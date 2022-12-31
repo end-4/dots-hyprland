@@ -1,0 +1,113 @@
+.system-menu-box {
+  @include window;
+  background-color: $bg;
+  border: 3px solid $border;
+  color: $text;
+}
+
+.separator {
+  font-size: 1rem;
+}
+
+.top-row {
+  margin: 1rem 1.5rem 0;
+
+  .time { font-size: 2rem; }
+
+  .date-box {
+    margin: 0 1rem;
+
+    label { font-size: 1.1rem; }
+
+    .date {
+      background: unset;
+      margin: 0 .5rem 0 0;
+      padding: 0;
+    }
+  }
+}
+
+.system-row {
+  font-family: SF Mono Nerd Font;
+  margin: .5rem .7rem;
+
+  .airplane-box button {
+    padding: 1rem 3rem;
+  }
+
+  label {
+    font-size: 1rem;
+    margin: 0 .1rem;
+  }
+}
+
+.element {
+  font-family: SF Mono Nerd Font;
+  @include rounding;
+  background: $surface0;
+  margin: .3rem;
+
+  button {
+    @include rounding;
+    padding: 1rem;
+
+    label {
+      font-size: 1.5rem;
+    }
+
+    &:hover {
+      background: $overlay0;
+    }
+  }
+}
+
+.sliders {
+  font-family: SF Mono Nerd Font;
+  @include rounding;
+  background-color: $surface0;
+  margin: .5rem 1rem;
+  padding: .6rem 1rem;
+
+  scale {
+    margin-right: -1rem;
+    min-width: 21.5rem;
+  }
+
+  box { margin: .2rem 0; }
+
+  label { font-size: 1.2rem; }
+}
+
+.volume-bar highlight {
+  font-family: SF Mono Nerd Font;
+  @include rounding;
+  background-image: linear-gradient(to right, $tokyocyan 30%, $tokyocyan 100%);
+}
+
+.brightness-slider-box scale highlight {
+  font-family: SF Mono Nerd Font;
+  @include rounding;
+  background-image: linear-gradient(to right, $tokyogreen 30%, $tokyogreen 100%);
+}
+
+.bottom-row {
+  margin: .5rem 1rem;
+
+  .battery-icon { font-size: 2rem; }
+  .battery-wattage { color: $mauve; }
+
+  .battery-status {
+    color: $subtext0;
+    margin: 0 .5rem;
+  }
+
+  button {
+    background-color: $surface0;
+    border-radius: 50%;
+    margin-bottom: .1rem;
+    padding: 0 .5rem;
+
+    label { font-size: 1.5rem; }
+    &:hover { background: $overlay0; }
+  }
+}

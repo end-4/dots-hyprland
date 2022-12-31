@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+tmp=$XDG_CACHE_HOME/dunst-history.json
+lock="$XDG_CACHE_HOME/dunst-toggle.lock"
+lockinfo="$XDG_CACHE_HOME/dunst-lock-info"
+
+touch $lockinfo
+
+declare ids
+export toggle_icon=""
+
+get_ids() {
+  mapfile -t ids < <(dunstctl history | jaq -r ".data[] | .[] | select(.appname.data != \"Spotify\") | .id.data")
+}
+
+get_notif() {
+  echo -n '['
+
+  for id in "${ids[@]}"; do
+      mapfile -t n < <(jaq -r ".data[] | .[] | select(.id.data == $id) | .appname.data, .summary.data, .body.data" "$tmp" | sed -r '/^\s*$/d' | sed -e 's/\%/ percent/g')
+      echo -n ''$([ $id -eq ${ids[0]} ] || echo ,)' { '
+      echo -n '"id": "'"$id"'", "appname": "'"${n[0]}"'", "summary": "'"${n[1]}"'", "body": "'"${n[2]}"'"'
+      echo -n '}' 
+  done
+
+  echo ']'
+}
+
+toggle() {
+  dunstctl set-paused toggle
+
+  if [ ! -f "$lock" ]; then
+    export toggle_icon=""
+    touch "$lock"
+  else
+    export toggle_icon=""
+    rm "$lock"
+  fi
+
+  echo "icon_change" > $lockinfo
+}
+
+clear() {
+  systemctl --user restart dunst
+  echo "icon_change" > $lockinfo
+}
+
+get_icon() {
+  if [ ${#ids[@]} -eq 0 ]; then
+    echo ""
+  else
+    echo ""
+  fi
+}
+
+if [ "$1" == "toggle" ]; then
+  toggle
+  dunstctl history > "$tmp"
+elif [ "$1" == "clear" ]; then
+  clear
+  dunstctl history > "$tmp"
+elif [ "$1" == "icons" ]; then
+  dunstctl history > "$tmp"
+  get_ids
+  echo '{"toggle_icon": "'"$toggle_icon"'", "icon": "'"$(get_icon)"'"}'
+  tail -f "$lockinfo" | while read -r; do
+    get_ids
+    echo '{"toggle_icon": "'"$toggle_icon"'", "icon": "'"$(get_icon)"'"}'
+  done
+else
+  dunstctl history > "$tmp"
+  get_ids
+  get_notif
+  tail -f "$tmp" 2>/dev/null | rg --line-buffered "aa\{sv\}" | while read -r; do
+    get_ids
+    get_notif
+  done
+fi

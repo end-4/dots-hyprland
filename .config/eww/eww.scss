@@ -1,0 +1,326 @@
+@import 'css/colors';
+
+@mixin rounding {
+  border-radius: 16px;
+}
+
+@mixin filter {
+  saturate {
+    filter: saturate(3);
+  }
+
+  grayscale {
+    filter: grayscale(100%);
+  }
+
+  contrast {
+    filter: contrast(160%);
+  }
+
+  brightness {
+    filter: brightness(0.25);
+  }
+
+  blur {
+    filter: blur(3px);
+  }
+
+  invert {
+    filter: invert(100%);
+  }
+
+  .sepia {
+    filter: sepia(100%);
+  }
+
+  huerotate {
+    filter: hue-rotate(180deg);
+  }
+
+  rss.opacity {
+    filter: opacity(50%);
+  }
+}
+
+@mixin window {
+  border: 3px solid $border;
+  box-shadow: 0 2px 3px $shadow;
+  margin: 5px 5px 10px;
+  @include rounding;
+}
+
+* {
+  all: unset;
+  transition: 200ms cubic-bezier(0.05, 0.9, 0.1, 1);
+  font-family: Product Sans, Roboto, sans-serif;
+}
+
+.music-ctl-revealer {
+  font-family: SF Mono Nerd Font;
+}
+
+@import 'css/calendar';
+@import 'css/music';
+@import 'css/notification';
+@import 'css/sidebar';
+@import 'css/system';
+@import 'css/volume';
+
+.bar {
+  background-color: $barbg;
+  // background-image: url("/home/end/.config/eww/images/topbar.png");
+  color: $fg;
+  border-radius: 100px;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: Product Sans;
+}
+
+tooltip {
+  background: $barbg;
+  border: 1px solid $border;
+  border-radius: 8px;
+
+  label {
+    font-size: 13pt;
+  }
+}
+
+.music-module {
+  font-family: SF Mono Nerd Font;
+}
+
+.icon {
+  font-family: Material Icons;
+  padding-left: 4px;
+  padding-right: 8px;
+}
+
+.module {
+  margin: 0 0px;
+  font-family: Material Icons;
+}
+
+.hour {
+  // font-weight: bold;
+  margin-left: 5px;
+  color: $tokyoblue;
+}
+
+.clock {
+  color: $tokyoblue;
+}
+
+.minute {
+  color: $tokyoblue;
+}
+
+.date {
+  background: $barbg;
+  color: $tokyoblue;
+  padding-left: 4px;
+
+  label {
+    font-size: 1.2rem;
+  }
+}
+
+.bright-icon {
+  color: $tokyoyellow;
+  padding-right: 4px;
+}
+
+.bright-icon:hover {
+  border-top: 2px solid;
+}
+
+.module-bt {
+  font-size: 1.2rem;
+}
+
+scale trough {
+  background-color: $bg1;
+  border-radius: 24px;
+  margin: 0 1rem;
+  min-height: 10px;
+  min-width: 70px;
+}
+
+.workspaces {
+  margin-left: 10px;
+}
+
+.notif-toggle {
+  padding: 0 5px;
+}
+
+.player-controls {
+  font-family: SF Mono Nerd Font;
+}
+
+.volume-icon {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.net-icon {
+  font-family: Material Icons;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 0px;
+}
+
+.net-icon:hover {
+  border-top: 2px solid;
+}
+
+.ws-1 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_Document.png");
+  background-repeat: no-repeat;
+  background-position: center;
+
+  // background-size: 120%;
+  // color: red;
+
+}
+
+.ws-2 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_LinageBrowser.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-3 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_LinageFiles.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-4 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_Tor.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-5 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_LinageTerminal.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-6 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_LinageSettings.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-7 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_Steam.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-8 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_Github.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-9 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_LinageRecorder.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-10 {
+  padding-left: 13px;
+  padding-right: 13px;
+  border-top: 2px solid;
+  background-image: url("images/grayscale/Grayscale_Speedtest.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ws-active{
+  background-size: 100%;
+}
+.ws-inactive{
+  background-size: 70%;
+}
+.ws-empty{
+  background-size: 70%;
+}
+
+.ws-1:hover {
+  background-size: 90%;
+}
+
+.ws-2:hover {
+  background-size: 90%;
+}
+
+.ws-3:hover {
+  background-size: 90%;
+}
+
+.ws-4:hover {
+  background-size: 90%;
+}
+
+.ws-5:hover {
+  background-size: 90%;
+}
+
+.ws-6:hover {
+  background-size: 90%;
+}
+
+.ws-7:hover {
+  background-size: 90%;
+}
+
+.ws-8:hover {
+  background-size: 90%;
+}
+
+.ws-9:hover {
+  background-size: 90%;
+}
+
+.ws-10:hover {
+  background-size: 90%;
+}
+
+.ws-active {
+  background-size: 100%;
+}

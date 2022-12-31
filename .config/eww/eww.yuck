@@ -1,0 +1,91 @@
+(include "./modules/bluetooth.yuck")
+(include "./modules/bright.yuck")
+(include "./modules/clock.yuck")
+(include "./modules/music.yuck")
+(include "./modules/net.yuck")
+(include "./modules/sys.yuck")
+(include "./modules/variables.yuck")
+(include "./modules/volume.yuck")
+(include "./modules/workspaces.yuck")
+
+(include "./windows/calendar.yuck")
+(include "./windows/music.yuck")
+(include "./windows/notifications.yuck")
+(include "./windows/system-menu.yuck")
+; (include "./windows/clipboard.yuck") DOES NOT WORK
+
+(defwidget notif-toggle []
+  (button
+    :class "notif-toggle module"
+    :onclick "${EWW_CMD} open --toggle notifications";
+    {notif_icons.icon}
+  )
+)
+
+(defwidget separator []
+
+)
+
+
+; clipboard 󰅌 󰅍 󰄷
+
+(defwidget left []
+  (box
+    :space-evenly false
+    :halign "start"
+    
+    (music-module)
+    (clock_module)
+    ; (notif-toggle)
+  )
+)
+
+(defwidget right []
+  (eventbox
+    ; :onhover "${EWW_CMD} update sys_rev=true"
+    ; :onhoverlost "${EWW_CMD} update sys_rev=false"
+    (box
+      :space-evenly false
+      :halign "end"
+      (volume-module)
+      (bright)
+      ; (bluetooth)
+      (net)
+      
+      ; (syscpu)
+      ; (cpumenu)
+      ; (sysmem)
+      ; (memmenu)
+      ; (sysbatt)
+      (sys)
+    )
+  )
+)
+
+(defwidget center []
+  (box
+    :space-evenly false
+    :halign "center"
+    (workspaces)
+  ))
+
+(defwidget bar []
+  (centerbox
+    :class "bar"
+    (left)
+    (center)
+    (right)
+  )
+)
+
+(defwindow bar
+  :monitor 0
+  :geometry (geometry :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px"
+  :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  (bar)
+)

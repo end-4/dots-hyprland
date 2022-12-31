@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+# define colors
+#        active     window     green     blue
+colors=("#F7768E" "#0DB9D7" "#0DB9D7" "#89b4fa")
+dimmed=("#0DB9D7" "#0DB9D7" "#0DB9D7" "#b4befe")
+empty="#313244"
+
+# get initial focused workspace
+focusedws=$(hyprctl -j monitors | jaq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+
+declare -A o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
+declare -A monitormap
+declare -A workspaces
+
+# set color for each workspace
+status() {
+  if [ "${o[$1]}" -eq 1 ]; then
+    mon=${monitormap[${workspaces[$1]}]}
+
+    if [ $focusedws -eq "$1" ]; then
+      echo -n "#F7768E"
+    else
+      echo -n "#0DB7D4"
+    fi
+  else
+    echo -n "#313244"
+  fi
+}
+
+activestatus() {
+  if [ "${o[$1]}" -eq 1 ]; then
+    mon=${monitormap[${workspaces[$1]}]}
+
+    if [ $focusedws -eq "$1" ]; then
+      echo -n "active"
+    else
+      echo -n "inactive"
+    fi
+  else
+    echo -n "empty"
+  fi
+}
+
+sizestatus() {
+  if [ "${o[$1]}" -eq 1 ]; then
+    # mon=${monitormap[${workspaces[$1]}]}
+
+    if [ $focusedws -eq "$1" ]; then
+      echo "100%"
+    else
+      echo "70%"
+    fi
+  else
+    echo "70%"
+  fi
+}
+
+# handle workspace create/destroy
+workspace_event() {
+  o[$1]=$2
+  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
+}
+# handle monitor (dis)connects
+monitor_event() {
+  while read -r k v; do monitormap["$k"]=$v; done < <(hyprctl -j monitors | gojq -r '.[]|"\(.name) \(.id) "')
+}
+
+# generate the json for eww
+generate() {
+  echo -n '['
+
+  for i in {1..10}; do
+    echo -n ''$([ $i -eq 1 ] || echo ,) '{ "number": "'"$i"'", "color": "'$(status "$i")'",  "size": "'$(sizestatus "$i")'",  "activity": "'$(activestatus "$i")'"}'
+  done
+
+  echo ']'
+}
+
+# setup
+
+# add monitors
+monitor_event
+
+# add workspaces
+workspace_event 1 1
+
+# check occupied workspaces
+for num in "${!workspaces[@]}"; do
+  o[$num]=1
+done
+# generate initial widget
+generate
+
+# main loop
+socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
+  case ${line%>>*} in
+    "workspace")
+      focusedws=${line#*>>}
+      ;;
+    "focusedmon")
+      focusedws=${line#*,}
+      ;;
+    "createworkspace")
+      workspace_event "${line#*>>}" 1
+      ;;
+    "destroyworkspace")
+      workspace_event "${line#*>>}" 0
+      ;;
+    "monitor"*)
+      monitor_event
+      ;;
+  esac
+  generate
+done

@@ -1,0 +1,95 @@
+.song-cover-art {
+  @include rounding;
+  background-position: center;
+  background-size: cover;
+  margin: 4px 5px 4px 0;
+  min-height: 24px;
+  min-width: 24px;
+}
+
+.music-window {
+  @include window;
+  background-color: $bg;
+  border: 3px solid $border;
+  color: $fg;
+}
+
+.music-cover-art {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  margin: 1em;
+  min-height: 170px;
+  min-width: 170px;
+  background-image: url("/home/end/.config/eww/images/LinageTrack.png");
+  // background-color: white;
+}
+
+.music-box {
+  margin: 1rem 1rem 1rem 0;
+}
+
+.music-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.music-artist {
+  color: $subtext1;
+}
+
+.music-button label {
+  color: $text;
+  font-size: 2rem;
+  font-family: SF Mono Nerd Font;
+  padding: 8px;
+}
+
+.music-time {
+  color: $text;
+  margin: 0 1rem;
+}
+
+.music-bar scale {
+  font-family: SF Mono Nerd Font;
+
+  highlight {
+    background-color: $tokyored;
+    border-radius: 24px;
+  }
+
+  trough {
+    background-color: $bg1;
+    border-radius: 24px;
+    margin-top: 0;
+    min-height: 10px;
+    min-width: 170px;
+  }
+}
+
+.music-ctl {
+  border-radius: 0px;
+  color: $tokyored;
+  padding-right: 10px;
+}
+
+.music-icon {
+  padding-top: 5px; //Because the music icon is a bit high
+  padding-left: 16px;
+  padding-right: 16px;
+  color: $tokyored;
+  background-image: url("images/LinageMusic.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.music-ctl-revealer {
+  padding-left: 10px;
+}
+
+.song-button {
+  color: $tokyored;
+  padding: 0px;
+}

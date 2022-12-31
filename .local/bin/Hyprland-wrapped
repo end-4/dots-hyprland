@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cd ~
+
+#export XDG_CURRENT_DESKTOP=GNOME
+#export XDG_SESSION_TYPE=wayland
+#export XDG_SESSION_DESKTOP=GNOME
+#export EDITOR = /usr/bin/gnome-text-editor
+
+export XMODIFIERS=@im=ibus
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+
+#export QT_QPA_PLATFORMTHEME=qt5ct #QT Theme (for KDE apps)
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+exec Hyprland
+

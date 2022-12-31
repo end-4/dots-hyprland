@@ -1,0 +1,44 @@
+(defwidget music-module []
+  (eventbox
+    :class "music-ctl"
+    :onhover "${EWW_CMD} update music_reveal=true && ${EWW_CMD} update date_rev=true"
+    :onhoverlost "${EWW_CMD} update music_reveal=false && ${EWW_CMD} update date_rev=false"
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :onclick "${EWW_CMD} open --toggle music"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next"
+    (box
+      :class "music-ctl"
+      :space-evenly false
+      ; (label :class "music-icon" :text {music.icon})
+      (label :class "music-icon" :text "   ")
+      (revealer
+        :transition "slideright"
+        :reveal music_reveal
+        :duration "300ms"
+        :class "music-ctl-revealer"
+        :onclick "${EWW_CMD} open --toggle music"
+        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+        :limit-width 20
+      {music.title})
+      (revealer
+        :transition "slideright"
+        :reveal music_reveal
+        :duration "300ms"
+        :class "music-ctl-revealer"
+        (box
+          :class "icon"
+          :style "font-family: SF Mono Nerd Font;"
+          ; (button 
+          ;   :class "song-button" 
+            
+          ;   {music.title} "" {music.status} "")
+          ; (button :class "song-button" :onclick "playerctl previous" {music.title})
+          (button :class "song-button" :onclick "playerctl previous" "")
+          (button :class "song-button" :onclick "playerctl play-pause" {music.status})
+          (button :class "song-button" :onclick "playerctl next" "")
+        )
+      )
+    )
+  )
+)

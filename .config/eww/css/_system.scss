@@ -1,0 +1,122 @@
+.membar {
+  color: $forestorange;
+}
+
+.cpubar {
+  color: $cpucolor;
+}
+
+.batbar {
+  color: $battcolor;
+  padding: 0px;
+}
+
+.membar,
+.cpubar,
+.batbar {
+  background-color: $bg1;
+}
+
+.iconmem {
+  color: $memcolor;
+}
+
+.iconcpu {
+  color: $cpucolor;
+}
+
+.icon-text {
+  font-size: 3rem;
+  padding: .7rem;
+}
+
+.sys-text-sub {
+  color: $text;
+}
+
+.sys-text-mem,
+.sys-text-cpu {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.sys-icon-mem,
+.sys-icon-cpu {
+  font-size: 1.5rem;
+  margin: 1.5rem;
+}
+
+.system-info-box {
+  @include rounding;
+  background-color: $surface0;
+  margin: .5rem 1rem;
+  padding: .5rem;
+}
+
+.sys-mem,
+.sys-cpu {
+  background-color: $bg;
+}
+
+.sys-icon-mem,
+.sys-text-mem,
+.sys-mem {
+  color: $memcolor;
+}
+
+.sys-icon-cpu,
+.sys-text-cpu,
+.sys-cpu {
+  color: $cpucolor;
+}
+
+.sys-box {
+  margin: .3em;
+
+  box { margin-left: 1rem; }
+}
+
+.cpu-menu{
+  color: $cpucolor;
+  padding-left: 5px;
+}
+
+.mem-menu{
+  color: $memcolor;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mem-menu-left{
+  color: $memcolor;
+  padding-left: 5px;
+  padding-right: 0px;
+}
+.mem-menu-mid{
+  color: $memcolor;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.mem-menu-right{
+  color: $memcolor;
+  padding-left: 0px;
+  padding-right: 5px;
+}
+
+.sys-menu{
+  color: $battcolor;
+  margin: 0px;
+  padding: 0px;
+}
+
+.sys-menu-button{
+  color: $forestred;
+  margin: 0px;
+  // padding: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background-image: url("images/LinageSettings.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

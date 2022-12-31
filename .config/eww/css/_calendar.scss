@@ -1,0 +1,43 @@
+.calendar-win {
+  @include window;
+  background-color: $bg;
+  border: 3px solid $border;
+  color: $fg;
+  padding: .2em;
+}
+
+calendar {
+  //padding: 5px;
+  padding-top: 4px;
+  padding-left: 4px;
+
+  :selected {
+    color: $text;
+    font-weight: bolder;
+    background-color: $catbg;
+    border-radius: 8px;
+  }
+
+  .header {
+    color: $tokyocyan;
+  }
+
+  .highlight {
+    color: $maroon;
+    font-weight: bold;
+  }
+
+  .button {
+    color: $text;
+  }
+
+  :indeterminate {
+    color: $overlay0;
+  }
+}
+
+.date-clock{
+  background: transparent;
+  color: $tokyocyan;
+  padding-left: 5px;
+}
