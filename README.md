@@ -1,6 +1,7 @@
 # dots-hyprland
  - ty fufexan for their eww config
  - linageos icons are cool
+ - _run `eww open bar` to open the bar! (add it to your startup commands)_
 
  ![dots-hyprland](./screenshot-1.png)
 
