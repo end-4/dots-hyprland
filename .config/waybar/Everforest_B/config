@@ -1,0 +1,271 @@
+{
+	"layer": "top",
+	"modules-left": ["custom/launcher", "cpu","memory", "idle_inhibitor", "hyprland/window"],
+	"modules-center": ["wlr/workspaces", "custom/waybar-media"],
+	"modules-right": ["tray", "pulseaudio", "backlight", "network", "clock", "battery", "custom/power"],
+	"pulseaudio": {
+		"tooltip": false,
+		"scroll-step": 5,
+		"format": "{icon} {volume}%",
+		"format-muted": " {volume}%",
+		"on-click":"pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"on-click-right":"gnome-control-center sound",
+		"on-click-middle":"gnome-control-center sound",
+		"format-icons": {
+			"default": ["", "", ""]
+		},
+	},
+	
+	"custom/rarr": {
+	    "format": "",
+	},
+	"custom/rarr#1": {
+	    "format": "",
+	},
+	"custom/rarr#2": {
+	    "format": "",
+	},
+	"custom/rarr#3": {
+	    "format": "",
+	},
+	
+	"custom/larr": {
+	    "format": "",
+	},
+	"custom/larr#1": {
+	    "format": "",
+	},
+	"custom/larr#2": {
+	    "format": "",
+	},
+	"custom/larr#3": {
+	    "format": "",
+	},
+	"custom/larr#4": {
+	    "format": "",
+	},
+	
+	"idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        },
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+
+    "hyprland/window": {
+        "max-length": 29,
+        "format": "什 {}",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    
+    "hyprland/language": {
+        "format": " {}",
+        "format-us": "us",
+        "format-vi": "vi",
+        "keyboard-name": "AT Translated Set 2 keyboard"
+    },
+	
+    "wlr/workspaces": {
+        "workspace-warparound":"false",
+        "on-click": "activate",
+        "all-outputs": true,
+        "sort-by-number": true,
+        "sort-by-name": false,
+        "format": "{icon}",
+        "format-icons": {
+      		"1": " ",
+      		"2": " ",
+      		"3": " ",
+      		"4": "﫸 ",
+      		"5": "漣 ",
+      		"6": " ",
+      	},
+        //"format-icons": ["", "", "", "", "﫸", "漣"],
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "smooth-scrolling-threshold": 1,
+    },
+
+    "river/tags": {
+		"num-tags": 6
+    },
+	"network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        // "format-wifi": " {essid}",
+        "format-wifi": " ",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "tooltip-format": " {essid} | {gwaddr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ Disconnected",
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-alt": " {essid}",
+        "on-click-right": "gnome-control-center wifi",
+        "on-click-middle": "gnome-control-center wifi",
+    },
+	"backlight": {
+		"tooltip": false,
+		// "format": "盛 {}%",
+		"format": "盛 ",
+		"format-alt": "盛 {}%",
+		"interval":1,
+        "on-scroll-up": "light -A 5",
+		"on-scroll-down": "light -U 5"
+	},
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 20,
+            "critical": 20
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "{icon}  {capacity}%",
+        "format-plugged": "{icon}  {capacity}%",
+        "format-alt": "{icon}  {time}",
+        "format-icons": ["", "", "", "", ""],
+        "on-click-right": "gnome-control-center power",
+        "on-click-middle": "gnome-control-center power",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-",
+    },
+	"tray":{
+		"icon-size":18,
+		"spacing": 10,
+		"format": "{} "
+	},
+    "clock": {
+        "format": "{: %I:%M %p   %d/%m/%Y}",
+        "format-alt": "{: %r   %d/%m/%Y}",
+        "on-click": "eww open --toggle calendar",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "interval": 1,
+    },
+    "cpu": {
+        "interval": 55,
+        "format": " {}%",
+        "max-length": 10,
+        "on-click-right": "kitty btm",
+        "on-click-middle": "kitty btm",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "memory": {
+        "interval": 5,
+        "format": " {used} GiB 易 {swapUsed} GiB",
+        "on-click-right": "kitty btm",
+        "on-click-middle": "kitty btm",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/media": {
+        "interval": 30,
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 20,
+        "format-icons": {
+            "spotify": " ",
+            "default": " "
+        },
+        "escape": true,
+        "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+        "on-click": "playerctl play-pause"
+    },
+    "custom/launcher":{
+        "format": " ",
+        "on-click": "pkill fuzzel || fuzzel --icon-theme=candy-icons fuzzel --background-color=1E201FEE --text-color=d8caacff --match-color=A8B468FF --border-width=3 --border-radius=10 --border-color=A8B370FF --selection-color=A8B468FF --selection-text-color=3E5B32FF --selection-match-color=e76c69ff --font='Cantarell'  --prompt='    '",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/power":{
+        "format": "  ",
+        "on-click": "eww open --toggle system-menu",
+        "on-click-middle": "hyprctl dispatch exit exit",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-",
+    },
+    "custom/wallpaper":{
+        "format":" ",
+        "on-click": "bash ~/.config/system_scripts/pkill_bc",
+    },
+    "custom/ws#1":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#2":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 2",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#3":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 3",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#4":{
+        "format": " 﫸 ",
+        "on-click": "hyprctl dispatch workspace 4",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#5":{
+        "format": " 﨩 ",
+        "on-click": "hyprctl dispatch workspace 5",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#6":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 6",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#7":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 7",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    }
+},
+// [    﫸  ]
+"custom/waybar-media": {
+        "return-type": "json",
+        "exec": "waybar-media.py status",
+        "on-click": "waybar-media.py playpause",
+        "on-scroll-up": "waybar-media.py previous",
+        "on-scroll-down": "waybar-media.py next",
+        "escape": true
+},
+
+"mpd": {
+    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ",
+    "format-disconnected": "Disconnected ",
+    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+    "interval": 10,
+    "consume-icons": {
+        "on": " " // Icon shows only when "consume" is on
+    },
+    "random-icons": {
+        "off": "<span color=\"#f53c3c\"></span> ", // Icon grayed out when "random" is off
+        "on": " "
+    },
+    "repeat-icons": {
+        "on": " "
+    },
+    "single-icons": {
+        "on": "1 "
+    },
+    "state-icons": {
+        "paused": "",
+        "playing": ""
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+},

@@ -1,0 +1,279 @@
+{
+    "on-scroll-down": "hyprctl dispatch workspace +1",
+    "on-scroll-up": "hyprctl dispatch workspace -1",
+	"layer": "top",
+	"modules-left": ["custom/launcher", "custom/rarr#1", "cpu", "custom/rarr#2","memory", "custom/rarr#3", "hyprland/window", "custom/rarr#4"],
+	"modules-center": ["custom/larr", "wlr/workspaces", "custom/rarr#5"],
+	"modules-right": ["tray", "custom/larr#2", "pulseaudio", "custom/larr#3", "backlight", "custom/larr#4", "network", "custom/larr#5", "clock", "custom/larr#7", "battery", "custom/larr#6", "custom/power"],
+	"pulseaudio": {
+		"tooltip": false,
+		"scroll-step": 5,
+		"format": "{icon} {volume}%",
+		"format-muted": "{icon} {volume}%",
+		"on-click":"pactl set-sink-mute @DEFAULT_SINK@ toggle",
+		"on-click-right":"gnome-control-center sound",
+		"on-click-middle":"gnome-control-center sound",
+		"format-icons": {
+			"default": ["", "", ""]
+		},
+	},
+	
+	"custom/rarr": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/rarr#1": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/rarr#2": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/rarr#3": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/rarr#4": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/rarr#5": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	
+	"custom/larr": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#1": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#2": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#3": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#4": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#5": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#6": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	"custom/larr#7": {
+	    "format": "",
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+	},
+	
+	"idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": " ",
+            "deactivated": " "
+        },
+	    "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+
+    "hyprland/window": {
+        "max-length": 25,
+        "format": "什 {}",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    
+    "hyprland/language": {
+        "format": " {}",
+        "format-us": "us",
+        "format-vi": "vi",
+        "keyboard-name": "AT Translated Set 2 keyboard"
+    },
+	
+    "wlr/workspaces": {
+        "workspace-warparound":"false",
+        "on-click": "activate",
+        "all-outputs": true,
+        "sort-by-number": true,
+        "sort-by-name": false,
+        "format": "{icon}",
+        "format-icons": {
+      		"1": " ",
+      		"2": " ",
+      		"3": " ",
+      		"4": "﫸 ",
+      		"5": "漣 ",
+      		"6": " ",
+      	},
+        //"format-icons": ["", "", "", "", "﫸", "漣"],
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "smooth-scrolling-threshold": 1,
+    },
+
+    "river/tags": {
+		"num-tags": 6
+    },
+	"network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        // "format-wifi": " {essid}",
+        "format-wifi": " ",
+        "format-ethernet": " {ipaddr}/{cidr}",
+        "tooltip-format": " {essid} | {gwaddr}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ Disconnected",
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "format-alt": " {essid}",
+        "on-click-right": "gnome-control-center wifi",
+        "on-click-middle": "gnome-control-center wifi",
+    },
+	"backlight": {
+		"tooltip": false,
+		"format": "盛 {}%",
+		"interval":1,
+        "on-scroll-up": "light -A 5",
+		"on-scroll-down": "light -U 5"
+	},
+    "battery": {
+        "states": {
+            "good": 90,
+            "warning": 20,
+            "critical": 20
+        },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "{icon}  {capacity}%",
+        "format-plugged": "{icon}  {capacity}%",
+        "format-alt": "{icon}  {time}",
+        "format-icons": ["", "", "", "", ""],
+        "on-click-right": "gnome-control-center power",
+        "on-click-middle": "gnome-control-center power",
+    },
+	"tray":{
+		"icon-size":18,
+		"spacing": 10,
+		"format": "{} "
+	},
+    "clock": {
+        "format": "{: %I:%M %p   %d/%m/%Y}",
+        "format-alt": "{: %r   %d/%m/%Y}",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "interval": 1,
+    },
+    "cpu": {
+        "interval": 55,
+        "format": " {}%",
+        "max-length": 10,
+        "on-click-right": "kitty btm",
+        "on-click-middle": "kitty btm",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "memory": {
+        "interval": 5,
+        "format": " {used} GiB 易 {swapUsed} GiB",
+        "on-click-right": "kitty btm",
+        "on-click-middle": "kitty btm",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/media": {
+        "interval": 30,
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 20,
+        "format-icons": {
+            "spotify": " ",
+            "default": " "
+        },
+        "escape": true,
+        "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+        "on-click": "playerctl play-pause"
+    },
+    "custom/launcher":{
+        "format": " ",
+        "on-click": "wofi --show drun",
+        "on-click-right": "killall wofi",
+        "on-click-middle": "killall wofi",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1"
+    },
+    "custom/power":{
+        "format": " ",
+        "on-click-middle": "hyprctl dispatch exit exit",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-",
+    },
+    "custom/wallpaper":{
+        "format":" ",
+        "on-click": "bash ~/.config/system_scripts/pkill_bc",
+    },
+    "custom/ws#1":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#2":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 2",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#3":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 3",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#4":{
+        "format": " 﫸 ",
+        "on-click": "hyprctl dispatch workspace 4",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#5":{
+        "format": " 﨩 ",
+        "on-click": "hyprctl dispatch workspace 5",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#6":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 6",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    },
+    "custom/ws#7":{
+        "format": "  ",
+        "on-click": "hyprctl dispatch workspace 7",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+    }
+}
+
+// [    﫸  ]

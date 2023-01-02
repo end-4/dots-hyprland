@@ -1,0 +1,279 @@
+/**
+ Paralellogram: transform: skew(20deg);
+
+
+
+**/
+* {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  font-family: "JetbrainsMono Nerd Font";
+  /*font-family: "Ubuntu Nerd Font"; font-size: 12pt;*/
+	min-height: 5px;
+}
+
+window#waybar {
+	background: transparent;
+}
+
+window#waybar.hidden {
+	opacity: 0.2;
+}
+
+#custom-launcher {
+  padding-left: 6px;
+  padding-right: 0px;
+  background-color: #9cbff7;
+  color: #161320;
+  font-size: 12pt;
+  
+}
+
+#clock {
+	color: #161320;
+	background-color: #9edbe6;
+  font-size: 12pt;
+  
+}
+
+#cpu {
+	color: #161320;
+	background-color: #f092ad;
+  font-size: 12pt;
+  
+}
+
+#memory {
+	color: #161320;
+  background-color: #f7c2a1;
+  font-size: 12pt;
+  
+}
+
+#window {
+	color: #161320;
+	background-color: #b1e0ad;
+  font-size: 12pt;
+  
+}
+
+#workspaces {
+    color: #161320;
+    background-color: #f7cdec;
+    font-size: 12pt;
+}
+
+#workspaces button {
+    padding-left: 7px;
+    padding-right: 3px;
+    color: #161320;
+    font-size: 12pt;
+  
+}
+
+#workspaces button.active {
+    color: #161320;
+    background-color: #9CBFF7;
+}
+
+#workspaces button:hover {
+    color: #161320;
+  
+}
+
+#workspaces button.focused {
+    color: #161320;
+  
+}
+
+#workspaces button.urgent {
+    color: #161320;
+  
+}
+
+#tray {
+	margin-left: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 10px;
+	transition: none;
+	color: #B5E8E0;
+	background: #161320;
+	font-size: 12pt;
+  
+}
+
+#pulseaudio {
+	color: #161320;
+	background-color: #f7e6c1;
+	font-size: 12pt;
+	
+}
+
+#backlight {
+	color: #161320;
+	background-color: #f7c2a1;
+	font-size: 12pt;
+  
+}
+
+#network {
+	color: #161320;
+	background-color: #f7cdec;
+	font-size: 12pt;
+  
+}
+
+#battery {
+	color: #161320;
+	background-color: #d4b7f7;
+	font-size: 12pt;
+  
+}
+
+#battery.charging, #battery.plugged {
+	  color: #499100;
+    background-color: #D4B7F7;
+}
+
+#battery.critical:not(.charging) {
+    background-color: #B5E8E0;
+    color: #161320;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/*
+#battery.good {
+	  color: #B1E0AD;
+    background-color: #D4B7F7;
+}
+*/
+
+#custom-power {
+	color: #161320;
+	background-color: #f092ad;
+	font-size: 12pt;
+  
+}
+
+@keyframes blink {
+    to {
+        background-color: #BF616A;
+        color: #B5E8E0;
+    }
+}
+
+/* Arrows */
+
+#custom-rarr{
+  color: #9cbff7;
+  background-color: #9edbe6;
+  font-size: 15pt;
+}
+#custom-rarr.1{
+  color: #9cbff7;
+  background-color: #f092ad;
+  font-size: 15pt;
+}
+#custom-rarr.2{
+  color: #f092ad;
+  background-color: #f7c2a1;
+  font-size: 15pt;
+}
+#custom-rarr.3{
+  color: #f7c2a1;
+  background-color: #b1e0ad;
+  font-size: 15pt;
+}
+#custom-rarr.4{
+  color: #b1e0ad;
+  background-color: transparent;
+  font-size: 15pt;
+}
+#custom-rarr.5{
+  color: #f7cdec;
+  background-color: transparent;
+  font-size: 15pt;
+}
+
+#custom-larr{
+  font-size: 15pt;
+  padding-right: 0;
+  background-color: transparent;
+  color: #f7cdec;
+}
+#custom-larr.2{
+  font-size: 15pt;
+  padding-right: 0;
+  background-color: transparent;
+  color: #f7e6c1;
+}
+#custom-larr.3{
+  background-color: #f7e6c1;
+  color: #f7c2a1;
+  font-size: 15pt;
+}
+#custom-larr.4{
+  background-color: #f7c2a1;
+  color: #f7cdec;
+  font-size: 15pt;
+}
+#custom-larr.5{
+  background-color: #f7cdec;
+  color: #9edbe6;
+  font-size: 15pt;
+}
+#custom-larr.6{
+  background-color: #d4b7f7;
+  color: #F28FAD;
+  font-size: 15pt;
+}
+#custom-larr.7{
+  background-color: #9edbe6;
+  color: #d4b7f7;
+  font-size: 15pt;
+}
+
+#custom-ws{
+  font-size: 12pt;
+  background-color: #f7cdec;
+  color: #161320;
+}
+
+/* Unused */
+
+#idle_inhibitor{
+	  color: #161320;
+}
+
+#custom-wallpaper {
+	  color: #161320;
+}
+
+#custom-updates {
+	  color: #161320;
+}
+
+#custom-media {
+	  color: #161320;
+}
+
+#battery.warning:not(.charging) {
+    background: #f53c3c;
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+
+
+
+
+/* Hover */
