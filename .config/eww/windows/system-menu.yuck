@@ -14,13 +14,17 @@
         :space-evenly false
         (label
           :class "date"
-        :text {time.date})
+          :text "${time.day},"
+        )
         (label
-          :class "day"
-        :text {time.day})))
+          :class "date"
+        :text "${time.date}")
+      )
+    )
     
-    (centerbox
+    (box
       :class "system-row"
+      :space-evenly false
       (box
         :class "wifi-box"
         :space-evenly false
@@ -42,7 +46,9 @@
         (label
           :text {net.essid}
           :xalign 0.5
-        :limit-width 15))
+          :limit-width 15
+        )
+      )
       
       (box
         :class "bluetooth-box"
@@ -66,7 +72,8 @@
           :text {bluetooth.text}
           :xalign 0.5
           :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
-        :limit-width 15))
+        :limit-width 15)
+      )
       
       (box
         :class "airplane-box"
@@ -81,34 +88,59 @@
         (label
           :text "Airplane Mode"
           :xalign 0.5
-        :limit-width 16)))
+        :limit-width 16)
+      )
+      
+      (box
+        :space-evenly false
+        :orientation "v"
+        (box
+          :class "element"
+          (button
+            :halign "end"
+            :onclick "wlogout -p layer-shell &"
+            ""
+          )
+        )
+        (label
+          :text "Power"
+          :xalign 0.5
+        :limit-width 16)
+      )
+    )
     
     (box
       :class "sliders"
       :orientation "v"
-      (box
-        :class "volume-slider-box"
-        :space-evenly false
-        (button
-          :class "volume-icon"
-          :onclick "scripts/volume mute SINK"
-        {volume.icon})
-        (scale
-          :class "volume-bar"
-          :value {volume.percent}
-          :tooltip "volume on ${volume.percent}%"
-        :onchange "scripts/volume setvol SINK {}"))
-      (box
-        :class "brightness-slider-box"
-        :space-evenly false
-        (button
-          :class "brightness-slider-icon"
-        {brightness.icon})
-        (scale
-          :class "brightness-slider"
-          :value {brightness.level}
-          :marks true
-        :onchange "light -S {}")))
+      :space-evenly false
+      (audiolevels)
+      ; (box
+        ;   :class "volume-slider-box"
+        ;   :space-evenly false
+        ;   (button
+          ;     :class "volume-icon"
+          ;     :onclick "scripts/volume mute SINK"
+        ;   {volume.icon})
+        ;   (scale
+          ;     :class "sliderbg"
+          ;     :value {volume.percent}
+          ;     :tooltip "volume on ${volume.percent}%"
+        ;   :onchange "scripts/volume setvol SINK {}")
+      ; )
+      ; (box
+        ;   :class "brightness-slider-box"
+        ;   :space-evenly false
+        ;   (button
+          ;     :class "brightness-slider-icon"
+        ;   {brightness.icon})
+        ;   (scale
+          ;     :class "brightness-slider slider"
+          ;     :value {brightness.level}
+          ;     :marks true
+          ;     :onchange "light -S {}"
+        ;   )
+      ; )
+    )
     
     (box
       :class "system-info-box"
@@ -151,7 +183,7 @@
           :class "sys-mem"
           :thickness 3
           (label
-            :text ""
+            :text ""
           :class "sys-icon-mem icon"))
         (box
           :orientation "v"
@@ -160,42 +192,49 @@
             :halign "start"
           :class "sys-text-mem")
           (label
-            :text "${memory.used} | ${memory.total}"
+            :text "${memory.used} / ${memory.total}"
             :halign "start"
-          :class "sys-text-sub"))))
-    
-    (centerbox
-      :class "bottom-row"
-      (box
-        :class "battery-box"
-        :space-evenly false
-        :halign "start"
-        (label
-          :class "battery-icon icon"
-          :style "color: ${battery.color}"
-        :text {battery.icon})
-        (label
-          :class "battery-percentage"
-        :text {EWW_BATTERY["BAT0"].capacity})
-        (label
-          :class "battery-status"
-        :text {battery.status})
-        ; (label
-          ;   :class "battery-wattage"
-        ;   :text {battery.wattage})
-      )
-      (label)
-      (box
-        :space-evenly false
-        :halign "end"
-        (button
-          :halign "end"
-          :class "power-button icon"
-          :onclick "wlogout -p layer-shell &"
-          ""
+          :class "sys-text-sub")
+          (label
+            :text "Swap ${memory.swapused} / ${memory.swaptotal}"
+            :halign "start"
+          :class "sys-text-sub")
         )
       )
     )
+    
+    ; (centerbox
+      ;   :class "bottom-row"
+      ;   (box
+        ;     :class "battery-box"
+        ;     :space-evenly false
+        ;     :halign "start"
+        ;     (label
+          ;       :class "battery-icon icon"
+          ;       :style "color: ${battery.color}"
+        ;     :text {battery.icon})
+        ;     (label
+          ;       :class "battery-percentage"
+        ;     :text {EWW_BATTERY["BAT0"].capacity})
+        ;     (label
+          ;       :class "battery-status"
+        ;     :text {battery.status})
+        ;     ; (label
+          ;       ;   :class "battery-wattage"
+        ;     ;   :text {battery.wattage})
+      ;   )
+      ;   (label)
+      ;   (box
+        ;     :space-evenly false
+        ;     :halign "end"
+        ;     (button
+          ;       :halign "end"
+          ;       :class "power-button icon"
+          ;       :onclick "wlogout -p layer-shell &"
+          ;       ""
+        ;     )
+      ;   )
+    ; )
   )
 )
 
@@ -209,4 +248,6 @@
     :width "0%"
     :height "0%"
   :anchor "right top")
-  (system-menu))
+  (system-menu)
+)
+

@@ -70,12 +70,17 @@
 
   scale {
     margin-right: -1rem;
-    min-width: 21.5rem;
+    min-width: 25.8rem;
   }
 
   box { margin: .2rem 0; }
 
   label { font-size: 1.2rem; }
+}
+
+.sliderbg {
+  background-color: transparent;
+  padding: 0px;
 }
 
 .volume-bar highlight {
@@ -84,11 +89,18 @@
   background-image: linear-gradient(to right, $tokyocyan 30%, $tokyocyan 100%);
 }
 
-.brightness-slider-box scale highlight {
-  font-family: SF Mono Nerd Font;
+.volume-slider-box scale highlight {
   @include rounding;
-  background-image: linear-gradient(to right, $tokyogreen 30%, $tokyogreen 100%);
+  background-image: linear-gradient(to right, $tokyocyan 30%, $tokyopurple 100%);
+  // border: 2px solid;
+  min-height: 0.9rem;
 }
+
+// .volume-slider-box scale {
+//   @include rounding;
+//   background-color: #1A1B26;
+//   border: 2px solid;
+// }
 
 .bottom-row {
   margin: .5rem 1rem;
@@ -110,4 +122,9 @@
     label { font-size: 1.5rem; }
     &:hover { background: $overlay0; }
   }
+}
+
+.power-button {
+  min-height: 2.5rem;
+  // min-width: 2.5rem;
 }

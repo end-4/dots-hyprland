@@ -1,3 +1,4 @@
+(include "./modules/audiolevels.yuck")
 (include "./modules/bluetooth.yuck")
 (include "./modules/bright.yuck")
 (include "./modules/clock.yuck")
@@ -23,7 +24,10 @@
 )
 
 (defwidget separator []
-
+  (label
+    :class "my-separator"
+    :text "|"
+  )
 )
 
 
@@ -51,6 +55,7 @@
       (bright)
       ; (bluetooth)
       (net)
+      (separator)
       
       ; (syscpu)
       ; (cpumenu)

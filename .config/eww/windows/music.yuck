@@ -4,7 +4,7 @@
     :space-evenly false
     (box
       :class "music-cover-art"
-      ; :style "background-image: url(\"${music.cover}\");"
+      :style "background-image: url(\"${music.artist}\");"
     )
     (box
       :orientation "v"

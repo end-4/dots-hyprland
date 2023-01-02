@@ -8,13 +8,34 @@
 
 .batbar {
   color: $battcolor;
-  padding: 0px;
+  padding-right: 4px;
 }
 
-.membar,
-.cpubar,
-.batbar {
-  background-color: $bg1;
+// .batbar-circle {
+//   color: $battcolor;
+//   padding-right: 4px;
+// }
+
+// .membar,
+// .cpubar,
+// .batbar {
+//   // background-color: transparent;
+//   padding: 0px;
+// }
+
+.membar:hover,
+.cpubar:hover,
+.batbar:hover {
+  border-top: 2px solid;
+}
+
+.batt-percentage{
+  padding-right: 5px;
+  padding-left: 4px;
+}
+
+.sys-menu-charge {
+  padding-left: 2px;
 }
 
 .iconmem {
@@ -112,7 +133,6 @@
 .sys-menu-button{
   color: $forestred;
   margin: 0px;
-  // padding: 4px;
   padding-left: 16px;
   padding-right: 16px;
   background-image: url("images/LinageSettings.png");
@@ -120,3 +140,9 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
+// .volume-bar, .brightness-slider, .slider {
+  // background-color: #16161E;
+  // border: 2px solid #7C9FF5;
+  // border-radius: 99px;
+// }

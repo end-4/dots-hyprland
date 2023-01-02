@@ -36,5 +36,4 @@ Dependencies:
 
 ## 🎨 Theme
 
-The theme colors can be changed in `css/_colors.scss`. Currently the theme used
-is [Catppuccin Mocha](https://github.com/catppuccin/catppuccin).
+tokyonight

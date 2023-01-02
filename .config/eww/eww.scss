@@ -58,6 +58,9 @@
 .music-ctl-revealer {
   font-family: SF Mono Nerd Font;
 }
+.music-ctl-revealer:hover {
+  border-top: 2px solid;
+}
 
 @import 'css/calendar';
 @import 'css/music';
@@ -96,7 +99,7 @@ tooltip {
 .icon {
   font-family: Material Icons;
   padding-left: 4px;
-  padding-right: 8px;
+  padding-right: 4px;
 }
 
 .module {
@@ -112,6 +115,10 @@ tooltip {
 
 .clock {
   color: $tokyoblue;
+}
+
+.clock-module:hover {
+  border-top: 2px solid $tokyoblue;
 }
 
 .minute {
@@ -177,11 +184,18 @@ scale trough {
   border-top: 2px solid;
 }
 
+.my-separator {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $tokyotext;
+}
+
 .ws-1 {
   padding-left: 13px;
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_Document.png");
+  // background-image: url("images/Document.png");
   background-repeat: no-repeat;
   background-position: center;
 
@@ -195,6 +209,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_LinageBrowser.png");
+  // background-image: url("images/LinageBrowser.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -203,7 +218,8 @@ scale trough {
   padding-left: 13px;
   padding-right: 13px;
   border-top: 2px solid;
-  background-image: url("images/grayscale/Grayscale_LinageFiles.png");
+  background-image: url("images/grayscale/Grayscale_LinageTerminal.png");
+  // background-image: url("images/LinageFiles.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -212,7 +228,8 @@ scale trough {
   padding-left: 13px;
   padding-right: 13px;
   border-top: 2px solid;
-  background-image: url("images/grayscale/Grayscale_Tor.png");
+  background-image: url("images/grayscale/Grayscale_LinageFiles.png");
+  // background-image: url("images/Tor.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -221,7 +238,8 @@ scale trough {
   padding-left: 13px;
   padding-right: 13px;
   border-top: 2px solid;
-  background-image: url("images/grayscale/Grayscale_LinageTerminal.png");
+  background-image: url("images/grayscale/Grayscale_Tor.png");
+  // background-image: url("images/LinageTerminal.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -231,6 +249,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_LinageSettings.png");
+  // background-image: url("images/LinageSettings.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -240,6 +259,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_Steam.png");
+  // background-image: url("images/Steam.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -249,6 +269,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_Github.png");
+  // background-image: url("images/Github.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -258,6 +279,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_LinageRecorder.png");
+  // background-image: url("images/LinageRecorder.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -267,6 +289,7 @@ scale trough {
   padding-right: 13px;
   border-top: 2px solid;
   background-image: url("images/grayscale/Grayscale_Speedtest.png");
+  // background-image: url("images/Speedtest.png");
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -282,43 +305,43 @@ scale trough {
 }
 
 .ws-1:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-2:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-3:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-4:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-5:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-6:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-7:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-8:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-9:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-10:hover {
-  background-size: 90%;
+  background-size: 90%; border-top: 2px solid $tokyoblue;
 }
 
 .ws-active {

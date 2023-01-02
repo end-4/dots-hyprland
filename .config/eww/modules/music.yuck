@@ -20,17 +20,26 @@
         :onclick "${EWW_CMD} open --toggle music"
         :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
         :limit-width 20
-      {music.title})
+        (eventbox
+          :limit-width 20
+          :class "music-ctl-revealer"
+          :onclick "${EWW_CMD} open --toggle music"
+          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+          ; (label :limit-width 20 {music.title})
+          {music.title}
+        )
+      )
       (revealer
         :transition "slideright"
         :reveal music_reveal
         :duration "300ms"
         :class "music-ctl-revealer"
+        :onclick "${EWW_CMD} open --toggle music"
         (box
           :class "icon"
           :style "font-family: SF Mono Nerd Font;"
-          ; (button 
-          ;   :class "song-button" 
+          ; (button
+            ;   :class "song-button"
             
           ;   {music.title} "" {music.status} "")
           ; (button :class "song-button" :onclick "playerctl previous" {music.title})

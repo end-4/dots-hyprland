@@ -3,6 +3,7 @@
 
 (defwidget sys []
   (eventbox
+    :class "sysbar"
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :onhover "${EWW_CMD} update sys_rev=true"
     :onhoverlost "${EWW_CMD} update sys_rev=false"
@@ -15,15 +16,18 @@
       (syscpu)
       (sysmem)
       (sysbatt)
-      (sysmenu)
+      (settingscog)
     )
   )
 )
 
 (defwidget syscpu []
   (eventbox
+    :class "cpubar"
+    :space-evenly false
+    :onclick "${EWW_CMD} open --toggle system-menu"
     (box
-      :class "sysbar"
+      :class "cpubar"
       :space-evenly false
       :onclick "${EWW_CMD} open --toggle system-menu"
       (circular-progress
@@ -56,7 +60,11 @@
 
 (defwidget sysmem []
   (eventbox
+    :class "membar"
+    :space-evenly false
+    :onclick "${EWW_CMD} open --toggle system-menu"
     (box
+      :class "membar"
       :space-evenly false
       :onclick "${EWW_CMD} open --toggle system-menu"
       (circular-progress
@@ -84,18 +92,36 @@
 )
 
 (defwidget sysbatt []
-  (circular-progress
-    :value "${EWW_BATTERY["BATT"].capacity}"
+  (eventbox
     :class "batbar"
-    :thickness 3
-    :start-at 75
-    :style "color: ${battery.color}"
-    (button
-      :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
+    :space-evenly false
+    :onclick "${EWW_CMD} open --toggle system-menu"
+    (box
+      :class "batbar"
+      :space-evenly false
       :onclick "${EWW_CMD} open --toggle system-menu"
-      :onrightclick "kitty btm"
-      :style "color: ${battery.color}"
-      (label :class "icon-text" :text "")
+      (circular-progress
+        :value "${EWW_BATTERY["BATT"].capacity}"
+        :class "batbar-circle"
+        :thickness 3
+        :start-at 75
+        :style "color: ${battery.color};"
+        (button
+          :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
+          :onclick "${EWW_CMD} open --toggle system-menu"
+          :onrightclick "kitty btm"
+          :style "color: ${battery.color}"
+          (label :class "icon-text" :text "")
+        )
+      )
+      (revealer
+        :transition "slideright"
+        :reveal true
+        :duration "300ms"
+        :class "sys-menu"
+        :onclick "${EWW_CMD} open --toggle system-menu"
+        (sysmenu)
+      )
     )
   )
 )
@@ -115,10 +141,10 @@
     :onclick "${EWW_CMD} open --toggle system-menu"
     :onrightclick "kitty btm"
     ; (box
-    ;   :class "mem-menu"
-    ;   (label :class "mem-menu-left" :text "${memory.used}")
-    ;   (label :class "mem-menu-mid" :text "")
-    ;   (label :class "mem-menu-right" :text "${memory.swapused}")
+      ;   :class "mem-menu"
+      ;   (label :class "mem-menu-left" :text "${memory.used}")
+      ;   (label :class "mem-menu-mid" :text "")
+      ;   (label :class "mem-menu-right" :text "${memory.swapused}")
     ; )
     (box
       ; :class "mem-menu"
@@ -139,18 +165,24 @@
     (box
       :space-evenly false
       (label :class "sys-menu-charge" :style "color: ${battery.color}" :text "${battery.quickicon}")
-      (label :class "sys-menu" :style "color: ${battery.color}" :text "${EWW_BATTERY["BATT"].capacity}%⠀")
-      (revealer
-        :transition "slideleft"
-        :reveal sys_rev
-        :duration "300ms"
-        :class "sys-menu"
+      (label :class "batt-percentage" :style "color: ${battery.color}" :text "${EWW_BATTERY["BATT"].capacity}%")
+    )
+  )
+)
+
+(defwidget settingscog[]
+  (eventbox
+    :class "settings-icon"
+    (revealer
+      :transition "slideleft"
+      :reveal sys_rev
+      :duration "300ms"
+      :class "sys-menu"
+      :onclick "${EWW_CMD} open --toggle system-menu"
+      (button
+        :class "sys-menu-button"
         :onclick "${EWW_CMD} open --toggle system-menu"
-        (button
-          :class "sys-menu-button"
-          :onclick "${EWW_CMD} open --toggle system-menu"
-          " "
-        )
+        " "
       )
     )
   )

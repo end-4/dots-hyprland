@@ -87,7 +87,7 @@ get_cover() {
 # 	done
 # fi
 
-# SANITIZED FIX
+# SANITIZE FIX
 sanitize() {
 	echo "$1" | sed 's/"/\"/g'
 }
@@ -98,7 +98,6 @@ else
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\{{mpris:length}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position len; do
 		# thecoverart=$(get_cover)
 		# notify-send "owo" "$thecoverart"
-		coverart="${get_cover}"
 		# notify-send "Cover location" "$coverart"
 		jq --null-input \
 			-r -c \
@@ -111,6 +110,6 @@ else
 			--arg icon "$playericon" \
 			--arg state "$s" \
 			--arg cover_art "$coverart" \
-			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length, "icon": "⠀", "cover": $cover_art}'
+			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length, "icon": "⠀"}'
 	done
 fi
