@@ -1,0 +1,11 @@
+(defvar winctlreveal true)
+
+(defwidget winctl []
+  (box
+    (eventbox
+      :class "winctl module"
+      :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.08/g\" -e \"s/down/+0.08/g\")"
+      (label :text "[ Split Ratio ]")
+    )
+  )
+)

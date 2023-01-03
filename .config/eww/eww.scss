@@ -107,6 +107,10 @@ tooltip {
   font-family: Material Icons;
 }
 
+.module:hover {
+  border-top: 2px solid;
+}
+
 .hour {
   // font-weight: bold;
   margin-left: 5px;
@@ -346,4 +350,14 @@ scale trough {
 
 .ws-active {
   background-size: 100%;
+}
+
+.winctl {
+  padding-left: 3px;
+  padding-right: 3px;
+  color: $tokyopink;
+}
+
+.winctl:hover {
+  border-top: 2px solid;
 }

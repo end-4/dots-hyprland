@@ -7,6 +7,7 @@
 (include "./modules/sys.yuck")
 (include "./modules/variables.yuck")
 (include "./modules/volume.yuck")
+(include "./modules/winctl.yuck")
 (include "./modules/workspaces.yuck")
 
 (include "./windows/calendar.yuck")
@@ -51,6 +52,8 @@
     (box
       :space-evenly false
       :halign "end"
+      (winctl)
+      (separator)
       (volume-module)
       (bright)
       ; (bluetooth)

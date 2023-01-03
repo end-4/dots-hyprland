@@ -1,6 +1,6 @@
 (defvar testjson "[1, 2, 3]")
 (defvar sys_menu_open true)
-(defpoll audiojson :interval "0.05s"
+(defpoll audiojson :interval "0.001s"
   :initial "initial-value"
   :run-while sys_menu_open
   `scripts/audiolevels`
@@ -10,6 +10,7 @@
   (box
     :space-evenly false
     :orientation "v"
+    :class "sliders"
     (label
       :text "Volume mixer"
       :xalign 0

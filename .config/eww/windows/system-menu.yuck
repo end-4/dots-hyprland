@@ -6,19 +6,12 @@
     (box
       :class "top-row"
       :space-evenly false
-      (label
-        :class "time"
-      :text "${time.hour}:${time.minute}")
+      (label :class "time" :text "${time.hour}:${time.minute}")
       (box
         :class "date-box"
         :space-evenly false
-        (label
-          :class "date"
-          :text "${time.day},"
-        )
-        (label
-          :class "date"
-        :text "${time.date}")
+        (label :class "date" :text "${time.day},")
+        (label :class "date" :text "${time.date}")
       )
     )
     
@@ -35,19 +28,16 @@
           (button
             :class "wifi-button"
             :onclick "scripts/net toggle"
-          {net.icon})
-          (label
-            :class "separator"
-          :text "|")
+            {net.icon}
+          )
+          (label :class "separator" :text "|")
           (button
             :class "wifi-arrow-btn"
             :onclick "eww close system-menu && nm-connection-editor &"
-          ""))
-        (label
-          :text {net.essid}
-          :xalign 0.5
-          :limit-width 15
+            ""
+          )
         )
+        (label :text {net.essid} :xalign 0.5 :limit-width 15)
       )
       
       (box
@@ -60,19 +50,21 @@
           (button
             :class "bluetooth-button"
             :onclick "scripts/bluetooth toggle"
-          {bluetooth.icon})
-          (label
-            :class "separator"
-          :text "|")
+            {bluetooth.icon}
+          )
+          (label :class "separator" :text "|")
           (button
             :class "bluetooth-arrow-btn"
             :onclick "eww close system-menu && blueberry"
-          ""))
+            ""
+          )
+        )
         (label
           :text {bluetooth.text}
           :xalign 0.5
           :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
-        :limit-width 15)
+          :limit-width 15
+        )
       )
       
       (box
@@ -84,11 +76,10 @@
           (button
             :class "airplane-button"
             :onclick "scripts/airplane toggle"
-          airplane))
-        (label
-          :text "Airplane Mode"
-          :xalign 0.5
-        :limit-width 16)
+            airplane
+          )
+        )
+        (label :text "Airplane Mode" :xalign 0.5 :limit-width 16)
       )
       
       (box
@@ -105,43 +96,11 @@
         (label
           :text "Power"
           :xalign 0.5
-        :limit-width 16)
+          :limit-width 16
+        )
       )
     )
-    
-    (box
-      :class "sliders"
-      :orientation "v"
-      :space-evenly false
-      (audiolevels)
-      ; (box
-        ;   :class "volume-slider-box"
-        ;   :space-evenly false
-        ;   (button
-          ;     :class "volume-icon"
-          ;     :onclick "scripts/volume mute SINK"
-        ;   {volume.icon})
-        ;   (scale
-          ;     :class "sliderbg"
-          ;     :value {volume.percent}
-          ;     :tooltip "volume on ${volume.percent}%"
-        ;   :onchange "scripts/volume setvol SINK {}")
-      ; )
-      ; (box
-        ;   :class "brightness-slider-box"
-        ;   :space-evenly false
-        ;   (button
-          ;     :class "brightness-slider-icon"
-        ;   {brightness.icon})
-        ;   (scale
-          ;     :class "brightness-slider slider"
-          ;     :value {brightness.level}
-          ;     :marks true
-          ;     :onchange "light -S {}"
-        ;   )
-      ; )
-    )
-    
+    (audiolevels)
     (box
       :class "system-info-box"
       
@@ -187,53 +146,43 @@
           :class "sys-icon-mem icon"))
         (box
           :orientation "v"
-          (label
-            :text "memory"
-            :halign "start"
-          :class "sys-text-mem")
-          (label
-            :text "${memory.used} / ${memory.total}"
-            :halign "start"
-          :class "sys-text-sub")
-          (label
-            :text "Swap ${memory.swapused} / ${memory.swaptotal}"
-            :halign "start"
-          :class "sys-text-sub")
+          (label :text "memory" :halign "start" :class "sys-text-mem")
+          (label :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
+          (label :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
         )
       )
     )
-    
-    ; (centerbox
-      ;   :class "bottom-row"
-      ;   (box
-        ;     :class "battery-box"
-        ;     :space-evenly false
-        ;     :halign "start"
-        ;     (label
-          ;       :class "battery-icon icon"
-          ;       :style "color: ${battery.color}"
-        ;     :text {battery.icon})
-        ;     (label
-          ;       :class "battery-percentage"
-        ;     :text {EWW_BATTERY["BAT0"].capacity})
-        ;     (label
-          ;       :class "battery-status"
-        ;     :text {battery.status})
-        ;     ; (label
-          ;       ;   :class "battery-wattage"
-        ;     ;   :text {battery.wattage})
-      ;   )
-      ;   (label)
-      ;   (box
-        ;     :space-evenly false
-        ;     :halign "end"
-        ;     (button
-          ;       :halign "end"
-          ;       :class "power-button icon"
-          ;       :onclick "wlogout -p layer-shell &"
-          ;       ""
-        ;     )
-      ;   )
+    ; (centerbox ;Battery remaining time and power button
+      ;     :class "bottom-row"
+      ;     (box
+        ;         :class "battery-box"
+        ;         :space-evenly false
+        ;         :halign "start"
+        ;         (label
+          ;             :class "battery-icon icon"
+          ;             :style "color: ${battery.color}"
+        ;         :text {battery.icon})
+        ;         (label
+          ;             :class "battery-percentage"
+        ;         :text {EWW_BATTERY["BAT0"].capacity})
+        ;         (label
+          ;             :class "battery-status"
+        ;         :text {battery.status})
+        ;         ; (label
+          ;             ;   :class "battery-wattage"
+        ;         ;   :text {battery.wattage})
+      ;     )
+      ;     (label)
+      ;     (box
+        ;         :space-evenly false
+        ;         :halign "end"
+        ;         (button
+          ;             :halign "end"
+          ;             :class "power-button icon"
+          ;             :onclick "wlogout -p layer-shell &"
+          ;             ""
+        ;         )
+      ;     )
     ; )
   )
 )
