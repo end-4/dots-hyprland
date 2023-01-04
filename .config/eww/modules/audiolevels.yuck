@@ -18,7 +18,7 @@
     )
     (for i in audiojson
       (eventbox
-        :onscroll "pactl set-sink-input-volume ${i.sink} $((${i.volume}$(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\") < 100 ? ${i.volume}$(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\") : 100 ))%"
+        :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
         :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
         (box
           :space-evenly false
