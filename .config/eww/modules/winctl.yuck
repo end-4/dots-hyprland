@@ -4,7 +4,7 @@
   (box
     (eventbox
       :class "winctl module"
-      :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.08/g\" -e \"s/down/+0.08/g\")"
+      :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"
       (label :text "[ Split Ratio ]")
     )
   )

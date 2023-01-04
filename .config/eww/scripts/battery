@@ -42,6 +42,22 @@ status() {
 	fi
 }
 
+statch() {
+	if [ "$STATE" = "Discharging" ]; then #Not charging, below 20%
+		if [ "$CAPACITY" -le 5 ]; then
+			echo 'deadly'
+		elif [ "$CAPACITY" -le 10 ]; then
+			echo 'critical'
+		elif [ "$CAPACITY" -le 30 ]; then
+			echo 'low'
+		else 
+			echo 'normal'
+		fi
+	else 
+		echo 'charging'
+	fi
+}
+
 chargestatus() {
 	if [ "$STATE" = "Charging" ]; then
 		echo -n ""
@@ -50,11 +66,35 @@ chargestatus() {
 	fi
 }
 
+circolor() {
+	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		echo '#5AA8ED'
+	else
+		echo '#9ECE6A'
+	fi
+}
+
+cirbgcolor() {
+	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		echo '#EF738A'
+	else
+		echo 'transparent'
+	fi
+}
+
 color() {
 	if [ "$CAPACITY" -le 20 ]; then
 		echo '#EF738A'
 	else
 		echo '#9ECE6A'
+	fi
+}
+
+bgcolor() {
+	if [ "$CAPACITY" -le 20 ]; then
+		echo '#EF738A'
+	else
+		echo 'transparent'
 	fi
 }
 
@@ -67,6 +107,6 @@ while true; do
 	CAPACITY=$(cat /sys/class/power_supply/BATT/capacity)
 	STATE=$(cat /sys/class/power_supply/BATT/status)
 
-	echo '{"quickicon": "'"$(chargestatus)"'", "icon": "'"$(geticon)"'", "percentage": '"$CAPACITY"', "wattage": "'"$(wattage)"'", "status": "'"$(status)"'", "color": "'"$(color)"'" }'
+	echo '{"quickicon": "'"$(chargestatus)"'", "icon": "'"$(geticon)"'", "percentage": '"$CAPACITY"', "wattage": "'"$(wattage)"'", "status": "'"$(status)"'", "circolor": "'"$(circolor)"'", "cirbgcolor": "'"$(cirbgcolor)"'", "color": "'"$(color)"'", "bgcolor": "'"$(bgcolor)"'" }'
 	sleep 3
 done

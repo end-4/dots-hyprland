@@ -78,12 +78,16 @@
   ))
 
 (defwidget bar []
-  (centerbox
-    :class "bar"
-    (left)
-    (center)
-    (right)
-  )
+  ; (box
+  ;   :space-evenly false
+  ;   :orientation "v"
+    (centerbox
+      :class "bar"
+      (left)
+      (center)
+      (right)
+    )
+  ; )
 )
 
 (defwindow bar

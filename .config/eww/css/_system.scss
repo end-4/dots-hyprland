@@ -29,9 +29,19 @@
   border-top: 2px solid;
 }
 
-.batt-percentage{
+.batt-percentage {
   padding-right: 5px;
   padding-left: 4px;
+}
+
+.batt-low {
+  background-color: #B5E8E0;
+  color: #161320;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 .sys-menu-charge {
@@ -94,43 +104,47 @@
 .sys-box {
   margin: .3em;
 
-  box { margin-left: 1rem; }
+  box {
+    margin-left: 1rem;
+  }
 }
 
-.cpu-menu{
+.cpu-menu {
   color: $cpucolor;
   padding-left: 5px;
 }
 
-.mem-menu{
+.mem-menu {
   color: $memcolor;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.mem-menu-left{
+.mem-menu-left {
   color: $memcolor;
   padding-left: 5px;
   padding-right: 0px;
 }
-.mem-menu-mid{
+
+.mem-menu-mid {
   color: $memcolor;
   padding-left: 0px;
   padding-right: 0px;
 }
-.mem-menu-right{
+
+.mem-menu-right {
   color: $memcolor;
   padding-left: 0px;
   padding-right: 5px;
 }
 
-.sys-menu{
+.sys-menu {
   color: $battcolor;
   margin: 0px;
   padding: 0px;
 }
 
-.sys-menu-button{
+.sys-menu-button {
   color: $forestred;
   margin: 0px;
   padding-left: 16px;
@@ -142,7 +156,7 @@
 }
 
 // .volume-bar, .brightness-slider, .slider {
-  // background-color: #16161E;
-  // border: 2px solid #7C9FF5;
-  // border-radius: 99px;
+// background-color: #16161E;
+// border: 2px solid #7C9FF5;
+// border-radius: 99px;
 // }

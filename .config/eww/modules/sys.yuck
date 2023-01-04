@@ -105,12 +105,12 @@
         :class "batbar-circle"
         :thickness 3
         :start-at 75
-        :style "color: ${battery.color};"
+        :style "border-radius: 99px; color: ${battery.circolor}; background-color: ${battery.cirbgcolor}"
         (button
           :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
           :onclick "${EWW_CMD} open --toggle system-menu"
           :onrightclick "kitty btm"
-          :style "color: ${battery.color}"
+          :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
           (label :class "icon-text" :text "")
         )
       )
