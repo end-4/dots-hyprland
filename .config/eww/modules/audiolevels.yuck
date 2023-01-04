@@ -1,4 +1,3 @@
-(defvar testjson "[1, 2, 3]")
 (defvar sys_menu_open true)
 (defpoll audiojson :interval "0.001s"
   :initial "initial-value"
@@ -56,7 +55,9 @@
             :space-evenly false
             (eventbox
               :class "volume-icon"
-              :onclick "pactl set-sink-input-mute ${i.sink} toggle"
+              :onclick "pactl set-sink-input-volume ${i.sink} 0%"
+              :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
+              :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
               {volume.icon}
             )
             (scale

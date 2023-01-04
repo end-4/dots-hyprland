@@ -143,7 +143,9 @@
           :thickness 3
           (label
             :text ""
-          :class "sys-icon-mem icon"))
+            :class "sys-icon-mem icon"
+          )
+        )
         (box
           :orientation "v"
           (label :text "memory" :halign "start" :class "sys-text-mem")

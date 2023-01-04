@@ -40,7 +40,7 @@
         (button
           :tooltip "CPU: ${round(EWW_CPU.avg,0)}%"
           :onclick "${EWW_CMD} open --toggle system-menu"
-          :onrightclick "kitty btm"
+          :onrightclick "foot btm"
           :onhover "${EWW_CMD} update cpu_reveal=true"
           :onhoverlost "${EWW_CMD} update cpu_reveal=false"
           (label :class "icon-text" :text "")
@@ -75,10 +75,22 @@
         (button
           :tooltip "RAM: ${round(memory.percentage,0)}%"
           :onclick "${EWW_CMD} open --toggle system-menu"
-          :onrightclick "kitty btm"
+          :onrightclick "foot btm"
           (label :class "icon-text" :text "")
         )
       )
+      ; (circular-progress                        ; Swap usage
+      ;   :value {memory.swappercentage}
+      ;   :class "membar"
+      ;   :thickness 2
+      ;   :start-at 75
+      ;   (button
+      ;     :tooltip "Swap: ${round(memory.swappercentage,0)}%"
+      ;     :onclick "${EWW_CMD} open --toggle system-menu"
+      ;     :onrightclick "foot btm"
+      ;     (label :class "icon-text" :text "")
+      ;   )
+      ; )
       (revealer
         :transition "slideright"
         :reveal sys_rev
@@ -109,7 +121,7 @@
         (button
           :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
           :onclick "${EWW_CMD} open --toggle system-menu"
-          :onrightclick "kitty btm"
+          :onrightclick "foot btm"
           :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
           (label :class "icon-text" :text "")
         )
@@ -130,7 +142,7 @@
   (eventbox
     :class "cpu-menu"
     :onclick "${EWW_CMD} open --toggle system-menu"
-    :onrightclick "kitty btm"
+    :onrightclick "foot btm"
     (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
   )
 )
@@ -139,7 +151,7 @@
   (eventbox
     ; :class "mem-menu"
     :onclick "${EWW_CMD} open --toggle system-menu"
-    :onrightclick "kitty btm"
+    :onrightclick "foot btm"
     ; (box
       ;   :class "mem-menu"
       ;   (label :class "mem-menu-left" :text "${memory.used}")
@@ -160,7 +172,7 @@
   (eventbox
     :class "sys-menu"
     :onclick "${EWW_CMD} open --toggle system-menu"
-    :onrightclick "kitty btm"
+    :onrightclick "foot btm"
     :style "color: ${battery.color}"
     (box
       :space-evenly false

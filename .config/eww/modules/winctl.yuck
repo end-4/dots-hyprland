@@ -1,4 +1,4 @@
-(defvar winctlreveal true)
+; (defvar winctlreveal true)
 
 (defwidget winctl []
   (box
