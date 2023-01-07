@@ -16,11 +16,11 @@
 
 .music-cover-art {
   background-position: center;
-  background-size: contain;
+  background-size: 100%;
   background-repeat: no-repeat;
-  border-radius: 8px;
+  border-radius: 999px;
   margin: 1em;
-  min-height: 170px;
+  // min-height: 80px;
   min-width: 170px;
   // background-image: url("/home/end/.config/eww/images/LinageTrack.png");
   // background-color: white;

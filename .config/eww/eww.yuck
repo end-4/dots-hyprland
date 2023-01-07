@@ -1,3 +1,4 @@
+(include "./modules/activewindow.yuck")
 (include "./modules/audiolevels.yuck")
 (include "./modules/bluetooth.yuck")
 (include "./modules/bright.yuck")
@@ -42,6 +43,8 @@
     
     (music-module)
     (clock_module)
+    (separator)
+    (activewindow)
     ; (notif-toggle)
   )
 )

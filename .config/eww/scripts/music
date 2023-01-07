@@ -50,14 +50,14 @@ get_position_time() {
 
 get_cover() {
 	# COVER_URL=$1
-	mkdir -p "~/.config/eww/eww_covers"
-	cd "~/.config/eww/eww_covers" || exit
+	mkdir -p "eww_covers"
+	cd "eww_covers" || exit
 
-	IMGPATH="~/.config/eww/eww_covers/cover_art.png"
+	IMGPATH="eww_covers/cover_art.png"
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		if [[ "$COVER_URL" = https* ]]; then
-			if [ ! -e "~/.config/eww/eww_covers/$(basename "$COVER_URL")" ]; then
+			if [ ! -e "eww_covers/$(basename "$COVER_URL")" ]; then
 				wget -N "$COVER_URL" -o /dev/null
 			fi
 

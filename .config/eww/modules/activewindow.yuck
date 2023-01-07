@@ -1,0 +1,27 @@
+(deflisten awin
+  ; :run-while win_ws_open
+  `scripts/activewin`
+)
+
+(defwidget activewindow []
+  (eventbox
+    ; :onmiddleclick 
+    (box
+      :space-evenly false
+      :class "activewin"
+      (label
+        :limit-width 50
+        :text "➜ "
+      )
+      (revealer
+        :transition "slideright"
+        :reveal "${!music_reveal}"
+        :duration "300ms"
+        (label
+          :limit-width 50
+          :text "${awin}"
+        )
+      )
+    )
+  )
+)

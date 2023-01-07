@@ -21,12 +21,10 @@
         :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
         :limit-width 20
         (eventbox
-          :limit-width 20
           :class "music-ctl-revealer"
           :onclick "${EWW_CMD} open --toggle music"
           :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-          ; (label :limit-width 20 {music.title})
-          {music.title}
+          (label :limit-width 70 :text "${music.title}")
         )
       )
       (revealer
