@@ -12,12 +12,16 @@
 .top-row {
   margin: 1rem 1.5rem 0;
 
-  .time { font-size: 2rem; }
+  .time {
+    font-size: 2rem;
+  }
 
   .date-box {
     margin: 0 1rem;
 
-    label { font-size: 1.1rem; }
+    label {
+      font-size: 1.1rem;
+    }
 
     .date {
       background: unset;
@@ -73,9 +77,13 @@
     min-width: 25.8rem;
   }
 
-  box { margin: .2rem 0; }
+  box {
+    margin: .2rem 0;
+  }
 
-  label { font-size: 1.2rem; }
+  label {
+    font-size: 1.2rem;
+  }
 }
 
 .sliderbg {
@@ -105,8 +113,13 @@
 .bottom-row {
   margin: .5rem 1rem;
 
-  .battery-icon { font-size: 2rem; }
-  .battery-wattage { color: $mauve; }
+  .battery-icon {
+    font-size: 2rem;
+  }
+
+  .battery-wattage {
+    color: $mauve;
+  }
 
   .battery-status {
     color: $subtext0;
@@ -119,8 +132,13 @@
     margin-bottom: .1rem;
     padding: 0 .5rem;
 
-    label { font-size: 1.5rem; }
-    &:hover { background: $overlay0; }
+    label {
+      font-size: 1.5rem;
+    }
+
+    &:hover {
+      background: $overlay0;
+    }
   }
 }
 
@@ -128,3 +146,13 @@
   min-height: 2.5rem;
   // min-width: 2.5rem;
 }
+
+
+
+// .winws-evbox{
+//   background: black;
+// }
+
+// .winws-evbox:hover{
+//   background: white;
+// }

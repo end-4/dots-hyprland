@@ -13,7 +13,7 @@
       :class "module"
       :space-evenly false
       :spacing 5
-      (syscpu)
+      ; (syscpu)
       (sysmem)
       (sysbatt)
       (settingscog)

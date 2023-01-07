@@ -193,6 +193,7 @@
 (defwindow system-menu
   :stacking "fg"
   :monitor 0
+  ; :focusable true
   :geometry (geometry
     :x "0"
     :y "0"

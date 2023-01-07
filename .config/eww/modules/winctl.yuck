@@ -1,7 +1,119 @@
-; (defvar winctlreveal true)
+(defvar win_ws_open false)
+; (defvar ws_loop "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]")
+(deflisten winjson
+  ; :run-while win_ws_open
+  `scripts/winlist`
+)
+(deflisten winicons
+  ; :run-while win_ws_open
+  `scripts/appicons`
+)
+(deflisten winnums
+  ; :run-while win_ws_open
+  `scripts/winnumbers`
+)
+
+; (defwidget win-ws2[]
+  ;   (box
+    ;     :space-evenly false
+    ;     :orientation "v"
+    ;     :class "system-menu-box"
+    ;     :style "background-color: #1A1B26; color: #A9B1D6;"
+    ;     ; (label :text "${winjson}" ) ; DEBUG
+    ;     (label
+      ;       :text "Workspace manager"
+      ;       :xalign 0.5
+      ;       :style "font-weight: bold; font-size: 15pt;"
+    ;     )
+    ;     (for i in winjson
+      ;       ; (for j in winjson2
+        ;         (box
+          ;           :class "sliders"
+          ;           :space-evenly false
+          ;           :orientation "h"
+          ;           (label
+            ;             :text "${i.title}"
+            ;             :limit-width 30
+          ;           )
+        ;         )
+      ;       ; )
+    ;     )
+  ;   )
+; )
+
+
+
+(defwidget win-ws[]
+  (box
+    :space-evenly false
+    :orientation "v"
+    :class "system-menu-box"
+    :style "background-color: #1A1B26; color: #A9B1D6; padding-bottom: .6rem;"
+    ; (label :text "${winjson}" ) ; DEBUG
+    (label
+      :class "winws-title"
+      :text "Open windows"
+      :xalign 0.5
+    )
+    (for i in winnums
+      (eventbox
+        :class "winws-evbox"
+        :onscroll "hyprctl dispatch movetoworkspacesilent $((${winjson[i].workspace.id}$(echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\"))),address:${winjson[i].address}"
+        :onclick "hyprctl dispatch focuswindow address:${winjson[i].address} && ${EWW_CMD} close win-workspace"
+        :onmiddleclick "hyprctl dispatch closewindow address:${winjson[i].address}"
+        (centerbox
+          :class "winws"
+          :space-evenly false
+          :orientation "h"
+          (box
+            :space-evenly false
+            :orientation "h"
+            (label
+              :class "appicon"
+              :style "background-image: url(\"${winicons[i]}\");"
+              :text ""
+            )
+            (box
+              :space-evenly false
+              :orientation "v"
+              (label
+                :halign "start"
+                :class "wintext"
+                :text "${winjson[i].title}"
+                :limit-width 44
+                :xalign 0
+              )
+              (label
+                :halign "start"
+                :class "winsubtext"
+                :text "${winjson[i].class}"
+                :limit-width 35
+                :xalign 0
+              )
+            )
+          )
+          (label
+            :class "wintext"
+            :text ""
+            :limit-width 1
+            :xalign 0
+          )
+          (label
+            :halign "end"
+            :class "wintext"
+            :text "[ ${winjson[i].workspace.id} ]"
+            :xalign 1
+          )
+        )
+      )
+    )
+  )
+)
 
 (defwidget winctl []
   (box
+    :space-evenly false
+    :orientation "h"
     (eventbox
       :class "winctl module"
       :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"

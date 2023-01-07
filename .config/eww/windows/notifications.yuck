@@ -64,7 +64,8 @@
                     :xalign 0
                     :wrap true
                     :class "summary"
-                  :text {i.summary})
+                    :text {i.summary}
+                  )
                   (label)
                   (label
                     :xalign 1

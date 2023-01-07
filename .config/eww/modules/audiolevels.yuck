@@ -1,7 +1,6 @@
 (defvar sys_menu_open true)
-(defpoll audiojson :interval "0.001s"
+(deflisten audiojson
   :initial "initial-value"
-  :run-while sys_menu_open
   `scripts/audiolevels`
 )
 

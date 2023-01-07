@@ -107,9 +107,7 @@ else
 			--arg pos "$(get_position "$position" "$len")" \
 			--arg pos_time "$(get_position_time "$position" "$len")" \
 			--arg length "$(get_length_time "$len")" \
-			--arg icon "$playericon" \
-			--arg state "$s" \
 			--arg cover_art "$coverart" \
-			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length, "icon": "⠀"}'
+			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length}'
 	done
 fi

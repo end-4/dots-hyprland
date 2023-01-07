@@ -68,6 +68,7 @@
 @import 'css/sidebar';
 @import 'css/system';
 @import 'css/volume';
+@import 'css/winctl';
 
 .bar {
   background-color: $barbg;
@@ -350,14 +351,11 @@ scale trough {
 
 .ws-active {
   background-size: 100%;
+  color: $tokyored;
 }
-
-.winctl {
-  padding-left: 3px;
-  padding-right: 3px;
-  color: $tokyopink;
+.ws-inactive {
+  color: $tokyocyan;
 }
-
-.winctl:hover {
-  border-top: 2px solid;
+.ws-empty {
+  color: #313244;
 }

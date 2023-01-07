@@ -1,0 +1,45 @@
+.winctl {
+  padding-left: 3px;
+  padding-right: 3px;
+  color: $tokyopink;
+}
+
+.winctl:hover {
+  border-top: 2px solid;
+}
+
+.winws {
+  @include rounding;
+  background-color: $surface0;
+  margin: .4rem .8rem;
+  padding: .3rem .5rem;
+  min-width: 31rem;
+}
+
+.winws-title {
+  font-weight: bold;
+  font-size: 15pt;
+  padding-top: .6rem;
+  padding-bottom: .6rem;
+}
+
+.wintext {
+  font-size: 14pt;
+}
+.winsubtext {
+  font-size: 10pt;
+}
+
+.winws-workspace {
+  padding: 0px;
+  margin: 0px;
+}
+
+.appicon {
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-left: 22px;
+  padding-right: 22px;
+  margin-right: 10px;
+}
