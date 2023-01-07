@@ -14,5 +14,5 @@
 # fedora
  - eww
  `sudo dnf install gojq socat`
-# others
+ - others
  `sudo dnf install tesseract`
