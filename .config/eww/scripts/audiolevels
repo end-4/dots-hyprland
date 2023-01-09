@@ -17,6 +17,10 @@ dostuff(){
           | tr " " "\n" \
           | grep -e % \
           | sed 's/%//g')
+  icons=$(pactl list sink-inputs \
+          | grep -e 'application.icon_name' \
+          | sed 's/\t//g' \
+          | sed 's/application.icon_name = //g')
   
   # echo "-=-=-=-=-=-=-=-=- Debug: Raw value -=-=-=-=-=-=-=-=-"
   # echo "$sinks"

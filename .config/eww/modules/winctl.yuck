@@ -1,8 +1,12 @@
 (defvar win_ws_open false)
-; (defvar ws_loop "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]")
+(defvar ws_loop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
 (deflisten winjson
   ; :run-while win_ws_open
   `scripts/winlist`
+)
+(deflisten winmatch
+  ; :run-while win_ws_open
+  `scripts/winmatch`
 )
 (deflisten winicons
   ; :run-while win_ws_open
@@ -48,11 +52,11 @@
     :space-evenly false
     :orientation "v"
     :class "system-menu-box"
-    :style "background-color: #1A1B26; color: #A9B1D6; padding-bottom: .6rem;"
+    :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem;"
     ; (label :text "${winjson}" ) ; DEBUG
     (label
       :class "winws-title"
-      :text "Open windows"
+      :text "Activities"
       :xalign 0.5
     )
     (for i in winnums
@@ -61,7 +65,7 @@
         :onscroll "hyprctl dispatch movetoworkspacesilent $((${winjson[i].workspace.id}$(echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\"))),address:${winjson[i].address}"
         :onclick "hyprctl dispatch focuswindow address:${winjson[i].address} && ${EWW_CMD} close win-workspace"
         :onmiddleclick "hyprctl dispatch closewindow address:${winjson[i].address}"
-        (centerbox
+        (centerbox ;App icon & info
           :class "winws"
           :space-evenly false
           :orientation "h"
@@ -98,11 +102,26 @@
             :limit-width 1
             :xalign 0
           )
-          (label
+          (box ; Workspace number
+            :space-evenly false
+            :orientation "h"
             :halign "end"
-            :class "wintext"
-            :text "[ ${winjson[i].workspace.id} ]"
-            :xalign 1
+            :style "padding-left: 30px;"
+            (label
+                :halign "end"
+                :class "wintext"
+                ; :text "[ ${winjson[i].workspace.id} ]"
+                :xalign 1
+            )
+            (for w in ws_loop
+              (button
+                :onclick "hyprctl dispatch movetoworkspacesilent ${w+1},address:${winjson[i].address}"
+                :class "wschoose"
+                :style "color: ${(winjson[i].workspace.id == w+1) ? '#EF738A' : '#A9B1D6'};"
+                ; "hyprctl dispatch movetoworkspacesilent ${w},address:${winjson[i].address}"
+                "●"
+              )
+            )
           )
         )
       )

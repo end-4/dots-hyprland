@@ -120,7 +120,7 @@
           :orientation "v"
           :vexpand false
           (label
-            :text "cpu"
+            :text "CPU"
             :halign "start"
           :class "sys-text-cpu")
           (label
@@ -148,7 +148,7 @@
         )
         (box
           :orientation "v"
-          (label :text "memory" :halign "start" :class "sys-text-mem")
+          (label :text "Memory" :halign "start" :class "sys-text-mem")
           (label :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
           (label :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
         )

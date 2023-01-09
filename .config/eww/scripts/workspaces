@@ -59,11 +59,11 @@ sizestatus() {
 # handle workspace create/destroy
 workspace_event() {
   o[$1]=$2
-  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
+  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | jq -r '.[]|"\(.id) \(.monitor)"')
 }
 # handle monitor (dis)connects
 monitor_event() {
-  while read -r k v; do monitormap["$k"]=$v; done < <(hyprctl -j monitors | gojq -r '.[]|"\(.name) \(.id) "')
+  while read -r k v; do monitormap["$k"]=$v; done < <(hyprctl -j monitors | jq -r '.[]|"\(.name) \(.id) "')
 }
 
 # generate the json for eww
@@ -74,6 +74,9 @@ generate() {
     echo -n ''$([ $i -eq 1 ] || echo ,) '{ "number": "'"$i"'",  "activity": "'$(activestatus "$i")'"}'
   done
 
+  # Workspace 11: active workspace
+  printf ', { "number": "'"$focusedws"'",  "activity": "'$(activestatus "$focusedws")'"}'
+
   echo ']'
 }
 
@@ -83,7 +86,7 @@ generate() {
 monitor_event
 
 # add workspaces
-workspace_event 1 1
+while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
 
 # check occupied workspaces
 for num in "${!workspaces[@]}"; do

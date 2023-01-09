@@ -15,13 +15,14 @@
 }
 
 .music-cover-art {
+  @include rounding;
   background-position: center;
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
-  border-radius: 999px;
+  // border-radius: 5px;
   margin: 1em;
-  // min-height: 80px;
-  min-width: 170px;
+  min-height: 230px;
+  min-width: 230px;
   // background-image: url("/home/end/.config/eww/images/LinageTrack.png");
   // background-color: white;
 }
@@ -80,7 +81,7 @@
   padding-right: 16px;
   color: $tokyored;
   background-image: url("images/LinageMusic.png");
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }

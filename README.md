@@ -1,15 +1,16 @@
 # dots-hyprland
- - Thanks to fufexan for their eww config
+ - Thanks to fufexan (who also thanks a lot more people) for the eww config: https://github.com/fufexan/dotfiles
  - LinageOS icons are cool
  - Run `eww open bar` to open the bar, if you decide to only use my eww configs
 
  ![dots-hyprland](./screenshot-1.png)
 
 # instructions
- - backup if u need
- - copy `Pictures`, `.config` to home folder
- - copy `Binaries` to a $PATH
- - install stuff to provide missing commands (ughhhh)
+ - Backup if u need
+ - Copy `Pictures`, `.config` to home folder
+ - Copy `Binaries` to a $PATH
+ - Install stuff to provide missing commands (ughhhh)
+ - About the `./config/eww/scripts/cache` folder: delete contents to refresh icon, do NOT delete the folder
 
 # fedora
  - eww

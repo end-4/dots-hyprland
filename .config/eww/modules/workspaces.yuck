@@ -1,3 +1,6 @@
+
+
+
 (defwidget workspaces []
   (eventbox
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
@@ -7,11 +10,11 @@
       :class "module workspaces"
       :spacing 0
       :space-evenly false
-      (for i in workspace
+      (for i in ws_loop
         (button
-          :onclick "hyprctl dispatch workspace ${i.number}"
-          :class "ws-${i.number} ws-${i.activity}"
-          ; "●"
+          :onclick "hyprctl dispatch workspace ${workspace[i].number}"
+          :class "ws-${workspace[i].number} ws-${workspace[i].activity}"
+          ; "●" ❶❷❸❹❺❻❼❽❾❿
           " "
         )
       )

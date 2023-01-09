@@ -79,12 +79,13 @@
     :space-evenly false
     :halign "center"
     (workspaces)
-  ))
+  )
+)
 
 (defwidget bar []
   ; (box
-  ;   :space-evenly false
-  ;   :orientation "v"
+    ;   :space-evenly false
+    ;   :orientation "v"
     (centerbox
       :class "bar"
       (left)
@@ -96,11 +97,13 @@
 
 (defwindow bar
   :monitor 0
-  :geometry (geometry :x "0%"
+  :geometry (geometry
+    :x "0%"
     :y "0%"
     :width "100%"
     :height "32px"
-  :anchor "top center")
+    :anchor "top center"
+  )
   :stacking "fg"
   :exclusive true
   (bar)
