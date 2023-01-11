@@ -2,17 +2,18 @@
   (box
     :class "vol-menu"
     (eventbox
-      :class "vol-menu"
+      ; :class "vol-menu"
       :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
       :onrightclick "pavucontrol"
       :onclick "scripts/volume mute SINK"
       (box
         (label
-          :class "vol-menu"
+          ; :class "vol-menu"
           :tooltip "volume ${volume.percent}%"
           :text "${volume.icon}"
+          :valign "start"
         )
-        (label :class "vol-menu" :text "${volume.percent}%")
+        (label :valign "start" :text "${volume.percent}%")
       )
     )
     ; (volmenu)
@@ -25,6 +26,7 @@
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :onrightclick "pavucontrol"
     :onclick "scripts/volume mute SINK"
+    :valign "start"
     (label :class "vol-menu" :text "${volume.percent}%")
   )
 )

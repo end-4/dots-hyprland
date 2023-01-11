@@ -94,11 +94,14 @@
   ; (box
     ;   :space-evenly false
     ;   :orientation "v"
-    (centerbox
-      :class "bar"
-      (left)
-      (center)
-      (right)
+    (eventbox
+      :onhoverlost "${EWW_CMD} update popup='none'"
+      (centerbox
+        :class "bar"
+        (left)
+        (center)
+        (right)
+      )
     )
   ; )
 )
@@ -118,7 +121,7 @@
     :height "32px"
     :anchor "top center"
   )
-  :stacking "fg"
+  ; :stacking "fg"
   :exclusive false
   (bar)
 )

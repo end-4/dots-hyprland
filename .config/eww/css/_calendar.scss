@@ -1,15 +1,16 @@
 .calendar-win {
   @include window;
   background-color: $bg;
-  border: 3px solid $border;
+  border: 3px solid $tokyocyan;
   color: $fg;
   padding: .2em;
 }
 
 calendar {
   //padding: 5px;
-  padding-top: 4px;
-  padding-left: 4px;
+  // padding-top: 4px;
+  // padding-left: 4px;
+  padding: 7px;
 
   :selected {
     color: $text;
