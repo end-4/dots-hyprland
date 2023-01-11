@@ -10,7 +10,7 @@
 .music-window {
   @include window;
   background-color: $bg;
-  border: 3px solid $border;
+  border: 3px solid $tokyored;
   color: $fg;
 }
 
@@ -21,10 +21,9 @@
   background-repeat: no-repeat;
   // border-radius: 5px;
   margin: 1em;
-  min-height: 230px;
-  min-width: 230px;
+  min-height: 150px;
+  min-width: 200px;
   // background-image: url("/home/end/.config/eww/images/LinageTrack.png");
-  // background-color: white;
 }
 
 .music-box {
@@ -72,7 +71,8 @@
 .music-ctl {
   border-radius: 0px;
   color: $tokyored;
-  padding-right: 10px;
+  // padding-right: 10px;
+  min-height: 32px;
 }
 
 .music-icon {

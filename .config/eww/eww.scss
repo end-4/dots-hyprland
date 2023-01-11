@@ -70,7 +70,7 @@
 @import 'css/volume';
 @import 'css/winctl';
 
-.bar {
+.barbg{
   background-color: $barbg;
   // background-image: url("/home/end/.config/eww/images/topbar.png");
   color: $fg;
@@ -80,7 +80,21 @@
     font-size: 1.2rem;
   }
 
-  font-family: Cantarell;
+  font-family: 'Product Sans';
+}
+
+.bar {
+  background-color: transparent;
+  min-height: 32px;
+  // background-image: url("/home/end/.config/eww/images/topbar.png");
+  color: $fg;
+  border-radius: 100px;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Product Sans';
 }
 
 tooltip {
@@ -106,6 +120,7 @@ tooltip {
 .module {
   margin: 0 0px;
   font-family: Material Icons;
+  min-height: 32px;
 }
 
 .module:hover {
@@ -114,7 +129,7 @@ tooltip {
 
 .hour {
   // font-weight: bold;
-  margin-left: 5px;
+  margin-left: 15px;
   color: $tokyoblue;
 }
 
@@ -122,9 +137,9 @@ tooltip {
   color: $tokyoblue;
 }
 
-.clock-module:hover {
-  border-top: 2px solid $tokyoblue;
-}
+// .clock-module:hover {
+//   border-top: 2px solid $tokyoblue;
+// }
 
 .minute {
   color: $tokyoblue;
@@ -193,6 +208,7 @@ scale trough {
   padding-left: 15px;
   padding-right: 15px;
   color: $tokyotext;
+  min-height: 32px;
 }
 
 .ws-1 {

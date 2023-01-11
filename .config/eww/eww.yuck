@@ -16,6 +16,7 @@
 (include "./windows/notifications.yuck")
 (include "./windows/system-menu.yuck")
 (include "./windows/win-workspace.yuck")
+(defvar popup "none")
 ; (include "./windows/clipboard.yuck") DOES NOT WORK
 
 (defwidget notif-toggle []
@@ -27,9 +28,12 @@
 )
 
 (defwidget separator []
-  (label
-    :class "my-separator"
-    :text "|"
+  (box
+    :valign "start"
+    (label
+      :class "my-separator"
+      :text "|"
+    )
   )
 )
 
@@ -39,12 +43,12 @@
 (defwidget left []
   (box
     :space-evenly false
+    :valign "start"
     :halign "start"
-    
+    :class "bar"
     (music-module)
     (clock_module)
-    (separator)
-    (activewindow)
+    ; (activewindow)
     ; (notif-toggle)
   )
 )
@@ -56,6 +60,8 @@
     (box
       :space-evenly false
       :halign "end"
+      :valign "start"
+      :class "bar"
       (winctl)
       (separator)
       (volume-module)
@@ -76,8 +82,10 @@
 
 (defwidget center []
   (box
+    :valign "start"
     :space-evenly false
     :halign "center"
+    :class "bar"
     (workspaces)
   )
 )
@@ -95,6 +103,12 @@
   ; )
 )
 
+(defwidget barbg []
+  (box
+    :class "barbg"
+  )
+)
+
 (defwindow bar
   :monitor 0
   :geometry (geometry
@@ -105,6 +119,20 @@
     :anchor "top center"
   )
   :stacking "fg"
-  :exclusive true
+  :exclusive false
   (bar)
+)
+
+(defwindow barbg
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px"
+    :anchor "top center"
+  )
+  :stacking "bg"
+  :exclusive false
+  (barbg)
 )

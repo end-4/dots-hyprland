@@ -1,49 +1,131 @@
+(deflisten mcover
+  'scripts/music cover'
+)
+
 (defwidget music-module []
   (eventbox
-    :class "music-ctl"
-    :onhover "${EWW_CMD} update music_reveal=true && ${EWW_CMD} update date_rev=true"
-    :onhoverlost "${EWW_CMD} update music_reveal=false && ${EWW_CMD} update date_rev=false"
-    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-    :onclick "${EWW_CMD} open --toggle music"
-    :onmiddleclick "playerctl play-pause"
-    :onrightclick "playerctl next"
+    :class "${popup == 'music' ? 'music-window' : ''}"
+    :onhoverlost "${EWW_CMD} update popup='none'"
     (box
-      :class "music-ctl"
+      :valign "start" 
       :space-evenly false
-      ; (label :class "music-icon" :text {music.icon})
-      (label :class "music-icon" :text "   ")
+      :orientation "v"
       (revealer
-        :transition "slideright"
-        :reveal music_reveal
-        :duration "300ms"
-        :class "music-ctl-revealer"
-        :onclick "${EWW_CMD} open --toggle music"
-        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-        :limit-width 20
+        ; :reveal "${popup != 'music'}"
+        :reveal true
+        :transition "slidedown"
         (eventbox
-          :class "music-ctl-revealer"
-          :onclick "${EWW_CMD} open --toggle music"
+          :class "music-ctl"
+          :onhover "${EWW_CMD} update music_reveal=true && ${EWW_CMD} update date_rev=true"
+          :onhoverlost "${EWW_CMD} update music_reveal=false && ${EWW_CMD} update date_rev=false"
           :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-          (label :limit-width 70 :text "${music.title}")
+          ; :onclick "${EWW_CMD} open --toggle music"
+          :onclick "${EWW_CMD} update popup='music'"
+          :onmiddleclick "playerctl play-pause"
+          :onrightclick "playerctl next"
+          (box
+            :class "music-ctl"
+            :space-evenly false
+            (label :class "music-icon" :text "")
+            (revealer
+              :transition "slideright"
+              :reveal "${music_reveal || popup == 'music'}"
+              :duration "300ms"
+              :class "music-ctl-revealer"
+              :onclick "${EWW_CMD} open --toggle music"
+              :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+              :limit-width 20
+              (eventbox
+                :class "music-ctl-revealer"
+                :onclick "${EWW_CMD} open --toggle music"
+                :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+                (label :limit-width 50 :text "${music.title}")
+              )
+            )
+            (revealer
+              :transition "slideright"
+              :reveal music_reveal
+              :duration "300ms"
+              :class "music-ctl-revealer"
+              :onclick "${EWW_CMD} open --toggle music"
+              (box
+                :class "icon"
+                :style "font-family: SF Mono Nerd Font;"
+                ; (button
+                  ;   :class "song-button"
+                  
+                ;   {music.title} "" {music.status} "")
+                ; (button :class "song-button" :onclick "playerctl previous" {music.title})
+                (button :class "song-button" :onclick "playerctl previous" "")
+                (button :class "song-button" :onclick "playerctl play-pause" {music.status})
+                (button :class "song-button" :onclick "playerctl next" "")
+              )
+            )
+          )
         )
       )
       (revealer
+        :reveal "${popup == 'music'}"
         :transition "slideright"
-        :reveal music_reveal
-        :duration "300ms"
-        :class "music-ctl-revealer"
-        :onclick "${EWW_CMD} open --toggle music"
-        (box
-          :class "icon"
-          :style "font-family: SF Mono Nerd Font;"
-          ; (button
-            ;   :class "song-button"
-            
-          ;   {music.title} "" {music.status} "")
-          ; (button :class "song-button" :onclick "playerctl previous" {music.title})
-          (button :class "song-button" :onclick "playerctl previous" "")
-          (button :class "song-button" :onclick "playerctl play-pause" {music.status})
-          (button :class "song-button" :onclick "playerctl next" "")
+        :duration "0ms"
+        (revealer
+          :reveal "${popup == 'music'}"
+          :transition "crossfade"
+          :duration "0ms"
+          (revealer
+            :reveal "${popup == 'music'}"
+            :transition "slidedown"
+            :duration "0ms"
+            (box
+              ; :class "music-window"
+              :space-evenly false
+              :orientation "h"
+              (box ; Cover art
+                :class "music-cover-art"
+                :style "background-image: url('${mcover}');"
+              )
+              (box ;
+                :orientation "v"
+                :class "music-box"
+                (label
+                  :class "music-title"
+                  :wrap true
+                  :text {music.title}
+                  :limit-width 35
+                )
+                (label
+                  :class "music-artist"
+                  :wrap true
+                  :text {music.artist}
+                )
+                (centerbox
+                  :halign "center"
+                  :class "music-button-box icon"
+                  (button :class "music-button" :onclick "playerctl previous" "")
+                  (button :class "music-button" :onclick "playerctl play-pause" {music.status})
+                  (button :class "music-button" :onclick "playerctl next" "")
+                )
+                (box
+                  (label
+                    :xalign 0
+                    :class "music-time"
+                    :text {music.position_time}
+                  )
+                  (label
+                    :xalign 1
+                    :class "music-time"
+                    :text {music.length}
+                  )
+                )
+                (box
+                  :class "music-bar"
+                  (scale
+                    :value {music.position}
+                  )
+                )
+              )
+            )
+          )
         )
       )
     )

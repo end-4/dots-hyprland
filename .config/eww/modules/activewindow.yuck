@@ -5,7 +5,6 @@
 
 (defwidget activewindow []
   (eventbox
-    ; :onmiddleclick 
     (box
       :space-evenly false
       :class "activewin"
