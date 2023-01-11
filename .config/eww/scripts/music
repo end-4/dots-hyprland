@@ -53,18 +53,19 @@ get_cover() {
 	mkdir -p "eww_covers"
 	cd "eww_covers" || exit
 
-	IMGPATH="eww_covers/cover_art.png"
+	IMGPATH="cover_art.png"
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		if [[ "$COVER_URL" = https* ]]; then
-			if [ ! -e "eww_covers/$(basename "$COVER_URL")" ]; then
-				wget -N "$COVER_URL" -o /dev/null
-			fi
+			# if [ ! -e "eww_covers/$(basename "$COVER_URL")" ]; then
+			# 	wget -N "$COVER_URL" -o /dev/null
+			# 	# wget -N "$COVER_URL" -o "$IMGPATH"
+			# fi
 
-			rm "$IMGPATH"
-			ln -s "$(basename "$COVER_URL")" "$IMGPATH"
+			# ln -s "$(basename "$COVER_URL")" "$IMGPATH"
 
-			echo "$IMGPATH"
+			# echo "$IMGPATH"
+			playerctl -F metadata mpris:artUrl
 		elif [ "$COVER_URL" = "" ]; then
 			echo ""
 		else
