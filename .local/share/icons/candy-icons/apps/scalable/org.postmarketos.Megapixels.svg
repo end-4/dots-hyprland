@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Gravit.io -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   style="isolation:isolate"
+   viewBox="0 0 48 48"
+   width="48pt"
+   height="48pt"
+   version="1.1"
+   id="svg9"
+   sodipodi:docname="org.postmarketos.Megapixels.svg.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs13">
+    <linearGradient
+       xlink:href="#ccd"
+       id="linearGradient4827"
+       x1="-125.93767"
+       y1="-73.405853"
+       x2="-45.044811"
+       y2="-94.477287"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-2.5,127.14286)" />
+    <linearGradient
+       id="ccd">
+      <stop
+         id="stop4834"
+         offset="0"
+         style="stop-color:#b3a4de;stop-opacity:1" />
+      <stop
+         style="stop-color:#77a1e3;stop-opacity:1"
+         offset="0.30466428"
+         id="stop4842" />
+      <stop
+         style="stop-color:#b174c6;stop-opacity:1"
+         offset="0.67511511"
+         id="stop4840" />
+      <stop
+         id="stop4836"
+         offset="1"
+         style="stop-color:#c44f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#ccd"
+       id="linearGradient882"
+       x1="8.3898306"
+       y1="31.016949"
+       x2="43.779659"
+       y2="12.305085"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3840"
+     inkscape:window-height="2042"
+     id="namedview11"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="-24.501398"
+     inkscape:cy="16.601858"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9" />
+  <linearGradient
+     id="_lgradient_1"
+     x1="0.67180997"
+     y1="0.020570019"
+     x2="0.42214948"
+     y2="0.96016449"
+     gradientTransform="matrix(42,0,0,42,3,3)"
+     gradientUnits="userSpaceOnUse"
+     xlink:href="#ccd">
+    <stop
+       offset="0%"
+       stop-opacity="1"
+       style="stop-color:rgb(26,108,255)"
+       id="stop2" />
+    <stop
+       offset="100%"
+       stop-opacity="1"
+       style="stop-color:rgb(197,34,255)"
+       id="stop4" />
+  </linearGradient>
+  <path
+     d=" M 7.491 26.466 L 7.491 26.466 C 7.663 27.643 6.848 28.741 5.671 28.916 L 5.671 28.916 C 4.494 29.091 3.399 28.278 3.226 27.102 L 3.226 27.102 C 3.075 26.078 3 25.034 3 24 C 3 18.432 5.218 13.091 9.149 9.149 C 13.091 5.218 18.432 3 24 3 C 29.568 3 34.909 5.218 38.851 9.149 C 42.782 13.091 45 18.432 45 24 C 45 29.568 42.782 34.909 38.851 38.851 C 34.909 42.782 29.568 45 24 45 C 18.508 45 13.231 42.846 9.311 39.002 L 9.311 39.002 C 8.461 38.169 8.446 36.804 9.278 35.954 L 9.278 35.954 C 10.111 35.104 11.476 35.089 12.326 35.922 L 12.326 35.922 C 15.438 38.98 19.638 40.692 24 40.692 C 28.426 40.692 32.669 38.937 35.803 35.803 C 38.937 32.669 40.692 28.426 40.692 24 C 40.692 19.574 38.937 15.331 35.803 12.197 C 32.669 9.063 28.426 7.308 24 7.308 C 19.574 7.308 15.331 9.063 12.197 12.197 C 9.063 15.331 7.308 19.574 7.308 24 C 7.308 24.829 7.372 25.648 7.491 26.466 L 7.491 26.466 L 7.491 26.466 L 7.491 26.466 Z  M 28.103 12.283 L 28.103 12.283 C 27.538 12.093 27.234 11.48 27.425 10.915 L 27.425 10.915 C 27.615 10.351 28.228 10.047 28.792 10.237 L 28.792 10.237 C 32.648 11.529 35.814 14.329 37.58 17.991 L 37.58 17.991 C 37.842 18.526 37.62 19.17 37.085 19.428 L 37.085 19.428 C 36.55 19.687 35.903 19.463 35.642 18.928 L 35.642 18.928 C 34.123 15.783 31.409 13.392 28.103 12.283 L 28.103 12.283 L 28.103 12.283 L 28.103 12.283 Z  M 22.923 10 C 22.923 9.406 23.406 8.923 24 8.923 C 24.594 8.923 25.077 9.406 25.077 10 C 25.077 10.594 24.594 11.077 24 11.077 C 23.406 11.077 22.923 10.594 22.923 10 L 22.923 10 L 22.923 10 Z  M 21.23 24 C 21.23 23.27 21.52 22.56 22.04 22.04 C 22.56 21.52 23.27 21.23 24 21.23 C 24.73 21.23 25.44 21.52 25.96 22.04 C 26.48 22.56 26.77 23.27 26.77 24 C 26.77 24.73 26.48 25.44 25.96 25.96 C 25.44 26.48 24.73 26.77 24 26.77 C 23.27 26.77 22.56 26.48 22.04 25.96 C 21.52 25.44 21.23 24.73 21.23 24 L 21.23 24 L 21.23 24 Z  M 19.23 24 C 19.23 22.74 19.73 21.52 20.63 20.63 C 21.52 19.73 22.74 19.23 24 19.23 C 25.26 19.23 26.48 19.73 27.37 20.63 C 28.27 21.52 28.77 22.74 28.77 24 C 28.77 25.26 28.27 26.48 27.37 27.37 C 26.48 28.27 25.26 28.77 24 28.77 C 22.74 28.77 21.52 28.27 20.63 27.37 C 19.73 26.48 19.23 25.26 19.23 24 L 19.23 24 L 19.23 24 Z  M 16.92 24 C 16.92 22.12 17.67 20.32 19 19 C 20.32 17.67 22.12 16.92 24 16.92 C 25.88 16.92 27.68 17.67 29 19 C 30.33 20.32 31.08 22.12 31.08 24 C 31.08 25.88 30.33 27.68 29 29 C 27.68 30.33 25.88 31.08 24 31.08 C 22.12 31.08 20.32 30.33 19 29 C 17.67 27.68 16.92 25.88 16.92 24 L 16.92 24 Z  M 14.92 24 C 14.92 21.59 15.88 19.28 17.58 17.58 C 19.28 15.88 21.59 14.92 24 14.92 C 26.41 14.92 28.72 15.88 30.42 17.58 C 32.12 19.28 33.08 21.59 33.08 24 C 33.08 26.41 32.12 28.72 30.42 30.42 C 28.72 32.12 26.41 33.08 24 33.08 C 21.59 33.08 19.28 32.12 17.58 30.42 C 15.88 28.72 14.92 26.41 14.92 24 L 14.92 24 Z "
+     fill-rule="evenodd"
+     fill="url(#_lgradient_1)"
+     id="path7"
+     style="fill-opacity:1;fill:url(#linearGradient882)" />
+</svg>

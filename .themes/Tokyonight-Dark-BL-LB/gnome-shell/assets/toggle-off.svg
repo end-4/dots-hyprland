@@ -1,0 +1,6 @@
+<svg width="40" height="20" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(0 -1032.4)" fill="#000000" stroke-width="0">
+  <path d="m10 1032.4c-5.54 0-10 4.46-10 10s4.46 10 10 10h20c5.54 0 10-4.46 10-10s-4.46-10-10-10zm0 1h20c4.986 0 9 4.014 9 9s-4.014 9-9 9h-20c-4.986 0-9-4.014-9-9s4.014-9 9-9z" opacity=".5" style="paint-order:stroke fill markers"/>
+  <circle transform="scale(-1,1)" cx="-10" cy="1042.4" r="5" opacity=".5" style="paint-order:stroke fill markers"/>
+ </g>
+</svg>
