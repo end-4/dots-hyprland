@@ -118,7 +118,6 @@ tooltip {
 }
 
 .module {
-  margin: 0 0px;
   font-family: Material Icons;
   min-height: 32px;
 }
@@ -158,6 +157,7 @@ tooltip {
 .bright-icon {
   color: $tokyoyellow;
   padding-right: 4px;
+  padding-top: 6px;
 }
 
 .bright-icon:hover {
@@ -198,6 +198,7 @@ scale trough {
   padding-left: 4px;
   padding-right: 4px;
   padding-top: 0px;
+  padding-top: 6px;
 }
 
 .net-icon:hover {

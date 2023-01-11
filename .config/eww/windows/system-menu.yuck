@@ -6,6 +6,16 @@
       :space-evenly false
       :orientation "v"
       (box
+        :class "module"
+        :space-evenly false
+        :spacing 5
+        :halign "end"
+        (syscpu)
+        (sysmem)
+        (sysbatt)
+        (settingscog)
+      )
+      (box
         :class "top-row"
         :space-evenly false
         (label :class "time" :text "${time.hour}:${time.minute}")
@@ -156,38 +166,6 @@
           )
         )
       )
-      ; (centerbox ;Battery remaining time and power button
-        ;     :class "bottom-row"
-        ;     (box
-          ;         :class "battery-box"
-          ;         :space-evenly false
-          ;         :halign "start"
-          ;         (label
-            ;             :class "battery-icon icon"
-            ;             :style "color: ${battery.color}"
-          ;         :text {battery.icon})
-          ;         (label
-            ;             :class "battery-percentage"
-          ;         :text {EWW_BATTERY["BAT0"].capacity})
-          ;         (label
-            ;             :class "battery-status"
-          ;         :text {battery.status})
-          ;         ; (label
-            ;             ;   :class "battery-wattage"
-          ;         ;   :text {battery.wattage})
-        ;     )
-        ;     (label)
-        ;     (box
-          ;         :space-evenly false
-          ;         :halign "end"
-          ;         (button
-            ;             :halign "end"
-            ;             :class "power-button icon"
-            ;             :onclick "wlogout -p layer-shell &"
-            ;             ""
-          ;         )
-        ;     )
-      ; )
     )
   )
 )

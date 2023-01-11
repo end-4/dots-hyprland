@@ -19,12 +19,13 @@
 
 (defwidget win-ws[]
   (eventbox
-    :onhoverlost "${EWW_CMD} close win-workspace"
+    ; :onhoverlost "${EWW_CMD} close win-workspace"
     (box
       :space-evenly false
       :orientation "v"
       :class "system-menu-box"
-      :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem;"
+      ; :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem; background-color: ${awin == winjson[i].title ? '#7AA2F7' : '$bg'};"
+      :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem; background-color: $bg};"
       ; (label :text "${winjson}" ) ; DEBUG
       (label
         :class "winws-title"
@@ -107,9 +108,10 @@
     :space-evenly false
     :orientation "h"
     (eventbox
-      :class "winctl module"
+      :valign "start"
+      ; :class "winctl module"
       :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"
-      (label :text "[ Split Ratio ]")
+      (label :class "winctl" :text "[ Split ]")
     )
   )
 )
