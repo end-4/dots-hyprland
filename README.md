@@ -3,7 +3,7 @@
  - LinageOS icons are cool
  - Run `eww open bar` to open the bar, if you decide to only use my eww configs
 
- ![dots-hyprland](./screenshot-2.png)
+ ![dots-hyprland](./screenshot-3.png) ![dots-hyprland](./screenshot-4.png)
 
 # instructions
  - Backup if u need
