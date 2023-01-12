@@ -1,0 +1,10 @@
+[theme]
+name = "enight"
+desc = "tokyonight colors, rounding, gnome- and windows- friendly shortcuts"
+version = "0.69"
+author = "end-4"
+git = "https://github.com/end-4/dots-hyprland"
+config = "./.config/hypr/hyprland.conf"
+subthemes = []
+default_subtheme = ""
+hyprpaper = "./.config/hypr/hyprpaper.conf"
