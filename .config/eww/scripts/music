@@ -53,7 +53,7 @@ get_cover() {
 	mkdir -p "eww_covers"
 	cd "eww_covers" || exit
 
-	IMGPATH="cover_art.png"
+	IMGPATH="cover_art"
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		if [[ "$COVER_URL" = https* ]]; then
@@ -65,11 +65,18 @@ get_cover() {
 			# ln -s "$(basename "$COVER_URL")" "$IMGPATH"
 
 			# echo "$IMGPATH"
-			playerctl -F metadata mpris:artUrl
+			coverurl="$(playerctl metadata mpris:artUrl)"
+			wget -O "$IMGPATH" "$coverurl" -q
+			coverpath="$IMGPATH"
+			wal -c
+			themejson=$(wal -i "$IMGPATH" -n -t -e -s | grep -e 'color1' | sed 's/'\''/"/g')
+			echo "$themejson"
+			printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
+			# printf '{"image": "eww_covers/'"$coverpath"'"}\n'
 		elif [ "$COVER_URL" = "" ]; then
-			echo ""
+		    printf '{"image": "", "color": "$bg"}'
 		else
-			echo "$COVER_URL"
+			echo "$COVER_URL"'", "color": "$bg"}'
 		fi
 	done
 }
@@ -108,7 +115,6 @@ else
 			--arg pos "$(get_position "$position" "$len")" \
 			--arg pos_time "$(get_position_time "$position" "$len")" \
 			--arg length "$(get_length_time "$len")" \
-			--arg cover_art "$coverart" \
 			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length}'
 	done
 fi

@@ -42,20 +42,6 @@ activestatus() {
   fi
 }
 
-sizestatus() {
-  if [ "${o[$1]}" -eq 1 ]; then
-    # mon=${monitormap[${workspaces[$1]}]}
-
-    if [ $focusedws -eq "$1" ]; then
-      echo "100%"
-    else
-      echo "70%"
-    fi
-  else
-    echo "70%"
-  fi
-}
-
 # handle workspace create/destroy
 workspace_event() {
   o[$1]=$2

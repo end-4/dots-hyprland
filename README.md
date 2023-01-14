@@ -5,6 +5,7 @@
 # If you're here only for eww...
  - `monitor=eDP-1, addreserved, 32, 0, 0, 0` (replace "eDP-1" with your monitor name)
  - Start the bar with `eww open bar` and `eww open barbg`
+ - If you use a Chromium-based browser (Brave Chrome Edge etc), Plasma Browser Integration is your friend (if you use Youtube for music like me)
 
 # Screenshots
  ![dots-hyprland](./screenshot-3.png) 
@@ -21,4 +22,4 @@
  - eww
  `sudo dnf install gojq socat`
  - others
- `sudo dnf install tesseract`
+ `sudo dnf install tesseract plasma-browser-integration`
