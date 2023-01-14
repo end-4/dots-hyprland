@@ -381,10 +381,16 @@
 (defwidget settingscog[]
   (eventbox
     :class "settings-icon"
-    (button
-      :class "sys-menu-button"
+    (revealer
+      :transition "slideright"
+      :reveal true
+      :duration "300ms"
       :onclick "${EWW_CMD} update popup='system-menu'"
-      " "
+      (button
+        :class "sys-menu-button"
+        :onclick "${EWW_CMD} update popup='system-menu'"
+        " "
+      )
     )
   )
 )
