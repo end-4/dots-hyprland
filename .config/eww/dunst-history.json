@@ -5,15 +5,15 @@
 			{
 				"body" : {
 					"type" : "s",
-					"data" : "#gg 1 att"
+					"data" : "Recording Stopped"
 				},
 				"message" : {
 					"type" : "s",
-					"data" : "<b>lmao</b>\n#gg 1 att"
+					"data" : "<b>wf-recorder</b>\nRecording Stopped"
 				},
 				"summary" : {
 					"type" : "s",
-					"data" : "lmao"
+					"data" : "wf-recorder"
 				},
 				"appname" : {
 					"type" : "s",
@@ -37,11 +37,11 @@
 				},
 				"timestamp" : {
 					"type" : "x",
-					"data" : 14362210710
+					"data" : 448646404
 				},
 				"timeout" : {
 					"type" : "x",
-					"data" : 8000000
+					"data" : 5000000
 				},
 				"progress" : {
 					"type" : "i",
@@ -51,15 +51,15 @@
 			{
 				"body" : {
 					"type" : "s",
-					"data" : "the quick brown fox jumps over the lazy dog freaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long message"
+					"data" : "Starting recording"
 				},
 				"message" : {
 					"type" : "s",
-					"data" : "<b>Google</b>\nthe quick brown fox jumps over the lazy dog freaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long messagefreaking long message"
+					"data" : "<b>wf-recorder</b>\nStarting recording"
 				},
 				"summary" : {
 					"type" : "s",
-					"data" : "Google"
+					"data" : "wf-recorder"
 				},
 				"appname" : {
 					"type" : "s",
@@ -83,11 +83,11 @@
 				},
 				"timestamp" : {
 					"type" : "x",
-					"data" : 8438290237
+					"data" : 442196836
 				},
 				"timeout" : {
 					"type" : "x",
-					"data" : 0
+					"data" : 5000000
 				},
 				"progress" : {
 					"type" : "i",

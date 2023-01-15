@@ -17,13 +17,13 @@
       :onclick "iwgtk &"
       :onrightclick "gnome-control-center network &"
       :tooltip {net.essid}
-      :style "color: ${net.color};"
+      ; :style "color: ${net.color};"
       (label
         :valign "start"
         :text {net.icon}
         :class "net-icon"
         :tooltip {net.essid}
-        :style "color: ${net.color};"
+        ; :style "color: ${net.color};"
       )
     )
   )

@@ -19,6 +19,31 @@
 (defvar popup "none")
 ; (include "./windows/clipboard.yuck") DOES NOT WORK
 
+(defwidget themer []   ; WIP
+  (eventbox
+    (box
+      :valign "start"
+      :space-evenly false
+      :spacing 4
+      :class "themer"
+      (label :text "[")
+      ; (checkbox
+      ;   :style "@include rounding; border: 2px solid;"
+      ;   ""
+      ; )
+      (button
+        :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'"
+        ""
+      )
+      (button
+        :onclick "cp css/_colorscheme_default.scss css/_colorscheme.scss"
+        ""
+      )
+      (label :text "]")
+    )
+  )
+)
+
 (defwidget notif-toggle []
   (button
     :class "notif-toggle module"
@@ -62,6 +87,7 @@
       :halign "end"
       :valign "start"
       :class "bar"
+      (themer)
       (winctl)
       (separator)
       (volume-module)

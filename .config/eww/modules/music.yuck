@@ -43,7 +43,7 @@
                 (label
                   :style "${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
                   :limit-width 50
-                  :text "${music.title}"
+                  :text "${music.title == '' ? 'Not playing' : music.title}"
                 )
               )
             )
@@ -67,7 +67,8 @@
                 )
                 (button
                   :class "song-button"
-                  :onclick "playerctl play-pause" {music.status}
+                  :onclick "playerctl play-pause" 
+                  "${music.status != '' ? music.status : '⏣'}"
                 )
                 (button
                   :class "song-button"
@@ -105,7 +106,7 @@
                 (label
                   :class "music-title"
                   :wrap true
-                  :text {music.title}
+                  :text "${music.title == '' ? 'Not playing' : music.title}"
                   :style "color: ${mcover.color.colors.color4};"
                   :limit-width 35
                 )
@@ -119,7 +120,7 @@
                   :halign "center"
                   :class "music-button-box icon"
                   (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl previous" "")
-                  (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl play-pause" {music.status})
+                  (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl play-pause" "${music.status != '' ? music.status : '⏣'}")
                   (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl next" "")
                 )
                 (box
@@ -142,6 +143,8 @@
                   (scale
                     ; :style "color: ${mcover.color.colors.color4};"
                     :value {music.position}
+                    :class "track-scale"
+                    ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
                     :style "highlight {background-color: ${mcover.color.colors.color4};}"
                   )
                 )

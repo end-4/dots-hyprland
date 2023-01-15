@@ -13,21 +13,6 @@ declare -A o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
 declare -A monitormap
 declare -A workspaces
 
-# set color for each workspace
-status() {
-  if [ "${o[$1]}" -eq 1 ]; then
-    mon=${monitormap[${workspaces[$1]}]}
-
-    if [ $focusedws -eq "$1" ]; then
-      echo -n "#F7768E"
-    else
-      echo -n "#0DB7D4"
-    fi
-  else
-    echo -n "#313244"
-  fi
-}
-
 activestatus() {
   if [ "${o[$1]}" -eq 1 ]; then
     mon=${monitormap[${workspaces[$1]}]}

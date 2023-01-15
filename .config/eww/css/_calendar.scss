@@ -1,8 +1,8 @@
 .calendar-win {
   @include window;
-  background-color: $bg;
-  border: 3px solid $tokyocyan;
-  color: $fg;
+  background-color: $colorbg;
+  border: 3px solid $color6;
+  color: $colortext;
   padding: .2em;
 }
 
@@ -13,23 +13,23 @@ calendar {
   padding: 7px;
 
   :selected {
-    color: $text;
+    color: $colortext;
     font-weight: bolder;
-    background-color: $catbg;
+    background-color: $overlay0;
     border-radius: 8px;
   }
 
   .header {
-    color: $tokyocyan;
+    color: $color6;
   }
 
   .highlight {
-    color: $maroon;
+    color: $color0;
     font-weight: bold;
   }
 
   .button {
-    color: $text;
+    color: $colortext;
   }
 
   :indeterminate {
@@ -39,6 +39,6 @@ calendar {
 
 .date-clock{
   background: transparent;
-  color: $tokyocyan;
+  color: $color6;
   padding-left: 5px;
 }
