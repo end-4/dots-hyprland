@@ -9,9 +9,11 @@
 
 .music-window {
   @include window;
-  background-color: $bg;
-  border: 3px solid $tokyored;
-  color: $fg;
+  background-color: $colorbg;
+  border: 3px solid $color1;
+  color: $colortext;
+  padding: 3px;
+  margin: 3px;
 }
 
 .music-cover-art {
@@ -36,7 +38,7 @@
 }
 
 .music-artist {
-  color: $subtext1;
+  color: $color1;
 }
 
 .music-button label {
@@ -47,7 +49,7 @@
 }
 
 .music-time {
-  color: $text;
+  color: $color1;
   margin: 0 1rem;
 }
 
@@ -55,12 +57,12 @@
   font-family: SF Mono Nerd Font;
 
   highlight {
-    background-color: $tokyored;
+    background-color: $color1;
     border-radius: 24px;
   }
 
   trough {
-    background-color: $bg1;
+    background-color: $colorbg;
     border-radius: 24px;
     margin-top: 0;
     min-height: 10px;
@@ -70,7 +72,7 @@
 
 .music-ctl {
   border-radius: 0px;
-  color: $tokyored;
+  color: $color1;
   // padding-right: 10px;
   min-height: 32px;
 }
@@ -79,7 +81,7 @@
   padding-top: 5px; //Because the music icon is a bit high
   padding-left: 16px;
   padding-right: 16px;
-  color: $tokyored;
+  color: $color1;
   background-image: url("images/LinageMusic.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -91,6 +93,6 @@
 }
 
 .song-button {
-  color: $tokyored;
+  color: $color1;
   padding: 0px;
 }

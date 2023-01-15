@@ -62,7 +62,7 @@
 }
 
 .sys-text-sub {
-  color: $text;
+  color: $colortext;
 }
 
 .sys-text-mem,
@@ -86,7 +86,7 @@
 
 .sys-mem,
 .sys-cpu {
-  background-color: $bg;
+  background-color: $colorbg;
 }
 
 .sys-icon-mem,
@@ -145,7 +145,7 @@
 }
 
 .sys-menu-button {
-  color: $forestred;
+  color: $color1;
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;

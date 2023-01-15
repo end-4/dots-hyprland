@@ -14,20 +14,20 @@
   label { font-size: 1rem; }
 
   &:hover {
-    border: 3px solid $border;
+    border: 3px solid $color7;
   }
 
   .appname {
-    color: $peach;
+    color: $color0;
     font-weight: bold;
   }
 
   .summary {
-    color: $text;
+    color: $colortext;
     font-weight: bold;
   }
 
-  .body { color: $text; }
+  .body { color: $colortext; }
 }
 
 .container {
@@ -40,7 +40,7 @@
 }
 
 .notification-label {
-  color: $tokyocyan;
+  color: $color6;
   font-size: 1.5rem;
 }
 
@@ -50,7 +50,7 @@
   padding: 0 .3rem;
 
   label {
-    color: $text;
+    color: $colortext;
     font-size: 1.2rem;
   }
 

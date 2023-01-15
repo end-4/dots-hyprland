@@ -14,8 +14,9 @@
         (button
           :onclick "hyprctl dispatch workspace ${workspace[i].number}"
           :class "ws-${workspace[i].number} ws-${workspace[i].activity}"
-          ; "●" ❶❷❸❹❺❻❼❽❾❿
+          ; "●" 
           " "
+          ; ❶❷❸❹❺❻❼❽❾❿
         )
       )
     )

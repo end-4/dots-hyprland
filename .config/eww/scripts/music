@@ -70,13 +70,56 @@ get_cover() {
 			coverpath="$IMGPATH"
 			wal -c
 			themejson=$(wal -i "$IMGPATH" -n -t -e -s | grep -e 'color1' | sed 's/'\''/"/g')
-			echo "$themejson"
 			printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
 			# printf '{"image": "eww_covers/'"$coverpath"'"}\n'
+
+			# echo "$themejson" | jq '.colors'
+			# echo 'COLORS: '
+
+			cd ..
+			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
+			echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
+			printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
+			echo "$themejson" | jq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+
+			# cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
+			cd "eww_covers" || exit
+			# notify-send 'eww color changer' 'okie dokie'
 		elif [ "$COVER_URL" = "" ]; then
 		    printf '{"image": "", "color": "$bg"}'
 		else
-			echo "$COVER_URL"'", "color": "$bg"}'
+			wal -c
+			themejson=$(wal -i "$IMGPATH" -n -t -e -s | grep -e 'color1' | sed 's/'\''/"/g')
+			# echo "$themejson"
+			printf '{"image": "'"$COVER_URL"'", "color": '"$themejson"'}\n'
 		fi
 	done
 }
@@ -103,6 +146,7 @@ sanitize() {
 if [ "$1" = "cover" ]; then
 	get_cover
 else
+	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\{{mpris:length}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position len; do
 		# thecoverart=$(get_cover)
 		# notify-send "owo" "$thecoverart"

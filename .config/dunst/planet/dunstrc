@@ -29,10 +29,11 @@
     # The maximum height of a single notification, excluding the frame.
     height = 1080
 
-    origin = top-right
+    # Position the notification in the top right corner
+    origin = bottom-right
 
     # Offset from the origin
-    offset = 20x52
+    offset = 40x40
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -67,7 +68,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.). (X11 only)
-    transparency = 50
+    transparency = 0
 
     # Draw a line of "separator_height" pixel height between two
     # notifications.
@@ -86,10 +87,10 @@
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
-    frame_width = 3
+    frame_width = 5
 
     # Defines color of the frame around the notification window.
-    frame_color = "#8297ED"
+    frame_color = "#fff7ca"
 
     # Size of gap to display between notifications - requires a compositor.
     # If value is greater than 0, separator_height will be ignored and a border
@@ -117,7 +118,7 @@
 
     ### Text ###
 
-    font = Product Sans 12
+    font = Nova Mono Bold 12
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.

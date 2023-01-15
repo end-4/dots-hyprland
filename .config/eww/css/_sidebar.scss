@@ -1,8 +1,8 @@
 .system-menu-box {
   @include window;
-  background-color: $bg;
+  background-color: $colorbg;
   border: 3px solid $border;
-  color: $text;
+  color: $colortext;
 }
 
 .separator {
@@ -94,12 +94,14 @@
 .volume-bar highlight {
   font-family: SF Mono Nerd Font;
   @include rounding;
-  background-image: linear-gradient(to right, $tokyocyan 30%, $tokyocyan 100%);
+  background: $color6;
+  // background-image: linear-gradient(to right, $tokyocyan 30%, $tokyopurple 100%);
 }
 
 .volume-slider-box scale highlight {
   @include rounding;
-  background-image: linear-gradient(to right, $tokyocyan 30%, $tokyopurple 100%);
+  background: $color6;
+  // background-image: linear-gradient(to right, $tokyocyan 30%, $tokyopurple 100%);
   // border: 2px solid;
   min-height: 0.9rem;
 }
@@ -118,11 +120,11 @@
   }
 
   .battery-wattage {
-    color: $mauve;
+    color: $color7;
   }
 
   .battery-status {
-    color: $subtext0;
+    color: $colortext;
     margin: 0 .5rem;
   }
 
@@ -146,13 +148,3 @@
   min-height: 2.5rem;
   // min-width: 2.5rem;
 }
-
-
-
-// .winws-evbox{
-//   background: black;
-// }
-
-// .winws-evbox:hover{
-//   background: white;
-// }

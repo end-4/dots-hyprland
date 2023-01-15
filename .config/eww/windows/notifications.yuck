@@ -1,10 +1,10 @@
 (defwindow notifications
   :geometry (geometry
     :x "0px"
-    :y "0px"
+    :y "32px"
     :width "0px"
     :height "0px"
-  :anchor "left top")
+  :anchor "top center")
   :monitor 0
   (notifications))
 
