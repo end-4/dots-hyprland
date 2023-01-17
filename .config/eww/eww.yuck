@@ -16,30 +16,32 @@
 (include "./windows/notifications.yuck")
 (include "./windows/system-menu.yuck")
 (include "./windows/win-workspace.yuck")
+(include "./windows/themer.yuck")
 (defvar popup "none")
 ; (include "./windows/clipboard.yuck") DOES NOT WORK
 
-(defwidget themer []   ; WIP
+(defwidget themer [] 
   (eventbox
     (box
+      :style "padding-right: 5px;"
       :valign "start"
       :space-evenly false
       :spacing 4
-      :class "themer"
-      (label :text "[")
-      ; (checkbox
-      ;   :style "@include rounding; border: 2px solid;"
-      ;   ""
-      ; )
       (button
-        :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'"
+        :class "themer-button"
+        :onclick "eww open --toggle themer"
+        ''
+      )
+      (button
+        :class "themer-button themer-get"
+        :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss' && cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf"
         ""
       )
       (button
-        :onclick "cp css/_colorscheme_default.scss css/_colorscheme.scss"
+        :class "themer-button themer-restore"
+        :onclick "cp css/_colorscheme_default.scss css/_colorscheme.scss && cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf"
         ""
       )
-      (label :text "]")
     )
   )
 )

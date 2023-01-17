@@ -146,7 +146,7 @@
                   (audiolevels)
                   (box
                     :class "system-info-box"
-                    
+                    :style "margin-bottom: 17px;"
                     ; cpu
                     (box
                       :class "sys-box"
@@ -313,7 +313,7 @@
         :class "batbar-circle"
         :thickness 3
         :start-at 75
-        :style "border-radius: 99px; color: ${battery.circolor}; background-color: ${battery.cirbgcolor}"
+        :style "border-radius: 99px; color: ${EWW_BATTERY["BATT"].capacity <= 20 ? battery.circolor : mcover.color.colors.color4}; background-color: ${battery.cirbgcolor}"
         (button
           :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
           :onclick "${EWW_CMD} update popup='system-menu'"
@@ -372,8 +372,8 @@
     :style "color: ${battery.color}"
     (box
       :space-evenly false
-      (label :class "sys-menu-charge" :style "color: ${battery.color}" :text "${battery.quickicon}")
-      (label :class "batt-percentage" :style "color: ${battery.color}" :text "${EWW_BATTERY["BATT"].capacity}%")
+      (label :class "sys-menu-charge" :text "${battery.quickicon}")
+      (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%")
     )
   )
 )
