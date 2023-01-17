@@ -7,9 +7,9 @@
  - Start with `eww open bar && eww open barbg`
  - Use a Chromium browser? Get "Plasma Browser Integration".
 
-# Screenshots
- ![dots-hyprland](./screenshot-3.png) 
+# Screenshots 
  ![dots-hyprland](./screenshot-5.png)
+ ![dots-hyprland](./screenshot-6.png)
 
 # Instructions
  - Backup if u need
