@@ -1,11 +1,11 @@
 //Auto generated color theme for image at: 
-$colorbg: #000101;
-$colortext: #28BABD;
-$color0: #1D9194;
-$color1: #12B0B3;
-$color2: #2DAEB0;
-$color3: #28BABD;
-$color4: #568587;
-$color5: #16CFD1;
-$color6: #87e5e6;
-$color7: #28BABD;
+$colorbg: #0a0909;
+$colortext: #8E8478;
+$color0: #665E59;
+$color1: #736E6C;
+$color2: #857C76;
+$color3: #8E8478;
+$color4: #7F7E81;
+$color5: #928F8E;
+$color6: #ccc9c8;
+$color7: #8E8478;

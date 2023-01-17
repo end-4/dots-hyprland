@@ -1,4 +1,4 @@
-
+(defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
 
 
 (defwidget workspaces []
@@ -10,13 +10,13 @@
       :class "module workspaces"
       :spacing 0
       :space-evenly false
-      (for i in ws_loop
+      (for i in workspace
         (button
-          :onclick "hyprctl dispatch workspace ${workspace[i].number}"
-          :class "ws-${workspace[i].number} ws-${workspace[i].activity}"
-          ; "●" 
-          " "
-          ; ❶❷❸❹❺❻❼❽❾❿
+          :onclick "hyprctl dispatch workspace ${i.number}"
+          :class "ws"
+          :style "color: ${i.color};"
+          "${ws-icons[i.number - 1]}"
+          ; "●"
         )
       )
     )

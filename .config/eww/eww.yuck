@@ -20,7 +20,7 @@
 (defvar popup "none")
 ; (include "./windows/clipboard.yuck") DOES NOT WORK
 
-(defwidget themer [] 
+(defwidget themer []
   (eventbox
     (box
       :style "padding-right: 5px;"
@@ -81,30 +81,26 @@
 )
 
 (defwidget right []
-  (eventbox
-    ; :onhover "${EWW_CMD} update sys_rev=true"
-    ; :onhoverlost "${EWW_CMD} update sys_rev=false"
-    (box
-      :space-evenly false
-      :halign "end"
-      :valign "start"
-      :class "bar"
-      (themer)
-      (winctl)
-      (separator)
-      (volume-module)
-      (bright)
-      ; (bluetooth)
-      (net)
-      (separator)
-      
-      ; (syscpu)
-      ; (cpumenu)
-      ; (sysmem)
-      ; (memmenu)
-      ; (sysbatt)
-      (sys)
-    )
+  (box
+    :space-evenly false
+    :halign "end"
+    :valign "start"
+    :class "bar"
+    (themer)
+    (winctl)
+    (separator)
+    (volume-module)
+    (bright)
+    ; (bluetooth)
+    (net)
+    (separator)
+    
+    ; (syscpu)
+    ; (cpumenu)
+    ; (sysmem)
+    ; (memmenu)
+    ; (sysbatt)
+    (sys)
   )
 )
 

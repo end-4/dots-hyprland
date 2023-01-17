@@ -76,6 +76,7 @@ get_cover() {
 			# echo "$themejson" | jq '.colors'
 			# echo 'COLORS: '
 
+			# notify-send 'eww' 'i found a url!'
 			cd ..
 			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
 			echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
@@ -143,6 +144,8 @@ get_cover() {
 
 			# echo "$themejson" | jq '.colors'
 			# echo 'COLORS: '
+
+			# notify-send 'eww' 'i found a file!'
 
 			cd ..
 			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"

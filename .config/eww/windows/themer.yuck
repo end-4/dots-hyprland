@@ -18,7 +18,7 @@
         )
         (input
           :class "themer-input"
-          :onaccept "cp './css/_colorscheme.scss' './css/savedcolors/_colorscheme_{}.scss' && cp ~/.config/hypr/colors.conf ~/.config/hypr/savedcolors/colors_{}.conf"
+          :onaccept "${EWW_CMD} close themer && cp './css/_colorscheme.scss' './css/savedcolors/_colorscheme_{}.scss' && cp ~/.config/hypr/colors.conf ~/.config/hypr/savedcolors/colors_{}.conf"
         )
       )
       (box
@@ -30,7 +30,7 @@
         )
         (input
           :class "themer-input"
-          :onaccept "cp './css/savedcolors/_colorscheme_{}.scss' './css/_colorscheme.scss' && cp ~/.config/hypr/savedcolors/colors_{}.conf ~/.config/hypr/colors.conf"
+          :onaccept "${EWW_CMD} close themer && cp './css/savedcolors/_colorscheme_{}.scss' './css/_colorscheme.scss' && cp ~/.config/hypr/savedcolors/colors_{}.conf ~/.config/hypr/colors.conf"
         )
       )
     )
