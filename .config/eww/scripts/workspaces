@@ -6,7 +6,7 @@ dimmed=("#7DCFFF" "#f9e2af" "#94e2d5" "#b4befe") # Inactive workspaces
 empty="#313244" # Empty workspaces
 
 # get initial focused workspace
-focusedws=$(hyprctl -j monitors | gojq -r -c '.[] | select(.focused == true) | .activeWorkspace.id')
+focusedws=$(hyprctl -j monitors | jaq -r '.[] | select(.focused == true) | .activeWorkspace.id')
 
 declare -A o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
 declare -A monitormap
@@ -27,14 +27,28 @@ status() {
   fi
 }
 
+status_activity() {
+  if [ "${o[$1]}" -eq 1 ]; then 
+    mon=${monitormap[${workspaces[$1]}]}
+
+    if [ $focusedws -eq "$1" ]; then
+      echo -n "active"
+    else
+      echo -n "inactive"
+    fi
+  else
+    echo -n "empty"
+  fi
+}
+
 # handle workspace create/destroy
 workspace_event() {
   o[$1]=$2
-  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r -c '.[]|"\(.id) \(.monitor)"')
+  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
 }
 # handle monitor (dis)connects
 monitor_event() {
-  while read -r k v; do monitormap["$k"]=$v; done < <(hyprctl -j monitors | gojq -r -c '.[]|"\(.name) \(.id) "')
+  while read -r k v; do monitormap["$k"]=$v; done < <(hyprctl -j monitors | gojq -r '.[]|"\(.name) \(.id) "')
 }
 
 # generate the json for eww
@@ -42,7 +56,8 @@ generate() {
   echo -n '['
 
   for i in {1..10}; do
-    echo -n ''$([ $i -eq 1 ] || echo ,) '{ "number": "'"$i"'", "color": "'$(status "$i")'" }'
+    echo -n ''$([ $i -eq 1 ] || echo ,)'{"num":"'$i'","clr":"'$(status "$i")'"}'
+    # echo -n ''$([ $i -eq 1 ] || echo ,) '{ "number": "'"$i"'", "activity": "'"$(status_activity $i)"'", "color": "'$(status "$i")'" }'
   done
 
   echo ']'
@@ -54,7 +69,7 @@ generate() {
 monitor_event
 
 # add workspaces
-while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r -c '.[]|"\(.id) \(.monitor)"')
+while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
 
 # check occupied workspaces
 for num in "${!workspaces[@]}"; do

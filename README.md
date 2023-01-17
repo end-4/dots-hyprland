@@ -12,7 +12,7 @@
 
 # Screenshots
  ![dots-hyprland](./screenshot-3.png) 
- ![dots-hyprland](./screenshot-4.png)
+ ![dots-hyprland](./screenshot-5.png)
 
 # Instructions
  - Backup if u need
