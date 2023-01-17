@@ -8,6 +8,7 @@
       (label
         :class "themer-title"
         :text "Color profile manager"
+        :xalign 0
       )
       (box
         :space-evenly false
@@ -22,6 +23,7 @@
         )
       )
       (box
+        :halign "start"
         :space-evenly false
         :orientation "h"
         (label
@@ -32,6 +34,24 @@
           :class "themer-input"
           :onaccept "${EWW_CMD} close themer && cp './css/savedcolors/_colorscheme_{}.scss' './css/_colorscheme.scss' && cp ~/.config/hypr/savedcolors/colors_{}.conf ~/.config/hypr/colors.conf"
         )
+      )
+      (label
+        :class "themer-title"
+        :text "Current pallete"
+        :xalign 0
+      )
+      (box
+        :spacing 3
+        :orientation "h"
+        :style "padding: 7px;"
+        (box :class "themer-color-preview preview-0" )
+        (box :class "themer-color-preview preview-1" )
+        (box :class "themer-color-preview preview-2" )
+        (box :class "themer-color-preview preview-3" )
+        (box :class "themer-color-preview preview-4" )
+        (box :class "themer-color-preview preview-5" )
+        (box :class "themer-color-preview preview-6" )
+        (box :class "themer-color-preview preview-7" )
       )
     )
   )

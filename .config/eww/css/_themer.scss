@@ -24,3 +24,19 @@
     margin-bottom: 2px;
     border: 2px solid $colortext;
 }
+
+.themer-color-preview {
+    min-height: 25px;
+    min-width: 25px;
+    border-radius: 5px;        
+    border-width: 55px;
+}
+
+.preview-0 { background-color: $color0; }
+.preview-1 { background-color: $color1; }
+.preview-2 { background-color: $color2; }
+.preview-3 { background-color: $color3; }
+.preview-4 { background-color: $color4; }
+.preview-5 { background-color: $color5; }
+.preview-6 { background-color: $color6; }
+.preview-7 { background-color: $color7; }

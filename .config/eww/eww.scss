@@ -228,8 +228,16 @@ scale trough {
 
 .ws:hover {
   color: $color5;
-  font-size: 4rem;
-  padding: 3px;
+}
+
+.ws-active {
+  color: $color1;
+}
+.ws-inactive {
+  color: $color6;
+}
+.ws-empty {
+  color: #313244;
 }
 
 .activewin {

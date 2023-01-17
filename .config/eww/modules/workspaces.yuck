@@ -12,10 +12,10 @@
       :space-evenly false
       (for i in workspace
         (button
-          :onclick "hyprctl dispatch workspace ${i.number}"
+          :onclick "hyprctl dispatch workspace ${i.num}"
           :class "ws"
-          :style "color: ${i.color};"
-          "${ws-icons[i.number - 1]}"
+          :style "color: ${i.clr};"
+          "${ws-icons[i.num - 1]}"
           ; "●"
         )
       )
