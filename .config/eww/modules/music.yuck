@@ -41,6 +41,7 @@
                 ; :onclick "${EWW_CMD} open --toggle music"
                 :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
                 (label
+                  :class "music-title"
                   :style "${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
                   :limit-width 50
                   :text "${music.title == '' ? 'Not playing' : music.title}"
@@ -107,7 +108,7 @@
                   :class "music-title"
                   :wrap true
                   :text "${music.title == '' ? 'Not playing' : music.title}"
-                  :style "color: ${mcover.color.colors.color4};"
+                  :style "color: ${mcover.color.colors.color4}; font-weight: bold;"
                   :limit-width 35
                 )
                 (label
