@@ -1,0 +1,51 @@
+(defwidget themerctl []
+  (eventbox
+    :onhoverlost "${EWW_CMD} close themer"
+    (box
+      :space-evenly false
+      :orientation "v"
+      :class "themer-menu-box"
+      (label
+        :class "themer-title"
+        :text "Color profile manager"
+      )
+      (box
+        :space-evenly false
+        :orientation "h"
+        (label
+          :class "themer-prompt"
+          :text "Save "
+        )
+        (input
+          :class "themer-input"
+          :onaccept "cp './css/_colorscheme.scss' './css/savedcolors/_colorscheme_{}.scss' && cp ~/.config/hypr/colors.conf ~/.config/hypr/savedcolors/colors_{}.conf"
+        )
+      )
+      (box
+        :space-evenly false
+        :orientation "h"
+        (label
+          :text "Load "
+          :class "themer-prompt"
+        )
+        (input
+          :class "themer-input"
+          :onaccept "cp './css/savedcolors/_colorscheme_{}.scss' './css/_colorscheme.scss' && cp ~/.config/hypr/savedcolors/colors_{}.conf ~/.config/hypr/colors.conf"
+        )
+      )
+    )
+  )
+)
+
+(defwindow themer
+  :monitor 0
+  :geometry (geometry
+    :x "300px"
+    :y "32px"
+    :anchor "top right"
+    :width "0px"
+    :height "0px"
+  )
+  :focusable true
+  (themerctl)
+)

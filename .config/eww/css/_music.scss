@@ -10,7 +10,7 @@
 .music-window {
   @include window;
   background-color: $colorbg;
-  border: 3px solid $color1;
+  border: 3px solid;
   color: $colortext;
   padding: 3px;
   margin: 3px;
@@ -62,7 +62,7 @@
   }
 
   trough {
-    background-color: $colorbg;
+    background-color: $surface0;
     border-radius: 24px;
     margin-top: 0;
     min-height: 10px;

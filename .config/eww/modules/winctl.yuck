@@ -90,7 +90,7 @@
                 (button
                   :onclick "hyprctl dispatch movetoworkspacesilent ${w+1},address:${winjson[i].address}"
                   :class "wschoose"
-                  :style "color: ${(winjson[i].workspace.id == w+1) ? '#EF738A' : '#A9B1D6'};"
+                  :style "color: ${(winjson[i].workspace.id == w+1) ? mcover.color.colors.color7 : 'rgba(108, 112, 134, 0.5)'};"
                   ; "hyprctl dispatch movetoworkspacesilent ${w},address:${winjson[i].address}"
                   "●"
                 )

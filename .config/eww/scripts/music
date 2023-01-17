@@ -109,17 +109,91 @@ get_cover() {
 			printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
 			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
+			# printf '$colormusic: ' >> './tmp/_colorscheme.colorpallete'
+			# printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			# echo '' >> './tmp/_colorscheme.colorpallete'
+
+			# Border gradient: color6 -> color5 -> color7
+			gradient1=$(echo -n "$themejson" | jq '.colors.color6' | sed 's/"//g')
+			gradient2=$(echo -n "$themejson" | jq '.colors.color5' | sed 's/"//g')
+			gradient3=$(echo -n "$themejson" | jq '.colors.color7' | sed 's/"//g')
+			
+			echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
+			echo 'general {' >> './tmp/colors_generated.conf'
+			echo '    col.active_border = rgba('"${gradient1#*#}FF"') rgba('"${gradient2#*#}FF"') rgba('"${gradient3#*#}FF"') 45deg' >> './tmp/colors_generated.conf'
+			echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_generated.conf'
+			echo '}' >> './tmp/colors_generated.conf'
 
 			# cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
 			cd "eww_covers" || exit
 			# notify-send 'eww color changer' 'okie dokie'
 		elif [ "$COVER_URL" = "" ]; then
-		    printf '{"image": "", "color": "$bg"}'
+		    echo '{"image": "", "color": "$bg"}'
 		else
+			COVER_URL="${COVER_URL:7}"
+			cp "$COVER_URL"  "$IMGPATH"
+			coverpath="$IMGPATH"
 			wal -c
 			themejson=$(wal -i "$IMGPATH" -n -t -e -s | grep -e 'color1' | sed 's/'\''/"/g')
+			printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
 			# echo "$themejson"
+
 			printf '{"image": "'"$COVER_URL"'", "color": '"$themejson"'}\n'
+			# printf '{"image": "eww_covers/'"$coverpath"'"}\n'
+
+			# echo "$themejson" | jq '.colors'
+			# echo 'COLORS: '
+
+			cd ..
+			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
+			echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
+			printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
+			echo "$themejson" | jq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo '' >> './tmp/_colorscheme.colorpallete'
+			# printf '$colormusic: ' >> './tmp/_colorscheme.colorpallete'
+			# printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			# echo '' >> './tmp/_colorscheme.colorpallete'
+
+			# Border gradient: color6 -> color5 -> color7
+			gradient1=$(echo -n "$themejson" | jq '.colors.color6' | sed 's/"//g')
+			gradient2=$(echo -n "$themejson" | jq '.colors.color5' | sed 's/"//g')
+			gradient3=$(echo -n "$themejson" | jq '.colors.color7' | sed 's/"//g')
+			
+			echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
+			echo 'general {' >> './tmp/colors_generated.conf'
+			echo '    col.active_border = rgba('"${gradient1#*#}FF"') rgba('"${gradient2#*#}FF"') rgba('"${gradient3#*#}FF"') 45deg' >> './tmp/colors_generated.conf'
+			echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_generated.conf'
+			echo '}' >> './tmp/colors_generated.conf'
+
+			# cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
+			cd "eww_covers" || exit
 		fi
 	done
 }
