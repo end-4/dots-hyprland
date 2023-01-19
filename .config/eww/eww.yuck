@@ -14,6 +14,7 @@
 (include "./windows/calendar.yuck")
 (include "./windows/music.yuck")
 (include "./windows/notifications.yuck")
+(include "./windows/overview.yuck")
 (include "./windows/system-menu.yuck")
 (include "./windows/win-workspace.yuck")
 (include "./windows/themer.yuck")
@@ -120,6 +121,7 @@
     ;   :orientation "v"
     (eventbox
       :onhoverlost "${EWW_CMD} update popup='none'"
+      :onhover "${EWW_CMD} update popup='none'"
       (centerbox
         :class "bar"
         (left)

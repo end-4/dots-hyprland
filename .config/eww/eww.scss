@@ -72,6 +72,7 @@ $border: $color7;
 @import 'css/calendar';
 @import 'css/music';
 @import 'css/notification';
+@import 'css/overview';
 @import 'css/sidebar';
 @import 'css/system';
 @import 'css/volume';
@@ -249,7 +250,7 @@ scale trough {
 .themer-button {
   padding: 6px;
   color: $color6;
-  background-color: $surface0;
+  // background-color: $surface0;
   border-radius: 5px;
 }
 

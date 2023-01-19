@@ -1,0 +1,63 @@
+.overview-window {
+  @include rounding;
+  background-color: $colorbg;
+  border: 3px solid $color7;
+  padding: 5px;
+}
+
+.overview-window-top {
+  @include rounding;
+  background-color: transparent;
+  border: 3px solid transparent;
+  padding: 5px;
+}
+
+.overview-ws {
+  border-radius: 11px;
+  background-color: $surface0;
+  margin: 5px;
+}
+
+.overview-ws-window {
+  border: 2px solid $color0;
+  border-radius: 11px;
+  margin: 3px; 
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.overview-icon {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 17px;
+  padding-right: 17px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.overview-ws-text {
+  padding-left: 5px;
+  font-size: 13pt;
+}
+.overview-ws-subtext {
+  padding-left: 5px;
+  font-size: 9pt;
+}
+
+.overview-ws-number { //Note: height 100px width 356px
+  font-size: 25pt;
+  border-radius: 11px;
+  background-color: $overlay0;
+  color: $colortext;
+  margin: 10px;
+  min-height: 40px;
+  min-width: 40px;
+}
+
+.overview-title {
+  font-weight: bold;
+  font-size: 15pt;
+  padding-top: .6rem;
+  padding-bottom: .6rem;
+}

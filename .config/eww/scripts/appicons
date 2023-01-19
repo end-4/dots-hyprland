@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 geticonlist() {
-    classes=$(hyprctl clients | grep -e 'class: ' | sed 's/class: Code/class: code/' | sed 's/\tclass: //')
+    classes=$(hyprctl clients | grep -e 'class: ' | sed 's/\tclass: //')
     addresses=$(hyprctl clients | grep -e ' -> ')
     # echo "$classes"
     IFS=$'\n'
@@ -32,7 +32,7 @@ geticonlist() {
             rm "scripts/cache/${classarr[i]}"
             echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
           else 
-            iconarr[i]='/home/end/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg'
+            iconarr[i]="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
             rm "scripts/cache/${classarr[i]}"
             echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
           fi

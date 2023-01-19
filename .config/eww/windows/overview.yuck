@@ -1,0 +1,118 @@
+(defvar selected '')
+(defvar wsloopa "[1, 2, 3, 4, 5]")
+(defvar wsloopb "[6, 7, 8, 9, 10]")
+(deflisten wsjsona
+  `scripts/overview1`
+)
+(deflisten wsjsonb
+  `scripts/overview2`
+)
+
+(defwidget overview []
+  (overlay
+    (box
+      :orientation "v"
+      :class "overview-window"
+      ; :space-evenly false
+      ; (label :text "${wsjsona}")
+      ; (label :text "${selected}")
+      (box
+        :orientation "h"
+        (for wspace in wsjsona
+          (box ; Note: height 100px width 356px
+            :class "overview-ws"
+            (box
+              :orientation "v"
+              (for ws-window in wspace
+                (eventbox
+                  :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
+                  ; :onrightclick "${selected}"
+                  :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
+                  (box
+                    :class "overview-ws-window"
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    :style "${ws-window.address == selected ? 'border: 2px solid #FFFFFF' : ''}; ${ws-window.address == '_none' ? 'border: none' : ''};"
+                    (box
+                      :class "overview-icon"
+                      :style "background-image: url('${ws-window.icon}')"
+                    )
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      :valign "center"
+                      (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
+                      (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (box
+        :orientation "h"
+        (for wspace in wsjsonb
+          (box ; Note: height 100px width 178px
+            :class "overview-ws"
+            (box
+              :orientation "v"
+              (for ws-window in wspace
+                (eventbox
+                  :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
+                  ; :onrightclick "${selected}"
+                  :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
+                  (box
+                    :class "overview-ws-window"
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    :style "${ws-window.address == selected ? 'border: 2px solid #FFFFFF' : ''}; ${ws-window.address == '_none' ? 'border: none' : ''};"
+                    (box
+                      :class "overview-icon"
+                      :style "background-image: url('${ws-window.icon}')"
+                    )
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      :valign "center"
+                      (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
+                      (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget testing []
+  (box
+    :class "overview-window"
+    (overlay
+      (box
+        :class "overview-ws-window"
+        :style "margin: 2px;"
+      )
+    )
+  )
+)
+
+(defwindow overview
+  :monitor 0
+  :geometry (geometry
+    :x "300px"
+    :y "32px"
+    :anchor "center"
+    :width "1780px"
+    :height "405px"
+  )
+  ; (testing)
+  (overview)
+)
