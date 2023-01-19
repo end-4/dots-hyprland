@@ -1,19 +1,12 @@
 (defvar win_ws_open false)
-(defvar ws_loop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
+(defvar wsloop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
 (deflisten winjson
-  ; :run-while win_ws_open
   `scripts/winlist`
 )
-(deflisten winmatch
-  ; :run-while win_ws_open
-  `scripts/winmatch`
-)
 (deflisten winicons
-  ; :run-while win_ws_open
   `scripts/appicons`
 )
 (deflisten winnums
-  ; :run-while win_ws_open
   `scripts/winnumbers`
 )
 
@@ -86,13 +79,14 @@
                 ; :text "[ ${winjson[i].workspace.id} ]"
                 :xalign 1
               )
-              (for w in ws_loop
+              (for w in wsloop
                 (button
                   :onclick "hyprctl dispatch movetoworkspacesilent ${w+1},address:${winjson[i].address}"
                   :class "wschoose"
-                  :style "color: ${(winjson[i].workspace.id == w+1) ? mcover.color.colors.color7 : 'rgba(108, 112, 134, 0.5)'};"
+                  :style "font-size: 16pt; color: ${(winjson[i].workspace.id == w+1) ? mcover.color.colors.color7 : 'rgba(108, 112, 134, 0.5)'};"
                   ; "hyprctl dispatch movetoworkspacesilent ${w},address:${winjson[i].address}"
-                  "●"
+                  "${ws-icons[w]}"
+                  ; "●"
                 )
               )
             )

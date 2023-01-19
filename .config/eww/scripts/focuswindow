@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+if [[ $1 == '_none' ]]; then
+  hyprctl dispatch workspace $2
+else 
+  hyprctl dispatch focuswindow address:$1
+fi
