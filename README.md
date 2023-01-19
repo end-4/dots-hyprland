@@ -8,7 +8,7 @@
  - Use a Chromium browser? Get "Plasma Browser Integration".
 
 # Screenshots 
- ![dots-hyprland](./screenshot-5.png)
+ ![dots-hyprland](./screenshot-7.png)
  ![dots-hyprland](./screenshot-6.png)
 
 # Instructions
