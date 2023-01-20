@@ -2,9 +2,7 @@
     <h1>end-4/dots-hyprland</h1>
     <h3></h3>
 </div>
-
-# dots-hyprland 
- - _Please note that Hyprland doesn't have an "e" in the name_
+ - _Please note that Hyprland doesn't have an "e" in the name tyty_
  - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- verrrry clean i stole from there :)
 
 # If you're here only for eww...
