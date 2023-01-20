@@ -10,6 +10,7 @@
         (label
           ; :class "vol-menu"
           :tooltip "volume ${volume.percent}%"
+          :style "font-family: 'Material Symbols Rounded';"
           :text "${volume.icon}"
           :valign "start"
         )

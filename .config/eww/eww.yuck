@@ -31,17 +31,8 @@
       (button
         :class "themer-button"
         :onclick "eww open --toggle themer"
+        :style "font-family: 'Material Symbols Rounded';"
         ''
-      )
-      (button
-        :class "themer-button themer-get"
-        :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss' && cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf"
-        ""
-      )
-      (button
-        :class "themer-button themer-restore"
-        :onclick "cp css/_colorscheme_default.scss css/_colorscheme.scss && cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf"
-        ""
       )
     )
   )

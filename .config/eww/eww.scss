@@ -62,7 +62,7 @@ $border: $color7;
 }
 
 .music-ctl-revealer {
-  font-family: SF Mono Nerd Font;
+  font-family: Material Symbols Rounded;
 }
 
 .music-ctl-revealer:hover {
@@ -117,17 +117,17 @@ tooltip {
 }
 
 .music-module {
-  font-family: SF Mono Nerd Font;
+  font-family: Material Symbols Rounded;
 }
 
 .icon {
-  font-family: Material Icons Regular;
+  font-family: Material Symbols Rounded;
   padding-left: 4px;
   padding-right: 4px;
 }
 
 .module {
-  font-family: Material Icons Regular;
+  font-family: Material Symbols Rounded;
   min-height: 32px;
 }
 
@@ -166,7 +166,7 @@ tooltip {
 .bright-icon {
   color: $color3;
   padding-right: 4px;
-  padding-top: 6px;
+  padding-top: 4px;
 }
 
 .bright-icon:hover {
@@ -194,7 +194,7 @@ scale trough {
 }
 
 .player-controls {
-  font-family: SF Mono Nerd Font;
+  font-family: Material Symbols Rounded;
 }
 
 .volume-icon {
@@ -204,11 +204,10 @@ scale trough {
 
 .net-icon {
   color: $color7;
-  font-family: Material Icons Regular;
+  font-family: Material Symbols Rounded;
   padding-left: 4px;
   padding-right: 4px;
-  padding-top: 0px;
-  padding-top: 6px;
+  padding-top: 4px;
 }
 
 .net-icon:hover {
@@ -252,10 +251,19 @@ scale trough {
   color: $color6;
   // background-color: $surface0;
   border-radius: 5px;
+  font-family: Material Symbols Rounded;
 }
 
 .themer-button:hover {
   background-color: $overlay0;
+}
+
+.themer-button:active {
+  background-color: $overlay0;
+}
+.themer-button:focus {
+  background-color: $overlay0;
+  border: 2px solid $overlay0;
 }
 
 // .themer-get {
@@ -278,3 +286,6 @@ scale trough {
 //   background-position: center;
 //   background-size: 100%;
 // }
+
+
+.icon, .icon, .vol-icon label { font-family: "Material Symbols Rounded"; } //AAAAAAAAAGGGHH

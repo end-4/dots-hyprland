@@ -18,10 +18,10 @@ else
     signal=$(nmcli -f in-use,signal dev wifi | rg "\*" | awk '{ print $2 }')
     essid=$(nmcli -t -f NAME connection show --active | head -n1 | sed 's/\"/\\"/g')
 
-    icons=("" "" "" "" "")
+    icons=("" "" "" "" "")
 
     if [ "$status" = "disconnected" ] ; then
-      icon=""
+      icon=""
       color="#988ba2"
     else
       level=$(awk -v n="$signal" 'BEGIN{print int((n-1)/20)}')
