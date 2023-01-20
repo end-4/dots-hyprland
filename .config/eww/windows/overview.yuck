@@ -26,7 +26,7 @@
               (for ws-window in wspace
                 (eventbox
                   :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
-                  ; :onrightclick "${selected}"
+                  :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                   :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
                   (box
                     :class "overview-ws-window"
@@ -62,7 +62,7 @@
               (for ws-window in wspace
                 (eventbox
                   :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
-                  ; :onrightclick "${selected}"
+                  :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                   :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
                   (box
                     :class "overview-ws-window"

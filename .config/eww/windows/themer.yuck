@@ -5,6 +5,27 @@
       :space-evenly false
       :orientation "v"
       :class "themer-menu-box"
+      (box
+        :style "padding-left: 10px; padding-top: 10px; font-size: 15pt;"
+        :valign "start"
+        :space-evenly false
+        :spacing 4
+        ; (button
+        ;   :class "themer-button"
+        ;   :onclick "eww open --toggle themer"
+        ;   ''
+        ; )
+        (button
+          :class "themer-button themer-get"
+          :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss' && cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf"
+          ""
+        )
+        (button
+          :class "themer-button themer-restore"
+          :onclick "cp css/_colorscheme_default.scss css/_colorscheme.scss && cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf"
+          ""
+        )
+      )
       (label
         :class "themer-title"
         :text "Color profile manager"

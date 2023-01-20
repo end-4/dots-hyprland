@@ -3,9 +3,9 @@
 get_status() {
 	s=$1
 	if [ "$s" = "Playing" ]; then
-		echo "⌬"
+		echo ""
 	else
-		echo "⏣"
+		echo ""
 	fi
 }
 
@@ -40,7 +40,6 @@ get_position() {
 
 get_position_time() {
 	pos=$1
-	len=$2
 	if [ -n "$pos" ]; then
 		date -d@"$(bc <<< "$pos / 1000000")" +%M:%S
 	else
@@ -73,7 +72,7 @@ get_cover() {
 			printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
 			# printf '{"image": "eww_covers/'"$coverpath"'"}\n'
 
-			# echo "$themejson" | jq '.colors'
+			# echo "$themejson" | gojq '.colors'
 			# echo 'COLORS: '
 
 			# notify-send 'eww' 'i found a url!'
@@ -81,43 +80,43 @@ get_cover() {
 			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
 			echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
 			printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
-			echo "$themejson" | jq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo "$themejson" | gojq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			# printf '$colormusic: ' >> './tmp/_colorscheme.colorpallete'
-			# printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			# printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			# echo '' >> './tmp/_colorscheme.colorpallete'
 
 			# Border gradient: color6 -> color5 -> color7
-			gradient1=$(echo -n "$themejson" | jq '.colors.color6' | sed 's/"//g')
-			gradient2=$(echo -n "$themejson" | jq '.colors.color5' | sed 's/"//g')
-			gradient3=$(echo -n "$themejson" | jq '.colors.color7' | sed 's/"//g')
+			gradient1=$(echo -n "$themejson" | gojq '.colors.color6' | sed 's/"//g')
+			gradient2=$(echo -n "$themejson" | gojq '.colors.color5' | sed 's/"//g')
+			gradient3=$(echo -n "$themejson" | gojq '.colors.color7' | sed 's/"//g')
 			
 			echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
 			echo 'general {' >> './tmp/colors_generated.conf'
@@ -142,7 +141,7 @@ get_cover() {
 			printf '{"image": "'"$COVER_URL"'", "color": '"$themejson"'}\n'
 			# printf '{"image": "eww_covers/'"$coverpath"'"}\n'
 
-			# echo "$themejson" | jq '.colors'
+			# echo "$themejson" | gojq '.colors'
 			# echo 'COLORS: '
 
 			# notify-send 'eww' 'i found a file!'
@@ -151,43 +150,43 @@ get_cover() {
 			# notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
 			echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
 			printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
-			echo "$themejson" | jq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			echo "$themejson" | gojq '.colors.color0' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
-			printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			echo '' >> './tmp/_colorscheme.colorpallete'
 			# printf '$colormusic: ' >> './tmp/_colorscheme.colorpallete'
-			# printf "$themejson" | jq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+			# printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 			# echo '' >> './tmp/_colorscheme.colorpallete'
 
 			# Border gradient: color6 -> color5 -> color7
-			gradient1=$(echo -n "$themejson" | jq '.colors.color6' | sed 's/"//g')
-			gradient2=$(echo -n "$themejson" | jq '.colors.color5' | sed 's/"//g')
-			gradient3=$(echo -n "$themejson" | jq '.colors.color7' | sed 's/"//g')
+			gradient1=$(echo -n "$themejson" | gojq '.colors.color6' | sed 's/"//g')
+			gradient2=$(echo -n "$themejson" | gojq '.colors.color5' | sed 's/"//g')
+			gradient3=$(echo -n "$themejson" | gojq '.colors.color7' | sed 's/"//g')
 			
 			echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
 			echo 'general {' >> './tmp/colors_generated.conf'
@@ -201,20 +200,6 @@ get_cover() {
 	done
 }
 
-# if [ "$1" = "cover" ]; then
-# 	get_cover
-# else
-# 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\{{mpris:length}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position len; do
-# 		jsonoutput='{"icon": "'"$(get_status "$status")"'", "artist": "'"$artist"'", "title": "'"$title"'", "status": "'"$(get_status "$status")"'", "position": "'"$(get_position "$position" "$len")"'", "position_time": "'"$(get_position_time "$position" "$len")"'", "length": "'"$(get_length_time "$len")"'"}'
-# 		# sanitizedoutput="${jsonoutput/\"\"/\"\\\"}"
-# 		sanitizedoutput="${jsonoutput//\"\"/\"\\\"}"
-		
-# 		echo "$jsonoutput" 
-# 		# notify-send "Debug: Music" "$sanitizedoutput"
-# 		# prints 'I love Sara and Marry'
-# 	done
-# fi
-
 # SANITIZE FIX
 sanitize() {
 	echo "$1" | sed 's/"/\"/g'
@@ -224,18 +209,23 @@ if [ "$1" = "cover" ]; then
 	get_cover
 else
 	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
-	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\{{mpris:length}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position len; do
+	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
 		# thecoverart=$(get_cover)
 		# notify-send "owo" "$thecoverart"
 		# notify-send "Cover location" "$coverart"
-		jq --null-input \
+		# echo "ok 👌"
+
+		len=$(playerctl metadata mpris:length)
+
+		gojq --null-input \
 			-r -c \
 			--arg artist "$(sanitize "$artist")" \
 			--arg title "$(sanitize "$title")" \
 			--arg status "$(get_status "$status")" \
 			--arg pos "$(get_position "$position" "$len")" \
-			--arg pos_time "$(get_position_time "$position" "$len")" \
+			--arg pos_time "$(get_position_time "$position")" \
 			--arg length "$(get_length_time "$len")" \
 			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length}'
+		# echo "done 👌"
 	done
 fi

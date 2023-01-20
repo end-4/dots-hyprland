@@ -64,15 +64,18 @@
                 ; (button :class "song-button" :onclick "playerctl previous" {music.title})
                 (button
                   :class "song-button"
+                  :style "font-family: 'Material Symbols Rounded'; "
                   :onclick "playerctl previous" ""
                 )
                 (button
                   :class "song-button"
                   :onclick "playerctl play-pause" 
-                  "${music.status != '' ? music.status : '⏣'}"
+                  :style "font-family: 'Material Symbols Rounded'; "
+                  "${music.status != '' ? music.status : ''}"
                 )
                 (button
                   :class "song-button"
+                  :style "font-family: 'Material Symbols Rounded'; "
                   :onclick "playerctl next" ""
                 )
               )
@@ -114,28 +117,28 @@
                 (label
                   :class "music-artist"
                   :wrap true
-                  :text {music.artist}
+                  :text "${music.artist}"
                   :style "color: ${mcover.color.colors.color4};"
                 )
                 (centerbox
                   :halign "center"
                   :class "music-button-box icon"
-                  (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl previous" "")
-                  (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl play-pause" "${music.status != '' ? music.status : '⏣'}")
-                  (button :style "color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl next" "")
+                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl previous" "")
+                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl play-pause" "${music.status != '' ? music.status : ''}")
+                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl next" "")
                 )
                 (box
                   (label
                     :style "color: ${mcover.color.colors.color4};"
                     :xalign 0
                     :class "music-time"
-                    :text {music.position_time}
+                    :text "${music.position_time}"
                   )
                   (label
                     :style "color: ${mcover.color.colors.color4};"
                     :xalign 1
                     :class "music-time"
-                    :text {music.length}
+                    :text "${music.length}"
                   )
                 )
                 (box

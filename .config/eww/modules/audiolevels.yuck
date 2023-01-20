@@ -53,11 +53,14 @@
             :class "volume-slider-box"
             :space-evenly false
             (eventbox
-              :class "volume-icon"
+              ; :class "volume-icon"
               :onclick "pactl set-sink-input-volume ${i.sink} 0%"
               :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
               :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
-              {volume.icon}
+              (label
+                :style "font-family: 'Material Symbols Rounded';"
+                :text "${volume.icon}"
+              )
             )
             (scale
               :class "sliderbg"
