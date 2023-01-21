@@ -2,9 +2,11 @@
   @include window;
   background: $bg;
   padding: 1rem;
+  font-family: 'Product Sans';
 }
 
 .notification {
+  font-family: 'Product Sans';
   background-color: $surface0;
   border-bottom: 3px solid $bg;
   padding: .5rem;

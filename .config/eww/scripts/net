@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 toggle() {
-  status=$(rfkill -J | jq -r '.rfkilldevices[] | select(.type == "wlan") | .soft' | head -1)
+  status=$(rfkill -J | jaq -r '.rfkilldevices[] | select(.type == "wlan") | .soft' | head -1)
 
   if [ "$status" = "unblocked" ]; then
     rfkill block wlan
@@ -18,7 +18,7 @@ else
     signal=$(nmcli -f in-use,signal dev wifi | rg "\*" | awk '{ print $2 }')
     essid=$(nmcli -t -f NAME connection show --active | head -n1 | sed 's/\"/\\"/g')
 
-    icons=("" "" "" "" "")
+    icons=("" "" "" "" "")
 
     if [ "$status" = "disconnected" ] ; then
       icon=""
@@ -30,7 +30,7 @@ else
       fi
 
       icon=${icons[$level]}
-      color="#9778D0"
+      color="#cba6f7"
     fi
 
     echo '{ "essid": "'"$essid"'", "icon": "'"$icon"'", "color": "'"$color"'" }'

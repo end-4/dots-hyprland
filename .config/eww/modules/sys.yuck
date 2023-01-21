@@ -4,7 +4,7 @@
 (defwidget sys []
   (eventbox
     :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
-    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    ; :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :onhover "${EWW_CMD} update sys_rev=true"
     :onclick "${EWW_CMD} update popup='system-menu'"
     :onhoverlost "${EWW_CMD} update popup='none' sys_rev=false"
@@ -62,17 +62,19 @@
                       :space-evenly false
                       :orientation "v"
                       (box
-                        :class "element icon"
+                        :class "element"
                         :space-evenly false
                         (button
-                          :class "wifi-button"
+                          ; :class "wifi-button"
                           :onclick "scripts/net toggle"
+                          :style "font-family: Material Symbols Rounded;"
                           {net.icon}
                         )
                         (label :class "separator" :text "|")
                         (button
                           :class "wifi-arrow-btn"
-                          :onclick "eww close system-menu && nm-connection-editor &"
+                          :style "font-family: Material Symbols Rounded;"
+                          :onclick "nm-connection-editor &"
                           ""
                         )
                       )
@@ -89,6 +91,7 @@
                         (button
                           :class "bluetooth-button"
                           :onclick "scripts/bluetooth toggle"
+                          :style "font-family: 'Material Symbols Rounded';"
                           {bluetooth.icon}
                         )
                         (label :class "separator" :text "|")
@@ -221,6 +224,7 @@
     :reveal "${popup == 'system-menu'}"
     :transition "slideleft"
     :duration "300ms"
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     (eventbox
       :class "cpubar"
       :space-evenly false
@@ -256,6 +260,7 @@
 
 (defwidget sysmem []
   (eventbox
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :class "membar"
     :space-evenly false
     :onclick "${EWW_CMD} update popup='system-menu'"
@@ -275,7 +280,8 @@
           (label :class "icon-text" :text "")
         )
       )
-      ; (circular-progress                        ; Swap usage
+      ; Separate swap usage circle
+      ; (circular-progress
         ;   :value {memory.swappercentage}
         ;   :class "membar"
         ;   :thickness 2
@@ -301,6 +307,7 @@
 
 (defwidget sysbatt []
   (eventbox
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :class "batbar"
     :space-evenly false
     :onclick "${EWW_CMD} update popup='system-menu'"
@@ -348,12 +355,6 @@
     ; :class "mem-menu"
     :onclick "${EWW_CMD} update popup='system-menu'"
     :onrightclick "foot btm"
-    ; (box
-      ;   :class "mem-menu"
-      ;   (label :class "mem-menu-left" :text "${memory.used}")
-      ;   (label :class "mem-menu-mid" :text "")
-      ;   (label :class "mem-menu-right" :text "${memory.swapused}")
-    ; )
     (box
       ; :class "mem-menu"
       :space-evenly false
@@ -380,6 +381,7 @@
 
 (defwidget settingscog[]
   (eventbox
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     :class "settings-icon"
     (revealer
       :transition "slideright"

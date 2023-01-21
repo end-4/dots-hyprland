@@ -1,9 +1,10 @@
 .calendar-win {
   @include window;
   background-color: $colorbg;
-  border: 3px solid $color6;
+  border: 3px solid $color7;
   color: $colortext;
   padding: .2em;
+  font-family: 'Product Sans';
 }
 
 calendar {
@@ -12,23 +13,28 @@ calendar {
   // padding-left: 4px;
   padding: 7px;
 
+
   :selected {
     color: $colortext;
     font-weight: bolder;
     background-color: $overlay0;
     border-radius: 8px;
+    font-family: 'Product Sans';
   }
 
   .header {
+    font-family: 'Product Sans';
     color: $color6;
   }
 
   .highlight {
+    font-family: 'Product Sans';
     color: $color0;
     font-weight: bold;
   }
 
   .button {
+    font-family: 'Product Sans';
     color: $colortext;
   }
 
@@ -38,6 +44,7 @@ calendar {
 }
 
 .date-clock{
+  font-family: 'Product Sans';
   background: transparent;
   color: $color6;
   padding-left: 5px;

@@ -6,22 +6,28 @@
 }
 
 .themer-title {
+    font-family: 'Product Sans', 'Material Symbols Rounded';
     font-weight: bold;
     font-size: 15pt;
     padding: .6rem;
 }
 
 .themer-prompt {
+    font-family: 'Product Sans', 'Material Symbols Rounded';
     font-size: 12pt;
     padding: .6rem;
 }
 
 .themer-input {
+    font-family: 'Product Sans', 'Material Symbols Rounded';
     background-color: $surface0;
     border-radius: 10px;
     padding: 3px;
     margin-top: 2px;
     margin-bottom: 2px;
+    border: 2px solid $overlay0;
+}
+.themer-input:focus {
     border: 2px solid $colortext;
 }
 

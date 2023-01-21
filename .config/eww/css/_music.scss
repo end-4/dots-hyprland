@@ -34,14 +34,17 @@
 
 .music-title {
   // font-weight: bold;
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   font-size: 1.1rem;
 }
 
 .music-artist {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   color: $color1;
 }
 
 .music-button label {
+  font-family: 'Material Symbols Rounded';
   // color: $text;
   font-size: 2rem;
   font-family: SF Mono Nerd Font;
@@ -49,11 +52,13 @@
 }
 
 .music-time {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   color: $color1;
   margin: 0 1rem;
 }
 
 .music-bar scale {
+  font-family: 'Material Symbols Rounded';
   font-family: SF Mono Nerd Font;
 
   highlight {
@@ -95,4 +100,8 @@
 .song-button {
   color: $color1;
   padding: 0px;
+}
+
+.music-button-box {
+  font-family: 'Material Symbols Rounded';
 }

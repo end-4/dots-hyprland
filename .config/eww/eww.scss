@@ -6,6 +6,29 @@ $memcolor: $color2;
 $cpucolor: $color5;
 $border: $color7;
 
+//thanks flick0!
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+//also thanks to him
+@keyframes blink {
+  to {
+    background-color: #f9e2af;
+    color: #96804e;
+  }
+}
+
 @mixin rounding {
   border-radius: 16px;
 }
@@ -58,7 +81,7 @@ $border: $color7;
 * {
   all: unset;
   transition: 200ms cubic-bezier(0.05, 0.9, 0.1, 1);
-  font-family: 'Product Sans', Roboto, sans-serif;
+  // font-family: 'Product Sans', 'Material Symbols Rounded';
 }
 
 .music-ctl-revealer {
@@ -143,6 +166,7 @@ tooltip {
 
 .clock {
   color: $color5;
+  font-family: 'Product Sans', 'Material Symbols Rounded';
 }
 
 // .clock-module:hover {
@@ -151,9 +175,11 @@ tooltip {
 
 .minute {
   color: $color5;
+  font-family: 'Product Sans', 'Material Symbols Rounded';
 }
 
 .date {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   background: $barbg;
   color: $color5;
   padding-left: 4px;
@@ -233,9 +259,11 @@ scale trough {
 .ws-active {
   color: $color1;
 }
+
 .ws-inactive {
   color: $color6;
 }
+
 .ws-empty {
   color: #313244;
 }
@@ -247,10 +275,15 @@ scale trough {
 }
 
 .themer-button {
-  padding: 6px;
+  // padding-top: 4px;
+  // padding-bottom: 4px;
+  // padding-left: 5px;
+  // padding-right: 5px;
+  min-height: 32px;
+  min-width: 32px;
   color: $color6;
   // background-color: $surface0;
-  border-radius: 5px;
+  border-radius: 7px;
   font-family: Material Symbols Rounded;
 }
 
@@ -261,8 +294,8 @@ scale trough {
 .themer-button:active {
   background-color: $overlay0;
 }
+
 .themer-button:focus {
-  background-color: $overlay0;
   border: 2px solid $overlay0;
 }
 
@@ -288,4 +321,8 @@ scale trough {
 // }
 
 
-.icon, .icon, .vol-icon label { font-family: "Material Symbols Rounded"; } //AAAAAAAAAGGGHH
+.icon,
+.icon,
+.vol-icon label {
+  font-family: "Material Symbols Rounded"; //AAAAAAAAAGGGHHH
+}
