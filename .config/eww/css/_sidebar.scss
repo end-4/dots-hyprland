@@ -32,7 +32,7 @@
 }
 
 .system-row {
-  font-family: SF Mono Nerd Font;
+  font-family: Product Sans;
   margin: .5rem .7rem;
 
   .airplane-box button {
@@ -46,7 +46,7 @@
 }
 
 .element {
-  font-family: SF Mono Nerd Font;
+  font-family: 'Product Sans';
   @include rounding;
   background: $surface0;
   margin: .3rem;
@@ -66,7 +66,7 @@
 }
 
 .sliders {
-  font-family: SF Mono Nerd Font;
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   @include rounding;
   background-color: $surface0;
   margin: .5rem 1rem;

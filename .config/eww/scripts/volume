@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-volicons=("", "", "")
+volicons=("" "" "")
 
 vol() {
   wpctl get-volume @DEFAULT_AUDIO_$1@ | awk '{print int($2*100)}'
@@ -34,7 +34,7 @@ else
   ismuted=$(ismuted "SINK")
 
   if [ "$ismuted" = 1 ]; then
-  	icon=""
+  	icon="${volicons[$lvl]}"
   else
     icon=""
   fi
@@ -46,7 +46,7 @@ else
     ismuted=$(ismuted "SINK")
 
     if [ "$ismuted" = 1 ]; then
-    	icon=""
+    	icon="${volicons[$lvl]}"
     else
       icon=""
     fi

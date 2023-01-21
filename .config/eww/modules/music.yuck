@@ -65,18 +65,19 @@
                 (button
                   :class "song-button"
                   :style "font-family: 'Material Symbols Rounded'; "
-                  :onclick "playerctl previous" ""
+                  :onclick "playerctl previous" ""
                 )
                 (button
                   :class "song-button"
-                  :onclick "playerctl play-pause" 
+                  :onclick "playerctl play-pause"
                   :style "font-family: 'Material Symbols Rounded'; "
                   "${music.status != '' ? music.status : ''}"
                 )
                 (button
                   :class "song-button"
                   :style "font-family: 'Material Symbols Rounded'; "
-                  :onclick "playerctl next" ""
+                  :onclick "playerctl next" 
+                  ""
                 )
               )
             )
@@ -123,9 +124,23 @@
                 (centerbox
                   :halign "center"
                   :class "music-button-box icon"
-                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl previous" "")
-                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl play-pause" "${music.status != '' ? music.status : ''}")
-                  (button :style "font-family: 'Material Symbols Rounded'; color: ${mcover.color.colors.color4};" :class "music-button" :onclick "playerctl next" "")
+                  (button
+                    :class "song-button"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    :onclick "playerctl previous" ""
+                  )
+                  (button
+                    :class "song-button"
+                    :onclick "playerctl play-pause"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    "${music.status != '' ? music.status : ''}"
+                  )
+                  (button
+                    :class "song-button"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    :onclick "playerctl next" 
+                    ""
+                  )
                 )
                 (box
                   (label

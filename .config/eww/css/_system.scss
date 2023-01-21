@@ -110,11 +110,13 @@
 }
 
 .cpu-menu {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   color: $cpucolor;
   padding-left: 5px;
 }
 
 .mem-menu {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   color: $memcolor;
   padding-left: 5px;
   padding-right: 5px;
@@ -139,6 +141,7 @@
 }
 
 .sys-menu {
+  font-family: 'Product Sans', 'Material Symbols Rounded';
   color: $battcolor;
   margin: 0px;
   padding: 0px;

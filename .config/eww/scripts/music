@@ -217,8 +217,7 @@ else
 
 		len=$(playerctl metadata mpris:length)
 
-		gojq --null-input \
-			-r -c \
+		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \
 			--arg title "$(sanitize "$title")" \
 			--arg status "$(get_status "$status")" \

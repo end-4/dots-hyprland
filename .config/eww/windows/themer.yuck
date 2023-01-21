@@ -10,11 +10,6 @@
         :valign "start"
         :space-evenly false
         :spacing 4
-        ; (button
-        ;   :class "themer-button"
-        ;   :onclick "eww open --toggle themer"
-        ;   ''
-        ; )
         (button
           :class "themer-button themer-get"
           :onclick "cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss' && cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf"
@@ -28,7 +23,7 @@
       )
       (label
         :class "themer-title"
-        :text "Color profile manager"
+        :text "Color profiles"
         :xalign 0
       )
       (box
