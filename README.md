@@ -13,8 +13,8 @@
  
 
 # Previews
- ![dots-hyprland](./screenshot-7.png)
- ![dots-hyprland](./screenshot-6.png)
+ ![dots-hyprland](./screenshot-8.png)
+ ![dots-hyprland](./screenshot-9.png)
 
 # Instructions
  - **Backup if you need**
