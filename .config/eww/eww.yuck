@@ -11,6 +11,7 @@
 (include "./modules/winctl.yuck")
 (include "./modules/workspaces.yuck")
 
+(include "./windows/bg-decor.yuck")
 (include "./windows/calendar.yuck")
 (include "./windows/music.yuck")
 (include "./windows/notifications.yuck")
@@ -19,7 +20,6 @@
 (include "./windows/win-workspace.yuck")
 (include "./windows/themer.yuck")
 (defvar popup "none")
-; (include "./windows/clipboard.yuck") DOES NOT WORK
 
 (defwidget themer []
   (eventbox
@@ -130,6 +130,8 @@
 )
 
 (defwindow bar
+  :wm-ignore true
+  :windowtype dock
   :monitor 0
   :geometry (geometry
     :x "0%"
@@ -144,6 +146,8 @@
 )
 
 (defwindow barbg
+  :wm-ignore true
+  :windowtype dock
   :monitor 0
   :geometry (geometry
     :x "0%"

@@ -6,6 +6,7 @@
 )
 
 (defwindow calendar
+  :wm-ignore true
   :monitor 0
   :geometry (geometry
     :x "0%"

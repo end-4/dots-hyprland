@@ -4,8 +4,8 @@
 (defwidget workspaces []
   (eventbox
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
-    :onmiddleclick "${EWW_CMD} open --toggle win-workspace"
-    :onrightclick "${EWW_CMD} open --toggle win-workspace"
+    :onmiddleclick "${EWW_CMD} open --toggle overview"
+    :onrightclick "${EWW_CMD} open --toggle overview"
     (box
       :class "module workspaces"
       :spacing 0

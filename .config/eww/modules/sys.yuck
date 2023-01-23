@@ -1,4 +1,5 @@
 (defvar sys_rev false)
+(defvar force_sys_rev false)
 ; (defvar sys_rev true)
 
 (defwidget sys []
@@ -8,7 +9,8 @@
     :onhover "${EWW_CMD} update sys_rev=true"
     :onclick "${EWW_CMD} update popup='system-menu'"
     :onhoverlost "${EWW_CMD} update popup='none' sys_rev=false"
-    :onrightclick "${EWW_CMD} update sys_rev=true || ${EWW_CMD} update sys_rev=true"
+    :onrightclick "${EWW_CMD} update force_sys_rev=${!force_sys_rev}"
+    :onmiddleclick "${EWW_CMD} open --toggle overview"
     (box
       :space-evenly false
       :orientation "v"
@@ -221,7 +223,7 @@
 
 (defwidget syscpu []
   (revealer
-    :reveal "${popup == 'system-menu'}"
+    :reveal "${popup == 'system-menu' || force_sys_rev}"
     :transition "slideleft"
     :duration "300ms"
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
@@ -241,13 +243,12 @@
           (button
             :tooltip "CPU: ${round(EWW_CPU.avg,0)}%"
             :onclick "${EWW_CMD} update popup='system-menu'"
-            :onrightclick "foot btm"
             (label :class "icon-text" :text "")
           )
         )
         (revealer
           :transition "slideright"
-          :reveal "${sys_rev || popup == 'system-menu'}"
+          :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev}"
           :duration "300ms"
           :class "sys-menu"
           :onclick "${EWW_CMD} update popup='system-menu'"
@@ -276,7 +277,6 @@
         (button
           :tooltip "RAM: ${round(memory.percentage,0)}%"
           :onclick "${EWW_CMD} update popup='system-menu'"
-          :onrightclick "foot btm"
           (label :class "icon-text" :text "")
         )
       )
@@ -289,13 +289,12 @@
         ;   (button
           ;     :tooltip "Swap: ${round(memory.swappercentage,0)}%"
           ;     :onclick "${EWW_CMD} update popup='system-menu'"
-          ;     :onrightclick "foot btm"
           ;     (label :class "icon-text" :text "")
         ;   )
       ; )
       (revealer
         :transition "slideright"
-        :reveal "${sys_rev || popup == 'system-menu'}"
+        :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev}"
         :duration "300ms"
         :class "sys-menu"
         :onclick "${EWW_CMD} update popup='system-menu'"
@@ -324,7 +323,6 @@
         (button
           :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
           :onclick "${EWW_CMD} update popup='system-menu'"
-          :onrightclick "foot btm"
           :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
           (label :class "icon-text" :text "")
         )
@@ -345,7 +343,6 @@
   (eventbox
     :class "cpu-menu"
     :onclick "${EWW_CMD} update popup='system-menu'"
-    :onrightclick "foot btm"
     (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
   )
 )
@@ -369,7 +366,6 @@
   (eventbox
     :class "sys-menu"
     :onclick "${EWW_CMD} update popup='system-menu'"
-    :onrightclick "foot btm"
     :style "color: ${battery.color}"
     (box
       :space-evenly false
