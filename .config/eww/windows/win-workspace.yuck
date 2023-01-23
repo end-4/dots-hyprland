@@ -1,4 +1,5 @@
 (defwindow win-workspace
+  :wm-ignore true
   :focusable false
   :monitor 0
   :geometry (geometry

@@ -1,4 +1,5 @@
 (defwindow notifications
+  :wm-ignore true
   :geometry (geometry
     :x "0px"
     :y "32px"

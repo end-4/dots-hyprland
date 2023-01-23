@@ -172,6 +172,7 @@
 
 ;; windows
 (defwindow system-menu
+  :wm-ignore true
   :monitor 0
   ; :focusable true
   :geometry (geometry

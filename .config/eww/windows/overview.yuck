@@ -105,6 +105,7 @@
 )
 
 (defwindow overview
+  :wm-ignore true
   :monitor 0
   :geometry (geometry
     :x "300px"

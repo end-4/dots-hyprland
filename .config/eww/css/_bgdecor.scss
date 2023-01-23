@@ -1,0 +1,36 @@
+.bg-decor-dow {
+  font-family: Product Sans;
+  font-size: 64pt;
+  color : rgba(255, 255, 255, 0.4);
+}
+
+.bg-decor-date {
+  font-family: Product Sans;
+  font-size: 26pt;
+  color : rgba(255, 255, 255, 0.4);
+}
+
+.bg-decor-input-left {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  margin-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 15pt;
+  min-height: 50px;
+  background-color : rgba(255, 255, 255, 0.2);
+}
+
+.bg-decor-input-right {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+  margin-top: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  // padding-top: 5px;
+  // padding-bottom: 5px;
+  font-size: 15pt;
+  min-height: 50px;
+  background-color : rgba(255, 255, 255, 0.2);
+  color : rgba(255, 255, 255, 0.2);
+}
