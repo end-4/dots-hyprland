@@ -13,23 +13,24 @@
       :class "bg-decor-date"
       :text "${time.date}"
     )
-    (box
-      :spacing 0
-      :space-evenly false
-      (input
-        :class "bg-decor-input-left"
-        :onaccept "firefox https://www.google.com/search?q={}"
-      )
-      (button
-        :class "bg-decor-input-right"
-        ""
-      )
-    )
+    ; I don't like focus being moved to this on reload
+    ; (box
+    ;   :spacing 0
+    ;   :space-evenly false
+    ;   (input
+    ;     :class "bg-decor-input-left"
+    ;     :onaccept "firefox https://www.google.com/search?q={}"
+    ;   )
+    ;   (button
+    ;     :class "bg-decor-input-right"
+    ;     ""
+    ;   )
+    ; )
   )
 )
 
 (defwindow bg-decor
-  :focusable true
+  :focusable false
   :stacking "bg"
   :windowtype "normal"
   :wm-ignore true

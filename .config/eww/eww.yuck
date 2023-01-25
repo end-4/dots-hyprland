@@ -16,6 +16,7 @@
 (include "./windows/music.yuck")
 (include "./windows/notifications.yuck")
 (include "./windows/overview.yuck")
+(include "./windows/osettings.yuck")
 (include "./windows/system-menu.yuck")
 (include "./windows/win-workspace.yuck")
 (include "./windows/themer.yuck")

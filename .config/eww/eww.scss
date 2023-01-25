@@ -29,6 +29,12 @@ $border: $color7;
   }
 }
 
+@keyframes ripple {
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+
 @mixin rounding {
   border-radius: 16px;
 }
@@ -73,7 +79,7 @@ $border: $color7;
 
 @mixin window {
   border: 3px solid $color7;
-  box-shadow: 0 2px 3px $shadow;
+  // box-shadow: 0 2px 3px $shadow;
   margin: 5px 5px 10px;
   @include rounding;
 }
@@ -82,6 +88,14 @@ $border: $color7;
   all: unset;
   transition: 200ms cubic-bezier(0.05, 0.9, 0.1, 1);
   // font-family: 'Product Sans', 'Material Symbols Rounded';
+}
+
+.scale slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.progress slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .music-ctl-revealer {
@@ -97,11 +111,12 @@ $border: $color7;
 @import 'css/music';
 @import 'css/notification';
 @import 'css/overview';
+@import 'css/osettings';
 @import 'css/sidebar';
 @import 'css/system';
+@import 'css/themer';
 @import 'css/volume';
 @import 'css/winctl';
-@import 'css/themer';
 
 .barbg {
   background-color: $colorbg;
@@ -136,6 +151,7 @@ tooltip {
   border-radius: 8px;
 
   label {
+    font-family: Product Sans;
     font-size: 13pt;
   }
 }
@@ -202,14 +218,6 @@ tooltip {
 
 .module-bt {
   font-size: 1.2rem;
-}
-
-scale trough {
-  background-color: $bg1;
-  border-radius: 24px;
-  margin: 0 1rem;
-  min-height: 10px;
-  min-width: 70px;
 }
 
 .workspaces {
@@ -327,3 +335,4 @@ scale trough {
 .vol-icon label {
   font-family: "Material Symbols Rounded"; //AAAAAAAAAGGGHHH
 }
+
