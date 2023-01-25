@@ -76,6 +76,13 @@
     margin-right: -1rem;
     min-width: 25.8rem;
   }
+  scale trough {
+    background-color: $bg1;
+    border-radius: 24px;
+    margin: 0 1rem;
+    min-height: 10px;
+    min-width: 70px;
+  }
 
   box {
     margin: .2rem 0;

@@ -7,10 +7,12 @@ from gi.repository import Gtk
 # Predefine class corrections
 if sys.argv[1] == 'Code':
     sys.argv[1] = 'code'
-if sys.argv[1] == 'GitHub Desktop':
+elif sys.argv[1] == 'GitHub Desktop':
     sys.argv[1] = 'github-desktop'
-if sys.argv[1] == 'org.kde.kolourpaint':
+elif sys.argv[1] == 'org.kde.kolourpaint':
     sys.argv[1] = 'kolourpaint'
+elif sys.argv[1] == 'osu!':
+    sys.argv[1] = 'osu'
 
 icon_name = sys.argv[1]
 icon_theme = Gtk.IconTheme.get_default()

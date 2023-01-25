@@ -38,10 +38,17 @@ else
   else
     icon=""
   fi
-  echo '{ "icon": "'"$icon"'", "percent": "'"$(vol "SINK")"'", "microphone": "'"$(vol "SOURCE")"'" }'
+  audio=1
+  if [ "$(wpctl status | grep 'MUTED')" == "" ]; then
+    audio=1
+  else 
+    audio=0
+  fi
+
+  echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
 
   # event loop
-  pactl subscribe | rg --line-buffered "change" | while read -r _; do
+  pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
     lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
     ismuted=$(ismuted "SINK")
 
@@ -50,6 +57,13 @@ else
     else
       icon=""
     fi
-    echo '{ "icon": "'"$icon"'", "percent": "'"$(vol "SINK")"'", "microphone": "'"$(vol "SOURCE")"'" }'
+    audio=1
+    if [ "$(wpctl status | grep 'MUTED')" == "" ]; then
+      audio=1
+    else 
+      audio=0
+    fi
+
+    echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
   done
 fi
