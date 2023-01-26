@@ -2,19 +2,21 @@
     <h1>[ end-4/dots-hyprland ]</h1>
     <h3></h3>
 </div>
-
  - _Please note that Hyprland doesn't have an "e" in the name tyty_
- - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :)
+ - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
+
+# Branches
+ - main (here)
+ - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
+
+# Previews
+ ![dots-hyprland](./screenshot-8.png)
+ ![dots-hyprland](./screenshot-9.png)
 
 # If you're here only for eww...
  - `monitor=eDP-1, addreserved, 32, 0, 0, 0` (replace "eDP-1" with your monitor name)
  - Start with `eww open bar && eww open barbg` (or put the config somewhere and source it)
  - See instructions below for how to use it efficiently
- 
-
-# Previews
- ![dots-hyprland](./screenshot-8.png)
- ![dots-hyprland](./screenshot-9.png)
 
 # Instructions
  - **Backup if you need**
@@ -25,7 +27,7 @@
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
 
-# Further eww bar instructions
+# Further eww instructions
  - Music icon: Middle-click: Play/Pause, Right-click: Next track, Left-click: Open music controls
  - Scroll the top-right/top-left corner to change volume
  - To open Workspace Overview, run `eww open overview` (or press Super+Tab if you use my Hyprland configs)
