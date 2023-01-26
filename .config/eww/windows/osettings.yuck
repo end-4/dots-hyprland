@@ -4,7 +4,7 @@
 
 (defwidget checkboxhyprctl [value changevalue]
   (eventbox
-    :onclick "hyprctl keyword ${changevalue} ${1 - value}"
+    :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle"
     (box
       :class "osettings-checkbox"
       :halign "end"
@@ -307,7 +307,7 @@
                           (scale
                             :class "osettings-slider"
                             :value "${hyprjson.input_sensitivity * 50 + 50}"
-                            :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}')"
+                            :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}') && scripts/hyprsettings tickle"
                           )
                         )
                       )
@@ -364,9 +364,9 @@
                   )
                 )
               )
-              ; Hyprland
+              ; Appearance
               (revealer
-                :reveal "${matches('hyprland options open the wiki guide help social hypr development discord gaps_in inner gaps: inner gaps_out outer gaps: outer space',oquery)}"
+                :reveal "${matches('appearance looks customization blur size blur passes blur strength blur xray',oquery)}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
@@ -376,10 +376,106 @@
                     :halign "start"
                     :wrap true
                     :class "osettings-section"
-                    :text "Hyprland options"
+                    :text "Blur"
+                  )
+                  (centerbox
+                    :orientation "h"
+                    :space-evenly false
+                    :halign "fill"
+                    (label
+                      :halign "start"
+                      :class "osettings-text"
+                      :text "Enable blur"
+                    )
+                    (box)
+                    (checkboxhyprctl
+                      :value "${hyprjson.blur}"
+                      :changevalue "decoration:blur"
+                    )
                   )
                   (revealer
-                    :reveal "${matches('hyprland gaps_in inner gaps: inner space',oquery)}"
+                    :reveal "${matches('appearance looks customization blur size blur strength',oquery)}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "osettings-text"
+                        :text "Blur size"
+                      )
+                      (scale
+                        :class "osettings-slider"
+                        :value "${hyprjson.blur_size}"
+                        :tooltip "Blur size: ${hyprjson.blur_size}"
+                        :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                      )
+                    )
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization blur passes blur strength',oquery)}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "osettings-text"
+                        :text "Blur passes"
+                      )
+                      (scale
+                        :class "osettings-slider"
+                        :value "${hyprjson.blur_passes * 10}"
+                        :tooltip "Blur passes: ${hyprjson.blur_passes}"
+                        :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                      )
+                    )
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization blur xray',oquery)}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      (centerbox
+                        :orientation "h"
+                        :space-evenly false
+                        :halign "fill"
+                        (label
+                          :halign "start"
+                          :class "osettings-text"
+                          :text "Blur xray"
+                        )
+                        (box)
+                        (checkboxhyprctl
+                          :value "${hyprjson.blur_xray}"
+                          :changevalue "decoration:blur_xray"
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              (revealer
+                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness',oquery)}"
+                :transition "slidedown"
+                :duration "0ms"
+                (box
+                  :space-evenly false
+                  :orientation "v"
+                  (label
+                    :halign "start"
+                    :wrap true
+                    :class "osettings-section"
+                    :text "Gaps"
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -395,12 +491,12 @@
                         :class "osettings-slider"
                         :value "${hyprjson.gaps_in}"
                         :tooltip "Inner gaps: ${hyprjson.gaps_in}"
-                        :onchange "hyprctl keyword general:gaps_in {}"
+                        :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle"
                       )
                     )
                   )
                   (revealer
-                    :reveal "${matches('hyprland gaps_out outer gaps: outer space',oquery)}"
+                    :reveal "${matches('appearance looks customization gaps_out outer gaps: outer space',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -416,12 +512,12 @@
                         :class "osettings-slider"
                         :value "${hyprjson.gaps_out}"
                         :tooltip "Outer gaps: ${hyprjson.gaps_out}"
-                        :onchange "hyprctl keyword general:gaps_out {}"
+                        :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle"
                       )
                     )
                   )
                   (revealer
-                    :reveal "${matches('hyprland border_size border size border thickness',oquery)}"
+                    :reveal "${matches('appearance looks customization border_size border size border thickness',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -437,16 +533,41 @@
                         :class "osettings-slider"
                         :value "${hyprjson.border_size}"
                         :tooltip "Border size: ${hyprjson.border_size}"
-                        :onchange "hyprctl keyword general:border_size {}"
+                        :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle"
                       )
                     )
                   )
+                )
+              )
+              (revealer
+                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness reload config configuration blur size blur strength blur passes',oquery)}"
+                :transition "slidedown"
+                :duration "0ms"
+                (box
+                  :space-evenly false
+                  :orientation "v"
                   (button
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-neutral"
                     :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf"
                     "Reload config"
+                  )
+                )
+              )
+              ; Hyprland
+              (revealer
+                :reveal "${matches('hyprland options open the wiki guide help social hypr development discord',oquery)}"
+                :transition "slidedown"
+                :duration "0ms"
+                (box
+                  :space-evenly false
+                  :orientation "v"
+                  (label
+                    :halign "start"
+                    :wrap true
+                    :class "osettings-section"
+                    :text "Hyprland options"
                   )
                   (revealer
                     :reveal "${matches('hyprland open the wiki guide help',oquery)}"
@@ -484,7 +605,7 @@
               )
               ; Calendar
               (revealer
-                :reveal "${matches('calendar',oquery)}"
+                :reveal "${'calendar' == oquery}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
