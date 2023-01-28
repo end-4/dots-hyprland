@@ -34,8 +34,13 @@
  - To open Workspace Overview, run `eww open overview` (or press Super+Tab if you use my Hyprland configs)
 
 # Dependencies
+ - Package names
 ```
-    bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet (network-manager-applet on fedora) pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
+    bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
+```
+ - On Fedora
+```
+sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration player ctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
 ```
 
 # Other cool stuff
