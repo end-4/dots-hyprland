@@ -7,7 +7,7 @@
  - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
 
 # Branches
- - main (here)
+ - linage https://github.com/end-4/dots-hyprland/tree/linage
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
 
 # Previews
