@@ -11,7 +11,9 @@
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
 
 # Previews
- ![dots-hyprland](./screenshot-8.png)
+ - osu!lazer
+ ![dots-hyprland](./screenshot-13.png)
+ - linage
  ![dots-hyprland](./screenshot-9.png)
 
 # If you're here only for eww...
