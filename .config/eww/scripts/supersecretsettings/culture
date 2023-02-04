@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 plugged=0
 
+swaybg -i images/wallpaper/wallpaper-cultured &
+notify-send 'onii chan~'
+
 while true; do
 	STATE=$(cat /sys/class/power_supply/BATT/status)
     if [[ "$STATE" = "Charging" ]]; then 
         if [ $plugged == 0 ]; then 
             plugged=1
             notify-send 'Aghh~~~~'
-        else 
-            plugged=0
         fi
-    fi
-	sleep 3
+    else 
+        plugged=0
+    fi      
+	sleep 1
 done

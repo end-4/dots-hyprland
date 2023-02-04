@@ -1,11 +1,11 @@
-//Auto generated color theme for image at: https://i.ytimg.com/vi/-z-Ww22krBY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCXfuEjEi72f_e6zuiRqwh4VIxTEw
-$colorbg: #0F0F14;
-$colortext: #C5BEBD;
-$color0: #68748A;
-$color1: #788695;
-$color2: #98A5B0;
-$color3: #C5BEBD;
-$color4: #A7B8C5;
-$color5: #B7C7CF;
-$color6: #d3dfe8;
-$color7: #C5BEBD;
+//Auto generated color theme for image at: https://i.ytimg.com/vi/jb2r80OuqiU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCX9uNxmdiUYEYCPzw5RzamS_pQMQ
+$colorbg: #0d0f14;
+$colortext: #A89397;
+$color0: #7C7188;
+$color1: #9A778C;
+$color2: #D5748D;
+$color3: #A89397;
+$color4: #DDA3A6;
+$color5: #E4C3BC;
+$color6: #f0e3df;
+$color7: #A89397;

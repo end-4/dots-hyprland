@@ -53,19 +53,21 @@
     @include window;
     @include rounding;
     // border-radius: 15px;
-    background-color: $colorbg;
+    background-color: tint($colorbg, 15%);
     // border: 3px solid $border;
     // color: $colortext;
 }
 
 .themer-title {
     font-family: 'Torus', 'Material Symbols Rounded';
-    font-weight: bold;
     font-size: 15pt;
     padding: .6rem;
+    color: $colortext;
+    font-size: 14pt;
 }
 
 .themer-prompt {
+    color: $colortext;
     font-family: 'Torus', 'Material Symbols Rounded';
     font-size: 12pt;
     padding: .6rem;
@@ -73,7 +75,8 @@
 
 .themer-input {
     font-family: 'Torus', 'Material Symbols Rounded';
-    background-color: $surface0;
+    // background-color: $surface0;
+    background-color: tint($colorbg, 10%);
     border-radius: 10px;
     padding: 3px;
     margin-top: 2px;

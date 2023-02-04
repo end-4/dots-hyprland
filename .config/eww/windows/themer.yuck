@@ -75,6 +75,7 @@
 
 (defwindow themer
   :wm-ignore true
+  :stacking "fg"
   :monitor 0
   :geometry (geometry
     :x "300px"

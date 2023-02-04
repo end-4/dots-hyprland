@@ -7,7 +7,7 @@
  - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
 
 # Branches
- - [Currently main style osu!lazer, updated in main branch. All non-main branches are archives]
+ - [Currently main style: osu!lazer, updated in main branch. All non-main branches are archives]
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
  - linage https://github.com/end-4/dots-hyprland/tree/linage
 

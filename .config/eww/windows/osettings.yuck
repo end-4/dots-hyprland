@@ -648,7 +648,7 @@
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-informative"
-                    :onclick "scripts/doreload"
+                    :onclick "scripts/supersecretsettings/doreload"
                     "Reset these stuff"
                   )
                   ; (centerbox
