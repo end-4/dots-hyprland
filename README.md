@@ -18,9 +18,10 @@
  ![dots-hyprland](./screenshot-9.png)
 
 # If you're here only for eww...
- - `monitor=eDP-1, addreserved, 32, 0, 0, 0` (replace "eDP-1" with your monitor name)
- - Start with `eww open bar && eww open barbg` (or put the config somewhere and source it)
- - See instructions below for how to use it efficiently
+ - `monitor=eDP-1, addreserved, `y`, 0, 0, 0` (replace "eDP-1" with your monitor name) (`y=53` for osu!lazer branch, `y=32` for linage branch)
+ - Start with `eww open bar && eww open bg-decor` (or put the config somewhere and source it)
+ - For linage branch, also run: `eww open barbg`
+ - See "Further eww instructions" below for how to use it efficiently
 
 # Instructions
  - **Backup if you need**
@@ -32,7 +33,7 @@
  - Install stuff to provide missing commands (list below) 
 
 # Further eww instructions
- - Music icon: Middle-click: Play/Pause, Right-click: Next track, Left-click: Open music controls
+ - Music control on the music button and top-left corner: Middle-click for Play/Pause, Right-click for Next track
  - Scroll the top-right/top-left corner to change volume
  - To open Workspace Overview, run `eww open overview` (or press Super+Tab if you use my Hyprland configs)
 
@@ -43,7 +44,7 @@
 ```
  - On Fedora
 ```
-sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration player ctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
+sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
 ```
 
 # Other cool stuff
