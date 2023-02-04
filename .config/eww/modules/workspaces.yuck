@@ -1,4 +1,5 @@
-(defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
+; (defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
+(defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 
 
 (defwidget workspaces []
@@ -14,8 +15,7 @@
         (button
           :onclick "hyprctl dispatch workspace ${i.num}"
           :class "ws"
-          :style "color: ${i.clr};"
-          "${ws-icons[i.num - 1]}"
+          (label :class "ws-text" :style "background-color: ${i.clr}; font-size: 13pt;" :text "${ws-icons[i.num - 1]}")
           ; "●"
         )
       )

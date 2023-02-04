@@ -1,6 +1,58 @@
 (deflisten mcover
   'scripts/music cover'
 )
+(deflisten mname
+  'scripts/music name'
+)
+
+(defwidget osu-music-module []
+  (eventbox
+    :class "dummy-${mcover}" ; Dummy class to keep the listener active
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :onclick "eww open --toggle music && ${EWW_CMD} ${music_open ? 'update music_open=false' : 'update music_open=true'}"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next"
+    :onhover "${EWW_CMD} update music_hover=true"
+    :onhoverlost "${EWW_CMD} update music_hover=false"
+    (box
+      :space-evenly false
+      (box
+        :space-evenly false
+        :valign "start"
+        :class "osu-music-box-${music_hover || music_open}"
+        (box
+          :class "osu-music-box-dummy"
+        )
+        (scale
+          :orientation "v"
+          :flipped "true"
+          :class "osu-music-slider"
+          :value "${volume.percent}"
+          :tooltip "volume on ${volume.percent}%"
+          :onchange "scripts/volume setvol SINK {}"
+        )
+      )
+      (revealer
+        :transition "slideright"
+        :reveal "${music_reveal && ! rev_ontf}"
+        :duration "300ms"
+        :class "music-ctl-revealer"
+        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+        :limit-width 20
+        (eventbox
+          :class "music-ctl-revealer-${music_hover || music_open}"
+          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+          (label
+            :class "music-title"
+            :limit-width 50
+            :style "color: ${mcover.color.colors.color4};"
+            :text "${mname.title == '' ? 'Not playing' : mname.title}"
+          )
+        )
+      )
+    )
+  )
+)
 
 (defwidget music-module []
   (eventbox
@@ -44,7 +96,7 @@
                   :class "music-title"
                   :style "${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
                   :limit-width 50
-                  :text "${music.title == '' ? 'Not playing' : music.title}"
+                  :text "${mname.title == '' ? 'Not playing' : mname.title}"
                 )
               )
             )
@@ -55,13 +107,14 @@
               :class "music-ctl-revealer"
               ; :onclick "${EWW_CMD} open --toggle music"
               (box
+                :space-evenly false
                 :class "icon"
                 :style "font-family: SF Mono Nerd Font; ${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
                 ; (button
                   ;   :class "song-button"
                   
-                ;   {music.title} "" {music.status} "")
-                ; (button :class "song-button" :onclick "playerctl previous" {music.title})
+                ;   {mname.title} "" {music.status} "")
+                ; (button :class "song-button" :onclick "playerctl previous" {mname.title})
                 (button
                   :class "song-button"
                   :style "font-family: 'Material Symbols Rounded'; "
@@ -76,7 +129,7 @@
                 (button
                   :class "song-button"
                   :style "font-family: 'Material Symbols Rounded'; "
-                  :onclick "playerctl next" 
+                  :onclick "playerctl next"
                   ""
                 )
               )
@@ -111,14 +164,14 @@
                 (label
                   :class "music-title"
                   :wrap true
-                  :text "${music.title == '' ? 'Not playing' : music.title}"
+                  :text "${mname.title == '' ? 'Not playing' : mname.title}"
                   :style "color: ${mcover.color.colors.color4}; font-weight: bold;"
                   :limit-width 35
                 )
                 (label
                   :class "music-artist"
                   :wrap true
-                  :text "${music.artist}"
+                  :text "${mname.artist}"
                   :style "color: ${mcover.color.colors.color4};"
                 )
                 (centerbox
@@ -138,7 +191,7 @@
                   (button
                     :class "song-button"
                     :style "font-family: 'Material Symbols Rounded'; "
-                    :onclick "playerctl next" 
+                    :onclick "playerctl next"
                     ""
                   )
                 )

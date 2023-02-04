@@ -1,16 +1,13 @@
 .calendar-win {
   @include window;
   background-color: $colorbg;
-  border: 3px solid $color7;
+  border: 3px solid $colortext;
   color: $colortext;
   padding: .2em;
-  font-family: 'Product Sans';
+  font-family: 'Torus';
 }
 
 calendar {
-  //padding: 5px;
-  // padding-top: 4px;
-  // padding-left: 4px;
   padding: 7px;
 
 
@@ -19,22 +16,22 @@ calendar {
     font-weight: bolder;
     background-color: $overlay0;
     border-radius: 8px;
-    font-family: 'Product Sans';
+    font-family: 'Torus';
   }
 
   .header {
-    font-family: 'Product Sans';
-    color: $color6;
+    font-family: 'Torus';
+    color: $colortext;
   }
 
   .highlight {
-    font-family: 'Product Sans';
+    font-family: 'Torus';
     color: $color0;
     font-weight: bold;
   }
 
   .button {
-    font-family: 'Product Sans';
+    font-family: 'Torus';
     color: $colortext;
   }
 
@@ -44,8 +41,9 @@ calendar {
 }
 
 .date-clock{
-  font-family: 'Product Sans';
+  font-family: 'Torus';
   background: transparent;
-  color: $color6;
-  padding-left: 5px;
+  color: white;
+  padding-left: 13px;
+  padding-right: 13px;
 }

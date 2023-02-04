@@ -101,7 +101,8 @@
             :class "element"
             (button
               :halign "end"
-              :onclick "wlogout -p layer-shell &"
+              ; :onclick "wlogout -p layer-shell &"
+              :onclick "wlogout"
               ""
             )
           )

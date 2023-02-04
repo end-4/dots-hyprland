@@ -1,51 +1,59 @@
 .osettings-window {
-    padding-top: 50px;
-    background-color: #302E38;
-    color: #F8F8F8;
+    min-width: 529px;
+    padding-top: 30px;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
+    font-family: Torus;
+}
+
+.onotify-window {
+    min-width: 529px;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
     font-family: Torus;
 }
 
 .osettings-separator {
-    background-color: #18171C;
+    background-color: $colorbg;
     min-height: 6px;
     margin-top: 27px;
 }
 
 .osettings-content {
-    padding-top: 13px;
+    // padding-top: 13px;
     padding-bottom: 10px;
-    background-color: #302E38;
-    color: #F8F8F8;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
     font-family: Torus;
 }
 
 .osettings-heading {
     padding-left: 28px;
     padding-right: 28px;
-    background-color: #302E38;
-    color: #F8F8F8;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
     font-family: Torus;
 }
 
 .osettings-title {
-    background-color: #302E38;
-    color: #F8F8F8;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
     font-family: Torus;
     font-size: 30pt;
 }
 
 .osettings-subtitle {
-    background-color: #302E38;
+    background-color: tint($colorbg, 15%);
     color: #DCD7EC;
     font-family: Torus;
     font-size: 14pt;
 }
 
 .osettings-section {
-    margin-top: 20px;
+    margin-top: 33px;
     margin-bottom: 9px;
-    background-color: #302E38;
-    color: #FAFAFA;
+    background-color: tint($colorbg, 15%);
+    color: $colortext;
     font-family: Torus;
     font-size: 20pt;
 }
@@ -53,7 +61,7 @@
 .osettings-text {
     margin-top: 10px;
     margin-bottom: 10px;
-    color: #F7F7F7;
+    color: $colortext;
     font-family: Torus;
     font-size: 14pt;
 }
@@ -61,16 +69,16 @@
 .osettings-search {
     margin-left: 28px;
     margin-right: 28px;
-    margin-top: 65px;
-    background-color: #24222A;
-    color: #FAFAFA;
+    margin-top: 35px;
+    background-color: tint($colorbg, 10%);
+    color: $colortext;
     border-radius: 6px;
     font-size: 11pt;
     min-height: 45px;
 }
 
 .osettings-search-text {
-    color: #EBEBEC;
+    color: $colortext;
     padding: 10px;
     font-size: 13pt;
     min-width: 420px;
@@ -86,7 +94,7 @@
 }
 
 .osettings-search-icon {
-    color: #FAFAFA;
+    color: $colortext;
     padding: 6px;
     padding-left: 0px;
     font-size: 20pt;
@@ -96,8 +104,6 @@
     padding-left: 28px;
     padding-right: 28px;
 }
-
-.osettings-settings {}
 
 .osettings-btn {
     margin-top: 10px;
@@ -109,31 +115,34 @@
 }
 
 .osettings-btn-destructive {
-    background-color: #CC3378;
+    color: white;
+    background-color: $color1;
 }
 
 .osettings-btn-neutral {
-    background-color: #5933CC;
+    color: white;
+    background-color: $color2;
 }
 
 .osettings-btn-informative {
-    background-color: #EEAA00;
+    color: white;
+    background-color: $color3;
 }
 
-.osettings-btn-neutral:hover,
-.osettings-btn-neutral:focus {
-    background-color: #8C66FF;
-}
+// .osettings-btn-neutral:hover,
+// .osettings-btn-neutral:focus {
+//     background-color: #8C66FF;
+// }
 
-.osettings-btn-destructive:hover,
-.osettings-btn-destructive:focus {
-    background-color: #F53D90;
-}
+// .osettings-btn-destructive:hover,
+// .osettings-btn-destructive:focus {
+//     background-color: #F53D90;
+// }
 
-.osettings-btn-informative:hover,
-.osettings-btn-informative:focus {
-    background-color: #FFCC00;
-}
+// .osettings-btn-informative:hover,
+// .osettings-btn-informative:focus {
+//     background-color: #FFCC00;
+// }
 
 .rounder {
     border-radius: 9999px;
@@ -144,7 +153,7 @@
     margin-bottom: 10px;
     min-height: 6px;
     border-radius: 9999px;
-    background-image: linear-gradient(to right, #8C66FF 50%, #24222A 50%);
+    background-image: linear-gradient(to right, $color0 50%, #24222A 50%);
     padding: 0px;
 
     trough {
@@ -158,7 +167,7 @@
 
     highlight {
         border-radius: 9999px;
-        background-color: #8C66FF;
+        background-color: $color0;
     }
 
     slider {
@@ -166,16 +175,16 @@
         min-height: 20px;
         // min-height: 6px;
         min-width: 65px;
-        background-color: #8C66FF;
+        background-color: $color0;
         margin: -8px;
     }
 
     slider:hover {
-        background-color: #A87AFF;
+        background-color: $color0;
     }
 
     slider:focus {
-        background-color: #A87AFF;
+        background-color: $color0;
     }
 }
 
@@ -186,7 +195,31 @@
     min-width: 60px;
     background-color: transparent;
     color: transparent;
-    border: 3px solid #8C66FF;
+    border: 3px solid $color0;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.osettings-checkbox-1 {
+    border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: $color0;
+    color: transparent;
+    border: 3px solid $color0;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.osettings-checkbox-0 {
+    border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: transparent;
+    color: transparent;
+    border: 3px solid $color0;
 
     margin-top: 10px;
     margin-bottom: 10px;
@@ -194,14 +227,6 @@
 
 .osettings-checkbox:checked {
     border-radius: 9999px;
-    background-color: #8C66FF;
-    color: #8C66FF;
-}
-
-.scrollbar { //whyyyyyyy
-    background-color: red;
-
-    trough {
-        background-color: red;
-    }
+    background-color: $color0;
+    color: $color0;
 }

@@ -3,8 +3,8 @@
 icons=("" "" "" "" "" "" "" "")
 
 gettime() {
-	FULL=$(cat /sys/class/power_supply/BAT0/energy_full)
-	NOW=$(cat /sys/class/power_supply/BAT0/energy_now)
+	FULL=$(cat /sys/class/power_supply/BATT/charge_full)
+	NOW=$(cat /sys/class/power_supply/BATT/charge_now)
 
 	if [ "$RATE" -gt 0 ]; then
 		if [ "$STATE" = "Discharging" ]; then
@@ -68,14 +68,14 @@ chargestatus() {
 
 circolor() {
 	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
-		echo '#5AA8ED'
+		echo 'white'
 	else
-		echo '#9ECE6A'
+		echo 'white'
 	fi
 }
 
 cirbgcolor() {
-	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+	if [[ "$CAPACITY" -le 50 && "$STATE" = "Discharging" ]]; then
 		echo '#EF738A'
 	else
 		echo 'transparent'
@@ -86,7 +86,7 @@ color() {
 	if [ "$CAPACITY" -le 20 ]; then
 		echo '#EF738A'
 	else
-		echo '#9ECE6A'
+		echo 'white'
 	fi
 }
 
@@ -102,10 +102,31 @@ wattage() {
 	echo "$(bc -l <<< "scale=1; $RATE / 1000000") W"
 }
 
+warnedlow=0
+
 while true; do
-	RATE=$(cat /sys/class/power_supply/BATT/power_now)
+	RATE=$(cat /sys/class/power_supply/BATT/voltage_now)
 	CAPACITY=$(cat /sys/class/power_supply/BATT/capacity)
 	STATE=$(cat /sys/class/power_supply/BATT/status)
+
+	if [[ "$CAPACITY" -le 5 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'FREAKING PLUG IN THE CHARGER ALREADY' '!!111!!1!123!!!' -u critical -a 'eww'
+		fi
+	elif [[ "$CAPACITY" -le 10 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'Battery verrry low' 'Hello?' -u critical -a 'eww'
+		fi
+	elif [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'Battery' 'Batterry low. Plug in your charger.' -u critical -a 'eww'
+		fi
+	else
+	    warnedlow=0
+	fi
 
 	echo '{"quickicon": "'"$(chargestatus)"'", "icon": "'"$(geticon)"'", "percentage": '"$CAPACITY"', "wattage": "'"$(wattage)"'", "status": "'"$(status)"'", "circolor": "'"$(circolor)"'", "cirbgcolor": "'"$(cirbgcolor)"'", "color": "'"$(color)"'", "bgcolor": "'"$(bgcolor)"'" }'
 	sleep 3

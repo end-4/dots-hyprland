@@ -10,7 +10,7 @@ getactivewin
 if [ "$1" == "--once" ]; then
   exit 0
 else
-  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
+  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "window>>" | while read -r line; do
     getactivewin
   done
 fi

@@ -1,14 +1,24 @@
 .membar {
-  color: $memcolor;
+  color: white;
 }
 
 .cpubar {
-  color: $cpucolor;
+  color: white;
 }
 
 .batbar {
-  color: $battcolor;
+  color: white;
   padding-right: 4px;
+}
+
+.cpubar-circle {
+  background-color: #5c5b5b;
+}
+.membar-circle {
+  background-color: #5c5b5b;
+}
+.batbar-circle {
+  background-color: #5c5b5b;
 }
 
 // .batbar-circle {
@@ -49,11 +59,11 @@
 }
 
 .iconmem {
-  color: $memcolor;
+  color: white;
 }
 
 .iconcpu {
-  color: $cpucolor;
+  color: white;
 }
 
 .icon-text {
@@ -81,7 +91,7 @@
   @include rounding;
   background-color: $surface0;
   margin: .5rem 1rem;
-  padding: .5rem;
+  // padding: .5rem;
 }
 
 .sys-mem,
@@ -110,45 +120,45 @@
 }
 
 .cpu-menu {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
-  color: $cpucolor;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  color: white;
   padding-left: 5px;
 }
 
 .mem-menu {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
-  color: $memcolor;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  color: white;
   padding-left: 5px;
   padding-right: 5px;
 }
 
 .mem-menu-left {
-  color: $memcolor;
+  color: white;
   padding-left: 5px;
   padding-right: 0px;
 }
 
 .mem-menu-mid {
-  color: $memcolor;
+  color: white;
   padding-left: 0px;
   padding-right: 0px;
 }
 
 .mem-menu-right {
-  color: $memcolor;
+  color: white;
   padding-left: 0px;
   padding-right: 5px;
 }
 
 .sys-menu {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  font-family: 'Torus', 'Material Symbols Rounded';
   color: $battcolor;
   margin: 0px;
   padding: 0px;
 }
 
 .sys-menu-button {
-  color: $color1;
+  color: white;
   margin: 0px;
   padding-left: 16px;
   padding-right: 16px;
@@ -166,4 +176,9 @@
 
 .sys-toggle {
   font-size: 3pt;
+}
+
+.inside-circle {
+  min-height: 27px;
+  min-width: 27px;
 }

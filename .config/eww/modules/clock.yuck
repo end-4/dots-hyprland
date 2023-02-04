@@ -6,37 +6,32 @@
     :onhoverlost "${EWW_CMD} update popup='none' && ${EWW_CMD} update date_rev=false"
     :onclick "${EWW_CMD} update popup='calendar'"
     :class "${popup == 'calendar' ? 'calendar-win' : ''}"
-    ; clock-module 
+    :style "${rev_ontf ? 'background-color: #838383;' : ''}"
+    ; clock-module
     (box
       :space-evenly false
       :orientation "v"
       (box
         :class "module"
         :valign "start"
-        :space-evenly false
-        :orientation "h"
+        :orientation "v"
+        :style "min-width: 115px;"
         (box
           :space-evenly false
-          (label
-            :text {time.hour}
-          :class "clock hour")
-          (label
-            :text ":"
-          :class "clock")
-          (label
-            :text {time.minute}
-          :class "clock minute"))
-        (revealer
-          :transition "slideright"
-          :reveal true ; Replace with "date_rev" for reveal on hover
-          :duration "250ms"
-          :class "date-clock"
-          (button
-            :class "date-clock"
-            :onclick "${EWW_CMD} update popup='calendar'"
-            "${time.day}, ${time.date}"
-          )
+          :halign "start"
+          (label :text "${time.hour}" :class "clock hour")
+          (label :text ":" :class "clock")
+          (label :text {time.minute} :class "clock minute")
         )
+        (button
+          :style "background"
+          :halign "start"
+          :valign "start"
+          :class "date-clock"
+          :onclick "${EWW_CMD} update popup='calendar'"
+          "${time.day}, ${time.date}"
+        )
+        
       )
       (revealer
         :reveal "${popup == 'calendar'}"

@@ -1,7 +1,7 @@
 .song-cover-art {
   @include rounding;
   background-position: center;
-  background-size: cover;
+  background-size: 100%;
   margin: 4px 5px 4px 0;
   min-height: 24px;
   min-width: 24px;
@@ -9,38 +9,57 @@
 
 .music-window {
   @include window;
+  @include rounding;
   background-color: $colorbg;
   border: 3px solid;
   color: $colortext;
-  padding: 3px;
   margin: 3px;
 }
 
 .music-cover-art {
   @include rounding;
-  background-position: center;
+  background-color: transparent;
   background-size: cover;
   background-repeat: no-repeat;
+  background-image: url("eww_covers/cover_art_default");
+  background-position: 50% 15%;
   // border-radius: 5px;
-  margin: 1em;
-  min-height: 200px;
+  // margin: 1em;
+  // min-height: 200px;
   min-width: 200px;
-  // background-image: url("/home/end/.config/eww/images/LinageTrack.png");
 }
 
 .music-box {
-  margin: 1rem 1rem 1rem 0;
+  padding-top: 24px;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-position: top;
+  @include rounding;
 }
 
-.music-title {
+.music-title { 
   // font-weight: bold;
-  font-family: 'Product Sans', 'Material Symbols Rounded';
-  font-size: 1.1rem;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  min-height: 39px;
+  font-size: 19pt;
+  color: $colortext;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.music-title-hover { 
+  // font-weight: bold;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  font-size: 19pt;
+  color: $colortext;
+  background-color: $overlay0;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .music-artist {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
-  color: $color1;
+  color: $colortext;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .music-button label {
@@ -52,7 +71,7 @@
 }
 
 .music-time {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  font-family: 'Torus', 'Material Symbols Rounded';
   color: $color1;
   margin: 0 1rem;
 }
@@ -69,7 +88,6 @@
   trough {
     background-color: $surface0;
     border-radius: 24px;
-    margin-top: 0;
     min-height: 10px;
     min-width: 170px;
   }
@@ -79,7 +97,7 @@
   border-radius: 0px;
   color: $color1;
   // padding-right: 10px;
-  min-height: 32px;
+  min-height: 53px;
 }
 
 .music-icon {
@@ -93,15 +111,92 @@
   background-position: center;
 }
 
-.music-ctl-revealer {
-  padding-left: 10px;
+.music-ctl-revealer-false {
+  // padding-left: 10px;
 }
 
+.music-ctl-revealer-true {
+  background-color: $overlay0;
+}
+
+
 .song-button {
-  color: $color1;
-  padding: 0px;
+  color: $colortext;
 }
 
 .music-button-box {
   font-family: 'Material Symbols Rounded';
+  font-size: 39pt;
+  color: $colortext;
+  min-width: 160px;
+  margin-top: 8px;
+  padding-bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.osu-music-box-false {
+  min-width: 75px;
+  min-height: 53px;
+  background-size: auto 65%;
+  background-position: 35% 50%;
+  background-image: url('images/lazer_icons/transparent/svg/beatmaps.svg');
+  // background-color: $colorbg;
+  background-repeat: no-repeat;
+}
+.osu-music-box-true {
+  min-width: 75px;
+  min-height: 53px;
+  background-size: auto 65%;
+  background-position: 35% 50%;
+  background-color: $overlay0;
+  background-image: url('images/lazer_icons/transparent/svg/beatmaps.svg');
+  background-repeat: no-repeat;
+}
+
+.osu-music-box-dummy {
+  min-width: 50px;
+  min-height: 53px;
+}
+
+.osu-music-slider {
+  margin-top: 9px;
+  margin-bottom: 9px;
+  min-height: 6px;
+  padding-left: 13px;
+
+  trough {
+    border-radius: 9999px;
+    background-color: #24222A;
+    min-height: 6px;
+    // margin-left: 32px;
+    // margin-right: 32px;
+    // min-width: 70px;
+    min-width: 3px;
+  }
+
+  highlight {
+    min-width: 3px;
+    border-radius: 9999px;
+    background-color: white;
+  }
+}
+
+.track-scale {
+  trough {
+    border-bottom-left-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+    background-color: $overlay0;
+    min-height: 8px;
+    // margin-left: 32px;
+    // margin-right: 32px;
+    // min-width: 70px;
+    min-width: 3px;
+  }
+
+  highlight {
+    min-width: 8px;
+    border-bottom-left-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+    background-color: $color0;
+  }
 }

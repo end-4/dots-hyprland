@@ -53,9 +53,11 @@ get_cover() {
 	cd "eww_covers" || exit
 
 	IMGPATH="cover_art"
+	echo '{"image": "eww_covers/cover_art_default"}'
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		if [[ "$COVER_URL" = https* ]]; then
+			COVER_URL=$(echo $COVER_URL)
 			# if [ ! -e "eww_covers/$(basename "$COVER_URL")" ]; then
 			# 	wget -N "$COVER_URL" -o /dev/null
 			# 	# wget -N "$COVER_URL" -o "$IMGPATH"
@@ -65,7 +67,15 @@ get_cover() {
 
 			# echo "$IMGPATH"
 			coverurl="$(playerctl metadata mpris:artUrl)"
-			wget -O "$IMGPATH" "$coverurl" -q
+			coverurl_highres="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
+			wget -O "$IMGPATH" "$coverurl_highres" -q –read-timeout=0.1
+			# curl "$coverurl_highres" --output "cover_art"
+			imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+			if [ $imgsize -eq "0" ]; then
+				# curl "$coverurl" --output "cover_art"
+				wget -O "$IMGPATH" "$coverurl" -q
+			fi
+			
 			coverpath="$IMGPATH"
 			wal -c
 			themejson=$(wal -i "$IMGPATH" -n -t -e -s | grep -e 'color1' | sed 's/'\''/"/g')
@@ -207,6 +217,18 @@ sanitize() {
 
 if [ "$1" = "cover" ]; then
 	get_cover
+elif [ "$1" = "name" ]; then
+	echo '{"artist": "", "title": ""}'
+	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
+	
+		len=$(playerctl metadata mpris:length)
+
+		gojq --null-input -r -c \
+			--arg artist "$(sanitize "$artist")" \
+			--arg title "$(sanitize "$title")" \
+			'{"artist": $artist, "title": $title}'
+		
+	done
 else
 	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
