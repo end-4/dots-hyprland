@@ -3,49 +3,34 @@
 (include "./modules/bluetooth.yuck")
 (include "./modules/bright.yuck")
 (include "./modules/clock.yuck")
+(include "./modules/editmode.yuck")
 (include "./modules/music.yuck")
 (include "./modules/net.yuck")
 (include "./modules/sys.yuck")
 (include "./modules/variables.yuck")
+(include "./modules/user.yuck")
 (include "./modules/volume.yuck")
 (include "./modules/winctl.yuck")
 (include "./modules/workspaces.yuck")
 
 (include "./windows/bg-decor.yuck")
+(include "./windows/dynamic-bg.yuck")
 (include "./windows/calendar.yuck")
 (include "./windows/music.yuck")
 (include "./windows/notifications.yuck")
 (include "./windows/overview.yuck")
 (include "./windows/osettings.yuck")
+(include "./windows/onotify.yuck")
 (include "./windows/system-menu.yuck")
 (include "./windows/win-workspace.yuck")
 (include "./windows/themer.yuck")
+
 (defvar popup "none")
-
-(defwidget themer []
-  (eventbox
-    (box
-      :style "padding-right: 5px;"
-      :valign "start"
-      :space-evenly false
-      :spacing 4
-      (button
-        :class "themer-button"
-        :onclick "eww open --toggle themer"
-        :style "font-family: 'Material Symbols Rounded';"
-        ''
-      )
-    )
-  )
-)
-
-(defwidget notif-toggle []
-  (button
-    :class "notif-toggle module"
-    :onclick "${EWW_CMD} open --toggle notifications";
-    {notif_icons.icon}
-  )
-)
+(defvar right_hover false)
+(defvar music_hover false)
+(defvar themer_hover false)
+(defvar music_open false)
+(defvar themer_open false)
 
 (defwidget separator []
   (box
@@ -61,15 +46,17 @@
 ; clipboard 󰅌 󰅍 󰄷
 
 (defwidget left []
-  (box
-    :space-evenly false
-    :valign "start"
-    :halign "start"
-    :class "bar"
-    (music-module)
-    (clock_module)
-    ; (activewindow)
-    ; (notif-toggle)
+  (eventbox
+    :onhover "${EWW_CMD} update music_reveal=true"
+    :onhoverlost "${EWW_CMD} update music_reveal=false"
+    (box
+      :space-evenly false
+      :valign "start"
+      :halign "start"
+      :class "bar"
+      (osettings-button)
+      (osu-music-module)
+    )
   )
 )
 
@@ -79,21 +66,10 @@
     :halign "end"
     :valign "start"
     :class "bar"
+    (editmode)
     (themer)
-    (winctl)
-    (separator)
-    (volume-module)
-    (bright)
-    ; (bluetooth)
-    (net)
-    (separator)
-    
-    ; (syscpu)
-    ; (cpumenu)
-    ; (sysmem)
-    ; (memmenu)
-    ; (sysbatt)
-    (sys)
+    ; (user)
+    (onotify-button)
   )
 )
 
@@ -132,13 +108,12 @@
 
 (defwindow bar
   :wm-ignore true
-  :windowtype dock
   :monitor 0
   :geometry (geometry
     :x "0%"
     :y "0%"
     :width "100%"
-    :height "32px"
+    :height "53px"
     :anchor "top center"
   )
   ; :stacking "fg"
@@ -148,16 +123,16 @@
 
 (defwindow barbg
   :wm-ignore true
-  :windowtype dock
   :monitor 0
   :geometry (geometry
     :x "0%"
     :y "0%"
     :width "100%"
-    :height "32px"
+    :height "53px"
     :anchor "top center"
   )
   :stacking "bg"
   :exclusive false
   (barbg)
 )
+

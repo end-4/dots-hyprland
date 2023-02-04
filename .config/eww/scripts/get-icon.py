@@ -7,6 +7,10 @@ from gi.repository import Gtk
 # Predefine class corrections
 if sys.argv[1] == 'Code':
     sys.argv[1] = 'code'
+elif sys.argv[1] == 'code-url-handler':
+    sys.argv[1] = 'code'
+elif sys.argv[1] == 'Microsoft-edge':
+    sys.argv[1] = 'microsoft-edge'
 elif sys.argv[1] == 'GitHub Desktop':
     sys.argv[1] = 'github-desktop'
 elif sys.argv[1] == 'org.kde.kolourpaint':

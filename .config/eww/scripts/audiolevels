@@ -65,6 +65,6 @@ dostuff(){
 
 dostuff
 
-pactl subscribe | rg --line-buffered "change" | while read -r _; do
+pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
     dostuff
 done

@@ -11,7 +11,7 @@ them in `~/.config/eww`. Then run `eww daemon` and `eww open bar`. Enjoy!
 
 Dependencies:
 - Icon fonts: `material-design-icons`, `material-icons`
-- Text font: Product Sans
+- Text font: Torus (get it from the osu! website with DevTools)
 
 ## 🎨 Theme
 - tokyonight

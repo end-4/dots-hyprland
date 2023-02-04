@@ -3,9 +3,9 @@
 getopen(){
   ans=$(eww windows | grep -e "$1")
   if [ "${ans:0:1}" == "*" ]; then
-    echo 1
+    echo "true"
   else 
-    echo 0
+    echo "false"
   fi
 }
 

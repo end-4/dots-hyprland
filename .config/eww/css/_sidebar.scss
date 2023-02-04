@@ -32,21 +32,26 @@
 }
 
 .system-row {
-  font-family: Product Sans;
-  margin: .5rem .7rem;
+  font-family: Torus;
+  // margin: .5rem .7rem;
+  margin-top: 20px;
 
   .airplane-box button {
     padding: 1rem 3rem;
   }
 
+  .power-box button {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
   label {
     font-size: 1rem;
-    margin: 0 .1rem;
   }
 }
 
 .element {
-  font-family: 'Product Sans';
+  font-family: 'Torus';
   @include rounding;
   background: $surface0;
   margin: .3rem;
@@ -66,7 +71,7 @@
 }
 
 .sliders {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  font-family: 'Torus', 'Material Symbols Rounded';
   @include rounding;
   background-color: $surface0;
   margin: .5rem 1rem;

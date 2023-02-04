@@ -1,8 +1,9 @@
 .overview-window {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
-  @include rounding;
+  font-family: 'Torus', 'Material Symbols Rounded';
+  border-radius: 20px;
   background-color: $colorbg;
-  border: 3px solid $color7;
+  // background-color: transparent;
+  // border: 3px solid $color0;
   padding: 5px;
 }
 

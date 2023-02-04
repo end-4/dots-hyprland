@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf
+kill $(pidof eww) && eww open bar && eww open bg-decor

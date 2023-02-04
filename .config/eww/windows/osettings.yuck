@@ -6,9 +6,8 @@
   (eventbox
     :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle"
     (box
-      :class "osettings-checkbox"
+      :class "osettings-checkbox-${value}"
       :halign "end"
-      :style "${value == 1 ? 'background-color: #8C66FF' : ''}"
     )
   )
 )
@@ -17,9 +16,8 @@
   (eventbox
     :onclick "${changecmd}"
     (box
-      :class "osettings-checkbox"
+      :class "osettings-checkbox-${value}"
       :halign "end"
-      :style "${value == 1 ? 'background-color: #8C66FF' : ''}"
     )
   )
 )
@@ -37,6 +35,11 @@
         :class "osettings-window"
         :orientation "v"
         :space-evenly false
+        ; (input
+          ;   :halign "start"
+          ;   :class "osettings-search-text"
+          ;   :onchange "${EWW_CMD} update oquery=\"$(echo {} | tr [:upper:] [:lower:])\""
+        ; )
         (box
           :orientation "v"
           :space-evenly false
@@ -86,7 +89,7 @@
           ; :hscroll false
           ; :halign "fill"
           :class "osettings-content"
-          :style "min-height: 765px;"
+          :style "min-height: 813px;"
           (box
             :halign "fill"
             :class "osettings-scroll-bg"
@@ -199,7 +202,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-neutral"
-                        :onclick "scripts/toggle-osettings.sh && ~/.local/bin/lock.sh"
+                        :onclick "~/.local/bin/lock.sh"
                         "Lock"
                       )
                     )
@@ -215,7 +218,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-neutral"
-                        :onclick "scripts/toggle-osettings.sh && systemctl suspend"
+                        :onclick "systemctl suspend"
                         "Suspend"
                       )
                     )
@@ -231,7 +234,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-destructive"
-                        :onclick "scripts/toggle-osettings.sh && kill Hyprland"
+                        :onclick "kill Hyprland"
                         "Logout"
                       )
                     )
@@ -247,7 +250,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-destructive"
-                        :onclick "scripts/toggle-osettings.sh && systemctl poweroff"
+                        :onclick "systemctl poweroff"
                         "Shutdown"
                       )
                     )
@@ -256,7 +259,7 @@
               )
               ; Mouse
               (revealer
-                :reveal "${matches('mouse and touchpad touch pad mouse speed osu raw input sensitivity disable while typing disable_while_typing tap to click clickfinger_behavior',oquery)}"
+                :reveal "${matches('mouse and touchpad touch pad mouse speed mouse acceleration osu raw input sensitivity disable while typing disable_while_typing tap to click clickfinger_behavior',oquery)}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
@@ -269,7 +272,7 @@
                     :text "Mouse & Touchpad"
                   )
                   (revealer
-                    :reveal "${matches('mouse speed osu raw input sensitivity',oquery)}"
+                    :reveal "${matches('mouse and touchpad touch pad speed mouse acceleration osu raw input sensitivity',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -314,7 +317,7 @@
                     )
                   )
                   (revealer
-                    :reveal "${matches('touch pad touchpad disable while typing disable_while_typing',oquery)}"
+                    :reveal "${matches('mouse and touch pad touchpad disable while typing disable_while_typing',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -339,7 +342,7 @@
                     )
                   )
                   (revealer
-                    :reveal "${matches('touch pad touchpad tap to click clickfinger_behavior',oquery)}"
+                    :reveal "${matches('mouse and touchpad touch pad tap to click clickfinger_behavior',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -620,6 +623,52 @@
                   (calendar)
                 )
               )
+              ; Super secret settings
+              (revealer
+                :reveal "${oquery == '!secret'}"
+                :transition "slidedown"
+                :duration "0ms"
+                (box
+                  :orientation "v"
+                  :space-evenly false
+                  (label
+                    :halign "start"
+                    :wrap true
+                    :class "osettings-section"
+                    :text "Super secret settings"
+                  )
+                  (button
+                    :halign "fill"
+                    :wrap true
+                    :class "osettings-btn osettings-btn-informative"
+                    :onclick "scripts/supersecretsettings/culture"
+                    "Activate culture mode"
+                  )
+                  (button
+                    :halign "fill"
+                    :wrap true
+                    :class "osettings-btn osettings-btn-informative"
+                    :onclick "scripts/doreload"
+                    "Reset these stuff"
+                  )
+                  ; (centerbox
+                  ;   :orientation "h"
+                  ;   :space-evenly false
+                  ;   :halign "fill"
+                  ;   (label
+                  ;     :halign "start"
+                  ;     :wrap true
+                  ;     :class "osettings-text"
+                  ;     :text "Culture mode"
+                  ;   )
+                  ;   (box)
+                  ;   (checkboxcmd
+                  ;     :value "${volume.audio}"
+                  ;     :changecmd "notify-send 'i see ur a man of culture as well'"
+                  ;   )
+                  ; )
+                )
+              )
             )
           )
         )
@@ -628,21 +677,30 @@
   )
 )
 
+
 (defwindow osettings
-  :focusable true
   :wm-ignore true
   :monitor 0
-  ; :focusable true
+  :focusable true
   :geometry (geometry
     :x "0"
-    :y "0"
-    ; :width "27.8%"
-    ; :width "535px"
+    :y "53px"
     :width "0px"
-    :height "100%"
-    ; :height "1048px"
-    :anchor "bottom left"
+    :height "1027px"
+    :anchor "top left"
   )
   (osettings)
 )
 
+(defwidget osettings-button []
+  (eventbox
+    :class "osettings-toggle-button-false"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next"
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    (button
+      :class "osettings-toggle-button-${rev_ostg}"
+      :onclick "scripts/toggle-osettings.sh"
+    )
+  )
+)

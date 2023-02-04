@@ -1,11 +1,17 @@
 @import 'css/colors';
 @import 'css/colorscheme';
 
-$battcolor: $color4;
-$memcolor: $color2;
-$cpucolor: $color5;
+$battcolor: white;
+$memcolor: $color1;
+$cpucolor: $color3;
 $border: $color7;
 
+@function tint($color, $percentage) {
+  @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+@function shade($color, $percentage) {
+  @return mix(rgb(0, 7, 18), $color, $percentage);
+}
 //thanks flick0!
 @keyframes gradient {
   0% {
@@ -36,7 +42,7 @@ $border: $color7;
 }
 
 @mixin rounding {
-  border-radius: 16px;
+  border-radius: 8px;
 }
 
 @mixin filter {
@@ -87,7 +93,8 @@ $border: $color7;
 * {
   all: unset;
   transition: 200ms cubic-bezier(0.05, 0.9, 0.1, 1);
-  // font-family: 'Product Sans', 'Material Symbols Rounded';
+  // font-family: 'Torus', 'Material Symbols Rounded';
+  background-repeat: no-repeat;
 }
 
 .scale slider {
@@ -102,12 +109,9 @@ $border: $color7;
   font-family: Material Symbols Rounded;
 }
 
-.music-ctl-revealer:hover {
-  border-top: 2px solid;
-}
-
 @import 'css/bgdecor';
 @import 'css/calendar';
+@import 'css/editmode';
 @import 'css/music';
 @import 'css/notification';
 @import 'css/overview';
@@ -119,30 +123,32 @@ $border: $color7;
 @import 'css/winctl';
 
 .barbg {
-  background-color: $colorbg;
+  background-color: #191919;
   // background-image: url("/home/end/.config/eww/images/topbar.png");
   color: $colortext;
-  border-radius: 100px;
+  border-radius: 0px;
 
   label {
     font-size: 1.2rem;
   }
 
-  font-family: 'Product Sans';
+  font-family: 'Torus';
 }
 
 .bar {
-  background-color: transparent;
-  min-height: 32px;
+  background-color: $colorbg;
+  // background-color: rgba(25, 25, 25, 0.5);
+  // background-color: transparent;
+  min-height: 53px;
   // background-image: url("/home/end/.config/eww/images/topbar.png");
   color: $fg;
-  border-radius: 100px;
+  border-radius: 0px;
 
   label {
     font-size: 1.2rem;
   }
 
-  font-family: 'Product Sans';
+  font-family: 'Torus';
 }
 
 tooltip {
@@ -151,7 +157,7 @@ tooltip {
   border-radius: 8px;
 
   label {
-    font-family: Product Sans;
+    font-family: Torus;
     font-size: 13pt;
   }
 }
@@ -162,28 +168,24 @@ tooltip {
 
 .icon {
   font-family: Material Symbols Rounded;
-  padding-left: 4px;
-  padding-right: 4px;
+  // padding-left: 4px;
+  // padding-right: 4px;
 }
 
 .module {
   font-family: Material Symbols Rounded;
-  min-height: 32px;
-}
-
-.module:hover {
-  border-top: 2px solid;
+  min-height: 53px;
 }
 
 .hour {
   // font-weight: bold;
-  margin-left: 15px;
-  color: $color5;
+  padding-left: 13px;
+  color: white;
 }
 
 .clock {
-  color: $color5;
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  color: white;
+  font-family: 'Torus', 'Material Symbols Rounded';
 }
 
 // .clock-module:hover {
@@ -191,14 +193,14 @@ tooltip {
 // }
 
 .minute {
-  color: $color5;
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  color: white;
+  font-family: 'Torus', 'Material Symbols Rounded';
 }
 
 .date {
-  font-family: 'Product Sans', 'Material Symbols Rounded';
+  font-family: 'Torus', 'Material Symbols Rounded';
   background: $barbg;
-  color: $color5;
+  color: white;
   padding-left: 4px;
 
   label {
@@ -222,10 +224,6 @@ tooltip {
 
 .workspaces {
   margin-left: 10px;
-}
-
-.notif-toggle {
-  padding: 0 5px;
 }
 
 .player-controls {
@@ -253,12 +251,25 @@ tooltip {
   padding-left: 15px;
   padding-right: 15px;
   color: $colortext;
-  min-height: 32px;
+  min-height: 53px;
 }
 
 .ws {
-  font-size: 4rem;
-  padding: 3px;
+  font-size: 6rem;
+}
+
+.ws-text {
+  font-size: 16pt;
+  font-family: Torus;
+  border-radius: 9999px;
+  // padding-left: 3px;
+  // padding-right: 3px;
+  min-width: 27px;
+  color: $colorbg;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .ws:hover {
@@ -266,46 +277,28 @@ tooltip {
 }
 
 .ws-active {
-  color: $color1;
+  // color: $color1;
+  background: rgb(148, 226, 213);
+  background: linear-gradient(52deg, rgba(148, 226, 213, 1) 0%, rgba(137, 220, 235, 1) 19%, rgba(116, 199, 236, 1) 43%, rgba(137, 180, 250, 1) 56%, rgba(180, 190, 254, 1) 80%, rgba(186, 187, 241, 1) 100%);
+  background-size: 300% 300%;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.377);
+  animation: gradient 15s ease infinite;
+  font-weight: bolder;
+  color: #ffffff;
 }
 
 .ws-inactive {
-  color: $color6;
+  // color: $color6;
 }
 
 .ws-empty {
-  color: #313244;
+  // color: #313244;
 }
 
 .activewin {
   color: $color3;
   // padding-left: 8px;
   // padding-right: 8px;
-}
-
-.themer-button {
-  // padding-top: 4px;
-  // padding-bottom: 4px;
-  // padding-left: 5px;
-  // padding-right: 5px;
-  min-height: 32px;
-  min-width: 32px;
-  color: $color6;
-  // background-color: $surface0;
-  border-radius: 7px;
-  font-family: Material Symbols Rounded;
-}
-
-.themer-button:hover {
-  background-color: $overlay0;
-}
-
-.themer-button:active {
-  background-color: $overlay0;
-}
-
-.themer-button:focus {
-  border: 2px solid $overlay0;
 }
 
 // .themer-get {
@@ -336,3 +329,105 @@ tooltip {
   font-family: "Material Symbols Rounded"; //AAAAAAAAAGGGHHH
 }
 
+.username {
+  color: $colortext;
+}
+
+.userpic {
+  margin: 5px;
+  min-height: 42px;
+  min-width: 42px;
+  background-size: 100%;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+}
+
+.osettings-toggle-button-false {
+  min-width: 75px;
+  min-height: 53px;
+  background-color: transparent;
+  background-image: url('/home/end/.config/eww/images/lazer_icons/transparent/svg/settings.svg');
+  background-size: auto 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  :hover {
+    background-color: $overlay0;
+  }
+}
+
+.osettings-toggle-button-true {
+  min-width: 75px;
+  min-height: 53px;
+  background-image: url('/home/end/.config/eww/images/lazer_icons/transparent/svg/settings.svg');
+  background-size: auto 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: $overlay0;
+}
+
+.onotify-toggle-button-false {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: transparent;
+  // background-image: url('./images/lazer_icons/notifications.png');
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+
+  :hover {
+    background-color: $overlay0;
+    // background-image: url('./images/lazer_icons/notifications_hover.png');
+  }
+}
+
+.onotify-toggle-button-true {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: $overlay0;
+  // background-image: url('./images/lazer_icons/notifications_hover.png');
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+}
+
+.real-onotify-toggle-button-false {
+  min-width: 53px;
+  min-height: 53px;
+  background-image: url('./images/lazer_icons/transparent/svg/forum.svg');
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+
+  :hover {
+    background-color: $overlay0;
+  }
+}
+
+.real-onotify-toggle-button-true {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: $overlay0;
+  background-size: auto 65%;
+  background-position: center;
+  background-image: url('./images/lazer_icons/transparent/svg/forum.svg');
+  background-repeat: no-repeat;
+}
+
+// .music-ctl-revealer:hover {
+//   border-top: 2px solid;
+// }
+// .bright-icon:hover {
+//   border-top: 2px solid;
+// }
+// .net-icon:hover {
+//   border-top: 2px solid;
+// }
+
+.dynbg-image {
+  transition: 900ms cubic-bezier(0.05, 0.9, 0.1, 1); // Hyprland default bezier but no overshot
+  background-image: url('images/wallpaper/wallpaper');
+  background-size: 133%;
+  min-height: 1080px;
+  min-width: 1920px;
+}
