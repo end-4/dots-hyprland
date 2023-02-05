@@ -15,7 +15,7 @@
         :space-evenly false
         (label
           :class "music-title"
-          ; :wrap true
+          :wrap false
           :text "${mname.title == '' ? 'Not playing' : mname.title}"
           :style "color: ${mcover.color.colors.color4};"
           :limit-width 35
