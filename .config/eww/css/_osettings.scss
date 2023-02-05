@@ -69,8 +69,9 @@
     margin-right: 28px;
     margin-top: 35px;
     background-color: tint($colorbg, 10%);
+    border: 2px solid $colortext;
     color: $colortext;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 11pt;
     min-height: 45px;
 }

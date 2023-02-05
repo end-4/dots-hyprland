@@ -1,5 +1,6 @@
 @import 'css/colors';
 @import 'css/colorscheme';
+@import 'images/svg/color.scss';
 
 @function tint($color, $percentage) {
   @return mix(rgb(245, 250, 255), $color, $percentage);
@@ -8,7 +9,7 @@
   @return mix(rgb(0, 7, 18), $color, $percentage);
 }
 
-$battcolor: white;
+$battcolor: $colorbar;
 $memcolor: $color1;
 $cpucolor: $color3;
 $border: $color7;
@@ -156,7 +157,7 @@ $bg1: $surface0;
 
 tooltip {
   background: $colorbg;
-  border: 1px solid $color7;
+  border: 1px solid $colortext;
   border-radius: 8px;
 
   label {
@@ -183,11 +184,11 @@ tooltip {
 .hour {
   // font-weight: bold;
   padding-left: 13px;
-  color: white;
+  color: $colorbar;
 }
 
 .clock {
-  color: white;
+  color: $colorbar;
   font-family: 'Torus', 'Material Symbols Rounded';
 }
 
@@ -196,14 +197,14 @@ tooltip {
 // }
 
 .minute {
-  color: white;
+  color: $colorbar;
   font-family: 'Torus', 'Material Symbols Rounded';
 }
 
 .date {
   font-family: 'Torus', 'Material Symbols Rounded';
   background: $barbg;
-  color: white;
+  color: $colorbar;
   padding-left: 4px;
 
   label {
@@ -349,7 +350,7 @@ tooltip {
   min-width: 75px;
   min-height: 53px;
   background-color: transparent;
-  background-image: url('/home/end/.config/eww/images/lazer_icons/transparent/svg/settings.svg');
+  background-image: url('images/svg/settings.svg');
   background-size: auto 65%;
   background-position: center;
   background-repeat: no-repeat;
@@ -362,7 +363,7 @@ tooltip {
 .osettings-toggle-button-true {
   min-width: 75px;
   min-height: 53px;
-  background-image: url('/home/end/.config/eww/images/lazer_icons/transparent/svg/settings.svg');
+  background-image: url('images/svg/settings.svg');
   background-size: auto 65%;
   background-position: center;
   background-repeat: no-repeat;
@@ -397,7 +398,7 @@ tooltip {
 .real-onotify-toggle-button-false {
   min-width: 53px;
   min-height: 53px;
-  background-image: url('./images/lazer_icons/transparent/svg/forum.svg');
+  background-image: url('./images/svg/forum.svg');
   background-repeat: no-repeat;
   background-size: auto 65%;
   background-position: center;
@@ -413,7 +414,7 @@ tooltip {
   background-color: $overlay0;
   background-size: auto 65%;
   background-position: center;
-  background-image: url('./images/lazer_icons/transparent/svg/forum.svg');
+  background-image: url('./images/svg/forum.svg');
   background-repeat: no-repeat;
 }
 

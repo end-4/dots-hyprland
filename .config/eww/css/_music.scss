@@ -139,7 +139,7 @@
   min-height: 53px;
   background-size: auto 65%;
   background-position: 35% 50%;
-  background-image: url('images/lazer_icons/transparent/svg/beatmaps.svg');
+  background-image: url('images/svg/beatmaps.svg');
   // background-color: $colorbg;
   background-repeat: no-repeat;
 }
@@ -149,7 +149,7 @@
   background-size: auto 65%;
   background-position: 35% 50%;
   background-color: $overlay0;
-  background-image: url('images/lazer_icons/transparent/svg/beatmaps.svg');
+  background-image: url('images/svg/beatmaps.svg');
   background-repeat: no-repeat;
 }
 
@@ -177,7 +177,7 @@
   highlight {
     min-width: 3px;
     border-radius: 9999px;
-    background-color: white;
+    background-color: $colorbar;
   }
 }
 
