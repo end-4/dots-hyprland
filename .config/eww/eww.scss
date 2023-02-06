@@ -157,8 +157,9 @@ $bg1: $surface0;
 
 tooltip {
   background: $colorbg;
-  border: 1px solid $colortext;
+  border: 2px solid $colortext;
   border-radius: 8px;
+  color: $colortext;
 
   label {
     font-family: Torus;
@@ -281,22 +282,17 @@ tooltip {
 }
 
 .ws-active {
-  // color: $color1;
-  background: rgb(148, 226, 213);
-  background: linear-gradient(52deg, rgba(148, 226, 213, 1) 0%, rgba(137, 220, 235, 1) 19%, rgba(116, 199, 236, 1) 43%, rgba(137, 180, 250, 1) 56%, rgba(180, 190, 254, 1) 80%, rgba(186, 187, 241, 1) 100%);
-  background-size: 300% 300%;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.377);
-  animation: gradient 15s ease infinite;
-  font-weight: bolder;
-  color: #ffffff;
+  background-color: $colortext;
 }
 
 .ws-inactive {
-  // color: $color6;
+  // background-color: tint($colorbg, 37%);
+  background-color: rgba(154, 152, 152, 0.7);
 }
 
 .ws-empty {
-  // color: #313244;
+  // background-color: tint($colorbg, 10%);
+  background-color: rgba(146, 145, 145, 0.3);
 }
 
 .activewin {
