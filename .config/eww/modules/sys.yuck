@@ -372,13 +372,13 @@
       :space-evenly false
       (label :class "sys-menu-charge" :text "${battery.quickicon}")
       (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%")
-      (revealer
-        :reveal "${popup == 'system-menu' || force_sys_rev}"
-        :transition "slideright"
-        :duration "300ms"
-        :class "sys-menu"
-        (label :class "batt-percentage" :text " | ${battery.wattage} | ${battery.status}")
-      )
+      ; (revealer
+      ;   :reveal "${popup == 'system-menu' || force_sys_rev}"
+      ;   :transition "slideright"
+      ;   :duration "300ms"
+      ;   :class "sys-menu"
+      ;   (label :class "batt-percentage" :text " | ${battery.wattage} | ${battery.status}")
+      ; )
     )
   )
 )

@@ -13,7 +13,7 @@
         (button
           :class "themer-action-button themer-get"
           :onclick "scripts/colormanage get"
-          ""
+          ""
         )
         (button
           :class "themer-action-button themer-restore"
