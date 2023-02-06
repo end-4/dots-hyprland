@@ -74,6 +74,10 @@
     border-radius: 10px;
     font-size: 11pt;
     min-height: 45px;
+    caret-color: $colortext;
+    selection {
+        background-color: rgba(154, 152, 152, 0.5);
+    }
 }
 
 .osettings-search-text {
@@ -84,11 +88,6 @@
 
     cursor {
         color: #7F7E83;
-    }
-
-    highlight {
-        color: green;
-        background-color: green;
     }
 }
 
@@ -199,6 +198,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 .osettings-checkbox-1 {
     border-radius: 9999px;
     // min-height: 20px;
@@ -211,6 +211,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
 .osettings-checkbox-0 {
     border-radius: 9999px;
     // min-height: 20px;
