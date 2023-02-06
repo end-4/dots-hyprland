@@ -79,10 +79,15 @@
     background-color: tint($colorbg, 10%);
     color: $colortext;
     border-radius: 10px;
-    padding: 3px;
+    padding: 7px;
     margin-top: 2px;
     margin-bottom: 2px;
     border: 2px solid $overlay0;
+    caret-color: $colortext;
+
+    selection {
+        background-color: rgba(154, 152, 152, 0.5);
+    }
 }
 
 .themer-input:focus {
