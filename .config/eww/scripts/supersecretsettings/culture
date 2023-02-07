@@ -2,14 +2,14 @@
 plugged=0
 
 swaybg -i images/wallpaper/wallpaper-cultured &
-notify-send 'onii chan~'
 
 while true; do
 	STATE=$(cat /sys/class/power_supply/BATT/status)
     if [[ "$STATE" = "Charging" ]]; then 
-        if [ $plugged == 0 ]; then 
+        if [ "$plugged" -eq "0" ]; then 
             plugged=1
             notify-send 'Aghh~~~~'
+            play scripts/supersecretsettings/culture.mp3
         fi
     else 
         plugged=0
