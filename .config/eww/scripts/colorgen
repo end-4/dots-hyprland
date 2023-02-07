@@ -55,8 +55,8 @@ echo '' >> './tmp/_colorscheme.colorpallete'
 # echo '' >> './tmp/_colorscheme.colorpallete'
 
 # Border gradient: color6 -> color5 -> color7
-gradient1=$(echo -n "$themejson" | gojq '.colors.color6' | sed 's/"//g')
-gradient2=$(echo -n "$themejson" | gojq '.colors.color5' | sed 's/"//g')
+gradient1=$(echo -n "$themejson" | gojq '.colors.color0' | sed 's/"//g')
+gradient2=$(echo -n "$themejson" | gojq '.colors.color1' | sed 's/"//g')
 gradient3=$(echo -n "$themejson" | gojq '.colors.color7' | sed 's/"//g')
 
 echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'

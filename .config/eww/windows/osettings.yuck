@@ -641,7 +641,7 @@
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-informative"
-                    :onclick "scripts/supersecretsettings/culture"
+                    :onclick "scripts/supersecretsettings/culture &"
                     "Activate culture mode"
                   )
                   (button
