@@ -34,7 +34,7 @@
       )
       (revealer
         :transition "slideright"
-        :reveal "${music_reveal && ! rev_ontf}"
+        :reveal "${music_reveal}"
         :duration "300ms"
         :class "music-ctl-revealer"
         :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"

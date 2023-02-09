@@ -1,11 +1,13 @@
-$colorbg: #171726;   //Get from color0
-$colortext: #a9b1d6; //Get from color4
-$color0: #ff79b1;
-$color1: #EF738A;
-$color2: #FF9E64;
-$color3: #E0AF68;
-$color4: #9ECE6A;
-$color5: #7AA2F7;
-$color6: #0DB9D7;
-$color7: #9778D0; //Get from color4 (border)
-$colormusic: #EF738A;
+//Auto generated color theme for image at: https://i.ytimg.com/vi/eg1JphbmZlE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDBpIuKkOKIPKk1iZ0Z398QipFzHA
+@function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }
+@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
+$colorbg: #091535;
+$colortext: #b3b9c0;
+$color0: #4F5C65;
+$color1: #465A70;
+$color2: #4F6478;
+$color3: #3E5D80;
+$color4: #4F6985;
+$color5: #5D7087;
+$color6: #b3b9c0;
+$color7: #3E5D80;

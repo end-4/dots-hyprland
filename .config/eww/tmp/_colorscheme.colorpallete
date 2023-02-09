@@ -1,13 +1,13 @@
-//Auto generated color theme for image at: https://images-ext-1.discordapp.net/external/ND10Yq513Di-a_h54IrfunXwgiexzcEDygRY88pDJ0I/https/media.tenor.com/tYiVdwDV97AAAAAD/go-white.png?width=436&height=245
+//Auto generated color theme for image at: https://i.ytimg.com/vi/VryxFm0kY7M/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDZmkyjnzFNiq1FkXWC01Joe0vQ5A
 @function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }
 @function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
-$colorbg: #0f1013;
-$colortext: #c4c4c6;
-$color0: #B06951;
-$color1: #926E62;
-$color2: #A58A73;
-$color3: #CB9678;
-$color4: #727985;
-$color5: #7A8C92;
-$color6: #c4c4c6;
-$color7: #CB9678;
+$colorbg: #020305;
+$colortext: #e0e2ee;
+$color0: #669EEB;
+$color1: #6BDAF9;
+$color2: #A495B2;
+$color3: #A2A3DC;
+$color4: #CBB2DB;
+$color5: #A2D8F6;
+$color6: #e0e2ee;
+$color7: #A2A3DC;
