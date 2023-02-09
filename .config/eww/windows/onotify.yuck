@@ -34,7 +34,7 @@
               (button
                 :class "wifi-arrow-btn"
                 :style "font-family: Material Symbols Rounded;"
-                :onclick "nm-connection-editor &"
+                :onclick "gnome-control-center wifi &"
                 ""
               )
             )
