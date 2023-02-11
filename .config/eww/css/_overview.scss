@@ -1,4 +1,5 @@
 .overview-window {
+  @include window
   font-family: 'Torus', 'Material Symbols Rounded';
   border-radius: 20px;
   background-color: $colorbg;

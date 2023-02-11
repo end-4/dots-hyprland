@@ -1,7 +1,5 @@
 (defvar MOVEMULTIPLIER 4)
-
-(deflisten activews :initial 5 `scripts/activews`)
-(deflisten morebgoffset 4)
+(defvar morebgoffset 4)
 
 (defwidget dynbg []
   (overlay
@@ -28,16 +26,16 @@
       )
       ; I don't like focus being moved to this on reload
       ; (box
-      ;   :spacing 0
-      ;   :space-evenly false
-      ;   (input
-      ;     :class "bg-decor-input-left"
-      ;     :onaccept "firefox https://www.google.com/search?q={}"
-      ;   )
-      ;   (button
-      ;     :class "bg-decor-input-right"
-      ;     ""
-      ;   )
+        ;   :spacing 0
+        ;   :space-evenly false
+        ;   (input
+          ;     :class "bg-decor-input-left"
+          ;     :onaccept "firefox https://www.google.com/search?q={}"
+        ;   )
+        ;   (button
+          ;     :class "bg-decor-input-right"
+          ;     ""
+        ;   )
       ; )
     )
   )

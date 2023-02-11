@@ -1,5 +1,3 @@
-(defvar rev_ontf false)
-
 (defwidget onotify []
   (revealer
     :reveal rev_ontf
@@ -408,11 +406,10 @@
         )
       )
       (eventbox
-        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
         :onclick "scripts/toggle-onotify.sh &";
         (box
           :class "real-onotify-toggle-button-${rev_ontf || right_hover}"
-          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
           ; (button
             ;   :class "real-onotify-toggle-button-${rev_ontf}"
             ;   :onclick "scripts/toggle-onotify.sh";

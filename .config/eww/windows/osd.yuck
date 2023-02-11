@@ -1,4 +1,4 @@
-(defwidget osdvol []
+(defwidget osdwidget []
   (box
     :class "osd-window"
     :orientation "h"
@@ -6,7 +6,7 @@
     (revealer
       :reveal {osd_vol}
       :transition "slideright"
-      :duration "200ms"
+      :duration "80ms"
       (centerbox
         :class "osd-var"
         :orientation "h"
@@ -29,7 +29,7 @@
     (revealer
       :reveal {osd_bright}
       :transition "slideright"
-      :duration "200ms"
+      :duration "80ms"
       (centerbox
         :class "osd-var"
         :orientation "h"
@@ -64,5 +64,5 @@
   )
   :stacking "fg"
   :exclusive false
-  (osdvol)
+  (osdwidget)
 )
