@@ -51,11 +51,10 @@
 
 .themer-menu-box {
     @include window;
-    // @include rounding;
+    @include rounding;
     border-radius: 15px;
     background-color: tint($colorbg, 15%);
-    // border: 3px solid $border;
-    // color: $colortext;
+    margin: 14px;
 }
 
 .themer-title {

@@ -693,7 +693,7 @@
     :class "osettings-toggle-button-false"
     :onmiddleclick "playerctl play-pause"
     :onrightclick "playerctl next"
-    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     (button
       :class "osettings-toggle-button-${rev_ostg}"
       :onclick "scripts/toggle-osettings.sh &"

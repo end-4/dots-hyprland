@@ -1,13 +1,3 @@
-(defvar selected '')
-(defvar wsloopa "[1, 2, 3, 4, 5]")
-(defvar wsloopb "[6, 7, 8, 9, 10]")
-(deflisten wsjsona
-  `scripts/overview1`
-)
-(deflisten wsjsonb
-  `scripts/overview2`
-)
-
 (defwidget overview []
   (overlay
     (box
