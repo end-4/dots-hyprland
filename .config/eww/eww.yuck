@@ -19,6 +19,7 @@
 (include "./windows/music.yuck")
 (include "./windows/notifications.yuck")
 (include "./windows/overview.yuck")
+(include "./windows/osd.yuck")
 (include "./windows/osettings.yuck")
 (include "./windows/onotify.yuck")
 (include "./windows/system-menu.yuck")
@@ -47,6 +48,7 @@
 
 (defwidget left []
   (eventbox
+    :class "dummy-${brightness.icon}" ; Dummy class to keep the listener active
     :onhover "${EWW_CMD} update music_reveal=true"
     :onhoverlost "${EWW_CMD} update music_reveal=false"
     (box

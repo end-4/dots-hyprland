@@ -1,10 +1,3 @@
-(deflisten mcover
-  'scripts/music cover'
-)
-(deflisten mname
-  'scripts/music name'
-)
-
 (defwidget osu-music-module []
   (eventbox
     :class "dummy-${mcover}" ; Dummy class to keep the listener active

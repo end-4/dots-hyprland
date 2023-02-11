@@ -1,7 +1,3 @@
-(defvar oquery "")
-(defvar rev_ostg false)
-(deflisten hyprjson `scripts/hyprsettings`)
-
 (defwidget checkboxhyprctl [value changevalue]
   (eventbox
     :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle"
@@ -202,7 +198,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-neutral"
-                        :onclick "~/.local/bin/lock.sh"
+                        :onclick "~/.local/bin/lock.sh &"
                         "Lock"
                       )
                     )
@@ -218,7 +214,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-neutral"
-                        :onclick "systemctl suspend"
+                        :onclick "systemctl suspend &"
                         "Suspend"
                       )
                     )
@@ -234,7 +230,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-destructive"
-                        :onclick "kill Hyprland"
+                        :onclick "pkill Hyprland &"
                         "Logout"
                       )
                     )
@@ -250,7 +246,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-destructive"
-                        :onclick "systemctl poweroff"
+                        :onclick "systemctl poweroff &"
                         "Shutdown"
                       )
                     )
@@ -553,7 +549,7 @@
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-neutral"
-                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf"
+                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf &"
                     "Reload config"
                   )
                 )
@@ -583,7 +579,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-informative"
-                        :onclick "scripts/toggle-osettings.sh && xdg-open https://wiki.hyprland.org"
+                        :onclick "scripts/toggle-osettings.sh && xdg-open https://wiki.hyprland.org &"
                         "Open the wiki"
                       )
                     )
@@ -599,7 +595,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-informative"
-                        :onclick "scripts/toggle-osettings.sh xdg-open https://discord.com/invite/hQ9XvMUjjr"
+                        :onclick "scripts/toggle-osettings.sh xdg-open https://discord.com/invite/hQ9XvMUjjr &"
                         "Hypr Development Discord"
                       )
                     )
@@ -648,7 +644,7 @@
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-informative"
-                    :onclick "scripts/supersecretsettings/doreload"
+                    :onclick "scripts/supersecretsettings/doreload &"
                     "Reset these stuff"
                   )
                   ; (centerbox
@@ -700,7 +696,7 @@
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     (button
       :class "osettings-toggle-button-${rev_ostg}"
-      :onclick "scripts/toggle-osettings.sh"
+      :onclick "scripts/toggle-osettings.sh &"
     )
   )
 )

@@ -1,9 +1,3 @@
-(defvar sys_menu_open true)
-(deflisten audiojson
-  :initial "initial-value"
-  `scripts/audiolevels`
-)
-
 (defwidget audiolevels[]
   (box
     :space-evenly false

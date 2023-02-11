@@ -50,14 +50,14 @@
               :space-evenly false
               (button
                 :class "bluetooth-button"
-                :onclick "scripts/bluetooth toggle"
+                :onclick "scripts/bluetooth toggle &"
                 :style "font-family: 'Material Symbols Rounded';"
                 {bluetooth.icon}
               )
               (label :class "separator" :text "|")
               (button
                 :class "bluetooth-arrow-btn"
-                :onclick "blueberry"
+                :onclick "blueberry &"
                 ""
               )
             )
@@ -78,7 +78,7 @@
               :class "element icon"
               (button
                 :class "airplane-button"
-                :onclick "scripts/airplane toggle"
+                :onclick "scripts/airplane toggle &"
                 airplane
               )
             )
@@ -273,15 +273,20 @@
                 (button
                   :class "notification-action"
                   :tooltip "Refresh"
-                :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json" "")
+                  :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &" 
+                  ""
+                )
                 (button
                   :class "notification-action"
                   :tooltip "Pause/Resume Notifications"
-                :onclick "scripts/notifications toggle" {notif_icons.toggle_icon})
+                  :onclick "scripts/notifications toggle &"
+                  {notif_icons.toggle_icon}
+                )
                 (button
                   :class "notification-action"
                   :tooltip "Clear Notifications"
-                  :onclick "scripts/notifications clear" ""
+                  :onclick "scripts/notifications clear &" 
+                  ""
                 )
               )
             )
@@ -356,7 +361,7 @@
         :onrightclick "playerctl next"
         :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
         (button
-          :onclick "scripts/toggle-onotify.sh";
+          :onclick "scripts/toggle-onotify.sh &";
           (box
             :space-evenly false
             :orientation "h"
@@ -404,7 +409,7 @@
       )
       (eventbox
         :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-        :onclick "scripts/toggle-onotify.sh";
+        :onclick "scripts/toggle-onotify.sh &";
         (box
           :class "real-onotify-toggle-button-${rev_ontf || right_hover}"
           :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"

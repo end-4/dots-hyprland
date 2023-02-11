@@ -1,7 +1,3 @@
-; (defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
-(defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
-
-
 (defwidget workspaces []
   (eventbox
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"

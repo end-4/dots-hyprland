@@ -1,14 +1,3 @@
-; (defwidget net []
-;   (button
-;     :class "net-icon"
-;     :onclick "iwgtk &"
-;     :onrightclick "gnome-control-center network &"
-;     :tooltip {net.essid}
-;     :style "color: ${net.color};"
-;     {net.icon}
-;   )
-; )
-
 (defwidget net []
   (box
     :class "module"
