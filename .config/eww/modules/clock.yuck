@@ -1,5 +1,3 @@
-(defvar date_rev false)
-
 (defwidget clock_module []
   (eventbox
     :onhover "${EWW_CMD} update date_rev=true"

@@ -1,6 +1,8 @@
 //Auto generated color theme for image at: https://i.ytimg.com/vi/co1QafXwo4g/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAncOMlDFU5jwlz8_EJITJPz1xaxQ
+@function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }
+@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
 $colorbg: #0a0614;
-$colortext: #924CC2;
+$colortext: #e2e4f0;
 $color0: #5F1DD9;
 $color1: #334AC7;
 $color2: #625CE0;

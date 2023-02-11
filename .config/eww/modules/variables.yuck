@@ -5,6 +5,20 @@
 (defvar net_rev false)
 (defvar time_rev false)
 (defvar vol_reveal false)
+(defvar win_ws_open false)
+(defvar wsloop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
+; (defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
+(defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
+(defvar oquery "")
+(defvar rev_ostg false)
+(defvar sys_menu_open true)
+(defvar date_rev false)
+(defvar sys_rev false)
+(defvar force_sys_rev false)
+(defvar editing false)
+(defvar osd_vol false)
+(defvar osd_bright false)
+
 
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
 
@@ -20,3 +34,16 @@
 (deflisten net "scripts/net")
 (deflisten volume "scripts/volume")
 (deflisten workspace "scripts/workspaces")
+(deflisten winjson `scripts/winlist`)
+(deflisten winicons `scripts/appicons`)
+(deflisten winnums `scripts/winnumbers`)
+(deflisten hyprjson `scripts/hyprsettings`)
+(deflisten awin `scripts/activewin`)
+(deflisten audiojson `scripts/audiolevels`)
+(deflisten mcover 'scripts/music cover')
+(deflisten mname 'scripts/music name') ; Workaround for music player: wont run full music script when music window not open
+
+
+; Nope, not using, quite useless
+; (deflisten username `echo $USERNAME`)
+; (defvar username_default 'end')

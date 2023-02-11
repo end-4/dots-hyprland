@@ -119,6 +119,7 @@ $bg1: $surface0;
 @import 'css/music';
 @import 'css/notification';
 @import 'css/overview';
+@import 'css/osd';
 @import 'css/osettings';
 @import 'css/sidebar';
 @import 'css/system';
@@ -325,8 +326,9 @@ tooltip {
 
 .icon,
 .icon,
+.icon-text,
 .vol-icon label {
-  font-family: "Material Symbols Rounded"; //AAAAAAAAAGGGHHH
+  font-family: "Material Symbols Rounded";
 }
 
 .username {
@@ -426,6 +428,7 @@ tooltip {
 
 .dynbg-image {
   transition: 900ms cubic-bezier(0.05, 0.9, 0.1, 1); // Hyprland default bezier but no overshot
+  background-image: url('images/wallpaper/wallpaper');
   background-size: 133%;
   min-height: 1080px;
   min-width: 1920px;

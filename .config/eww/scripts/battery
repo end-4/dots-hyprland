@@ -122,7 +122,7 @@ while true; do
 	elif [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
 		if [ $warnedlow == 0 ]; then 
 			warnedlow=1
-			notify-send 'Battery' 'Batterry low. Plug in your charger.' -u critical -a 'eww'
+			notify-send 'Battery low' 'Plug in your charger pweeeeaaase :>' -u critical -a 'eww'
 		fi
 	else
 	    warnedlow=0

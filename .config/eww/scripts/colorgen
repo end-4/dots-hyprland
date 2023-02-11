@@ -5,7 +5,7 @@ coverurl=$2
 
 coverpath="$IMGPATH"
 wal -c
-lightdark=$(cat ../scripts/cache/__mode_light_dark.txt)
+lightdark=$(cat ../scripts/workdir/__mode_light_dark.txt)
 themejson=$(wal -i "$IMGPATH" -n -t -s -e $lightdark | grep -e 'color1' | sed 's/'\''/"/g')
 if [ "$3" == "--just-generate" ]; then
 	printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
@@ -55,9 +55,9 @@ echo '' >> './tmp/_colorscheme.colorpallete'
 # echo '' >> './tmp/_colorscheme.colorpallete'
 
 # Border gradient: color6 -> color5 -> color7
-gradient1=$(echo -n "$themejson" | gojq '.colors.color0' | sed 's/"//g')
-gradient2=$(echo -n "$themejson" | gojq '.colors.color1' | sed 's/"//g')
-gradient3=$(echo -n "$themejson" | gojq '.colors.color7' | sed 's/"//g')
+gradient1=$(echo -n "$themejson" | gojq '.colors.color1' | sed 's/"//g')
+gradient2=$(echo -n "$themejson" | gojq '.colors.color2' | sed 's/"//g')
+gradient3=$(echo -n "$themejson" | gojq '.colors.color4' | sed 's/"//g')
 
 echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
 echo 'general {' >> './tmp/colors_generated.conf'

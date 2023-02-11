@@ -1,7 +1,3 @@
-(defvar sys_rev false)
-(defvar force_sys_rev false)
-; (defvar sys_rev true)
-
 (defwidget sys []
   (eventbox
     :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
