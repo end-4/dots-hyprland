@@ -4,6 +4,7 @@
 </div>
 
  - _Please note that Hyprland doesn't have an "e" in the name tyty_
+ - This dynamic, pywal-powered rice changes colors/wallpapers often, it might be different to the preview
  - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
 
 # Branches
