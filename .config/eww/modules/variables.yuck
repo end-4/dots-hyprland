@@ -16,6 +16,7 @@
 (defvar sys_rev false)
 (defvar force_sys_rev false)
 (defvar editing false)
+(defvar osd_track false)
 (defvar osd_vol false)
 (defvar osd_bright false)
 (defvar selected '')
