@@ -3,7 +3,7 @@
     :class "module"
     (eventbox
       :class "bright-icon"
-      :onscroll "echo {} | sed -e 's/down/-U 5/g' -e 's/up/-A 5/g' | xargs light"
+      :onscroll "echo $(echo {} | sed -e 's/down/-U 5/g' -e 's/up/-A 5/g' | xargs light) && scripts/bright osd"
       (label
         :valign "start"
         :text {brightness.icon}

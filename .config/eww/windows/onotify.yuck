@@ -357,7 +357,7 @@
         :class "onotify-toggle-button-${rev_ontf || right_hover}"
         :onmiddleclick "playerctl play-pause"
         :onrightclick "playerctl next"
-        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+        :onscroll "echo $(echo {} | sed -e 's/down/-U 5/g' -e 's/up/-A 5/g' | xargs light) && scripts/brightness osd"
         (button
           :onclick "scripts/toggle-onotify.sh &";
           (box
@@ -386,7 +386,7 @@
             )
             (eventbox
               :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
-              :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+              :onscroll "echo $(echo {} | sed -e 's/down/-U 5/g' -e 's/up/-A 5/g' | xargs light) && scripts/brightness osd"
               :onhover "${EWW_CMD} update sys_rev=true"
               :onhoverlost "${EWW_CMD} update popup='none' sys_rev=false"
               :onrightclick "${EWW_CMD} update force_sys_rev=${!force_sys_rev}"

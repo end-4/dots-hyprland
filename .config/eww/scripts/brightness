@@ -44,7 +44,7 @@ osd_handler() {
     sleep 0.1
   done
 
-  eww close osd
+  dummy=$(eww close osd)
 }
 
 if [ "$1" = "osd" ]; then

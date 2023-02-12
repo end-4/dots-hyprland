@@ -1,7 +1,7 @@
 (defwidget osu-music-module []
   (eventbox
     :class "dummy-${mcover}" ; Dummy class to keep the listener active
-    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     :onclick "eww open --toggle music && ${EWW_CMD} ${music_open ? 'update music_open=false' : 'update music_open=true'}"
     :onmiddleclick "playerctl play-pause"
     :onrightclick "playerctl next"
@@ -27,14 +27,14 @@
       )
       (revealer
         :transition "slideright"
-        :reveal "${music_reveal}"
+        :reveal "${music_reveal || osd_vol}"
         :duration "300ms"
         :class "music-ctl-revealer"
-        :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
         :limit-width 20
         (eventbox
           :class "music-ctl-revealer-${music_hover || music_open}"
-          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+          :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
           (label
             :class "music-title"
             :limit-width 50
