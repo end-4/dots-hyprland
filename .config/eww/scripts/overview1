@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-dummy='{"address":"_none","at":[0,0],"class":"workspace","size":[0,0],"title":"<___overview_workspace>","workspace":{"id":<___overview_workspace>, "name": "<___overview_workspace>"}}'
+dummy='{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"<___overview_workspace>","workspace":{"id":<___overview_workspace>, "name": "<___overview_workspace>"}}'
 
 getwins() {
   hyprctlclients=$(hyprctl clients -j \
@@ -16,9 +16,12 @@ getwins() {
   # echo $(echo "$hyprctlclients")  # Print on one line only
 
   workspace=('[' '[' '[' '[' '[' '[' '[' '[' '[' '[')
-  workspacecnt=(0 0 0 0 0 0 0 0 0 0)
+  workspacecnt=(1 1 1 1 1 1 1 1 1 1)
 
   wsid=0
+  for i in 0 1 2 3 4; do
+    workspace[i]+=$(echo $dummy | sed "s/<___overview_workspace>/$((i+1))/g")
+  done
 
   # echo $hyprctlclients | gojq -c '.[]'
 
@@ -27,6 +30,9 @@ getwins() {
   for client in "${clientsarr[@]}"; do
     wsid=$(echo $client | gojq -c '.workspace.id')
     ((wsid-=1))
+    if [[ "$wsid" == "-100" ]]; then 
+      continue
+    fi
     if [[ "${workspacecnt[wsid]}" != "0" ]]; then 
       workspace[wsid]+=","
     fi
@@ -68,12 +74,6 @@ getwins() {
     # echo 'ADDED TO: workspace '"$wsid"
     # echo ' --> '"${workspace[wsid]}"
     ((workspacecnt[wsid]+=1))
-  done
-  
-  for i in 0 1 2 3 4; do
-    if [[ ${workspace[i]} == "[" ]]; then 
-      workspace[i]+=$(echo $dummy | sed "s/<___overview_workspace>/$((i+1))/g")
-    fi
   done
 
   for i in 0 1 2 3 4; do
