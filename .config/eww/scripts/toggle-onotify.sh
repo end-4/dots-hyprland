@@ -26,7 +26,6 @@ if [[ "$state" == "false" ]]; then
         eww close osettings 
         eww update oquery=''
     fi
-    wtype -k tab
 else
     eww update rev_ontf=false
     eww update force_sys_rev=false
