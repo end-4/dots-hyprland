@@ -37,14 +37,35 @@
                     (box
                       (box
                         :class "overview-icon"
-                        :style "background-image: url('${ws-window.icon}')"
+                        :style "
+                        background-size: ${ws-window.size[0] > ws-window.size[1] ? 'auto 45%' : '45% auto'};
+                        background-image: url('${ws-window.icon}')
+                        "
                       )
                       ; (box
-                      ;   :orientation "v"
-                      ;   :space-evenly false
-                      ;   :valign "center"
-                      ;   (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
-                      ;   (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
+                        ;   :orientation "v"
+                        ;   :space-evenly false
+                        ;   :valign "center"
+                        ;   (label
+                          ;     :xalign 0 :halign "start"
+                          ;     :class "overview-ws-text"
+                          ;     :text "${ws-window.class == 'workspace' ? '' : ws-window.title}"
+                          ;     :style "
+                          ;     font-size: ${ws-window.size[0] > ws-window.size[1] ? ws-window.size[1] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_TEXT : ws-window.size[0] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_TEXT }px;
+                          ;     "
+                          ;     :limit-width 10
+                          ;     :wrap true
+                        ;   )
+                        ;   (label
+                          ;     :wrap true :xalign 0 :halign "start"
+                          ;     :class "overview-ws-subtext"
+                          ;     :text "${ws-window.class == 'workspace' ? '' : ws-window.class}"
+                          ;     :style "
+                          ;     font-size: ${ws-window.size[0] > ws-window.size[1] ? ws-window.size[1] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_SUBTEXT : ws-window.size[0] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_SUBTEXT }px;
+                          ;     "
+                          ;     :limit-width 10
+                          ;     :wrap true
+                        ;   )
                       ; )
                     )
                   )
@@ -88,14 +109,17 @@
                     (box
                       (box
                         :class "overview-icon"
-                        :style "background-image: url('${ws-window.icon}')"
+                        :style "
+                        background-size: ${ws-window.size[0] > ws-window.size[1] ? 'auto 45%' : '45% auto'};
+                        background-image: url('${ws-window.icon}')
+                        "
                       )
                       ; (box
-                      ;   :orientation "v"
-                      ;   :space-evenly false
-                      ;   :valign "center"
-                      ;   (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
-                      ;   (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
+                        ;   :orientation "v"
+                        ;   :space-evenly false
+                        ;   :valign "center"
+                        ;   (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
+                        ;   (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
                       ; )
                     )
                   )

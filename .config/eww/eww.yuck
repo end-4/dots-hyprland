@@ -23,7 +23,7 @@
 (include "./windows/osettings.yuck")
 (include "./windows/onotify.yuck")
 (include "./windows/system-menu.yuck")
-(include "./windows/win-workspace.yuck")
+; (include "./windows/win-workspace.yuck")
 (include "./windows/themer.yuck")
 
 (defvar popup "none")
@@ -45,7 +45,7 @@
 
 (defwidget left []
   (eventbox
-    :class "dummy-${brightness.icon} dummy-${net.icon}" ; Dummy class to keep some isteners active
+    :class "dummy-${brightness.icon} dummy-${net.icon} dummy-${wsjsona[0][0].at}-${wsjsonb[0][0].at} dummy-${activews}" ; Dummy class to keep some isteners active
     :onhover "${EWW_CMD} update music_reveal=true"
     :onhoverlost "${EWW_CMD} update music_reveal=false"
     (box

@@ -1,19 +1,14 @@
+; Const
 (defvar RES_WIDTH 1920)
 (defvar RES_HEIGHT 1080)
 (defvar OVERVIEW_SCALE 0.18)
-
-
-(defvar bright_reveal false)
-(defvar bt_rev false)
-(defvar music_reveal false)
-(defvar notif_rev false)
-(defvar net_rev false)
-(defvar time_rev false)
-(defvar vol_reveal false)
-(defvar win_ws_open false)
+(defvar OVERVIEW_SCALE_TEXT 0.45)
+(defvar OVERVIEW_SCALE_SUBTEXT 0.35)
 (defvar wsloop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
-; (defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
+
+; Vars
+(defvar music_reveal false)
 (defvar oquery "")
 (defvar rev_ostg false)
 (defvar sys_menu_open true)
@@ -25,13 +20,12 @@
 (defvar osd_vol false)
 (defvar osd_bright false)
 (defvar selected '')
-(defvar wsloopa "[1, 2, 3, 4, 5]")
-(defvar wsloopb "[6, 7, 8, 9, 10]")
 (defvar rev_ontf false)
 
-
+; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
 
+; Listeners
 (deflisten airplane "scripts/airplane")
 (deflisten battery "scripts/battery")
 (deflisten bluetooth "scripts/bluetooth")
