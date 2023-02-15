@@ -17,8 +17,10 @@ elif sys.argv[1] == 'org.kde.kolourpaint':
     sys.argv[1] = 'kolourpaint'
 elif sys.argv[1] == 'osu!':
     sys.argv[1] = 'osu'
-elif sys.argv[1] == 'wpsoffice':
-    sys.argv[1] = 'libreoffice'
+elif sys.argv[1].find("Minecraft") != -1:
+    sys.argv[1] = 'minecraft'
+# elif sys.argv[1] == 'ru-turikhay-tlauncher-bootstrap-Bootstrap':
+#     sys.argv[1] = 'minecraft'
 
 icon_name = sys.argv[1]
 icon_theme = Gtk.IconTheme.get_default()
