@@ -43,9 +43,13 @@ status_activity() {
 
 # handle workspace create/destroy
 workspace_event() {
-  o[$1]=$2
-  while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
-  unset 'workspaces[$1]'
+  if (( $1 <= 10 )); then
+    o[$1]=$2
+    while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
+  fi
+  if [ "$2" == "0" ]; then
+    unset "workspaces[$1]"
+  fi
 }
 # handle monitor (dis)connects
 monitor_event() {
@@ -82,22 +86,22 @@ done
 generate
 
 # main loop
-socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "workspace|monitor" | while read -r line; do
+socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "workspace>>|monitor>>" | while read -r line; do
   # echo "${#workspaces[@]} ${#o[@]}"
   case ${line%>>*} in
     "workspace")
-      # focusedws=${line#*>>}
-      o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
-      workspaces=()
-      # add workspaces
-      while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
+      focusedws=${line#*>>}
+      # o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
+      # workspaces=()
+      # # add workspaces
+      # while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
 
-      # check occupied workspaces
-      for num in "${!workspaces[@]}"; do
-        o[$num]=1
-      done
+      # # check occupied workspaces
+      # for num in "${!workspaces[@]}"; do
+      #   o[$num]=1
+      # done
 
-      focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+      # focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
 
       generate
       ;;
@@ -111,16 +115,16 @@ socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - |
       # generate
       ;;
     "destroyworkspace")
-      # workspace_event "${line#*>>}" 0
-      o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
-      workspaces=()
-      # add workspaces
-      while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
-      # check occupied workspaces
-      for num in "${!workspaces[@]}"; do
-        o[$num]=1
-      done
-      focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+      workspace_event "${line#*>>}" 0
+      # o=([1]=0 [2]=0 [3]=0 [4]=0 [5]=0 [6]=0 [7]=0 [8]=0 [9]=0 [10]=0)
+      # workspaces=()
+      # # add workspaces
+      # while read -r k v; do workspaces[$k]="$v"; done < <(hyprctl -j workspaces | gojq -r '.[]|"\(.id) \(.monitor)"')
+      # # check occupied workspaces
+      # for num in "${!workspaces[@]}"; do
+      #   o[$num]=1
+      # done
+      # focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
       generate
       ;;
     "monitor"*)
