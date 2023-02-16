@@ -1,7 +1,7 @@
 .overview-window {
   @include window
   font-family: 'Torus', 'Material Symbols Rounded';
-  border-radius: 20px;
+  border-radius: 26px;
   background-color: $colorbg;
   // background-color: transparent;
   // border: 3px solid $color0;
@@ -18,17 +18,18 @@
 .overview-ws {
   border-radius: 20px;
   background-color: $surface0;
-  //margin: 5px;
+  margin: 4px;
 }
 
 .overview-ws-window {
   border: 2px solid $color0;
   border-radius: 11px;
+  background-color: $overlay0;
   // //margin: 3px; 
 }
 .overview-ws-window-content {
   border-radius: 11px;
-  background-color: rgba(135, 147, 163, 0.7);
+  // background-color: rgba(135, 147, 163, 0.7);
 }
 
 .overview-icon {

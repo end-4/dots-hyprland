@@ -5,6 +5,7 @@
 @function tint($color, $percentage) {
   @return mix(rgb(245, 250, 255), $color, $percentage);
 }
+
 @function shade($color, $percentage) {
   @return mix(rgb(0, 7, 18), $color, $percentage);
 }
@@ -432,4 +433,112 @@ tooltip {
   background-size: 133%;
   min-height: 1080px;
   min-width: 1920px;
+}
+
+.rect-progress-box {
+  min-height: 53px;
+  min-width: 53px;
+}
+
+.rect-progress-h-u {
+  // border: 1px solid purple;
+  padding: 0px;
+  min-width: 26px;
+  margin-top: 13.5px;
+  margin-bottom: 35.5px;
+  margin-right: -39.5px;
+  margin-left: 13.5px;
+
+  trough {
+      background-color:#5c5b5b;
+      min-height: 6px;
+  }
+
+  highlight {
+      background-color: $colortext;
+  }
+
+  slider {
+      min-height: 0px;
+      min-width: 0px;
+      background-color: transparent;
+  }
+}
+.rect-progress-h-d {
+  // border: 1px solid purple;
+  padding: 0px;
+  min-width: 26px;
+  margin-bottom: 13.5px;
+  margin-top: 36.5px;
+  margin-right: -22.5px;
+  margin-left: 2.5px;
+
+  trough {
+      background-color:#5c5b5b;
+      min-height: 6px;
+  }
+
+  highlight {
+      background-color: $colortext;
+  }
+
+  slider {
+      min-height: 0px;
+      min-width: 0px;
+      background-color: transparent;
+  }
+}
+
+.rect-progress-v-r {
+  // border: 1px solid purple;
+  padding: 0px;
+  min-width: 26px;
+  margin-top: 13.5px;
+  margin-bottom: 13.5px;
+  margin-right: -39.5px;
+  margin-left: 25.5px;
+
+  trough {
+      background-color:#5c5b5b;
+      min-width: 6px;
+  }
+
+  highlight {
+      background-color: $colortext;
+  }
+
+  slider {
+      min-height: 0px;
+      min-width: 0px;
+      background-color: transparent;
+  }
+}
+
+.rect-progress-v-l {
+  // border: 1px solid purple;
+  padding: 0px;
+  min-width: 26px;
+  margin-top: 13.5px;
+  margin-bottom: 13.5px;
+  margin-right: -2.5px;
+  margin-left: -16.5px;
+
+  trough {
+      background-color:#5c5b5b;
+      min-width: 6px;
+  }
+
+  highlight {
+      background-color: $colortext;
+  }
+
+  slider {
+      min-height: 0px;
+      min-width: 0px;
+      background-color: transparent;
+  }
+}
+
+progressbar>trough {
+  min-width: 3px;
 }

@@ -21,7 +21,7 @@
               "
               (for ws-window in wspace
                 (box
-                  :class "overview-ws-window"
+                  :class "${ws-window.class == 'workspace' ? '' : 'overview-ws-window'}"
                   :style "
                   ${ws-window.address == selected ? 'border: 2px solid #FFFFFF' : ''};
                   ${ws-window.address == '_none' ? 'border: none' : ''};
@@ -93,7 +93,7 @@
               "
               (for ws-window in wspace
                 (box
-                  :class "overview-ws-window"
+                  :class "${ws-window.class == 'workspace' ? '' : 'overview-ws-window'}"
                   :style "
                   ${ws-window.address == selected ? 'border: 2px solid #FFFFFF' : ''};
                   ${ws-window.address == '_none' ? 'border: none' : ''};
@@ -137,25 +137,11 @@
   )
 )
 
-(defwidget testing []
-  (box
-    :class "overview-window"
-    (overlay
-      (box
-        :class "overview-ws-window"
-        :style "margin: 2px;"
-      )
-    )
-  )
-)
-
 (defwindow overview
   :wm-ignore true
   :monitor 0
   :geometry (geometry
     :anchor "center center"
-    :width "960px"
-    :height "216px"
   )
   ; (testing)
   (overview)
