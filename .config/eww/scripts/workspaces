@@ -113,6 +113,9 @@ socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - |
     "createworkspace")
       workspace_event "${line#*>>}" 1
       # focusedws=${line#*>>}
+      # generate
+      ;;
+    "movewindow")
       generate
       ;;
     "destroyworkspace")
