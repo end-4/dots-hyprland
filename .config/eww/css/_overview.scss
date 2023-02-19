@@ -1,7 +1,7 @@
 .overview-window {
   @include window
   font-family: 'Torus', 'Material Symbols Rounded';
-  border-radius: 26px;
+  border-radius: 22px;
   background-color: $colorbg;
   // background-color: transparent;
   // border: 3px solid $color0;
@@ -16,14 +16,14 @@
 }
 
 .overview-ws {
-  border-radius: 20px;
+  border-radius:  15px;
   background-color: $surface0;
   margin: 4px;
 }
 
 .overview-ws-window {
   border: 2px solid $color0;
-  border-radius: 11px;
+  border-radius: 15px;
   background-color: $overlay0;
   // //margin: 3px; 
 }
@@ -33,12 +33,15 @@
 }
 
 .overview-icon {
-  // //margin-top: 5px;
-  // //margin-bottom: 5px;
-  //padding-left: 17px;
-  //padding-right: 17px;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.overview-background {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  border-radius: 15px;
 }
 
 .overview-ws-text {
