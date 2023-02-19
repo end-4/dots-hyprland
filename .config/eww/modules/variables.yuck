@@ -48,6 +48,7 @@
 (deflisten mname 'scripts/music name') ; Workaround for music player: wont run full music script when music window not open
 (deflisten wsjsona `scripts/overview1`)
 (deflisten wsjsonb `scripts/overview2`)
+; (deflisten wsthumbs `scripts/overview-thumbnails`) ; slow, so nope
 (deflisten activews :initial 5 `scripts/activews`)
 
 ; Nope, not using, quite useless

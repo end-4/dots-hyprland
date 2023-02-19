@@ -35,6 +35,11 @@
                     :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                     :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
                     (box
+                      :class "overview-background"
+                      ; Uncomment below to enable thumbnail previews (VERY SLOW)
+                      ; :style "
+                      ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
+                      ; "
                       (box
                         :class "overview-icon"
                         :style "
@@ -42,37 +47,8 @@
                         background-image: url('${ws-window.icon}')
                         "
                       )
-                      ; (box
-                        ;   :orientation "v"
-                        ;   :space-evenly false
-                        ;   :valign "center"
-                        ;   (label
-                          ;     :xalign 0 :halign "start"
-                          ;     :class "overview-ws-text"
-                          ;     :text "${ws-window.class == 'workspace' ? '' : ws-window.title}"
-                          ;     :style "
-                          ;     font-size: ${ws-window.size[0] > ws-window.size[1] ? ws-window.size[1] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_TEXT : ws-window.size[0] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_TEXT }px;
-                          ;     "
-                          ;     :limit-width 10
-                          ;     :wrap true
-                        ;   )
-                        ;   (label
-                          ;     :wrap true :xalign 0 :halign "start"
-                          ;     :class "overview-ws-subtext"
-                          ;     :text "${ws-window.class == 'workspace' ? '' : ws-window.class}"
-                          ;     :style "
-                          ;     font-size: ${ws-window.size[0] > ws-window.size[1] ? ws-window.size[1] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_SUBTEXT : ws-window.size[0] * OVERVIEW_SCALE * 45 / 200 * OVERVIEW_SCALE_SUBTEXT }px;
-                          ;     "
-                          ;     :limit-width 10
-                          ;     :wrap true
-                        ;   )
-                      ; )
                     )
                   )
-                  ;                   (label :style "margin: -1000;" :text "margin-left: ${ws-window.at[0] * OVERVIEW_SCALE};
-                    ; margin-top: ${ws-window.at[1] * OVERVIEW_SCALE};
-                    ; margin-right: -${(ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE};
-                    ; margin-bottom: ${RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE)};")
                 )
               )
             )
@@ -107,6 +83,10 @@
                     :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                     :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
                     (box
+                      :class "overview-background"
+                      ; :style "
+                      ; background-image: url('scripts/cache/thumbnails/${ws-window.address}.png');
+                      ; "
                       (box
                         :class "overview-icon"
                         :style "
@@ -114,19 +94,8 @@
                         background-image: url('${ws-window.icon}')
                         "
                       )
-                      ; (box
-                        ;   :orientation "v"
-                        ;   :space-evenly false
-                        ;   :valign "center"
-                        ;   (label :xalign 0 :halign "start" :class "overview-ws-text" :text "${ws-window.title}" :limit-width 28 :wrap true )
-                        ;   (label :xalign 0 :halign "start" :class "overview-ws-subtext" :text "${ws-window.class}" :limit-width 30 :wrap true )
-                      ; )
                     )
                   )
-                  ;                   (label :style "margin: -1000;" :text "margin-left: ${ws-window.at[0] * OVERVIEW_SCALE};
-                    ; margin-top: ${ws-window.at[1] * OVERVIEW_SCALE};
-                    ; margin-right: -${(ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE};
-                    ; margin-bottom: ${RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE)};")
                 )
               )
             )

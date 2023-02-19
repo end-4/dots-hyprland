@@ -450,20 +450,21 @@ tooltip {
   margin-left: 13.5px;
 
   trough {
-      background-color:#5c5b5b;
-      min-height: 6px;
+    background-color: #5c5b5b;
+    min-height: 6px;
   }
 
   highlight {
-      background-color: $colortext;
+    background-color: $colortext;
   }
 
   slider {
-      min-height: 0px;
-      min-width: 0px;
-      background-color: transparent;
+    min-height: 0px;
+    min-width: 0px;
+    background-color: transparent;
   }
 }
+
 .rect-progress-h-d {
   // border: 1px solid purple;
   padding: 0px;
@@ -474,18 +475,18 @@ tooltip {
   margin-left: 2.5px;
 
   trough {
-      background-color:#5c5b5b;
-      min-height: 6px;
+    background-color: #5c5b5b;
+    min-height: 6px;
   }
 
   highlight {
-      background-color: $colortext;
+    background-color: $colortext;
   }
 
   slider {
-      min-height: 0px;
-      min-width: 0px;
-      background-color: transparent;
+    min-height: 0px;
+    min-width: 0px;
+    background-color: transparent;
   }
 }
 
@@ -499,23 +500,22 @@ tooltip {
   margin-left: 25.5px;
 
   trough {
-      background-color:#5c5b5b;
-      min-width: 6px;
+    background-color: #5c5b5b;
+    min-width: 6px;
   }
 
   highlight {
-      background-color: $colortext;
+    background-color: $colortext;
   }
 
   slider {
-      min-height: 0px;
-      min-width: 0px;
-      background-color: transparent;
+    min-height: 0px;
+    min-width: 0px;
+    background-color: transparent;
   }
 }
 
 .rect-progress-v-l {
-  // border: 1px solid purple;
   padding: 0px;
   min-width: 26px;
   margin-top: 13.5px;
@@ -524,18 +524,18 @@ tooltip {
   margin-left: -16.5px;
 
   trough {
-      background-color:#5c5b5b;
-      min-width: 6px;
+    background-color: #5c5b5b;
+    min-width: 6px;
   }
 
   highlight {
-      background-color: $colortext;
+    background-color: $colortext;
   }
 
   slider {
-      min-height: 0px;
-      min-width: 0px;
-      background-color: transparent;
+    min-height: 0px;
+    min-width: 0px;
+    background-color: transparent;
   }
 }
 
