@@ -1,13 +1,13 @@
-//Auto generated color theme for image at: https://i.ytimg.com/vi/AfWVlSzCdwA/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAoc3chpcalV9NIdJk5WGrh7ibihA
+//Auto generated color theme for image at: https://i.ytimg.com/vi/3E8vSukHKAM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBZWX5Envbw9P4TI6wd70cSzgebvQ
 @function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }
 @function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
-$colorbg: #010004;
-$colortext: #d7d4dc;
-$color0: #2D1EA0;
-$color1: #533DBB;
-$color2: #AE5ED1;
-$color3: #7D93BB;
-$color4: #EEA5A2;
-$color5: #A59FE6;
-$color6: #d7d4dc;
-$color7: #7D93BB;
+$colorbg: #040210;
+$colortext: #e0e0e2;
+$color0: #5B5A62;
+$color1: #343B88;
+$color2: #707288;
+$color3: #807F82;
+$color4: #9F9FA3;
+$color5: #BDBDC4;
+$color6: #e0e0e2;
+$color7: #807F82;
