@@ -57,18 +57,25 @@ get_cover() {
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		if [[ "$COVER_URL" = https* ]]; then
-			COVER_URL=$(echo $COVER_URL)
 			
 			coverurl="$(playerctl metadata mpris:artUrl)"
-			coverurl_highres="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
-			wget -O "$IMGPATH" "$coverurl_highres" -q –read-timeout=0.1
-			# curl "$coverurl_highres" --output "cover_art"
+			coverurl_highres_yt="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
+			coverurl_highres_soundcloud="$(echo $coverurl | sed 's/80x80/500x500/g')"
+
+			wget -O "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
+			cp "$IMGPATH""_soundcloud" "$IMGPATH"
 			imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
 			if [ $imgsize -eq "0" ]; then
-				# curl "$coverurl" --output "cover_art"
-				wget -O "$IMGPATH" "$coverurl" -q
+				wget -O "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
+				cp "$IMGPATH""_yt" "$IMGPATH"
+				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
 			fi
-			
+			if [ $imgsize -eq "0" ]; then
+				wget -O "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_lowres" "$IMGPATH"
+			fi
+
+			#Generate colors
 			../scripts/colorgen $IMGPATH $coverurl
 		elif [ "$COVER_URL" = "" ]; then
 		    echo '{"image": "", "color": "$bg"}'
