@@ -3,17 +3,31 @@
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
     :onmiddleclick "${EWW_CMD} open --toggle overview"
     :onrightclick "${EWW_CMD} open --toggle overview"
-    (box
-      :class "module workspaces"
-      :spacing 0
-      :space-evenly false
-      (for i in workspace
-        (button
-          :onclick "hyprctl dispatch workspace ${i.num}"
-          :class "ws"
-          (label :class "ws-text" :style "font-size: 13pt; background-color: ${i.clr};" :text "${ws-icons[i.num - 1]}")
-          ; "●"
+    (overlay
+      ; :class "module workspaces"
+      ; :spacing 0
+      ; :space-evenly false
+      (box
+        :class "module workspaces"
+        :spacing 0
+        :space-evenly false
+        (for i in workspace
+          (button
+            :onclick "hyprctl dispatch workspace ${i.num}"
+            :class "ws"
+            (label :class "ws-text" :style "font-size: 13pt; background-color: ${i.clr};" :text "${ws-icons[i.num - 1]}")
+            ; "●"
+          )
         )
+      )
+      (button
+        :class "ws"
+        :style "
+        margin-left:  ${10 + 31 * (activews - 1)}px;
+        margin-right: ${31 * (10 - activews)}px;
+        "
+        (label :class "ws-text ws-text-active" :style "font-size: 13pt;" :text "${activews}")
+        ; "●"
       )
     )
   )

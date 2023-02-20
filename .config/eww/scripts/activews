@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
 focusedws=$(hyprctl activewindow -j | gojq '.workspace.id')
+echo $focusedws
 
 if [ "$1" == "--once" ]; then
   exit 0
