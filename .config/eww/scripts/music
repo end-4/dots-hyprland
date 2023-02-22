@@ -69,13 +69,13 @@ get_cover() {
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))	
 			fi
 			# Youtube
-			if [ "$coverurl" == *"img.youtube"* ]; then
+			if [[ "$coverurl" == *"ytimg"* ]]; then
 				wget -O "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
 				cp "$IMGPATH""_yt" "$IMGPATH"
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
 			fi
 			# Fallback
-			if [ $imgsize -eq "0" ]; then
+			if [ "$imgsize" == "0" ]; then
 				wget -O "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_lowres" "$IMGPATH"
 			fi
