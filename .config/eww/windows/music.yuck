@@ -1,61 +1,66 @@
 (defwidget music []
-  (eventbox
-    :onhoverlost "${EWW_CMD} close music && ${EWW_CMD} update music_open=false"
-    (overlay
-      (box ; Fallback
-        :class "music-cover-art"
-      )
-      (box ; Cover art
-        :class "music-cover-art"
-        :style "background-image: url('${mcover.image}');"
-      )
-      (box ;
-        :orientation "v"
-        :class "music-box"
-        :space-evenly false
-        (label
-          :class "music-title"
-          :wrap false
-          :text "${mname.title == '' ? 'Not playing' : mname.title}"
-          :style "color: ${mcover.color.colors.color4};"
-          :limit-width 35
+  (revealer
+    :reveal music_open
+    :transition "slidedown"
+    :duration "0ms"
+    (eventbox
+      :onhoverlost "${EWW_CMD} close music && ${EWW_CMD} update music_open=false"
+      (overlay
+        (box ; Fallback
+          :class "music-cover-art"
         )
-        (label
-          :class "music-artist"
-          :wrap true
-          :text "${mname.artist}"
-          :style "color: ${mcover.color.colors.color4};"
+        (box ; Cover art
+          :class "music-cover-art"
+          :style "background-image: url('${mcover.image}');"
         )
-        (box
-          :halign "fill"
-          :class "music-button-box"
-          (centerbox
-            :halign "center"
-            (button
-              :class "song-button"
-              :style "color: ${mcover.color.colors.color4};"
-              :onclick "playerctl previous" ""
-            )
-            (button
-              :class "song-button"
-              :style "color: ${mcover.color.colors.color4};"
-              :onclick "playerctl play-pause"
-              "${music.status != '' ? music.status : ''}"
-            )
-            (button
-              :class "song-button"
-              :style "color: ${mcover.color.colors.color4};"
-              :onclick "playerctl next"
-              ""
+        (box ;
+          :orientation "v"
+          :class "music-box"
+          :space-evenly false
+          (label
+            :class "music-title"
+            :wrap false
+            :text "${mname.title == '' ? 'Not playing' : mname.title}"
+            :style "color: ${mcover.color.colors.color4};"
+            :limit-width 35
+          )
+          (label
+            :class "music-artist"
+            :wrap true
+            :text "${mname.artist}"
+            :style "color: ${mcover.color.colors.color4};"
+          )
+          (box
+            :halign "fill"
+            :class "music-button-box"
+            (centerbox
+              :halign "center"
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color4};"
+                :onclick "playerctl previous" ""
+              )
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color4};"
+                :onclick "playerctl play-pause"
+                "${music.status != '' ? music.status : ''}"
+              )
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color4};"
+                :onclick "playerctl next"
+                ""
+              )
             )
           )
-        )
-        (scale
-          :valign "end"
-          :value {music.position}
-          :class "track-scale"
-          :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-          :style "highlight {background-color: ${mcover.color.colors.color4};}"
+          (scale
+            :valign "end"
+            :value {music.position}
+            :class "track-scale"
+            :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+            :style "highlight {background-color: ${mcover.color.colors.color4};}"
+          )
         )
       )
     )
