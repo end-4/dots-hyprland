@@ -1,4 +1,4 @@
-	#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 get_status() {
 	s=$1

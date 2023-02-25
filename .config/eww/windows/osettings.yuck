@@ -36,123 +36,74 @@
           ;   :class "osettings-search-text"
           ;   :onchange "${EWW_CMD} update oquery=\"$(echo {} | tr [:upper:] [:lower:])\""
         ; )
-        (box
-          :orientation "v"
-          :space-evenly false
+        (eventbox
+          ; :onhoverlost "scripts/toggle-osettings.sh --close &"
           (box
-            :class "osettings-heading"
             :orientation "v"
             :space-evenly false
-            (label
-              :halign "start"
-              :wrap true
-              :class "osettings-title"
-              :text "settings"
-            )
-            (label
-              :halign "start"
-              :wrap true
-              :class "osettings-subtitle"
-              :text "change the way Hyprland behaves"
-            )
-          )
-          (box
-            :spacing 0
-            :space-evenly false
-            :class "osettings-search"
-            :orientation "h"
-            (input
-              :halign "start"
-              :class "osettings-search-text"
-              :onchange "${EWW_CMD} update oquery=\"$(echo {} | tr [:upper:] [:lower:])\""
-            )
-            (box)
-            (button
-              :halign "end"
-              :class "osettings-search-icon"
-              :style "font-weight: bolder;"
-              ""
-            )
-          )
-        )
-        (box
-          :class "osettings-separator"
-          :orientation "v"
-          :space-evenly false
-        )
-        (scroll
-          ; :vscroll true
-          ; :hscroll false
-          ; :halign "fill"
-          :class "osettings-content"
-          :style "min-height: 813px;"
-          (box
-            :halign "fill"
-            :class "osettings-scroll-bg"
-            :space-evenly false
-            :spacing 20
-            :orientation "v"
             (box
-              :class "osettings-settings"
               :orientation "v"
               :space-evenly false
-              ; Quick settings
-              (revealer
-                :reveal "${matches('quick settings volume audio brightness',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
+              (box
+                :class "osettings-heading"
+                :orientation "v"
+                :space-evenly false
+                (label
+                  :halign "start"
+                  :wrap true
+                  :class "osettings-title"
+                  :text "settings"
+                )
+                (label
+                  :halign "start"
+                  :wrap true
+                  :class "osettings-subtitle"
+                  :text "change the way Hyprland behaves"
+                )
+              )
+              (box
+                :spacing 0
+                :space-evenly false
+                :class "osettings-search"
+                :orientation "h"
+                (input
+                  :halign "start"
+                  :class "osettings-search-text"
+                  :onchange "${EWW_CMD} update oquery=\"$(echo {} | tr [:upper:] [:lower:])\""
+                )
+                (box)
+                (button
+                  :halign "end"
+                  :class "osettings-search-icon"
+                  :style "font-weight: bolder;"
+                  ""
+                )
+              )
+            )
+            (box
+              :class "osettings-separator"
+              :orientation "v"
+              :space-evenly false
+            )
+            (scroll
+              ; :vscroll true
+              ; :hscroll false
+              ; :halign "fill"
+              :class "osettings-content"
+              :style "min-height: 813px;"
+              (box
+                :halign "fill"
+                :class "osettings-scroll-bg"
+                :space-evenly false
+                :spacing 20
+                :orientation "v"
                 (box
+                  :class "osettings-settings"
                   :orientation "v"
                   :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Quick settings"
-                  )
+                  ; Quick settings
                   (revealer
-                    :reveal "${matches('quick settings volume audio',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (eventbox
-                      :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
-                      (box
-                        :orientation "v"
-                        :space-evenly false
-                        (centerbox
-                          :orientation "h"
-                          :space-evenly false
-                          :halign "fill"
-                          (label
-                            :halign "start"
-                            :wrap true
-                            :class "osettings-text"
-                            :text "Volume"
-                          )
-                          (box)
-                          ; (checkbox
-                            ;   :halign "end"
-                            ;   :class "osettings-checkbox"
-                            ;   :onchecked "scripts/volume mute SINK"
-                            ;   :onunchecked "scripts/volume mute SINK"
-                          ; )
-                          (checkboxcmd
-                            :value "${volume.audio}"
-                            :changecmd "scripts/volume mute SINK"
-                          )
-                        )
-                        (scale
-                          :halign "fill"
-                          :class "osettings-slider"
-                          :value "${volume.percent}"
-                          :tooltip "volume on ${volume.percent}%"
-                          :onchange "scripts/volume setvol SINK {}"
-                        )
-                      )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('quick settings brightness',oquery)}"
+                    :reveal "${matches('quick settings volume audio brightness',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -161,139 +112,295 @@
                       (label
                         :halign "start"
                         :wrap true
-                        :class "osettings-text"
-                        :text "Brightness"
+                        :class "osettings-section"
+                        :text "Quick settings"
                       )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${brightness.level}"
-                        :onchange "light -S {}"
+                      (revealer
+                        :reveal "${matches('quick settings volume audio',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (eventbox
+                          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+                          (box
+                            :orientation "v"
+                            :space-evenly false
+                            (centerbox
+                              :orientation "h"
+                              :space-evenly false
+                              :halign "fill"
+                              (label
+                                :halign "start"
+                                :wrap true
+                                :class "osettings-text"
+                                :text "Volume"
+                              )
+                              (box)
+                              ; (checkbox
+                                ;   :halign "end"
+                                ;   :class "osettings-checkbox"
+                                ;   :onchecked "scripts/volume mute SINK"
+                                ;   :onunchecked "scripts/volume mute SINK"
+                              ; )
+                              (checkboxcmd
+                                :value "${volume.audio}"
+                                :changecmd "scripts/volume mute SINK"
+                              )
+                            )
+                            (scale
+                              :halign "fill"
+                              :class "osettings-slider"
+                              :value "${volume.percent}"
+                              :tooltip "volume on ${volume.percent}%"
+                              :onchange "scripts/volume setvol SINK {}"
+                            )
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('quick settings brightness',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (label
+                            :halign "start"
+                            :wrap true
+                            :class "osettings-text"
+                            :text "Brightness"
+                          )
+                          (scale
+                            :class "osettings-slider"
+                            :value "${brightness.level}"
+                            :onchange "light -S {}"
+                          )
+                        )
                       )
                     )
                   )
-                )
-              )
-              ; Session control
-              (revealer
-                :reveal "${matches('session lock logout suspend log out shutdown shut down poweroff power off',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Session"
-                  )
+                  ; Session control
                   (revealer
-                    :reveal "${matches('session lock',oquery)}"
+                    :reveal "${matches('session lock logout suspend log out shutdown shut down poweroff power off',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
-                      :orientation "v"
                       :space-evenly false
-                      (button
-                        :halign "fill"
+                      :orientation "v"
+                      (label
+                        :halign "start"
                         :wrap true
-                        :class "osettings-btn osettings-btn-neutral"
-                        :onclick "~/.local/bin/lock.sh &"
-                        "Lock"
+                        :class "osettings-section"
+                        :text "Session"
+                      )
+                      (revealer
+                        :reveal "${matches('session lock',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-neutral"
+                            :onclick "~/.local/bin/lock.sh &"
+                            "Lock"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('session suspend',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-neutral"
+                            :onclick "systemctl suspend &"
+                            "Suspend"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('session logout log out',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-destructive"
+                            :onclick "pkill Hyprland &"
+                            "Logout"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('session shutdown shut down poweroff power off',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-destructive"
+                            :onclick "systemctl poweroff &"
+                            "Shutdown"
+                          )
+                        )
                       )
                     )
                   )
+                  ; Mouse
                   (revealer
-                    :reveal "${matches('session suspend',oquery)}"
+                    :reveal "${matches('mouse and touchpad touch pad mouse speed mouse acceleration osu raw input sensitivity disable while typing disable_while_typing tap to click clickfinger_behavior',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
-                      :orientation "v"
                       :space-evenly false
-                      (button
-                        :halign "fill"
+                      :orientation "v"
+                      (label
+                        :halign "start"
                         :wrap true
-                        :class "osettings-btn osettings-btn-neutral"
-                        :onclick "systemctl suspend &"
-                        "Suspend"
+                        :class "osettings-section"
+                        :text "Mouse & Touchpad"
+                      )
+                      (revealer
+                        :reveal "${matches('mouse and touchpad touch pad speed mouse acceleration osu raw input sensitivity',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (centerbox
+                            :orientation "h"
+                            :space-evenly false
+                            :halign "fill"
+                            (label
+                              :halign "start"
+                              :wrap true
+                              :class "osettings-text"
+                              :text "Raw input"
+                            )
+                            (box)
+                            (checkboxhyprctl
+                              :value "${hyprjson.force_no_accel}"
+                              :changevalue "input:force_no_accel"
+                              :halign "end"
+                              :class "osettings-checkbox"
+                            )
+                          )
+                          (eventbox
+                            :onrightclick "hyprctl keyword input:sensitivity 0"
+                            (box
+                              :space-evenly false
+                              :orientation "v"
+                              (label
+                                :halign "start"
+                                :wrap true
+                                :class "osettings-text"
+                                :text "Sensitivity"
+                              )
+                              (scale
+                                :class "osettings-slider"
+                                :value "${hyprjson.input_sensitivity * 50 + 50}"
+                                :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}') && scripts/hyprsettings tickle"
+                              )
+                            )
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('mouse and touch pad touchpad disable while typing disable_while_typing',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (centerbox
+                            :orientation "h"
+                            :space-evenly false
+                            :halign "fill"
+                            (label
+                              :halign "start"
+                              :class "osettings-text"
+                              :text "Disable touchpad while typing"
+                            )
+                            (box)
+                            (checkboxhyprctl
+                              :value "${hyprjson.touchpad_disable_while_typing}"
+                              :changevalue "input:touchpad:disable_while_typing"
+                              :class "osettings-checkbox"
+                            )
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('mouse and touchpad touch pad tap to click clickfinger_behavior',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (centerbox
+                            :orientation "h"
+                            :space-evenly false
+                            :halign "fill"
+                            (label
+                              :halign "start"
+                              :class "osettings-text"
+                              :text "Tap to click"
+                            )
+                            (box)
+                            (checkboxhyprctl
+                              :value "${hyprjson.touchpad_clickfinger_behavior}"
+                              :changevalue "input:touchpad:clickfinger_behavior"
+                            )
+                          )
+                        )
                       )
                     )
                   )
+                  ; Appearance
                   (revealer
-                    :reveal "${matches('session logout log out',oquery)}"
+                    :reveal "${matches('appearance looks customization blur size blur passes blur strength blur xray',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
-                      :orientation "v"
                       :space-evenly false
-                      (button
-                        :halign "fill"
+                      :orientation "v"
+                      (label
+                        :halign "start"
                         :wrap true
-                        :class "osettings-btn osettings-btn-destructive"
-                        :onclick "pkill Hyprland &"
-                        "Logout"
+                        :class "osettings-section"
+                        :text "Blur"
                       )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('session shutdown shut down poweroff power off',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :orientation "v"
-                      :space-evenly false
-                      (button
-                        :halign "fill"
-                        :wrap true
-                        :class "osettings-btn osettings-btn-destructive"
-                        :onclick "systemctl poweroff &"
-                        "Shutdown"
-                      )
-                    )
-                  )
-                )
-              )
-              ; Mouse
-              (revealer
-                :reveal "${matches('mouse and touchpad touch pad mouse speed mouse acceleration osu raw input sensitivity disable while typing disable_while_typing tap to click clickfinger_behavior',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Mouse & Touchpad"
-                  )
-                  (revealer
-                    :reveal "${matches('mouse and touchpad touch pad speed mouse acceleration osu raw input sensitivity',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
                       (centerbox
                         :orientation "h"
                         :space-evenly false
                         :halign "fill"
                         (label
                           :halign "start"
-                          :wrap true
                           :class "osettings-text"
-                          :text "Raw input"
+                          :text "Enable blur"
                         )
                         (box)
                         (checkboxhyprctl
-                          :value "${hyprjson.force_no_accel}"
-                          :changevalue "input:force_no_accel"
-                          :halign "end"
-                          :class "osettings-checkbox"
+                          :value "${hyprjson.blur}"
+                          :changevalue "decoration:blur"
                         )
                       )
-                      (eventbox
-                        :onrightclick "hyprctl keyword input:sensitivity 0"
+                      (revealer
+                        :reveal "${matches('appearance looks customization blur size blur strength',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
                         (box
                           :space-evenly false
                           :orientation "v"
@@ -301,99 +408,65 @@
                             :halign "start"
                             :wrap true
                             :class "osettings-text"
-                            :text "Sensitivity"
+                            :text "Blur size"
                           )
                           (scale
                             :class "osettings-slider"
-                            :value "${hyprjson.input_sensitivity * 50 + 50}"
-                            :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}') && scripts/hyprsettings tickle"
+                            :value "${hyprjson.blur_size}"
+                            :tooltip "Blur size: ${hyprjson.blur_size}"
+                            :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('appearance looks customization blur passes blur strength',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (label
+                            :halign "start"
+                            :wrap true
+                            :class "osettings-text"
+                            :text "Blur passes"
+                          )
+                          (scale
+                            :class "osettings-slider"
+                            :value "${hyprjson.blur_passes * 10}"
+                            :tooltip "Blur passes: ${hyprjson.blur_passes}"
+                            :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('appearance looks customization blur xray',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (centerbox
+                            :orientation "h"
+                            :space-evenly false
+                            :halign "fill"
+                            (label
+                              :halign "start"
+                              :class "osettings-text"
+                              :text "Blur xray"
+                            )
+                            (box)
+                            (checkboxhyprctl
+                              :value "${hyprjson.blur_xray}"
+                              :changevalue "decoration:blur_xray"
+                            )
                           )
                         )
                       )
                     )
                   )
                   (revealer
-                    :reveal "${matches('mouse and touch pad touchpad disable while typing disable_while_typing',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (centerbox
-                        :orientation "h"
-                        :space-evenly false
-                        :halign "fill"
-                        (label
-                          :halign "start"
-                          :class "osettings-text"
-                          :text "Disable touchpad while typing"
-                        )
-                        (box)
-                        (checkboxhyprctl
-                          :value "${hyprjson.touchpad_disable_while_typing}"
-                          :changevalue "input:touchpad:disable_while_typing"
-                          :class "osettings-checkbox"
-                        )
-                      )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('mouse and touchpad touch pad tap to click clickfinger_behavior',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (centerbox
-                        :orientation "h"
-                        :space-evenly false
-                        :halign "fill"
-                        (label
-                          :halign "start"
-                          :class "osettings-text"
-                          :text "Tap to click"
-                        )
-                        (box)
-                        (checkboxhyprctl
-                          :value "${hyprjson.touchpad_clickfinger_behavior}"
-                          :changevalue "input:touchpad:clickfinger_behavior"
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-              ; Appearance
-              (revealer
-                :reveal "${matches('appearance looks customization blur size blur passes blur strength blur xray',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Blur"
-                  )
-                  (centerbox
-                    :orientation "h"
-                    :space-evenly false
-                    :halign "fill"
-                    (label
-                      :halign "start"
-                      :class "osettings-text"
-                      :text "Enable blur"
-                    )
-                    (box)
-                    (checkboxhyprctl
-                      :value "${hyprjson.blur}"
-                      :changevalue "decoration:blur"
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('appearance looks customization blur size blur strength',oquery)}"
+                    :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -402,174 +475,76 @@
                       (label
                         :halign "start"
                         :wrap true
-                        :class "osettings-text"
-                        :text "Blur size"
+                        :class "osettings-section"
+                        :text "Gaps"
                       )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${hyprjson.blur_size}"
-                        :tooltip "Blur size: ${hyprjson.blur_size}"
-                        :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
-                      )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('appearance looks customization blur passes blur strength',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (label
-                        :halign "start"
-                        :wrap true
-                        :class "osettings-text"
-                        :text "Blur passes"
-                      )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${hyprjson.blur_passes * 10}"
-                        :tooltip "Blur passes: ${hyprjson.blur_passes}"
-                        :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
-                      )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('appearance looks customization blur xray',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (centerbox
-                        :orientation "h"
-                        :space-evenly false
-                        :halign "fill"
-                        (label
-                          :halign "start"
-                          :class "osettings-text"
-                          :text "Blur xray"
-                        )
-                        (box)
-                        (checkboxhyprctl
-                          :value "${hyprjson.blur_xray}"
-                          :changevalue "decoration:blur_xray"
+                      (revealer
+                        :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (label
+                            :halign "start"
+                            :wrap true
+                            :class "osettings-text"
+                            :text "Gaps: Inner"
+                          )
+                          (scale
+                            :class "osettings-slider"
+                            :value "${hyprjson.gaps_in}"
+                            :tooltip "Inner gaps: ${hyprjson.gaps_in}"
+                            :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle"
+                          )
                         )
                       )
-                    )
-                  )
-                )
-              )
-              (revealer
-                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Gaps"
-                  )
-                  (revealer
-                    :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (label
-                        :halign "start"
-                        :wrap true
-                        :class "osettings-text"
-                        :text "Gaps: Inner"
+                      (revealer
+                        :reveal "${matches('appearance looks customization gaps_out outer gaps: outer space',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (label
+                            :halign "start"
+                            :wrap true
+                            :class "osettings-text"
+                            :text "Gaps: Outer"
+                          )
+                          (scale
+                            :class "osettings-slider"
+                            :value "${hyprjson.gaps_out}"
+                            :tooltip "Outer gaps: ${hyprjson.gaps_out}"
+                            :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle"
+                          )
+                        )
                       )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${hyprjson.gaps_in}"
-                        :tooltip "Inner gaps: ${hyprjson.gaps_in}"
-                        :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle"
-                      )
-                    )
-                  )
-                  (revealer
-                    :reveal "${matches('appearance looks customization gaps_out outer gaps: outer space',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (label
-                        :halign "start"
-                        :wrap true
-                        :class "osettings-text"
-                        :text "Gaps: Outer"
-                      )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${hyprjson.gaps_out}"
-                        :tooltip "Outer gaps: ${hyprjson.gaps_out}"
-                        :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle"
+                      (revealer
+                        :reveal "${matches('appearance looks customization border_size border size border thickness',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (label
+                            :halign "start"
+                            :wrap true
+                            :class "osettings-text"
+                            :text "Border size"
+                          )
+                          (scale
+                            :class "osettings-slider"
+                            :value "${hyprjson.border_size}"
+                            :tooltip "Border size: ${hyprjson.border_size}"
+                            :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle"
+                          )
+                        )
                       )
                     )
                   )
                   (revealer
-                    :reveal "${matches('appearance looks customization border_size border size border thickness',oquery)}"
-                    :transition "slidedown"
-                    :duration "0ms"
-                    (box
-                      :space-evenly false
-                      :orientation "v"
-                      (label
-                        :halign "start"
-                        :wrap true
-                        :class "osettings-text"
-                        :text "Border size"
-                      )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${hyprjson.border_size}"
-                        :tooltip "Border size: ${hyprjson.border_size}"
-                        :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle"
-                      )
-                    )
-                  )
-                )
-              )
-              (revealer
-                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness reload config configuration blur size blur strength blur passes',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (button
-                    :halign "fill"
-                    :wrap true
-                    :class "osettings-btn osettings-btn-neutral"
-                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf &"
-                    "Reload config"
-                  )
-                )
-              )
-              ; Hyprland
-              (revealer
-                :reveal "${matches('hyprland options open the wiki guide help social hypr development discord',oquery)}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Hyprland options"
-                  )
-                  (revealer
-                    :reveal "${matches('hyprland open the wiki guide help',oquery)}"
+                    :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness reload config configuration blur size blur strength blur passes',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
@@ -578,91 +553,123 @@
                       (button
                         :halign "fill"
                         :wrap true
-                        :class "osettings-btn osettings-btn-informative"
-                        :onclick "scripts/toggle-osettings.sh && xdg-open https://wiki.hyprland.org &"
-                        "Open the wiki"
+                        :class "osettings-btn osettings-btn-neutral"
+                        :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf &"
+                        "Reload config"
                       )
                     )
                   )
+                  ; Hyprland
                   (revealer
-                    :reveal "${matches('hyprland help social hypr development discord',oquery)}"
+                    :reveal "${matches('hyprland options open the wiki guide help social hypr development discord',oquery)}"
                     :transition "slidedown"
                     :duration "0ms"
                     (box
                       :space-evenly false
                       :orientation "v"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "osettings-section"
+                        :text "Hyprland options"
+                      )
+                      (revealer
+                        :reveal "${matches('hyprland open the wiki guide help',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-informative"
+                            :onclick "scripts/toggle-osettings.sh && xdg-open https://wiki.hyprland.org &"
+                            "Open the wiki"
+                          )
+                        )
+                      )
+                      (revealer
+                        :reveal "${matches('hyprland help social hypr development discord',oquery)}"
+                        :transition "slidedown"
+                        :duration "0ms"
+                        (box
+                          :space-evenly false
+                          :orientation "v"
+                          (button
+                            :halign "fill"
+                            :wrap true
+                            :class "osettings-btn osettings-btn-informative"
+                            :onclick "scripts/toggle-osettings.sh xdg-open https://discord.com/invite/hQ9XvMUjjr &"
+                            "Hypr Development Discord"
+                          )
+                        )
+                      )
+                    )
+                  )
+                  ; Calendar
+                  (revealer
+                    :reveal "${'calendar' == oquery}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "osettings-section"
+                        :text "Calendar"
+                      )
+                      (calendar)
+                    )
+                  )
+                  ; Super secret settings
+                  (revealer
+                    :reveal "${oquery == '!secret'}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "osettings-section"
+                        :text "Super secret settings"
+                      )
                       (button
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-informative"
-                        :onclick "scripts/toggle-osettings.sh xdg-open https://discord.com/invite/hQ9XvMUjjr &"
-                        "Hypr Development Discord"
+                        :onclick "scripts/supersecretsettings/culture &"
+                        "Activate culture mode"
                       )
+                      (button
+                        :halign "fill"
+                        :wrap true
+                        :class "osettings-btn osettings-btn-informative"
+                        :onclick "scripts/supersecretsettings/doreload &"
+                        "Reset these stuff"
+                      )
+                      ; (centerbox
+                        ;   :orientation "h"
+                        ;   :space-evenly false
+                        ;   :halign "fill"
+                        ;   (label
+                          ;     :halign "start"
+                          ;     :wrap true
+                          ;     :class "osettings-text"
+                          ;     :text "Culture mode"
+                        ;   )
+                        ;   (box)
+                        ;   (checkboxcmd
+                          ;     :value "${volume.audio}"
+                          ;     :changecmd "notify-send 'i see ur a man of culture as well'"
+                        ;   )
+                      ; )
                     )
                   )
-                )
-              )
-              ; Calendar
-              (revealer
-                :reveal "${'calendar' == oquery}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :orientation "v"
-                  :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Calendar"
-                  )
-                  (calendar)
-                )
-              )
-              ; Super secret settings
-              (revealer
-                :reveal "${oquery == '!secret'}"
-                :transition "slidedown"
-                :duration "0ms"
-                (box
-                  :orientation "v"
-                  :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Super secret settings"
-                  )
-                  (button
-                    :halign "fill"
-                    :wrap true
-                    :class "osettings-btn osettings-btn-informative"
-                    :onclick "scripts/supersecretsettings/culture &"
-                    "Activate culture mode"
-                  )
-                  (button
-                    :halign "fill"
-                    :wrap true
-                    :class "osettings-btn osettings-btn-informative"
-                    :onclick "scripts/supersecretsettings/doreload &"
-                    "Reset these stuff"
-                  )
-                  ; (centerbox
-                  ;   :orientation "h"
-                  ;   :space-evenly false
-                  ;   :halign "fill"
-                  ;   (label
-                  ;     :halign "start"
-                  ;     :wrap true
-                  ;     :class "osettings-text"
-                  ;     :text "Culture mode"
-                  ;   )
-                  ;   (box)
-                  ;   (checkboxcmd
-                  ;     :value "${volume.audio}"
-                  ;     :changecmd "notify-send 'i see ur a man of culture as well'"
-                  ;   )
-                  ; )
                 )
               )
             )

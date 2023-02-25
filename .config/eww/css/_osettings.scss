@@ -111,16 +111,19 @@
 .osettings-btn-destructive {
     color: white;
     background-color: $color1;
+    background-image: linear-gradient(to right, $color1 0%, $color3 100%);
 }
 
 .osettings-btn-neutral {
     color: white;
     background-color: $color2;
+    background-image: linear-gradient(to right, $color2 0%, $color4 100%);
 }
 
 .osettings-btn-informative {
     color: white;
     background-color: $color3;
+    background-image: linear-gradient(to right, $color3 0%, $color5 100%);
 }
 
 // .osettings-btn-neutral:hover,
@@ -147,7 +150,7 @@
     margin-bottom: 10px;
     min-height: 6px;
     border-radius: 9999px;
-    background-image: linear-gradient(to right, $color0 50%, #24222A 50%);
+    background-image: linear-gradient(to right, $color4 50%, #24222A 50%);
     padding: 0px;
 
     trough {
@@ -162,6 +165,7 @@
     highlight {
         border-radius: 9999px;
         background-color: $color0;
+        background-image: linear-gradient(to right, $color4 0%, $color0 100%);
     }
 
     slider {
