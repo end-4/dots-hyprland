@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+IFS=$'\n'
+entrynames=( $(cat 'scripts/cache/entrynames.txt' | fzf --filter="$1" | head -n 10) )
+entries=( $(cat 'scripts/cache/entries.txt') )
+
+
+# for x in "${!entrynames[@]}"; do
+#   echo "${entrynames[x]}"'----------'
+# done
+
+printf '['
+
+for x in "${!entrynames[@]}"; do
+  if [ "$x" != "0" ]; then
+    printf ','
+  fi
+
+  # echo $x
+
+  # getclass=$(echo '."'"${entrynames[x]}"'"')
+  echo -n $(echo $entries | gojq -c '."'"${entrynames[x]}"'"')
+done
+
+printf ']'

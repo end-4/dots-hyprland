@@ -5,7 +5,7 @@
   (overlay
     (box
       :class "dynbg-image"
-      :style "background-position: ${(activews - 5)*MOVEMULTIPLIER > 50 ? 100 : 50+(activews - 5)*MOVEMULTIPLIER}% 50%"
+      :style "background-position: ${(activews - 5)*MOVEMULTIPLIER > 50 ? 100 : 50+(activews - 5)*MOVEMULTIPLIER}% 20%"
     )
     (box
       :space-evenly false
