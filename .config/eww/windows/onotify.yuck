@@ -1,333 +1,324 @@
 (defwidget onotify []
-  (revealer
-    :reveal rev_ontf
-    :transition "slideleft"
-    :duration "250ms"
-    (revealer
-      :reveal rev_ontf
-      :transition "crossfade"
-      :duration "300ms"
+  (box
+    :class "onotify-window"
+    :orientation "v"
+    :space-evenly false
+    :style "${rev_ontf ? '' : 'margin-right: -533px;'}"
+    (eventbox
+      ; :onhoverlost "scripts/toggle-onotify.sh --close &"
       (box
-        :class "onotify-window"
         :orientation "v"
         :space-evenly false
-        (eventbox
-          ; :onhoverlost "scripts/toggle-onotify.sh --close &"
+        (box
+          :class "system-row"
+          :space-evenly false
+          :halign "center"
           (box
-            :orientation "v"
+            :class "wifi-box"
             :space-evenly false
+            :orientation "v"
             (box
-              :class "system-row"
+              :class "element"
               :space-evenly false
-              :halign "center"
-              (box
-                :class "wifi-box"
-                :space-evenly false
-                :orientation "v"
-                (box
-                  :class "element"
-                  :space-evenly false
-                  (button
-                    ; :class "wifi-button"
-                    :onclick "scripts/net toggle"
-                    :style "font-family: Material Symbols Rounded;"
-                    {net.icon}
-                  )
-                  (label :class "separator" :text "|")
-                  (button
-                    :class "wifi-arrow-btn"
-                    :style "font-family: Material Symbols Rounded;"
-                    :onclick "gnome-control-center wifi &"
-                    ""
+              (button
+                ; :class "wifi-button"
+                :onclick "scripts/net toggle"
+                :style "font-family: Material Symbols Rounded;"
+                {net.icon}
+              )
+              (label :class "separator" :text "|")
+              (button
+                :class "wifi-arrow-btn"
+                :style "font-family: Material Symbols Rounded;"
+                :onclick "gnome-control-center wifi &"
+                ""
+              )
+            )
+            (label :style "font-size: 12pt;" :class "sys-toggle" :text {net.essid} :xalign 0.5 :limit-width 15)
+          )
+          
+          (box
+            :class "bluetooth-box"
+            :space-evenly false
+            :orientation "v"
+            (box
+              :class "element icon"
+              :space-evenly false
+              (button
+                :class "bluetooth-button"
+                :onclick "scripts/bluetooth toggle &"
+                :style "font-family: 'Material Symbols Rounded';"
+                {bluetooth.icon}
+              )
+              (label :class "separator" :text "|")
+              (button
+                :class "bluetooth-arrow-btn"
+                :onclick "blueberry &"
+                ""
+              )
+            )
+            (label
+              :style "font-size: 12pt;"
+              :text {bluetooth.text}
+              :xalign 0.5
+              :class "sys-toggle"
+              :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
+              :limit-width 15
+            )
+          )
+          (box
+            :class "airplane-box"
+            :space-evenly false
+            :orientation "v"
+            (box
+              :class "element icon"
+              (button
+                :class "airplane-button"
+                :onclick "scripts/airplane toggle &"
+                airplane
+              )
+            )
+            (label :style "font-size: 12pt;" :text "Airplane Mode" :xalign 0.5 :limit-width 16)
+          )
+          (box
+            :class "power-box"
+            :space-evenly false
+            :orientation "v"
+            (box
+              :class "element icon"
+              (button
+                :halign "end"
+                :onclick "wlogout &"
+                ; :onclick "wlogout -p layer-shell &"
+                ""
+              )
+            )
+            (label
+              :style "font-size: 12pt;"
+              :text "Power"
+              :class "sys-toggle"
+              :xalign 0.5
+              :limit-width 16
+            )
+          )
+        )
+        (box
+          :class "osettings-separator"
+          :orientation "v"
+          :space-evenly false
+        )
+        (scroll
+          ; :vscroll true
+          ; :hscroll false
+          ; :halign "fill"
+          :class "osettings-content"
+          :valign "fill"
+          :style "min-height: 884px;"
+          (box
+            :halign "fill"
+            :class "osettings-scroll-bg"
+            :space-evenly false
+            :spacing 20
+            :orientation "v"
+            ; Volume mixer
+            (box
+              :space-evenly false
+              :orientation "v"
+              ; :class "sliders"
+              (label
+                :halign "start"
+                :wrap true
+                :class "osettings-section"
+                :text "Volume mixer"
+              )
+              (for i in audiojson
+                (eventbox
+                  :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
+                  :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
+                  :onclick "pactl set-sink-input-volume ${i.sink} 0%"
+                  (box
+                    :space-evenly false
+                    :orientation "v"
+                    ; (label :class "time" :text "DEBUG:${i}")
+                    (centerbox
+                      :space-evenly false
+                      :orientation "h"
+                      ; :halign "center"
+                      (label
+                        :xalign 0
+                        :class "osettings-text"
+                        :limit-width 42
+                        :text "${i.name} (#${i.sink})"
+                      )
+                      (label
+                        :xalign 0
+                        :class "osettings-text"
+                        :limit-width 30
+                        :text ""
+                      )
+                      (box :orientation "v"
+                        (label
+                          :xalign 1
+                          :class "osettings-text"
+                          :text "${i.volume}%"
+                        )
+                      )
+                    )
+                    (scale
+                      :halign "fill"
+                      :class "osettings-slider"
+                      :value {i.volume}
+                      :onchange "pactl set-sink-input-volume ${i.sink} {}%"
+                      :tooltip "${i.name}: ${i.volume}%"
+                    )
                   )
                 )
-                (label :style "font-size: 12pt;" :class "sys-toggle" :text {net.essid} :xalign 0.5 :limit-width 15)
+              )
+            )
+            ; Resource usage
+            (label
+              :halign "start"
+              :wrap true
+              :class "osettings-section"
+              :text "Resources"
+            )
+            (box
+              :style "margin-bottom: 17px;"
+              ; cpu
+              (box
+                :class "sys-box"
+                :space-evenly false
+                :halign "start"
+                (circular-progress
+                  :start-at 75
+                  :value "${EWW_CPU.avg}"
+                  :class "sys-cpu"
+                  :thickness 3
+                  (label
+                    :text ""
+                  :class "sys-icon-cpu icon")
+                )
+                (box
+                  :orientation "v"
+                  :vexpand false
+                  (label
+                    :text "CPU"
+                    :halign "start"
+                    :class "sys-text-cpu"
+                    :style "font-size: 12pt;"
+                  )
+                  (label
+                    :text "${round(EWW_CPU.avg,2)}%"
+                    :halign "start"
+                    :class "sys-text-sub"
+                    :style "font-size: 12pt;"
+                  )
+                  (label
+                    :text "${EWW_CPU.cores[0].freq} MHz"
+                    :halign "start"
+                    :class "sys-text-sub"
+                    :style "font-size: 12pt;"
+                  )
+                )
               )
               
+              ; memory
               (box
-                :class "bluetooth-box"
+                :class "sys-box"
                 :space-evenly false
-                :orientation "v"
-                (box
-                  :class "element icon"
-                  :space-evenly false
-                  (button
-                    :class "bluetooth-button"
-                    :onclick "scripts/bluetooth toggle &"
-                    :style "font-family: 'Material Symbols Rounded';"
-                    {bluetooth.icon}
-                  )
-                  (label :class "separator" :text "|")
-                  (button
-                    :class "bluetooth-arrow-btn"
-                    :onclick "blueberry &"
-                    ""
+                :halign "end"
+                (circular-progress
+                  :start-at 75
+                  :value {memory.percentage}
+                  :class "sys-mem"
+                  :thickness 3
+                  (label
+                    :text ""
+                    :class "sys-icon-mem icon"
                   )
                 )
-                (label
-                  :style "font-size: 12pt;"
-                  :text {bluetooth.text}
-                  :xalign 0.5
-                  :class "sys-toggle"
-                  :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
-                  :limit-width 15
+                (box
+                  :orientation "v"
+                  (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
+                  (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
+                  (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
                 )
               )
-              (box
-                :class "airplane-box"
-                :space-evenly false
-                :orientation "v"
-                (box
-                  :class "element icon"
-                  (button
-                    :class "airplane-button"
-                    :onclick "scripts/airplane toggle &"
-                    airplane
-                  )
-                )
-                (label :style "font-size: 12pt;" :text "Airplane Mode" :xalign 0.5 :limit-width 16)
+            )
+            ; Calendar
+            ; (label
+              ;   :halign "start"
+              ;   :wrap true
+              ;   :class "osettings-section"
+              ;   :text "Calendar"
+            ; )
+            ; (calendar)
+            ;
+            (centerbox
+              (label
+                :class "osettings-section"
+                :halign "start"
+                :text "Notifications"
               )
+              (box)
               (box
-                :class "power-box"
+                :class "icon"
+                :halign "end"
                 :space-evenly false
-                :orientation "v"
-                (box
-                  :class "element icon"
-                  (button
-                    :halign "end"
-                    :onclick "wlogout &"
-                    ; :onclick "wlogout -p layer-shell &"
-                    ""
-                  )
+                :spacing 10
+                (button
+                  :class "notification-action"
+                  :tooltip "Refresh"
+                  :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
+                  ""
                 )
-                (label
-                  :style "font-size: 12pt;"
-                  :text "Power"
-                  :class "sys-toggle"
-                  :xalign 0.5
-                  :limit-width 16
+                (button
+                  :class "notification-action"
+                  :tooltip "Pause/Resume Notifications"
+                  :onclick "scripts/notifications toggle &"
+                  {notif_icons.toggle_icon}
+                )
+                (button
+                  :class "notification-action"
+                  :tooltip "Clear Notifications"
+                  :onclick "scripts/notifications clear &"
+                  ""
                 )
               )
             )
             (box
-              :class "osettings-separator"
+              :class "container"
               :orientation "v"
               :space-evenly false
-            )
-            (scroll
-              ; :vscroll true
-              ; :hscroll false
-              ; :halign "fill"
-              :class "osettings-content"
-              :valign "fill"
-              :style "min-height: 884px;"
-              (box
-                :halign "fill"
-                :class "osettings-scroll-bg"
-                :space-evenly false
-                :spacing 20
-                :orientation "v"
-                ; Volume mixer
-                (box
-                  :space-evenly false
-                  :orientation "v"
-                  ; :class "sliders"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Volume mixer"
-                  )
-                  (for i in audiojson
-                    (eventbox
-                      :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
-                      :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
-                      :onclick "pactl set-sink-input-volume ${i.sink} 0%"
-                      (box
-                        :space-evenly false
-                        :orientation "v"
-                        ; (label :class "time" :text "DEBUG:${i}")
-                        (centerbox
-                          :space-evenly false
-                          :orientation "h"
-                          ; :halign "center"
-                          (label
-                            :xalign 0
-                            :class "osettings-text"
-                            :limit-width 42
-                            :text "${i.name} (#${i.sink})"
-                          )
-                          (label
-                            :xalign 0
-                            :class "osettings-text"
-                            :limit-width 30
-                            :text ""
-                          )
-                          (box :orientation "v"
-                            (label
-                              :xalign 1
-                              :class "osettings-text"
-                              :text "${i.volume}%"
-                            )
-                          )
-                        )
-                        (scale
-                          :halign "fill"
-                          :class "osettings-slider"
-                          :value {i.volume}
-                          :onchange "pactl set-sink-input-volume ${i.sink} {}%"
-                          :tooltip "${i.name}: ${i.volume}%"
-                        )
-                      )
-                    )
-                  )
-                )
-                ; Resource usage
-                (label
-                  :halign "start"
-                  :wrap true
-                  :class "osettings-section"
-                  :text "Resources"
-                )
-                (box
-                  :style "margin-bottom: 17px;"
-                  ; cpu
+              (for i in notifications
+                (eventbox
+                  :onclick "dunstctl history-pop ${i.id} && dunstctl action 0 && dunstctl close"
                   (box
-                    :class "sys-box"
+                    :class "notification"
+                    :orientation "v"
+                    :width 300
                     :space-evenly false
-                    :halign "start"
-                    (circular-progress
-                      :start-at 75
-                      :value "${EWW_CPU.avg}"
-                      :class "sys-cpu"
-                      :thickness 3
+                    (centerbox
+                      :space-evenly false
                       (label
-                        :text ""
-                      :class "sys-icon-cpu icon")
-                    )
-                    (box
-                      :orientation "v"
-                      :vexpand false
-                      (label
-                        :text "CPU"
-                        :halign "start"
-                        :class "sys-text-cpu"
-                        :style "font-size: 12pt;"
+                        :xalign 0
+                        :wrap true
+                        :class "summary"
+                        :text {i.summary}
                       )
+                      (label)
                       (label
-                        :text "${round(EWW_CPU.avg,2)}%"
-                        :halign "start"
-                        :class "sys-text-sub"
-                        :style "font-size: 12pt;"
-                      )
-                      (label
-                        :text "${EWW_CPU.cores[0].freq} MHz"
-                        :halign "start"
-                        :class "sys-text-sub"
-                        :style "font-size: 12pt;"
+                        :xalign 1
+                        :wrap true
+                        :class "appname"
+                        :text {i.appname}
                       )
                     )
-                  )
-                  
-                  ; memory
-                  (box
-                    :class "sys-box"
-                    :space-evenly false
-                    :halign "end"
-                    (circular-progress
-                      :start-at 75
-                      :value {memory.percentage}
-                      :class "sys-mem"
-                      :thickness 3
-                      (label
-                        :text ""
-                        :class "sys-icon-mem icon"
-                      )
-                    )
-                    (box
-                      :orientation "v"
-                      (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
-                      (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
-                      (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
-                    )
-                  )
-                )
-                ; Calendar
-                ; (label
-                  ;   :halign "start"
-                  ;   :wrap true
-                  ;   :class "osettings-section"
-                  ;   :text "Calendar"
-                ; )
-                ; (calendar)
-                ;
-                (centerbox
-                  (label
-                    :class "osettings-section"
-                    :halign "start"
-                    :text "Notifications"
-                  )
-                  (box)
-                  (box
-                    :class "icon"
-                    :halign "end"
-                    :space-evenly false
-                    :spacing 10
-                    (button
-                      :class "notification-action"
-                      :tooltip "Refresh"
-                      :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
-                      ""
-                    )
-                    (button
-                      :class "notification-action"
-                      :tooltip "Pause/Resume Notifications"
-                      :onclick "scripts/notifications toggle &"
-                      {notif_icons.toggle_icon}
-                    )
-                    (button
-                      :class "notification-action"
-                      :tooltip "Clear Notifications"
-                      :onclick "scripts/notifications clear &"
-                      ""
-                    )
-                  )
-                )
-                (box
-                  :class "container"
-                  :orientation "v"
-                  :space-evenly false
-                  (for i in notifications
-                    (eventbox
-                      :onclick "dunstctl history-pop ${i.id} && dunstctl action 0 && dunstctl close"
-                      (box
-                        :class "notification"
-                        :orientation "v"
-                        :width 300
-                        :space-evenly false
-                        (centerbox
-                          :space-evenly false
-                          (label
-                            :xalign 0
-                            :wrap true
-                            :class "summary"
-                            :text {i.summary}
-                          )
-                          (label)
-                          (label
-                            :xalign 1
-                            :wrap true
-                            :class "appname"
-                            :text {i.appname}
-                          )
-                        )
-                        (label
-                          :xalign 0
-                          :wrap true
-                          :class "body"
-                          :text {i.body}
-                        )
-                      )
+                    (label
+                      :xalign 0
+                      :wrap true
+                      :class "body"
+                      :text {i.body}
                     )
                   )
                 )

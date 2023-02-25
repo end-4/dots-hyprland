@@ -110,7 +110,10 @@
 }
 
 .overview-results {
-
+  // :first-child {
+  //   color: white;
+  //   background-image: linear-gradient(to right, $color0 0%, $color4 100%);
+  // }
 }
 
 .overview-search-result {
@@ -125,15 +128,12 @@
 
   caret-color: transparent;
 
-  :focus {
-    color: $color4;
-    border: 2px solid $color4;
-  }
   selection {
-    // background-color: rgba(154, 152, 152, 0.5);
+    background-color: transparent;
   }
 }
 
-.overview-search-result:focus {
-  color: $color4;
+.overview-search-result:focus{
+  color: white;
+  background-image: linear-gradient(to right, $color0 0%, $color4 100%);
 }
