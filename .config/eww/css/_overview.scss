@@ -1,11 +1,20 @@
 .overview-window {
-  @include window
-  font-family: 'Torus', 'Material Symbols Rounded';
+  @include window font-family: 'Torus', 'Material Symbols Rounded';
   border-radius: 22px;
   background-color: $colorbg;
   // background-color: transparent;
   // border: 3px solid $color0;
   //padding: 5px;
+}
+
+.overview-window-title {
+  font-size: 15pt;
+  color: $colortext;
+  border-radius: 15px;
+  background-color: $surface0;
+  margin: 4px;
+  padding: 4px;
+  min-height: 30px;
 }
 
 .overview-window-top {
@@ -16,7 +25,7 @@
 }
 
 .overview-ws {
-  border-radius:  15px;
+  border-radius: 15px;
   background-color: $surface0;
   margin: 4px;
 }
@@ -27,6 +36,7 @@
   background-color: $overlay0;
   // //margin: 3px; 
 }
+
 .overview-ws-window-content {
   border-radius: 11px;
   // background-color: rgba(135, 147, 163, 0.7);
@@ -48,12 +58,14 @@
   //padding-left: 5px;
   font-size: 13pt;
 }
+
 .overview-ws-subtext {
   //padding-left: 5px;
   font-size: 9pt;
 }
 
-.overview-ws-number { //Note: height 100px width 356px
+.overview-ws-number {
+  //Note: height 100px width 356px
   font-size: 25pt;
   border-radius: 11px;
   background-color: $overlay0;
@@ -68,4 +80,60 @@
   font-size: 15pt;
   //padding-top: .6rem;
   //padding-bottom: .6rem;
+}
+
+.overview-search-area {
+  
+}
+
+.overview-search-box {
+  border-radius: 20px;
+  border: 2px solid $colortext;
+  background-color: tint($colorbg, 10%);
+  color: $colortext;
+  font-size: 15pt;
+  min-height: 45px;
+  min-width: 400px;
+
+  margin: 20px 0px;
+  padding: 2px 12px;
+
+  caret-color: $colortext;
+
+  selection {
+    background-color: rgba(154, 152, 152, 0.5);
+  }
+}
+
+.overview-search-box:focus {
+  color: $color4;
+}
+
+.overview-results {
+
+}
+
+.overview-search-result {
+  border-radius: 20px;
+  border: 2px solid;
+  background-color: tint($colorbg, 10%);
+  color: $colortext;
+  font-size: 15pt;
+  min-height: 45px;
+  min-width: 400px;
+  padding: 2px 12px;
+
+  caret-color: transparent;
+
+  :focus {
+    color: $color4;
+    border: 2px solid $color4;
+  }
+  selection {
+    // background-color: rgba(154, 152, 152, 0.5);
+  }
+}
+
+.overview-search-result:focus {
+  color: $color4;
 }
