@@ -21,6 +21,9 @@
 (defvar osd_bright false)
 (defvar selected '')
 (defvar rev_ontf false)
+(defvar overview_hover_name "Activities Overview")
+(defvar overview_query "")
+(defvar overview_results "")
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)

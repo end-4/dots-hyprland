@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+cd ~
+eww close overview
+app=$1
+eval "${app%\%*}"
+
