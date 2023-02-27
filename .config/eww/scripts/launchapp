@@ -1,7 +1,25 @@
 #!/usr/bin/bash
 
-cd ~
-eww close overview
-app=$1
-eval "${app%\%*}"
+
+if [[ "$1" == ">"* ]]; then
+    args=( $1 )
+    eww close overview
+    if [[ "${args[0]}" == ">music" ]]; then
+        scripts/colormanage get
+    elif [[ "${args[0]}" == ">load" ]]; then
+        scripts/colormanage load "${args[1]}"
+    elif [[ "${args[0]}" == ">save" ]]; then
+        scripts/colormanage save "${args[1]}"
+    else
+        # notify-send 'eww' 'Invalid command!'
+        true
+    fi
+else 
+    cd ~
+    eww close overview
+    app=$1
+    eval "${app%\%*}" &
+    pkill launchapp
+fi
+
 

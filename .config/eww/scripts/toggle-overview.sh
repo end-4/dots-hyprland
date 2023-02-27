@@ -6,6 +6,7 @@ cd ~/.config/eww
 if [[ "$state" == "false" ]]; then 
     scripts/listentrynames.py &
     scripts/listentries.py &
+    eww update anim_open_search=true
     eww update overview_query='' 
     eww update overview_hover_name="Activities Overview"
     eww open --toggle overview 

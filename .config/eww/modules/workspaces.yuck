@@ -4,9 +4,7 @@
     :onmiddleclick "${EWW_CMD} open --toggle overview"
     :onrightclick "${EWW_CMD} open --toggle overview"
     (overlay
-      ; :class "module workspaces"
-      ; :spacing 0
-      ; :space-evenly false
+      ; Only displays workspace state (has windows or not)
       (box
         :class "module workspaces"
         :spacing 0
@@ -20,7 +18,8 @@
           )
         )
       )
-      (button
+      ; Use a separate indicator for active workspace (animations, yay) (and more performant)
+      (button 
         :class "ws"
         :style "
         margin-left:  ${10 + 31 * (activews - 1)}px;

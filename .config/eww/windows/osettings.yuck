@@ -23,7 +23,10 @@
     :class "osettings-window"
     :orientation "v"
     :space-evenly false
-    :style "${rev_ostg ? '' : 'margin-left: -533px;'}"
+    :style "
+    ${anim_open_ostg ? 'transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_ostg ? '' : 'margin-left: -533px;'}
+    "
     (eventbox
       ; :onhoverlost "scripts/toggle-osettings.sh --close &"
       (box
@@ -542,7 +545,7 @@
                     :halign "fill"
                     :wrap true
                     :class "osettings-btn osettings-btn-neutral"
-                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf &"
+                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf && rm temporary_config.conf &"
                     "Reload config"
                   )
                 )

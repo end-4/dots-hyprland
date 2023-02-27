@@ -6,6 +6,8 @@
  - _Please note that Hyprland doesn't have an "e" in the name tyty_
  - This dynamic, pywal-powered rice changes colors/wallpapers often, it might be different to the preview
  - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
+ - Kinda hacky code, uses px for styling 
+ - Menus are animated (in a hacky way)
 
 # Branches
  - [Current main style: osu!lazer, updated in main branch. All non-main branches are archives.]
@@ -41,12 +43,12 @@
 # Python Dependencies
  - Command
 ```
-    pip install pywal desktop_entry_lib
+pip install pywal desktop_entry_lib
 ```
 # Other Dependencies (install it with your distro's package manager)
- - Package names
+ - Package names (may vary)
 ```
-    bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
+bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
 ```
  - For Fedora, run:
 ```

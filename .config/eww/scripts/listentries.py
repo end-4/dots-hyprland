@@ -4,7 +4,6 @@ import desktop_entry_lib
 import os
 import json
 import subprocess
-from fuzzysearch import find_near_matches
 
 full_output = {}
 

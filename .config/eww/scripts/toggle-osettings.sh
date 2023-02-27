@@ -3,6 +3,7 @@ state=$(eww get rev_ostg)
 state_ontf=$(eww get rev_ontf)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
+    eww update anim_open_ostg=false
     eww update rev_ostg=false
     hyprctl keyword monitor eDP-1,addreserved,53,0,0,0
     # hyprctl keyword decoration:dim_inactive false
@@ -10,9 +11,11 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww close osettings 
     eww update oquery=''
 else # state = false
+    eww update anim_open_ostg=true
     if [[ "$state_ontf" == "true" ]]; then
+        eww update anim_open_ontf=false
         eww update rev_ontf=false
-        eww update force_sys_rev=false
+        eww update force_sys_rev=false &
     fi
     eww open osettings 
     eww update oquery=''
