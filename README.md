@@ -5,10 +5,10 @@
 
  - _Please note that Hyprland doesn't have an "e" in the name tyty_
  - This dynamic, pywal-powered rice changes colors/wallpapers often, it might be different to the preview
- - Thanks fufexan (who also thanks a lot more people) for their eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
+ - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles <-- very clean, i stole from there :) 
 
 # Branches
- - [Currently main style: osu!lazer, updated in main branch. All non-main branches are archives]
+ - [Current main style: osu!lazer, updated in main branch. All non-main branches are archives.]
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
  - linage https://github.com/end-4/dots-hyprland/tree/linage
 
@@ -28,17 +28,21 @@
  - **Backup if you need**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `Binaries` to a $PATH, (don't replace if asked (unecessary))
- - gnome-text-editor themes: Copy that folder to root if ya need (you can ask gnome devs why it's stored there don't ask me)
- - **Install font: Product Sans** (or change the font in `./.config/eww/eww.scss` to another font)
+ - gnome-text-editor themes: Structured like root, not home (you can ask gnome devs why it's stored there don't ask me)
+ - **Install font: Product Sans** (for linage branch)
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
 
 # Further eww instructions
- - Music control on the music button and top-left corner: Middle-click for Play/Pause, Right-click for Next track
+ - Music control on the music button: Middle-click for Play/Pause, Right-click for Next track
  - Scroll the top-right/top-left corner to change volume
- - To open Workspace Overview, run `eww open overview` (or press Super+Tab if you use my Hyprland configs)
+ - To open Workspace Overview, run `eww open overview` or middle-click the workspace indicators (or press Super+Tab if you use my Hyprland configs)
 
 # Dependencies
+ - Python packages
+```
+    pip install pywal desktop_entry_lib
+```
  - Package names
 ```
     bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
