@@ -11,17 +11,23 @@
       (input
         :class "overview-search-box"
         :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
-        :onaccept "scripts/launchapp '${overview_results[0].exec}' &"
+        :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
       )
     )
     (revealer
       :reveal "${overview_query == ''}"
       :transition "slidedown"
-      :duration "200ms"
+      :duration "${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'}"
+      :style "
+      transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+      "
       (revealer
         :reveal "${overview_query == ''}"
         :transition "crossfade"
-        :duration "200ms"
+        :duration "${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'}"
+        :style "
+        transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+        "
         (box
           :space-evenly false
           :orientation "v"
@@ -139,11 +145,17 @@
       (revealer
         :reveal "${overview_query != ''}"
         :transition "slidedown"
-        :duration "200ms"
+        :duration "${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'}"
+        :style "
+        transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+        "
         (revealer
           :reveal "${overview_query != ''}"
           :transition "crossfade"
-          :duration "200ms"
+          :duration "${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'}"
+          :style "
+          transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+          "
           (box
             :halign "center"
             :orientation "v"
@@ -168,7 +180,7 @@
   :wm-ignore true
   :monitor 0
   :geometry (geometry
-    :y "53px"
+    :y "103px"
     :anchor "top center"
     ; :y "0px"
     ; :anchor "center center"

@@ -24,6 +24,12 @@
 (defvar overview_hover_name "Activities Overview")
 (defvar overview_query "")
 (defvar overview_results "")
+(defvar rev_themer false)
+; Dynamic animation: open = decelerate; close = accelerate
+(defvar anim_open_ostg true)
+(defvar anim_open_ontf true)
+(defvar anim_open_search true)
+(defvar anim_open_themer true)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)

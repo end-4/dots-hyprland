@@ -1,8 +1,7 @@
 (defwidget music []
-  (revealer
-    :reveal music_open
-    :transition "slidedown"
-    :duration "0ms"
+  (box
+    :class "music-area"
+    :style "${music_open ? '' : 'margin-top: -200px;'}"
     (eventbox
       :onhoverlost "${EWW_CMD} close music && ${EWW_CMD} update music_open=false"
       (overlay
