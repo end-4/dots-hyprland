@@ -38,16 +38,17 @@
  - Scroll the top-right/top-left corner to change volume
  - To open Workspace Overview, run `eww open overview` or middle-click the workspace indicators (or press Super+Tab if you use my Hyprland configs)
 
-# Dependencies
- - Python packages
+# Python Dependencies
+ - Command
 ```
     pip install pywal desktop_entry_lib
 ```
+# Other Dependencies (install it with your distro's package manager)
  - Package names
 ```
     bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
 ```
- - On Fedora
+ - For Fedora, run:
 ```
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi
 ```
