@@ -1,3 +1,8 @@
+.music-area {
+  box-shadow: 0 3px 3px $shadow;
+  transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
 .song-cover-art {
   @include rounding;
   background-position: center;
@@ -27,8 +32,7 @@
   // margin: 1em;
   // min-height: 200px;
   min-width: 200px;
-  box-shadow: 0 3px 3px $shadow;
-  margin: 3px;
+  // box-shadow: 0 3px 3px $shadow;
 }
 
 .music-box {
