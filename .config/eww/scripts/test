@@ -1,16 +1,7 @@
 #!/usr/bin/env bash
 
-time=$1
-
-socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "activelayout>>" | while read -r line; do
+socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
   echo $line
-  eww update countdown=$time
-done
-
-while true; do
-  echo $time
-  time=$((time-1))
-  sleep 0.4
 done
 
 
