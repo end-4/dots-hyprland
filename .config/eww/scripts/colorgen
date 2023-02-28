@@ -6,19 +6,22 @@ coverurl=$2
 coverpath="$IMGPATH"
 wal -c
 lightdark=$(cat ../scripts/workdir/__mode_light_dark.txt)
-themejson=$(wal -i "$IMGPATH" -n -t -s -e $lightdark | grep -e 'color1' | sed 's/'\''/"/g')
+wal -i "$IMGPATH" -n -t -s -e $lightdark
+themejson=$(cat ~/.cache/wal/colors.json | gojq -c)
+echo $themejson
 if [ "$3" == "--just-generate" ]; then
 	printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
 else
 	printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
 fi
 
+
 # notify-send 'eww' 'i found a url!'
 cd ..
 
 # notify-send 'eww color changer' "here i go in the dir that has $(ls | tr '\n' ' ')"
 echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
-echo '@function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
+echo '@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
 echo '@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
 printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
 printf "$themejson" | gojq '.special.background' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
@@ -50,11 +53,7 @@ echo '' >> './tmp/_colorscheme.colorpallete'
 printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
 printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 echo '' >> './tmp/_colorscheme.colorpallete'
-# printf '$colormusic: ' >> './tmp/_colorscheme.colorpallete'
-# printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
-# echo '' >> './tmp/_colorscheme.colorpallete'
 
-# Border gradient: color6 -> color5 -> color7
 gradient1=$(echo -n "$themejson" | gojq '.colors.color1' | sed 's/"//g')
 gradient2=$(echo -n "$themejson" | gojq '.colors.color2' | sed 's/"//g')
 gradient3=$(echo -n "$themejson" | gojq '.colors.color4' | sed 's/"//g')
