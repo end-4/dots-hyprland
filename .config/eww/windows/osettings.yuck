@@ -20,7 +20,6 @@
 
 (defwidget osettings []
   (box
-    :class "osettings-window"
     :orientation "v"
     :space-evenly false
     :style "
@@ -28,10 +27,17 @@
     ${rev_ostg ? '' : 'margin-left: -533px;'}
     "
     (eventbox
+      :onclick "scripts/toggle-osettings.sh --close &"
+      (box
+        :style "min-height: 53px;"
+      )
+    )
+    (eventbox
       ; :onhoverlost "scripts/toggle-osettings.sh --close &"
       (box
         :orientation "v"
         :space-evenly false
+        :class "osettings-window"
         (box
           :orientation "v"
           :space-evenly false
@@ -676,7 +682,7 @@
   :focusable true
   :geometry (geometry
     :x "0px"
-    :y "53px"
+    :y "0px"
     :width "0px"
     :height "1027px"
     :anchor "top left"
