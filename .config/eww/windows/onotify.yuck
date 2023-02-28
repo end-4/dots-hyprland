@@ -1,6 +1,5 @@
 (defwidget onotify []
   (box
-    :class "onotify-window"
     :orientation "v"
     :space-evenly false
     :style "
@@ -8,10 +7,17 @@
     ${rev_ontf ? '' : 'margin-right: -533px;'}
     "
     (eventbox
+      :onclick "scripts/toggle-onotify.sh --close &"
+      (box
+        :style "min-height: 53px;"
+      )
+    )
+    (eventbox
       ; :onhoverlost "scripts/toggle-onotify.sh --close &"
       (box
         :orientation "v"
         :space-evenly false
+        :class "onotify-window"
         (box
           :class "system-row"
           :space-evenly false
@@ -337,10 +343,10 @@
 (defwindow onotify
   :wm-ignore true
   :monitor 0
-  ; :focusable true
+  :focusable true
   :geometry (geometry
-    :x "0"
-    :y "53px"
+    :x "0px"
+    :y "0px"
     :width "0px"
     :height "1027px"
     :anchor "top right"

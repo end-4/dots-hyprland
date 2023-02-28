@@ -1,6 +1,15 @@
 (defwidget themerctl []
+  (box
+    :orientation "v"
+    :space-evenly false
     (eventbox
-      :onhoverlost "${EWW_CMD} close themer && ${EWW_CMD} update themer_open=false"
+      :onclick "scripts/toggle-themer.sh --close &"
+      (box
+        :style "min-height: 53px;"
+      )
+    )
+    (eventbox
+      ; :onhoverlost "${EWW_CMD} close themer && ${EWW_CMD} update themer_open=false"
       (box
         :space-evenly false
         :orientation "v"
@@ -88,6 +97,7 @@
       )
     )
   )
+)
 
 (defwindow themer
   :wm-ignore true
@@ -95,7 +105,7 @@
   :monitor 0
   :geometry (geometry
     :x "300px"
-    :y "53px"
+    :y "0px"
     :anchor "top right"
     :width "0px"
     :height "0px"

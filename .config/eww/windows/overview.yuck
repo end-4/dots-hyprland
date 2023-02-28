@@ -3,6 +3,9 @@
     :space-evenly false
     :orientation "v"
     :class "thewholething"
+    (eventbox
+      :onclick "scripts/toggle-overview.sh --close &"
+    )
     (box
       :class "overview-search-area"
       :space-evenly false
