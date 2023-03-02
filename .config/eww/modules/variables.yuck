@@ -25,6 +25,7 @@
 (defvar overview_query "")
 (defvar overview_results "")
 (defvar rev_themer false)
+(defvar open_overview false)
 ; Dynamic animation: open = decelerate; close = accelerate
 (defvar anim_open_ostg true)
 (defvar anim_open_ontf true)

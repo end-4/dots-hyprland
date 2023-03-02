@@ -7,6 +7,7 @@
       :onclick "scripts/toggle-overview.sh --close &"
       :onmiddleclick "scripts/toggle-overview.sh --close &"
       :onrightclick "scripts/toggle-overview.sh --close &"
+      :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
     )
     (box
       :class "overview-search-area"

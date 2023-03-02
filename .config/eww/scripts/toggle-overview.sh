@@ -1,16 +1,19 @@
 #!/usr/bin/bash
-state=$(~/.config/eww/scripts/isopen.sh overview)
+state=$(eww get open_overview)
 
 cd ~/.config/eww
 
 if [[ "$state" == "false" ]]; then 
+    scripts/toggle-osettings.sh --close &
+    scripts/toggle-onotify.sh --close &
     scripts/listentrynames.py &
     scripts/listentries.py &
-    eww update anim_open_search=true
-    eww update overview_query='' 
-    eww update overview_hover_name="Activities Overview"
-    eww open --toggle overview 
+    eww update overview_query=''  &
+    eww update overview_hover_name="Activities Overview" &
+    eww open overview
+    eww update open_overview=true
 else
-    eww open --toggle overview 
+    eww close overview
     eww update overview_query='' 
+    eww update open_overview=false
 fi
