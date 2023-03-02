@@ -8,6 +8,8 @@
     "
     (eventbox
       :onclick "scripts/toggle-onotify.sh --close &"
+      :onmiddleclick "scripts/toggle-onotify.sh --close &"
+      :onrightclick "scripts/toggle-onotify.sh --close &"
       (box
         :style "min-height: 53px;"
       )
@@ -370,11 +372,11 @@
           (box
             :space-evenly false
             :orientation "h"
+            ; Time and date
             (box
-              :class "module"
-              :valign "start"
+              :class "module-timedate module"
               :orientation "v"
-              :style "min-width: 115px;"
+              :space-evenly false
               (box
                 :space-evenly false
                 :halign "start"
@@ -383,14 +385,12 @@
                 (label :text {time.minute} :class "clock minute")
               )
               (box
-                :style "background"
-                :halign "start"
-                :valign "start"
-                :class "date-clock"
+                :class "date"
                 :onclick "${EWW_CMD} update popup='calendar'"
                 "${time.day}, ${time.date}"
               )
             )
+            ; System levels
             (eventbox
               :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
               :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"

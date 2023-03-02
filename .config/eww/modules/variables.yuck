@@ -30,6 +30,7 @@
 (defvar anim_open_ontf true)
 (defvar anim_open_search true)
 (defvar anim_open_themer true)
+(defvar anim_open_music true)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)

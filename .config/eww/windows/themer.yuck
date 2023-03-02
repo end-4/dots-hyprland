@@ -5,7 +5,11 @@
     (eventbox
       :onclick "scripts/toggle-themer.sh --close &"
       (box
-        :style "min-height: 53px;"
+        :style "
+        min-height: 53px;
+        ${rev_themer ? '' : 'margin-top: -400px;'}
+        ${anim_open_themer ? 'transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+        "
       )
     )
     (eventbox
@@ -15,8 +19,8 @@
         :orientation "v"
         :class "themer-menu-box"
         :style "
-        ${rev_themer ? '' : 'margin-top: -300px;'}
-        ${anim_open_themer ? 'transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+        ${rev_themer ? '' : 'margin-top: -400px;'}
+        ${anim_open_themer ? 'transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
         "
         (box
           :style "padding-left: 10px; padding-right: 10px; padding-top: 10px; font-size: 15pt;"

@@ -1,9 +1,12 @@
 (defwidget music []
-  (box
-    :class "music-area"
-    :style "${music_open ? '' : 'margin-top: -200px;'}"
-    (eventbox
-      :onhoverlost "${EWW_CMD} close music && ${EWW_CMD} update music_open=false"
+  (eventbox
+    :onhoverlost "scripts/toggle-music.sh --close &"
+    (box
+      :class "music-area"
+      :style "
+      ${music_open ? '' : 'margin-left: -533px; margin-right: 533px;'}
+      ${anim_open_music ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+      "
       (overlay
         (box ; Fallback
           :class "music-cover-art"
@@ -68,13 +71,12 @@
 
 (defwindow music
   :wm-ignore true
-  :focusable false
   :monitor 0
   :geometry (geometry
-    :x "10px"
-    :y "67px"
-    :width "540px"
-    :height "173px"
+    :x "0px"
+    :y "53px"
+    :width "558px"
+    :height "191px"
   :anchor "top left")
   (music)
 )

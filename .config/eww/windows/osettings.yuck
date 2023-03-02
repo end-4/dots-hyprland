@@ -28,6 +28,8 @@
     "
     (eventbox
       :onclick "scripts/toggle-osettings.sh --close &"
+      :onmiddleclick "scripts/toggle-osettings.sh --close &"
+      :onrightclick "scripts/toggle-osettings.sh --close &"
       (box
         :style "min-height: 53px;"
       )
