@@ -5,6 +5,8 @@
     :class "thewholething"
     (eventbox
       :onclick "scripts/toggle-overview.sh --close &"
+      :onmiddleclick "scripts/toggle-overview.sh --close &"
+      :onrightclick "scripts/toggle-overview.sh --close &"
     )
     (box
       :class "overview-search-area"
@@ -166,7 +168,7 @@
             :spacing 2
             (for entry in overview_results
               (input
-                :value "${entry.name}"
+                :value "${entry.name} >> ${entry.exec}"
                 :class "overview-search-result"
                 :onaccept "scripts/launchapp '${entry.exec}' &"
               )

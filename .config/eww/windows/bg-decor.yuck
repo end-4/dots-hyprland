@@ -37,8 +37,8 @@
   :geometry (geometry
     :x 80
     :y 0
-    :width "30%"
-    :height "25%"
+    :width "100%"
+    :height "100%"
     :anchor "left center"
   )
   :monitor 0
