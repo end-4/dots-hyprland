@@ -47,6 +47,9 @@
             (for wspace in wsjsona
               (box ; Note: height 100px width 356px
                 :class "overview-ws"
+                :style "
+                ${wspace[0].workspace.id == activews ? ('border: 2px solid;') : ''}
+                "
                 (box
                   :space-evenly false
                   :orientation "h"
@@ -68,7 +71,7 @@
                       (eventbox
                         :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
                         :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
-                        :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
+                        :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
                         :onhover "${ws-window.class == 'workspace' ? '' : EWW_CMD} ${ws-window.class == 'workspace' ? '' : 'update overview_hover_name=\''}${ws-window.class == 'workspace' ? '' : ws-window.title}${ws-window.class == 'workspace' ? '' : '\' &'}"
                         (box
                           :class "overview-background"
@@ -96,6 +99,9 @@
             (for wspace in wsjsonb
               (box ; Note: height 100px width 356px
                 :class "overview-ws"
+                :style "
+                ${wspace[0].workspace.id == activews ? ('border: 2px solid;') : ''}
+                "
                 (box
                   :space-evenly false
                   :orientation "h"
@@ -117,7 +123,7 @@
                       (eventbox
                         :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
                         :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
-                        :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && ${EWW_CMD} close overview"
+                        :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
                         :onhover "${ws-window.class == 'workspace' ? '' : EWW_CMD} ${ws-window.class == 'workspace' ? '' : 'update overview_hover_name=\''}${ws-window.class == 'workspace' ? '' : ws-window.title}${ws-window.class == 'workspace' ? '' : '\' &'}"
                         (box
                           :class "overview-background"
