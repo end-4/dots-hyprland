@@ -94,6 +94,10 @@
     border: 2px solid $colortext;
 }
 
+.themer-color-preview-section {
+    @include rounding;
+}
+
 .themer-color-preview {
     min-height: 25px;
     min-width: 25px;
