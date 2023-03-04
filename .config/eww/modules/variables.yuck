@@ -60,7 +60,7 @@
 (deflisten wsjsona `scripts/overview1`)
 (deflisten wsjsonb `scripts/overview2`)
 ; (deflisten wsthumbs `scripts/overview-thumbnails`) ; slow, so nope
-(deflisten activews :initial 5 `scripts/activews`)
+(deflisten activews :initial 1 `scripts/activews`)
 
 ; Nope, not using, quite useless
 ; (deflisten username `echo $USERNAME`)

@@ -46,10 +46,7 @@
             :orientation "h"
             (for wspace in wsjsona
               (box ; Note: height 100px width 356px
-                :class "overview-ws"
-                :style "
-                ${wspace[0].workspace.id == activews ? ('border: 2px solid;') : ''}
-                "
+                :class "overview-ws overview-ws-${wspace[0].workspace.id == activews}"
                 (box
                   :space-evenly false
                   :orientation "h"
@@ -98,10 +95,7 @@
             :orientation "h"
             (for wspace in wsjsonb
               (box ; Note: height 100px width 356px
-                :class "overview-ws"
-                :style "
-                ${wspace[0].workspace.id == activews ? ('border: 2px solid;') : ''}
-                "
+                :class "overview-ws overview-ws-${wspace[0].workspace.id == activews}"
                 (box
                   :space-evenly false
                   :orientation "h"
