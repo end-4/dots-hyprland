@@ -10,10 +10,13 @@ getwins() {
     | grep -v '"monitor": ' \
     | grep -v '"floating": ' \
     | grep -v '"fullscreen": ' \
-    | grep -v '"pinned":') # | grep -v ""name":")
+    | grep -v '"pinned":') 
+  # | grep -v ""name":")
   # echo '-=-=-=- final output -=-=-=-'
   # echo "$toprint"
   # echo $(echo "$hyprctlclients")  # Print on one line only
+
+  
 
   workspace=('[' '[' '[' '[' '[' '[' '[' '[' '[' '[')
   workspacecnt=(1 1 1 1 1 1 1 1 1 1)
@@ -30,15 +33,17 @@ getwins() {
   for client in "${clientsarr[@]}"; do
     wsid=$(echo $client | gojq -c '.workspace.id')
     ((wsid-=1))
+    iconpath=''
+    clientclass=$(echo $client | gojq '.class' | sed 's/"//g')
+    if [[ "$clientclass" == "" ]]; then 
+      continue
+    fi
     if [[ "$wsid" == "-100" ]]; then 
       continue
     fi
     if [[ "${workspacecnt[wsid]}" != "0" ]]; then 
       workspace[wsid]+=","
     fi
-
-    clientclass=$(echo $client | gojq '.class' | sed 's/"//g')
-    iconpath=''
 
     if [ -f "scripts/cache/$clientclass" ]; then
         iconpath=$(cat scripts/cache/$clientclass)

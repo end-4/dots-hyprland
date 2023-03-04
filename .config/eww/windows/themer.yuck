@@ -129,15 +129,4 @@
       ''
     )
   )
-  
-  ; (eventbox
-    ;   :onhover "${EWW_CMD} update themer_hover=true"
-    ;   :onhoverlost "${EWW_CMD} update themer_hover=false"
-    ;   (checkbox
-      ;     :class "themer-button-${themer_hover || themer_open}"
-      ;     :onchecked "eww open themer && ${EWW_CMD} update themer_open=true"
-      ;     :onunchecked "eww open close themer && ${EWW_CMD} update themer_open=false"
-      ;     :tooltip "Color manager"
-    ;   )
-  ; )
 )
