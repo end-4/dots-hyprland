@@ -37,7 +37,7 @@
 .music-box {
   @include rounding;
   padding-top: 24px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   background-position: top;
 }
 
@@ -117,6 +117,10 @@
   background-position: center;
 }
 
+.music-ctl-revealer {
+  // transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
 .music-ctl-revealer-false {
   // padding-left: 10px;
 }
@@ -125,6 +129,19 @@
   background-color: $overlay0;
 }
 
+.music-media-source {
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 15px;
+  min-width: 40px;
+  min-height: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.music-source-icon {
+  font-family: 'JetBrainsMono Nerd Font';
+  font-size: 16pt;
+  margin-right: 5px;
+}
 
 .song-button {
   color: $colortext;
@@ -137,7 +154,7 @@
   min-width: 160px;
   margin-top: 8px;
   padding-bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .osu-music-box-false {

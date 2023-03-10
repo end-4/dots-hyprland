@@ -31,7 +31,7 @@
       :onmiddleclick "scripts/toggle-osettings.sh --close &"
       :onrightclick "scripts/toggle-osettings.sh --close &"
       (box
-        :style "min-height: 53px;"
+        :style "min-height: 1px;"
       )
     )
     (eventbox
@@ -625,7 +625,7 @@
               )
               ; Super secret settings
               (revealer
-                :reveal "${oquery == '!secret'}"
+                :reveal "${oquery == '!secret' || oquery == '!sekret'}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
@@ -650,6 +650,20 @@
                     :class "osettings-btn osettings-btn-informative"
                     :onclick "scripts/supersecretsettings/doreload &"
                     "Reset these stuff"
+                  )
+                  (button
+                    :halign "fill"
+                    :wrap true
+                    :class "osettings-btn osettings-btn-destructive"
+                    :onclick "hyprctl keyword bind ,c,exec,wtype k"
+                    "Bekome a KDE developer"
+                  )
+                  (button
+                    :halign "fill"
+                    :wrap true
+                    :class "osettings-btn osettings-btn-destructive"
+                    :onclick "hyprctl keyword unbind ,c"
+                    "Un-become a KDE developer"
                   )
                   ; (centerbox
                     ;   :orientation "h"
@@ -684,7 +698,7 @@
   :focusable true
   :geometry (geometry
     :x "0px"
-    :y "0px"
+    :y "53px"
     :width "0px"
     :height "1027px"
     :anchor "top left"

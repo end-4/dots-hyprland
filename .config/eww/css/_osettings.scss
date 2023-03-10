@@ -2,6 +2,7 @@
     min-width: 529px;
     padding-top: 30px;
     background-color: tint($colorbg, 12.5%);
+    // background-color: transparent;
     color: $colortext;
     font-family: Torus;
 }
@@ -104,8 +105,11 @@
     margin-bottom: 10px;
     border-radius: 9999px;
     min-height: 50px;
-    font-weight: bold;
+    font-weight: normal;
     font-size: 13pt;
+}
+.osettings-btn {
+    font-weight: bold;
 }
 
 .osettings-btn-destructive {
@@ -128,17 +132,17 @@
 
 .osettings-btn-neutral:hover,
 .osettings-btn-neutral:focus {
-    background-image: linear-gradient(to right, $color2 0%, $color4 75%);
+    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
 }
 
 .osettings-btn-destructive:hover,
 .osettings-btn-destructive:focus {
-    background-image: linear-gradient(to right, $color1 0%, $color3 75%);
+    background-image: linear-gradient(to right, $color1 0%, $color3 50%);
 }
 
 .osettings-btn-informative:hover,
 .osettings-btn-informative:focus {
-    background-image: linear-gradient(to right, $color2 0%, $color4 75%);
+    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
 }
 
 .rounder {

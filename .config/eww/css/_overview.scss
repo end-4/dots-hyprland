@@ -25,10 +25,17 @@
 }
 
 .overview-ws {
-  color: $color3;
+  border: 2px solid;
   border-radius: 15px;
   background-color: $surface0;
   margin: 4px;
+}
+
+.overview-ws-true {
+  color: $color3;
+}
+.overview-ws-false {
+  color: transparent;
 }
 
 .overview-ws-window {
