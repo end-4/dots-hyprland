@@ -56,20 +56,23 @@ get_cover() {
 	echo '{"image": "eww_covers/cover_art_default"}'
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
+		music_source='󰐍'
 		if [[ "$COVER_URL" = https* ]]; then
-			
+			music_source='󰖟'
 			coverurl="$(playerctl metadata mpris:artUrl)"
 			coverurl_highres_yt="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
 			coverurl_highres_soundcloud="$(echo $coverurl | sed 's/80x80/500x500/g')"
 
 			# SoundCloud
 			if [[ "$coverurl" == *"sndcdn"* ]]; then
+				music_source='󰓀'
 				wget -O "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
 				cp "$IMGPATH""_soundcloud" "$IMGPATH"
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))	
 			fi
 			# Youtube
 			if [[ "$coverurl" == *"ytimg"* ]]; then
+				music_source='󰗃'
 				wget -O "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
 				cp "$IMGPATH""_yt" "$IMGPATH"
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
@@ -81,14 +84,14 @@ get_cover() {
 			fi
 
 			#Generate colors
-			../scripts/colorgen $IMGPATH $coverurl
+			../scripts/colorgen $IMGPATH $coverurl "$music_source"
 		elif [ "$COVER_URL" = "" ]; then
 		    echo '{"image": "", "color": "$bg"}'
 		else
 			COVER_URL="${COVER_URL:7}"
 			cp "$COVER_URL"  "$IMGPATH"
 			
-			../scripts/colorgen $IMGPATH $COVER_URL
+			../scripts/colorgen $IMGPATH $COVER_URL "$music_source"
 		fi
 	done
 }

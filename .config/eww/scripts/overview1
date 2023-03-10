@@ -49,7 +49,6 @@ getwins() {
     if [ -f "scripts/cache/thumbnails/$clientaddress.png" ]; then
       thumbnailpath="scripts/cache/thumbnails/$clientaddress.png"
     fi
-
     
     # Get app icon
     if [ -f "scripts/cache/$clientclass" ]; then
