@@ -266,7 +266,7 @@
 
 (defwidget syscpu []
   (revealer
-    :reveal "${popup == 'system-menu' || force_sys_rev}"
+    :reveal "${popup == 'system-menu' || force_sys_rev || EWW_CPU.avg>= 50}"
     :transition "slideleft"
     :duration "300ms"
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
@@ -292,7 +292,7 @@
         )
         (revealer
           :transition "slideright"
-          :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev}"
+          :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev  || EWW_CPU.avg>= 50}"
           :duration "300ms"
           :class "sys-menu"
           :onclick "${EWW_CMD} update popup='system-menu'"
@@ -339,7 +339,7 @@
       ; )
       (revealer
         :transition "slideright"
-        :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev}"
+        :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev || memory.percentage + memory.swappercentage >= 120}"
         :duration "300ms"
         :class "sys-menu"
         :onclick "${EWW_CMD} update popup='system-menu'"
@@ -360,10 +360,10 @@
       :space-evenly false
       :onclick "${EWW_CMD} update popup='system-menu'"
       ; (box
-      ;   ; :style " min-width: 100px;"
-      ;   (rectangular-progress
-      ;     :value "${volume.percent}"
-      ;   )
+        ;   ; :style " min-width: 100px;"
+        ;   (rectangular-progress
+          ;     :value "${volume.percent}"
+        ;   )
       ; )
       (circular-progress
         :value "${EWW_BATTERY["BATT"].capacity}"
@@ -394,7 +394,12 @@
   (eventbox
     :class "cpu-menu"
     :onclick "${EWW_CMD} update popup='system-menu'"
-    (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
+    (box
+      :orientation "h"
+      :space-evenly false
+      (label :class "cpu-menu icon" :text "")
+      (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
+    )
   )
 )
 
@@ -405,6 +410,7 @@
     (box
       ; :class "mem-menu"
       :space-evenly false
+      (label :class "mem-menu-left" :text "")
       (label :class "mem-menu-left" :text "${memory.used}")
       (label :class "mem-menu-mid" :text "")
       (label :class "mem-menu-right" :text "${memory.swapused}")

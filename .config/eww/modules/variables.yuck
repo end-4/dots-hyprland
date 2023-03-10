@@ -1,4 +1,5 @@
 ; Const
+(defvar FILE_BROWSER "nautilus")
 (defvar RES_WIDTH 1920)
 (defvar RES_HEIGHT 1080)
 (defvar OVERVIEW_SCALE 0.18)
@@ -25,6 +26,7 @@
 (defvar overview_query "")
 (defvar overview_results "")
 (defvar rev_themer false)
+(defvar rev_dash false)
 (defvar open_overview false)
 ; Dynamic animation: open = decelerate; close = accelerate
 (defvar anim_open_ostg true)
@@ -32,6 +34,7 @@
 (defvar anim_open_search true)
 (defvar anim_open_themer true)
 (defvar anim_open_music true)
+(defvar anim_open_dash true)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "day": "%A"}'`)
@@ -62,6 +65,13 @@
 ; (deflisten wsthumbs `scripts/overview-thumbnails`) ; slow, so nope
 (deflisten activews :initial 1 `scripts/activews`)
 
-; Nope, not using, quite useless
-; (deflisten username `echo $USERNAME`)
-; (defvar username_default 'end')
+(defvar username_default "end")
+(defvar quote_content `["haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV", "I have a hentai anal gif playing in my base"]`)
+(defvar quote_author `["- vaxer", "- vaxer"]`)
+
+(defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
+(defpoll packages :interval "5m" `pacman -Q | wc -l`)
+(defpoll kernel :interval "5m" `uname -r`) 
+(defpoll username :initial "end" :interval "5m" `whoami`)  
+(defpoll hostname :initial "eavouros" :interval "5m" `uname -n`) 
+(defpoll wm :interval "5m" `echo $XDG_CURRENT_DESKTOP`) 

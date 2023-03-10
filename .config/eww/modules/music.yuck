@@ -33,7 +33,7 @@
         :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
         :limit-width 20
         (eventbox
-          :class "music-ctl-revealer-${music_hover || music_open}"
+          :class "music-ctl-revealer music-ctl-revealer-${music_hover || music_open}"
           :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
           (label
             :class "music-title"
