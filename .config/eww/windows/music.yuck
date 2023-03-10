@@ -64,6 +64,13 @@
             :style "highlight {background-color: ${mcover.color.colors.color4};}"
           )
         )
+        (box
+          :class "music-media-source"
+          :halign "start"
+          :valign "start"
+          :orientation "h"
+          (label :class "music-source-icon" :text "${mcover.color.source}" :style "color: ${mcover.color.colors.color4};")
+        )
       )
     )
   )
@@ -71,6 +78,7 @@
 
 (defwindow music
   :wm-ignore true
+  :stacking "overlay"
   :monitor 0
   :geometry (geometry
     :x "0px"

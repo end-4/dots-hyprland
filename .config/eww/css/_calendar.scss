@@ -8,30 +8,26 @@
 }
 
 calendar {
-  padding: 7px;
-
 
   :selected {
     color: $colortext;
     font-weight: bolder;
     background-color: $overlay0;
     border-radius: 8px;
-    font-family: 'Torus';
   }
 
   .header {
-    font-family: 'Torus';
     color: $colortext;
+    margin: 15px;
+    min-height: 400px;
   }
 
   .highlight {
-    font-family: 'Torus';
     color: $color0;
     font-weight: bold;
   }
 
   .button {
-    font-family: 'Torus';
     color: $colortext;
   }
 
