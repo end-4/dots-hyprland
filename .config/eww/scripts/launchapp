@@ -3,7 +3,7 @@
 
 if [[ "$1" == ">"* ]]; then
     args=( $1 )
-    eww close overview
+    ~/.config/eww/scripts/toggle-overview.sh --close &
     if [[ "${args[0]}" == ">music" ]]; then
         scripts/colormanage get
     elif [[ "${args[0]}" == ">load" ]]; then
@@ -16,7 +16,7 @@ if [[ "$1" == ">"* ]]; then
     fi
 else 
     cd ~
-    eww close overview
+    ~/.config/eww/scripts/toggle-overview.sh --close &
     app=$1
     eval "${app%\%*}" &
     pkill launchapp

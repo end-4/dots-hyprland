@@ -18,6 +18,7 @@ else # state = false
         eww update force_sys_rev=false &
     fi
     eww open osettings 
+    ~/.config/eww/scripts/open-blurred.sh &
     eww update oquery=''
     hyprctl keyword monitor eDP-1,addreserved,53,0,30,-30
     # hyprctl keyword decoration:dim_inactive true

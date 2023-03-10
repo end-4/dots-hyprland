@@ -13,6 +13,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
 else
     eww update anim_open_ontf=true
     eww open onotify
+    ~/.config/eww/scripts/open-blurred.sh &
     if [[ "$state_ostg" == "true" ]]; then
         eww update anim_open_ostg=false
         eww update rev_ostg=false
