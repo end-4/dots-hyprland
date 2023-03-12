@@ -41,7 +41,28 @@
           ; :space-evenly false
           ; (label :text "${wsjsona}")
           ; (label :text "${selected}")
-          (label :class "overview-window-title" :text overview_hover_name)
+          (centerbox
+            :class "overview-window-title"
+            (label :halign "start" :style "margin: 5px;" :text "${overview_hover_name.class}")
+            (box
+              :space-evenly false
+              :orientation "h"
+              ; ICON ICON ICON
+              (box
+                :class "overview-topbar-icon overview-icon"
+                :style "
+                background-image: url('${overview_hover_name.icon}');
+                "
+              )  
+              (label :text "${overview_hover_name.title}")
+            )
+            (button
+              :halign "end"
+              :class "overview-topbar-button"
+              :onclick "scripts/toggle-overview.sh --close"
+              (label :text "")
+            )
+          )
           (box
             :orientation "h"
             (for wspace in wsjsona
@@ -69,7 +90,8 @@
                         :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
                         :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                         :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
-                        :onhover "${ws-window.class == 'workspace' ? '' : EWW_CMD} ${ws-window.class == 'workspace' ? '' : 'update overview_hover_name=\''}${ws-window.class == 'workspace' ? '' : ws-window.title}${ws-window.class == 'workspace' ? '' : '\' &'}"
+                        :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
+                        ; :onhover "${ws-window.class == 'workspace' ? '' : EWW_CMD} ${ws-window.class == 'workspace' ? '' : 'update overview_hover_name=\''}${ws-window.class == 'workspace' ? '' : ws-window.title}${ws-window.class == 'workspace' ? '' : '\' &'}"
                         (box
                           :class "overview-background"
                           ; Uncomment below to enable thumbnail previews (VERY SLOW)
@@ -118,7 +140,7 @@
                         :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
                         :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
                         :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
-                        :onhover "${ws-window.class == 'workspace' ? '' : EWW_CMD} ${ws-window.class == 'workspace' ? '' : 'update overview_hover_name=\''}${ws-window.class == 'workspace' ? '' : ws-window.title}${ws-window.class == 'workspace' ? '' : '\' &'}"
+                        :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
                         (box
                           :class "overview-background"
                           ; Uncomment below to enable thumbnail previews (VERY SLOW)
@@ -168,10 +190,23 @@
             :class "overview-results"
             :spacing 2
             (for entry in overview_results
-              (input
-                :value "${entry.name} >> ${entry.exec}"
-                :class "overview-search-result"
-                :onaccept "scripts/launchapp '${entry.exec}' &"
+              (box
+                :orientation "h"
+                ; (input
+                  ;   :value "${entry.icon}"
+                  ;   :class "overview-search-result"
+                  ;   :onaccept "scripts/launchapp '${entry.exec}' &"
+                ; )
+                (input
+                  :value "${entry.name} |  $ ${entry.exec}"
+                  :class "overview-search-result"
+                  :onaccept "scripts/launchapp '${entry.exec}' &"
+                )
+                ; (input
+                  ;   :value "${entry.exec}"
+                  ;   :class "overview-search-result"
+                  ;   :onaccept "scripts/launchapp '{}' &"
+                ; )
               )
             )
           )

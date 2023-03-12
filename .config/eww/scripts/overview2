@@ -3,18 +3,17 @@ dummy='{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"tit
 
 getwins() {
   hyprctlclients=$(hyprctl clients -j \
-    | grep -v '"xwayland": ' \
-    | grep -v '"grouped": ' \
-    | grep -v '"pid": ' \
-    | grep -v '"fullscreenMode": ' \
-    | grep -v '"monitor": ' \
+    | grep -v '"mapped": ' \
+    | grep -v '"hidden": ' \
     | grep -v '"floating": ' \
+    | grep -v '"monitor": ' \
+    | grep -v '"pid": ' \
+    | grep -v '"xwayland": ' \
+    | grep -v '"pinned":' \
     | grep -v '"fullscreen": ' \
-    | grep -v '"pinned":') 
-  # | grep -v ""name":")
-  # echo '-=-=-=- final output -=-=-=-'
-  # echo "$toprint"
-  # echo $(echo "$hyprctlclients")  # Print on one line only
+    | grep -v '"fullscreenMode": ' \
+    | grep -v '"fakeFullscreen": ' \
+    | grep -v '"grouped": ')
 
   
 
@@ -45,25 +44,35 @@ getwins() {
       workspace[wsid]+=","
     fi
 
+    # Get app icon
     if [ -f "scripts/cache/$clientclass" ]; then
         iconpath=$(cat scripts/cache/$clientclass)
         if [ ! -f "${iconpath}" ]; then # Cache refresh if icon doesnt exist
-            iconpath=$(scripts/get-icon.py "$clientclass")
+            iconpath=$(geticons "$clientclass" | head -n 1)
             echo "${iconpath}" > "scripts/cache/$clientclass"
         fi
     else
-        iconpath=$(scripts/get-icon.py "$clientclass")
+        iconpath=$(geticons "$clientclass" | head -n 1)
         echo "${iconpath}" > "scripts/cache/$clientclass"
     fi
-    if [[ ${iconpath} = "not found" ]]; then
-      iconpath=$(scripts/get-icon.py "$(echo "${classarr[i]##*.}" | tr '[:upper:]' '[:lower:]')")
-      if [[ ! ${iconpath} = "not found" ]]; then
+    if [[ ${iconpath} == "" ]]; then
+      # Retry with lowercase if icon not found
+      iconpath=$(geticons $(echo "$clientclass" | tr '[:upper:]' '[:lower:]' | sed 's/\ /-/g') | head -n 1)
+      if [[ ! ${iconpath} = "" ]]; then
         rm "scripts/cache/$clientclass"
         echo "${iconpath}" > "scripts/cache/$clientclass"
       else 
-        iconpath="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
-        rm "scripts/cache/$clientclass"
-        echo "${iconpath}" > "scripts/cache/$clientclass"
+        newname=$(scripts/iconpatch $clientclass)
+        iconpath=$(geticons "$newname" | head -n 1)
+        if [[ ! ${iconpath} = "" ]]; then
+          rm "scripts/cache/$clientclass"
+          echo "${iconpath}" > "scripts/cache/$clientclass"
+        else
+          # Fallback app icon, replace the path below to the fallback icon of your choice
+          iconpath="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
+          rm "scripts/cache/$clientclass"
+          echo "${iconpath}" > "scripts/cache/$clientclass"
+        fi
       fi
     fi
 
