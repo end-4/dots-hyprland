@@ -11,6 +11,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     sleep 0.3
     eww close onotify 
 else
+    ~/.config/eww/scripts/toggle-overview.sh --close &
     eww update anim_open_ontf=true
     eww open onotify
     ~/.config/eww/scripts/open-blurred.sh &

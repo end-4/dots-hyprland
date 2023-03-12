@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+if [[ "$1" == "code-url-handler" ]];then
+  echo 'code'
+elif [[ "$1" == "gnome-tweaks" ]];then
+  echo 'org.gnome.tweaks'
+fi
+

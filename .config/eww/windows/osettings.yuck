@@ -31,7 +31,7 @@
       :onmiddleclick "scripts/toggle-osettings.sh --close &"
       :onrightclick "scripts/toggle-osettings.sh --close &"
       (box
-        :style "min-height: 1px;"
+        :class "box-that-is-there" :style "min-height: 1px;"
       )
     )
     (eventbox
@@ -542,25 +542,41 @@
                   )
                 )
               )
+              ; Hyperland
               (revealer
-                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness reload config configuration blur size blur strength blur passes',oquery)}"
+                :reveal "${matches(oquery, 'hyperland')}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (button
-                    :halign "fill"
+                  (label
+                    :halign "start"
                     :wrap true
-                    :class "osettings-btn osettings-btn-neutral"
-                    :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf && rm temporary_config.conf &"
-                    "Reload config"
+                    :class "osettings-section"
+                    :text "Hyperland"
+                  )
+                  (revealer
+                    :reveal "${matches(oquery, 'hyperland')}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      (button
+                        :halign "fill"
+                        :wrap true
+                        :class "osettings-btn osettings-btn-neutral"
+                        :onclick "notify-send whyyyyyyy 😭"
+                        "Check the spelling and try again"
+                      )
+                    )
                   )
                 )
               )
               ; Hyprland
               (revealer
-                :reveal "${matches('hyprland options open the wiki guide help social hypr development discord',oquery)}"
+                :reveal "${matches('hyprland options open the wiki guide help social hypr development discord reload config configuration',oquery)}"
                 :transition "slidedown"
                 :duration "0ms"
                 (box
@@ -571,6 +587,22 @@
                     :wrap true
                     :class "osettings-section"
                     :text "Hyprland options"
+                  )
+                  (revealer
+                    :reveal "${matches('hyprland options reload config configuration',oquery)}"
+                    :transition "slidedown"
+                    :duration "0ms"
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      (button
+                        :halign "fill"
+                        :wrap true
+                        :class "osettings-btn osettings-btn-neutral"
+                        :onclick "cp ~/.config/hypr/hyprland.conf temporary_config.conf && cp temporary_config.conf ~/.config/hypr/hyprland.conf && rm temporary_config.conf &"
+                        "Reload config"
+                      )
+                    )
                   )
                   (revealer
                     :reveal "${matches('hyprland open the wiki guide help',oquery)}"

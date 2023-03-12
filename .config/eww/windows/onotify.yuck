@@ -364,8 +364,8 @@
       :space-evenly false
       (eventbox
         :class "onotify-toggle-button-${rev_ontf || right_hover}"
-        :onmiddleclick "${EWW_CMD} open --toggle dashboard &"
-        :onrightclick "${EWW_CMD} open --toggle dashboard &"
+        :onmiddleclick "scripts/toggle-dash.sh &"
+        :onrightclick "scripts/toggle-dash.sh &"
         :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
         (button
           :onclick "scripts/toggle-onotify.sh &";
@@ -415,8 +415,8 @@
       (eventbox
         :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
         :onclick "scripts/toggle-onotify.sh &"
-        :onmiddleclick "${EWW_CMD} open --toggle dashboard &"
-        :onrightclick "${EWW_CMD} open --toggle dashboard &"
+        :onmiddleclick "scripts/toggle-dash.sh &"
+        :onrightclick "scripts/toggle-dash.sh &"
         (box
           :class "real-onotify-toggle-button-${rev_ontf || right_hover}"
           ; (button

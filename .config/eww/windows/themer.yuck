@@ -107,7 +107,7 @@
 
 (defwindow themer
   :wm-ignore true
-  :stacking "fg"
+  :stacking "overlay"
   :monitor 0
   :geometry (geometry
     :x "300px"

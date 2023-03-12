@@ -143,7 +143,7 @@ $bg1: $surface0;
 }
 
 .bar {
-  background-color: $colorbg;
+  background-color: $colorbarbg;
   // background-color: rgba(25, 25, 25, 0.5);
   // background-color: transparent;
   min-height: 53px;
@@ -231,6 +231,7 @@ tooltip {
 
 .workspaces {
   margin-left: 10px;
+  background-color: transparent;
 }
 
 .player-controls {
@@ -294,7 +295,7 @@ tooltip {
 
 .ws-inactive {
   // background-color: tint($colorbg, 37%);
-  background-color: rgba(154, 152, 152, 0.7);
+  background-color: rgba(194, 192, 192, 0.7);
 }
 
 .ws-empty {
@@ -546,4 +547,8 @@ tooltip {
 
 progressbar>trough {
   min-width: 3px;
+}
+
+.box-that-is-there {
+  background-color: $colorbg;
 }
