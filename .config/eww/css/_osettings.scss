@@ -1,21 +1,20 @@
 .osettings-window {
     min-width: 529px;
     padding-top: 30px;
-    background-color: tint($colorbg, 12.5%);
-    // background-color: transparent;
+    background-color: tint($colorbg, 10%);
     color: $colortext;
     font-family: Torus;
 }
 
 .onotify-window {
     min-width: 529px;
-    background-color: tint($colorbg, 12.5%);
+    background-color: tint($colorbg, 10%);
     color: $colortext;
     font-family: Torus;
 }
 
 .osettings-separator {
-    background-color: $colorbg;
+    background-color: shade($colorbg, 5%);
     min-height: 6px;
     margin-top: 27px;
 }
@@ -23,7 +22,6 @@
 .osettings-content {
     // padding-top: 13px;
     padding-bottom: 10px;
-    background-color: tint($colorbg, 12.5%);
     color: $colortext;
     font-family: Torus;
 }
@@ -31,13 +29,11 @@
 .osettings-heading {
     padding-left: 28px;
     padding-right: 28px;
-    background-color: tint($colorbg, 12.5%);
     color: $colortext;
     font-family: Torus;
 }
 
 .osettings-title {
-    background-color: tint($colorbg, 12.5%);
     color: $colortext;
     font-family: Torus;
     font-size: 30pt;

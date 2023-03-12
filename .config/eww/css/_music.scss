@@ -37,7 +37,7 @@
 .music-box {
   @include rounding;
   padding-top: 24px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   background-position: top;
 }
 
@@ -134,7 +134,7 @@
   border-bottom-right-radius: 15px;
   min-width: 40px;
   min-height: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .music-source-icon {
@@ -154,7 +154,7 @@
   min-width: 160px;
   margin-top: 8px;
   padding-bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .osu-music-box-false {

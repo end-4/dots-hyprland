@@ -1,11 +1,14 @@
-//Auto generated color theme for image at: https://i.ytimg.com/vi/XjNAhJme_O8/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDE4uYD5oloF_5GsgT2h4mlB533Fg
-$colorbg: #162546;
-$colortext: #90D1F6;
-$color0: #68ABE3;
-$color1: #76CAF3;
-$color2: #8DB5E3;
-$color3: #90D1F6;
-$color4: #AED6F7;
-$color5: #AEE5FA;
-$color6: #deecf5;
-$color7: #90D1F6;
+//Auto generated color theme for image at: https://i1.sndcdn.com/artworks-000141682356-dsvdol-t80x80.jpg
+@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }
+@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
+$colorbarbg: #0c1d33;
+$colorbg: rgba(12,29,51,0.7);
+$colortext: #dee6ed;
+$color0: #4977AC;
+$color1: #5F8AB8;
+$color2: #739BC5;
+$color3: #849FBF;
+$color4: #92B1D2;
+$color5: #B1C9E2;
+$color6: #dee6ed;
+$color7: #849FBF;

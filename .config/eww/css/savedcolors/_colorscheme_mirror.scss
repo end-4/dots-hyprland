@@ -1,7 +1,8 @@
 //Auto generated color theme for image at: https://i1.sndcdn.com/artworks-000653264299-7lydij-t80x80.jpg
-@function bluetint($color, $percentage) { @return mix(#CDDFED, $color, $percentage); }
+@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }
 @function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
-$colorbg: #090727;
+$colorbarbg: #090727;
+$colorbg: rgba(9,7,39,0.7);
 $colortext: #e1e4f1;
 $color0: #926AC9;
 $color1: #2994E6;
