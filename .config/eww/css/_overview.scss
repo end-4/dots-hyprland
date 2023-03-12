@@ -1,7 +1,7 @@
 .overview-window {
   @include window font-family: 'Torus', 'Material Symbols Rounded';
   border-radius: 22px;
-  background-color: $colorbg;
+  background-color: $colorbarbg;
   // background-color: transparent;
   // border: 3px solid $color0;
   //padding: 5px;
@@ -48,6 +48,24 @@
 .overview-ws-window-content {
   border-radius: 11px;
   // background-color: rgba(135, 147, 163, 0.7);
+}
+
+.overview-topbar-icon {
+  min-width: 30px;
+  min-height: 30px;
+  margin: 5px;
+  background-size: contain;
+}
+
+.overview-topbar-button {
+  min-width: 30px;
+  min-height: 30px;
+  margin: 5px;
+  border-radius: 8px;
+}
+
+.overview-topbar-button:hover {
+  background-color: $overlay0;
 }
 
 .overview-icon {
@@ -97,13 +115,13 @@
 .overview-search-box {
   border-radius: 20px;
   border: 2px solid $colortext;
-  background-color: tint($colorbg, 10%);
+  background-color: tint($colorbarbg, 10%);
   color: $colortext;
   font-size: 15pt;
   min-height: 45px;
   min-width: 400px;
 
-  margin: 20px 0px;
+  margin: 20px 20px;
   padding: 2px 12px;
 
   caret-color: $colortext;
@@ -127,12 +145,13 @@
 .overview-search-result {
   border-radius: 20px;
   border: 2px solid;
-  background-color: tint($colorbg, 10%);
+  background-color: tint($colorbarbg, 10%);
   color: $colortext;
   font-size: 15pt;
   min-height: 45px;
   min-width: 400px;
   padding: 2px 12px;
+  margin: 0 5px;
 
   caret-color: transparent;
 

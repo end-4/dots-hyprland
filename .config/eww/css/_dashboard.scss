@@ -15,7 +15,7 @@
 .dash {
   min-height: 50px;
   min-width: 50px;
-  background-color: $colorbg;
+  background-color: $colorbarbg;
   border-radius: 15px;
   padding: 20px;
   margin: 5px;
@@ -65,14 +65,14 @@
 }
 
 .dash-button:hover {
-  background-color: tint($colorbg, 10%);
+  background-color: tint($colorbarbg, 10%);
 }
 .dash-button:focus {
-  background-color: tint($colorbg, 10%);
+  background-color: tint($colorbarbg, 10%);
 }
 
 .dash-button:active {
-  background-color: tint($colorbg, 20%);
+  background-color: tint($colorbarbg, 20%);
 }
 
 .dash-quote-content {
@@ -97,8 +97,8 @@
   min-width: 30px;
   margin: -5px;
   margin-left: 15px;
-  background-color: $colorbg;
-  border: 2px solid tint($colorbg, 10%);
+  background-color: $colorbarbg;
+  border: 2px solid tint($colorbarbg, 10%);
   border-radius: 10px;
   color: $colortext;
   font-size: 19pt;
@@ -109,8 +109,8 @@
   padding-right: 15px;
   min-width: 860px;
   margin: -5px;
-  background-color: $colorbg;
-  border: 2px solid tint($colorbg, 10%);
+  background-color: $colorbarbg;
+  border: 2px solid tint($colorbarbg, 10%);
   border-radius: 10px;
   color: $colortext;
   font-size: 15pt;
@@ -189,7 +189,7 @@
 }
 
 .dash-resource-tile {
-  // background-color: tint($colorbg, 20%);
+  // background-color: tint($colorbarbg, 20%);
   border-radius: 12px;
   padding-left: 15px;
   padding-right: 15px;
