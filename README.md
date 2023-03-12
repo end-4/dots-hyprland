@@ -16,7 +16,7 @@
 
 # Previews
  - osu!lazer
- ![dots-hyprland](./screenshot-16.png)
+ ![dots-hyprland](./screenshot-17.png)
  - linage
  ![dots-hyprland](./screenshot-9.png)
 
