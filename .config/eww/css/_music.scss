@@ -15,7 +15,7 @@
 .music-window {
   @include window;
   @include rounding;
-  background-color: $colorbg;
+  background-color: $colorbarbg;
   border: 3px solid;
   color: $colortext;
   margin: 3px;
@@ -145,11 +145,17 @@
 
 .song-button {
   color: $colortext;
+  border-radius: 9999px;
+  margin: 3px 3px;
+  min-width: 58px;
+  font-size: 36pt;
+}
+.song-button:hover {
+  background-color: $overlay0;
 }
 
 .music-button-box {
   font-family: 'Material Symbols Rounded';
-  font-size: 39pt;
   color: $colortext;
   min-width: 160px;
   margin-top: 8px;
@@ -163,7 +169,7 @@
   background-size: auto 65%;
   background-position: 35% 50%;
   background-image: url('images/svg/beatmaps.svg');
-  // background-color: $colorbg;
+  // background-color: $colorbarbg;
   background-repeat: no-repeat;
 }
 .osu-music-box-true {

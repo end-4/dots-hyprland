@@ -7,18 +7,14 @@ coverurl=$2
 
 coverpath="$IMGPATH"
 wal -c
-lightdark=$(cat ../scripts/workdir/__mode_light_dark.txt)
+lightdark=$(cat scripts/workdir/__mode_light_dark.txt)
 wal -i "$IMGPATH" -n -t -s -e $lightdark -q
 themejson=$(cat ~/.cache/wal/colors.json | gojq -c)
 themejson="${themejson::-1}"
 themejson="$themejson"',"source":"'"$3"'"}'
 echo $themejson
 
-if [ "$3" == "--just-generate" ]; then
-	printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
-else
-	printf '{"image": "eww_covers/'"$coverpath"'", "color": '"$themejson"'}\n'
-fi
+printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
 
 # Get color in rgb
 colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
@@ -30,7 +26,6 @@ rgb_bg='rgba('"$rgb_bg"','"$OPACITY"')'
 # echo $rgb_bg
 
 # notify-send 'eww' 'i found a url!'
-cd ..
 
 # Write to scss
 echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
@@ -84,7 +79,4 @@ echo '}' >> './tmp/colors_generated.conf'
 
 # Print json to stdout
 printf "$themejson" | gojq '.special.foreground' | sed 's/"//g' > 'tmp/_iconcolor.txt'
-
-# cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
-cd "eww_covers" || exit
 

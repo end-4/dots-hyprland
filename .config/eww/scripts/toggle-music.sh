@@ -9,6 +9,5 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
 else
     eww update anim_open_music=true
     eww open music
-    # hyprctl keyword decoration:dim_inactive true
     eww update music_open=true
 fi

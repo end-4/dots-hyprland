@@ -9,6 +9,5 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
 else
     eww update anim_open_themer=true
     eww open themer
-    # hyprctl keyword decoration:dim_inactive true
     eww update rev_themer=true
 fi

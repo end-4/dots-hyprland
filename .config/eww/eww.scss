@@ -230,7 +230,7 @@ tooltip {
 }
 
 .workspaces {
-  margin-left: 10px;
+  // margin-left: 10px;
   background-color: transparent;
 }
 
@@ -550,5 +550,5 @@ progressbar>trough {
 }
 
 .box-that-is-there {
-  background-color: $colorbg;
+  background-color: tint($colorbg, 10%);
 }

@@ -25,7 +25,7 @@ if [[ "$1" == ">"* ]]; then
   cd ~/.config/eww 
   if [[ "$1" == ">load"* ]]; then
     searching=$(echo "$1" | sed 's/>load //g'  | sed 's/>load//g')
-    profilenames=( $(ls css/savedcolors/ | grep .txt | sed 's/_iconcolor_//g' | sed 's/.txt//g' | fzf --filter="$searching" | head -n 10) )
+    profilenames=( $(ls css/savedcolors/ | grep .txt | sed 's/_iconcolor_//g' | sed 's/.txt//g' | fzf --filter="$searching") )
     echo -n '['
     for x in "${!profilenames[@]}"; do
       if [ "$x" != "0" ]; then

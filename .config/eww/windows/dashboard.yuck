@@ -113,8 +113,8 @@
                 ${anim_open_dash ? dash_curve_in : dash_curve_out}
                 ${rev_dash ? '' : 'margin-bottom: -1000px; margin-top: 1000px;'}
                 "
-                (label :xalign 0 :class "dash-quote-content clr3" :text "${quote_content[1]}")
-                (label :xalign 1 :class "dash-quote-author clr4" :text "${quote_author[1]}")
+                (label :xalign 0 :class "dash-quote-content clr3" :text "${quote_content[0]}")
+                (label :xalign 1 :class "dash-quote-author clr4" :text "${quote_author[0]}")
               )
             )
             (box ; Col 2
@@ -202,6 +202,7 @@
                   (box
                     :orientation "h"
                     :space-evenly false
+                    :class "clrt"
                     (label :xalign 0 :text " " :class "icon")
                     (label :xalign 0 :text "documents")
                   )
@@ -212,6 +213,7 @@
                   (box
                     :orientation "h"
                     :space-evenly false
+                    :class "clrt"
                     (label :xalign 0 :text " " :class "icon")
                     (label :xalign 0 :text "downloads")
                   )
@@ -222,6 +224,7 @@
                   (box
                     :orientation "h"
                     :space-evenly false
+                    :class "clrt"
                     (label :xalign 0 :text " " :class "icon")
                     (label :xalign 0 :text "pictures")
                   )
@@ -232,6 +235,7 @@
                   (box
                     :orientation "h"
                     :space-evenly false
+                    :class "clrt"
                     (label :xalign 0 :text " " :class "icon")
                     (label :xalign 0 :text "videos")
                   )

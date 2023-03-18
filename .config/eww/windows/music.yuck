@@ -22,14 +22,14 @@
           (label
             :class "music-title"
             :wrap false
-            :text "${mname.title == '' ? 'Not playing' : mname.title}"
+            :text "${music.title == '' ? 'Not playing' : music.title}"
             :style "color: ${mcover.color.colors.color4};"
             :limit-width 35
           )
           (label
             :class "music-artist"
             :wrap true
-            :text "${mname.artist}"
+            :text "${music.artist}"
             :style "color: ${mcover.color.colors.color4};"
           )
           (box
@@ -81,7 +81,7 @@
   :stacking "overlay"
   :monitor 0
   :geometry (geometry
-    :x "0px"
+    ; :x "53px"
     :y "53px"
     :width "558px"
     :height "191px"

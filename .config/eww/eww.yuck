@@ -1,3 +1,4 @@
+;##################### Modules #########################
 (include "./modules/activewindow.yuck")
 (include "./modules/audiolevels.yuck")
 (include "./modules/bluetooth.yuck")
@@ -12,6 +13,7 @@
 ; (include "./modules/volume.yuck")
 (include "./modules/workspaces.yuck")
 
+;##################### Windows #########################
 (include "./windows/bg-decor.yuck")
 (include "./windows/dynamic-bg.yuck")
 (include "./windows/dashboard.yuck")
@@ -23,13 +25,6 @@
 (include "./windows/onotify.yuck")
 ; (include "./windows/system-menu.yuck")
 (include "./windows/themer.yuck")
-
-(defvar popup "none")
-(defvar right_hover false)
-(defvar music_hover false)
-(defvar themer_hover false)
-(defvar music_open false)
-(defvar themer_open false)
 
 (defwidget separator []
   (box
@@ -58,15 +53,19 @@
 )
 
 (defwidget right []
-  (box
-    :space-evenly false
-    :halign "end"
-    :valign "start"
-    :class "bar"
-    (editmode)
-    (themer)
-    ; (user)
-    (onotify-button)
+  (eventbox
+    :onhover "${EWW_CMD} update right_hover=true"
+    :onhoverlost "${EWW_CMD} update right_hover=false"
+    (box
+      :space-evenly false
+      :halign "end"
+      :valign "start"
+      :class "bar"
+      (editmode)
+      (themer)
+      ; (user)
+      (onotify-button)
+    )
   )
 )
 
@@ -100,10 +99,12 @@
 (defwidget barbg []
   (box
     :class "barbg"
+    :stacking "overlay"
   )
 )
 
 (defwindow bar
+  :stacking "fg"
   :wm-ignore true
   :monitor 0
   :geometry (geometry

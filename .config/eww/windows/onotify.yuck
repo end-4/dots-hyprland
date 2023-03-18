@@ -11,7 +11,7 @@
       :onmiddleclick "scripts/toggle-onotify.sh --close &"
       :onrightclick "scripts/toggle-onotify.sh --close &"
       (box
-        :style "min-height: 1px;"
+        :class "box-that-is-there" :style "min-height: 1px;"
       )
     )
     (eventbox
@@ -358,12 +358,12 @@
 
 (defwidget onotify-button []
   (eventbox
-    :onhover "${EWW_CMD} update right_hover=true"
-    :onhoverlost "${EWW_CMD} update right_hover=false"
+    :onhover "${EWW_CMD} update ontf_hover=true"
+    :onhoverlost "${EWW_CMD} update ontf_hover=false"
     (box
       :space-evenly false
       (eventbox
-        :class "onotify-toggle-button-${rev_ontf || right_hover}"
+        :class "onotify-toggle-button-${rev_ontf || ontf_hover}"
         :onmiddleclick "scripts/toggle-dash.sh &"
         :onrightclick "scripts/toggle-dash.sh &"
         :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
@@ -418,7 +418,7 @@
         :onmiddleclick "scripts/toggle-dash.sh &"
         :onrightclick "scripts/toggle-dash.sh &"
         (box
-          :class "real-onotify-toggle-button-${rev_ontf || right_hover}"
+          :class "real-onotify-toggle-button-${rev_ontf || ontf_hover}"
           ; (button
             ;   :class "real-onotify-toggle-button-${rev_ontf}"
             ;   :onclick "scripts/toggle-onotify.sh";

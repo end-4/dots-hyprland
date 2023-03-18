@@ -1,5 +1,6 @@
 (defwidget checkboxhyprctl [value changevalue]
   (eventbox
+    :cursor "pointer"
     :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle"
     (box
       :class "osettings-checkbox-${value}"

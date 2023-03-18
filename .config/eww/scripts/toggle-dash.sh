@@ -12,6 +12,5 @@ else
     scripts/toggle-onotify.sh --close &
     eww update anim_open_dash=true
     eww open dashboard
-    # hyprctl keyword decoration:dim_inactive true
     eww update rev_dash=true
 fi

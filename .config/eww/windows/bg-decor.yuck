@@ -31,7 +31,7 @@
 
 (defwindow bg-decor
   :focusable false
-  :stacking "bg"
+  :stacking "bottom"
   :windowtype "normal"
   :wm-ignore true
   :geometry (geometry

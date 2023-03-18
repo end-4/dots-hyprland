@@ -10,9 +10,16 @@ if [[ "$1" == ">"* ]]; then
         scripts/colormanage load "${args[1]}"
     elif [[ "${args[0]}" == ">save" ]]; then
         scripts/colormanage save "${args[1]}"
+    elif [[ "${args[0]}" == ">light" ]]; then
+        scripts/togglelight light
+    elif [[ "${args[0]}" == ">dark" ]]; then
+        scripts/togglelight dark
+    elif [[ "${args[0]}" == ">wall" ]]; then
+        scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
+        scripts/colormanage get
     else
         # notify-send 'eww' 'Invalid command!'
-        true
+        false
     fi
 else 
     cd ~

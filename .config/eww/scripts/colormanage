@@ -1,12 +1,13 @@
 #!/usr/bin/bash
 
+cd ~/.config/eww/ || exit
 
 if [ $1 == "get" ]; then
   hyprctl keyword misc:disable_autoreload true
   cp './tmp/_iconcolor.txt' './css/_iconcolor.txt'
   cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
   cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf
-  applycolor=$(eww get mcover | gojq '.color.special.foreground' | sed 's/"//g')
+  applycolor=$(cat './css/_iconcolor.txt')
   scripts/applycolor "$applycolor"
 elif [ $1 == "default" ]; then
   hyprctl keyword misc:disable_autoreload true

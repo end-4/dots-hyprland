@@ -2,6 +2,8 @@
   (eventbox
     :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"
     :cursor "col-resize"
+    :onmiddleclick "scripts/toggle-compactmode.sh"
+    :onrightclick "scripts/toggle-compactmode.sh --enable --border 0"
     (checkbox
       :class "edit-mode-checkbox-${editing}"
       :onchecked "scripts/editmode.sh enable"
