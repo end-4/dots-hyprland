@@ -28,7 +28,15 @@
 (defvar rev_themer false)
 (defvar rev_dash false)
 (defvar open_overview false)
-; Dynamic animation: open = decelerate; close = accelerate
+(defvar popup "none")
+(defvar right_hover false)
+    (defvar ontf_hover false)
+(defvar music_hover false)
+(defvar themer_hover false)
+(defvar music_open false)
+(defvar themer_open false)
+
+; Dynamic animation: different for open and close
 (defvar anim_open_ostg true)
 (defvar anim_open_ontf true)
 (defvar anim_open_search true)
@@ -59,7 +67,7 @@
 (deflisten awin `scripts/activewin`)
 (deflisten audiojson `scripts/audiolevels`)
 (deflisten mcover 'scripts/music cover')
-(deflisten mname 'scripts/music name') ; Workaround for music player: wont run full music script when music window not open
+(deflisten mname `playerctl --follow metadata --format '{{ title }}'`) ; Workaround for music player: wont run full music script when music window not open
 (deflisten wsjsona `scripts/overview1`)
 (deflisten wsjsonb `scripts/overview2`)
 ; (deflisten wsthumbs `scripts/overview-thumbnails`) ; slow, so nope
@@ -71,7 +79,7 @@
 
 (defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
 (defpoll packages :interval "5m" `pacman -Q | wc -l`)
-(defpoll kernel :interval "5m" `uname -r`) 
-(defpoll username :initial "end" :interval "5m" `whoami`)  
-(defpoll hostname :initial "eavouros" :interval "5m" `uname -n`) 
-(defpoll wm :interval "5m" `echo $XDG_CURRENT_DESKTOP`) 
+(defpoll kernel :interval "5m" `uname -r`)
+(defpoll username :initial "end" :interval "5m" `whoami`)
+(defpoll hostname :initial "eavouros" :interval "5m" `uname -n`)
+(defpoll wm :interval "5m" `echo $XDG_CURRENT_DESKTOP`)

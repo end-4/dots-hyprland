@@ -1,1 +1,0 @@
-[{"comment":"Play this game on Steam","exec":"steam steam://rungameid/1262600","icon":"steam","name":"Need for Speed™ Rivals"},{"comment":"A wayland native terminal emulator (server)","exec":"foot --server","icon":"foot","name":"Foot Server"},{"comment":"A simple GUI for 'reflector'","exec":"/usr/bin/reflector-simple","icon":"endeavouros-icon","name":"Reflector Simple"}]

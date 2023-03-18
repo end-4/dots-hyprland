@@ -4,13 +4,10 @@ state=$(eww get open_overview)
 cd ~/.config/eww
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then 
-    eww close overview
-    eww update overview_query='' 
-    eww update open_overview=false
+    eww close overview &
+    eww update overview_query='' &
+    eww update open_overview=false &
 else
-    scripts/toggle-osettings.sh --close &
-    scripts/toggle-onotify.sh --close &
-    scripts/toggle-dash.sh --close &
     scripts/listentrynames.py &
     scripts/listentries.py &
     eww update overview_query=''  &

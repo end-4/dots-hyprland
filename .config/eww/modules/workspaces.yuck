@@ -22,7 +22,7 @@
       (button 
         :class "ws"
         :style "
-        margin-left:  ${10 + 31 * (activews - 1)}px;
+        margin-left:  ${31 * (activews - 1)}px;
         margin-right: ${31 * (10 - activews)}px;
         "
         (label :class "ws-text ws-text-active" :style "font-size: 13pt;" :text "${activews}")

@@ -38,8 +38,8 @@
           (label
             :class "music-title"
             :limit-width 50
-            :style "color: ${mcover.color.colors.color4};"
-            :text "${mname.title == '' ? 'Not playing' : mname.title}"
+            ; :style "color: ${mcover.color.colors.color4};"
+            :text "${mname == '' ? 'Not playing' : mname}"
           )
         )
       )

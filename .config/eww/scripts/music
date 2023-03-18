@@ -84,14 +84,18 @@ get_cover() {
 			fi
 
 			#Generate colors
-			../scripts/colorgen $IMGPATH $coverurl "$music_source"
+			cd ..
+			scripts/colorgen 'eww_covers/'$IMGPATH $coverurl "$music_source"
+			cd "eww_covers"
 		elif [ "$COVER_URL" = "" ]; then
 		    echo '{"image": "", "color": "$bg"}'
 		else
 			COVER_URL="${COVER_URL:7}"
 			cp "$COVER_URL"  "$IMGPATH"
 			
-			../scripts/colorgen $IMGPATH $COVER_URL "$music_source"
+			cd ..
+			scripts/colorgen '"eww_covers/'$IMGPATH'"' $coverurl "$music_source"
+			cd "eww_covers"
 		fi
 	done
 }
