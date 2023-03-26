@@ -113,18 +113,13 @@
             )
           )
         )
-        (box
-          :class "osettings-separator"
-          :orientation "v"
-          :space-evenly false
-        )
         (scroll
           ; :vscroll true
           ; :hscroll false
           ; :halign "fill"
-          :class "osettings-content"
+          :class "onotify-content"
           :valign "fill"
-          :style "min-height: 884px;"
+          :style "min-height: 866px;"
           (box
             :halign "fill"
             :class "osettings-scroll-bg"
@@ -136,15 +131,25 @@
               :space-evenly false
               :orientation "v"
               ; :class "sliders"
-              (label
-                :halign "start"
-                :wrap true
-                :class "osettings-section"
-                :text "Volume mixer"
+              (box
+                :orientation "h"
+                :space-evenly false
+                :spacing 10
+                (label
+                  :halign "start"
+                  :class "osettings-section-icon"
+                  :text ""
+                )
+                (label
+                  :halign "start"
+                  :wrap true
+                  :class "osettings-section"
+                  :text "Volume mixer"
+                )
               )
               (for i in audiojson
                 (eventbox
-                  :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")%"
+                  :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")% &"
                   :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
                   :onclick "pactl set-sink-input-volume ${i.sink} 0%"
                   (box
@@ -187,11 +192,21 @@
               )
             )
             ; Resource usage
-            (label
-              :halign "start"
-              :wrap true
-              :class "osettings-section"
-              :text "Resources"
+            (box
+              :orientation "h"
+              :space-evenly false
+              :spacing 10
+              (label
+                :halign "start"
+                :class "osettings-section-icon"
+                :text ""
+              )
+              (label
+                :halign "start"
+                :wrap true
+                :class "osettings-section"
+                :text "Resources"
+              )
             )
             (box
               :style "margin-bottom: 17px;"
@@ -265,11 +280,23 @@
             ; )
             ; (calendar)
             ;
+            ; Notifications
             (centerbox
-              (label
-                :class "osettings-section"
-                :halign "start"
-                :text "Notifications"
+              (box
+                :orientation "h"
+                :space-evenly false
+                :spacing 10
+                (label
+                  :halign "start"
+                  :class "osettings-section-icon"
+                  :text ""
+                )
+                (label
+                  :halign "start"
+                  :wrap true
+                  :class "osettings-section"
+                  :text "Notifications"
+                )
               )
               (box)
               (box
@@ -358,17 +385,15 @@
 
 (defwidget onotify-button []
   (eventbox
-    :onhover "${EWW_CMD} update ontf_hover=true"
-    :onhoverlost "${EWW_CMD} update ontf_hover=false"
     (box
       :space-evenly false
       (eventbox
-        :class "onotify-toggle-button-${rev_ontf || ontf_hover}"
+        :class "module-button"
         :onmiddleclick "scripts/toggle-dash.sh &"
         :onrightclick "scripts/toggle-dash.sh &"
         :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
         (button
-          :onclick "scripts/toggle-onotify.sh &";
+          :onclick "scripts/toggle-calendar.sh &"
           (box
             :space-evenly false
             :orientation "h"
@@ -377,12 +402,16 @@
               :class "module-timedate module"
               :orientation "v"
               :space-evenly false
+              :valign "center"
               (box
                 :space-evenly false
-                :halign "start"
+                :halign "end"
+                :class "timedate-time"
                 (label :text "${time.hour}" :class "clock hour")
+                ; (label :text "${time.hour % 12}" :class "clock hour")
                 (label :text ":" :class "clock")
                 (label :text {time.minute} :class "clock minute")
+                ; (label :text "${time.hour >= 12 ? 'pm' : 'am'}" :class "clock minute")
               )
               (box
                 :class "date"
@@ -391,38 +420,32 @@
               )
             )
             ; System levels
-            (eventbox
-              :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
-              :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
-              :onhover "${EWW_CMD} update sys_rev=true"
-              :onhoverlost "${EWW_CMD} update popup='none' sys_rev=false"
-              :onrightclick "${EWW_CMD} update force_sys_rev=${!force_sys_rev}"
-              :onmiddleclick "${EWW_CMD} open --toggle overview"
-              (box
-                :class "module"
-                :space-evenly false
-                :spacing 5
-                :halign "end"
-                (syscpu)
-                (sysmem)
-                (sysbatt)
-                ; (settingscog)
-              )
-            )
           )
         )
       )
       (eventbox
-        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
         :onclick "scripts/toggle-onotify.sh &"
         :onmiddleclick "scripts/toggle-dash.sh &"
         :onrightclick "scripts/toggle-dash.sh &"
+        :onhover "${EWW_CMD} update ontf_hover=true"
+        :onhoverlost "${EWW_CMD} update ontf_hover=false"
         (box
-          :class "real-onotify-toggle-button-${rev_ontf || ontf_hover}"
-          ; (button
-            ;   :class "real-onotify-toggle-button-${rev_ontf}"
-            ;   :onclick "scripts/toggle-onotify.sh";
-          ; )
+          :orientation "h"
+          :space-evenly false
+          :class "module-button module-button-${rev_ontf || ontf_hover}"
+          (box
+            ; :class "module"
+            :space-evenly false
+            :spacing 5
+            :halign "end"
+            (syscpu)
+            (sysmem)
+            (sysbatt)
+          )
+          (box
+            :class "real-onotify-toggle-button"
+          )
         )
       )
     )

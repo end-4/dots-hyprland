@@ -3,6 +3,7 @@
 icons=("" "" "")
 XDG_CACHE_HOME="$HOME/.cache"
 date="$XDG_CACHE_HOME/eww/osd_brightness.date"
+lock=0
 
 showhide() {
   # get dates
@@ -28,7 +29,7 @@ osd() {
     mkdir -p "$XDG_CACHE_HOME/eww"
   fi
   date +%s > "$date"
-  showhide
+  # showhide
 }
 
 osd_handler() {

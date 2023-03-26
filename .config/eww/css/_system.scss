@@ -36,7 +36,7 @@
 .membar:hover,
 .cpubar:hover,
 .batbar:hover {
-  border-top: 2px solid;
+  // border-top: 2px solid;
 }
 
 .batt-percentage {
@@ -115,6 +115,9 @@
 
 .sys-box {
   margin: .3em;
+  // background-color: tint($colorbarbg, 7%);
+  // border-radius: 20px;
+  // padding: 35px;
 
   box {
     margin-left: 1rem;

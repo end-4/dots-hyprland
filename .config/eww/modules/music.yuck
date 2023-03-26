@@ -9,10 +9,11 @@
     :onhoverlost "${EWW_CMD} update music_hover=false"
     (box
       :space-evenly false
+      :class "module-button module-button-${music_hover || music_open}"
       (box
         :space-evenly false
         :valign "start"
-        :class "osu-music-box-${music_hover || music_open}"
+        :class "osu-music-box"
         (box
           :class "osu-music-box-dummy"
         )
@@ -27,19 +28,38 @@
       )
       (revealer
         :transition "slideright"
-        :reveal "${music_reveal || osd_vol}"
+        :reveal "${music_reveal || osd_vol || (mname.title != '')}"
         :duration "300ms"
         :class "music-ctl-revealer"
         :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
         :limit-width 20
         (eventbox
-          :class "music-ctl-revealer music-ctl-revealer-${music_hover || music_open}"
+          :class "music-ctl-revealer"
           :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
-          (label
-            :class "music-title"
-            :limit-width 50
-            ; :style "color: ${mcover.color.colors.color4};"
-            :text "${mname == '' ? 'Not playing' : mname}"
+          (box
+            :space-evenly false
+            :class "music-ctl-revealer"
+            :orientation "v"
+            :valign "center"
+            (label
+              :class "music-title-bar"
+              :limit-width 50
+              :xalign 0
+              :style "font-size: 15pt; font-family: 'Torus';" ;color: ${mcover.color.colors.color7};
+              :text "${mname.title == '' ? 'Not playing' : mname.title}"
+            )
+            (revealer
+              :transition "slidedown"
+              :reveal "${mname.artist != ''}"
+              :duration "20ms"
+              (label
+                :class "music-artist-bar"
+                :limit-width 50
+                :xalign 0
+                :style "font-size: 11pt; font-family: 'Torus';"
+                :text "${mname.artist}"
+              )
+            )
           )
         )
       )

@@ -1,14 +1,80 @@
 .bg-decor-dow {
-  margin-top: 450px;
+  color: $colortext;
   font-family: Torus;
-  font-size: 64pt;
-  color : rgba(255, 255, 255, 0.8);
+  font-size: 50pt;
 }
 
 .bg-decor-date {
+  color: $colortext;
   font-family: Torus;
-  font-size: 26pt;
-  color : rgba(255, 255, 255, 0.8);
+  font-size: 23pt;
+}
+
+.bg-module {
+  background-color: shade($colorbg, 10%);
+  border-radius: 40px;
+  padding: 26px;
+  margin: 13px;
+}
+
+.bg-text {
+  color: $colortext;
+  font-family: 'Torus';
+}
+
+.bg-icon {
+  font-family: 'Material Symbols Rounded';
+  font-size: 18pt;
+  margin: 5px;
+  color: $color5;
+}
+
+.bg-title {
+  color: $colortext;
+  font-size: 18pt;
+  margin: 5px;
+}
+
+.bg-cool-text {
+  color: $colortext;
+  font-family: 'Config';
+  font-size: 15pt;
+  margin: 5px;
+}
+
+.bg-progress {
+  margin: 5px;
+  min-width: 450px;
+
+  trough {
+    border-radius: 9999px;
+    background-color: #24222A;
+    min-height: 10px;
+  }
+
+  highlight {
+    border-radius: 9999px;
+    background-color: $color3;
+  }
+}
+
+.bg-graph-container {
+  min-width: 150px;
+  min-height: 30px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  border-radius: 8px;
+  border: 1px solid $colortext;
+  margin: 5px;
+}
+
+.bg-graph {
+  color: $color3;
+  // background-color: $color3;
+}
+
+.bg-date {
+  min-width: 500px;
 }
 
 .bg-decor-input-left {
@@ -19,7 +85,7 @@
   padding-right: 20px;
   font-size: 15pt;
   min-height: 50px;
-  background-color : rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .bg-decor-input-right {
@@ -32,6 +98,6 @@
   // padding-bottom: 5px;
   font-size: 15pt;
   min-height: 50px;
-  background-color : rgba(255, 255, 255, 0.2);
-  color : rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.2);
 }

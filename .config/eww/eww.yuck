@@ -17,7 +17,7 @@
 (include "./windows/bg-decor.yuck")
 (include "./windows/dynamic-bg.yuck")
 (include "./windows/dashboard.yuck")
-; (include "./windows/calendar.yuck")
+(include "./windows/calendar.yuck")
 (include "./windows/music.yuck")
 (include "./windows/overview.yuck")
 (include "./windows/osd.yuck")
@@ -84,8 +84,6 @@
     ;   :space-evenly false
     ;   :orientation "v"
     (eventbox
-      :onhoverlost "${EWW_CMD} update popup='none'"
-      :onhover "${EWW_CMD} update popup='none'"
       (centerbox
         :class "bar"
         (left)

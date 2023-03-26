@@ -205,7 +205,7 @@
                     ;   :onaccept "scripts/launchapp '${entry.exec}' &"
                   ; )
                   (input
-                    :value "${entry.name} |  $ ${entry.exec}"
+                    :value "${entry.name}"
                     :class "overview-search-result"
                     :onaccept "scripts/launchapp '${entry.exec}' &"
                   )

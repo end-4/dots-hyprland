@@ -1,13 +1,18 @@
 .calendar-win {
   @include window;
-  background-color: $colorbg;
-  border: 3px solid $colortext;
+  background-color: $colorbarbg;
+  border: 3px solid $color3;
+  border-radius: 15px;
   color: $colortext;
   padding: .2em;
   font-family: 'Torus';
+  margin: 14px;
 }
 
 calendar {
+  * {
+    padding-top: 10px;
+  }
 
   :selected {
     color: $colortext;
@@ -29,17 +34,10 @@ calendar {
 
   .button {
     color: $colortext;
+    padding-top: 10px;
   }
 
   :indeterminate {
     color: $overlay0;
   }
-}
-
-.date-clock{
-  font-family: 'Torus';
-  background: transparent;
-  color: $colorbar;
-  padding-left: 13px;
-  padding-right: 13px;
 }

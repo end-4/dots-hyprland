@@ -21,13 +21,14 @@ def getProperties(target_file) -> None:
     # iconcmd = "/usr/bin/geticons " + str(entry.Icon)
     # iconcmd = "/usr/bin/geticons"
     # iconpath = str(subprocess.check_output(str(iconcmd), shell=True))
+    dirs = target_file.split('/')
+    entryname = dirs[-1]
 
     # return
     props = {
         "name": str(entry.Name.default_text),
-        "comment": str(entry.Comment.default_text),
-        "exec": str(entry.Exec),
-        "icon": str(entry.Icon)
+        # "icon": str(entry.Icon),
+        "exec": str('gtk-launch ' + entryname)
     }
     return props
 

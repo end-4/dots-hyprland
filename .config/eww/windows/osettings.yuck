@@ -80,17 +80,12 @@
             )
           )
         )
-        (box
-          :class "osettings-separator"
-          :orientation "v"
-          :space-evenly false
-        )
         (scroll
           ; :vscroll true
           ; :hscroll false
           ; :halign "fill"
           :class "osettings-content"
-          :style "min-height: 813px;"
+          :style "min-height: 801px;"
           (box
             :halign "fill"
             :class "osettings-scroll-bg"
@@ -109,11 +104,21 @@
                 (box
                   :orientation "v"
                   :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Quick settings"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Quick settings"
+                    )
                   )
                   (revealer
                     :reveal "${matches('quick settings volume audio',oquery)}"
@@ -122,36 +127,46 @@
                     (eventbox
                       :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
                       (box
-                        :orientation "v"
+                        :orientation "h"
                         :space-evenly false
-                        (centerbox
-                          :orientation "h"
-                          :space-evenly false
-                          :halign "fill"
-                          (label
-                            :halign "start"
-                            :wrap true
-                            :class "osettings-text"
-                            :text "Volume"
-                          )
-                          (box)
-                          ; (checkbox
-                            ;   :halign "end"
-                            ;   :class "osettings-checkbox"
-                            ;   :onchecked "scripts/volume mute SINK"
-                            ;   :onunchecked "scripts/volume mute SINK"
-                          ; )
-                          (checkboxcmd
-                            :value "${volume.audio}"
-                            :changecmd "scripts/volume mute SINK"
-                          )
+                        :spacing 10
+                        (label
+                          :wrap true
+                          :class "osettings-text-icon"
+                          :text ""
                         )
-                        (scale
-                          :halign "fill"
-                          :class "osettings-slider"
-                          :value "${volume.percent}"
-                          :tooltip "volume on ${volume.percent}%"
-                          :onchange "scripts/volume setvol SINK {}"
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          (centerbox
+                            :orientation "h"
+                            :space-evenly false
+                            :style "min-width: 417px;"
+                            (label
+                              :halign "start"
+                              :wrap true
+                              :class "osettings-text"
+                              :text "Volume"
+                            )
+                            (box)
+                            ; (checkbox
+                              ;   :halign "end"
+                              ;   :class "osettings-checkbox"
+                              ;   :onchecked "scripts/volume mute SINK"
+                              ;   :onunchecked "scripts/volume mute SINK"
+                            ; )
+                            (checkboxcmd
+                              :value "${volume.audio}"
+                              :changecmd "scripts/volume mute SINK"
+                            )
+                          )
+                          (scale
+                            :halign "fill"
+                            :class "osettings-slider"
+                            :value "${volume.percent}"
+                            :tooltip "volume on ${volume.percent}%"
+                            :onchange "scripts/volume setvol SINK {}"
+                          )
                         )
                       )
                     )
@@ -161,18 +176,29 @@
                     :transition "slidedown"
                     :duration "0ms"
                     (box
-                      :orientation "v"
+                      :orientation "h"
                       :space-evenly false
+                      :spacing 10
                       (label
-                        :halign "start"
                         :wrap true
-                        :class "osettings-text"
-                        :text "Brightness"
+                        :class "osettings-text-icon"
+                        :text ""
                       )
-                      (scale
-                        :class "osettings-slider"
-                        :value "${brightness.level}"
-                        :onchange "light -S {}"
+                      (box
+                        :orientation "v"
+                        :space-evenly false
+                        :style "min-width: 417px;"
+                        (label
+                          :halign "start"
+                          :wrap true
+                          :class "osettings-text"
+                          :text "Brightness"
+                        )
+                        (scale
+                          :class "osettings-slider"
+                          :value "${brightness.level}"
+                          :onchange "light -S {}"
+                        )
                       )
                     )
                   )
@@ -186,11 +212,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Session"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Session"
+                    )
                   )
                   (revealer
                     :reveal "${matches('session lock',oquery)}"
@@ -266,11 +302,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Mouse & Touchpad"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Mouse & Touchpad"
+                    )
                   )
                   (revealer
                     :reveal "${matches('mouse and touchpad touch pad speed mouse acceleration osu raw input sensitivity',oquery)}"
@@ -376,11 +422,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Blur"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Blur"
+                    )
                   )
                   (centerbox
                     :orientation "h"
@@ -472,11 +528,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Gaps"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Gaps"
+                    )
                   )
                   (revealer
                     :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
@@ -551,11 +617,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Hyperland"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Hyperland"
+                    )
                   )
                   (revealer
                     :reveal "${matches(oquery, 'hyperland')}"
@@ -583,11 +659,21 @@
                 (box
                   :space-evenly false
                   :orientation "v"
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Hyprland options"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Hyprland"
+                    )
                   )
                   (revealer
                     :reveal "${matches('hyprland options reload config configuration',oquery)}"
@@ -647,11 +733,21 @@
                 (box
                   :orientation "v"
                   :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Calendar"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Calendar"
+                    )
                   )
                   (calendar)
                 )
@@ -664,11 +760,21 @@
                 (box
                   :orientation "v"
                   :space-evenly false
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "osettings-section"
-                    :text "Super secret settings"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "osettings-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "osettings-section"
+                      :text "Super secret settings"
+                    )
                   )
                   (button
                     :halign "fill"
@@ -729,10 +835,10 @@
   :wm-ignore true
   :monitor 0
   :focusable true
+  :exclusive true
   :geometry (geometry
     :x "0px"
     :y "53px"
-    :width "0px"
     :height "1027px"
     :anchor "top left"
   )

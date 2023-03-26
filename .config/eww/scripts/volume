@@ -3,6 +3,7 @@
 volicons=("" "" "")
 XDG_CACHE_HOME="$HOME/.cache"
 date="$XDG_CACHE_HOME/eww/osd_vol.date"
+lock=0
 
 showhide() {
   # get dates
