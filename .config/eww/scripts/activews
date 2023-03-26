@@ -3,6 +3,10 @@
 focusedws=$(hyprctl activewindow -j | gojq '.workspace.id')
 echo $focusedws
 
+if [[ "$focusedws" == 'null' ]]; then
+  echo 1
+fi
+
 if [ "$1" == "--once" ]; then
   exit 0
 else

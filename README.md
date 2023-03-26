@@ -8,11 +8,14 @@
  - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
 
 # Branches
- - [ Current main style: osu!lazer, updated in main branch. All non-main branches are archives. ]
+ - [ Current main style: Material, updated in main branch. All non-main branches are archives. ]
+ - Material https://github.com/end-4/dots-hyprland/tree/material
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
  - linage https://github.com/end-4/dots-hyprland/tree/linage
 
 # Screenshots
+- Material
+ ![dots-hyprland](./screenshot-20.png)
  - osu!lazer
  ![dots-hyprland](./screenshot-17.png)
  - linage

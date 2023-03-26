@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+prevtitle=''
+prevartist=''
+
 get_status() {
 	s=$1
 	if [ "$s" = "Playing" ]; then
@@ -111,8 +114,11 @@ elif [ "$1" = "name" ]; then
 	echo '{"artist": "", "title": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
 	
-		len=$(playerctl metadata mpris:length)
-
+		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
+			continue
+		fi
+		title=$(scripts/limitlen "$title" 45)
+		
 		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \
 			--arg title "$(sanitize "$title")" \
@@ -123,7 +129,11 @@ else
 	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
 	
+		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
+			continue
+		fi
 		len=$(playerctl metadata mpris:length)
+		title=$(scripts/limitlen "$title" 40)
 
 		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \

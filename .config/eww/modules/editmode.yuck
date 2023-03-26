@@ -5,7 +5,7 @@
     :onmiddleclick "scripts/toggle-compactmode.sh"
     :onrightclick "scripts/toggle-compactmode.sh --enable --border 0"
     (checkbox
-      :class "edit-mode-checkbox-${editing}"
+      :class "module-button edit-mode-checkbox-${editing}"
       :onchecked "scripts/editmode.sh enable"
       :onunchecked "scripts/editmode.sh disable"
       :tooltip "Edit mode (middle-click to move, right-click to resize windows)"

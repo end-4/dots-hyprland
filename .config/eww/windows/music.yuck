@@ -81,7 +81,7 @@
   :stacking "overlay"
   :monitor 0
   :geometry (geometry
-    ; :x "53px"
+    :x "15px"
     :y "53px"
     :width "558px"
     :height "191px"

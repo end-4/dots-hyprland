@@ -1,5 +1,5 @@
 .music-area {
-  padding: 9px;
+  padding: 10px;
   @include rounding;
 }
 
@@ -56,6 +56,26 @@
   font-size: 19pt;
   color: $colortext;
   background-color: $overlay0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.music-title-bar { 
+  // font-weight: bold;
+  // background-color: red ;
+  font-family: 'Torus';
+  font-size: 18pt;  
+  color: $colortext;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.music-artist-bar { 
+  // background-color: blue;
+  font-family: 'Torus';
+  font-size: 13pt;
+  color: $colortext;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -158,27 +178,18 @@
   font-family: 'Material Symbols Rounded';
   color: $colortext;
   min-width: 160px;
-  margin-top: 8px;
+  margin-top: 6px;
   padding-bottom: 0px;
   background-color: rgba(0, 0, 0, 0.6);
 }
 
-.osu-music-box-false {
+.osu-music-box {
   min-width: 75px;
   min-height: 53px;
   background-size: auto 65%;
   background-position: 35% 50%;
   background-image: url('images/svg/beatmaps.svg');
   // background-color: $colorbarbg;
-  background-repeat: no-repeat;
-}
-.osu-music-box-true {
-  min-width: 75px;
-  min-height: 53px;
-  background-size: auto 65%;
-  background-position: 35% 50%;
-  background-color: $overlay0;
-  background-image: url('images/svg/beatmaps.svg');
   background-repeat: no-repeat;
 }
 
@@ -195,7 +206,7 @@
 
   trough {
     border-radius: 9999px;
-    background-color: #24222A;
+    background-color: #5c5b5b;
     min-height: 6px;
     // margin-left: 32px;
     // margin-right: 32px;

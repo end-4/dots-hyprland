@@ -149,7 +149,8 @@ $bg1: $surface0;
   min-height: 53px;
   // background-image: url("/home/end/.config/eww/images/topbar.png");
   color: $fg;
-  border-radius: 0px;
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
 
   label {
     font-size: 1.2rem;
@@ -194,11 +195,13 @@ tooltip {
   // font-weight: bold;
   // padding-left: 13px;
   color: $colorbar;
+  font-size: 20pt;
 }
 
 .clock {
   color: $colorbar;
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: 'Torus';
+  font-size: 19pt;
 }
 
 // .clock-module:hover {
@@ -210,9 +213,20 @@ tooltip {
   font-family: 'Torus', 'Material Symbols Rounded';
 }
 
+.timedate-time {
+  label {
+    font-size: 16pt;
+  }
+}
+
 .date {
   font-family: 'Torus', 'Material Symbols Rounded';
   color: $colorbar;
+
+  // margin-top: -2px;
+  label {
+    font-size: 12pt;
+  }
 }
 
 .bright-icon {
@@ -221,9 +235,9 @@ tooltip {
   padding-top: 4px;
 }
 
-.bright-icon:hover {
-  border-top: 2px solid;
-}
+// .bright-icon:hover {
+//   border-top: 2px solid;
+// }
 
 .module-bt {
   font-size: 1.2rem;
@@ -251,9 +265,9 @@ tooltip {
   padding-top: 4px;
 }
 
-.net-icon:hover {
-  border-top: 2px solid;
-}
+// .net-icon:hover {
+//   border-top: 2px solid;
+// }
 
 .my-separator {
   padding-left: 15px;
@@ -281,6 +295,7 @@ tooltip {
   margin-left: 2px;
   margin-right: 2px;
 }
+
 .ws-text-active {
   background-color: $colortext;
 }
@@ -352,7 +367,8 @@ tooltip {
 }
 
 .osettings-toggle-button-false {
-  min-width: 75px;
+  padding: 0px 11px;
+  min-width: 53px;
   min-height: 53px;
   background-color: transparent;
   background-image: url('images/svg/settings.svg');
@@ -363,16 +379,19 @@ tooltip {
   :hover {
     background-color: $overlay0;
   }
+  border-radius: 26px;
 }
 
 .osettings-toggle-button-true {
-  min-width: 75px;
+  padding: 0px 11px;
+  min-width: 53px;
   min-height: 53px;
   background-image: url('images/svg/settings.svg');
   background-size: auto 65%;
   background-position: center;
   background-repeat: no-repeat;
   background-color: $overlay0;
+  border-radius: 26px;
 }
 
 .onotify-toggle-button-false {
@@ -388,6 +407,7 @@ tooltip {
     background-color: $overlay0;
     // background-image: url('./images/lazer_icons/notifications_hover.png');
   }
+  border-radius: 26px;
 }
 
 .onotify-toggle-button-true {
@@ -400,7 +420,7 @@ tooltip {
   background-position: center;
 }
 
-.real-onotify-toggle-button-false {
+.real-onotify-toggle-button {
   min-width: 53px;
   min-height: 53px;
   background-image: url('./images/svg/forum.svg');
@@ -423,6 +443,19 @@ tooltip {
   background-repeat: no-repeat;
 }
 
+.module-button {
+  border-radius: 26px;
+  padding: 0px 5px;
+}
+
+.module-button:hover {
+  background-color: $overlay0;
+}
+
+.module-button-true {
+  background-color: $overlay0;
+}
+
 // .music-ctl-revealer:hover {
 //   border-top: 2px solid;
 // }
@@ -441,114 +474,10 @@ tooltip {
   min-width: 1920px;
 }
 
-.rect-progress-box {
-  min-height: 53px;
-  min-width: 53px;
-}
-
-.rect-progress-h-u {
-  // border: 1px solid purple;
-  padding: 0px;
-  min-width: 26px;
-  margin-top: 13.5px;
-  margin-bottom: 35.5px;
-  margin-right: -39.5px;
-  margin-left: 13.5px;
-
-  trough {
-    background-color: #5c5b5b;
-    min-height: 6px;
-  }
-
-  highlight {
-    background-color: $colortext;
-  }
-
-  slider {
-    min-height: 0px;
-    min-width: 0px;
-    background-color: transparent;
-  }
-}
-
-.rect-progress-h-d {
-  // border: 1px solid purple;
-  padding: 0px;
-  min-width: 26px;
-  margin-bottom: 13.5px;
-  margin-top: 36.5px;
-  margin-right: -22.5px;
-  margin-left: 2.5px;
-
-  trough {
-    background-color: #5c5b5b;
-    min-height: 6px;
-  }
-
-  highlight {
-    background-color: $colortext;
-  }
-
-  slider {
-    min-height: 0px;
-    min-width: 0px;
-    background-color: transparent;
-  }
-}
-
-.rect-progress-v-r {
-  // border: 1px solid purple;
-  padding: 0px;
-  min-width: 26px;
-  margin-top: 13.5px;
-  margin-bottom: 13.5px;
-  margin-right: -39.5px;
-  margin-left: 25.5px;
-
-  trough {
-    background-color: #5c5b5b;
-    min-width: 6px;
-  }
-
-  highlight {
-    background-color: $colortext;
-  }
-
-  slider {
-    min-height: 0px;
-    min-width: 0px;
-    background-color: transparent;
-  }
-}
-
-.rect-progress-v-l {
-  padding: 0px;
-  min-width: 26px;
-  margin-top: 13.5px;
-  margin-bottom: 13.5px;
-  margin-right: -2.5px;
-  margin-left: -16.5px;
-
-  trough {
-    background-color: #5c5b5b;
-    min-width: 6px;
-  }
-
-  highlight {
-    background-color: $colortext;
-  }
-
-  slider {
-    min-height: 0px;
-    min-width: 0px;
-    background-color: transparent;
-  }
-}
-
-progressbar>trough {
-  min-width: 3px;
+progressbar > trough {
+  min-width: 30px;
 }
 
 .box-that-is-there {
-  background-color: tint($colorbg, 10%);
+  background-color: transparent;
 }

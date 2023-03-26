@@ -34,7 +34,7 @@
 .system-row {
   font-family: Torus;
   // margin: .5rem .7rem;
-  margin-top: 20px;
+  margin-top: 27px;
 
   .airplane-box button {
     padding: 1rem 3rem;
@@ -52,12 +52,18 @@
 
 .element {
   font-family: 'Torus';
-  @include rounding;
+  border-top-left-radius: 31px;
+  border-top-right-radius: 31px;
+  border-bottom-left-radius: 31px;
+  border-bottom-right-radius: 10px;
   background: $surface0;
   margin: .3rem;
 
   button {
-    @include rounding;
+    border-top-left-radius: 31px;
+    border-top-right-radius: 31px;
+    border-bottom-left-radius: 31px;
+    border-bottom-right-radius: 10px;
     padding: 1rem;
 
     label {
@@ -81,6 +87,7 @@
     margin-right: -1rem;
     min-width: 25.8rem;
   }
+
   scale trough {
     background-color: $bg1;
     border-radius: 24px;

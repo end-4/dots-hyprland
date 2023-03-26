@@ -125,7 +125,7 @@
     :onhover "${EWW_CMD} update themer_hover=true"
     :onhoverlost "${EWW_CMD} update themer_hover=false"
     (button
-      :class "themer-button-${themer_hover || themer_open}"
+      :class "module-button themer-button-${themer_hover || themer_open}"
       :onclick "scripts/toggle-themer.sh"
       :style "font-family: 'Material Symbols Rounded';"
       ''

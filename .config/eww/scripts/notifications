@@ -51,7 +51,7 @@ toggle() {
 }
 
 clear() {
-  systemctl --user restart dunst
+  dunstctl history-clear
   echo "icon_change" > $lockinfo
 }
 
