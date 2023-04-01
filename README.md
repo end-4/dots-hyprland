@@ -3,6 +3,15 @@
     <h3></h3>
 </div>
 
+<div align="center">
+
+![](https://img.shields.io/github/last-commit/end-4/dots-hyprland?&style=for-the-badge&color=FFB1C8&logoColor=D9E0EE&labelColor=292324)
+![](https://img.shields.io/github/stars/end-4/dots-hyprland?style=for-the-badge&logo=starship&color=FFB686&logoColor=D9E0EE&labelColor=292324)
+[![](https://img.shields.io/github/repo-size/end-4/dots-hyprland?color=CAC992&label=SIZE&logo=codesandbox&style=for-the-badge&logoColor=D9E0EE&labelColor=292324)](https://github.com/end-4/hyprland)
+</a>
+
+</div>
+
  - _Please note that Hyprland doesn't have an "e" in the name tyty_
  - This dynamic, pywal-powered rice may changes colors/wallpapers often, but the bar layout should be similar to the preview
  - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
