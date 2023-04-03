@@ -62,7 +62,7 @@ sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMag
 - AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
 ```
 [ yay as AUR helper ]
-yay -S python-material-color-utilities geticons
+yay -S python-material-color-utilities geticons gtklock-runshell-module gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module
 ```
  - Other cool stuff that I use
 ```
