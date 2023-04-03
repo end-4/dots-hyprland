@@ -34,19 +34,17 @@
  - **Backup if you need**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `Binaries` to a $PATH, (do NOT replace if asked)
- - gnome-text-editor themes: Structured like root, not home (you can ask gnome devs why it's stored there don't ask me)
- - **Install font: Product Sans** (for linage branch)
+ - gnome-text-editor themes: Structured like root, go inside and copy...
+ - Install font Product Sans (for linage branch)
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
 
 # eww instructions
- - `monitor=eDP-1, addreserved, `y`, 0, 0, 0` (replace "eDP-1" with your monitor name) (`y=53` for osu!lazer branch, `y=32` for linage branch)
- - Start with `eww open bar && eww open bg-decor` (or put the config somewhere and source it)
+ - Start eww with `eww daemon && eww open bar && eww open bg-decor`
  - For linage branch, also run: `eww open barbg`
  - -=-=-=- notes for usage -=-=-=-
- - Music control on the music button: Middle-click for Play/Pause, Right-click for Next track
- - Scroll the top-right/top-left corner to change volume
- - To open Workspace Overview, run `eww open overview` or middle-click the workspace indicators (or press Super+Tab if you use for some reason decide to use my keybinds)
+ - Music control on the music button and on topleft corner: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
+ - To open the Overview, middle/right-click the workspace indicators or run `eww open overview`
 
 # Dependencies
  - Python
