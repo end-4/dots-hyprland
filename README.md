@@ -59,7 +59,7 @@ bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light network
 [ Command for: Fedora ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi qalc
 ```
-- AUR Packages
+- AUR Packages (ughhh why not arch?) (check their AUR pages and click "Upstream URL for their repos")
 ```
 [ yay as AUR helper ]
 yay -S python-material-color-utilities geticons
