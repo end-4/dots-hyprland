@@ -11,8 +11,6 @@
 </a>
 
 </div>
-
- - _Please note that Hyprland doesn't have an "e" in the name tyty_
  - This dynamic, pywal-powered rice may changes colors/wallpapers often, but the bar layout should be similar to the preview
  - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
 
