@@ -12,17 +12,23 @@
 
 </div>
 
- - This dynamic, pywal-powered rice may changes colors/wallpapers often, but the bar layout should be similar to the preview
- - Thanks fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
+# Main features
+ - An overview widget that shows window positions in workspaces
+ - Can switch to Windows 11 mode hehee
+ - Powered by Pywal and Material You
+ - Sexy animations
+ - Made by a literal Asian
 
 # Branches
- - [ Current main style: Material, updated in main branch. All non-main branches are archives. ]
+ - [ Current main style: Material/Windows, updated in main branch. All non-main branches are archives. ]
+ - Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes
  - Material https://github.com/end-4/dots-hyprland/tree/material
  - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
  - linage https://github.com/end-4/dots-hyprland/tree/linage
+ - Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio
 
-# Screenshots
-- Material
+# Screenshots 
+ - Material
  ![dots-hyprland](./screenshot-20.png)
  - osu!lazer
  ![dots-hyprland](./screenshot-17.png)
@@ -67,3 +73,17 @@ yay -S python-material-color-utilities geticons gtklock-runshell-module gtklock-
 ```
 tesseract
 ```
+
+# Attribution
+ - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
+ - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always). System64, Mathisbuilder, BeardWarrior, to name a few.
+ - Bing AI for helping me breeze through the process of learning different libraries
+ - Maybe more, but I don't remember it all.. thanks anyway
+
+# Some inspirations
+ - osu!lazer
+ - Windows 11
+ - Material 3
+ - Valorant's download indicator _(yes seriously xD)_
+ - TETR.IO (web game) (tetrio branch)
+ - LinageOS (linage branch)
