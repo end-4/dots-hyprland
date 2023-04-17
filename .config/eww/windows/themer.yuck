@@ -8,7 +8,7 @@
       :onclick "scripts/toggle-themer.sh --close &"
       (box
         :style "
-        ${rev_themer ? '' : 'margin-top: -400px;'}
+        ${rev_themer ? '' : 'margin-top: -600px;'}
         ${anim_open_themer ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
         min-height: 1px;
         "
@@ -21,7 +21,7 @@
         :orientation "v"
         :class "themer-menu-box"
         :style "
-        ${rev_themer ? '' : 'margin-top: -400px;'}
+        ${rev_themer ? '' : 'margin-top: -600px;'}
         ${anim_open_themer ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
         "
         (box
@@ -84,7 +84,7 @@
         )
         (label
           :class "themer-title"
-          :text "Current pallete"
+          :text "Pywal Colors"
           :xalign 0
         )
         (box
@@ -99,6 +99,42 @@
           (box :class "themer-color-preview preview-5" )
           (box :class "themer-color-preview preview-6" )
           (box :class "themer-color-preview preview-7" )
+        )
+        (label
+          :class "themer-title"
+          :text "Primary, secondary"
+          :xalign 0
+        )
+        (box
+          :spacing 3
+          :orientation "h"
+          :style "padding: 7px;"
+          (box :class "themer-color-preview preview-primary" )
+          (box :class "themer-color-preview preview-onPrimary" )
+          (box :class "themer-color-preview preview-primaryContainer" )
+          (box :class "themer-color-preview preview-onPrimaryContainer" )
+          (box :class "themer-color-preview preview-secondary" )
+          (box :class "themer-color-preview preview-onSecondary" )
+          (box :class "themer-color-preview preview-secondaryContainer" )
+          (box :class "themer-color-preview preview-onSecondaryContainer" )
+        )
+        (label
+          :class "themer-title"
+          :text "Tertiary, bg, surface"
+          :xalign 0
+        )
+        (box
+          :spacing 3
+          :orientation "h"
+          :style "padding: 7px;"
+          (box :class "themer-color-preview preview-tertiary" )
+          (box :class "themer-color-preview preview-onTertiary" )
+          (box :class "themer-color-preview preview-tertiaryContainer" )
+          (box :class "themer-color-preview preview-onTertiaryContainer" )
+          (box :class "themer-color-preview preview-background" )
+          (box :class "themer-color-preview preview-onBackground" )
+          (box :class "themer-color-preview preview-surface" )
+          (box :class "themer-color-preview preview-onSurface" )
         )
       )
     )
@@ -128,7 +164,11 @@
       :class "module-button themer-button-${themer_hover || themer_open}"
       :onclick "scripts/toggle-themer.sh"
       :style "font-family: 'Material Symbols Rounded';"
-      ''
+      (image
+        :path "images/svg/beatmappacks.svg"
+        :image-width 33
+        :image-height 33
+      )
     )
   )
 )

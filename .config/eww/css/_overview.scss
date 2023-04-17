@@ -9,9 +9,9 @@
 
 .overview-window-title {
   font-size: 15pt;
-  color: $colortext;
+  color: $onPrimaryContainer;
   border-radius: 15px;
-  background-color: $surface0;
+  background-color: tint($surface, 5%);
   margin: 4px;
   padding: 4px;
   min-height: 30px;
@@ -27,21 +27,24 @@
 .overview-ws {
   border: 2px solid;
   border-radius: 15px;
-  background-color: $surface0;
+  background-color: tint($surface, 5%);
   margin: 4px;
 }
 
 .overview-ws-true {
-  color: $color3;
+  color: $primary;
 }
 .overview-ws-false {
   color: transparent;
 }
 
 .overview-ws-window {
-  border: 2px solid $color0;
+  // border: 2px solid transparent;
+  // background-color: rgba(108, 112, 134, 1);
   border-radius: 15px;
-  background-color: $overlay0;
+  background-color: shade($overlay0, 2%);
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
   // //margin: 3px; 
 }
 
@@ -95,7 +98,7 @@
   font-size: 25pt;
   border-radius: 11px;
   background-color: $overlay0;
-  color: $colortext;
+  color: $onBackground;
   //margin: 10px;
   min-height: 40px;
   min-width: 40px;
@@ -113,10 +116,10 @@
 }
 
 .overview-search-box {
+  border: 2px solid;
   border-radius: 20px;
-  border: 2px solid $colortext;
   background-color: tint($colorbarbg, 10%);
-  color: $colortext;
+  color: $onBackground;
   font-size: 15pt;
   min-height: 45px;
   min-width: 400px;
@@ -124,15 +127,14 @@
   margin: 20px 20px;
   padding: 2px 12px;
 
-  caret-color: $colortext;
-
+  caret-color: $onBackground;
   selection {
     background-color: rgba(154, 152, 152, 0.5);
   }
 }
 
 .overview-search-box:focus {
-  color: $color4;
+  color: $tertiary;
 }
 
 .overview-results {
@@ -143,14 +145,14 @@
 }
 
 .overview-search-result {
-  border-radius: 20px;
-  border: 2px solid;
+  border-radius: 15px;
   background-color: tint($colorbarbg, 10%);
-  color: $colortext;
+  color: $onBackground;
   font-size: 15pt;
   min-height: 45px;
   min-width: 400px;
   padding: 2px 12px;
+  padding-left: 57px;
   margin: 0 5px;
 
   caret-color: transparent;
@@ -159,8 +161,14 @@
     background-color: transparent;
   }
 }
+.overview-search-result-icon {
+  border-radius: 15px;
+  min-height: 45px;
+  min-width: 45px;
+  padding: 2px 12px;
+}
 
 .overview-search-result:focus{
-  color: white;
-  background-image: linear-gradient(to right, $color0 0%, $color4 100%);
+  color: $tertiary;
+  background-color: $tertiaryContainer;
 }

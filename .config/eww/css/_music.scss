@@ -188,7 +188,7 @@
   min-height: 53px;
   background-size: auto 65%;
   background-position: 35% 50%;
-  background-image: url('images/svg/beatmaps.svg');
+  // background-image: url('images/svg/beatmaps.svg');
   // background-color: $colorbarbg;
   background-repeat: no-repeat;
 }
@@ -196,6 +196,8 @@
 .osu-music-box-dummy {
   min-width: 50px;
   min-height: 53px;
+  margin-right: -6px;
+  margin-left: 6px;
 }
 
 .osu-music-slider {

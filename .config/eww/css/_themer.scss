@@ -3,7 +3,7 @@
     min-width: 53px;
     color: $colortext;
     font-family: Material Symbols Rounded;
-    background-image: url('images/svg/beatmappacks.svg');
+    // background-image: url('images/svg/beatmappacks.svg');
     background-size: auto 65%;
     background-position: center;
 }
@@ -14,7 +14,7 @@
     color: $colortext;
     font-family: Material Symbols Rounded;
     background-color: $overlay0;
-    background-image: url('images/svg/beatmappacks.svg');
+    // background-image: url('images/svg/beatmappacks.svg');
     background-size: auto 65%;
     background-position: center;
 }
@@ -24,7 +24,7 @@
     min-width: 53px;
     color: $colortext;
     font-family: Material Symbols Rounded;
-    background-image: url('images/svg/beatmappacks.svg');
+    // background-image: url('images/svg/beatmappacks.svg');
     background-size: auto 65%;
     background-position: center;
 }
@@ -137,3 +137,55 @@
 .preview-7 {
     background-color: $color7;
 }
+
+.preview-primary {
+    background-color: $primary;
+}
+.preview-onPrimary {
+    background-color: $onPrimary;
+}
+.preview-primaryContainer {
+    background-color: $primaryContainer;
+}
+.preview-onPrimaryContainer {
+    background-color: $onPrimaryContainer;
+}
+.preview-secondary {
+    background-color: $secondary;
+}
+.preview-onSecondary {
+    background-color: $onSecondary;
+}
+.preview-secondaryContainer {
+    background-color: $secondaryContainer;
+}
+.preview-onSecondaryContainer {
+    background-color: $onSecondaryContainer;
+}
+.preview-tertiary {
+    background-color: $tertiary;
+}
+.preview-onTertiary {
+    background-color: $onTertiary;
+}
+.preview-tertiaryContainer {
+    background-color: $tertiaryContainer;
+}
+.preview-onTertiaryContainer {
+    background-color: $onTertiaryContainer;
+}
+.preview-background {
+    background-color: $colorbarbg;
+}
+.preview-onBackground {
+    background-color: $onBackground;
+}
+.preview-surface {
+    background-color: $surface;
+}
+.preview-onSurface {
+    background-color: $onSurface;
+}
+
+
+

@@ -1,0 +1,44 @@
+(defwidget winpower []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winpowermenu ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winpowermenu ? '' : 'margin-bottom: -700px;'}
+    "
+    (eventbox
+      :valign "start"
+      :onclick "scripts/toggle-winpowermenu.sh --close &"
+      :onmiddleclick "scripts/toggle-winpowermenu.sh --close &"
+      :onrightclick "scripts/toggle-winpowermenu.sh --close &"
+      (box
+        :class "box-that-is-there" :style "min-height: 1px;"
+      )
+    )
+    (box
+      :class "winwin"
+      :width 300
+      :height 300
+      :space-evenly false
+      (button
+        :halign "end"
+        :onclick "scripts/toggle-winactions.sh --close settings &"
+        :class "winactions-bottom-button wincog winicon"
+      )
+    )
+  )
+)
+
+(defwindow winpowermenu
+  :wm-ignore true
+  :monitor 0
+  :focusable true
+  :geometry (geometry
+    :x "680px"
+    :y "66px"
+    :height 200
+    :width 200
+    :anchor "bottom left"
+  )
+  (winpower)
+)

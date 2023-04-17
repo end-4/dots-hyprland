@@ -74,6 +74,7 @@
                   :valign "center"
                   :class "dash-user-pic"
                   :style "background-image: url('/var/lib/AccountsService/icons/${username == "" ? username_default : username}');"
+                  ; :style "background-image: url('${waifu}');"
                 )
                 (box
                   :orientation "v" :space-evenly false :valign "center"
@@ -113,8 +114,8 @@
                 ${anim_open_dash ? dash_curve_in : dash_curve_out}
                 ${rev_dash ? '' : 'margin-bottom: -1000px; margin-top: 1000px;'}
                 "
-                (label :xalign 0 :class "dash-quote-content clr3" :text "${quote_content[0]}")
-                (label :xalign 1 :class "dash-quote-author clr4" :text "${quote_author[0]}")
+                (label :xalign 0 :class "dash-quote-content clr3" :text "${quote_content[1]}")
+                (label :xalign 1 :class "dash-quote-author clr4" :text "${quote_author[1]}")
               )
             )
             (box ; Col 2

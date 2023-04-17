@@ -30,11 +30,11 @@ getwins() {
   # echo $hyprctlclients | gojq -c '.[]'
 
   IFS=$'\n'
-  clientsarr=( $(echo $hyprctlclients | gojq -c '.[]') )
+  clientsarr=( $(echo $hyprctlclients | gojq -c -M '.[]') )
 
   #For every window
   for client in "${clientsarr[@]}"; do
-    wsid=$(echo $client | gojq -c '.workspace.id')
+    wsid=$(echo $client | gojq -c -M '.workspace.id')
     ((wsid-=1))
     if [[ "$wsid" == "-100" ]]; then 
       continue
@@ -43,12 +43,12 @@ getwins() {
       workspace[wsid]+=","
     fi
 
-    clientclass=$(echo $client | gojq '.class' | sed 's/"//g')
+    clientclass=$(echo $client | gojq -r '.class')
     iconpath=''
     thumbnailpath=''
 
     # Get thumbnail
-    clientaddress=$(echo $client | gojq '.address' | sed 's/"//g')
+    clientaddress=$(echo $client | gojq -r '.address')
     atx=$(echo $client | gojq -c '.at[0]')
     aty=$(echo $client | gojq -c '.at[1]')
     sizex=$(echo $client | gojq -c '.size[0]')

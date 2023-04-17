@@ -4,7 +4,7 @@
     :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     :onclick "scripts/toggle-music.sh &"
     :onmiddleclick "playerctl play-pause"
-    :onrightclick "playerctl next"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onhover "${EWW_CMD} update music_hover=true"
     :onhoverlost "${EWW_CMD} update music_hover=false"
     (box
@@ -14,7 +14,10 @@
         :space-evenly false
         :valign "start"
         :class "osu-music-box"
-        (box
+        (image
+          :path "images/svg/beatmaps.svg"
+          :image-width 33
+          :image-height 33
           :class "osu-music-box-dummy"
         )
         (scale
@@ -28,7 +31,7 @@
       )
       (revealer
         :transition "slideright"
-        :reveal "${music_reveal || osd_vol || (mname.title != '')}"
+        :reveal "${(music_reveal || osd_vol || (mname.title != '')) && !focus}"
         :duration "300ms"
         :class "music-ctl-revealer"
         :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"

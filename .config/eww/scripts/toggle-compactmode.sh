@@ -3,6 +3,7 @@
 state=$(hyprctl getoption decoration:rounding -j | gojq '.int')
 
 if [[ "$state" != "0" || "$1" == "--enable" ]]; then
+    eww update compact=true &
     hyprctl keyword decoration:rounding 0 
     hyprctl keyword general:gaps_in 0 
     hyprctl keyword general:gaps_out 0
@@ -12,5 +13,6 @@ if [[ "$state" != "0" || "$1" == "--enable" ]]; then
         hyprctl keyword general:border_size 1
     fi
 else
+    eww update compact=false &
     hyprctl reload
 fi

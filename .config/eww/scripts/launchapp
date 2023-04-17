@@ -17,6 +17,12 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">wall" ]]; then
         scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
         scripts/colormanage get
+    elif [[ "${args[0]}" == ">segs" ]]; then
+        python3 scripts/waifupics.py --segs
+    elif [[ "${args[0]}" == ">uwu" ]]; then
+        python3 scripts/waifupics.py
+    elif [[ "${args[0]}" == ">r" ]]; then
+        pkill eww && eww daemon && eww open bg-decor && eww open bar
     else
         # notify-send 'eww' 'Invalid command!'
         false

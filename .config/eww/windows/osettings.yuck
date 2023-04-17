@@ -24,7 +24,7 @@
     :orientation "v"
     :space-evenly false
     :style "
-    ${anim_open_ostg ? 'transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${anim_open_ostg ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     ${rev_ostg ? '' : 'margin-left: -533px;'}
     "
     (eventbox
@@ -822,6 +822,32 @@
                   ; )
                 )
               )
+              ; Waifu
+              ; (revealer
+                ;   :reveal "${oquery == 'uwu' || oquery == 'sex'}"
+                ;   :transition "slidedown"
+                ;   :duration "0ms"
+                ;   (box
+                  ;     :space-evenly false
+                  ;     :orientation "v"
+                  ;     (input
+                    ;       :wrap true
+                    ;       :class "osettings-btn osettings-btn-neutral"
+                    ;       :style "padding: 0 20px;"
+                    ;       :onaccept "python3 scripts/waifupics.py &"
+                    ;       "segs"
+                  ;     )
+                  ;     (box
+                    ;       :valign "center"
+                    ;       :width 400
+                    ;       :height 400
+                    ;       :class "osettings-waifu"
+                    ;       :style "
+                    ;       background-image: url('eww_covers/waifu');
+                    ;       "
+                  ;     )
+                ;   )
+              ; )
             )
           )
         )
@@ -849,11 +875,17 @@
   (eventbox
     :class "osettings-toggle-button-false"
     :onmiddleclick "playerctl play-pause"
-    :onrightclick "playerctl next"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     (button
       :class "osettings-toggle-button-${rev_ostg}"
       :onclick "scripts/toggle-osettings.sh &"
+      (image
+        :path "images/svg/settings.svg"
+        :image-height 33
+        :image-width 33
+      )
     )
   )
 )
+

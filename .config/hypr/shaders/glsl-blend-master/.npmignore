@@ -1,0 +1,13 @@
+.npmignore
+node_modules
+*.log
+.DS_Store
+.gitignore
+bundle.js
+demo
+source
+_temp
+index.html
+allCompiled.glsl
+allError.glsl
+allErrorCompiled.glsl

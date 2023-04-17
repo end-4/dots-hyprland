@@ -1,8 +1,8 @@
 .osettings-window {
     min-width: 501px;
     padding-top: 20px;
-    background-color: tint($colorbarbg, 7%);
-    color: $colortext;
+    background-color: $colorbarbg;
+    color: $onBackground;
     font-family: Torus;
     margin: 7px;
     margin-left: 0px;
@@ -13,8 +13,8 @@
 
 .onotify-window {
     min-width: 529px;
-    background-color: tint($colorbarbg, 7%);
-    color: $colortext;
+    background-color: $colorbarbg;
+    color: $onBackground;
     font-family: Torus;
     margin: 7px;
     margin-right: 0px;
@@ -35,36 +35,37 @@
     padding-bottom: 8px;
     padding-top: 8px;
     font-family: Torus;
-    color: $colortext;
-    background-color: tint($colorbarbg, 11%);
+    color: $onBackground;
+    background-color: tint($colorbarbg, 4%);
     border-top-right-radius: 53px;
 }
 
 .onotify-content {
     // padding-top: 13px;
     margin-top: 27px;
+    padding-top: 8px;
     padding-bottom: 16px;
     font-family: Torus;
-    color: $colortext;
-    background-color: tint($colorbarbg, 11%);
+    color: $onBackground;
+    background-color: tint($colorbarbg, 4%);
     border-top-left-radius: 53px;
 }
 
 .osettings-heading {
     padding-left: 28px;
     padding-right: 28px;
-    color: $colortext;
+    color: $onBackground;
     font-family: Torus;
 }
 
 .osettings-title {
-    color: $colortext;
+    color: $onBackground;
     font-family: Torus;
     font-size: 30pt;
 }
 
 .osettings-subtitle {
-    color: $color5;
+    color: $onSecondaryContainer;
     font-family: Torus;
     font-size: 14pt;
 }
@@ -72,19 +73,19 @@
 .osettings-section-icon {
     margin-top: 33px;
     margin-bottom: 9px;
-    color: $colortext;
+    color: $onSecondaryContainer;
     font-family: 'Material Symbols Rounded';
     font-size: 20pt;
     min-width: 50px;
     min-height: 50px;
-    background-color: tint($colorbarbg, 7%);
+    background-color: $secondaryContainer;
     border-radius: 16px;
 }
 
 .osettings-section {
     margin-top: 33px;
     margin-bottom: 9px;
-    color: $colortext;
+    color: $onSecondaryContainer;
     font-family: Torus;
     font-size: 20pt;
 }
@@ -92,7 +93,7 @@
 .osettings-text {
     margin-top: 10px;
     margin-bottom: 10px;
-    color: $colortext;
+    color: $onBackground;
     font-family: Torus;
     font-size: 14pt;
 }
@@ -100,7 +101,7 @@
 .osettings-text-icon {
     margin-top: 10px;
     margin-bottom: 10px;
-    color: $colortext;
+    color: $onBackground;
     font-family: 'Material Symbols Rounded';
     font-size: 14pt;
     min-width: 50px;
@@ -110,13 +111,13 @@
     margin-left: 28px;
     margin-right: 28px;
     margin-top: 35px;
-    background-color: tint($colorbarbg, 7%);
-    border: 2px solid $colortext;
-    color: $colortext;
+    background-color: $surfaceVariant;
+    border: 2px solid $onSurfaceVariant;
+    color: $onBackground;
     border-radius: 10px;
     font-size: 11pt;
     min-height: 45px;
-    caret-color: $colortext;
+    caret-color: $onBackground;
 
     selection {
         background-color: rgba(154, 152, 152, 0.5);
@@ -124,14 +125,14 @@
 }
 
 .osettings-search-text {
-    color: $colortext;
+    color: $onSurfaceVariant;
     padding: 10px;
     font-size: 13pt;
     min-width: 420px;
 }
 
 .osettings-search-icon {
-    color: $colortext;
+    color: $onSurfaceVariant;
     padding: 6px;
     padding-left: 0px;
     font-size: 20pt;
@@ -156,36 +157,33 @@
 }
 
 .osettings-btn-destructive {
-    color: white;
-    background-color: $color1;
-    background-image: linear-gradient(to right, $color1 0%, $color3 100%);
+    color: $onTertiary;
+    background-color: $tertiary;
 }
 
 .osettings-btn-neutral {
-    color: white;
-    background-color: $color2;
-    background-image: linear-gradient(to right, $color2 0%, $color4 100%);
+    color: $onPrimary;
+    background-color: $primary;
 }
 
 .osettings-btn-informative {
-    color: white;
-    background-color: $color3;
-    background-image: linear-gradient(to right, $color2 0%, $color4 100%);
+    color: $onSecondary;
+    background-color: $secondary;
 }
 
 .osettings-btn-neutral:hover,
 .osettings-btn-neutral:focus {
-    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
+    background-color: tint($primary, 10%);
 }
 
 .osettings-btn-destructive:hover,
 .osettings-btn-destructive:focus {
-    background-image: linear-gradient(to right, $color1 0%, $color3 50%);
+    background-color: tint($tertiary, 10%);
 }
 
 .osettings-btn-informative:hover,
 .osettings-btn-informative:focus {
-    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
+    background-color: tint($secondary, 10%);
 }
 
 .rounder {
@@ -197,7 +195,7 @@
     margin-bottom: 10px;
     min-height: 6px;
     border-radius: 9999px;
-    background-image: linear-gradient(45deg, $color4 50%, #24222A 50%);
+    background-image: linear-gradient(45deg, $primary 50%, #24222A 50%);
     padding: 0px;
 
     trough {
@@ -211,24 +209,24 @@
 
     highlight {
         border-radius: 9999px;
-        background-color: $color0;
-        background-image: linear-gradient(45deg, $color4 0%, $color0 100%);
+        background-color: $primary;
+        background-image: linear-gradient(45deg, $primary 0%, $primary 100%);
     }
 
     slider {
         border-radius: 9999px;
         min-height: 20px;
         min-width: 65px;
-        background-color: $color0;
+        background-color: $primary;
         margin: -8px;
     }
 
     slider:hover {
-        background-color: $color4;
+        background-color: $primary;
     }
 
     // slider:focus {
-    //     background-color: $color4;
+    //     background-color: $primary;
     // }
 }
 
@@ -239,7 +237,7 @@
     min-width: 60px;
     background-color: transparent;
     color: transparent;
-    border: 3px solid $color0;
+    border: 3px solid $primary;
 
     margin-top: 10px;
     margin-bottom: 10px;
@@ -250,9 +248,9 @@
     // min-height: 20px;
     // min-height: 6px;
     min-width: 60px;
-    background-color: $color0;
+    background-color: $primary;
     color: transparent;
-    border: 3px solid $color0;
+    border: 3px solid $primary;
 
     margin-top: 10px;
     margin-bottom: 10px;
@@ -265,7 +263,7 @@
     min-width: 60px;
     background-color: transparent;
     color: transparent;
-    border: 3px solid $color0;
+    border: 3px solid $primary;
 
     margin-top: 10px;
     margin-bottom: 10px;
@@ -273,6 +271,16 @@
 
 .osettings-checkbox:checked {
     border-radius: 9999px;
-    background-color: $color0;
-    color: $color0;
+    background-color: $primary;
+    color: $primary;
+}
+
+.osettings-waifu {
+    margin-top: 30px;
+    min-width: 350px;
+    min-height: 350px;
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
 }
