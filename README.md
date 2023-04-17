@@ -13,11 +13,11 @@
 </div>
 
 # Main features
- - An overview widget that shows window positions in workspaces
- - Can switch to Windows 11 mode hehee
+ - An overview widget that shows window positions in workspaces (and has an app search! gnomie!!!1!1!!)
+ - Can toggle Windows 11-like mode hehee
  - Powered by Pywal and Material You
  - Sexy animations
- - Made by a literal Asian
+ - A rice made by a literal Asian
 
 # Branches
  - [ Current main style: Material/Windows, updated in main branch. All non-main branches are archives. ]
@@ -28,8 +28,10 @@
  - Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio
 
 # Screenshots 
+ - Windoes 11
+ ![dots-hyprland](./screenshot-windoes.png)
  - Material
- ![dots-hyprland](./screenshot-20.png)
+ ![dots-hyprland](./screenshot-material.png)
  - osu!lazer
  ![dots-hyprland](./screenshot-17.png)
  - linage
