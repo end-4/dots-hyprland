@@ -117,7 +117,7 @@ elif [ "$1" = "name" ]; then
 		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
 			continue
 		fi
-		title=$(scripts/limitlen "$title" 45)
+		title=$(scripts/limitlen.py "$title" 45)
 		
 		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \
@@ -133,7 +133,7 @@ else
 			continue
 		fi
 		len=$(playerctl metadata mpris:length)
-		title=$(scripts/limitlen "$title" 40)
+		title=$(scripts/limitlen.py "$title" 40)
 
 		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \

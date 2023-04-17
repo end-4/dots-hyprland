@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cp -r images/svg/osu_dark/* images/svg/
+cp -r images/svg/dark/* images/svg/
 
 filelist=$(ls 'images/svg' -p | grep -v /)
 

@@ -1,0 +1,945 @@
+.winwin {
+  background: rgba(36, 36, 36, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-top: 1px solid rgba(64, 64, 64, 0.5);
+  margin: 12px;
+}
+
+.winwin-center {
+  background: rgba(36, 36, 36, 0.6);
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-bottom: 0px solid transparent;
+  border-top: 1px solid rgba(30, 30, 30, 0.5);
+  margin: 0px 12px;
+}
+
+.winwin-topbar {
+  background: rgba(28, 28, 28, 0.6);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-bottom: 0px solid transparent;
+  margin: 12px;
+  margin-bottom: 0px;
+}
+
+.winwin-top {
+  background: rgba(36, 36, 36, 0.6);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-top: 1px solid rgba(64, 64, 64, 0.5);
+  border-bottom: 0px solid transparent;
+  margin: 12px;
+  margin-bottom: 0px;
+}
+
+.winwin-bottom {
+  background: rgba(28, 28, 28, 0.6);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-top: 1px solid rgba(30, 30, 30, 0.5);
+  margin: 12px;
+  margin-top: 0px;
+}
+
+.winwin-bottom-pad {
+  padding: 6px 12px;
+}
+
+.winstart-bottom-pad {
+  padding: 0px 43px;
+}
+
+.winbar {
+  min-height: 50px;
+  background: rgba(20, 20, 20, 0.3);
+  background-image: url('images/textures/acrylic.png');
+  border-top: 1px solid rgba(64, 64, 64, 0.8);
+}
+
+.winbutton-pad {
+  padding: 3px;
+  // min-width: 42px;
+  min-height: 42px;
+}
+
+.winbutton-only {
+  :first-child {
+    :first-child {
+      border-radius: 6px;
+      border: 1px solid transparent;
+      border-top: 1px solid transparent;
+    }
+  }
+}
+
+.winbutton-only:hover {
+  :first-child {
+    :first-child {
+      background-color: shade($overlay0, 2%);
+      border: 1px solid $overlayedge;
+      border-top: 1px solid tint($overlayedge, 5%);
+    }
+  }
+}
+
+.winbutton-only:active {
+  :first-child {
+    :first-child {
+      background-color: tint($overlay0, 8%);
+      border: 1px solid tint($overlayedge, 10%);
+      border-top: 1px solid tint($overlayedge, 15%);
+    }
+  }
+}
+
+.winnotif-text {
+  background-color: transparent;
+  font-size: 12pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  margin: 1px;
+}
+
+.winnotif-bodytext {
+  color: #CDCDCD;
+}
+
+.winbartext {
+  background-color: transparent;
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+}
+
+.wintoggle-text {
+  background-color: transparent;
+  font-size: 10pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+}
+
+.winstarticon-true {
+  background-size: 60%;
+  background-position: center;
+  background-image: url('images/icons/win.png');
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.winstarticon-false {
+  background-size: 60%;
+  background-position: center;
+  background-image: url('images/icons/win-inactive.png');
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.thewinbutton:active {
+  :first-child {
+    :first-child {
+      background-size: 50%;
+      background-image: url('images/icons/win-clicked.png');
+    }
+  }
+}
+
+.wintaskbaricon {
+  background-size: 60%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.wintaskbaricon-false {
+  background-size: 70%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.wintaskbaricon-true {
+  background-size: 70%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.wintaskbar-indicator-true {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+  margin-bottom: 4px;
+  margin-top: 43px;
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: $primary;
+}
+
+.wintaskbar-indicator-false {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+  margin-bottom: 4px;
+  margin-top: 43px;
+  margin-left: 22px;
+  margin-right: 22px;
+  background-color: #9C98A3;
+}
+
+.winbutton-only:active {
+  :first-child {
+    :first-child {
+      background-size: 50%;
+    }
+  }
+}
+
+.wintimedate {
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+  padding: 0 10px;
+}
+
+.winbutton-true {
+  background-color: shade($overlay0, 2%);
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+}
+
+.winicon {
+  background-position: center;
+  min-height: 42px;
+  min-width: 30px;
+}
+
+.winwifi {
+  background-image: url('images/svg/dark/wifi.svg');
+}
+
+.winwifi1 {
+  background-image: url('images/svg/dark/wifi1.svg');
+}
+
+.winwifi2 {
+  background-image: url('images/svg/dark/wifi2.svg');
+}
+
+.winwifi3 {
+  background-image: url('images/svg/dark/wifi3.svg');
+}
+
+.winwifi4 {
+  background-image: url('images/svg/dark/wifi4.svg');
+}
+
+.winwifi-activated {
+  background-image: url('images/svg/light/wifi.svg');
+}
+
+.winwifi1-activated {
+  background-image: url('images/svg/light/wifi1.svg');
+}
+
+.winwifi2-activated {
+  background-image: url('images/svg/light/wifi2.svg');
+}
+
+.winwifi3-activated {
+  background-image: url('images/svg/light/wifi3.svg');
+}
+
+.winwifi4-activated {
+  background-image: url('images/svg/light/wifi4.svg');
+}
+
+.winbat0 {
+  background-image: url('images/svg/dark/bat0.svg');
+}
+
+.winbat1 {
+  background-image: url('images/svg/dark/bat1.svg');
+}
+
+.winbat2 {
+  background-image: url('images/svg/dark/bat2.svg');
+}
+
+.winbat3 {
+  background-image: url('images/svg/dark/bat3.svg');
+}
+
+.winbat4 {
+  background-image: url('images/svg/dark/bat4.svg');
+}
+
+.winbat5 {
+  background-image: url('images/svg/dark/bat5.svg');
+}
+
+.winbat6 {
+  background-image: url('images/svg/dark/bat6.svg');
+}
+
+.winbat7 {
+  background-image: url('images/svg/dark/bat7.svg');
+}
+
+.winbat8 {
+  background-image: url('images/svg/dark/bat8.svg');
+}
+
+.winbat9 {
+  background-image: url('images/svg/dark/bat9.svg');
+}
+
+.winbat10 {
+  background-image: url('images/svg/dark/bat10.svg');
+}
+.winbatcharge {
+  background-image: url('images/svg/dark/batcharge.svg');
+}
+
+.winvol0 {
+  background-image: url('images/svg/dark/vol0.svg');
+}
+
+.winvol1 {
+  background-image: url('images/svg/dark/vol1.svg');
+}
+
+.winvol2 {
+  background-image: url('images/svg/dark/vol2.svg');
+}
+
+.winvol3 {
+  background-image: url('images/svg/dark/vol3.svg');
+}
+
+.winvolmute {
+  background-image: url('images/svg/dark/volmute.svg');
+}
+
+.winbrightness {
+  background-image: url('images/svg/dark/brightness.svg');
+}
+
+.winbluetooth {
+  background-image: url('images/svg/dark/bluetooth.svg');
+}
+
+.winbluetooth-false {
+  background-image: url('images/svg/dark/bluetoothfalse.svg');
+}
+
+.winbluetooth-true {
+  background-image: url('images/svg/light/bluetoothtrue.svg');
+}
+
+.winbluetooth {
+  background-image: url('images/svg/light/bluetooth.svg');
+}
+
+.winbluetooth-false {
+  background-image: url('images/svg/dark/bluetoothfalse.svg');
+}
+
+.winbluetooth-true {
+  background-image: url('images/svg/dark/bluetoothtrue.svg');
+}
+
+.winactions-airplane {
+  background-image: url('images/svg/dark/airplane.svg');
+}
+
+.winactions-nightlight-activated {
+  background-image: url('images/svg/light/night.svg');
+}
+
+.winactions-nightlight {
+  background-image: url('images/svg/dark/brightness.svg');
+}
+
+.wincog {
+  background-image: url('images/svg/dark/cog.svg');
+}
+
+.winbell {
+  background-image: url('images/svg/dark/notif.svg');
+}
+
+.winreset {
+  background-image: url('images/svg/dark/reset.svg');
+}
+
+.winnotifsnooze {
+  background-image: url('images/svg/dark/notifsnooze.svg');
+}
+
+.winapp {
+  background-image: url('images/svg/dark/app.svg');
+}
+
+.wincaretup {
+  background-image: url('images/svg/dark/caretup.svg');
+}
+
+.wincaretdown {
+  background-image: url('images/svg/dark/caretdown.svg');
+}
+
+.winsearch-icon {
+  background-image: url('images/svg/dark/search-fluent.svg');
+}
+
+.winstart-search-searchbox-icon {
+  background-size: 100%;
+  background-position: center;
+  min-height: 21px;
+  min-width: 21px;
+  margin-left: 4px;
+  margin-right: 10px;
+}
+
+.winactions-togglerow {
+  margin: 12px;
+  margin-bottom: 0px;
+}
+
+.winactions-sliderrow {
+  margin: 0 12px;
+}
+
+.winactions-toggle {
+  background-color: shade($overlay0, 2%);
+  border-radius: 6px;
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+  margin: 12px;
+  min-height: 50px;
+  min-width: 98px;
+}
+
+.winactions-toggle-true {
+  background-color: $primary;
+}
+
+.winactions-toggle-icon {
+  min-width: 21px;
+  min-height: 21px;
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: auto 45%;
+}
+
+.winactions-toggle-icon:hover {
+  background-color: $hover0;
+}
+
+.winactions-toggle-icon:active {
+  background-color: tint($hover0, 10%);
+}
+
+.winactions-toggle-icon-center {
+  border-radius: 6px;
+}
+
+.winactions-toggle-icon-left {
+  min-width: 21px;
+  min-height: 21px;
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: auto 45%;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: 1px solid tint($overlayedge, 5%);
+}
+
+.winactions-toggle-icon-right {
+  min-width: 21px;
+  min-height: 21px;
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: auto 45%;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-right: 1px solid tint($overlayedge, 5%);
+}
+
+.winactions-toggle-icon-left:hover {
+  background-color: $hover0;
+}
+
+.winactions-toggle-icon-right:hover {
+  background-color: $hover0;
+}
+
+.winactions-toggle-icon-left:active {
+  background-color: tint($hover0, 10%);
+}
+
+.winactions-toggle-icon-right:active {
+  background-color: tint($hover0, 10%)
+}
+
+.winactions-toggle-arrow {
+  background-image: url('images/svg/dark/rightarrow.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: 40%;
+}
+
+.winactions-toggle-arrow-activated {
+  background-image: url('images/svg/light/rightarrow.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  // background-size: 40%;
+}
+
+.winactions-element {
+  margin: 12px;
+}
+
+.winslider {
+  border-radius: 9999px;
+  margin: 0 9px;
+  transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  trough {
+    border-radius: 9999px;
+    background-color: #A69999;
+    min-height: 4px;
+    min-width: 287px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  }
+
+  highlight {
+    border-radius: 9999px;
+    background-color: $primary;
+    background-image: linear-gradient(45deg, $primary 0%, $primary 100%);
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  }
+
+  slider {
+    border-radius: 9999px;
+    border: 5px solid #454545;
+    min-height: 11px;
+    min-width: 11px;
+    background-color: $primary;
+    margin: -8px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  }
+
+  slider:hover {
+    border-radius: 9999px;
+    border: 4px solid #454545;
+    min-height: 13px;
+    min-width: 13px;
+    background-color: $primary;
+    margin: -8px;
+  }
+
+  slider:active {
+    border-radius: 9999px;
+    border: 6px solid #454545;
+    min-height: 9px;
+    min-width: 9px;
+    background-color: $primary;
+    margin: -8px;
+  }
+
+  // slider:focus {
+  //     background-color: $primary;
+  // }
+}
+
+.winnotif-badge {
+  border-radius: 9999px;
+  min-width: 20px;
+  min-height: 20px;
+  background-color: $primary;
+  color: #000000;
+  margin-left: 10px;
+}
+
+.winnotif-notif {
+  background-color: rgba(75, 75, 75, 0.25);
+  border-radius: 6px;
+  border: 1px solid rgba(30, 30, 30, 0.5);
+  margin: 4px;
+  padding: 13px;
+}
+
+.winnotif-notif-icon {
+  // background-size: 95%;
+  background-position: center center;
+  // background: red;
+  min-height: 20px;
+  min-width: 20px;
+  margin: 8px;
+}
+
+.winnotif-appname {
+  margin: 8px;
+  background-color: transparent;
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+}
+
+.winnotif-title {
+  margin: 17px;
+}
+
+.winnotif-button {
+  background-size: 50% auto;
+  background-color: rgba(75, 75, 75, 0.25);
+  background-position: center;
+  border-radius: 6px;
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+  margin: 12px 3px;
+  padding: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.winnotif-button:hover {
+  background-color: rgba(95, 95, 95, 0.4);
+}
+
+.winnotif-button:active {
+  background-color: tint(rgba(95, 95, 95, 0.4), 20%);
+}
+
+.wincalendar-text {
+  border-radius: 9999px;
+  font-size: 12pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  margin: 1px;
+  min-height: 44px;
+  min-width: 44px;
+  margin: 3px;
+}
+
+.day-1 {
+  background-color: transparent;
+  color: #7C7C7C;
+}
+
+.day0 {
+  background-color: transparent;
+  color: white;
+}
+
+.day-1:hover {
+  background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day0:hover {
+  background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day-1:active {
+  background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day0:active {
+  background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day1 {
+  background-color: $primary;
+  color: #000000;
+}
+
+.day1:hover {
+  background-color: tint($primary, 10%);
+}
+
+.day1:active {
+  background-color: tint($primary, 20%);
+}
+
+.winarrow-up {
+  background-image: url('images/svg/dark/uparrow.svg');
+}
+
+.winarrow-down {
+  background-image: url('images/svg/dark/downarrow.svg');
+}
+
+.winactions-bottom-button {
+  background-color: transparent;
+  border-radius: 6px;
+  // border: 1px solid transparent;
+  // border-top: 1px solid transparent;
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.winactions-bottom-button:hover {
+  background-color: rgba(75, 75, 75, 0.5);
+}
+
+.winactions-bottom-button:active {
+  background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.winnotif-calendar {
+  background: rgba(36, 36, 36, 0.6);
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-bottom: 0px solid transparent;
+  border-top: 1px solid rgba(30, 30, 30, 0.5);
+  margin: 0px 12px;
+}
+
+.winnotif-monthbutton {
+  // background-size: 80% auto;
+  background-color: transparent;
+  background-position: center;
+  border-radius: 6px;
+  margin: 12px 3px;
+  padding: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.winnotif-monthbutton:hover {
+  background-color: rgba(95, 95, 95, 0.4);
+}
+
+.winnotif-monthbutton:active {
+  background-color: tint(rgba(95, 95, 95, 0.4), 10%);
+}
+
+.winstart-search-contents {
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  background-color: transparent;
+  border-radius: 6px;
+  border: 0px solid transparent;
+  padding: 11px;
+  margin: 34px;
+  margin-left: 69px;
+}
+
+.winstart-search-accent {
+  min-height: 2px;
+  background-color: $primary;
+  border-bottom-left-radius: 99px;
+  border-bottom-right-radius: 99px;
+  margin: 34px 36px;
+  margin-bottom: 34px;
+}
+
+.winstart-search-prompt {
+  background-color: rgba(34, 32, 39, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  padding: 11px;
+  margin: 34px;
+}
+
+.winstart-search-prompt-text {
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  color: #CCCCCC;
+}
+
+.winstart-button-allapps {
+  background-color: rgba(75, 75, 75, 0.25);
+  border-radius: 6px;
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+  padding: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.winstart-button-allapps:hover {
+  background-color: rgba(95, 95, 95, 0.4);
+}
+
+.winstart-button-allapps:active {
+  background-color: tint(rgba(95, 95, 95, 0.4), 20%);
+}
+
+.winstart-allapps-arrow {
+  background-image: url('images/svg/dark/rightarrow.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  min-width: 15px;
+  min-width: 15px;
+  margin-left: 8px;
+  background-size: 90%;
+}
+
+.winstart-allapps-icon {
+  font-family: 'Material Symbols Rounded';
+  font-size: 13pt;
+  font-weight: 300;
+}
+
+.winstart-section {
+  background-color: transparent;
+  font-size: 11.4pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 700;
+}
+
+.winstart-pinnedapps {
+  margin: 12px 34px;
+}
+
+.winsearch-section-box {
+  margin: 0 72px;
+  margin-bottom: 12px;
+}
+
+.winstart-pinnedapps-entry-pad {
+  padding-top: 11px;
+}
+
+.winstart-pinnedapps-entry {
+  min-width: 101px;
+  min-height: 88px;
+  border-radius: 6px;
+}
+
+.winstart-pinnedapps-entry:hover {
+  background-color: rgba(49, 49, 49, 0.45);
+}
+
+.winstart-pinnedapps-icon {
+  min-width: 33px;
+  min-height: 33px;
+}
+
+.winstart-recommended {
+  margin: 0px 60px;
+  margin-bottom: 33px;
+}
+
+.winstart-recommended-entry {
+  // min-width: 285.67px;
+  min-height: 59px;
+  border-radius: 6px;
+}
+
+.winstart-recommended-entry:hover {
+  background-color: rgba(49, 49, 49, 0.45);
+}
+
+.winstart-recommended-entry-pad {
+  min-width: 266.67px;
+  min-height: 59px; 
+  border-radius: 6px;
+}
+
+.winstart-recommended-icon {
+  min-width: 33px;
+  min-height: 33px;
+  margin: 13px;
+}
+
+.winstart-recommended-text {
+  margin: 13px 0px;
+}
+
+.winstart-recommended-name {
+  color: white;
+}
+
+.winstart-recommended-subtext {
+  color: #C1C1C1;
+}
+
+.winstart-user {
+  border-radius: 6px;
+  padding: 5px 16px;
+  margin: 14px;
+}
+
+.winstart-user:hover {
+  background-color: rgba(49, 49, 49, 0.7); 
+}
+
+.winstart-user-icon {
+  min-width: 33px;
+  min-height: 33px;
+  border-radius: 9999px;
+  background: white;
+  background-image: url('images/svg/light/user.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.winstart-power-icon {
+  background-size: 53%;
+  background-image: url('images/svg/dark/power.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  min-width: 43px;
+  min-height: 43px;
+  border-radius: 6px;
+  margin: 14px;
+}
+
+.winstart-power-icon-true {
+  background-color: rgba(49, 49, 49, 0.7); 
+}
+
+.winstart-power-icon:hover {
+  background-color: rgba(49, 49, 49, 0.7); 
+}
+
+.winstart-allapps-box {
+  padding: 0 55px;
+}
+
+.winstart-allapps-app-pad {
+  padding-top: 11px;
+}
+
+.winstart-allapps-app {
+  border-radius: 6px;
+  min-height: 42px;
+  min-width: 564px;
+}
+
+.winstart-allapps-app:hover {
+  background-color: rgba(49, 49, 49, 0.45);
+}
+
+.winstart-allapps-app-icon {
+  margin: 8px;
+}
+
+.winstart-allapps-appname {
+  margin-left: 15px;
+}

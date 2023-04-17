@@ -4,7 +4,47 @@ IFS=$'\n'
 entrynames=( $(cat 'scripts/cache/entrynames.txt' | fzf --filter="$1" | head -n 10) )
 entries=( $(cat 'scripts/cache/entries.txt') )
 
-definitelyNotMath() {
+geticonof() {
+  clientclass=''
+  clientclass=$1
+  iconpath=''
+  # Get app icon
+  if [ -f "scripts/cache/$clientclass" ]; then
+      iconpath=$(cat scripts/cache/$clientclass)
+      if [ ! -f "${iconpath}" ]; then # Cache refresh if icon doesnt exist
+          iconpath=$(geticons "$clientclass" | head -n 1)
+          echo "${iconpath}" > "scripts/cache/$clientclass"
+      fi
+  else
+      iconpath=$(geticons "$clientclass" | head -n 1)
+      echo "${iconpath}" > "scripts/cache/$clientclass"
+  fi
+  if [[ ${iconpath} == "" ]]; then
+    # Retry with lowercase if icon not found
+    iconpath=$(geticons $(echo "$clientclass" | tr '[:upper:]' '[:lower:]' | sed 's/\ /-/g') | head -n 1)
+
+    if [[ ! ${iconpath} = "" ]]; then
+      rm "scripts/cache/$clientclass"
+      echo "${iconpath}" > "scripts/cache/$clientclass"
+    else 
+      newname=$(scripts/iconpatch $clientclass)
+      iconpath=$(geticons "$newname" | head -n 1)
+      if [[ ! ${iconpath} = "" ]]; then
+        rm "scripts/cache/$clientclass"
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+      else
+        # Fallback app icon, replace the path below to the fallback icon of your choice
+        # iconpath="/usr/share/icons/Win11-dark/mimes/48/application-x-executable.svg"
+        iconpath=$(geticons "application-x-executable" | head -n 1)
+        rm "scripts/cache/$clientclass"
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+      fi
+    fi
+  fi
+  echo "$iconpath"
+}
+
+quiteSureNotMath() {
   if [[ ${1:0:1} != "0" \
   && ${1:0:1} != "1" \
   && ${1:0:1} != "2" \
@@ -14,7 +54,10 @@ definitelyNotMath() {
   && ${1:0:1} != "6" \
   && ${1:0:1} != "7" \
   && ${1:0:1} != "8" \
-  && ${1:0:1} != "9" ]]; then
+  && ${1:0:1} != "9" \
+  && ${1:0:1} != "(" \
+  && ${1:0:1} != ")" \
+  ]]; then
     echo 'true'
   else
     echo 'false'
@@ -40,7 +83,7 @@ if [[ "$1" == ">"* ]]; then
   exit 0
 fi
 
-if [[ "${!entrynames[@]}" == "" && $(definitelyNotMath "$1") == "false" ]]; then
+if [[ "${!entrynames[@]}" == "" && $(quiteSureNotMath "$1") == "false" ]]; then
   mathAns=$(qalc $1 | head -n 1)
   mathAns="${mathAns#*= }"
   mathAns="${mathAns#*≈ }"
@@ -59,7 +102,10 @@ for x in "${!entrynames[@]}"; do
   if [ "$x" != "0" ]; then
     printf ','
   fi
-  echo -n $(echo $entries | gojq -c '."'"${entrynames[x]}"'"')
+  appjson=$(echo $entries | gojq -c -M '."'"${entrynames[x]}"'"')
+  # iconname=$(echo "$appjson" | gojq -r -c -M '.icon')
+  # appjson=$(echo "$appjson" | gojq '.icon = "'$(geticonof "$iconname")'"')
+  echo -n "$appjson"
 done
 
 printf ']'

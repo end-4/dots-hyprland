@@ -1,45 +1,63 @@
 .bg-decor-dow {
-  color: $colortext;
+  color: $onPrimaryContainer;
   font-family: Torus;
-  font-size: 50pt;
+  font-size: 35pt;
 }
 
 .bg-decor-date {
-  color: $colortext;
+  color: $onPrimaryContainer;
   font-family: Torus;
-  font-size: 23pt;
+  font-size: 20pt;
 }
 
 .bg-module {
-  background-color: shade($colorbg, 10%);
-  border-radius: 40px;
-  padding: 26px;
-  margin: 13px;
+  // background-color: shade($colorbg, 10%);
+  border-radius: 30px;
+  padding: 20px;
+  margin: 5px;
 }
 
 .bg-text {
-  color: $colortext;
+  text-shadow: -1px -1px 0 $primaryContainer,
+    1px -1px 0 $primaryContainer,
+    -1px 1px 0 $primaryContainer,
+    1px 1px 0 $primaryContainer;
+  color: $onPrimaryContainer;
   font-family: 'Torus';
 }
 
 .bg-icon {
+  margin-bottom: 9px;
+  color: $onSecondaryContainer;
   font-family: 'Material Symbols Rounded';
-  font-size: 18pt;
-  margin: 5px;
-  color: $color5;
+  font-size: 15pt;
+  min-width: 40px;
+  min-height: 40px;
+  background-color: $secondaryContainer;
+  border-radius: 13px;
 }
 
 .bg-title {
-  color: $colortext;
-  font-size: 18pt;
+  text-shadow: -1px -1px 0 $primaryContainer,
+    1px -1px 0 $primaryContainer,
+    -1px 1px 0 $primaryContainer,
+    1px 1px 0 $primaryContainer;
+  color: $onPrimaryContainer;
+  font-size: 16pt;
   margin: 5px;
+  padding-bottom: 10px;
+  padding-left: 5px;
 }
 
 .bg-cool-text {
-  color: $colortext;
+  color: $onPrimaryContainer;
   font-family: 'Config';
-  font-size: 15pt;
+  font-size: 13pt;
   margin: 5px;
+  text-shadow: -1px -1px 0 $primaryContainer,
+    1px -1px 0 $primaryContainer,
+    -1px 1px 0 $primaryContainer,
+    1px 1px 0 $primaryContainer;
 }
 
 .bg-progress {
@@ -64,8 +82,12 @@
   padding-bottom: 4px;
   padding-top: 4px;
   border-radius: 8px;
-  border: 1px solid $colortext;
+  border: 1px solid $onPrimaryContainer;
   margin: 5px;
+  box-shadow: -1px -1px 0 $primaryContainer,
+    1px -1px 0 $primaryContainer,
+    -1px 1px 0 $primaryContainer,
+    1px 1px 0 $primaryContainer;
 }
 
 .bg-graph {

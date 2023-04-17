@@ -12,12 +12,13 @@
 calendar {
   * {
     padding-top: 10px;
+    color: $primary;
   }
 
   :selected {
-    color: $colortext;
+    color: $onPrimary;
     font-weight: bolder;
-    background-color: $overlay0;
+    background-color: $primary;
     border-radius: 8px;
   }
 
@@ -28,7 +29,7 @@ calendar {
   }
 
   .highlight {
-    color: $color0;
+    color: $onTertiaryContainer;
     font-weight: bold;
   }
 
@@ -38,6 +39,6 @@ calendar {
   }
 
   :indeterminate {
-    color: $overlay0;
+    color: $onBackground;
   }
 }

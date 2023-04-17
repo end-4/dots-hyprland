@@ -11,6 +11,12 @@ getoptions(){
   blur_size=$(hyprctl getoption decoration:blur_size -j | gojq -r -c '.int')
   blur_passes=$(hyprctl getoption decoration:blur_passes -j | gojq -r -c '.int')
   blur_xray=$(hyprctl getoption decoration:blur_xray -j | gojq -r -c '.int')
+  nightlight=$(hyprctl getoption decoration:screen_shader -j | gojq -r -c '.str')
+  if [[ "$nightlight" == *"nothing.frag" ]]; then
+    nightlight='false'
+  else
+    nightlight='true'
+  fi
 
   echo -n '{'
   echo -n "\"gaps_in\":$gaps_in,"
@@ -24,6 +30,7 @@ getoptions(){
   echo -n "\"blur_size\":$blur_size,"
   echo -n "\"blur_passes\":$blur_passes,"
   echo -n "\"blur_xray\":$blur_xray,"
+  echo -n "\"nightlight\":$nightlight,"
 
   echo '"dummy":0}'
 }

@@ -1,6 +1,6 @@
 .system-menu-box {
   @include window;
-  background-color: $colorbg;
+  background-color: $colorbarbg;
   border: 3px solid $border;
   // color: $colortext;
 }
@@ -56,7 +56,8 @@
   border-top-right-radius: 31px;
   border-bottom-left-radius: 31px;
   border-bottom-right-radius: 10px;
-  background: $surface0;
+  background-color: $secondaryContainer;
+  color: $onSecondaryContainer;
   margin: .3rem;
 
   button {

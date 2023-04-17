@@ -1,0 +1,297 @@
+(defwidget winmenu []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winstart ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winstart ? '' : 'margin-bottom: -900px;'}
+    "
+    (eventbox
+      :valign "start"
+      :onclick "scripts/toggle-winstart.sh --close &"
+      :onmiddleclick "scripts/toggle-winstart.sh --close &"
+      :onrightclick "scripts/toggle-winstart.sh --close &"
+      (box
+        :class "box-that-is-there" :style "min-height: 1px;"
+      )
+    )
+    (box
+      :space-evenly false
+      :orientation "v"
+      :class "winwin-top"
+      :height 694
+      (overlay
+        (box
+          :valign "end"
+          :space-evenly false
+          :class "winstart-search-prompt"
+          (box
+            :halign "start"
+            :class "winsearch-icon winstart-search-searchbox-icon"
+          )
+          (revealer
+            :reveal {winsearch == ''}
+            :halign "start"
+            :duration "0ms"
+            (label :class "winstart-search-prompt-text" :xalign 0 :text "Type to search")
+          )
+        )
+        (box
+          :valign "end"
+          :class "winstart-search-accent"
+        )
+        (input
+          :class "winstart-search-contents"
+          :onchange "${EWW_CMD} update winsearch={}"
+        )
+      )
+      (box
+        :space-evenly false
+        :orientation "h"
+        (revealer
+          :reveal {!winstart_allapps}
+          :transition "slideright"
+          :duration "250ms"
+          (box
+            :space-evenly false
+            :orientation "v"
+            :width 674
+            (centerbox
+              :orientation "h"
+              :class "winsearch-section-box"
+              (label
+                :halign "start"
+                :class "winstart-section"
+                :text "Pinned"
+              )
+              (box)
+              (button
+                :halign "end"
+                :class "wintoggle-text winstart-button-allapps"
+                :onclick "scripts/toggle-allapps.sh --open &"
+                (box
+                  :space-evenly false
+                  :spacing 6
+                  (label :text "All apps" :style "padding: 0 2px;")
+                  (label :class "winstart-allapps-icon" :text "")
+                  ; (box
+                    ;   :class "winstart-allapps-arrow"
+                  ; )
+                )
+              )
+            )
+            (box
+              :class "winstart-pinnedapps"
+              :height 293
+              :orientation "v"
+              :space-evenly false
+              (for row in pinnedapps
+                (box
+                  :orientation "h"
+                  :space-evenly false
+                  (for app in row
+                    (eventbox
+                      :class "winstart-pinnedapps-entry"
+                      :onclick "scripts/toggle-winstart.sh --close && ${app.exec}"
+                      (box
+                        :orientation "v"
+                        :space-evenly false
+                        :class "winstart-pinnedapps-entry-pad"
+                        :width 101
+                        :height 88
+                        (box
+                          :class "winstart-pinnedapps-icon"
+                          :style "
+                          min-width: 33px;
+                          min-height: 33px;
+                          background-image: url('${app.icon}');
+                          background-position: center;
+                          background-size: auto 100%;
+                          "
+                        )
+                        (label
+                          :limit-width 12
+                          :class "wintoggle-text"
+                          :style "margin-top: 4px;"
+                          :text "${app.name}"
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (centerbox
+              :orientation "h"
+              :class "winsearch-section-box"
+              (label
+                :halign "start"
+                :class "winstart-section"
+                :text "Recommended"
+              )
+              (box)
+              (box)
+            )
+            (box
+              :class "winstart-recommended"
+              :height 222
+              :orientation "v"
+              :space-evenly false
+              :valign "start"
+              (for recrow in recommended
+                (box
+                  :orientation "h"
+                  :space-evenly false
+                  :valign "start"
+                  :spacing 20
+                  (for entry in recrow
+                    (eventbox
+                      :class "winstart-recommended-entry"
+                      :onclick "scripts/toggle-winstart.sh --close && ${entry.exec}"
+                      (box
+                        :valign "start"
+                        :orientation "h"
+                        :space-evenly false
+                        :width 285.67
+                        :height 66
+                        :class "winstart-recommended-entry-pad"
+                        ; Recommended tile contents here
+                        (box
+                          :halign "start"
+                          :class "winstart-recommended-icon"
+                          :style "
+                          min-width: 33px;
+                          min-height: 33px;
+                          background-image: url('${entry.icon}');
+                          background-position: center;
+                          background-size: 100% auto;
+                          "
+                        )
+                        (box
+                          :orientation "v"
+                          :space-evenly false
+                          :class "winstart-recommended-text"
+                          (label :xalign 0 :class "wintoggle-text winstart-recommended-name" :text "${entry.name}" :limit-width 26)
+                          (label :xalign 0 :class "wintoggle-text winstart-recommended-subtext" :text "${entry.subtext}" :limit-width 26)
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (revealer
+          :reveal {winstart_allapps}
+          :transition "slideleft"
+          :duration "250ms"
+          (box
+            :space-evenly false
+            :transition "slideleft"
+            :orientation "v"
+            :width 674
+            (centerbox
+              :orientation "h"
+              :class "winsearch-section-box"
+              (label
+                :halign "start"
+                :class "winstart-section"
+                :text "All apps"
+              )
+              (box)
+              (button
+                :halign "end"
+                :class "wintoggle-text winstart-button-allapps"
+                :onclick "scripts/toggle-allapps.sh --close"
+                (box
+                  :space-evenly false
+                  :spacing 6
+                  (label :class "winstart-allapps-icon" :text "")
+                  (label :text "Back" :style "padding: 0 2px;")
+                  ; (box
+                    ;   :class "winstart-allapps-arrow"
+                  ; )
+                )
+              )
+            )
+            (scroll
+              :height 549
+              (box
+                :space-evenly false
+                :orientation "v"
+                :class "winstart-allapps-box"
+                (for app in allapps
+                  (button
+                    :class "winstart-allapps-app"
+                    :onclick "scripts/toggle-winstart.sh --close && gtk-launch ${app.filename} &"
+                    (box
+                      :space-evenly false
+                      :orientation "h"
+                      (revealer
+                        :transition "slideright"
+                        :duration "0ms"
+                        :reveal {app.icon != '_letter'}
+                        (image
+                          :class "winstart-allapps-app-icon"
+                          :path {(app.icon != '_letter' && app.icon != '') ? app.icon : 'images/svg/dark/app.svg'}
+                          :image-height 25
+                          :image-width 25
+                        )
+                      )
+                      (label
+                        :class "winbartext winstart-allapps-appname"
+                        :text {app.name}
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (centerbox
+      :space-evenly false
+      :orientation "h"
+      :class "winwin-bottom winstart-bottom-pad"
+      :height 67
+      (button
+        :halign "start"
+        :space-evenly false
+        :class "winstart-user"
+        :onclick "scripts/toggle-winstart.sh && gnome-control-center user-accounts &"
+        (box
+          :space-evenly false
+          :orientation "h"
+          :spacing 16
+          (box
+            :class "winstart-user-icon"
+          )
+          (label :class "wintoggle-text" :text "${username}")
+        )
+      )
+      (box)
+      (button
+        :halign "end"
+        :class "winstart-power-icon winstart-power-icon-${rev_winpowermenu}"
+        :onclick "scripts/toggle-winpowermenu.sh &"
+      )
+    )
+  )
+)
+
+(defwindow winstart
+  :wm-ignore true
+  :monitor 0
+  :focusable true
+  :geometry (geometry
+    :x "0px"
+    :y "51px"
+    ; :height 788
+    :width 673
+    :anchor "bottom left"
+  )
+  (winmenu)
+)

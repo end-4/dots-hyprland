@@ -30,7 +30,7 @@
     (box
       :space-evenly false
       :orientation "v"
-      :valign "end"
+      :valign "center"
       (box
         :space-evenly false
         :orientation "v"
@@ -40,7 +40,7 @@
           (box
             :orientation "h"
             :space-evenly false
-            (label :xalign 0 :class "bg-icon" :text "")
+            (label :xalign 0.5 :class "bg-icon" :text "")
             (label :xalign 0 :class "bg-text bg-title" :text "CPU x${arraylength(EWW_CPU.cores)}")
           )
           (box)
@@ -129,7 +129,7 @@
       :space-evenly false
       :orientation "v"
       :halign "end"
-      :valign "end"
+      :valign "center"
       (box
         :space-evenly false
         :orientation "v"
@@ -139,7 +139,7 @@
           (box
             :orientation "h"
             :space-evenly false
-            (label :xalign 0 :class "bg-icon" :text "")
+            (label :xalign 0.5 :class "bg-icon" :text "")
             (label :xalign 0 :class "bg-text bg-title" :text "Network")
           )
           (box)
@@ -193,7 +193,7 @@
           (box
             :orientation "h"
             :space-evenly false
-            (label :xalign 0 :class "bg-icon" :text "")
+            (label :xalign 0.5 :class "bg-icon" :text "")
             (label :xalign 0 :class "bg-text bg-title" :text "Memory")
           )
           (box)
@@ -227,7 +227,7 @@
           (box
             :orientation "h"
             :space-evenly false
-            (label :xalign 0 :class "bg-icon" :text "")
+            (label :xalign 0.5 :class "bg-icon" :text "")
             (label :xalign 0 :class "bg-text bg-title" :text "Swap")
           )
           (box)
@@ -271,7 +271,7 @@
           (box
             :orientation "h"
             :space-evenly false
-            (label :xalign 0 :class "bg-icon" :text "")
+            (label :xalign 0.5 :class "bg-icon" :text "")
             (label :xalign 0 :class "bg-text bg-title" :text "Disk usage")
           )
           (box)

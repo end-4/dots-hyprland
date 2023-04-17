@@ -28,12 +28,15 @@ getwins() {
   # echo $hyprctlclients | gojq -c '.[]'
 
   IFS=$'\n'
-  clientsarr=( $(echo $hyprctlclients | gojq -c '.[]') )
+  clientsarr=( $(echo $hyprctlclients | gojq -c -M '.[]') )
   for client in "${clientsarr[@]}"; do
-    wsid=$(echo $client | gojq -c '.workspace.id')
+    wsid=$(echo $client | gojq -c -M '.workspace.id')
+    if [[ $wsid -lt 6 ]]; then
+      continue
+    fi
     ((wsid-=1))
     iconpath=''
-    clientclass=$(echo $client | gojq '.class' | sed 's/"//g')
+    clientclass=$(echo $client | gojq -r '.class')
     if [[ "$clientclass" == "" ]]; then 
       continue
     fi
@@ -69,7 +72,8 @@ getwins() {
           echo "${iconpath}" > "scripts/cache/$clientclass"
         else
           # Fallback app icon, replace the path below to the fallback icon of your choice
-          iconpath="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
+          # iconpath="/usr/share/icons/Win11-dark/mimes/48/application-x-executable.svg"
+          iconpath=$(geticons "application-x-executable" | head -n 1)
           rm "scripts/cache/$clientclass"
           echo "${iconpath}" > "scripts/cache/$clientclass"
         fi

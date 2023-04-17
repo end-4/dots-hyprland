@@ -51,7 +51,7 @@
               (button
                 :class "song-button"
                 :style "color: ${mcover.color.colors.color4};"
-                :onclick "playerctl next"
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
                 ""
               )
             )

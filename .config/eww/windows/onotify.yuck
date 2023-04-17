@@ -3,7 +3,7 @@
     :orientation "v"
     :space-evenly false
     :style "
-    ${anim_open_ontf ? 'transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${anim_open_ontf ? 'transition: 200ms cubic-bezier(0, 1, 0, 1);' : 'transition: 150ms cubic-bezier(0.4, 0, 0.8, 0.15);'}
     ${rev_ontf ? '' : 'margin-right: -533px;'}
     "
     (eventbox
@@ -443,7 +443,10 @@
             (sysmem)
             (sysbatt)
           )
-          (box
+          (image
+            :path "images/svg/forum.svg"
+            :image-height 33
+            :image-width 33
             :class "real-onotify-toggle-button"
           )
         )
