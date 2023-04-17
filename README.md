@@ -40,9 +40,9 @@
 # General instructions
  - **Backup if you need**
  - Copy `Pictures`, `.config`, `.local` to home folder
- - Copy `Binaries` to a $PATH, (do NOT replace if asked)
+ - Copy `execs` to a $PATH
  - gnome-text-editor themes: Structured like root, go inside and copy...
- - Install font Product Sans (for linage branch)
+ - Install font Product Sans (for linage branch), Segoe UI Variable (for the main and Windows branch)
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
 
@@ -78,7 +78,7 @@ tesseract
 
 # Attribution
  - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
- - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always). System64, Mathisbuilder, BeardWarrior, to name a few.
+ - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always)
  - Bing AI for helping me breeze through the process of learning different libraries
  - Maybe more, but I don't remember it all.. thanks anyway
 
