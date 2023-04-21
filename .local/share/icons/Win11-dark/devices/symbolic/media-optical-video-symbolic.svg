@@ -1,0 +1,12 @@
+<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#dedede;
+      }</style>
+ </defs>
+ <path class="ColorScheme-Text" d="m11.557 11c0.3493 0 0.63281 0.28156 0.63281 0.63086 0 0.3493-0.28351 0.63477-0.63281 0.63477-0.3493 0-0.63281-0.28547-0.63281-0.63477-1e-6 -0.3493 0.28352-0.63086 0.63281-0.63086zm1.4434 0c0.34923 0 0.63476 0.28156 0.63476 0.63086 0 0.3493-0.28553 0.63477-0.63476 0.63477-0.34927 0-0.63086-0.28547-0.63086-0.63477 0-0.3493 0.28159-0.63086 0.63086-0.63086zm-1.8398 1.4902h2.2363c0.13023 0 0.23438 0.12984 0.23438 0.29102v0.25977c8.4e-4 0.01687 0.01615 0.08127 0.18359 0.02344l0.91992-0.32031c0.02872-0.01143 0.09178-0.02407 0.0918 0.07031v1.6074c0 0.07049-0.03791 0.07326-0.07227 0.0625l-0.95312-0.22656c-0.15584-0.03697-0.16921 0.0097-0.16992 0.02344v0.17773c0 0.16111-0.10415 0.29102-0.23438 0.29102h-2.2363c-0.13017 0-0.23633-0.12991-0.23633-0.29102v-1.6777c0-0.16117 0.10616-0.29102 0.23633-0.29102z" fill="currentColor"/>
+ <g transform="translate(-1233,-61)" color="#bebebe">
+  <path transform="translate(1233,61)" d="m8 5c-1.68 0-3 1.32-3 3s1.32 3 3 3 3-1.32 3-3-1.32-3-3-3zm0.00586 1.0059a2.002 2.002 0 0 1 1.9961 1.9961 2.002 2.002 0 0 1-1.9961 1.9961c-1.098 0-2.0137-0.89709-2.0137-1.9961 0-1.098 0.91567-1.9961 2.0137-1.9961z" fill="#dedede" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none"/>
+ </g>
+ <path d="m8 0a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 2-0.25391v-1.0391a7 7 0 0 1-2 0.29297 7 7 0 0 1-7-7 7 7 0 0 1 6.9062-7 7 7 0 0 1 0.09375 0 7 7 0 0 1 7 7 7 7 0 0 1-0.29297 2h1.0391a8 8 0 0 0 0.25391-2 8 8 0 0 0-8-8z" fill="#dedede"/>
+</svg>

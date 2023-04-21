@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   version="1.1"
+   viewBox="0 0 16.933 16.933"
+   id="svg41912"
+   sodipodi:docname="hp_logo.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview41914"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.640625"
+     inkscape:cx="16.112941"
+     inkscape:cy="36.668235"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg41912" />
+  <defs
+     id="defs41904">
+    <linearGradient
+       id="b"
+       x1="1"
+       x2="47"
+       gradientTransform="matrix(0,-0.2991,0.2991,0,33.038,286.45)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#015093"
+         offset="0"
+         id="stop41899" />
+      <stop
+         stop-color="#015ca7"
+         offset="1"
+         id="stop41901" />
+    </linearGradient>
+  </defs>
+  <g
+     transform="matrix(1.1538515,0,0,1.1538515,-1.3031611,-1.2939298)"
+     stroke-width="0.92729"
+     id="g41910">
+    <path
+       transform="translate(-31.75,-270.81)"
+       d="m 40.217,272.39 a 6.879,6.879 0 1 1 0,13.758 6.879,6.879 0 0 1 0,-13.758 z"
+       fill="url(#b)"
+       id="path41906"
+       style="fill:url(#b)" />
+    <path
+       d="M 8.261,1.593 A 6.871,6.871 0 0 0 6.913,1.766 L 3.68,11.159 H 4.958 L 6.59,6.373 h 0.885 l -1.61,4.786 H 7.151 L 8.671,6.703 C 8.893,6.062 8.544,5.476 7.897,5.476 H 6.902 Z m 1.787,3.883 -3.314,9.649 c 0.396,0.102 0.807,0.169 1.227,0.2 l 1.44,-4.168 h 1.697 c 0.302,0 0.631,-0.243 0.734,-0.541 L 13.186,6.7 C 13.407,6.059 13.058,5.473 12.411,5.473 M 11.013,6.37 h 0.964 L 10.64,10.258 H 9.677 Z"
+       fill="#ffffff"
+       id="path41908" />
+  </g>
+</svg>

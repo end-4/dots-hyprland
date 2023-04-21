@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <defs id="defs3051">
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#dedede;
+      }
+      </style>
+  </defs>
+ <g transform="translate(-421.71-531.79)" style="fill-rule:evenodd">
+  <path d="m423.71 533.79h1v12h-1z" 
+        class="ColorScheme-Text"
+        style="fill:currentColor;fill-opacity:1;stroke:none"
+        />
+  <path d="m424.71 533.79l5 1v1l6 2-2 1 2 1-6 1v-1l-5 1z"/>
+</g>
+</svg>

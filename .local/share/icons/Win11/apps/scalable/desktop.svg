@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg312"
+   sodipodi:docname="desktop.svg"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview314"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.515625"
+     inkscape:cx="18.570743"
+     inkscape:cy="33.688249"
+     inkscape:window-width="1920"
+     inkscape:window-height="989"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg312" />
+  <defs
+     id="defs293">
+    <linearGradient
+       id="linear0"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="27"
+       x2="32"
+       y2="27"
+       gradientTransform="scale(2)">
+      <stop
+         offset="0"
+         style="stop-color:rgb(5.882353%,31.372549%,40.392157%);stop-opacity:1;"
+         id="stop255" />
+      <stop
+         offset="1"
+         style="stop-color:rgb(1.176471%,21.176471%,36.862745%);stop-opacity:1;"
+         id="stop257" />
+    </linearGradient>
+    <linearGradient
+       id="linear1"
+       gradientUnits="userSpaceOnUse"
+       x1="7.2736"
+       y1="0.4343"
+       x2="24.5255"
+       y2="30.3154"
+       gradientTransform="scale(2)">
+      <stop
+         offset="0"
+         style="stop-color:rgb(25.882353%,89.019608%,90.588235%);stop-opacity:1;"
+         id="stop260" />
+      <stop
+         offset="1"
+         style="stop-color:rgb(3.529412%,43.529412%,74.509804%);stop-opacity:1;"
+         id="stop262" />
+    </linearGradient>
+    <filter
+       id="alpha"
+       filterUnits="objectBoundingBox"
+       x="0"
+       y="0"
+       width="1"
+       height="1">
+      <feColorMatrix
+         type="matrix"
+         in="SourceGraphic"
+         values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+         id="feColorMatrix265" />
+    </filter>
+    <mask
+       id="mask0">
+      <g
+         filter="url(#alpha)"
+         id="g270">
+        <rect
+           x="0"
+           y="0"
+           width="64"
+           height="64"
+           style="fill:rgb(0%,0%,0%);fill-opacity:0.101961;stroke:none;"
+           id="rect268" />
+      </g>
+    </mask>
+    <image
+       id="image6"
+       width="9"
+       height="9"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAABmJLR0QA/wD/AP+gvaeTAAAAeklEQVQYlY3QsQoCQQyE4W/dFQTRQlsF4d7B2vd/Da8VRRv1XM8m4mEhpkmG/IGZJJ9Kg97H3A8XIxRMkFFxxQPPHOAYSzTYYI4OtyE0DWCHLRY44oR7CSjH9SpgoTNSCXMVZ7QBtKEr+vTlaY0ZLtjjgO6vdG/o559eaUMfCMRK6YkAAAAASUVORK5CYII=" />
+    <clipPath
+       id="clip1">
+      <rect
+         x="0"
+         y="0"
+         width="64"
+         height="64"
+         id="rect274" />
+    </clipPath>
+    <g
+       id="surface7"
+       clip-path="url(#clip1)">
+      <use
+         xlink:href="#image6"
+         transform="matrix(2,0,0,2,0,20)"
+         id="use277" />
+    </g>
+    <mask
+       id="mask1">
+      <g
+         filter="url(#alpha)"
+         id="g282">
+        <rect
+           x="0"
+           y="0"
+           width="64"
+           height="64"
+           style="fill:rgb(0%,0%,0%);fill-opacity:0.101961;stroke:none;"
+           id="rect280" />
+      </g>
+    </mask>
+    <image
+       id="image285"
+       width="9"
+       height="9"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAABmJLR0QA/wD/AP+gvaeTAAAAeklEQVQYlY3QsQoCQQyE4W/dFQTRQlsF4d7B2vd/Da8VRRv1XM8m4mEhpkmG/IGZJJ9Kg97H3A8XIxRMkFFxxQPPHOAYSzTYYI4OtyE0DWCHLRY44oR7CSjH9SpgoTNSCXMVZ7QBtKEr+vTlaY0ZLtjjgO6vdG/o559eaUMfCMRK6YkAAAAASUVORK5CYII=" />
+    <clipPath
+       id="clip2">
+      <rect
+         x="0"
+         y="0"
+         width="64"
+         height="64"
+         id="rect287" />
+    </clipPath>
+    <g
+       id="surface10"
+       clip-path="url(#clip2)">
+      <use
+         xlink:href="#image6"
+         transform="matrix(2,0,0,2,0,10)"
+         id="use290" />
+    </g>
+  </defs>
+  <g
+     id="surface2"
+     transform="matrix(0.9375,0,0,0.9375,2,2)">
+    <path
+       style="fill:url(#linear0);fill-rule:nonzero;stroke:none"
+       d="m 0,52 h 64 v 1 c 0,1.65625 -1.34375,3 -3,3 H 3 C 1.34375,56 0,54.65625 0,53 Z m 0,0"
+       id="path295" />
+    <path
+       style="fill:url(#linear1);fill-rule:nonzero;stroke:none"
+       d="m 3,8 h 58 c 1.65625,0 3,1.34375 3,3 V 52 H 0 V 11 C 0,9.34375 1.34375,8 3,8 Z m 0,0"
+       id="path297" />
+    <use
+       xlink:href="#surface7"
+       mask="url(#mask0)"
+       id="use299" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 7,24 h 4 c 0.550781,0 1,0.449219 1,1 v 4 c 0,0.550781 -0.449219,1 -1,1 H 7 C 6.449219,30 6,29.550781 6,29 v -4 c 0,-0.550781 0.449219,-1 1,-1 z m 0,0"
+       id="path301" />
+    <use
+       xlink:href="#surface10"
+       mask="url(#mask1)"
+       id="use303" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 7,14 h 4 c 0.550781,0 1,0.449219 1,1 v 4 c 0,0.550781 -0.449219,1 -1,1 H 7 C 6.449219,20 6,19.550781 6,19 v -4 c 0,-0.550781 0.449219,-1 1,-1 z m 0,0"
+       id="path305" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 55,54 c 0,0.550781 -0.449219,1 -1,1 -0.550781,0 -1,-0.449219 -1,-1 0,-0.550781 0.449219,-1 1,-1 0.550781,0 1,0.449219 1,1 z m 0,0"
+       id="path307" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 59,54 c 0,0.550781 -0.449219,1 -1,1 -0.550781,0 -1,-0.449219 -1,-1 0,-0.550781 0.449219,-1 1,-1 0.550781,0 1,0.449219 1,1 z m 0,0"
+       id="path309" />
+  </g>
+</svg>

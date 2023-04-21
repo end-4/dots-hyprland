@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g transform='translate(-1133 -20.995)'>
+        <path color='#000' d='M1137 21c-1.108 0-2 .892-2 2v13.5s0 .5.5.5h11s.5 0 .5-.5V23c0-1.108-.892-2-2-2zm0 1h8c.554 0 1 .446 1 1v10.5s.054.5-.5.5h-9s-.5 0-.5-.5V23c0-.554.446-1 1-1zm8.5 13a.5.5 0 1 1 0 1 .5.5 0 0 1 0-1z' fill='#dedede' overflow='visible' style='marker:none'/>
+        <path color='#bebebe' d='M1141 24l-3 5h3v3l3-5h-3z' fill='#dedede' overflow='visible' style='isolation:auto;mix-blend-mode:normal;marker:none'/>
+    </g>
+</svg>

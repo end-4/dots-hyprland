@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Activity-Monitor" width="64" height="64" enable-background="new 0 0 1024 1024" image-rendering="optimizeSpeed" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="linearGradient908" x1="12.654" x2="9.2894" y1="-42.659" y2="-39.589" gradientTransform="matrix(8.5926 0 0 7.4531 -61.006 350.62)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#c81446" offset="0"/>
+   <stop stop-color="#be0f46" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient917" x1="9.13" x2="11.57" y1="-46.409" y2="-43.045" gradientTransform="matrix(8.5926 0 0 7.4531 -61.006 350.62)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#f0417d" offset="0"/>
+   <stop stop-color="#e64678" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient6210" x1="12.654" x2="9.2894" y1="-42.659" y2="-39.589" gradientTransform="matrix(8.5926 0 0 7.4531 -61.006 350.62)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient908"/>
+ </defs>
+ <g stroke-width=".039432">
+  <path d="m18.564 3.1152a3.9776 3.1321 0 0 0-3.9551 3.1699v24.615h45.461a3.9776 3.1321 0 0 0-0.91211-2.0039l-0.47852-0.375-37.549-24.68a3.9776 3.1321 0 0 0-2.5664-0.72656zm41.506 27.785v0.001953h-45.461v24.615a3.9776 3.1321 0 0 0 6.5215 2.4434l37.549-24.68a3.9776 3.1321 0 0 0 1.3926-2.3809h-0.001954z" fill="url(#linearGradient6210)"/>
+  <path d="m60.071 30.902h-45.462v24.617a3.9776 3.1321 0 0 0 6.5223 2.4432l37.549-24.68a3.9776 3.1321 0 0 0 1.3913-2.38z" fill="url(#linearGradient908)"/>
+  <path d="m18.564 3.1154a3.9776 3.1321 0 0 0-3.9548 3.1693v24.617h45.462a3.9776 3.1321 0 0 0-0.91371-2.0051l-0.47758-0.37495-37.549-24.68a3.9776 3.1321 0 0 0-2.5674-0.72623z" fill="url(#linearGradient917)"/>
+ </g>
+ <path d="m29.423 29.603-20.86-13.462a2.2098 1.7084 0 0 0-3.624 1.3325v26.855a2.2098 1.7084 0 0 0 3.624 1.3325l20.86-13.462a2.2098 1.7084 0 0 0 0.26512-2.3917z" fill="#911941" stroke-width=".021706" p-id="47316"/>
+</svg>

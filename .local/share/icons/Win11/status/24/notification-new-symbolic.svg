@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="24"
+   width="24"
+   version="1.1"
+   id="svg8">
+  <metadata
+     id="metadata14">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs12" />
+  <path
+     id="path2-3-7-9-8-3-7-2"
+     d="M 11.544922 5.7421875 C 10.327492 6.0735423 9.2714234 6.9714055 8.7734375 8.1699219 C 8.7734375 8.1699219 6.8591806 12.790042 5.0878906 12.728516 C 5.0688906 12.732516 5.0554563 12.747373 5.0351562 12.751953 C 4.9580563 12.773473 4.8843294 12.808165 4.8183594 12.853516 C 4.7913594 12.871576 4.7638344 12.881834 4.7402344 12.902344 C 4.6503344 12.976574 4.5795531 13.070765 4.5332031 13.177734 C 4.3740131 13.562068 4.5560531 13.99939 4.9394531 14.158203 L 14.640625 18.175781 C 15.024965 18.334978 15.459941 18.155821 15.619141 17.771484 C 15.662041 17.663073 15.678969 17.545739 15.667969 17.429688 C 15.665969 17.398457 15.654238 17.370374 15.648438 17.339844 C 15.633637 17.260934 15.606106 17.185025 15.566406 17.115234 C 15.556206 17.098024 15.558375 17.077207 15.546875 17.060547 C 14.774539 16.340829 15.143438 14.418039 15.566406 12.974609 A 5 5 0 0 1 11 8 A 5 5 0 0 1 11.544922 5.7421875 z M 10.40625 17.503906 C 10.47982 18.441959 11.208172 19.225326 12.177734 19.332031 C 12.74742 19.394351 13.285133 19.207804 13.689453 18.863281 L 10.40625 17.503906 z "
+     style="color:#bebebe;overflow:visible;isolation:auto;mix-blend-mode:normal;fill:#ffffff;marker:none" />
+  <path
+     id="path4"
+     style="color:#bebebe;overflow:visible;isolation:auto;mix-blend-mode:normal;fill:#d33636;marker:none"
+     overflow="visible"
+     d="m 20,8 a 4,4 0 0 1 -8,0 4,4 0 1 1 8,0 z"
+     class="error" />
+</svg>

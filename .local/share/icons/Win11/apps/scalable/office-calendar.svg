@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <defs>
+  <linearGradient id="linearGradient873" x1="-48.646" x2="-32.772" y1="-3.0915" y2="9.574" gradientTransform="matrix(1 0 0 .91665 49.175 7.5514)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#26b4eb" offset="0"/>
+   <stop stop-color="#017adc" offset="1"/>
+  </linearGradient>
+  <filter id="filter965" x="-.18292" y="-.08269" width="1.3658" height="1.1654" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.12760554"/>
+  </filter>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="m16.404 4.7176h-15.875v10.882c0 0.40307 0.32452 0.72759 0.72759 0.72759h14.42c0.40308 0 0.72759-0.32452 0.72759-0.72759z" fill="url(#linearGradient873)" stroke-width=".95742"/>
+ <path d="m1.2565 1.7757c-0.40307 0-0.72759 0.32452-0.72759 0.72759v2.2143h15.875v-2.2143c0-0.40307-0.32452-0.72759-0.72759-0.72759z" fill="#056abe" stroke-width=".95742"/>
+ <g transform="translate(14.962 -35.303)" fill="#fff">
+  <rect x="-8.9927" y="42.131" width="1.852" height="1.852"/>
+  <rect x="-5.7878" y="42.131" width="1.852" height="1.852"/>
+  <rect x="-2.583" y="42.131" width="1.852" height="1.852"/>
+  <rect x="-12.198" y="47.871" width="1.852" height="1.852"/>
+  <rect x="-8.9927" y="47.871" width="1.852" height="1.852"/>
+  <rect x="-5.7878" y="47.871" width="1.852" height="1.852"/>
+  <rect x="-12.198" y="45.001" width="1.852" height="1.852"/>
+  <rect x="-8.9927" y="45.001" width="1.852" height="1.852"/>
+  <rect x="-5.7878" y="45.001" width="1.852" height="1.852"/>
+  <rect x="-2.583" y="45.001" width="1.852" height="1.852"/>
+ </g>
+ <g>
+  <rect transform="matrix(1.0256 0 0 .7562 15.915 -25.364)" x="-13.08" y="35.909" width="1.6743" height="3.7036" ry=".83713" filter="url(#filter965)" opacity=".3"/>
+  <rect x="2.5172" y=".60547" width="1.6743" height="3.7036" ry=".83713" fill="#2ecef2"/>
+  <rect transform="matrix(1.0256 0 0 .7562 26.13 -25.364)" x="-13.08" y="35.909" width="1.6743" height="3.7036" ry=".83713" filter="url(#filter965)" opacity=".3"/>
+  <rect x="12.742" y=".60547" width="1.6743" height="3.7036" ry=".83713" fill="#2ecef2"/>
+ </g>
+</svg>

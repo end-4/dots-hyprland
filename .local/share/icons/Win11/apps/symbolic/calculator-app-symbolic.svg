@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#363636">
+  <path d="m3.994 0c-1.258 0.015-2.179-0.03-2.931 0.385a1.88 1.88 0 0 0-0.838 0.998c-0.165 0.439-0.225 0.96-0.225 1.617v10c0 0.658 0.06 1.179 0.225 1.617 0.164 0.439 0.461 0.79 0.838 0.998 0.752 0.416 1.673 0.37 2.931 0.385h8.012c1.258-0.014 2.179 0.03 2.932-0.385a1.88 1.88 0 0 0 0.838-0.998c0.164-0.438 0.224-0.96 0.224-1.617v-10c0-0.658-0.06-1.178-0.225-1.617a1.88 1.88 0 0 0-0.837-0.998c-0.753-0.416-1.674-0.37-2.932-0.385h-8.008zm6e-3 1h4v14h-4c-1.259-0.015-2.09-0.06-2.455-0.262-0.184-0.1-0.287-0.212-0.385-0.472s-0.16-0.674-0.16-1.266v-10c0-0.592 0.062-1.006 0.16-1.266s0.201-0.371 0.385-0.472c0.365-0.202 1.195-0.247 2.455-0.262zm6 5h4v1h-4zm0 2h4v1h-4z" color="#000000" font-family="sans-serif" font-weight="400" overflow="visible" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  <path d="m3 5h3v1h-3z" color="#bebebe" overflow="visible"/>
+  <path d="m5 4v3h-1v-3zm-2 6h3v1h-3z" color="#bebebe" overflow="visible"/>
+ </g>
+</svg>

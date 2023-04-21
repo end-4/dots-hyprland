@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 16 16">
+  <defs
+     id="defs3051">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#363636;
+      }
+      </style>    
+        <linearGradient
+       id="linearGradient3778-2">
+      <stop
+         style="stop-color:currentColor;stop-opacity:0.2" 
+         offset="0"
+         id="stop3780-2" />
+      <stop
+         style="stop-color:currentColor;stop-opacity:0.7" 
+         offset="1"
+         id="stop3782-0" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3778-2"
+       id="linearGradient3784"
+       x1="20"
+       y1="10.666667"
+       x2="4.0000052"
+       y2="10.666667"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.75000025,0,0,0.75,420.71429,530.79074)" />
+  </defs>
+     <g transform="translate(-421.71429,-531.79074)" >
+    <path
+      style="opacity:1;fill:url(#linearGradient3784);fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="m 423.71429,533.79074 0,10.5 0,0.75 0,0.75 12,0 0,-0.75 0,-0.75 0,-10.5 z"
+ />
+    </g>
+</svg>

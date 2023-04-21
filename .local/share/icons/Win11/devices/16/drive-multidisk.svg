@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="0 0 16 16"
+   id="svg43"
+   sodipodi:docname="drive-multidisk.svg"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview45"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="24.9375"
+     inkscape:cx="6.5964912"
+     inkscape:cy="10.385965"
+     inkscape:window-width="1920"
+     inkscape:window-height="954"
+     inkscape:window-x="0"
+     inkscape:window-y="40"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg43" />
+  <metadata
+     id="metadata2">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10">
+    <linearGradient
+       id="linearGradient887"
+       x1="10"
+       x2="10"
+       y1="23"
+       y2="28"
+       gradientTransform="matrix(1 0 0 .8 -7.4709 -8.3912)"
+       gradientUnits="userSpaceOnUse"
+       xlink:href="#linearGradient885" />
+    <linearGradient
+       id="linearGradient885">
+      <stop
+         stop-color="#313131"
+         offset="0"
+         id="stop5" />
+      <stop
+         stop-color="#636363"
+         offset="1"
+         id="stop7" />
+    </linearGradient>
+  </defs>
+  <style
+     id="current-color-scheme"
+     type="text/css">.ColorScheme-Text {
+            color:#232629;
+        }</style>
+  <path
+     class="ColorScheme-Text"
+     d="m 5.99988,0.0021362 c -1.4995,0 -2.5425,1.0366 -2.9316,2.0332 l -2.8691,6.4844 c -0.0032,0.0076 -0.0047,0.015808 -0.0078,0.023438 l -0.05859,0.15039 h 0.01172 c -0.08705,0.25475 -0.14453,0.52362 -0.14453,0.80859 0,0.6719698 0.26493,1.2781998 0.69336,1.7265998 l -0.49414,1.291 c -0.0032,0.0076 -0.0047,0.01581 -0.0078,0.02344 l -0.05859,0.15039 H 0.14453 C 0.05748,12.948334 0,13.217204 0,13.502174 c 0,1.385 1.115,2.5 2.5,2.5 h 11 c 1.385,0 2.5,-1.115 2.5,-2.5 0,-0.28498 -0.05748,-0.55384 -0.14453,-0.80859 h 0.01172 l -0.05859,-0.15039 -0.0039,-0.01563 c -0.0011,-0.0027 -0.0028,-0.0051 -0.0039,-0.0078 l -0.49414,-1.291 c 0.42843,-0.44835 0.69336,-1.0546 0.69336,-1.7265998 0,-0.28498 -0.05748,-0.55384 -0.14453,-0.80859 h 0.01172 l -0.05859,-0.15039 -0.0039,-0.015625 c -0.0011,-0.0027 -0.0028,-0.00511 -0.0039,-0.00781 l -2.8691,-6.4844 c -0.38916,-0.99659 -1.4345,-2.1159 -2.9316,-2.0332 h -4 z m 0,1 h 4 c 1.108,0 1.7085,0.64988 2,1.3965 l 2.1465,4.709 c -0.21961,-0.062705 -0.4062,-0.10547 -0.64648,-0.10547 h -11 c -0.24028,0 -0.42883,0.038862 -0.64844,0.10156 l 2.1484,-4.7051 c 0.29153,-0.74658 0.892,-1.3965 2,-1.3965 z m -3.5,7 h 11 c 0.831,0 1.5,0.669 1.5,1.5 0,0.8309998 -0.669,1.4999998 -1.5,1.4999998 h -11 c -0.831,0 -1.5,-0.669 -1.5,-1.4999998 0,-0.831 0.669,-1.5 1.5,-1.5 z m 5.9883,1 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.4999998 0.5,0.5 0 0 0 0.5,-0.4999998 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z m 2,0 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.4999998 0.5,0.5 0 0 0 0.5,-0.4999998 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z m 2,0 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.4999998 0.5,0.5 0 0 0 0.5,-0.4999998 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z m -9.9883,2.9999998 h 11 c 0.831,0 1.5,0.669 1.5,1.5 0,0.831 -0.669,1.5 -1.5,1.5 h -11 c -0.831,0 -1.5,-0.669 -1.5,-1.5 0,-0.831 0.669,-1.5 1.5,-1.5 z m 5.9883,1 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.5 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z m 2,0 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.5 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z m 2,0 a 0.5,0.5 0 0 0 -0.48828,0.5 0.5,0.5 0 0 0 0.5,0.5 0.5,0.5 0 0 0 0.5,-0.5 0.5,0.5 0 0 0 -0.5,-0.5 0.5,0.5 0 0 0 -0.01172,0 z"
+     fill="currentColor"
+     id="path13" />
+</svg>

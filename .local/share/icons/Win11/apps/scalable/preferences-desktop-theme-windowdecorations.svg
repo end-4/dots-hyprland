@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="linearGradient1229" x1="17" x2="17" y1="7" y2="51" gradientTransform="matrix(.26458 0 0 .26458 14.857 5.7152)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#6c7378" offset="0"/>
+   <stop stop-color="#42464a" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient1242" x1="-9" x2="45" y1="50" y2="50" gradientTransform="matrix(.26458 0 0 .26458 14.857 5.7152)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#a1aab3" offset="0"/>
+   <stop stop-color="#818990" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient1255" x1="-9" x2="45" y1="6.9456" y2="50.946" gradientTransform="matrix(.20578 0 0 .19843 19.09 10.687)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#3ccbf4" offset="0"/>
+   <stop stop-color="#1594df" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient1257" x1="-6.6522" x2="42.652" y1="50" y2="50" gradientTransform="matrix(.22538 0 0 .19843 18.737 10.687)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#50e5ff" offset="0"/>
+   <stop stop-color="#29b1eb" offset="1"/>
+  </linearGradient>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="matrix(.93333 0 0 .93333 -10.586 -4.763)" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="12.476" y="7.5528" width="14.287" height="11.641" ry=".54354" fill="url(#linearGradient1229)" stroke-width=".53429" style="paint-order:stroke fill markers"/>
+  <path d="m12.476 18.415v0.23564c0 0.30112 0.2425 0.54362 0.54363 0.54362h13.2c0.30112 0 0.54363-0.2425 0.54363-0.54362v-0.23564z" fill="url(#linearGradient1242)" stroke-width=".52916" style="paint-order:stroke fill markers"/>
+  <rect x="17.238" y="12.065" width="11.112" height="8.7311" ry=".52916" fill="url(#linearGradient1255)" stroke-width=".40807" style="paint-order:stroke fill markers"/>
+  <path d="m17.238 20.212v0.05529c0 0.29315 0.236 0.52916 0.52916 0.52916h10.054c0.29315 0 0.52916-0.236 0.52916-0.52916v-0.05529z" fill="url(#linearGradient1257)" stroke-width=".42296" style="paint-order:stroke fill markers"/>
+ </g>
+</svg>

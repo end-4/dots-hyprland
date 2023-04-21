@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css"/>
+  <linearGradient id="linearGradient1590" x1="20.969" x2="44.996" y1="19.942" y2="43.969" gradientTransform="matrix(1.0026 0 0 1.0026 .088015 .48946)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#646464" offset="0"/>
+   <stop stop-color="#464646" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m7.5001 4.5c-1.662 0-3.0001 1.3381-3.0001 3.0001v49c0 1.662 1.3381 3.0001 3.0001 3.0001h49c1.662 0 3.0001-1.3381 3.0001-3.0001v-49c0-1.662-1.3381-3.0001-3.0001-3.0001z" fill="url(#linearGradient1590)"/>
+ <g fill="#5e4aa6">
+  <circle cx="-1121.7" cy="-1340.1" r="0"/>
+  <circle cx="-22.232" cy="-74.58" r="0" fill-rule="evenodd"/>
+  <circle cx="-1062.4" cy="-1276" r="0"/>
+ </g>
+ <path d="m10.5 17.498v28h4v4h-4v4h-4v5.8203c0.30803 0.10885 0.6348 0.17744 0.98047 0.17969h49.039c0.34567-0.002245 0.67244-0.070835 0.98047-0.17969v-4.8203h-4v-5h-4v-4h4v-28h-43z" fill="#282828"/>
+ <path d="m14.5 21.497v24h35v-24zm5 6h8v4h-8zm17 0h8v4h-8zm-22 22v5h3v5h27v-6h5v-4z" fill="#fff"/>
+ <path d="m10.5 17.497v1h43v-1zm0 32v1h4v-1zm39 0v1h4v-1zm-43 4v1h4v-1zm47 1v1h4v-1z" fill="#fff" opacity=".1"/>
+</svg>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64"
+   height="64"
+   version="1"
+   id="svg16"
+   sodipodi:docname="acetoneiso.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs20">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient979">
+      <stop
+         style="stop-color:#71cdf0;stop-opacity:0"
+         offset="0"
+         id="stop971" />
+      <stop
+         style="stop-color:#88ebf8;stop-opacity:1"
+         offset="0.38562924"
+         id="stop973" />
+      <stop
+         style="stop-color:#86ecfa;stop-opacity:1"
+         offset="0.50850338"
+         id="stop975" />
+      <stop
+         style="stop-color:#49badf;stop-opacity:0"
+         offset="1"
+         id="stop977" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient927">
+      <stop
+         style="stop-color:#5280a3;stop-opacity:1"
+         offset="0"
+         id="stop923" />
+      <stop
+         style="stop-color:#3a5793;stop-opacity:1"
+         offset="1"
+         id="stop925" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient867">
+      <stop
+         style="stop-color:#58abe8;stop-opacity:1"
+         offset="0"
+         id="stop863" />
+      <stop
+         style="stop-color:#58abe8;stop-opacity:1"
+         offset="0.49430951"
+         id="stop871" />
+      <stop
+         style="stop-color:#99efff;stop-opacity:1"
+         offset="1"
+         id="stop865" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient867"
+       id="linearGradient869"
+       x1="32.390251"
+       y1="2.191329"
+       x2="32.390251"
+       y2="62.01318"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient927"
+       id="linearGradient929"
+       x1="2"
+       y1="31.999956"
+       x2="62"
+       y2="31.999956"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient979"
+       id="linearGradient969"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="rotate(-90,30.431565,30.3512)"
+       x1="29.448641"
+       y1="23.356905"
+       x2="29.448641"
+       y2="42.167213" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="935"
+     id="namedview18"
+     showgrid="false"
+     showguides="false"
+     inkscape:zoom="12.109375"
+     inkscape:cx="48.826254"
+     inkscape:cy="26.199722"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg16"
+     inkscape:document-rotation="0" />
+  <circle
+     style="fill:url(#linearGradient869);stroke-width:5.37501;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;fill-opacity:1"
+     id="path861"
+     cx="32"
+     cy="32"
+     r="30" />
+  <path
+     id="path965"
+     style="fill:url(#linearGradient969);fill-opacity:1;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;opacity:1"
+     d="m 12.874247,8.9451355 5.31e-4,45.8545485 a 30,30 0 0 0 4.346803,3.053148 30,30 0 0 0 33.244016,-2.166263 L 50.464008,8.0565097 A 30,30 0 0 0 47.221581,5.8913081 30,30 0 0 0 12.874247,8.9451355 Z" />
+  <path
+     id="circle912"
+     style="fill:url(#linearGradient929);fill-opacity:1;stroke-width:5.37501;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers;opacity:0.5"
+     d="M 31.855469 2 A 30 30 0 0 0 2 32 A 30 30 0 0 0 32 62 A 30 30 0 0 0 62 32 A 30 30 0 0 0 32 2 A 30 30 0 0 0 31.855469 2 z M 31.857422 2.5 A 29.5 29.5 0 0 1 32 2.5 A 29.5 29.5 0 0 1 61.5 32 A 29.5 29.5 0 0 1 32 61.5 A 29.5 29.5 0 0 1 2.5 32 A 29.5 29.5 0 0 1 31.857422 2.5 z " />
+  <path
+     id="path936"
+     style="opacity:0.5;fill:#81dff5;fill-opacity:1;stroke-width:7.81459;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     d="M 32 3.5 A 28.5 28.5 0 0 0 3.5 32 A 28.5 28.5 0 0 0 32 60.5 A 28.5 28.5 0 0 0 60.5 32 A 28.5 28.5 0 0 0 32 3.5 z M 32 4.5 A 27.5 27.5 0 0 1 59.5 32 A 27.5 27.5 0 0 1 32 59.5 A 27.5 27.5 0 0 1 4.5 32 A 27.5 27.5 0 0 1 32 4.5 z " />
+  <path
+     id="path946"
+     style="opacity:0.3;fill:#ffffff;fill-opacity:1;stroke-width:4.56857;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     d="M 32 18.5 A 13.5 13.5 0 0 0 18.5 32 A 13.5 13.5 0 0 0 32 45.5 A 13.5 13.5 0 0 0 45.5 32 A 13.5 13.5 0 0 0 32 18.5 z M 31.892578 19 A 13 13 0 0 1 32 19 A 13 13 0 0 1 45 32 A 13 13 0 0 1 32 45 A 13 13 0 0 1 19 32 A 13 13 0 0 1 31.892578 19 z " />
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:4.23015;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     id="circle950"
+     cx="32"
+     cy="32"
+     r="12.5" />
+  <circle
+     style="opacity:1;fill:#d3d3d3;fill-opacity:1;stroke-width:3.89174;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     id="circle955"
+     cx="32"
+     cy="32"
+     r="11.5" />
+  <circle
+     style="opacity:1;fill:#85909d;fill-opacity:1;stroke-width:2.19968;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     id="circle959"
+     cx="32"
+     cy="32"
+     r="6.5" />
+  <circle
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:2.03047;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+     id="circle961"
+     cx="32"
+     cy="32"
+     r="6" />
+</svg>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="d" x1="399.57" x2="399.57" y1="545.8" y2="517.8" gradientTransform="translate(-384.57,-515.8)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#3889e9" offset="0"/>
+   <stop stop-color="#5ea5fb" offset="1"/>
+  </linearGradient>
+  <linearGradient id="b">
+   <stop stop-color="#e3e3e3" offset="0"/>
+   <stop stop-color="#fffcff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="a" x1="41.165" x2="54.039" y1="89.364" y2="20.836" gradientUnits="userSpaceOnUse" xlink:href="#b"/>
+  <linearGradient id="linearGradient863" x1="399.57" x2="399.57" y1="545.8" y2="517.8" gradientTransform="translate(-384.57 -515.8)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#39414b" offset="0"/>
+   <stop stop-color="#72818d" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect x="1" y=".99997" width="30" height="30" rx="8" ry="8" fill="url(#linearGradient863)"/>
+ <circle cx="16" cy="16" r="0" fill="url(#d)"/>
+ <circle cx="16.075" cy="16.058" r="15.646" fill-opacity="0" stroke-width="1.1176"/>
+ <g transform="matrix(.1593 0 0 .1593 8.1184 8.9729)" fill="url(#a)" opacity=".9">
+  <g fill="url(#a)">
+   <g fill="url(#a)">
+    <path d="m72.766 74.275c-13.366-10.451-3.933-53.438-3.933-53.438h16.336c1.705 0 8.389-1.072 8.389-9.076 0-9.846-8.168-9.241-8.168-9.241h-60.147c-9.873 0-18.784 11.304-23.899 19.389-2.723 4.318-1.183 5.528 3.493 3.493 16.392-7.178 21.012-4.593 21.012-4.593 1.155 5.528 1.54 30.473-2.667 40.318-4.263 9.269-12.128 21.012-0.578 27.915 9.021 5.115 18.481-5.391 17.546-23.268-0.44-9.461-1.183-44.938-1.183-44.938h15.072c-0.469 5.528-3.025 33.745-0.357 50.467 2.777 27.915 33.112 22.497 38.777 6.685 1.402-4.373 1.073-7.729 0.027-10.26-1.926-4.702-5.144-4.949-4.785-2.75 0.221 1.402 0.083 2.777-0.138 4.016-0.661 3.823-8.471 9.817-14.797 5.281z" fill="url(#a)"/>
+   </g>
+  </g>
+ </g>
+</svg>

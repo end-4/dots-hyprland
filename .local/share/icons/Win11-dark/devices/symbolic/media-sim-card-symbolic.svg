@@ -1,0 +1,9 @@
+<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#dedede;
+      }</style>
+ </defs>
+ <path class="ColorScheme-Text" d="m4 7 2-4.88e-4v3.0007l-2 4.88e-4zm3-7.33e-4h2v2.001h-2zm3 2.45e-4 2 4.88e-4v3.0007l-2-4.88e-4zm-3 3.0005h2v2.9993h-2zm-3 1.0005 2-4.88e-4v1.9995l-2 4.88e-4zm6-4.88e-4 2 4.88e-4v1.9995l-2-4.88e-4z" fill="currentColor"/>
+ <path d="m6 1-4 4v1.4141 6.5859c0 1.108 0.892 2 2 2h8c1.108 0 2-0.892 2-2v-10c0-1.108-0.892-2-2-2h-6zm0.41406 1h5.5859c0.554 0 1 0.446 1 1v10c0 0.554-0.446 1-1 1h-8c-0.554 0-1-0.446-1-1v-7.5859l3.4141-3.4141z" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8708"/>
+</svg>

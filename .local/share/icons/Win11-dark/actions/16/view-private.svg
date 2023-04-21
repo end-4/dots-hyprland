@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs>
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#dedede;
+      }
+    </style>
+  </defs>
+  <path
+    class="ColorScheme-Text"
+    d="M 4.9999986,2.0000025 3.9999987,5.9999997 H 12 L 11,2.0000025 7.9999981,3.0000014 Z M 2.9999999,6.999999 2.0000001,8.0000001 H 14 L 12.999986,6.999999 Z"
+    style="fill:currentColor;fill-opacity:1;stroke:none"/>
+  <g transform="matrix(0.66666641,0,0,0.66666641,1.0000004,-0.99999676)">
+    <g transform="translate(-3.5,2.5)">
+      <path
+        class="ColorScheme-Text"
+        d="m 11,15.5 h 6 V 17 h -6 z"
+        style="fill:currentColor;fill-opacity:1;stroke:none"/>
+    </g>
+    <path
+        class="ColorScheme-Text"
+        transform="scale(1.5)"
+        d="M 3.5,10 A 2.5,2.5 0 0 0 1,12.5 2.5,2.5 0 0 0 3.5,15 2.5,2.5 0 0 0 6,12.5 2.5,2.5 0 0 0 3.5,10 Z m 0,1 A 1.5,1.5 0 0 1 5,12.5 1.5,1.5 0 0 1 3.5,14 1.5,1.5 0 0 1 2,12.5 1.5,1.5 0 0 1 3.5,11 Z"
+        style="fill:currentColor;fill-opacity:1;stroke:none"/>
+    <path
+        class="ColorScheme-Text"
+        d="M 15.75,15 A 3.75,3.75 0 0 0 12,18.75 3.75,3.75 0 0 0 15.75,22.5 3.75,3.75 0 0 0 19.5,18.75 3.75,3.75 0 0 0 15.75,15 Z m 0,1.5 A 2.25,2.25 0 0 1 18,18.75 2.25,2.25 0 0 1 15.75,21 2.25,2.25 0 0 1 13.5,18.75 2.25,2.25 0 0 1 15.75,16.5 Z"
+        style="fill:currentColor;fill-opacity:1;stroke:none"/>
+  </g>
+</svg>

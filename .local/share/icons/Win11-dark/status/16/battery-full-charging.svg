@@ -1,0 +1,10 @@
+<svg width="20" height="16" enable-background="new" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#ffffff">
+  <g fill-rule="evenodd">
+   <path d="m2.5215 5c-0.28865 0-0.52148 0.24253-0.52148 0.54492v4.9102c0 0.30239 0.23284 0.54492 0.52148 0.54492h4.4473l0.25-1h-1.7188c-0.79859-1.712e-4 -1.2749-0.89013-0.83203-1.5547l2.2969-3.4453h-4.4434zm7.5098 0-0.25 1h1.7188c0.79859 1.713e-4 1.2749 0.89013 0.83203 1.5547l-2.2969 3.4453h4.4434c0.28865 0 0.52148-0.24253 0.52148-0.54492v-4.9102c0-0.30239-0.23284-0.54492-0.52148-0.54492h-4.4473z" style="paint-order:stroke fill markers"/>
+   <path d="m2 3c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h13c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h13c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-13c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" enable-background="new" style="paint-order:stroke fill markers"/>
+   <path d="m18 6v4a2 2 0 0 0 2-2 2 2 0 0 0-2-2z" enable-background="new" style="paint-order:stroke fill markers"/>
+  </g>
+  <path d="m8.834 4-3.334 5h3l-0.75 3h0.41602l3.334-5h-3l0.75-3z" enable-background="new"/>
+ </g>
+</svg>

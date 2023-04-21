@@ -1,0 +1,13 @@
+<svg width="24" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#363636; }</style>
+ </defs>
+ <path d="m18.367 5.5c0.72222 1.3397 1.1328 2.8713 1.1328 4.5h4.5v-4.5h-5.6328zm-12.867 12.867v5.6328h4.5v-4.5c-1.6287 0-3.1603-0.41059-4.5-1.1328z" style="fill:currentColor" class="ColorScheme-Text" opacity=".35"/>
+ <path d="m18.066 5c0.1994 0.32101 0.38033 0.65497 0.54102 1h5.3926v-1h-5.9336zm-13.066 13.066v5.9336h1v-5.3926c-0.34503-0.16068-0.67899-0.34161-1-0.54102z" style="fill:currentColor" class="ColorScheme-Text"/>
+ <path d="m21 9v1h2v-1h-2zm-12 12v2h1v-2h-1z" style="fill:currentColor" class="ColorScheme-Text"/>
+ <g style="fill:currentColor" class="ColorScheme-Text">
+  <path d="m10 0.5c-5.2467 0-9.5 4.2533-9.5 9.5s4.2533 9.5 9.5 9.5v-9.5h9.5c0-5.2467-4.2533-9.5-9.5-9.5z" opacity=".15"/>
+  <path d="m10 0c-5.5169 0-10 4.4831-10 10s4.4831 10 10 10v-1c-4.9765 0-9-4.0235-9-9s4.0235-9 9-9 9 4.0235 9 9h1c0-5.5169-4.4831-10-10-10z"/>
+ </g>
+ <rect class="ColorScheme-Text" x="10" y="10" width="14" height="14" fill="currentColor" opacity=".5"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" enable-background="new">
+    <defs>
+         <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#dedede; }</style>
+    </defs>
+    <g class="ColorScheme-Text" transform="matrix(0 -1 -1 0 -413 -83.997)" fill="currentColor">
+        <rect y="-418" x="-92.997" width="2" style="marker:none" ry="1" rx="1" height="2" overflow="visible" enable-background="new"/>
+        <rect y="-422" x="-92.997" width="2" style="marker:none" ry="1" rx="1" height="2" overflow="visible" enable-background="new"/>
+        <rect y="-426" x="-92.997" width="2" style="marker:none" ry="1" rx="1" height="2" overflow="visible" enable-background="new"/>
+    </g>
+</svg>

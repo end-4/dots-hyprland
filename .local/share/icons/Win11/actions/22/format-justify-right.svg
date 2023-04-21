@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+  <defs id="defs3051">
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#363636;
+      }
+      </style>
+  </defs>
+ <path 
+    style="fill:currentColor;fill-opacity:1;stroke:none" 
+    d="m3 1033.3622v1h16v-1zm0 2v1h9v-1zm0 4v1h10v-1zm0 2v1h4v-1zm0 4v1h10v-1zm0 2v1h7v-1zm8 1v1h2v-1z" transform="matrix(-1 0 0 1 22-1030.3622)"
+    class="ColorScheme-Text"
+    />  
+</svg>

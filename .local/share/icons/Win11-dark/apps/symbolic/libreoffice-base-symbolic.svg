@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g fill="#dedede">
+  <path d="m10.826 0 4.1738 4.1738v-3.1738c0-0.554-0.446-1-1-1z" style="paint-order:stroke fill markers"/>
+  <path d="M5 8.72v.95c2.1 1.09 4 0 4 0v-.95s-2.06 1.05-4 0z"/>
+  <ellipse cx="7" cy="7" rx="2" ry="1"/>
+  <path d="M5 10.72v.95c2.1 1.09 4 0 4 0v-.95s-2.06 1.05-4 0z"/>
+  <path d="m3 0c-1.0907 0-2 0.9093-2 2v12c0 1.0907 0.9093 2 2 2h10c1.0907 0 2-0.9093 2-2v-8a1.0001 1.0001 0 0 0-0.29297-0.70703l-5-5a1.0001 1.0001 0 0 0-0.70703-0.29297h-6zm0 1h6l5 5v8c0 0.554-0.446 1-1 1h-10c-0.554 0-1-0.446-1-1v-12c0-0.554 0.446-1 1-1z" color="#000000" color-rendering="auto" dominant-baseline="auto" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+ </g>
+</svg>

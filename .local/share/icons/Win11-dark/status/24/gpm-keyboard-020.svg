@@ -1,0 +1,13 @@
+<svg width="24" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <g transform="translate(1.1377 .2)" fill="#ffffff">
+  <g transform="matrix(.15 0 0 .15 -.13774 5.8)">
+   <path d="m64 48h-8v-16h8c8.836 0 16-7.164 16-16s-7.164-16-16-16c-8.837 0-16 7.164-16 16v8h-16v-8c0-8.836-7.164-16-16-16s-16 7.164-16 16 7.164 16 16 16h8v16h-8c-8.836 0-16 7.164-16 16s7.164 16 16 16c8.837 0 16-7.164 16-16v-8h16v7.98c0 8e-3 -1e-3 0.014-1e-3 0.02 0 8.836 7.164 16 16 16s16-7.164 16-16-7.163-15.998-15.999-16zm0-40c4.418 0 8 3.582 8 8s-3.582 8-8 8h-8v-8c0-4.418 3.582-8 8-8zm-56 8c0-4.418 3.582-8 8-8s8 3.582 8 8v8h-8c-4.418 0-8-3.583-8-8zm8 56c-4.418 0-8-3.582-8-8s3.582-8 8-8h8v8c0 4.418-3.582 8-8 8zm16-24v-16h16v16zm32 24c-4.418 0-8-3.582-8-8v-8h7.999c4.418 0 8 3.582 8 8s-3.581 8-7.999 8z" fill="#ffffff"/>
+  </g>
+  <g transform="matrix(0 -.017679 .017679 0 13.136 39.971)"></g>
+  <g transform="rotate(-90 15.331 5.4689)" fill-rule="evenodd">
+   <rect x="2" y="5" width="3" height="6" rx=".12024" ry=".54584" stroke-width=".48038" style="paint-order:stroke fill markers"/>
+   <path d="m2 3c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h13c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h13c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-13c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" enable-background="new" style="paint-order:stroke fill markers"/>
+   <path d="m18 6v4a2 2 0 0 0 2-2 2 2 0 0 0-2-2z" enable-background="new" style="paint-order:stroke fill markers"/>
+  </g>
+ </g>
+</svg>

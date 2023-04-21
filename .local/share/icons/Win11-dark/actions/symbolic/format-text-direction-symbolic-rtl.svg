@@ -1,0 +1,9 @@
+<svg height='16' width='16' xmlns='http://www.w3.org/2000/svg'>
+    <g color='#dedede' transform='translate(-553 -57)'>
+        <rect fill='#dedede' height='1' overflow='visible' style='marker:none' transform='scale(-1 1)' width='14' x='-568.001' y='58'/>
+        <rect fill='#dedede' height='1' overflow='visible' style='marker:none' transform='scale(-1 1)' width='14' x='-568.001' y='61'/>
+        <path d='M568.001 67h-10v1h10zM556.001 68v2h10v1h-10v2l-3-2.5z' fill='#dedede' overflow='visible' style='marker:none'/>
+        <rect fill='#dedede' height='1' overflow='visible' style='marker:none' transform='scale(-1 1)' width='14' x='-568.001' y='64'/>
+        
+    </g>
+</svg>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="linearGradient863" x1="399.57" x2="399.57" y1="545.8" y2="517.8" gradientTransform="translate(-384.57,-515.8)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#0578ff" offset="0"/>
+   <stop stop-color="#42ccff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect x="1" y=".99999" width="30" height="30" rx="8" ry="8" fill="url(#linearGradient863)"/>
+ <g fill="#fff" stroke-linecap="round" stroke-linejoin="round">
+  <path d="m7 5c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h6c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h6c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-6c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" opacity=".9"/>
+  <path d="m19 5c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h6c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h6c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-6c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" opacity=".9"/>
+  <path d="m7 17c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h6c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h6c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-6c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" opacity=".9"/>
+  <path d="m19 17c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h6c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h6c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-6c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" opacity=".9"/>
+ </g>
+</svg>

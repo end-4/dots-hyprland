@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <filter id="f" x="-.064666" y="-.056002" width="1.1293" height="1.112" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.66144363"/>
+  </filter>
+  <linearGradient id="e" x1="25.68" x2="26.448" y1="39.395" y2="17.376" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#345f29" offset="0"/>
+   <stop stop-color="#59a446" offset="1"/>
+  </linearGradient>
+  <linearGradient id="a" x1="15.707" x2="25.68" y1="32.561" y2="39.395" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#ad7c59" offset="0"/>
+   <stop stop-color="#835b41" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(1.4453 0 0 1.4453 -14.363 -16.175)">
+  <g transform="matrix(1.3035,0,0,1.317,-1.4752,-6.5511)" filter="url(#f)" opacity=".1">
+   <path transform="matrix(1.0229 0 0 1.0124 .87599 4.9741)" d="m25 11-12 7v14l12 7 12-7v-14z" fill-rule="evenodd"/>
+  </g>
+  <g transform="matrix(1.3035,0,0,1.317,-2.4747,-7.8841)" fill-rule="evenodd">
+   <path d="m14.173 23.2 12.275 21.257 12.273-21.257-12.273-7.09" fill="url(#e)"/>
+   <path d="m14.173 23.2v3.543l12.274 7.09 1e-3 -3.547z" fill="#59a849"/>
+   <path d="m26.448 33.827 12.274-7.087v-3.543l-12.274 7.086z" fill="#3e7231"/>
+   <path d="m14.173 26.74v10.63l12.274 7.087v-10.63z" fill="url(#a)"/>
+   <path d="m26.448 33.827 12.274-7.087v10.63l-12.274 7.087z" fill="#573d2b"/>
+  </g>
+ </g>
+</svg>

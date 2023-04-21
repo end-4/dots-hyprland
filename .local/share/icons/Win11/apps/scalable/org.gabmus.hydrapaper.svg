@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g>
+  <rect x="4" y="10" width="48" height="36" rx="3" ry="3" fill="#f35a23" style="paint-order:stroke fill markers"/>
+  <rect x="6" y="12" width="44" height="32" rx="1.0476" ry="1.0667" opacity=".15" style="paint-order:stroke fill markers"/>
+  <rect x="8" y="14" width="48" height="36" rx="3" ry="3" fill="#8bc34a" style="paint-order:stroke fill markers"/>
+  <rect x="10" y="16" width="44" height="32" rx="1.0476" ry="1.0667" opacity=".15" style="paint-order:stroke fill markers"/>
+  <rect x="12" y="18" width="48" height="36" rx="3" ry="3" fill="#29b6f6" style="paint-order:stroke fill markers"/>
+  <path d="m15 20c-0.58038 0-1.0469 0.47547-1.0469 1.0664v29.867c0 0.59093 0.46649 1.0664 1.0469 1.0664h31.953l11-11v-19.934c0-0.59093-0.46649-1.0664-1.0469-1.0664z" opacity=".15" style="paint-order:stroke fill markers"/>
+  <path d="m47 52 11-11h-9.9531c-0.58038 0-1.0469 0.47547-1.0469 1.0664z" fill="#6fcdf9" style="paint-order:stroke fill markers"/>
+  <path d="m58 41-11 11h9.9531c0.58038 0 1.0469-0.47547 1.0469-1.0664z" opacity=".05" style="paint-order:stroke fill markers"/>
+ </g>
+</svg>

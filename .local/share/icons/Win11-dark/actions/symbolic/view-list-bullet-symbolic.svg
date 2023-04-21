@@ -1,0 +1,10 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#dedede">
+  <circle cx="2.5" cy="4.5" r=".5"/>
+  <circle cx="2.5" cy="8.5" r=".5"/>
+  <circle cx="2.5" cy="12.5" r=".5"/>
+  <rect x="4" y="4" width="10" height="1" rx=".55556" ry=".5"/>
+  <rect x="4" y="8" width="10" height="1" rx=".55556" ry=".5"/>
+  <rect x="4" y="12" width="10" height="1" rx=".55556" ry=".5"/>
+ </g>
+</svg>

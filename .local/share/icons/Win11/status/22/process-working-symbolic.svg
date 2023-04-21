@@ -1,0 +1,19 @@
+<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#ffffff; } .ColorScheme-Highlight { color:#4285f4; }</style>
+ </defs>
+ <g transform="translate(-754,-26)" class="ColorScheme-Text" fill="currentColor">
+  <rect x="764.5" y="29" width="1" height="5" rx=".5" ry=".5" overflow="visible"/>
+  <rect transform="rotate(-90)" x="-37.5" y="757" width="1" height="5" rx=".5" ry=".5" opacity=".578" overflow="visible"/>
+  <rect transform="scale(-1)" x="-765.5" y="-45" width="1" height="5" rx=".5" ry=".5" opacity=".335" overflow="visible"/>
+  <rect transform="rotate(90)" x="36.5" y="-773" width="1" height="5" rx=".5" ry=".5" opacity=".19" overflow="visible"/>
+  <rect transform="rotate(-30)" x="643.51" y="406.54" width="1" height="5" rx=".5" ry=".5" opacity=".833" overflow="visible"/>
+  <rect transform="rotate(-60)" x="349.96" y="673.01" width="1" height="5" rx=".5" ry=".5" opacity=".694" overflow="visible"/>
+  <rect transform="rotate(240)" x="-415.04" y="636.01" width="1" height="5" rx=".5" ry=".5" opacity=".482" overflow="visible"/>
+  <rect transform="rotate(210)" x="-681.51" y="342.46" width="1" height="5" rx=".5" ry=".5" opacity=".402" overflow="visible"/>
+  <rect transform="rotate(150)" x="-644.51" y="-422.54" width="1" height="5" rx=".5" ry=".5" opacity=".28" overflow="visible"/>
+  <rect transform="rotate(120)" x="-350.96" y="-689.01" width="1" height="5" rx=".5" ry=".5" opacity=".23" overflow="visible"/>
+  <rect transform="rotate(60)" x="414.04" y="-652.01" width="1" height="5" rx=".5" ry=".5" opacity=".16" overflow="visible"/>
+  <rect transform="rotate(30)" x="680.51" y="-358.46" width="1" height="5" rx=".5" ry=".5" opacity=".13" overflow="visible"/>
+ </g>
+</svg>

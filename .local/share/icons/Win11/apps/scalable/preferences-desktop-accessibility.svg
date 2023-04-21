@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Apps-Visual-Studio-Code" width="64" height="64" enable-background="new 0 0 1024 1024" image-rendering="optimizeSpeed" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="linearGradient1289">
+   <stop stop-color="#4397ff" offset="0"/>
+   <stop stop-color="#2b59b2" offset="1"/>
+  </linearGradient>
+  <style type="text/css"/>
+  <style type="text/css"/>
+  <linearGradient id="linearGradient1291" x1="-6.3238" x2="-6.3238" y1="10.876" y2="51.408" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient1289"/>
+ </defs>
+ <g transform="matrix(1.3857 0 0 1.3857 41.092 -11.242)" fill="url(#linearGradient1291)">
+  <circle cx="-6.5617" cy="17" r="6" stroke-linecap="round" stroke-linejoin="round" stroke-width=".25377"/>
+  <path d="m-13.422 21.916-5.2275-2.2987s-2.3353-0.79995-3.5668 1.2346c-1.2315 2.0345 0.22923 3.7523 0.78783 4.0785 0.55861 0.3262 8.2041 4.0699 8.2041 4.0699v8.142l-4.0059 9.9124s-0.73592 3.2875 1.7819 3.9657 3.8143-0.24388 4.2992-1.3772c0.48496-1.1333 3.5805-9.6259 3.5805-9.6259s0.31418-0.75812 1.1138-0.75812 1.1555 0.79241 1.1555 0.79241l3.7815 9.9166s0.73548 1.7707 3.2569 1.3927c2.5214-0.37799 3.1418-2.6559 2.8954-3.7316s-4.3557-10.622-4.3557-10.622v-8.0617l8.1942-4.1257s1.3961-0.34804 1.044-2.9188c-0.35211-2.5708-2.9186-2.8233-3.7452-2.5038-0.82652 0.31949-5.14 2.335-5.14 2.335s-2.6934 4.0102-6.7945 4.0102c-4.1012 0-6.9032-2.8874-7.2591-3.8267z"/>
+ </g>
+</svg>

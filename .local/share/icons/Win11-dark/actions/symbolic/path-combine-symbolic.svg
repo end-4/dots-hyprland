@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="16"
+   height="16"
+   id="svg7435">
+  <defs
+     id="defs7437" />
+  <metadata
+     id="metadata7440">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="rect5505-21-8-4-7-0-8-1-5-6"
+     d="M 10.14453,1 A 5.0000005,5.0000018 0 0 0 5,6 H 1.5 C 1.223,6 1,6.223 1,6.5 v 8 C 1,14.777 1.223,15 1.5,15 h 8 C 9.777,15 10,14.777 10,14.5 V 10.998047 A 5.0000005,5.0000018 0 0 0 15,6 5.0000005,5.0000018 0 0 0 10.14453,1 Z"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:0.25;vector-effect:none;fill:#dedede;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:accumulate" />
+  <path
+     d="M 1,5 C 0.446,5 0,5.446 0,6 v 9 c 0,0.554 0.446,1 1,1 h 9 c 0.554,0 1,-0.446 1,-1 V 6 C 11,5.446 10.554,5 10,5 Z m 0.5,1 h 8 C 9.777,6 10,6.223001 10,6.5 v 8 C 10,14.777 9.777,15 9.5,15 h -8 C 1.223,15 1,14.777 1,14.5 v -8 C 1,6.223 1.223,6 1.5,6 Z M 10.17383,0.001954 A 6.0000006,6.0000022 0 0 0 4,6 6.0000006,6.0000022 0 1 0 16,6 6.0000006,6.0000022 0 0 0 10.17383,0.001954 Z m -0.0273,1 A 5.0000005,5.0000018 0 0 1 15,6 5.0000005,5.0000018 0 1 1 5,6 5.0000005,5.0000018 0 0 1 10.14648,1.001954 Z"
+     style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;vector-effect:none;fill:#dedede;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;paint-order:normal;enable-background:accumulate"
+     id="rect5505-21-8-4-7-5-7-2-1-3" />
+</svg>

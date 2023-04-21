@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#dedede; } .ColorScheme-Highlight { color:#5294e2; }</style>
+ </defs>
+ <g fill="#dedede" stroke-linecap="round" stroke-linejoin="round">
+  <path d="m10.5 6a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5 3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5zm0 1a2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5 2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5z" stroke-width="1.4"/>
+  <path d="m2 4c-1.108 0-2 0.892-2 2v7c0 1.108 0.892 2 2 2h12c1.108 0 2-0.892 2-2v-7c0-1.108-0.892-2-2-2h-12zm0 1h12c0.554 0 1 0.446 1 1v7c0 0.554-0.446 1-1 1h-12c-0.554 0-1-0.446-1-1v-7c0-0.554 0.446-1 1-1z"/>
+  <rect x="7" y="2" width="6" height="1" rx="0" ry="0"/>
+  <rect x="2" y="6" width="2" height="1" rx="0" ry="0"/>
+ </g>
+</svg>

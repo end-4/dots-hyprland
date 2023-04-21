@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="a" x2="0" y1="532.8" y2="527.8" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#ebf1f1" offset="0"/>
+   <stop stop-color="#fcfcfc" offset="1"/>
+  </linearGradient>
+  <linearGradient id="b" x1="16" x2="16" y1="4" y2="11" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fdfefe" offset="0"/>
+   <stop stop-color="#dfe4e6" offset="1"/>
+  </linearGradient>
+  <filter id="j" x="-.04125" y="-.11" width="1.0825" height="1.22" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.275"/>
+  </filter>
+  <linearGradient id="e" x1="7.5" x2="7.5" y1="12" y2="17" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <linearGradient id="d" x1="7.5" x2="7.5" y1="12" y2="17" gradientTransform="translate(17)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <filter id="i" x="-.06" y="-.06" width="1.12" height="1.12" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.125"/>
+  </filter>
+  <filter id="h" x="-.06" y="-.06" width="1.12" height="1.12" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.125"/>
+  </filter>
+  <radialGradient id="c" cx="15.851" cy="20.863" r="13.734" gradientTransform="matrix(1 0 0 .32764 0 3.698)" gradientUnits="userSpaceOnUse">
+   <stop stop-opacity=".62745" offset="0"/>
+   <stop stop-color="#030303" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="linearGradient863" x1="399.57" x2="399.57" y1="545.8" y2="517.8" gradientTransform="translate(-384.57 -515.8)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#f71252" offset="0"/>
+   <stop stop-color="#ff5c39" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect x="1" y=".99997" width="30" height="30" rx="8" ry="8" fill="url(#linearGradient863)"/>
+ <g stroke-linecap="square" stroke-width=".1">
+  <path d="m11 4c-1.662 0-3 1.338-3 3v3h2v-3c0-0.55401 0.44598-1 1-1h10c0.55402 0 1 0.44599 1 1v3h2v-3c0-1.662-1.338-3-3-3h-10z" filter="url(#j)" opacity=".25"/>
+  <path d="m11 4c-1.662 0-3 1.338-3 3v3h2v-3c0-0.55401 0.44598-1 1-1h10c0.55402 0 1 0.44599 1 1v3h2v-3c0-1.662-1.338-3-3-3h-10z" fill="url(#b)"/>
+ </g>
+ <g fill-rule="evenodd">
+  <path d="m7.5 12a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5zm0 1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5z" filter="url(#i)" opacity=".25" style="paint-order:normal"/>
+  <path d="m7.5 12a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5zm0 1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5z" fill="url(#e)" style="paint-order:normal"/>
+  <path d="m24.5 12a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5zm0 1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5z" filter="url(#h)" opacity=".25" style="paint-order:normal"/>
+  <path d="m24.5 12a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5zm0 1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5z" fill="url(#d)" style="paint-order:normal"/>
+ </g>
+ <path d="m16 1a15 15 0 0 0-13.74 9h27.469a15 15 0 0 0-13.729-9z" fill="url(#c)" opacity=".35" style="paint-order:fill markers stroke"/>
+</svg>

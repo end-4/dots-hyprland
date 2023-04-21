@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" version="1.1" xmlns="http://www.w3.org/2000/svg" height="64" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+ <defs id="defs5455">
+  <linearGradient inkscape:collect="always" id="linearGradient4372" xlink:href="#linearGradient4227" y1="523.79797" y2="537.79797" x1="408.5715" gradientUnits="userSpaceOnUse" x2="422.57147" gradientTransform="matrix(1.2998888 0 0 1.3 -499.09733 -648.93736)"/>
+  <linearGradient inkscape:collect="always" id="linearGradient4227">
+   <stop style="stop-color:#292c2f" id="stop4229"/>
+   <stop offset="1" style="stop-opacity:0" id="stop4231"/>
+  </linearGradient>
+  <linearGradient inkscape:collect="always" id="linearGradient3834" xlink:href="#linearGradient4300-7" y1="540.79797" y2="506.798" x2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.5292812 0 0 1.529412 -592.82053 -769.10295)"/>
+  <linearGradient inkscape:collect="always" id="linearGradient3862" xlink:href="#linearGradient4351-8" y1="540.79797" y2="506.798" x2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.52941243 0 0 0.52941244 -184.30279 -245.30519)"/>
+  <linearGradient inkscape:collect="always" id="linearGradient4351-8">
+   <stop style="stop-color:#dedede" id="stop4353-5"/>
+   <stop offset="1" style="stop-color:#ececec" id="stop4355-8"/>
+  </linearGradient>
+  <linearGradient inkscape:collect="always" id="linearGradient4300-7">
+   <stop style="stop-color:#6c7a89" id="stop4302-2"/>
+   <stop offset="1" style="stop-color:#768492" id="stop4304-4"/>
+  </linearGradient>
+ </defs>
+ <metadata id="metadata5458"/>
+ <g inkscape:label="Capa 1" inkscape:groupmode="layer" id="layer1" transform="matrix(1 0 0 1 -376.57144 -491.79797)">
+  <path style="fill:url(#linearGradient3834)" id="rect4146" d="M 32 6 C 17.59725 6 6.0019531 17.59602 6.0019531 32 C 6.0019531 46.40398 17.59725 58 32 58 C 46.40275 58 57.998047 46.40398 57.998047 32 C 57.998047 17.59602 46.40275 6 32 6 z M 32 29 C 33.662 29 35 30.338 35 32 C 35 33.662 33.662 35 32 35 C 30.338 35 29 33.662 29 32 C 29 30.338 30.338 29 32 29 z " transform="matrix(1 0 0 1 376.57144 491.79797)"/>
+  <path style="fill:url(#linearGradient4372);opacity:0.2;fill-rule:evenodd" id="path4364" d="M 38.125 25.375 L 37.570312 26.257812 A 8 8 0 0 1 40 32 A 8 8 0 0 1 32 40 A 8 8 0 0 1 25.669922 36.876953 L 24.71875 37.375 L 42.683594 55.683594 C 48.453734 53.085924 53.084131 48.454284 55.681641 42.683594 L 38.125 25.375 z M 37.025391 27.126953 L 34.736328 30.777344 C 34.90297 31.151175 35 31.562905 35 32 C 35 33.662 33.662 35 32 35 C 31.358211 35 30.768025 34.795724 30.28125 34.455078 L 26.564453 36.40625 A 7 7 0 0 0 32 39 A 7 7 0 0 0 39 32 A 7 7 0 0 0 37.025391 27.126953 z " transform="matrix(1 0 0 1 376.57144 491.79797)"/>
+  <path style="fill:url(#linearGradient3862)" id="rect4270" d="M 32 23 C 27.014 23 23 27.014 23 32 C 23 36.986 27.014 41 32 41 C 36.986 41 41 36.986 41 32 C 41 27.014 36.986 23 32 23 z M 32 24 A 8 8 0 0 1 40 32 A 8 8 0 0 1 32 40 A 8 8 0 0 1 24 32 A 8 8 0 0 1 32 24 z M 32 25 A 7 7 0 0 0 25 32 A 7 7 0 0 0 32 39 A 7 7 0 0 0 39 32 A 7 7 0 0 0 32 25 z M 32 29 C 33.662 29 35 30.338 35 32 C 35 33.662 33.662 35 32 35 C 30.338 35 29 33.662 29 32 C 29 30.338 30.338 29 32 29 z " transform="matrix(1 0 0 1 376.57144 491.79797)"/>
+  <path inkscape:connector-curvature="0" style="fill:#2e3132;fill-opacity:0.294118" id="rect4284" d="m 6.0019531,31.191406 c -0.005,0.21774 0,0.435127 0,0.654297 C 6.0019531,46.334943 17.59723,58 32,58 46.40277,58 57.998047,46.334943 57.998047,31.845703 c 0,-0.21917 0.005,-0.436557 0,-0.654297 C 57.654007,45.374776 46.18454,57 32,57 17.81546,57 6.3459931,45.374776 6.0019531,31.191406 Z" transform="matrix(1 0 0 1 376.57144 491.79797)"/>
+  <path style="fill:#2e3132;fill-opacity:0.294118;stroke-linecap:round" id="path4558" d="M 32 24 A 8 8 0 0 0 24 32 A 8 8 0 0 0 32 40 A 8 8 0 0 0 40 32 A 8 8 0 0 0 32 24 z M 32 25 A 7 7 0 0 1 39 32 A 7 7 0 0 1 32 39 A 7 7 0 0 1 25 32 A 7 7 0 0 1 32 25 z " transform="matrix(1 0 0 1 376.57144 491.79797)"/>
+ </g>
+</svg>

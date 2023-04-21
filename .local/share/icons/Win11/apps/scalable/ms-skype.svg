@@ -1,0 +1,1 @@
+skype.svg

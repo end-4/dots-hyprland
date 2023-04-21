@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+    <defs id="defs3051">
+        <style type="text/css" id="current-color-scheme">
+            .ColorScheme-NegativeText {
+                color:#da4453;
+            }
+        </style>
+    </defs>
+    <g style="fill:currentColor;fill-opacity:1;stroke:none" class="ColorScheme-NegativeText" transform="translate(-421.714 -525.79)">
+        <circle cx="432.714" cy="536.791" r="6" fill="#fff"/>
+        <path d="M432.714 528.79a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m-3.293 4l3.293 3.294 3.293-3.293.707.707-3.293 3.293 3.293 3.293-.707.707-3.293-3.293-3.293 3.293-.707-.707 3.293-3.293-3.293-3.293.707-.707" fill="#da4453"/>
+    </g>
+</svg>

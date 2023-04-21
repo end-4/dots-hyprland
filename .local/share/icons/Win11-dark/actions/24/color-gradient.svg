@@ -1,0 +1,19 @@
+<svg version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#dedede;
+      }</style>
+  <linearGradient id="linearGradient4164" x1="3" x2="19" y1="1049.4" y2="1033.4" gradientTransform="matrix(.75 0 0 .75 2.75 -770.02)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#808080" offset="0"/>
+   <stop stop-color="#f2f2f2" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="translate(1 1)">
+  <g transform="translate(-326 -534.36)">
+   <g transform="translate(326 -496)">
+    <path transform="translate(0 1030.4)" d="m16 4v1h-11v11h-1v2h2v-1h11v-11h1v-2h-2z" fill="url(#linearGradient4164)" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+    <path class="ColorScheme-Text" transform="translate(0 1030.4)" d="m15 3v3.293l-8.707 8.707h-3.293v4h4v-3.293l8.707-8.707h3.293v-4h-4zm1 1h2v2h-2v-2zm-12 12h2v2h-2v-2z" fill="currentColor"/>
+   </g>
+  </g>
+ </g>
+</svg>

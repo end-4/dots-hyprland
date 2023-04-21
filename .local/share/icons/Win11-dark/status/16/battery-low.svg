@@ -1,0 +1,7 @@
+<svg width="20" height="16" enable-background="new" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#ffffff" fill-rule="evenodd">
+  <rect x="2" y="5" width="5" height="6" rx=".53373" ry=".54584" style="paint-order:stroke fill markers"/>
+  <path d="m2 3c-1.108 0-2 0.892-2 2v6c0 1.108 0.892 2 2 2h13c1.108 0 2-0.892 2-2v-6c0-1.108-0.892-2-2-2zm0 1h13c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-13c-0.554 0-1-0.446-1-1v-6c0-0.554 0.446-1 1-1z" enable-background="new" style="paint-order:stroke fill markers"/>
+  <path d="m18 6v4a2 2 0 0 0 2-2 2 2 0 0 0-2-2z" enable-background="new" style="paint-order:stroke fill markers"/>
+ </g>
+</svg>

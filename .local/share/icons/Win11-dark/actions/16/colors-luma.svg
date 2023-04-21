@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 16 16">
+  <defs id="defs3051">
+    <style type="text/css" id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#dedede;
+      }
+      </style>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4012"
+       id="linearGradient5517"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.6,0,0,0.56250001,2.2,-576.26626)"
+       x1="3"
+       y1="1049.3622"
+       x2="19"
+       y2="1033.3622" />
+    <linearGradient
+       id="linearGradient4012"
+       inkscape:collect="always">
+      <stop
+         id="stop4014"
+         offset="0"
+         style="stop-color:#1d99f3;stop-opacity:1" />
+      <stop
+         style="stop-color:#48acf5;stop-opacity:0.76119405"
+         offset="0.41666669"
+         id="stop4016" />
+      <stop
+         style="stop-color:#73c0f7;stop-opacity:0"
+         offset="0.66666329"
+         id="stop4018" />
+      <stop
+         id="stop4020"
+         offset="1"
+         style="stop-color:#cae7fc;stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  <path
+     style="fill:currentColor;fill-opacity:1;stroke:none" 
+     d="M 8,2 C 7.76,2.786 7.764,3.283 7.375,4 L 8,4 Z m 0,2 0,3 2,0 C 9.436,6.09 9.214,5.084 8.625,4 Z M 8,7 6,7 C 5.866,7.216 5.086,7.795 4.969,8 L 4,10 8,10 Z m 0,3 0,3 2,0 c 0.305,-0.214 0.959,-0.214 1.188,-0.5 L 12.001,10 Z m 0,3 -1.531,0 0,0.438 1.531,0 z"
+     class="ColorScheme-Text"/>
+  <path
+     style="fill:url(#linearGradient5517);fill-opacity:1;stroke:none"
+     d="M 8,1.99997 C 7.22167,4.55372 5.61319,6.69168 4.4971,8.53769 4.20318,9.06029 4.17678,9.61592 4.17678,10.24997 c 0,2.0775 1.58512,3.54008 3.80112,3.54008 2.216,0 3.87847,-1.46258 3.87847,-3.54008 0,-0.63405 -0.29157,-1.0571 -0.58549,-1.5797 C 10.36471,6.93475 8.77832,4.55372 8,1.99997 Z"/>
+  <path
+     style="fill:currentColor;fill-opacity:0.25;stroke:none" 
+     d="M 8,2 C 7.222,4.554 5.646,6.813 4.641,8.516 4.347,9.039 4,9.616 4,10.25 4,12.327 5.784,14 8,14 10.216,14 12,12.327 12,10.25 12,9.616 11.653,9.127 11.359,8.604 10.243,6.88 8.778,4.554 8,2"
+     class="ColorScheme-Text"/>
+  <path
+     style="fill:currentColor;fill-opacity:1;stroke:none" 
+     d="m 8,2 c -1.072,3.818 -4,6.079 -4,8.188 0,2.109 1.791,3.813 4,3.813 2.209,0 4,-1.704 4,-3.813 C 12,8.079 9.072,5.819 8,2 M 7.969,3.438 c 0.862,3.137 3.219,4.986 3.219,6.719 0,1.733 -1.441,3.125 -3.219,3.125 -1.778,0 -3.188,-1.392 -3.188,-3.125 0,-1.733 2.325,-3.582 3.188,-6.719"
+     class="ColorScheme-Text"/>
+</svg>

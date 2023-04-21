@@ -1,0 +1,5 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g transform='translate(-913 271)'>
+        <path class='error' d='M921-271c-4.423 0-8 3.576-8 8 0 4.424 3.577 8 8 8 4.424 0 8-3.576 8-8 0-4.424-3.576-8-8-8zm0 1a7 7 0 0 1 7 7 7 7 0 0 1-7 7 7 7 0 0 1-7-7 7 7 0 0 1 7-7zm-1 2v4l.5 3h1l.5-3v-4zm1 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2z' fill='#f55f55'/>
+    </g>
+</svg>

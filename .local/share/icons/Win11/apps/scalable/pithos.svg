@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <linearGradient id="d" x1="99.036" x2="99.036" y1="-.50472" y2="199.84" gradientTransform="matrix(4.6171 0 0 4.6171 45.796 78.158)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#369" offset="0"/>
+   <stop stop-color="#25507b" offset="1"/>
+  </linearGradient>
+  <linearGradient id="a" x1="403.12" x2="403.12" y1="211.25" y2="396.25" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#5a1aa9" offset="0"/>
+   <stop stop-color="#c063d5" offset="1"/>
+  </linearGradient>
+  <filter id="f" x="-.042002" y="-.031499" width="1.084" height="1.063" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="2.42805"/>
+  </filter>
+  <linearGradient id="c" x1="403.7" x2="402.71" y1="139.02" y2="463.07" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#d7d7d7" offset="1"/>
+  </linearGradient>
+  <linearGradient id="b" x1="402.71" x2="402.71" y1="316.42" y2="341.92" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+  <linearGradient id="e" x1="396.33" x2="396.33" y1="137.89" y2="463.07" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+ </defs>
+ <g transform="translate(0 -988.36)">
+  <g transform="matrix(.063762 0 0 .063762 -.61424 985.88)" stroke-width="15.683">
+   <circle cx="507.51" cy="539.87" r="461.71" color="#000000" fill="url(#d)"/>
+   <g id="principle_icon" transform="matrix(3.1367 0 0 3.1367 -743.17 -400.14)" stroke-width="15.683">
+    <path class="shp1" d="m400 450c82.84 0 150-67.16 150-150s-67.16-150-150-150-150 67.16-150 150 67.16 150 150 150z" fill="url(#e)"/>
+    <path class="shp2" d="m377.4 377.56c0 12.08-9.77 21.88-21.82 21.88-5.27 0-10.11-1.87-13.88-4.99 4.18-2.02 7.06-6.3 7.06-11.26 0-6.9-5.6-12.5-12.5-12.5-0.86 0-1.69 0.09-2.5 0.25v-86.82c0-38.48 31.13-69.68 69.52-69.68h0.63c38.16 0 68.68 30.8 68.58 68.88v0.61c-0.01 0.21-0.01 0.41-0.02 0.61-1.39 37.4-32.25 68.01-68.88 68.01-12.05 0-21.82-9.79-21.82-21.87s9.77-21.87 21.82-21.87c12.85 0 24.64-11.67 25.25-25.75-0.05-13.86-11.02-24.88-24.93-24.88h-0.63c-14.29 0-25.87 11.61-25.87 25.93zm51.44-93.88 0.02-1.23c0 0.2-0.01 0.41-0.02 0.61 0 0.2 0 0.41-0.01 0.61zm43.66-0.36-0.02 1.23c0-0.21 0.01-0.41 0.01-0.61 0.01-0.2 0.01-0.41 0.01-0.61z" fill="#0b030d" filter="url(#f)" opacity=".3"/>
+    <path id="Combined Shape" class="shp2" d="m377.4 374.37c0 12.08-9.77 21.88-21.82 21.88-5.27 0-10.11-1.87-13.88-4.99 4.18-2.02 7.06-6.3 7.06-11.26 0-6.9-5.6-12.5-12.5-12.5-0.86 0-1.69 0.09-2.5 0.25v-86.82c0-38.48 31.13-69.68 69.52-69.68h0.63c38.16 0 68.68 30.8 68.58 68.88v0.61c-0.01 0.21-0.01 0.41-0.02 0.61-1.39 37.4-32.25 68.01-68.88 68.01-12.05 0-21.82-9.79-21.82-21.87s9.77-21.87 21.82-21.87c12.85 0 24.64-11.67 25.25-25.75-0.05-13.86-11.02-24.88-24.93-24.88h-0.63c-14.29 0-25.87 11.61-25.87 25.93zm51.44-93.88 0.02-1.23c0 0.2-0.01 0.41-0.02 0.61 0 0.2 0 0.41-0.01 0.61zm43.66-0.36-0.02 1.23c0-0.21 0.01-0.41 0.01-0.61 0.01-0.2 0.01-0.41 0.01-0.61z" fill="url(#c)"/>
+    <path id="Oval 2 Copy" class="shp3" d="m403.75 341.25c7.59 0 13.75-6.16 13.75-13.75s-6.16-13.75-13.75-13.75-13.75 6.16-13.75 13.75 6.16 13.75 13.75 13.75z" fill="url(#b)"/>
+   </g>
+  </g>
+ </g>
+</svg>

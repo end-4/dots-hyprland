@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="linearGradient5002">
+   <stop stop-color="#2e5d89" offset="0"/>
+   <stop stop-color="#1b92f4" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient4352" x1="400.57" x2="415.57" y1="512.8" y2="527.8" gradientTransform="matrix(1.1818 0 0 1.1818 -74.286 -95.236)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient5002"/>
+  <linearGradient id="linearGradient4352-8" x1="400.57" x2="415.57" y1="512.8" y2="527.8" gradientTransform="translate(57.625 10.5)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient5002"/>
+  <linearGradient id="linearGradient1455" x1="4" x2="60" y1="27" y2="27" gradientTransform="matrix(1 0 0 1.0556 376.57 491.03)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#555a5f" offset="0"/>
+   <stop stop-color="#4b4f53" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient17498" x1="4" x2="60" y1="9" y2="45" gradientTransform="matrix(.8954 0 0 .91673 379.92 493.54)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#3fe3e7" offset="0"/>
+   <stop stop-color="#066bbc" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient1205" x1="4" x2="60" y1="27" y2="27" gradientTransform="matrix(.92857 0 0 .22223 378.86 527.8)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient1455"/>
+  <linearGradient id="linearGradient1519" x1="4" x2="60" y1="27" y2="27" gradientTransform="matrix(.92857 0 0 .97233 378.86 492.04)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient1455"/>
+ </defs>
+ <g transform="translate(-376.57 -491.8)">
+  <g transform="translate(0 1.2291)">
+   <path d="m382.57 537.8h52l1.9993 5h-55.999z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#bcc5cf" image-rendering="optimizeSpeed" shape-rendering="auto" solid-color="#000000" stop-color="#000000" stroke-width="9.4557" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+   <path d="m380.57 542.8h55.999v2h-55.999z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#44484c" fill-opacity=".99608" image-rendering="optimizeSpeed" shape-rendering="auto" solid-color="#000000" stop-color="#000000" stroke-width="9.4279" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+   <rect x="382.57" y="529.8" width="52" height="8" ry="0" fill="url(#linearGradient1205)" stroke-linecap="round" stroke-linejoin="round" stroke-width=".3634"/>
+   <path d="m385.36 500.34c-1.5433 0-2.7857 1.338-2.7857 3v1c0-1.662 1.2424-3 2.7857-3h46.429c1.5433 0 2.7857 1.338 2.7857 3v-1c0-1.662-1.2424-3-2.7857-3z" fill="#b8c2cc" stroke-width=".96362"/>
+   <rect x="382.57" y="500.8" width="52" height="35.002" ry="3.0024" fill="url(#linearGradient1519)" stroke-linecap="round" stroke-linejoin="round" stroke-width=".76014"/>
+   <rect x="383.5" y="501.8" width="50.143" height="33.002" ry="2.0024" fill="url(#linearGradient17498)" stroke-linecap="round" stroke-linejoin="round" stroke-width=".7248"/>
+  </g>
+ </g>
+</svg>

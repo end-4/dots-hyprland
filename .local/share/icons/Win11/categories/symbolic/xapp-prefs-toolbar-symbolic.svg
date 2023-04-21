@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Gnome Symbolic Icon Theme</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <title>Gnome Symbolic Icon Theme</title>
+ <g fill="#363636">
+  <path d="m1 6c-0.554 0-1 0.446-1 1v2c0 0.554 0.446 1 1 1h2c0.554 0 1-0.446 1-1v-2c0-0.554-0.446-1-1-1h-2zm0 1h2v2h-2v-2z" color="#000000" enable-background="new"/>
+  <rect y="3" width="16" height="1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect y="12" width="16" height="1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <path d="m7 6c-0.554 0-1 0.446-1 1v2c0 0.554 0.446 1 1 1h2c0.554 0 1-0.446 1-1v-2c0-0.554-0.446-1-1-1zm0 1h2v2h-2z" color="#000000" enable-background="new"/>
+  <path d="m13 6c-0.554 0-1 0.446-1 1v2c0 0.554 0.446 1 1 1h2c0.554 0 1-0.446 1-1v-2c0-0.554-0.446-1-1-1zm0 1h2v2h-2z" color="#000000" enable-background="new"/>
+ </g>
+</svg>

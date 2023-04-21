@@ -1,0 +1,13 @@
+<svg width="24" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#363636; }</style>
+ </defs>
+ <g style="fill:currentColor" class="ColorScheme-Text" >
+  <path d="m10 0.5c-5.2467 0-9.5 4.2533-9.5 9.5 0 3.618 2.0239 6.7629 5 8.3672v-12.867h12.867c-1.6043-2.9761-4.7492-5-8.3672-5z" opacity=".15"/>
+  <path d="m10 0c-5.5169 0-10 4.4831-10 10 0 3.8969 2.242 7.2683 5.5 8.918v-1.1289c-2.6893-1.555-4.5-4.4544-4.5-7.7891 0-4.9765 4.0235-9 9-9 3.3346 0 6.234 1.8107 7.7891 4.5h1.1289c-1.6496-3.258-5.021-5.5-8.918-5.5z"/>
+ </g>
+ <path d="m14.5 14.5v9.5h9.5v-9.5h-9.5z" style="fill:currentColor" class="ColorScheme-Text" opacity=".5"/>
+ <path class="ColorScheme-Text" d="m5.5 24v-18.5h18.5v9h-9.5v9.5z" fill="currentColor" opacity=".35"/>
+ <path class="ColorScheme-Text" d="m5 5v19h1v-18h18v-1zm9 9v10h1v-9h9v-1z" fill="currentColor"/>
+ <path d="m9 9v2h2v-2h-2zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2zm-12 4v2h2v-2h-2zm0 4v2h2v-2h-2zm0 4v2h2v-2h-2z" style="fill:currentColor" class="ColorScheme-Text"/>
+</svg>

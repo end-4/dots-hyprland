@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs
+     id="defs3051">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#363636;
+      }
+      </style>
+  </defs>
+  <path
+     style="fill:currentColor;fill-opacity:1;stroke:none" 
+     d="M 15 3 L 15 7 L 11 7 L 16 13 L 21 7 L 17 7 L 17 3 L 15 3 z M 4 14 L 4 15 L 28 15 L 28 14 L 4 14 z M 4 16 L 4 17 L 28 17 L 28 16 L 4 16 z M 16 18 L 11 24 L 15 24 L 15 29 L 17 29 L 17 24 L 21 24 L 16 18 z "
+     class="ColorScheme-Text"
+     />
+</svg>

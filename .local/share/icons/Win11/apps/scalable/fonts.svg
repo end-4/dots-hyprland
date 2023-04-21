@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="64" height="64" version="1.1" viewBox="0 0 16.933 16.933" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <defs>
+  <linearGradient id="linearGradient1410" x1="-38.419" x2="-37.57" y1="25.799" y2="22.519" gradientTransform="matrix(.85105 0 0 .85105 42.135 -5.9007)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#545454" offset="0"/>
+   <stop stop-color="#393939" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient868" x1="2.1525" x2="10.691" y1="1.3632" y2="12.018" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#424344" offset="0"/>
+   <stop stop-color="#5e6162" offset="1"/>
+  </linearGradient>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <path d="m9.4384 16.056h5.1169c0.57229 0 1.0331-0.46033 1.0331-1.0326v-10.319c0-0.57229-0.46077-1.0331-1.0331-1.0331h-9.2628z" fill="#f0f0f5" stroke-width=".85105"/>
+ <text x="8.0007629" y="12.142981" fill="#3a3a3a" font-family="AkrutiMal1" font-size="6.4483px" font-weight="bold" letter-spacing="0px" stroke-width=".16121" word-spacing="0px" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="8.0007629" y="12.142981" fill="#3a3a3a" font-family="AkrutiMal1" font-size="6.4483px" font-weight="bold" stroke-width=".16121" style="font-feature-settings:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal">文</tspan></text>
+ <path d="m7.7994 0.89702h-5.1169c-0.57229 0-1.0331 0.46033-1.0331 1.0326v10.319c0 0.57229 0.46077 1.0331 1.0331 1.0331h9.2628z" fill="url(#linearGradient868)" stroke-width=".85105"/>
+ <path d="m8.5126 13.281h3.4327l-2.4935 2.7742z" fill="url(#linearGradient1410)"/>
+ <path d="m7.3769 9.7594-0.38497-1.2653h-1.9401l-0.38614 1.2664h-1.2147l1.8779-5.3426h1.3791l1.8849 5.3426h-1.2159m-0.65491-2.2124c-0.3568-1.1479-0.5575-1.7957-0.60327-1.9483-0.035251-0.11756-0.066956-0.23616-0.095071-0.35563-0.07981 0.31103-0.30985 1.0786-0.68778 2.304h1.3861" fill="#fafafa" font-size="24" font-weight="700" letter-spacing="0" stroke-width=".86383" word-spacing="0"/>
+</svg>

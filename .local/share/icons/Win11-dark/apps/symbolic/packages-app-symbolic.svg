@@ -1,0 +1,9 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-492,-279)" fill="#dedede">
+  <path d="m496.99 280c-1.258 0.015-2.179-0.03-2.932 0.385a1.88 1.88 0 0 0-0.837 0.998c-0.165 0.438-0.225 0.96-0.225 1.617v9c0 0.658 0.06 1.179 0.225 1.617 0.164 0.439 0.461 0.789 0.837 0.996 0.753 0.415 1.674 0.372 2.932 0.387h5.012c1.258-0.015 2.179 0.03 2.932-0.385a1.88 1.88 0 0 0 0.838-0.998c0.164-0.438 0.224-0.96 0.224-1.617v-9c0-0.658-0.06-1.179-0.225-1.617a1.875 1.875 0 0 0-0.837-0.996c-0.753-0.415-1.674-0.372-2.932-0.387h-5.008zm6e-3 1h5c1.259 0.015 2.09 0.06 2.455 0.262 0.184 0.1 0.287 0.213 0.385 0.472 0.097 0.26 0.16 0.674 0.16 1.266v9c0 0.592-0.063 1.006-0.16 1.266-0.098 0.26-0.202 0.371-0.385 0.472-0.366 0.202-1.196 0.247-2.455 0.262h-5c-1.259-0.015-2.09-0.06-2.455-0.262-0.184-0.1-0.287-0.213-0.385-0.472-0.097-0.26-0.16-0.674-0.16-1.266v-9c0-0.592 0.063-1.006 0.16-1.266 0.098-0.26 0.203-0.371 0.387-0.472 0.366-0.202 1.194-0.247 2.453-0.262z" font-family="sans-serif" font-weight="400" overflow="visible" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  <path d="m495.33 290c-0.185 0-0.334 0.112-0.334 0.25v2.5c0 0.139 0.149 0.25 0.334 0.25h2.333c0.184 0 0.333-0.112 0.333-0.25v-2.5c0-0.139-0.149-0.25-0.333-0.25z" opacity=".5"/>
+  <rect x="501" y="292" width="3" height="1" rx=".25" ry=".25" opacity=".5"/>
+  <rect x="501" y="290" width="3" height="1" rx=".25" ry=".25" opacity=".5"/>
+  <path d="m498.94 281h1.063v13h-1.063z"/>
+ </g>
+</svg>

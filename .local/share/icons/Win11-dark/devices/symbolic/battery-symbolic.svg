@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#dedede" fill-rule="evenodd">
+  <path d="m1 4c-0.554 0-1 0.446-1 1v6c0 0.554 0.446 1 1 1h12c0.554 0 1-0.446 1-1v-6c0-0.554-0.446-1-1-1zm0 1h12v6h-12z" style="paint-order:normal"/>
+  <path d="m15 6.5879v2.8242a1.5 1.5 0 0 0 1-1.4121 1.5 1.5 0 0 0-1-1.4121z" style="paint-order:normal"/>
+  <rect x="2" y="6" width="10" height="4" ry="0" style="paint-order:normal"/>
+ </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg height="22" width="22" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css" id="current-color-scheme">
+        .ColorScheme-Text {
+            color:#363636;
+        }
+        .ColorScheme-Highlight {
+            color:#3daee9;
+        }
+    </style>
+    <path d="M10 3a5 5 0 0 0-5 5v6a5 5 0 0 0 5 5h2a5 5 0 0 0 5-5V8a5 5 0 0 0-5-5zm0 1h2a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z" fill="currentColor" class="ColorScheme-Text"/>
+    <path d="M10 4a4 4 0 0 0-1 .133V11h4V4.13A4 4 0 0 0 12 4zm0 1h2v5h-2z" fill="currentColor" class="ColorScheme-Highlight"/>
+</svg>
