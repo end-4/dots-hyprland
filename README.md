@@ -79,7 +79,7 @@ tesseract
 # Attribution
  - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
  - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always)
- - Bing AI for helping me breeze through the process of learning different libraries
+ - Bing AI for helping me breeze through the process of learning libraries
  - Maybe more, but I don't remember it all.. thanks anyway
 
 # Some inspirations
