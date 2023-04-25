@@ -29,13 +29,13 @@
 
 # Screenshots 
  - Windoes 11
- ![dots-hyprland](./screenshot-windoes.png)
+ ![dots-hyprland](./assets/screenshot-windoes.png)
  - Material
- ![dots-hyprland](./screenshot-material.png)
+ ![dots-hyprland](./assets/screenshot-material.png)
  - osu!lazer
- ![dots-hyprland](./screenshot-17.png)
+ ![dots-hyprland](./assets/screenshot-17.png)
  - linage
- ![dots-hyprland](./screenshot-9.png)
+ ![dots-hyprland](./assets/screenshot-9.png)
 
 # General instructions
  - **Backup if you need**
