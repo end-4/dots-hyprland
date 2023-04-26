@@ -4,7 +4,6 @@ reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
 if [[ "$reserves" == "[0,53,0,0]" ]]; then
     eww open winbar &
     eww close bar &
-    eww close bg-decor &
     hyprctl keyword monitor eDP-1,addreserved,0,50,0,0
 
     hyprctl keyword decoration:rounding 0 
@@ -16,7 +15,6 @@ if [[ "$reserves" == "[0,53,0,0]" ]]; then
 else
     eww close winbar &
     eww open bar &
-    eww open bg-decor &
     hyprctl keyword monitor eDP-1,addreserved,53,0,0,0
 
     hyprctl keyword decoration:rounding 17 

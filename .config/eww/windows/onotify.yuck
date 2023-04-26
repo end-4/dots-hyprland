@@ -1,3 +1,94 @@
+(defwidget volume_mixer []
+  (box
+    :space-evenly false
+    :orientation "v"
+    ; :class "sliders"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :spacing 10
+      (label
+        :halign "start"
+        :class "osettings-section-icon"
+        :text ""
+      )
+      (label
+        :halign "start"
+        :wrap true
+        :class "osettings-section"
+        :text "Volume mixer"
+      )
+    )
+    (for app in audiojson
+      (box
+        :orientation "v"
+        :space-evenly false
+        (box
+          :orientation "h"
+          :space-evenly false
+          :spacing 10
+          (image
+            :class "onotify-app-icon"
+            :path {app.icon}
+            :image-width 25
+            :image-height 25
+          )
+          (label
+            :xalign 0
+            :valign "center"
+            :class "onotify-app-name"
+            :limit-width 42
+            :text {app.name}
+          )
+        )
+        (box
+          :orientation "v"
+          :space-evenly false
+          (scroll
+            :vscroll false
+            :hscroll true
+            (box
+              :orientation "h"
+              ; :space-evenly false
+              (for ser in {app["volume"]}
+                (eventbox
+                  :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")% &"
+                  :onrightclick "pactl set-sink-input-volume ${ser[0]} 100%"
+                  :onclick "pactl set-sink-input-volume ${ser[0]} 0%"
+                  (centerbox
+                    :space-evenly false
+                    :orientation "${app.count > 3 ? 'v' : 'h'}"
+                    :class "onotify-app-volbox"
+                    (label
+                      :xalign "${app.count > 3 ? '0.5' : '0'}"
+                      :class "onotify-app-ser"
+                      :style "
+                      ${app.count > 3 ? 'margin-bottom: 5px;' : 'padding: 0 5px;'}
+                      "
+                      :text "#${ser[0]}"
+                    )
+                    (box)
+                    (circular-progress
+                      :halign "${app.count > 3 ? 'center' : 'end'}"
+                      :value {ser[1] <= 100 ? ser[1] : 100}
+                      :class "onotify-app-vol-circle"
+                      :thickness 4
+                      :start-at 75
+                      :width 45
+                      :height 45
+                      (label :class "onotify-app-text" :text "${ser[1]}")
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
 (defwidget onotify []
   (box
     :orientation "v"
@@ -127,150 +218,87 @@
             :spacing 20
             :orientation "v"
             ; Volume mixer
-            (box
-              :space-evenly false
-              :orientation "v"
-              ; :class "sliders"
-              (box
-                :orientation "h"
-                :space-evenly false
-                :spacing 10
-                (label
-                  :halign "start"
-                  :class "osettings-section-icon"
-                  :text ""
-                )
-                (label
-                  :halign "start"
-                  :wrap true
-                  :class "osettings-section"
-                  :text "Volume mixer"
-                )
-              )
-              (for i in audiojson
-                (eventbox
-                  :onscroll "pactl set-sink-input-volume ${i.sink} $(echo {} | sed -e \"s/up/+10/g\" -e \"s/down/-10/g\")% &"
-                  :onrightclick "pactl set-sink-input-volume ${i.sink} 100%"
-                  :onclick "pactl set-sink-input-volume ${i.sink} 0%"
-                  (box
-                    :space-evenly false
-                    :orientation "v"
-                    ; (label :class "time" :text "DEBUG:${i}")
-                    (centerbox
-                      :space-evenly false
-                      :orientation "h"
-                      ; :halign "center"
-                      (label
-                        :xalign 0
-                        :class "osettings-text"
-                        :limit-width 42
-                        :text "${i.name} (#${i.sink})"
-                      )
-                      (label
-                        :xalign 0
-                        :class "osettings-text"
-                        :limit-width 30
-                        :text ""
-                      )
-                      (box :orientation "v"
-                        (label
-                          :xalign 1
-                          :class "osettings-text"
-                          :text "${i.volume}%"
-                        )
-                      )
-                    )
-                    (scale
-                      :halign "fill"
-                      :class "osettings-slider"
-                      :value {i.volume}
-                      :onchange "pactl set-sink-input-volume ${i.sink} {}%"
-                      :tooltip "${i.name}: ${i.volume}%"
-                    )
-                  )
-                )
-              )
-            )
-            ; Resource usage
-            (box
-              :orientation "h"
-              :space-evenly false
-              :spacing 10
-              (label
-                :halign "start"
-                :class "osettings-section-icon"
-                :text ""
-              )
-              (label
-                :halign "start"
-                :wrap true
-                :class "osettings-section"
-                :text "Resources"
-              )
-            )
-            (box
-              :style "margin-bottom: 17px;"
-              ; cpu
-              (box
-                :class "sys-box"
-                :space-evenly false
-                :halign "start"
-                (circular-progress
-                  :start-at 75
-                  :value "${EWW_CPU.avg}"
-                  :class "sys-cpu"
-                  :thickness 3
-                  (label
-                    :text ""
-                  :class "sys-icon-cpu icon")
-                )
-                (box
-                  :orientation "v"
-                  :vexpand false
-                  (label
-                    :text "CPU"
-                    :halign "start"
-                    :class "sys-text-cpu"
-                    :style "font-size: 12pt;"
-                  )
-                  (label
-                    :text "${round(EWW_CPU.avg,2)}%"
-                    :halign "start"
-                    :class "sys-text-sub"
-                    :style "font-size: 12pt;"
-                  )
-                  (label
-                    :text "${EWW_CPU.cores[0].freq} MHz"
-                    :halign "start"
-                    :class "sys-text-sub"
-                    :style "font-size: 12pt;"
-                  )
-                )
-              )
+            (volume_mixer)
+            ; ; Resource usage
+            ; (box
+              ;   :orientation "h"
+              ;   :space-evenly false
+              ;   :spacing 10
+              ;   (label
+                ;     :halign "start"
+                ;     :class "osettings-section-icon"
+                ;     :text ""
+              ;   )
+              ;   (label
+                ;     :halign "start"
+                ;     :wrap true
+                ;     :class "osettings-section"
+                ;     :text "Resources"
+              ;   )
+            ; )
+            ; (box
+              ;   :style "margin-bottom: 17px;"
+              ;   ; cpu
+              ;   (box
+                ;     :class "sys-box"
+                ;     :space-evenly false
+                ;     :halign "start"
+                ;     (circular-progress
+                  ;       :start-at 75
+                  ;       :value "${EWW_CPU.avg}"
+                  ;       :class "sys-cpu"
+                  ;       :thickness 3
+                  ;       (label
+                    ;         :text ""
+                  ;       :class "sys-icon-cpu icon")
+                ;     )
+                ;     (box
+                  ;       :orientation "v"
+                  ;       :vexpand false
+                  ;       (label
+                    ;         :text "CPU"
+                    ;         :halign "start"
+                    ;         :class "sys-text-cpu"
+                    ;         :style "font-size: 12pt;"
+                  ;       )
+                  ;       (label
+                    ;         :text "${round(EWW_CPU.avg,2)}%"
+                    ;         :halign "start"
+                    ;         :class "sys-text-sub"
+                    ;         :style "font-size: 12pt;"
+                  ;       )
+                  ;       (label
+                    ;         :text "${EWW_CPU.cores[0].freq} MHz"
+                    ;         :halign "start"
+                    ;         :class "sys-text-sub"
+                    ;         :style "font-size: 12pt;"
+                  ;       )
+                ;     )
+              ;   )
               
-              ; memory
-              (box
-                :class "sys-box"
-                :space-evenly false
-                :halign "end"
-                (circular-progress
-                  :start-at 75
-                  :value {memory.percentage}
-                  :class "sys-mem"
-                  :thickness 3
-                  (label
-                    :text ""
-                    :class "sys-icon-mem icon"
-                  )
-                )
-                (box
-                  :orientation "v"
-                  (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
-                  (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
-                  (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
-                )
-              )
-            )
+              ;   ; memory
+              ;   (box
+                ;     :class "sys-box"
+                ;     :space-evenly false
+                ;     :halign "end"
+                ;     (circular-progress
+                  ;       :start-at 75
+                  ;       :value {memory.percentage}
+                  ;       :class "sys-mem"
+                  ;       :thickness 3
+                  ;       (label
+                    ;         :text ""
+                    ;         :class "sys-icon-mem icon"
+                  ;       )
+                ;     )
+                ;     (box
+                  ;       :orientation "v"
+                  ;       (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
+                  ;       (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
+                  ;       (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
+                ;     )
+              ;   )
+            ; )
             ; Calendar
             ; (label
               ;   :halign "start"

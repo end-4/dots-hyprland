@@ -28,10 +28,9 @@
         (box
           :orientation "h"
           :space-evenly false
-          (box :class "winicon winwifi${net.level}")
-          (box :class "winicon winvol${volume.audio == 1 ? round(volume.percent / 33, 0) : 'mute'}")
-          ; (box :class "winicon winbat${battery.quickicon == '' ? round(battery.percentage / 10, 0) : 'charge'}")
-          (box :class "winicon winbat${round(battery.percentage / 10, 0)}")
+          (image :class "winicon" :path "images/svg/dark/wifi${net.level}.svg")
+          (image :class "winicon" :path "images/svg/dark/vol${volume.audio == 1 ? round(volume.percent / 33, 0) : 'mute'}.svg")
+          (image :class "winicon" :path "images/svg/dark/bat${round(battery.percentage / 10, 0)}.svg")
         )
       )
     )

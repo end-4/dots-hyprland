@@ -224,10 +224,6 @@
     slider:hover {
         background-color: $primary;
     }
-
-    // slider:focus {
-    //     background-color: $primary;
-    // }
 }
 
 .osettings-checkbox {
@@ -283,4 +279,54 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+}
+
+.onotify-app-icon {
+    margin: 9px 5px;
+
+    color: $onSecondaryContainer;
+    font-family: 'Material Symbols Rounded';
+    font-size: 20pt;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: $secondaryContainer;
+    border-radius: 14px;
+}
+
+.onotify-app-name {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: $onSecondaryContainer;
+    font-family: Torus;
+    font-size: 15pt;
+}
+
+.onotify-app-text {
+    color: $onSecondaryContainer;
+    font-family: Torus;
+    font-size: 13pt;
+}
+
+.onotify-app-ser {
+    color: $onSecondaryContainer;
+    font-family: Torus;
+    font-size: 13pt;
+}
+
+.onotify-app-vol-circle {
+    background-color: #5c5b5b;
+    color: $primary;
+}
+
+.onotify-app-volbox {
+    margin: 9px 5px;
+    padding: 5px;
+
+    color: $onSecondaryContainer;
+    font-family: 'Material Symbols Rounded';
+    font-size: 20pt;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: $secondaryContainer;
+    border-radius: 14px;
 }

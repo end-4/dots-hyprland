@@ -73,6 +73,13 @@
         :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
         :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
       )
+      (revealer
+        :reveal false
+        :transition "slidedown"
+        (label
+          :text {ICON_GET} ; Dummy to keep listeners active
+        )
+      )
     )
     (eventbox
       :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Activities Overview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &`
