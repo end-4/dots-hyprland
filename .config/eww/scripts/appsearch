@@ -4,6 +4,8 @@ IFS=$'\n'
 entrynames=( $(cat 'scripts/cache/entrynames.txt' | fzf --filter="$1" | head -n 10) )
 entries=( $(cat 'scripts/cache/entries.txt') )
 
+addedNewActions=false
+
 geticonof() {
   clientclass=''
   clientclass=$1
@@ -64,6 +66,16 @@ quiteSureNotMath() {
   fi
 }
 
+# Search inits: math
+if [[ "$1" == "--calculator" ]]; then
+  echo -n '[{"name":"Calculator - Type something!","icon":"images/svg/dark/calculator.svg","exec":"wl-copy \"Clipboard contents ;)\""}]'
+  eww update winsearch_actions='{"name":"Calculator - Type something!","icon":"images/svg/dark/calculator.svg","exec":"wl-copy \"Clipboard contents ;)\""}'
+  eww update winsearch_actions_type='Math result'
+  addedNewActions=true
+  exit 0
+fi
+
+# Quick commands
 if [[ "$1" == ">"* ]]; then
   cd ~/.config/eww 
   if [[ "$1" == ">load"* ]]; then
@@ -74,7 +86,14 @@ if [[ "$1" == ">"* ]]; then
       if [ "$x" != "0" ]; then
         printf ','
       fi
-      echo -n '{"name": "'"${profilenames[x]}"'", "exec": ">load '"${profilenames[x]}"'"}'
+      profilejson='{"name": "'"${profilenames[x]}"'", "exec": ">load '"${profilenames[x]}"'"}'
+      if (( x == 0 )); then
+        eww update winsearch_actions="$profilejson"
+        eww update winsearch_actions_type='Color theme'
+        addedNewActions=true
+      fi
+
+      echo -n "$profilejson"
     done
     echo -n ']'
   else
@@ -83,19 +102,25 @@ if [[ "$1" == ">"* ]]; then
   exit 0
 fi
 
-if [[ "${!entrynames[@]}" == "" && $(quiteSureNotMath "$1") == "false" ]]; then
+# Do math
+if [[ $(quiteSureNotMath "$1") == "false" ]]; then
   mathAns=$(qalc $1 | head -n 1)
   mathAns="${mathAns#*= }"
   mathAns="${mathAns#*≈ }"
-  if [[ "$mathAns" == *"error"* ]]; then
-    echo '[]'
+  if [[ "$mathAns" == *"error"* || "$mathAns" == *"warning"* ]]; then
+    echo '[{"name":"Invalid math","icon":"images/svg/dark/calculator.svg","exec":"wl-copy \"Clipboard contents ;)\""}]'
     exit 0
   else
-    echo '[{"name": "'"$mathAns"'", "exec": "wl-copy \"'"$mathAns"'\""}]'
+    ansjson='{"name": "'"$mathAns"'","icon":"images/svg/dark/calculator.svg","exec": "wl-copy \"'"$mathAns"'\""}'
+    eww update winsearch_actions="$ansjson"
+    eww update winsearch_actions_type='Math result'
+    addedNewActions=true
+    echo '['"$ansjson"']'
   fi
   exit 0
 fi
 
+# Application search
 printf '['
 
 for x in "${!entrynames[@]}"; do
@@ -103,9 +128,19 @@ for x in "${!entrynames[@]}"; do
     printf ','
   fi
   appjson=$(echo $entries | gojq -c -M '."'"${entrynames[x]}"'"')
+  if (( x == 0 )); then
+    eww update winsearch_actions="$appjson"
+    eww update winsearch_actions_type='Application'
+    addedNewActions=true
+  fi
   # iconname=$(echo "$appjson" | gojq -r -c -M '.icon')
   # appjson=$(echo "$appjson" | gojq '.icon = "'$(geticonof "$iconname")'"')
   echo -n "$appjson"
 done
 
 printf ']'
+
+if [[ "$addedNewActions" == "false" ]]; then
+  eww update winsearch_actions='{"name":"'"$1"'","icon":"images/svg/dark/protocol.svg","exec":"wl-copy \"Clipboard contents ;)\""}'
+  eww update winsearch_actions_type='Run command'
+fi

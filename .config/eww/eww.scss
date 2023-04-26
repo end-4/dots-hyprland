@@ -47,6 +47,28 @@ $bg1: $surface0;
   }
 }
 
+@keyframes flyin-bottom {
+  from {
+    margin-bottom: -55px;
+    margin-top: 55px;
+  } 
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+@keyframes flyin-top {
+  from {
+    margin-bottom: 55px;
+    margin-top: -55px;
+  } 
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
 @mixin rounding {
   border-radius: 10px;
 }
@@ -143,6 +165,10 @@ $bg1: $surface0;
   }
 
   font-family: 'Torus';
+  animation-name: flyin-top;
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);  
+  animation-iteration-count: 1;
 }
 
 .bar-compact {
@@ -154,6 +180,7 @@ $bg1: $surface0;
   label {
     font-size: 1.2rem;
   }
+
   font-family: 'Torus';
 }
 
@@ -295,11 +322,13 @@ tooltip {
 }
 
 .ws-text-active {
-  background-color: $onBackground;
+  background-color: $colorbar;
 }
 
 .ws:hover {
-  color: tint($onBackground, 10%);
+  :first-child {
+    color: $tertiary;
+  }
 }
 
 .ws-active {

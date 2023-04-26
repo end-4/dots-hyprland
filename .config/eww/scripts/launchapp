@@ -1,9 +1,10 @@
 #!/usr/bin/bash
 
+~/.config/eww/scripts/toggle-overview.sh --close &
+~/.config/eww/scripts/toggle-winstart.sh --close &
 
 if [[ "$1" == ">"* ]]; then
     args=( $1 )
-    ~/.config/eww/scripts/toggle-overview.sh --close &
     if [[ "${args[0]}" == ">music" ]]; then
         scripts/colormanage get
     elif [[ "${args[0]}" == ">load" ]]; then
@@ -22,14 +23,13 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">uwu" ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
-        pkill eww && eww daemon && eww open bg-decor && eww open bar
+        pkill eww && eww daemon && eww open bar
     else
         # notify-send 'eww' 'Invalid command!'
         false
     fi
 else 
     cd ~
-    ~/.config/eww/scripts/toggle-overview.sh --close &
     app=$1
     eval "${app%\%*}" &
     pkill launchapp

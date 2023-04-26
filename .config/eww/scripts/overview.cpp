@@ -71,7 +71,7 @@ void addApp(json& client) {
     std::ifstream ifs(filename);
     std::string iconpath((std::istreambuf_iterator<char>(ifs)),
                          (std::istreambuf_iterator<char>()));
-    if (iconpath.size() > 0) iconpath.pop_back();  // Remove '\n'
+    while (iconpath.size() > 0 && *iconpath.rbegin() == '\n') iconpath.pop_back();  // Remove '\n'
     newApp["icon"] = iconpath;
 
     workspaces[i][j].push_back(newApp);
@@ -89,8 +89,8 @@ void getApps() {
 }
 
 int main(int argc, char* argv[]) {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     initWorkspaces();
     getApps();

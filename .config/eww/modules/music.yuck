@@ -1,6 +1,5 @@
 (defwidget osu-music-module []
   (eventbox
-    :class "dummy-${mcover}" ; Dummy class to keep the listener active
     :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     :onclick "scripts/toggle-music.sh &"
     :onmiddleclick "playerctl play-pause"
@@ -10,6 +9,12 @@
     (box
       :space-evenly false
       :class "module-button module-button-${music_hover || music_open}"
+      (revealer ; dummy keep alive
+        :reveal false
+        :duration "0ms"
+        :transition "slideright"
+        (label :text {mcover.image})
+      )
       (box
         :space-evenly false
         :valign "start"

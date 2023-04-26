@@ -16,11 +16,13 @@ dostuff(){
           | sed 's/front-right: //' \
           | tr " " "\n" \
           | grep -e % \
-          | sed 's/%//g')
-  icons=$(pactl list sink-inputs \
-          | grep -e 'application.icon_name' \
+          | sed 's/%//g' )
+  binaries=$(pactl list sink-inputs \
+          | grep -e 'application.process.binary' -e 'application.icon_name' \
           | sed 's/\t//g' \
-          | sed 's/application.icon_name = //g')
+          | sed 's/application.process.binary = //g' \
+          | sed 's/application.icon_name = //g' \
+          | sed 's/"//g' )
   
   # echo "-=-=-=-=-=-=-=-=- Debug: Raw value -=-=-=-=-=-=-=-=-"
   # echo "$sinks"
@@ -31,6 +33,12 @@ dostuff(){
   sinkarr=($(echo "$sinks"))
   namearr=($(echo "$names"))
   volarr=($(echo "$vols"))
+  iconarr=($(echo "$binaries"))
+
+  # Get icons
+  for i in "${!iconarr[@]}"; do
+    iconarr[$i]=$(geticons ${iconarr[i]} | head -n 1)
+  done
   
   # Functions
   sanitize() {
@@ -39,7 +47,7 @@ dostuff(){
   
   geticon() {
   #     notify-send "${volarr[$((i*2))]}"
-      if ["${volarr[$(($1*2))]}" -eq "0"]; then
+      if [ "${volarr[$(($1*2))]}" -eq "0" ]; then
           echo ""
       else 
           echo ""
@@ -52,9 +60,8 @@ dostuff(){
       if [ $i -ne 0 ]; then
           printf ', '
       fi
-  #     echo -n '{''"sink": "'"${sinkarr[$i]}"'", "name": "'"${namearr[$i]}"', "icon": "'"$(geticon $i)"'", "volume": "'"${volarr[$((i*2))]}"'"}'
       echo -n '{''"sink": "'"${sinkarr[$i]}"'", "name": "'"${namearr[$i]}"'", "volume": "'"${volarr[$((i*2))]}"'"}'
-  #     printf "\n"
+    #   echo -n '{''"sink": "'"${sinkarr[$i]}"'", "icon": "'"${iconarr[$i]}"'", "name": "'"${namearr[$i]}"'", "volume": "'"${volarr[$((i*2))]}"'"}'
   done
   printf ']\n'
   
@@ -63,8 +70,15 @@ dostuff(){
   # echo "$vols"
 }
 
-dostuff
 
-pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
-    dostuff
-done
+cd ~/.config/eww
+# dostuff
+scripts/audioapps
+
+if [ "$1" == "--once" ]; then
+  exit 0
+else
+    pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
+        scripts/audioapps
+    done
+fi

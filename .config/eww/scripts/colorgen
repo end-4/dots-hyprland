@@ -18,8 +18,8 @@ echo $themejson
 
 maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
 # scripts/material_colors.py --path "$IMGPATH" $lightdark > tmp/_material.colorpallete
-scripts/material_colors.py --color "$maincol" "$lightdark" > tmp/_material.colorpallete
-
+scripts/material_colors.py --color "$maincol" "$lightdark" > tmp/_material.colorpallete &
+accent=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
 
 printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
 
@@ -85,5 +85,5 @@ echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_ge
 echo '}' >> './tmp/colors_generated.conf'
 
 # Print json to stdout
-printf "$themejson" | gojq -r '.special.foreground' > 'tmp/_iconcolor.txt'
+echo -n "$accent" > 'tmp/_iconcolor.txt'
 

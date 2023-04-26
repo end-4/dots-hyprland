@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+cd ~/.config/eww 
 
 icons=("" "" "")
 XDG_CACHE_HOME="$HOME/.cache"
@@ -12,14 +13,10 @@ showhide() {
 
   # handle showing
   if [ "$rundate" = "$currentdate" ] && [ "$lock" -eq 0 ]; then
-    eww open osd
-    eww update osd_bright=true
+    scripts/toggle-osd-bright.sh --open
     lock=1
   elif [ "$((currentdate - rundate))" = "2" ] && [ "$lock" -eq 1 ]; then
-    eww update osd_bright=false
-    if [ "$(eww get osd_vol)" = "false" ] && [ "$(eww get osd_bright)" = "false" ]; then
-      dummy=$(eww close osd)
-    fi
+    scripts/toggle-osd-bright.sh --close > /dev/null
     lock=0
   fi
 }
@@ -44,8 +41,6 @@ osd_handler() {
     showhide
     sleep 0.1
   done
-
-  dummy=$(eww close osd)
 }
 
 if [ "$1" = "osd" ]; then

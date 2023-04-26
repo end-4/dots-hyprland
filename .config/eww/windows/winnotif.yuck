@@ -43,13 +43,17 @@
             :space-evenly false
             :style "margin-right: 12px;"
             (button
-              :class "winnotif-button winreset"
+              :class "winnotif-button"
               :tooltip "Refresh"
               :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
-              ""
+              (image
+                :path "images/svg/dark/reset.svg"
+                :image-width 19
+                :image-height 19
+              )
             )
             (button
-              :class "winnotif-button winnotifsnooze"
+              :class "winnotif-button"
               :tooltip "Pause/Resume Notifications"
               :onclick "scripts/notifications toggle &"
               {notif_icons.toggle_icon}
@@ -66,7 +70,7 @@
           :width 400
           :valign "start"
           :style "
-          min-height: ${rev_wincalendar ? 363 : 811}px;
+          min-height: ${rev_wincalendar ? 357 : 811}px;
           transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);
           "
           (box
@@ -83,7 +87,7 @@
                     :orientation "h"
                     :space-evenly false
                     :class "winwin-bottom-pad"
-                    (box :class "winapp winnotif-notif-icon")
+                    (image :class "winapp winnotif-notif-icon" :path "images/svg/dark/app.svg")
                     (label :class "winnotif-appname" :text {i.appname})
                   )
                   (box
@@ -125,7 +129,7 @@
           :space-evenly false
           :orientation "h"
           :style "padding: 0 12px;"
-          (label :xalign 0 :class "wincalendar-text" :text "${time.day}, ${time.monthname} ${day_only}")
+          (label :xalign 0 :class "wincalendar-title" :text "${time.day}, ${time.monthname} ${day_only}")
           (box)
           (button
             :halign "end"
@@ -154,26 +158,32 @@
               :space-evenly false
               (centerbox
                 :style "padding: 0 12px;"
-                (label :xalign 0 :class "wincalendar-text" :text "${calendartitle}")
+                (label :xalign 0 :class "wincalendar-title" :text "${calendartitle}")
                 (box)
                 (box
                   :halign "end"
                   (button
-                    :halign "end"
                     :onclick "scripts/scrollmonth up &"
-                    :class "winicon winnotif-monthbutton wincaretup"
+                    :halign "end"
+                    :class "winicon winnotif-monthbutton"
+                    (image
+                      :path "images/svg/dark/caretup.svg"
+                    )
                   )
                   (button
-                    :halign "end"
                     :onclick "scripts/scrollmonth down &"
-                    :class "winicon winnotif-monthbutton wincaretdown"
+                    :halign "end"
+                    :class "winicon winnotif-monthbutton"
+                    (image
+                      :path "images/svg/dark/caretdown.svg"
+                    )
                   )
                 )
               )
               (box
                 (for day in weekdays
                   (box
-                    :class "wincalendar-text day${day.today}"
+                    :class "wincalendar-button day${day.today}"
                     (label :class "wincalendar-text" :text "${day.day}")
                   )
                 )
@@ -182,7 +192,7 @@
                 (box
                   (for day in week
                     (button
-                      :class "wincalendar-text day${day.today}"
+                      :class "wincalendar-button day${day.today}"
                       (label :class "wincalendar-text" :text "${day.day}")
                     )
                   )
@@ -200,7 +210,7 @@
           :space-evenly false
           :orientation "h"
           :class "winwin-bottom-pad"
-          (label :xalign 0 :class "wincalendar-text" :text "Calendar")
+          (label :xalign 0 :class "wincalendar-title" :text "Calendar")
         )
       )
     )

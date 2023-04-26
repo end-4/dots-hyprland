@@ -20,6 +20,7 @@ struct DesktopEntry {
     string exec;
     string icon;
     string filename;
+    string filepath;
     bool show;
 };
 
@@ -29,12 +30,12 @@ int mode = 0;  // 0: Object, 1: Array, 2: Start (Contains JSON for letters)
 
 // Returns the file name from a path
 std::string getFileName(const std::string& path) {
-  // Find the last position of '/' or '\' in the path
-  size_t pos = path.find_last_of("/\\");
-  // If none is found, return the whole path
-  if (pos == std::string::npos) return path;
-  // Otherwise, return the substring after the last slash
-  return path.substr(pos + 1);
+    // Find the last position of '/' or '\' in the path
+    size_t pos = path.find_last_of("/\\");
+    // If none is found, return the whole path
+    if (pos == std::string::npos) return path;
+    // Otherwise, return the substring after the last slash
+    return path.substr(pos + 1);
 }
 
 // Returns the file name without extension from a path
@@ -96,7 +97,8 @@ string getIconPath(string iconname) {
         // cout << "icon name: " << iconname << '\n';
         // cout << "path: " << path << '\n';
     }
-    if (path.size() > 0) path.pop_back();  // Remove '\n'
+    while (path.size() > 0 && *path.rbegin() == '\n')
+        path.pop_back();  // Remove '\n'
     return path;
 }
 
@@ -105,6 +107,7 @@ DesktopEntry readDesktopFile(const string& filename) {
     DesktopEntry entry;
     entry.show = true;
     entry.filename = getFileNameNoExt(filename);
+    entry.filepath = filename;
 
     ifstream file(filename);
     if (file.is_open()) {
@@ -122,7 +125,7 @@ DesktopEntry readDesktopFile(const string& filename) {
             if (pos != string::npos) {
                 string key = line.substr(0, pos);
                 string value = line.substr(pos + 1);
-                // Store the name and exec properties
+                // Store properties
                 if (key == "Name") {
                     entry.name = value;
                 } else if (key == "Exec") {
@@ -162,6 +165,7 @@ void getDesktopEntries(const string& dirname) {
         if (entry.path().extension() == ".desktop") {
             // Read the file and print its name and exec properties
             DesktopEntry thisEntry = readDesktopFile(entry.path());
+            // cout << thisEntry.name << " [icon: " << thisEntry.icon << "]\n";
             if (thisEntry.show) allApps.push_back(thisEntry);
         }
     }
@@ -179,6 +183,7 @@ void toJson() {
         thisApp["icon"] = entry.icon;
         thisApp["exec"] = entry.exec;
         thisApp["filename"] = entry.filename;
+        thisApp["filepath"] = entry.filepath;
         // Get
         if (mode == 0)
             apps[entry.name] = thisApp;
@@ -186,14 +191,14 @@ void toJson() {
             apps.push_back(thisApp);
         else if (mode == 2) {
             cout << "{\"name\":\"" + entry.name + "\",\"icon\":\"" +
-                        entry.icon + "\",\"exec\":\"" + entry.exec + "\",\"filename\":\"" + entry.filename + "\"}";
+                        entry.icon + "\",\"exec\":\"" + entry.exec + "\"}";
             if (i != int(allApps.size()) - 1) cout << ",";
         }
     }
     if (mode == 0 || mode == 1)
-        cout << apps;
+        cout << apps << '\n';
     else if (mode == 2)
-        cout << ']';
+        cout << ']' << '\n';
 }
 
 string getUsername() {
@@ -228,7 +233,7 @@ int main(int argc, char* argv[]) {
     }
 
     string username = getUsername();
-    // Print all desktop entries in /usr/share/applications/
+    // Print all desktop entries in common locations
     getDesktopEntries("/usr/share/applications/");
     getDesktopEntries("/home/" + username + "/.local/share/applications");
     getDesktopEntries("/var/lib/flatpak/exports/share/applications");

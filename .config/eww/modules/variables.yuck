@@ -1,4 +1,4 @@
-; Const
+; Const and bg scripts
 (defvar FILE_BROWSER "nautilus")
 (defvar RES_WIDTH 1920)
 (defvar RES_HEIGHT 1080)
@@ -8,6 +8,7 @@
 (defvar wsloop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
+(deflisten ICON_GET `scripts/get_open_icons`)
 
 ; Vars
 (defvar music_reveal false)
@@ -50,6 +51,10 @@
 (defvar monthshift 0)
 (defvar calendartitle '')
 (defvar winsearch '')
+(defvar winsearch_results "")
+(defvar winsearch_actions "")
+(defvar winsearch_actions_type "")
+(defvar winsearch_prefix "")
 (defvar allapps '')
 (defvar allapps_get '')
 (defvar compact false)
@@ -94,8 +99,6 @@
 (deflisten mname 'scripts/music name')
 (deflisten wsjsona `scripts/overview-wrapper1`)
 (deflisten wsjsonb `scripts/overview-wrapper2`)
-(deflisten icona `scripts/overview1`)
-(deflisten iconb `scripts/overview2`)
 ; (deflisten appoverview `scripts/overview-wrapper`)
 ; (deflisten wsthumbs `scripts/overview-thumbnails`) ; slow, so nope
 (deflisten activews :initial 1 `scripts/activews`)

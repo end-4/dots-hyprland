@@ -114,7 +114,7 @@ elif [ "$1" = "name" ]; then
 	echo '{"artist": "", "title": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
 	
-		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
+		if [[ "$title" == *" - YouTube"* && "$artist" == "" ]]; then
 			continue
 		fi
 		title=$(scripts/limitlen.py "$title" 45)

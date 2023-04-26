@@ -51,7 +51,7 @@ void addApp(json& client) {
         std::string iconpath((std::istreambuf_iterator<char>(ifs)),
                              (std::istreambuf_iterator<char>()));
         // cout << "PATH: " << filename << " | ICON PATH: " << iconpath << '\n';
-        if (iconpath.size() > 0) iconpath.pop_back(); //Remove '\n'
+        while (iconpath.size() > 0 && *iconpath.rbegin() == '\n') iconpath.pop_back();  // Remove '\n'
         newApp["icon"] = iconpath;
 
         apps.push_back(newApp);
