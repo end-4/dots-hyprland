@@ -20,24 +20,42 @@
  - Sexy animations
  - A rice made by a literal Asian
 
-# Branches
- - [ Current main style: Material/Windows, updated in main branch. All non-main branches are archives. ]
- - Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes
- - Material https://github.com/end-4/dots-hyprland/tree/material
- - osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer
- - linage https://github.com/end-4/dots-hyprland/tree/linage
- - Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio
+# Branches/Screenshots (click the spoilers to see more!)
 
-# Screenshots 
+<details> 
+  <summary>Current main style: Material/Windows, updated in main branch. All non-main branches are archives. </summary>
+  - Nothing here :P, check the ones below
+</details>
 
- - Windoes 11
- ![dots-hyprland](./assets/screenshot-windoes.png)
- - Material
- ![dots-hyprland](./assets/screenshot-material.png)
- - osu!lazer
- ![dots-hyprland](./assets/screenshot-17.png)
- - linage
- ![dots-hyprland](./assets/screenshot-9.png)
+<details open> 
+  <summary>Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes </summary>
+  
+   ![dots-hyprland](./assets/screenshot-windoes.png)
+</details>
+
+<details open> 
+  <summary>Material https://github.com/end-4/dots-hyprland/tree/material </summary>
+  
+   ![dots-hyprland](./assets/screenshot-material.png)
+</details>
+
+<details> 
+  <summary>osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer </summary>
+  
+   ![dots-hyprland](./assets/screenshot-17.png)
+</details>
+
+<details> 
+  <summary>linage https://github.com/end-4/dots-hyprland/tree/linage </summary>
+  
+   ![dots-hyprland](./assets/screenshot-9.png)
+</details>
+
+<details> 
+  <summary>Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio </summary>
+  
+   ![dots-hyprland](./assets/screenshot-tetrio.png)
+</details>
 
 # General instructions
  - **Backup if you need**
