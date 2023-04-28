@@ -211,7 +211,7 @@
   :geometry (geometry
     ; :height 1080
     ; :width 1920
-    :y "103px"
+    :y "153px"
     :anchor "top center"
     ; :y "0px"
     ; :anchor "center center"

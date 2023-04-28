@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-OPACITY=0.3
+OPACITY=0.75
 
 IMGPATH=$1
 coverurl=$2

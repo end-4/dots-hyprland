@@ -2,6 +2,7 @@
 state=$(eww get rev_winstart)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
+    scripts/toggle-winpowermenu.sh --close &
     eww update anim_open_winstart=false
     eww update rev_winstart=false
     sleep 0.1
@@ -11,7 +12,6 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update winstart_allapps=false
     eww update allapps=''
 else
-    cd ~/.config/eww
     scripts/allapps > scripts/cache/entries.txt &
     scripts/allappnames > scripts/cache/entrynames.txt &
     eww update anim_open_winstart=true

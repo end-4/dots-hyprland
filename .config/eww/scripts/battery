@@ -75,7 +75,7 @@ circolor() {
 }
 
 cirbgcolor() {
-	if [[ "$CAPACITY" -le 50 && "$STATE" = "Discharging" ]]; then
+	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
 		echo '#EF738A'
 	else
 		echo 'transparent'

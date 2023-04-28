@@ -1,14 +1,13 @@
 #!/usr/bin/bash
+cd ~/.config/eww
+
 reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
 if [[ "$1" == "--keypress" && "$reserves" == "[0,0,0,50]" ]]; then
-    cd ~/.config/eww
     scripts/toggle-winstart.sh
     exit
 fi
 
 state=$(eww get open_overview)
-
-cd ~/.config/eww || exit
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then 
     eww close overview &

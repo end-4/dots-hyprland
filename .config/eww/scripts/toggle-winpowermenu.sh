@@ -5,7 +5,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_winpowermenu=false
     eww update rev_winpowermenu=false
     eww update winsearch='' &
-    sleep 0.1
+    sleep 0.15
     eww close winpowermenu
 else
     eww update anim_open_winpowermenu=true
