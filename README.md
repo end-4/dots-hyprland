@@ -68,10 +68,10 @@
  
 # eww (yes I spend too much time on this)
  ## Performance
-|     | Do use | Do not use! | Notes |
+|  ⌄  | Do use | Do not use! | Notes |
 | --- | ------ | ----------- | ----- |
 | Kernel | Zen or vanilla | XanMod | From my experience in EndeavourOS |
-| Login shell | bash or zsh | fish | It's okay to use fish for your terminal, it's what I do |
+| Login shell | bash or zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
  - This eww config only works in `~/.config/eww`
@@ -83,7 +83,7 @@
  - Music control with the leftmost button of bars: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
  - To open the Overview, middle/right-click the workspace indicators or run `eww open overview`
  - You can type to search in overview!
- ## Overview/Search usage
+ ## Search
  - Type normally to search apps
  - Type something beginning with a number and it'll be calculated (`qalc` is used for backend)
  - `>save THEME`: Saves current colorscheme, with THEME as the name.
