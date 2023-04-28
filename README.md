@@ -45,6 +45,12 @@
  - Install font Product Sans (for linage branch), Segoe UI Variable (for the main and Windows branch)
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
+ 
+# Heavily recommended for eww performance
+|     | Do use | Don't use |
+| --- | ------ | --------- |
+| Kernel | Zen or vanilla | XanMod |
+| Login shell | bash or zsh | fish |
 
 # eww instructions
  - Start eww with `eww daemon && eww open bar && eww open bg-decor`
