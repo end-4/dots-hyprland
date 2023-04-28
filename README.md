@@ -46,18 +46,33 @@
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
  
-# Heavily recommended for eww performance
-|     | Do use | Don't use |
-| --- | ------ | --------- |
-| Kernel | Zen or vanilla | XanMod |
-| Login shell | bash or zsh | fish |
+# eww (yes I spend too much time on this)
+ ## Performance
+|     | Do use | Do not use! | Notes |
+| --- | ------ | ----------- | ----- |
+| Kernel | Zen or vanilla | XanMod | From my experience in EndeavourOS |
+| Login shell | bash or zsh | fish | It's okay to use fish for your terminal, it's what I do |
 
-# eww instructions
- - Start eww with `eww daemon && eww open bar && eww open bg-decor`
- - For linage branch, also run: `eww open barbg`
- - -=-=-=- notes for usage -=-=-=-
- - Music control on the music button and on topleft corner: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
+ ## Setup
+ - This eww config only works in `~/.config/eww`
+ - Start eww with `eww daemon`
+ - To open the top bar, run `eww open bar` (for linage branch, also run: `eww open barbg`)
+ - To open the Windows bar, run `eww open winbar`
+ - Open the overview and wait 10 seconds (for it to generate app search cache, or icons won't show properly)
+ ## Usage
+ - Music control with the leftmost button of bars: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
  - To open the Overview, middle/right-click the workspace indicators or run `eww open overview`
+ - You can type to search in overview!
+ ## Overview/Search usage
+ - Type normally to search apps
+ - Type something beginning with a number and it'll be calculated (`qalc` is used for backend)
+ - `>save THEME`: Saves current colorscheme, with THEME as the name.
+ - `>load THEME`: Loads a saved theme. Available themes will be shown as you type.
+ - `>music`: Get colorscheme from current media thumbnail
+ - `>wall`: Get colorscheme from wallpaper located in `~/.config/eww/images/wallpaper/wallpaper` (might take quite a while)
+ - `>light`: Remember to generate light theme for future schemes
+ - `>dark`: Remember to generate dark theme for future schemes
+ - `>r`: Reload (runs `eww reload`)
 
 # Dependencies
  - Python
