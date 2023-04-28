@@ -70,8 +70,8 @@
  ## Performance
 |  ⌄  | Do use | Do not use! | Notes |
 | --- | ------ | ----------- | ----- |
-| Kernel | Zen or vanilla | XanMod | From my experience in EndeavourOS |
-| Login shell | bash or zsh | fish | It's okay to use fish in a terminal - that's what I do |
+| Kernel | Realtime/Zen/vanilla | XanMod | From my experience in EndeavourOS |
+| Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
  - This eww config only works in `~/.config/eww`
