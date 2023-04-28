@@ -12,6 +12,7 @@
 
 </div>
 
+
 # Main features
  - An overview widget that shows window positions in workspaces (and has an app search! gnomie!!!1!1!!)
  - Can toggle Windows 11-like mode hehee
@@ -28,6 +29,7 @@
  - Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio
 
 # Screenshots 
+
  - Windoes 11
  ![dots-hyprland](./assets/screenshot-windoes.png)
  - Material
