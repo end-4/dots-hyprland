@@ -1175,3 +1175,35 @@
     transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
   }
 }
+
+.win-segoeicon {
+  font-family: 'Segoe Fluent Icons';
+}
+
+.winpower-window {
+  padding: 5px;
+}
+
+.winpower-buttonicon {
+  padding: 10px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.winpower-button {
+  background-color: transparent;
+  border-radius: 6px;
+  // border: 1px solid transparent;
+  // border-top: 1px solid transparent;
+  min-width: 42px;
+  min-height: 42px;
+  // margin: 0 5px;
+}
+
+.winpower-button:hover {
+  background-color: rgba(75, 75, 75, 0.5);
+}
+
+.winpower-button:active {
+  background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}

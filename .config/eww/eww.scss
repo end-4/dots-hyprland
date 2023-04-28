@@ -154,7 +154,7 @@ $bg1: $surface0;
 @import 'css/winstuff';
 
 .bar-normal {
-  background-color: $colorbarbg;
+  background-color: $colorbg;
   min-height: 53px;
   color: $fg;
   border-bottom-right-radius: 26px;
@@ -172,7 +172,7 @@ $bg1: $surface0;
 }
 
 .bar-compact {
-  background-color: $colorbarbg;
+  background-color: $colorbg;
   border-bottom: 1px solid $primary;
   min-height: 53px;
   color: $fg;
