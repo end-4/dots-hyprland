@@ -70,7 +70,7 @@
  ## Performance
 |  ⌄  | Do use | Do not use! | Notes |
 | --- | ------ | ----------- | ----- |
-| Kernel | Realtime/Zen/vanilla | XanMod | From my experience in EndeavourOS |
+| Kernel |     |             | auto-cpufreq + unplugged = unresponsive |
 | Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
