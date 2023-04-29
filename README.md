@@ -68,9 +68,9 @@
  
 # eww (yes I spend too much time on this)
  ## Performance
-|  ⌄  | Do use | Do not use! | Notes |
+|  ⌄  | Do use | Not recommended | Notes |
 | --- | ------ | ----------- | ----- |
-| Kernel |     |             | auto-cpufreq + unplugged = unresponsive |
+| Kernel |     | XanMod | `auto-cpufreq` + unplugged = might be unresponsive |
 | Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
