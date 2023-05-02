@@ -10,7 +10,7 @@ separator_height = 4
 separator_color = yes
 padding = 20
 horizontal_padding = 20
-frame_width = 3
+frame_width = 2
 sort = no
 idle_threshold = 120
 font = Torus 13
@@ -33,7 +33,7 @@ browser = firefox
 always_run_script = true
 title = Dunst
 class = Dunst
-corner_radius = 15
+corner_radius = 10
 
 [shortcuts]
 close = ctrl+shift+space
@@ -55,6 +55,6 @@ frame_color = "#AEE5FA"
 
 [urgency_critical]
 timeout = 0
-background = "#EEAA00"
-foreground = "#1A1B26"
-frame_color = "#191919"
+background = "#191919"
+foreground = "#EEAA00"
+frame_color = "#EEAA00"
