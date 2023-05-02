@@ -89,7 +89,7 @@
         (scale
           :value "${brightness.level}"
           :onchange "light -S {}"
-          :class "winslider"
+          :class "winslider winslider-winactions"
         )
       )
       ; Slider 1: Volume
@@ -104,7 +104,7 @@
         (scale
           :value "${volume.percent}"
           :onchange "scripts/volume setvol SINK {}"
-          :class "winslider"
+          :class "winslider winslider-winactions"
         )
       )
     )

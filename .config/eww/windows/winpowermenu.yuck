@@ -47,7 +47,7 @@
         :class "winpower-button"
         (box
           :space-evenly false
-          (label :xalign 0 :class "winpower-buttonicon win-segoeicon" :text "")
+          (label :xalign 0 :class "winpower-buttonicon win-segoeicon" :text "")
           (label :xalign 0 :class "winbartext" :text "Restart")
         )
       )

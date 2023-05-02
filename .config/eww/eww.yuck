@@ -32,6 +32,7 @@
 (include "./windows/winpowermenu.yuck")
 (include "./windows/winstart.yuck")
 (include "./windows/winoverview.yuck")
+(include "./windows/wingamebar.yuck")
 
 (defwidget separator []
   (box

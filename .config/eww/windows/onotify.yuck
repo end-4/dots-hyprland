@@ -21,11 +21,9 @@
     )
     (for app in audiojson
       (box
-        :orientation "v"
-        :space-evenly false
+        :orientation "v" :space-evenly false
         (box
-          :orientation "h"
-          :space-evenly false
+          :orientation "h" :space-evenly false
           :spacing 10
           (image
             :class "onotify-app-icon"
@@ -52,7 +50,7 @@
               ; :space-evenly false
               (for ser in {app["volume"]}
                 (eventbox
-                  :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")% &"
+                  :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")%"
                   :onrightclick "pactl set-sink-input-volume ${ser[0]} 100%"
                   :onclick "pactl set-sink-input-volume ${ser[0]} 0%"
                   (centerbox

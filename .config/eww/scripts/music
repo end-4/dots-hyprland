@@ -72,12 +72,22 @@ get_cover() {
 				wget -O "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
 				cp "$IMGPATH""_soundcloud" "$IMGPATH"
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))	
-			fi
 			# Youtube
-			if [[ "$coverurl" == *"ytimg"* ]]; then
+			elif [[ "$coverurl" == *"ytimg"* ]]; then
 				music_source='󰗃'
 				wget -O "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
 				cp "$IMGPATH""_yt" "$IMGPATH"
+				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+			# Likely YT Music
+			elif [[ "$coverurl" == *"googleusercontent"* ]]; then
+				music_source=''
+				wget -O "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_other" "$IMGPATH"
+				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+			# Any other
+			else
+				wget -O "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_other" "$IMGPATH"
 				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
 			fi
 			# Fallback
