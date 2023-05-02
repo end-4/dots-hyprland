@@ -550,14 +550,12 @@
 
 .winslider {
   border-radius: 9999px;
-  margin: 0 9px;
   transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
 
   trough {
     border-radius: 9999px;
     background-color: #A69999;
     min-height: 4px;
-    min-width: 287px;
     transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
   }
 
@@ -599,6 +597,14 @@
   // slider:focus {
   //     background-color: $primary;
   // }
+}
+
+.winslider-winactions {
+  margin: 0 9px;
+
+  trough {
+    min-width: 287px;
+  }
 }
 
 .winnotif-badge {
@@ -1178,6 +1184,7 @@
 
 .win-segoeicon {
   font-family: 'Segoe Fluent Icons';
+  font-weight: bold;
 }
 
 .winpower-window {
@@ -1206,4 +1213,215 @@
 
 .winpower-button:active {
   background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.wingamebar-overlay {
+  // background-color: rgba(25, 25, 25, 0.1);
+}
+
+.wingamebar-window {
+  background: #252525;
+  border-radius: 10px;
+  border: 1px solid $overlay0;
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.wingamebar-titlebar {
+  background: #1C1C1C;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 2px $overlay0;
+  padding: 10px;
+}
+
+.wingamebar-icon {
+  font-family: 'Segoe Fluent Icons';
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+.wingamebar-text {
+  font-family: 'Bahnschrift';
+  font-size: 12pt;
+  font-weight: 500;
+}
+
+.wingamebar-text-small {
+  font-size: 10pt;
+}
+
+.wingamebar-text-clock {
+  font-size: 17pt;
+  margin: 17px;
+}
+.wingamebar-text-bigmetric {
+  font-size: 25pt;
+}
+
+.wingamebar-content {
+  padding: 8px 17px;
+}
+
+.wingamebar-capture {
+  padding: 17px;
+}
+
+.wingamebar-capture-button {
+  min-width: 59px;
+  min-height: 59px;
+  background: #3A3A3A;
+  border-radius: 9999px;
+}
+
+.wingamebar-capture-button-unavailable {
+  min-width: 59px;
+  min-height: 59px;
+  background: #282828;
+  border-radius: 9999px;
+}
+
+.wingamebar-subtext {
+  color: #A8A8A8;
+}
+
+.wingamebar-capture-bottom {
+  border-top: 1px solid #373737;
+  padding: 8px 17px;
+  color: #DEDEDE;
+}
+
+.wingamebar-button-pad:hover {
+  :first-child {
+    background-color: $overlay0;
+  }
+}
+
+.wingamebar-button:hover {
+  background-color: $overlay0;
+}
+
+.wingamebar-capture-bottom {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.wingamebar-navbar {
+  min-height: 35px;
+  border-bottom: 2px solid #333333;
+  padding: 0 17px;
+}
+
+.wingamebar-navbar-button {
+  min-height: 35px;
+  min-width: 75px;
+  margin-bottom: -2px;
+  background-image: url('images/svg/dark/linehorizontal.svg');
+  background-position: bottom;
+  background-size: 100% auto;
+}
+
+.wingamebar-audio-sys {
+  padding: 17px;
+  border-bottom: 2px solid #333333;
+}
+
+.winslider-gamebar-sys {
+  margin: 0 5px;
+
+  trough {
+    min-width: 260px;
+  }
+}
+
+.winslider-gamebar-app {
+
+  // margin: 0 5px;
+  trough {
+    min-width: 205px;
+    margin: 0 3px;
+  }
+}
+
+.wingamebar-audio-appicon {
+  margin-left: 17px;
+  margin-bottom: 5px;
+}
+
+.wingamebar-control-button {
+  min-width: 59px;
+  min-height: 59px;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+.wingamebar-control-button:hover {
+  background-color: $hover0;
+}
+
+.wingamebar-control-button-active {
+  min-width: 59px;
+  min-height: 59px;
+  border-radius: 6px;
+  margin: 5px;
+  background-size: auto 4%;
+  background-position: 0% 93%;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 21%, $primary 21%, $primary 79%, rgba(0, 0, 0, 0) 79%, rgba(0, 0, 0, 0) 100%);
+}
+
+.wingamebar-control-button-active:hover {
+  background-color: $hover0;
+}
+
+.wingamebar-control-sidesection-left {
+  background-color: #1C1C1C;
+  min-height: 68px;
+  min-width: 68px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.wingamebar-control-sidesection-right {
+  background-color: #1C1C1C;
+  min-height: 68px;
+  min-width: 68px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.wingamebar-control-button {
+  font-size: 15pt;
+}
+
+.wingamebar-performance-metricscolumn {
+  min-width: 100px; 
+}
+
+.wingamebar-performance-metric-false {
+  min-height: 25px;
+  padding: 0 17px;
+}
+
+.wingamebar-performance-metric-true {
+  min-height: 25px;
+  background-color: #3C3C3C;
+  padding: 0 17px;
+}
+
+.wingamebar-performance-grapharea {
+  border-bottom-right-radius: 10px;
+}
+
+.wingamebar-performance-graphpad {
+  padding: 17px;
+}
+
+.wingamebar-performance-graph-graphpad {
+  padding-top: 37px;
+  padding-bottom: 37px;
+  padding-left: 17px;
+  padding-right: 17px;
+}
+
+.wingamebar-graph {
+  color: $primary;
 }

@@ -23,7 +23,7 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">uwu" ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
-        eww reload
+        pkill eww && eww daemon && eww open bar
     else
         # notify-send 'eww' 'Invalid command!'
         false
