@@ -30,7 +30,7 @@
 <details open> 
   <summary>Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes </summary>
   
-   ![dots-hyprland](./assets/screenshot-windoes.png)
+   ![dots-hyprland](./assets/screenshot-windoes2.png)
 </details>
 
 <details open> 
