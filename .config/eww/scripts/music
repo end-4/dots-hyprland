@@ -56,7 +56,7 @@ get_cover() {
 	cd "eww_covers" || exit
 
 	IMGPATH="cover_art"
-	echo '{"image": "eww_covers/cover_art_default"}'
+	echo '{"image": "eww_covers/cover_art_default", "color": {"alpha":"100","colors":{"color0":"#111215","color1":"#2B698F","color10":"#597591","color11":"#447CC0","color12":"#3A9FB7","color13":"#6192A6","color14":"#60ABCC","color15":"#c4c6ca","color2":"#597591","color3":"#447CC0","color4":"#3A9FB7","color5":"#6192A6","color6":"#60ABCC","color7":"#c4c6ca","color8":"#898a8d","color9":"#2B698F"},"special":{"background":"#111215","cursor":"#c4c6ca","foreground":"#c4c6ca"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󰗃"}}'
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		music_source='󰐍'
@@ -69,30 +69,30 @@ get_cover() {
 			# SoundCloud
 			if [[ "$coverurl" == *"sndcdn"* ]]; then
 				music_source='󰓀'
-				wget -O "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
+				curl --silent --output "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
 				cp "$IMGPATH""_soundcloud" "$IMGPATH"
-				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))	
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))	
 			# Youtube
 			elif [[ "$coverurl" == *"ytimg"* ]]; then
 				music_source='󰗃'
-				wget -O "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
+				curl --silent --output "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
 				cp "$IMGPATH""_yt" "$IMGPATH"
-				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
 			# Likely YT Music
 			elif [[ "$coverurl" == *"googleusercontent"* ]]; then
 				music_source=''
-				wget -O "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_other" "$IMGPATH"
-				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
 			# Any other
 			else
-				wget -O "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_other" "$IMGPATH"
-				imgsize=$(echo $(du -b '/home/end/.config/eww/eww_covers/cover_art' | tr '\t' '\n' | grep -v 'cover_art'))
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
 			fi
 			# Fallback
-			if [ "$imgsize" == "0" ]; then
-				wget -O "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
+			if [ "$imgsize" == "0" || "$(diff )" ]; then
+				curl --silent --output "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_lowres" "$IMGPATH"
 			fi
 
