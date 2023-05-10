@@ -91,7 +91,7 @@ get_cover() {
 				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
 			fi
 			# Fallback
-			if [ "$imgsize" == "0" || "$(diff )" ]; then
+			if [ "$imgsize" == "0" ] || [ ! "$(diff ~/.config/eww/eww_covers/cover_art ~/.config/eww/eww_covers/cover_art_error)" ]; then
 				curl --silent --output "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_lowres" "$IMGPATH"
 			fi
