@@ -1,19 +1,24 @@
 (defwidget activewindow []
-  (eventbox
+  (box
+    :valign "center"
+    :space-evenly false
+    :orientation "v"
     (box
-      :space-evenly false
-      :class "activewin"
-      (label
-        :limit-width 50
-        :text "➜ "
-      )
-      (revealer
-        :transition "slideright"
-        :reveal "${!music_reveal}"
-        :duration "300ms"
-        (label
-          :limit-width 50
-          :text "${awin}"
+      (eventbox
+        :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+        :onhover "${EWW_CMD} update rev_center_ws=true"
+        (box
+          :space-evenly false
+          :class "activewin"
+          (revealer
+            :transition "slideright"
+            :reveal "${!music_reveal}"
+            :duration "300ms"
+            (label
+              :limit-width 40
+              :text "${awin.title}"
+            )
+          )
         )
       )
     )

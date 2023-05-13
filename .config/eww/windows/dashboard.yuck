@@ -1,9 +1,3 @@
-; (defvar separateanim "${anim_open_dash ? 'transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);'}")
-; (defvar fromleft "${rev_dash ? '' : 'margin-left: -1000px;'}")
-; (defvar fromright "${rev_dash ? '' : 'margin-right: -1000px;'}")
-; (defvar fromtop "${rev_dash ? '' : 'margin-top: -1000px;'}")
-; (defvar frombottom "${rev_dash ? '' : 'margin-bottom: -1000px;'}")
-
 (defvar dash_curve_in "transition: 150ms cubic-bezier(0.05, 0.9, 0.1, 1.0);")
 (defvar dash_curve_out "transition: 80ms cubic-bezier(0.3, 0, 0.8, 0.15);")
 

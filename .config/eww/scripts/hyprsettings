@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 getoptions(){
+  rounding=$(hyprctl getoption decoration:rounding -j | gojq -r -c '.int')
   gaps_in=$(hyprctl getoption general:gaps_in -j | gojq -r -c '.int')
   gaps_out=$(hyprctl getoption general:gaps_out -j | gojq -r -c '.int')
   border_size=$(hyprctl getoption general:border_size -j | gojq -r -c '.int')
@@ -19,6 +20,7 @@ getoptions(){
   fi
 
   echo -n '{'
+  echo -n "\"rounding\":$rounding,"
   echo -n "\"gaps_in\":$gaps_in,"
   echo -n "\"gaps_out\":$gaps_out,"
   echo -n "\"border_size\":$border_size,"

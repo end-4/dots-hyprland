@@ -1,7 +1,8 @@
 .overview-window {
-  @include window font-family: 'Torus', 'Material Symbols Rounded';
+  @include window;
+  font-family: 'Torus', 'Material Symbols Rounded';
   border-radius: 22px;
-  background-color: $colorbarbg;
+  background-color: shade($colorbarbg, 4%);
   // background-color: transparent;
   // border: 3px solid $color0;
   //padding: 5px;
@@ -15,6 +16,7 @@
   margin: 4px;
   padding: 4px;
   min-height: 30px;
+  background-image: linear-gradient(135deg, $onSecondary 15%, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, 0) 33%, $onSecondary 33%, $onSecondary 68%, rgba(0, 0, 0, 0) 68%, rgba(0, 0, 0, 0) 95%, $onSecondary 95%);
 }
 
 .overview-window-top {
@@ -27,13 +29,14 @@
 .overview-ws {
   border: 2px solid;
   border-radius: 15px;
-  background-color: tint($surface, 5%);
+  background-color: tint($surface, 2%);
   margin: 4px;
 }
 
 .overview-ws-true {
   color: $primary;
 }
+
 .overview-ws-false {
   color: transparent;
 }
@@ -42,9 +45,9 @@
   // border: 2px solid transparent;
   // background-color: rgba(108, 112, 134, 1);
   border-radius: 15px;
-  background-color: shade($overlay0, 2%);
-  border: 1px solid $overlayedge;
-  border-top: 1px solid tint($overlayedge, 5%);
+  background-color: shade($surface0, 2%);
+  border: 1px solid $surface0;
+  border-top: 1px solid tint($surface0, 5%);
   // //margin: 3px; 
 }
 
@@ -111,23 +114,20 @@
   //padding-bottom: .6rem;
 }
 
-.overview-search-area {
-  
-}
-
 .overview-search-box {
   border: 2px solid;
-  border-radius: 20px;
-  background-color: tint($colorbarbg, 10%);
+  border-radius: 9999px;
+  background-color: tint($colorbarbg, 4%);
   color: $onBackground;
   font-size: 15pt;
   min-height: 45px;
-  min-width: 400px;
+  min-width: 130px;
 
   margin: 20px 20px;
-  padding: 2px 12px;
+  padding: 2px 17px;
 
   caret-color: $onBackground;
+
   selection {
     background-color: rgba(154, 152, 152, 0.5);
   }
@@ -138,22 +138,25 @@
 }
 
 .overview-results {
-  // :first-child {
-  //   color: white;
-  //   background-image: linear-gradient(to right, $color0 0%, $color4 100%);
-  // }
+  // background-color: $surface;
+  padding: 10px 5px;
+  border-radius: 20px;
 }
 
 .overview-search-result {
-  border-radius: 15px;
-  background-color: tint($colorbarbg, 10%);
+  border-radius: 9999px;
+  background-color: $onTertiary;
   color: $onBackground;
   font-size: 15pt;
-  min-height: 45px;
+  min-height: 47px;
   min-width: 400px;
   padding: 2px 12px;
   padding-left: 57px;
-  margin: 0 5px;
+  margin: 0px 5px;
+
+  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 60%, tint($tertiaryContainer, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 40% 50%;
 
   caret-color: transparent;
 
@@ -161,14 +164,35 @@
     background-color: transparent;
   }
 }
+
 .overview-search-result-icon {
-  border-radius: 15px;
-  min-height: 45px;
-  min-width: 45px;
+  background-color: $tertiaryContainer;
+  border-radius: 9999px;
+  min-height: 51px;
+  min-width: 51px;
+  // padding: 2px 12px;
+}
+
+.overview-search-result:focus {
+  color: $onTertiaryContainer;
+  // background-color: $tertiaryContainer;
+  background-position: 65% 50%;
+}
+
+.overview-search-result:active {
+  color: $onTertiaryContainer;
+  // background-color: $tertiaryContainer;
+  background-position: 100% 50%;
+}
+
+.overview-search-typetosearch-pad {
+  min-width: 160px;
+  margin: 20px 20px;
   padding: 2px 12px;
 }
 
-.overview-search-result:focus{
-  color: $tertiary;
-  background-color: $tertiaryContainer;
+.overview-search-typetosearch-text {
+  margin: 13px 13px;
+  font-size: 15pt;
+  color: #CCCCCC;
 }

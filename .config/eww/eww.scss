@@ -11,9 +11,9 @@
   @return mix(rgb(0, 7, 18), $color, $percentage);
 }
 
-$battcolor: $colorbar;
-$memcolor: $tertiary;
-$cpucolor: $secondary;
+$battcolor: $color6;
+$memcolor: $color5;
+$cpucolor: $color4;
 $border: $color7;
 $surface0: tint($colorbg, 10%);
 $bg1: $surface0;
@@ -51,7 +51,8 @@ $bg1: $surface0;
   from {
     margin-bottom: -55px;
     margin-top: 55px;
-  } 
+  }
+
   to {
     margin-bottom: 0px;
     margin-top: 0px;
@@ -62,7 +63,8 @@ $bg1: $surface0;
   from {
     margin-bottom: 55px;
     margin-top: -55px;
-  } 
+  }
+
   to {
     margin-bottom: 0px;
     margin-top: 0px;
@@ -137,9 +139,11 @@ $bg1: $surface0;
   font-family: Material Symbols Rounded;
 }
 
+@import 'css/bottombar';
 @import 'css/bgdecor';
 @import 'css/calendar';
 @import 'css/dashboard';
+@import 'css/dashfs';
 @import 'css/editmode';
 @import 'css/music';
 @import 'css/notification';
@@ -149,30 +153,66 @@ $bg1: $surface0;
 @import 'css/sidebar';
 @import 'css/system';
 @import 'css/themer';
+@import 'css/taskbar';
 @import 'css/volume';
 @import 'css/winctl';
 @import 'css/winstuff';
 
-.bar-normal {
-  background-color: $colorbg;
+.module-group {
+  // background-color: $colorbg;
   min-height: 53px;
   color: $fg;
   border-bottom-right-radius: 26px;
   border-bottom-left-radius: 26px;
+}
+
+.bar-bg-only {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-right: -1911px;
+  margin-left: 8px;
+  border-radius: 26px;
+  background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+}
+
+.bar-bg-only-compact {
+  margin-right: -1920px;
+  background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+}
+
+.bar-normal {
+  // margin: 8px;
+  // border-radius: 26px;
+  // background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  min-height: 53px;
+  color: $fg;
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+
+  // background-image: linear-gradient(to right,
+  //     rgba(0, 0, 0, 0) 0%,
+  //     rgba(0, 0, 0, 0) 4.322916667%,
+  //     shade($colorbg, 75%) 4.322916667%,
+  //     shade($colorbg, 75%) 96.82291667%,
+  //     rgba(0, 0, 0, 0) 96.82291667%,
+  //     rgba(0, 0, 0, 0) 100%,
+  //   );
 
   label {
     font-size: 1.2rem;
   }
 
   font-family: 'Torus';
-  animation-name: flyin-top;
-  animation-duration: 350ms;
-  animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);  
-  animation-iteration-count: 1;
+  // animation-name: flyin-top;
+  // animation-duration: 350ms;
+  // animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+  // animation-iteration-count: 1;
 }
 
 .bar-compact {
-  background-color: $colorbg;
+  background-color: shade($colorbg, 70%); //because dark background makes colors pop
   border-bottom: 1px solid $primary;
   min-height: 53px;
   color: $fg;
@@ -224,7 +264,7 @@ tooltip {
 }
 
 .clock {
-  color: $colorbar;
+  color: $color2;
   font-family: 'Torus';
   font-size: 19pt;
 }
@@ -234,7 +274,7 @@ tooltip {
 // }
 
 .minute {
-  color: $colorbar;
+  color: $color2;
   font-family: 'Torus', 'Material Symbols Rounded';
 }
 
@@ -246,7 +286,7 @@ tooltip {
 
 .date {
   font-family: 'Torus', 'Material Symbols Rounded';
-  color: $colorbar;
+  color: $color2;
 
   // margin-top: -2px;
   label {
@@ -255,7 +295,7 @@ tooltip {
 }
 
 .bright-icon {
-  color: $color3;
+  color: $color2;
   padding-right: 4px;
   padding-top: 4px;
 }
@@ -307,6 +347,14 @@ tooltip {
   // transition: 400ms cubic-bezier(0.2, 0.0, 0, 1.0); //Material 3
 }
 
+.ws-top {
+  // padding-top: 9px;
+}
+
+.ws-active-top {
+  
+}
+
 .ws-text {
   font-size: 16pt;
   font-family: Torus;
@@ -314,9 +362,23 @@ tooltip {
   // padding-left: 3px;
   // padding-right: 3px;
   min-width: 27px;
+  min-height: 27px;
   color: $colorbarbg;
   margin-top: 13px;
   margin-bottom: 13px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.ws-text-top {
+  // font-size: 16pt;
+  // font-family: Torus;
+  border-radius: 9999px;
+  // padding-left: 3px;
+  // padding-right: 3px;
+  min-width: 27px;
+  min-height: 5px;
+  color: $colorbarbg;
   margin-left: 2px;
   margin-right: 2px;
 }
@@ -346,7 +408,7 @@ tooltip {
 }
 
 .activewin {
-  color: $color3;
+  color: $colorbar;
   // padding-left: 8px;
   // padding-right: 8px;
 }
@@ -394,31 +456,82 @@ tooltip {
 }
 
 .osettings-toggle-button-false {
-  padding: 0px 11px;
-  min-width: 53px;
-  min-height: 53px;
-  background-color: transparent;
-  // background-image: url('images/svg/settings.svg');
-  background-size: auto 65%;
-  background-position: center;
-  background-repeat: no-repeat;
+  :first-child {
+    :first-child {
+      padding: 0px 11px;
+      min-width: 53px;
+      min-height: 53px;
+      background-color: transparent;
+      // background-image: url('images/svg/settings.svg');
+      background-size: 400% auto;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+      border-radius: 26px;
 
-  :hover {
-    background-color: $overlay0;
+      :active {
+        background-color: $overlay0;
+        background-position: 90% 50%;
+      }
+    }
   }
+}
 
-  border-radius: 26px;
+.osettings-toggle-button-false:hover {
+  :first-child {
+    :first-child {
+      background-color: $overlay0;
+      background-position: 60% 50%;
+    }
+  }
 }
 
 .osettings-toggle-button-true {
-  padding: 0px 11px;
-  min-width: 53px;
-  min-height: 53px;
-  background-size: auto 65%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: $overlay0;
+  :first-child {
+    :first-child {
+      padding: 0px 11px;
+      min-width: 53px;
+      min-height: 53px;
+      background-color: $overlay0;
+      background-position: 90% 50%;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+      background-size: 400% auto;
+      border-radius: 26px;
+    }
+  }
+}
+
+.module-button-pad {
+  margin: 8px 0;
   border-radius: 26px;
+  // background-color: shade($colorbg, 75%);
+}
+
+.module-button-pad-left {
+  margin: 8px 0;
+  margin-left: 8px;
+  // background-color: shade($colorbg, 75%);
+  border-top-left-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.module-button-pad-center {
+  margin: 8px 0;
+  // background-color: shade($colorbg, 75%);
+}
+
+.module-button-pad-right {
+  margin: 8px 0;
+  margin-right: 8px;
+  // background-color: shade($colorbg, 75%);
+  border-bottom-right-radius: 26px;
+  border-top-right-radius: 26px;
+}
+
+.module-button-pad-right-nomargin {
+  // background-color: shade($colorbg, 75%);
+  border-bottom-right-radius: 26px;
+  border-top-right-radius: 26px;
 }
 
 .onotify-toggle-button-false {
@@ -471,34 +584,45 @@ tooltip {
 }
 
 .module-button {
+  transition: 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 26px;
   padding: 0px 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 40% 50%;
+}
+
+.module-button-hover {
+  transition: 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 26px;
+  padding: 0px 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-color: $overlay0;
+  background-position: 60% 50%;
 }
 
 .module-button:hover {
   background-color: $overlay0;
+  background-position: 60% 50%;
+}
+
+.module-button:active {
+  background-color: $overlay0;
+  background-position: 100% 50%;
 }
 
 .module-button-true {
+  border-radius: 26px;
+  padding: 0px 5px;
   background-color: $overlay0;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 90% 50%;
 }
-
-// .music-ctl-revealer:hover {
-//   border-top: 2px solid;
-// }
-// .bright-icon:hover {
-//   border-top: 2px solid;
-// }
-// .net-icon:hover {
-//   border-top: 2px solid;
-// }
 
 .dynbg-image {
   transition: 900ms cubic-bezier(0.05, 0.9, 0.1, 1); // Hyprland default bezier but no overshot
-  background-image: url('images/wallpaper/wallpaper');
-  background-size: 120%;
-  min-height: 1080px;
-  min-width: 1920px;
 }
 
 progressbar>trough {
@@ -508,3 +632,15 @@ progressbar>trough {
 .box-that-is-there {
   background-color: transparent;
 }
+
+.search-button {
+  min-height: 53px;
+  min-width: 65px;
+  color: $colortext;
+  font-family: Material Symbols Rounded;
+}
+
+.workspaces-top {
+  min-width: 306px;
+  min-height: 5px;
+} 

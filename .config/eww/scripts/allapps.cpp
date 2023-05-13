@@ -27,6 +27,7 @@ struct DesktopEntry {
 vector<DesktopEntry> allApps;
 json apps;
 int mode = 0;  // 0: Object, 1: Array, 2: Start (Contains JSON for letters)
+string iconTheme = "";
 
 // Returns the file name from a path
 std::string getFileName(const std::string& path) {
@@ -82,6 +83,13 @@ string exec(const char* cmd) {
 }
 
 string getIconPath(string iconname) {
+    if (iconTheme == "") {
+        iconTheme =
+            exec(string("gsettings get org.gnome.desktop.interface icon-theme")
+                     .c_str());
+        iconTheme.pop_back();
+        // cout << "icon theme: " << iconTheme << '\n';
+    }
     if (iconname.size() == 0) {
         return "";
     } else if (iconname[0] == '/') {
@@ -91,8 +99,10 @@ string getIconPath(string iconname) {
     }
     string path = readIfExists("scripts/cache/" + iconname);
     if (path == "") {
-        path = exec(
-            string("geticons " + string(iconname) + " | head -n 1").c_str());
+        path = exec(string("geticons -t " + iconTheme + " " + string(iconname) +
+                           " | head -n 1")
+                        .c_str());
+        // cout << "path: " << path << '\n';
         writeToFile("scripts/cache/" + iconname, path);
         // cout << "icon name: " << iconname << '\n';
         // cout << "path: " << path << '\n';

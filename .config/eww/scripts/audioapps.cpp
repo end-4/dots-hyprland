@@ -13,6 +13,7 @@ using json = nlohmann::json;
 
 string clients;
 json clientjson, apps;
+string iconTheme = "";
 
 string exec(const char* cmd) {
     array<char, 128> buffer;
@@ -50,6 +51,13 @@ void writeToFile(const string& name, const string& content) {
 }
 
 string getIconPath(string iconname) {
+    if (iconTheme == "") {
+        iconTheme =
+            exec(string("gsettings get org.gnome.desktop.interface icon-theme")
+                     .c_str());
+        iconTheme.pop_back();
+        // cout << "icon theme: " << iconTheme << '\n';
+    }
     if (iconname.size() == 0) {
         return "";
     } else if (iconname[0] == '/') {
@@ -60,7 +68,7 @@ string getIconPath(string iconname) {
     string path = readIfExists("scripts/cache/" + iconname);
     if (path == "") {
         path = exec(
-            string("geticons " + string(iconname) + " | head -n 1").c_str());
+            string("geticons -t " + iconTheme + " " + string(iconname) + " | head -n 1").c_str());
         writeToFile("scripts/cache/" + iconname, path);
         // cout << "icon name: " << iconname << '\n';
         // cout << "path: " << path << '\n';
