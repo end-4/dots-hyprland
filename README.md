@@ -123,10 +123,10 @@ tesseract
  - Bing AI for helping me breeze through the process of learning libraries
  - Maybe more, but I don't remember it all.. thanks anyway
 
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
+
 # Some inspirations
- - osu!lazer
- - Windows 11
- - Material 3
- - Valorant's download indicator _(yes seriously xD)_
- - TETR.IO (web game) (tetrio branch)
- - LinageOS (linage branch)
+ - osu!lazer, ~~Windows 11~~, Material 3, Valorant's download indicator, TETR.IO (web game), LinageOS
+
