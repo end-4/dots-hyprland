@@ -28,12 +28,18 @@
 </details>
 
 <details open> 
+  <summary>Summer https://github.com/end-4/dots-hyprland/tree/summer-gruv </summary>
+  
+   ![dots-hyprland](./assets/screenshot-summer.png)
+</details>
+
+<details open> 
   <summary>Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes </summary>
   
    ![dots-hyprland](./assets/screenshot-windoes2.png)
 </details>
 
-<details open> 
+<details> 
   <summary>Material https://github.com/end-4/dots-hyprland/tree/material </summary>
   
    ![dots-hyprland](./assets/screenshot-material.png)
