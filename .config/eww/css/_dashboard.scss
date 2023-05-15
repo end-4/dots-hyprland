@@ -40,6 +40,7 @@
   color: $colortext;
   font-size: 15pt;
 }
+
 .dash-fetch-icon {
   color: $colortext;
   font-size: 16pt;
@@ -67,6 +68,7 @@
 .dash-button:hover {
   background-color: tint($colorbarbg, 10%);
 }
+
 .dash-button:focus {
   background-color: tint($colorbarbg, 10%);
 }

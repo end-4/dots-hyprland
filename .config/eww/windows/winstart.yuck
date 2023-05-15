@@ -542,7 +542,7 @@
             :halign "start"
             :space-evenly false
             :class "winstart-user"
-            :onclick "scripts/toggle-winstart.sh && gnome-control-center user-accounts &"
+            :onclick "scripts/toggle-winstart.sh --close && gnome-control-center user-accounts &"
             (box
               :space-evenly false
               :orientation "h"
@@ -577,7 +577,7 @@
     :y "51px"
     ; :height 788
     :width 673
-    :anchor "bottom left"
+    :anchor "bottom center"
   )
   (winmenu)
 )

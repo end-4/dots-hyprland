@@ -170,6 +170,17 @@
   border-top: 1px solid transparent;
 }
 
+.winnewsicon {
+  background-size: 60%;
+  background-position: center;
+  // background-image: url('images/icons/winnews.png');
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
 .thewinbutton:active {
   :first-child {
     :first-child {
@@ -1254,6 +1265,7 @@
   font-size: 17pt;
   margin: 17px;
 }
+
 .wingamebar-text-bigmetric {
   font-size: 25pt;
 }
@@ -1393,7 +1405,7 @@
 }
 
 .wingamebar-performance-metricscolumn {
-  min-width: 100px; 
+  min-width: 100px;
 }
 
 .wingamebar-performance-metric-false {
@@ -1424,4 +1436,149 @@
 
 .wingamebar-graph {
   color: $primary;
+}
+
+.winnews-topbar {
+  margin: 25px;
+  margin-bottom: 13px;
+}
+
+.winnews-user {
+  border-radius: 9999px;
+}
+
+.winnews-user:hover {
+  background-color: rgba(49, 49, 49, 0.7);
+}
+
+.winnews-title {
+  font-family: 'Segoe UI Variable Regular';
+  font-size: 12pt;
+  font-weight: bold;
+  font-size: 16pt;
+  margin-right: 20px;
+}
+
+.winnews-clock {
+  font-family: 'Segoe UI Variable Regular';
+  font-size: 12pt;
+  font-weight: 500;
+  font-size: 16pt;
+  margin-right: 20px;
+}
+
+.winnews-search-prompt {
+  background-color: rgba(34, 32, 39, 0.5);
+  border-radius: 9999px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  padding: 5px;
+}
+
+.winnews-search-prompt-text {
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  color: #CCCCCC;
+}
+
+.winnews-search-contents {
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  background-color: transparent;
+  border-radius: 6px;
+  border: 0px solid transparent;
+  // padding: 11px;
+  // margin: 34px;
+  margin-left: 37px;
+
+  selection {
+    background-color: tint($primary, 50%);
+    color: #1e1e1e;
+  }
+}
+
+.winnews-widgets {
+  margin: 0 46px;
+  margin-top: 4px;
+}
+
+.winnews-section-icon {
+  color: $onSecondaryContainer;
+  font-family: 'Material Symbols Rounded';
+  font-size: 20pt;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  margin: 5px;
+}
+
+.winnews-widget {
+  border-radius: 12px;
+  background-color: $onSecondary;
+  padding-bottom: 10px;
+}
+
+.winnews-section {
+  color: $onSecondaryContainer;
+  font-family: 'Segoe UI Variable Regular';
+  font-size: 15pt;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.winnews-text {
+  margin: 5px 0px;
+  background-repeat: no-repeat;
+  color: $onBackground;
+  font-family: 'Segoe UI Variable Regular';
+  font-size: 12pt;
+}
+
+.winnews-option {
+  padding: 0 17px;
+  margin-left: 43px;
+}
+
+.winslider-winnews {
+  margin: 0 5px;
+  min-height: 21px;
+
+  trough {
+    min-width: 260px;
+  }
+}
+
+.win-checkbox-0 {
+  margin: 5px 0px;
+  border-radius: 9999px;
+  min-width: 26px;
+  min-height: 26px;
+  background: url('images/svg/checkbox_no.svg');
+  background-repeat: no-repeat;
+  color: transparent;
+}
+
+.win-checkbox-1 {
+  margin: 5px 0px;
+  border-radius: 9999px;
+  min-width: 26px;
+  min-height: 26px;
+  background: url('images/svg/checkbox.svg');
+  background-repeat: no-repeat;
+  color: transparent;
+}
+
+.winnews-fetch-pad {
+  padding: 0 17px;
+  padding-left: 15px;
+}
+
+.winnews-fetch-icon {
+  color: $primary;
+  font-size: 16pt;
+  font-family: Material Symbols Rounded;
+}
+.winnews-fetch {
+  font-size: 15pt;
 }

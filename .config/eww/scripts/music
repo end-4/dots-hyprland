@@ -127,7 +127,7 @@ elif [ "$1" = "name" ]; then
 		if [[ "$title" == *" - YouTube"* && "$artist" == "" ]]; then
 			continue
 		fi
-		title=$(scripts/limitlen.py "$title" 45)
+		title=$(scripts/limitlen.py "$title" 41)
 		
 		gojq --null-input -r -c \
 			--arg artist "$(sanitize "$artist")" \

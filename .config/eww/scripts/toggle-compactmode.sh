@@ -7,6 +7,7 @@ if [[ "$state" != "0" || "$1" == "--enable" ]]; then
     hyprctl keyword decoration:rounding 0 
     hyprctl keyword general:gaps_in 0 
     hyprctl keyword general:gaps_out 0
+    hyprctl keyword monitor eDP-1,addreserved,69,0,0,0  
     if [[ "$2" == "--border" ]]; then
         hyprctl keyword general:border_size "$3"
     else

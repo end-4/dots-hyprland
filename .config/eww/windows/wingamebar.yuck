@@ -10,47 +10,47 @@
         :height 1080
         :width 1920
         :class "wingamebar-overlay"
-        ; (eventbox
-          ;   :onclick "${EWW_CMD} close wingamebar &"
-          ;   :onmiddleclick "${EWW_CMD} close wingamebar &"
-          ;   :onrightclick "${EWW_CMD} close wingamebar &"
-        ; )
       )
       ; Controls
-      (box :space-evenly false
-        :style "
-        margin-left: ${RES_WIDTH / 2 + ((gamebarwidgets.controls.at[0] - (RES_WIDTH / 2)) * (rev_wingamebar ? 1 : 1.03)) - (gamebarwidgets.controls.size[0] / 2)};
-        margin-top: ${RES_HEIGHT / 2 + ((gamebarwidgets.controls.at[1] - (RES_HEIGHT / 2)) * (rev_wingamebar ? 1 : 1.03)) - (gamebarwidgets.controls.size[1] / 2)};
-        margin-right: ${RES_WIDTH - (RES_WIDTH / 2 + ((gamebarwidgets.controls.at[0] - (RES_WIDTH / 2)) * (rev_wingamebar ? 1 : 1.03)) + (gamebarwidgets.controls.size[0] / 2))};
-        margin-bottom: ${RES_HEIGHT - (RES_HEIGHT / 2 + ((gamebarwidgets.controls.at[1] - (RES_HEIGHT / 2)) * (rev_wingamebar ? 1 : 1.03)) + (gamebarwidgets.controls.size[1] / 2))};
-        "
-        :class "wingamebar-window"
-        :halign "center"
-        (box :space-evenly false :orientation "h"
-          :class "wingamebar-control-sidesection-left"
-          (button
-            :class "wingamebar-control-button"
-            (label :class "win-segoeicon wingamebar-control-button" :text "")
+      (eventbox
+        :onclick "scripts/toggle-wingamebar.sh --close"
+        :onrightclick "scripts/toggle-wingamebar.sh --close"
+        :onmiddleclick "scripts/toggle-wingamebar.sh --close"
+        (box :space-evenly false
+          :style "
+          margin-left: ${RES_WIDTH / 2 + ((gamebarwidgets.controls.at[0] - (RES_WIDTH / 2)) * (rev_wingamebar ? 1 : 1.03)) - (gamebarwidgets.controls.size[0] / 2)};
+          margin-top: ${RES_HEIGHT / 2 + ((gamebarwidgets.controls.at[1] - (RES_HEIGHT / 2)) * (rev_wingamebar ? 1 : 1.03)) - (gamebarwidgets.controls.size[1] / 2)};
+          margin-right: ${RES_WIDTH - (RES_WIDTH / 2 + ((gamebarwidgets.controls.at[0] - (RES_WIDTH / 2)) * (rev_wingamebar ? 1 : 1.03)) + (gamebarwidgets.controls.size[0] / 2))};
+          margin-bottom: ${RES_HEIGHT - (RES_HEIGHT / 2 + ((gamebarwidgets.controls.at[1] - (RES_HEIGHT / 2)) * (rev_wingamebar ? 1 : 1.03)) + (gamebarwidgets.controls.size[1] / 2))};
+          "
+          :class "wingamebar-window"
+          :halign "center"
+          (box :space-evenly false :orientation "h"
+            :class "wingamebar-control-sidesection-left"
+            (button
+              :class "wingamebar-control-button"
+              (label :class "win-segoeicon wingamebar-control-button" :text "")
+            )
           )
-        )
-        (box
-          :class "wingamebar-control-appsection"
-          (button
-            :class "wingamebar-control-button-active"
-            (label :class "win-segoeicon wingamebar-control-button" :text "")
+          (box
+            :class "wingamebar-control-appsection"
+            (button
+              :class "wingamebar-control-button-active"
+              (label :class "win-segoeicon wingamebar-control-button" :text "")
+            )
+            (button
+              :class "wingamebar-control-button-active"
+              (label :class "win-segoeicon wingamebar-control-button" :text "")
+            )
+            (button
+              :class "wingamebar-control-button-active"
+              (label :class "win-segoeicon wingamebar-control-button" :text "")
+            )
           )
-          (button
-            :class "wingamebar-control-button-active"
-            (label :class "win-segoeicon wingamebar-control-button" :text "")
+          (box :space-evenly false :orientation "h"
+            :class "wingamebar-control-sidesection-right"
+            (label :class "wingamebar-text wingamebar-text-clock" :text {time12})
           )
-          (button
-            :class "wingamebar-control-button-active"
-            (label :class "win-segoeicon wingamebar-control-button" :text "")
-          )
-        )
-        (box :space-evenly false :orientation "h"
-          :class "wingamebar-control-sidesection-right"
-          (label :class "wingamebar-text wingamebar-text-clock" :text {time12})
         )
       )
       ; Capture
@@ -260,7 +260,7 @@
                   :width 236 :height 191
                   :orientation "v" :space-evenly false
                   :class "wingamebar-performance-graph-graphpad"
-                  (graph 
+                  (graph
                     :width 202 :height 117
                     :class "wingamebar-graph"
                     :value {round(EWW_CPU.avg, 0)}
@@ -298,7 +298,7 @@
                   :width 236 :height 191
                   :orientation "v" :space-evenly false
                   :class "wingamebar-performance-graph-graphpad"
-                  (graph 
+                  (graph
                     :width 202 :height 117
                     :class "wingamebar-graph"
                     :value {round(memory.percentage, 0)}
@@ -336,7 +336,7 @@
                   :width 236 :height 191
                   :orientation "v" :space-evenly false
                   :class "wingamebar-performance-graph-graphpad"
-                  (graph 
+                  (graph
                     :width 202 :height 117
                     :class "wingamebar-graph"
                     :value {round(memory.swappercentage, 0)}

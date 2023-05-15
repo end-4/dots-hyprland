@@ -1,26 +1,34 @@
 .osettings-window {
     min-width: 501px;
     padding-top: 20px;
-    background-color: $colorbarbg;
+    background-color: shade($colorbarbg, 4%);
     color: $onBackground;
     font-family: Torus;
     margin: 7px;
     margin-left: 0px;
     border-top-right-radius: 53px;
-    // border-bottom-right-radius: 53px;
-    // box-shadow: 2px 2px 3px #16161E;
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('images/pictures/beach_smoothie.jpg');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
 }
 
 .onotify-window {
     min-width: 529px;
-    background-color: $colorbarbg;
+    background-color: shade($colorbarbg, 5%);
     color: $onBackground;
     font-family: Torus;
     margin: 7px;
     margin-right: 0px;
     border-top-left-radius: 53px;
-    // border-bottom-left-radius: 53px;
-    // box-shadow: -2px 2px 6px #16161E;
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('images/pictures/beach_drinks.jpeg');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
 }
 
 .osettings-separator {
@@ -36,7 +44,7 @@
     padding-top: 8px;
     font-family: Torus;
     color: $onBackground;
-    background-color: tint($colorbarbg, 4%);
+    background-color: shade($colorbarbg, 5%);
     border-top-right-radius: 53px;
 }
 
@@ -47,7 +55,7 @@
     padding-bottom: 16px;
     font-family: Torus;
     color: $onBackground;
-    background-color: tint($colorbarbg, 4%);
+    background-color: shade($colorbarbg, 5%);
     border-top-left-radius: 53px;
 }
 
@@ -111,7 +119,7 @@
     margin-left: 28px;
     margin-right: 28px;
     margin-top: 35px;
-    background-color: $surfaceVariant;
+    background-color: tint($colorbarbg, 4%);
     border: 2px solid $onSurfaceVariant;
     color: $onBackground;
     border-radius: 10px;
@@ -143,6 +151,12 @@
     padding-right: 28px;
 }
 
+.osettings-scroll-bg-colored {
+    padding-left: 28px;
+    padding-right: 28px;
+    background-color: shade($colorbarbg, 5%);
+}
+
 .osettings-btn {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -159,31 +173,64 @@
 .osettings-btn-destructive {
     color: $onTertiary;
     background-color: $tertiary;
+    background-image: linear-gradient(45deg, shade($color4, 5%) 58%, tint($color4, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
 }
 
 .osettings-btn-neutral {
     color: $onPrimary;
     background-color: $primary;
+    background-image: linear-gradient(45deg, shade($color1, 5%) 58%, tint($color1, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
 }
 
 .osettings-btn-informative {
     color: $onSecondary;
     background-color: $secondary;
+    background-image: linear-gradient(45deg, shade($color5, 5%) 58%, tint($color5, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
 }
 
 .osettings-btn-neutral:hover,
 .osettings-btn-neutral:focus {
     background-color: tint($primary, 10%);
+    // background-image: linear-gradient(135deg, $color3 75%, $color3 75%);
+    background-position: 70% 0%;
 }
 
 .osettings-btn-destructive:hover,
 .osettings-btn-destructive:focus {
     background-color: tint($tertiary, 10%);
+    // background-image: linear-gradient(135deg, tint($color4, 10%) 75%, tint($color4, 10%) 75%);
+    background-position: 70% 0%;
 }
 
 .osettings-btn-informative:hover,
 .osettings-btn-informative:focus {
     background-color: tint($secondary, 10%);
+    // background-image: linear-gradient(135deg, tint($color5, 10%) 75%, tint($color5, 10%) 75%);
+    background-position: 70% 0%;
+}
+
+.osettings-btn-neutral:active {
+    background-color: tint($primary, 10%);
+    // background-image: linear-gradient(135deg, $color3 75%, $color3 75%);
+    background-position: 100% 50%;
+}
+
+.osettings-btn-destructive:active {
+    background-color: tint($tertiary, 10%);
+    // background-image: linear-gradient(135deg, tint($color4, 10%) 75%, tint($color4, 10%) 75%);
+    background-position: 100% 50%;
+}
+
+.osettings-btn-informative:active {
+    background-color: tint($secondary, 10%);
+    // background-image: linear-gradient(135deg, tint($color5, 10%) 75%, tint($color5, 10%) 75%);
+    background-position: 100% 50%;
 }
 
 .rounder {
@@ -195,12 +242,12 @@
     margin-bottom: 10px;
     min-height: 6px;
     border-radius: 9999px;
-    background-image: linear-gradient(45deg, $primary 50%, #24222A 50%);
+    background-image: linear-gradient(45deg, $primary 50%, tint($colorbarbg, 15%) 50%);
     padding: 0px;
 
     trough {
         border-radius: 9999px;
-        background-color: #24222A;
+        background-color: tint($colorbarbg, 15%);
         min-height: 6px;
         margin-left: 32px;
         margin-right: 32px;
@@ -329,4 +376,64 @@
     min-height: 40px;
     background-color: $secondaryContainer;
     border-radius: 14px;
+}
+
+.osettings-tag {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'Torus';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    min-width: 50px;
+    margin-top: 25px;
+}
+
+.osettings-tag:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag:active {
+    background-color: tint($tertiary, 40%);
+}
+
+.osettings-tag-nerd {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    min-width: 50px;
+    margin-top: 25px;
+}
+
+.osettings-tag-nerd:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag-nerd:active {
+    background-color: tint($tertiary, 40%);
+}
+
+.osettings-tag-material {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'Material Symbols Rounded';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    // min-width: 25px;
+    margin-top: 25px;
+}
+
+.osettings-tag-material:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag-material:active {
+    background-color: tint($tertiary, 40%);
 }

@@ -37,11 +37,11 @@
 .music-box {
   @include rounding;
   padding-top: 24px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
   background-position: top;
 }
 
-.music-title { 
+.music-title {
   // font-weight: bold;
   font-family: 'Torus', 'Material Symbols Rounded';
   min-height: 39px;
@@ -50,7 +50,8 @@
   padding-left: 10px;
   padding-right: 10px;
 }
-.music-title-hover { 
+
+.music-title-hover {
   // font-weight: bold;
   font-family: 'Torus', 'Material Symbols Rounded';
   font-size: 19pt;
@@ -60,24 +61,21 @@
   padding-right: 10px;
 }
 
-.music-title-bar { 
-  // font-weight: bold;
-  // background-color: red ;
+.music-title-bar {
   font-family: 'Torus';
-  font-size: 18pt;  
+  font-size: 15pt;
   color: $colorbar;
   padding-left: 10px;
   padding-right: 10px;
 
 }
 
-.music-artist-bar { 
-  // background-color: blue;
-  font-family: 'Torus';
-  font-size: 13pt;
+.music-artist-bar {
   color: $colorbar;
   padding-left: 10px;
   padding-right: 10px;
+  font-family: 'Torus';
+  font-size: 11pt;
 }
 
 .music-artist {
@@ -138,6 +136,7 @@
 }
 
 .music-ctl-revealer {
+  margin-top: -4px;
   // transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);
 }
 
@@ -154,7 +153,7 @@
   border-bottom-right-radius: 15px;
   min-width: 40px;
   min-height: 20px;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .music-source-icon {
@@ -167,9 +166,10 @@
   color: $colortext;
   border-radius: 9999px;
   margin: 3px 3px;
-  min-width: 58px;
-  font-size: 36pt;
+  min-width: 52px;
+  font-size: 32pt;
 }
+
 .song-button:hover {
   background-color: $overlay0;
 }
@@ -179,18 +179,21 @@
   color: $colortext;
   min-width: 160px;
   margin-top: 6px;
+  margin-bottom: 6px;
   padding-bottom: 0px;
   background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 9999px;
 }
 
 .osu-music-box {
-  min-width: 75px;
+  // min-width: 75px;
   min-height: 53px;
   background-size: auto 65%;
-  background-position: 35% 50%;
+  background-position: 50% 50%;
   // background-image: url('images/svg/beatmaps.svg');
   // background-color: $colorbarbg;
   background-repeat: no-repeat;
+  padding-left: 15px;
 }
 
 .osu-music-box-dummy {
@@ -225,10 +228,11 @@
 
 .track-scale {
   @include rounding;
+
   trough {
     border-bottom-left-radius: 9999px;
     border-bottom-right-radius: 9999px;
-    background-color: $overlay0;
+    background-color: rgba(0, 0, 0, 0.8);
     min-height: 8px;
     // margin-left: 32px;
     // margin-right: 32px;
@@ -242,4 +246,60 @@
     border-bottom-right-radius: 9999px;
     background-color: $color0;
   }
+}
+
+.bar-music-cover {
+  border-radius: 10px;
+  min-height: 45px;
+  min-width: 45px;
+  background-size: auto 100%;
+  background-position: center;
+}
+
+.bar-music-state {
+  font-family: 'Material Symbols Rounded';
+  color: $color6;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 9999px;
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.music-cava-column {
+  background-color: $color0;
+  margin: 0 3px;
+  margin-bottom: 8px;
+  border-top-left-radius: 99px;
+  border-top-right-radius: 99px;
+}
+
+.music-time-label {
+  color: $colorbar;
+  background-color: rgba(0, 0, 0, 0.6);
+  font-size: 13pt;
+  font-family: 'Torus';
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  min-width: 50px;
+}
+
+.music-button-box-bar {
+  font-family: 'Material Symbols Rounded';
+  color: $colortext;
+  min-width: 160px;
+  margin: 0 0px;
+  border-radius: 9999px;
+}
+
+.song-button-bar {
+  color: $colortext;
+  border-radius: 9999px;
+  // margin: 3px;
+  min-width: 52px;
+  font-size: 32pt;
+}
+
+.song-button-bar:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }

@@ -1,13 +1,13 @@
 .membar {
-  color: $colorbar;
+  color: $color5;
 }
 
 .cpubar {
-  color: $colorbar;
+  color: $color4;
 }
 
 .batbar {
-  color: $colorbar;
+  color: $color6;
   padding-right: 4px;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .batt-percentage {
-  color: $colorbar;
+  color: $color6;
   padding-right: 5px;
   padding-left: 4px;
 }
@@ -61,11 +61,11 @@
 }
 
 .iconmem {
-  color: $colorbar;
+  color: $color5;
 }
 
 .iconcpu {
-  color: $colorbar;
+  color: $color4;
 }
 
 .icon-text {
@@ -126,31 +126,31 @@
 
 .cpu-menu {
   font-family: 'Torus', 'Material Symbols Rounded';
-  color: $colorbar;
+  color: $color4;
   padding-left: 5px;
 }
 
 .mem-menu {
   font-family: 'Torus', 'Material Symbols Rounded';
-  color: $colorbar;
+  color: $color5;
   padding-left: 5px;
   padding-right: 5px;
 }
 
 .mem-menu-left {
-  color: $colorbar;
+  color: $color5;
   padding-left: 5px;
   padding-right: 0px;
 }
 
 .mem-menu-mid {
-  color: $colorbar;
+  color: $color5;
   padding-left: 0px;
   padding-right: 0px;
 }
 
 .mem-menu-right {
-  color: $colorbar;
+  color: $color5;
   padding-left: 0px;
   padding-right: 5px;
 }
