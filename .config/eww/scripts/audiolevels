@@ -37,7 +37,7 @@ dostuff(){
 
   # Get icons
   for i in "${!iconarr[@]}"; do
-    iconarr[$i]=$(geticons ${iconarr[i]} | head -n 1)
+    iconarr[$i]=$(geticons -t "$(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g")" ${iconarr[i]} | head -n 1)
   done
   
   # Functions

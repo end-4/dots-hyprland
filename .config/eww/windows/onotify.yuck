@@ -92,7 +92,7 @@
     :orientation "v"
     :space-evenly false
     :style "
-    ${anim_open_ontf ? 'transition: 200ms cubic-bezier(0, 1, 0, 1);' : 'transition: 150ms cubic-bezier(0.4, 0, 0.8, 0.15);'}
+    ${anim_open_ontf ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     ${rev_ontf ? '' : 'margin-right: -533px;'}
     "
     (eventbox
@@ -208,7 +208,7 @@
           ; :halign "fill"
           :class "onotify-content"
           :valign "fill"
-          :style "min-height: 866px;"
+          :style "min-height: 317px;"
           (box
             :halign "fill"
             :class "osettings-scroll-bg"
@@ -216,173 +216,178 @@
             :spacing 20
             :orientation "v"
             ; Volume mixer
-            (volume_mixer)
-            ; ; Resource usage
-            ; (box
-              ;   :orientation "h"
-              ;   :space-evenly false
-              ;   :spacing 10
-              ;   (label
-                ;     :halign "start"
-                ;     :class "osettings-section-icon"
-                ;     :text ""
-              ;   )
-              ;   (label
-                ;     :halign "start"
-                ;     :wrap true
-                ;     :class "osettings-section"
-                ;     :text "Resources"
-              ;   )
-            ; )
-            ; (box
-              ;   :style "margin-bottom: 17px;"
-              ;   ; cpu
-              ;   (box
-                ;     :class "sys-box"
-                ;     :space-evenly false
-                ;     :halign "start"
-                ;     (circular-progress
-                  ;       :start-at 75
-                  ;       :value "${EWW_CPU.avg}"
-                  ;       :class "sys-cpu"
-                  ;       :thickness 3
-                  ;       (label
-                    ;         :text ""
-                  ;       :class "sys-icon-cpu icon")
-                ;     )
-                ;     (box
-                  ;       :orientation "v"
-                  ;       :vexpand false
-                  ;       (label
-                    ;         :text "CPU"
-                    ;         :halign "start"
-                    ;         :class "sys-text-cpu"
-                    ;         :style "font-size: 12pt;"
-                  ;       )
-                  ;       (label
-                    ;         :text "${round(EWW_CPU.avg,2)}%"
-                    ;         :halign "start"
-                    ;         :class "sys-text-sub"
-                    ;         :style "font-size: 12pt;"
-                  ;       )
-                  ;       (label
-                    ;         :text "${EWW_CPU.cores[0].freq} MHz"
-                    ;         :halign "start"
-                    ;         :class "sys-text-sub"
-                    ;         :style "font-size: 12pt;"
-                  ;       )
-                ;     )
-              ;   )
-              
-              ;   ; memory
-              ;   (box
-                ;     :class "sys-box"
-                ;     :space-evenly false
-                ;     :halign "end"
-                ;     (circular-progress
-                  ;       :start-at 75
-                  ;       :value {memory.percentage}
-                  ;       :class "sys-mem"
-                  ;       :thickness 3
-                  ;       (label
-                    ;         :text ""
-                    ;         :class "sys-icon-mem icon"
-                  ;       )
-                ;     )
-                ;     (box
-                  ;       :orientation "v"
-                  ;       (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
-                  ;       (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
-                  ;       (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
-                ;     )
-              ;   )
-            ; )
-            ; Calendar
-            ; (label
-              ;   :halign "start"
-              ;   :wrap true
-              ;   :class "osettings-section"
-              ;   :text "Calendar"
-            ; )
-            ; (calendar)
-            ;
+            ; (volume_mixer)
             ; Notifications
-            (centerbox
-              (box
-                :orientation "h"
-                :space-evenly false
-                :spacing 10
-                (label
-                  :halign "start"
-                  :class "osettings-section-icon"
-                  :text ""
-                )
-                (label
-                  :halign "start"
-                  :wrap true
-                  :class "osettings-section"
-                  :text "Notifications"
-                )
-              )
-              (box)
-              (box
-                :class "icon"
-                :halign "end"
-                :space-evenly false
-                :spacing 10
-                (button
-                  :class "notification-action"
-                  :tooltip "Refresh"
-                  :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
-                  ""
-                )
-                (button
-                  :class "notification-action"
-                  :tooltip "Pause/Resume Notifications"
-                  :onclick "scripts/notifications toggle &"
-                  {notif_icons.toggle_icon}
-                )
-                (button
-                  :class "notification-action"
-                  :tooltip "Clear Notifications"
-                  :onclick "scripts/notifications clear &"
-                  ""
-                )
-              )
-            )
             (box
-              :class "container"
-              :orientation "v"
-              :space-evenly false
-              (for i in notifications
-                (eventbox
-                  :onclick "dunstctl history-pop ${i.id} && dunstctl action 0 && dunstctl close"
-                  (box
-                    :class "notification"
-                    :orientation "v"
-                    :width 300
-                    :space-evenly false
-                    (centerbox
-                      :space-evenly false
+              :space-evenly false :orientation "v"
+              (centerbox
+                (box
+                  :orientation "h"
+                  :space-evenly false
+                  :spacing 10
+                  (label
+                    :halign "start"
+                    :class "osettings-section-icon"
+                    :text ""
+                  )
+                  (label
+                    :halign "start"
+                    :class "osettings-section"
+                    :text "Notifications"
+                  )
+                )
+                (box)
+                ; (box
+                  ;   :class "icon"
+                  ;   :halign "end" :valign "center"
+                  ;   :space-evenly false
+                  ;   :spacing 10
+                  ;   (button
+                    ;     :class "notification-action"
+                    ;     :tooltip "Refresh"
+                    ;     :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
+                    ;     ""
+                  ;   )
+                  ;   (button
+                    ;     :class "notification-action"
+                    ;     :tooltip "Pause/Resume Notifications"
+                    ;     :onclick "scripts/notifications toggle &"
+                    ;     {notif_icons.toggle_icon}
+                  ;   )
+                  ;   (button
+                    ;     :class "notification-action"
+                    ;     :tooltip "Clear Notifications"
+                    ;     :onclick "scripts/notifications clear &"
+                    ;     ""
+                  ;   )
+                ; )
+                (box
+                  :orientation "h" :space-evenly false
+                  :halign "end" :spacing 4
+                  :style "margin-left: 9px;"
+                  (button :valign "center" :yalign 0.5
+                    :class "osettings-tag-material"
+                    :tooltip "Refresh"
+                    :onclick "dunstctl history > $XDG_CACHE_HOME/dunst-history.json &"
+                    "Refresh"
+                  )
+                  (button :valign "center" :yalign 0.5
+                    :class "osettings-tag-material"
+                    :tooltip "Pause/Resume Notifications"
+                    :onclick "scripts/notifications toggle &"
+                    "Pause"
+                  )
+                  (button :valign "center" :yalign 0.5
+                    :class "osettings-tag-material"
+                    :tooltip "Clear Notifications"
+                    :onclick "scripts/notifications clear &"
+                    "Clear"
+                  )
+                )
+              )
+              (box
+                :class "container"
+                :orientation "v"
+                :space-evenly false
+                (for i in notifications
+                  (eventbox
+                    :onclick "dunstctl history-pop ${i.id} && dunstctl action 0 && dunstctl close"
+                    (box
+                      :class "notification"
+                      :orientation "v" :space-evenly false
+                      :width 300
+                      (centerbox
+                        :space-evenly false
+                        (label
+                          :xalign 0
+                          :wrap true
+                          :class "summary"
+                          :text {i.summary}
+                        )
+                        (label)
+                        (label
+                          :xalign 1
+                          :wrap true
+                          :class "appname"
+                          :text {i.appname}
+                        )
+                      )
                       (label
                         :xalign 0
                         :wrap true
-                        :class "summary"
-                        :text {i.summary}
-                      )
-                      (label)
-                      (label
-                        :xalign 1
-                        :wrap true
-                        :class "appname"
-                        :text {i.appname}
+                        :class "body"
+                        :text {i.body}
                       )
                     )
-                    (label
-                      :xalign 0
-                      :wrap true
-                      :class "body"
-                      :text {i.body}
+                  )
+                )
+              )
+            )
+          )
+        )
+        ; Calendar
+        (box
+          :space-evenly false :orientation "v"
+          :class "osettings-scroll-bg-colored"
+          (box :space-evenly false
+            (box
+              :orientation "h" :space-evenly false :spacing 10
+              :hexpand true
+              (label
+                :halign "start"
+                :class "osettings-section-icon"
+                :text ""
+              )
+              (label
+                :halign "start"
+                :wrap true
+                :class "osettings-section"
+                :text "${calendartitle}"
+              )
+            )
+            (box
+              :orientation "h" :space-evenly false
+              :halign "end" :spacing 4
+              (button :valign "center" :yalign 0.5
+                :class "osettings-tag-material"
+                :tooltip "Refresh"
+                :onclick "scripts/scrollmonth up &"
+                "Remove"
+              )
+              (button :valign "center" :yalign 0.5
+                :class "osettings-tag-material"
+                :tooltip "Pause/Resume Notifications"
+                :onclick "scripts/scrollmonth down &"
+                "Add"
+              )
+            )
+          )
+          (box
+            :space-evenly false :orientation "v"
+            (eventbox
+              :onscroll "scripts/scrollmonth {} &"
+              (box
+                :orientation "v"
+                :space-evenly false
+                (box
+                  :space-evenly false :orientation "v"
+                  :halign "center"
+                  (box
+                    (for day in weekdays
+                      (box
+                        :class "calendarwin-button day${day.today}"
+                        (label :class "calendarwin-text" :text "${day.day}")
+                      )
+                    )
+                  )
+                  (for week in calendar
+                    (box
+                      (for day in week
+                        (button
+                          :class "calendarwin-button calendarwin-day${day.today}"
+                          (label :class "calendarwin-text" :text "${day.day}")
+                        )
+                      )
                     )
                   )
                 )
@@ -401,9 +406,9 @@
   :focusable true
   :geometry (geometry
     :x "0px"
-    :y "53px"
+    :y "61px"
     :width "0px"
-    :height "1027px"
+    :height "1019px"
     :anchor "top right"
   )
   (onotify)
@@ -411,55 +416,55 @@
 
 (defwidget onotify-button []
   (eventbox
+    :halign "end"
     (box
       :space-evenly false
+      :halign "end"
       (eventbox
-        :class "module-button"
-        :onmiddleclick "scripts/toggle-dash.sh &"
-        :onrightclick "scripts/toggle-dash.sh &"
+        :onmiddleclick "scripts/toggle-dashfs.sh &"
+        :onrightclick "scripts/toggle-dashfs.sh &"
         :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
-        (button
-          :onclick "scripts/toggle-calendar.sh &"
+        :onclick "scripts/toggle-onotify.sh &"
+        :onhover "${EWW_CMD} update calendar_hover=true"
+        :onhoverlost "${EWW_CMD} update calendar_hover=false"
+        (box
+          :class "module-button-pad-center"
+          ; Time and date
           (box
-            :space-evenly false
-            :orientation "h"
-            ; Time and date
+            :orientation "v" :space-evenly false
+            :valign "center"
+            :class "module-timedate module module-button${rev_calendar ? '-true' : (calendar_hover ? '-hover' : '')}"
+            :style "padding: 0 10px;"
             (box
-              :class "module-timedate module"
-              :orientation "v"
               :space-evenly false
-              :valign "center"
-              (box
-                :space-evenly false
-                :halign "end"
-                :class "timedate-time"
-                (label :text "${time.hour}" :class "clock hour")
-                ; (label :text "${time.hour % 12}" :class "clock hour")
-                (label :text ":" :class "clock")
-                (label :text {time.minute} :class "clock minute")
-                ; (label :text "${time.hour >= 12 ? 'pm' : 'am'}" :class "clock minute")
-              )
-              (box
-                :class "date"
-                :onclick "${EWW_CMD} update popup='calendar'"
-                "${time.day}, ${time.date}"
-              )
+              :halign "end"
+              :class "timedate-time"
+              (label :text "${time.hour}" :class "clock hour")
+              ; (label :text "${time.hour % 12}" :class "clock hour")
+              (label :text ":" :class "clock")
+              (label :text {time.minute} :class "clock minute")
+              ; (label :text "${time.hour >= 12 ? 'pm' : 'am'}" :class "clock minute")
             )
-            ; System levels
+            (box
+              :class "date"
+              :onclick "${EWW_CMD} update popup='calendar'"
+              "${time.day}, ${time.date}"
+            )
           )
         )
       )
       (eventbox
         :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
         :onclick "scripts/toggle-onotify.sh &"
-        :onmiddleclick "scripts/toggle-dash.sh &"
-        :onrightclick "scripts/toggle-dash.sh &"
+        :onmiddleclick "scripts/toggle-dashfs.sh &"
+        :onrightclick "scripts/toggle-dashfs.sh &"
         :onhover "${EWW_CMD} update ontf_hover=true"
         :onhoverlost "${EWW_CMD} update ontf_hover=false"
         (box
           :orientation "h"
           :space-evenly false
-          :class "module-button module-button-${rev_ontf || ontf_hover}"
+          :class "module-button${rev_ontf ? '-true' : (ontf_hover ? '-hover' : '')}"
+          :style "padding-left: 10px; padding-right: 10px; margin: 8px 0; margin-right: 8px;"
           (box
             ; :class "module"
             :space-evenly false
@@ -470,10 +475,11 @@
             (sysbatt)
           )
           (image
+            :class "real-onotify-toggle-button module-button-pad-right-nomargin"
+            ; :class "real-onotify-toggle-button"
             :path "images/svg/forum.svg"
             :image-height 33
             :image-width 33
-            :class "real-onotify-toggle-button"
           )
         )
       )

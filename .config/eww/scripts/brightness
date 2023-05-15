@@ -15,7 +15,7 @@ showhide() {
   if [ "$rundate" = "$currentdate" ] && [ "$lock" -eq 0 ]; then
     scripts/toggle-osd-bright.sh --open
     lock=1
-  elif [ "$((currentdate - rundate))" = "2" ] && [ "$lock" -eq 1 ]; then
+  elif [ $((currentdate - rundate)) -ge 2 ] && [ "$lock" -eq 1 ]; then
     scripts/toggle-osd-bright.sh --close > /dev/null
     lock=0
   fi

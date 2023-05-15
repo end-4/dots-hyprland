@@ -33,30 +33,30 @@ getwins() {
     if [ -f "scripts/cache/$clientclass" ]; then
         iconpath=$(cat scripts/cache/$clientclass)
         if [ ! -f "${iconpath}" ]; then # Cache refresh if icon doesnt exist
-            iconpath=$(geticons "$clientclass" | head -n 1)
+            iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$clientclass" | head -n 1)
             echo "${iconpath}" > "scripts/cache/$clientclass"
         fi
     else
-        iconpath=$(geticons "$clientclass" | head -n 1)
+        iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$clientclass" | head -n 1)
         echo "${iconpath}" > "scripts/cache/$clientclass"
     fi
     if [[ ${iconpath} == "" ]]; then
       # Retry with lowercase if icon not found
-      iconpath=$(geticons $(echo "$clientclass" | tr '[:upper:]' '[:lower:]' | sed 's/\ /-/g') | head -n 1)
+      iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") $(echo "$clientclass" | tr '[:upper:]' '[:lower:]' | sed 's/\ /-/g') | head -n 1)
 
       if [[ ! ${iconpath} = "" ]]; then
         rm "scripts/cache/$clientclass"
         echo "${iconpath}" > "scripts/cache/$clientclass"
       else 
         newname=$(scripts/iconpatch $clientclass)
-        iconpath=$(geticons "$newname" | head -n 1)
+        iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$newname" | head -n 1)
         if [[ ! ${iconpath} = "" ]]; then
           rm "scripts/cache/$clientclass"
           echo "${iconpath}" > "scripts/cache/$clientclass"
         else
           # Fallback app icon, replace the path below to the fallback icon of your choice
           # iconpath="/usr/share/icons/Win11-dark/mimes/48/application-x-executable.svg"
-          iconpath=$(geticons "application-x-executable" | head -n 1)
+          iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "application-x-executable" | head -n 1)
           rm "scripts/cache/$clientclass"
           echo "${iconpath}" > "scripts/cache/$clientclass"
         fi

@@ -60,7 +60,7 @@
   :monitor 0
   :focusable true
   :geometry (geometry
-    :x "525px"
+    :x "1140px"
     :y "126px"
     :width 161
     :anchor "bottom left"

@@ -63,24 +63,47 @@
       :onrightclick "scripts/toggle-overview.sh --close &"
       :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
     )
-    (box
-      :class "overview-search-area"
-      :space-evenly false
-      :halign "center"
-      :orientation "v"
-      (input
-        :class "overview-search-box"
-        :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
-        :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
+    ; Search bar
+    (overlay
+      (box
+        :class "overview-search-area"
+        :space-evenly false
+        :halign "center"
+        :orientation "v"
+        (input
+          :class "overview-search-box"
+          :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
+          :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
+          :style "
+          border-radius: ${overview_query == '' ? 99 : 20}px;
+          min-width: ${overview_query == '' ? 130 : 445}px;
+          "
+        )
+        (revealer
+          :reveal false
+          :transition "slidedown"
+          (label
+            :text {ICON_GET} ; Dummy to keep listeners active
+          )
+        )
       )
-      (revealer
-        :reveal false
-        :transition "slidedown"
-        (label
-          :text {ICON_GET} ; Dummy to keep listeners active
+      (box
+        :class "overview-search-typetosearch-pad"
+        :space-evenly false
+        :halign "center"
+        :orientation "v"
+        (revealer
+          :reveal "${overview_query == ''}"
+          :duration "0ms"
+          (label
+            :class "overview-search-typetosearch-text"
+            :xalign 0
+            :text "Type to search"
+          )
         )
       )
     )
+    ; The overview
     (eventbox
       :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Activities Overview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &`
       :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
@@ -149,6 +172,7 @@
         )
       )
     )
+    ; Search Results
     (box
       :class "overview-search-area"
       :space-evenly false

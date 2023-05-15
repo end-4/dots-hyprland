@@ -211,7 +211,7 @@
 
 (defwidget syscpu []
   (revealer
-    :reveal "${((popup == 'system-menu' || force_sys_rev || EWW_CPU.avg>= 50) && !right_hover)}"
+    :reveal "${((popup == 'system-menu' || EWW_CPU.avg>= 50) || force_sys_rev)}"
     :transition "slideleft"
     :duration "300ms"
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"

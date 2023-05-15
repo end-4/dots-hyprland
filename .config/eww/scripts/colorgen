@@ -20,6 +20,7 @@ maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
 # scripts/material_colors.py --path "$IMGPATH" $lightdark > tmp/_material.colorpallete
 scripts/material_colors.py --color "$maincol" "$lightdark" > tmp/_material.colorpallete &
 accent=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
+tertiary=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
 
 printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
 
@@ -85,5 +86,12 @@ echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_ge
 echo '}' >> './tmp/colors_generated.conf'
 
 # Print json to stdout
-echo -n "$accent" > 'tmp/_iconcolor.txt'
+echo "$accent" > 'tmp/_iconcolor.txt'
+echo "$tertiary" >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color2' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color4' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color5' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color5' >> 'tmp/_iconcolor.txt'
 
+# beatmappacks tertiary, forum color1, search color3, search color4, tournaments color4
+# 

@@ -9,7 +9,9 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-lboost_iostreams",
+                "`pkg-config --libs boost_iostreams`"
             ],
             "options": {
                 "cwd": "${fileDirname}"
