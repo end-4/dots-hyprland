@@ -23,7 +23,7 @@
 # Branches + Screenshots
 
 <details> 
-  <summary> Current main style: Material/Windows, updated in main branch. All non-main branches are archives. </summary>
+  <summary> Current main style: Similar to Summer branch, but with different colors, updated in main branch. All non-main branches are archives. </summary>
   - Nothing here :P, check the ones below
 </details>
 
