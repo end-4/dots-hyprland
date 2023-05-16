@@ -76,7 +76,7 @@
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes |
 | --- | ------ | ----------- | ----- |
-| Kernel |     | XanMod | `auto-cpufreq` + unplugged = might be unresponsive |
+| Kernel |     |    | `auto-cpufreq` + unplugged = might be unresponsive |
 | Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
