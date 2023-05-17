@@ -43,6 +43,12 @@ string exec(const char* cmd) {
     return result;
 }
 
+bool likelyNotMath(const string& expression) {
+    char firstChar = expression[0];
+    if (firstChar >= '0' && firstChar <= '9') return false;
+    return true;
+}
+
 void calcPrompt() {
     cout << "[{\"name\":\"Calculator - Type "
             "something!\",\"icon\":\"images/svg/dark/"
@@ -71,7 +77,10 @@ void getAppJson() {
 }
 
 void tryThemeCmd() {
-    searchTerm = searchTerm.substr(6);
+    if (searchTerm.size() >= 6)
+        searchTerm = searchTerm.substr(6);
+    else
+        searchTerm = " ";
     string searchCommand =
         "ls css/savedcolors/ | grep .txt | sed 's/_iconcolor_//g' | sed "
         "'s/.txt//g' | fzf --filter='" +
@@ -99,11 +108,12 @@ void tryAppSearch() {
         cout << appEntries[entryName];
         if (i < entryNames.size() - 1) cout << ',';
     }
-    cout << ']';
+    cout << ']' << '\n';
     exit(0);
 }
 
 void tryCalculate() {
+    if (likelyNotMath(searchTerm)) return;
     string calcCommand =
         "rink '" + searchTerm + "' | tail -1 | sed 's/approx. //g'";
     string results = exec(&calcCommand[0]);
@@ -116,22 +126,43 @@ void tryCalculate() {
     exit(0);
 }
 
+void commandOnly() {
+    cout << "[]\n";
+    string updateCmd =
+        "eww update "
+        "winsearch_actions='{\"name\":\"'\"$1\"'\",\"icon\":\"images/svg/dark/"
+        "protocol.svg\",\"exec\":\"" +
+        searchTerm + "\"}'";
+    exec(&updateCmd[0]);
+    exec("eww update winsearch_actions_type='Run command'");
+    exit(0);
+}
+
 int main(int argc, char* argv[]) {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
     if (argc == 1) {
         cout << "[{\"name\": \"Type something!\"}]";
         return 0;
     }
     searchTerm = argv[1];
+    // Special commands
     if (searchTerm == "--calculator") calcPrompt();
-    if (searchTerm.find(">load") != string::npos) tryThemeCmd();
+    if (searchTerm[0] == '>') {
+        if (searchTerm.find(">load") != string::npos)
+            tryThemeCmd();
+        else {
+            cout << "[]\n";
+            exit(0);
+        }
+    }
     // Get app names and entries
     getAppNames();
     getAppJson();
     // Attempt searches in order. Each search will exit if success
-    tryAppSearch();
     tryCalculate();
+    tryAppSearch();
+    commandOnly();
 
     cout << results;
 }
