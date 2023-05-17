@@ -53,6 +53,7 @@
 (defvar allapps_get '')
 (defvar compact false)
 (defvar resource_metric "cpu")
+(defvar record_sound false)
 
 ; Dynamic animation: different for open and close
 (defvar rev_wincalendar true)
