@@ -91,13 +91,14 @@
           (button
             :valign "start"
             :class "wingamebar-capture-button wingamebar-button"
-            :onclick "scripts/toggle-wingamebar.sh --close && ~/.local/bin/record-script.sh &"
+            :onclick "scripts/toggle-wingamebar.sh --close && ~/.local/bin/record-script.sh ${record_sound ? '--sound ' : ''}&"
             (label :class "win-segoeicon" :text "")
           )
           (button
             :valign "start"
             :class "wingamebar-capture-button wingamebar-button"
-            (label :class "win-segoeicon" :text "")
+            :onclick "${EWW_CMD} update record_sound='${!record_sound}'"
+            (label :class "win-segoeicon" :text "${record_sound ? '' : ''}")
           )
         )
         (label :xalign 0 :class "wingamebar-content wingamebar-text wingamebar-subtext" :text {awin.title} :limit-width 38)
