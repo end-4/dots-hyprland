@@ -4,9 +4,7 @@
 </div>
 
  - This is end_4's submission for the Hyprland summer 2023 ricing competition
- - *for instructions n stuff please check the main branch*
-
+ - *for instructions, credits n stuff please check the main branch*
+ - A video to show animations: https://streamable.com/4oogot
  - A sheet of stuff
 ![dots-hyprland](./assets/all_ordered.png)
- - And a video to show animations
-https://streamable.com/4oogot
