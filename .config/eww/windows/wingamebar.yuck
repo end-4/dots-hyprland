@@ -379,6 +379,7 @@
   :focusable true
   :wm-ignore true
   :monitor 0
+  :namespace "gamebar"
   :geometry (geometry
     :height 1080
     :width 1920

@@ -194,12 +194,9 @@
     :x "0%"
     :y "0%"
     :width "100%"
-    :height "53px"
-    ; :width "53px"
-    ; :height "100%"
+    :height "69px"
     :anchor "top center"
   )
-  ; :stacking "fg"
   :exclusive false
   (bar)
 )

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Import the requests module
 import requests
 import json
@@ -21,6 +22,7 @@ if response.status_code == 200:
     link=results['url']
     os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', link))
     os.system('mv ./eww_covers/waifu_tmp ./eww_covers/waifu')
+    print('eww_covers/waifu')
 else:
     # Print an error message
     print("Something went wrong. Status code:", response.status_code)
