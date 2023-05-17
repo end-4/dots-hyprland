@@ -12,13 +12,13 @@
 
 </div>
 
-
-# Main features
- - An overview widget that shows window positions in workspaces (and has an app search! gnomie!!!1!1!!)
+# Cool stuff
+ - An overview widget that shows window positions in workspaces + app search (aims to be a GNOME overview replacement)
  - Can toggle Windows 11-like mode hehee
  - Powered by Pywal and Material You
  - Sexy animations
- - A rice made by a literal Asian
+ - By an actual Asian
+ - Winner of Hyprland ricing competition Summer 2023 (summer-gruv branch)
 
 # Branches + Screenshots
 
