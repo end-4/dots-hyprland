@@ -9,4 +9,4 @@
  - A sheet of stuff
 ![dots-hyprland](./assets/all_ordered.png)
  - And a video to show animations
-![dots-hyprland](./assets/summer-showcase-fade_edited.mp4)
+https://streamable.com/4oogot
