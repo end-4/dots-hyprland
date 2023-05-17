@@ -17,6 +17,8 @@
   min-height: 300px;
   border-top-left-radius: 26px;
   border-top-right-radius: 26px;
+  border: 2px solid $primary;
+  border-bottom: 0px solid transparent;
   background-color: mix(rgba(30, 30, 30, 0.5), $colorbg, 50%);
   background-size: 100% 100%;
 }

@@ -94,7 +94,7 @@
         :orientation "v"
         (revealer
           :reveal "${overview_query == ''}"
-          :duration "0ms"
+          :duration "100ms"
           (label
             :class "overview-search-typetosearch-text"
             :xalign 0

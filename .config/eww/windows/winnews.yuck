@@ -200,101 +200,106 @@
               :reveal "${matches('appearance looks customization blur size blur passes blur strength blur xray',oquery)}"
               :transition "slidedown"
               :duration "200ms"
-              (box
-                :space-evenly false :orientation "v"
-                :class "winnews-widget"
+              (revealer
+                :reveal "${matches('appearance looks customization blur size blur passes blur strength blur xray',oquery)}"
+                :transition "fade"
+                :duration "200ms"
                 (box
-                  :orientation "h" :space-evenly false
-                  (label
-                    :halign "start"
-                    :class "winnews-section-icon"
-                    :text ""
-                  )
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "winnews-section"
-                    :text "Blur"
-                  )
-                )
-                (centerbox
-                  :orientation "h" :space-evenly false
-                  :halign "fill"
-                  :class "winnews-option"
-                  (label
-                    :halign "start"
-                    :class "winnews-text"
-                    :text "Enable blur"
-                  )
-                  (box)
-                  (checkboxhyprctl-win
-                    :value "${hyprjson.blur}"
-                    :changevalue "decoration:blur"
-                  )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization blur size blur strength',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
+                  :space-evenly false :orientation "v"
+                  :class "winnews-widget"
                   (box
-                    :space-evenly false
-                    :orientation "v"
-                    :class "winnews-option"
+                    :orientation "h" :space-evenly false
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
                     (label
                       :halign "start"
                       :wrap true
-                      :class "winnews-text"
-                      :text "Blur size"
-                    )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.blur_size}"
-                      :tooltip "Blur size: ${hyprjson.blur_size}"
-                      :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                      :class "winnews-section"
+                      :text "Blur"
                     )
                   )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization blur passes blur strength',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
-                  (box
-                    :space-evenly false :orientation "v"
+                  (centerbox
+                    :orientation "h" :space-evenly false
+                    :halign "fill"
                     :class "winnews-option"
                     (label
                       :halign "start"
-                      :wrap true
                       :class "winnews-text"
-                      :text "Blur passes"
+                      :text "Enable blur"
                     )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.blur_passes * 10}"
-                      :tooltip "Blur passes: ${hyprjson.blur_passes}"
-                      :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                    (box)
+                    (checkboxhyprctl-win
+                      :value "${hyprjson.blur}"
+                      :changevalue "decoration:blur"
                     )
                   )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization blur xray',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
-                  (box
-                    :space-evenly false :orientation "v"
-                    :class "winnews-option"
-                    (centerbox
-                      :orientation "h"
+                  (revealer
+                    :reveal "${matches('appearance looks customization blur size blur strength',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
                       :space-evenly false
-                      :halign "fill"
+                      :orientation "v"
+                      :class "winnews-option"
                       (label
                         :halign "start"
+                        :wrap true
                         :class "winnews-text"
-                        :text "Blur xray"
+                        :text "Blur size"
                       )
-                      (box)
-                      (checkboxhyprctl-win
-                        :value "${hyprjson.blur_xray}"
-                        :changevalue "decoration:blur_xray"
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.blur_size}"
+                        :tooltip "Blur size: ${hyprjson.blur_size}"
+                        :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                      )
+                    )
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization blur passes blur strength',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "winnews-text"
+                        :text "Blur passes"
+                      )
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.blur_passes * 10}"
+                        :tooltip "Blur passes: ${hyprjson.blur_passes}"
+                        :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                      )
+                    )
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization blur xray',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (centerbox
+                        :orientation "h"
+                        :space-evenly false
+                        :halign "fill"
+                        (label
+                          :halign "start"
+                          :class "winnews-text"
+                          :text "Blur xray"
+                        )
+                        (box)
+                        (checkboxhyprctl-win
+                          :value "${hyprjson.blur_xray}"
+                          :changevalue "decoration:blur_xray"
+                        )
                       )
                     )
                   )
@@ -302,109 +307,114 @@
               )
             ) ; Revealer
             (revealer
-              :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness',oquery)}"
+              :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness rounding corner',oquery)}"
               :transition "slidedown"
               :duration "200ms"
-              (box
-                :space-evenly false :orientation "v"
-                :class "winnews-widget"
+              (revealer
+                :reveal "${matches('appearance looks customization gaps gaps_in inner gaps: inner gaps_out outer gaps: outer space border_size border size border thickness rounding corner',oquery)}"
+                :transition "fade"
+                :duration "200ms"
                 (box
-                  :orientation "h"
-                  :space-evenly false
-                  :spacing 10
-                  (label
-                    :halign "start"
-                    :class "winnews-section-icon"
-                    :text ""
-                  )
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "winnews-section"
-                    :text "Gaps/Borders"
-                  )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
+                  :space-evenly false :orientation "v"
+                  :class "winnews-widget"
                   (box
-                    :space-evenly false :orientation "v"
-                    :class "winnews-option"
+                    :orientation "h"
+                    :space-evenly false
+                    :spacing 10
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
                     (label
                       :halign "start"
                       :wrap true
-                      :class "winnews-text"
-                      :text "Gaps: Inner"
-                    )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.gaps_in}"
-                      :tooltip "Inner gaps: ${hyprjson.gaps_in}"
-                      :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle"
+                      :class "winnews-section"
+                      :text "Gaps/Borders"
                     )
                   )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization gaps_out outer gaps: outer space',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
-                  (box
-                    :space-evenly false :orientation "v"
-                    :class "winnews-option"
-                    (label
-                      :halign "start"
-                      :wrap true
-                      :class "winnews-text"
-                      :text "Gaps: Outer"
-                    )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.gaps_out}"
-                      :tooltip "Outer gaps: ${hyprjson.gaps_out}"
-                      :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle"
-                    )
-                  )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization border_size border size border thickness',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
-                  (box
-                    :space-evenly false :orientation "v"
-                    :class "winnews-option"
-                    (label
-                      :halign "start"
-                      :wrap true
-                      :class "winnews-text"
-                      :text "Border size"
-                    )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.border_size}"
-                      :tooltip "Border size: ${hyprjson.border_size}"
-                      :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle"
+                  (revealer
+                    :reveal "${matches('appearance looks customization gaps_in inner gaps: inner space',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "winnews-text"
+                        :text "Gaps: Inner"
+                      )
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.gaps_in}"
+                        :tooltip "Inner gaps: ${hyprjson.gaps_in}"
+                        :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle"
+                      )
                     )
                   )
-                )
-                (revealer
-                  :reveal "${matches('appearance looks customization rounding corner',oquery)}"
-                  :transition "slidedown"
-                  :duration "200ms"
-                  (box
-                    :space-evenly false :orientation "v"
-                    :class "winnews-option"
-                    (label
-                      :halign "start"
-                      :wrap true
-                      :class "winnews-text"
-                      :text "Rounding"
+                  (revealer
+                    :reveal "${matches('appearance looks customization gaps_out outer gaps: outer space',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "winnews-text"
+                        :text "Gaps: Outer"
+                      )
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.gaps_out}"
+                        :tooltip "Outer gaps: ${hyprjson.gaps_out}"
+                        :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle"
+                      )
                     )
-                    (scale
-                      :class "winslider winslider-winnews"
-                      :value "${hyprjson.rounding}"
-                      :tooltip "Border size: ${hyprjson.rounding}"
-                      :onchange "hyprctl keyword decoration:rounding {} && scripts/hyprsettings tickle"
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization border_size border size border thickness',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "winnews-text"
+                        :text "Border size"
+                      )
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.border_size}"
+                        :tooltip "Border size: ${hyprjson.border_size}"
+                        :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle"
+                      )
+                    )
+                  )
+                  (revealer
+                    :reveal "${matches('appearance looks customization rounding corner',oquery)}"
+                    :transition "slidedown"
+                    :duration "200ms"
+                    (box
+                      :space-evenly false :orientation "v"
+                      :class "winnews-option"
+                      (label
+                        :halign "start"
+                        :wrap true
+                        :class "winnews-text"
+                        :text "Rounding"
+                      )
+                      (scale
+                        :class "winslider winslider-winnews"
+                        :value "${hyprjson.rounding}"
+                        :tooltip "Border size: ${hyprjson.rounding}"
+                        :onchange "hyprctl keyword decoration:rounding {} && scripts/hyprsettings tickle"
+                      )
                     )
                   )
                 )
@@ -417,50 +427,104 @@
               :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
               :transition "slidedown"
               :duration "200ms"
-              (box :orientation "v" :space-evenly false
-                :class "winnews-widget"
-                (box
-                  :orientation "h"
-                  :space-evenly false
-                  (label
-                    :halign "start"
-                    :class "winnews-section-icon"
-                    :text ""
+              (revealer
+                :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
+                :transition "fade"
+                :duration "200ms"
+                (box :orientation "v" :space-evenly false
+                  :class "winnews-widget"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "winnews-section"
+                      :text "System info"
+                    )
                   )
-                  (label
-                    :halign "start"
-                    :wrap true
-                    :class "winnews-section"
-                    :text "System info"
+                  (box
+                    :orientation "v" :space-evenly false :valign "center"
+                    :class "winnews-fetch-pad"
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${username + '@' + hostname}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${kernel}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${uptime}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${wm}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${packages}")
+                    )
                   )
                 )
-                (box
-                  :orientation "v" :space-evenly false :valign "center"
-                  :class "winnews-fetch-pad"
+              )
+            )
+            (revealer
+              :reveal "${matches('waifu anime cute sex segs ecchi hentai',oquery)}"
+              :transition "slidedown"
+              :duration "200ms"
+              (revealer
+                :reveal "${matches('waifu anime cute sex segs ecchi hentai',oquery)}"
+                :transition "fade"
+                :duration "200ms"
+                (box :orientation "v" :space-evenly false
+                  :class "winnews-widget"
                   (box
-                    :orientation "h" :space-evenly false :spacing 20
-                    (label :class "winnews-fetch-icon" :text "")
-                    (label :class "winnews-text" :text "${username + '@' + hostname}")
+                    :orientation "h"
+                    :space-evenly false
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :hexpand true
+                      :class "winnews-section"
+                      :text "Random waifu"
+                    )
+                    (eventbox
+                      :onclick "scripts/toggle-winnews.sh --close && xdg-open 'https://waifu.pics/' &"
+                      :cursor "pointer"
+                      (label
+                        :halign "end"
+                        :wrap true
+                        :class "winnews-link winnews-title-right"
+                        :text "(https://waifu.pics/)"
+                      )
+                    )
                   )
                   (box
-                    :orientation "h" :space-evenly false :spacing 20
-                    (label :class "winnews-fetch-icon" :text "")
-                    (label :class "winnews-text" :text "${kernel}")
-                  )
-                  (box
-                    :orientation "h" :space-evenly false :spacing 20
-                    (label :class "winnews-fetch-icon" :text "")
-                    (label :class "winnews-text" :text "${uptime}")
-                  )
-                  (box
-                    :orientation "h" :space-evenly false :spacing 20
-                    (label :class "winnews-fetch-icon" :text "")
-                    (label :class "winnews-text" :text "${wm}")
-                  )
-                  (box
-                    :orientation "h" :space-evenly false :spacing 20
-                    (label :class "winnews-fetch-icon" :text "")
-                    (label :class "winnews-text" :text "${packages}")
+                    :orientation "v" :space-evenly false :valign "center"
+                    :class "winnews-fetch-pad"
+                    (box
+                      :class "winnews-waifu"
+                      :style "
+                      background-image: url('${(waifu_get == 'null' || waifu_get == '') ? 'eww_covers/waifu' : waifu_get}');
+                      "
+                    )
                   )
                 )
               )

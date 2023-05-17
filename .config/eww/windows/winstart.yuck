@@ -36,7 +36,7 @@
           (revealer
             :reveal {winsearch == ''}
             :halign "start"
-            :duration "0ms"
+            :duration "100ms"
             (label :class "winstart-search-prompt-text" :xalign 0 :text "Type to search")
           )
         )

@@ -74,7 +74,7 @@
 }
 
 .winbar-bg {
-  background: rgba(30, 30, 30, 0.25);
+  background: rgba(30, 30, 30, 0.5);
   background-image: url('images/textures/acrylic.png');
   background-blend-mode: luminosity;
 
@@ -1227,7 +1227,7 @@
 }
 
 .wingamebar-overlay {
-  // background-color: rgba(25, 25, 25, 0.1);
+  background-color: rgba(10, 10, 10, 0.4);
 }
 
 .wingamebar-window {
@@ -1581,4 +1581,19 @@
 }
 .winnews-fetch {
   font-size: 15pt;
+}
+
+.winnews-waifu {
+  min-width: 380px;
+  min-height: 380px;
+  background-size: 100% auto;
+  background-position: top;
+}
+
+.winnews-title-right {
+  margin-right: 15px;
+}
+
+.winnews-link {
+  color: #89B4FA;
 }
