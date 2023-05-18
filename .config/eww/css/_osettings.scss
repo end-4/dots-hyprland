@@ -8,11 +8,13 @@
     margin-left: 0px;
     border-top-right-radius: 53px;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url('images/pictures/beach_smoothie.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('images/pictures/banner_left');
     background-position: top;
     background-repeat: no-repeat;
     background-size: 100% auto;
+
+    box-shadow: 2px -4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .onotify-window {
@@ -25,10 +27,12 @@
     border-top-left-radius: 53px;
 
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-        url('images/pictures/beach_drinks.jpeg');
+    url('images/pictures/banner_right');
     background-position: top;
     background-repeat: no-repeat;
     background-size: 100% auto;
+
+    box-shadow: -2px -4px 4px rgba(0, 0, 0, 0.5);
 }
 
 .osettings-separator {

@@ -56,9 +56,9 @@
   :stacking "overlay"
   :wm-ignore true
   :monitor 0
+  :namespace "osd"
   :geometry (geometry
-    :x "0%"
-    :y "53px"
+    :y "69px"
     :width "100px"
     :height "53px"
     :anchor "top center"
