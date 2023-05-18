@@ -10,7 +10,7 @@
       :space-evenly false
       :class "module-button-pad-center"
       (box
-        :space-evenly false 
+        :space-evenly false
         :class "module-button${music_open ? '-true' : (music_hover ? '-hover' : '')}"
         (revealer ; dummy keep alive
           :reveal false
@@ -70,7 +70,7 @@
                 :space-evenly false :orientation "v"
                 :valign "center"
                 :class "music-ctl-revealer"
-                :hexpand true
+                :hexpand "true"
                 (label
                   :class "music-title-bar"
                   :limit-width 50

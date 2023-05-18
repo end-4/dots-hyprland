@@ -474,12 +474,28 @@
             (sysmem)
             (sysbatt)
           )
-          (image
-            :class "real-onotify-toggle-button module-button-pad-right-nomargin"
-            ; :class "real-onotify-toggle-button"
-            :path "images/svg/forum.svg"
-            :image-height 33
-            :image-width 33
+          (overlay
+            (image
+              :class "real-onotify-toggle-button module-button-pad-right-nomargin"
+              ; :class "real-onotify-toggle-button"
+              :path "images/svg/forum.svg"
+              :image-height 33
+              :image-width 33
+            )
+            (revealer
+              :reveal {arraylength(notifications) > 0}
+              :transition "slideleft"
+              :duration "200ms"
+              :class "dummy${notifications[0].id}"
+              (box
+                :halign "end" :valign "end"
+                :class "notif-badge"
+                (label :class "notif-indicator"
+                  :style "font-size: 11pt;"
+                  :text "${arraylength(notifications)}"
+                )
+              )
+            )
           )
         )
       )

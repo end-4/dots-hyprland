@@ -11,6 +11,7 @@
   @return mix(rgb(0, 7, 18), $color, $percentage);
 }
 
+$grey: grey;
 $battcolor: $color6;
 $memcolor: $color5;
 $cpucolor: $color4;
@@ -155,7 +156,6 @@ $bg1: $surface0;
 @import 'css/themer';
 @import 'css/taskbar';
 @import 'css/volume';
-@import 'css/winctl';
 @import 'css/winstuff';
 
 .module-group {

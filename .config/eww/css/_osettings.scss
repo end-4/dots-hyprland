@@ -437,3 +437,18 @@
 .osettings-tag-material:active {
     background-color: tint($tertiary, 40%);
 }
+
+.notif-indicator {
+    font-family: 'Torus';
+    font-size: 10pt;
+}
+
+.notif-badge {
+    border-radius: 99px;
+    min-width: 20px;
+    min-height: 20px;
+    background-color: $primary;
+    color: #000000;
+    margin-bottom: 8px;
+    margin-right: 5px;
+}

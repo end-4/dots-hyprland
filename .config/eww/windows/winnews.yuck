@@ -518,7 +518,7 @@
                   )
                   (box
                     :orientation "v" :space-evenly false :valign "center"
-                    :class "winnews-fetch-pad"
+                    ; :class "winnews-fetch-pad"
                     (box
                       :class "winnews-waifu"
                       :style "
