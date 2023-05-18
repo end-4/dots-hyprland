@@ -10,6 +10,9 @@
   background-color: shade($colorbg, 70%);
   background-size: 100% auto;
   background-position: center center;
+
+  margin-top: 5px; //for shadow
+  box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .bottombar-bg-front {
@@ -17,10 +20,11 @@
   min-height: 300px;
   border-top-left-radius: 26px;
   border-top-right-radius: 26px;
-  border: 2px solid $primary;
   border-bottom: 0px solid transparent;
   background-color: mix(rgba(30, 30, 30, 0.5), $colorbg, 50%);
   background-size: 100% 100%;
+
+  margin-top: 5px; //for shadow
 }
 
 .cava-column {

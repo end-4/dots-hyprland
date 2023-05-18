@@ -374,6 +374,7 @@
   :stacking "fg"
   :windowtype "normal"
   :wm-ignore true
+  :namespace "bottombar-back"
   :geometry (geometry
     :x 0
     :y 0

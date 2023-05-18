@@ -404,6 +404,7 @@
   :wm-ignore true
   :monitor 0
   :focusable true
+  :namespace "onotify"
   :geometry (geometry
     :x "0px"
     :y "61px"

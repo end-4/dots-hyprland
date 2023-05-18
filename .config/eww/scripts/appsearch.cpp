@@ -172,12 +172,15 @@ void commandOnly() {
 int main(int argc, char* argv[]) {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
+
+    // Arguments
     if (argc == 1) {
         cout << "[{\"name\": \"Type something!\"}]";
         return 0;
     }
     if (argc > 2 && string(argv[2]) == "--updateinfo") updateInfo = true;
     searchTerm = argv[1];
+
     // Special commands
     if (searchTerm == "--calculator") calcPrompt();
     if (searchTerm[0] == '>') {

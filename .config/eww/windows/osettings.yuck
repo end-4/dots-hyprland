@@ -977,6 +977,7 @@
   :monitor 0
   :focusable true
   :exclusive true
+  :namespace "osettings"
   :geometry (geometry
     :x "0px"
     :y "61px"
