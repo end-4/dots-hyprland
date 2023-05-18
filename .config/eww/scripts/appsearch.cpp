@@ -16,6 +16,8 @@ string results;
 vector<string> entryNames;
 json appEntries;
 
+bool updateInfo = false;
+
 void splitString(const std::string& str, const char delimiter,
                  std::vector<std::string>& result) {
     std::string line;
@@ -96,7 +98,15 @@ void tryThemeCmd() {
         cout << '}';
         if (i < entryNames.size() - 1) cout << ',';
     }
-    cout << ']';
+    cout << ']' << endl;
+    if (updateInfo) {
+        string entryName = entryNames[0];
+        string updateCmd = "eww update winsearch_actions='{\"name\":\"" +
+                           entryName + "\",\"exec\":\">load " + entryName +
+                           "\"}'";
+        exec(&updateCmd[0]);
+        exec("eww update winsearch_actions_type='Color theme'");
+    }
     exit(0);
 }
 
@@ -108,7 +118,13 @@ void tryAppSearch() {
         cout << appEntries[entryName];
         if (i < entryNames.size() - 1) cout << ',';
     }
-    cout << ']' << '\n';
+    cout << ']' << endl;
+    if (updateInfo) {
+        string updateCmd = "eww update winsearch_actions='" +
+                           string(appEntries[entryNames[0]].dump()) + "'";
+        exec(&updateCmd[0]);
+        exec("eww update winsearch_actions_type='Application'");
+    }
     exit(0);
 }
 
@@ -122,19 +138,34 @@ void tryCalculate() {
     cout
         << "[{\"name\":\"" << results
         << "\",\"icon\":\"images/svg/dark/calculator.svg\",\"exec\":\"wl-copy '"
-        << results << "'\"}]";
+        << results << "'\"}]" << endl;
+    if (updateInfo) {
+        string updateCmd =
+            "eww update "
+            "winsearch_actions='{\"name\":\"'\"" +
+            results +
+            "\"'\",\"icon\":\"images/svg/dark/"
+            "calculator.svg\",\"exec\":\"wl-copy '" +
+            results + "'\"}'";
+        exec(&updateCmd[0]);
+        exec("eww update winsearch_actions_type='Math result'");
+    }
     exit(0);
 }
 
 void commandOnly() {
-    cout << "[]\n";
-    string updateCmd =
-        "eww update "
-        "winsearch_actions='{\"name\":\"'\"$1\"'\",\"icon\":\"images/svg/dark/"
-        "protocol.svg\",\"exec\":\"" +
-        searchTerm + "\"}'";
-    exec(&updateCmd[0]);
-    exec("eww update winsearch_actions_type='Run command'");
+    cout << "[]" << endl;
+    if (updateInfo) {
+        string updateCmd =
+            "eww update "
+            "winsearch_actions='{\"name\":\"'\"" +
+            searchTerm +
+            "\"'\",\"icon\":\"images/svg/dark/"
+            "protocol.svg\",\"exec\":\"" +
+            searchTerm + "\"}'";
+        exec(&updateCmd[0]);
+        exec("eww update winsearch_actions_type='Run command'");
+    }
     exit(0);
 }
 
@@ -145,6 +176,7 @@ int main(int argc, char* argv[]) {
         cout << "[{\"name\": \"Type something!\"}]";
         return 0;
     }
+    if (argc > 2 && string(argv[2]) == "--updateinfo") updateInfo = true;
     searchTerm = argv[1];
     // Special commands
     if (searchTerm == "--calculator") calcPrompt();
@@ -152,7 +184,7 @@ int main(int argc, char* argv[]) {
         if (searchTerm.find(">load") != string::npos)
             tryThemeCmd();
         else {
-            cout << "[]\n";
+            cout << "[]" << endl;
             exit(0);
         }
     }

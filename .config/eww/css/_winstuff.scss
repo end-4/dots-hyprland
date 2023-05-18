@@ -900,7 +900,7 @@
 }
 
 .winstart-pinnedapps-entry:hover {
-  background-color: rgba(49, 49, 49, 0.45);
+  background-color: rgba(95, 95, 95, 0.4);
 }
 
 .winstart-pinnedapps-icon {
@@ -1586,6 +1586,8 @@
 .winnews-waifu {
   min-width: 380px;
   min-height: 380px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   background-size: 100% auto;
   background-position: top;
 }
