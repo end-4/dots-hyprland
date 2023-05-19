@@ -15,10 +15,10 @@
 # Cool stuff
  - An overview widget that shows window positions in workspaces + app search (aims to be a GNOME overview replacement)
  - Can toggle Windows 11-like mode hehee
- - Powered by Pywal and Material You
+ - Pywal and Material You colors
  - Sexy animations
- - By an actual Asian
- - Winner of Hyprland ricing competition Summer 2023 (summer-gruv branch)
+ - Made by an actual Asian
+ - `summer-gruv` is the winner of Hyprland ricing competition Summer 2023
 
 # Branches + Screenshots
 
@@ -64,11 +64,11 @@
 </details>
 
 # General instructions
- - **Backup if you need**
+ - **Backup**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `execs` to a $PATH
  - gnome-text-editor themes: Structured like root, go inside and copy...
- - Install font Product Sans (for linage branch), Segoe UI Variable (for the main and Windows branch)
+ - Install font Product Sans and Segoe UI Variable yourself
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
  
@@ -76,7 +76,7 @@
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes |
 | --- | ------ | ----------- | ----- |
-| Kernel |     |  XanMod  | `auto-cpufreq` + unplugged = might be unresponsive |
+| Kernel |     |    | `auto-cpufreq` + unplugged = might be unresponsive |
 | Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
