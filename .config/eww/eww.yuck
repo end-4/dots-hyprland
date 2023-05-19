@@ -1,4 +1,4 @@
-;##################### Modules #########################
+  ;##################### Modules #########################
 (include "./modules/activewindow.yuck")
 (include "./modules/audiolevels.yuck")
 (include "./modules/bluetooth.yuck")
@@ -29,6 +29,7 @@
 (include "./windows/osettings.yuck")
 (include "./windows/onotify.yuck")
 ; (include "./windows/system-menu.yuck")
+(include "./windows/supercontext.yuck")
 (include "./windows/themer.yuck")
 (include "./windows/winactions.yuck")
 (include "./windows/winosd.yuck")
@@ -190,6 +191,7 @@
   :stacking "fg"
   :wm-ignore true
   :monitor 0
+  :namespace "bar"
   :geometry (geometry
     :x "0%"
     :y "0%"
