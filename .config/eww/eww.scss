@@ -152,6 +152,7 @@ $bg1: $surface0;
 @import 'css/osd';
 @import 'css/osettings';
 @import 'css/sidebar';
+@import 'css/supercontext';
 @import 'css/system';
 @import 'css/themer';
 @import 'css/taskbar';
@@ -172,8 +173,12 @@ $bg1: $surface0;
   margin-right: -1911px;
   margin-left: 8px;
   border-radius: 26px;
-  background-color: shade($colorbg, 75%); 
+  background-color: mix(shade($colorbarbg, 45%), $primary, 97%); 
+  // background-color: shade($colorbg, 75%); 
+  // background-color: #0B121C;
   background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .bar-bg-only-compact {

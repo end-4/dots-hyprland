@@ -74,12 +74,14 @@
     color: $onBackground;
     font-family: Torus;
     font-size: 30pt;
+    text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
 }
 
 .osettings-subtitle {
     color: $onSecondaryContainer;
     font-family: Torus;
     font-size: 14pt;
+    text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
 }
 
 .osettings-section-icon {
@@ -134,6 +136,8 @@
     selection {
         background-color: rgba(154, 152, 152, 0.5);
     }
+
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
 }
 
 .osettings-search-text {
@@ -342,6 +346,8 @@
     min-height: 40px;
     background-color: $secondaryContainer;
     border-radius: 14px;
+
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .onotify-app-name {
@@ -380,6 +386,8 @@
     min-height: 40px;
     background-color: $secondaryContainer;
     border-radius: 14px;
+
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .osettings-tag {
@@ -451,7 +459,7 @@
     border-radius: 99px;
     min-width: 20px;
     min-height: 20px;
-    background-color: $primary;
+    background-color: $color1;
     color: #000000;
     margin-bottom: 8px;
     margin-right: 5px;

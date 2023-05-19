@@ -219,7 +219,7 @@
             :xalign 0
             :class "bottombar-artist"
             :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
-            :text "${mname.artist}"
+            :text {mname.artist}
           )
           (centerbox
             :halign "start"

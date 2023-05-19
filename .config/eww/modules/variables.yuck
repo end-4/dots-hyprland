@@ -10,6 +10,8 @@
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
+(defvar SUPERCONTEXT_WIDTH 300)
+(defvar SUPERCONTEXT_HEIGHT 300)
 
 ; Vars
 (defvar music_reveal false)
@@ -54,6 +56,8 @@
 (defvar compact false)
 (defvar resource_metric "cpu")
 (defvar record_sound false)
+(defvar supercontext_pos_x 960)
+(defvar supercontext_pos_y 540)
 
 ; Dynamic animation: different for open and close
 (defvar rev_wincalendar true)
@@ -70,6 +74,7 @@
 (defvar rev_winnews false)
 (defvar rev_dashfs false)
 (defvar rev_bottombar false)
+(defvar rev_supercontext false)
 
 (defvar anim_open_ostg true)
 (defvar anim_open_ontf true)
@@ -86,6 +91,7 @@
 (defvar anim_open_winnews true)
 (defvar anim_open_dashfs true)
 (defvar anim_open_bottombar true)
+(defvar anim_open_supercontext true)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`)
