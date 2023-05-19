@@ -23,8 +23,8 @@
 # Branches + Screenshots
 
 <details> 
-  <summary> Current main style: Similar to Summer branch, but with different colors, updated in main branch. All non-main branches are archives. </summary>
-  - Nothing here :P, check the ones below
+  <summary> Came here from my Reddit post? It's the main branch. Non-main branches are archives. </summary>
+  - Spoilers below will each have an image
 </details>
 
 <details open> 
