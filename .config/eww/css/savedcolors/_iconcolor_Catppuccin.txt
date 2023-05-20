@@ -1,6 +1,6 @@
-#dbe1ff
-#e4bada
-#D3A8AB
-#A5ACD0
-#D4B6CF
-#D4B6CF
+#d2ccc4
+#a68f81
+#8b7265
+#e0dbd1
+#c3b1a1
+#c3b1a1
