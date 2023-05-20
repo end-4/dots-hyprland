@@ -75,8 +75,8 @@ int main(int argc, char* argv[]) {
 
     workspace_a = stoi(string(argv[1]));
     workspace_b = stoi(string(argv[2]));
-    if (workspace_a <= 0 || workspace_b <= 0) {
-        cout << "Illegal wtf" << endl;
+    if (workspace_a <= 0 || workspace_b <= 0 || workspace_a == workspace_b) {
+        cout << "Nahhh that's stupid" << endl;
         return 0;
     }
 
