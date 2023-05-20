@@ -1,7 +1,7 @@
 ; Const and bg scripts
 (defvar FILE_BROWSER "nautilus")
-(defvar RES_WIDTH 1920)
-(defvar RES_HEIGHT 1080)
+(defpoll RES_WIDTH :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
+(defpoll RES_HEIGHT :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)utilus")
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar OVERVIEW_SCALE_TEXT 0.45)
