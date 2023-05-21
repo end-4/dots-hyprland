@@ -52,7 +52,7 @@
 </details>
 
 <details> 
-  <summary>linage https://github.com/end-4/dots-hyprland/tree/linage </summary>
+  <summary>lineage https://github.com/end-4/dots-hyprland/tree/lineage </summary>
   
    ![dots-hyprland](./assets/screenshot-9.png)
 </details>
@@ -82,7 +82,7 @@
  ## Setup
  - This eww config only works in `~/.config/eww`
  - Start eww with `eww daemon`
- - To open the top bar, run `eww open bar` (for linage branch, also run: `eww open barbg`)
+ - To open the top bar, run `eww open bar` (for lineage branch, also run: `eww open barbg`)
  - To open the Windows bar, run `eww open winbar`
  - Open the overview and wait 10 seconds (for it to generate app search cache, or icons won't show properly)
  ## Usage
@@ -134,5 +134,5 @@ tesseract
 [![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
 
 # Some inspirations
- - osu!lazer, ~~Windows 11~~, Material 3, Valorant's download indicator, TETR.IO (web game), LinageOS
+ - osu!lazer, ~~Windows 11~~, Material 3, Valorant's download indicator, TETR.IO (web game), LineageOS
 
