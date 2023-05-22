@@ -12,7 +12,7 @@
 
 </div>
 
-# Cool stuff
+# ✨ Cool stuff
  - An overview widget that shows window positions in workspaces + app search (aims to be a GNOME overview replacement)
  - Can toggle Windows 11-like mode hehee
  - Pywal and Material You colors
@@ -20,7 +20,7 @@
  - Made by an actual Asian
  - `summer-gruv` is the winner of Hyprland ricing competition Summer 2023
 
-# Branches + Screenshots
+# 👀 Branches + Screenshots
 
 <details> 
   <summary> Came here from my Reddit post? It's the main branch. Non-main branches are archives. </summary>
@@ -63,7 +63,7 @@
    ![dots-hyprland](./assets/screenshot-tetrio.png)
 </details>
 
-# General instructions
+# 🔧 General instructions
  - **Backup**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `execs` to a $PATH
@@ -72,7 +72,7 @@
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
  - Install stuff to provide missing commands (list below) 
  
-# eww (yes I spend too much time on this)
+# 🎨 eww (yes I spend too much time on this)
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes |
 | --- | ------ | ----------- | ----- |
@@ -100,7 +100,8 @@
  - `>dark`: Remember to generate dark theme for future schemes
  - `>r`: Reload (runs `eww reload`)
 
-# Dependencies
+# 📦 Dependencies
+ - Missing something? Please tell me. Thanks!
  - Python
 ```
 [ Command ]
@@ -123,16 +124,16 @@ yay -S python-material-color-utilities geticons gtklock-runshell-module gtklock-
 tesseract
 ```
 
-# Attribution
+# 🙏 Attribution
  - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
  - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always)
  - Bing AI for helping me breeze through the process of learning libraries
  - Maybe more, but I don't remember them all.. thanks anyway
 
-## Stargazers over time
+# 🌟 Stars
 
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
+[![Stars](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
 
-# Some inspirations
+# 💡 Some inspirations
  - osu!lazer, ~~Windows 11~~, Material 3, Valorant's download indicator, TETR.IO (web game), LineageOS
 
