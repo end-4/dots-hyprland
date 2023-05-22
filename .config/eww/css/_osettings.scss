@@ -1,5 +1,5 @@
-$bgdetail: shade($onSecondary, 16%);
-$bgdetail2: shade($onTertiary, 16%);
+$bgdetail: $onSecondary;
+$bgdetail2: $onTertiary;
 
 .osettings-window {
     min-width: 501px;
@@ -14,7 +14,7 @@ $bgdetail2: shade($onTertiary, 16%);
     // background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     //     url('images/pictures/banner_left');
 
-    background-color: shade($onSecondary, 40%);
+    background-color: shade($onSecondary, 50%);
 
     background-image:
         linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
@@ -53,7 +53,7 @@ $bgdetail2: shade($onTertiary, 16%);
         linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
         linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
 
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     ;
     background-size:
         15px 30px, 15px 30px, 15px 30px, 15px 30px,
@@ -105,7 +105,7 @@ $bgdetail2: shade($onTertiary, 16%);
     // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
     //     url('images/pictures/banner_right');
 
-    background-color: shade($onSecondary, 40%);
+    background-color: shade($onSecondary, 50%);
 
     background-image:
         linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
@@ -142,7 +142,7 @@ $bgdetail2: shade($onTertiary, 16%);
         linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
         linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
 
-        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     ;
     background-size:
         15px 30px, 15px 30px, 15px 30px, 15px 30px,
@@ -204,7 +204,7 @@ $bgdetail2: shade($onTertiary, 16%);
     padding-top: 8px;
     padding-bottom: 16px;
     font-family: Torus;
-    color: $onBackground;
+    color: $onPrimaryContainer;
     background-color: shade($colorbarbg, 5%);
     border-top-left-radius: 53px;
 }
@@ -212,12 +212,12 @@ $bgdetail2: shade($onTertiary, 16%);
 .osettings-heading {
     padding-left: 28px;
     padding-right: 28px;
-    color: $onBackground;
+    color: $primary;
     font-family: Torus;
 }
 
 .osettings-title {
-    color: $onBackground;
+    color: $onPrimaryContainer;
     font-family: Torus;
     font-size: 30pt;
     text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.5);
@@ -272,12 +272,12 @@ $bgdetail2: shade($onTertiary, 16%);
     margin-right: 28px;
     margin-top: 35px;
     background-color: tint($colorbarbg, 4%);
-    border: 2px solid $onSurfaceVariant;
-    color: $onBackground;
+    border: 2px solid $tertiary;
+    color: $tertiary;
     border-radius: 10px;
     font-size: 11pt;
     min-height: 45px;
-    caret-color: $onBackground;
+    caret-color: $tertiary;
 
     selection {
         background-color: rgba(154, 152, 152, 0.5);
@@ -287,14 +287,14 @@ $bgdetail2: shade($onTertiary, 16%);
 }
 
 .osettings-search-text {
-    color: $onSurfaceVariant;
+    color: $tertiary;
     padding: 10px;
     font-size: 13pt;
     min-width: 420px;
 }
 
 .osettings-search-icon {
-    color: $onSurfaceVariant;
+    color: $tertiary;
     padding: 6px;
     padding-left: 0px;
     font-size: 20pt;

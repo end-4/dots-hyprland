@@ -212,14 +212,14 @@
           (label :xalign 0
             :class "bottombar-title"
             :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
-            :text {mname.title}
+            :text {mname.title == '' ? 'Media controls' : mname.title}
           )
           (label
             :halign "start" :valign "end"
             :xalign 0
             :class "bottombar-artist"
             :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
-            :text {mname.artist}
+            :text {mname.title == '' ? 'Nothing...' : mname.artist}
           )
           (centerbox
             :halign "start"
