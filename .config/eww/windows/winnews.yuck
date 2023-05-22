@@ -489,7 +489,7 @@
                 :transition "fade"
                 :duration "200ms"
                 (box :orientation "v" :space-evenly false
-                  :class "winnews-widget"
+                  :class "winnews-widget-nopad"
                   (box
                     :orientation "h"
                     :space-evenly false
