@@ -47,7 +47,7 @@
               :style "
               font-size: 18pt;
               margin-bottom: -1px;
-              color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+              color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
               "
               :text "${mplay == 'Playing' ? '' : ''}"
             )
@@ -76,9 +76,9 @@
                   :limit-width 50
                   :xalign 0
                   :style "
-                  color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
                   "
-                  :text "${mname.title == '' ? 'Not playing' : mname.title}"
+                  :text {mname.title == '' ? 'Playerctl' : mname.title}
                 )
                 (revealer
                   :transition "slidedown"
@@ -89,9 +89,9 @@
                     :limit-width 50
                     :xalign 0
                     :style "font-size: 11pt; font-family: 'Torus';
-                    color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+                    color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
                     "
-                    :text "${mname.artist}"
+                    :text {mname.artist}
                   )
                 )
               )
