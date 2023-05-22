@@ -226,6 +226,7 @@
           :class "cpubar-circle"
           :thickness 4
           :start-at 75
+          :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
           (box
             :tooltip "CPU: ${round(EWW_CPU.avg,0)}%"
             :class "inside-circle"
@@ -257,6 +258,7 @@
         :class "membar-circle"
         :thickness 4
         :start-at 75
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
         (box
           :class "inside-circle"
           :tooltip "RAM: ${round(memory.percentage,0)}%"
@@ -314,8 +316,12 @@
     (box
       :orientation "h"
       :space-evenly false
-      (label :class "cpu-menu icon" :text "")
-      (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
+      (label :class "cpu-menu icon" :text ""
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
+      (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%"
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
     )
   )
 )
@@ -324,10 +330,18 @@
   (eventbox
     (box
       :space-evenly false
-      (label :class "mem-menu-left" :text "")
-      (label :class "mem-menu-left" :text "${memory.used}")
-      (label :class "mem-menu-mid" :text "")
-      (label :class "mem-menu-right" :text "${memory.swapused}")
+      (label :class "mem-menu-left" :text ""
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
+      (label :class "mem-menu-left" :text "${memory.used}"
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
+      (label :class "mem-menu-mid" :text ""
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
+      (label :class "mem-menu-right" :text "${memory.swapused}"
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
     )
   )
 )
@@ -338,8 +352,12 @@
     :style "color: ${battery.color}"
     (box
       :space-evenly false
-      (label :class "sys-menu-charge" :text "${battery.quickicon}")
-      (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%")
+      (label :class "sys-menu-charge" :text "${battery.quickicon}"
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
+      (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%"
+        :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+      )
       ; (revealer
         ;   :reveal "${popup == 'system-menu' || force_sys_rev}"
         ;   :transition "slideright"

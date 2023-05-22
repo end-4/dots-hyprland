@@ -1,17 +1,17 @@
-; Const and bg scripts
+; Const vars
 (defvar FILE_BROWSER "nautilus")
 (defvar RES_WIDTH 1920)
 (defvar RES_HEIGHT 1080)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
-(defvar OVERVIEW_SCALE_TEXT 0.45)
-(defvar OVERVIEW_SCALE_SUBTEXT 0.35)
-(defvar wsloop "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]")
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar SUPERCONTEXT_WIDTH 300)
 (defvar SUPERCONTEXT_HEIGHT 300)
+(defvar SUPERCONTEXT_OFFSET_X "[75, 23.1, -60.6, -60.6, 23.1]")
+(defvar SUPERCONTEXT_OFFSET_Y "[0, 67.6, 41.8, -41.8, -67.6]")
+(defvar SUPERCONTEXT_BUTTON_RADIUS 30)
 
 ; Vars
 (defvar music_reveal false)
@@ -58,6 +58,7 @@
 (defvar record_sound false)
 (defvar supercontext_pos_x 960)
 (defvar supercontext_pos_y 540)
+(defvar ws_to_swap 0)
 
 ; Dynamic animation: different for open and close
 (defvar rev_wincalendar true)
@@ -122,8 +123,6 @@
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
 (deflisten wsjsona "scripts/overview-wrapper1")
 (deflisten wsjsonb "scripts/overview-wrapper2")
-; (deflisten appoverview "scripts/overview-wrapper")
-; (deflisten wsthumbs "scripts/overview-thumbnails") ; slow, so nope
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten tasks "scripts/taskbarloop")
 (deflisten pinnedapps "cat modules/pinned-apps.json | gojq -c -M")
@@ -132,6 +131,8 @@
 (deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
 (deflisten cavajson `scripts/cavajson`)
 (deflisten mousepos `scripts/mousetrack`)
+(defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
+(defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
 
 (defvar username_default "username")
 (defvar quote_content `["haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV", "I have a hentai anal gif playing in my base", "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree"]`)

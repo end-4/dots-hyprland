@@ -15,6 +15,10 @@ if [[ "$1" == ">"* ]]; then
         scripts/togglelight light
     elif [[ "${args[0]}" == ">dark" ]]; then
         scripts/togglelight dark
+    elif [[ "${args[0]}" == ">multi" ]]; then
+        echo -n 'multi' > 'scripts/workdir/__mode_colors.txt'
+    elif [[ "${args[0]}" == ">one" ]]; then
+        echo -n 'one' > 'scripts/workdir/__mode_colors.txt'
     elif [[ "${args[0]}" == ">wall" ]]; then
         scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
         scripts/colormanage get
@@ -23,7 +27,7 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">uwu" ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
-        pkill eww && eww daemon && eww open bar && eww open dynamic-bg && eww open bottomline
+        pkill eww && eww daemon && eww open bar && eww open bottomline
     else
         # notify-send 'eww' 'Invalid command!'
         false

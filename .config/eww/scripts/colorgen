@@ -37,8 +37,6 @@ rgb_bg='rgba('"$rgb_bg"','"$OPACITY"')'
 
 # Write to scss
 echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
-echo '@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
-echo '@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
 printf '$colorbarbg: ' >> './tmp/_colorscheme.colorpallete'
 printf "$themejson" | gojq -r '.special.background' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
 echo '' >> './tmp/_colorscheme.colorpallete'
