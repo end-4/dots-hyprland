@@ -1519,6 +1519,11 @@
   padding-bottom: 10px;
 }
 
+.winnews-widget-nopad {
+  border-radius: 12px;
+  background-color: $onSecondary;
+}
+
 .winnews-section {
   color: $onSecondaryContainer;
   font-family: 'Segoe UI Variable Regular';
