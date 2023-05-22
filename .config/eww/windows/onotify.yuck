@@ -440,15 +440,22 @@
               :space-evenly false
               :halign "end"
               :class "timedate-time"
-              (label :text "${time.hour}" :class "clock hour")
+              (label :text "${time.hour}" :class "clock hour"
+                :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+              )
               ; (label :text "${time.hour % 12}" :class "clock hour")
-              (label :text ":" :class "clock")
-              (label :text {time.minute} :class "clock minute")
+              (label :text ":" :class "clock"
+                :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+              )
+              (label :text {time.minute} :class "clock minute"
+                :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
+              )
               ; (label :text "${time.hour >= 12 ? 'pm' : 'am'}" :class "clock minute")
             )
             (box
               :class "date"
               :onclick "${EWW_CMD} update popup='calendar'"
+              :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
               "${time.day}, ${time.date}"
             )
           )

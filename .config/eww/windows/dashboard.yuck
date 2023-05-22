@@ -23,8 +23,8 @@
         ${anim_open_dash ? dash_curve_in : dash_curve_out}
         ${rev_dash ? '' : 'margin-left: -1100px; margin-right: 1100px;'}
         "
-        (label :angle 0 :xalign 0 :class "dash-title" :text "Dashboard")
-        (label :angle 0 :xalign 0 :class "dash-subtitle" :text "Serves the sole purpose of showing off to awesomewm users ;)")
+        (label :angle 0 :xalign 0 :class "dash-title" :text "Classic dashboard")
+        (label :angle 0 :xalign 0 :class "dash-subtitle" :text "That kinda useless random widget porn.")
       )
       (box
         :orientation "h"

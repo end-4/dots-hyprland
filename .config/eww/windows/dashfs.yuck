@@ -47,15 +47,15 @@
 (defwidget dashfs_widget []
   (eventbox
     :onclick "scripts/toggle-dashfs.sh --close &"
-    (box :width RES_WIDTH :height RES_HEIGHT
+    (box :width {RES_WIDTH} :height {RES_HEIGHT}
       :class "dashfs-bg"
       (overlay
         (box :space-evenly false :orientation "v"
-          :width 1920 :height 1080
+          :width {RES_WIDTH} :height {RES_HEIGHT}
           :class "dashfs-graph"
           :style "
           transition: ${anim_open_dashfs ? MD3_DECEL : MD3_ACCEL};
-          ${rev_dashfs ? '' : 'margin-left: -1300px; margin-right: 1300px;'}
+          ${rev_dashfs ? '' : 'margin-left: -${RES_WIDTH}px; margin-right: ${RES_WIDTH}px;'}
           "
         )
         ; Cava (left)
