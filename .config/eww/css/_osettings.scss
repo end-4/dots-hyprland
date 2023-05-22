@@ -1,3 +1,6 @@
+$bgdetail: shade($onSecondary, 16%);
+$bgdetail2: shade($onTertiary, 16%);
+
 .osettings-window {
     min-width: 501px;
     padding-top: 20px;
@@ -8,11 +11,83 @@
     margin-left: 0px;
     border-top-right-radius: 53px;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        url('images/pictures/banner_left');
-    background-position: top;
+    // background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    //     url('images/pictures/banner_left');
+
+    background-color: shade($onSecondary, 40%);
+
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    ;
+    background-size:
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px,
+
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+
+        60px 60px, 120px 120px, 90px 90px,
+
+        20px 40px, 20px 40px, 40px 80px, 40px 80px,
+        40px 80px, 40px 80px,
+
+        100% 100%,
+    ;
+    background-position:
+        0px 100px, 15px 100px, 30px 100px, 45px 100px,
+        60px 100px, 75px 100px, 90px 100px, 105px 100px,
+        120px 100px, 135px 100px, 150px 100px,
+
+        550px 40px, 535px 40px, 520px 40px, 505px 40px,
+        490px 40px, 475px 40px, 460px 40px, 445px 40px,
+        430px 40px, 415px 40px, 400px 40px, 385px 40px,
+
+        300px 60px, 165px 135px, 180px 5px,
+
+        360px 190px, 380px 190px, 340px 170px, 380px 170px, 
+        40px -10px, 80px -10px, 
+
+        top,
+    ;
     background-repeat: no-repeat;
-    background-size: 100% auto;
 
     box-shadow: 2px -4px 4px rgba(0, 0, 0, 0.5);
 }
@@ -26,11 +101,82 @@
     margin-right: 0px;
     border-top-left-radius: 53px;
 
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('images/pictures/banner_right');
-    background-position: top;
+
+    // background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    //     url('images/pictures/banner_right');
+
+    background-color: shade($onSecondary, 40%);
+
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, $bgdetail 59%, $bgdetail 61%, rgba(0, 0, 0, 0) 61%),
+        
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    ;
+    background-size:
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px,
+
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+
+        60px 60px, 120px 120px, 90px 90px,
+
+        160px 80px,
+        40px 80px, 40px 80px,
+
+        100% 100%,
+    ;
+    background-position:
+        100px 16px, 115px 16px, 130px 16px, 145px 16px,
+        160px 16px, 175px 16px, 190px 16px, 205px 16px,
+        220px 16px, 235px 16px, 250px 16px,
+
+        550px 90px, 535px 90px, 520px 90px, 505px 90px,
+        490px 90px, 475px 90px, 460px 90px, 445px 90px,
+        430px 90px, 415px 90px, 400px 90px, 385px 90px,
+
+        300px 60px, 165px 135px, 220px 95px,
+
+        -25px 90px, 
+        400px -10px, 440px -10px, 
+
+        top,
+    ;
     background-repeat: no-repeat;
-    background-size: 100% auto;
 
     box-shadow: -2px -4px 4px rgba(0, 0, 0, 0.5);
 }
