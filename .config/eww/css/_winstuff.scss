@@ -1,6 +1,6 @@
 .winwin {
   background: rgba(40, 40, 40, 0.6);
-  border-radius: 8px;
+  border-radius: 9px;
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-top: 1px solid rgba(64, 64, 64, 0.5);
   margin: 12px;
@@ -74,7 +74,7 @@
 }
 
 .winbar-bg {
-  background: rgba(30, 30, 30, 0.5);
+  background: rgba(25, 25, 25, 0.6);
   background-image: url('images/textures/acrylic.png');
   background-blend-mode: luminosity;
 
@@ -467,6 +467,10 @@
 
 .winactions-sliderrow {
   margin: 0 12px;
+}
+
+.winactions-media-pad {
+  padding: 25px;
 }
 
 .winactions-toggle {
@@ -1019,7 +1023,7 @@
 
 .winsearch-actions-box {
   background-color: rgba(73, 73, 73, 0.25);
-  border-radius: 8px;
+  border-radius: 9px;
 }
 
 .winsearch-tag-strip {
@@ -1146,7 +1150,7 @@
 
 .winosd-window {
   margin: 5px;
-  border-radius: 8px;
+  border-radius: 9px;
   min-width: 10px;
   min-height: 40px;
 }
@@ -1155,7 +1159,7 @@
   padding: 7px;
   min-width: 100px;
   min-height: 37px;
-  border-radius: 8px;
+  border-radius: 9px;
   margin: 12px;
 }
 
@@ -1514,13 +1518,13 @@
 }
 
 .winnews-widget {
-  border-radius: 8px;
+  border-radius: 9px;
   background-color: $onSecondary;
   padding-bottom: 10px;
 }
 
 .winnews-widget-nopad {
-  border-radius: 8px;
+  border-radius: 9px;
   background-color: $onSecondary;
 }
 
@@ -1612,9 +1616,8 @@
 }
 
 .wintaskview-workspaces-bg {
-  border: 1px solid #424C5C;
-  border-radius: 8px;
-  background-color: rgba(40, 40, 40, 0.6);
+  border-radius: 9px;
+  background-color: rgba(20, 20, 20, 0.6);
   margin: 10px;
   min-height: 60px;
 }
@@ -1631,4 +1634,70 @@
 .wintaskview-workspace-bg {
   background-size: 100% auto;
   background-position: center;
+  border-radius: 5px;
+}
+
+.taskview-ws {
+  margin: 4px;
+  padding: 8px 12px;
+  background-size: 17% 2%;
+  background-position: bottom;
+}
+
+.taskview-ws-true {
+  background-color: rgba(75, 75, 75, 0.25);
+  border-radius: 9px;
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+
+  background-image: url('images/svg/linehorizontal.svg');
+}
+
+.taskview-ws-false {
+  background-color: transparent;
+  border-radius: 9px;
+  border: 1px solid transparent;
+}
+
+.taskview-ws-window {
+  border-radius: 5px;
+  // background-color: shade($surface0, 2%);
+  // background-color: rgba(46, 56, 72, 1);
+  background-color: #2C2C2C;
+  border: 1px solid $surface0;
+  border-top: 1px solid tint($surface0, 5%);  
+}
+
+.winactions-media-cover {
+  border-radius: 5px;
+  min-height: 45px;
+  min-width: 45px;
+  background-size: auto 100%;
+  background-position: center;
+}
+
+.winactions-media-title {
+  color: white;
+  background-color: transparent;
+  font-size: 12pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+}
+
+.winactions-media-artist {
+  color: white;
+  background-color: transparent;
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+}
+
+.winactions-media-button {
+  font-size: 14pt;
+  color: white;
+  border-radius: 5px;
+}
+
+.winactions-media-button:hover {
+  background-color: rgba(95, 95, 95, 0.4);
 }

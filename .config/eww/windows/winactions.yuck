@@ -14,6 +14,57 @@
         :class "box-that-is-there" :style "min-height: 1px;"
       )
     )
+    ; Media controls
+    (revealer
+      :reveal {mname.title != ''}
+      :transition "slideup"
+      :duration "200ms"
+      (box
+        :class "winwin winactions-media-pad"
+        :space-evenly false :orientation "v"
+        :style "margin-bottom: 0px;"
+        :spacing 29
+        (box
+          :halign "start" :space-evenly false :orientation "h" :spacing 8
+          (label :class "win-segoeicon" :text "")
+          (label :class "win-segoeicon" :text "Media")
+        )
+        (box
+          :space-evenly false :orientation "h" :spacing 8
+          :width 346
+          (box
+            :space-evenly false :orientation "v" :hexpand true
+            (label :xalign 0 :limit-width 36 :class "winactions-media-title" :text {mname.title})
+            (label :xalign 0 :limit-width 36 :class "winactions-media-artist" :text {mname.artist})
+          )
+          (box
+            :halign "end"
+            :class "winactions-media-cover"
+            :style "background-image: url('${mcover.image}')"
+          )
+        )
+        (box
+          :halign "center"
+          :class "music-button-box-bar"
+          :spacing 42
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl previous"
+            ""
+          )
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl play-pause"
+            "${music.status != '' ? (music.status == '' ? '' : '') : ''}"
+          )
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+            ""
+          )
+        )
+      )
+    )
     (box
       :class "winwin-top"
       :space-evenly false
