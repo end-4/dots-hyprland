@@ -73,17 +73,6 @@
           (cavacol_musicwin :dir "up" :nth 32)
           (cavacol_musicwin :dir "up" :nth 33)
           (cavacol_musicwin :dir "up" :nth 34)
-          (cavacol_musicwin :dir "up" :nth 35)
-          (cavacol_musicwin :dir "up" :nth 36)
-          (cavacol_musicwin :dir "up" :nth 37)
-          (cavacol_musicwin :dir "up" :nth 38)
-          (cavacol_musicwin :dir "up" :nth 39)
-          (cavacol_musicwin :dir "up" :nth 40)
-          (cavacol_musicwin :dir "up" :nth 41)
-          (cavacol_musicwin :dir "up" :nth 42)
-          (cavacol_musicwin :dir "up" :nth 43)
-          (cavacol_musicwin :dir "up" :nth 44)
-          (cavacol_musicwin :dir "up" :nth 45)
         )
         (box ;
           :orientation "v"
