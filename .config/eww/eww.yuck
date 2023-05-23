@@ -173,7 +173,7 @@
             :reveal false
             :transition "slideright"
             (label
-              :text "${net.level} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
+              :text "${mcover.source} ${mname.title} ${net.level} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
             )
           )
         )

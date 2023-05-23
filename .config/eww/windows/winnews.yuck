@@ -516,6 +516,22 @@
                       )
                     )
                   )
+                  ;totally necessary bunny ears
+                  (label
+                    :halign "start"
+                    :wrap true
+                    :hexpand true
+                    :halign "center"
+                    :text "
+                    ⢀⡤⣄⡀
+                    ⠀⢠⡏⠀⠀⠳⡄⠀⠀⠀⠀⠀   ⣀⣀⣀
+                    ⠀⢸⠃⠀⠀⠀⢿⠀⠀⠀⠀  ⣼⠃⠀⠘⢧
+                    ⠀⢸⡆⠀⠀⠀⠸⡆⠀⠀   ⣸⠃⠀⠀⠀⠈⢧
+                    ⠀⠈⣇⠀⠀⠀   ⣧⠀   ⠀⡏⠀⢦⠀⠀⠀⠸⡆
+                    ⠀　⢹⡀⠀⠀⠀⢸⠀     ⢸⠇⠀⠘⢧⡀⣸⠃
+                    ⠀　⠀⢳⠀⠀⠀⢸⡆     ⢸⠀ ⠀⣼⠙
+                    "
+                  )
                   (box
                     :orientation "v" :space-evenly false :valign "center"
                     ; :class "winnews-fetch-pad"

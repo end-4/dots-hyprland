@@ -1,7 +1,7 @@
 (defwidget winworkspacebox [wspace]
   (box ; Note: height 100px width 356px
-    :space-evenly false :orientation "v"
-    :class "overview-ws overview-ws-${wspace[0].workspace.id == activews}"
+    :space-evenly false :orientation "v" :spacing 3
+    :class "taskview-ws taskview-ws-${wspace[0].workspace.id == activews}"
     (label
       :class "wintaskview-text"
       :xalign 0
@@ -14,23 +14,24 @@
       min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
       "
       (overlay
-        (box
+        (box ; image doesnt do rounding so use css background image
+          :class "wintaskview-workspace-bg"
+          ; :path "./images/wallpaper/wallpaper_small"
           :style "
           min-width: ${RES_WIDTH * TASKVIEW_SCALE}px;
           min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
+          background-image: url('./images/wallpaper/wallpaper_small');
           "
-        )
-        (image
-          :class "wintaskview-workspace-bg"
-          :path "./images/wallpaper/wallpaper_small"
-          :image-width {RES_WIDTH * TASKVIEW_SCALE}
-          :image-height {RES_HEIGHT * TASKVIEW_SCALE}
+          :width {RES_WIDTH * TASKVIEW_SCALE}
+          :height {RES_HEIGHT * TASKVIEW_SCALE}
+          :image-width {round(RES_WIDTH * TASKVIEW_SCALE, 0)}
+          :image-height {round(RES_HEIGHT * TASKVIEW_SCALE, 0)}
         )
         (box
           :space-evenly false :orientation "h"
           (for ws-window in wspace
             (box
-              :class "${ws-window.class == 'workspace' ? '' : 'overview-ws-window'}"
+              :class "${ws-window.class == 'workspace' ? '' : 'taskview-ws-window'}"
               :style "
               ${ws-window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
               ${ws-window.address == '_none' ? 'border: none' : ''};
@@ -42,7 +43,7 @@
               (eventbox
                 :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
                 :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
-                :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
+                :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} scripts/toggle-wintaskview.sh --close &"
                 :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
                 (box
                   :class "overview-background"
@@ -53,16 +54,8 @@
                   (image
                     :class "overview-icon"
                     :path {ws-window.icon}
-                    ; :image-width {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * TASKVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * TASKVIEW_SCALE))}
-                    ; :image-height {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * TASKVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * TASKVIEW_SCALE))}
                     :image-width {round(ws-window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
                     :image-height {round(ws-window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
-                    
-                    ; :style "
-                    ; background-size: ${ws-window.size[0] > ws-window.size[1] ? 'auto 45%' : '45% auto'};
-                    ; background-image: url('${ws-window.icon}')
-                    ; ;
-                    ; "
                   )
                 )
               )
@@ -81,9 +74,6 @@
     :class "thewholething"
     (eventbox
       :onclick "scripts/toggle-wintaskview.sh --close &"
-      :onmiddleclick "scripts/toggle-wintaskview.sh --close &"
-      :onrightclick "scripts/toggle-wintaskview.sh --close &"
-      :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
       (box
         :width RES_WIDTH :height {RES_HEIGHT - 50}
         :class "wintaskview-bg"
@@ -95,22 +85,26 @@
           ${rev_wintaskview ? '' : 'margin-bottom: -900px;'}
           min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
           "
-          (box
-            :orientation "h" :space-evenly false
-            :halign "center"
+          (scroll
+            :hscroll true
+            :vscroll false
             (box
               :orientation "h" :space-evenly false
-              (for wspace in wsjsona
-                (winworkspacebox
-                  :wspace {wspace}
+              :halign "center"
+              (box
+                :orientation "h" :space-evenly false
+                (for wspace in wsjsona
+                  (winworkspacebox
+                    :wspace {wspace}
+                  )
                 )
               )
-            )
-            (box
-              :orientation "h" :space-evenly false
-              (for wspace in wsjsonb
-                (winworkspacebox
-                  :wspace {wspace}
+              (box
+                :orientation "h" :space-evenly false
+                (for wspace in wsjsonb
+                  (winworkspacebox
+                    :wspace {wspace}
+                  )
                 )
               )
             )
