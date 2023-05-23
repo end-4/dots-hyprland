@@ -2,14 +2,19 @@
 cd ~/.config/eww
 
 reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
-if [[ "$1" == "--keypress" && "$reserves" == "[0,0,0,50]" ]]; then
-    scripts/toggle-winstart.sh
-    exit
+if [[ "$reserves" == "[0,0,0,50]" ]]; then
+    if [[ "$1" == "--keypress" ]]; then
+        scripts/toggle-winstart.sh
+        exit
+    elif [[ "$1" == "--overview" && "$reserves" == "[0,0,0,50]" ]]; then
+        scripts/toggle-wintaskview.sh
+        exit
+    fi
 fi
 
 state=$(eww get open_overview)
 
-if [[ "$state" == "true" || "$1" == "--close" ]]; then 
+if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww close overview &
     eww update overview_query='' &
     eww update open_overview=false &

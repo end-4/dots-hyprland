@@ -17,6 +17,7 @@
 (include "./modules/workspaces.yuck")
 
 ;##################### Windows #########################
+; Normal stuff
 (include "./windows/bottombar.yuck")
 (include "./windows/bg-decor.yuck")
 (include "./windows/dynamic-bg.yuck")
@@ -31,14 +32,17 @@
 ; (include "./windows/system-menu.yuck")
 (include "./windows/supercontext.yuck")
 (include "./windows/themer.yuck")
+
+; Windows 11 stuff
 (include "./windows/winactions.yuck")
-(include "./windows/winosd.yuck")
+(include "./windows/wingamebar.yuck")
 (include "./windows/winnews.yuck")
 (include "./windows/winnotif.yuck")
+(include "./windows/winosd.yuck")
+(include "./windows/winoverview.yuck")
 (include "./windows/winpowermenu.yuck")
 (include "./windows/winstart.yuck")
-(include "./windows/winoverview.yuck")
-(include "./windows/wingamebar.yuck")
+(include "./windows/wintaskview.yuck")
 
 (defwidget separator []
   (box

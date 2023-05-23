@@ -1,6 +1,6 @@
 .winwin {
   background: rgba(40, 40, 40, 0.6);
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-top: 1px solid rgba(64, 64, 64, 0.5);
   margin: 12px;
@@ -1019,7 +1019,7 @@
 
 .winsearch-actions-box {
   background-color: rgba(73, 73, 73, 0.25);
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .winsearch-tag-strip {
@@ -1146,7 +1146,7 @@
 
 .winosd-window {
   margin: 5px;
-  border-radius: 12px;
+  border-radius: 8px;
   min-width: 10px;
   min-height: 40px;
 }
@@ -1155,7 +1155,7 @@
   padding: 7px;
   min-width: 100px;
   min-height: 37px;
-  border-radius: 12px;
+  border-radius: 8px;
   margin: 12px;
 }
 
@@ -1514,13 +1514,13 @@
 }
 
 .winnews-widget {
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: $onSecondary;
   padding-bottom: 10px;
 }
 
 .winnews-widget-nopad {
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: $onSecondary;
 }
 
@@ -1584,6 +1584,7 @@
   font-size: 16pt;
   font-family: Material Symbols Rounded;
 }
+
 .winnews-fetch {
   font-size: 15pt;
 }
@@ -1603,4 +1604,31 @@
 
 .winnews-link {
   color: #89B4FA;
+}
+
+.wintaskview-bg {
+  // background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(50, 63, 83, 0.2);
+}
+
+.wintaskview-workspaces-bg {
+  border: 1px solid #424C5C;
+  border-radius: 8px;
+  background-color: rgba(40, 40, 40, 0.6);
+  margin: 10px;
+  min-height: 60px;
+}
+
+.wintaskview-text {
+  background-color: transparent;
+  font-size: 11pt;
+  font-family: 'Segoe UI Variable Regular';
+  font-weight: 500;
+  margin: 1px;
+  color: white;
+}
+
+.wintaskview-workspace-bg {
+  background-size: 100% auto;
+  background-position: center;
 }
