@@ -2,7 +2,7 @@
 mode = waves
 framerate = 60
 autosens = 1
-bars = 90
+bars = 70
 
 [output]
 method = raw
