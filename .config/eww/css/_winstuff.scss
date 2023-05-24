@@ -1,5 +1,5 @@
 .winwin {
-  background: rgba(40, 40, 40, 0.6);
+  background: rgba(40, 40, 40, 0.7);
   border-radius: 9px;
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-top: 1px solid rgba(64, 64, 64, 0.5);
@@ -7,7 +7,7 @@
 }
 
 .winwin-center {
-  background: rgba(40, 40, 40, 0.6);
+  background: rgba(40, 40, 40, 0.7);
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-bottom: 0px solid transparent;
   border-top: 1px solid rgba(30, 30, 30, 0.5);
@@ -15,7 +15,7 @@
 }
 
 .winwin-center-noseparator {
-  background: rgba(40, 40, 40, 0.6);
+  background: rgba(40, 40, 40, 0.7);
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-bottom: 0px solid transparent;
   border-top: 0px solid transparent;
@@ -23,7 +23,7 @@
 }
 
 .winwin-topbar {
-  background: rgba(28, 28, 28, 0.6);
+  background: rgba(28, 28, 28, 0.7);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -34,7 +34,7 @@
 
 .winwin-top {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background: rgba(40, 40, 40, 0.6);
+  background: rgba(40, 40, 40, 0.7);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -45,7 +45,7 @@
 }
 
 .winwin-bottom {
-  background: rgba(28, 28, 28, 0.6);
+  background: rgba(28, 28, 28, 0.7);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -56,7 +56,7 @@
 
 .winwin-bottom-light {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background: rgba(40, 40, 40, 0.6);
+  background: rgba(40, 40, 40, 0.65);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -74,7 +74,7 @@
 }
 
 .winbar-bg {
-  background: rgba(25, 25, 25, 0.6);
+  background: rgba(25, 25, 25, 0.7);
   background-image: url('images/textures/acrylic.png');
   background-blend-mode: luminosity;
 
@@ -632,9 +632,9 @@
 }
 
 .winnotif-notif {
-  background-color: rgba(75, 75, 75, 0.25);
+  background-color: rgba(55, 55, 55, 0.6);
   border-radius: 6px;
-  border: 1px solid rgba(30, 30, 30, 0.5);
+  border: 1px solid rgba(30, 30, 30, 0.2);
   margin: 4px;
   padding: 13px;
 }
@@ -904,7 +904,7 @@
 }
 
 .winstart-pinnedapps-entry:hover {
-  background-color: rgba(95, 95, 95, 0.4);
+  background-color: rgba(95, 95, 95, 0.6);
 }
 
 .winstart-pinnedapps-icon {
@@ -1283,16 +1283,22 @@
 }
 
 .wingamebar-capture-button {
-  min-width: 59px;
-  min-height: 59px;
+  min-width: 57px;
+  min-height: 57px;
   background: #3A3A3A;
+  border: 1px solid #3A3A3A;
   border-radius: 9999px;
 }
 
+.wingamebar-capture-button:hover {
+  border: 1px solid white;
+}
+
 .wingamebar-capture-button-unavailable {
-  min-width: 59px;
-  min-height: 59px;
+  min-width: 55px;
+  min-height: 55px;
   background: #282828;
+  border: 2px solid #282828;
   border-radius: 9999px;
 }
 
@@ -1645,7 +1651,7 @@
 }
 
 .taskview-ws-true {
-  background-color: rgba(75, 75, 75, 0.25);
+  background-color: rgba(75, 75, 75, 0.6);
   border-radius: 9px;
   border: 1px solid $overlayedge;
   border-top: 1px solid tint($overlayedge, 5%);
@@ -1696,8 +1702,10 @@
   font-size: 14pt;
   color: white;
   border-radius: 5px;
+  padding: 10px;
+  margin: -5px;
 }
 
 .winactions-media-button:hover {
-  background-color: rgba(95, 95, 95, 0.4);
+  background-color: rgba(95, 95, 95, 0.6);
 }

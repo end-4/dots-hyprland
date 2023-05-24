@@ -17,7 +17,7 @@
     },
     {
         "address": [],
-        "class": "Code",
+        "class": "code-url-handler",
         "count": 0,
         "icon": "/usr/share/icons/Win11-dark/apps/scalable/code.svg",
         "workspace": [],
