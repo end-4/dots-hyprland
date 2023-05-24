@@ -8,8 +8,7 @@
     ${osd_vol ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     "
     (box
-      :space-evenly false
-      :orientation "h"
+      :orientation "h" :space-evenly false :spacing 5
       :class "winactions-sliderrow"
       (image :class "winicon" :path "images/svg/dark/vol${volume.audio == 1 ? round(volume.percent / 33, 0) : 'mute'}.svg")
       (scale
@@ -17,6 +16,7 @@
         :onchange "scripts/volume setvol SINK {} &"
         :class "winslider-osd"
       )
+      (label :class "winnotif-text" :text {volume.percent})
     )
   )
 )
@@ -31,8 +31,7 @@
     ${osd_bright ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     "
     (box
-      :space-evenly false
-      :orientation "h"
+      :orientation "h" :space-evenly false :spacing 5
       :class "winactions-sliderrow"
       (image :class "winicon" :path "images/svg/dark/brightness.svg")
       (scale
@@ -40,6 +39,7 @@
         :onchange "light -S {} && scripts/brightness osd &"
         :class "winslider-osd"
       )
+      (label :class "winnotif-text" :text {brightness.level})
     )
   )
 )
