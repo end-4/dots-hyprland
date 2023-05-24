@@ -453,7 +453,7 @@
                               :space-evenly false
                               :class "winstart-recommended-text"
                               (label :xalign 0 :class "wintoggle-text winstart-recommended-name" :text "${entry.name}" :limit-width 26)
-                              (label :xalign 0 :class "wintoggle-text winstart-recommended-subtext" :text "${entry.subtext}" :limit-width 26)
+                              (label :xalign 0 :class "wintoggle-text winstart-recommended-subtext" :text "${entry.subtext}" :limit-width 29)
                             )
                           )
                         )

@@ -4,6 +4,7 @@
 (defvar RES_HEIGHT 1080)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
+(defvar TASKVIEW_SCALE 0.12)
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
@@ -12,6 +13,7 @@
 (defvar SUPERCONTEXT_OFFSET_X "[75, 23.1, -60.6, -60.6, 23.1]")
 (defvar SUPERCONTEXT_OFFSET_Y "[0, 67.6, 41.8, -41.8, -67.6]")
 (defvar SUPERCONTEXT_BUTTON_RADIUS 30)
+(defvar TASKVIEW_WORKSPACE_NAMES '["Desktop 1", "Desktop 2", "Desktop 3", "Desktop 4", "Desktop 5", "Desktop 6", "Desktop 7", "Desktop 8", "Desktop 9", "Desktop 10", ]')
 
 ; Vars
 (defvar music_reveal false)
@@ -76,6 +78,7 @@
 (defvar rev_dashfs false)
 (defvar rev_bottombar false)
 (defvar rev_supercontext false)
+(defvar rev_wintaskview false)
 
 (defvar anim_open_ostg true)
 (defvar anim_open_ontf true)
@@ -93,6 +96,7 @@
 (defvar anim_open_dashfs true)
 (defvar anim_open_bottombar true)
 (defvar anim_open_supercontext true)
+(defvar anim_open_wintaskview true)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`)

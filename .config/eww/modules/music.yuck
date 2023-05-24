@@ -111,7 +111,8 @@
                       font-size: 30pt;
                       color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
                       "
-                      :onclick "playerctl previous" ""
+                      :onclick "playerctl previous" 
+                      ""
                     )
                     (button
                       :class "song-button-bar"

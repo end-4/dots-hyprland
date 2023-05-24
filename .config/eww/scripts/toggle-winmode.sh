@@ -11,7 +11,7 @@ if [[ "$reserves" == "[0,61,0,0]" ]]; then
     hyprctl keyword general:border_size 1
     hyprctl keyword decoration:drop_shadow true
 
-    hyprctl keyword general:col.active_border 'rgba(494949aa)'
+    hyprctl keyword general:col.active_border 'rgba(494949dd)'
     hyprctl keyword general:col.inactive_border 'rgba(494949aa)'
 else
     eww close winbar
