@@ -23,18 +23,18 @@
 # 👀 Branches + Screenshots
 
 <details> 
-  <summary> Came here from my Reddit post? It's the main branch. Non-main branches are archives. </summary>
-  - Spoilers below will each have an image
+  <summary> Came here from my Reddit post in which I mentioned grass? It's the main branch. Others are archives. </summary>
+    
 </details>
 
 <details open> 
-  <summary>Summer https://github.com/end-4/dots-hyprland/tree/summer-gruv </summary>
+  <summary>Summer (osu/material style) https://github.com/end-4/dots-hyprland/tree/summer-gruv </summary>
   
    ![dots-hyprland](./assets/screenshot-summer.png)
 </details>
 
 <details open> 
-  <summary>Material/Windows https://github.com/end-4/dots-hyprland/tree/windoes </summary>
+  <summary>Windows style https://github.com/end-4/dots-hyprland/tree/windoes </summary>
   
    ![dots-hyprland](./assets/screenshot-windoes2.png)
 </details>
@@ -45,23 +45,7 @@
    ![dots-hyprland](./assets/screenshot-material.png)
 </details>
 
-<details> 
-  <summary>osu!lazer https://github.com/end-4/dots-hyprland/tree/osu!lazer </summary>
-  
-   ![dots-hyprland](./assets/screenshot-17.png)
-</details>
-
-<details> 
-  <summary>lineage https://github.com/end-4/dots-hyprland/tree/lineage </summary>
-  
-   ![dots-hyprland](./assets/screenshot-9.png)
-</details>
-
-<details> 
-  <summary>Tetrio https://github.com/end-4/dots-hyprland/tree/tetrio </summary>
-  
-   ![dots-hyprland](./assets/screenshot-tetrio.png)
-</details>
+- `lineage` and `osu!lazer` are past generations with less features
 
 # 🔧 General instructions
  - **Backup**
