@@ -13,7 +13,7 @@ getoptions(){
   blur_passes=$(hyprctl getoption decoration:blur_passes -j | gojq -r -c '.int')
   blur_xray=$(hyprctl getoption decoration:blur_xray -j | gojq -r -c '.int')
   nightlight=$(hyprctl getoption decoration:screen_shader -j | gojq -r -c '.str')
-  if [[ "$nightlight" == *"nothing.frag" ]]; then
+  if [[ "$nightlight" == *"nothing.frag" || "$nightlight" == "" ]]; then
     nightlight='false'
   else
     nightlight='true'
