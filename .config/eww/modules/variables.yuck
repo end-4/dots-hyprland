@@ -6,6 +6,7 @@
 (defvar OVERVIEW_SCALE 0.18)
 (defvar TASKVIEW_SCALE 0.12)
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
+(defvar wsnums `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`)
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar SUPERCONTEXT_WIDTH 300)
@@ -14,6 +15,9 @@
 (defvar SUPERCONTEXT_OFFSET_Y "[0, 67.6, 41.8, -41.8, -67.6]")
 (defvar SUPERCONTEXT_BUTTON_RADIUS 30)
 (defvar TASKVIEW_WORKSPACE_NAMES '["Desktop 1", "Desktop 2", "Desktop 3", "Desktop 4", "Desktop 5", "Desktop 6", "Desktop 7", "Desktop 8", "Desktop 9", "Desktop 10", ]')
+(defvar WINTASKVIEW_RESERVED_BOTTOM 250)
+(defvar WINTASKVIEW_SPACING 30)
+(defvar MIN_ROW_HEIGHT 100)
 
 ; Vars
 (defvar music_reveal false)
@@ -135,6 +139,7 @@
 (deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
 (deflisten cavajson `scripts/cavajson`)
 (deflisten mousepos `scripts/mousetrack`)
+(deflisten taskviewlayout `scripts/taskviewlayout-wrapper`)
 (defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
 (defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
 

@@ -74,9 +74,72 @@
     :class "thewholething"
     (eventbox
       :onclick "scripts/toggle-wintaskview.sh --close &"
-      (box
-        :width RES_WIDTH :height {RES_HEIGHT - 50}
-        :class "wintaskview-bg"
+      (overlay
+        (box
+          :width RES_WIDTH :height {RES_HEIGHT - 50}
+          :class "wintaskview-bg"
+        )
+        (box
+          :orientation "h" :space-evenly false
+          :halign "fill" :valign "start" :height {RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM}
+          (for workspace in taskviewlayout
+            (revealer
+              :reveal {arraylength(workspace) != 0 && workspace[0][0]["workspace"]["id"] == activews}
+              :transition "slideright"
+              :duration "0ms"
+              (scroll
+                :hscroll false :vscroll true
+                :width {RES_WIDTH}
+                :height {RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM}
+                (box
+                  :space-evenly false :orientation "v" :spacing WINTASKVIEW_SPACING
+                  :style "padding: ${WINTASKVIEW_SPACING}"
+                  (for row in workspace
+                    (box
+                      :space-evenly false :spacing WINTASKVIEW_SPACING
+                      :halign "center"
+                      :height {max(
+                        MIN_ROW_HEIGHT,
+                        (RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM - WINTASKVIEW_SPACING) / arraylength(workspace) - 51 - WINTASKVIEW_SPACING
+                      )}
+                      (for window in row
+                        (box
+                          :class "${window.class == 'workspace' ? '' : 'taskview-ws-window'}"
+                          :style `
+                          ${window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
+                          ${window.address == '_none' ? 'border: none' : ''};
+                          min-width: ${window["size"][0]}px;
+                          min-height: ${window["size"][1]}px;
+                          `
+                          (eventbox
+                            ; :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
+                            ; :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
+                            ; :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} scripts/toggle-wintaskview.sh --close &"
+                            ; :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
+                            (box
+                              :class "overview-background"
+                              :style "padding-top: 49px;"
+                              ; Uncomment below to enable thumbnail previews (VERY SLOW)
+                              ; :style "
+                              ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
+                              ; "
+                              (image
+                                :class "overview-icon"
+                                ; :path {ws-window.icon}
+                                :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
         (box
           :valign "end"
           :class "wintaskview-workspaces-bg"

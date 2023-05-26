@@ -1,27 +1,32 @@
-#include <array>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <regex>
-#include <stdexcept>
+#include <array>       // This script tries to show windows of workspaces
+#include <cmath>       // in a reasonable way in Task View
+#include <filesystem>  //
+#include <fstream>     // Goal: all windows on the same row have equal height
+#include <iostream>    //
+#include <memory>      //
+#include <regex>       // binary search -> ok scale
+#include <stdexcept>   // -> sort small-wide windows -> match pairs -> rows
 #include <string>
 
 #include "nlohmann/json.hpp"
+
 using namespace std;
 using json = nlohmann::json;
 
-#define ROWS 2
-#define COLS 5
+#define COLS 10
+#define RES_WIDTH 1920
+#define RES_HEIGHT 1080
+#define RESERVED_BOTTOM 250
+#define SPACING 30
+#define TITLEBAR_AND_BORDER_HEIGHT 51
+#define MIN_ROW_HEIGHT 100  // 100px (else scroll down)
+const json EMPTY_JSON = R"([])"_json;
+const string workspaceInitTemplate = "[]";
 
+int numOfApps[COLS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 string clients;
-json clientjson, apps;
-json workspaces;
-string workspaceInitTemplate =
-    "[{\"address\":\"_none\",\"at\":[0,0],\"class\":\"workspace\",\"size\":["
-    "1920,1080],\"title\":\"__WORKSPACE_ID\",\"workspace\":{\"id\":__WORKSPACE_"
-    "ID,\"name\":\"__WORKSPACE_ID\"}}]";
-vector<string> appnames;
+json clientjson, workspaces;
+json workspacesArranged;
 
 string exec(const char* cmd) {
     array<char, 128> buffer;
@@ -37,16 +42,14 @@ string exec(const char* cmd) {
 }
 
 void initWorkspaces() {
-    for (int i = 0; i < ROWS; i++) {
-        workspaces.push_back(json::array({}));  // []
-        for (int j = 0; j < COLS; j++) {
-            int workspaceNum = i * COLS + j + 1;  // Note: Workspaces are 1-base
-            string workspaceInitString =
-                regex_replace(workspaceInitTemplate, regex("__WORKSPACE_ID"),
-                              to_string(workspaceNum));
-            json thisWorkspaceInit = json::parse(workspaceInitString);
-            workspaces[i].push_back(thisWorkspaceInit);
-        }
+    int i = 0;
+    for (int j = 0; j < COLS; j++) {
+        int workspaceNum = i * COLS + j + 1;  // Note: Workspaces are 1-base
+        string workspaceInitString =
+            regex_replace(workspaceInitTemplate, regex("__WORKSPACE_ID"),
+                          to_string(workspaceNum));
+        json thisWorkspaceInit = json::parse(workspaceInitString);
+        workspaces.push_back(thisWorkspaceInit);
     }
 }
 
@@ -60,13 +63,14 @@ void addApp(json& client) {
     // New JSON for app
     json newApp =
         R"({"class": "", "workspace": {"id": 8, "name": "8"}, "title": "", "at": [0, 0], "size": [0, 0], "address": [], "icon": ""})"_json;
+
     // Add normal stuff
     newApp["class"] = client["class"];
     newApp["address"] = client["address"];
     newApp["workspace"] = client["workspace"];
     newApp["title"] = client["title"];
-    newApp["at"] = client["at"];
     newApp["size"] = client["size"];
+
     // Icon path
     string filename = string("./scripts/cache/" + string(client["class"]));
     std::ifstream ifs(filename);
@@ -76,7 +80,18 @@ void addApp(json& client) {
         iconpath.pop_back();  // Remove '\n'
     newApp["icon"] = iconpath;
 
-    workspaces[i][j].push_back(newApp);
+    // Counting
+    int size_x = int(newApp["size"][0]);
+    int size_y = int(newApp["size"][1]);
+    if (size_x <= size_y * 2) {  // Normal
+        newApp["countAs"] = 1;   //     count as 1 window
+    } else {                     // Very wide
+        newApp["countAs"] = 2;   //     count as 2 windows
+    }
+    numOfApps[int(newApp["workspace"]["id"]) - 1] += int(newApp["countAs"]);
+
+    // Push
+    workspaces[j].push_back(newApp);
 }
 
 void getApps() {
@@ -90,13 +105,68 @@ void getApps() {
     }
 }
 
+void scaleWindows() {
+    for (int i = 0; i < workspaces.size(); i++) {
+        if (workspaces[i].size() == 0) {
+            workspacesArranged.push_back(EMPTY_JSON);
+            continue;
+        }
+        // Declare
+        int numOfRows = int(ceil(sqrt(numOfApps[i])));
+        int winsPerRow = (numOfApps[i] + (numOfRows - 1)) / numOfRows;  // ceil
+        json thisWorkspace = EMPTY_JSON;
+        for (int i = 0; i < numOfRows; i++) thisWorkspace.push_back(EMPTY_JSON);
+        int rowHeight =
+            max(MIN_ROW_HEIGHT,
+                (RES_HEIGHT - RESERVED_BOTTOM - SPACING) / numOfRows -
+                    TITLEBAR_AND_BORDER_HEIGHT - SPACING);
+        int thisRowCnt = 0, rowsDone = 0;
+
+        // cout << "Workspace " << i + 1 << " | Rows: " << numOfRows
+        //      << " | Per row: " << winsPerRow << '\n';
+
+        // Scale
+        for (json& window : workspaces[i]) {
+            int cntAs = int(window["countAs"]);
+            if (cntAs == 1) {
+                window["size"][0] = int(window["size"][0]) /
+                                    (float(window["size"][1]) / rowHeight);
+                window["size"][1] = rowHeight;
+            } else {  // cntAs == 2
+                window["size"][1] =
+                    int(float(window["size"][1]) /
+                        (float(window["size"][0]) / (rowHeight * 2)));
+                window["size"][0] = rowHeight * 2;
+            }
+            thisWorkspace[rowsDone].push_back(window);
+            thisRowCnt += int(window["countAs"]);
+            if (thisRowCnt >= winsPerRow) {
+                rowsDone++;
+                thisRowCnt = 0;
+            }
+        }
+
+        workspacesArranged.push_back(thisWorkspace);
+    }
+}
+
 int main(int argc, char* argv[]) {
     // ios::sync_with_stdio(false);
     // cin.tie(nullptr);
 
-    // Get rekt uggh i mean windows in workspaces
+    // Get windows in workspaces, counting
     initWorkspaces();
     getApps();
 
-    
+    // cout << ">>>>>>>> [DEBUG INGO START] >>>>>>>>" << '\n';
+    // cout << workspaces << '\n';
+    // cout << "<<<<<<<< [DEBUG INGO END] <<<<<<<<" << '\n' << '\n';
+
+    // cout << "# of apps: ";
+    // for (int i = 0; i < COLS; i++) cout << numOfApps[i] << ' ';
+    // cout << '\n';
+    // Scaling, arranging
+    scaleWindows();
+
+    cout << workspacesArranged << '\n';
 }
