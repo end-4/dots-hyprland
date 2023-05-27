@@ -35,7 +35,7 @@
         :orientation "h"
         :space-evenly false
         (circular-progress
-          :value {brightness.level}
+          :value {round(brightness.level, 0)}
           :class "osd-circle"
           :thickness 4
           :start-at 75
@@ -46,7 +46,7 @@
           )
         )
         (box)
-        (label :xalign 0.5 :class "osd-text" :text "${brightness.level}")
+        (label :xalign 0.5 :class "osd-text" :text {round(brightness.level, 0)})
       )
     )
   )

@@ -35,11 +35,11 @@
       :class "winactions-sliderrow"
       (image :class "winicon" :path "images/svg/dark/brightness.svg")
       (scale
-        :value {brightness.level}
+        :value {round(brightness.level, 0)}
         :onchange "light -S {} && scripts/brightness osd &"
         :class "winslider-osd"
       )
-      (label :class "winnotif-text" :text {brightness.level})
+      (label :class "winnotif-text" :text {round(brightness.level, 0)})
     )
   )
 )
