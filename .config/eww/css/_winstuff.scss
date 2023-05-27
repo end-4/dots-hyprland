@@ -1667,8 +1667,6 @@
 
 .taskview-ws-window {
   border-radius: 5px;
-  // background-color: shade($surface0, 2%);
-  // background-color: rgba(46, 56, 72, 1);
   background-color: #2C2C2C;
   border: 1px solid $surface0;
   border-top: 1px solid tint($surface0, 5%);  
@@ -1676,8 +1674,21 @@
 
 .taskview-thisws-window {
   border-radius: 12px;
-  // background-color: shade($surface0, 2%);
   background-color: rgba(22, 22, 22, 0.85);
+  color: white;
+}
+
+.wintaskview-thisws-window-close {
+  color: white;
+  font-size: 15pt;
+}
+
+.taskview-thisws-window-thumbnail {
+  border-radius: 4px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: #202020;
+  margin: 1px;
 }
 
 .winactions-media-cover {

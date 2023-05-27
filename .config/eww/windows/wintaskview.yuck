@@ -106,6 +106,7 @@
                       (for window in row
                         (box
                           :class "${window.class == 'workspace' ? '' : 'taskview-thisws-window'}"
+                          :valign "start"
                           :style `
                           ${window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
                           ${window.address == '_none' ? 'border: none' : ''};
@@ -138,14 +139,21 @@
                                   ; :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
                                 )
                                 (label
+                                  :hexpand true :xalign 0
                                   :class "wintaskview-text"
                                   :text "${window.title}"
                                 )
+                                ; (button
+                                ;   (label
+                                ;     :class "wintaskview-thisws-window-close"
+                                ;     :text ""
+                                ;   ) 
+                                ; )
                               )
                               (image
                                 :vexpand true
-                                :class "overview-icon"
                                 :path {window.icon}
+                                :class "taskview-thisws-window-thumbnail"
                                 :image-width {round(window.size[0] * 25 / 100, 0)}
                                 :image-height {round(window.size[1] * 25 / 100, 0)}
                                 ; :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}

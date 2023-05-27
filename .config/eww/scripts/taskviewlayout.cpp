@@ -113,7 +113,7 @@ void scaleWindows() {
             continue;
         }
         // Declare
-        int numOfRows = int(ceil(sqrt(numOfApps[i])));
+        int numOfRows = numOfApps[i] > 3 ? int(ceil(sqrt(numOfApps[i]))) : 1;
         int winsPerRow = (numOfApps[i] + (numOfRows - 1)) / numOfRows;  // ceil
         json thisWorkspace = EMPTY_JSON;
         for (int i = 0; i < numOfRows; i++) thisWorkspace.push_back(EMPTY_JSON);
@@ -140,6 +140,19 @@ void scaleWindows() {
                         (float(window["size"][0]) / (rowHeight * 2)));
                 window["size"][0] = rowHeight * 2;
             }
+
+            // int minWidth = string(window["title"]).size() * 9;
+            // cout << "Window: " << string(window["title"])
+            //      << ", min width: " << minWidth << '\n';
+            // if (window["size"][0] < minWidth) {
+            //     window["size"][1] = int(window["size"][1]) *
+            //                         (float(minWidth) /
+            //                         int(window["size"][0]));
+            //     window["size"][0] = minWidth;
+            // }
+            // cout << " --> " << window["size"][0] << "x" << window["size"][1]
+            //      << '\n';
+            
             thisWorkspace[rowsDone].push_back(window);
             thisRowCnt += int(window["countAs"]);
             if (thisRowCnt >= winsPerRow) {
@@ -153,8 +166,7 @@ void scaleWindows() {
 }
 
 int main(int argc, char* argv[]) {
-    // ios::sync_with_stdio(false);
-    // cin.tie(nullptr);
+    ios::sync_with_stdio(false);
 
     // Get windows in workspaces, counting
     initWorkspaces();
