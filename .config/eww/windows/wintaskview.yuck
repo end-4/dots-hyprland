@@ -94,6 +94,7 @@
                 (box
                   :space-evenly false :orientation "v" :spacing WINTASKVIEW_SPACING
                   :style "padding: ${WINTASKVIEW_SPACING}"
+                  :valign "center"
                   (for row in workspace
                     (box
                       :space-evenly false :spacing WINTASKVIEW_SPACING
@@ -104,7 +105,7 @@
                       )}
                       (for window in row
                         (box
-                          :class "${window.class == 'workspace' ? '' : 'taskview-ws-window'}"
+                          :class "${window.class == 'workspace' ? '' : 'taskview-thisws-window'}"
                           :style `
                           ${window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
                           ${window.address == '_none' ? 'border: none' : ''};
@@ -117,17 +118,38 @@
                             ; :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} scripts/toggle-wintaskview.sh --close &"
                             ; :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
                             (box
+                              :orientation "v" :space-evenly false
                               :class "overview-background"
-                              :style "padding-top: 49px;"
                               ; Uncomment below to enable thumbnail previews (VERY SLOW)
                               ; :style "
                               ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
                               ; "
+                              (box ;
+                                :height 49 :space-evenly false :spacing 10
+                                :orientation "h"
+                                :style "padding: 0 14px;"
+                                (image
+                                  :vexpand true
+                                  :class "overview-icon"
+                                  :path {window.icon}
+                                  :image-width 25
+                                  :image-height 25
+                                  ; :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                  ; :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                )
+                                (label
+                                  :class "wintaskview-text"
+                                  :text "${window.title}"
+                                )
+                              )
                               (image
+                                :vexpand true
                                 :class "overview-icon"
-                                ; :path {ws-window.icon}
-                                :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
-                                :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                :path {window.icon}
+                                :image-width {round(window.size[0] * 25 / 100, 0)}
+                                :image-height {round(window.size[1] * 25 / 100, 0)}
+                                ; :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                ; :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
                               )
                             )
                           )

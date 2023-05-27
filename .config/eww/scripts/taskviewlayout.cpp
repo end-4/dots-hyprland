@@ -19,7 +19,8 @@ using json = nlohmann::json;
 #define RESERVED_BOTTOM 250
 #define SPACING 30
 #define TITLEBAR_AND_BORDER_HEIGHT 51
-#define MIN_ROW_HEIGHT 100  // 100px (else scroll down)
+#define MIN_ROW_HEIGHT 186  // 100px (else scroll down)
+#define MAX_ROW_HEIGHT 300  // 100px (else scroll down)
 const json EMPTY_JSON = R"([])"_json;
 const string workspaceInitTemplate = "[]";
 
@@ -117,9 +118,10 @@ void scaleWindows() {
         json thisWorkspace = EMPTY_JSON;
         for (int i = 0; i < numOfRows; i++) thisWorkspace.push_back(EMPTY_JSON);
         int rowHeight =
-            max(MIN_ROW_HEIGHT,
-                (RES_HEIGHT - RESERVED_BOTTOM - SPACING) / numOfRows -
-                    TITLEBAR_AND_BORDER_HEIGHT - SPACING);
+            min(max(MIN_ROW_HEIGHT,
+                    (RES_HEIGHT - RESERVED_BOTTOM - SPACING) / numOfRows -
+                        TITLEBAR_AND_BORDER_HEIGHT - SPACING),
+                MAX_ROW_HEIGHT);
         int thisRowCnt = 0, rowsDone = 0;
 
         // cout << "Workspace " << i + 1 << " | Rows: " << numOfRows
