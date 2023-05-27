@@ -1674,6 +1674,12 @@
   border-top: 1px solid tint($surface0, 5%);  
 }
 
+.taskview-thisws-window {
+  border-radius: 12px;
+  // background-color: shade($surface0, 2%);
+  background-color: rgba(22, 22, 22, 0.85);
+}
+
 .winactions-media-cover {
   border-radius: 5px;
   min-height: 45px;
