@@ -182,7 +182,6 @@ void getDesktopEntries(const string& dirname) {
 }
 
 void toJson() {
-    if (mode == 2) cout << '[';
     sort(allApps.begin(), allApps.end(), lf);
     int i = -1;
     for (const auto& entry : allApps) {
@@ -192,23 +191,20 @@ void toJson() {
         thisApp["name"] = entry.name;
         thisApp["icon"] = entry.icon;
         thisApp["exec"] = entry.exec;
-        thisApp["filename"] = entry.filename;
-        thisApp["filepath"] = entry.filepath;
+        if (mode != 2) {
+            thisApp["filename"] = entry.filename;
+            thisApp["filepath"] = entry.filepath;
+        }
         // Get
         if (mode == 0)
             apps[entry.name] = thisApp;
         else if (mode == 1)
             apps.push_back(thisApp);
         else if (mode == 2) {
-            cout << "{\"name\":\"" + entry.name + "\",\"icon\":\"" +
-                        entry.icon + "\",\"exec\":\"" + entry.exec + "\"}";
-            if (i != int(allApps.size()) - 1) cout << ",";
+            apps.push_back(thisApp);
         }
     }
-    if (mode == 0 || mode == 1)
-        cout << apps << '\n';
-    else if (mode == 2)
-        cout << ']' << '\n';
+    cout << apps << '\n';
 }
 
 string getUsername() {
