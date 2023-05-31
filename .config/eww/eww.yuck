@@ -1,4 +1,4 @@
-  ;##################### Modules #########################
+;##################### Modules #########################
 (include "./modules/activewindow.yuck")
 (include "./modules/audiolevels.yuck")
 (include "./modules/bluetooth.yuck")
@@ -41,6 +41,7 @@
 (include "./windows/winosd.yuck")
 (include "./windows/winoverview.yuck")
 (include "./windows/winpowermenu.yuck")
+(include "./windows/winshadows.yuck")
 (include "./windows/winstart.yuck")
 (include "./windows/wintaskview.yuck")
 
@@ -102,11 +103,11 @@
   (box
     :space-evenly false :orientation "v"
     ; (revealer
-    ;   :transition "slidedown"
-    ;   :duration "0ms"
-    ;   :reveal {!(rev_center_ws || awin.title == 'null')}
-    ;   ; :reveal true
-    ;   (workspaces_top)
+      ;   :transition "slidedown"
+      ;   :duration "0ms"
+      ;   :reveal {!(rev_center_ws || awin.title == 'null')}
+      ;   ; :reveal true
+      ;   (workspaces_top)
     ; )
     (box
       :valign "start"
@@ -166,8 +167,9 @@
         :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
         (box
           :space-evenly false
-          :style "margin-left: ${RES_WIDTH / 2 - 75 - (25 * arraylength(tasks))}px;"
+          :style "margin-left: ${RES_WIDTH / 2 - 100 - (25 * arraylength(tasks))}px;"
           (winstarticon)
+          (wintaskview-button)
           (wintaskbar)
           (revealer
             :reveal false
@@ -185,6 +187,7 @@
     (box
       :halign "end"
       :space-evenly false
+      (wintray-button)
       (winactions)
       (windate)
     )

@@ -582,8 +582,8 @@
           transition: ${anim_open_dashfs ? MD3_DECEL : MD3_ACCEL};
           ${rev_dashfs ? 'margin-left: 40px; margin-bottom: 40px;' : 'margin-bottom: -200px; margin-top: 200px;'}
           "
-          (label :xalign 0 :class "dashfs-quote-content" :text "${quote_content[0]}")
-          (label :xalign 1 :class "dashfs-quote-author" :text "${quote_author[0]}")
+          (label :xalign 0 :class "dashfs-quote-content" :text "${quote_content[3]}")
+          (label :xalign 1 :class "dashfs-quote-author" :text "${quote_author[3]}")
         )
       )
     )

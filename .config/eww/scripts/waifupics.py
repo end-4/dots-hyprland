@@ -8,9 +8,17 @@ import sys
 # Define the URL to send the GET request
 url = "https://api.waifu.pics/sfw/waifu"
 if len(sys.argv) > 1 and sys.argv[1] == '--segs':
-    url = "https://api.waifu.pics/nsfw/waifu"
+    url = "https://api.waifu.pics/nsfw/"
+    if len(sys.argv) > 2:
+        url += sys.argv[2]
+    else:
+        url += "waifu"
 else:
-    url = "https://api.waifu.pics/sfw/waifu"    
+    url = "https://api.waifu.pics/sfw/"
+    if len(sys.argv) > 1:
+        url += sys.argv[1]
+    else:
+        url += "waifu"
 
 # Send the GET request and store the response object
 response = requests.get(url)

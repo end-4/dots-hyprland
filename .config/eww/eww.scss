@@ -176,7 +176,7 @@ $bg1: $surface0;
   background-color: mix(shade($colorbarbg, 45%), $primary, 97%); 
   // background-color: shade($colorbg, 75%); 
   // background-color: #0B121C;
-  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+  background-image: linear-gradient(135deg, shade($onSecondary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onSecondary, 47%) 37%, shade($onSecondary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onSecondary, 47%) 85%);
 
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
 }
@@ -184,7 +184,7 @@ $bg1: $surface0;
 .bar-bg-only-compact {
   margin-right: -1920px;
   background-color: shade($colorbg, 75%);
-  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+  background-image: linear-gradient(135deg, shade($onSecondary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onSecondary, 47%) 37%, shade($onSecondary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onSecondary, 47%) 85%);
 }
 
 .bar-normal {
@@ -225,7 +225,6 @@ tooltip {
   color: white;
 
   label {
-    font-family: 'Torus';
     font-size: 13pt;
   }
 }
