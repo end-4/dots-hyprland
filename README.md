@@ -90,7 +90,7 @@
  - Python
 ```
 [ Command ]
-pip install pywal desktop_entry_lib
+pip install pywal desktop_entry_lib nekos.py
 ```
  - Other Dependencies (install it with your distro's package manager)
 ```
