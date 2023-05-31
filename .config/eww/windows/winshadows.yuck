@@ -326,7 +326,7 @@
     "
     ; Media controls
     (revealer
-      :reveal {mname.title != ''}
+      :reveal {mname_win.title != ''}
       :transition "slideup"
       :duration "200ms"
       (box
@@ -343,7 +343,7 @@
       :class "winwin-shadow"
       :style "
       min-height: 433px;
-      min-width: 404px;
+      min-width: 398px;
       "
     )
   )
