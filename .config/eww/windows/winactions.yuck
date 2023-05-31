@@ -16,7 +16,7 @@
     )
     ; Media controls
     (revealer
-      :reveal {mname.title != ''}
+      :reveal {mname_win.title != ''}
       :transition "slideup"
       :duration "200ms"
       (box
@@ -34,8 +34,8 @@
           :width 346
           (box
             :space-evenly false :orientation "v" :hexpand true
-            (label :xalign 0 :limit-width 36 :class "winactions-media-title" :text {mname.title})
-            (label :xalign 0 :limit-width 36 :class "winactions-media-artist" :text {mname.artist})
+            (label :xalign 0 :limit-width 36 :class "winactions-media-title" :text {mname_win.title})
+            (label :xalign 0 :limit-width 36 :class "winactions-media-artist" :text {mname_win.artist})
           )
           (box
             :halign "end"
