@@ -23,8 +23,9 @@
 # 👀 Branches + Screenshots
 
 <details> 
-  <summary> Came here from my Reddit post in which I mentioned grass? It's the main branch. Others are archives. </summary>
-    
+  <summary>Came here from my Reddit post in which I mentioned grass? It's the main branch. Others are archives.</summary>
+  
+   ![dots-hyprland](./assets/screenshot-reddit.png)
 </details>
 
 <details open> 
