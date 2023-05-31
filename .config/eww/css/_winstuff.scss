@@ -1,13 +1,13 @@
 .winwin {
-  background: rgba(40, 40, 40, 0.7);
-  border-radius: 9px;
+  background: rgba(40, 40, 40, 0.71);
+  border-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-top: 1px solid rgba(64, 64, 64, 0.5);
   margin: 12px;
 }
 
 .winwin-center {
-  background: rgba(40, 40, 40, 0.7);
+  background: rgba(40, 40, 40, 0.71);
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-bottom: 0px solid transparent;
   border-top: 1px solid rgba(30, 30, 30, 0.5);
@@ -15,7 +15,7 @@
 }
 
 .winwin-center-noseparator {
-  background: rgba(40, 40, 40, 0.7);
+  background: rgba(40, 40, 40, 0.71);
   border: 1px solid rgba(60, 60, 60, 0.4);
   border-bottom: 0px solid transparent;
   border-top: 0px solid transparent;
@@ -23,7 +23,7 @@
 }
 
 .winwin-topbar {
-  background: rgba(28, 28, 28, 0.7);
+  background: rgba(28, 28, 28, 0.71);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -34,7 +34,7 @@
 
 .winwin-top {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background: rgba(40, 40, 40, 0.7);
+  background: rgba(40, 40, 40, 0.71);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -56,7 +56,7 @@
 
 .winwin-bottom-light {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background: rgba(40, 40, 40, 0.65);
+  background: rgba(40, 40, 40, 0.71);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   border: 1px solid rgba(60, 60, 60, 0.4);
@@ -170,10 +170,9 @@
   border-top: 1px solid transparent;
 }
 
-.winnewsicon {
+.winbaricon {
   background-size: 60%;
   background-position: center;
-  // background-image: url('images/icons/winnews.png');
   min-width: 42px;
   min-height: 42px;
   border-radius: 6px;
@@ -1022,7 +1021,7 @@
 }
 
 .winsearch-actions-box {
-  background-color: rgba(73, 73, 73, 0.25);
+  background-color: rgba(73, 73, 73, 0.5);
   border-radius: 9px;
 }
 
@@ -1204,6 +1203,12 @@
 
 .winpower-window {
   padding: 5px;
+  background: rgba(40, 40, 40, 0.71);
+  border-radius: 12px;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-top: 1px solid rgba(64, 64, 64, 0.5);
+  margin: 12px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
 }
 
 .winpower-buttonicon {
@@ -1623,9 +1628,10 @@
 
 .wintaskview-workspaces-bg {
   border-radius: 9px;
-  background-color: rgba(20, 20, 20, 0.6);
+  background-color: rgba(15, 15, 15, 0.75);
   margin: 10px;
   min-height: 60px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.65);
 }
 
 .wintaskview-text {
@@ -1669,7 +1675,7 @@
   border-radius: 5px;
   background-color: #2C2C2C;
   border: 1px solid $surface0;
-  border-top: 1px solid tint($surface0, 5%);  
+  border-top: 1px solid tint($surface0, 5%);
 }
 
 .taskview-thisws-window {
@@ -1725,4 +1731,190 @@
 
 .winactions-media-button:hover {
   background-color: rgba(95, 95, 95, 0.6);
+}
+
+.winwin-shadow {
+  margin: 12px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+  // box-shadow: 0px 8px 10px red;
+}
+
+.winwin-topbar-shadow {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin: 12px;
+  margin-bottom: 0px;
+  margin-top: 6px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-center-shadow {
+  margin: 0px 12px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-center-noseparator-shadow {
+  margin: 0px 12px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-topbar-shadow {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin: 12px;
+  margin-bottom: 0px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-top-shadow {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin: 12px;
+  margin-bottom: 0px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-bottom-shadow {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  margin: 12px;
+  margin-top: 0px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winwin-bottom-light-shadow {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  margin: 12px;
+  margin-top: 0px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.65);
+}
+
+.winnewsicon {
+  background-position: center;
+  background-image: url('images/icons/winnews.png');
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.winnewsicon-interaction:active {
+  :first-child {
+    :first-child {
+      background-image: url('images/icons/winnews-clicked.png');
+    }
+  }
+}
+
+.wintaskviewicon {
+  background-position: center;
+  background-size: 60%;
+  background-image: url('images/icons/wintaskview.png');
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.wintaskviewicon-interaction:active {
+  :first-child {
+    :first-child {
+      background-size: 50%;
+      background-image: url('images/icons/wintaskview-clicked.png');
+    }
+  }
+}
+
+.winbarbutton-h {
+  :first-child {
+    :first-child {
+      border-radius: 6px;
+      border: 1px solid transparent;
+      border-top: 1px solid transparent;
+    }
+  }
+}
+
+.winbarbutton-h:hover {
+  :first-child {
+    :first-child {
+      background-color: shade($overlay0, 2%);
+      border: 1px solid $overlayedge;
+      border-top: 1px solid tint($overlayedge, 5%);
+    }
+  }
+}
+
+.winbarbutton-h:active {
+  :first-child {
+    :first-child {
+      background-color: tint($overlay0, 8%);
+      border: 1px solid tint($overlayedge, 10%);
+      border-top: 1px solid tint($overlayedge, 15%);
+    }
+  }
+}
+
+.wintray-button {
+  border-radius: 6px;
+  border: 1px solid $overlayedge;
+  border-top: 1px solid tint($overlayedge, 5%);
+  padding: 6px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.winbarbutton-h-open {
+  :first-child {
+    :first-child {
+      background-color: shade($overlay0, 2%);
+      border: 1px solid $overlayedge;
+      border-top: 1px solid tint($overlayedge, 5%);
+    }
+  }
+}
+
+.winnews-tag-strip {
+  min-height: 34px;
+  margin: 0 15px;
+  // margin-bottom: 3px;
+}
+
+.winnews-tag {
+  border-radius: 9999px;
+  padding: 10px 15px;
+  margin: 0 3px;
+  background-color: $secondaryContainer;
+  color: $onSecondaryContainer;
+}
+
+.winnews-tag:hover {
+  background-color: tint($secondaryContainer, 10%);
+  color: tint($onSecondaryContainer, 10%);
+}
+
+.winnews-tag:active {
+  background-color: tint($secondaryContainer, 20%);
+  color: tint($onSecondaryContainer, 20%);
+}
+
+.winnews-tag-false {
+  background-color: rgba(73, 73, 73, 0.25);
+  border-radius: 9999px;
+  padding: 10px 15px;
+  margin: 0 3px;
+}
+
+.winnews-tag-true {
+  background-color: $primary;
+  color: $onPrimary;
+  border-radius: 9999px;
+  padding: 10px 15px;
+  margin: 0 3px;
 }

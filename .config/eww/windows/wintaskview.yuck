@@ -114,17 +114,13 @@
                           min-height: ${window["size"][1]}px;
                           `
                           (eventbox
-                            ; :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
-                            ; :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
-                            ; :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} scripts/toggle-wintaskview.sh --close &"
+                            :onrightclick "scripts/selectwindow ${window.address} '${EWW_CMD}' ${window.workspace.id}"
+                            :onmiddleclick "hyprctl dispatch closewindow address:${window.address}"
+                            :onclick "scripts/focuswindow ${window.address} ${window.workspace.id} && hyprctl dispatch bringactivetotop && scripts/toggle-wintaskview.sh --close &"
                             ; :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
                             (box
                               :orientation "v" :space-evenly false
                               :class "overview-background"
-                              ; Uncomment below to enable thumbnail previews (VERY SLOW)
-                              ; :style "
-                              ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
-                              ; "
                               (box ;
                                 :height 49 :space-evenly false :spacing 10
                                 :orientation "h"
@@ -141,6 +137,7 @@
                                 (label
                                   :hexpand true :xalign 0
                                   :class "wintaskview-text"
+                                  :limit-width {round(window.size[0] / 9, 0)}
                                   :text "${window.title}"
                                 )
                                 ; (button

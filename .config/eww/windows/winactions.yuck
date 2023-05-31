@@ -1,4 +1,4 @@
-(defwidget winacts []
+(defwidget winactions_widget []
   (box
     :space-evenly false
     :orientation "v"
@@ -201,5 +201,5 @@
     :y "50px"
     :anchor "bottom right"
   )
-  (winacts)
+  (winactions_widget)
 )

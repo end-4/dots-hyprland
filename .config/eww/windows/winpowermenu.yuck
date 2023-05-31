@@ -16,7 +16,7 @@
       )
     )
     (box
-      :class "winwin winpower-window"
+      :class "winpower-window"
       :orientation "v"
       :width 161
       :space-evenly false
@@ -59,6 +59,7 @@
   :wm-ignore true
   :monitor 0
   :focusable true
+  :namespace "noblur"
   :geometry (geometry
     :x "1140px"
     :y "126px"

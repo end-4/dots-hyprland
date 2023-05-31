@@ -4,7 +4,6 @@
     :onclick "scripts/toggle-winstart.sh &"
     :onmiddleclick "playerctl play-pause"
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     (box
       :class "winbutton-pad"
       (box
@@ -111,5 +110,39 @@
     )
     ; Dummy keep alive
     (revealer :transition "slideright" :reveal false (label :text {awin.class}))
+  )
+)
+
+(defwidget wintaskview-button []
+  (eventbox
+    :class "winbarbutton-h wintaskviewicon-interaction"
+    :onclick "scripts/toggle-wintaskview.sh &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :class "winbutton-pad"
+      (box
+        :class "wintaskviewicon winbutton-${rev_wintaskview}"
+        :path "images/icons/wintaskview.png"
+        :image-width 26
+        :image-height 26
+      )
+    )
+  )
+)
+
+(defwidget wintray-button []
+  (eventbox
+    :class "winbarbutton-h${tray_is_open ? '-open' : ''}"
+    :onclick "pkill waybar || waybar -c ~/.config/eww/scripts/custom_configs/waybar-tray-config/config && sleep 0.9 && scripts/update-tray.sh &"
+    (box
+      :class "winbutton-pad"
+      (image
+        :style "padding: 0 5px;"
+        :path "images/svg/dark/uparrow.svg"
+        :image-width 20
+        :image-height 20
+      )
+    )
   )
 )

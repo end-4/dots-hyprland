@@ -9,7 +9,7 @@
   )
 )
 
-(defwidget winnewspanel []
+(defwidget winnews_widget []
   (box
     :orientation "v" :space-evenly false
     :width {RES_WIDTH / 2}
@@ -516,25 +516,42 @@
                       )
                     )
                   )
-                  ;totally necessary bunny ears
+                  ; Tag strip
+                  (scroll
+                    :halign "fill"
+                    :hscroll true :vscroll false
+                    (box
+                      :class "winnews-tag-strip"
+                      :space-evenly false
+                      (for id in WAIFU_TAG_ID
+                        (button
+                          :class "winnews-tag"
+                          :onclick "eww update waifu_get=$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]}) &"
+                          (label :class "wintoggle-text" :text {WAIFU_CATEGORIES[id]})
+                        )
+                      )
+                    )
+                  )
+                  ; Totally necessary bunny ears
                   (label
                     :halign "start"
                     :wrap true
                     :hexpand true
                     :halign "center"
                     :text "
-                    ⢀⡤⣄⡀
+                    ⠀⠀⢀⡤⣄⡀
                     ⠀⢠⡏⠀⠀⠳⡄⠀⠀⠀⠀⠀   ⣀⣀⣀
                     ⠀⢸⠃⠀⠀⠀⢿⠀⠀⠀⠀  ⣼⠃⠀⠘⢧
                     ⠀⢸⡆⠀⠀⠀⠸⡆⠀⠀   ⣸⠃⠀⠀⠀⠈⢧
-                    ⠀⠈⣇⠀⠀⠀   ⣧⠀   ⠀⡏⠀⢦⠀⠀⠀⠸⡆
+                    ⠀⠈⣇⠀⠀⠀  ⣧⠀   ⠀ ⡏⠀⢦⠀⠀⠀⠸⡆
                     ⠀　⢹⡀⠀⠀⠀⢸⠀     ⢸⠇⠀⠘⢧⡀⣸⠃
                     ⠀　⠀⢳⠀⠀⠀⢸⡆     ⢸⠀ ⠀⣼⠙
                     "
+                    :style "margin-bottom: -20px;"
                   )
+                  ; The image
                   (box
                     :orientation "v" :space-evenly false :valign "center"
-                    ; :class "winnews-fetch-pad"
                     (box
                       :class "winnews-waifu"
                       :style "
@@ -561,21 +578,20 @@
     ; :height "0%"
     :anchor "top left"
   )
-  (winnewspanel)
+  (winnews_widget)
 )
 
 (defwidget winnews-button []
   (eventbox
-    :class "winbutton-only thewinbutton"
+    :class "winbarbutton-h winnewsicon-interaction"
     :onclick "scripts/toggle-winnews.sh &"
     :onmiddleclick "playerctl play-pause"
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
     (box
       :class "winbutton-pad"
-      (image
+      (box
         :class "winnewsicon winbutton-${rev_winnews}"
-        :path "images/icons/winnews.png"
       )
     )
   )

@@ -130,10 +130,10 @@ void tryAppSearch() {
 
 void tryCalculate() {
     if (likelyNotMath(searchTerm)) return;
-    string calcCommand =
-        "rink '" + searchTerm + "' | tail -1 | sed 's/approx. //g'";
+    string calcCommand = "qalc '" + searchTerm + "'";
     string results = exec(&calcCommand[0]);
-    results = results.substr(0, results.find_last_of("(") - 1);
+    results = results.substr(results.find_first_of("=") + 2);
+    if(results.back() == '\n') results.pop_back();
     // cout << results << '\n';
     cout
         << "[{\"name\":\"" << results
