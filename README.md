@@ -49,7 +49,7 @@
 - `lineage` and `osu!lazer` are past generations with less features
 
 # 🔧 General instructions
- - **_There are no plans to make an install script, as it basically helps newbies to f\*ck up their system and makes things harder to troubleshoot when they ask for help. Please take care._**
+ - **_There are no plans to make an install script, as it basically helps newbies to f\*ck up their system and makes things harder to troubleshoot when they ask for help. Please take care, and copy things manually._**
  - **Backup**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `execs` to a $PATH
