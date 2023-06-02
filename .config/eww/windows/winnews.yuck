@@ -620,9 +620,9 @@
                     :orientation "v" :space-evenly false :valign "center"
                     (box
                       :class "winnews-waifu"
-                      ; :style "
-                      ; background-image: url('${(waifu_get == 'null' || waifu_get == '') ? 'eww_covers/waifu' : waifu_get}');
-                      ; "
+                      :style "
+                      background-image: url('${(waifu_get == 'null' || waifu_get == '') ? 'eww_covers/waifu' : waifu_get}');
+                      "
                     )
                   )
                 )
