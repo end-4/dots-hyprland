@@ -18,7 +18,7 @@
     :class "winbutton"
     :onhover "${EWW_CMD} update winactions_hover=true &"
     :onhoverlost "${EWW_CMD} update winactions_hover=false &"
-    :onclick "scripts/toggle-winactions.sh &" 
+    :onclick "scripts/toggle-winactions.sh &"
     :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
     (box
       :class "winbutton-pad"
@@ -142,6 +142,21 @@
         :path "images/svg/dark/uparrow.svg"
         :image-width 20
         :image-height 20
+      )
+    )
+  )
+)
+
+(defwidget winlang []
+  (eventbox
+    :class "winbarbutton-h"
+    :onclick "scripts/toggle-winlang.sh"
+    (box
+      :class "winbutton-pad"
+      (label
+        :class "winbartext"
+        :width 40
+        :text "${lang_ibus.name_abbr}"
       )
     )
   )

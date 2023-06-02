@@ -1,15 +1,18 @@
 [general]
-mode = waves
+
+mode = normal
 framerate = 60
 autosens = 1
 bars = 70
 
 [output]
+
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
 
 [color]
+
 gradient = 1
 
 gradient_color_1 = '#99B5DE'
@@ -20,3 +23,8 @@ gradient_color_5 = '#DFEDF5'
 gradient_color_6 = '#FDEBD4'
 gradient_color_7 = '#E7D2D7'
 gradient_color_8 = '#C1838E'
+
+[smoothing]
+
+gravity = 1000000
+noise_reduction = 0.65
