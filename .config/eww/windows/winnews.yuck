@@ -1,3 +1,24 @@
+(defwidget cavacol_winnews [nth dir]
+  (box
+    :valign "${dir == 'up' ? 'end' : (
+      dir == 'down' ? 'start' : (
+        dir == 'virt' ? 'center' : 'fill'
+      )
+    )}"
+    :halign "${dir == 'right' ? 'start' : (
+      dir == 'left' ? 'end' : (
+        dir == 'hori' ? 'center' : 'fill'
+      )
+    )}"
+    :width 15
+    :class "winnews-cava-column"
+    :style "
+    transition: 0ms;
+    min-${dir == 'up' || dir == 'down' ? 'height' : 'width'}: ${cavajson[nth] / 8}px;
+    "
+  )
+)
+
 (defwidget checkboxhyprctl-win [value changevalue]
   (eventbox
     :cursor "pointer"
@@ -78,6 +99,64 @@
         (box :orientation "h" :spacing 12
           :class "winnews-widgets"
           (box :orientation "v" :spacing 12 :space-evenly false
+            ; System info
+            (revealer
+              :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
+              :transition "slidedown"
+              :duration "200ms"
+              (revealer
+                :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
+                :transition "fade"
+                :duration "200ms"
+                (box :orientation "v" :space-evenly false
+                  :class "winnews-widget"
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "winnews-section"
+                      :text "System info"
+                    )
+                  )
+                  (box
+                    :orientation "v" :space-evenly false :valign "center"
+                    :class "winnews-fetch-pad"
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${username + '@' + hostname}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${kernel}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${uptime}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${wm}")
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 20
+                      (label :class "winnews-fetch-icon" :text "")
+                      (label :class "winnews-text" :text "${packages}")
+                    )
+                  )
+                )
+              )
+            )
             ; Mouse and touchpad
             (revealer
               :reveal "${matches('mouse and touchpad touch pad mouse speed mouse acceleration osu raw input sensitivity disable while typing disable_while_typing tap to click clickfinger_behavior',oquery)}"
@@ -423,12 +502,12 @@
           )
           ; 2nd column
           (box :orientation "v" :spacing 12 :space-evenly false
-            (revealer
-              :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
+            (revealer ; Quote
+              :reveal "${matches('quote speech vaxry linus torvalds hyprland',oquery)}"
               :transition "slidedown"
               :duration "200ms"
               (revealer
-                :reveal "${matches('fetch system information user distro kernel uptime de desktop packages',oquery)}"
+                :reveal "${matches('quote speech vaxry linus torvalds hyprland',oquery)}"
                 :transition "fade"
                 :duration "200ms"
                 (box :orientation "v" :space-evenly false
@@ -439,13 +518,13 @@
                     (label
                       :halign "start"
                       :class "winnews-section-icon"
-                      :text ""
+                      :text "Assistant"
                     )
                     (label
                       :halign "start"
                       :wrap true
                       :class "winnews-section"
-                      :text "System info"
+                      :text "Quote"
                     )
                   )
                   (box
@@ -453,34 +532,21 @@
                     :class "winnews-fetch-pad"
                     (box
                       :orientation "h" :space-evenly false :spacing 20
-                      (label :class "winnews-fetch-icon" :text "")
-                      (label :class "winnews-text" :text "${username + '@' + hostname}")
+                      (label :class "winnews-fetch-icon" :text "Chat")
+                      (label :class "winnews-text" :text {quote_content[4]})
                     )
                     (box
-                      :orientation "h" :space-evenly false :spacing 20
-                      (label :class "winnews-fetch-icon" :text "")
-                      (label :class "winnews-text" :text "${kernel}")
-                    )
-                    (box
-                      :orientation "h" :space-evenly false :spacing 20
-                      (label :class "winnews-fetch-icon" :text "")
-                      (label :class "winnews-text" :text "${uptime}")
-                    )
-                    (box
-                      :orientation "h" :space-evenly false :spacing 20
-                      (label :class "winnews-fetch-icon" :text "")
-                      (label :class "winnews-text" :text "${wm}")
-                    )
-                    (box
-                      :orientation "h" :space-evenly false :spacing 20
-                      (label :class "winnews-fetch-icon" :text "")
-                      (label :class "winnews-text" :text "${packages}")
+                      :orientation "h" :space-evenly false :spacing 10
+                      :halign "end"
+                      :style "margin-right: 20px;"
+                      (label :class "winnews-fetch-icon" :text "Person")
+                      (label :class "winnews-text" :text {quote_author[4]})
                     )
                   )
                 )
               )
             )
-            (revealer
+            (revealer ; Waifu
               :reveal "${matches('waifu anime cute sex segs ecchi hentai',oquery)}"
               :transition "slidedown"
               :duration "200ms"
@@ -554,14 +620,71 @@
                     :orientation "v" :space-evenly false :valign "center"
                     (box
                       :class "winnews-waifu"
-                      :style "
-                      background-image: url('${(waifu_get == 'null' || waifu_get == '') ? 'eww_covers/waifu' : waifu_get}');
-                      "
+                      ; :style "
+                      ; background-image: url('${(waifu_get == 'null' || waifu_get == '') ? 'eww_covers/waifu' : waifu_get}');
+                      ; "
                     )
                   )
                 )
               )
-            )
+            ) ; Waifu: end
+            (revealer ; Cava
+              :reveal "${matches('cava music audio visualizer sound volume beats',oquery)}"
+              :transition "slidedown"
+              :duration "200ms"
+              (revealer
+                :reveal "${matches('cava music audio visualizer sound volume beats',oquery)}"
+                :transition "fade"
+                :duration "200ms"
+                (overlay
+                  (box :orientation "h"
+                    :height 150
+                    :class "winnews-widget-nopad-cava"
+                    (cavacol_winnews :dir "up" :nth 0)
+                    (cavacol_winnews :dir "up" :nth 1)
+                    (cavacol_winnews :dir "up" :nth 2)
+                    (cavacol_winnews :dir "up" :nth 3)
+                    (cavacol_winnews :dir "up" :nth 4)
+                    (cavacol_winnews :dir "up" :nth 5)
+                    (cavacol_winnews :dir "up" :nth 6)
+                    (cavacol_winnews :dir "up" :nth 7)
+                    (cavacol_winnews :dir "up" :nth 8)
+                    (cavacol_winnews :dir "up" :nth 9)
+                    (cavacol_winnews :dir "up" :nth 10)
+                    (cavacol_winnews :dir "up" :nth 10)
+                    (cavacol_winnews :dir "up" :nth 10)
+                    (cavacol_winnews :dir "up" :nth 12)
+                    (cavacol_winnews :dir "up" :nth 14)
+                    (cavacol_winnews :dir "up" :nth 16)
+                    (cavacol_winnews :dir "up" :nth 18)
+                    (cavacol_winnews :dir "up" :nth 20)
+                    (cavacol_winnews :dir "up" :nth 22)
+                    (cavacol_winnews :dir "up" :nth 24)
+                    (cavacol_winnews :dir "up" :nth 26)
+                    (cavacol_winnews :dir "up" :nth 28)
+                    (cavacol_winnews :dir "up" :nth 30)
+                    (cavacol_winnews :dir "up" :nth 32)
+                    (cavacol_winnews :dir "up" :nth 34)
+                  )
+                  (box
+                    :orientation "h"
+                    :space-evenly false
+                    :valign "start"
+                    (label
+                      :halign "start"
+                      :class "winnews-section-icon"
+                      :text ""
+                    )
+                    (label
+                      :halign "start"
+                      :wrap true
+                      :class "winnews-section"
+                      :text "Cava"
+                    )
+                  )
+                )
+              )
+            ) ; Cava: end
           )
         )
       )

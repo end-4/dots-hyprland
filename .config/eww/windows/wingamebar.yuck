@@ -382,8 +382,8 @@
   :monitor 0
   :namespace "gamebar"
   :geometry (geometry
-    :height 1080
-    :width 1920
+    :height "100%"
+    :width "100%"
     :anchor "center center"
   )
   (wingamebarwidget)

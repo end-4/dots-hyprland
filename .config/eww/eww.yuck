@@ -35,7 +35,9 @@
 
 ; Windows 11 stuff
 (include "./windows/winactions.yuck")
+(include "./windows/winbsod.yuck")
 (include "./windows/wingamebar.yuck")
+(include "./windows/winlang.yuck")
 (include "./windows/winnews.yuck")
 (include "./windows/winnotif.yuck")
 (include "./windows/winosd.yuck")
@@ -175,7 +177,7 @@
             :reveal false
             :transition "slideright"
             (label
-              :text "${activews} ${mcover.source} ${mname_win.title} ${net.level} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
+              :text "${lang_ibus.name_abbr} ${activews} ${mcover.source} ${mname_win.title} ${net.level} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
             )
           )
         )
@@ -188,6 +190,7 @@
       :halign "end"
       :space-evenly false
       (wintray-button)
+      (winlang)
       (winactions)
       (windate)
     )

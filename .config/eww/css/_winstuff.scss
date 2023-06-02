@@ -1918,3 +1918,72 @@
   padding: 10px 15px;
   margin: 0 3px;
 }
+
+.winbsod-background {
+  background-color: #000000;
+}
+
+.winbsod-text {
+  font-family: 'Segoe UI Variable';
+}
+
+.winbsod-face {
+  font-size: 150pt;
+}
+
+.winbsod-desc {
+  font-size: 30pt;
+}
+
+.winbsod-technicalinfo {
+  font-size: 15pt;
+}
+
+.winnews-cava-column {
+  background-color: $primary;
+  border-top-left-radius: 99px;
+  border-top-right-radius: 99px;
+  margin: 0 4px;
+}
+
+.winnews-widget-nopad-cava {
+  border-radius: 9px;
+  background-color: $onSecondary;
+
+  :first-child {
+    border-bottom-left-radius: 99px;
+  }
+
+  :last-child {
+    border-bottom-right-radius: 99px;
+  }
+}
+
+.winlang-text {
+  color: white;
+}
+
+.winlang-subtext {
+  color: #C1C1C1;
+}
+
+.winlang-lang-false {
+  padding: 15px;
+  margin: 4px;
+  border-radius: 6px;
+
+  background-position: -0.5% center;
+  background-size: 5px 24px;
+  background-image: url('images/svg/linetransparent.svg');
+}
+
+.winlang-lang-true {
+  padding: 15px;
+  margin: 4px;
+  border-radius: 6px;
+
+  background-color: rgba(73, 73, 73, 0.25);
+  background-position: -0.5% center;
+  background-size: 5px 24px;
+  background-image: url('images/svg/linevertical.svg');
+}
