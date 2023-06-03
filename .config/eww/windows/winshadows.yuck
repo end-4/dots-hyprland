@@ -349,6 +349,56 @@
   )
 )
 
+(defwidget winlang_shadows_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winlang ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winlang ? '' : 'margin-bottom: -700px;'}
+    "
+    (eventbox
+      :onclick "scripts/toggle-winlang.sh --close &"
+      :onmiddleclick "scripts/toggle-winlang.sh --close &"
+      :onrightclick "scripts/toggle-winlang.sh --close &"
+      (box
+        :class "box-that-is-there" :style "min-height: 1px;"
+      )
+    )
+    (box
+      :space-evenly false :orientation "v"
+      :class "winwin-shadow"
+      :width 420
+      (box
+        :space-evenly false :spacing 10
+        :style "padding: 15px;"
+        (label
+          :class "winlang-text"
+        )
+      )
+      (box
+        :space-evenly false :orientation "v"
+        (for language in langs
+          (box
+            :class "winlang-lang-false"
+            :height 84
+          )
+        )
+      )
+      (box
+        :class "winwin-bottom-pad"
+        (box
+          :class "winlang-bottom-button"
+          (label
+            :class "winlang-text"
+            :style "padding: 0 5px;"
+          )
+        )
+      )
+    )
+  )
+)
+
 (defwindow winnotif_shadows
   :wm-ignore true
   :monitor 0
@@ -403,4 +453,17 @@
     :anchor "bottom right"
   )
   (winactions_shadows_widget)
+)
+
+(defwindow winlang_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "50px"
+    :anchor "bottom right"
+  )
+  (winlang_shadows_widget)
 )
