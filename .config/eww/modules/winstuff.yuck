@@ -149,7 +149,7 @@
 
 (defwidget winlang []
   (eventbox
-    :class "winbarbutton-h"
+    :class "winbarbutton-h${rev_winlang ? '-open' : ''}"
     :onclick "scripts/toggle-winlang.sh"
     (box
       :class "winbutton-pad"

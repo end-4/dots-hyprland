@@ -5,6 +5,7 @@ if [[ "$currentshader" != *"extradark.frag" ]]; then
     hyprctl keyword decoration:screen_shader '~/.config/hypr/shaders/extradark.frag'
 else
     hyprctl keyword decoration:screen_shader ''
+    hyprctl reload
 fi
 
 scripts/hyprsettings tickle

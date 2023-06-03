@@ -1733,6 +1733,10 @@
   background-color: rgba(95, 95, 95, 0.6);
 }
 
+.winactions-media-button:active {
+  background-color: rgba(100, 100, 100, 0.8);
+}
+
 .winwin-shadow {
   margin: 12px;
   border-radius: 12px;
@@ -1977,6 +1981,10 @@
   background-image: url('images/svg/linetransparent.svg');
 }
 
+.winlang-lang-false:hover {
+  background-color: rgba(73, 73, 73, 0.2);
+}
+
 .winlang-lang-true {
   padding: 15px;
   margin: 4px;
@@ -1986,4 +1994,21 @@
   background-position: -0.5% center;
   background-size: 5px 24px;
   background-image: url('images/svg/linevertical.svg');
+}
+
+.winlang-bottom-button {
+  background-color: transparent;
+  border-radius: 6px;
+  // border: 1px solid transparent;
+  // border-top: 1px solid transparent;
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.winlang-bottom-button:hover {
+  background-color: rgba(75, 75, 75, 0.5);
+}
+
+.winlang-bottom-button:active {
+  background-color: tint(rgba(75, 75, 75, 0.5), 10%);
 }

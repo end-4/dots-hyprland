@@ -137,7 +137,7 @@
 (deflisten audiojson "scripts/audiolevels")
 (deflisten mcover "scripts/music cover")
 (deflisten mname "scripts/music name 41")
-(deflisten mname_win "scripts/music name 33")
+(deflisten mname_win "scripts/music name 32")
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
 (deflisten wsjsona "scripts/overview-wrapper1")
 (deflisten wsjsonb "scripts/overview-wrapper2")

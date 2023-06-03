@@ -33,13 +33,13 @@
       (box
         :space-evenly false :orientation "v"
         (for language in langs
-          (eventbox
+          (button
+            :class "winlang-lang${language.name_ibus == lang_ibus.name_ibus ? '-true' : '-false'}"
             :onclick "ibus engine ${language.name_ibus} && eww update lang_ibus='${language}' &"
+            :height 76
             (box
               :orientation "h" :space-evenly false :spacing 10
-              :class "winlang-lang${language.name_ibus == lang_ibus.name_ibus ? '-true' : '-false'}"
               ; :class "winlang-lang-true"
-              :height 57
               (label :xalign 0
                 :width 35
                 :text {language.name_abbr}
@@ -63,16 +63,16 @@
       :class "winwin-bottom"
       :width 420
       (box
-        :space-evenly false :spacing 10
-        :style "padding: 15px;"
-        (label :xalign 0
-          :class "winlang-text"
-          :text "More keyboard settings"
+        :class "winwin-bottom-pad"
+        (button
+          :class "winlang-bottom-button"
+          :onclick "scripts/toggle-winlang.sh --close && gnome-control-center keyboard &"
+          (label :xalign 0
+            :class "winlang-text"
+            :style "padding: 0 5px;"
+            :text "More keyboard settings"
+          )
         )
-        ; (label :xalign 0
-          ;   :class "winlang-subtext"
-          ;   :text "Win + Space"
-        ; )
       )
     )
   )
