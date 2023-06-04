@@ -60,7 +60,7 @@ func_backup() {
     func_printseparator
 }
 
-func_install() {
+func_install_config() {
     echo ' [?]  Install eww config? '
     echo '      This is for the bar and menus. '
     echo -n '      [Y/n] '
@@ -73,7 +73,7 @@ func_install() {
     
     echo ' [?]  Install Hyprland config?'
     echo '      (You can select many. "k e" will install both keybinds and execs)'
-    echo -n '      [A]ll/[K]eybinds/[E]xecs/[N]one '
+    echo -n '      [A]ll/[k]eybinds/[e]xecs/[n]one '
     read -r userInput
     if [ "$userInput" == "A" ] || [ "$userInput" == "a" ] || [ "$userInput" == "" ]; then
         func_home_install ".config/hypr/"
@@ -86,7 +86,7 @@ func_install() {
         fi
 
         if [[ "$userInput" == "N" ]] || [[ "$userInput" == "n" ]]; then
-            printf " [i]  Skipping Hyprland config installation.\n"
+            printf " [-]  Skipping Hyprland config installation.\n"
         fi
     fi
     
@@ -96,7 +96,7 @@ func_install() {
         func_home_install ".config/gtk-3.0/"
         func_home_install ".config/gtk-4.0/"
     else
-        printf " [i]  Skipping GTK theme installation.\n"
+        printf " [-]  Skipping GTK theme installation.\n"
     fi
     
     echo -n ' [?]  Install Starship prompt? [Y/n] '
@@ -104,7 +104,7 @@ func_install() {
     if [ "$userInput" == "y" ] || [ "$userInput" == "Y" ] || [ "$userInput" == "" ]; then
         func_home_install ".config/starship.toml"
     else
-        printf " [i]  Skipping Starship prompt installation.\n"
+        printf " [-]  Skipping Starship prompt installation.\n"
     fi
     
     echo -n ' [?]  Install dunst config? This is for notification style [Y/n] '
@@ -112,12 +112,33 @@ func_install() {
     if [ "$userInput" == "y" ] || [ "$userInput" == "Y" ] || [ "$userInput" == "" ]; then
         func_home_install ".config/dunst/"
     else
-        printf " [i]  Skipping dunst config installation.\n"
+        printf " [-]  Skipping dunst config installation.\n"
+    fi
+}
+
+func_install_local() {
+    echo -n ' [?]  Install bundled fonts? [Y/n] '
+    read -r userInput
+    if [ "$userInput" == "y" ] || [ "$userInput" == "Y" ] || [ "$userInput" == "" ]; then
+        func_home_install ".local/share/fonts/"
+    else
+        printf " [-]  Skipping font installation.\n"
+    fi
+
+    echo ' [?]  Install icon packs?'
+    echo '      (requires root so that geticons would run normally)'
+    echo -n '      [Y/n] '
+    read -r userInput
+    if [ "$userInput" == "y" ] || [ "$userInput" == "Y" ] || [ "$userInput" == "" ]; then
+        sudo cp -r ./.local/share/icons/ /usr/share/
+    else
+        printf " [-]  Skipping icon installation.\n"
     fi
 }
 
 
 func_welcome
 func_backup
-func_install
+func_install_config
+func_install_local
 
