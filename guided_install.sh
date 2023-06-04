@@ -142,3 +142,7 @@ func_backup
 func_install_config
 func_install_local
 
+func_printseparator
+echo 'That'\''s pretty much it. Other stuff are either not included in showcases, or not easily installed (or cuz im lazy).'
+echo 'Copy them yourself if interested.'
+
