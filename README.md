@@ -70,6 +70,7 @@
  - Start eww with `eww daemon`
  - To open the top bar, run `eww open bar` (for lineage branch, also run: `eww open barbg`)
  - To open the Windows bar, run `eww open winbar`
+ - To open the bottom line, run `eww open bottomline` (so that the music windows open if you click the bottom edge of the screen)
  - Open the overview and wait 10 seconds (for it to generate app search cache, or icons won't show properly)
  ## Usage
  - Music control with the leftmost button of bars: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
@@ -84,7 +85,7 @@
  - `>wall`: Get colorscheme from wallpaper located in `~/.config/eww/images/wallpaper/wallpaper` (might take quite a while)
  - `>light`: Remember to generate light theme for future schemes
  - `>dark`: Remember to generate dark theme for future schemes
- - `>r`: Reload (runs `eww reload`)
+ - `>r`: Reload (kills and relaunches eww with the default bar)
 
 # 📦 Dependencies
  - Missing something? Please tell me. Thanks!
