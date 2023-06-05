@@ -2,6 +2,7 @@
 (include "./variables.yuck")
 ;;;;;;;;;;;;;;;; Bar modules ;;;;;;;;;;;;;;;;;;;
 (include "./modules/music.yuck")
+(include "./modules/searchbutton.yuck")
 (include "./modules/system.yuck")
 (include "./modules/workspaces.yuck")
 ;;;;;;;;;;;;;;;;;; Windows ;;;;;;;;;;;;;;;;;;;;;
@@ -23,11 +24,9 @@
       (box
         :space-evenly false :spacing 5
         :halign "center"
-        (workspaces_widget)
+        (searchbutton_widget)
         (music_widget)
-        ; (clock_widget)
-        ; (resources_widget)
-        ; (battery_widget)
+        (workspaces_widget)
         (system_widget)
       )
     )

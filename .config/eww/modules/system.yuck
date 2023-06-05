@@ -2,11 +2,11 @@
   (eventbox
     :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
     (box
-      :class "bar-pad-right"
+      :class "bar-pad"
       (box
         :space-evenly false :spacing 5
         :class "bar-bg bar-bg-pad"
-        (box
+        (box ; Date and time
           :space-evenly false :orientation "v"
           :valign "center"
           :class "bar-pad-horiz-moreright"
@@ -17,15 +17,32 @@
             :text "${time.day}, ${time.monthname} ${day_only}"
           )
         )
-        (box
+        (box ; Common icons
+          :space-evenly false :spacing 10
+          :orientation "h"
+          :valign "center"
+          :class "bar-pad-horiz-moreright"
+          (label
+            :class "bar-icon-material bar-system-icon"
+            :text {WIFI_ICONS[net.level]}
+          )
+          (label
+            :class "bar-icon-material bar-system-icon"
+            :text {bluetooth.icon}
+          )
+          (label
+            :class "bar-system-icon"
+            :text "${VOLUME_ICONS[round(volume.percent / 33, 0)]}"
+          )
+        )
+        (box ; Resources
           :space-evenly false :spacing -6
           :orientation "v"
           :valign "center"
-          (box
+          (box ; CPU
             :space-evenly false :orientation "h" :spacing 5
-            
             (label
-              :class "bar-icon-material"
+              :class "bar-icon-material bar-resources-icon"
               :text ""
             )
             (progress
@@ -34,10 +51,10 @@
               :value {EWW_CPU.avg}
             )
           )
-          (box
+          (box ; RAM
             :space-evenly false :orientation "h" :spacing 5
             (label
-              :class "bar-icon-material"
+              :class "bar-icon-material bar-resources-icon"
               :text "Memory"
             )
             (progress
@@ -46,10 +63,10 @@
               :value {memory.percentage}
             )
           )
-          (box
+          (box ; Swap
             :space-evenly false :orientation "h" :spacing 5
             (label
-              :class "bar-icon-material"
+              :class "bar-icon-material bar-resources-icon"
               :text ""
             )
             (progress
@@ -59,7 +76,7 @@
             )
           )
         )
-        (box
+        (box ; Battery
           :class "bar-circle-pad"
           (circular-progress
             :value "${EWW_BATTERY["BATT"].capacity}"

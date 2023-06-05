@@ -25,6 +25,8 @@
 (defvar quote_content `["haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV", "I have a hentai anal gif playing in my base", "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree", "baaaaaaaaaaaa", "...so Nvidia, fuck you"]`)
 (defvar quote_author `["- vaxry", "- vaxry", "- Hyprland community, 2022", "-vaxer", "- Linus Torvalds"]`)
 (defvar WORKSPACE_SIDE_PAD 15)
+(defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
+(defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 
 ; Vars
 (defvar osd_vol false)

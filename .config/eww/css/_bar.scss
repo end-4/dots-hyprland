@@ -40,9 +40,25 @@
     font-size: 10pt;
 }
 
+.bar-btn-icon {
+    color: $primary;
+    font-weight: 900;
+    font-size: 15pt;
+}
+
 .bar-icon-material {
     font-family: 'Material Symbols Rounded';
+}
+.bar-icon-segoe {
+    font-family: 'Segoe Fluent Icons';
+}
+
+.bar-resources-icon {
     font-size: 12pt;
+}
+
+.bar-system-icon {
+    font-size: 16pt;
 }
 
 .bar-ws-txt {
