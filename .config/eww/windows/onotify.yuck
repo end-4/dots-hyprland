@@ -499,7 +499,11 @@
                 :halign "end" :valign "end"
                 :class "notif-badge"
                 (label :class "notif-indicator"
-                  :style "font-size: 11pt;"
+                  :style "
+                  font-size: 11pt;
+                  border-radius: 99px;
+                  ${colormode == 'one' ? ('background-color: ' + coloraccent + ';') : ''}
+                  "
                   :text "${arraylength(notifications)}"
                 )
               )
