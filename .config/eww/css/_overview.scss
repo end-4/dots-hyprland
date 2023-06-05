@@ -1,11 +1,8 @@
 .overview-window {
-  @include window;
   font-family: 'Torus', 'Material Symbols Rounded';
   border-radius: 22px;
   background-color: shade($colorbarbg, 4%);
-  // background-color: transparent;
-  // border: 3px solid $color0;
-  //padding: 5px;
+  border: 2px solid $primary;
 }
 
 .overview-window-title {
@@ -20,7 +17,7 @@
 }
 
 .overview-window-top {
-  @include rounding;
+  @include bar-rounding;
   background-color: transparent;
   border: 3px solid transparent;
   //padding: 5px;

@@ -2,8 +2,8 @@
 
 # define colors
 colors=("#FFFFFF" "#fab387" "#a6e3a1" "#89b4fa") # Active Workspaces
-dimmed=("rgba(174,172,182,0.7)" "#f9e2af" "#94e2d5" "#b4befe") # Inactive workspaces
-empty='rgba(146,145,145,0.5)' # Empty workspaces
+dimmed=("rgba(154,152,162,0.7)" "#f9e2af" "#94e2d5" "#b4befe") # Inactive workspaces
+empty='rgba(106,105,105,0.6)' # Empty workspaces
 
 # get initial focused workspace
 focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
