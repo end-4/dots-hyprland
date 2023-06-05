@@ -40,13 +40,9 @@
    ![dots-hyprland](./assets/screenshot-windoes2.png)
 </details>
 
-<details> 
-  <summary>Material https://github.com/end-4/dots-hyprland/tree/material </summary>
-  
-   ![dots-hyprland](./assets/screenshot-material.png)
-</details>
 
-- `lineage` and `osu!lazer` are past generations with less features
+
+- `lineage` and `osu!lazer` are past generations of the `summer` branch with fewer features
 
 ---
 
