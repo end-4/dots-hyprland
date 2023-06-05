@@ -6,9 +6,10 @@
 <div align="center">
 
 ## What will be here
-Blur: yes
-Corners: rounded
-Floating bar: yes
+</div>
+<h3> Blur: yes </h3>
+<h3> Corners: rounded 15px </h3>
+<h3> Bar: float </h3>
 
 ## One little preview
 ![end-4/dots-hyprland](./assets/novelknock-1.png)
