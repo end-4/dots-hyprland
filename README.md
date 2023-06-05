@@ -48,8 +48,10 @@
 
 - `lineage` and `osu!lazer` are past generations with less features
 
+---
+
 # 🔧 General instructions
- - **_There are no plans to make an install script, as it basically helps newbies to f\*ck up their system and makes things harder to troubleshoot when they ask for help. Please take care, and copy things manually._**
+ - **_A guided install script exists, but very incomplete. I recommend against using it._**
  - **Backup**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `execs` to a $PATH
@@ -98,7 +100,7 @@ pip install pywal desktop_entry_lib
 ```
 [ Possible package names ]
 bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager networkmanagerapplet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi libqalculate sox nlohmann-json boost boost-libs
-[ Command for: Fedora ]
+[ Command for: Fedora (INCOMPLETE) ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi qalc sox nlohmann-json-devel
 ```
 - AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
@@ -110,6 +112,7 @@ yay -S python-material-color-utilities geticons gtklock-runshell-module gtklock-
 ```
 tesseract
 ```
+---
 
 # 🙏 Attribution
  - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
