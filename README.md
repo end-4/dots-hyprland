@@ -6,9 +6,9 @@
 <div align="center">
 
 ## What will be here
-- Blur: yes
-- Corners: rounded
-- Floating bar: yes
+Blur: yes
+Corners: rounded
+Floating bar: yes
 
 ## One little preview
 ![end-4/dots-hyprland](./assets/novelknock-1.png)
