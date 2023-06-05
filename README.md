@@ -42,7 +42,7 @@
 
 
 
-- `lineage` and `osu!lazer` are past generations of the `summer` branch with fewer features
+- `material`, `lineage`, and `osu!lazer` are past generations of the `summer` branch with fewer features
 
 ---
 
