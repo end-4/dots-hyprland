@@ -1,0 +1,191 @@
+// =============================================================================
+//
+// Waybar configuration
+//
+// Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+//
+// =============================================================================
+
+{
+    // -------------------------------------------------------------------------
+    // Global configuration
+    // -------------------------------------------------------------------------
+
+    "layer": "top",
+
+    "position": "bottom",
+    "exclusive": false,
+    // If height property would be not present, it'd be calculated dynamically
+    "height": 10,
+
+    "modules-left": [
+        "tray"
+    ],
+    "modules-center": [],
+    "modules-right": [],
+
+
+    // -------------------------------------------------------------------------
+    // Modules
+    // -------------------------------------------------------------------------
+
+    "battery": {
+        "interval": 10,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        // Connected to AC
+        "format": "  {capacity}%", // Icon: bolt
+        // Not connected to AC
+        "format-discharging": "{icon}   {capacity}%",
+	"rotate": 90,
+        "format-icons": [
+            "", // Icon: battery-full
+            "", // Icon: battery-three-quarters
+            "", // Icon: battery-half
+            "", // Icon: battery-quarter
+            ""  // Icon: battery-empty
+        ],
+        "tooltip": true
+    },
+
+    "clock#time": {
+        "interval": 1,
+        "format": "{:%H:%M}",
+        "tooltip": false
+    },
+    "custom/clock": {
+      "rotate": 90,
+      "interval": 1,
+      "exec": "date '+%H:%M:%S, %a %b %d (%m-%d-%Y)'",
+      "format": {}
+    },
+    "clock#date": {
+      "interval": 10,
+      "format": "  {:%e %b %y}", // Icon: calendar-alt
+      "tooltip-format": "{:%e %B %Y}"
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": "  {usage}% ({load})", // Icon: microchip
+        "states": {
+          "warning": 70,
+          "critical": 90
+        }
+    },
+
+    "custom/keyboard-layout": {
+      "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4",
+      // Interval set only as a fallback, as the value is updated by signal
+      "interval": 30,
+      "format": "  {}", // Icon: keyboard
+      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+      "signal": 1, // SIGHUP
+      "tooltip": false
+    },
+
+    "memory": {
+        "interval": 5,
+        "format": "  {}%", // Icon: memory
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "network": {
+        "interval": 5,
+        "format-wifi": "  {essid} ({signalStrength}%)", // Icon: wifi
+        "format-ethernet": "  {ifname}: {ipaddr}/{cidr}", // Icon: ethernet
+        "format-disconnected": "⚠  Disconnected",
+        "tooltip-format": "{ifname}: {ipaddr}"
+    },
+
+    "sway/mode": {
+        "format": "<span style=\"italic\">  {}</span>", // Icon: expand-arrows-alt
+        "tooltip": false
+    },
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 120
+    },
+
+    "wlr/workspaces": {
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "all-outputs": true,
+        "on-click": "activate",
+        "format": "{name}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "urgent": "",
+            "active": "",
+            "default": ""
+          }
+    },
+
+    "pulseaudio": {
+        "scroll-step": 1,
+	"rotate": 90,
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": "*Muted*",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["","",""]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    "temperature": {
+      "critical-threshold": 80,
+      "interval": 5,
+      "format": "{icon}  {temperatureC}°C",
+      "format-icons": [
+          "", // Icon: temperature-empty
+          "", // Icon: temperature-quarter
+          "", // Icon: temperature-half
+          "", // Icon: temperature-three-quarters
+          ""  // Icon: temperature-full
+      ],
+      "tooltip": true
+    },
+
+    "tray": {
+        "rotate": 90,
+        "icon-size": 30,
+        "spacing": 10
+    },
+     "backlight": {
+		"rotate": 90,
+//		"device": "acpi_video1",
+		"format": "{icon} {percent}%",
+		"format-icons": ["󰃞","󰃝", "󰃠"]
+    },
+     "custom/media": {
+		"format": "{icon} {}",
+		"return-type": "json",
+		"max-length": 32,
+		"escape": true,
+		"format-icons": {
+			"default": " "
+		},
+		"on-click": "playerctl play-pause",
+		"on-click-forward": "playerctl next",
+		"on-click-backward": "playerctl previous",
+		"exec": "/home/user/.config/waybar/scripts/mediaplayer.py"
+   }
+
+}

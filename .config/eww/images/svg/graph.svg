@@ -1,16 +1,16 @@
 <svg width="1920" height="1080">
-  <circle cx="225" cy="350" r="40" stroke="#d5e3ff" stroke-width="3" fill="none" />
-  <circle cx="525" cy="250" r="40" stroke="#d5e3ff" stroke-width="3" fill="none" />
-  <circle cx="825" cy="350" r="40" stroke="#d5e3ff" stroke-width="3" fill="none" />
-  <circle cx="1125" cy="250" r="40" stroke="#d5e3ff" stroke-width="3" fill="none" />
-  <line x1="225" y1="350" x2="525" y2="250" stroke="#d5e3ff" stroke-width="3" 
+  <circle cx="225" cy="350" r="40" stroke="#4bfbeb" stroke-width="3" fill="none" />
+  <circle cx="525" cy="250" r="40" stroke="#4bfbeb" stroke-width="3" fill="none" />
+  <circle cx="825" cy="350" r="40" stroke="#4bfbeb" stroke-width="3" fill="none" />
+  <circle cx="1125" cy="250" r="40" stroke="#4bfbeb" stroke-width="3" fill="none" />
+  <line x1="225" y1="350" x2="525" y2="250" stroke="#4bfbeb" stroke-width="3" 
     stroke-linecap="round"/>
-  <line x1="525" y1="250" x2="825" y2="350" stroke="#d5e3ff" stroke-width="3" 
+  <line x1="525" y1="250" x2="825" y2="350" stroke="#4bfbeb" stroke-width="3" 
     stroke-linecap="round"/>
-  <line x1="825" y1="350" x2="1125" y2="250" stroke="#d5e3ff" stroke-width="3" 
+  <line x1="825" y1="350" x2="1125" y2="250" stroke="#4bfbeb" stroke-width="3" 
     stroke-linecap="round"/>
-  <circle cx="225" cy="350" r="20" stroke="#d5e3ff" stroke-width="3" fill="#d5e3ff" />
-  <circle cx="525" cy="250" r="20" stroke="#d5e3ff" stroke-width="3" fill="#d5e3ff" />
-  <circle cx="825" cy="350" r="20" stroke="#d5e3ff" stroke-width="3" fill="#d5e3ff" />
-  <circle cx="1125" cy="250" r="20" stroke="#d5e3ff" stroke-width="3" fill="#d5e3ff" />
+  <circle cx="225" cy="350" r="20" stroke="#4bfbeb" stroke-width="3" fill="#4bfbeb" />
+  <circle cx="525" cy="250" r="20" stroke="#4bfbeb" stroke-width="3" fill="#4bfbeb" />
+  <circle cx="825" cy="350" r="20" stroke="#4bfbeb" stroke-width="3" fill="#4bfbeb" />
+  <circle cx="1125" cy="250" r="20" stroke="#4bfbeb" stroke-width="3" fill="#4bfbeb" />
 </svg>
