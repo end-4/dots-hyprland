@@ -1,12 +1,20 @@
 ;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;
 (include "./variables.yuck")
 ;;;;;;;;;;;;;;;; Bar modules ;;;;;;;;;;;;;;;;;;;
+(include "./modules/colorscheme.yuck")
+(include "./modules/dynamicleft.yuck")
+(include "./modules/dynamicright.yuck")
 (include "./modules/music.yuck")
+(include "./modules/notifications.yuck")
+(include "./modules/osd_volume.yuck")
+(include "./modules/osd_bright.yuck")
 (include "./modules/searchbutton.yuck")
 (include "./modules/system.yuck")
+(include "./modules/taskbar.yuck")
 (include "./modules/workspaces.yuck")
 ;;;;;;;;;;;;;;;;;; Windows ;;;;;;;;;;;;;;;;;;;;;
 (include "./windows/overview.yuck")
+(include "./windows/sideright.yuck")
 
 (defwidget bar_widget []
   (box
@@ -15,19 +23,34 @@
     (box
       ; :class "bar-bg"
       :style "
-      margin: ${GAPS}px;
-      margin-right: -${RES_WIDTH - GAPS}px;
+      margin-right: -${RES_WIDTH}px;
       "
+      (revealer :transition "slideright" :reveal false
+        (revealer :transition "slidedown" :reveal false
+          (label :text "${awin} ${brightness.icon}")
+        )
+      )
     )
-    (box
+    (centerbox
+      :space-evenly false
       :width {RES_WIDTH}
+      (box
+        (bright_osd_widget)
+      )
       (box
         :space-evenly false :spacing 5
         :halign "center"
-        (searchbutton_widget)
-        (music_widget)
+        :style "
+        transition: 600ms cubic-bezier(0.05, 0.7, 0.1, 1);
+        margin-left: ${bar_offset * 200}px;
+        margin-right: ${-bar_offset * 200}px;
+        "
+        (dynamicleft_widget)
         (workspaces_widget)
-        (system_widget)
+        (dynamicright_widget)
+      )
+      (box
+        (volume_osd_widget)
       )
     )
   )
@@ -35,8 +58,9 @@
 
 (defwindow bar
   :monitor 0
-  :stacking "fg"
+  :stacking "overlay"
   :focusable false
+  ; :namespace "noblur"
   :geometry (geometry
     :width "100%"
     :height "60px"

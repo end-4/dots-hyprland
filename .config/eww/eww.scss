@@ -2,7 +2,9 @@
 @import 'css/colors';
 @import 'css/colorscheme';
 @import 'css/material';
-@import 'images/svg/color.scss';
+// @import 'images/svg/color.scss';
+
+$background: rgba(11, 7, 2, 0.65);
 
 @function tint($color, $percentage) {
   @return mix(rgb(245, 250, 255), $color, $percentage);
@@ -20,6 +22,10 @@
   font-family: 'Lexend';
 }
 
+@mixin window-pad {
+  padding: 5px;
+}
+
 * {
   all: unset;
   transition: 75ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -29,3 +35,12 @@
 // Windows
 @import 'css/bar';
 @import 'css/overview';
+@import 'css/sidebar';
+
+.clr-accent {
+  color: $primary;
+}
+
+.window {
+  @include window-pad;
+}

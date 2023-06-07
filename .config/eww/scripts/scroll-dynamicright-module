@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+
+MIN_VALUE=1
+MAX_VALUE=$(eww get DYNMODULE_RIGHT_PAGES)
+newvalue=$(eww get dynamicright_module_page)
+
+clamp() {
+    if [ "$1" -lt "$2" ]; then
+        echo "$2"
+        elif [ "$1" -gt "$3" ]; then
+        echo "$3"
+    else
+        echo "$1"
+    fi
+}
+
+if [ "$1" == "up" ]; then
+    newvalue="$((newvalue - 1))"
+else
+    newvalue="$((newvalue + 1))"
+fi
+
+newvalue=$(clamp "$newvalue" "$MIN_VALUE" "$MAX_VALUE")
+eww update dynamicright_module_page="$newvalue"

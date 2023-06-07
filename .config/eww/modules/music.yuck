@@ -1,59 +1,54 @@
 (defwidget music_widget []
-  (eventbox
-    ; :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
-    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
-    :onclick "scripts/toggle-music.sh &"
-    :onmiddleclick "playerctl play-pause"
-    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
     (box
-      :class "bar-pad"
-      (box
-        :space-evenly false
-        :orientation "h"
-        :class "bar-bg bar-bg-pad"
-        :spacing 5
-        (overlay
-          (box
-            :halign "center" :valign "center"
-            :class "bar-music-cover"
-            :style "background-image: url('${mcover.image}')"
-          )
-          (label
-            :class "bar-icon-material bar-music-status"
-            :halign "center" :valign "center"
-            :style "
-            font-size: 18pt;
-            margin-bottom: -1px;
-            color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
-            "
-            :text "${mplay == 'Playing' ? '' : ''}"
-          )
-        )
+      :space-evenly false
+      :orientation "h"
+      :class "bar-bg bar-bg-pad"
+      :spacing 5
+      (overlay
         (box
-          :space-evenly false :orientation "v"
-          :valign "center"
+          :halign "center" :valign "center"
+          :class "bar-music-cover"
+          :style "background-image: url('${mcover.image}')"
+        )
+        (label
+          :class "bar-icon-material bar-music-status"
+          :halign "center" :valign "center"
+          :style "
+          font-size: 18pt;
+          margin-bottom: -1px;
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          "
+          :text "${mplay == 'Playing' ? '' : ''}"
+        )
+      )
+      (box
+        :space-evenly false :orientation "v"
+        :valign "center"
+        (label
+          :class "bar-txt-larger"
+          :limit-width 50
+          :xalign 0
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          "
+          :text {mname.title == '' ? 'Playerctl' : mname.title}
+        )
+        (revealer
+          :transition "slidedown"
+          :reveal "${mname.artist != ''}"
+          :duration "20ms"
           (label
-            :class "bar-txt-larger"
+            :class "bar-txt-small"
             :limit-width 50
             :xalign 0
             :style "
             color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
             "
-            :text {mname.title == '' ? 'Playerctl' : mname.title}
-          )
-          (revealer
-            :transition "slidedown"
-            :reveal "${mname.artist != ''}"
-            :duration "20ms"
-            (label
-              :class "bar-txt"
-              :limit-width 50
-              :xalign 0
-              :style "font-size: 11pt; font-family: 'Torus';
-              color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
-              "
-              :text {mname.artist}
-            )
+            :text "${mname.artist}"
           )
         )
       )

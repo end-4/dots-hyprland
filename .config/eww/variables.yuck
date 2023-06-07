@@ -1,6 +1,7 @@
 ; Const vars
 (defvar RES_WIDTH 1920)
 (defvar RES_HEIGHT 1080)
+(defvar BAR_HEIGHT 50)
 (defvar GAPS 5)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
@@ -9,14 +10,6 @@
 (defvar wsnums `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`)
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
-(defvar SUPERCONTEXT_WIDTH 300)
-(defvar SUPERCONTEXT_HEIGHT 300)
-(defvar SUPERCONTEXT_OFFSET_X "[75, 23.1, -60.6, -60.6, 23.1]")
-(defvar SUPERCONTEXT_OFFSET_Y "[0, 67.6, 41.8, -41.8, -67.6]")
-(defvar SUPERCONTEXT_BUTTON_RADIUS 30)
-(defvar TASKVIEW_WORKSPACE_NAMES '["Desktop 1", "Desktop 2", "Desktop 3", "Desktop 4", "Desktop 5", "Desktop 6", "Desktop 7", "Desktop 8", "Desktop 9", "Desktop 10", ]')
-(defvar WINTASKVIEW_RESERVED_BOTTOM 250)
-(defvar WINTASKVIEW_SPACING 30)
 (defvar MIN_ROW_HEIGHT 100)
 (defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32]`)
 (defvar WAIFU_CATEGORIES `["waifu","waifu segs","neko","neko segs","megumin","shinobu","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","glomp","slap","kill","kick","happy","wink","poke","dance","cringe"]`)
@@ -27,8 +20,11 @@
 (defvar WORKSPACE_SIDE_PAD 15)
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
+(defvar DYNMODULE_LEFT_PAGES 3)
+(defvar DYNMODULE_RIGHT_PAGES 2)
 
 ; Vars
+(defvar bar_offset 0)
 (defvar osd_vol false)
 (defvar osd_bright false)
 (defvar compact false)
@@ -36,7 +32,12 @@
 (defvar overview_hover_name "Activities Overview")
 (defvar overview_query "")
 (defvar overview_results "")
+(defvar dynamicleft_module_page 1) ; 1-base
+(defvar dynamicright_module_page 1) ; 1-base
+
 (defvar open_overview false)
+(defvar open_sideleft false)
+(defvar open_sideright false)
 
 ; Dynamic animation: different for open and close
 
@@ -65,8 +66,7 @@
 (deflisten awin "scripts/activewin")
 (deflisten audiojson "scripts/audiolevels")
 (deflisten mcover "scripts/music cover")
-(deflisten mname "scripts/music name 41")
-(deflisten mname_win "scripts/music name 32")
+(deflisten mname "scripts/music name 32") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
 (deflisten wsjsona "scripts/overview-wrapper1")
 (deflisten wsjsonb "scripts/overview-wrapper2")

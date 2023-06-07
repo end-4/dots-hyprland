@@ -1,0 +1,8 @@
+.sidebar-bg {
+    @include bar-rounding;
+    background-color: $background;
+}
+
+.sidebar-bg-pad {
+    padding: 0 10px;
+}

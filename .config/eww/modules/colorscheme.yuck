@@ -1,0 +1,22 @@
+(defwidget colorscheme_widget []
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
+    (box
+      :class "bar-bg bar-bg-pad"
+      (box
+        :space-evenly false
+        :orientation "h"
+        :spacing 5
+        :halign "center"
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-1" :text "1")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-2" :text "1")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-3" :text "2")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-4" :text "2")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-5" :text "3")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-6" :text "3")
+      )
+    )
+  )
+)

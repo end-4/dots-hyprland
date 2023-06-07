@@ -1,5 +1,5 @@
 .bar-bg {
-    background-color: rgba(11, 7, 2, 0.65);
+    background-color: $background;
     @include bar-rounding;
 }
 
@@ -35,6 +35,16 @@
     font-size: 14pt;
 }
 
+.bar-txt-hugeass {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.bar-txt-small {
+    @include mainfont;
+    font-size: 11pt;
+}
+
 .bar-txt-smaller {
     @include mainfont;
     font-size: 10pt;
@@ -49,8 +59,16 @@
 .bar-icon-material {
     font-family: 'Material Symbols Rounded';
 }
+
+.bar-icon-material-hugeass {
+    font-family: 'Material Symbols Rounded';
+    font-size: 16pt;
+    margin-bottom: -1px;
+}
+
 .bar-icon-segoe {
     font-family: 'Segoe Fluent Icons';
+    font-weight: 700;
 }
 
 .bar-resources-icon {
@@ -116,7 +134,7 @@
         min-height: 5px;
         min-width: 4px;
         border-radius: 99px;
-        border-radius: 9999px;
+        border-radius: 99px;
         background-color: $primary;
         background-image: linear-gradient(45deg, $primary 0%, $primary 100%);
     }
@@ -133,7 +151,104 @@
 
 .bar-music-status {
     background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 9999px;
+    border-radius: 99px;
     min-width: 30px;
     min-height: 30px;
+}
+
+.bar-tasks-app-pad {
+    padding: 10px 10px;
+}
+
+.bar-tasks-app-highlight {
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-tasks-app-highlight-true {
+    background-color: $primary;
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-tasks-app-highlight-false {
+    background-color: transparent;
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-notif-count {
+    border-radius: 99px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 18pt;
+    margin-bottom: -1px;
+}
+
+.bar-notif-count-yes {
+    background-color: $primary;
+    color: $onPrimary;
+    font-weight: bold;
+    font-size: 10pt;
+    @include mainfont;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 5px;
+}
+
+.bar-clr {
+    border-radius: 99px;
+    margin: 5px;
+    @include mainfont;
+}
+
+.bar-clr-1 {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.bar-clr-2 {
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
+}
+
+.bar-clr-3 {
+    background-color: $secondary;
+    color: $onSecondary;
+}
+
+.bar-clr-4 {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-clr-5 {
+    background-color: $tertiary;
+    color: $onTertiary;
+}
+
+.bar-clr-6 {
+    background-color: $tertiaryContainer;
+    color: $onTertiaryContainer;
+}
+
+.osd-pad {
+    padding: 8px;
+}
+
+.osd-bg {
+    background-color: rgba(11, 7, 2, 0.65);
+    border-radius: 99px;
+    min-width: 150px;
+    padding: 0 7px;
+}
+
+.osd-circle {
+    // color: $primary; 
 }

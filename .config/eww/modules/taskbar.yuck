@@ -1,0 +1,40 @@
+(defwidget taskbar_widget []
+  (overlay
+    (box
+      :class "bar-pad"
+      :width 420
+      :height 60
+      (box
+        :space-evenly false :spacing 5
+        :class "bar-bg bar-bg-pad"
+      )
+    )
+    (scroll
+      :hscroll true
+      :vscroll false
+      :width 395
+      (box
+        :halign "center"
+        :space-evenly false
+        (for app in tasks
+          (eventbox
+            :onclick "${app.count > 0 ? ('hyprctl dispatch workspace ' + app.workspace[0] + ' &') : (app.exec)}"
+            (overlay
+              (box
+                :class "bar-tasks-app-pad"
+                (image
+                  :class "bar-tasks-app-icon${app.class == awin.class ? '-active' : ''}"
+                  :path {app.icon}
+                  :image-width 25 :image-height 25
+                )
+              )
+              (box
+                :class "bar-tasks-app-highlight-${app.class == awin.class ? 'true' : 'false'}"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
