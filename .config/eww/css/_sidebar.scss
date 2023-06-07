@@ -6,3 +6,148 @@
 .sidebar-bg-pad {
     padding: 0 10px;
 }
+
+.sidebar-content {
+    @include mainfont;
+    margin: 10px 20px;
+}
+
+.sidebar-notif-appname {
+    @include mainfont;
+    color: $primary;
+    font-size: 12pt;
+}
+
+.sidebar-notif-decor-left {
+    margin-left: 5px;
+    min-width: 8px;
+    border-bottom-left-radius: 99px;
+    border-left: 2px solid $primary;
+    border-bottom: 2px solid $primary;
+}
+
+.sidebar-notif-summary {
+    @include mainfont;
+    color: $onBackground;
+    font-size: 12pt;
+}
+
+.sidebar-notif-body {
+    @include mainfont;
+    @include subtext;
+    font-size: 12pt;
+}
+
+.sidebar-section-title {
+    margin: 15px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.sidebar-section-title-icon {
+    margin: 0 5px;
+}
+
+.sidebar-section-title-text {
+    margin: 0 5px;
+}
+
+.sidebar-calendar-btn {
+    @include mainfont;
+    font-size: 12pt;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 1px;
+    border-radius: 10px;
+}
+
+.sidebar-calendar-txt {
+    border-radius: 9999px;
+    font-size: 12pt;
+    @include mainfont;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 3px;
+    border-radius: 10px;
+}
+
+.day-1 {
+    @include subtext;
+    background-color: transparent;
+}
+
+.day0 {
+    background-color: transparent;
+    color: $onBackground;
+}
+
+.day-1:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day0:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day-1:active {
+    background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day0:active {
+    background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day1 {
+    background-color: $primary;
+    color: #000000;
+}
+
+.day1:hover {
+    background-color: tint($primary, 10%);
+}
+
+.day1:active {
+    background-color: tint($primary, 20%);
+}
+
+.sidebar-section-title-btn {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 8px;
+}
+
+.sidebar-section-title-btn:hover {
+    background-color: $onPrimary;
+}
+
+.sidebar-section-title-btn:active {
+    background-color: shade($onPrimary, 30%);
+}
+
+.sidebar-box {
+    border-radius: 15px;
+}
+
+.sidebar-box-title {
+    margin: 5px;
+}
+
+.sidebar-todo-item {
+    margin: 0 5px;
+}
+
+.sidebar-todo-btn {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 8px;
+}
+
+.sidebar-todo-btn:hover {
+    background-color: $onPrimary;
+}
+
+.sidebar-todo-btn:active {
+    background-color: shade($onPrimary, 30%);
+}

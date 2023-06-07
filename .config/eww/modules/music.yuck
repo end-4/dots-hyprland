@@ -35,7 +35,7 @@
           :style "
           color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
           "
-          :text {mname.title == '' ? 'Playerctl' : mname.title}
+          :text {mname.title == '' ? 'Music' : mname.title}
         )
         (revealer
           :transition "slidedown"

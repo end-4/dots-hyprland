@@ -1,11 +1,11 @@
-#include <array>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <vector>
+#include <array>       //
+#include <filesystem>  //
+#include <fstream>     // This should be ran when
+#include <iostream>    // a notification is sent to statnot
+#include <memory>      //
+#include <stdexcept>   //
+#include <string>      //
+#include <vector>      //
 
 #include "nlohmann/json.hpp"
 using namespace std;
@@ -55,9 +55,9 @@ inline void getDunstNotifs() {
 }
 
 void addNotif(const json& newNotification) {
-    notifApps["count"] = int(notifApps["count"]) + 1;
+    // cout << "NEW NOTIF: " << newNotification << '\n';
     bool found = false;
-    for (json& existingApp : notifApps["data"]) {
+    for (json& existingApp : notifApps) {
         auto it = existingApp.find("name");
         if (it != existingApp.end() &&
             *it == newNotification["appname"]["data"]) {
@@ -77,7 +77,7 @@ void addNotif(const json& newNotification) {
             json::array({newNotification["summary"]["data"],
                          newNotification["body"]["data"]}));
 
-        notifApps["data"].push_back(newApp);
+        notifApps.push_back(newApp);
     }
 }
 
@@ -89,8 +89,6 @@ inline void groupNotifs() {
 
 int main() {
     // ios::sync_with_stdio(false);
-    notifApps["data"] = json::array();
-    notifApps["count"] = 0;
 
     getDunstNotifs();
     groupNotifs();

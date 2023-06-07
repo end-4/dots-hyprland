@@ -6,7 +6,7 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onclick "${open_sideright ?
     (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
-    (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideright=true &')}"
+    (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideright=true && ${EWW_CMD} update notifications=\"$(scripts/notifget)\" &')}"
     (box
       :class "osd-pad"
       :width 350

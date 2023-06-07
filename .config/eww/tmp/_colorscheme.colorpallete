@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: https://images-ext-2.discordapp.net/external/aELBxeiZEEdaFbVcGxZNF4Vhexah1gxxmed1q6l1eJM/https/media.tenor.com/1xWYLbSLvX0AAAAD/amber-heard-amber-turd.png?width=436&height=290
-$colorbarbg: #0F0A05;
-$colorbg: rgba(15,10,5,0.75);
-$colortext: #ccbcb3;
-$color0: #3D3D44;
-$color1: #6F574B;
-$color2: #655E58;
-$color3: #8A6C58;
-$color4: #8D786B;
-$color5: #958877;
-$color6: #ccbcb3;
-$color7: #8A6C58;
+//Auto generated color theme for image at: https://i.ytimg.com/vi/_G3Tvd37eGc/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC2MGxhtg8NzEsLUwOQyEWVbizKSg
+$colorbarbg: #101613;
+$colorbg: rgba(16,22,19,0.75);
+$colortext: #e8dcd1;
+$color0: #117589;
+$color1: #17A1A4;
+$color2: #16CCDA;
+$color3: #51C2CD;
+$color4: #D1AD9B;
+$color5: #A6C3B9;
+$color6: #e8dcd1;
+$color7: #51C2CD;

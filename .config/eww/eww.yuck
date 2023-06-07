@@ -9,6 +9,7 @@
 (include "./modules/osd_volume.yuck")
 (include "./modules/osd_bright.yuck")
 (include "./modules/searchbutton.yuck")
+(include "./modules/sysinfo.yuck")
 (include "./modules/system.yuck")
 (include "./modules/taskbar.yuck")
 (include "./modules/workspaces.yuck")
@@ -58,7 +59,7 @@
 
 (defwindow bar
   :monitor 0
-  :stacking "overlay"
+  :stacking "fg"
   :focusable false
   ; :namespace "noblur"
   :geometry (geometry

@@ -60,9 +60,15 @@
     font-family: 'Material Symbols Rounded';
 }
 
+.bar-icon-material-large {
+    font-family: 'Material Symbols Rounded';
+    font-size: 14pt;
+    margin-bottom: -1px;
+}
+
 .bar-icon-material-hugeass {
     font-family: 'Material Symbols Rounded';
-    font-size: 16pt;
+    font-size: 17pt;
     margin-bottom: -1px;
 }
 
@@ -238,6 +244,26 @@
     color: $onTertiaryContainer;
 }
 
+.bar-clr-7 {
+    background-color: $surface;
+    color: $onSurface;
+}
+
+.bar-clr-8 {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+}
+
+.bar-clr-9 {
+    background-color: $background;
+    color: $onBackground;
+}
+
+.bar-clr-10 {
+    background-color: $inversePrimary;
+    color: white;
+}
+
 .osd-pad {
     padding: 8px;
 }
@@ -251,4 +277,8 @@
 
 .osd-circle {
     // color: $primary; 
+}
+
+.bar-sysinfo-distro-logo {
+    
 }

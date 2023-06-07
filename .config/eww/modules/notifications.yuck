@@ -9,21 +9,21 @@
       :class "bar-bg bar-bg-pad"
       :spacing 5
       (label
-        :class "bar-notif-count ${(notifications != 'null' && arraylength(notifications) > 0) ? 'bar-notif-count-yes' : 'bar-icon-material'}"
+        :class "bar-notif-count ${(notifications != 'null' && notifications.count > 0) ? 'bar-notif-count-yes' : 'bar-icon-material'}"
         :halign "center" :valign "center"
         :style "
-        ${(notifications != 'null' && arraylength(notifications)) > 0 ? 'font-size: 11pt;' : ''}
+        ${(notifications != 'null' && notifications.count) > 0 ? 'font-size: 11pt;' : ''}
         "
-        :text "${(notifications != 'null' && arraylength(notifications) > 0) ? arraylength(notifications) : ''}"
+        :text "${(notifications != 'null' && notifications.count > 0) ? notifications.count : ''}"
       )
       (revealer
-        :reveal {notifications == 'null' || arraylength(notifications) == 0}
+        :reveal {notifications == 'null' || notifications.count == 0}
         :transition "slideright"
         :duration "0ms"
         (label :class "bar-txt" :text "No notifications")
       )
       (revealer
-        :reveal {arraylength(notifications) > 0}
+        :reveal {notifications.count > 0}
         :transition "slideright"
         :duration "0ms"
         :hexpand true
@@ -36,16 +36,19 @@
             (label :xalign 0
               :hexpand true
               :class "bar-txt"
-              :text "${notifications[0]['content'][0][0]}"
+              :text "${notifications['data'][0]['content'][0][0]}"
+              :limit-width 20
             )
             (label :xalign 1
               :class "bar-txt-smaller"
-              :text "${notifications[0]['name']}"
+              :text "${notifications['data'][0]['name']}"
+              :limit-width 20
             )
           )
           (label :xalign 0
             :class "bar-txt-small"
-            :text "${notifications[0]['content'][0][1]}"
+            :text "${notifications['data'][0]['content'][0][1]}"
+            :limit-width 45
           )
         )
       )

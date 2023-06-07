@@ -1,25 +1,34 @@
 (defwidget sideright_widget []
-  (box
-    :space-evenly false
-    :halign "end"
-    :style "
-    ${open_sideright ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
-    ${open_sideright ? '' : 'margin-right: -900px;'}
-    "
-    (eventbox
-      :onhoverlost {EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &'}
+  (eventbox
+    ; :onscroll "${open_sideright ? '' : 'echo $(echo {} | sed -e \'s/down/-/g\' -e \'s/up/+/g\' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &'}"
+    ; :onclick "${open_sideright ? '' :
+    ; (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideright=true &')}"
+    :onhoverlost {EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &'}
+    (box
+      :space-evenly false
+      :halign "end"
+      :style "
+      ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+      ${open_sideright ? '' : 'margin-right: -589px;'}
+      "
+      ; ↑ PERFECTLY LEAVE 1 PIXEL ON THE RIGHT EDGE AWAAHAHAHAHAH
       (box
         :orientation "v"
-        :space-evenly false :spacing 5
+        :space-evenly false :spacing -5
         :halign "end"
-        :class "window"
         :style "
-        min-width: 580px;
+        min-width: 590px;
         "
-        (box
-          :space-evenly false :orientation "h"
-          (eventbox
-            :onclick {EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &'}
+        (eventbox
+          :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+          :onmiddleclick "playerctl play-pause"
+          :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+          :onclick "${open_sideright ?
+          (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
+          (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideright=true && ${EWW_CMD} update notifications=\"$(scripts/notifget)\" &')}"
+          (box
+            :space-evenly false :orientation "h"
+            :class "window"
             (box
               :space-evenly false :spacing 10
               :halign "start"
@@ -34,19 +43,211 @@
                 :class "bar-txt-hugeass"
                 :text "System"
               )
-              (box
-                :orientation "v"
-                (label :xalign 1
-                  :class "bar-txt-small"
-                  :text "Unhover to close"
-                )
+              (label :xalign 1
+                :class "bar-txt-small"
+                :text "Unhover to close"
               )
             )
           )
         )
         (box
-          :height {RES_HEIGHT - (BAR_HEIGHT + GAPS * 3)}
-          :class "sidebar-bg"
+          :class "window"
+          (box
+            :orientation "v" :space-evenly false
+            :height {RES_HEIGHT - (BAR_HEIGHT + GAPS * 3)}
+            :class "sidebar-bg"
+            (box ; The text
+              :space-evenly false
+              :height {BAR_HEIGHT} :width 400
+              :class "primaryContainerElement sidebar-section-title"
+              (label :xalign 0
+                :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                :text "Notifications"
+              )
+              (label :xalign 0
+                :hexpand true
+                :class "bar-txt-hugeass sidebar-section-title-icon"
+                :text "Notifications"
+              )
+              (button
+                :halign "end" :valign "center"
+                :class "sidebar-section-title-btn sidebar-section-title-icon"
+                :onclick "${EWW_CMD} update notifications=\"$(scripts/notifget)\" &"
+                (label
+                  :class "bar-icon-material-large"
+                  :text "Update"
+                )
+              )
+              (button
+                :halign "end" :valign "center"
+                :class "sidebar-section-title-btn sidebar-section-title-icon"
+                (label
+                  :class "bar-icon-material-large"
+                  :text "Pause"
+                )
+              )
+              (button
+                :halign "end" :valign "center"
+                :class "sidebar-section-title-btn sidebar-section-title-icon"
+                :onclick "scripts/notifications clear && ${EWW_CMD} update notifications=\"$(scripts/notifget)\" &"
+                (label
+                  :class "bar-icon-material-large"
+                  :text "Close"
+                )
+              )
+            )
+            (scroll
+              :vexpand true
+              (box ; Notifications
+                :space-evenly false :orientation "v" :spacing -10
+                (box
+                  :space-evenly false
+                  :orientation "v"
+                  (for app in {notifications.data}
+                    (box
+                      :space-evenly false :orientation "v"
+                      :spacing 10
+                      :class "sidebar-content"
+                      (label :xalign 0
+                        :width 175
+                        :class "sidebar-notif-appname"
+                        :text {app.name}
+                        :wrap true
+                      )
+                      (box
+                        :space-evenly false :orientation "h"
+                        :spacing 10
+                        (box
+                          :class "sidebar-notif-decor-left"
+                          :width 5
+                        )
+                        (box
+                          :space-evenly false :orientation "v"
+                          :spacing 10
+                          (for message in {app.content}
+                            (box
+                              :space-evenly false :orientation "v"
+                              (label :xalign 0
+                                :class "sidebar-notif-summary"
+                                :text {message[0]}
+                                :limit-width 60
+                              )
+                              (label :xalign 0
+                                :class "sidebar-notif-body"
+                                :text {message[1]}
+                                :limit-width 60
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (box ; Calendar
+              :orientation "v"
+              :space-evenly false
+              :spacing -10
+              (eventbox
+                :onscroll "scripts/scrollmonth {} &"
+                (box ; The text
+                  :space-evenly false
+                  :height {BAR_HEIGHT} :width 400
+                  :class "primaryContainerElement sidebar-section-title"
+                  (label :xalign 0
+                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                    :text ""
+                  )
+                  (label :xalign 0
+                    :hexpand true
+                    :class "bar-txt-hugeass sidebar-section-title-text"
+                    :text "${calendartitle}"
+                  )
+                  (label :xalign 1
+                    :class "bar-txt-small sidebar-section-title-text"
+                    :text "Scroll to change month"
+                  )
+                )
+              )
+              (box
+                :class "sidebar-content"
+                :orientation "h" :space-evenly false :spacing 10
+                (eventbox
+                  :onscroll "scripts/scrollmonth {} &"
+                  (box
+                    :orientation "v"
+                    :space-evenly false
+                    (box
+                      (for day in weekdays
+                        (box
+                          :class "sidebar-calendar-btn day${day.today}"
+                          (label
+                            :class "sidebar-calendar-txt"
+                            :text "${day.day}"
+                          )
+                        )
+                      )
+                    )
+                    (for week in calendar
+                      (box
+                        (for day in week
+                          (button
+                            :class "sidebar-calendar-btn day${day.today}"
+                            (label
+                              :class "sidebar-calendar-txt"
+                              :text "${day.day}"
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (box
+                  :orientation "v"
+                  :space-evenly false
+                  :hexpand true
+                  :class "secondaryContainerElement sidebar-box"
+                  (label
+                    :class "bar-txt-hugeass sidebar-box-title"
+                    :text "Todo"
+                  )
+                  (scroll
+                    :hscroll false :vscroll true
+                    :vexpand true
+                    (box
+                      :orientation "v"
+                      :space-evenly false :spacing 10
+                      (for task in todolist
+                        (box
+                          :orientation "h"
+                          :space-evenly false
+                          :class "sidebar-todo-item"
+                          (button
+                            :valign "center"
+                            :class "sidebar-todo-btn"
+                            (label
+                              :class "bar-icon-material-large"
+                              :text "Remove"
+                            )
+                          )
+                          (label :xalign 0
+                            :text {task}
+                            :wrap true
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              (box
+                :height 20
+              )
+            )
+          )
         )
       )
     )

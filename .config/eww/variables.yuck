@@ -21,9 +21,15 @@
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar DYNMODULE_LEFT_PAGES 3)
-(defvar DYNMODULE_RIGHT_PAGES 2)
+(defvar DYNMODULE_RIGHT_PAGES 3)
+
+; Const: animation curves
+(defvar ANIM_NAMES `["Material","Fluent"]`)
+(defvar ANIM_ENTER `["transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 200ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 150ms cubic-bezier(1,0,1,1);"]`)
 
 ; Vars
+(defvar anim_set 0)
 (defvar bar_offset 0)
 (defvar osd_vol false)
 (defvar osd_bright false)
@@ -34,7 +40,10 @@
 (defvar overview_results "")
 (defvar dynamicleft_module_page 1) ; 1-base
 (defvar dynamicright_module_page 1) ; 1-base
+(defvar calendartitle "")
+(defvar monthshift 0)
 
+; Open/close state
 (defvar open_overview false)
 (defvar open_sideleft false)
 (defvar open_sideright false)
@@ -66,15 +75,13 @@
 (deflisten awin "scripts/activewin")
 (deflisten audiojson "scripts/audiolevels")
 (deflisten mcover "scripts/music cover")
-(deflisten mname "scripts/music name 32") ; The number is the length limit of the title
+(deflisten mname "scripts/music name 35") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
 (deflisten wsjsona "scripts/overview-wrapper1")
 (deflisten wsjsonb "scripts/overview-wrapper2")
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten tasks "scripts/taskbarloop")
-(deflisten pinnedapps "cat modules/pinned-apps.json | gojq -c -M")
-(deflisten recommended "cat modules/recommended.json | gojq -c -M")
-(deflisten gamebarwidgets "cat modules/gamebar.json | gojq -c -M")
+(deflisten todolist "cat modules/todo.json | gojq -c -M")
 (deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
 (deflisten cavajson `scripts/cavajson`)
 (deflisten mousepos `scripts/mousetrack`)
@@ -85,6 +92,7 @@
 (defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
 
 ; Fetch stuff
+(defpoll distro :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")
 (defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
 (defpoll packages :interval "5m" `pacman -Q | wc -l`)
 (defpoll kernel :interval "5m" `uname -r`)
