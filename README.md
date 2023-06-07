@@ -12,4 +12,4 @@
 ---
 
 ## One little preview
-![end-4/dots-hyprland](./assets/novelknock-1.png)
+![end-4/dots-hyprland](./assets/novelknock-2.png)
