@@ -12,6 +12,11 @@
     margin: 10px 20px;
 }
 
+.sidebar-notification {
+    @include mainfont;
+    margin: 10px 15px;
+}
+
 .sidebar-notif-appname {
     @include mainfont;
     color: $primary;
@@ -150,4 +155,188 @@
 
 .sidebar-todo-btn:active {
     background-color: shade($onPrimary, 30%);
+}
+
+.sidebar-quicktoggle {
+    margin: 15px;
+    margin-bottom: 20px;
+}
+
+.sidebar-quicktoggle-btn {
+    border-radius: 10px;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-quicktoggle-btn:hover {
+    background-color: tint($secondaryContainer, 10%);
+}
+
+.sidebar-quicktoggle-btn:active {
+    background-color: tint($secondaryContainer, 20%);
+}
+
+.sidebar-quicktoggle-btn-active {
+    border-radius: 10px;
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.sidebar-quicktoggle-btn-active:hover {
+    background-color: tint($primary, 10%);
+}
+
+.sidebar-quicktoggle-btn-active:active {
+    background-color: tint($primary, 20%);
+}
+
+.sidebar-quicktoggle-btn-left {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.sidebar-quicktoggle-btn-right {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.sidebar-quicktoggle-power-optn:hover {
+    :first-child {
+        background-color: tint($secondaryContainer, 10%);
+    }
+}
+
+.sidebar-quicktoggle-power-optn:active {
+    :first-child {
+        background-color: tint($secondaryContainer, 20%);
+    }
+}
+
+.sidebar-quicktoggle-power-icon {
+    border-radius: 10px;
+    min-width: 40px;
+    min-height: 40px;
+    margin-bottom: -1px;
+    margin: 5px;
+    @include icon-material;
+    font-size: 17pt;
+}
+
+.sidebar-quicktoggle-slider {
+    border-radius: 9999px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface2;
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: $primary;
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -8px;
+        border-radius: 99px;
+        background-color: $primary;
+    }
+}
+
+.sidebar-music-box {
+    margin: 15px;
+}
+
+.sidebar-music-thumbnail {
+    border-radius: 10px;
+    background-position: center center;
+    background-size: 100% auto;
+}
+
+.sidebar-music-vignette {
+    border-radius: 10px;
+}
+
+.sidebar-music-source {
+    @include icon-nerd;
+    font-size: 25pt;
+    margin: 0 20px;
+}
+
+.sidebar-music-output {
+    @include mainfont;
+    border-radius: 10px;
+    font-size: 12pt;
+    margin: 15px 15px;
+    padding: 5px 15px;
+}
+
+.sidebar-music-title {
+    @include mainfont;
+    font-size: 15pt;
+}
+
+.sidebar-music-artist {
+    @include mainfont;
+    font-size: 13pt;
+    color: $overlay0;
+}
+
+.sidebar-music-playbtn {
+    min-width: 60px;
+    min-height: 60px;
+    margin: 15px;
+    @include icon-segoe;
+    border-radius: 15pt;
+    font-size: 16pt;
+    color: $inverseOnSurface;
+}
+
+.sidebar-music-trackbtn {
+    @include icon-segoe;
+    margin: 15px;
+    border-radius: 10px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.sidebar-music-trackbtn:hover {
+    background-color: tint($overlay0, 30%);
+}
+
+.sidebar-music-trackbtn:active {
+    background-color: tint($overlay0, 50%);
+}
+
+.sidebar-music-slider {
+    border-radius: 9999px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface2;
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: shade(white, 20%);
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -8px;
+        border-radius: 99px;
+        background-color: shade(white, 20%);
+    }
 }

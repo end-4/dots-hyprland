@@ -12,9 +12,15 @@
         :hexpand true
         :class "bar-pad-horiz"
         (label :xalign 0 :class "bar-txt-larger clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          "
           :text "${time.hour}:${time.minute}"
         )
         (label :xalign 0 :class "bar-txt-small clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          "
           :text "${time.day}, ${time.monthname} ${day_only}"
         )
       )
@@ -84,12 +90,14 @@
           :class "bar-batt-circle"
           :thickness 3
           :start-at 75
-          :style "border-radius: 99px; color: ${coloraccent};"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          "
           (box
             :width 27 :height 27
             :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
             :onclick "${EWW_CMD} update popup='system-menu'"
-            :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
+            :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
             (label
               :halign "center" :valign "center"
               :class "bar-txt-smaller"

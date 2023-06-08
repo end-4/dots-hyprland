@@ -20,7 +20,7 @@
 (defvar WORKSPACE_SIDE_PAD 15)
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
-(defvar DYNMODULE_LEFT_PAGES 3)
+(defvar DYNMODULE_LEFT_PAGES 2)
 (defvar DYNMODULE_RIGHT_PAGES 3)
 
 ; Const: animation curves
@@ -43,7 +43,9 @@
 (defvar calendartitle "")
 (defvar monthshift 0)
 
-; Open/close state
+; Open/close/hover state
+(defvar hover_music false)
+(defvar rev_power false)
 (defvar open_overview false)
 (defvar open_sideleft false)
 (defvar open_sideright false)
@@ -75,7 +77,7 @@
 (deflisten awin "scripts/activewin")
 (deflisten audiojson "scripts/audiolevels")
 (deflisten mcover "scripts/music cover")
-(deflisten mname "scripts/music name 35") ; The number is the length limit of the title
+(deflisten mname "scripts/music name 999") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
 (deflisten wsjsona "scripts/overview-wrapper1")
 (deflisten wsjsonb "scripts/overview-wrapper2")

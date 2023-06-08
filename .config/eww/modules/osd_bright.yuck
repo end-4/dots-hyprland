@@ -4,6 +4,9 @@
     :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
     :onmiddleclick "playerctl play-pause"
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "${open_sideleft ?
+          (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideleft=false &') :
+          (EWW_CMD + ' open sideleft && ' + EWW_CMD + ' update bar_offset=1 && ' + EWW_CMD + ' update open_sideright=false && ' + EWW_CMD + ' update open_sideleft=true &')}"
     (box
       :class "osd-pad"
       :width 350
@@ -23,7 +26,7 @@
           (button
             :class "inside-circle"
             (label :class "bar-txt-smaller"
-              :text {round(brightness.level, 0)}
+              :text {round(brightness.level, 0) == 100 ? '' : round(brightness.level, 0)}
             )
           )
         )

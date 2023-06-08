@@ -57,23 +57,23 @@
 }
 
 .bar-icon-material {
-    font-family: 'Material Symbols Rounded';
+    @include icon-material;
 }
 
 .bar-icon-material-large {
-    font-family: 'Material Symbols Rounded';
+    @include icon-material;
     font-size: 14pt;
     margin-bottom: -1px;
 }
 
 .bar-icon-material-hugeass {
-    font-family: 'Material Symbols Rounded';
+    @include icon-material;
     font-size: 17pt;
     margin-bottom: -1px;
 }
 
 .bar-icon-segoe {
-    font-family: 'Segoe Fluent Icons';
+    @include icon-segoe;
     font-weight: 700;
 }
 
@@ -275,10 +275,19 @@
     padding: 0 7px;
 }
 
-.osd-circle {
-    // color: $primary; 
+.bar-music-btn {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 13pt;
+    color: $onSurface;
+    margin: 2px;
+    border-radius: 8px;
 }
 
-.bar-sysinfo-distro-logo {
-    
+.bar-music-btn:hover {
+    background-color: $overlay0;
+}
+
+.bar-music-btn:active {
+    background-color: tint($overlay0, 10%);
 }

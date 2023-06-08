@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: https://media.discordapp.net/attachments/1114548683770441738/1114548686400266260/hyprland11_fadeout.mp4?format=jpeg&width=600&height=337
-$colorbarbg: #09080E;
-$colorbg: rgba(9,8,14,0.75);
-$colortext: #85bcc3;
-$color0: #4C3A42;
-$color1: #10506E;
-$color2: #505052;
-$color3: #8D3829;
-$color4: #137289;
-$color5: #6F7A85;
-$color6: #85bcc3;
-$color7: #8D3829;
+//Auto generated color theme for image at: https://i.ytimg.com/vi/rFl5aK6n_FQ/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCXobx_JxRSe5CoDdrRK9_6EIUkzQ
+$colorbarbg: #151419;
+$colorbg: rgba(21,20,25,0.75);
+$colortext: #ede3e2;
+$color0: #A299A4;
+$color1: #DCAFA1;
+$color2: #DCC9AE;
+$color3: #B2ABCA;
+$color4: #C9B9CB;
+$color5: #D3CBCF;
+$color6: #ede3e2;
+$color7: #B2ABCA;

@@ -14,15 +14,19 @@ wal -i "$IMGPATH" -n -t -s -e $lightdark -q
 themejson=$(cat ~/.cache/wal/colors.json | gojq -c -M)
 themejson="${themejson::-1}"
 themejson="$themejson"',"source":"'"$3"'"}'
-echo $themejson
+echo "$themejson"
 
 maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
 # scripts/material_colors.py --path "$IMGPATH" $lightdark > tmp/_material.colorpallete
-scripts/material_colors.py --color "$maincol" "$lightdark" > tmp/_material.colorpallete &
-accent=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
-tertiary=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
+generated_material=$(scripts/material_colors.py --color "$maincol" "$lightdark")
+echo "$generated_material" > tmp/_material.colorpallete &
+onPrimaryContainer=$(echo "$generated_material" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
+primaryContainer=$(echo "$generated_material" | grep '$primaryContainer: ' | sed 's/$primaryContainer: //g' | sed 's/;//g')
+tertiary=$(echo "$generated_material" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
+onPrimary=$(echo "$generated_material" | grep '$onPrimary: ' | sed 's/$onPrimary: //g' | sed 's/;//g')
+primary=$(echo "$generated_material" | grep '$primary: ' | sed 's/$primary: //g' | sed 's/;//g')
 
-printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
+printf '{"image": "'"$coverpath"'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'"}}\n'
 
 # Get color in rgb
 colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
@@ -84,7 +88,7 @@ echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_ge
 echo '}' >> './tmp/colors_generated.conf'
 
 # Print json to stdout
-echo "$accent" > 'tmp/_iconcolor.txt'
+echo "$onPrimaryContainer" > 'tmp/_iconcolor.txt'
 echo "$tertiary" >> 'tmp/_iconcolor.txt'
 printf "$themejson" | gojq -r '.colors.color2' >> 'tmp/_iconcolor.txt'
 printf "$themejson" | gojq -r '.colors.color4' >> 'tmp/_iconcolor.txt'

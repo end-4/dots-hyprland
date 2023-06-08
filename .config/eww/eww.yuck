@@ -15,6 +15,7 @@
 (include "./modules/workspaces.yuck")
 ;;;;;;;;;;;;;;;;;; Windows ;;;;;;;;;;;;;;;;;;;;;
 (include "./windows/overview.yuck")
+(include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
 
 (defwidget bar_widget []

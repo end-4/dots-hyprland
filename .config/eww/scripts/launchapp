@@ -27,7 +27,7 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">uwu" ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
-        pkill eww && eww daemon && eww open bar && eww open bottomline
+        pkill eww && eww daemon && eww open bar &
     elif [[ "${args[0]}" == ">todo" ]]; then
         scripts/todo add "${1#*>todo }"
         eww update todolist="$(cat json/todo.json | gojq -c -M)"
