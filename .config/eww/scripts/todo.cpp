@@ -53,23 +53,40 @@ string exec(const char* cmd) {
 }
 
 void delItem(const string& stringToDelete) {
-    auto it = todo.find(stringToDelete);
-    int id = it - todo.begin();
-    if (it != todo.end()) {
-        todo.erase(id);
+    cout << " [i] Full list: '" << todo << "'\n";
+    cout << " [x] Deleting item: '" << stringToDelete << "'\n\n";
+    for (int i = 0; i < todo.size(); i++) {
+        const string& thisEntry = todo[i];
+        cout << "Compare: \"" << thisEntry << "\" and \"" << stringToDelete << "\"\n";
+        if (thisEntry == stringToDelete) {
+            cout << "yes\n";
+            todo.erase(i);
+            break;
+        }
     }
+}
+
+void addItem(const string& stringToAdd) {
+    cout << "adding\n";
+    todo.push_back(stringToAdd);
 }
 
 int main(int argc, char* argv[]) {
     if (argc == 1) {
         cout << "Usage: todo del [ STRING ]";
+        return 0;
     }
 
-    rawTodo = readIfExists("modules/todo.json");
+    rawTodo = readIfExists("json/todo.json");
     todo = json::parse(rawTodo);
     if (argc > 2 && string(argv[1]) == "del") {
         delItem(string(argv[2]));
-        exec("echo '' > modules/todo.json");
-        writeToFile("modules/todo.json", todo.dump());
+        exec("echo '' > json/todo.json");
+        writeToFile("json/todo.json", todo.dump());
+    }
+    else if (argc > 2 && string(argv[1]) == "add") {
+        addItem(string(argv[2]));
+        exec("echo '' > json/todo.json");
+        writeToFile("json/todo.json", todo.dump());
     }
 }

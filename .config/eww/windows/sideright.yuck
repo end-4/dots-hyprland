@@ -217,6 +217,7 @@
                   (scroll
                     :hscroll false :vscroll true
                     :vexpand true
+                    :style "margin: 5px;"
                     (box
                       :orientation "v"
                       :space-evenly false :spacing 10
@@ -225,9 +226,11 @@
                           :orientation "h"
                           :space-evenly false
                           :class "sidebar-todo-item"
+                          :spacing 5
                           (button
                             :valign "center"
                             :class "sidebar-todo-btn"
+                            :onclick "scripts/todo del '${task}' && ${EWW_CMD} update todolist=\"$(cat json/todo.json | gojq -c -M)\""
                             (label
                               :class "bar-icon-material-large"
                               :text "Remove"

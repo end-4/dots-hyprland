@@ -28,6 +28,9 @@ if [[ "$1" == ">"* ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
         pkill eww && eww daemon && eww open bar && eww open bottomline
+    elif [[ "${args[0]}" == ">todo" ]]; then
+        scripts/todo add "${1#*>todo }"
+        eww update todolist="$(cat json/todo.json | gojq -c -M)"
     else
         # notify-send 'eww' 'Invalid command!'
         false

@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: https://i.ytimg.com/vi/_G3Tvd37eGc/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC2MGxhtg8NzEsLUwOQyEWVbizKSg
-$colorbarbg: #101613;
-$colorbg: rgba(16,22,19,0.75);
-$colortext: #e8dcd1;
-$color0: #117589;
-$color1: #17A1A4;
-$color2: #16CCDA;
-$color3: #51C2CD;
-$color4: #D1AD9B;
-$color5: #A6C3B9;
-$color6: #e8dcd1;
-$color7: #51C2CD;
+//Auto generated color theme for image at: https://media.discordapp.net/attachments/1114548683770441738/1114548686400266260/hyprland11_fadeout.mp4?format=jpeg&width=600&height=337
+$colorbarbg: #09080E;
+$colorbg: rgba(9,8,14,0.75);
+$colortext: #85bcc3;
+$color0: #4C3A42;
+$color1: #10506E;
+$color2: #505052;
+$color3: #8D3829;
+$color4: #137289;
+$color5: #6F7A85;
+$color6: #85bcc3;
+$color7: #8D3829;
