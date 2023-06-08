@@ -3,6 +3,12 @@
     <h3> in progress! </h3>
 </div>
 
+## Note for myself
+- remember to add dependencies
+```
+go install github.com/polyfloyd/shady/cmd/shady@latest
+```
+
 ## What will be here
 
 - Blur: yes
