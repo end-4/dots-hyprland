@@ -32,7 +32,9 @@
           :hscroll true :vscroll false
           :hexpand true
           (box
-            :space-evenly false :orientation "v"
+            :orientation "v"
+            :space-evenly false 
+            :spacing -2
             :valign "center"
             (label
               :class "bar-txt-larger"

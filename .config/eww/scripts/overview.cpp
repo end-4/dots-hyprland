@@ -67,6 +67,9 @@ void addApp(json& client) {
     newApp["at"] = client["at"];
     newApp["size"] = client["size"];
     // Icon path
+    if(string(client["class"]) == "") {
+        client["class"] = "dummy";
+    }
     string filename = string("./scripts/cache/" + string(client["class"]));
     std::ifstream ifs(filename);
     std::string iconpath((std::istreambuf_iterator<char>(ifs)),

@@ -12,7 +12,7 @@
         :class "bar-notif-count ${(notifications != 'null' && notifications.count > 0) ? 'bar-notif-count-yes' : 'bar-icon-material'}"
         :halign "center" :valign "center"
         :style "
-        ${(notifications != 'null' && notifications.count) > 0 ? 'font-size: 11pt;' : ''}
+        ${(notifications != 'null' && notifications.count > 0) ? 'font-size: 11pt;' : ''}
         "
         :text "${(notifications != 'null' && notifications.count > 0) ? notifications.count : ''}"
       )

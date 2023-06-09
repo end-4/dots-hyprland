@@ -9,7 +9,7 @@
     (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true && ' + EWW_CMD + ' update notifications=\"$(scripts/notifget)\" &')}"
     (box
       :class "osd-pad"
-      :width 350
+      :width 390
       (box
         :space-evenly false
         :halign "end"

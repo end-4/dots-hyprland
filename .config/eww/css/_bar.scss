@@ -102,7 +102,7 @@
 }
 
 .bar-batt-circle {
-    background-color: $surface2;
+    background-color: $surfaceVariant;
 }
 
 .inside-circle {
@@ -133,7 +133,7 @@
         min-height: 5px;
         min-width: 60px;
         border-radius: 99px;
-        background-color: $surface2;
+        background-color: $surfaceVariant;
     }
 
     progress {
@@ -261,7 +261,7 @@
 
 .bar-clr-10 {
     background-color: $inversePrimary;
-    color: white;
+    color: $onBackground;
 }
 
 .osd-pad {

@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: https://i.ytimg.com/vi/rFl5aK6n_FQ/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCXobx_JxRSe5CoDdrRK9_6EIUkzQ
-$colorbarbg: #151419;
-$colorbg: rgba(21,20,25,0.75);
-$colortext: #ede3e2;
-$color0: #A299A4;
-$color1: #DCAFA1;
-$color2: #DCC9AE;
-$color3: #B2ABCA;
-$color4: #C9B9CB;
-$color5: #D3CBCF;
-$color6: #ede3e2;
-$color7: #B2ABCA;
+//Auto generated color theme for image at: [Local wallpaper]
+$colorbarbg: #330b46;
+$colorbg: rgba(51,11,70,0.75);
+$colortext: #cb77b8;
+$color0: #D4226E;
+$color1: #F32563;
+$color2: #F12564;
+$color3: #F32564;
+$color4: #F92764;
+$color5: #970087;
+$color6: #cb77b8;
+$color7: #F32564;

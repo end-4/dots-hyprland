@@ -1,3 +1,6 @@
+$bgdetail: $onSecondary;
+$bgdetail2: $onTertiary;
+
 .sidebar-bg {
     @include bar-rounding;
     background-color: $background;
@@ -46,7 +49,9 @@
 .sidebar-section-title {
     margin: 15px;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 13px;
+    color: $onPrimaryContainer;
+    background-color: mix($background, rgba(0, 0, 0, 0), 50%);
 }
 
 .sidebar-section-title-icon {
@@ -64,18 +69,18 @@
     min-height: 30px;
     min-width: 30px;
     margin: 1px;
-    border-radius: 10px;
+    border-radius: 13px;
 }
 
 .sidebar-calendar-txt {
-    border-radius: 9999px;
+    border-radius: 99px;
     font-size: 12pt;
     @include mainfont;
     font-weight: 500;
     min-height: 30px;
     min-width: 30px;
     margin: 3px;
-    border-radius: 10px;
+    border-radius: 13px;
 }
 
 .day-1 {
@@ -163,7 +168,7 @@
 }
 
 .sidebar-quicktoggle-btn {
-    border-radius: 10px;
+    border-radius: 13px;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -177,7 +182,7 @@
 }
 
 .sidebar-quicktoggle-btn-active {
-    border-radius: 10px;
+    border-radius: 13px;
     background-color: $primary;
     color: $onPrimary;
 }
@@ -213,7 +218,7 @@
 }
 
 .sidebar-quicktoggle-power-icon {
-    border-radius: 10px;
+    border-radius: 13px;
     min-width: 40px;
     min-height: 40px;
     margin-bottom: -1px;
@@ -231,7 +236,7 @@
         min-height: 3px;
         min-width: 60px;
         border-radius: 99px;
-        background-color: $surface2;
+        background-color: $surface;
     }
 
     highlight {
@@ -254,38 +259,114 @@
 }
 
 .sidebar-music-thumbnail {
-    border-radius: 10px;
-    background-position: center center;
-    background-size: 100% auto;
+    border-radius: 13px;
+
+    background-color: shade($onSecondary, 50%);
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    ;
+    background-size:
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px,
+
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+
+        60px 60px, 120px 120px, 90px 90px,
+
+        20px 40px, 20px 40px, 40px 80px, 40px 80px,
+        40px 80px, 40px 80px,
+
+        100% 100%,
+    ;
+    background-position:
+        0px 100px, 15px 100px, 30px 100px, 45px 100px,
+        60px 100px, 75px 100px, 90px 100px, 105px 100px,
+        120px 100px, 135px 100px, 150px 100px,
+
+        550px 40px, 535px 40px, 520px 40px, 505px 40px,
+        490px 40px, 475px 40px, 460px 40px, 445px 40px,
+        430px 40px, 415px 40px, 400px 40px, 385px 40px,
+
+        300px 60px, 165px 135px, 180px 5px,
+
+        360px 190px, 380px 190px, 340px 170px, 380px 170px,
+        40px -10px, 80px -10px,
+
+        top,
+    ;
 }
 
 .sidebar-music-vignette {
-    border-radius: 10px;
+    border-radius: 13px;
 }
 
 .sidebar-music-source {
     @include icon-nerd;
     font-size: 25pt;
     margin: 0 20px;
+    color: $onPrimaryContainer;
 }
 
 .sidebar-music-output {
     @include mainfont;
-    border-radius: 10px;
+    border-radius: 13px;
     font-size: 12pt;
     margin: 15px 15px;
     padding: 5px 15px;
+    color: $onPrimary;
+    background-color: $primary;
 }
 
 .sidebar-music-title {
     @include mainfont;
     font-size: 15pt;
+    color: $onPrimaryContainer;
 }
 
 .sidebar-music-artist {
     @include mainfont;
     font-size: 13pt;
     color: $overlay0;
+    color: $onPrimaryContainer;
 }
 
 .sidebar-music-playbtn {
@@ -293,17 +374,19 @@
     min-height: 60px;
     margin: 15px;
     @include icon-segoe;
-    border-radius: 15pt;
+    border-radius: 20px;
     font-size: 16pt;
     color: $inverseOnSurface;
+    background-color: $primary;
 }
 
 .sidebar-music-trackbtn {
     @include icon-segoe;
     margin: 15px;
-    border-radius: 10px;
-    min-width: 30px;
-    min-height: 30px;
+    border-radius: 13px;
+    min-width: 35px;
+    min-height: 35px;
+    color: $onPrimaryContainer;
 }
 
 .sidebar-music-trackbtn:hover {
@@ -312,6 +395,19 @@
 
 .sidebar-music-trackbtn:active {
     background-color: tint($overlay0, 50%);
+}
+
+.sidebar-music-progress {
+    min-height: 3px;
+    min-width: 60px;
+    border-radius: 99px;
+    background-color: $surface;
+}
+
+.sidebar-music-progress-btn {
+    font-size: 16pt;
+    margin-top: -4px;
+    color: $onPrimaryContainer;
 }
 
 .sidebar-music-slider {
@@ -323,13 +419,13 @@
         min-height: 3px;
         min-width: 60px;
         border-radius: 99px;
-        background-color: $surface2;
+        background-color: $surface;
     }
 
     highlight {
         min-width: 3px;
         border-radius: 99px;
-        background-color: shade(white, 20%);
+        background-color: shade($onBackground, 20%);
         transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
     }
 
@@ -337,6 +433,95 @@
         min-width: 5px;
         margin: -8px;
         border-radius: 99px;
-        background-color: shade(white, 20%);
+        background-color: shade($onBackground, 20%);
+    }
+}
+
+.sidebar-quote {
+    @include mainfont;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 13px;
+}
+
+.sidebar-brightness-progress {
+    min-height: 3px;
+    min-width: 60px;
+    border-radius: 99px;
+    background-color: $surface;
+    margin: 20px;
+}
+
+.sidebar-brightness-progress-btn {
+    font-size: 16pt;
+    margin-top: -4px;
+}
+
+.sidebar-resource-pad {
+    margin: 0 15px;
+}
+
+.sidebar-resource-value {
+    border-radius: 18px;
+    padding: 10px;
+}
+
+.sidebar-resource-icon-large {
+    @include icon-material;
+    font-size: 23pt;
+}
+
+.sidebar-resource-icon-small {
+    @include icon-material;
+    font-size: 16pt;
+}
+
+.sidebar-resource-icon-large-segoe {
+    @include icon-segoe;
+    font-size: 23pt;
+}
+
+.sidebar-resource-circle {
+    @include icon-material;
+    font-size: 20pt;
+    background-color: $surface;
+}
+
+.sidebar-resource-txt {
+    padding: 0 5px;
+    @include techfont;
+    font-size: 14pt;
+    background-color: $secondary;
+    color: $onSecondary;
+    border-radius: 13px;
+}
+
+.sidebar-resource-txt-small {
+    padding: 0 5px;
+    @include techfont;
+    font-size: 11pt;
+    background-color: $secondary;
+    color: $onSecondary;
+    border-radius: 13px;
+}
+
+.sidebar-resource-prog {
+    min-height: 5px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 5px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface;
+    }
+
+    progress {
+        min-height: 5px;
+        min-width: 4px;
+        border-radius: 99px;
+        border-radius: 99px;
+        background-color: $secondary;
     }
 }

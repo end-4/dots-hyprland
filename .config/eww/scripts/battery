@@ -68,9 +68,9 @@ chargestatus() {
 
 circolor() {
 	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
-		cat images/svg/color.txt
+		cat css/_iconcolor.txt | head -1
 	else
-		cat images/svg/color.txt
+		cat css/_iconcolor.txt | head -1
 	fi
 }
 

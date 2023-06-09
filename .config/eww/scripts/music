@@ -103,7 +103,9 @@ get_cover() {
 		elif [ "$COVER_URL" = "" ]; then
 		    echo '{"image": "", "color": "$bg"}'
 		else
+			music_source='󱛟'
 			COVER_URL="${COVER_URL:7}"
+			COVER_URL=$(echo $COVER_URL | sed 's/%20/ /g')
 			cp "$COVER_URL"  "$IMGPATH"
 			
 			cd ..

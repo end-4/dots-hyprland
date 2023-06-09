@@ -5,7 +5,7 @@ OPACITY=0.75
 IMGPATH=$1
 coverurl=$2
 
-coverpath="$IMGPATH"
+coverpath=$(echo "$IMGPATH" | sed 's/"//g')
 # Generate colors
 wal -c
 lightdark=$(cat scripts/workdir/__mode_light_dark.txt)
@@ -26,7 +26,7 @@ tertiary=$(echo "$generated_material" | grep '$tertiary: ' | sed 's/$tertiary: /
 onPrimary=$(echo "$generated_material" | grep '$onPrimary: ' | sed 's/$onPrimary: //g' | sed 's/;//g')
 primary=$(echo "$generated_material" | grep '$primary: ' | sed 's/$primary: //g' | sed 's/;//g')
 
-printf '{"image": "'"$coverpath"'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'"}}\n'
+printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'"}}\n'
 
 # Get color in rgb
 colorsreg=$(cat ~/.cache/wal/colors-putty.reg)

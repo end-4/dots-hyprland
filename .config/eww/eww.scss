@@ -6,7 +6,7 @@
 
 $background: rgba(11, 7, 2, 0.7);
 // $background: rgba(11, 7, 2, 1);
-// $background: ;
+// $background: $surface;
 
 @function tint($color, $percentage) {
   @return mix(rgb(245, 250, 255), $color, $percentage);
@@ -17,7 +17,7 @@ $background: rgba(11, 7, 2, 0.7);
 }
 
 @mixin bar-rounding {
-  border-radius: 15px;
+  border-radius: 18px;
 }
 
 @mixin mainfont {
@@ -31,6 +31,9 @@ $background: rgba(11, 7, 2, 0.7);
 }
 @mixin icon-segoe {
   font-family: 'Segoe Fluent Icons';
+}
+@mixin techfont {
+  font-family: 'JetBrains Mono Nerd Font';
 }
 
 @mixin window-pad {

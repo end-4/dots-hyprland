@@ -48,10 +48,12 @@
             )
           )
         )
-        (box ; Media controls
+        (box ; Body
+          :space-evenly false
+          :orientation "v"
           :class "window"
           :vexpand true
-          (box
+          (box ; Media controls
             :orientation "v" :space-evenly false
             :vexpand true
             :class "sidebar-bg"
@@ -64,7 +66,7 @@
                   :class "sidebar-music-thumbnail"
                   :height 200
                   :style "
-                  background-image: url('${mcover.image}');
+                  ${mcover.image == 'eww_covers/cover_art_default' ? '' : ('background-image: url(\'' + mcover.image + '\');')}
                   "
                 )
                 (box ; 2. Color tint
@@ -87,15 +89,24 @@
                       :text "${mcover.color.source}"
                       :style "color: ${mcover.materialcolor.onPrimaryContainer};"
                     )
-                    (label :xalign 1
+                    (box
+                      :orientation "h" :space-evenly false :spacing 5
                       :halign "end"
                       :class "sidebar-music-output"
                       :style "
-                      background-color: ${mcover.color.colors.color4};
-                      color: ${mcover.color.colors.color7};
+                      background-color: ${mcover.materialcolor.primary};
+                      color: ${mcover.materialcolor.onPrimary};
                       "
-                      ; Replace this with output device!
-                      :text "${mplay}"
+                      (label
+                        :class "bar-icon-material sidebar-music-device"
+                        :text "${volume.device == 'Headphones' ? '' : ''}"
+                        :style "
+                        color: ${mcover.materialcolor.onPrimary};
+                        "
+                      )
+                      (label
+                        :text "${volume.device}"
+                      )
                     )
                   )
                   (box ; Title, play button
@@ -115,7 +126,7 @@
                           :style "
                           color: ${mcover.materialcolor.onPrimaryContainer};
                           "
-                          :text "${mname.title}"
+                          :text "${strlength(mname.title) == 0 ? 'Music' : mname.title}"
                         )
                         (label :xalign 0
                           :class "sidebar-music-artist"
@@ -148,12 +159,39 @@
                       :onclick "playerctl previous"
                       ""
                     )
-                    (scale
+                    (overlay
                       :hexpand true
-                      :class "sidebar-music-slider"
-                      :value {music.position}
-                      :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                      (box
+                        :hexpand true
+                        :valign "center"
+                        :class "sidebar-music-progress"
+                        :style "
+                        background-image:
+                        linear-gradient(to right, ${mcover.materialcolor.onPrimaryContainer == 'null' ? 'mix(white, black, 0.2)' : mcover.materialcolor.onPrimaryContainer} ${music.position}%, rgba(200, 200, 200, 0.6) ${music.position}%);
+                        "
+                      )
+                      (label
+                        :class "sidebar-music-progress-btn"
+                        :valign "center"
+                        :xalign {music.position / 100}
+                        :style "
+                        color: ${mcover.materialcolor.onPrimaryContainer};
+                        "
+                        :text "●"
+                      )
                     )
+                    ; ; Below is the proper scale widget, but doesn't follow Material colors
+                    ; (scale
+                      ;     :hexpand true
+                      ;     :class "sidebar-music-slider"
+                      ;     :style "
+                      ;     highlight {
+                      ;     color: red;
+                      ;     }
+                      ;     "
+                      ;     :value {music.position}
+                      ;     ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                    ; )
                     (button
                       :class "sidebar-music-trackbtn"
                       :style "
@@ -162,6 +200,177 @@
                       :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
                       ""
                     )
+                  )
+                )
+              )
+            )
+            (box ; Favourite tweaks
+              :orientation "v"
+              :space-evenly false
+              :vexpand true
+              (box ; The text
+                :space-evenly false
+                :height {BAR_HEIGHT} :width 400
+                :class "sidebar-section-title"
+                (label :xalign 0
+                  :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                  :text ""
+                )
+                (label :xalign 0
+                  :hexpand true
+                  :class "bar-txt-hugeass sidebar-section-title-text"
+                  :text "Resources"
+                )
+                ; (label :xalign 1
+                  ;   :class "bar-txt-small sidebar-section-title-text"
+                  ;   :text "no"
+                ; )
+              )
+              (box ; Actual stuff
+                :orientation "h"
+                :space-evenly false :spacing 10
+                :class "sidebar-resource-pad"
+                (box
+                  :class "sidebar-resource-value secondaryContainerElement"
+                  :width 140 :height 180
+                  (box
+                    :orientation "v" :space-evenly false :spacing 13
+                    :halign "center" :valign "center"
+                    (circular-progress
+                      :width 80 :height 80
+                      :start-at 75
+                      :class "sidebar-resource-circle"
+                      :value {EWW_CPU.avg}
+                      :thickness 5
+                      (label :class "sidebar-resource-icon-large-segoe" :text "")
+                    )
+                    (label
+                      :class "sidebar-resource-txt"
+                      :text "${round(EWW_CPU.avg, 0)}%"
+                    )
+                  )
+                )
+                (box
+                  :orientation "v" :space-evenly false :spacing 10
+                  :hexpand true
+                  (box
+                    :orientation "h" :space-evenly false :spacing 10
+                    (box
+                      :class "sidebar-resource-value secondaryContainerElement"
+                      :width 120 :height 120
+                      :valign "start"
+                      (box
+                        :orientation "v" :space-evenly false :spacing 13
+                        :halign "center" :valign "center"
+                        (circular-progress
+                          :width 55 :height 55
+                          :start-at 75
+                          :class "sidebar-resource-circle"
+                          :value {memory.percentage}
+                          :thickness 4
+                          (label :class "sidebar-resource-icon-small" :text "")
+                        )
+                        (label
+                          :class "sidebar-resource-txt-small"
+                          :text "${memory.used}/${memory.total}"
+                        )
+                      )
+                    )
+                    (box
+                      :class "sidebar-resource-value secondaryContainerElement"
+                      :width 120 :height 120
+                      :valign "start"
+                      (box
+                        :orientation "v" :space-evenly false :spacing 13
+                        :halign "center" :valign "center"
+                        (circular-progress
+                          :width 55 :height 55
+                          :start-at 75
+                          :class "sidebar-resource-circle"
+                          :value {memory.swappercentage}
+                          :thickness 4
+                          (label :class "sidebar-resource-icon-small" :text "")
+                        )
+                        (label
+                          :class "sidebar-resource-txt-small"
+                          :text "${memory.swapused}/${memory.swaptotal}"
+                        )
+                      )
+                    )
+                  )
+                  (box
+                    :class "sidebar-resource-value secondaryContainerElement"
+                    
+                    :valign "start"
+                    (box
+                      :orientation "h" :space-evenly false :spacing 15
+                      :valign "center"
+                      (label
+                        :valign "center"
+                        :class "sidebar-resource-icon-small"
+                        :text ""
+                      )
+                      (progress
+                        :valign "center"
+                        :hexpand true
+                        :class "sidebar-resource-prog"
+                        :value {diskfreepercent}
+                      )
+                      (label
+                        :valign "center"
+                        :class "sidebar-resource-txt-small"
+                        :text "${diskfree}/${disksize} free"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (box ; Quote
+              :orientation "v"
+              :space-evenly false
+              :spacing -10
+              :valign "end"
+              (eventbox
+                :onscroll "${EWW_CMD} update quote_index=${(quote_index + (strlength('{}') < 4 ? -1 : 1) + arraylength(quote_content)) % arraylength(quote_content)} &"
+                :onclick "${EWW_CMD} update quote_index=${(quote_index + 1 + arraylength(quote_content)) % arraylength(quote_content)} &"
+                (box
+                  :orientation "v"
+                  :space-evenly false :spacing -20
+                  (box ; The text
+                    :space-evenly false
+                    :height {BAR_HEIGHT} :width 400
+                    :class "sidebar-section-title"
+                    (label :xalign 0
+                      :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                      :text ""
+                    )
+                    (label :xalign 0
+                      :hexpand true
+                      :class "bar-txt-hugeass sidebar-section-title-text"
+                      :text "Quote!"
+                    )
+                    (label :xalign 1
+                      :class "bar-txt-small sidebar-section-title-text"
+                      :text "Click to change quote"
+                    )
+                  )
+                  (box
+                    :class "sidebar-quote secondaryContainerElement"
+                    :orientation "v" :space-evenly false :spacing 10
+                    :height 150
+                    (label :xalign 0 :yalign 0
+                      :vexpand true
+                      :text {quote_content[quote_index]}
+                      :wrap true
+                    )
+                    (label :xalign 1
+                      :text {quote_author[quote_index]}
+                      :wrap true
+                    )
+                  )
+                  (box
+                    :height 20
                   )
                 )
               )
