@@ -124,7 +124,6 @@
                 :orientation "v"
                 (for result in winsearch_results
                   (overlay
-                    :space-evenly false
                     (input
                       :value "${result.name}"
                       :class "winsearch-result"
@@ -150,8 +149,6 @@
                 :text "Run command"
               )
               (overlay
-                :orientation "h"
-                :space-evenly false
                 (input
                   :value {winsearch}
                   :class "winsearch-result"
@@ -171,8 +168,6 @@
                 :text "Search the web"
               )
               (overlay
-                :orientation "h"
-                :space-evenly false
                 (input
                   :value {winsearch}
                   :class "winsearch-result"
@@ -437,7 +432,7 @@
                               :valign "start"
                               :orientation "h"
                               :space-evenly false
-                              :width 285.67
+                              :width 286
                               :height 66
                               :class "winstart-recommended-entry-pad"
                               ; Recommended tile contents here
@@ -543,13 +538,11 @@
           )
         )
         (centerbox
-          :space-evenly false
           :orientation "h"
           :class "winwin-bottom winstart-bottom-pad"
           :height 67
           (button
             :halign "start"
-            :space-evenly false
             :class "winstart-user"
             :onclick "scripts/toggle-winstart.sh --close && gnome-control-center user-accounts &"
             (box

@@ -22,10 +22,8 @@
           min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
           background-image: url('./images/wallpaper/wallpaper_small');
           "
-          :width {RES_WIDTH * TASKVIEW_SCALE}
-          :height {RES_HEIGHT * TASKVIEW_SCALE}
-          :image-width {round(RES_WIDTH * TASKVIEW_SCALE, 0)}
-          :image-height {round(RES_HEIGHT * TASKVIEW_SCALE, 0)}
+          :width {round(RES_WIDTH * TASKVIEW_SCALE, 0)}
+          :height {round(RES_HEIGHT * TASKVIEW_SCALE, 0)}
         )
         (box
           :space-evenly false :orientation "h"
@@ -99,14 +97,16 @@
                     (box
                       :space-evenly false :spacing WINTASKVIEW_SPACING
                       :halign "center"
-                      :height {max(
-                        MIN_ROW_HEIGHT,
+                      :valign "center"
+                      :height {
+                        (MIN_ROW_HEIGHT > (RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM - WINTASKVIEW_SPACING) / arraylength(workspace) - 51 - WINTASKVIEW_SPACING) ?
+                        MIN_ROW_HEIGHT :
                         (RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM - WINTASKVIEW_SPACING) / arraylength(workspace) - 51 - WINTASKVIEW_SPACING
-                      )}
+                      }
                       (for window in row
                         (box
                           :class "${window.class == 'workspace' ? '' : 'taskview-thisws-window'}"
-                          :valign "start"
+                          :valign "center"
                           :style `
                           ${window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
                           ${window.address == '_none' ? 'border: none' : ''};

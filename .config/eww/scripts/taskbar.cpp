@@ -29,6 +29,8 @@ string exec(const char* cmd) {
 }
 
 void addApp(json& client) {
+    if(string(client["class"]).size() == 0) return;
+    
     bool found = false;
     for (json& obj : apps) {
         auto it = obj.find("class");

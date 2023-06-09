@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+cd ~/.config/eww || exit
 state=$(eww get rev_winstart)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
