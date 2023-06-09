@@ -55,6 +55,7 @@ void initWorkspaces() {
 }
 
 void addApp(json& client) {
+    if(string(client["class"]).size() == 0) return;
     // Calculate position in overview tile
     int workspaceNum = int(client["workspace"]["id"]) - 1;  // 1-base to 0-base
     if (workspaceNum < 0)

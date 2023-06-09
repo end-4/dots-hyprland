@@ -131,8 +131,8 @@
           )
           (scale
             :valign "end"
-            :value {music.position}
             :class "track-scale"
+            :value {music.position}
             :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
             :style "highlight {background-color: ${mcover.color.colors.color4};}"
           )

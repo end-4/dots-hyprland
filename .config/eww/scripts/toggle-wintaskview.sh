@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-cd ~/.config/eww
+cd ~/.config/eww || exit
 
 state=$(eww get rev_wintaskview)
 

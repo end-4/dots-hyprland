@@ -85,7 +85,6 @@
           (label :class "winnews-clock" :text {time12})
           (button
             :halign "end"
-            :space-evenly false
             :class "winnews-user"
             :onclick "scripts/toggle-winnews.sh --close && gnome-control-center user-accounts &"
             (box :height 35 :width 35
@@ -204,7 +203,7 @@
                         )
                       )
                     )
-                    (centerbox :orientation "h" :space-evenly false
+                    (centerbox :orientation "h"
                       :halign "fill"
                       :class "winnews-option"
                       (label
@@ -233,7 +232,6 @@
                     (centerbox
                       :class "winnews-option"
                       :orientation "h"
-                      :space-evenly false
                       :halign "fill"
                       (label
                         :halign "start"
@@ -256,7 +254,7 @@
                   (box
                     :space-evenly false
                     :orientation "v"
-                    (centerbox :orientation "h" :space-evenly false
+                    (centerbox :orientation "h"
                       :halign "fill"
                       :class "winnews-option"
                       (label
@@ -301,7 +299,7 @@
                     )
                   )
                   (centerbox
-                    :orientation "h" :space-evenly false
+                    :orientation "h"
                     :halign "fill"
                     :class "winnews-option"
                     (label
@@ -367,7 +365,6 @@
                       :class "winnews-option"
                       (centerbox
                         :orientation "h"
-                        :space-evenly false
                         :halign "fill"
                         (label
                           :halign "start"

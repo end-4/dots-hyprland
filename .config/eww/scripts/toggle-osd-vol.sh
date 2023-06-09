@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-cd ~/.config/eww
+cd ~/.config/eww || exit
 reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
 state=$(eww get osd_bright)
 
