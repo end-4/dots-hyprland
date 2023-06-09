@@ -525,3 +525,18 @@ $bgdetail2: $onTertiary;
         background-color: $secondary;
     }
 }
+
+.sidebar-favourite-pad {
+    @include mainfont;
+    margin: 15px;
+}
+
+.sidebar-hyprtoggle-0 {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-hyprtoggle-1 {
+    background-color: $primary;
+    color: $onPrimary;
+}

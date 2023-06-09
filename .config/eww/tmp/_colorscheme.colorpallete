@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: [Local wallpaper]
-$colorbarbg: #330b46;
-$colorbg: rgba(51,11,70,0.75);
-$colortext: #cb77b8;
-$color0: #D4226E;
-$color1: #F32563;
-$color2: #F12564;
-$color3: #F32564;
-$color4: #F92764;
-$color5: #970087;
-$color6: #cb77b8;
-$color7: #F32564;
+//Auto generated color theme for image at: https://media.discordapp.net/attachments/899763415508221985/1116616693054197811/ru4lXb1db-BYggoy.mp4?format=jpeg&width=436&height=327
+$colorbarbg: #170f0d;
+$colorbg: rgba(23,15,13,0.75);
+$colortext: #e4d9d3;
+$color0: #8C736F;
+$color1: #AC8877;
+$color2: #C2937C;
+$color3: #AD9D95;
+$color4: #D2A793;
+$color5: #CAB9AF;
+$color6: #e4d9d3;
+$color7: #AD9D95;

@@ -22,6 +22,7 @@
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar DYNMODULE_LEFT_PAGES 2)
 (defvar DYNMODULE_RIGHT_PAGES 3)
+(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "Waifu"]`)
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
@@ -40,6 +41,7 @@
 (defvar overview_results "")
 (defvar dynamicleft_module_page 1) ; 1-base
 (defvar dynamicright_module_page 1) ; 1-base
+(defvar sideleft_favourite_page 1) ; 1-base
 (defvar calendartitle "")
 (defvar monthshift 0)
 (defvar quote_index 0)
@@ -107,5 +109,5 @@
 (defpoll diskfree :interval "5m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
 (defpoll disksize :interval "5m" `df -h --output=size / | awk 'NR==2{print $1}'`)
 (deflisten cpuname `cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}' | head -n 1`)
-(defpoll waifu_get :interval "5m" `python3 scripts/waifupics.py`)
+(defpoll waifu :interval "5m" `python3 scripts/waifupics.py`)
 (defpoll calendar :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)

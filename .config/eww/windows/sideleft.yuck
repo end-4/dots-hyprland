@@ -1,3 +1,40 @@
+(defwidget togglehyprctl [value changevalue option-label option-icon]
+  (eventbox
+    :cursor "pointer"
+    :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle &"
+    (box
+      :class "sidebar-hyprtoggle-${value}"
+      :height 50 :width 50
+    )
+  )
+)
+
+(defwidget hyprtoggles_widget []
+  (box
+    :orientation "v"
+    (box
+      :orientation "h"
+      (togglehyprctl
+        :value {hyprjson.force_no_accel}
+        :changevalue "input:force_no_accel"
+        :option-label "No mouse accel"
+        :option-icon ""
+      )
+    )
+    (box
+      :orientation "h"
+  
+    )
+  )
+)
+
+(defwidget waifu_widget []
+  (box
+    :orientation "h"
+    :space-evenly false
+  )
+)
+
 (defwidget sideleft_widget []
   (eventbox
     :onhoverlost "${open_sideleft ?
@@ -173,7 +210,7 @@
                       (label
                         :class "sidebar-music-progress-btn"
                         :valign "center"
-                        :xalign {music.position / 100}
+                        :xalign {music.position == '' ? 0 : (music.position / 100)}
                         :style "
                         color: ${mcover.materialcolor.onPrimaryContainer};
                         "
@@ -204,13 +241,12 @@
                 )
               )
             )
-            (box ; Favourite tweaks
+            (box ; Resources
               :orientation "v"
               :space-evenly false
-              :vexpand true
               (box ; The text
                 :space-evenly false
-                :height {BAR_HEIGHT} :width 400
+                :height {BAR_HEIGHT}
                 :class "sidebar-section-title"
                 (label :xalign 0
                   :class "bar-icon-material-hugeass sidebar-section-title-icon"
@@ -297,6 +333,27 @@
                         )
                       )
                     )
+                    (box
+                      :class "sidebar-resource-value secondaryContainerElement"
+                      :hexpand true :height 120
+                      :valign "start"
+                      (box
+                        :orientation "v" :space-evenly false :spacing 13
+                        :halign "center" :valign "center"
+                        (circular-progress
+                          :width 55 :height 55
+                          :start-at 75
+                          :class "sidebar-resource-circle"
+                          :value {battery.percentage}
+                          :thickness 4
+                          (label :class "sidebar-resource-icon-small" :text "Bolt")
+                        )
+                        (label
+                          :class "sidebar-resource-txt-small"
+                          :text "${battery.percentage}%"
+                        )
+                      )
+                    )
                   )
                   (box
                     :class "sidebar-resource-value secondaryContainerElement"
@@ -326,6 +383,57 @@
                 )
               )
             )
+            (box ; Favourite settings >> Waifu
+              :orientation "v"
+              :space-evenly false :spacing -20
+              :vexpand true
+              (eventbox
+                :onscroll "scripts/scroll-sideleft-favourite {} &"
+                (box ; The text
+                  :orientation "h"
+                  :space-evenly false
+                  :valign "start"
+                  :height {BAR_HEIGHT}
+                  :class "sidebar-section-title"
+                  (label :xalign 0
+                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                    :text ""
+                  )
+                  (label :xalign 0
+                    :hexpand true
+                    :class "bar-txt-hugeass sidebar-section-title-text"
+                    :text "${SIDELEFT_FAVOURITE_TITLES[sideleft_favourite_page - 1]}"
+                  )
+                  (label :xalign 1
+                    :class "bar-txt-small sidebar-section-title-text"
+                    :text "Scroll for images"
+                  )
+                )
+              )
+              (box
+                :class "sidebar-favourite-pad"
+                :orientation "h" :space-evenly false :spacing 15
+                :vexpand true
+                (box ; 1: Quick toggles
+                  :style "
+                  ${ANIM_ENTER[1]}
+                  ${sideleft_favourite_page > 1 ? 'margin-left: -650px;' : ''}
+                  "
+                  (hyprtoggles_widget)
+                )
+                (box ; 2: Waifu
+                  :style "
+                  ${ANIM_ENTER[1]}
+                  ${sideleft_favourite_page > 2 ? 'margin-left: -650px;' :
+                  sideleft_favourite_page < 2 ? 'margin-right: -650px;' : ''}
+                  "
+                  (waifu_widget)
+                )
+              )
+              (box
+                :height 20
+              )
+            )
             (box ; Quote
               :orientation "v"
               :space-evenly false
@@ -339,7 +447,7 @@
                   :space-evenly false :spacing -20
                   (box ; The text
                     :space-evenly false
-                    :height {BAR_HEIGHT} :width 400
+                    :height {BAR_HEIGHT}
                     :class "sidebar-section-title"
                     (label :xalign 0
                       :class "bar-icon-material-hugeass sidebar-section-title-icon"

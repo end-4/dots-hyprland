@@ -23,9 +23,9 @@ if [[ "$1" == ">"* ]]; then
         scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
         scripts/colormanage get
     elif [[ "${args[0]}" == ">segs" ]]; then
-        python3 scripts/waifupics.py --segs
+        eww update waifu="$(python3 scripts/waifupics.py --segs)"
     elif [[ "${args[0]}" == ">uwu" ]]; then
-        python3 scripts/waifupics.py
+        eww update waifu="$(python3 scripts/waifupics.py)"
     elif [[ "${args[0]}" == ">r" ]]; then
         pkill eww && eww daemon && eww open bar &
     elif [[ "${args[0]}" == ">todo" ]]; then

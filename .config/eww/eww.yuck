@@ -29,7 +29,7 @@
       "
       (revealer :transition "slideright" :reveal false
         (revealer :transition "slidedown" :reveal false
-          (label :text "${awin} ${brightness.icon}")
+          (label :text "${awin} ${brightness}")
         )
       )
     )

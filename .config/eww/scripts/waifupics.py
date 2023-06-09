@@ -4,6 +4,7 @@ import requests
 import json
 import os
 import sys
+from PIL import Image
 
 # Define the URL to send the GET request
 url = "https://api.waifu.pics/sfw/waifu"
@@ -30,7 +31,10 @@ if response.status_code == 200:
     link=results['url']
     os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', link))
     os.system('mv ./eww_covers/waifu_tmp ./eww_covers/waifu')
-    print('eww_covers/waifu')
+
+    with Image.open('./eww_covers/waifu') as img:
+        width, height = img.size
+        print('{' + '"name": "{0}", "size": [{1}, {2}]'.format('eww_covers/waifu', width, height) + '}')
 else:
     # Print an error message
     print("Something went wrong. Status code:", response.status_code)
