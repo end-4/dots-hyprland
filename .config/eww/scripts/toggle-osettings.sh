@@ -14,7 +14,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_ostg=false
     eww update rev_ostg=false
     sleep 0.15
-    eww close osettings 
+    eww close osettings 2>/dev/null
     eww update oquery=''
 else # state = false
     eww update anim_open_ostg=true

@@ -5,7 +5,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_winnews=false
     eww update rev_winnews=false
     sleep 0.15
-    eww close winnews
+    eww close winnews 2>/dev/null
     eww update oquery=''
 else
     eww update anim_open_winnews=true

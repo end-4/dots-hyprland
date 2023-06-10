@@ -11,7 +11,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_winactions=false
     eww update rev_winactions=false
     sleep 0.1
-    eww close winactions
+    eww close winactions 2>/dev/null
 else
     eww update anim_open_winactions=true
     eww open winactions

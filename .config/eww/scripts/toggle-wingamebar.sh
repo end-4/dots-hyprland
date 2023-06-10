@@ -2,7 +2,7 @@
 state=$(eww get rev_wingamebar)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
-    eww close wingamebar
+    eww close wingamebar 2>/dev/null
     eww update anim_open_wingamebar=false
     eww update rev_wingamebar=false
 else

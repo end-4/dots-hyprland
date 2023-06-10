@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 cd ~
-eww close dashboard
+eww close dashboard 2>/dev/null
 
 if [[ "$1" == "--web" ]]; then
     app=$2

@@ -6,8 +6,8 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update rev_bottombar=false
     # eww update force_sys_rev=false
     sleep 0.15
-    eww close bottombar
-    eww close bottombar-back
+    eww close bottombar 2>/dev/null
+    eww close bottombar-back 2>/dev/null
     eww update cavajson=''
 else
     eww update anim_open_bottombar=true
