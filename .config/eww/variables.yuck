@@ -22,7 +22,7 @@
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar DYNMODULE_LEFT_PAGES 2)
 (defvar DYNMODULE_RIGHT_PAGES 3)
-(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "Waifu"]`)
+(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "oh yeah"]`)
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
@@ -87,6 +87,7 @@
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten tasks "scripts/taskbarloop")
 (deflisten todolist "cat json/todo.json | gojq -c -M")
+(deflisten favouritesettings "cat json/favouritesettings.json | gojq -c -M")
 (deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
 (deflisten cavajson `scripts/cavajson`)
 (deflisten mousepos `scripts/mousetrack`)
@@ -95,6 +96,7 @@
 (defpoll langs :interval "5m" `cat json/langs.json | gojq -c -M`)
 (defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
 (defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
+(defpoll mousemode :interval "1m" "lsusb | grep -i mouse > /dev/null && echo 1 || echo 0")
 
 ; Fetch stuff
 (defpoll distro :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")

@@ -20,18 +20,26 @@ $background: rgba(11, 7, 2, 0.7);
   border-radius: 18px;
 }
 
+@mixin window-shadow {
+  box-shadow: 0px 2px 3px mix($background, rgba(0, 0, 0, 0), 90%);
+}
+
 @mixin mainfont {
   font-family: 'Lexend';
 }
+
 @mixin icon-material {
   font-family: 'Material Symbols Rounded';
 }
+
 @mixin icon-nerd {
   font-family: 'JetBrainsMono Nerd Font';
 }
+
 @mixin icon-segoe {
   font-family: 'Segoe Fluent Icons';
 }
+
 @mixin techfont {
   font-family: 'JetBrains Mono Nerd Font';
 }

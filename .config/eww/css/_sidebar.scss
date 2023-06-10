@@ -3,6 +3,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-bg {
     @include bar-rounding;
+    @include window-shadow;
     background-color: $background;
 }
 
@@ -528,15 +529,73 @@ $bgdetail2: $onTertiary;
 
 .sidebar-favourite-pad {
     @include mainfont;
+    margin: 15px -5px;
+}
+
+.sidebar-hyprtoggle-scrollbg {
+    margin: 5px 20px;
+    // margin-right: 0px;
+    min-width: 555px;
+}
+.sidebar-waifu-scrollbg {
+    margin: 5px 20px;
+    min-width: 555px;
+}
+
+.sidebar-hyprtoggle {
+    border-radius: 18px;
+    background-color: $secondaryContainer;
+}
+
+.sidebar-hyprtoggle-icon {
+    @include icon-material;
+    font-size: 35pt;
+}
+
+.sidebar-hyprtoggle-icon-segoe {
+    @include icon-segoe;
+    font-size: 35pt;
+    margin-left: 2px;
+    margin-right: -2px;
+}
+
+.sidebar-hyprtoggle-icon-0 {
+    color: shade($onPrimaryContainer, 30%);
+}
+
+.sidebar-hyprtoggle-icon-1 {
+    color: $primary;
+}
+
+.sidebar-hyprtoggle-name {
+    @include mainfont;
+    color: $onPrimaryContainer;
+    margin: 10px;
+}
+
+.sidebar-hyprtoggle-onoff {
+    border-radius: 99px;
+    transition: 0ms linear;
+    padding: 2px 5px;
+    min-width: 35px;
     margin: 15px;
 }
 
-.sidebar-hyprtoggle-0 {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+.sidebar-hyprtoggle-onoff-0 {
+    background-color: transparent;
 }
 
-.sidebar-hyprtoggle-1 {
+.sidebar-hyprtoggle-onoff-1 {
     background-color: $primary;
-    color: $onPrimary;
+}
+
+.sidebar-hyprtoggle-summary {
+    background-color: $background;
+    border-radius: 18px;
+}
+
+.sidebar-hyprtoggle-summary-txt {
+    @include techfont;
+    margin: 15px;
+    color: $onBackground;
 }

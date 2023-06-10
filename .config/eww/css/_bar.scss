@@ -1,6 +1,7 @@
 .bar-bg {
     background-color: $background;
     @include bar-rounding;
+    @include window-shadow;
 }
 
 .bar-bg-pad {
@@ -8,7 +9,7 @@
 }
 
 .bar-pad {
-    padding: 5px 0;
+    padding: 5px;
 }
 
 .bar-pad-left {

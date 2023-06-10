@@ -7,7 +7,7 @@
       :halign "end"
       :style "
       ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
-      ${open_sideright ? '' : 'margin-right: -589px;'}
+      ${open_sideright ? '' : 'margin-right: -594px;'}
       "
       ; ↑ PERFECTLY LEAVE 1 PIXEL ON THE RIGHT EDGE AWAAHAHAHAHAH
       (box
@@ -15,7 +15,7 @@
         :space-evenly false :spacing -5
         :halign "end"
         :style "
-        min-width: 590px;
+        min-width: 595px;
         "
         (eventbox
           :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
@@ -30,7 +30,7 @@
             (box
               :space-evenly false :spacing 10
               :halign "start"
-              :height {BAR_HEIGHT} :width 400
+              :height {BAR_HEIGHT} :width 390
               :class "sidebar-bg sidebar-bg-pad"
               (label :xalign 0
                 :class "bar-icon-material-hugeass"
@@ -460,8 +460,7 @@
 (defwindow sideright
   :monitor 0
   :stacking "fg"
-  ;   :focusable true
-  ; :namespace "noblur"
+  :namespace "eww"
   :geometry (geometry
     :height "100%"
     :anchor "top right"

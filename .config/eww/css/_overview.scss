@@ -1,12 +1,12 @@
 .overview-window {
-  font-family: 'Torus', 'Material Symbols Rounded';
+  @include mainfont;
   border-radius: 22px;
   background-color: shade($colorbarbg, 4%);
   border: 2px solid $primary;
 }
 
 .overview-window-title {
-  font-size: 15pt;
+  font-size: 14pt;
   color: $onPrimaryContainer;
   border-radius: 15px;
   background-color: tint($surface, 5%);
@@ -138,6 +138,7 @@
 }
 
 .overview-search-result {
+  @include mainfont;
   border-radius: 9999px;
   background-color: $onTertiary;
   color: $onBackground;

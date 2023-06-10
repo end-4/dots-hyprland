@@ -94,7 +94,7 @@
         :orientation "v"
         (revealer
           :reveal "${overview_query == ''}"
-          :duration "100ms"
+          :duration "150ms"
           (label
             :class "overview-search-typetosearch-text"
             :xalign 0
@@ -110,16 +110,16 @@
       (revealer
         :reveal "${overview_query == ''}"
         :transition "slidedown"
-        :duration "${overview_query == '' ? '200ms' : '100ms'}"
+        :duration "${overview_query == '' ? '200ms' : '150ms'}"
         :style "
-        transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+        transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '150ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
         "
         (revealer
           :reveal "${overview_query == ''}"
           :transition "crossfade"
-          :duration "${overview_query == '' ? '200ms' : '100ms'}"
+          :duration "${overview_query == '' ? '200ms' : '150ms'}"
           :style "
-          transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+          transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '150ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
           "
           (box
             :space-evenly false
@@ -181,16 +181,16 @@
       (revealer
         :reveal "${overview_query != ''}"
         :transition "slidedown"
-        :duration "${overview_query == '' ? '100ms' : '200ms'}"
+        :duration "${overview_query == '' ? '150ms' : '200ms'}"
         :style "
-        transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+        transition: ${overview_query == '' ? '150ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
         "
         (revealer
           :reveal "${overview_query != ''}"
           :transition "crossfade"
-          :duration "${overview_query == '' ? '100ms' : '200ms'}"
+          :duration "${overview_query == '' ? '150ms' : '200ms'}"
           :style "
-          transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+          transition: ${overview_query == '' ? '150ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
           "
           (scroll
             :width 502
@@ -228,8 +228,8 @@
 (defwindow overview
   :stacking "overlay"
   :focusable true
-  :wm-ignore true
   :monitor 0
+  :namespace "eww"
   :geometry (geometry
     ; :height 1080
     ; :width 1920

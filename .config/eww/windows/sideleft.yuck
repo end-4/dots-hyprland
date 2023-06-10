@@ -1,10 +1,25 @@
-(defwidget togglehyprctl [value changevalue option-label option-icon]
+(defwidget togglehyprctl [value changecmd option-label option-icon icon-style]
   (eventbox
     :cursor "pointer"
-    :onclick "hyprctl keyword ${changevalue} ${1 - value} && scripts/hyprsettings tickle &"
+    :onclick "${changecmd}${1 - value} && scripts/hyprsettings tickle &"
     (box
-      :class "sidebar-hyprtoggle-${value}"
-      :height 50 :width 50
+      :orientation "v"
+      :space-evenly false :spacing -10
+      :height 100 :width 100
+      :class "sidebar-hyprtoggle"
+      (label
+        :class "sidebar-hyprtoggle-name"
+        :text option-label
+      )
+      (label
+        :vexpand true
+        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-segoe' : ''} sidebar-hyprtoggle-icon-${value}"
+        :text option-icon
+      )
+      (box
+        :halign "center" :valign "end"
+        :class "sidebar-hyprtoggle-onoff sidebar-hyprtoggle-onoff-${value}"
+      )
     )
   )
 )
@@ -12,18 +27,55 @@
 (defwidget hyprtoggles_widget []
   (box
     :orientation "v"
+    :spacing 10
+    :class "sidebar-hyprtoggle-scrollbg"
+    ; :style "background: cyan;"
     (box
       :orientation "h"
+      :spacing 10
+      (togglehyprctl
+        :value {hyprjson.blur}
+        :changecmd "hyprctl keyword decoration:blur "
+        :option-label "Blur"
+        :option-icon ""
+        :icon-style 0
+      )
+      (togglehyprctl
+        :value {hyprjson.blur_xray}
+        :changecmd "hyprctl keyword decoration:blur_xray "
+        :option-label "Blur xray"
+        :option-icon ""
+        :icon-style 0
+      )
       (togglehyprctl
         :value {hyprjson.force_no_accel}
-        :changevalue "input:force_no_accel"
-        :option-label "No mouse accel"
+        :changecmd "hyprctl keyword input:force_no_accel "
+        :option-label "Raw input"
         :option-icon ""
+        :icon-style 0
+      )
+      (togglehyprctl
+        :value {hyprjson.touchpad_disable_while_typing}
+        :changecmd "hyprctl keyword input:touchpad:disable_while_typing "
+        :option-label "Typing"
+        :option-icon ""
+        :icon-style 1
+      )
+      (togglehyprctl
+        :value {mousemode}
+        :changecmd "eww update mousemode="
+        :option-label "Mouse"
+        :option-icon "Mouse"
+        :icon-style 0
       )
     )
     (box
       :orientation "h"
-  
+      :class "sidebar-hyprtoggle-summary"
+      (label :xalign 0 :yalign 0 :wrap true
+        :class "sidebar-hyprtoggle-summary-txt"
+        :text "Blur ${hyprjson.blur == 1 ? ('enabled ' + (hyprjson.blur_xray == 1 ? 'with xray' : 'without xray')) : 'disabled'}.\\\n${hyprjson.force_no_accel == 1 ? 'You\'re clicking circles to the meat' : 'You\'re not clicking circles'}.\\\n${hyprjson.touchpad_disable_while_typing == 1 ? 'You\'re Minecrafting without a mouse' : 'You\'re not Minecrafting without a mouse'}.\\\n${mousemode == 1 ? 'Scrolling is optimized for mouse' : 'Scrolling is optimized for touchpad'}."
+      )
     )
   )
 )
@@ -32,6 +84,9 @@
   (box
     :orientation "h"
     :space-evenly false
+    :class "sidebar-waifu-scrollbg"
+    ; :style "background: purple;"
+    :spacing 10
   )
 )
 
@@ -44,7 +99,7 @@
       :halign "end"
       :style "
       ${open_sideleft ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
-      ${open_sideleft ? '' : 'margin-left: -589px;'}
+      ${open_sideleft ? '' : 'margin-left: -594px;'}
       "
       ; ↑ PERFECTLY LEAVE 1 PIXEL ON THE RIGHT EDGE AWAAHAHAHAHAH
       (box
@@ -52,7 +107,7 @@
         :space-evenly false :spacing -5
         :halign "start"
         :style "
-        min-width: 590px;
+        min-width: 595px;
         "
         (eventbox
           :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
@@ -67,8 +122,8 @@
             :halign "end"
             (box
               :space-evenly false :spacing 10
-              :height {BAR_HEIGHT} :width 400
-              :class "sidebar-bg sidebar-bg-pad"
+              :height {BAR_HEIGHT} :width 390
+              :class "sidebar-bg sidebar-bg-pad window-shadow"
               (label :xalign 0
                 :class "bar-icon-material-hugeass"
                 :text ""
@@ -103,8 +158,9 @@
                   :class "sidebar-music-thumbnail"
                   :height 200
                   :style "
-                  ${mcover.image == 'eww_covers/cover_art_default' ? '' : ('background-image: url(\'' + mcover.image + '\');')}
+                  ${mcover.image == 'eww_covers/cover_art_default' ? '' : ('background-image: url(\'' + mcover.image + '\'); background-size: 100% auto; background-position: center')}
                   "
+                  ; "${mcover.image == 'eww_covers/cover_art_default' ? '' : ('background-image: url(' + mcover.image + '); background-size: 100% auto; background-position: center')}"
                 )
                 (box ; 2. Color tint
                   :class "sidebar-music-vignette"
@@ -412,20 +468,21 @@
               )
               (box
                 :class "sidebar-favourite-pad"
-                :orientation "h" :space-evenly false :spacing 15
+                :orientation "h" :space-evenly false :spacing 0
                 :vexpand true
+                ; :style "background: pink;"
                 (box ; 1: Quick toggles
                   :style "
                   ${ANIM_ENTER[1]}
-                  ${sideleft_favourite_page > 1 ? 'margin-left: -650px;' : ''}
+                  ${sideleft_favourite_page > 1 ? 'margin-left: -1000px;' : ''}
                   "
                   (hyprtoggles_widget)
                 )
                 (box ; 2: Waifu
                   :style "
                   ${ANIM_ENTER[1]}
-                  ${sideleft_favourite_page > 2 ? 'margin-left: -650px;' :
-                  sideleft_favourite_page < 2 ? 'margin-right: -650px;' : ''}
+                  ${sideleft_favourite_page > 2 ? 'margin-left: -1000px;' :
+                  sideleft_favourite_page < 2 ? 'margin-right: -1000px;' : ''}
                   "
                   (waifu_widget)
                 )
@@ -493,8 +550,7 @@
 (defwindow sideleft
   :monitor 0
   :stacking "fg"
-  ;   :focusable true
-  ; :namespace "noblur"
+  :namespace "eww"
   :geometry (geometry
     :height "100%"
     :anchor "top left"
