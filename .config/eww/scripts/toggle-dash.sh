@@ -13,7 +13,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_dash=false
     eww update rev_dash=false
     sleep 0.08
-    eww close dashboard
+    eww close dashboard 2>/dev/null
 else
     scripts/toggle-overview.sh --close &
     scripts/toggle-osettings.sh --close &

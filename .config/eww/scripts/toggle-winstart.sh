@@ -7,7 +7,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_winstart=false
     eww update rev_winstart=false
     sleep 0.1
-    eww close winstart
+    eww close winstart 2>/dev/null
     eww update winsearch=''
     eww update winsearch_prefix=''
     eww update winstart_allapps=false

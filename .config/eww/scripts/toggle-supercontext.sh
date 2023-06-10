@@ -5,7 +5,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update anim_open_supercontext=false
     eww update rev_supercontext=false
     sleep 0.1
-    eww close supercontext
+    eww close supercontext 2>/dev/null
 else
     eww update supercontext_pos_x="$(hyprctl cursorpos -j | gojq '.x')"
     eww update supercontext_pos_y="$(hyprctl cursorpos -j | gojq '.y')" &

@@ -14,7 +14,7 @@ if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update rev_ontf=false
     # eww update force_sys_rev=false
     sleep 0.15
-    eww close onotify 
+    eww close onotify 2>/dev/null
 else
     eww update anim_open_ontf=true
     eww open onotify
