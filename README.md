@@ -90,7 +90,7 @@
  - Python
 ```
 [ Command ]
-pip install pywal desktop_entry_lib poetry build
+pip install pywal desktop_entry_lib poetry build pygobject
 ```
  - Other Dependencies (install it with your distro's package manager)
 ```
