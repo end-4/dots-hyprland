@@ -43,6 +43,7 @@
 
 
 - `material`, `lineage`, and `osu!lazer` are past generations of the `summer` branch with fewer features
+- coming soon: NovelKnock
 
 ---
 
