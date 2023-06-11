@@ -22,7 +22,7 @@
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar DYNMODULE_LEFT_PAGES 2)
 (defvar DYNMODULE_RIGHT_PAGES 3)
-(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "oh yeah"]`)
+(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "You're a degenerate"]`)
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)

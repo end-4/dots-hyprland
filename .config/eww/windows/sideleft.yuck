@@ -29,7 +29,6 @@
     :orientation "v"
     :spacing 10
     :class "sidebar-hyprtoggle-scrollbg"
-    ; :style "background: cyan;"
     (box
       :orientation "h"
       :spacing 10
@@ -85,8 +84,45 @@
     :orientation "h"
     :space-evenly false
     :class "sidebar-waifu-scrollbg"
-    ; :style "background: purple;"
     :spacing 10
+    (box
+      (scroll
+        :vscroll true :hscroll false
+        :vexpand true
+        :width 100
+        (box
+          :orientation "v"
+          (for id in WAIFU_TAG_ID
+            (button
+              :class "sidebar-waifu-tag"
+              :onclick "${EWW_CMD} update waifu='{\"name\":\"eww_covers/waifu_loading\", \"size\": [0, 100]}' && ${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+              {WAIFU_CATEGORIES[id]}
+            )
+          )
+        )
+      )
+    )
+    (eventbox
+      :onscroll "scripts/scroll-sideleft-favourite {} &"
+      :hexpand true
+      (scroll
+        :hexpand true
+        :hscroll true :vscroll false
+        (box
+          :halign "start"
+          :class "sidebar-waifu-pic"
+          :style "
+          min-height: 280px;
+          min-width: ${280 / waifu['size'][1] * waifu['size'][0]}px;
+          background-image: url('${waifu.name}');
+          ${waifu['size'][0] > waifu['size'][1] ?
+          'background-size: 100% auto;' : 'background-size: auto 100%;'
+          }
+          "
+          ; "${EWW_CMD} update waifu='{\"name\":\"eww_covers/cover_art\"}' && ${EWW_CMD} update waifu=$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[0]}) &"
+        )
+      )
+    )
   )
 )
 
@@ -297,6 +333,57 @@
                 )
               )
             )
+            (box ; Favourite settings >> Waifu
+              :orientation "v"
+              :space-evenly false :spacing -20
+              :vexpand true
+              (eventbox
+                :onscroll "scripts/scroll-sideleft-favourite {} &"
+                (box ; The text
+                  :orientation "h"
+                  :space-evenly false
+                  :valign "start"
+                  :height {BAR_HEIGHT}
+                  :class "sidebar-section-title"
+                  (label :xalign 0
+                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                    :text ""
+                  )
+                  (label :xalign 0
+                    :hexpand true
+                    :class "bar-txt-hugeass sidebar-section-title-text"
+                    :text "${SIDELEFT_FAVOURITE_TITLES[sideleft_favourite_page - 1]}"
+                  )
+                  (label :xalign 1
+                    :class "bar-txt-small sidebar-section-title-text"
+                    :text {sideleft_favourite_page == 1 ? '>>' : '<<'}
+                  )
+                )
+              )
+              (box
+                :class "sidebar-favourite-pad"
+                :orientation "h" :space-evenly false :spacing 0
+                :vexpand true
+                (eventbox
+                  :onscroll "scripts/scroll-sideleft-favourite {} &"
+                  (box ; 1: Quick toggles
+                    :style "
+                    ${ANIM_ENTER[1]}
+                    ${sideleft_favourite_page > 1 ? 'margin-left: -1000px;' : ''}
+                    "
+                    (hyprtoggles_widget)
+                  )
+                )
+                (box ; 2: Waifu
+                  :style "
+                  ${ANIM_ENTER[1]}
+                  ${sideleft_favourite_page > 2 ? 'margin-left: -1000px;' :
+                  sideleft_favourite_page < 2 ? 'margin-right: -1000px;' : ''}
+                  "
+                  (waifu_widget)
+                )
+              )
+            )
             (box ; Resources
               :orientation "v"
               :space-evenly false
@@ -437,58 +524,6 @@
                     )
                   )
                 )
-              )
-            )
-            (box ; Favourite settings >> Waifu
-              :orientation "v"
-              :space-evenly false :spacing -20
-              :vexpand true
-              (eventbox
-                :onscroll "scripts/scroll-sideleft-favourite {} &"
-                (box ; The text
-                  :orientation "h"
-                  :space-evenly false
-                  :valign "start"
-                  :height {BAR_HEIGHT}
-                  :class "sidebar-section-title"
-                  (label :xalign 0
-                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
-                    :text ""
-                  )
-                  (label :xalign 0
-                    :hexpand true
-                    :class "bar-txt-hugeass sidebar-section-title-text"
-                    :text "${SIDELEFT_FAVOURITE_TITLES[sideleft_favourite_page - 1]}"
-                  )
-                  (label :xalign 1
-                    :class "bar-txt-small sidebar-section-title-text"
-                    :text "Scroll for images"
-                  )
-                )
-              )
-              (box
-                :class "sidebar-favourite-pad"
-                :orientation "h" :space-evenly false :spacing 0
-                :vexpand true
-                ; :style "background: pink;"
-                (box ; 1: Quick toggles
-                  :style "
-                  ${ANIM_ENTER[1]}
-                  ${sideleft_favourite_page > 1 ? 'margin-left: -1000px;' : ''}
-                  "
-                  (hyprtoggles_widget)
-                )
-                (box ; 2: Waifu
-                  :style "
-                  ${ANIM_ENTER[1]}
-                  ${sideleft_favourite_page > 2 ? 'margin-left: -1000px;' :
-                  sideleft_favourite_page < 2 ? 'margin-right: -1000px;' : ''}
-                  "
-                  (waifu_widget)
-                )
-              )
-              (box
-                :height 20
               )
             )
             (box ; Quote

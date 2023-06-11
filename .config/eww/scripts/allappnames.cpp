@@ -67,6 +67,10 @@ bool lf(DesktopEntry a, DesktopEntry b) { return a.name < b.name; }
 // A function that prints out all desktop entry names and exec properties in a
 // given directory
 void get_desktop_entries(const string& dirname) {
+    // Check if the directory exists
+    if (!filesystem::exists(dirname) || !filesystem::is_directory(dirname)) {
+        return;
+    }
     // Iterate over all files in the directory
     for (const auto& entry : filesystem::directory_iterator(dirname)) {
         // Check if the file has a .desktop extension

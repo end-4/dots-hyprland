@@ -25,6 +25,7 @@ $bgdetail2: $onTertiary;
     @include mainfont;
     color: $primary;
     font-size: 12pt;
+    text-shadow: 0px 0px 2px mix($primary, rgba(0, 0, 0, 0), 80%);
 }
 
 .sidebar-notif-decor-left {
@@ -257,6 +258,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-music-box {
     margin: 15px;
+    margin-bottom: 0px;
 }
 
 .sidebar-music-thumbnail {
@@ -530,6 +532,7 @@ $bgdetail2: $onTertiary;
 .sidebar-favourite-pad {
     @include mainfont;
     margin: 15px -5px;
+    margin-bottom: 0px;
 }
 
 .sidebar-hyprtoggle-scrollbg {
@@ -537,6 +540,7 @@ $bgdetail2: $onTertiary;
     // margin-right: 0px;
     min-width: 555px;
 }
+
 .sidebar-waifu-scrollbg {
     margin: 5px 20px;
     min-width: 555px;
@@ -565,6 +569,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-hyprtoggle-icon-1 {
     color: $primary;
+    text-shadow: 0px 0px 2px mix($primary, rgba(0, 0, 0, 0), 80%);
 }
 
 .sidebar-hyprtoggle-name {
@@ -587,6 +592,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-hyprtoggle-onoff-1 {
     background-color: $primary;
+    box-shadow: 0px 0px 3px mix($primary, rgba(0, 0, 0, 0), 80%);
 }
 
 .sidebar-hyprtoggle-summary {
@@ -598,4 +604,29 @@ $bgdetail2: $onTertiary;
     @include techfont;
     margin: 15px;
     color: $onBackground;
+}
+
+.sidebar-waifu-tag {
+    @include mainfont;
+    font-size: 12pt;
+    border-radius: 13px;
+    padding: 5px 10px;
+    margin: 3px 2px;
+    min-height: 20px;
+    background-color: $secondaryContainer;
+    box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.5);
+}
+
+.sidebar-waifu-tag:hover {
+    background-color: tint($secondaryContainer, 10%);
+}
+
+.sidebar-waifu-tag:active {
+    background-color: tint($secondaryContainer, 20%);
+}
+
+.sidebar-waifu-pic {
+    background-color: black;
+    border-radius: 18px;
+    background-position: top center;
 }
