@@ -96,18 +96,18 @@ pip install pywal desktop_entry_lib poetry build
  - Other Dependencies (install it with your distro's package manager)
 ```
 [ Possible package names ]
-bc blueberry bluez cliphist coreutils dunst findutils gawk gojq imagemagick light networkmanager network-manager-applet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi libqalculate sox nlohmann-json boost boost-libs
+bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager network-manager-applet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi libqalculate sox nlohmann-json boost boost-libs
 [ Command for: Fedora (INCOMPLETE) ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi qalc sox nlohmann-json-devel
 ```
 - AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
 ```
 [ yay as AUR helper ]
-yay -S python-material-color-utilities geticons gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module cava
+yay -S python-material-color-utilities geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module cava
 ```
- - Other cool stuff that I use (you can skip these if you don't know what they are)
+ - Other stuff that I use, not ricing-related (you can skip these)
 ```
-tesseract
+tesseract cliphist grim slurp fuzzel
 ```
 ---
 
