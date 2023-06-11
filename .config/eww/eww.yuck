@@ -1,3 +1,4 @@
+(include "./variables.yuck")
 ;##################### Modules #########################
 (include "./modules/activewindow.yuck")
 (include "./modules/audiolevels.yuck")
@@ -10,7 +11,6 @@
 (include "./modules/searchbutton.yuck")
 (include "./modules/sys.yuck")
 (include "./modules/taskbar.yuck")
-(include "./modules/variables.yuck")
 (include "./modules/user.yuck")
 ; (include "./modules/volume.yuck")
 (include "./modules/winstuff.yuck")
