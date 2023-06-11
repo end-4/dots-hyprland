@@ -1,11 +1,12 @@
 * {
+    all: unset;
     border: 0px;
 }
 
 window {
-    /* background: transparent; */
-    background-color: #1A1B26;
-    background-image: url("background.jpg");
+    background: rgba(0, 0, 0, 0.4);
+    /* background-color: #1A1B26; */
+    /* background-image: url("background"); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -28,12 +29,17 @@ window {
 }
 
 #input-field {
-    background-color: rgba(26, 27, 38, 1);
-    border-radius: 1.2rem;
-    font-size: 1.4rem;
-    padding: 0.5rem;
-    padding-left: 0.7rem;
-    margin: 0.6rem;
+    background-color: rgba(26, 27, 38, 0.7);
+    border-radius: 8px;
+    font-size: 14pt;
+    padding: 5px 15px;
+    margin: 7px;
+    box-shadow: 2px 2px 4px #16161E;
+    min-height: 40px;
+}
+
+#input-field:focus {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 96%, #FFD9DE 96%);
 }
 
 #unlock-button {
@@ -47,7 +53,7 @@ window {
 }
 
 /* #clock-label {
-    font-family: Product Sans;
+    font-family: Lexend;
     font-size: 3.5rem;
     color: transparent;
     border-radius: 9999px;
@@ -59,16 +65,17 @@ window {
 } */
 
 #clock-label {
-    font-family: 'Product Sans';
+    font-family: 'Lexend';
     font-size: 6rem;
+    font-weight: 500;
     /* background-color: rgba(26, 27, 38, 1); */
     border-radius: 1.2rem;
     padding: 0.5rem;
     padding-left: 0.7rem;
     margin: 0.6rem;
-    margin-top: -40rem;
+    margin-top: -35rem;
     /* border: 0.2rem solid #7E64C5; */
-    color: #a2d5f8;
+    color: #FFD9DE;
     text-shadow: 2px 2px 4px #16161E;
 }
 
@@ -78,19 +85,42 @@ window {
 }
 
 #powerbar-box {
-    border-radius: 9999px;
-    background-color: rgba(26, 27, 38, 1);
-    padding: 0.3rem;
+    
 }
 #poweroff-button {
+    background: rgba(200, 200, 200, 0.1);
     min-width: 2rem;
     min-height: 2rem;
+    color: #FFD9DE;
+    font-weight: 500;
+    border-radius: 99px;
+    margin: 10px;
 }
+
 #suspend-button {
+    background: rgba(200, 200, 200, 0.1);
     min-width: 2rem;
     min-height: 2rem;
+    color: #FFD9DE;
+    font-weight: 500;
+    border-radius: 99px;
+    margin: 10px;
 }
+
 #reboot-button {
+    background: rgba(200, 200, 200, 0.1);
     min-width: 2rem;
     min-height: 2rem;
+    color: #FFD9DE;
+    font-weight: 500;
+    border-radius: 99px;
+    margin: 10px;
+}
+
+#poweroff-button:hover, #reboot-button:hover, #suspend-button:hover {
+    background: rgba(200, 200, 200, 0.3);
+}
+
+#poweroff-button:active, #reboot-button:active, #suspend-button:active {
+    background: rgba(200, 200, 200, 0.5);
 }
