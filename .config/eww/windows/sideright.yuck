@@ -352,6 +352,7 @@
               :spacing -10
               (eventbox
                 :onscroll "scripts/scrollmonth {} &"
+                :onclick "${EWW_CMD} update monthshift=0 &"
                 (box ; The text
                   :space-evenly false
                   :height {BAR_HEIGHT} :width 400

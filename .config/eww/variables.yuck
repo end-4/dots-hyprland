@@ -11,7 +11,7 @@
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar MIN_ROW_HEIGHT 100)
-(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]`)
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]`) 
 (defvar WAIFU_CATEGORIES `["waifu","waifu segs","neko","neko segs","megumin","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","kick","happy","wink"]`)
 (defvar WAIFU_CATEGORIES_ARGS `["waifu","--segs waifu","neko","--segs neko","megumin","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","kick","happy","wink"]`)
 (defvar username_default "username")
@@ -22,7 +22,10 @@
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar DYNMODULE_LEFT_PAGES 2)
 (defvar DYNMODULE_RIGHT_PAGES 3)
-(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "You're a degenerate"]`)
+(defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "Culture"]`)
+(defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
+(defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
+
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
@@ -30,6 +33,7 @@
 (defvar ANIM_EXIT `["transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 150ms cubic-bezier(1,0,1,1);"]`)
 
 ; Vars
+(defvar scroll_offset_waifu 0)
 (defvar anim_set 0)
 (defvar bar_offset 0)
 (defvar osd_vol false)

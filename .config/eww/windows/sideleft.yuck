@@ -86,17 +86,52 @@
     :class "sidebar-waifu-scrollbg"
     :spacing 10
     (box
-      (scroll
-        :vscroll true :hscroll false
-        :vexpand true
-        :width 100
-        (box
-          :orientation "v"
-          (for id in WAIFU_TAG_ID
-            (button
-              :class "sidebar-waifu-tag"
-              :onclick "${EWW_CMD} update waifu='{\"name\":\"eww_covers/waifu_loading\", \"size\": [0, 100]}' && ${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
-              {WAIFU_CATEGORIES[id]}
+      :space-evenly false :orientation "h"
+      (revealer
+        :reveal {mousemode == 1}
+        :transition "slideright"
+        :duration "200ms"
+        (eventbox
+          :onscroll "scripts/scroll-waifu {} &"
+          :width 100
+          (box
+            :orientation "v"
+            :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
+            (box
+              :orientation "v"
+              :valign "start"
+              :style "
+              ${ANIM_ENTER[1]}
+              margin-top: -${(SCROLL_MULTIPLIER_WAIFUTAGS * scroll_offset_waifu)}px;
+              margin-bottom: -${(arraylength(WAIFU_TAG_ID) - SCROLL_TOSHOW_WAIFUTAGS - scroll_offset_waifu) * SCROLL_MULTIPLIER_WAIFUTAGS}px;
+              "
+              (for id in WAIFU_TAG_ID
+                (button
+                  :class "sidebar-waifu-tag"
+                  :onclick "${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                  {WAIFU_CATEGORIES[id]}
+                )
+              )
+            )
+          )
+        )
+      )
+      (revealer
+        :reveal {mousemode == 0}
+        :transition "slideleft"
+        :duration "200ms"
+        (scroll
+          :vscroll true :hscroll false
+          :vexpand true
+          :width 100
+          (box
+            :orientation "v"
+            (for id in WAIFU_TAG_ID
+              (button
+                :class "sidebar-waifu-tag"
+                :onclick "${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                {WAIFU_CATEGORIES[id]}
+              )
             )
           )
         )
@@ -109,14 +144,13 @@
         :hexpand true
         :hscroll true :vscroll false
         (box
-          :halign "start"
+          ; :halign "start"
           :class "sidebar-waifu-pic"
           :style "
-          min-height: 280px;
-          min-width: ${280 / waifu['size'][1] * waifu['size'][0]}px;
+          ${ANIM_ENTER[0]}
           background-image: url('${waifu.name}');
           ${waifu['size'][0] > waifu['size'][1] ?
-          'background-size: 100% auto;' : 'background-size: auto 100%;'
+          'background-size: auto 100%;' : 'background-size: 100% auto;'
           }
           "
           ; "${EWW_CMD} update waifu='{\"name\":\"eww_covers/cover_art\"}' && ${EWW_CMD} update waifu=$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[0]}) &"
@@ -356,7 +390,7 @@
                   )
                   (label :xalign 1
                     :class "bar-txt-small sidebar-section-title-text"
-                    :text {sideleft_favourite_page == 1 ? '>>' : '<<'}
+                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.pics API'}
                   )
                 )
               )
@@ -369,7 +403,7 @@
                   (box ; 1: Quick toggles
                     :style "
                     ${ANIM_ENTER[1]}
-                    ${sideleft_favourite_page > 1 ? 'margin-left: -1000px;' : ''}
+                    ${sideleft_favourite_page > 1 ? 'margin-left: -600px;' : ''}
                     "
                     (hyprtoggles_widget)
                   )
@@ -377,149 +411,158 @@
                 (box ; 2: Waifu
                   :style "
                   ${ANIM_ENTER[1]}
-                  ${sideleft_favourite_page > 2 ? 'margin-left: -1000px;' :
-                  sideleft_favourite_page < 2 ? 'margin-right: -1000px;' : ''}
+                  ${sideleft_favourite_page > 2 ? 'margin-left: -600px;' :
+                  sideleft_favourite_page < 2 ? 'margin-right: -600px;' : ''}
                   "
                   (waifu_widget)
                 )
               )
             )
-            (box ; Resources
-              :orientation "v"
-              :space-evenly false
-              (box ; The text
-                :space-evenly false
-                :height {BAR_HEIGHT}
-                :class "sidebar-section-title"
-                (label :xalign 0
-                  :class "bar-icon-material-hugeass sidebar-section-title-icon"
-                  :text ""
-                )
-                (label :xalign 0
-                  :hexpand true
-                  :class "bar-txt-hugeass sidebar-section-title-text"
-                  :text "Resources"
-                )
-                ; (label :xalign 1
-                  ;   :class "bar-txt-small sidebar-section-title-text"
-                  ;   :text "no"
-                ; )
-              )
-              (box ; Actual stuff
-                :orientation "h"
-                :space-evenly false :spacing 10
-                :class "sidebar-resource-pad"
-                (box
-                  :class "sidebar-resource-value secondaryContainerElement"
-                  :width 140 :height 180
-                  (box
-                    :orientation "v" :space-evenly false :spacing 13
-                    :halign "center" :valign "center"
-                    (circular-progress
-                      :width 80 :height 80
-                      :start-at 75
-                      :class "sidebar-resource-circle"
-                      :value {EWW_CPU.avg}
-                      :thickness 5
-                      (label :class "sidebar-resource-icon-large-segoe" :text "")
+            (revealer
+              :reveal {sideleft_favourite_page == 1}
+              :transition "slideup"
+              :duration {sideleft_favourite_page == 1 ? '0ms' : '100ms'}
+              (eventbox
+                :onscroll "scripts/scroll-sideleft-favourite {} &"
+                :hexpand true
+                (box ; Resources
+                  :orientation "v"
+                  :space-evenly false
+                  (box ; The text
+                    :space-evenly false
+                    :height {BAR_HEIGHT}
+                    :class "sidebar-section-title"
+                    (label :xalign 0
+                      :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                      :text ""
                     )
-                    (label
-                      :class "sidebar-resource-txt"
-                      :text "${round(EWW_CPU.avg, 0)}%"
+                    (label :xalign 0
+                      :hexpand true
+                      :class "bar-txt-hugeass sidebar-section-title-text"
+                      :text "Resources"
                     )
+                    ; (label :xalign 1
+                      ;   :class "bar-txt-small sidebar-section-title-text"
+                      ;   :text "no"
+                    ; )
                   )
-                )
-                (box
-                  :orientation "v" :space-evenly false :spacing 10
-                  :hexpand true
-                  (box
-                    :orientation "h" :space-evenly false :spacing 10
+                  (box ; Actual stuff
+                    :orientation "h"
+                    :space-evenly false :spacing 10
+                    :class "sidebar-resource-pad"
                     (box
                       :class "sidebar-resource-value secondaryContainerElement"
-                      :width 120 :height 120
-                      :valign "start"
+                      :width 140 :height 180
                       (box
                         :orientation "v" :space-evenly false :spacing 13
                         :halign "center" :valign "center"
                         (circular-progress
-                          :width 55 :height 55
+                          :width 80 :height 80
                           :start-at 75
                           :class "sidebar-resource-circle"
-                          :value {memory.percentage}
-                          :thickness 4
-                          (label :class "sidebar-resource-icon-small" :text "")
+                          :value {EWW_CPU.avg}
+                          :thickness 5
+                          (label :class "sidebar-resource-icon-large-segoe" :text "")
                         )
                         (label
-                          :class "sidebar-resource-txt-small"
-                          :text "${memory.used}/${memory.total}"
+                          :class "sidebar-resource-txt"
+                          :text "${round(EWW_CPU.avg, 0)}%"
                         )
                       )
                     )
                     (box
-                      :class "sidebar-resource-value secondaryContainerElement"
-                      :width 120 :height 120
-                      :valign "start"
+                      :orientation "v" :space-evenly false :spacing 10
+                      :hexpand true
                       (box
-                        :orientation "v" :space-evenly false :spacing 13
-                        :halign "center" :valign "center"
-                        (circular-progress
-                          :width 55 :height 55
-                          :start-at 75
-                          :class "sidebar-resource-circle"
-                          :value {memory.swappercentage}
-                          :thickness 4
-                          (label :class "sidebar-resource-icon-small" :text "")
+                        :orientation "h" :space-evenly false :spacing 10
+                        (box
+                          :class "sidebar-resource-value secondaryContainerElement"
+                          :width 120 :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {memory.percentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${memory.used}/${memory.total}"
+                            )
+                          )
                         )
-                        (label
-                          :class "sidebar-resource-txt-small"
-                          :text "${memory.swapused}/${memory.swaptotal}"
+                        (box
+                          :class "sidebar-resource-value secondaryContainerElement"
+                          :width 120 :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {memory.swappercentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${memory.swapused}/${memory.swaptotal}"
+                            )
+                          )
+                        )
+                        (box
+                          :class "sidebar-resource-value secondaryContainerElement"
+                          :hexpand true :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {battery.percentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "Bolt")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${battery.percentage}%"
+                            )
+                          )
                         )
                       )
-                    )
-                    (box
-                      :class "sidebar-resource-value secondaryContainerElement"
-                      :hexpand true :height 120
-                      :valign "start"
                       (box
-                        :orientation "v" :space-evenly false :spacing 13
-                        :halign "center" :valign "center"
-                        (circular-progress
-                          :width 55 :height 55
-                          :start-at 75
-                          :class "sidebar-resource-circle"
-                          :value {battery.percentage}
-                          :thickness 4
-                          (label :class "sidebar-resource-icon-small" :text "Bolt")
+                        :class "sidebar-resource-value secondaryContainerElement"
+                        
+                        :valign "start"
+                        (box
+                          :orientation "h" :space-evenly false :spacing 15
+                          :valign "center"
+                          (label
+                            :valign "center"
+                            :class "sidebar-resource-icon-small"
+                            :text ""
+                          )
+                          (progress
+                            :valign "center"
+                            :hexpand true
+                            :class "sidebar-resource-prog"
+                            :value {diskfreepercent}
+                          )
+                          (label
+                            :valign "center"
+                            :class "sidebar-resource-txt-small"
+                            :text "${diskfree}/${disksize} free"
+                          )
                         )
-                        (label
-                          :class "sidebar-resource-txt-small"
-                          :text "${battery.percentage}%"
-                        )
-                      )
-                    )
-                  )
-                  (box
-                    :class "sidebar-resource-value secondaryContainerElement"
-                    
-                    :valign "start"
-                    (box
-                      :orientation "h" :space-evenly false :spacing 15
-                      :valign "center"
-                      (label
-                        :valign "center"
-                        :class "sidebar-resource-icon-small"
-                        :text ""
-                      )
-                      (progress
-                        :valign "center"
-                        :hexpand true
-                        :class "sidebar-resource-prog"
-                        :value {diskfreepercent}
-                      )
-                      (label
-                        :valign "center"
-                        :class "sidebar-resource-txt-small"
-                        :text "${diskfree}/${disksize} free"
                       )
                     )
                   )
@@ -532,7 +575,7 @@
               :spacing -10
               :valign "end"
               (eventbox
-                :onscroll "${EWW_CMD} update quote_index=${(quote_index + (strlength('{}') < 4 ? -1 : 1) + arraylength(quote_content)) % arraylength(quote_content)} &"
+                :onscroll "scripts/scroll-quote {} &"
                 :onclick "${EWW_CMD} update quote_index=${(quote_index + 1 + arraylength(quote_content)) % arraylength(quote_content)} &"
                 (box
                   :orientation "v"
@@ -552,7 +595,7 @@
                     )
                     (label :xalign 1
                       :class "bar-txt-small sidebar-section-title-text"
-                      :text "Click to change quote"
+                      :text "${quote_index+1}/${arraylength(quote_content)}"
                     )
                   )
                   (box
