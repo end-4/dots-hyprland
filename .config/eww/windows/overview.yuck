@@ -226,7 +226,7 @@
 )
 
 (defwindow overview
-  :stacking "overlay"
+  :stacking "bottom"
   :focusable true
   :monitor 0
   :namespace "eww"

@@ -1,5 +1,6 @@
 #!/usr/bin/bash
-cd ~/.config/eww
+cd ~/.config/eww || exit
+mkdir -p ~/.config/eww/scripts/cache/
 
 reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
 if [[ "$reserves" == "[0,0,0,50]" ]]; then
@@ -15,7 +16,7 @@ fi
 state=$(eww get open_overview)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
-    eww close overview &
+    eww close overview 2>/dev/null &
     eww update overview_query='' &
     eww update open_overview=false &
 else
