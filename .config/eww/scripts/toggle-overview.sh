@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 cd ~/.config/eww || exit
+mkdir -p ~/.config/eww/scripts/cache/
 
 reserves=$(hyprctl monitors -j | gojq -r -c '.[0]["reserved"]')
 if [[ "$reserves" == "[0,0,0,50]" ]]; then
