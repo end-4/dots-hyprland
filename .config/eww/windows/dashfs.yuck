@@ -189,7 +189,7 @@
                 )
               )
             )
-            } ${username}!"
+            } ${realname}!"
           )
           (label :xalign 0 :class "dashfs-greet-subtext"
             :text "It's not awesome, it's Hyprland!"
