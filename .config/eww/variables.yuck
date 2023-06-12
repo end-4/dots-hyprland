@@ -159,6 +159,7 @@
 (defpoll packages :interval "5m" `pacman -Q | wc -l`)
 (defpoll kernel :interval "5m" `uname -r`)
 (defpoll username :interval "5m" :initial "username" `whoami`)
+(defpoll realname :interval "5m" :initial "realname" `getent passwd "$USER" | cut -d ':' -f 5 | cut -d ',' -f 1`)
 (defpoll hostname :interval "5m" :initial "distro" `uname -n`)
 (defpoll wm :interval "5m" :initial "Hyprland" `echo $XDG_CURRENT_DESKTOP`)
 (defpoll diskfreepercent :interval "5m" `echo $(df --output=pcent / | tr -dc '0-9')`)
