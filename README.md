@@ -13,12 +13,25 @@
 </div>
 
 # ✨ Cool stuff
- - An overview widget that shows window positions in workspaces + app search (aims to be a GNOME overview replacement)
- - Can toggle Windows 11-like mode hehee
- - Pywal and Material You colors
- - Sexy animations
- - Made by an actual Asian
- - `summer-gruv` is the winner of Hyprland ricing competition Summer 2023
+ <details open> 
+  <summary>Notable features</summary>
+    
+  - An overview widget that shows window positions in workspaces + app search (GNOME overview replacement)
+  - Can toggle Windows 11-like mode hehee
+</details>
+<details open> 
+  <summary>Details</summary>
+    
+  - Pywal and Material You colors
+  - Sexy animations
+  - ~~Made by an actual Asian~~
+</details>
+ <details> 
+  <summary>Bragging</summary>
+  
+   - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023 and featured in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery)
+   - [`windoes`](https://github.com/end-4/dots-hyprland/tree/windoes) branch received a "Tasty rice" flair [on r/unixporn](https://www.reddit.com/r/unixporn/comments/13zdhqd/hyprland_windows_rice_with_too_much_eww_with_blur/)
+</details>
 
 # 👀 Branches + Screenshots
 
