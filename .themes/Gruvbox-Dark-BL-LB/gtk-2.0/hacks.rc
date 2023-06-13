@@ -1,0 +1,36 @@
+# vim:set ft=gtkrc ts=2 sw=2 sts=2 ai et:
+#
+# This file contains horrible hacks to make this theme work with some programs
+# This is mostly due to the limitations of GTK 2 but sometimes its the fault of
+# the programs themselves. Not going to point fingers.
+#
+# Either way, it's a WONTFIX for both, hence this horrible file.
+
+style "toplevel_hack" {
+  engine "adwaita" {}
+}
+
+style "chrome_entry" {
+  base[NORMAL]      = @base_color
+  base[INSENSITIVE] = @base_color
+}
+
+style "vim_notebook" {
+  bg[NORMAL] = @base_color
+  bg[ACTIVE] = @bg_color
+}
+
+# Vim puts an eventbox between the tab and the label and colours it,
+# we need to handle that
+widget "vim-main-window*GtkNotebook.GtkEventBox" style "vim_notebook"
+
+# (he)xchat input box
+class "SexySpellEntry" style:highest "normal_entry"
+
+# Chromium uses base as the fill colour of its own entries
+# This would be fine but GTK uses it to fill the surrounding space, so its set to bg
+# That results in Chromium using it for the fill, so we need to handle that
+widget_class "*Chrom*<GtkEntry>" style "chrome_entry"
+
+# Hack to be able to match widgets in LibreOffice
+class "GtkWindow" style "toplevel_hack"

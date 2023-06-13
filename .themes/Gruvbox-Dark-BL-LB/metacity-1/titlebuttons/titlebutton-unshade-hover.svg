@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   version="1.1"
+   id="svg13"
+   sodipodi:docname="titlebutton-unshade-hover.svg"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs17" />
+  <sodipodi:namedview
+     id="namedview15"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1044"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg13" />
+  <rect
+     x="-0.0040094261"
+     y="-16.001081"
+     width="15.999758"
+     height="15.999758"
+     ry="1.693065e-05"
+     opacity="0"
+     stroke-width="0.474327"
+     style="paint-order:markers stroke fill"
+     id="rect2"
+     transform="scale(1,-1)" />
+  <path
+     d="m 7.997184,1.00403 c 3.866051,0 7.000012,3.1339614 7.000012,7.000012 0,3.86605 -3.133999,7.000012 -7.000012,7.000012 -3.8660506,0 -7.00001195,-3.133961 -7.00001195,-7.000012 0,-3.8660506 3.13399915,-7.000012 7.00001195,-7.000012"
+     fill="#4285f4"
+     fill-rule="evenodd"
+     id="path4"
+     style="stroke-width:3.7795;fill:#266b79;fill-opacity:1" />
+  <g
+     transform="matrix(0.99998011,0,0,-0.99998011,-0.00265685,14.503913)"
+     fill="#c0e3ff"
+     id="g10">
+    <g
+       transform="translate(-81,-967)"
+       fill="#c0e3ff"
+       id="g8">
+      <path
+         d="m 89,970 -2,3 h 1 v 4 h 2 v -4 h 1 z"
+         color="#000000"
+         fill="#000000"
+         opacity="0.5"
+         style="text-indent:0;text-decoration-line:none;text-transform:none"
+         id="path6" />
+    </g>
+  </g>
+</svg>

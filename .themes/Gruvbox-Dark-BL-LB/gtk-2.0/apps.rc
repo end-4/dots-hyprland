@@ -1,0 +1,92 @@
+# vim:set ft=gtkrc ts=2 sw=2 sts=2 ai et:
+#
+# This file, unlike hacks.rc, contains legitimate cases we need to handle, e.g.
+# custom widgets, programs giving us a chance to alter their UI to fit more with
+# the theme or stuff that is supposed to look different, like panels.
+
+# TODO: This could really look nicer
+style "gimp_spin_scale" {
+  # Spin background
+  bg[NORMAL] = @base_color
+
+  engine "pixmap" {
+    image {
+      function        = BOX
+      state           = NORMAL
+      detail          = "spinbutton_up"
+      overlay_file    = "assets/pan-up-alt.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = PRELIGHT
+      detail          = "spinbutton_up"
+      overlay_file    = "assets/pan-up.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = ACTIVE
+      detail          = "spinbutton_up"
+      overlay_file    = "assets/pan-up.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = INSENSITIVE
+      detail          = "spinbutton_up"
+      overlay_file    = "assets/pan-up-alt-disabled.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = NORMAL
+      detail          = "spinbutton_down"
+      overlay_file    = "assets/pan-down-alt.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = PRELIGHT
+      detail          = "spinbutton_down"
+      overlay_file    = "assets/pan-down.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = ACTIVE
+      detail          = "spinbutton_down"
+      overlay_file    = "assets/pan-down.png"
+      overlay_stretch = FALSE
+    }
+
+    image {
+      function        = BOX
+      state           = INSENSITIVE
+      detail          = "spinbutton_down"
+      overlay_file    = "assets/pan-down-alt-disabled.png"
+      overlay_stretch = FALSE
+    }
+  }
+}
+
+style "chrome_gtk_frame" {
+  ChromeGtkFrame::frame-color                    = @titlebar_bg_color
+  ChromeGtkFrame::inactive-frame-color           = @titlebar_bg_color
+  ChromeGtkFrame::incognito-frame-color          = @titlebar_bg_color
+  ChromeGtkFrame::incognito-inactive-frame-color = @titlebar_bg_color
+
+  ChromeGtkFrame::frame-gradient-size = 0
+}
+
+# Disable spin button assets for GimpSpinScale
+class "GimpSpinScale" style "gimp_spin_scale"
+
+# Chromium lets us define some colours and settings for better integration
+class "ChromeGtkFrame" style "chrome_gtk_frame"
