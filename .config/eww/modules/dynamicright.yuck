@@ -10,8 +10,29 @@
     (box
       :orientation "h" :space-evenly false
       (revealer
-        :reveal {mousemode == 1}
+        :reveal {mousemode == 0}
         :transition "slideright"
+        :duration "200ms"
+        (scroll
+          :width 410
+          (box
+            :space-evenly false
+            :orientation "v"
+            (box ; Module 1: System
+              (system_widget)
+            )
+            (box ; Module 2: Notifications
+              (notifications_widget)
+            )
+            (box ; Module 3: System info
+              (sysinfo_widget)
+            )
+          )
+        )
+      )
+      (revealer
+        :reveal {mousemode == 1}
+        :transition "slideleft"
         :duration "200ms"
         (box
           :space-evenly false
@@ -38,27 +59,6 @@
             dynamicright_module_page < 3 ? 'margin-bottom: -70px;' : ''}
             "
             (sysinfo_widget)
-          )
-        )
-      )
-      (revealer
-        :reveal {mousemode == 0}
-        :transition "slideleft"
-        :duration "200ms"
-        (scroll
-          :width 420
-          (box
-            :space-evenly false
-            :orientation "v"
-            (box ; Module 1: System
-              (system_widget)
-            )
-            (box ; Module 2: Notifications
-              (notifications_widget)
-            )
-            (box ; Module 3: System info
-              (sysinfo_widget)
-            )
           )
         )
       )

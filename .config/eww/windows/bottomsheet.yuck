@@ -1,0 +1,15 @@
+(defwidget bottomsheet_widget []
+  (box
+    
+  )
+)
+
+(defwindow bottomsheet
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "bottom center"
+  )
+  (bottomsheet_widget)
+)

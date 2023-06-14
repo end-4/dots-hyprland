@@ -31,6 +31,8 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">todo" ]]; then
         scripts/todo add "${1#*>todo }"
         eww update todolist="$(cat json/todo.json | gojq -c -M)"
+    elif [[ "${args[0]}" == ">raw" ]]; then
+        hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq '.int') ))
     else
         # notify-send 'eww' 'Invalid command!'
         false

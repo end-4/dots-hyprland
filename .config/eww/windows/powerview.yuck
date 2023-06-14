@@ -1,6 +1,6 @@
-(defwidget workspacebox [wspace]
-  (box ; Note: height 100px width 356px
-    :class "overview-ws"
+(defwidget powerview_workspacebox_widget [wspace]
+  (box
+    :class "powerview-ws"
     (overlay
       (box
         :space-evenly false
@@ -11,7 +11,7 @@
         "
         (box
           :hexpand true
-          :class "overview-ws-${wspace[0].workspace.id == activews}"
+          :class "powerview-ws-${wspace[0].workspace.id == activews}"
           :style "
           border-radius: 99px;
           margin: 0px ${800*OVERVIEW_SCALE}px;
@@ -29,14 +29,14 @@
         "
         (for ws-window in wspace
           (box
-            :class "${ws-window.class == 'workspace' ? '' : 'overview-ws-window'}"
+            :class "${ws-window.class == 'workspace' ? '' : 'powerview-ws-window'}"
             :style "
             ${ws-window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
             ${ws-window.address == '_none' ? 'border: none' : ''};
-            margin-left: ${ws-window.at[0] * OVERVIEW_SCALE}px;
-            margin-top: ${ws-window.at[1] * OVERVIEW_SCALE}px;
-            margin-right: -${(ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE}px;
-            margin-bottom: ${RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE)};
+            margin-left: ${round(ws-window.at[0] * OVERVIEW_SCALE, 0)}px;
+            margin-top: ${round(ws-window.at[1] * OVERVIEW_SCALE, 0)}px;
+            margin-right: -${round((ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE,0)}px;
+            margin-bottom: ${round(RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE), 0)};
             "
             (eventbox
               :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
@@ -44,24 +44,10 @@
               :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
               :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
               (box
-                :class "overview-background"
-                ; Uncomment below to enable thumbnail previews (VERY SLOW)
-                ; :style "
-                ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
-                ; "
                 (image
-                  :class "overview-icon"
                   :path {ws-window.icon}
-                  ; :image-width {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * OVERVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * OVERVIEW_SCALE))}
-                  ; :image-height {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * OVERVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * OVERVIEW_SCALE))}
                   :image-width {round(ws-window.size[0] * OVERVIEW_SCALE * 45 / 100, 0)}
                   :image-height {round(ws-window.size[1] * OVERVIEW_SCALE * 45 / 100, 0)}
-                  
-                  ; :style "
-                  ; background-size: ${ws-window.size[0] > ws-window.size[1] ? 'auto 45%' : '45% auto'};
-                  ; background-image: url('${ws-window.icon}')
-                  ; ;
-                  ; "
                 )
               )
             )
@@ -72,58 +58,65 @@
   )
 )
 
-(defwidget overview []
+(defwidget powerview_widget []
   (box
     :space-evenly false
     :orientation "v"
     (eventbox
-      :onclick "scripts/toggle-overview.sh --close &"
-      :onmiddleclick "scripts/toggle-overview.sh --close &"
-      :onrightclick "scripts/toggle-overview.sh --close &"
+      :onclick "scripts/toggle-powerview.sh --close &"
+      :onmiddleclick "scripts/toggle-powerview.sh --close &"
+      :onrightclick "scripts/toggle-powerview.sh --close &"
       :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
     )
-    ; Search bar
-    (overlay
+    ; Search box
+    (box
+      :halign "center"
+      :class "bar-pad"
+      :width 290
+      :height 60
       (box
-        :class "overview-search-area"
         :space-evenly false
-        :halign "center"
-        :orientation "v"
-        (input
-          :class "overview-search-box"
-          :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
-          :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
-          :style "
-          border-radius: ${overview_query == '' ? 99 : 20}px;
-          min-width: ${overview_query == '' ? 130 : 445}px;
-          "
-        )
-        (revealer
-          :reveal false
-          :transition "slidedown"
-          (label
-            :text {ICON_GET} ; Dummy to keep listeners active
+        :orientation "h"
+        :class "bar-bg-noshadow bar-bg-pad"
+        :spacing 5
+        (overlay
+          (box
+            :width 260
+            :height {BAR_HEIGHT}
+            :space-evenly false
+            :orientation "v"
+            (input
+              :class "powerview-search-txt"
+              :halign "fill" :vexpand true
+              :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
+              :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
+            )
+            (revealer
+              :reveal false
+              :transition "slidedown"
+              (label
+                :text {ICON_GET} ; Dummy to keep listener active
+              )
+            )
           )
-        )
-      )
-      (box
-        :class "overview-search-typetosearch-pad"
-        :space-evenly false
-        :halign "center"
-        :orientation "v"
-        (revealer
-          :reveal "${overview_query == ''}"
-          :duration "150ms"
-          (label
-            :class "overview-search-typetosearch-text"
-            :xalign 0
-            :text "Type to search"
+          (box
+            :space-evenly false
+            :halign "center" :valign "center"
+            :orientation "v"
+            (revealer
+              :reveal "${overview_query == ''}"
+              :duration "150ms"
+              (label
+                :class "powerview-search-prompt-txt"
+                :xalign 0
+                :text "Type to search"
+              )
+            )
           )
         )
       )
     )
-    ; The overview
-    (eventbox
+    (eventbox ; Apps in workspaces
       :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Activities Overview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &`
       :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
       (revealer
@@ -131,7 +124,7 @@
         :transition "slidedown"
         :duration "${overview_query == '' ? '200ms' : '150ms'}"
         :style "
-        transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '150ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+        transition: ${overview_query == '' ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
         "
         (revealer
           :reveal "${overview_query == ''}"
@@ -143,38 +136,11 @@
           (box
             :space-evenly false
             :orientation "v"
-            :class "overview-window"
-            ; :space-evenly false
-            ; (label :text "${wsjsona}")
-            ; (label :text "${selected}")
-            (centerbox
-              :class "overview-window-title"
-              (label :halign "start" :style "margin: 5px;" :text "${overview_hover_name.class}")
-              (box
-                :space-evenly false
-                :orientation "h"
-                (image
-                  :class "overview-topbar-icon overview-icon"
-                  :path {overview_hover_name.icon}
-                  :image-height 30
-                  :image-width 30
-                  ; :style "
-                  ; background-image: url('${overview_hover_name.icon}');
-                  ; "
-                )
-                (label :text "${overview_hover_name.title}")
-              )
-              (button
-                :halign "end"
-                :class "overview-topbar-button"
-                :onclick "scripts/toggle-overview.sh --close"
-                (label :text "")
-              )
-            )
+            :class "bar-bg shadow-pad window-border"
             (box
               :orientation "h"
               (for wspace in wsjsona
-                (workspacebox
+                (powerview_workspacebox_widget
                   :wspace {wspace}
                 )
               )
@@ -182,7 +148,7 @@
             (box
               :orientation "h"
               (for wspace in wsjsonb
-                (workspacebox
+                (powerview_workspacebox_widget
                   :wspace {wspace}
                 )
               )
@@ -191,8 +157,7 @@
         )
       )
     )
-    ; Search Results
-    (box
+    (box ; Search results
       :class "overview-search-area"
       :space-evenly false
       :halign "center"
@@ -244,20 +209,14 @@
   )
 )
 
-(defwindow overview
+(defwindow powerview
   :stacking "overlay"
   :focusable true
   :monitor 0
   :namespace "eww"
   :geometry (geometry
-    ; :height 1080
-    ; :width 1920
-    :y "153px"
     :anchor "top center"
-    ; :y "0px"
-    ; :anchor "center center"
   )
-  ; (testing)
-  (overview)
+  (powerview_widget)
 )
 

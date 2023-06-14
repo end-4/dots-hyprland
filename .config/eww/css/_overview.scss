@@ -1,19 +1,22 @@
 .overview-window {
   @include mainfont;
+  @include window-shadow;
+  margin: 5px;
   border-radius: 22px;
-  background-color: shade($colorbarbg, 4%);
+  background-color: shade($background, 60%);
   border: 2px solid $primary;
 }
 
 .overview-window-title {
   font-size: 14pt;
   color: $onPrimaryContainer;
+  color: white;
   border-radius: 15px;
-  background-color: tint($surface, 5%);
+  background-color: $surface;
+  color: $onSurface;
   margin: 4px;
   padding: 4px;
   min-height: 30px;
-  background-image: linear-gradient(135deg, $onSecondary 15%, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, 0) 33%, $onSecondary 33%, $onSecondary 68%, rgba(0, 0, 0, 0) 68%, rgba(0, 0, 0, 0) 95%, $onSecondary 95%);
 }
 
 .overview-window-top {
@@ -24,14 +27,13 @@
 }
 
 .overview-ws {
-  border: 2px solid;
   border-radius: 15px;
-  background-color: tint($surface, 2%);
+  background-color: rgba(155, 155, 155, 0.1);
   margin: 4px;
 }
 
 .overview-ws-true {
-  color: $primary;
+  background-color: $primary;
 }
 
 .overview-ws-false {
@@ -40,9 +42,8 @@
 
 .overview-ws-window {
   border-radius: 15px;
-  background-color: shade($surface0, 2%);
-  border: 1px solid $surface0;
-  border-top: 1px solid tint($surface0, 5%);
+  background-color: shade($surface, 42%);
+  border: 1px solid $surface;
 }
 
 .overview-ws-window-content {
@@ -128,7 +129,7 @@
 }
 
 .overview-search-box:focus {
-  color: $tertiary;
+  color: $secondary;
 }
 
 .overview-results {
@@ -140,7 +141,7 @@
 .overview-search-result {
   @include mainfont;
   border-radius: 9999px;
-  background-color: $onTertiary;
+  background-color: $onSecondary;
   color: $onBackground;
   font-size: 15pt;
   min-height: 47px;
@@ -149,7 +150,7 @@
   padding-left: 57px;
   margin: 0px 5px;
 
-  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 60%, tint($tertiaryContainer, 10%) 60%);
+  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 60%, tint($secondaryContainer, 10%) 60%);
   background-size: 400% auto;
   background-position: 40% 50%;
 
@@ -161,7 +162,7 @@
 }
 
 .overview-search-result-icon {
-  background-color: $tertiaryContainer;
+  background-color: $secondaryContainer;
   border-radius: 9999px;
   min-height: 51px;
   min-width: 51px;
@@ -169,14 +170,14 @@
 }
 
 .overview-search-result:focus {
-  color: $onTertiaryContainer;
-  // background-color: $tertiaryContainer;
+  color: $onSecondaryContainer;
+  // background-color: $secondaryContainer;
   background-position: 65% 50%;
 }
 
 .overview-search-result:active {
-  color: $onTertiaryContainer;
-  // background-color: $tertiaryContainer;
+  color: $onSecondaryContainer;
+  // background-color: $secondaryContainer;
   background-position: 100% 50%;
 }
 

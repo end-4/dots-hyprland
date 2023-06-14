@@ -171,7 +171,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-quicktoggle-btn {
     border-radius: 13px;
-    background-color: $secondaryContainer;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
     color: $onSecondaryContainer;
 }
 
@@ -445,6 +445,7 @@ $bgdetail2: $onTertiary;
     padding: 10px;
     margin: 15px;
     border-radius: 13px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
 }
 
 .sidebar-brightness-progress {
@@ -467,6 +468,7 @@ $bgdetail2: $onTertiary;
 .sidebar-resource-value {
     border-radius: 18px;
     padding: 10px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
 }
 
 .sidebar-resource-icon-large {
@@ -548,7 +550,7 @@ $bgdetail2: $onTertiary;
 
 .sidebar-hyprtoggle {
     border-radius: 18px;
-    background-color: $secondaryContainer;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
 }
 
 .sidebar-hyprtoggle-icon {
@@ -558,13 +560,13 @@ $bgdetail2: $onTertiary;
 
 .sidebar-hyprtoggle-icon-segoe {
     @include icon-segoe;
-    font-size: 35pt;
+    font-size: 26pt;
     margin-left: 2px;
     margin-right: -2px;
 }
 
 .sidebar-hyprtoggle-icon-0 {
-    color: shade($onPrimaryContainer, 30%);
+    color: tint($onPrimary, 40%);
 }
 
 .sidebar-hyprtoggle-icon-1 {
@@ -613,7 +615,7 @@ $bgdetail2: $onTertiary;
     padding: 5px 10px;
     margin: 3px 2px;
     min-height: 20px;
-    background-color: $secondaryContainer;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
     box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.5);
 }
 

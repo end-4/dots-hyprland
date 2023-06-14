@@ -1,0 +1,55 @@
+@keyframes flyin-top {
+  from {
+    margin-top: -60px;
+    margin-bottom: 60px;
+  }
+
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+.powerview-search-box {
+  animation-name: flyin-top;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+  animation-iteration-count: 1;
+}
+
+.powerview-search-txt {
+  @include mainfont;
+  font-size: 12pt;
+}
+
+.powerview-search-prompt-txt {
+  @include mainfont;
+  font-size: 12pt;
+  @include subtext;
+}
+
+.powerview-ws {
+  border-radius: 13px;
+  background-color: rgba(90, 90, 90, 0.1);
+  margin: 4px;
+}
+
+.powerview-ws {
+  border-radius: 13px;
+  background-color: rgba(155, 155, 155, 0.1);
+  margin: 4px;
+}
+
+.powerview-ws-true {
+  background-color: $primary;
+}
+
+.powerview-ws-false {
+  color: transparent;
+}
+
+.powerview-ws-window {
+  border-radius: 13px;
+  background-color: mix($overlay0, rgba(80,80,80,0.3), 40%);
+  border: 1px solid mix($overlay0, rgba(80,80,80,0.4), 50%);
+}

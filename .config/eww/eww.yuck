@@ -14,7 +14,9 @@
 (include "./modules/taskbar.yuck")
 (include "./modules/workspaces.yuck")
 ;;;;;;;;;;;;;;;;;; Windows ;;;;;;;;;;;;;;;;;;;;;
+(include "./windows/bottomsheet.yuck")
 (include "./windows/overview.yuck")
+(include "./windows/powerview.yuck")
 (include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
 
@@ -61,7 +63,6 @@
 (defwindow bar
   :monitor 0
   :stacking "fg"
-  :focusable false
   :namespace "eww"
   :geometry (geometry
     :width "100%"

@@ -19,6 +19,7 @@ struct DesktopEntry {
     bool show;
 };
 
+string username;
 vector<DesktopEntry> allApps;
 json apps;
 int mode = 0;  // 0: Object, 1: Array
@@ -115,11 +116,15 @@ int main(int argc, char* argv[]) {
             mode = stoi(string(argv[2]));
     }
 
-    string username = get_username();
+    username = get_username();
     // Print all desktop entries in /usr/share/applications/
-    get_desktop_entries("/usr/share/applications/");
-    get_desktop_entries("/home/" + username + "/.local/share/applications");
-    get_desktop_entries("/var/lib/flatpak/exports/share/applications");
+    string entryDirs[3] = {"/usr/share/applications/",
+                           "/home/" + username + "/.local/share/applications",
+                           "/var/lib/flatpak/exports/share/applications"};
+    for (string directory : entryDirs) {
+        if (filesystem::exists(directory))
+            get_desktop_entries(directory);
+    }
 
     // Get em in the json object
     to_json();

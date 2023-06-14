@@ -17,7 +17,7 @@
           "
           :text "${time.hour}:${time.minute}"
         )
-        (label :xalign 0 :class "bar-txt-small clr-accent"
+        (label :xalign 0 :class "bar-txt-smaller clr-accent"
           :style "
           color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
           "
