@@ -1,0 +1,221 @@
+@namespace xul url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Icons light/dark fix coloring hack filters */
+:root {
+	--gnome-icons-hack-filter: filter: brightness(0) saturate(100%) invert(37%) sepia(8%) saturate(683%) hue-rotate(183deg) brightness(95%) contrast(84%);
+	--gnome-window-icons-hack-filter: filter: brightness(0) saturate(100%) invert(37%) sepia(8%) saturate(683%) hue-rotate(183deg) brightness(95%) contrast(84%);
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--gnome-icons-hack-filter: brightness(0) saturate(100%) invert(94%) sepia(11%) saturate(362%) hue-rotate(184deg) brightness(95%) contrast(87%);
+		--gnome-window-icons-hack-filter: brightness(0) saturate(100%) invert(94%) sepia(11%) saturate(362%) hue-rotate(184deg) brightness(95%) contrast(87%);
+	}
+}
+
+/* OPTIONAL: Use system theme icons instead of Adwaita icons included by theme */
+@supports -moz-bool-pref("gnomeTheme.systemIcons") {
+	
+	/* Window buttons */
+	:root[tabsintitlebar] #titlebar .titlebar-button .toolbarbutton-icon,
+	:root[tabsintitlebar][inFullscreen] #window-controls toolbarbutton .toolbarbutton-icon {
+		filter: var(--gnome-window-icons-hack-filter) !important;
+		width: 16px;
+	}
+	:root[tabsintitlebar] #titlebar .titlebar-buttonbox .titlebar-close .toolbarbutton-icon,
+	:root[tabsintitlebar] #titlebar #titlebar-close .toolbarbutton-icon {
+		list-style-image: url("moz-icon://stock/window-close-symbolic?size=dialog") !important;
+	}
+	:root[tabsintitlebar] #titlebar .titlebar-buttonbox .titlebar-max .toolbarbutton-icon,
+	:root[tabsintitlebar] #titlebar #titlebar-max .toolbarbutton-icon {
+		list-style-image: url("moz-icon://stock/window-maximize-symbolic?size=dialog") !important;
+	}
+	:root[tabsintitlebar] #titlebar .titlebar-buttonbox .titlebar-restore .toolbarbutton-icon {
+		list-style-image: url("moz-icon://stock/window-restore-symbolic?size=dialog") !important;
+	}
+	:root[tabsintitlebar] #titlebar .titlebar-buttonbox .titlebar-min .toolbarbutton-icon,
+	:root[tabsintitlebar] #titlebar #titlebar-min .toolbarbutton-icon {
+		list-style-image: url("moz-icon://stock/window-minimize-symbolic?size=dialog") !important;
+	}
+	:root[tabsintitlebar][inFullscreen] #window-controls #restore-button .toolbarbutton-icon {
+		list-style-image: url("moz-icon://stock/view-restore-symbolic?size=dialog") !important;
+	}
+
+	/* Toolbars close button */
+	.close-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/window-close-symbolic?size=dialog") !important;
+	}
+
+	/* Navbar icons */
+
+	/* Back button */
+	#nav-bar #back-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/go-previous-symbolic?size=dialog") !important;
+	}
+	/* Forward button */
+	#nav-bar #forward-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/go-next-symbolic?size=dialog") !important;
+	}
+	/* Menu button */
+	#PanelUI-menu-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/open-menu-symbolic?size=dialog") !important;
+	}
+	/* New tab button */
+	#new-tab-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/tab-new-symbolic?size=dialog") !important;
+	}
+	/* Home button */
+	#home-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/user-home-symbolic?size=dialog") !important;
+	}
+	/* Preferences button */
+	#preferences-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/preferences-system-symbolic?size=dialog") !important;
+	}
+	/* Fullscreen button */
+	#fullscreen-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/view-fullscreen-symbolic?size=dialog") !important;
+	}
+	/* Zoom out button */
+	#zoom-out-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/zoom-out-symbolic?size=dialog") !important;
+	}
+	/* Zoom in button */
+	#zoom-in-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/zoom-in-symbolic?size=dialog") !important;
+	}
+	/* Developer button */
+	#developer-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/applications-engineering-symbolic?size=dialog") !important;
+	}
+	/* Email link button */
+	#email-link-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/mail-unread-symbolic?size=dialog") !important;
+	}
+	/* Print button */
+	#print-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/printer-symbolic?size=dialog") !important;
+	}
+	/* Addons button */
+	#add-ons-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/application-x-addon-symbolic?size=dialog") !important;
+	}
+	/* Find button */
+	#find-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-find-symbolic?size=dialog") !important;
+	}
+	/* New window button */
+	#new-window-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/window-new-symbolic?size=dialog") !important;
+	}
+	/* Bookmarks menu button */
+	#bookmarks-menu-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/starred-symbolic?size=dialog") !important;
+	}
+	/* History button */
+	#history-panelmenu .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/preferences-system-time-symbolic?size=dialog") !important;
+	}
+	/* All tabs button */
+	#alltabs-button {
+		list-style-image: url("moz-icon://stock/pan-down-symbolic?size=dialog") !important;
+	}
+	#alltabs-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+	}
+	/* Cut button */
+	#cut-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-cut-symbolic?size=dialog") !important;
+	}
+	/* Copy button */
+	#copy-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-copy-symbolic?size=dialog") !important;
+	}
+	/* Paste button */
+	#paste-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-paste-symbolic?size=dialog") !important;
+	}
+
+	/* Reload */
+	#reload-button,
+	#context-reload .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/view-refresh-symbolic?size=dialog") !important;
+	}
+	/* Stop */
+	#stop-button,
+	#context-stop .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/process-stop-symbolic?size=dialog") !important;
+	}
+	/* Downlaod */
+	#downloads-button,
+	#downloads-indicator-icon .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/folder-download-symbolic?size=dialog") !important;
+	}
+
+	/* Navbar overflow button */
+	#nav-bar-overflow-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/pan-down-symbolic?size=dialog") !important;
+	}
+
+	/* Context back button */	
+	#context-back .menu-iconic-icon { 
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/go-previous-symbolic?size=dialog") !important;
+	}
+	/* Context forward button */	
+	#context-forward .menu-iconic-icon { 
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/go-next-symbolic?size=dialog") !important;
+	}
+
+	/* Main menu buttons icons */
+	#appMenu-zoomReduce-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/zoom-out-symbolic?size=dialog") !important;
+	}
+	#appMenu-zoomEnlarge-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/zoom-in-symbolic?size=dialog") !important;
+	}
+	#appMenu-fullscreen-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/view-fullscreen-symbolic?size=dialog") !important;
+	}
+	#appMenu-cut-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-cut-symbolic?size=dialog") !important;
+	}
+	#appMenu-copy-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-copy-symbolic?size=dialog") !important;
+	}
+	#appMenu-paste-button .toolbarbutton-icon {
+		filter: var(--gnome-icons-hack-filter);
+		list-style-image: url("moz-icon://stock/edit-paste-symbolic?size=dialog") !important;
+	}
+}
+

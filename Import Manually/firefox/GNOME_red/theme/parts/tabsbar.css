@@ -1,0 +1,619 @@
+/* Tabs bar  */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+:root {
+	--space-above-tabbar: 0 !important;
+}
+
+#TabsToolbar {
+    --toolbarbutton-inner-padding: var(--toolbarbutton-inner-padding) !important;
+	background-color: var(--gnome-tabbar-background) !important;
+	border-bottom: 0 !important;
+	padding: 0 !important;
+	position: relative;
+	z-index: 1;
+}
+
+#TabsToolbar .titlebar-buttonbox-container:not(#hack) {
+	display: none !important;
+}
+
+#TabsToolbar:-moz-window-inactive {
+	background-color: var(--gnome-inactive-tabbar-background) !important;
+}
+
+/* Tabs bar height */
+#tabbrowser-tabs,
+#tabbrowser-tabs arrowscrollbox {
+	height: auto !important;
+	min-height: auto !important;
+	--tab-min-height: 34px !important;
+}
+
+tab > stack {
+	height: 34px !important;
+	width: 34px !important;
+	min-height: 34px !important;
+}
+
+/* Tabs scroll fade */
+#TabsToolbar {
+	--gnome-tabbar-fade-background: var(--gnome-tabbar-background);
+}
+#TabsToolbar:-moz-window-inactive {
+	--gnome-tabbar-fade-background: var(--gnome-inactive-tabbar-background);
+}
+
+#scrollbutton-up:not([disabled])::after,
+#scrollbutton-down:not([disabled])::after {
+	content: "";
+	height: 44px;
+	position: absolute;
+	top: -3px;
+	z-index: -1;
+	width: 50px;
+	pointer-events: none;
+}
+
+#scrollbutton-up:not([disabled])::after {
+	background: linear-gradient(to right, var(--gnome-tabbar-fade-background) 25px, transparent);
+	
+}
+#scrollbutton-down:not([disabled])::after {
+	background: linear-gradient(to left, var(--gnome-tabbar-fade-background) 25px, transparent);
+	right: 0;
+}
+
+spacer[part=overflow-start-indicator], spacer[part=overflow-end-indicator] {
+	width: 0 !important;
+	border: 0 !important;
+	margin-inline: 0 !important;
+}
+
+#scrollbutton-up, #scrollbutton-down {
+	position: relative !important;
+	z-index: 5 !important;
+}
+
+/* Remove hover effects on tab bar buttons */
+#TabsToolbar {
+	--toolbarbutton-active-background: transparent !important;
+	--toolbarbutton-hover-background: transparent !important;
+}
+
+/* Tabsbar buttons */
+#TabsToolbar .toolbarbutton-1:not(#hack) {
+	border-radius: 6px !important;
+	margin: 5px 3px 6px !important;
+	padding: 0 9px !important;
+	min-height: 34px !important;
+	transition: background 0.3s;
+}
+#TabsToolbar .toolbarbutton-1:not([disabled]):not(:active):not([open]):hover {
+	background-color: var(--gnome-tabbar-tab-hover-background) !important;
+}
+#TabsToolbar .toolbarbutton-1:active, #TabsToolbar .toolbarbutton-1[open] {
+	background-color: var(--gnome-tabbar-tab-active-background) !important;
+}
+
+/* Fake tabsbar border */
+#TabsToolbar::after {
+	content: "";
+	display: block;
+	width: 200%;
+	background: var(--gnome-toolbar-background);
+	border-bottom: 1px solid var(--gnome-toolbar-border-color);
+	height: 0;
+	min-height: 0;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 6;
+}
+
+/* Tab */
+.tabbrowser-tab {
+	border-width: 0 !important;
+	padding: 5px 2px 6px !important;
+	position: relative;
+}
+.tabbrowser-tab:not([hidden=true], [pinned]):first-of-type {
+	padding-left: 5px !important;
+}
+.tabbrowser-tab:not([hidden="true"]):last-of-type {
+	padding-right: 5px !important;
+}
+
+#tabbrowser-tabs[haspinnedtabs]:not([positionpinnedtabs]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[first-visible-unpinned-tab] {
+  margin-inline-start: 0 !important;
+}
+
+/* Tabs separators */
+.tabbrowser-tab {
+	border-style: solid !important;
+	border-left-width: 1px !important;
+	border-color: transparent !important;
+}
+.tabbrowser-tab:not(:first-of-type, [selected], :hover) {
+	--gnome-tabbar-tab-separator-hack0: var(--gnome-tabbar-background);
+	--gnome-tabbar-tab-separator-hack1: linear-gradient(
+		to bottom,
+		var(--gnome-tabbar-tab-separator-hack0) 0,
+		var(--gnome-tabbar-tab-separator-hack0) 9px,
+		var(--gnome-tabbar-tab-separator-color) 9px,
+		var(--gnome-tabbar-tab-separator-color) 35px,
+		var(--gnome-tabbar-tab-separator-hack0) 35px,
+		var(--gnome-tabbar-tab-separator-hack0) 45px
+	) 1;
+	border-image: var(--gnome-tabbar-tab-separator-hack1);
+}
+.tabbrowser-tab:-moz-window-inactive {
+	--gnome-tabbar-tab-separator-hack0: var(--gnome-inactive-tabbar-background);
+}
+#tabbrowser-tabs[overflow="true"] .tabbrowser-tab[first-visible-unpinned-tab] {
+	border-image: none !important;
+}
+.tabbrowser-tab[selected] ~ .tabbrowser-tab:not([hidden="true"]) {
+	border-image: none;
+}
+.tabbrowser-tab[selected] ~ .tabbrowser-tab:not([hidden="true"]) ~ .tabbrowser-tab:not([hidden="true"]) {
+	border-image: var(--gnome-tabbar-tab-separator-hack1);
+}
+.tabbrowser-tab:hover ~ .tabbrowser-tab:not([hidden="true"]) {
+	border-image: none !important;
+}
+.tabbrowser-tab:hover ~ .tabbrowser-tab:not([hidden="true"]) ~ .tabbrowser-tab:not([hidden="true"]) {
+	border-image: var(--gnome-tabbar-tab-separator-hack1) !important;
+}
+
+/* Tab labels */
+tab {
+	color: var(--gnome-toolbar-color) !important;
+	font-family: Cantarell, inherit;
+	font-weight: normal;
+	font-size: 1em;
+}
+
+/* Reset tab background */
+.tab-background {
+	border-radius: 6px !important;
+	box-shadow: none !important;
+	margin-block: 0 !important;
+	border: 0 !important;
+	transition: background 0.2s;
+}
+
+/* Center all inside tab */
+.tab-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: -1px;
+	min-width: 100% !important;
+	padding: 0 4px !important;
+}
+
+/* Fix custom info tab icon */
+.tabbrowser-tab[image="chrome://global/skin/icons/info.svg"]:not([pinned]):not([busy]):not([progress]) .tab-icon-stack::before {
+	margin-inline-end: 5.5px;
+}
+.tabbrowser-tab[image="chrome://global/skin/icons/info.svg"] .tab-icon-image {
+	display: none !important;
+}
+
+/* Prevent tab icons size breaking */
+.tab-icon-image, .tab-icon-sound, .tab-throbber, .tab-throbber-fallback, .tab-close-button {
+	min-width: 16px;
+}
+
+/* Center tab icon contents */
+.tabbrowser-tab .tab-icon-stack {
+	align-items: center;
+	justify-items: center;
+}
+
+/* Adjust tab label width */
+.tab-label-container {
+	min-width: 0 !important;
+}
+
+/* Put tab close button to the right */
+.tabbrowser-tab .tab-close-button {
+	margin-left: auto !important;
+}
+
+/* Force tab favicon to the center */
+.tabbrowser-tab:not([pinned]) .tab-icon-stack {
+	margin-left: auto !important;
+}
+
+/* Tab icon margin */
+.tabbrowser-tab:not([pinned]) .tab-icon-stack {
+	margin-right: 2px;
+}
+.tab-throbber:not([pinned]), .tab-icon-pending:not([pinned]), .tab-icon-image:not([pinned]), .tab-sharing-icon-overlay:not([pinned]), .tab-icon-overlay:not([pinned]) {
+  margin-inline-end: 0 !important;
+}
+.tabbrowser-tab:not([soundplaying], [muted], [activemedia-blocked], [crashed]) .tab-icon-stack {
+	padding: 4px;
+}
+
+/* Hide favicon when mute icon is present */
+.tabbrowser-tab:not([pinned]):is([soundplaying], [muted], [activemedia-blocked], [crashed]) .tab-icon-image:not([sharing]),
+.tabbrowser-tab:not([pinned]):is([soundplaying], [muted], [activemedia-blocked], [crashed])[selected] .tab-icon-image {
+	display: none;
+}
+
+/* Hide secondary label about muting */
+.tabbrowser-tab:is([soundplaying], [muted], [activemedia-blocked], [crashed]) .tab-secondary-label {
+	display: none;
+}
+
+/* Tab buttons */
+.tab-icon-overlay,
+.tab-close-button {
+	border: 0px solid transparent;
+	box-sizing: content-box; /* Avoid deformation on flexbox */
+	border-radius: 99px !important;
+	padding: 4px !important;
+	background-size: 24px;
+	transition: all 0.2s ease-out !important;
+}
+:root:not(:-moz-window-inactive) .tab-icon-overlay:hover,
+:root:not(:-moz-window-inactive) .tab-close-button:hover {
+	background: var(--gnome-button-flat-hover-background) !important;
+}
+
+.tab-icon-stack:is([soundplaying], [muted], [activemedia-blocked]) image {
+	 margin: auto !important;
+}
+
+/* Always show the muted icon when poresent */
+#tabbrowser-tabs:not([secondarytext-unsupported]) .tabbrowser-tab:not(:hover) .tab-icon-overlay[indicator-replaces-favicon] {
+	opacity: 1 !important;
+}
+
+/* Icon overlay smaller */
+.tab-icon-overlay[pinned], .tab-icon-overlay:not([indicator-replaces-favicon="true"], [selected]) {
+	width: 12px !important;
+	height: 12px !important;
+	padding: 2px !important;
+}
+/* Icon overlay small style */
+.tab-icon-overlay:is([pinned], [sharing]):not([crashed]) {
+	stroke: unset !important;
+}
+.tab-icon-overlay:is([pinned]):not([crashed]),
+.tab-icon-overlay:is([sharing]):not([crashed], [selected]) {
+	background: var(--gnome-tab-button-background) !important;
+}
+.tab-icon-overlay:is([pinned], [sharing]):not([crashed]):hover {
+	background: var(--gnome-tab-button-hover-background) !important;
+}
+
+/* Fix icon overlay posisition when sharing */
+.tab-icon-overlay:not([crashed], [pinned]):is([sharing])[selected] {
+	top: 0 !important;
+	inset-inline-end: 0 !important;
+}
+
+/* Close tab button */
+.tab-close-button {
+	list-style-image: url("../icons/window-close-symbolic.svg") !important;
+	fill: var(--gnome-toolbar-color) !important;
+	fill-opacity: 1 !important;
+	-moz-context-properties: fill, fill-opacity !important;
+	height: 16px !important;
+	margin-right: 0 !important;
+	opacity: 1 !important;
+	width: 16px !important;
+	z-index: 100 !important;
+}
+:root:-moz-window-inactive .tab-close-button:not(#hack) {
+	opacity: .18 !important;
+}
+:root:not(:-moz-window-inactive) .tab-close-button:active {
+	background-image: var(--gnome-button-active-background) !important;
+	box-shadow: var(--gnome-button-active-box-shadow) !important;
+	border-color: var(--gnome-button-active-border-color) !important;
+	border-bottom-color: var(--gnome-button-active-border-color) !important;
+	border-top-color: var(--gnome-button-active-border-accent-color) !important;
+}
+
+.tab-close-button:active:not(:hover) {
+	background-image: none !important;
+	box-shadow: none !important;
+}
+
+/* Autohide */
+.tabbrowser-tab:not([selected="true"]) .tab-close-button {
+	visibility: hidden !important;
+	opacity: 0 !important;
+}
+.tabbrowser-tab:hover .tab-close-button {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
+
+/* Fix close button position */
+.tabbrowser-tab:not([pinned]) .tab-label-container {
+	margin-right: -16px;
+}
+.tabbrowser-tab:not([pinned]):is([selected="true"], :hover) .tab-label-container[textoverflow="true"] {
+	margin-right: 0;
+}
+#tabbrowser-tabs[closebuttons="activetab"] .tabbrowser-tab:not([pinned]) .tab-close-button {
+	display: block !important;
+}
+
+/* Close button overlay */
+.tabbrowser-tab:not([pinned]) .tab-content::before {
+	border-radius: 0 6px 6px 0;
+	content: "";
+	height: 100%;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	transition: 0.2s;
+	width: 55px;
+}
+.tabbrowser-tab:not([pinned]) .tab-content::before {
+	background: linear-gradient(to left, var(--gnome-tabbar-tab-close-overlay-bg) 100%);
+	z-index: 99;
+}
+.tabbrowser-tab:not([pinned]):is([selected="true"], :hover) .tab-content::before {
+	opacity: 1;
+}
+.tabbrowser-tab:not([pinned])[selected="true"] .tab-content::before {
+	--gnome-tabbar-tab-close-overlay-bg: var(--gnome-tabbar-tab-active-background);
+}
+.tabbrowser-tab:not([pinned], :-moz-window-inactive)[selected="true"]:hover .tab-content::before {
+	--gnome-tabbar-tab-close-overlay-bg: var(--gnome-tabbar-tab-active-hover-background);
+}
+.tabbrowser-tab:not([pinned]):hover .tab-content::before {
+	--gnome-tabbar-tab-close-overlay-bg: var(--gnome-tabbar-tab-hover-background);
+}
+.tabbrowser-tab:not([pinned])[selected="true"]:-moz-window-inactive .tab-content::before {
+	--gnome-tabbar-tab-close-overlay-bg: var(--gnome-inactive-tabbar-tab-active-background);
+}
+.tabbrowser-tab:not([pinned]):hover:-moz-window-inactive .tab-content::before  {
+	--gnome-tabbar-tab-close-overlay-bg: var(--gnome-inactive-tabbar-tab-hover-background);
+}
+
+/* Tab close button etc. positioning */
+.tab-throbber, .tab-icon-image, .tab-sharing-icon-overlay, .tab-icon-sound, .tab-close-button {
+	margin-top: 0 !important;
+}
+
+/* Active tab */
+.tab-background[selected=true] {
+	background: none !important;
+	border-image: none !important;
+}
+.tab-background[selected=true]  {
+	background-color: var(--gnome-tabbar-tab-active-background) !important;
+}
+.tab-background[selected=true]:-moz-window-inactive  {
+	background-color: var(--gnome-inactive-tabbar-tab-active-background) !important;
+}
+
+/* Tab hover */
+.tabbrowser-tab:hover > .tab-stack > .tab-background[selected=true]:not(:-moz-window-inactive) {
+	background-color: var(--gnome-tabbar-tab-active-hover-background) !important;
+}
+.tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true]),
+#TabsToolbar[brighttext] > #tabbrowser-tabs > .tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true]),
+#TabsToolbar[brighttext] > #tabbrowser-tabs > .tabbrowser-tab:hover > .tab-stack > .tab-background > .tab-line:not([selected=true]) {
+	background-color: transparent !important;
+}
+.tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true]) {
+	background-color: var(--gnome-tabbar-tab-hover-background) !important;
+	border-image: none !important;
+}
+:root:-moz-window-inactive .tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected=true]) {
+	background-color: var(--gnome-inactive-tabbar-tab-hover-background) !important;
+}
+
+/* Full width tabs */
+.tabbrowser-tab:not([style^="max-width"]):not([pinned]),
+.tabbrowser-tab[style^="max-width: 100px !important;"]:not([pinned]) {
+	max-width: 100% !important;
+	--tab-min-width: 131px !important;
+}
+.tabbrowser-tab:not([style^="max-width"]):not([pinned]):not([fadein]),
+.tabbrowser-tab[style^="max-width: 100px !important;"]:not([pinned]):not([fadein]) {
+	max-width: .1px !important;
+}
+
+/* Remove blank spaces on tabs start and end */
+#TabsToolbar .titlebar-spacer {
+	display: none !important;
+}
+
+/* Remove container bottom line indicator */
+.tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
+	display: none;
+}
+
+/* Create new container tab indicator */
+.tabbrowser-tab[class*="identity-color-"] .tab-label-container {
+	color: var(--identity-tab-color) !important;
+}
+
+/* Needs attetion tab indicator */
+.tabbrowser-tab:is([image], [pinned]) > .tab-stack > .tab-content[attention]:not([selected="true"]),
+.tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged]:not([selected="true"]) {
+	background-image: radial-gradient(var(--gnome-tabbar-tab-needs-attetion), var(--gnome-tabbar-tab-needs-attetion) 10px) !important;
+	background-position: center bottom !important;
+	background-size: 14px 2px !important;
+}
+
+/* Tab spinner */
+.tab-throbber::before {
+	animation: gnome-spinner 1s linear infinite !important;
+	background-image: url("../icons/process-working-symbolic.svg") !important;
+	width: 16px !important;
+	opacity: 1 !important;
+}
+@keyframes gnome-spinner {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Tabs manager menu */
+#alltabs-button {
+	visibility: collapse;
+}
+#tabbrowser-tabs[overflow="true"] ~ #alltabs-button {
+	visibility: visible;
+}
+
+/* Firefox View */
+#TabsToolbar #firefox-view-button .toolbarbutton-icon {
+	box-shadow: none !important;
+	fill: var(--gnome-toolbar-icon-fill) !important;
+	height: 16px !important;
+	opacity: 1 !important;
+	width: 16px !important;
+}
+:root:not([privatebrowsingmode="temporary"]):not([firefoxviewhidden]) :is(#firefox-view-button, #wrapper-firefox-view-button) + #tabbrowser-tabs {
+  border-inline-start: 0 !important;
+  padding-inline-start: var(--tab-overflow-pinned-tabs-width) !important;
+  margin-inline-start: 0 !important;
+}
+
+/* OPTIONAL: Hide single tab */
+@supports -moz-bool-pref("gnomeTheme.hideSingleTab") {
+	#tabbrowser-tabs tab:only-of-type,
+	#tabbrowser-tabs tab:only-of-type ~ toolbarbutton,
+	#tabbrowser-tabs tab:only-of-type ~ #tabbrowser-arrowscrollbox-periphery {
+		visibility: collapse;
+	}
+}
+
+/* OPTIONAL: Use normal width tabs */
+@supports -moz-bool-pref("gnomeTheme.normalWidthTabs") {
+	.tabbrowser-tab:not([style^="max-width"]):not([pinned]),
+	.tabbrowser-tab[style^="max-width: 100px !important;"]:not([pinned]) {
+		max-width: 225px !important;
+		--tab-min-width: inherit !important;
+	}
+}
+
+/* OPTIONAL: Add more contrast to the active tab */
+@supports -moz-bool-pref("gnomeTheme.activeTabContrast") {
+	.tab-background[selected=true]:not(#hack),
+	:root:not(:-moz-window-inactive) .tabbrowser-tab:hover > .tab-stack > .tab-background:not(#hack) {
+		background: var(--gnome-tabbar-tab-active-background-contrast) !important;
+	}
+	.tabbrowser-tab:not([pinned])[selected="true"] .tab-content::before,
+	:root:not(:-moz-window-inactive) .tabbrowser-tab:hover .tab-content::before {
+		--gnome-tabbar-tab-close-overlay-bg: var(--gnome-tabbar-tab-active-background-contrast) !important;
+	}
+}
+
+/* OPTIONAL: Show the close button on the selected tab only */
+@supports -moz-bool-pref("gnomeTheme.closeOnlySelectedTabs") {
+	/* Hide the close buttons on hover */
+	.tabbrowser-tab:not([selected="true"]):hover .tab-close-button {
+		visibility: hidden !important;
+		opacity: 0 !important;
+	}
+	/* Hide the close button overlay on hover */
+	.tabbrowser-tab:not([pinned]):hover .tab-content::before {
+		--gnome-tabbar-tab-close-overlay-bg: unset;
+	}
+	/* Reset the overflow position of the tab label container */
+	.tabbrowser-tab:not([pinned]):not([selected="true"]):hover .tab-label-container[textoverflow="true"] {
+		margin-right: -16px;
+	}
+}
+
+/* OPTIONAL: Use tabs as headerbar */
+@supports -moz-bool-pref("gnomeTheme.tabsAsHeaderbar") {
+	/* Rearrange bars */
+	#navigator-toolbox #titlebar {
+		-moz-box-ordinal-group: 0;
+	}
+	#navigator-toolbox #titlebar #TabsToolbar {
+		-moz-box-ordinal-group: 0;
+	}
+	#navigator-toolbox #titlebar #toolbar-menubar {
+		-moz-box-ordinal-group: 1;
+	}
+	#navigator-toolbox #nav-bar {
+		-moz-box-ordinal-group: 1;
+	}
+	#navigator-toolbox #PersonalToolbar {
+		-moz-box-ordinal-group: 2;
+	}
+	
+	/* Remove nav-bar rounding and padding */
+	:root[tabsintitlebar][sizemode="normal"]:not([gtktiledwindow="true"]) #nav-bar { 
+		border-radius: 0 !important; 
+	 } 
+	:root[tabsintitlebar]:not([inFullscreen]) #nav-bar,
+	:root[tabsintitlebar][inFullscreen] #nav-bar {
+		padding-left: 3px !important;
+		padding-right: 3px !important;
+	}
+	
+	/* Round and pad tab-bar */
+	:root[tabsintitlebar][sizemode="normal"]:not([gtktiledwindow="true"]) #TabsToolbar {
+		border-radius: env(-moz-gtk-csd-titlebar-radius) env(-moz-gtk-csd-titlebar-radius) 0 0 !important
+	}
+	:root[tabsintitlebar] #TabsToolbar .toolbar-items {
+		padding: 0 46px;
+	}
+	
+	/* Hide duplicate window controls from menubar */
+	:root[tabsintitlebar] #toolbar-menubar .titlebar-buttonbox-container {
+		display: none !important;
+	}
+	
+	/* Force displaying controls in tab-bar */
+	:root[tabsintitlebar] #TabsToolbar .titlebar-buttonbox-container:not(#hack) {
+		display: -moz-box !important;
+		position: static !important;
+		visibility: visible !important;
+	}
+	
+	/* Blend single tab into whole bar */
+	@supports -moz-bool-pref("gnomeTheme.hideSingleTab") {
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]),
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) ~ toolbarbutton,
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) ~ #tabbrowser-arrowscrollbox-periphery {
+			visibility: visible;
+		}
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) {
+			-moz-window-dragging: drag;
+		}
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) .tab-background {
+			display: none !important
+		}
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) .tab-close-button {
+			visibility: hidden !important;
+			opacity: 0 !important;
+		}
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) .tab-content::before {
+			--gnome-tabbar-tab-close-overlay-bg: unset !important;
+		}
+		#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]) .tab-labelk-container[textoverflow="true"] {
+			margin-right: -16px;
+		}
+		/* Override normal width tabs */
+		@supports -moz-bool-pref("gnomeTheme.normalWidthTabs") {
+			#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"]:not([pinned]):not([style^="max-width"]),
+			#tabbrowser-tabs tab[first-visible-tab="true"][last-visible-tab="true"][style^="max-width: 100px !important;"]:not([pinned]) {
+				max-width: 100% !important;
+				--tab-min-width: 131px !important;
+			}
+		}
+	}
+}

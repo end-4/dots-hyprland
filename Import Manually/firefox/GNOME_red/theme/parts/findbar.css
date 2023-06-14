@@ -1,0 +1,44 @@
+/* Find bar  */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+findbar {
+	padding: 0 !important;
+	position: relative;
+}
+
+findbar label, findbar description {
+	color: var(--gnome-toolbar-color) !important;
+}
+
+.findbar-container {
+	align-items: center;
+	padding: 6px !important;
+	display: flex;
+	justify-content: flex-start;
+	position: relative;
+	flex-direction: row;
+	margin: 0 !important;
+	width: calc(100% - 42px);
+	height: auto !important;
+}
+
+hbox[anonid="findbar-textbox-wrapper"] {
+	display: flex !important;
+}
+
+.findbar-entire-word {
+	margin-right: auto !important;
+}
+
+.findbar-find-status, .found-matches {	
+	margin-right: 6px !important;
+}
+
+.findbar-closebutton {
+	margin: 6px 6px 6px 0 !important;
+}
+
+.findbar-container toolbarbutton .toolbarbutton-text {
+	display: none !important;
+}

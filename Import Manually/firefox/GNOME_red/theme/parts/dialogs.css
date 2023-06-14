@@ -1,0 +1,90 @@
+/* Dialogs */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+window {
+	padding: 0 !important;
+}
+
+#window-modal-dialog {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+/* Browser dialog prompts center */
+.dialogOverlay[topmost="true"]:not(.dialogOverlay-window-modal-dialog-subdialog), #window-modal-dialog::backdrop {
+	background-color: rgba(0, 0, 0, .5) !important;
+}
+
+/* Dialog */
+.dialogBox {
+	border-radius: 12px !important;
+	margin-top: 0 !important;
+}
+.dialogBox[resizable="true"] {
+	margin-top: 24px !important;
+}
+
+window[role="dialog"] {
+	background: var(--gnome-toolbar-background) !important;
+	border: 0 !important;
+	box-shadow: var(--gnome-menu-shadow) !important;
+	padding: 0 !important;
+}
+dialog {	
+	padding: 0 !important;
+}
+dialog#handling {
+	display: flex;
+	flex-direction: column;
+}
+
+/* Content */
+.dialog-content-box {
+	padding: 24px;
+	padding-bottom: 0;
+}
+.box-inherit[part="content-box"] {
+	padding: 12px 24px 12px 24px;
+}
+#titleContainer {
+	justify-content: center !important;
+}
+.titleIcon {
+	background-color: transparent !important;
+}
+
+/* Buttons */
+.dialog-button-box {
+	display: flex !important;
+	margin-top: auto;
+}
+
+.dialog-button-box button:not(#hack) {
+	height: auto !important;
+	max-height: unset !important;
+	padding: 10px 14px !important;
+	margin: 0 !important;
+	border-radius: 0 !important;
+	flex: 1;
+	border-bottom: 0 !important;
+}
+
+/* Buttons borders - only suppor for cancel/ok */
+.dialog-button-box button[dlgtype="accept"] {
+	border-right: 0 !important;
+	border-left: 0 !important;
+}
+.dialog-button-box button[dlgtype="cancel"]:not(#hack) {
+	border-left: 0 !important;
+}
+
+/* Hadler dialog */
+#os-default-handler image {
+	display: none !important;	
+}
+#os-default-handler .name {
+	font-weight: normal !important;
+}

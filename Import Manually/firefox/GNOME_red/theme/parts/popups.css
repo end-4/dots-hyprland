@@ -1,0 +1,289 @@
+/* Popup menus and context menus */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Style menus */
+menupopup {
+	-moz-appearance: none !important;	
+	color: var(--gnome-toolbar-color) !important;
+	padding: 8px !important;
+}
+
+menu menupopup {
+	margin:	-13px 0px 0px 0px !important;
+}
+
+menulist {
+	padding: 0px !important;
+}
+
+.menupopup-arrowscrollbox {
+	-moz-appearance: none !important;
+	background: var(--gnome-menu-background) !important;
+	border: 1px solid var(--gnome-menu-border-color) !important;
+	border-radius: 12px !important;
+	box-shadow: var(--gnome-menu-shadow) !important;
+	padding: 6px !important;
+	margin: 0 !important;
+}
+
+menuitem[type="checkbox"] image, menuitem[type="radio"] image {
+	visibility: visible !important;
+}
+menuitem[disabled="true"]:hover, menupopup menu[disabled="true"]:hover {
+	background: transparent !important;
+}
+
+/* Adjust popovers position */
+panel[type=arrow] {
+	margin-top: 8px !important;
+}
+
+/* Style popovers */
+panel:not([remote]) {
+	--arrowpanel-background: var(--gnome-menu-background) !important;
+	--panel-item-hover-bgcolor: var(--gnome-menu-button-hover-background) !important;
+}
+panel  {
+	--arrowpanel-padding: 0 !important;
+	--arrowpanel-border-color: var(--gnome-menu-border-color) !important;
+	--arrowpanel-border-radius: 12px !important;
+	--gnome-menu-padding: 6px;
+}
+
+/* Padding rules */
+#sidebarMenu-popup {
+	--arrowpanel-padding: var(--gnome-menu-padding) !important;
+}
+#downloadsPanel-blockedSubview,
+#downloadsPanel-mainView {
+	padding:  var(--gnome-menu-padding) !important;
+}
+.panel-header, .panel-footer,
+.panel-subview-body,
+#protections-popup-mainView-panel-header-section,
+.permission-popup-section,
+.popup-notification-header-container,
+.popup-notification-body-container,
+.popup-notification-footer-container {
+	padding: 0 var(--gnome-menu-padding) var(--gnome-menu-padding) !important;
+}
+:is(
+	.panel-header, .panel-footer,
+	.panel-subview-body,
+	.protections-popup-section,
+	#protections-popup-mainView-panel-header-section,
+	.permission-popup-section,
+	.identity-popup-section,
+	.popup-notification-header-container,
+	.popup-notification-body-container,
+	.popup-notification-footer-container
+):first-child:not(:empty) {
+	padding-top: var(--gnome-menu-padding) !important;
+}
+#protections-popup-footer,
+#identity-popup-clear-sitedata-footer {
+	padding: 0 var(--gnome-menu-padding) !important;
+}
+.panel-subview-body > .panel-subview-body {
+	padding: 0 !important;
+}
+/* Padding with margign */
+.subviewbutton.panel-subview-footer-button:not(#downloadsHistory) {
+	margin: var(--gnome-menu-padding) !important;
+}
+.subviewbutton.panel-subview-footer-button:not(:only-child, #downloadsHistory) {
+	margin: 0 var(--gnome-menu-padding) !important;
+}
+.subviewbutton.panel-subview-footer-button:not(:only-child, #downloadsHistory):last-child {
+	margin-bottom: var(--gnome-menu-padding) !important;
+}
+
+/* No menu */
+#notification-popup,
+#permission-popup,
+#editBookmarkPanel,
+#downloadsPanel {
+	--gnome-menu-padding: 12px !important;
+}
+
+/* Panel arrow */
+.panel-arrowcontent {
+	background: var(--arrowpanel-background) !important;
+	border: 1px solid var(--gnome-menu-border-color) !important;
+	border-radius: 12px !important;
+	color: var(--gnome-toolbar-color) !important;
+}
+.panel-arrow {    
+	fill: var(--arrowpanel-background) !important;
+	stroke: var(--gnome-menu-border-color) !important;
+	display: -moz-inline-box !important;
+}
+
+/* Panel header */
+.panel-header {
+	position: relative !important;
+}
+
+/* Panel footer */
+.panel-footer {
+	background-color: transparent !important;
+	margin: 0 !important;
+}
+.panel-subview-body .panel-footer {
+	padding: 0 !important;
+}
+.panel-footer.panel-footer-menulike {
+	border-top: 0 !important;
+	margin-top: 8px !important;
+}
+.panel-footer toolbarseparator {
+	display: none !important;
+}
+.proton-zap {
+	border-image: unset !important;
+}
+.panel-subview-footer {
+	margin-top: 10px !important;
+}
+
+/* Remove unwanted separators */
+.panel-header + toolbarseparator,
+#identity-popup-mainView-panel-header + toolbarseparator,
+#permission-popup-mainView-panel-header + toolbarseparator,
+#protections-popup-mainView-panel-header-section + toolbarseparator {
+	display: none !important;
+}
+
+/* Menu buttons */
+menuitem, menupopup menu,
+panelview .subviewbutton:not(#appMenu-fxa-label2, .unified-extensions-item-menu-button),
+panelview .toolbarbutton-1,
+panelview .unified-extensions-item-action-button,
+.protections-popup-footer-button,
+.protections-popup-category,
+.identity-popup-content-blocking-category,
+#PlacesToolbar .bookmark-item,
+#downloadsPanel-mainView .download-state {
+	-moz-appearance: none !important;
+	border-radius: 6px !important;	
+	color: var(--gnome-toolbar-color) !important;
+	font: menu !important;
+	padding: 4px 12px !important;
+	min-height: 32px !important;
+}
+.subviewbutton,
+.protections-popup-footer-button,
+.protections-popup-category,
+.identity-popup-content-blocking-category,
+#PlacesToolbar menupopup[placespopup="true"] .bookmark-item,
+.openintabs-menuitem,
+.widget-overflow-list .toolbarbutton-1,
+panelview .unified-extensions-item {
+	margin: 0 !important;
+}
+
+.subviewbutton[shortcut]:after {
+	opacity: 0.5 !important;
+}
+
+.bookmark-item .menu-right {
+	fill-opacity: 1 !important;
+}
+
+/* Menu buttons disabled */
+menuitem[disabled="true"], menupopup menu[disabled="true"],
+.subviewbutton[disabled="true"], .toolbarbutton-1[disabled="true"],
+.protections-popup-category[disabled="true"],
+.identity-popup-content-blocking-category[disabled="true"] {
+	opacity: .5 !important;
+}
+menuitem[disabled="true"][_moz-menuactive], menupopup menu[disabled="true"][_moz-menuactive] {
+	background: transparent !important;
+}
+
+/* Menu buttons hover */
+menuitem:not([disabled="true"]):is(:hover, [_moz-menuactive]),
+menupopup menu:not([disabled="true"]):is(:hover, [_moz-menuactive]),
+.subviewbutton:not([disabled="true"], #appMenu-zoom-controls2, #appMenu-fxa-label2):hover,
+.protections-popup-footer-button:not([disabled="true"]):hover,
+#protections-popup-show-report-stack:hover .protections-popup-footer-button,
+.protections-popup-category:not([disabled="true"]):hover,
+.identity-popup-content-blocking-category:not([disabled="true"]):hover,
+#PlacesToolbar .bookmark-item:is(:hover, [open], [_moz-menuactive]),
+#downloadsPanel-mainView .download-state:hover {
+	background: var(--gnome-menu-button-hover-background) !important;
+}
+
+/* Menu buttons fix */
+#appMenu-fxa-label2 {
+	padding: 0 !important;
+}
+#appMenu-fxa-label2:hover {
+	background: transparent !important;
+}
+
+/* Menu buttons back */
+.subviewbutton-back {
+	opacity: 1 !important;
+	width: 100%;
+	-moz-box-align: center !important;
+	-moz-box-pack: start !important;
+}
+.subviewbutton-back + h1 {
+	font-weight: bold !important;
+	left: 0 !important;
+	padding: 0 !important;
+	pointer-events: none;
+	position: absolute !important;
+	top: 15px !important;
+	width: 100%;
+}
+
+/* Menu headers */
+.subview-subheader {
+	font: menu !important;
+	font-weight: bold !important;
+	padding-block: 0 !important;
+	margin: 0 4px !important;
+}
+
+/* Style popover separators */
+toolbarseparator, menuseparator {
+	appearance: none !important;
+}
+
+#PlacesToolbar menupopup[placespopup="true"] menuseparator {
+	border-top: 1px solid var(--gnome-menu-separator-color) !important;
+	padding: 0 !important;
+	margin: 6px 0 !important;
+}
+#PlacesToolbar menupopup[placespopup="true"] menuseparator::before {
+	border: 0 !important;
+}
+
+toolbarseparator:not([orient="vertical"]), menupopup menuseparator {
+	border-top: 1px solid var(--gnome-menu-separator-color) !important;
+	margin: 6px 0 !important;
+}
+toolbarseparator[orient="vertical"] {
+	margin: 0 6px !important;
+}
+
+.panel-subview-body + toolbarseparator:not([orient="vertical"]) {
+	margin: 0 0 6px !important;
+}
+panelview > toolbarseparator:not([orient="vertical"]),
+#identity-popup-more-info-footer toolbarseparator:not([orient="vertical"]){
+	margin: 6px !important;
+}
+#identity-popup-clear-sitedata-footer toolbarseparator:not([orient="vertical"]) {
+	margin-top: 0 !important;
+}
+
+toolbarbutton menupopup[placespopup] menuseparator {
+	padding: 0 !important;
+}
+toolbarbutton menupopup[placespopup] menuseparator::before {
+	display: none !important;
+}
