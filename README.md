@@ -4,10 +4,11 @@
 </div>
 
 ## Note for myself
-- remember to add dependencies
+- remember to add dependencies if upscale music thumbs
 ```
 go install github.com/polyfloyd/shady/cmd/shady@latest
 ```
+- requires new hyprland
 
 ## What will be here
 
