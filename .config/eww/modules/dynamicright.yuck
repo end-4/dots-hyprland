@@ -14,7 +14,7 @@
         :transition "slideright"
         :duration "200ms"
         (scroll
-          :width 410
+          :width 420
           (box
             :space-evenly false
             :orientation "v"

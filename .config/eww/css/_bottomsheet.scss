@@ -1,0 +1,101 @@
+.bottomsheet-bg {
+    transition: 0ms;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.45);
+    background-size: 100% auto;
+    background-position: center;
+    box-shadow: 0px 2px 3px rgba(11, 11, 11, 0.35);
+    // border: 1px solid mix($overlay0, rgba(80,80,80,0.3), 40%);
+}
+
+.bottomsheet-back-bg {
+    @include bar-rounding;
+    background-size: 100% auto;
+    background-position: center;
+}
+
+.bottomsheet-music-cover {
+    border-radius: 18px;
+    background-position: center;
+    background-size: auto 100%;
+    margin: 50px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.bottomsheet-music-info {
+    margin: 50px 0px;
+}
+
+.bottomsheet-music-title {
+    @include mainfont;
+    font-size: 27pt;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+    font-weight: 500;
+}
+
+.bottomsheet-music-artist {
+    @include mainfont;
+    font-size: 15pt;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+    font-weight: 500;
+}
+
+.bottomsheet-music-controlsbox {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 99px;
+    padding: 5px;
+}
+
+.bottomsheet-music-btn {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 13pt;
+    color: $onSurface;
+    margin: 2px;
+    border-radius: 99px;
+    padding: 5px;
+}
+
+.bottomsheet-music-btn:hover {
+    background-color: $overlay0;
+}
+
+.bottomsheet-music-btn:active {
+    background-color: tint($overlay0, 10%);
+}
+
+.bottomsheet-mixer-app-icon {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    border-radius: 13px;
+    padding: 10px;
+}
+
+.bottomsheet-mixer-app-serial {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    border-radius: 13px;
+    // padding: 10px;
+}
+
+.bottomsheet-mixer-app-num {
+    font-size: 13pt;
+    margin: 0px 10px;
+    color: $onSecondaryContainer;
+}
+
+.bottomsheet-mixer-app-incircle {
+    font-size: 11pt;
+    margin: 0px 5px;
+    color: $onSecondaryContainer;
+}
+
+.bottomsheet-mixer-app-circle {
+    color: $onSecondaryContainer;
+    background-color: $overlay0;
+}
+
+.bottomsheet-cavacol {
+    border-top-left-radius: 99px;
+    border-top-right-radius: 99px;
+    // border-bottom-left-radius: 99px;
+    // border-bottom-right-radius: 99px;
+}

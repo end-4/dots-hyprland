@@ -1,15 +1,220 @@
+(defwidget bottomsheet_back_widget []
+  (box
+    :orientation "v"
+    :space-evenly false
+    :style "
+    ${open_bottomsheet ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+    ${open_bottomsheet ? '' : ('margin-bottom: -400px;')}
+    "
+    (eventbox
+      :onclick "scripts/toggle-bottomsheet.sh --close &"
+      :onrightclick "scripts/toggle-bottomsheet.sh --close &"
+      :onmiddleclick "scripts/toggle-bottomsheet.sh --close &"
+    )
+    (box
+      :class "window"
+      :height 300
+      (box ; Media cover background (behind blur)
+        :class "bottomsheet-back-bg"
+        :style "background-image: url('${mcover.image}');"
+      )
+    )
+  )
+)
+
 (defwidget bottomsheet_widget []
   (box
-    
+    :orientation "v"
+    :space-evenly false
+    :style "
+    ${open_bottomsheet ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+    ${open_bottomsheet ? '' : ('margin-bottom: -400px;')}
+    "
+    (eventbox
+      :onclick "scripts/toggle-bottomsheet.sh --close &"
+      :onrightclick "scripts/toggle-bottomsheet.sh --close &"
+      :onmiddleclick "scripts/toggle-bottomsheet.sh --close &"
+    )
+    (box
+      :class "window"
+      :orientation "h"
+      :spacing 15
+      :style "
+      margin: 0px 20px;
+      margin-bottom: -309px;
+      "
+      (for colheight in cavajson
+        (box
+          :class "bottomsheet-cavacol"
+          :valign "end"
+          :style "
+          min-height: ${colheight / 5}px;
+          background-color: ${mcover.color.colors.color4};
+          "
+        )
+      )
+    )
+    (box ; Real stuff
+      :height 300
+      :space-evenly false
+      :orientation "v"
+      :style "
+      margin: 5px;
+      "
+      (box
+        :orientation "h"
+        :space-evenly false
+        :class "bottomsheet-bg"
+        (box ; Media cover (foreground)
+          :valign "center"
+          :class "bottomsheet-music-cover"
+          :style "
+          min-height: 200px; min-width: 200px;
+          background-image: url('${mcover.image}');
+          "
+        )
+        (scroll
+          :hscroll true :vscroll false
+          :width {RES_WIDTH / 2}
+          :hexpand true
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "bottomsheet-music-info"
+            (label
+              :xalign 0
+              :class "bottomsheet-music-title"
+              :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+              :wrap true
+              :text {mname.title}
+            )
+            (label
+              :xalign 0 :yalign 0
+              :vexpand true
+              :class "bottomsheet-music-artist"
+              :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+              :text {mname.artist}
+            )
+            (box
+              :orientation "h"
+              :halign "start"
+              :class "bottomsheet-music-controlsbox"
+              (button
+                :class "bar-icon-segoe bottomsheet-music-btn"
+                :style "
+                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl previous"
+                ""
+              )
+              (button
+                :class "bar-icon-segoe bottomsheet-music-btn"
+                :style "
+                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl play-pause"
+                "${mplay == 'Playing' ? '' : ''}"
+              )
+              (button
+                :class "bar-icon-segoe bottomsheet-music-btn"
+                :style "
+                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                ""
+              )
+            )
+          )
+        )
+        (scroll ; Volume mixer
+          :halign "end"
+          :vscroll true :hscroll false
+          :width 500
+          (box
+            :orientation "V"
+            :space-evenly false :spacing 10
+            :style "padding: 15px;"
+            (for app in audiojson
+              (box
+                :space-evenly false :orientation "h" :spacing 10
+                (image
+                  :class "bottomsheet-mixer-app-icon"
+                  :style "background-color: ${mcover.materialcolor.secondaryContainer};"
+                  :path {app.icon}
+                  :image-width 30
+                  :image-height 30
+                )
+                (box
+                  :orientation "h"
+                  :space-evenly true ; Even I can't believe I'd ever write this
+                  :hexpand true
+                  :spacing 5
+                  (for ser in {app["volume"]}
+                    (eventbox
+                      :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")%"
+                      :onrightclick "pactl set-sink-input-volume ${ser[0]} 100%"
+                      :onclick "pactl set-sink-input-volume ${ser[0]} 0%"
+                      (box
+                        :hexpand true
+                        :space-evenly false
+                        :orientation "h"
+                        :class "bottomsheet-mixer-app-serial"
+                        :style "background-color: ${mcover.materialcolor.secondaryContainer};"
+                        (label
+                          :xalign 0 :hexpand true
+                          :class "bottomsheet-mixer-app-num"
+                          :style "
+                          color: ${mcover.materialcolor.onSecondaryContainer};
+                          "
+                          :text "#${ser[0]}"
+                        )
+                        (box
+                          :style "margin: 0px 10px;"
+                          (circular-progress
+                            :value {ser[1] <= 100 ? ser[1] : 100}
+                            :start-at 75 :thickness 3
+                            :width 37 :height 37
+                            :class "bottomsheet-mixer-app-circle"
+                            :style "color: ${mcover.materialcolor.onSecondaryContainer};"
+                            (label
+                              :class "bottomsheet-mixer-app-incircle"
+                              :style "color: ${mcover.materialcolor.onSecondaryContainer};"
+                              :text "${ser[1]}"
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
   )
 )
 
 (defwindow bottomsheet
   :monitor 0
   :stacking "fg"
-  :namespace "eww"
+  :namespace "eww-lowopacity"
+  :focusable true
   :geometry (geometry
     :anchor "bottom center"
+    :width "100%"
   )
   (bottomsheet_widget)
+)
+
+(defwindow bottomsheet_back
+  :monitor 0
+  :stacking "bg"
+  :namespace "eww-lowopacity"
+  :geometry (geometry
+    :anchor "bottom center"
+    :width "100%"
+  )
+  (bottomsheet_back_widget)
 )

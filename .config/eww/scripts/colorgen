@@ -22,11 +22,13 @@ generated_material=$(scripts/material_colors.py --color "$maincol" "$lightdark")
 echo "$generated_material" > tmp/_material.colorpallete &
 onPrimaryContainer=$(echo "$generated_material" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
 primaryContainer=$(echo "$generated_material" | grep '$primaryContainer: ' | sed 's/$primaryContainer: //g' | sed 's/;//g')
+onSecondaryContainer=$(echo "$generated_material" | grep '$onSecondaryContainer: ' | sed 's/$onSecondaryContainer: //g' | sed 's/;//g')
+secondaryContainer=$(echo "$generated_material" | grep '$secondaryContainer: ' | sed 's/$secondaryContainer: //g' | sed 's/;//g')
 tertiary=$(echo "$generated_material" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
 onPrimary=$(echo "$generated_material" | grep '$onPrimary: ' | sed 's/$onPrimary: //g' | sed 's/;//g')
 primary=$(echo "$generated_material" | grep '$primary: ' | sed 's/$primary: //g' | sed 's/;//g')
 
-printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'"}}\n'
+printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'", "secondaryContainer": "'"$secondaryContainer"'", "onSecondaryContainer": "'"$onSecondaryContainer"'"}}\n'
 
 # Get color in rgb
 colorsreg=$(cat ~/.cache/wal/colors-putty.reg)

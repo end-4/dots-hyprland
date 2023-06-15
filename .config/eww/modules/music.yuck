@@ -38,7 +38,6 @@
             :valign "center"
             (label
               :class "bar-txt-larger"
-              :limit-width 50
               :xalign 0
               :style "
               color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
@@ -51,7 +50,6 @@
               :duration "20ms"
               (label
                 :class "bar-txt-small"
-                :limit-width 50
                 :xalign 0
                 :style "
                 color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
@@ -72,6 +70,7 @@
             (box
               :orientation "h"
               :valign "center"
+              :spacing -2
               (button
                 :class "bar-icon-segoe bar-music-btn"
                 :style "

@@ -479,6 +479,7 @@ $bgdetail2: $onTertiary;
 .sidebar-resource-icon-small {
     @include icon-material;
     font-size: 16pt;
+    color: $primary;
 }
 
 .sidebar-resource-icon-large-segoe {
@@ -490,6 +491,7 @@ $bgdetail2: $onTertiary;
     @include icon-material;
     font-size: 20pt;
     background-color: $surface;
+    color: $primary;
 }
 
 .sidebar-resource-txt {
@@ -527,7 +529,7 @@ $bgdetail2: $onTertiary;
         min-width: 4px;
         border-radius: 99px;
         border-radius: 99px;
-        background-color: $secondary;
+        background-color: $primary;
     }
 }
 
@@ -598,7 +600,7 @@ $bgdetail2: $onTertiary;
 }
 
 .sidebar-hyprtoggle-summary {
-    background-color: $background;
+    background-color: rgba(11, 11, 11, 0.5);
     border-radius: 18px;
 }
 

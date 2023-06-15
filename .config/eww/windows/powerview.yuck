@@ -31,7 +31,7 @@
           (box
             :class "${ws-window.class == 'workspace' ? '' : 'powerview-ws-window'}"
             :style "
-            ${ws-window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
+            ${ws-window.address == selected ? ('border: 1px solid' + coloraccent) : ''};
             ${ws-window.address == '_none' ? 'border: none' : ''};
             margin-left: ${round(ws-window.at[0] * OVERVIEW_SCALE, 0)}px;
             margin-top: ${round(ws-window.at[1] * OVERVIEW_SCALE, 0)}px;
@@ -41,7 +41,7 @@
             (eventbox
               :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
               :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
-              :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
+              :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-powerview.sh --close &"
               :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
               (box
                 (image
@@ -77,26 +77,21 @@
       (box
         :space-evenly false
         :orientation "h"
-        :class "bar-bg-noshadow bar-bg-pad"
         :spacing 5
         (overlay
-          (box
-            :width 260
+          (input
+            :width 280
             :height {BAR_HEIGHT}
-            :space-evenly false
-            :orientation "v"
-            (input
-              :class "powerview-search-txt"
-              :halign "fill" :vexpand true
-              :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
-              :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
-            )
-            (revealer
-              :reveal false
-              :transition "slidedown"
-              (label
-                :text {ICON_GET} ; Dummy to keep listener active
-              )
+            :class "bar-bg-noshadow bar-bg-pad powerview-search-txt"
+            :halign "fill" :vexpand true
+            :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
+            :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
+          )
+          (revealer
+            :reveal false
+            :transition "slidedown"
+            (label
+              :text {ICON_GET} ; Dummy to keep listener active
             )
           )
           (box
@@ -122,17 +117,11 @@
       (revealer
         :reveal "${overview_query == ''}"
         :transition "slidedown"
-        :duration "${overview_query == '' ? '200ms' : '150ms'}"
-        :style "
-        transition: ${overview_query == '' ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-        "
+        :duration "${overview_query == '' ? '180ms' : '150ms'}"
         (revealer
           :reveal "${overview_query == ''}"
           :transition "crossfade"
-          :duration "${overview_query == '' ? '200ms' : '150ms'}"
-          :style "
-          transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '150ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
-          "
+          :duration "${overview_query == '' ? '180ms' : '150ms'}"
           (box
             :space-evenly false
             :orientation "v"
@@ -158,38 +147,30 @@
       )
     )
     (box ; Search results
-      :class "overview-search-area"
       :space-evenly false
       :halign "center"
       :orientation "v"
       (revealer
         :reveal "${overview_query != ''}"
         :transition "slidedown"
-        :duration "${overview_query == '' ? '150ms' : '200ms'}"
-        :style "
-        transition: ${overview_query == '' ? '150ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
-        "
+        :duration "${overview_query == '' ? '170ms' : '200ms'}"
         (revealer
           :reveal "${overview_query != ''}"
           :transition "crossfade"
-          :duration "${overview_query == '' ? '150ms' : '200ms'}"
-          :style "
-          transition: ${overview_query == '' ? '150ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
-          "
+          :duration "${overview_query == '' ? '170ms' : '200ms'}"
           (scroll
             :width 502
-            :height 547
+            :height {RES_HEIGHT - BAR_HEIGHT - GAPS*3}
             (box
               :halign "center"
               :orientation "v"
-              :class "overview-results"
               :spacing 2
               :space-evenly false
               (for entry in overview_results
                 (overlay
                   (input
                     :value "${entry.name}"
-                    :class "overview-search-result"
+                    :class "powerview-search-result"
                     :onaccept "scripts/launchapp '${entry.exec}' &"
                   )
                   (image

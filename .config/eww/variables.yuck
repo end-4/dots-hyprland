@@ -55,6 +55,7 @@
 (defvar open_powerview false)
 (defvar open_sideleft false)
 (defvar open_sideright false)
+(defvar open_bottomsheet false)
 
 ; Dynamic animation: different for open and close
 

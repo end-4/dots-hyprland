@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
-~/.config/eww/scripts/toggle-overview.sh --close &
-~/.config/eww/scripts/toggle-winstart.sh --close &
+~/.config/eww/scripts/toggle-powerview.sh --close &
 
 if [[ "$1" == ">"* ]]; then
     args=( $1 )

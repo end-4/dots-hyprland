@@ -15,7 +15,6 @@
 (include "./modules/workspaces.yuck")
 ;;;;;;;;;;;;;;;;;; Windows ;;;;;;;;;;;;;;;;;;;;;
 (include "./windows/bottomsheet.yuck")
-(include "./windows/overview.yuck")
 (include "./windows/powerview.yuck")
 (include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
