@@ -727,7 +727,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-neutral"
-                        :onclick "~/.local/bin/lock.sh &"
+                        :onclick "pidof gtklock || gtklock &"
                         "Lock"
                       )
                     )
