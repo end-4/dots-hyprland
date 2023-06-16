@@ -130,7 +130,7 @@
               (button
                 :class "wifi-arrow-btn"
                 :style "font-family: Material Symbols Rounded;"
-                :onclick "gnome-control-center wifi &"
+                :onclick "foot sh -c 'sleep 0.01 ; nmtui' &"
                 ""
               )
             )

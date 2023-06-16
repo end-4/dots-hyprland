@@ -849,7 +849,7 @@
                         :halign "fill"
                         :wrap true
                         :class "osettings-btn osettings-btn-informative"
-                        :onclick "scripts/toggle-osettings.sh xdg-open https://discord.com/invite/hQ9XvMUjjr &"
+                        :onclick "scripts/toggle-osettings.sh &&  xdg-open https://discord.com/invite/hQ9XvMUjjr &"
                         "Hypr Development Discord"
                       )
                     )
