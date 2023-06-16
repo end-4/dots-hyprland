@@ -25,6 +25,6 @@ gradient_color_7 = '#E7D2D7'
 gradient_color_8 = '#C1838E'
 
 [smoothing]
-
+monstercat = 1
 gravity = 1000000
-noise_reduction = 0.65
+noise_reduction = 0.5
