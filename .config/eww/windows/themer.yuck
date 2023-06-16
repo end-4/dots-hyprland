@@ -33,23 +33,23 @@
             :spacing 4
             (button
               :class "themer-action-button themer-get"
-              :onclick "scripts/colormanage get &"
+              :onclick "scripts/toggle-themer.sh --close && scripts/colormanage get &"
               ""
             )
             (button
               :class "themer-action-button themer-restore"
-              :onclick "scripts/colormanage default &"
+              :onclick "scripts/toggle-themer.sh --close && scripts/colormanage default &"
               ""
             )
             (button
               :class "themer-action-button"
-              :onclick "scripts/togglelight light &"
+              :onclick "scripts/toggle-themer.sh --close && scripts/togglelight light &"
               :tooltip "Light mode (for generating new themes)"
               ""
             )
             (button
               :class "themer-action-button"
-              :onclick "scripts/togglelight dark &"
+              :onclick "scripts/toggle-themer.sh --close && scripts/togglelight dark &"
               :tooltip "Dark mode (for generating new themes)"
               ""
             )
