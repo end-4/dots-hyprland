@@ -24,6 +24,7 @@ struct DesktopEntry {
     bool show;
 };
 
+string username;
 vector<DesktopEntry> allApps;
 json apps;
 int mode = 0;  // 0: Object, 1: Array, 2: Start (Contains JSON for letters)
@@ -97,13 +98,13 @@ string getIconPath(string iconname) {
     } else if (iconname[0] == '\n') {
         return "";  // wtf
     }
-    string path = readIfExists("scripts/cache/" + iconname);
+    string path = readIfExists("/home/" + username + "/.config/eww/scripts/cache/" + iconname);
     if (path == "") {
         path = exec(string("geticons -t " + iconTheme + " " + string(iconname) +
                            " | head -n 1")
                         .c_str());
         // cout << "path: " << path << '\n';
-        writeToFile("scripts/cache/" + iconname, path);
+        writeToFile("/home/" + username + "/.config/eww/scripts/cache/" + iconname, path);
         // cout << "icon name: " << iconname << '\n';
         // cout << "path: " << path << '\n';
     }
@@ -238,11 +239,15 @@ int main(int argc, char* argv[]) {
             mode = stoi(string(argv[2]));
     }
 
-    string username = getUsername();
+    username = getUsername();
     // Print all desktop entries in common locations
-    getDesktopEntries("/usr/share/applications/");
-    getDesktopEntries("/home/" + username + "/.local/share/applications");
-    getDesktopEntries("/var/lib/flatpak/exports/share/applications");
+    string entryDirs[3] = {"/usr/share/applications/",
+                           "/home/" + username + "/.local/share/applications",
+                           "/var/lib/flatpak/exports/share/applications"};
+    for (string directory : entryDirs) {
+        if (filesystem::exists(directory))
+            getDesktopEntries(directory);
+    }
     if (mode == 2) addLetters();
     // Get a json and print
     toJson();
