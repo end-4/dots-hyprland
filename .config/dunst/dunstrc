@@ -23,7 +23,6 @@ stack_duplicates = false
 hide_duplicate_count = yes
 show_indicators = no
 icon_position = left
-icon_path = "/home/end/.config/eww/images/linageOS Icons/1G.png"
 max_icon_size = 48
 sticky_history = yes
 history_length = 20
