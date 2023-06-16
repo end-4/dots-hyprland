@@ -634,3 +634,8 @@ $bgdetail2: $onTertiary;
     border-radius: 18px;
     background-position: top center;
 }
+
+.sidebar-todo-box {
+    border-radius: 15px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+}

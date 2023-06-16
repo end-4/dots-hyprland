@@ -49,7 +49,7 @@
           :valign "end"
           :style "
           min-height: ${colheight / 5}px;
-          background-color: ${mcover.color.colors.color4};
+          background-color: ${colheight == 0 ? 'transparent' : mcover.color.colors.color4};
           "
         )
       )
@@ -86,7 +86,7 @@
               :class "bottomsheet-music-title"
               :style "color: ${mcover.materialcolor.onPrimaryContainer};"
               :wrap true
-              :text {mname.title}
+              :text {strlength(mname.title) == 0 ? 'Music' : mname.title}
             )
             (label
               :xalign 0 :yalign 0
@@ -203,6 +203,7 @@
   :focusable true
   :geometry (geometry
     :anchor "bottom center"
+    :y 1
     :width "100%"
   )
   (bottomsheet_widget)
@@ -214,7 +215,19 @@
   :namespace "eww-lowopacity"
   :geometry (geometry
     :anchor "bottom center"
+    :y 1
     :width "100%"
   )
   (bottomsheet_back_widget)
+)
+
+(defwindow bottomline
+  :monitor 0
+  :stacking "bg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "bottom center"
+    :width "100%"
+  )
+  (eventbox :onclick "scripts/toggle-bottomsheet.sh" (box :height 1))
 )

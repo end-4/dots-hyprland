@@ -410,7 +410,7 @@
                   :orientation "v"
                   :space-evenly false
                   :hexpand true
-                  :class "secondaryContainerElement sidebar-box"
+                  :class "sidebar-todo-box"
                   (label
                     :class "bar-txt-hugeass sidebar-box-title"
                     :text "Todo"

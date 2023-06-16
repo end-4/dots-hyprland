@@ -1,7 +1,8 @@
 (defwidget workspaces_widget []
   (eventbox
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
-    :onmiddleclick "scripts/toggle-powerview.sh"
+    :onmiddleclick "scripts/toggle-powerview.sh &"
+    :onrightclick "scripts/toggle-powerview.sh &"
     (overlay
       ; Only displays workspace state (has windows or not)
       (box
