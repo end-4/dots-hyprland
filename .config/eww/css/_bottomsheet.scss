@@ -67,7 +67,8 @@
 .bottomsheet-mixer-app-icon {
     background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
     border-radius: 13px;
-    padding: 10px;
+    min-height: 50px;
+    min-width: 50px;
 }
 
 .bottomsheet-mixer-app-serial {
@@ -96,6 +97,6 @@
 .bottomsheet-cavacol {
     border-top-left-radius: 99px;
     border-top-right-radius: 99px;
-    // border-bottom-left-radius: 99px;
-    // border-bottom-right-radius: 99px;
+    border-bottom-left-radius: 99px;
+    border-bottom-right-radius: 99px;
 }

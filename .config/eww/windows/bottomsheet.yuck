@@ -46,9 +46,9 @@
       (for colheight in cavajson
         (box
           :class "bottomsheet-cavacol"
-          :valign "end"
+          :valign "center"
           :style "
-          min-height: ${colheight / 5}px;
+          min-height: ${round(colheight / 3.5, 0)}px;
           background-color: ${colheight == 0 ? 'transparent' : mcover.color.colors.color4};
           "
         )
