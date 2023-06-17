@@ -73,11 +73,11 @@ elif [ "$1" == "icons" ]; then
   dunstctl history > "$tmp"
   get_ids
   is_paused=$(dunstctl is-paused)
-  echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '$is_paused', "icon": "'"$(get_icon)"'"}'
+  echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
   tail -f "$lockinfo" | while read -r; do
     get_ids
     is_paused=$(dunstctl is-paused)
-    echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '$is_paused', "icon": "'"$(get_icon)"'"}'
+    echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
   done
 else
   dunstctl history > "$tmp"
