@@ -129,7 +129,6 @@
 (deflisten net "scripts/net")
 (deflisten volume "scripts/volume")
 (deflisten workspace "scripts/workspaces")
-(deflisten winicons "scripts/appicons")
 (deflisten winnums "scripts/winnumbers")
 (deflisten hyprjson "scripts/hyprsettings")
 (deflisten awin "scripts/activewin")
