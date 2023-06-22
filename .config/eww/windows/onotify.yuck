@@ -274,7 +274,7 @@
                   (button :valign "center" :yalign 0.5
                     :class "osettings-tag-material"
                     :tooltip "Pause/Resume Notifications"
-                    :onclick "scripts/notifications toggle &"
+                    :onclick "scripts/notifications toggle && eww update notifications='$(scripts/notifications --once)' &"
                     {notif_icons.paused ? "" : "Pause"}
                   )
                   (button :valign "center" :yalign 0.5

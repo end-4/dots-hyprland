@@ -3,6 +3,7 @@
 tmp=scripts/cache/dunst-history.json
 lock="scripts/cache/dunst-toggle.lock"
 lockinfo="scripts/cache/dunst-lock-info"
+cd ~/.config/eww
 
 touch $lockinfo
 
@@ -63,7 +64,11 @@ get_icon() {
   fi
 }
 
-if [ "$1" == "toggle" ]; then
+if [ "$1" == "--once" ]; then
+  dunstctl history > "$tmp"
+  get_ids
+  get_notif
+elif [ "$1" == "toggle" ]; then
   toggle
   dunstctl history > "$tmp"
 elif [ "$1" == "clear" ]; then
