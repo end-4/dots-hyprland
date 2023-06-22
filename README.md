@@ -110,7 +110,7 @@ pip install pywal desktop_entry_lib poetry build
 ```
 [ Possible package names ]
 bc blueberry bluez coreutils dunst findutils gawk gojq imagemagick light networkmanager network-manager-applet pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wlogout wofi libqalculate sox nlohmann-json boost boost-libs
-[ Command for: Fedora (INCOMPLETE) ]
+[ Command for: Fedora (INCOMPLETE command so there's less name hunting for you) ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi qalc sox nlohmann-json-devel
 ```
 - AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
@@ -118,7 +118,7 @@ sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMag
 [ yay as AUR helper ]
 yay -S python-material-color-utilities geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module cava
 ```
- - Other stuff that I use, not ricing-related (you can skip these)
+ - Other stuff that I use, mostly utilities (you can skip these)
 ```
 tesseract cliphist grim slurp fuzzel
 ```
@@ -126,14 +126,14 @@ tesseract cliphist grim slurp fuzzel
 
 # 🙏 Attribution
  - Thank you fufexan (who also thanks a lot more people) for their guidance and eww config: https://github.com/fufexan/dotfiles (very clean implementation, my config is based on this)
- - Thanks to the people at the Hypr Development Discord for their inspiration (some might be toxic sometimes, but not always)
- - Bing AI for helping me breeze through the process of learning libraries
- - Maybe more, but I don't remember them all.. thanks anyway
+ - Thanks to the people at the Hypr Development Discord for their inspiration
+ - Bing AI for helping me code like 80% of the C++ functions lmao
+ - Maybe more, but I might not remember them all.. Still, thanks.
 
 # 🌟 Stars
 
 [![Stars](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
 
 # 💡 Some inspirations
- - osu!lazer, ~~Windows 11~~, Material 3, Valorant's download indicator, TETR.IO (web game), LineageOS
+ - osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
 
