@@ -3,6 +3,8 @@
 (defvar RES_HEIGHT 1080)
 (defvar BAR_HEIGHT 50)
 (defvar GAPS 5)
+(defvar DASH_CAROUSEL_WIDTH 600)
+(defvar DASH_CAROUSEL_HEIGHT 400)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar TASKVIEW_SCALE 0.12)
@@ -56,8 +58,9 @@
 (defvar open_sideleft false)
 (defvar open_sideright false)
 (defvar open_bottomsheet false)
-
-; Dynamic animation: different for open and close
+(defvar pinned_bottomsheet false)
+(defvar open_dashboard 0)
+(defvar rev_dash_carousel false)
 
 ; Time
 (defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`)
@@ -101,6 +104,8 @@
 (defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
 (defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
 (defpoll mousemode :interval "1m" "lsusb | grep -i mouse > /dev/null && echo 1 || echo 0")
+(defvar gallery_index `[0,1,2,3,4,5,6]`)
+(defvar gallery `["images/pictures/qr_aur.png", "images/pictures/banner_left", "images/pictures/banner_right", "images/icons/distros/EndeavourOS", "images/icons/win.png", "images/icons/winnews-clicked.png", "images/icons/wintaskview-clicked.png"]`)
 
 ; Fetch stuff
 (defpoll distro :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")
@@ -108,6 +113,7 @@
 (defpoll packages :interval "5m" `pacman -Q | wc -l`)
 (defpoll kernel :interval "5m" `uname -r`)
 (defpoll username :interval "5m" :initial "username" `whoami`)
+(defpoll realname :interval "5m" :initial "username" `awk -F':' -v uid=1000 '$3 == uid { print $5 }' /etc/passwd`)
 (defpoll hostname :interval "5m" :initial "distro" `uname -n`)
 (defpoll wm :interval "5m" :initial "Hyprland" `echo $XDG_CURRENT_DESKTOP`)
 (defpoll diskfreepercent :interval "5m" `echo $(df --output=pcent / | tr -dc '0-9')`)

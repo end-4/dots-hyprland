@@ -23,7 +23,7 @@
             :style "
             font-size: 18pt;
             margin-bottom: -1px;
-            color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+            color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
             "
             :text "${mplay == 'Playing' ? '' : ''}"
           )
@@ -40,7 +40,7 @@
               :class "bar-txt-larger"
               :xalign 0
               :style "
-              color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+              color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
               "
               :text {mname.title == '' ? 'Music' : mname.title}
             )
@@ -52,7 +52,7 @@
                 :class "bar-txt-small"
                 :xalign 0
                 :style "
-                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
                 "
                 :text "${mname.artist}"
               )
@@ -74,7 +74,7 @@
               (button
                 :class "bar-icon-segoe bar-music-btn"
                 :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl previous"
                 ""
@@ -82,7 +82,7 @@
               (button
                 :class "bar-icon-segoe bar-music-btn"
                 :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl play-pause"
                 "${mplay == 'Playing' ? '' : ''}"
@@ -90,7 +90,7 @@
               (button
                 :class "bar-icon-segoe bar-music-btn"
                 :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
                 ""

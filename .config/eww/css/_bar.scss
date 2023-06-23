@@ -275,11 +275,11 @@
 }
 
 .osd-active-right {
-    background-image: linear-gradient(225deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 30%);
+    background-image: linear-gradient(225deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 10%);
 }
 
 .osd-active-left {
-    background-image: linear-gradient(135deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 30%);
+    background-image: linear-gradient(135deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 10%);
 }
 
 .osd-bg {

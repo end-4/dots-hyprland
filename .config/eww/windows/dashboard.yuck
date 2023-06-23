@@ -1,0 +1,172 @@
+(defwidget dashboard_widget []
+  (overlay
+    (box
+      :class "dashboard-bg"
+      :height {RES_HEIGHT}
+      :width {RES_WIDTH}
+    )
+    (revealer ; Audio visualizer (cava)
+      :reveal {open_dashboard >= 3}
+      :duration "100ms"
+      :transition "crossfade"
+      (box
+        :orientation "h"
+        :spacing 17
+        (for colheight in cavajson
+          (box
+            :class "dashboard-cavacol"
+            :valign "end"
+            :style "
+            min-height: ${round(colheight[0] / 2.5, 0)}px;
+            "
+          )
+        )
+      )
+    )
+    (box
+      :halign "center" :valign "start"
+      :style "
+      ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+      margin-top: ${open_dashboard >= 1 ? 40 : 90}px;
+      "
+      (revealer ; Time and date
+        :reveal {open_dashboard >= 1}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "v"
+          :space-evenly false
+          (label
+            :class "dashboard-clock-time"
+            :text "${time.hour}:${time.minute}"
+          )
+          (label
+            :class "dashboard-clock-date"
+            :text "${time.day}, ${day_only} ${time.monthname} ${time.year}"
+          )
+        )
+      )
+    )
+    (box
+      :halign "start" :valign "start"
+      :style "
+      ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+      margin-top: ${open_dashboard >= 1 ? 50 : 100}px;
+      margin-left: 50px;
+      "
+      (revealer ; User
+        :reveal {open_dashboard >= 1}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "h"
+          :space-evenly false
+          :spacing 15
+          (box
+            :halign "center" :valign "center"
+            :class "dashbaord-user-pic"
+            :style "background-image: url('/var/lib/AccountsService/icons/${username}');"
+          )
+          (box
+            :orientation "v"
+            :space-evenly false
+            (label :xalign 0
+              :class "dashboard-clock-realname"
+              :text "${realname}"
+            )
+            (label :xalign 0
+              :class "dashboard-clock-username"
+              :text "${username}"
+            )
+          )
+        )
+      )
+    )
+    (revealer ; Close button
+      :reveal {open_dashboard >= 1}
+      :duration "100ms"
+      :transition "crossfade"
+      (button
+        :halign "end" :valign "start"
+        :onclick "scripts/toggle-dashboard.sh --close &"
+        :style "
+        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+        padding: 50px;
+        padding-right: ${open_dashboard >= 1 ? 50 : 0}px;
+        "
+        (box
+          :orientation "v"
+          :space-evenly false
+          :spacing -5
+          (label
+            :class "dashboard-close-btn-icon"
+            :text "close"
+          )
+          (label
+            :class "dashboard-close-btn-txt"
+            :text "Close"
+          )
+        )
+      )
+    )
+    (box
+      :halign "start" :valign "start"
+      (revealer ; Gallery
+        :reveal {open_dashboard >= 2}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "h"
+          :space-evenly false
+          :spacing 15
+          :style "
+          ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+          padding-top: ${open_dashboard >= 2 ? 300 : 350}px;
+          margin-left: ${rev_dash_carousel ? 0 : -(DASH_CAROUSEL_WIDTH)}px;
+          "
+          (box
+            :orientation "h"
+            :space-evenly false
+            (box
+              :width DASH_CAROUSEL_WIDTH
+              :height DASH_CAROUSEL_HEIGHT
+              :style "background: red;"
+              :space-evenly false :orientation "h"
+              (for img_id in gallery_index
+                (box
+                  :style "
+                  background: blue;
+                  
+                  "
+                )
+              )
+            )
+            (button
+              :onclick "${EWW_CMD} update rev_dash_carousel='${!rev_dash_carousel}' &"
+              :style "padding-left: 20px;"
+              (label
+                :angle 270
+                :class "dashboard-gallery-txt"
+                :text "Gallery"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow dashboard
+  :stacking "overlay"
+  :focusable true
+  :monitor 0
+  :namespace "gtk-layer-shell"
+  :geometry (geometry
+    :anchor "center center"
+    :height "100%"
+    :width "100%"
+  )
+  (dashboard_widget)
+)
+

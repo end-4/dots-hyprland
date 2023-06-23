@@ -1,0 +1,52 @@
+.dashboard-bg {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-clock-time {
+    @include mainfont;
+    font-size: 55pt;
+}
+
+.dashboard-clock-date {
+    @include mainfont;
+    font-size: 20pt;
+}
+
+.dashbaord-user-pic {
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 99px;
+    background-position: center center;
+    background-size: auto 100%;
+}
+
+.dashboard-clock-realname {
+    @include mainfont;
+    font-size: 22pt;
+}
+
+.dashboard-clock-username {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.dashboard-close-btn-icon {
+    @include icon-material;
+    font-size: 33pt;
+}
+
+.dashboard-close-btn-txt {
+    @include mainfont;
+    font-size: 11pt;
+}
+
+.dashboard-cavacol {
+    border-top-left-radius: 99px;
+    border-top-right-radius: 99px;
+    background-color: rgba(200, 200, 200, 0.2);
+}
+
+.dashboard-gallery-txt {
+    @include mainfont;
+    font-size: 16pt;
+}

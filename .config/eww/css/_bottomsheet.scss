@@ -19,7 +19,7 @@
     background-position: center;
     background-size: auto 100%;
     margin: 50px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+    min-height: 200px;
 }
 
 .bottomsheet-music-info {
@@ -65,14 +65,14 @@
 }
 
 .bottomsheet-mixer-app-icon {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    background-color: $secondaryContainer;
     border-radius: 13px;
     min-height: 50px;
     min-width: 50px;
 }
 
 .bottomsheet-mixer-app-serial {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    background-color: $secondaryContainer;
     border-radius: 13px;
     // padding: 10px;
 }
@@ -99,4 +99,31 @@
     border-top-right-radius: 99px;
     border-bottom-left-radius: 99px;
     border-bottom-right-radius: 99px;
+}
+
+.bottomsheet-windowctl {
+    margin: 15px;
+    margin-right: 5px;
+}
+
+.bottomsheet-windowctl-btn {
+    border-radius: 13px;
+    background-color: $secondary;
+    color: $onSecondary;
+    @include icon-material;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+.bottomsheet-windowctl-btn:hover {
+    background-color: tint($primary, 10%);
+}
+
+.bottomsheet-windowctl-btn-true {
+    border-radius: 13px;
+    background-color: $secondary;
+    color: $onSecondary;
+    @include icon-material-filled;
+    font-size: 18pt;
+    font-weight: bolder;
 }

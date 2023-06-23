@@ -67,7 +67,7 @@ bool lf(DesktopEntry a, DesktopEntry b) { return a.name < b.name; }
 
 // A function that prints out all desktop entry names and exec properties in a
 // given directory
-void get_desktop_entries(const string& dirname) {
+void getDesktopEntries(const string& dirname) {
     // Check if the directory exists
     if (!filesystem::exists(dirname) || !filesystem::is_directory(dirname)) {
         return;
@@ -123,7 +123,7 @@ int main(int argc, char* argv[]) {
                            "/var/lib/flatpak/exports/share/applications"};
     for (string directory : entryDirs) {
         if (filesystem::exists(directory))
-            get_desktop_entries(directory);
+            getDesktopEntries(directory);
     }
 
     // Get em in the json object

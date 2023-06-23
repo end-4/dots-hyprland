@@ -21,14 +21,14 @@
         (label :xalign 0
           :class "bar-txt clr-accent"
           :style "
-          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
           "
           :text "${kernel}"
         )
         (label :xalign 0
           :class "bar-txt-small clr-accent"
           :style "
-          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
           "
           :text "${packages} packages"
         )

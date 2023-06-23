@@ -45,7 +45,7 @@
           :valign "center"
           :class "bar-ws-txt bar-ws-txt-active"
           :style "
-          background-color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7)};
+          background-color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
           "
           :text "${activews}"
         )

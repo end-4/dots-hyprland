@@ -23,163 +23,205 @@
 )
 
 (defwidget bottomsheet_widget []
-  (box
-    :orientation "v"
-    :space-evenly false
-    :style "
-    ${open_bottomsheet ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
-    ${open_bottomsheet ? '' : ('margin-bottom: -400px;')}
-    "
-    (eventbox
-      :onclick "scripts/toggle-bottomsheet.sh --close &"
-      :onrightclick "scripts/toggle-bottomsheet.sh --close &"
-      :onmiddleclick "scripts/toggle-bottomsheet.sh --close &"
-    )
+  (eventbox
+    :onhoverlost {pinned_bottomsheet ? '' : 'scripts/toggle-bottomsheet.sh --close &'}
     (box
-      :class "window"
-      :orientation "h"
-      :spacing 15
+      :orientation "v"
+      :space-evenly false
       :style "
-      margin: 0px 20px;
-      margin-bottom: -309px;
+      ${open_bottomsheet ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+      ${open_bottomsheet ? '' : ('margin-bottom: -400px;')}
       "
-      (for colheight in cavajson
-        (box
-          :class "bottomsheet-cavacol"
-          :valign "center"
-          :style "
-          min-height: ${round(colheight / 3.5, 0)}px;
-          background-color: ${colheight == 0 ? 'transparent' : mcover.color.colors.color4};
-          "
+      (eventbox
+        :onclick "scripts/toggle-bottomsheet.sh --close &"
+        :onrightclick "scripts/toggle-bottomsheet.sh --close &"
+        :onmiddleclick "scripts/toggle-bottomsheet.sh --close &"
+      )
+      (box
+        :class "window"
+        :orientation "h"
+        :spacing 17
+        :style "
+        margin: 0px 20px;
+        margin-bottom: -309px;
+        "
+        (for colheight in cavajson
+          (box
+            :class "bottomsheet-cavacol"
+            :valign "center"
+            :style "
+            min-height: ${round(colheight[0] / 3.5, 0)}px;
+            background-color: ${colheight[0] == 0 ? 'transparent' : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+            "
+          )
         )
       )
-    )
-    (box ; Real stuff
-      :height 300
-      :space-evenly false
-      :orientation "v"
-      :style "
-      margin: 5px;
-      "
-      (box
-        :orientation "h"
+      (box ; Real stuff
+        :height 300
         :space-evenly false
-        :class "bottomsheet-bg"
-        (box ; Media cover (foreground)
-          :valign "center"
-          :class "bottomsheet-music-cover"
-          :style "
-          min-height: 200px; min-width: 200px;
-          background-image: url('${mcover.image}');
-          "
-        )
-        (scroll
-          :hscroll true :vscroll false
-          :width {RES_WIDTH / 2}
-          :hexpand true
-          (box
+        :orientation "v"
+        :style "
+        margin: 5px;
+        "
+        (box
+          :orientation "h"
+          :space-evenly false :spacing -35
+          :class "bottomsheet-bg"
+          (box ; Pin button
             :orientation "v"
-            :space-evenly false
-            :class "bottomsheet-music-info"
-            (label
-              :xalign 0
-              :class "bottomsheet-music-title"
-              :style "color: ${mcover.materialcolor.onPrimaryContainer};"
-              :wrap true
-              :text {strlength(mname.title) == 0 ? 'Music' : mname.title}
+            :spacing 15
+            :valign "start"
+            :class "bottomsheet-windowctl"
+            (button
+              :width 50 :height 50
+              :onclick "scripts/toggle-bottomsheet.sh --close &"
+              :class "bottomsheet-windowctl-btn"
+              :style "
+              background-color: mix(${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer}, rgb(0,0,0), 0);
+              color: mix(${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer}, rgb(0,0,0), 0);
+              "
+              "keyboard_double_arrow_down"
             )
-            (label
-              :xalign 0 :yalign 0
-              :vexpand true
-              :class "bottomsheet-music-artist"
-              :style "color: ${mcover.materialcolor.onPrimaryContainer};"
-              :text {mname.artist}
+            (button
+              :width 50 :height 50
+              :onclick "${EWW_CMD} update pinned_bottomsheet=${!pinned_bottomsheet} &"
+              :class "bottomsheet-windowctl-btn${pinned_bottomsheet ? '-true' : ''}"
+              :style "
+              background-color: mix(
+                ${pinned_bottomsheet ?
+                (mcover.materialcolor.primary == 'null' ? coloraccent : mcover.materialcolor.primary) :
+                (mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer)},
+                rgb(0,0,0), 0);
+              color: mix(
+                ${pinned_bottomsheet ?
+                (mcover.materialcolor.onPrimary == 'null' ? coloraccent : mcover.materialcolor.onPrimary) :
+                (mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer)},
+                rgb(0,0,0), 0);
+              "
+              "push_pin"
             )
+          )
+          (box ; Media cover (foreground)
+            :valign "center"
+            :class "bottomsheet-music-cover"
+            :style "
+            ${mcover.image == 'null' ? '' :
+            '
+            background-image: url(\'${mcover.image}\');
+            min-width: 200px;
+            box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.7);
+            '}
+            "
+          )
+          (scroll
+            :hscroll true :vscroll false
+            :width {RES_WIDTH / 2}
+            :hexpand true
+            :style "margin-left: 15px; margin-right: 30px;"
             (box
-              :orientation "h"
-              :halign "start"
-              :class "bottomsheet-music-controlsbox"
-              (button
-                :class "bar-icon-segoe bottomsheet-music-btn"
-                :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
-                "
-                :onclick "playerctl previous"
-                ""
+              :orientation "v"
+              :space-evenly false
+              :class "bottomsheet-music-info"
+              (label
+                :xalign 0
+                :class "bottomsheet-music-title"
+                :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
+                :wrap true
+                :text {strlength(mname.title) == 0 ? 'Music' : mname.title}
               )
-              (button
-                :class "bar-icon-segoe bottomsheet-music-btn"
-                :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
-                "
-                :onclick "playerctl play-pause"
-                "${mplay == 'Playing' ? '' : ''}"
+              (label
+                :xalign 0 :yalign 0
+                :vexpand true
+                :class "bottomsheet-music-artist"
+                :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
+                :text {mname.artist}
               )
-              (button
-                :class "bar-icon-segoe bottomsheet-music-btn"
-                :style "
-                color: ${colormode == 'one' ? 'white' : (mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4)};
-                "
-                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-                ""
+              (box
+                :orientation "h"
+                :halign "start"
+                :class "bottomsheet-music-controlsbox"
+                (button
+                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :style "
+                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                  "
+                  :onclick "playerctl previous"
+                  ""
+                )
+                (button
+                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :style "
+                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                  "
+                  :onclick "playerctl play-pause"
+                  "${mplay == 'Playing' ? '' : ''}"
+                )
+                (button
+                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :style "
+                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                  "
+                  :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                  ""
+                )
               )
             )
           )
-        )
-        (scroll ; Volume mixer
-          :halign "end"
-          :vscroll true :hscroll false
-          :width 500
-          (box
-            :orientation "V"
-            :space-evenly false :spacing 10
-            :style "padding: 15px;"
-            (for app in audiojson
-              (box
-                :space-evenly false :orientation "h" :spacing 10
-                (image
-                  :class "bottomsheet-mixer-app-icon"
-                  :style "background-color: ${mcover.materialcolor.secondaryContainer};"
-                  :path {app.icon}
-                  :image-width 30
-                  :image-height 30
-                )
+          (scroll ; Volume mixer
+            :halign "end"
+            ; :vscroll true :hscroll false
+            :width 500
+            (box
+              :orientation "V"
+              :space-evenly false :spacing 10
+              :style "padding: 15px;"
+              (for app in audiojson
                 (box
-                  :orientation "h"
-                  :space-evenly true ; Even I can't believe I'd ever write this
-                  :hexpand true
-                  :spacing 5
-                  (for ser in {app["volume"]}
-                    (eventbox
-                      :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")%"
-                      :onrightclick "pactl set-sink-input-volume ${ser[0]} 100%"
-                      :onclick "pactl set-sink-input-volume ${ser[0]} 0%"
-                      (box
-                        :hexpand true
-                        :space-evenly false
-                        :orientation "h"
-                        :class "bottomsheet-mixer-app-serial"
-                        :style "background-color: ${mcover.materialcolor.secondaryContainer};"
-                        (label
-                          :xalign 0 :hexpand true
-                          :class "bottomsheet-mixer-app-num"
-                          :style "
-                          color: ${mcover.materialcolor.onSecondaryContainer};
-                          "
-                          :text "#${ser[0]}"
-                        )
+                  :space-evenly false :orientation "h" :spacing 10
+                  (image
+                    :class "bottomsheet-mixer-app-icon"
+                    :style "background-color: ${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer};"
+                    :path {app.icon}
+                    :image-width 30
+                    :image-height 30
+                  )
+                  (box
+                    :orientation "h"
+                    :space-evenly true ; Even I can't believe I'd ever write this
+                    :hexpand true
+                    :spacing 5
+                    (for ser in {app["volume"]}
+                      (eventbox
+                        :onscroll "pactl set-sink-input-volume ${ser[0]} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")%"
+                        :onrightclick "pactl set-sink-input-volume ${ser[0]} 100%"
+                        :onclick "pactl set-sink-input-volume ${ser[0]} 0%"
                         (box
-                          :style "margin: 0px 10px;"
-                          (circular-progress
-                            :value {ser[1] <= 100 ? ser[1] : 100}
-                            :start-at 75 :thickness 3
-                            :width 37 :height 37
-                            :class "bottomsheet-mixer-app-circle"
-                            :style "color: ${mcover.materialcolor.onSecondaryContainer};"
-                            (label
-                              :class "bottomsheet-mixer-app-incircle"
-                              :style "color: ${mcover.materialcolor.onSecondaryContainer};"
-                              :text "${ser[1]}"
+                          :hexpand true
+                          :space-evenly false
+                          :orientation "h"
+                          :class "bottomsheet-mixer-app-serial"
+                          :style "background-color: ${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer};"
+                          (label
+                            :xalign 0 :hexpand true
+                            :class "bottomsheet-mixer-app-num"
+                            :style "
+                            color: ${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer};
+                            "
+                            :text "#${ser[0]}"
+                          )
+                          (box
+                            :style "margin: 0px 10px;"
+                            (circular-progress
+                              :value {ser[1] <= 100 ? ser[1] : 100}
+                              :start-at 75 :thickness 3
+                              :width 37 :height 37
+                              :class "bottomsheet-mixer-app-circle"
+                              :style "color: ${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer};"
+                              (label
+                                :class "bottomsheet-mixer-app-incircle"
+                                :style "color: ${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer};"
+                                :text "${ser[1]}"
+                              )
                             )
                           )
                         )
@@ -200,7 +242,7 @@
   :monitor 0
   :stacking "fg"
   :namespace "eww-lowopacity"
-  :focusable true
+  ; :focusable true
   :geometry (geometry
     :anchor "bottom center"
     :y 1
