@@ -112,7 +112,7 @@
       )
     )
     (eventbox ; Apps in workspaces
-      :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Activities Overview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &`
+      :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}' &`
       :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
       (revealer
         :reveal "${overview_query == ''}"
@@ -125,21 +125,44 @@
           (box
             :space-evenly false
             :orientation "v"
-            :class "bar-bg shadow-pad window-border"
             (box
-              :orientation "h"
-              (for wspace in wsjsona
-                (powerview_workspacebox_widget
-                  :wspace {wspace}
+              :space-evenly false
+              :orientation "v"
+              :class "bar-bg shadow-pad window-border"
+              (box
+                :orientation "h"
+                (for wspace in wsjsona
+                  (powerview_workspacebox_widget
+                    :wspace {wspace}
+                  )
+                )
+              )
+              (box
+                :orientation "h"
+                (for wspace in wsjsonb
+                  (powerview_workspacebox_widget
+                    :wspace {wspace}
+                  )
                 )
               )
             )
-            (box
+            (centerbox
+              :halign "center"
+              :width {RES_WIDTH / 3}
               :orientation "h"
-              (for wspace in wsjsonb
-                (powerview_workspacebox_widget
-                  :wspace {wspace}
-                )
+              :class "bar-bg shadow-pad window-border powerview-info"
+              (label :xalign 0
+                :class "bar-txt-larger"
+                :text "${overview_hover_name.class}"
+              )
+              (label
+                :class "bar-txt-larger"
+                :style "margin: 0px 50px;"
+                :text "${overview_hover_name.title}"
+              )
+              (label :xalign 1
+                :class "bar-txt-larger"
+                :text "${overview_hover_name.size[0]}x${overview_hover_name.size[1]} "
               )
             )
           )

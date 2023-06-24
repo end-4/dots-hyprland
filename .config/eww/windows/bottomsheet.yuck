@@ -125,7 +125,9 @@
               (label
                 :xalign 0
                 :class "bottomsheet-music-title"
-                :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
+                :style "
+                color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};
+                "
                 :wrap true
                 :text {strlength(mname.title) == 0 ? 'Music' : mname.title}
               )

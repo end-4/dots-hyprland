@@ -50,3 +50,10 @@
     @include mainfont;
     font-size: 16pt;
 }
+
+.dashboard-carousel-image {
+    border-radius: 13px;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    background-position: center;
+}

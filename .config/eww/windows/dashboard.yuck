@@ -109,51 +109,70 @@
         )
       )
     )
-    (box
-      :halign "start" :valign "start"
-      (revealer ; Gallery
-        :reveal {open_dashboard >= 2}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "h"
-          :space-evenly false
-          :spacing 15
-          :style "
-          ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-          padding-top: ${open_dashboard >= 2 ? 300 : 350}px;
-          margin-left: ${rev_dash_carousel ? 0 : -(DASH_CAROUSEL_WIDTH)}px;
-          "
-          (box
-            :orientation "h"
-            :space-evenly false
-            (box
-              :width DASH_CAROUSEL_WIDTH
-              :height DASH_CAROUSEL_HEIGHT
-              :style "background: red;"
-              :space-evenly false :orientation "h"
-              (for img_id in gallery_index
-                (box
-                  :style "
-                  background: blue;
-                  
-                  "
-                )
-              )
-            )
-            (button
-              :onclick "${EWW_CMD} update rev_dash_carousel='${!rev_dash_carousel}' &"
-              :style "padding-left: 20px;"
-              (label
-                :angle 270
-                :class "dashboard-gallery-txt"
-                :text "Gallery"
-              )
-            )
-          )
-        )
-      )
-    )
+    ; (box
+    ;   :halign "start" :valign "start"
+    ;   (revealer ; Gallery
+    ;     :reveal {open_dashboard >= 2}
+    ;     :duration "100ms"
+    ;     :transition "crossfade"
+    ;     (box
+    ;       :orientation "h"
+    ;       :space-evenly false
+    ;       :spacing 15
+    ;       :style "
+    ;       ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+    ;       padding-top: ${open_dashboard >= 2 ? 300 : 350}px;
+    ;       margin-left: ${rev_dash_carousel ? 0 : -(DASH_CAROUSEL_WIDTH)}px;
+    ;       "
+    ;       (eventbox
+    ;         :onhoverlost "${EWW_CMD} update rev_dash_carousel=false &"
+    ;         :onscroll "scripts/scroll-gallery {} &"
+    ;         (box
+    ;           :orientation "h"
+    ;           :space-evenly false
+    ;           (scroll
+    ;             :width DASH_CAROUSEL_WIDTH
+    ;             :height DASH_CAROUSEL_HEIGHT
+    ;             :hscroll true :vscroll false
+    ;             (box
+    ;               :space-evenly false :orientation "h"
+    ;               (for img_id in gallery_index
+    ;                 (box
+    ;                   :class "dashboard-carousel-image"
+    ;                   :style "
+    ;                   ${
+    ;                   (scroll_offset_carousel <= img_id * 3 && scroll_offset_carousel >= img_id * 3 - 3) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MAX_WIDTH}px;' : (
+    ;                     (scroll_offset_carousel == img_id * 3 + 1 || scroll_offset_carousel == img_id * 3 - 4) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MED_WIDTH}px;' : (
+    ;                       (scroll_offset_carousel == img_id * 3 + 2 || scroll_offset_carousel == img_id * 3 - 5) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MIN_WIDTH}px;' : (
+    ;                         'min-width: 0px;'
+    ;                       )))
+    ;                   }
+    ;                   ${(scroll_offset_carousel > img_id * 3 + 4 || scroll_offset_carousel < img_id * 3 - 7) ? 
+    ;                   'margin: 0px;' : 
+    ;                   'margin: 0px 5px;'
+    ;                   }
+    ;                   ${ANIM_VERYLONG[1]}
+    ;                   ${(scroll_offset_carousel > img_id * 3 + 2 || scroll_offset_carousel < img_id * 3 - 6) ? 
+    ;                   '' : 'background-image: url(\'${gallery[img_id]}\');'}
+    ;                   "
+    ;                 )
+    ;               )
+    ;             )
+    ;           )
+    ;           (button
+    ;             :onclick "${EWW_CMD} update rev_dash_carousel='${!rev_dash_carousel}' &"
+    ;             :style "padding-left: 20px;"
+    ;             (label
+    ;               :angle 270
+    ;               :class "dashboard-gallery-txt"
+    ;               :text "Gallery"
+    ;             )
+    ;           )
+    ;         )
+    ;       )
+    ;     )
+    ;   )
+    ; )
   )
 )
 

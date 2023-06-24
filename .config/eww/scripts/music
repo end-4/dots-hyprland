@@ -63,7 +63,7 @@ get_cover() {
 		music_source='󰐍'
 		COVER_URL=${COVER_URL//blob:/}
 		COVER_URL=${COVER_URL//file:\/\//}
-		COVER_URL=${COVER_URL//%20/}
+		COVER_URL=${COVER_URL//%20/ }
 		if [[ "$COVER_URL" = *"https"* ]]; then
 			music_source='󰖟'
 			coverurl="$(playerctl metadata mpris:artUrl)"

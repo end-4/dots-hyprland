@@ -12,7 +12,7 @@ else
     scripts/allapps > scripts/cache/entries.txt &
     scripts/allappnames > scripts/cache/entrynames.txt &
     eww update overview_query=''  &
-    eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &
+    eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}' &
     eww open powerview
     eww update open_powerview=true
 fi
