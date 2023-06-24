@@ -10,3 +10,4 @@
 ## Oh look a preview
 ![end-4/dots-hyprland](./assets/novelknock-3.png)
 ![end-4/dots-hyprland](./assets/novelknock-4.png)
+![end-4/dots-hyprland](./assets/novelknock-5.png)
