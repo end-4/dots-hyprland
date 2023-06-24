@@ -78,7 +78,7 @@
 | Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
- - This eww config only works in `~/.config/eww`
+ - This eww config only works properly in `~/.config/eww`
  - Start eww with `eww daemon`
  - To open the top bar, run `eww open bar` (for lineage branch, also run: `eww open barbg`)
  - To open the Windows bar, run `eww open winbar`
@@ -131,6 +131,7 @@ tesseract cliphist grim slurp fuzzel
  - Maybe more, but I might not remember them all.. Still, thanks.
 
 # 🌟 Stars
+- _A star really makes my day! Thanks!_
 
 [![Stars](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
 
