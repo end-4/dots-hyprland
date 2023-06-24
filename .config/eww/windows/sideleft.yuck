@@ -333,7 +333,7 @@
                         :style "
                         background-image:
                         linear-gradient(to right,
-                          ${mcover.materialColor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer} ${music.position}%,
+                          ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer} ${music.position}%,
                           rgba(200, 200, 200, 0.6) ${music.position}%);
                         "
                       )
