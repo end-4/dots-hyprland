@@ -15,7 +15,7 @@
 ## osu/material style
 - Screenshot from [the reddit post in which i mentioned grass](https://www.reddit.com/r/unixporn/comments/13lrz09/hyprland_and_eww_people_tell_me_i_should_go_touch/)
 ![dots-hyprland](./assets/screenshot-reddit.png)
-- Summer (gruvbox) theme (for Hyprland summer 2023 ricing competition)
+- Summer (gruvbox) theme (for Hyprland summer 2023 ricing competition). [a video that shows animations](https://streamable.com/4oogot)
 ![dots-hyprland](./assets/screenshot-summer.png)
 
 ## Windows 11 style
