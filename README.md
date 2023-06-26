@@ -34,16 +34,10 @@
    - [`windoes`](https://github.com/end-4/dots-hyprland/tree/windoes) branch received a "Tasty rice" flair [on r/unixporn](https://www.reddit.com/r/unixporn/comments/13zdhqd/hyprland_windows_rice_with_too_much_eww_with_blur/)
 </details>
 
-# 👀 Branches + Screenshots
-
-<details> 
-  <summary>Came here from my Reddit post in which I mentioned grass? It's the main branch. Others are archives.</summary>
-  
-   ![dots-hyprland](./assets/screenshot-reddit.png)
-</details>
+# 👀 Styles
 
 <details open> 
-  <summary>Summer (osu/material style) https://github.com/end-4/dots-hyprland/tree/summer-gruv </summary>
+  <summary>osu/material style https://github.com/end-4/dots-hyprland/tree/hybrid </summary>
   
    ![dots-hyprland](./assets/screenshot-summer.png)
 </details>
