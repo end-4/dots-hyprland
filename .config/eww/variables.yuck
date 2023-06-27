@@ -1,13 +1,9 @@
 ; Const vars
-(defvar RES_WIDTH 1920)
-(defvar RES_HEIGHT 1080)
+; I know it looks like a joke but look at the interval
+(defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
+(defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
 (defvar BAR_HEIGHT 50)
 (defvar GAPS 5)
-(defvar DASH_CAROUSEL_WIDTH 620) ; 600px + Spacing*2
-(defvar DASH_CAROUSEL_HEIGHT 400)
-(defvar DASH_CAROUSEL_IMAGE_MAX_WIDTH 300)    ;; Fixed widths.
-(defvar DASH_CAROUSEL_IMAGE_MED_WIDTH 200)    ;; Maybe I'll improve this later
-(defvar DASH_CAROUSEL_IMAGE_MIN_WIDTH 100)    ;; with a prefix sum array of images' max(width:height, MAX_WIDTH)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar TASKVIEW_SCALE 0.12)
@@ -32,12 +28,11 @@
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
-(defvar ANIM_ENTER `["transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 300ms cubic-bezier(0,0,0,1);"]`)
-(defvar ANIM_EXIT `["transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 200ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_ENTER `["transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 180ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
 (defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
 
 ; Vars
-(defvar scroll_offset_carousel 0) ; In number of tags, not pixels
 (defvar scroll_offset_waifu 0)
 (defvar anim_set 0)
 (defvar bar_offset 0)
@@ -66,7 +61,6 @@
 (defvar open_bottomsheet false)
 (defvar pinned_bottomsheet false)
 (defvar open_dashboard 0)
-(defvar rev_dash_carousel false)
 (defvar rev_session_1 false)
 (defvar rev_session_2 false)
 (defvar rev_session_3 false)
@@ -122,8 +116,6 @@
 (defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
 (defpoll coloraccent :initial "#E22369" :interval "5m" "cat css/_iconcolor.txt | head -1")
 (defpoll mousemode :interval "1m" "lsusb | grep -i mouse > /dev/null && echo 1 || echo 0")
-(defvar gallery_index `[0,1,2,3]`)
-(defvar gallery `["eww_covers/gallery1.jpg", "eww_covers/gallery2.jpg", "eww_covers/gallery3.jpg", "eww_covers/gallery4.jpg", "eww_covers/gallery5.jpg", "eww_covers/gallery6.jpg", "eww_covers/gallery7.jpg", "eww_covers/gallery8.jpg"]`)
 
 ; Fetch stuff
 (defpoll distro :initial "EndeavourOS" :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")
