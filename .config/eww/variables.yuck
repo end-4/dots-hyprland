@@ -1,7 +1,7 @@
 ; Const vars
 (defvar FILE_BROWSER "nautilus")
-(defvar RES_WIDTH 1920)
-(defvar RES_HEIGHT 1080)
+(defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
+(defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
 (defvar BG_ZOOM 1.2)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar TASKVIEW_SCALE 0.12)
