@@ -1,3 +1,132 @@
+(defwidget switch [ value ]
+  (box
+    :halign "end"
+    :space-evenly false
+    :class "switch-bg-${value}"
+    :style "
+    min-width: 40px;
+    min-height: 20px;
+    "
+    (box
+      :valign "center"
+      :class "switch-fg-${value}"
+      :style "
+      ${ANIM_ENTER[1]}
+      ${(value == true || value == 1) ? 'margin-left: 20px;' : 'margin-left: 4px;'}
+      min-width: ${(value == true || value == 1) ? 20 : 12}px;
+      min-height: ${(value == true || value == 1) ? 20 : 12}px;
+      "
+      (label :class "switch-fg-icon" :text {(value == true || value == 1) ? 'check' : ''})
+    )
+  )
+)
+
+(defwidget settings-title [ name ]
+  (box
+    :space-evenly false
+    :style "margin-bottom: 5px;"
+    (label :class "dashboard-settings-title-txt" :text {name})
+  )
+)
+
+(defwidget settings-title-small [ name ]
+  (box
+    :space-evenly false
+    :style "margin: 2px 0px;"
+    (label :class "dashboard-settings-title-txtsmall" :text {name})
+  )
+)
+
+(defwidget settings-option-binary [ name value ]
+  (box
+    :space-evenly false
+    (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text {name})
+    (switch :value value)
+  )
+)
+
+(defwidget settings_option_mousesens []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:force_no_accel ${1 - hyprjson.force_no_accel} &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "speed")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text {hyprjson.force_no_accel == 1 ? 'Raw input' : ('Accel: ' + hyprjson.input_sensitivity)})
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :value {hyprjson.input_sensitivity * 50 + 50}
+        :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}') && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_touchpad []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Disable while typing" :value {hyprjson.touchpad_disable_while_typing})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:touchpad:clickfinger_behavior ${1 - hyprjson.touchpad_clickfinger_behavior} &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Tap to click" :value {hyprjson.touchpad_clickfinger_behavior})
+      )
+    )
+  )
+)
+
+(defwidget settings_option_language []
+  (box
+    :vexpand true
+    (scroll
+      :hscroll true :vscroll false :hexpand true
+      (box
+        :spacing 5
+        (for language in langs
+          (button
+            :class "dashboard-option-lang${language.name_ibus == lang_ibus.name_ibus ? '-true' : '-false'}"
+            :onclick "ibus engine ${language.name_ibus} && eww update lang_ibus='${language}' &"
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget settings_mouse_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    (settings-title :name "Devices")
+    (settings-title-small :name "Mouse")
+    (settings_option_mousesens)
+    (settings-title-small :name "Touchpad")
+    (settings_option_touchpad)
+    (settings-title-small :name "Keyboard")
+    (settings_option_language)
+  )
+)
+
 (defwidget dashboard_widget []
   (overlay
     (box
@@ -5,20 +134,23 @@
       :height {RES_HEIGHT}
       :width {RES_WIDTH}
     )
-    (revealer ; Audio visualizer (cava)
-      :reveal {open_dashboard >= 3}
-      :duration "100ms"
-      :transition "crossfade"
-      (box
-        :orientation "h"
-        :spacing 17
-        (for colheight in cavajson
-          (box
-            :class "dashboard-cavacol"
-            :valign "end"
-            :style "
-            min-height: ${round(colheight[0] / 2.5, 0)}px;
-            "
+    (box
+      :valign "end"
+      (revealer ; Audio visualizer (cava)
+        :reveal {open_dashboard >= 3}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "h"
+          :spacing 17
+          (for colheight in cavajson
+            (box
+              :class "dashboard-cavacol"
+              :valign "end"
+              :style "
+              min-height: ${round(colheight[0] / 2.5, 0)}px;
+              "
+            )
           )
         )
       )
@@ -82,96 +214,252 @@
         )
       )
     )
-    (revealer ; Close button
-      :reveal {open_dashboard >= 1}
-      :duration "100ms"
-      :transition "crossfade"
-      (button
-        :halign "end" :valign "start"
-        :onclick "scripts/toggle-dashboard.sh --close &"
-        :style "
-        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-        padding: 50px;
-        padding-right: ${open_dashboard >= 1 ? 50 : 0}px;
-        "
-        (box
-          :orientation "v"
-          :space-evenly false
-          :spacing -5
-          (label
-            :class "dashboard-close-btn-icon"
-            :text "close"
+    (box
+      :halign "end" :valign "start"
+      (revealer ; Close button
+        :reveal {open_dashboard >= 1}
+        :duration "100ms"
+        :transition "crossfade"
+        (eventbox
+          :onclick "scripts/toggle-dashboard.sh --close &"
+          :cursor "pointer"
+          (box
+            :style "
+            ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 1 ? '' : 'margin-top: 100px;'}
+            padding: 50px;
+            "
+            (box
+              :orientation "v"
+              :space-evenly false
+              :spacing -5
+              (label
+                :class "dashboard-close-btn-icon"
+                :text "close"
+              )
+              (label
+                :class "dashboard-close-btn-txt"
+                :text "Close"
+              )
+            )
           )
-          (label
-            :class "dashboard-close-btn-txt"
-            :text "Close"
+        )
+      )
+    )
+    (box ; Session control
+      :halign "end" :valign "center"
+      (revealer
+        :reveal {open_dashboard >= 2}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "v" :space-evenly false :spacing 30
+          :style "
+          ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+          ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+          "
+          (eventbox
+            :halign "end"
+            :cursor "pointer"
+            :onclick "gtklock &"
+            (box :space-evenly false :orientation "v"
+              :class "dashboard-session-btn"
+              (label :class "dashboard-session-btn-icon" :text "lock")
+              (label :class "dashboard-close-btn-txt" :text "Lock")
+            )
+          )
+          (box :orientation "h" :space-evenly false :spacing 10
+            :halign "end"
+            :style "
+            ${ANIM_ENTER[anim_set]}
+            ${rev_session_1 ? '' : 'margin-right: -210px;'}
+            "
+            (eventbox
+              :cursor "pointer"
+              :onclick "${EWW_CMD} update rev_session_1=${!rev_session_1} &"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "bedtime")
+                (label :class "dashboard-close-btn-txt" :text "Sleep")
+              )
+            )
+            (eventbox
+              :cursor "e-resize"
+              :onclick "${EWW_CMD} update rev_session_1=false && systemctl suspend &"
+              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+            )
+          )
+          (box :orientation "h" :space-evenly false :spacing 10
+            :halign "end"
+            :style "
+            ${ANIM_ENTER[anim_set]}
+            ${rev_session_2 ? '' : 'margin-right: -210px;'}
+            "
+            (eventbox
+              :cursor "pointer"
+              :onclick "${EWW_CMD} update rev_session_2=${!rev_session_2} &"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "power_settings_new")
+                (label :class "dashboard-close-btn-txt" :text "Shutdown")
+              )
+            )
+            (eventbox
+              :cursor "e-resize"
+              :onclick "${EWW_CMD} update rev_session_2=false && systemctl poweroff &"
+              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+            )
+          )
+          (box :orientation "h" :space-evenly false :spacing 10
+            :halign "end"
+            :style "
+            ${ANIM_ENTER[anim_set]}
+            ${rev_session_3 ? '' : 'margin-right: -210px;'}
+            "
+            (eventbox
+              :cursor "pointer"
+              :onclick "${EWW_CMD} update rev_session_3=${!rev_session_3} &"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "restart_alt")
+                (label :class "dashboard-close-btn-txt" :text "Restart")
+              )
+            )
+            (eventbox
+              :cursor "e-resize"
+              :onclick "${EWW_CMD} update rev_session_3=false && reboot &"
+              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+            )
+          )
+        )
+      )
+    )
+    (box
+      :halign "start" :valign "center"
+      (revealer ; Settings sections
+        :reveal {open_dashboard >= 2}
+        :duration "100ms"
+        :transition "crossfade"
+        (box
+          :orientation "h" :space-evenly false
+          :width 700
+          :style "
+          ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+          ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+          "
+          (box
+            :orientation "v" :space-evenly false :spacing 30
+            (eventbox
+              :halign "start"
+              :cursor "pointer"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
+                (label :class "dashboard-close-btn-txt" :text "Devices")
+              )
+            )
+            (eventbox
+              :halign "start"
+              :cursor "pointer"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "lens_blur")
+                (label :class "dashboard-close-btn-txt" :text "Blur")
+              )
+            )
+            (eventbox
+              :halign "start"
+              :cursor "pointer"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text " safety_divider")
+                (label :class "dashboard-close-btn-txt" :text " Gaps+Borders")
+              )
+            )
+            (eventbox
+              :halign "start"
+              :cursor "pointer"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "water_drop")
+                (label :class "dashboard-close-btn-txt" :text " Hyprland")
+              )
+            )
+          )
+          (scroll
+            :hexpand true
+            :hscroll false :vscroll true
+            :class "dashboard-settings-panel"
+            (box
+              (settings_mouse_widget)
+            )
           )
         )
       )
     )
     ; (box
-    ;   :halign "start" :valign "start"
-    ;   (revealer ; Gallery
-    ;     :reveal {open_dashboard >= 2}
-    ;     :duration "100ms"
-    ;     :transition "crossfade"
-    ;     (box
-    ;       :orientation "h"
-    ;       :space-evenly false
-    ;       :spacing 15
-    ;       :style "
-    ;       ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-    ;       padding-top: ${open_dashboard >= 2 ? 300 : 350}px;
-    ;       margin-left: ${rev_dash_carousel ? 0 : -(DASH_CAROUSEL_WIDTH)}px;
-    ;       "
-    ;       (eventbox
-    ;         :onhoverlost "${EWW_CMD} update rev_dash_carousel=false &"
-    ;         :onscroll "scripts/scroll-gallery {} &"
-    ;         (box
-    ;           :orientation "h"
-    ;           :space-evenly false
-    ;           (scroll
-    ;             :width DASH_CAROUSEL_WIDTH
-    ;             :height DASH_CAROUSEL_HEIGHT
-    ;             :hscroll true :vscroll false
-    ;             (box
-    ;               :space-evenly false :orientation "h"
-    ;               (for img_id in gallery_index
-    ;                 (box
-    ;                   :class "dashboard-carousel-image"
-    ;                   :style "
-    ;                   ${
-    ;                   (scroll_offset_carousel <= img_id * 3 && scroll_offset_carousel >= img_id * 3 - 3) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MAX_WIDTH}px;' : (
-    ;                     (scroll_offset_carousel == img_id * 3 + 1 || scroll_offset_carousel == img_id * 3 - 4) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MED_WIDTH}px;' : (
-    ;                       (scroll_offset_carousel == img_id * 3 + 2 || scroll_offset_carousel == img_id * 3 - 5) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MIN_WIDTH}px;' : (
-    ;                         'min-width: 0px;'
-    ;                       )))
-    ;                   }
-    ;                   ${(scroll_offset_carousel > img_id * 3 + 4 || scroll_offset_carousel < img_id * 3 - 7) ? 
-    ;                   'margin: 0px;' : 
-    ;                   'margin: 0px 5px;'
-    ;                   }
-    ;                   ${ANIM_VERYLONG[1]}
-    ;                   ${(scroll_offset_carousel > img_id * 3 + 2 || scroll_offset_carousel < img_id * 3 - 6) ? 
-    ;                   '' : 'background-image: url(\'${gallery[img_id]}\');'}
-    ;                   "
-    ;                 )
-    ;               )
-    ;             )
-    ;           )
-    ;           (button
-    ;             :onclick "${EWW_CMD} update rev_dash_carousel='${!rev_dash_carousel}' &"
-    ;             :style "padding-left: 20px;"
-    ;             (label
-    ;               :angle 270
-    ;               :class "dashboard-gallery-txt"
-    ;               :text "Gallery"
-    ;             )
-    ;           )
-    ;         )
-    ;       )
-    ;     )
-    ;   )
+      ;   :halign "start" :valign "start"
+      ;   (revealer ; Gallery
+        ;     :reveal {open_dashboard >= 2}
+        ;     :duration "100ms"
+        ;     :transition "crossfade"
+        ;     (box
+          ;       :orientation "h"
+          ;       :space-evenly false
+          ;       :spacing 15
+          ;       :style "
+          ;       ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+          ;       padding-top: ${open_dashboard >= 2 ? 300 : 350}px;
+          ;       margin-left: ${rev_dash_carousel ? 0 : -(DASH_CAROUSEL_WIDTH)}px;
+          ;       "
+          ;       (eventbox
+            ;         :onhoverlost "${EWW_CMD} update rev_dash_carousel=false &"
+            ;         :onscroll "scripts/scroll-gallery {} &"
+            ;         (box
+              ;           :orientation "h"
+              ;           :space-evenly false
+              ;           (scroll
+                ;             :width DASH_CAROUSEL_WIDTH
+                ;             :height DASH_CAROUSEL_HEIGHT
+                ;             :hscroll true :vscroll false
+                ;             (box
+                  ;               :space-evenly false :orientation "h"
+                  ;               (for img_id in gallery_index
+                    ;                 (box
+                      ;                   :class "dashboard-carousel-image"
+                      ;                   :style "
+                      ;                   ${
+                      ;                   (scroll_offset_carousel <= img_id * 3 && scroll_offset_carousel >= img_id * 3 - 3) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MAX_WIDTH}px;' : (
+                        ;                     (scroll_offset_carousel == img_id * 3 + 1 || scroll_offset_carousel == img_id * 3 - 4) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MED_WIDTH}px;' : (
+                          ;                       (scroll_offset_carousel == img_id * 3 + 2 || scroll_offset_carousel == img_id * 3 - 5) ? 'min-width: ${DASH_CAROUSEL_IMAGE_MIN_WIDTH}px;' : (
+                            ;                         'min-width: 0px;'
+                          ;                       )))
+                      ;                   }
+                      ;                   ${(scroll_offset_carousel > img_id * 3 + 4 || scroll_offset_carousel < img_id * 3 - 7) ?
+                      ;                   'margin: 0px;' :
+                      ;                   'margin: 0px 5px;'
+                      ;                   }
+                      ;                   ${ANIM_VERYLONG[1]}
+                      ;                   ${(scroll_offset_carousel > img_id * 3 + 2 || scroll_offset_carousel < img_id * 3 - 6) ?
+                      ;                   '' : 'background-image: url(\'${gallery[img_id]}\');'}
+                      ;                   "
+                    ;                 )
+                  ;               )
+                ;             )
+              ;           )
+              ;           (button
+                ;             :onclick "${EWW_CMD} update rev_dash_carousel='${!rev_dash_carousel}' &"
+                ;             :style "padding-left: 20px;"
+                ;             (label
+                  ;               :angle 270
+                  ;               :class "dashboard-gallery-txt"
+                  ;               :text "Gallery"
+                ;             )
+              ;           )
+            ;         )
+          ;       )
+        ;     )
+      ;   )
     ; )
   )
 )

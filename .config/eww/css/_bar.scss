@@ -54,6 +54,13 @@
 .bar-txt-smaller {
     @include mainfont;
     font-size: 10pt;
+    // font-weight: 500; // A slightly higher font weight for small text
+}
+
+.bar-txt-tiny {
+    @include mainfont;
+    font-size: 9pt;
+    font-weight: 500; // A slightly higher font weight for small text
 }
 
 .bar-btn-icon {
@@ -306,3 +313,19 @@
 .bar-music-btn:active {
     background-color: tint($overlay0, 10%);
 }
+
+.bar-wall-btn {
+    border-radius: 13px;
+    min-height: 40px;
+    min-width: 40px;
+}
+
+.bar-wall-btn:hover {
+    background-color: $overlay0;
+}
+
+.bar-wall-btn:active {
+    background-color: tint($overlay0, 10%);
+}
+
+

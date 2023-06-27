@@ -121,8 +121,8 @@
 
 .bottomsheet-windowctl-btn-true {
     border-radius: 13px;
-    background-color: $secondary;
-    color: $onSecondary;
+    background-color: $primary;
+    color: $onPrimary;
     @include icon-material-filled;
     font-size: 18pt;
     font-weight: bolder;

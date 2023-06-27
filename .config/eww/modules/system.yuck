@@ -21,26 +21,36 @@
           :style "
           color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
           "
-          :text "${time.day}, ${time.monthname} ${day_only}"
+          :text "${time.day}, ${time.date}"
         )
       )
-      (box ; Common icons
+      (box ; Icons
         :space-evenly false :spacing 10
         :orientation "h"
-        :valign "center"
         :class "bar-pad-horiz-moreright"
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false :spacing -4
+          (label :class "bar-icon-material bar-system-icon"
+           :text "keyboard"  
+          )
+          (label :class "bar-txt-tiny" :text {lang_ibus.name_abbr})
+        )
         (label
+          :valign "center"
           :class "bar-icon-material bar-system-icon"
           :text {WIFI_ICONS[net.level]}
         )
         (label
+          :valign "center"
           :class "bar-icon-material bar-system-icon"
           :text {bluetooth.icon}
         )
-        (label
-          :class "bar-system-icon bar-icon-segoe"
-          :text "${VOLUME_ICONS[round(volume.percent / 33, 0)]}"
-        )
+        ; (label
+          ;   :class "bar-system-icon bar-icon-segoe"
+          ;   :text "${VOLUME_ICONS[round(volume.percent / 33, 0)]}"
+        ; )
       )
       (box ; Resources
         :space-evenly false :spacing -6
@@ -96,7 +106,6 @@
           (box
             :width 27 :height 27
             :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
-            :onclick "${EWW_CMD} update popup='system-menu'"
             :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
             (label
               :halign "center" :valign "center"

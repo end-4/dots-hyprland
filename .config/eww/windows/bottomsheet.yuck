@@ -77,8 +77,8 @@
               :onclick "scripts/toggle-bottomsheet.sh --close &"
               :class "bottomsheet-windowctl-btn"
               :style "
-              background-color: mix(${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer}, rgb(0,0,0), 0);
-              color: mix(${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer}, rgb(0,0,0), 0);
+              ${mcover.materialcolor.secondaryContainer == 'null' ? '' : 'background-color: ${mcover.materialcolor.secondaryContainer};'}
+              ${mcover.materialcolor.onSecondaryContainer == 'null' ? '' : 'color: ${mcover.materialcolor.onSecondaryContainer};'}
               "
               "keyboard_double_arrow_down"
             )
@@ -87,17 +87,15 @@
               :onclick "${EWW_CMD} update pinned_bottomsheet=${!pinned_bottomsheet} &"
               :class "bottomsheet-windowctl-btn${pinned_bottomsheet ? '-true' : ''}"
               :style "
-              background-color: mix(
+              ${mcover.materialcolor.primary == 'null' ? '' : 'background-color:
                 ${pinned_bottomsheet ?
                 (mcover.materialcolor.primary == 'null' ? coloraccent : mcover.materialcolor.primary) :
-                (mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer)},
-                rgb(0,0,0), 0);
-              color: mix(
+                (mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer)};
+              color:
                 ${pinned_bottomsheet ?
-                (mcover.materialcolor.onPrimary == 'null' ? coloraccent : mcover.materialcolor.onPrimary) :
-                (mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer)},
-                rgb(0,0,0), 0);
-              "
+                (mcover.materialcolor.onPrimary == 'null' ? 'black' : mcover.materialcolor.onPrimary) :
+                (mcover.materialcolor.onSecondaryContainer == 'null' ? 'black' : mcover.materialcolor.onSecondaryContainer)};
+              '}"
               "push_pin"
             )
           )
@@ -144,25 +142,19 @@
                 :class "bottomsheet-music-controlsbox"
                 (button
                   :class "bar-icon-segoe bottomsheet-music-btn"
-                  :style "
-                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
-                  "
+                  :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl previous"
                   ""
                 )
                 (button
                   :class "bar-icon-segoe bottomsheet-music-btn"
-                  :style "
-                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
-                  "
+                  :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl play-pause"
                   "${mplay == 'Playing' ? '' : ''}"
                 )
                 (button
                   :class "bar-icon-segoe bottomsheet-music-btn"
-                  :style "
-                  color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
-                  "
+                  :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
                   ""
                 )

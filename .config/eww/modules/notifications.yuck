@@ -36,18 +36,18 @@
             (label :xalign 0
               :hexpand true
               :class "bar-txt"
-              :text "${notifications['data'][0]['content'][0][0]}"
+              :text "${notifications.count > 0 ? notifications['data'][0]['content'][0][0] : ''}"
               :limit-width 20
             )
             (label :xalign 1
               :class "bar-txt-smaller"
-              :text "${notifications['data'][0]['name']}"
+              :text "${notifications.count > 0 ? notifications['data'][0]['name'] : ''}"
               :limit-width 20
             )
           )
           (label :xalign 0
             :class "bar-txt-small"
-            :text "${notifications['data'][0]['content'][0][1]}"
+            :text "${notifications.count > 0 ? notifications['data'][0]['content'][0][1] : ''}"
             :limit-width 45
           )
         )

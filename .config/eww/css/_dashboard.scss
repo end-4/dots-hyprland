@@ -2,6 +2,10 @@
     background-color: rgba(0, 0, 0, 0.3);
 }
 
+@mixin dashboard-panel-bg {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .dashboard-clock-time {
     @include mainfont;
     font-size: 55pt;
@@ -32,7 +36,7 @@
 
 .dashboard-close-btn-icon {
     @include icon-material;
-    font-size: 33pt;
+    font-size: 30pt;
 }
 
 .dashboard-close-btn-txt {
@@ -56,4 +60,169 @@
     background-repeat: no-repeat;
     background-size: auto 100%;
     background-position: center;
+}
+
+.dashboard-session-btn {
+    padding: 10px 0px;
+}
+
+.dashboard-session-btn-icon {
+    @include icon-material;
+    font-size: 30pt;
+    padding: 0 50px;
+}
+
+.dashboard-settings-panel {
+    @include dashboard-panel-bg;
+    border-radius: 15px;
+    // background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    padding: 15px;
+}
+
+.dashboard-settings-title-icon {
+    @include icon-material;
+    font-size: 18pt;
+}
+
+.dashboard-settings-title-txt {
+    @include mainfont;
+    font-size: 20pt;
+}
+
+.dashboard-settings-title-txtsmall {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.dashboard-settings-option-group {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    border-radius: 13px;
+}
+
+.dashboard-settings-option-group-left {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    border-radius: 2px;
+    border-top-left-radius: 13px;
+    border-bottom-left-radius: 13px;
+}
+
+.dashboard-settings-option-group-right {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    border-radius: 2px;
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+}
+
+.dashboard-settings-option-toggle-icon {
+    @include icon-material;
+    font-size: 28pt;
+}
+
+.dashboard-settings-option-toggle-txt {
+    @include mainfont;
+    font-size: 10pt;
+}
+
+.dashboard-settings-option-group-pad {
+    padding: 15px;
+}
+
+.dashboard-settings-option-group-minsize {
+    min-width: 80px;
+    min-height: 80px;
+}
+
+.dashboard-settings-scale {
+    border-radius: 99px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: mix($surface, rgba(0,0,0,0), 30%);
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: $primary;
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -9px;
+        border-radius: 99px;
+        background-color: $primary;
+    }
+}
+
+.dashboard-settings-txt {
+    @include mainfont;
+    font-size: 12pt;
+}
+
+.switch-bg-1 {
+    border-radius: 99px;
+    background-color: $primary;
+    border: 2px solid $primary;
+}
+
+.switch-bg-0 {
+    border-radius: 99px;
+    background-color: mix($surface, rgba(0,0,0,0), 50%);
+    border: 2px solid $onSurface;
+}
+
+.switch-bg-true {
+    border-radius: 99px;
+    background-color: $primary;
+    border: 2px solid $primary;
+}
+
+.switch-bg-false {
+    border-radius: 99px;
+    background-color: mix($surface, rgba(0,0,0,0), 50%);
+    border: 3px solid $onSurface;
+}
+
+.switch-fg-1 {
+    border-radius: 99px;
+    background-color: $onPrimary;
+    color: $primary;
+}
+
+.switch-fg-0 {
+    border-radius: 99px;
+    background-color: $onSurface;
+}
+
+.switch-fg-true {
+    border-radius: 99px;
+    background-color: $onPrimary;
+    color: $primary;
+}
+
+.switch-fg-false {
+    border-radius: 99px;
+    background-color: $onSurface;
+}
+
+.switch-fg-icon {
+    @include icon-material;
+    font-size: 9pt;
+    font-weight: bolder;
+    margin: -2px;
+}
+
+.dashboard-option-lang-true {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    border-radius: 13px;
+}
+
+.dashboard-option-lang-false {
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    border-radius: 13px;
 }

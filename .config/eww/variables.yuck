@@ -32,8 +32,8 @@
 
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
-(defvar ANIM_ENTER `["transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 200ms cubic-bezier(0,0,0,1);"]`)
-(defvar ANIM_EXIT `["transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 150ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_ENTER `["transition: 300ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 300ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 200ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 200ms cubic-bezier(1,0,1,1);"]`)
 (defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
 
 ; Vars
@@ -45,15 +45,16 @@
 (defvar osd_bright false)
 (defvar compact false)
 (defvar selected '')
-(defvar overview_hover_name "Activities Overview")
+(defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
-(defvar overview_results "")
+(defvar overview_results "[]")
 (defvar dynamicleft_module_page 1) ; 1-base
 (defvar dynamicright_module_page 1) ; 1-base
 (defvar sideleft_favourite_page 1) ; 1-base
 (defvar calendartitle "")
 (defvar monthshift 0)
 (defvar quote_index 0)
+(defvar settings_section -1)
 
 ; Open/close/hover state
 (defvar hover_music false)
@@ -66,54 +67,66 @@
 (defvar pinned_bottomsheet false)
 (defvar open_dashboard 0)
 (defvar rev_dash_carousel false)
+(defvar rev_session_1 false)
+(defvar rev_session_2 false)
+(defvar rev_session_3 false)
 
 ; Time
-(defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`)
+(defpoll time
+  :initial `{"date": "6/9", "hour": "0", "minute": "0", "monthname": "Month", "day": "Not monday", "year": "2077"}`
+  :interval "5s"
+  `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`
+)
 (defpoll day_only :interval "1m" "date '+%e' | sed 's/ //g'")
 (defpoll time12 :interval "10s" `date '+%l:%M %^P' | sed 's/am/AM/g' | sed 's/pm/PM/g'`)
 
 ; Listeners
 (deflisten airplane "scripts/airplane")
-(deflisten battery "scripts/battery")
-(deflisten bluetooth "scripts/bluetooth")
-(deflisten brightness "scripts/brightness")
-(deflisten memory "scripts/memory")
-(deflisten music "scripts/music")
-(deflisten music_cover "scripts/music cover")
-(deflisten notifications "scripts/notifications")
+(deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery")
+(deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
+(deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
+(deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
+(deflisten music :initial `{"artist" :"","length":"00:00","position":"0","position_time":"00:00","status":"","title":"Music"}` "scripts/music")
+(deflisten mcover 
+  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}' 
+  "scripts/music cover"
+)
+(deflisten notifications :initial '{"count":0,"data":[]}' "scripts/notifications")
 (deflisten notif_icons :initial `{"icon": "󰆄", "paused": false, "toggle_icon": ""}` "scripts/notifications icons")
-(deflisten net "scripts/net")
-(deflisten volume "scripts/volume")
-(deflisten workspace "scripts/workspaces")
-(deflisten winjson "scripts/winlist")
+(deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
+(deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
+(deflisten workspace :initial `[{"num":"1","clr":"rgba(106,105,105,0.6)"},{"num":"2","clr":"rgba(106,105,105,0.6)"},{"num":"3","clr":"rgba(106,105,105,0.6)"},{"num":"4","clr":"rgba(106,105,105,0.6)"},{"num":"5","clr":"rgba(106,105,105,0.6)"},{"num":"6","clr":"rgba(106,105,105,0.6)"},{"num":"7","clr":"rgba(106,105,105,0.6)"},{"num":"8","clr":"rgba(106,105,105,0.6)"},{"num":"9","clr":"rgba(106,105,105,0.6)"},{"num":"10","clr":"rgba(106,105,105,0.6)"}]` "scripts/workspaces")
 (deflisten winicons "scripts/appicons")
-(deflisten winnums "scripts/winnumbers")
-(deflisten hyprjson "scripts/hyprsettings")
+(deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
 (deflisten awin "scripts/activewin")
-(deflisten audiojson "scripts/audiolevels")
-(deflisten mcover "scripts/music cover")
-(deflisten mname "scripts/music name 999") ; The number is the length limit of the title
+(deflisten audiojson :initial "[]" "scripts/audiolevels")
+(deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
-(deflisten wsjsona "scripts/overview-wrapper1")
-(deflisten wsjsonb "scripts/overview-wrapper2")
+(deflisten wsjsona 
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"1","workspace":{"id":1,"name":"1"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"2","workspace":{"id":2,"name":"2"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"3","workspace":{"id":3,"name":"3"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"4","workspace":{"id":4,"name":"4"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"5","workspace":{"id":5,"name":"5"}}]]`
+  "scripts/overview-wrapper1"
+)
+(deflisten wsjsonb
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"6","workspace":{"id":6,"name":"6"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"7","workspace":{"id":7,"name":"7"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"8","workspace":{"id":8,"name":"8"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"9","workspace":{"id":9,"name":"9"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"10","workspace":{"id":10,"name":"10"}}]]`  
+  "scripts/overview-wrapper2"
+)
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten tasks "scripts/taskbarloop")
-(deflisten todolist "cat json/todo.json | gojq -c -M")
-(deflisten favouritesettings "cat json/favouritesettings.json | gojq -c -M")
+(deflisten todolist :initial "[]" "cat json/todo.json | gojq -c -M")
 (deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
-(deflisten cavajson `scripts/cavajson`)
+(deflisten cavajson :initial "[[0,0]]" `scripts/cavajson`)
 (deflisten mousepos `scripts/mousetrack`)
 (deflisten taskviewlayout `scripts/taskviewlayout-wrapper`)
 (deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)
-(defpoll langs :interval "5m" `cat json/langs.json | gojq -c -M`)
+(defpoll langs :initial "[]" :interval "5m" `cat json/langs.json | gojq -c -M`)
 (defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
-(defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
+(defpoll coloraccent :initial "#E22369" :interval "5m" "cat css/_iconcolor.txt | head -1")
 (defpoll mousemode :interval "1m" "lsusb | grep -i mouse > /dev/null && echo 1 || echo 0")
 (defvar gallery_index `[0,1,2,3]`)
 (defvar gallery `["eww_covers/gallery1.jpg", "eww_covers/gallery2.jpg", "eww_covers/gallery3.jpg", "eww_covers/gallery4.jpg", "eww_covers/gallery5.jpg", "eww_covers/gallery6.jpg", "eww_covers/gallery7.jpg", "eww_covers/gallery8.jpg"]`)
 
 ; Fetch stuff
-(defpoll distro :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")
+(defpoll distro :initial "EndeavourOS" :interval "5m" "grep -w NAME /etc/os-release | cut -d= -f2")
 (defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
 (defpoll packages :interval "5m" `pacman -Q | wc -l`)
 (defpoll kernel :interval "5m" `uname -r`)
@@ -121,13 +134,13 @@
 (defpoll realname :interval "5m" :initial "username" `awk -F':' -v uid=1000 '$3 == uid { print $5 }' /etc/passwd`)
 (defpoll hostname :interval "5m" :initial "distro" `uname -n`)
 (defpoll wm :interval "5m" :initial "Hyprland" `echo $XDG_CURRENT_DESKTOP`)
-(defpoll diskfreepercent :interval "5m" `echo $(df --output=pcent / | tr -dc '0-9')`)
+(defpoll diskfreepercent :initial "0" :interval "5m" `echo $(df --output=pcent / | tr -dc '0-9')`)
 (defpoll diskused :interval "5m" `df -h --output=used / | awk 'NR==2{print $1}'`)
 (defpoll diskfree :interval "5m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
 (defpoll disksize :interval "5m" `df -h --output=size / | awk 'NR==2{print $1}'`)
 (deflisten cpuname `cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}' | head -n 1`)
-(defpoll waifu :interval "5m" `python3 scripts/waifupics.py`)
-(defpoll calendar :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+(defpoll waifu :initial `{"name": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifupics.py`)
+(defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
 
 
 ; Quote

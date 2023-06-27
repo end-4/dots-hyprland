@@ -10,6 +10,12 @@
         :orientation "h"
         :spacing 5
         :halign "center"
+        (button
+          :valign "center"
+          :class "bar-wall-btn"
+          :onclick "scripts/switchwall &"
+          (label :class "bar-icon-material-hugeass" :text "image")
+        )
         (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-1" :text "1")
         (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-2" :text "1")
         (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-3" :text "2")

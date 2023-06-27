@@ -236,7 +236,7 @@
                   :hexpand true
                   :height 200
                   :style "
-                  background: radial-gradient(mix(${mcover.materialcolor.primaryContainer == 'null' ? coloraccent : mcover.materialcolor.primaryContainer}, rgba(0, 0, 0, 0.4), 0.75) 50%, mix(${mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4}, rgba(0, 0, 0, 0.4), 0.65) 50%);
+                  background: radial-gradient(mix(${mcover.materialcolor.primaryContainer == 'null' ? coloraccent : mcover.materialcolor.primaryContainer}, rgba(0, 0, 0, 0.4), 0.8) 50%, mix(${mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4}, rgba(0, 0, 0, 0.4), 0.8) 50%);
                   "
                 )
                 (box ; 3. Text and controls
@@ -256,8 +256,8 @@
                       :halign "end"
                       :class "sidebar-music-output"
                       :style "
-                      background-color: ${mcover.materialcolor.primary == 'null' ? coloraccent : mcover.materialcolor.primary};
-                      color: ${mcover.materialcolor.onPrimary == 'null' ? coloraccent : mcover.materialcolor.onPrimary};
+                      ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
                       "
                       (label
                         :class "bar-icon-material sidebar-music-device"
@@ -306,8 +306,8 @@
                       :valign "center"
                       :class "sidebar-music-playbtn"
                       :style "
-                      background-color: ${mcover.materialcolor.primary == 'null' ? coloraccent : mcover.materialcolor.primary};
-                      color: ${mcover.materialcolor.onPrimary == 'null' ? coloraccent : mcover.materialcolor.onPrimary};
+                      ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
                       "
                       :onclick "playerctl play-pause"
                       "${mplay == 'Playing' ? '' : ''}"

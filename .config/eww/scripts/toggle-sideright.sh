@@ -4,7 +4,6 @@ state=$(eww get open_sideright)
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
     eww update open_sideright=false
     eww update bar_offset=0
-    sleep 0.15
 else
     cd ~/.config/eww || exit
     eww open sideright

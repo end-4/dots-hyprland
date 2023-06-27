@@ -36,7 +36,6 @@
       )
     )
     (centerbox
-      :space-evenly false
       :width {RES_WIDTH}
       (box
         (bright_osd_widget)

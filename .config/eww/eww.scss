@@ -56,6 +56,10 @@ $background: rgba(11, 11, 11, 0.8);
   color: #BEBEBE;
 }
 
+@mixin greyed {
+  color: #757575;
+}
+
 * {
   all: unset;
   transition: 75ms cubic-bezier(0.05, 0.7, 0.1, 1);

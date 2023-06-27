@@ -36,19 +36,27 @@
             margin-left: ${round(ws-window.at[0] * OVERVIEW_SCALE, 0)}px;
             margin-top: ${round(ws-window.at[1] * OVERVIEW_SCALE, 0)}px;
             margin-right: -${round((ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE,0)}px;
-            margin-bottom: ${round(RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE), 0)};
+            margin-bottom: ${round(RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE), 0)}px;
             "
             (eventbox
+              :cursor "${ws-window.class == 'workspace' ? '' : 'cell'}"
               :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
               :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
               :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-powerview.sh --close &"
               :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
-              (box
+              (literal
+                :content `
+                ${ ws-window.icon == 'null' ? '(box)' :
+                '
                 (image
+                  :vexpand true
                   :path {ws-window.icon}
                   :image-width {round(ws-window.size[0] * OVERVIEW_SCALE * 45 / 100, 0)}
                   :image-height {round(ws-window.size[1] * OVERVIEW_SCALE * 45 / 100, 0)}
                 )
+                '
+                }
+                `
               )
             )
           )
@@ -148,7 +156,7 @@
             )
             (centerbox
               :halign "center"
-              :width {RES_WIDTH / 3}
+              :width {round(RES_WIDTH / 1.7, 0)}
               :orientation "h"
               :class "bar-bg shadow-pad window-border powerview-info"
               (label :xalign 0
