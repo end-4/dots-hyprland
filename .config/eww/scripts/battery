@@ -3,8 +3,8 @@
 icons=("" "" "" "" "" "" "" "")
 
 gettime() {
-	FULL=$(cat /sys/class/power_supply/*/charge_full)
-	NOW=$(cat /sys/class/power_supply/*/charge_now)
+	FULL=$(cat /sys/class/power_supply/*/charge_full | head -1)
+	NOW=$(cat /sys/class/power_supply/*/charge_now | head -1)
 
 	if [ "$RATE" -gt 0 ]; then
 		if [ "$STATE" = "Discharging" ]; then
@@ -68,9 +68,9 @@ chargestatus() {
 
 circolor() {
 	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
-		cat images/svg/color.txt
+		cat css/_iconcolor.txt | head -1
 	else
-		cat images/svg/color.txt
+		cat css/_iconcolor.txt | head -1
 	fi
 }
 
@@ -105,9 +105,9 @@ wattage() {
 warnedlow=0
 
 while true; do
-	RATE=$(cat /sys/class/power_supply/BATT/voltage_now)
-	CAPACITY=$(cat /sys/class/power_supply/BATT/capacity)
-	STATE=$(cat /sys/class/power_supply/BATT/status)
+	RATE=$(cat /sys/class/power_supply/*/voltage_now | head -1)
+	CAPACITY=$(cat /sys/class/power_supply/*/capacity | head -1)
+	STATE=$(cat /sys/class/power_supply/*/status | head -1)
 
 	if [[ "$CAPACITY" -le 5 && "$STATE" = "Discharging" ]]; then
 		if [ $warnedlow == 0 ]; then 
