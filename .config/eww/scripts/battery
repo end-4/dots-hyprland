@@ -3,8 +3,8 @@
 icons=("" "" "" "" "" "" "" "")
 
 gettime() {
-	FULL=$(cat /sys/class/power_supply/BATT/charge_full)
-	NOW=$(cat /sys/class/power_supply/BATT/charge_now)
+	FULL=$(cat /sys/class/power_supply/*/charge_full)
+	NOW=$(cat /sys/class/power_supply/*/charge_now)
 
 	if [ "$RATE" -gt 0 ]; then
 		if [ "$STATE" = "Discharging" ]; then
