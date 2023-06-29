@@ -8,7 +8,7 @@
     (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
     (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true && ' + EWW_CMD + ' update notifications=\"$(scripts/notifget)\" &')}"
     (box
-      :class "osd-pad ${osd_vol ? 'osd-active-right' : ''}"
+      :class "osd-pad"
       :width 390
       (box
         :space-evenly false

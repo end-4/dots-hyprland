@@ -51,7 +51,7 @@
             :valign "center"
             :style "
             min-height: ${round(colheight[0] / 3.5, 0)}px;
-            background-color: ${colheight[0] == 0 ? 'transparent' : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+            background-color: ${colheight[0] == 0 ? 'transparent' : 'mix(${(mcover.color.colors.color3 == 'null' ? coloraccent : mcover.color.colors.color3)}, rgba(220, 220, 220, 0.1), 0.2)'};
             "
           )
         )
@@ -174,7 +174,7 @@
                   :space-evenly false :orientation "h" :spacing 10
                   (image
                     :class "bottomsheet-mixer-app-icon"
-                    :style "background-color: ${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer};"
+                    :style "${mcover.materialcolor.secondaryContainer == 'null' ? '' : 'background-color: ${mcover.materialcolor.secondaryContainer};'}"
                     :path {app.icon}
                     :image-width 30
                     :image-height 30
@@ -194,13 +194,11 @@
                           :space-evenly false
                           :orientation "h"
                           :class "bottomsheet-mixer-app-serial"
-                          :style "background-color: ${mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer};"
+                          :style "${mcover.materialcolor.secondaryContainer == 'null' ? '' : 'background-color: ${mcover.materialcolor.secondaryContainer};'}"
                           (label
                             :xalign 0 :hexpand true
                             :class "bottomsheet-mixer-app-num"
-                            :style "
-                            color: ${mcover.materialcolor.onSecondaryContainer == 'null' ? coloraccent : mcover.materialcolor.onSecondaryContainer};
-                            "
+                            :style "${mcover.materialcolor.onSecondaryContainer == 'null' ? '' : 'color: ${mcover.materialcolor.onSecondaryContainer};'}"
                             :text "#${ser[0]}"
                           )
                           (box

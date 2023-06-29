@@ -72,6 +72,62 @@
   )
 )
 
+(defwidget settings_option_blursize []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "straighten")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Size")
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.blur_size}
+        :value {hyprjson.blur_size}
+        :onchange "hyprctl keyword decoration:blur_size {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_blurpasses []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "control_point_duplicate")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Passes")
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.blur_passes}
+        :value {hyprjson.blur_passes}
+        :onchange "hyprctl keyword decoration:blur_passes {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
 (defwidget settings_option_touchpad []
   (box
     :orientation "h"
@@ -95,6 +151,29 @@
   )
 )
 
+(defwidget settings_option_blurtoggles []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur_xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
+      )
+    )
+  )
+)
+
 (defwidget settings_option_language []
   (box
     :vexpand true
@@ -106,6 +185,26 @@
           (button
             :class "dashboard-option-lang${language.name_ibus == lang_ibus.name_ibus ? '-true' : '-false'}"
             :onclick "ibus engine ${language.name_ibus} && eww update lang_ibus='${language}' &"
+            (box
+              :space-evenly false :orientation "h" :spacing 5
+              (box
+                :valign "center"
+                :class "dashboard-lang-indicator-${language.name_ibus == lang_ibus.name_ibus}"
+              )
+              (box
+                :space-evenly false :orientation "v"
+                :valign "center"
+                (label :xalign 0
+                  :limit-width 25
+                  :text {language.name}
+                )
+                (label :xalign 0
+                  :limit-width 25
+                  :wrap true
+                  :text "${language.name_method}"
+                )
+              )
+            )
           )
         )
       )
@@ -117,6 +216,7 @@
   (box
     :orientation "v"
     :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
     (settings-title :name "Devices")
     (settings-title-small :name "Mouse")
     (settings_option_mousesens)
@@ -127,12 +227,54 @@
   )
 )
 
+(defwidget settings_blur_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Blur")
+    (settings-title-small :name "Modes")
+    (settings_option_blurtoggles)
+    (settings-title-small :name "Strength")
+    (settings_option_blursize)
+    (settings_option_blurpasses)
+  )
+)
+
 (defwidget dashboard_widget []
   (overlay
     (box
       :class "dashboard-bg"
-      :height {RES_HEIGHT}
-      :width {RES_WIDTH}
+      :height RES_HEIGHT
+      :width RES_WIDTH
+    )
+    (image
+      :path "images/menus/corner_topleft.svg"
+      :halign "start"
+      :valign "start"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image
+      :path "images/menus/corner_topright.svg"
+      :halign "end"
+      :valign "start"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image
+      :path "images/menus/corner_bottomleft.svg"
+      :halign "start"
+      :valign "end"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image
+      :path "images/menus/corner_bottomright.svg"
+      :halign "end"
+      :valign "end"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
     )
     (box
       :valign "end"
@@ -352,6 +494,7 @@
             (eventbox
               :halign "start"
               :cursor "pointer"
+              :onclick "${EWW_CMD} update scroll_offset_settings=0 &"
               (box :space-evenly false :orientation "v"
                 :class "dashboard-session-btn"
                 (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
@@ -361,6 +504,7 @@
             (eventbox
               :halign "start"
               :cursor "pointer"
+              :onclick "${EWW_CMD} update scroll_offset_settings=1 &"
               (box :space-evenly false :orientation "v"
                 :class "dashboard-session-btn"
                 (label :class "dashboard-session-btn-icon" :text "lens_blur")
@@ -370,6 +514,7 @@
             (eventbox
               :halign "start"
               :cursor "pointer"
+              :onclick "${EWW_CMD} update scroll_offset_settings=2 &"
               (box :space-evenly false :orientation "v"
                 :class "dashboard-session-btn"
                 (label :class "dashboard-session-btn-icon" :text " safety_divider")
@@ -379,6 +524,7 @@
             (eventbox
               :halign "start"
               :cursor "pointer"
+              :onclick "${EWW_CMD} update scroll_offset_settings=3 &"
               (box :space-evenly false :orientation "v"
                 :class "dashboard-session-btn"
                 (label :class "dashboard-session-btn-icon" :text "water_drop")
@@ -386,12 +532,22 @@
               )
             )
           )
-          (scroll
+          (eventbox
             :hexpand true
-            :hscroll false :vscroll true
-            :class "dashboard-settings-panel"
-            (box
-              (settings_mouse_widget)
+            (scroll
+              :hexpand true
+              :hscroll false :vscroll true
+              :class "dashboard-settings-panel"
+              (box
+                :orientation "v" 
+                :style "
+                margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
+                ${ANIM_ENTER[1]}
+                "
+                ; :space-evenly false
+                (settings_mouse_widget)
+                (settings_blur_widget)
+              )
             )
           )
         )

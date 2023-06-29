@@ -236,7 +236,7 @@
                   :hexpand true
                   :height 200
                   :style "
-                  background: radial-gradient(mix(${mcover.materialcolor.primaryContainer == 'null' ? coloraccent : mcover.materialcolor.primaryContainer}, rgba(0, 0, 0, 0.4), 0.8) 50%, mix(${mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4}, rgba(0, 0, 0, 0.4), 0.8) 50%);
+                  background: radial-gradient(mix(${mcover.materialcolor.primaryContainer == 'null' ? coloraccent : mcover.materialcolor.primaryContainer}, rgba(0, 0, 0, 0.4), 0.95) 50%, mix(${mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4}, rgba(0, 0, 0, 0.4), 0.95) 50%);
                   "
                 )
                 (box ; 3. Text and controls

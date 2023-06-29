@@ -5,6 +5,7 @@
 (defvar BAR_HEIGHT 50)
 (defvar GAPS 5)
 (defvar BG_ZOOM 1.2)
+(defvar BG_ROUNDING 18)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar TASKVIEW_SCALE 0.12)
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
@@ -24,6 +25,7 @@
 (defvar SIDELEFT_FAVOURITE_TITLES `["Favourite settings", "Culture"]`)
 (defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
 (defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
+(defvar SCROLL_MULTIPLIER_SETTINGS 427) ; Number of pixels to scroll each mouse scroll
 
 
 ; Const: animation curves
@@ -50,6 +52,7 @@
 (defvar monthshift 0)
 (defvar quote_index 0)
 (defvar settings_section -1)
+(defvar scroll_offset_settings 0)
 
 ; Open/close/hover state
 (defvar hover_music false)
@@ -81,8 +84,8 @@
 (deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
 (deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
 (deflisten music :initial `{"artist" :"","length":"00:00","position":"0","position_time":"00:00","status":"","title":"Music"}` "scripts/music")
-(deflisten mcover 
-  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}' 
+(deflisten mcover
+  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
   "scripts/music cover"
 )
 (deflisten notifications :initial '{"count":0,"data":[]}' "scripts/notifications")
@@ -96,12 +99,12 @@
 (deflisten audiojson :initial "[]" "scripts/audiolevels")
 (deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
-(deflisten wsjsona 
+(deflisten wsjsona
   :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"1","workspace":{"id":1,"name":"1"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"2","workspace":{"id":2,"name":"2"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"3","workspace":{"id":3,"name":"3"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"4","workspace":{"id":4,"name":"4"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"5","workspace":{"id":5,"name":"5"}}]]`
   "scripts/overview-wrapper1"
 )
 (deflisten wsjsonb
-  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"6","workspace":{"id":6,"name":"6"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"7","workspace":{"id":7,"name":"7"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"8","workspace":{"id":8,"name":"8"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"9","workspace":{"id":9,"name":"9"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"10","workspace":{"id":10,"name":"10"}}]]`  
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"6","workspace":{"id":6,"name":"6"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"7","workspace":{"id":7,"name":"7"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"8","workspace":{"id":8,"name":"8"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"9","workspace":{"id":9,"name":"9"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"10","workspace":{"id":10,"name":"10"}}]]`
   "scripts/overview-wrapper2"
 )
 (deflisten activews :initial 1 "scripts/activews")
@@ -139,6 +142,7 @@
 (defvar quote_content `[
   "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
   "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
+  "arch is like rick astley to me\\\nnever gonna let you down",
   "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree",
   "that was good enough I guess\\\nI have a penis",
   "...so Nvidia, fuck you",
@@ -149,6 +153,7 @@
 (defvar quote_author `[
   "- vaxry",
   "- vaxry",
+  "- vaxry-chan",
   "- Hyprland community, 2022",
   "- vaxry",
   "- Linus Torvalds",

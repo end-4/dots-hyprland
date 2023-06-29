@@ -8,7 +8,7 @@
     (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideleft=false &') :
     (EWW_CMD + ' open sideleft && ' + EWW_CMD + ' update bar_offset=1 && ' + EWW_CMD + ' update open_sideright=false && ' + EWW_CMD + ' update open_sideleft=true &')}"
     (box
-      :class "osd-pad ${osd_bright ? 'osd-active-left' : ''}"
+      :class "osd-pad"
       :width 390
       (box
         :space-evenly false

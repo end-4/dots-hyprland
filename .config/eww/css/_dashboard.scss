@@ -76,6 +76,9 @@
     @include dashboard-panel-bg;
     border-radius: 15px;
     // background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+}
+
+.dashboard-setting-section-pad {
     padding: 15px;
 }
 
@@ -220,9 +223,25 @@
 .dashboard-option-lang-true {
     background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
     border-radius: 13px;
+    padding: 15px;
 }
 
 .dashboard-option-lang-false {
     background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
     border-radius: 13px;
+    padding: 15px;
+}
+
+.dashboard-lang-indicator-true {
+    background-color: $primary;
+    border-radius: 99px;
+    min-width: 4px;
+    min-height: 30px;
+}
+
+.dashboard-lang-indicator-false {
+    background-color: transparent;
+    border-radius: 99px;
+    min-width: 4px;
+    min-height: 30px;
 }

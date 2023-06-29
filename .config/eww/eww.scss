@@ -118,3 +118,10 @@ $background: rgba(11, 11, 11, 0.8);
 .window-border {
   border: 1px solid rgba(82, 82, 82, 1);
 }
+
+tooltip {
+  background-color: $background;
+  border-radius: 13px;
+  padding: 15px;
+  margin: 15px;
+}
