@@ -36,16 +36,22 @@
 
 # 👀 Styles
 
+_Click the images for a video showcase with animations!_
+
 <details open> 
   <summary>osu/material style https://github.com/end-4/dots-hyprland/tree/hybrid </summary>
   
-   ![dots-hyprland](./assets/screenshot-summer.png)
+   <a href="https://streamable.com/4oogot">
+    <img src="./assets/screenshot-summer.png" alt="Desktop Preview">
+   </a>
 </details>
 
 <details open> 
   <summary>Windows style https://github.com/end-4/dots-hyprland/tree/windoes </summary>
   
-   ![dots-hyprland](./assets/screenshot-windoes2.png)
+   <a href="https://streamable.com/5qx614">
+    <img src="./assets/screenshot-windoes2.png" alt="Desktop Preview">
+   </a>
 </details>
 
 
