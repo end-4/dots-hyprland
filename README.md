@@ -4,7 +4,7 @@
 </div>
 
 # Description
-- For this branch, there are 2 styles that can be toggled: ( press `Super`+`Alt`+`W`)
+- For this branch, there are **2 styles that can be toggled: ( press `Super`+`Alt`+`W`)**
     - osu/material style: top bar + sidebars. Uses osu! icons. Some elements try to follow Material Design 3
     - Windows 11 style: Aimed to fool people. With convincing animations and blur effect.
  
