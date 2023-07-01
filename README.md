@@ -53,9 +53,15 @@ _Click the images for a video showcase with animations!_
    </a>
 </details>
 
+<details open> 
+  <summary>"NovelKnock" style (WIP) https://github.com/end-4/dots-hyprland/tree/novelknock </summary>
+  
+   <a href="https://github.com/end-4/dots-hyprland/tree/novelknock">
+    <img src="./assets/screenshot-novelknock-1.png" alt="Desktop Preview">
+   </a>
+</details>
 
 - For older and insignificant styles, check the releases
-- Coming soon: "NovelKnock"
 
 ---
 
