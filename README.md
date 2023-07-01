@@ -7,6 +7,7 @@
 - For this branch, there are **2 styles that can be toggled: ( press `Super`+`Alt`+`W`)**
     - osu/material style: top bar + sidebars. Uses osu! icons. Some elements try to follow Material Design 3
     - Windows 11 style: Aimed to fool people. With convincing animations and blur effect.
+- *__Disclaimer__: Wallpapers in this repo might not be exact. You can always find a wallpaper yourself and generate a color scheme using it (Copy it to `~/.config/eww/images/wallpaper/wallpaper` then use the `>wall` command __on the search bar__. If the colors look too chaotic, type `>one` then try `>wall` again. To switch back to that "chaotic" color set, type `>multi` then `>wall`.)*
  
 # Notes
 - [Check the releases](https://github.com/end-4/dots-hyprland/releases) for configurations presented in Reddit/Discord posts
