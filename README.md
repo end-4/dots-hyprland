@@ -94,8 +94,10 @@ _Click the images for a video showcase with animations!_
  - `>load THEME`: Loads a saved theme. Available themes will be shown as you type.
  - `>music`: Get colorscheme from current media thumbnail
  - `>wall`: Get colorscheme from wallpaper located in `~/.config/eww/images/wallpaper/wallpaper` (might take quite a while)
- - `>light`: Remember to generate light theme for future schemes
- - `>dark`: Remember to generate dark theme for future schemes
+ - `>light`: Remember to use light mode for next color generations
+ - `>dark`: Remember to use dark mode for next color generations
+ - `>one`: Remember to use only one color for bar icons for next color generations
+ - `>multi`: Remember to use only many colors for bar icons for next color generations
  - `>r`: Reload (kills and relaunches eww with the default bar)
 
 # 📦 Dependencies
