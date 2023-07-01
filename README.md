@@ -17,20 +17,19 @@
   <summary>Notable features</summary>
     
   - An overview widget that shows window positions in workspaces + app search (GNOME overview replacement)
-  - Can toggle Windows 11-like mode hehee
+  - `hybrid` branch: Can toggle Windows 11-like mode hehee
 </details>
 <details open> 
   <summary>Details</summary>
     
-  - Pywal and Material You colors
+  - Pywal and [Material You](https://m3.material.io/styles/color/the-color-system/key-colors-tones) colors
   - Sexy animations
-  - ~~Made by an actual Asian~~
 </details>
  <details> 
   <summary>Bragging</summary>
      
    - Featured in [Athena OS](https://github.com/Athena-OS) 
-   - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023 and featured in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery)
+   - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023. Now featured in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery) and [Hyprland Wiki](https://wiki.hyprland.org/Configuring/Example-configurations/)
    - [`windoes`](https://github.com/end-4/dots-hyprland/tree/windoes) branch received a "Tasty rice" flair [on r/unixporn](https://www.reddit.com/r/unixporn/comments/13zdhqd/hyprland_windows_rice_with_too_much_eww_with_blur/)
 </details>
 
