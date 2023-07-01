@@ -97,7 +97,7 @@ _Click the images for a video showcase with animations!_
  - `>light`: Remember to use light mode for next color generations
  - `>dark`: Remember to use dark mode for next color generations
  - `>one`: Remember to use only one color for bar icons for next color generations
- - `>multi`: Remember to use only many colors for bar icons for next color generations
+ - `>multi`: Remember to use many colors for bar icons for next color generations
  - `>r`: Reload (kills and relaunches eww with the default bar)
 
 # 📦 Dependencies
