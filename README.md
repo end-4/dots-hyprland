@@ -5,6 +5,7 @@
 
 ## Notes
 - requires new hyprland (maybe wait for next release)
+- requires [eww pr to add trigonometry funcs](https://github.com/elkowar/eww/pull/823)
 ---
 
 ## Oh look a preview
