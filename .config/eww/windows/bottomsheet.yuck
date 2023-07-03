@@ -257,11 +257,11 @@
 
 (defwindow bottomline
   :monitor 0
-  :stacking "bg"
+  :stacking "fg"
   :namespace "eww"
   :geometry (geometry
     :anchor "bottom center"
     :width "100%"
   )
-  (eventbox :onclick "scripts/toggle-bottomsheet.sh" (box :height 1))
+  (eventbox :onclick "scripts/toggle-bottomsheet.sh &" (box :height 1))
 )

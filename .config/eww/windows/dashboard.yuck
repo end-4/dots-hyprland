@@ -12,12 +12,20 @@
       :class "switch-fg-${value}"
       :style "
       ${ANIM_ENTER[1]}
-      ${(value == true || value == 1) ? 'margin-left: 20px;' : 'margin-left: 4px;'}
-      min-width: ${(value == true || value == 1) ? 20 : 12}px;
-      min-height: ${(value == true || value == 1) ? 20 : 12}px;
+      ${(value == true || value > 0) ? 'margin-left: 20px;' : 'margin-left: 4px;'}
+      min-width: ${(value == true || value > 0) ? 20 : 12}px;
+      min-height: ${(value == true || value > 0) ? 20 : 12}px;
       "
-      (label :class "switch-fg-icon" :text {(value == true || value == 1) ? 'check' : ''})
+      (label :class "switch-fg-icon" :text {(value == true || value > 0) ? 'check' : ''})
     )
+  )
+)
+
+(defwidget settings_button [ text onclick ]
+  (button
+    :onclick {onclick}
+    :class "dashboard-settings-button"
+    (label :text {text})
   )
 )
 
@@ -39,7 +47,7 @@
 
 (defwidget settings-option-binary [ name value ]
   (box
-    :space-evenly false
+    :space-evenly false :hexpand true
     (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text {name})
     (switch :value value)
   )
@@ -56,7 +64,7 @@
         :orientation "v"
         :space-evenly false
         :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
-        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "speed")
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "arrow_selector_tool")
         (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text {hyprjson.force_no_accel == 1 ? 'Raw input' : ('Accel: ' + hyprjson.input_sensitivity)})
       )
     )
@@ -128,6 +136,103 @@
   )
 )
 
+(defwidget settings_option_gapsin []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "fullscreen_exit")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Inner")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.gaps_in}
+        :value {hyprjson.gaps_in}
+        :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_gapsout []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "fullscreen")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Outer")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.gaps_out}
+        :value {hyprjson.gaps_out}
+        :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_bordersize []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "line_weight")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Thickness")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.border_size}
+        :value {hyprjson.border_size}
+        :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_rounding []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "rounded_corner")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Rounding")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.rounding}
+        :value {hyprjson.rounding}
+        :onchange "hyprctl keyword decoration:rounding {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+
 (defwidget settings_option_touchpad []
   (box
     :orientation "h"
@@ -195,11 +300,11 @@
                 :space-evenly false :orientation "v"
                 :valign "center"
                 (label :xalign 0
-                  :limit-width 25
+                  :limit-width 24
                   :text {language.name}
                 )
                 (label :xalign 0
-                  :limit-width 25
+                  :limit-width 24
                   :wrap true
                   :text "${language.name_method}"
                 )
@@ -207,6 +312,29 @@
             )
           )
         )
+      )
+    )
+  )
+)
+
+(defwidget settings_option_debuggingtoggles []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword debug:damage_tracking ${2 - hyprjson.damage_tracking} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Damage tracking" :value {hyprjson.damage_tracking})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword debug:overlay ${1 - hyprjson.overlay} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Show FPS" :value {hyprjson.overlay})
       )
     )
   )
@@ -238,6 +366,42 @@
     (settings-title-small :name "Strength")
     (settings_option_blursize)
     (settings_option_blurpasses)
+  )
+)
+
+(defwidget settings_gaps_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Window settings")
+    (settings-title-small :name "Gaps")
+    (box :spacing 5
+      (settings_option_gapsin)
+      (settings_option_gapsout)
+    )
+    (settings-title-small :name "Borders")
+    (box :spacing 5
+      (settings_option_bordersize)
+      (settings_option_rounding)
+    )
+  )
+)
+
+(defwidget settings_hyprland_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Hyprland")
+    (settings_button :text "Reload config" :onclick "hyprctl reload &")
+    (settings-title-small :name "Debugging stuff")
+    (settings_option_debuggingtoggles)
+    (settings-title-small :name "Help & Support")
+    (box :spacing 5
+      (settings_button :text "Open Hyprland Wiki" :onclick "scripts/toggle-dashboard.sh --close && xdg-open https://wiki.hyprland.org/ &")
+      (settings_button :text "Hypr Dev. Discord server" :onclick "scripts/toggle-dashboard.sh --close && xdg-open https://discord.com/invite/hQ9XvMUjjr &")
+    )
   )
 )
 
@@ -489,64 +653,86 @@
           ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
           ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
           "
-          (box
-            :orientation "v" :space-evenly false :spacing 30
-            (eventbox
-              :halign "start"
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update scroll_offset_settings=0 &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
-                (label :class "dashboard-close-btn-txt" :text "Devices")
-              )
-            )
-            (eventbox
-              :halign "start"
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update scroll_offset_settings=1 &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "lens_blur")
-                (label :class "dashboard-close-btn-txt" :text "Blur")
-              )
-            )
-            (eventbox
-              :halign "start"
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update scroll_offset_settings=2 &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text " safety_divider")
-                (label :class "dashboard-close-btn-txt" :text " Gaps+Borders")
-              )
-            )
-            (eventbox
-              :halign "start"
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update scroll_offset_settings=3 &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "water_drop")
-                (label :class "dashboard-close-btn-txt" :text " Hyprland")
-              )
+          (eventbox
+            :onscroll "scripts/scroll-settings {} &"
+            (box
+              :class "dashboard-settings-highlight${scroll_offset_settings  == -1 ? '-hide' : ''}"
+              :halign "start" :valign "start"
+              :style "
+              ${ANIM_ENTER[1]}
+              margin-right: -4px; margin-top: ${20+117*scroll_offset_settings}px;
+              "
             )
           )
           (eventbox
-            :hexpand true
-            (scroll
+            :onscroll "scripts/scroll-settings {} &"
+            (box
+              :orientation "v" :space-evenly false :spacing 30
+              (eventbox
+                :halign "start"
+                :cursor "pointer"
+                :onclick {scroll_offset_settings == 0 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=0 &'}
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
+                  (label :class "dashboard-close-btn-txt" :text "Devices")
+                )
+              )
+              (eventbox
+                :halign "start"
+                :cursor "pointer"
+                :onclick {scroll_offset_settings == 1 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=1 &'}
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "lens_blur")
+                  (label :class "dashboard-close-btn-txt" :text "Blur")
+                )
+              )
+              (eventbox
+                :halign "start"
+                :cursor "pointer"
+                :onclick {scroll_offset_settings == 2 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=2 &'}
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "wysiwyg")
+                  (label :class "dashboard-close-btn-txt" :text "Window")
+                )
+              )
+              (eventbox
+                :halign "start"
+                :cursor "pointer"
+                :onclick {scroll_offset_settings == 3 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=3 &'}
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "water_drop")
+                  (label :class "dashboard-close-btn-txt" :text " Hyprland")
+                )
+              )
+            )
+          )
+          (revealer
+            :reveal {scroll_offset_settings != -1}
+            :duration "100ms"
+            :transition "slideright"
+            (eventbox
               :hexpand true
-              :hscroll false :vscroll true
-              :class "dashboard-settings-panel"
-              (box
-                :orientation "v" 
-                :style "
-                margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
-                ${ANIM_ENTER[1]}
-                "
-                ; :space-evenly false
-                (settings_mouse_widget)
-                (settings_blur_widget)
+              (scroll
+                :hexpand true
+                :hscroll false :vscroll true
+                :class "dashboard-settings-panel"
+                :width 560
+                (box
+                  :orientation "v"
+                  :style "
+                  margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
+                  ${ANIM_ENTER[1]}
+                  "
+                  ; :space-evenly false
+                  (settings_mouse_widget)
+                  (settings_blur_widget)
+                  (settings_gaps_widget)
+                  (settings_hyprland_widget)
+                )
               )
             )
           )
@@ -560,7 +746,7 @@
   :stacking "overlay"
   :focusable true
   :monitor 0
-  :namespace "gtk-layer-shell"
+  :namespace "eww"
   :geometry (geometry
     :anchor "center center"
     :height "100%"

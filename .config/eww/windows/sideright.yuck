@@ -3,6 +3,7 @@
     :onhoverlost "${open_sideright ?
     (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') : ''}"
     (box
+      :height RES_HEIGHT
       :space-evenly false
       :halign "end"
       :style "
@@ -463,7 +464,7 @@
   :stacking "fg"
   :namespace "eww"
   :geometry (geometry
-    :height "100%"
+    ; :height "100%"
     :anchor "top right"
   )
   (sideright_widget)

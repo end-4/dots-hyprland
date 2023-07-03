@@ -13,6 +13,8 @@ getoptions(){
   blur_passes=$(hyprctl getoption decoration:blur_passes -j | gojq -r -c '.int')
   blur_xray=$(hyprctl getoption decoration:blur_xray -j | gojq -r -c '.int')
   nightlight=$(hyprctl getoption decoration:screen_shader -j | gojq -r -c '.str')
+  overlay=$(hyprctl getoption debug:overlay -j | gojq -r -c '.int')
+  damage_tracking=$(hyprctl getoption debug:damage_tracking -j | gojq -r -c '.int')
   if [[ "$nightlight" == *"nothing.frag" || "$nightlight" == "[[EMPTY]]" || "$nightlight" == "" ]]; then
     nightlight='false'
   else
@@ -33,6 +35,8 @@ getoptions(){
   echo -n "\"blur_passes\":$blur_passes,"
   echo -n "\"blur_xray\":$blur_xray,"
   echo -n "\"nightlight\":$nightlight,"
+  echo -n "\"overlay\":$overlay,"
+  echo -n "\"damage_tracking\":$damage_tracking,"
 
   echo '"dummy":0}'
 }

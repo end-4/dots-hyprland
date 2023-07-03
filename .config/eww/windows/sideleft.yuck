@@ -27,54 +27,65 @@
 (defwidget hyprtoggles_widget []
   (box
     :orientation "v"
-    :spacing 10
+    :space-evenly false :spacing 10
     :class "sidebar-hyprtoggle-scrollbg"
+    ; (togglehyprctl
+      ;   :value {mousemode}
+      ;   :changecmd "eww update mousemode="
+      ;   :option-label "Mouse"
+      ;   :option-icon "Mouse"
+      ;   :icon-style 0
+    ; )
+    (settings_option_mousesens)
     (box
       :orientation "h"
-      :spacing 10
-      (togglehyprctl
-        :value {hyprjson.blur}
-        :changecmd "hyprctl keyword decoration:blur "
-        :option-label "Blur"
-        :option-icon ""
-        :icon-style 0
+      :spacing 5
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon" :text "blur_on")
+          (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
+        )
       )
-      (togglehyprctl
-        :value {hyprjson.blur_xray}
-        :changecmd "hyprctl keyword decoration:blur_xray "
-        :option-label "Blur xray"
-        :option-icon ""
-        :icon-style 0
-      )
-      (togglehyprctl
-        :value {hyprjson.force_no_accel}
-        :changecmd "hyprctl keyword input:force_no_accel "
-        :option-label "Raw input"
-        :option-icon ""
-        :icon-style 0
-      )
-      (togglehyprctl
-        :value {hyprjson.touchpad_disable_while_typing}
-        :changecmd "hyprctl keyword input:touchpad:disable_while_typing "
-        :option-label "Typing"
-        :option-icon "\\\n"
-        :icon-style 1
-      )
-      (togglehyprctl
-        :value {mousemode}
-        :changecmd "eww update mousemode="
-        :option-label "Mouse"
-        :option-icon "Mouse"
-        :icon-style 0
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword decoration:blur_xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon" :text "preview")
+          (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
+        )
       )
     )
     (box
       :orientation "h"
-      :class "sidebar-hyprtoggle-summary"
-      (label :xalign 0 :yalign 0 :wrap true
-        :class "sidebar-hyprtoggle-summary-txt"
-        :text "Blur ${hyprjson.blur == 1 ? ('enabled ' + (hyprjson.blur_xray == 1 ? 'with xray' : 'without xray')) : 'disabled'}.\\\n${hyprjson.force_no_accel == 1 ? 'You\'re clicking circles to the meat' : 'You\'re not clicking circles'}.\\\n${hyprjson.touchpad_disable_while_typing == 1 ? 'You\'re not Minecrafting without a mouse' : 'You\'re Minecrafting without a mouse'}.\\\n${mousemode == 1 ? 'Scrolling is optimized for mouse' : 'Scrolling is optimized for touchpad'}."
+      :spacing 5
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon" :text "keyboard")
+          (settings-option-binary :name "→ Disable touchpad" :value {hyprjson.touchpad_disable_while_typing})
+        )
       )
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword input:touchpad:clickfinger_behavior ${1 - hyprjson.touchpad_clickfinger_behavior} &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon" :text "touch_app")
+          (settings-option-binary :name "Tap to click" :value {hyprjson.touchpad_clickfinger_behavior})
+        )
+      )
+    )
+    (button
+      :vexpand true
+      :onclick "hyprctl reload &"
+      :class "dashboard-settings-button"
+      (label :text "Reload config")
     )
   )
 )

@@ -5,6 +5,7 @@
 // @import 'images/svg/color.scss';
 
 $background: rgba(11, 11, 11, 0.8);
+// $background: rgba(244, 244, 244, 0.8);
 // $background: rgba(11, 7, 2, 1);
 // $background: $surface;
 
@@ -72,6 +73,7 @@ $background: rgba(11, 11, 11, 0.8);
 @import 'css/dashboard';
 @import 'css/powerview';
 @import 'css/sidebar';
+@import 'css/supercontext';
 
 .clr-accent {
   color: $primary;

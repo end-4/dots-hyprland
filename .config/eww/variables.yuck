@@ -2,6 +2,8 @@
 ; I know it looks like a joke but look at the interval
 (defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
 (defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
+; (defvar RES_WIDTH 1920)
+; (defvar RES_HEIGHT 1080)
 (defvar BAR_HEIGHT 50)
 (defvar GAPS 5)
 (defvar BG_ZOOM 1.2)
@@ -26,6 +28,13 @@
 (defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
 (defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
 (defvar SCROLL_MULTIPLIER_SETTINGS 427) ; Number of pixels to scroll each mouse scroll
+(defvar DASHBOARD_SETTINGS_PAGES 4)
+(defvar SUPERCONTEXT_DIAMETER 320)
+(defvar SUPERCONTEXT_RADIUS 160) ; Half of diameter obviously
+(defvar SUPERCONTEXT_DIST_FROM_CENTER 124)
+(defvar SUPERCONTEXT_BUTTON_DIAMETER 88)
+(defvar SUPERCONTEXT_BUTTON_RADIUS 44) ; Half of diameter obviously
+(defvar SUPERCONTEXT_ROTATIONS `[22.5, 67.5, 112.5, 157.5, 202.5]`) ; in degrees, clockwise, starts from 12 o'clock
 
 
 ; Const: animation curves
@@ -52,7 +61,11 @@
 (defvar monthshift 0)
 (defvar quote_index 0)
 (defvar settings_section -1)
-(defvar scroll_offset_settings 0)
+(defvar scroll_offset_settings -1)
+(defvar scrolldir 'a')
+(defvar supercontext_pos_x 960)
+(defvar supercontext_pos_y 540)
+(defvar ws_to_swap 0)
 
 ; Open/close/hover state
 (defvar hover_music false)
@@ -67,6 +80,7 @@
 (defvar rev_session_1 false)
 (defvar rev_session_2 false)
 (defvar rev_session_3 false)
+(defvar open_supercontext 0)
 
 ; Time
 (defpoll time

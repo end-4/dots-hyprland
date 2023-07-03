@@ -20,6 +20,7 @@
 (include "./windows/powerview.yuck")
 (include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
+(include "./windows/supercontext.yuck")
 
 (defwidget bar_widget []
   (box

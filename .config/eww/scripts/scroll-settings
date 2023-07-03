@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+offset=$(eww get scroll_offset_settings)
+total=$(eww get DASHBOARD_SETTINGS_PAGES)
+
+if [ "$1" == "up" ]; then
+    eww update scroll_offset_settings=$(( ("$offset" + "$total" - 1) % "$total" ))
+else
+    eww update scroll_offset_settings=$(( ("$offset" + 1) % "$total" ))
+fi

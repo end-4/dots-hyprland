@@ -639,3 +639,9 @@ $bgdetail2: $onTertiary;
     border-radius: 15px;
     background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
 }
+
+.sidebar-optn-icon {
+    @include icon-material;
+    font-size: 22pt;
+    margin: -10px 0px;
+}
