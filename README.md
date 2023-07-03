@@ -1,9 +1,9 @@
 <div align="center">
-    <h1>[ end-4/dots-hyprland > novelknock ]</h1>
-    <h3> barebones? no </h3>
+    <h1>[ end-4/dots-hyprland > NovelKnock ]</h1>
+    <h3> A polished Linux experience. </h3>
 </div>
 
-## Notes
+## Notes before release
 - requires new hyprland (maybe wait for next release)
 - requires [eww pr to add trigonometry funcs](https://github.com/elkowar/eww/pull/823)
 ---
