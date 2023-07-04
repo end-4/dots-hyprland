@@ -171,7 +171,7 @@
           :class "sidebar-waifu-pic"
           :style "
           ${ANIM_ENTER[0]}
-          background-image: url('${waifu.name}');
+          background-image: url('${waifu.path}');
           ${waifu['size'][0] > waifu['size'][1] ?
           'background-size: auto 100%;' : 'background-size: 100% auto;'
           }
@@ -417,7 +417,7 @@
                   )
                   (label :xalign 1
                     :class "bar-txt-small sidebar-section-title-text"
-                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.im API'}
+                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.im, nekos.life, and waifu.pics API'}
                   )
                 )
               )

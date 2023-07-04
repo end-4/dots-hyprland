@@ -22,7 +22,7 @@ if [[ "$1" == ">"* ]]; then
         scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
         scripts/colormanage get
     elif [[ "${args[0]}" == ">segs" ]]; then
-        eww update waifu="$(python3 scripts/waifu-get.py --segs)"
+        eww update waifu="$(python3 scripts/waifu-get.py --segs ero)"
     elif [[ "${args[0]}" == ">uwu" ]]; then
         eww update waifu="$(python3 scripts/waifu-get.py)"
     elif [[ "${args[0]}" == ">r" ]]; then

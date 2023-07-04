@@ -6,39 +6,79 @@ import sys
 from PIL import Image
 
 ###### variables ######
+mode = 'im' # either 'im' (waifu.im), 'nekos' (nekos.life), or 'pics' (waifu.pics)
 taglist = []
 segs = False
+output = {}
+headers = {}
 
 ###### arguments ######
 for i in range(1, len(sys.argv)): # Add tags
     if sys.argv[i] == '--segs':
         segs = True
+    elif sys.argv[i] == '--im':
+        mode = 'im'
+    elif sys.argv[i] == '--neko':
+        mode = 'nekos'
+    elif sys.argv[i] == '--pics':
+        mode = 'pics'
     else:
         taglist.append(sys.argv[i])
 
-###### request ######
-url = 'https://api.waifu.im/search'
-headers = {'Accept-Version': 'v5'}
+###### prepare request ######
+if mode == 'im':
+    url = 'https://api.waifu.im/search'
+    headers = {'Accept-Version': 'v5'}
+
+elif mode == 'nekos':
+    if segs:
+        url = 'https://nekos.life/api/lewd/neko'
+    else:
+        url = 'https://nekos.life/api/neko'
+
+elif mode == 'pics':
+    if segs:
+        url = 'https://api.waifu.pics/nsfw/'
+    else:
+        url = 'https://api.waifu.pics/sfw/'
+
+    if len(taglist) > 0:
+        url += taglist[0]
+    else:
+        url += 'waifu'
+
+else: # default: waifu.im
+    url = 'https://api.waifu.im/search'
+    headers = {'Accept-Version': 'v5'}
+
+
 params = {
     'included_tags': taglist,
     'height': '>=600'
 }
 response = requests.get(url, params=params, headers=headers)
 
-###### processing ######
+# print(response.json())
 
+###### processing ######
 if response.status_code == 200:
     data = response.json()
     # Process the response data as needed
-    # print(json.dumps(data))
-    link=data['images'][0]['url']
-    os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', link))
+    if mode == 'im':
+        output['link'] = data['images'][0]['url']
+    elif mode == 'nekos':
+        output['link'] = data['neko']
+    else:
+        output['link'] = data['url']
+
+    os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', output['link']))
     os.system('eww update waifu=\'{"name":"eww_covers/waifu_loading", "size": [0, 100]}\'')
     os.system('mv ./eww_covers/waifu_tmp ./eww_covers/waifu')
 
     with Image.open('./eww_covers/waifu') as img:
-        width, height = img.size
-        print('{' + '"name": "{0}", "size": [{1}, {2}]'.format('eww_covers/waifu', width, height) + '}')
+        output['size'] = img.size
+        output['path'] = 'eww_covers/waifu'
+        print(json.dumps(output))
 
 else:
     print('Request failed with status code:', response.status_code)

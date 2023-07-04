@@ -15,9 +15,9 @@
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar MIN_ROW_HEIGHT 100)
-(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]`)
-(defvar WAIFU_CATEGORIES `["waifu", "maid", "oppai", "uniform", "ero", "ecchi", "hentai", "paizuri", "selfies", "marin-kitagawa", "mori-calliope", "raiden-shogun", "milf", "ass", "oral"]`)
-(defvar WAIFU_CATEGORIES_ARGS `["waifu", "maid", "oppai", "uniform", "ero", "ecchi", "hentai", "paizuri", "selfies", "marin-kitagawa", "mori-calliope", "raiden-shogun", "milf", "ass", "oral"]`)
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]`) ; Note: change $total and $shown in scripts/scroll-waifu too
+(defvar WAIFU_CATEGORIES `["waifu", "maid", "uniform", "nekos.life", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin", "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu", ".pics:waifu segs", ".pics:neko", ".pics:neko segs", "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS `["waifu", "maid", "uniform", "--neko", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
 (defvar username_default "username")
 (defvar WORKSPACE_SIDE_PAD 15)
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
