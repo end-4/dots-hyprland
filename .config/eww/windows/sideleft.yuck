@@ -29,14 +29,26 @@
     :orientation "v"
     :space-evenly false :spacing 10
     :class "sidebar-hyprtoggle-scrollbg"
-    ; (togglehyprctl
+    (box
+      :orientation "h" :space-evenly false :spacing 5
+      (settings_option_mousesens)
+      ; (togglehyprctl
       ;   :value {mousemode}
       ;   :changecmd "eww update mousemode="
       ;   :option-label "Mouse"
       ;   :option-icon "Mouse"
       ;   :icon-style 0
-    ; )
-    (settings_option_mousesens)
+      ; )
+      (eventbox
+        :cursor "pointer"
+        :onclick "eww update mousemode=${1 - mousemode} &"
+        (box :space-evenly false :spacing 15
+          :class "dashboard-settings-option-group dashboard-settings-option-group-pad"
+          (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text "Scroll\\\naccessibility")
+          (label :class "sidebar-optn-icon" :text "${mousemode == 1 ? 'mouse' : ''}")
+        )
+      )
+    )
     (box
       :orientation "h"
       :spacing 5
@@ -119,7 +131,7 @@
               (for id in WAIFU_TAG_ID
                 (button
                   :class "sidebar-waifu-tag"
-                  :onclick "${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                  :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
                   {WAIFU_CATEGORIES[id]}
                 )
               )
@@ -140,7 +152,7 @@
             (for id in WAIFU_TAG_ID
               (button
                 :class "sidebar-waifu-tag"
-                :onclick "${EWW_CMD} update waifu=\"$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
                 {WAIFU_CATEGORIES[id]}
               )
             )
@@ -164,7 +176,7 @@
           'background-size: auto 100%;' : 'background-size: 100% auto;'
           }
           "
-          ; "${EWW_CMD} update waifu='{\"name\":\"eww_covers/cover_art\"}' && ${EWW_CMD} update waifu=$(scripts/waifupics.py ${WAIFU_CATEGORIES_ARGS[0]}) &"
+          ; "${EWW_CMD} update waifu='{\"name\":\"eww_covers/cover_art\"}' && ${EWW_CMD} update waifu=$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[0]}) &"
         )
       )
     )
@@ -405,7 +417,7 @@
                   )
                   (label :xalign 1
                     :class "bar-txt-small sidebar-section-title-text"
-                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.pics API'}
+                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.im API'}
                   )
                 )
               )

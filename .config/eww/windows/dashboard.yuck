@@ -47,7 +47,7 @@
 
 (defwidget settings-option-binary [ name value ]
   (box
-    :space-evenly false :hexpand true
+    :space-evenly false :hexpand true :valign "center"
     (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text {name})
     (switch :value value)
   )
@@ -57,6 +57,7 @@
   (box
     :orientation "h"
     :space-evenly false :spacing 3
+    :hexpand true
     (eventbox
       :cursor "pointer"
       :onclick "hyprctl keyword input:force_no_accel ${1 - hyprjson.force_no_accel} &"

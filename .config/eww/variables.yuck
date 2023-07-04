@@ -15,9 +15,9 @@
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar MIN_ROW_HEIGHT 100)
-(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]`)
-(defvar WAIFU_CATEGORIES `["waifu","waifu segs","neko","neko segs","megumin","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","kick","happy","wink"]`)
-(defvar WAIFU_CATEGORIES_ARGS `["waifu","--segs waifu","neko","--segs neko","megumin","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","kick","happy","wink"]`)
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]`)
+(defvar WAIFU_CATEGORIES `["waifu", "maid", "oppai", "uniform", "ero", "ecchi", "hentai", "paizuri", "selfies", "marin-kitagawa", "mori-calliope", "raiden-shogun", "milf", "ass", "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS `["waifu", "maid", "oppai", "uniform", "ero", "ecchi", "hentai", "paizuri", "selfies", "marin-kitagawa", "mori-calliope", "raiden-shogun", "milf", "ass", "oral"]`)
 (defvar username_default "username")
 (defvar WORKSPACE_SIDE_PAD 15)
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
@@ -36,16 +36,15 @@
 (defvar SUPERCONTEXT_BUTTON_RADIUS 44) ; Half of diameter obviously
 (defvar SUPERCONTEXT_ROTATIONS `[22.5, 67.5, 112.5, 157.5, 202.5]`) ; in degrees, clockwise, starts from 12 o'clock
 
-
 ; Const: animation curves
 (defvar ANIM_NAMES `["Material","Fluent"]`)
-(defvar ANIM_ENTER `["transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
-(defvar ANIM_EXIT `["transition: 180ms cubic-bezier(0.3, 0, 0.8, 0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
-(defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05, 0.7, 0.1, 1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_ENTER `["transition: 250ms cubic-bezier(0.05,0.7,0.1,1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 180ms cubic-bezier(0.3,0,0.8,0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05,0.7,0.1,1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
+(defvar anim_set 0) ; Index of main animation set
 
 ; Vars
 (defvar scroll_offset_waifu 0)
-(defvar anim_set 0)
 (defvar bar_offset 0)
 (defvar osd_vol false)
 (defvar osd_bright false)
@@ -148,15 +147,15 @@
 (defpoll diskfree :interval "5m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
 (defpoll disksize :interval "5m" `df -h --output=size / | awk 'NR==2{print $1}'`)
 (deflisten cpuname `cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}' | head -n 1`)
-(defpoll waifu :initial `{"name": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifupics.py`)
+(defpoll waifu :initial `{"name": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifu-get.py`)
 (defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
 
 
 ; Quote
 (defvar quote_content `[
+  "arch is like rick astley to me\\\nnever gonna let you down",
   "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
   "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
-  "arch is like rick astley to me\\\nnever gonna let you down",
   "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree",
   "that was good enough I guess\\\nI have a penis",
   "...so Nvidia, fuck you",
@@ -165,9 +164,9 @@
   "sEX"
 ]`)
 (defvar quote_author `[
-  "- vaxry",
-  "- vaxry",
   "- vaxry-chan",
+  "- vaxry",
+  "- vaxry",
   "- Hyprland community, 2022",
   "- vaxry",
   "- Linus Torvalds",
