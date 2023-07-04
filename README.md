@@ -108,10 +108,10 @@ _Click the images for a video showcase with animations!_
 
 # 📦 Dependencies
  - Missing something? Please tell me. Thanks!
- - Python
+ - Python dependencies
 ```
 [ Command ]
-pip install pywal desktop_entry_lib poetry build
+pip install pywal desktop_entry_lib poetry build Pillow
 ```
  - Other Dependencies (install it with your distro's package manager)
 ```
