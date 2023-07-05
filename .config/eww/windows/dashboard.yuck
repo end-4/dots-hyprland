@@ -740,6 +740,74 @@
         )
       )
     )
+    (box
+      :halign "center" :valign "center"
+      :orientation "h" :space-evenly false :spacing 70
+      (box
+        (revealer ; Directories
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 15
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (box
+              :orientation "h" :space-evenly false :spacing 15
+              (label :text "Directories" :class "dashboard-section-txt")
+            )
+            (box
+              :orientation "v" :spacing 5
+              (for dir in directories
+                (eventbox
+                  :cursor "pointer"
+                  :onclick "scripts/toggle-dashboard.sh --close && xdg-open ${dir.path} &"
+                  (box
+                    :orientation "h" :space-evenly false :spacing 15
+                    (label :text {dir.icon} :class "dashboard-section-icon")
+                    (label :text {dir.name} :class "dashboard-section-txt")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (box
+        (revealer ; Websites
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 15
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (box
+              :orientation "h" :space-evenly false :spacing 15
+              (label :text "Websites" :class "dashboard-section-txt")
+            )
+            (box
+              :orientation "v" :spacing 5
+              (for site in websites
+                (eventbox
+                  :cursor "pointer"
+                  :onclick "scripts/toggle-dashboard.sh --close && xdg-open ${site.url} &"
+                  (box
+                    :orientation "h" :space-evenly false :spacing 15
+                    (label :text {site.icon} :class "dashboard-section-icon-nerd")
+                    (label :text {site.name} :class "dashboard-section-txt")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
   )
 )
 

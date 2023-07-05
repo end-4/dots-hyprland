@@ -1,0 +1,9 @@
+[
+    {"name": "Discord", "url": "https://discord.com/app", "icon": "󰙯"},
+    {"name": "Youtube", "url": "https://youtube.com", "icon": "󰗃"},
+    {"name": "SoundCloud", "url": "https://soundcloud.com", "icon": "󰓀"},
+    {"name": "GitHub", "url": "https://github.com", "icon": "󰊤"},
+    {"name": "Pixiv", "url": "https://pixiv.net", "icon": "󰋩"},
+    {"name": "Gmail", "url": "https://mail.google.com", "icon": "󰊫"},
+    {"name": "G Translate", "url": "https://translate.google.com", "icon": "󰊿"}
+]

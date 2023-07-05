@@ -131,6 +131,7 @@
                     :hexpand true
                     :class "sidebar-quicktoggle-btn sidebar-quicktoggle-btn-right"
                     :style "margin-left: 3px;"
+                    :tooltip "Scroll !"
                     (eventbox
                       :hexpand true
                       :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) &"

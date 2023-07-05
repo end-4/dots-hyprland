@@ -82,7 +82,7 @@
               margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[0]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
-                :onclick "scripts/toggle-supercontext.sh --close && pkill $(hyprctl activewindow -j | gojq -r '.class') &"
+                :onclick "pkill $(ps -p $(hyprctl activewindow -j | gojq -r '.pid') -o comm=) &"
                 :tooltip "Brutally kill this window"
                 :cursor "pointer"
                 (label :class "supercontext-btn-icon" :text "Dangerous")

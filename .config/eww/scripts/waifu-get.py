@@ -5,6 +5,28 @@ import os
 import sys
 from PIL import Image
 
+def printhelp():
+    print('''
+Usage: waifu-get.py [OPTION]... [TAG]...
+
+Options:
+    --segs\tForce NSFW images
+    --im\tUse waifu.im API. You can use many tags
+    --pics\tUse waifu.pics API. Use 1 tag only.
+    --nekos\tUse nekos.life (old) API. No tags.
+
+Tags:
+    waifu.im (type):
+        maid waifu marin-kitagawa mori-calliope raiden-shogun oppai selfies uniform
+    waifu.im (nsfw tags):
+        ecchi hentai ero ass paizuri oral milf
+    ''')
+    exit()
+
+###### help ######
+if len(sys.argv) == 1:
+    printhelp()
+
 ###### variables ######
 mode = 'im' # either 'im' (waifu.im), 'nekos' (nekos.life), or 'pics' (waifu.pics)
 taglist = []
@@ -22,6 +44,8 @@ for i in range(1, len(sys.argv)): # Add tags
         mode = 'nekos'
     elif sys.argv[i] == '--pics':
         mode = 'pics'
+    elif sys.argv[i] == '--help' or sys.argv[i] == '-h':
+        printhelp()
     else:
         taglist.append(sys.argv[i])
 

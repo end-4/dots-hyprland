@@ -56,18 +56,18 @@
         :space-evenly false :spacing -6
         :orientation "v"
         :valign "center"
-        (box ; CPU
-          :space-evenly false :orientation "h" :spacing 5
-          (label
-            :class "bar-icon-material bar-resources-icon"
-            :text ""
-          )
-          (progress
-            :valign "center"
-            :class "bar-prog"
-            :value {EWW_CPU.avg}
-          )
-        )
+        ; (box ; CPU
+        ;   :space-evenly false :orientation "h" :spacing 5
+        ;   (label
+        ;     :class "bar-icon-material bar-resources-icon"
+        ;     :text ""
+        ;   )
+        ;   (progress
+        ;     :valign "center"
+        ;     :class "bar-prog"
+        ;     :value {EWW_CPU.avg}
+        ;   )
+        ; )
         (box ; RAM
           :space-evenly false :orientation "h" :spacing 5
           (label
@@ -96,7 +96,7 @@
       (box ; Battery
         :class "bar-circle-pad"
         (circular-progress
-          :value "${EWW_BATTERY["BATT"].capacity}"
+          :value "${battery.percentage}"
           :class "bar-batt-circle"
           :thickness 3
           :start-at 75
@@ -105,7 +105,7 @@
           "
           (box
             :width 27 :height 27
-            :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
+            :tooltip "Battery: ${battery.percentage}% (${EWW_BATTERY.BATT.status})"
             :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
             (label
               :halign "center" :valign "center"
@@ -114,7 +114,7 @@
               font-size: 10pt;
               ${battery.quickicon == '' ? '' : ('color: ' + coloraccent + ';')}
               "
-              :text "${EWW_BATTERY["BATT"].capacity}"
+              :text "${battery.percentage}"
             )
           )
         )

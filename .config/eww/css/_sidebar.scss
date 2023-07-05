@@ -615,7 +615,7 @@ $bgdetail2: $onTertiary;
     font-size: 12pt;
     border-radius: 13px;
     padding: 5px 10px;
-    margin: 3px 2px;
+    margin: 0px 2px;
     min-height: 20px;
     background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
     box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.5);
@@ -630,9 +630,14 @@ $bgdetail2: $onTertiary;
 }
 
 .sidebar-waifu-pic {
-    background-color: white;
+    background-color: transparent;
     border-radius: 18px;
     background-position: top center;
+}
+
+.sidebar-waifu-pic-bg {
+    background-color: white;
+    border-radius: 19px;
 }
 
 .sidebar-todo-box {

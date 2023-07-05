@@ -33,11 +33,11 @@
       :orientation "h" :space-evenly false :spacing 5
       (settings_option_mousesens)
       ; (togglehyprctl
-      ;   :value {mousemode}
-      ;   :changecmd "eww update mousemode="
-      ;   :option-label "Mouse"
-      ;   :option-icon "Mouse"
-      ;   :icon-style 0
+        ;   :value {mousemode}
+        ;   :changecmd "eww update mousemode="
+        ;   :option-label "Mouse"
+        ;   :option-icon "Mouse"
+        ;   :icon-style 0
       ; )
       (eventbox
         :cursor "pointer"
@@ -107,7 +107,7 @@
     :orientation "h"
     :space-evenly false
     :class "sidebar-waifu-scrollbg"
-    :spacing 10
+    :spacing 13
     (box
       :space-evenly false :orientation "h"
       (revealer
@@ -122,6 +122,7 @@
             :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
             (box
               :orientation "v"
+              :spacing 6
               :valign "start"
               :style "
               ${ANIM_ENTER[1]}
@@ -166,17 +167,20 @@
       (scroll
         :hexpand true
         :hscroll true :vscroll false
-        (box
-          ; :halign "start"
-          :class "sidebar-waifu-pic"
-          :style "
-          ${ANIM_ENTER[0]}
-          background-image: url('${waifu.path}');
-          ${waifu['size'][0] > waifu['size'][1] ?
-          'background-size: auto 100%;' : 'background-size: 100% auto;'
-          }
-          "
-          ; "${EWW_CMD} update waifu='{\"name\":\"eww_covers/cover_art\"}' && ${EWW_CMD} update waifu=$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[0]}) &"
+        (overlay
+          (box
+            :class "sidebar-waifu-pic-bg"
+          )
+          (box
+            :class "sidebar-waifu-pic"
+            :style "
+            ${ANIM_ENTER[0]}
+            background-image: url('${waifu.path}');
+            ${waifu['size'][0] / waifu['size'][1] > 395 / 530 ?
+            'background-size: auto 100%;' : 'background-size: 100% auto;'
+            }
+            "
+          )
         )
       )
     )
@@ -469,8 +473,8 @@
                       :text "Resources"
                     )
                     ; (label :xalign 1
-                      ;   :class "bar-txt-small sidebar-section-title-text"
-                      ;   :text "no"
+                    ;     :class "bar-txt-small sidebar-section-title-text"
+                    ;     :text "no"
                     ; )
                   )
                   (box ; Actual stuff

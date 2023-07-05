@@ -98,23 +98,23 @@
 }
 
 .dashboard-settings-option-group {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
 }
 
 .dashboard-settings-option-group-middle {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
 }
 
 .dashboard-settings-option-group-left {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 2px;
     border-top-left-radius: 13px;
     border-bottom-left-radius: 13px;
 }
 
 .dashboard-settings-option-group-right {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 2px;
     border-top-right-radius: 13px;
     border-bottom-right-radius: 13px;
@@ -148,7 +148,7 @@
         min-height: 3px;
         min-width: 60px;
         border-radius: 99px;
-        background-color: mix($surface, rgba(0,0,0,0), 30%);
+        background-color: mix($surface, rgba(0, 0, 0, 0), 30%);
     }
 
     highlight {
@@ -185,7 +185,7 @@
 
 .switch-bg-0 {
     border-radius: 99px;
-    background-color: mix($surface, rgba(0,0,0,0), 50%);
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
     border: 2px solid $onSurface;
 }
 
@@ -197,7 +197,7 @@
 
 .switch-bg-false {
     border-radius: 99px;
-    background-color: mix($surface, rgba(0,0,0,0), 50%);
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
     border: 3px solid $onSurface;
 }
 
@@ -237,13 +237,13 @@
 }
 
 .dashboard-option-lang-true {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
     padding: 15px;
 }
 
 .dashboard-option-lang-false {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
     padding: 15px;
 }
@@ -277,15 +277,30 @@
 }
 
 .dashboard-settings-button {
-    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
     padding: 15px;
 }
 
 .dashboard-settings-button:hover {
-    background-color: tint(mix($secondaryContainer, rgba(0,0,0,0), 50%), 5%);
+    background-color: tint(mix($secondaryContainer, rgba(0, 0, 0, 0), 50%), 5%);
 }
 
 .dashboard-settings-button:active {
-    background-color: tint(mix($secondaryContainer, rgba(0,0,0,0), 50%), 10%);
+    background-color: tint(mix($secondaryContainer, rgba(0, 0, 0, 0), 50%), 10%);
+}
+
+.dashboard-section-icon {
+    @include icon-material;
+    font-size: 18pt;
+}
+
+.dashboard-section-icon-nerd {
+    @include icon-nerd;
+    font-size: 18pt;
+}
+
+.dashboard-section-txt {
+    @include mainfont;
+    font-size: 18pt;
 }

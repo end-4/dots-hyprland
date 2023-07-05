@@ -13,7 +13,7 @@
     )
     (box
       :class "window"
-      :height 300
+      :style "min-height: 300px;"
       (box ; Media cover background (behind blur)
         :class "bottomsheet-back-bg"
         :style "background-image: url('${mcover.image}');"
