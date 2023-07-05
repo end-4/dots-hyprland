@@ -286,14 +286,14 @@
       :class "batbar"
       :space-evenly false
       (circular-progress
-        :value "${EWW_BATTERY['BATT']['capacity']}"
+        :value "${battery.percentage}"
         :class "batbar-circle"
         :thickness 4
         :start-at 75
         :style "border-radius: 99px; color: ${battery.circolor};"
         (box
           :class "inside-circle"
-          :tooltip "Battery: ${EWW_BATTERY['BATT']['capacity']}%"
+          :tooltip "Battery: ${battery.percentage}%"
           :onclick "${EWW_CMD} update popup='system-menu'"
           :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
           (label :class "icon-text" :text "")
