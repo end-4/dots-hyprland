@@ -24,7 +24,7 @@
           :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
           :onclick "${open_sideright ?
           (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
-          (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true && ' + EWW_CMD + ' update notifications=\"$(scripts/notifget)\" &')}"
+          (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true &')}"
           (box
             :space-evenly false :orientation "h"
             :class "window"
@@ -264,33 +264,6 @@
                   :class "bar-txt-hugeass sidebar-section-title-icon"
                   :text "Notifications"
                 )
-                (button
-                  :halign "end" :valign "center"
-                  :class "sidebar-section-title-btn sidebar-section-title-icon"
-                  :onclick "${EWW_CMD} update notifications=\"$(scripts/notifget)\" &"
-                  (label
-                    :class "bar-icon-material-large"
-                    :text "Update"
-                  )
-                )
-                (button
-                  :halign "end" :valign "center"
-                  :class "sidebar-section-title-btn sidebar-section-title-icon"
-                  :onclick "scripts/notifications toggle &"
-                  (label
-                    :class "bar-icon-material-large"
-                    :text "Pause"
-                  )
-                )
-                (button
-                  :halign "end" :valign "center"
-                  :class "sidebar-section-title-btn sidebar-section-title-icon"
-                  :onclick "scripts/notifications clear && ${EWW_CMD} update notifications=\"$(scripts/notifget)\" &"
-                  (label
-                    :class "bar-icon-material-large"
-                    :text "Close"
-                  )
-                )
               )
               (scroll
                 :vexpand true
@@ -300,45 +273,69 @@
                   (box
                     :space-evenly false
                     :orientation "v"
-                    (for app in {notifications.data}
+                    (for app in notifications
                       (box
                         :space-evenly false :orientation "v"
                         :spacing 10
                         :class "sidebar-notification"
-                        (label :xalign 0
-                          :hexpand true
-                          :width 175
-                          :class "sidebar-notif-appname"
-                          :text {app.name}
-                          :wrap true
-                        )
                         (box
-                          :space-evenly false :orientation "h"
-                          :spacing 10
+                          :valign "center"
+                          :space-evenly false :orientation "v"
                           (box
-                            :class "sidebar-notif-decor-left"
-                            :width 5
-                          )
-                          (box
-                            :space-evenly false :orientation "v"
-                            :spacing 10
-                            (for message in {app.content}
-                              (box
-                                :space-evenly false :orientation "v"
-                                (label :xalign 0
-                                  :class "sidebar-notif-summary"
-                                  :text {message[0]}
-                                  ; :limit-width 60
-                                )
-                                (label :xalign 0
-                                  :class "sidebar-notif-body"
-                                  :text {message[1]}
-                                  ; :limit-width 60
-                                )
-                              )
+                            :space-evenly false :orientation "h"
+                            :spacing 5
+                            (label :xalign 0
+                              :hexpand true
+                              :class "bar-txt"
+                              :text "${app['summary']}"
+                              :limit-width 20
+                            )
+                            (label :xalign 1
+                              :class "bar-txt-smaller"
+                              :text "${app['app_name']}"
+                              :limit-width 20
                             )
                           )
+                          (label :xalign 0
+                            :class "bar-txt-small"
+                            :text "${app['body']}"
+                            :limit-width 45
+                          )
                         )
+                        ; (label :xalign 0
+                        ;   :hexpand true
+                        ;   :width 175
+                        ;   :class "sidebar-notif-appname"
+                        ;   :text {app.name}
+                        ;   :wrap true
+                        ; )
+                        ; (box
+                        ;   :space-evenly false :orientation "h"
+                        ;   :spacing 10
+                        ;   (box
+                        ;     :class "sidebar-notif-decor-left"
+                        ;     :width 5
+                        ;   )
+                        ;   (box
+                        ;     :space-evenly false :orientation "v"
+                        ;     :spacing 10
+                        ;     (for message in {app.content}
+                        ;       (box
+                        ;         :space-evenly false :orientation "v"
+                        ;         (label :xalign 0
+                        ;           :class "sidebar-notif-summary"
+                        ;           :text {message[0]}
+                        ;           ; :limit-width 60
+                        ;         )
+                        ;         (label :xalign 0
+                        ;           :class "sidebar-notif-body"
+                        ;           :text {message[1]}
+                        ;           ; :limit-width 60
+                        ;         )
+                        ;       )
+                        ;     )
+                        ;   )
+                        ; )
                       )
                     )
                   )

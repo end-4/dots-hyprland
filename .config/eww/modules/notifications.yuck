@@ -9,21 +9,21 @@
       :class "bar-bg bar-bg-pad"
       :spacing 5
       (label
-        :class "bar-notif-count ${(notifications != 'null' && notifications.count > 0) ? 'bar-notif-count-yes' : 'bar-icon-material'}"
+        :class "bar-notif-count ${arraylength(notifications) > 0 ? 'bar-notif-count-yes' : 'bar-icon-material'}"
         :halign "center" :valign "center"
         :style "
-        ${(notifications != 'null' && notifications.count > 0) ? 'font-size: 11pt;' : ''}
+        ${arraylength(notifications) > 0 ? 'font-size: 11pt;' : ''}
         "
-        :text "${(notifications != 'null' && notifications.count > 0) ? notifications.count : ''}"
+        :text "${arraylength(notifications) > 0 ? arraylength(notifications) : ''}"
       )
       (revealer
-        :reveal {notifications == 'null' || notifications.count == 0}
+        :reveal {arraylength(notifications) == 0}
         :transition "slideright"
         :duration "0ms"
         (label :class "bar-txt" :text "No notifications")
       )
       (revealer
-        :reveal {notifications.count > 0}
+        :reveal {arraylength(notifications) > 0}
         :transition "slideright"
         :duration "0ms"
         :hexpand true
@@ -36,18 +36,18 @@
             (label :xalign 0
               :hexpand true
               :class "bar-txt"
-              :text "${notifications.count > 0 ? notifications['data'][0]['content'][0][0] : ''}"
+              :text "${arraylength(notifications) > 0 ? notifications[0]['summary'] : ''}"
               :limit-width 20
             )
             (label :xalign 1
               :class "bar-txt-smaller"
-              :text "${notifications.count > 0 ? notifications['data'][0]['name'] : ''}"
+              :text "${arraylength(notifications) > 0 ? notifications[0]['app_name'] : ''}"
               :limit-width 20
             )
           )
           (label :xalign 0
             :class "bar-txt-small"
-            :text "${notifications.count > 0 ? notifications['data'][0]['content'][0][1] : ''}"
+            :text "${arraylength(notifications) > 0 ? notifications[0]['body'] : ''}"
             :limit-width 45
           )
         )
