@@ -20,9 +20,9 @@
 
 ## Gallery
 ![end-4/dots-hyprland](./assets/novelknock-7.png)
-![end-4/dots-hyprland](./assets/novelknock-4.png)
+![end-4/dots-hyprland](./assets/novelknock-8.png)
 ![end-4/dots-hyprland](./assets/novelknock-6.png)
-![end-4/dots-hyprland](./assets/novelknock-3.png)
+![end-4/dots-hyprland](./assets/novelknock-9.png)
 
 
 ## Dependencies
