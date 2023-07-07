@@ -143,11 +143,13 @@ $bgdetail2: $onTertiary;
 }
 
 .sidebar-box-title {
+    color: $onBackground;
     margin: 5px;
 }
 
 .sidebar-todo-item {
     margin: 0 5px;
+    color: $onBackground;
 }
 
 .sidebar-todo-btn {
@@ -227,6 +229,7 @@ $bgdetail2: $onTertiary;
     margin: 5px;
     @include icon-material;
     font-size: 17pt;
+    color: $onBackground;
 }
 
 .sidebar-quicktoggle-slider {
@@ -558,6 +561,7 @@ $bgdetail2: $onTertiary;
 .sidebar-hyprtoggle-icon {
     @include icon-material;
     font-size: 35pt;
+    color: $onBackground;
 }
 
 .sidebar-hyprtoggle-icon-segoe {
@@ -565,6 +569,7 @@ $bgdetail2: $onTertiary;
     font-size: 26pt;
     margin-left: 2px;
     margin-right: -2px;
+    color: $onBackground;
 }
 
 .sidebar-hyprtoggle-icon-0 {

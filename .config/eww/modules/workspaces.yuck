@@ -23,7 +23,7 @@
             :class "bar-ws-btn"
             (label
               :valign "center"
-              :class "bar-ws-txt"
+              :class "bar-ws-txt bar-txt-norm"
               :width 26 :height 26
               :style "
               background-color: ${i.clr};

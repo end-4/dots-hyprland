@@ -8,7 +8,6 @@
 (include "./modules/notifications.yuck")
 (include "./modules/osd_volume.yuck")
 (include "./modules/osd_bright.yuck")
-(include "./modules/searchbutton.yuck")
 (include "./modules/sysinfo.yuck")
 (include "./modules/system.yuck")
 (include "./modules/taskbar.yuck")

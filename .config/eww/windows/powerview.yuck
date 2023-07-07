@@ -160,16 +160,16 @@
               :orientation "h"
               :class "bar-bg shadow-pad window-border powerview-info"
               (label :xalign 0
-                :class "bar-txt-larger"
+                :class "bar-txt-larger bar-txt-norm"
                 :text "${overview_hover_name.class}"
               )
               (label
-                :class "bar-txt-larger"
+                :class "bar-txt-larger bar-txt-norm"
                 :style "margin: 0px 50px;"
                 :text "${overview_hover_name.title}"
               )
               (label :xalign 1
-                :class "bar-txt-larger"
+                :class "bar-txt-larger bar-txt-norm"
                 :text "${overview_hover_name.size[0]}x${overview_hover_name.size[1]} "
               )
             )

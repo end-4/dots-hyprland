@@ -32,19 +32,19 @@
           :valign "center"
           :orientation "v"
           :space-evenly false :spacing -4
-          (label :class "bar-icon-material bar-system-icon"
+          (label :class "bar-icon-material bar-system-icon bar-txt-norm"
            :text "keyboard"  
           )
-          (label :class "bar-txt-tiny" :text {lang_ibus.name_abbr})
+          (label :class "bar-txt-tiny bar-txt-norm" :text {lang_ibus.name_abbr})
         )
         (label
           :valign "center"
-          :class "bar-icon-material bar-system-icon"
+          :class "bar-icon-material bar-system-icon bar-txt-norm"
           :text {WIFI_ICONS[net.level]}
         )
         (label
           :valign "center"
-          :class "bar-icon-material bar-system-icon"
+          :class "bar-icon-material bar-system-icon bar-txt-norm"
           :text {bluetooth.icon}
         )
         ; (label
@@ -56,22 +56,22 @@
         :space-evenly false :spacing -6
         :orientation "v"
         :valign "center"
-        ; (box ; CPU
-        ;   :space-evenly false :orientation "h" :spacing 5
-        ;   (label
-        ;     :class "bar-icon-material bar-resources-icon"
-        ;     :text ""
-        ;   )
-        ;   (progress
-        ;     :valign "center"
-        ;     :class "bar-prog"
-        ;     :value {EWW_CPU.avg}
-        ;   )
-        ; )
+        (box ; CPU
+          :space-evenly false :orientation "h" :spacing 5
+          (label
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
+            :text ""
+          )
+          (progress
+            :valign "center"
+            :class "bar-prog"
+            :value {EWW_CPU.avg}
+          )
+        )
         (box ; RAM
           :space-evenly false :orientation "h" :spacing 5
           (label
-            :class "bar-icon-material bar-resources-icon"
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
             :text "Memory"
           )
           (progress
@@ -83,7 +83,7 @@
         (box ; Swap
           :space-evenly false :orientation "h" :spacing 5
           (label
-            :class "bar-icon-material bar-resources-icon"
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
             :text ""
           )
           (progress
@@ -109,7 +109,7 @@
             :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
             (label
               :halign "center" :valign "center"
-              :class "bar-txt-smaller"
+              :class "bar-txt-smaller bar-txt-norm"
               :style "
               font-size: 10pt;
               ${battery.quickicon == '' ? '' : ('color: ' + coloraccent + ';')}

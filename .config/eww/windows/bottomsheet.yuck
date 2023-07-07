@@ -103,7 +103,7 @@
             :valign "center"
             :class "bottomsheet-music-cover"
             :style "
-            ${mcover.image == 'null' ? '' :
+            ${mcover.image == 'null' ? 'min-width: 200px;' :
             '
             background-image: url(\'${mcover.image}\');
             min-width: 200px;
@@ -246,7 +246,7 @@
 (defwindow bottomsheet_back
   :monitor 0
   :stacking "bg"
-  :namespace "eww-lowopacity"
+  :namespace "noblur"
   :geometry (geometry
     :anchor "bottom center"
     :y 1

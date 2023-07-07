@@ -10,6 +10,7 @@ else
     eww update supercontext_pos_y="$(hyprctl cursorpos -j | gojq '.y')" &
     eww open supercontext
     eww update ws_to_swap=0
+    eww update ws_to_dump=0
     eww update open_supercontext=1
     eww update open_supercontext=2
     eww update open_supercontext=3

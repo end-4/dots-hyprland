@@ -25,13 +25,13 @@
           :start-at 75
           (button
             :class "inside-circle"
-            (label :class "bar-txt-smaller"
+            (label :class "bar-txt-smaller bar-txt-norm"
               :text {round(brightness.level, 0) == 100 ? '' : round(brightness.level, 0)}
             )
           )
         )
         (label :xalign 1 :hexpand true
-          :class "bar-txt"
+          :class "bar-txt bar-txt-norm"
           :style "margin-right: 5px;"
           :text "Brightness"
         )

@@ -37,11 +37,8 @@
             :spacing -2
             :valign "center"
             (label
-              :class "bar-txt-larger"
+              :class "bar-txt-larger bar-txt-norm"
               :xalign 0
-              :style "
-              color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
-              "
               :text {mname.title == '' ? 'Music' : mname.title}
             )
             (revealer
@@ -49,11 +46,8 @@
               :reveal "${mname.artist != ''}"
               :duration "20ms"
               (label
-                :class "bar-txt-small"
+                :class "bar-txt-small bar-txt-norm"
                 :xalign 0
-                :style "
-                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
-                "
                 :text "${mname.artist}"
               )
             )

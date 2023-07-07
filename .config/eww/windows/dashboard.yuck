@@ -16,7 +16,7 @@
       min-width: ${(value == true || value > 0) ? 20 : 12}px;
       min-height: ${(value == true || value > 0) ? 20 : 12}px;
       "
-      (label :class "switch-fg-icon" :text {(value == true || value > 0) ? 'check' : ''})
+      (label :class "switch-fg-icon bar-txt-norm" :text {(value == true || value > 0) ? 'check' : ''})
     )
   )
 )
@@ -407,332 +407,335 @@
 )
 
 (defwidget dashboard_widget []
-  (overlay
-    (box
-      :class "dashboard-bg"
-      :height RES_HEIGHT
-      :width RES_WIDTH
-    )
-    (image
-      :path "images/menus/corner_topleft.svg"
-      :halign "start"
-      :valign "start"
-      :image-width BG_ROUNDING
-      :image-height BG_ROUNDING
-    )
-    (image
-      :path "images/menus/corner_topright.svg"
-      :halign "end"
-      :valign "start"
-      :image-width BG_ROUNDING
-      :image-height BG_ROUNDING
-    )
-    (image
-      :path "images/menus/corner_bottomleft.svg"
-      :halign "start"
-      :valign "end"
-      :image-width BG_ROUNDING
-      :image-height BG_ROUNDING
-    )
-    (image
-      :path "images/menus/corner_bottomright.svg"
-      :halign "end"
-      :valign "end"
-      :image-width BG_ROUNDING
-      :image-height BG_ROUNDING
-    )
-    (box
-      :valign "end"
-      (revealer ; Audio visualizer (cava)
-        :reveal {open_dashboard >= 3}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "h"
-          :spacing 17
-          (for colheight in cavajson
-            (box
-              :class "dashboard-cavacol"
-              :valign "end"
-              :style "
-              min-height: ${round(colheight[0] / 2.5, 0)}px;
-              "
+  (box
+    :space-evenly false :orientation "h"
+    (overlay
+      (box
+        :class "dashboard-bg"
+        :height RES_HEIGHT
+        :width RES_WIDTH
+      )
+      (image
+        :path "images/menus/corner_topleft.svg"
+        :halign "start"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_topright.svg"
+        :halign "end"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_bottomleft.svg"
+        :halign "start"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_bottomright.svg"
+        :halign "end"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (box
+        :valign "end"
+        (revealer ; Audio visualizer (cava)
+          :reveal {open_dashboard >= 3}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h"
+            :spacing 17
+            (for colheight in cavajson
+              (box
+                :class "dashboard-cavacol"
+                :valign "end"
+                :style "
+                min-height: ${round(colheight[0] / 2.5, 0)}px;
+                "
+              )
             )
           )
         )
       )
-    )
-    (box
-      :halign "center" :valign "start"
-      :style "
-      ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-      margin-top: ${open_dashboard >= 1 ? 40 : 90}px;
-      "
-      (revealer ; Time and date
-        :reveal {open_dashboard >= 1}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "v"
-          :space-evenly false
-          (label
-            :class "dashboard-clock-time"
-            :text "${time.hour}:${time.minute}"
-          )
-          (label
-            :class "dashboard-clock-date"
-            :text "${time.day}, ${day_only} ${time.monthname} ${time.year}"
-          )
-        )
-      )
-    )
-    (box
-      :halign "start" :valign "start"
-      :style "
-      ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-      margin-top: ${open_dashboard >= 1 ? 50 : 100}px;
-      margin-left: 50px;
-      "
-      (revealer ; User
-        :reveal {open_dashboard >= 1}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "h"
-          :space-evenly false
-          :spacing 15
-          (box
-            :halign "center" :valign "center"
-            :class "dashbaord-user-pic"
-            :style "background-image: url('/var/lib/AccountsService/icons/${username}');"
-          )
+      (box
+        :halign "center" :valign "start"
+        :style "
+        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+        margin-top: ${open_dashboard >= 1 ? 40 : 90}px;
+        "
+        (revealer ; Time and date
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
           (box
             :orientation "v"
             :space-evenly false
-            (label :xalign 0
-              :class "dashboard-clock-realname"
-              :text "${realname}"
+            (label
+              :class "dashboard-clock-time"
+              :text "${time.hour}:${time.minute}"
             )
-            (label :xalign 0
-              :class "dashboard-clock-username"
-              :text "${username}"
+            (label
+              :class "dashboard-clock-date"
+              :text "${time.day}, ${day_only} ${time.monthname} ${time.year}"
             )
           )
         )
       )
-    )
-    (box
-      :halign "end" :valign "start"
-      (revealer ; Close button
-        :reveal {open_dashboard >= 1}
-        :duration "100ms"
-        :transition "crossfade"
-        (eventbox
-          :onclick "scripts/toggle-dashboard.sh --close &"
-          :cursor "pointer"
+      (box
+        :halign "start" :valign "start"
+        :style "
+        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+        margin-top: ${open_dashboard >= 1 ? 50 : 100}px;
+        margin-left: 50px;
+        "
+        (revealer ; User
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
           (box
-            :style "
-            ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-            ${open_dashboard >= 1 ? '' : 'margin-top: 100px;'}
-            padding: 50px;
-            "
+            :orientation "h"
+            :space-evenly false
+            :spacing 15
+            (box
+              :halign "center" :valign "center"
+              :class "dashbaord-user-pic"
+              :style "background-image: url('/var/lib/AccountsService/icons/${username}');"
+            )
             (box
               :orientation "v"
               :space-evenly false
-              :spacing -5
-              (label
-                :class "dashboard-close-btn-icon"
-                :text "close"
+              (label :xalign 0
+                :class "dashboard-user-realname"
+                :text "${realname}"
               )
-              (label
-                :class "dashboard-close-btn-txt"
-                :text "Close"
+              (label :xalign 0
+                :class "dashboard-user-username"
+                :text "${username}"
               )
             )
           )
         )
       )
-    )
-    (box ; Session control
-      :halign "end" :valign "center"
-      (revealer
-        :reveal {open_dashboard >= 2}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "v" :space-evenly false :spacing 30
-          :style "
-          ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-          ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
-          "
+      (box
+        :halign "end" :valign "start"
+        (revealer ; Close button
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
           (eventbox
-            :halign "end"
+            :onclick "scripts/toggle-dashboard.sh --close &"
             :cursor "pointer"
-            :onclick "gtklock &"
-            (box :space-evenly false :orientation "v"
-              :class "dashboard-session-btn"
-              (label :class "dashboard-session-btn-icon" :text "lock")
-              (label :class "dashboard-close-btn-txt" :text "Lock")
-            )
-          )
-          (box :orientation "h" :space-evenly false :spacing 10
-            :halign "end"
-            :style "
-            ${ANIM_ENTER[anim_set]}
-            ${rev_session_1 ? '' : 'margin-right: -210px;'}
-            "
-            (eventbox
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update rev_session_1=${!rev_session_1} &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "bedtime")
-                (label :class "dashboard-close-btn-txt" :text "Sleep")
-              )
-            )
-            (eventbox
-              :cursor "e-resize"
-              :onclick "${EWW_CMD} update rev_session_1=false && systemctl suspend &"
-              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
-            )
-          )
-          (box :orientation "h" :space-evenly false :spacing 10
-            :halign "end"
-            :style "
-            ${ANIM_ENTER[anim_set]}
-            ${rev_session_2 ? '' : 'margin-right: -210px;'}
-            "
-            (eventbox
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update rev_session_2=${!rev_session_2} &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "power_settings_new")
-                (label :class "dashboard-close-btn-txt" :text "Shutdown")
-              )
-            )
-            (eventbox
-              :cursor "e-resize"
-              :onclick "${EWW_CMD} update rev_session_2=false && systemctl poweroff &"
-              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
-            )
-          )
-          (box :orientation "h" :space-evenly false :spacing 10
-            :halign "end"
-            :style "
-            ${ANIM_ENTER[anim_set]}
-            ${rev_session_3 ? '' : 'margin-right: -210px;'}
-            "
-            (eventbox
-              :cursor "pointer"
-              :onclick "${EWW_CMD} update rev_session_3=${!rev_session_3} &"
-              (box :space-evenly false :orientation "v"
-                :class "dashboard-session-btn"
-                (label :class "dashboard-session-btn-icon" :text "restart_alt")
-                (label :class "dashboard-close-btn-txt" :text "Restart")
-              )
-            )
-            (eventbox
-              :cursor "e-resize"
-              :onclick "${EWW_CMD} update rev_session_3=false && reboot &"
-              (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
-            )
-          )
-        )
-      )
-    )
-    (box
-      :halign "start" :valign "center"
-      (revealer ; Settings sections
-        :reveal {open_dashboard >= 2}
-        :duration "100ms"
-        :transition "crossfade"
-        (box
-          :orientation "h" :space-evenly false
-          :width 700
-          :style "
-          ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
-          ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
-          "
-          (eventbox
-            :onscroll "scripts/scroll-settings {} &"
             (box
-              :class "dashboard-settings-highlight${scroll_offset_settings  == -1 ? '-hide' : ''}"
-              :halign "start" :valign "start"
               :style "
-              ${ANIM_ENTER[1]}
-              margin-right: -4px; margin-top: ${20+117*scroll_offset_settings}px;
+              ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+              ${open_dashboard >= 1 ? '' : 'margin-top: 100px;'}
+              padding: 50px;
               "
-            )
-          )
-          (eventbox
-            :onscroll "scripts/scroll-settings {} &"
-            (box
-              :orientation "v" :space-evenly false :spacing 30
-              (eventbox
-                :halign "start"
-                :cursor "pointer"
-                :onclick {scroll_offset_settings == 0 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=0 &'}
-                (box :space-evenly false :orientation "v"
-                  :class "dashboard-session-btn"
-                  (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
-                  (label :class "dashboard-close-btn-txt" :text "Devices")
+              (box
+                :orientation "v"
+                :space-evenly false
+                :spacing -5
+                (label
+                  :class "dashboard-close-btn-icon"
+                  :text "close"
                 )
-              )
-              (eventbox
-                :halign "start"
-                :cursor "pointer"
-                :onclick {scroll_offset_settings == 1 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=1 &'}
-                (box :space-evenly false :orientation "v"
-                  :class "dashboard-session-btn"
-                  (label :class "dashboard-session-btn-icon" :text "lens_blur")
-                  (label :class "dashboard-close-btn-txt" :text "Blur")
-                )
-              )
-              (eventbox
-                :halign "start"
-                :cursor "pointer"
-                :onclick {scroll_offset_settings == 2 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=2 &'}
-                (box :space-evenly false :orientation "v"
-                  :class "dashboard-session-btn"
-                  (label :class "dashboard-session-btn-icon" :text "wysiwyg")
-                  (label :class "dashboard-close-btn-txt" :text "Window")
-                )
-              )
-              (eventbox
-                :halign "start"
-                :cursor "pointer"
-                :onclick {scroll_offset_settings == 3 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=3 &'}
-                (box :space-evenly false :orientation "v"
-                  :class "dashboard-session-btn"
-                  (label :class "dashboard-session-btn-icon" :text "water_drop")
-                  (label :class "dashboard-close-btn-txt" :text " Hyprland")
+                (label
+                  :class "dashboard-close-btn-txt"
+                  :text "Close"
                 )
               )
             )
           )
-          (revealer
-            :reveal {scroll_offset_settings != -1}
-            :duration "100ms"
-            :transition "slideright"
+        )
+      )
+      (box ; Session control
+        :halign "end" :valign "center"
+        (revealer
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 30
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
             (eventbox
-              :hexpand true
-              (scroll
+              :halign "end"
+              :cursor "pointer"
+              :onclick "gtklock &"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "lock")
+                (label :class "dashboard-close-btn-txt" :text "Lock")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_1 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_1=${!rev_session_1} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "bedtime")
+                  (label :class "dashboard-close-btn-txt" :text "Sleep")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_1=false && systemctl suspend &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_2 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_2=${!rev_session_2} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "power_settings_new")
+                  (label :class "dashboard-close-btn-txt" :text "Shutdown")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_2=false && systemctl poweroff &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_3 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_3=${!rev_session_3} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "restart_alt")
+                  (label :class "dashboard-close-btn-txt" :text "Restart")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_3=false && reboot &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+          )
+        )
+      )
+      (box
+        :halign "start" :valign "center"
+        (revealer ; Settings sections
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h" :space-evenly false
+            :width 700
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (eventbox
+              :onscroll "scripts/scroll-settings {} &"
+              (box
+                :class "dashboard-settings-highlight${scroll_offset_settings  == -1 ? '-hide' : ''}"
+                :halign "start" :valign "start"
+                :style "
+                ${ANIM_ENTER[1]}
+                margin-right: -4px; margin-top: ${20+117*scroll_offset_settings}px;
+                "
+              )
+            )
+            (eventbox
+              :onscroll "scripts/scroll-settings {} &"
+              (box
+                :orientation "v" :space-evenly false :spacing 30
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 0 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=0 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
+                    (label :class "dashboard-close-btn-txt" :text "Devices")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 1 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=1 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "lens_blur")
+                    (label :class "dashboard-close-btn-txt" :text "Blur")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 2 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=2 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "wysiwyg")
+                    (label :class "dashboard-close-btn-txt" :text "Window")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 3 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=3 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "water_drop")
+                    (label :class "dashboard-close-btn-txt" :text " Hyprland")
+                  )
+                )
+              )
+            )
+            (revealer
+              :reveal {scroll_offset_settings != -1}
+              :duration "100ms"
+              :transition "slideright"
+              (eventbox
                 :hexpand true
-                :hscroll false :vscroll true
-                :class "dashboard-settings-panel"
-                :width 560
-                (box
-                  :orientation "v"
-                  :style "
-                  margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
-                  ${ANIM_ENTER[1]}
-                  "
-                  ; :space-evenly false
-                  (settings_mouse_widget)
-                  (settings_blur_widget)
-                  (settings_gaps_widget)
-                  (settings_hyprland_widget)
+                (scroll
+                  :hexpand true
+                  :hscroll false :vscroll true
+                  :class "dashboard-settings-panel"
+                  :width 560
+                  (box
+                    :orientation "v"
+                    :style "
+                    margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
+                    ${ANIM_ENTER[1]}
+                    "
+                    ; :space-evenly false
+                    (settings_mouse_widget)
+                    (settings_blur_widget)
+                    (settings_gaps_widget)
+                    (settings_hyprland_widget)
+                  )
                 )
               )
             )
@@ -741,7 +744,10 @@
       )
     )
     (box
-      :halign "center" :valign "center"
+      :valign "center"
+      :style "
+      margin-left: -${RES_WIDTH / 2 + 200}px;
+      "
       :orientation "h" :space-evenly false :spacing 70
       (box
         (revealer ; Directories

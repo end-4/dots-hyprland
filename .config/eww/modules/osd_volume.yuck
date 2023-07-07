@@ -19,7 +19,7 @@
         ${osd_vol ? '' : 'margin-left: 200px; margin-right: -200px;'}
         "
         (label :xalign 0 :hexpand true
-          :class "bar-txt"
+          :class "bar-txt bar-txt-norm"
           :style "margin-left: 5px;"
           :text "Volume"
         )
@@ -31,7 +31,7 @@
           :halign "start"
           (button
             :class "inside-circle"
-            (label :class "bar-txt-smaller"
+            (label :class "bar-txt-smaller bar-txt-norm"
               :text {volume.percent}
             )
           )

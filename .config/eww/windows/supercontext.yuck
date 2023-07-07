@@ -85,7 +85,7 @@
                 :onclick "pkill $(ps -p $(hyprctl activewindow -j | gojq -r '.pid') -o comm=) &"
                 :tooltip "Brutally kill this window"
                 :cursor "pointer"
-                (label :class "supercontext-btn-icon" :text "Dangerous")
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "Dangerous")
               )
             )
             (box ; Button 1
@@ -100,10 +100,10 @@
               (eventbox
                 :class "supercontext-btn-num"
                 :tooltip "Swap workspace windows with workspace..."
-                :onscroll "eww update ws_to_swap=$(( ${ws_to_swap == 0 ? activews : ws_to_swap} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') ))"
+                :onscroll "eww update ws_to_swap=$(( ${ws_to_swap == 0 ? activews : ws_to_swap} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') )) &"
                 :onclick "scripts/swapws ${activews} ${ws_to_swap} &"
                 :cursor "col-resize"
-                (label :text {ws_to_swap == 0 ? '' : ws_to_swap})
+                (label :class "bar-txt-norm" :text {ws_to_swap == 0 ? '' : ws_to_swap})
               )
             )
             (box
@@ -116,10 +116,12 @@
               margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[2]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
-                :onclick "~/.local/bin/record-script-fullscreen.sh &"
-                :tooltip "Record"
-                :cursor "pointer"
-                (label :class "supercontext-btn-icon" :text "radio_button_checked")
+                :class "supercontext-btn-num"
+                :tooltip "Dump windows of this workspace to workspace..."
+                :onscroll "eww update ws_to_dump=$(( ${ws_to_dump == 0 ? activews : ws_to_dump} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') )) &"
+                :onclick "scripts/dumptows ${activews} ${ws_to_dump} &"
+                :cursor "col-resize"
+                (label :class "bar-txt-norm" :style {ws_to_dump == 0 ? 'font-family: Material Symbols Rounded' : ''} :text {ws_to_dump == 0 ? 'publish' : ws_to_dump})
               )
             )
             (box
@@ -131,8 +133,11 @@
               margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[3]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
               margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[3]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
-              (button
-                :onclick "notify-send 'btn3'"
+              (eventbox
+                :onclick "~/.local/bin/record-script-fullscreen.sh &"
+                :tooltip "Record"
+                :cursor "pointer"
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "radio_button_checked")
               )
             )
             (box
@@ -144,8 +149,11 @@
               margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[4]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
               margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[4]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
-              (button
-                :onclick "notify-send 'btn4'"
+              (eventbox
+                :onclick "notify-send 'an extra button ;)'"
+                :tooltip "does nothing lol"
+                :cursor "pointer"
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "-")
               )
             )
           )

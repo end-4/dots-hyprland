@@ -9,11 +9,13 @@
 .dashboard-clock-time {
     @include mainfont;
     font-size: 55pt;
+    color: $onBackground;
 }
 
 .dashboard-clock-date {
     @include mainfont;
     font-size: 20pt;
+    color: $onBackground;
 }
 
 .dashbaord-user-pic {
@@ -24,24 +26,28 @@
     background-size: auto 100%;
 }
 
-.dashboard-clock-realname {
+.dashboard-user-realname {
     @include mainfont;
     font-size: 22pt;
+    color: $onBackground;
 }
 
-.dashboard-clock-username {
+.dashboard-user-username {
     @include mainfont;
     font-size: 16pt;
+    color: $onBackground;
 }
 
 .dashboard-close-btn-icon {
     @include icon-material;
     font-size: 30pt;
+    color: $onBackground;
 }
 
 .dashboard-close-btn-txt {
     @include mainfont;
     font-size: 11pt;
+    color: $onBackground;
 }
 
 .dashboard-cavacol {
@@ -64,18 +70,19 @@
 
 .dashboard-session-btn {
     padding: 10px 0px;
+    color: $onBackground;
 }
 
 .dashboard-session-btn-icon {
     @include icon-material;
     font-size: 30pt;
     padding: 0 50px;
+    color: $onBackground;
 }
 
 .dashboard-settings-panel {
     @include dashboard-panel-bg;
     border-radius: 15px;
-    // background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
 }
 
 .dashboard-setting-section-pad {
@@ -85,25 +92,30 @@
 .dashboard-settings-title-icon {
     @include icon-material;
     font-size: 18pt;
+    color: $onBackground;
 }
 
 .dashboard-settings-title-txt {
     @include mainfont;
     font-size: 20pt;
+    color: $onBackground;
 }
 
 .dashboard-settings-title-txtsmall {
     @include mainfont;
     font-size: 16pt;
+    color: $onBackground;
 }
 
 .dashboard-settings-option-group {
     background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
+    color: $onBackground;
 }
 
 .dashboard-settings-option-group-middle {
     background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    color: $onBackground;
 }
 
 .dashboard-settings-option-group-left {
@@ -111,6 +123,7 @@
     border-radius: 2px;
     border-top-left-radius: 13px;
     border-bottom-left-radius: 13px;
+    color: $onBackground;
 }
 
 .dashboard-settings-option-group-right {
@@ -118,6 +131,7 @@
     border-radius: 2px;
     border-top-right-radius: 13px;
     border-bottom-right-radius: 13px;
+    color: $onBackground;
 }
 
 .dashboard-settings-option-toggle-icon {
@@ -169,6 +183,7 @@
 .dashboard-settings-txt {
     @include mainfont;
     font-size: 12pt;
+    color: $onBackground;
 }
 
 .switch-bg-2 {
@@ -240,12 +255,14 @@
     background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
     padding: 15px;
+    color: $onBackground;
 }
 
 .dashboard-option-lang-false {
     background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
     border-radius: 13px;
     padding: 15px;
+    color: $onBackground;
 }
 
 .dashboard-lang-indicator-true {
@@ -293,14 +310,17 @@
 .dashboard-section-icon {
     @include icon-material;
     font-size: 18pt;
+    color: $onBackground;
 }
 
 .dashboard-section-icon-nerd {
     @include icon-nerd;
     font-size: 18pt;
+    color: $onBackground;
 }
 
 .dashboard-section-txt {
     @include mainfont;
     font-size: 18pt;
+    color: $onBackground;
 }

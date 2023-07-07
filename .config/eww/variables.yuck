@@ -16,8 +16,8 @@
 (deflisten ICON_GET `scripts/get_open_icons`)
 (defvar MIN_ROW_HEIGHT 100)
 (defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]`) ; Note: change $total and $shown in scripts/scroll-waifu too
-(defvar WAIFU_CATEGORIES `["waifu", "maid", "uniform", "nekos.life", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin", "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu", ".pics:waifu segs", ".pics:neko", ".pics:neko segs", "oral"]`)
-(defvar WAIFU_CATEGORIES_ARGS `["waifu", "maid", "uniform", "--neko", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
+(defvar WAIFU_CATEGORIES      `["waifu", "maid", "uniform", "nekos.life", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin",        "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu",  ".pics:waifu segs",    ".pics:neko",  ".pics:neko segs",    "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS `["waifu", "maid", "uniform", "--neko",     "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
 (defvar username_default "username")
 (defvar WORKSPACE_SIDE_PAD 15)
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
@@ -65,6 +65,8 @@
 (defvar supercontext_pos_x 960)
 (defvar supercontext_pos_y 540)
 (defvar ws_to_swap 0)
+(defvar ws_to_dump 0)
+(defvar flash_notif false)
 
 ; Open/close/hover state
 (defvar hover_music false)
@@ -156,23 +158,23 @@
 ; Quote
 (defvar quote_content `[
   "arch is like rick astley to me\\\nnever gonna let you down",
+  "you have any cool ones?\\\nI'm always open for new wallpapers\\\npreferably anime tiddies ofc but yknow",
   "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
   "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
-  "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree",
+  "doki doki waku waku",
   "that was good enough I guess\\\nI have a penis",
   "...so Nvidia, fuck you",
   "you cant spell circumference without cum",
-  "you have any cool ones?\\\nI'm always open for new wallpapers\\\npreferably anime tiddies ofc but yknow",
   "sEX"
 ]`)
 (defvar quote_author `[
   "- vaxry-chan",
   "- vaxry",
   "- vaxry",
-  "- Hyprland community, 2022",
+  "- vaxry",
+  "- Hyprland community, 2023",
   "- vaxry",
   "- Linus Torvalds",
   "- vaxer",
-  "- vaxry",
   "- vaxer"
 ]`)

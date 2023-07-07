@@ -1,3 +1,13 @@
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 600% 0%;
+    }
+}
+
 .bar-bg {
     background-color: $background;
     @include bar-rounding;
@@ -61,6 +71,14 @@
     @include mainfont;
     font-size: 9pt;
     font-weight: 500; // A slightly higher font weight for small text
+}
+
+.bar-txt-norm {
+    color: $onBackground;
+}
+
+.bar-txt-sub {
+    color: shade($onBackground, 15%);
 }
 
 .bar-btn-icon {
@@ -281,6 +299,10 @@
     transition: 1000ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
+.osd-circle {
+    color: $onBackground;
+}
+
 // .osd-active-right {
 //     background-image: linear-gradient(225deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 10%);
 // }
@@ -328,4 +350,14 @@
     background-color: tint($overlay0, 10%);
 }
 
-
+.bar-notif-flash {
+    background: linear-gradient(135deg,
+            $background 20%, tint($background, 11%) 20%,
+            tint($background, 11%) 40%, $background 40%,
+            $background 60%, tint($background, 11%) 60%,
+            tint($background, 11%) 80%, $background 80%,
+            $background 100%, tint($background, 11%) 100%);
+    background-size: 300% 300%;
+    animation: gradient 4.5s cubic-bezier(0.24, 0.61, 0.48, 0.9);
+    animation-iteration-count: 1;
+}

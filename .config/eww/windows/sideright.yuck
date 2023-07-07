@@ -286,55 +286,62 @@
                             :spacing 5
                             (label :xalign 0
                               :hexpand true
-                              :class "bar-txt"
-                              :text "${app['summary']}"
-                              :limit-width 20
+                              :class "bar-txt bar-txt-norm"
+                              :text {app['summary']}
+                              :limit-width 40
                             )
                             (label :xalign 1
-                              :class "bar-txt-smaller"
+                              :class "bar-txt-smaller bar-txt-norm"
                               :text "${app['app_name']}"
                               :limit-width 20
                             )
+                            (label :xalign 1
+                              :class "bar-txt-small bar-txt-norm"
+                              :text " • ${app['time']}"
+                              :limit-width 20
+                            )
                           )
-                          (label :xalign 0
-                            :class "bar-txt-small"
-                            :text "${app['body']}"
-                            :limit-width 45
+                          (box
+                            (label :xalign 0 :hexpand true :wrap true
+                              :class "bar-txt-small bar-txt-sub"
+                              :text {app['body']}
+                              ; :limit-width 45
+                            )
                           )
                         )
                         ; (label :xalign 0
-                        ;   :hexpand true
-                        ;   :width 175
-                        ;   :class "sidebar-notif-appname"
-                        ;   :text {app.name}
-                        ;   :wrap true
+                          ;   :hexpand true
+                          ;   :width 175
+                          ;   :class "sidebar-notif-appname"
+                          ;   :text {app.name}
+                          ;   :wrap true
                         ; )
                         ; (box
-                        ;   :space-evenly false :orientation "h"
-                        ;   :spacing 10
-                        ;   (box
-                        ;     :class "sidebar-notif-decor-left"
-                        ;     :width 5
-                        ;   )
-                        ;   (box
-                        ;     :space-evenly false :orientation "v"
-                        ;     :spacing 10
-                        ;     (for message in {app.content}
-                        ;       (box
-                        ;         :space-evenly false :orientation "v"
-                        ;         (label :xalign 0
-                        ;           :class "sidebar-notif-summary"
-                        ;           :text {message[0]}
-                        ;           ; :limit-width 60
-                        ;         )
-                        ;         (label :xalign 0
-                        ;           :class "sidebar-notif-body"
-                        ;           :text {message[1]}
-                        ;           ; :limit-width 60
-                        ;         )
-                        ;       )
-                        ;     )
-                        ;   )
+                          ;   :space-evenly false :orientation "h"
+                          ;   :spacing 10
+                          ;   (box
+                            ;     :class "sidebar-notif-decor-left"
+                            ;     :width 5
+                          ;   )
+                          ;   (box
+                            ;     :space-evenly false :orientation "v"
+                            ;     :spacing 10
+                            ;     (for message in {app.content}
+                              ;       (box
+                                ;         :space-evenly false :orientation "v"
+                                ;         (label :xalign 0
+                                  ;           :class "sidebar-notif-summary"
+                                  ;           :text {message[0]}
+                                  ;           ; :limit-width 60
+                                ;         )
+                                ;         (label :xalign 0
+                                  ;           :class "sidebar-notif-body"
+                                  ;           :text {message[1]}
+                                  ;           ; :limit-width 60
+                                ;         )
+                              ;       )
+                            ;     )
+                          ;   )
                         ; )
                       )
                     )

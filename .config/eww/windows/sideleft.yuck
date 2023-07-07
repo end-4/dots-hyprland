@@ -8,12 +8,12 @@
       :height 100 :width 100
       :class "sidebar-hyprtoggle"
       (label
-        :class "sidebar-hyprtoggle-name"
+        :class "sidebar-hyprtoggle-name bar-txt-norm"
         :text option-label
       )
       (label
         :vexpand true
-        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-segoe' : ''} sidebar-hyprtoggle-icon-${value}"
+        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-segoe' : ''} sidebar-hyprtoggle-icon-${value} bar-txt-norm"
         :text option-icon
       )
       (box
@@ -44,8 +44,8 @@
         :onclick "eww update mousemode=${1 - mousemode} &"
         (box :space-evenly false :spacing 15
           :class "dashboard-settings-option-group dashboard-settings-option-group-pad"
-          (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text "Scroll\\\naccessibility")
-          (label :class "sidebar-optn-icon" :text "${mousemode == 1 ? 'mouse' : ''}")
+          (label :xalign 0 :hexpand true :class "dashboard-settings-txt bar-txt-norm" :text "Scroll\\\naccessibility")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "${mousemode == 1 ? 'mouse' : ''}")
         )
       )
     )
@@ -57,7 +57,7 @@
         :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
         (box :space-evenly false :spacing 10
           :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
-          (label :class "sidebar-optn-icon" :text "blur_on")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "blur_on")
           (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
         )
       )
@@ -66,7 +66,7 @@
         :onclick "hyprctl keyword decoration:blur_xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
         (box :space-evenly false :spacing 10
           :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
-          (label :class "sidebar-optn-icon" :text "preview")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "preview")
           (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
         )
       )
@@ -79,7 +79,7 @@
         :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
         (box :space-evenly false :spacing 10
           :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
-          (label :class "sidebar-optn-icon" :text "keyboard")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "keyboard")
           (settings-option-binary :name "→ Disable touchpad" :value {hyprjson.touchpad_disable_while_typing})
         )
       )
@@ -88,7 +88,7 @@
         :onclick "hyprctl keyword input:touchpad:clickfinger_behavior ${1 - hyprjson.touchpad_clickfinger_behavior} &"
         (box :space-evenly false :spacing 10
           :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
-          (label :class "sidebar-optn-icon" :text "touch_app")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "touch_app")
           (settings-option-binary :name "Tap to click" :value {hyprjson.touchpad_clickfinger_behavior})
         )
       )
@@ -97,7 +97,7 @@
       :vexpand true
       :onclick "hyprctl reload &"
       :class "dashboard-settings-button"
-      (label :text "Reload config")
+      (label :class "bar-txt bar-txt-norm" :text "Reload config")
     )
   )
 )
@@ -131,7 +131,7 @@
               "
               (for id in WAIFU_TAG_ID
                 (button
-                  :class "sidebar-waifu-tag"
+                  :class "sidebar-waifu-tag bar-txt-norm"
                   :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
                   {WAIFU_CATEGORIES[id]}
                 )
@@ -222,16 +222,16 @@
               :height {BAR_HEIGHT} :width 390
               :class "sidebar-bg sidebar-bg-pad window-shadow"
               (label :xalign 0
-                :class "bar-icon-material-hugeass"
+                :class "bar-icon-material-hugeass bar-txt-norm"
                 :text ""
               )
               (label :xalign 0
                 :hexpand true
-                :class "bar-txt-hugeass"
+                :class "bar-txt-hugeass bar-txt-norm"
                 :text "Knock"
               )
               (label :xalign 1
-                :class "bar-txt-small"
+                :class "bar-txt-small bar-txt-norm"
                 :text "Unhover to close"
               )
             )
@@ -630,7 +630,7 @@
                     )
                   )
                   (box
-                    :class "sidebar-quote"
+                    :class "sidebar-quote bar-txt-norm"
                     :orientation "v" :space-evenly false :spacing 10
                     :height 150
                     (label :xalign 0 :yalign 0
