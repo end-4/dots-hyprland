@@ -19,6 +19,7 @@
 - **_feel like giving this a go? see the dependencies below!_**
 
 ## Gallery
+![end-4/dots-hyprland](./assets/novelknock-10.png)
 ![end-4/dots-hyprland](./assets/novelknock-7.png)
 ![end-4/dots-hyprland](./assets/novelknock-8.png)
 ![end-4/dots-hyprland](./assets/novelknock-6.png)
