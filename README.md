@@ -37,17 +37,17 @@
 
 _Click the images for a video showcase with animations!_
 
-### NovelKnock
+### [NovelKnock](https://github.com/end-4/dots-hyprland/tree/novelknock)
    <a href="https://streamable.com/7vo61k">
     <img src="./assets/screenshot-novelknock-1.png" alt="Desktop Preview">
    </a>
 
-### Hybrid
+### [Hybrid](https://github.com/end-4/dots-hyprland/tree/hybrid)
    <a href="https://streamable.com/4oogot">
     <img src="./assets/screenshot-summer.png" alt="Desktop Preview">
    </a>
 
-### Windoes
+### [Windoes](https://github.com/end-4/dots-hyprland/tree/windoes)
    <a href="https://streamable.com/5qx614">
     <img src="./assets/screenshot-windoes2.png" alt="Desktop Preview">
    </a>
