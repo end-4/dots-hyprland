@@ -38,7 +38,7 @@
 _Click the images for a video showcase with animations!_
 
 ### NovelKnock
-   <a href="https://github.com/end-4/dots-hyprland/tree/novelknock">
+   <a href="https://streamable.com/7vo61k">
     <img src="./assets/screenshot-novelknock-1.png" alt="Desktop Preview">
    </a>
 
