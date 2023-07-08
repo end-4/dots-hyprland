@@ -37,29 +37,20 @@
 
 _Click the images for a video showcase with animations!_
 
-<details open> 
-  <summary>osu/material style https://github.com/end-4/dots-hyprland/tree/hybrid </summary>
-  
-   <a href="https://streamable.com/4oogot">
-    <img src="./assets/screenshot-summer.png" alt="Desktop Preview">
-   </a>
-</details>
-
-<details open> 
-  <summary>Windows style https://github.com/end-4/dots-hyprland/tree/windoes </summary>
-  
-   <a href="https://streamable.com/5qx614">
-    <img src="./assets/screenshot-windoes2.png" alt="Desktop Preview">
-   </a>
-</details>
-
-<details open> 
-  <summary>"NovelKnock" style (WIP) https://github.com/end-4/dots-hyprland/tree/novelknock </summary>
-  
+### NovelKnock
    <a href="https://github.com/end-4/dots-hyprland/tree/novelknock">
     <img src="./assets/screenshot-novelknock-1.png" alt="Desktop Preview">
    </a>
-</details>
+
+### Hybrid
+   <a href="https://streamable.com/4oogot">
+    <img src="./assets/screenshot-summer.png" alt="Desktop Preview">
+   </a>
+
+### Windoes
+   <a href="https://streamable.com/5qx614">
+    <img src="./assets/screenshot-windoes2.png" alt="Desktop Preview">
+   </a>
 
 - For older and insignificant styles, check the releases
 
