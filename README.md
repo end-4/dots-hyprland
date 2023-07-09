@@ -49,7 +49,7 @@ _Click the images for a video showcase with animations!_
 
 ### [Windoes](https://github.com/end-4/dots-hyprland/tree/windoes)
    <a href="https://streamable.com/5qx614">
-    <img src="./assets/screenshot-windoes2.png" alt="Desktop Preview">
+    <img src="./assets/windoes-3.png" alt="Desktop Preview">
    </a>
 
 - For older and insignificant styles, check the releases
