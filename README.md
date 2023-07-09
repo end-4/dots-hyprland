@@ -61,10 +61,11 @@ _Click the images for a video showcase with animations!_
  - **Backup**
  - Copy `Pictures`, `.config`, `.local` to home folder
  - Copy `execs` to a $PATH
- - gnome-text-editor themes: Structured like root, go inside and copy...
- - Install font Product Sans and Segoe UI Variable yourself
+ - Install stuff to provide missing commands (list below)
+ - Run `usermod -aG video <USERNAME>` for brightness control to work
  - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
- - Install stuff to provide missing commands (list below) 
+ - Install proprietary font: Segoe UI Variable (for windoes and hybrid branch)
+ - Optional: get anything else ya want from the "Import manually" folder
  
 # 🎨 eww (yes I spend too much time on this)
  ## Performance
