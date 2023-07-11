@@ -57,32 +57,34 @@ _Click the images for a video showcase with animations!_
 ---
 
 # 🔧 General instructions
+ - Make sure you follow these general steps then steps in the readme of your interested branch if there are any
  - **_A guided install script exists, but very incomplete. I recommend against using it._**
  - **Backup**
- - Copy `Pictures`, `.config`, `.local` to home folder
- - Copy `execs` to a $PATH
- - Install stuff to provide missing commands (list below)
- - Run `usermod -aG video <USERNAME>` for brightness control to work
- - Get "Plasma Browser Integration" extension for your browser (for media player to display properly)
+ - Copy
+   - `Pictures`, `.config`, `.local` to home folder
+   - Stuff in `Import manually` folder if you need them
+ - Install dependencies
+   - See the list in the Dependencies section
+   - Get "Plasma browser integration" extension for your browser
+   - Run `usermod -aG video <USERNAME>` for brightness control to work
  - Install proprietary font: Segoe UI Variable (for windoes and hybrid branch)
- - Optional: get anything else ya want from the "Import manually" folder
  
 # 🎨 eww (yes I spend too much time on this)
  ## Performance
-|  ⌄  | Do use | Not recommended | Notes |
-| --- | ------ | ----------- | ----- |
-| Kernel |     |    | `auto-cpufreq` + unplugged = might be unresponsive |
-| Login shell | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
+|  ⌄  | Do use | Not recommended | Notes                 |
+| --- | ------ | ----------- | ------------------------- |
+| Kernel |     |             | Don't abuse power savers! |
+| Login shell  | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
  - This eww config only works properly in `~/.config/eww`
  - Start eww with `eww daemon`
- - To open the top bar, run `eww open bar` (for lineage branch, also run: `eww open barbg`)
- - To open the Windows bar, run `eww open winbar`
+ - To open the top bar, run `eww open bar`
+ - To open the Windows bar, run `eww open winbar` (`windoes`/`hybrid` branch)
  - To open the bottom line, run `eww open bottomline` (so that the music window opens if you click the bottom edge of the screen)
  - Open the overview and wait 10 seconds (for it to generate app search cache, or icons won't show properly)
  ## Usage
- - Music control with the leftmost button of bars: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
+ - Music controls: Middle-click for Play/Pause, Right-click for Next track, scroll to change volume
  - To open the Overview, middle/right-click the workspace indicators or run `eww open overview`
  - You can type to search in overview!
  ## Search
