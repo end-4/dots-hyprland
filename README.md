@@ -29,6 +29,6 @@
 
 ## Dependencies
 - See the main branch for [general dependencies](https://github.com/end-4/dots-hyprland#-dependencies), then install the following:
-    - Hyprland that's new enough (at the time of writing, you have to use hyprland-git) ~~@vaxry hyprland 0.27 when~~
+    - Hyprland 0.27.0+
     - [eww with trigonometric functions](https://github.com/elkowar/eww/pull/823). If the PR hasn't been merged, you should clone my branch and compile it.
 ---
