@@ -1,0 +1,6 @@
+(defwidget separator_widget []
+  (box
+    :valign "center"
+    :class "separator"
+  )
+)

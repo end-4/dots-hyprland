@@ -1,0 +1,24 @@
+(defwidget dynamiccenter_widget []
+  (box
+    :vexpand true
+    :orientation "h" :space-evenly false
+    (box
+      :space-evenly false
+      :orientation "v"
+      (box ; Module 1: Volume, Brightness
+        :class "dynamic-module"
+        :style "
+        ${(osd_vol || osd_bright) ? '' : 'margin-top: -70px;'}
+        "
+        (osd_widget)
+      )
+      (box ; Module 2: Workspaces
+        :class "dynamic-module"
+        :style "
+        ${(osd_vol || osd_bright) ? 'margin-bottom: -70px;' : ''}
+        "
+        (workspaces_widget)
+      )
+    )
+  )
+)

@@ -29,8 +29,6 @@ string exec(const char* cmd) {
 }
 
 void addApp(json& client) {
-    if(string(client["class"]).size() == 0) return;
-    
     bool found = false;
     for (json& obj : apps) {
         auto it = obj.find("class");
@@ -63,7 +61,7 @@ void addApp(json& client) {
 void getAppNameAndCount() {
     // Get clients
     clients = exec("hyprctl clients -j | gojq -c -M");
-    pinned = exec("cat modules/taskbar.json | gojq -c -M");
+    pinned = exec("cat json/taskbar.json | gojq -c -M");
     clientjson = json::parse(clients);
     apps = json::parse(pinned);
 

@@ -1,0 +1,72 @@
+(defwidget system_widget []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :width {RES_WIDTH / 5}
+      :height BAR_HEIGHT
+      :class "bar-group-margin"
+      (box
+        :class "bar-group bar-group-standalone bar-group-pad"
+        :orientation "h" :space-evenly false :spacing 15
+        (box
+          :space-evenly false :spacing 5
+          (label :xalign 0 :class "txt-norm"
+            :text {formattime(EWW_TIME, '%I:%M')}
+          )
+          (label :xalign 0 :class "txt-norm"
+            :text "•"
+          )
+          (label :xalign 0 :class "txt-smallie"
+            :text {formattime(EWW_TIME, '%A, %d/%m')}
+          )
+        )
+        (box
+          :hexpand true :valign "center"
+          :space-evenly false :spacing 2
+          :class "bar-batt${battery.percentage <= BATTERY_LOW ? '-low' : ''}"
+          :tooltip "Battery: ${battery.percentage}% (${EWW_BATTERY.BATT.status})"
+          (label :xalign 0
+            :valign "center"
+            :class "bar-batt-percentage"
+            :text {battery.percentage}
+          )
+          (progress
+            :value {battery.percentage}
+            :class "bar-prog-batt${battery.percentage <= BATTERY_LOW ? '-low' : ''}"
+            :hexpand true :valign "center"
+          )
+          (box
+            :valign "center"
+            :class "bar-batt-chargestate${battery.quickicon == '' ? '' : (battery.percentage <= BATTERY_LOW ? '-charging-low' : '-charging')}"
+          )
+        )
+        (box ; Icons
+          :space-evenly false :spacing 10
+          :orientation "h"
+          :class "bar-pad-horiz-moreright"
+          (box
+            :valign "center"
+            :orientation "v"
+            :space-evenly false :spacing -4
+            (label :class "icon-material bar-system-icon txt-norm"
+              :text "keyboard"
+            )
+            (label :class "txt-tiny" :text {lang_ibus.name_abbr})
+          )
+          ; (label
+          ;   :valign "center"
+          ;   :class "icon-material bar-system-icon txt-norm"
+          ;   :text {WIFI_ICONS[net.level]}
+          ; )
+          ; (label
+          ;   :valign "center"
+          ;   :class "icon-material bar-system-icon txt-norm"
+          ;   :text {bluetooth.icon}
+          ; )
+        )
+      )
+    )
+  )
+)

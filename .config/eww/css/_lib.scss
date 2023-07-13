@@ -1,0 +1,80 @@
+// Common rules
+@mixin mainfont {
+    font-family: 'Lexend';
+}
+
+@mixin icon-material {
+    font-family: 'Material Symbols Rounded';
+}
+
+@mixin icon-material-filled {
+    font-family: 'Material Symbols Rounded';
+}
+
+@mixin icon-nerd {
+    font-family: 'JetBrainsMono Nerd Font';
+}
+
+@mixin icon-segoe {
+    font-family: 'Segoe Fluent Icons';
+}
+
+@mixin techfont {
+    font-family: 'JetBrains Mono Nerd Font';
+}
+
+@mixin subtext {
+    color: rgb(160,160,160);
+}
+
+.txt-hugeass {
+    @include mainfont;
+    font-size: 20pt;
+}
+
+.txt-larger {
+    @include mainfont;
+    font-size: 18pt;
+}
+
+.txt-large {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.txt-norm {
+    @include mainfont;
+    font-size: 14pt;
+}
+
+.txt-small {
+    @include mainfont;
+    font-size: 12pt;
+}
+
+.txt-smallie {
+    @include mainfont;
+    font-size: 11pt;
+}
+
+.txt-smaller {
+    @include mainfont;
+    font-size: 10pt;
+}
+
+.txt-tiny {
+    @include mainfont;
+    font-size: 8pt;
+}
+
+.icon-material {
+    @include icon-material;
+}
+
+.separator {
+    border-radius: 999px;
+    background-color: $onSurface;
+    margin: 0 10px;
+    min-width: 8px;
+    min-height: 8px;
+}
