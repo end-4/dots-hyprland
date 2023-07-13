@@ -20,6 +20,6 @@ swww img "$imgpath" --transition-step 230 --transition-fps 60 \
     --transition-pos "$cursorposx, $cursorposy_inverted" &
 
 # Generate colors for eww n stuff
-cp "$imgpath" "$HOME/.config/eww/images/wallpaper/wallpaper"
+cp "$imgpath" "$HOME/.config/eww/images/wallpaper"
 cd "$HOME/.config/eww" || exit
 ./scripts/launchapp '>wall'

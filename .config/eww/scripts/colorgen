@@ -18,7 +18,6 @@ themejson="$themejson"',"source":"'"$3"'"}'
 echo "$themejson"
 
 maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
-# scripts/material_colors.py --path "$IMGPATH" $lightdark > scripts/cache/_material.colorpallete
 generated_material=$(scripts/material_colors.py --color "$maincol" "$lightdark")
 echo "$generated_material" > scripts/cache/_material.colorpallete &
 onPrimaryContainer=$(echo "$generated_material" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
@@ -91,12 +90,4 @@ echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './scripts/cache
 echo '}' >> './scripts/cache/colors_generated.conf'
 
 # Print json to stdout
-echo "$onPrimaryContainer" > 'scripts/cache/_iconcolor.txt'
-echo "$tertiary" >> 'scripts/cache/_iconcolor.txt'
-printf "$themejson" | gojq -r '.colors.color2' >> 'scripts/cache/_iconcolor.txt'
-printf "$themejson" | gojq -r '.colors.color4' >> 'scripts/cache/_iconcolor.txt'
-printf "$themejson" | gojq -r '.colors.color5' >> 'scripts/cache/_iconcolor.txt'
-printf "$themejson" | gojq -r '.colors.color5' >> 'scripts/cache/_iconcolor.txt'
-
-# beatmappacks tertiary, forum color1, search color3, search color4, tournaments color4
-# 
+cp "$HOME/.cache/wal/colors.json" 'scripts/cache/_iconcolor.txt'

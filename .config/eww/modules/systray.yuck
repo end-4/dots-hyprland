@@ -8,7 +8,8 @@
       (box
         :space-evenly false
         (box :hexpand true)
-        (systray :pack-direction "rtl" :icon-size 17)
+        (systray :pack-direction "rtl" :icon-size 18)
+        (box :width BG_ROUNDING)
         (label
           :width BAR_HEIGHT
           :height BAR_HEIGHT
@@ -21,9 +22,7 @@
           :class "icon-material bar-system-icon txt-norm"
           :text {bluetooth.icon}
         )
-        (box
-          :width BG_ROUNDING
-        )
+        (box :width BG_ROUNDING)
         ; (button
         ;   :width BAR_HEIGHT
         ;   :height BAR_HEIGHT
