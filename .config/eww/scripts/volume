@@ -95,6 +95,8 @@ else
   # initial values
   lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
   ismuted=$(ismuted "SINK")
+  device=$(pactl --format=json list | gojq -r '.["sinks"][0]["active_port"]' | sed 's/\[Out] //g')
+  device=$(echo "$device" | tail -1)
 
   if [ "$ismuted" = 1 ]; then
   	icon="${volicons[$lvl]}"
@@ -108,13 +110,15 @@ else
     audio=0
   fi
 
-  echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
+  echo '{"icon":"'"$icon"'","audio":"'"$audio"'","device":"'"$device"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
 
   osd_handler &
   # event loop
   pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
     lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
     ismuted=$(ismuted "SINK")
+    device=$(pactl --format=json list | gojq -r '.["sinks"][0]["active_port"]' | sed 's/\[Out] //g')
+    device=$(echo "$device" | tail -1)
 
     if [ "$ismuted" = 1 ]; then
     	icon="${volicons[$lvl]}"
@@ -128,6 +132,6 @@ else
       audio=0
     fi
 
-    echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
+    echo '{"icon":"'"$icon"'","audio":"'"$audio"'","device":"'"$device"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
   done
 fi

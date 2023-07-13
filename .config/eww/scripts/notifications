@@ -3,7 +3,6 @@
 tmp=scripts/cache/dunst-history.json
 lock="scripts/cache/dunst-toggle.lock"
 lockinfo="scripts/cache/dunst-lock-info"
-cd ~/.config/eww
 
 touch $lockinfo
 
@@ -64,11 +63,7 @@ get_icon() {
   fi
 }
 
-if [ "$1" == "--once" ]; then
-  dunstctl history > "$tmp"
-  get_ids
-  get_notif
-elif [ "$1" == "toggle" ]; then
+if [ "$1" == "toggle" ]; then
   toggle
   dunstctl history > "$tmp"
 elif [ "$1" == "clear" ]; then
@@ -78,18 +73,19 @@ elif [ "$1" == "icons" ]; then
   dunstctl history > "$tmp"
   get_ids
   is_paused=$(dunstctl is-paused)
-  echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
+  echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '$is_paused', "icon": "'"$(get_icon)"'"}'
   tail -f "$lockinfo" | while read -r; do
     get_ids
     is_paused=$(dunstctl is-paused)
-    echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
+    echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '$is_paused', "icon": "'"$(get_icon)"'"}'
   done
 else
+cd ~/.config/eww
   dunstctl history > "$tmp"
   get_ids
-  get_notif
-  tail -f "$tmp" 2>/dev/null | rg --line-buffered "aa\{sv\}" | while read -r; do
-    get_ids
-    get_notif
-  done
+  scripts/notifget
+  # tail -f "$tmp" 2>/dev/null | rg --line-buffered "aa\{sv\}" | while read -r; do
+  #   get_ids
+  #   scripts/notifget
+  # done
 fi

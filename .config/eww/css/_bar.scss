@@ -1,0 +1,285 @@
+.bar-bg {
+    background-color: $background;
+}
+
+.dynamic-module {
+    transition: 250ms cubic-bezier(0, 0, 0, 1);
+}
+
+.bar-group-margin {
+    padding: 3px;
+}
+
+.bar-group {
+    background-color: mix($surface, $onSurface, 90%);
+}
+
+.bar-group-pad {
+    padding: 0px 15px;
+}
+
+.bar-group-pad-less {
+    padding: 0px 10px;
+}
+
+.bar-group-pad-left {
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.bar-group-pad-right {
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.bar-group-pad-leftonly {
+    padding-left: 10px;
+}
+
+.bar-group-pad-rightonly {
+    padding-right: 10px;
+}
+
+.bar-group-standalone {
+    border-radius: 20px;
+}
+
+.bar-group-middle {
+    border-radius: 7px;
+}
+
+.bar-group-left {
+    border-radius: 7px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.bar-group-right {
+    border-radius: 7px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.bar-batt-circle {
+    color: $onPrimaryContainer;
+    background-color: $primaryContainer;
+}
+
+.bar-batt {
+    padding: 0px 3px;
+    min-height: 14px;
+    border-radius: 99px;
+    color: $primaryContainer;
+    background-color: $onPrimaryContainer;
+}
+
+.bar-batt-low {
+    padding: 0px 3px;
+    min-height: 14px;
+    border-radius: 99px;
+    color: $errorContainer;
+    background-color: $onErrorContainer;
+}
+
+.bar-batt-percentage {
+    font-size: 11pt;
+    margin-top: -1px;
+    margin-left: 2px;
+    font-weight: 500;
+}
+
+.bar-batt-chargestate {
+    // min-width: 10px;
+    // min-height: 10px;
+    border-radius: 99px;
+    background-color: transparent;
+}
+
+.bar-batt-chargestate-charging {
+    border-radius: 99px;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: $primaryContainer;
+}
+
+.bar-batt-chargestate-charging-low {
+    border-radius: 99px;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: $errorContainer;
+}
+
+.bar-ws-txt {
+    @include mainfont;
+    font-size: 12pt;
+}
+
+.ws {
+    transition: 100ms cubic-bezier(0, 1, 0, 1);
+}
+
+.bar-ws-txt-active {
+    border-radius: 99px;
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.bar-ws-txt-true {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-ws-txt-left {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-top-left-radius: 99px;
+    border-bottom-left-radius: 99px;
+}
+
+.bar-ws-txt-right {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-top-right-radius: 99px;
+    border-bottom-right-radius: 99px;
+}
+
+.bar-ws-txt-alone {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 99px;
+}
+
+.bar-ws-txt-middle {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-ws-txt-false {
+    color: $onSurface;
+}
+
+.bar-music-playstate {
+    min-width: 26px;
+    min-height: 26px;
+    border-radius: 99px;
+    margin: 4px;
+    margin-left: 3px;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-music-playstate-playing {
+    min-width: 26px;
+    min-height: 26px;
+    border-radius: 99px;
+    margin: 4px;
+    margin-left: 3px;
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
+}
+
+.bar-music-playstate-txt {
+    @include icon-material;
+    font-size: 16pt;
+    margin-bottom: -2px;
+    margin-left: 0px;
+}
+
+.bar-prog-batt {
+    min-height: 14px;
+    min-width: 1px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 14px;
+        min-width: 1px;
+        border-radius: 99px;
+        background-color: $onPrimaryContainer;
+    }
+
+    progress {
+        min-height: 10px;
+        min-width: 10px;
+        margin: 0px 2px;
+        border-radius: 99px;
+        background-color: $primaryContainer;
+    }
+}
+
+.bar-prog-batt-low {
+    min-height: 14px;
+    min-width: 1px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 14px;
+        min-width: 1px;
+        border-radius: 99px;
+        background-color: $onErrorContainer;
+    }
+
+    progress {
+        min-height: 10px;
+        min-width: 10px;
+        margin: 0px 2px;
+        border-radius: 99px;
+        background-color: $errorContainer;
+    }
+}
+
+.bar-prog-osd {
+    min-height: 14px;
+    min-width: 1px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 14px;
+        min-width: 1px;
+        border-radius: 99px;
+        background-color: $onSurfaceVariant;
+    }
+
+    progress {
+        min-height: 10px;
+        min-width: 10px;
+        margin: 0px 2px;
+        border-radius: 99px;
+        background-color: $surfaceVariant;
+    }
+}
+
+menu {
+    padding: 10px;
+    background: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 17px;
+}
+
+menubar>menuitem {
+    border-radius: 8px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+menu>menuitem {
+    padding: 0.4em 1.5rem;
+    background: transparent;
+    transition: 0.2s ease background;
+    border-radius: 7px;
+}
+
+menu>menuitem:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bar-btn {
+}
+
+.bar-btn-txt {
+    border-radius: 99px;
+    color: $onSecondaryContainer;
+    background-color: $secondaryContainer;
+}

@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
     string workdir = string(getenv("HOME")) + "/.config/eww";
     chdir(&workdir[0]);
     // Get lang list, current lang
-    fileContents = readIfExists("modules/langs.json");
+    fileContents = readIfExists("json/langs.json");
     languages = json::parse(fileContents);
     currentLang = exec("ibus engine");
     currentLang.pop_back();  // Remove trailing newline

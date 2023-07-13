@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+offset=$(eww get scroll_offset_carousel)
+total=$(eww get gallery_index | gojq 'length')
+
+maxvalue=$(( "$total" * 3 - 5 ))
+
+if [ "$1" == "up" ]; then
+    eww update scroll_offset_carousel=$(( ("$offset" + "$maxvalue" - 1) % "$maxvalue" ))
+else
+    eww update scroll_offset_carousel=$(( ("$offset" + 1) % "$maxvalue" ))
+fi
