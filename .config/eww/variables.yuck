@@ -4,7 +4,7 @@
 (defvar BAR_HEIGHT 40)
 (defvar GAPS 0)
 (defvar BG_ROUNDING 17)
-(defpoll accent :initial "#16C1C8" :interval "69h" "cat css/_iconcolor.txt | head -1")
+(defpoll accent :initial "#16C1C8" :interval "69h" `cat css/_material.scss | grep 'onPrimaryContainer' | awk '{print $2}' | cut -d ";" -f1`)
 (defvar BATTERY_LOW 20)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
