@@ -76,10 +76,10 @@
               :class "supercontext-btn"
               :style "
               opacity: ${open_supercontext >= 1 ? 1 : 0};
-              margin-left: ${SUPERCONTEXT_RADIUS + (sindeg(SUPERCONTEXT_ROTATIONS[0]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sindeg(SUPERCONTEXT_ROTATIONS[0]), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
-              margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[0]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[0]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[0])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
                 :onclick "pkill $(ps -p $(hyprctl activewindow -j | gojq -r '.pid') -o comm=) &"
@@ -92,10 +92,10 @@
               :class "supercontext-btn"
               :style "
               opacity: ${open_supercontext >= 2 ? 1 : 0};
-              margin-left: ${SUPERCONTEXT_RADIUS + (sindeg(SUPERCONTEXT_ROTATIONS[1]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sindeg(SUPERCONTEXT_ROTATIONS[1]), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
-              margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[1]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[1]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[1])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
                 :class "supercontext-btn-num"
@@ -110,10 +110,10 @@
               :class "supercontext-btn"
               :style "
               opacity: ${open_supercontext >= 3 ? 1 : 0};
-              margin-left: ${SUPERCONTEXT_RADIUS + (sindeg(SUPERCONTEXT_ROTATIONS[2]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sindeg(SUPERCONTEXT_ROTATIONS[2]), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
-              margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[2]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[2]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[2])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
                 :class "supercontext-btn-num"
@@ -128,10 +128,10 @@
               :class "supercontext-btn"
               :style "
               opacity: ${open_supercontext >= 4 ? 1 : 0};
-              margin-left: ${SUPERCONTEXT_RADIUS + (sindeg(SUPERCONTEXT_ROTATIONS[3]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sindeg(SUPERCONTEXT_ROTATIONS[3]), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
-              margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[3]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[3]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[3])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
                 :onclick "~/.local/bin/record-script-fullscreen.sh &"
@@ -144,10 +144,10 @@
               :class "supercontext-btn"
               :style "
               opacity: ${open_supercontext >= 5 ? 1 : 0};
-              margin-left: ${SUPERCONTEXT_RADIUS + (sindeg(SUPERCONTEXT_ROTATIONS[4]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sindeg(SUPERCONTEXT_ROTATIONS[4]), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
-              margin-top: ${SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[4]) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
-              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cosdeg(SUPERCONTEXT_ROTATIONS[4]) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[4])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
               "
               (eventbox
                 :onclick "notify-send 'an extra button ;)'"
