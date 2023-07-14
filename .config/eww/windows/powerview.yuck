@@ -79,18 +79,14 @@
     ; Search box
     (box
       :halign "center"
-      :class "bar-pad"
-      :width 290
+      :width 300
       :height 60
       (box
-        :space-evenly false
-        :orientation "h"
-        :spacing 5
         (overlay
           (input
             :width 280
             :height {BAR_HEIGHT}
-            :class "bar-bg-noshadow bar-bg-pad powerview-search-txt"
+            :class "powerview-search-field"
             :halign "fill" :vexpand true
             :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
             :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
@@ -136,7 +132,7 @@
             (box
               :space-evenly false
               :orientation "v"
-              :class "bar-bg shadow-pad window-border"
+              :class "powerview-bg"
               (box
                 :orientation "h"
                 (for wspace in wsjsona
@@ -228,6 +224,7 @@
   :namespace "eww"
   :geometry (geometry
     :anchor "top center"
+    :y 40
   )
   (powerview_widget)
 )

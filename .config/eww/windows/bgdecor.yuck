@@ -1,38 +1,47 @@
 (defwidget bgdecor_widget []
   (box
     :space-evenly false :orientation "v"
+    :width RES_WIDTH :height RES_HEIGHT
     (box :height BAR_HEIGHT)
-    (overlay
-      :valign "end"
-      (box
-        :width RES_WIDTH
-        :height {RES_HEIGHT - BAR_HEIGHT}
-      )
+    (box :space-evenly false
       (image
         :path "images/svg/corner_topleft.svg"
         :halign "start"
         :valign "start"
+        :width BG_ROUNDING
+        :height BG_ROUNDING
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )
+      (box :hexpand true)
       (image
         :path "images/svg/corner_topright.svg"
         :halign "end"
         :valign "start"
+        :width BG_ROUNDING
+        :height BG_ROUNDING
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )
+    )
+    (box :vexpand true)
+    (box :space-evenly false
       (image
-        :path "images/svg/corner_bottomleft.svg"
+        :path "images/svg/center_bottomleft.svg"
         :halign "start"
-        :valign "end"
+        :valign "start"
+        :width BG_ROUNDING
+        :height BG_ROUNDING
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )
+      (box :hexpand true)
       (image
         :path "images/svg/corner_bottomright.svg"
         :halign "end"
-        :valign "end"
+        :valign "start"
+        :width BG_ROUNDING
+        :height BG_ROUNDING
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )

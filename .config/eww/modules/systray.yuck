@@ -13,13 +13,13 @@
         (label
           :width BAR_HEIGHT
           :height BAR_HEIGHT
-          :class "icon-material bar-system-icon txt-norm"
+          :class "icon-material bar-system-icon txt-norm txt"
           :text {WIFI_ICONS[net.level]}
         )
         (label
           :width BAR_HEIGHT
           :height BAR_HEIGHT
-          :class "icon-material bar-system-icon txt-norm"
+          :class "icon-material bar-system-icon txt-norm txt"
           :text {bluetooth.icon}
         )
         (box :width BG_ROUNDING)
