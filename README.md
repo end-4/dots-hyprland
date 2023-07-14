@@ -68,6 +68,7 @@ _Click the images for a video showcase with animations!_
    - Get "Plasma browser integration" extension for your browser
    - Run `usermod -aG video <USERNAME>` for brightness control to work
  - Install proprietary font: Segoe UI Variable (for windoes and hybrid branch)
+ - **For ARM users**: Compile .cpp scripts in `~/.config/eww/scripts/` (to that folder) (like this: `g++ ~/.config/ewwscripts/SCRIPTNAME.cpp -o ~/.config/eww/scripts/SCRIPTNAME`)
  
 # 🎨 eww (yes I spend too much time on this)
  ## Performance
