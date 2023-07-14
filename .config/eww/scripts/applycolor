@@ -14,7 +14,7 @@ for i in "${!filearr[@]}"; do
     echo "images/svg/${filearr[$i]}"
     colorvalue=$(echo "$colorscss" | grep "${filearr[$i]}" | awk '{print $2}' | cut -d ";" -f1)
     
-    for file in images/svg/"${filearr[$i]}"/*; do 
+    for file in images/svg/template/"${filearr[$i]}"/*; do 
         cp "$file" images/svg/
         sed -i "s/black/$colorvalue/g" images/svg/"${file##*/}"
     done

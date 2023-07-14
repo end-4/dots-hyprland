@@ -253,8 +253,8 @@
 
 menu {
     padding: 10px;
-    background: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
     border-radius: 17px;
 }
 
@@ -268,7 +268,7 @@ menu>menuitem {
     padding: 0.4em 1.5rem;
     background: transparent;
     transition: 0.2s ease background;
-    border-radius: 7px;
+    border-radius: 8px;
 }
 
 menu>menuitem:hover {
@@ -280,6 +280,6 @@ menu>menuitem:hover {
 
 .bar-btn-txt {
     border-radius: 99px;
-    color: $onSecondaryContainer;
-    background-color: $secondaryContainer;
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
 }

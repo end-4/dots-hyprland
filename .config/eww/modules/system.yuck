@@ -12,13 +12,13 @@
         :orientation "h" :space-evenly false :spacing 15
         (box
           :space-evenly false :spacing 5
-          (label :xalign 0 :class "txt-norm"
+          (label :xalign 0 :class "txt-norm txt"
             :text {formattime(EWW_TIME, '%I:%M')}
           )
-          (label :xalign 0 :class "txt-norm"
+          (label :xalign 0 :class "txt-norm txt"
             :text "•"
           )
-          (label :xalign 0 :class "txt-smallie"
+          (label :xalign 0 :class "txt-smallie txt"
             :text {formattime(EWW_TIME, '%A, %d/%m')}
           )
         )
@@ -50,10 +50,10 @@
             :valign "center"
             :orientation "v"
             :space-evenly false :spacing -4
-            (label :class "icon-material bar-system-icon txt-norm"
+            (label :class "icon-material bar-system-icon txt-norm txt"
               :text "keyboard"
             )
-            (label :class "txt-tiny" :text {lang_ibus.name_abbr})
+            (label :class "txt-tiny txt" :text {lang_ibus.name_abbr})
           )
           ; (label
           ;   :valign "center"

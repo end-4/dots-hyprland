@@ -27,6 +27,22 @@
     color: rgb(160,160,160);
 }
 
+@mixin elevation2 {
+    background: $surface;
+    color: $onSurface;
+    box-shadow: 0px 2px 4px mix($shadow, rgba(0,0,0,0), 40%);
+}
+
+@mixin elevation3 {
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
+    box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
+}
+
+.txt {
+    color: $onBackground;
+}
+
 .txt-hugeass {
     @include mainfont;
     font-size: 20pt;
