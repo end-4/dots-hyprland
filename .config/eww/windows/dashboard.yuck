@@ -415,6 +415,27 @@
         :height RES_HEIGHT
         :width RES_WIDTH
       )
+      (box
+        :valign "end"
+        (revealer ; Audio visualizer (cava)
+          :reveal {open_dashboard >= 3}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h"
+            :spacing 17
+            (for colheight in cavajson
+              (box
+                :class "dashboard-cavacol"
+                :valign "end"
+                :style "
+                min-height: ${round(colheight[0] / 2.5, 0)}px;
+                "
+              )
+            )
+          )
+        )
+      )
       (image
         :path "images/menus/corner_topleft.svg"
         :halign "start"
@@ -442,27 +463,6 @@
         :valign "end"
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
-      )
-      (box
-        :valign "end"
-        (revealer ; Audio visualizer (cava)
-          :reveal {open_dashboard >= 3}
-          :duration "100ms"
-          :transition "crossfade"
-          (box
-            :orientation "h"
-            :spacing 17
-            (for colheight in cavajson
-              (box
-                :class "dashboard-cavacol"
-                :valign "end"
-                :style "
-                min-height: ${round(colheight[0] / 2.5, 0)}px;
-                "
-              )
-            )
-          )
-        )
       )
       (box
         :halign "center" :valign "start"

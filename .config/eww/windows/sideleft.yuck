@@ -149,7 +149,7 @@
           :vexpand true
           :width 100
           (box
-            :orientation "v"
+            :orientation "v" :spacing 6
             (for id in WAIFU_TAG_ID
               (button
                 :class "sidebar-waifu-tag"
