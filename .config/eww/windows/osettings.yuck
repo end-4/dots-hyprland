@@ -24,7 +24,7 @@
     :orientation "v"
     :space-evenly false
     :style "
-    ${anim_open_ostg ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${anim_open_ostg ? 'transition: 300ms cubic-bezier(0, 1, 0, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     ${rev_ostg ? '' : 'margin-left: -533px; margin-right: 533px;'}
     "
     (eventbox
@@ -683,7 +683,6 @@
                       :orientation "v"
                       (button
                         :halign "fill"
-                        :wrap true
                         :class "osettings-btn osettings-btn-neutral"
                         :onclick "notify-send whyyyyyyy 😭"
                         "Check the spelling and try again"
@@ -930,7 +929,6 @@
                   )
                   (button
                     :halign "fill"
-                    :wrap true
                     :class "osettings-btn osettings-btn-destructive"
                     :onclick "hyprctl keyword unbind ,c"
                     "Un-become a KDE developer"

@@ -31,7 +31,7 @@
         margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[1] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
         margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[1] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
         margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[1] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
-        transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+        transition: 300ms cubic-bezier(0, 1, 0, 1);
         "
         (eventbox
           :class "supercontext-button-number-child"

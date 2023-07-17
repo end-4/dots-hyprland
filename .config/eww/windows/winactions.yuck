@@ -3,7 +3,7 @@
     :space-evenly false
     :orientation "v"
     :style "
-    ${anim_open_winactions ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${anim_open_winactions ? 'transition: 300ms cubic-bezier(0, 1, 0, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     ${rev_winactions ? '' : 'margin-bottom: -700px;'}
     "
     (eventbox

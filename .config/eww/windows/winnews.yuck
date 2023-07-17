@@ -36,7 +36,7 @@
     :width {RES_WIDTH / 2}
     :height {RES_HEIGHT - 51}
     :style "
-    ${anim_open_winnews ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${anim_open_winnews ? 'transition: 300ms cubic-bezier(0, 1, 0, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
     ${rev_winnews ? '' : 'margin-left: -960px; margin-right: 960px;'}
     "
     (eventbox
