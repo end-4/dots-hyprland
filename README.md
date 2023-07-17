@@ -28,7 +28,7 @@
  <details> 
   <summary>Bragging</summary>
      
-   - Featured in [Athena OS](https://github.com/Athena-OS) 
+   - [`hybrid`](https://github.com/end-4/dots-hyprland/tree/hybrid) branch is featured in [Athena OS](https://www.athenaos.org/en/configuration/hyprland/) 
    - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023. Now featured in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery) and [Hyprland Wiki](https://wiki.hyprland.org/Configuring/Example-configurations/)
    - [`windoes`](https://github.com/end-4/dots-hyprland/tree/windoes) branch received a "Tasty rice" flair [on r/unixporn](https://www.reddit.com/r/unixporn/comments/13zdhqd/hyprland_windows_rice_with_too_much_eww_with_blur/)
 </details>
