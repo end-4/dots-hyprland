@@ -355,7 +355,7 @@
       (label :class "sys-menu-charge" :text "${battery.quickicon}"
         :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
       )
-      (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%"
+      (label :class "batt-percentage" :text "${battery.percentage}%"
         :style "${colormode == 'one' ? ('color: ' + coloraccent + ';') : ''}"
       )
       ; (revealer
