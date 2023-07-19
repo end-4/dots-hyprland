@@ -15,7 +15,7 @@
   padding: 0px 20px;
   border-radius: 99px;
   font-size: 12pt;
-  @include elevation3;
+  @include elevation2;
 }
 
 .powerview-search-txt {
@@ -60,14 +60,17 @@
 
 .powerview-ws-window {
   border-radius: 13px;
-  background-color: mix($primaryContainer, rgba(80, 80, 80, 0.3), 7%);
+  background-color: mix($onSecondary, rgba(80, 80, 80, 0.3), 30%);
+}
+
+.powerview-ws-window-selected {
+  border-radius: 13px;
+  background-color: mix($secondaryContainer, rgba(80, 80, 80, 0.3), 30%);
 }
 
 .powerview-search-result {
   @include mainfont;
-  border-radius: 18px;
-  background-color: $onSecondary;
-  color: $onBackground;
+  border-radius: 22px;
   font-size: 15pt;
   min-height: 47px;
   min-width: 400px;
@@ -75,7 +78,8 @@
   padding-left: 57px;
   margin: 0px 5px;
 
-  background-color: rgba(11, 11, 11, 0.8);
+  background-color: $background;
+  color: $onBackground;
   background-size: 400% auto;
   background-position: 40% 50%;
 
@@ -119,4 +123,6 @@
 
 .powerview-info {
   padding: 15px;
+  border-radius: 22px;
+  @include elevation2;
 }

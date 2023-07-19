@@ -1,0 +1,32 @@
+(defwidget notifications_widget []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :space-evenly false
+      :style "
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT_NORMAL}px;
+      "
+      (box :width BG_ROUNDING)
+      (eventbox
+        :class "bar-btn"
+        :onclick "scripts/toggle-powerview.sh"
+        (box
+          :class "bar-btn-box"
+          :space-evenly false :spacing 5
+          (label
+            :class "icon-material txt-norm txt"
+            :text "search"
+          )
+          (label
+            :class "txt-smaller txt txt-smaller-offset"
+            :text "Search"
+          )
+        )
+      )
+      (box :hexpand true)
+    )
+  )
+)

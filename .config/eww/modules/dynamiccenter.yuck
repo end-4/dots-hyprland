@@ -8,14 +8,14 @@
       (box ; Module 1: Volume, Brightness
         :class "dynamic-module"
         :style "
-        ${(osd_vol || osd_bright) ? '' : 'margin-top: -70px;'}
+        ${(osd_vol || osd_bright) ? '' : 'margin-top: -${BAR_HEIGHT+1}px;'}
         "
         (osd_widget)
       )
       (box ; Module 2: Workspaces
         :class "dynamic-module"
         :style "
-        ${(osd_vol || osd_bright) ? 'margin-bottom: -70px;' : ''}
+        ${(osd_vol || osd_bright) ? 'margin-bottom: -${BAR_HEIGHT+1}px;' : ''}
         "
         (workspaces_widget)
       )

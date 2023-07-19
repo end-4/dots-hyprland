@@ -1,25 +1,45 @@
 ; Const
-; (defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
-; (defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
-(defvar RES_WIDTH 1920)
-(defvar RES_HEIGHT 1080)
-(defvar BAR_HEIGHT 40)
+(defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
+(defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
+; (defvar RES_WIDTH 1920)
+; (defvar RES_HEIGHT 1080)
+(defvar BAR_USELESS_GAPS 3)
+(defvar BAR_HEIGHT_HIDDEN 0)
+(defvar BAR_HEIGHT_NORMAL 40)
+(defvar BAR_HEIGHT_EXTENDED 80)
+(defvar BAR_HEIGHT_BOTTOM_NORMAL 60)
 (defvar GAPS 0)
-(defvar BG_ROUNDING 17)
+(defvar BG_ROUNDING 22)
 (defpoll accent :initial "#16C1C8" :interval "69h" `cat css/_material.scss | grep 'onPrimaryContainer' | awk '{print $2}' | cut -d ";" -f1`)
 (defvar BATTERY_LOW 20)
 (defvar OVERVIEW_SCALE 0.18)
+(defvar OVERVIEW_INDICATOR_GAP 1)
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar WORKSPACE_SIDE_PAD 7)
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
 
+; Const: animation curves
+(defvar ANIM_NAMES `["Material","Fluent"]`)
+(defvar ANIM_ENTER `["transition: 250ms cubic-bezier(0.05,0.7,0.1,1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 180ms cubic-bezier(0.3,0,0.8,0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05,0.7,0.1,1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_INSTANT "transition: 0ms;")
+(defvar anim_set 0) ; Index of main animation set
+
 ; Widget states
 (defvar open_powerview false)
+(defvar open_sideleft false)
+(defvar open_sideright false)
 (defvar osd_vol false)
 (defvar osd_bright false)
+(defvar hover_leftspace false)
+(defvar hover_rightspace false)
+(defvar hover_music false)
 
 ; Vars
+(defvar BAR_HEIGHT 40)
+(defvar BAR_HEIGHT_BOTTOM 0)
 (defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
@@ -30,16 +50,24 @@
 (deflisten ICON_GET `scripts/get_open_icons`)
 
 ; Listeners
+(deflisten awin "scripts/activewin")
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten audiojson :initial "[]" "scripts/audiolevels")
 (deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery")
 (deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
 (deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
 (deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)
+(deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
 (deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
 (deflisten mplay "playerctl -F metadata -f '{{status}}'")
+(deflisten music :initial `{"artist" :"","length":"00:00","position":"0","position_time":"00:00","status":"","title":"Music"}` "scripts/music")
+(deflisten mcover
+  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
+  "scripts/music cover"
+)
 (deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
 (deflisten notifications :initial '[]' "scripts/notify-receive | gojq -c -M 'reverse'")
+(deflisten tasks "scripts/taskbarloop")
 (deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
 (deflisten workspace :initial `[{"num":"1","clr":"rgba(106,105,105,0.6)"},{"num":"2","clr":"rgba(106,105,105,0.6)"},{"num":"3","clr":"rgba(106,105,105,0.6)"},{"num":"4","clr":"rgba(106,105,105,0.6)"},{"num":"5","clr":"rgba(106,105,105,0.6)"},{"num":"6","clr":"rgba(106,105,105,0.6)"},{"num":"7","clr":"rgba(106,105,105,0.6)"},{"num":"8","clr":"rgba(106,105,105,0.6)"},{"num":"9","clr":"rgba(106,105,105,0.6)"},{"num":"10","clr":"rgba(106,105,105,0.6)"}]` "scripts/workspaces")
 (deflisten wsjsona
@@ -52,6 +80,7 @@
 )
 
 ; Polls
+(defpoll distrologo :initial "endeavouros" :interval "69h" `cat /etc/os-release | grep 'LOGO' | cut -d '=' -f2`)
 (defpoll time
   :initial `{"date": "6/9", "hour": "0", "minute": "0", "monthname": "Month", "day": "Not monday", "year": "2077"}`
   :interval "5s"

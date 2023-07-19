@@ -1,0 +1,20 @@
+(defwidget sideright_widget []
+  (box
+    :style "
+    margin-top: ${BAR_HEIGHT}px;
+    margin-bottom: ${BAR_HEIGHT_BOTTOM}px;
+    "
+    (box
+      :class "sidebar-window"
+    )
+  )
+)
+
+(defwindow sideright
+  :monitor 0
+  :stacking "bg"
+  :geometry (geometry
+    :anchor "top right"
+  )
+  (sideright_widget)
+)
