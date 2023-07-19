@@ -22,7 +22,7 @@ while true; do
   perc=$(printf '%.1f' "$(free -m | rg Mem | awk '{print ($3/$2)*100}')")
 
   swapfree=$(printf '%.1fG' "$(bc -l <<< "($swapt - $swapu) / 1000")")
-  swapperc=$(printf '%.1f' "$(free -m | rg Swap | awk '{print ($3/$2)*100}')")
+  swapperc=$(printf '%.1f' "$(free -m | rg Swap | awk '{print ($2!=0) ? ($3/$2)*100 : 0}')")
 
   echo '{ "total": "'"$total"'", "used": "'"$used"'", "free": "'"$free"'", "swaptotal": "'"$swaptotal"'", "swapused": "'"$swapused"'", "swappercentage": '"$swapperc"', "swapfree": "'"$swapfree"'", "percentage": '"$perc"' }'
 
