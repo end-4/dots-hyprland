@@ -1,4 +1,3 @@
 
-*.svg
-*.svg
 Projects/notify-receive/target/
+!Import Manually/firefox/GNOME_red/theme/icons/
