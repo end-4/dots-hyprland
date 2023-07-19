@@ -1,0 +1,47 @@
+(defwidget taskbar_widget []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "scripts/toggle-powerview.sh &"
+    :onrightclick "scripts/toggle-powerview.sh &"
+    (overlay
+      (box
+        :class "bar-group-margin"
+        :style "
+        min-width: ${(arraylength(tasks) > 13 ? 13 : arraylength(tasks)) * BAR_HEIGHT_BOTTOM_NORMAL}px;
+        "
+        (box
+          :class "bar-group bar-group-round"
+        )
+      )
+      (scroll
+        (box
+          :halign "center"
+          :orientation "h"
+          :space-evenly false
+          :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+          (for app in tasks
+            (overlay
+              (eventbox
+                :cursor "pointer"
+                :onclick "${app.count > 0 ? ('hyprctl dispatch focuswindow address:' + app.address[0] + ' &') : (app.exec)}"
+                ; :tooltip "${app.class}"
+                (box
+                  :class "taskbar-button ${app.class == awin.class ? 'taskbar-button-active' : ''}"
+                  (image
+                    :class "taskbaricon"
+                    :path {app.icon}
+                    :image-width 32
+                    :image-height 32
+                  )
+                )
+              )
+              (box :class "taskbar-indicator-${app.class == awin.class ? 'true' : (app.count > 0 ? 'false' : 'none')}")
+            )
+          )
+          ; Dummy keep alive
+          (revealer :transition "slideright" :reveal false (label :text {awin.class}))
+        )
+      )
+    )
+  )
+)

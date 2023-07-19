@@ -5,7 +5,6 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     (box
       :width {RES_WIDTH / 5}
-      :height BAR_HEIGHT
       :class "bar-group-margin"
       (box
         :class "bar-group bar-group-standalone bar-group-pad-rightonly"
@@ -28,7 +27,7 @@
               :class "txt-smallie txt"
               :text {mname.title != '' ? mname.title : 'Musik'}
             )
-            (label :xalign 0 :class "txt-norm"
+            (label :xalign 0 :class "txt-norm txt"
               :text {mname.artist == '' ? '' : '•'}
             )
             (label
@@ -36,6 +35,85 @@
               :xalign 0
               :class "txt-smallie txt"
               :text {mname.artist}
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget music_bottom_widget []
+  (eventbox
+    :onhover "${EWW_CMD} update hover_music=true &"
+    :onhoverlost "${EWW_CMD} update hover_music=false &"
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :halign "start"
+      :space-evenly false
+      :class "bar-group-margin"
+      (box
+        :class "bar-group bar-group-round bar-group-pad-less"
+        :space-evenly false :spacing 10
+        :width {round(RES_WIDTH / 3.5, 0)}
+        (box
+          :width {round(RES_WIDTH / 11, 0)}
+          :height 40 :valign "center"
+          :class "bar-music-bottom-cover bar-music-cover"
+          :style "
+          background-image: url('${mcover.image == 'null' || mcover.image == '' ? 'eww_covers/cover_art_default' : mcover.image}');
+          "
+          (box
+            :class "bar-music-bottom-ctl-bg bar-music-hide-${!hover_music}"
+            (box
+              :halign "center" :valign "center"
+              :spacing 10
+              (button
+                :class "icon-segoe bar-music-btn"
+                :onclick "playerctl previous"
+                ""
+              )
+              (button
+                :class "icon-segoe bar-music-btn"
+                :onclick "playerctl play-pause"
+                "${mplay == 'Playing' ? '' : ''}"
+              )
+              (button
+                :class "icon-segoe bar-music-btn"
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                ""
+              )
+            )
+          )
+        )
+        (box
+          :hexpand true
+          :orientation "h" :space-evenly false
+          :valign "center"
+          (scroll :hscroll true :vscroll false :hexpand true
+            (box
+              :orientation "v"
+              :space-evenly false
+              :class "bar-music-bottom-textbox"
+              :hexpand true
+              (label :xalign 0
+                :hexpand true
+                :class "txt-small txt"
+                :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                :text {mname.title != '' ? mname.title : 'Music...'}
+              )
+              (revealer
+                :reveal {mname.artist != ''}
+                :transition "slidedown"
+                (label :xalign 0
+                  :hexpand true
+                  :class "txt-small txt"
+                  :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                  :text {mname.artist}
+                )
+              )
             )
           )
         )

@@ -3,14 +3,15 @@
 icons=("" "" "" "" "" "" "" "")
 
 gettime() {
-	FULL=$(cat /sys/class/power_supply/*/charge_full | head -1)
-	NOW=$(cat /sys/class/power_supply/*/charge_now | head -1)
+	# FULL=$(cat /sys/class/power_supply/*/uevent | grep 'POWER_SUPPLY_CHARGE_FULL=' | cut -d '=' -f2)
+	# NOW=$(cat /sys/class/power_supply/*/uevent | grep 'POWER_SUPPLY_CHARGE_NOW=' | cut -d '=' -f2)
+	# RATE=$(cat /sys/class/power_supply/*/uevent | grep 'POWER_SUPPLY_VOLTAGE_NOW=' | cut -d '=' -f2)
 
 	if [ "$RATE" -gt 0 ]; then
 		if [ "$STATE" = "Discharging" ]; then
-			EX="$NOW / $RATE"
+			upower -e | grep battery | while read line; do upower -i $line; done | grep 'time to empty:' | cut -d ':' -f2 | sed 's/ //g' | sed 's/ours//g' | sed 's/inutes//g'
 		else
-			EX="($FULL - $NOW) / $RATE"
+			upower -e | grep battery | while read line; do upower -i $line; done | grep 'time to full:' | cut -d ':' -f2 | sed 's/ //g' | sed 's/ours//g' | sed 's/inutes//g'
 		fi
 		date -u -d@"$(bc -l <<< "$EX * 3600")" +%H:%M
 	fi
@@ -28,15 +29,13 @@ geticon() {
 
 status() {
 	if [ "$STATE" = "Charging" ]; then
-		echo -n "charging"
-
 		if [ "$RATE" -gt 0 ]; then
-			echo ", $(gettime) left"
+			echo "$(gettime) to full"
 		else
 			echo ""
 		fi
 	elif [ "$STATE" = "Discharging" ]; then
-		echo "$(gettime)h left"
+		echo "$(gettime) left"
 	else
 		echo "fully charged"
 	fi
@@ -128,6 +127,6 @@ while true; do
 	    warnedlow=0
 	fi
 
-	echo '{"quickicon": "'"$(chargestatus)"'", "icon": "'"$(geticon)"'", "percentage": '"$CAPACITY"', "wattage": "'"$(wattage)"'", "status": "'"$(status)"'", "circolor": "'"$(circolor)"'", "cirbgcolor": "'"$(cirbgcolor)"'", "color": "'"$(color)"'", "bgcolor": "'"$(bgcolor)"'" }'
+	echo '{"quickicon": "'"$(chargestatus)"'", "percentage": '"$CAPACITY"', "status": "'"$(status)"'"}'
 	sleep 3
 done

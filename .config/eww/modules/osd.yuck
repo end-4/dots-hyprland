@@ -6,7 +6,10 @@
     :onrightclick "scripts/toggle-powerview.sh &"
     (box
       :width {26*10 + WORKSPACE_SIDE_PAD*2}
-      :height BAR_HEIGHT
+      :style "
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT - (BAR_USELESS_GAPS * 2)}px;
+      "
       :class "bar-group-margin"
       (box
         :spacing 15

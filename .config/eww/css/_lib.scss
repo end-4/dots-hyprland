@@ -1,10 +1,19 @@
+// Common colors
+$hovercolor: rgba(128, 128, 128, 0.4);
+$activecolor: rgba(128, 128, 128, 0.7);
+
 // Common rules
 @mixin mainfont {
     font-family: 'Lexend';
+    font-weight: 500;
 }
 
 @mixin icon-material {
     font-family: 'Material Symbols Rounded';
+}
+
+@mixin icon-segoe {
+    font-family: 'Segoe Fluent Icons';
 }
 
 @mixin icon-material-filled {
@@ -24,19 +33,61 @@
 }
 
 @mixin subtext {
-    color: rgb(160,160,160);
+    color: rgb(160, 160, 160);
 }
 
 @mixin elevation2 {
     background: $surface;
     color: $onSurface;
-    box-shadow: 0px 2px 4px mix($shadow, rgba(0,0,0,0), 40%);
+    box-shadow: 0px 2px 3px $shadow;
+    margin: 7px;
 }
 
 @mixin elevation3 {
     background: $surfaceVariant;
     color: $onSurfaceVariant;
-    box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
+    // box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
+    box-shadow: 0px 2px 5px $shadow;
+    margin: 7px;
+}
+
+@mixin md3_decel {
+    transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@mixin md3_accel {
+    transition: 180ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+@mixin noanim {
+    transition: 0ms;
+}
+
+@keyframes flyin-top {
+    from {
+        margin-top: -41px;
+    }
+
+    to {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+}
+
+@keyframes flyin-bottom {
+    from {
+        margin-top: 71px;
+        margin-bottom: -71px;
+    }
+
+    to {
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+}
+
+.no-anim {
+    @include noanim;
 }
 
 .txt {
@@ -45,46 +96,54 @@
 
 .txt-hugeass {
     @include mainfont;
-    font-size: 20pt;
+    font-size: 1.8182rem;
 }
 
 .txt-larger {
     @include mainfont;
-    font-size: 18pt;
+    font-size: 1.6363rem;
 }
 
 .txt-large {
     @include mainfont;
-    font-size: 16pt;
+    font-size: 1.4545rem;
 }
 
 .txt-norm {
     @include mainfont;
-    font-size: 14pt;
+    font-size: 1.2727rem;
 }
 
 .txt-small {
     @include mainfont;
-    font-size: 12pt;
+    font-size: 1.0909rem;
 }
 
 .txt-smallie {
     @include mainfont;
-    font-size: 11pt;
+    font-size: 1rem;
 }
 
 .txt-smaller {
     @include mainfont;
-    font-size: 10pt;
+    font-size: 0.9091rem;
+}
+
+.txt-smaller-offset {
+    margin-top: -2px;
 }
 
 .txt-tiny {
     @include mainfont;
-    font-size: 8pt;
+    font-size: 0.7273rem;
 }
 
 .icon-material {
     @include icon-material;
+}
+
+.icon-segoe {
+    @include icon-segoe;
 }
 
 .separator {

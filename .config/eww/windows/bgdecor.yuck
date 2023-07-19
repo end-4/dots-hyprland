@@ -1,50 +1,59 @@
 (defwidget bgdecor_widget []
   (box
     :space-evenly false :orientation "v"
-    :width RES_WIDTH :height RES_HEIGHT
-    (box :height BAR_HEIGHT)
-    (box :space-evenly false
+    (box
+      :class "bar-bg"
+      :style "
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT >= 2 ? (BAR_HEIGHT - 2) : 0}px;
+      "
+    )
+    (overlay
+      (box
+        :width RES_WIDTH
+        :height 1
+        :vexpand true
+        :style "
+        ${ANIM_ENTER[0]}
+        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM - 1}px;
+        "
+        :class "bgdecor-border"
+      )
       (image
         :path "images/svg/corner_topleft.svg"
         :halign "start"
         :valign "start"
-        :width BG_ROUNDING
-        :height BG_ROUNDING
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )
-      (box :hexpand true)
       (image
         :path "images/svg/corner_topright.svg"
         :halign "end"
         :valign "start"
-        :width BG_ROUNDING
-        :height BG_ROUNDING
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/svg/corner_bottomleft.svg"
+        :halign "start"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/svg/corner_bottomright.svg"
+        :halign "end"
+        :valign "end"
         :image-width BG_ROUNDING
         :image-height BG_ROUNDING
       )
     )
-    (box :vexpand true)
-    (box :space-evenly false
-      (image
-        :path "images/svg/center_bottomleft.svg"
-        :halign "start"
-        :valign "start"
-        :width BG_ROUNDING
-        :height BG_ROUNDING
-        :image-width BG_ROUNDING
-        :image-height BG_ROUNDING
-      )
-      (box :hexpand true)
-      (image
-        :path "images/svg/corner_bottomright.svg"
-        :halign "end"
-        :valign "start"
-        :width BG_ROUNDING
-        :height BG_ROUNDING
-        :image-width BG_ROUNDING
-        :image-height BG_ROUNDING
-      )
+    (box
+      :class "bar-bg"
+      :style "
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT_BOTTOM}px;
+      "
     )
   )
 )

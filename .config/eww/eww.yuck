@@ -4,41 +4,90 @@
 (include "./lib.yuck")
 ; Bar modules
 (include "./modules/dynamiccenter.yuck")
+(include "./modules/leftspace.yuck")
 (include "./modules/music.yuck")
 (include "./modules/osd.yuck")
+(include "./modules/rightspace.yuck")
+(include "./modules/taskbar.yuck")
 (include "./modules/system.yuck")
-(include "./modules/systray.yuck")
 (include "./modules/workspaces.yuck")
 ; Other widgets
 (include "./windows/bgdecor.yuck")
 (include "./windows/powerview.yuck")
+(include "./windows/sideright.yuck")
 
 (defwidget bar_widget []
-  (centerbox
-    :height BAR_HEIGHT
-    :class "bar-bg"
-    (box
-      :hexpand true
+  (box
+    :space-evenly false
+    :orientation "h"
+    (revealer
+      :transition "slideright" :duration "0ms"
+      :reveal false
+      (label :text "tasks[0]")
     )
     (centerbox
+      :halign "start"
+      :class "bar-bg flyin-top"
+      :style "
+      min-width: ${RES_WIDTH}px;
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT_NORMAL}px;
+      "
       (box
-        :orientation "h" :space-evenly false
-        (music_widget)
+        :hexpand true
+        (leftspace_widget)
+      )
+      ; (box)
+      (centerbox
+        (box
+          :orientation "h" :space-evenly false
+          (music_widget)
+        )
+        (box
+          :orientation "h" :space-evenly false
+          ; (workspaces_widget)
+          (dynamiccenter_widget)
+        )
+        (box
+          :orientation "h" :space-evenly false
+          :halign "end"
+          (system_widget)
+        )
       )
       (box
-        :orientation "h" :space-evenly false
-        ; (workspaces_widget)
-        (dynamiccenter_widget)
-      )
-      (box
-        :orientation "h" :space-evenly false
-        :halign "end"
-        (system_widget)
+        :hexpand true
+        (rightspace_widget)
       )
     )
-    (box
-      :hexpand true
-      (tray_widget)
+  )
+)
+
+(defwidget bar_bottom_widget []
+  (box
+    :space-evenly false
+    :orientation "h"
+    (centerbox
+      :halign "start"
+      :class "bar-bg flyin-bottom"
+      :style "
+      min-width: ${RES_WIDTH}px;
+      ${ANIM_ENTER[0]}
+      min-height: ${BAR_HEIGHT_NORMAL}px;
+      "
+      (box
+        :hexpand true
+        (music_bottom_widget)
+      )
+      (box
+        (taskbar_widget)
+      )
+      (box
+        :hexpand true
+        :orientation "h"
+        :space-evenly false
+        (box :hexpand true)
+        (system_bottom_widget)
+      )
     )
   )
 )
@@ -53,4 +102,16 @@
     :anchor "top center"
   )
   (bar_widget)
+)
+
+(defwindow barbottom
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :width "100%"
+    :height "60px"
+    :anchor "bottom center"
+  )
+  (bar_bottom_widget)
 )

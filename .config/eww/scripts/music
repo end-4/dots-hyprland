@@ -141,6 +141,7 @@ elif [ "$1" == "name" ]; then
 		elif [[ "$title" == *"YouTube Music" && "$artist" == "" ]]; then
 			continue
 		fi
+		# title=$(echo "$title" | cut -d '-' -f2)
 		title=$(scripts/limitlen.py "$title" "$lentolimit")
 		artist=$(scripts/limitlen.py "$artist" "$lentolimit")
 		
@@ -160,6 +161,7 @@ else
 			continue
 		fi
 		len=$(playerctl metadata mpris:length)
+		# title=$(echo "$title" | cut -d '-' -f2)
 		title=$(scripts/limitlen.py "$title" 40)
 		artist=$(scripts/limitlen.py "$artist" 40)
 

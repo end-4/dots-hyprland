@@ -14,9 +14,9 @@
           :class "powerview-ws-${wspace[0].workspace.id == activews}"
           :style "
           border-radius: 99px;
-          margin: 0px ${800*OVERVIEW_SCALE}px;
-          margin-bottom: ${(RES_HEIGHT - BAR_HEIGHT + GAPS * 2 * 2) * OVERVIEW_SCALE}px;
-          margin-top: ${GAPS * OVERVIEW_SCALE * 2}px;
+          margin: 0px ${RES_WIDTH / 3 * OVERVIEW_SCALE}px;
+          margin-bottom: ${(BAR_HEIGHT == 0 ? GAPS : (RES_HEIGHT - BAR_HEIGHT)) * OVERVIEW_SCALE + OVERVIEW_INDICATOR_GAP}px;
+          margin-top: ${(BAR_HEIGHT == 0 ? (RES_HEIGHT - BAR_HEIGHT_BOTTOM) : GAPS) * OVERVIEW_SCALE + OVERVIEW_INDICATOR_GAP}px;
           "
         )
       )
@@ -29,10 +29,10 @@
         "
         (for ws-window in wspace
           (box
-            :class "${ws-window.class == 'workspace' ? '' : 'powerview-ws-window'}"
+            :class "${ws-window.address == '_none' ? '' : (
+              ws-window.address != selected ? 'powerview-ws-window' : 'powerview-ws-window-selected'
+            )}"
             :style "
-            ${ws-window.address == selected ? ('border: 1px solid' + accent) : ''};
-            ${ws-window.address == '_none' ? 'border: none' : ''};
             margin-left: ${round(ws-window.at[0] * OVERVIEW_SCALE, 0)}px;
             margin-top: ${round(ws-window.at[1] * OVERVIEW_SCALE, 0)}px;
             margin-right: -${round((ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE,0)}px;
@@ -154,18 +154,18 @@
               :halign "center"
               :width {round(RES_WIDTH / 1.7, 0)}
               :orientation "h"
-              :class "bar-bg shadow-pad window-border powerview-info"
+              :class "bar-bg powerview-info"
               (label :xalign 0
-                :class "bar-txt-larger bar-txt-norm"
+                :class "txt-norm txt"
                 :text "${overview_hover_name.class}"
               )
               (label
-                :class "bar-txt-larger bar-txt-norm"
+                :class "txt-norm txt"
                 :style "margin: 0px 50px;"
                 :text "${overview_hover_name.title}"
               )
               (label :xalign 1
-                :class "bar-txt-larger bar-txt-norm"
+                :class "txt-norm txt"
                 :text "${overview_hover_name.size[0]}x${overview_hover_name.size[1]} "
               )
             )
@@ -224,7 +224,7 @@
   :namespace "eww"
   :geometry (geometry
     :anchor "top center"
-    :y 40
+    :y 80
   )
   (powerview_widget)
 )
