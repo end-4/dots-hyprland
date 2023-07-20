@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
-~/.config/eww/scripts/toggle-overview.sh --close &
-~/.config/eww/scripts/toggle-winstart.sh --close &
+~/.config/eww/scripts/toggle-powerview.sh --close &
 
 if [[ "$1" == ">"* ]]; then
     args=( $1 )
@@ -11,6 +10,8 @@ if [[ "$1" == ">"* ]]; then
         scripts/colormanage load "${args[1]}"
     elif [[ "${args[0]}" == ">save" ]]; then
         scripts/colormanage save "${args[1]}"
+    elif [[ "${args[0]}" == ">swr" ]]; then # basic rice switching
+        ~/.local/bin/switchrice.sh "${args[1]}" "${args[2]}"
     elif [[ "${args[0]}" == ">light" ]]; then
         scripts/togglelight light
     elif [[ "${args[0]}" == ">dark" ]]; then
@@ -20,14 +21,21 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">one" ]]; then
         echo -n 'one' > 'scripts/workdir/__mode_colors.txt'
     elif [[ "${args[0]}" == ">wall" ]]; then
-        scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
+        scripts/colorgen 'images/wallpaper' '[Local wallpaper]' ''
         scripts/colormanage get
+    elif [[ "${args[0]}" == ">img" ]]; then
+        scripts/switchwall
     elif [[ "${args[0]}" == ">segs" ]]; then
-        python3 scripts/waifupics.py --segs
+        eww update waifu="$(python3 scripts/waifu-get.py --segs ero)"
     elif [[ "${args[0]}" == ">uwu" ]]; then
-        python3 scripts/waifupics.py
+        eww update waifu="$(python3 scripts/waifu-get.py)"
     elif [[ "${args[0]}" == ">r" ]]; then
-        pkill eww && eww daemon && eww open bar && eww open bottomline
+        pkill eww && eww daemon && eww open bar &
+    elif [[ "${args[0]}" == ">todo" ]]; then
+        scripts/todo add "${1#*>todo }"
+        eww update todolist="$(cat json/todo.json | gojq -c -M)"
+    elif [[ "${args[0]}" == ">raw" ]]; then
+        hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq '.int') ))
     else
         # notify-send 'eww' 'Invalid command!'
         false
