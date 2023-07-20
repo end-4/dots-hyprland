@@ -11,6 +11,8 @@ if [[ "$1" == ">"* ]]; then
         scripts/colormanage load "${args[1]}"
     elif [[ "${args[0]}" == ">save" ]]; then
         scripts/colormanage save "${args[1]}"
+    elif [[ "${args[0]}" == ">swr" ]]; then # basic rice switching
+        ~/.local/bin/switchrice.sh "${args[1]}" "${args[2]}"
     elif [[ "${args[0]}" == ">light" ]]; then
         scripts/togglelight light
     elif [[ "${args[0]}" == ">dark" ]]; then
