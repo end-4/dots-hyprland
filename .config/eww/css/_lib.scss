@@ -5,13 +5,13 @@ $activecolor: rgba(128, 128, 128, 0.7);
 // Common rules
 @mixin mainfont {
     font-family: 'Lexend';
-    font-weight: 500;
+    // font-weight: 500;
 }
 
 @mixin sidefont {
     font-family: 'Lexend';
     // font-family: 'Bahnschrift';
-    font-weight: 500;
+    // font-weight: 500;
 }
 
 @mixin icon-material {
@@ -157,6 +157,14 @@ $activecolor: rgba(128, 128, 128, 0.7);
 .txt-tiny {
     @include mainfont;
     font-size: 0.7273rem;
+}
+
+.txt-subtxt {
+    color: mix($onBackground, $background, 80%);
+}
+
+.txt-bold {
+    font-weight: 500;
 }
 
 .icon-material {
