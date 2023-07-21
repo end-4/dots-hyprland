@@ -1,0 +1,28 @@
+(defwidget status_widget []
+  (box
+    :space-evenly false
+    (box :hexpand true)
+    (systray :pack-direction "rtl" :icon-size 18)
+    (box :width BG_ROUNDING)
+    (label
+      :width BAR_HEIGHT_NORMAL
+      :class "icon-material bar-system-icon txt-norm txt"
+      :text {WIFI_ICONS[net.level]}
+    )
+    (label
+      :width BAR_HEIGHT_NORMAL
+      :class "icon-material bar-system-icon txt-norm txt"
+      :text {bluetooth.icon}
+    )
+    (box :width BG_ROUNDING)
+    ; (button
+      ;   :width BAR_HEIGHT
+      ;   :height BAR_HEIGHT
+      ;   :class "bar-btn bar-group-margin"
+      ;   (label
+        ;     :class "txt-large icon-material"
+        ;     :text "settings"
+      ;   )
+    ; )
+  )
+)

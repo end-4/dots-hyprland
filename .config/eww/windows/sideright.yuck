@@ -1,17 +1,225 @@
 (defwidget sideright_widget []
-  (box
-    :style "
-    margin-top: ${BAR_HEIGHT}px;
-    min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
-    margin-bottom: ${BAR_HEIGHT_BOTTOM}px;
-    ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
-    ${open_sideright ? '' : 'margin-right: -500px;'}
-    "
+  (eventbox
+    :onhoverlost "scripts/toggle-sideright.sh --close &"
     (box
-      :class "sidebar-window"
       :orientation "v" :space-evenly false
+      (eventbox
+        :onclick "scripts/toggle-sideright.sh &"
+        (box :style "min-height: ${BAR_HEIGHT}px;")
+      )
       (box
-        :orientation "h"
+        :style "
+        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
+        ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+        ${open_sideright ? '' : 'margin-right: -800px;'}
+        "
+        (box
+          :vexpand true
+          :class "sidebar-window"
+          :orientation "v" :space-evenly false :spacing 15
+          (box
+            :orientation "h" :spacing 10
+            (button ; Wifi
+              :class "sidebar-toggle${net.essid == 'lo' ? '' : '-active'}"
+              (box
+                :space-evenly false :orientation "h" :spacing 5
+                (label
+                  :class "icon-material txt-norm"
+                  :text {WIFI_ICONS[net.level]}
+                )
+                (label :xalign 0
+                  :class "txt-txt-norm"
+                  :hexpand true
+                  :text "Internet"
+                )
+                (label
+                  :class "icon-material txt-norm"
+                  :text "chevron_right"
+                )
+              )
+            )
+            (button ; Bluetooth
+              :class "sidebar-toggle"
+              (box
+                :space-evenly false :orientation "h" :spacing 5
+                (label
+                  :class "icon-material txt-norm"
+                  :text {bluetooth.icon}
+                )
+                (label :xalign 0
+                  :class "txt-txt-norm"
+                  :hexpand true
+                  :text "Bluetooth"
+                )
+                (label
+                  :class "icon-material txt-norm"
+                  :text "chevron_right"
+                )
+              )
+            )
+            (button
+              :class "sidebar-toggle"
+              (box
+                :space-evenly false :orientation "h" :spacing 5
+                (label
+                  :class "icon-material txt-norm"
+                  :text {hyprjson.nightlight ? "Nightlight" : ""}
+                )
+                (label :xalign 0
+                  :class "txt-txt-norm"
+                  :hexpand true
+                  :text "Night light"
+                )
+              )
+            )
+          )
+          (box
+            :vexpand true
+            :orientation "v" :space-evenly false :spacing 15
+            :class "sidebar-section"
+            (box
+              (label :xalign 0
+                :class "sidebar-section-heading txt-large"
+                :text "Notifications"
+              )
+            )
+            (scroll :vscroll true :hscroll false :vexpand true
+              (box
+                :orientation "v" :space-evenly false :spacing 10
+                (for notif in notifications
+                  (box
+                    :class "sidebar-notif"
+                    :orientation "h"
+                    (box :orientation "v" :space-evenly false
+                      (box :orientation "h" :space-evenly false
+                        (label :xalign 0
+                          :wrap true
+                          :class "txt-norm"
+                          :text "${notif.summary}"
+                        )
+                        (box :hexpand true)
+                        (label :xalign 0
+                          :wrap true
+                          :class "txt-small"
+                          :text "${notif.app_name} • ${notif.time}"
+                        )
+                      )
+                      (label :xalign 0
+                        :wrap true
+                        :class "txt-smaller"
+                        :text {notif.body}
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (box
+            :orientation "v" :space-evenly false :spacing 15
+            :class "sidebar-section"
+            (box
+              :space-evenly false :orientation "v"
+              (eventbox
+                :onscroll "scripts/scrollmonth {} &"
+                :onclick "${EWW_CMD} update monthshift=0 &"
+                (box :space-evenly false :orientation "h"
+                  (label :xalign 0
+                    :class "sidebar-section-heading txt-large"
+                    :text {calendartitle}
+                  )
+                  (box :hexpand true)
+                  (label :xalign 0
+                    :class "sidebar-section-heading txt-large"
+                    :text "To-do list"
+                  )
+                )
+              )
+              (box ; Calendar
+                :orientation "v"
+                :space-evenly false
+                :spacing -10
+                (box
+                  :class "sidebar-content"
+                  :orientation "h" :space-evenly false :spacing 10
+                  (eventbox
+                    :onscroll "scripts/scrollmonth {} &"
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      (box
+                        (for day in weekdays
+                          (box
+                            :class "sidebar-calendar-btn day${day.today}"
+                            (label
+                              :class "sidebar-calendar-txt txt-smallie"
+                              :text "${day.day}"
+                            )
+                          )
+                        )
+                      )
+                      (for week in calendar
+                        (box
+                          (for day in week
+                            (button
+                              :class "sidebar-calendar-btn day${day.today}"
+                              (label
+                                :class "sidebar-calendar-txt txt-smallie"
+                                :text "${day.day}"
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (box
+                    :orientation "v"
+                    :space-evenly false
+                    :hexpand true
+                    :class "sidebar-todo-box"
+                    (scroll
+                      :hscroll false :vscroll true
+                      :vexpand true
+                      :style "margin: 5px 0;"
+                      (box
+                        :orientation "v"
+                        :space-evenly false :spacing 10
+                        (for task in todolist
+                          (box
+                            :orientation "h"
+                            :space-evenly false
+                            :class "sidebar-todo-item"
+                            :spacing 5
+                            (label :xalign 0
+                              :hexpand true
+                              :class "txt-small"
+                              :text {task}
+                              :wrap true
+                            )
+                            (button
+                              :valign "center"
+                              :class "sidebar-todo-btn"
+                              :onclick "scripts/todo del '${task}' && ${EWW_CMD} update todolist=\"$(cat json/todo.json | gojq -c -M)\""
+                              (label
+                                :class "icon-material txt-norm"
+                                :text "Remove"
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (eventbox
+        :onclick "scripts/toggle-sideright.sh &"
+        (box :style "min-height: ${BAR_HEIGHT_BOTTOM}px;")
       )
     )
   )

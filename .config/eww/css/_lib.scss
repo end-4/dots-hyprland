@@ -8,6 +8,12 @@ $activecolor: rgba(128, 128, 128, 0.7);
     font-weight: 500;
 }
 
+@mixin sidefont {
+    font-family: 'Lexend';
+    // font-family: 'Bahnschrift';
+    font-weight: 500;
+}
+
 @mixin icon-material {
     font-family: 'Material Symbols Rounded';
 }
@@ -34,6 +40,13 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 @mixin subtext {
     color: rgb(160, 160, 160);
+}
+
+@mixin elevation-safe {
+    background: $surface;
+    color: $onSurface;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.69);
+    margin: 7px;
 }
 
 @mixin elevation2 {
@@ -65,7 +78,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 @keyframes flyin-top {
     from {
-        margin-top: -41px;
+        margin-top: -2.795rem;
     }
 
     to {
@@ -76,14 +89,22 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 @keyframes flyin-bottom {
     from {
-        margin-top: 71px;
-        margin-bottom: -71px;
+        margin-top: 4.841rem;
+        margin-bottom: -4.841rem;
     }
 
     to {
         margin-bottom: 0px;
         margin-top: 0px;
     }
+}
+
+@function tint($color, $percentage) {
+    @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+    @return mix(rgb(0, 0, 0), $color, $percentage);
 }
 
 .no-anim {
@@ -130,7 +151,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 .txt-smaller-offset {
-    margin-top: -2px;
+    margin-top: -0.136rem;
 }
 
 .txt-tiny {
@@ -147,9 +168,16 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 .separator {
-    border-radius: 999px;
+    border-radius: 50rem;
     background-color: $onSurface;
-    margin: 0 10px;
-    min-width: 8px;
-    min-height: 8px;
+    margin: 0rem 0.682rem;
+    min-width: 0.545rem;
+    min-height: 0.545rem;
+}
+
+tooltip {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 50rem;
+    border: 1px solid $onSurfaceVariant;
 }
