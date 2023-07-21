@@ -2,17 +2,25 @@
   (box
     :style "
     margin-top: ${BAR_HEIGHT}px;
+    min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
     margin-bottom: ${BAR_HEIGHT_BOTTOM}px;
+    ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+    ${open_sideright ? '' : 'margin-right: -500px;'}
     "
     (box
       :class "sidebar-window"
+      :orientation "v" :space-evenly false
+      (box
+        :orientation "h"
+      )
     )
   )
 )
 
 (defwindow sideright
   :monitor 0
-  :stacking "bg"
+  :stacking "fg"
+  :namespace "eww"
   :geometry (geometry
     :anchor "top right"
   )

@@ -17,10 +17,11 @@
 }
 .dynamic-module {
     transition: 250ms cubic-bezier(0, 0, 0, 1);
+    min-height: 2.727rem;
 }
 
 .bar-group-margin {
-    padding: 0.205rem;
+    padding: 0.2rem;
 }
 
 .bar-group {

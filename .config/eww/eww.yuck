@@ -44,8 +44,7 @@
           (music_widget)
         )
         (box
-          :orientation "h" :space-evenly false
-          ; (workspaces_widget)
+          :orientation "h"
           (dynamiccenter_widget)
         )
         (box
