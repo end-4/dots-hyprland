@@ -5,7 +5,7 @@
       :class "bar-bg"
       :style "
       ${ANIM_ENTER[0]}
-      min-height: ${BAR_HEIGHT >= 2 ? (BAR_HEIGHT - 2) : 0}px;
+      min-height: ${BAR_HEIGHT >= 2 ? BAR_HEIGHT : 0}px;
       "
     )
     (overlay
@@ -15,7 +15,7 @@
         :vexpand true
         :style "
         ${ANIM_ENTER[0]}
-        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM - 1}px;
+        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
         "
         :class "bgdecor-border"
       )

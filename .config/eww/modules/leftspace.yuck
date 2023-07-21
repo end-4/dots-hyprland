@@ -7,24 +7,24 @@
     :onhoverlost "${EWW_CMD} update hover_leftspace=false &"
     (box
       :space-evenly false
-      (box :width BG_ROUNDING)
-      (eventbox
-        :class "bar-btn"
-        :onclick "scripts/toggle-powerview.sh"
-        (box
-          :class "bar-btn-box"
-          :space-evenly false :spacing 5
-          (label
-            :class "icon-material txt-norm txt"
-            :text "search"
-          )
-          (label
-            :class "txt-smaller txt txt-smaller-offset"
-            :text "Search"
-          )
-        )
-      )
-      (box :hexpand true)
+      ; (box :width BG_ROUNDING)
+      ; (eventbox
+      ;   :class "bar-btn"
+      ;   :onclick "scripts/toggle-powerview.sh"
+      ;   (box
+      ;     :class "bar-btn-box"
+      ;     :space-evenly false :spacing 5
+      ;     (label
+      ;       :class "icon-material txt-norm txt"
+      ;       :text "search"
+      ;     )
+      ;     (label
+      ;       :class "txt-smaller txt txt-smaller-offset"
+      ;       :text "Search"
+      ;     )
+      ;   )
+      ; )
+      ; (box :hexpand true)
     )
   )
 )
