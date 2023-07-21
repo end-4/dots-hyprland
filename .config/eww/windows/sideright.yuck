@@ -74,27 +74,73 @@
             )
           )
           (box
-            :vexpand true
-            :orientation "v" :space-evenly false :spacing 15
-            :class "sidebar-section"
-            (box
-              (label :xalign 0
-                :class "sidebar-section-heading txt-large"
-                :text "Notifications"
+            :orientation "h" :spacing 10
+            (button
+              :class "sidebar-action"
+              (label
+                :class "icon-material txt-norm"
+                :text "settings"
               )
             )
+            (button
+              :class "sidebar-action"
+              (label
+                :class "icon-material txt-norm"
+                :text "lock"
+              )
+            )
+            (button
+              :class "sidebar-action"
+              (label
+                :class "icon-material txt-norm"
+                :text "bedtime"
+              )
+            )
+            (button
+              :class "sidebar-action"
+              (label
+                :class "icon-material txt-norm"
+                :text "power_settings_new"
+              )
+            )
+          )
+          ; (box
+            ;   :vexpand true
+            ;   :orientation "v" :space-evenly false :spacing 15
+            ;   :class "sidebar-section"
+            ;   (box
+              ;     (label :xalign 0
+                ;       :class "sidebar-section-heading txt-large"
+                ;       :text "Notifications"
+              ;     )
+            ;   )
             (scroll :vscroll true :hscroll false :vexpand true
               (box
                 :orientation "v" :space-evenly false :spacing 10
                 (for notif in notifications
                   (box
-                    :class "sidebar-notif"
+                    :class "sidebar-notif${
+                    arraylength(notifications) == 1 ? '' : (
+                      notif.id == arraylength(notifications) ? (
+                        notifications[1]['app_name'] == notif.app_name ? '-top' : ''
+                        ) : (
+                        notif.id == 1 ? (
+                          notifications[arraylength(notifications) - 2]['app_name'] == notif.app_name ? '-bottom' : ''
+                          ) : (
+                          notifications[arraylength(notifications) - notif.id + 1]['app_name'] == notif.app_name ? (
+                            notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name ? '-middle' : '-top') : (
+                            notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name ? '-bottom' : ''
+                          )
+                        )
+                      )
+                    )
+                    }"
                     :orientation "h"
                     (box :orientation "v" :space-evenly false
                       (box :orientation "h" :space-evenly false
                         (label :xalign 0
                           :wrap true
-                          :class "txt-norm"
+                          :class "txt-norm txt-bold"
                           :text "${notif.summary}"
                         )
                         (box :hexpand true)
@@ -102,11 +148,16 @@
                           :wrap true
                           :class "txt-small"
                           :text "${notif.app_name} • ${notif.time}"
+                          :text "${arraylength(notifications) == 1 ||
+                          notif.id == arraylength(notifications) ||
+                          notifications[arraylength(notifications) - notif.id - 1]['app_name'] != notif.app_name ?
+                          '${notif.app_name} • ${notif.time}' : notif.time
+                          }"
                         )
                       )
                       (label :xalign 0
                         :wrap true
-                        :class "txt-smaller"
+                        :class "txt-smaller txt-subtxt"
                         :text {notif.body}
                       )
                     )
@@ -114,7 +165,7 @@
                 )
               )
             )
-          )
+          ; )
           (box
             :orientation "v" :space-evenly false :spacing 15
             :class "sidebar-section"

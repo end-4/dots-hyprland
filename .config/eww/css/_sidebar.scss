@@ -20,9 +20,31 @@
 
 .sidebar-notif {
     background-color: $secondaryContainer;
-    border-radius: 0.682rem;
-    padding: 0.682rem;
+    border-radius: 1.432rem;
+    padding: 1.023rem;
 }
+
+.sidebar-notif-top {
+    background-color: $secondaryContainer;
+    border-top-left-radius: 1.432rem;
+    border-top-right-radius: 1.432rem;
+    padding: 1.023rem;
+}
+
+.sidebar-notif-middle {
+    margin-top: -10px;
+    background-color: $secondaryContainer;
+    padding: 0rem 1.023rem 1.023rem 1.023rem;
+}
+
+.sidebar-notif-bottom {
+    margin-top: -10px;
+    background-color: $secondaryContainer;
+    border-bottom-left-radius: 1.432rem;
+    border-bottom-right-radius: 1.432rem;
+    padding: 0rem 1.023rem 1.023rem 1.023rem;
+}
+
 
 .sidebar-calendar-btn {
     @include mainfont;
@@ -45,11 +67,12 @@
 
 .day-1 {
     background-color: transparent;
+    color: $onSurfaceVariant;
 }
 
 .day0 {
     background-color: transparent;
-    color: $onBackground;
+    color: $onSurfaceVariant;
 }
 
 .day-1:hover {
@@ -61,29 +84,29 @@
 }
 
 .day-1:active {
-    background-color: $surface;
+    background-color: rgba(125, 125, 125, 0.5);
 }
 
 .day0:active {
-    background-color: $surface;
+    background-color: rgba(125, 125, 125, 0.5);
 }
 
 .day1 {
     background-color: $primary;
-    color: #000000;
+    color: $onPrimary;
 }
 
 .day1:hover {
-    background-color: mix($secondaryContainer, $onSurface, 70%);
+    background-color: mix($primary, $onBackground, 70%);
 }
 
 .day1:active {
-    background-color: mix($secondaryContainer, $onSurface, 50%);
+    background-color: mix($primary, $onBackground, 50%);
 }
 
 .sidebar-todo-item {
     margin: 0rem 0.341rem;
-    color: $onBackground;
+    color: $onSurfaceVariant;
 }
 
 .sidebar-todo-btn {
@@ -134,4 +157,21 @@
 .sidebar-toggle-active:active {
     background-color: tint($primary, 20%);
     color: tint($onPrimary, 20%);
+}
+
+.sidebar-action {
+    background-color: $background;
+    color: $onBackground;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+}
+
+.sidebar-action:hover {
+    background-color: tint($background, 10%);
+    color: tint($onBackground, 10%);
+}
+
+.sidebar-action:active {
+    background-color: tint($background, 15%);
+    color: tint($onBackground, 15%);
 }
