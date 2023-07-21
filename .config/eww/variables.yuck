@@ -15,6 +15,7 @@
 (defvar OVERVIEW_SCALE 0.18)
 (defvar OVERVIEW_INDICATOR_GAP 1)
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
+(defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar WORKSPACE_SIDE_PAD 7)
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
@@ -28,18 +29,20 @@
 (defvar anim_set 0) ; Index of main animation set
 
 ; Widget states
+(defvar flash_notif false)
+(defvar hover_leftspace false)
+(defvar hover_rightspace false)
+(defvar hover_music false)
 (defvar open_powerview false)
 (defvar open_sideleft false)
 (defvar open_sideright false)
 (defvar osd_vol false)
 (defvar osd_bright false)
-(defvar hover_leftspace false)
-(defvar hover_rightspace false)
-(defvar hover_music false)
 
 ; Vars
 (defvar BAR_HEIGHT 40)
 (defvar BAR_HEIGHT_BOTTOM 0)
+(defvar calendartitle "")
 (defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
@@ -56,6 +59,8 @@
 (deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery")
 (deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
 (deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
+(defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+(deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
 (deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)
 (deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
 (deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
@@ -68,6 +73,7 @@
 (deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
 (deflisten notifications :initial '[]' "scripts/notify-receive | gojq -c -M 'reverse'")
 (deflisten tasks "scripts/taskbarloop")
+(deflisten todolist :initial "[]" "cat json/todo.json | gojq -c -M")
 (deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
 (deflisten workspace :initial `[{"num":"1","clr":"rgba(106,105,105,0.6)"},{"num":"2","clr":"rgba(106,105,105,0.6)"},{"num":"3","clr":"rgba(106,105,105,0.6)"},{"num":"4","clr":"rgba(106,105,105,0.6)"},{"num":"5","clr":"rgba(106,105,105,0.6)"},{"num":"6","clr":"rgba(106,105,105,0.6)"},{"num":"7","clr":"rgba(106,105,105,0.6)"},{"num":"8","clr":"rgba(106,105,105,0.6)"},{"num":"9","clr":"rgba(106,105,105,0.6)"},{"num":"10","clr":"rgba(106,105,105,0.6)"}]` "scripts/workspaces")
 (deflisten wsjsona

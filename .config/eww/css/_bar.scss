@@ -456,3 +456,15 @@ menu>menuitem:hover {
     min-width: 3.409rem;
     min-height: 3.409rem;
 }
+
+.bar-notif-indicator {
+    border-radius: 10rem;
+    background-color: $primary;
+    color: $onPrimary;
+    padding: 0.136rem 0.477rem;
+}
+
+.bar-notif-icon {
+    margin-top: 0.068rem;
+    margin-bottom: -0.068rem;
+}

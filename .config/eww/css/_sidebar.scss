@@ -1,6 +1,137 @@
 .sidebar-window {
+    @include elevation2;
     background-color: $background;
     border-radius: 17px;
     min-width: 34.091rem;
     margin: 0.205rem;
+    padding: 1.023rem;
+}
+
+.sidebar-section-heading {
+    @include sidefont;
+    color: $onSurfaceVariant;
+}
+
+.sidebar-section {
+    background-color: mix($surface, $onSurface, 90%);
+    border-radius: 15px;
+    padding: 1.023rem;
+}
+
+.sidebar-notif {
+    background-color: $secondaryContainer;
+    border-radius: 0.682rem;
+    padding: 0.682rem;
+}
+
+.sidebar-calendar-btn {
+    @include mainfont;
+    font-weight: 500;
+    min-height: 1.977rem;
+    min-width: 1.977rem;
+    margin: 0.068rem;
+    border-radius: 50rem;
+}
+
+.sidebar-calendar-txt {
+    @include mainfont;
+    border-radius: 50rem;
+    font-weight: 500;
+    min-height: 1.977rem;
+    min-width: 1.977rem;
+    margin: 0.205rem;
+    border-radius: 13px;
+}
+
+.day-1 {
+    background-color: transparent;
+}
+
+.day0 {
+    background-color: transparent;
+    color: $onBackground;
+}
+
+.day-1:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day0:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day-1:active {
+    background-color: $surface;
+}
+
+.day0:active {
+    background-color: $surface;
+}
+
+.day1 {
+    background-color: $primary;
+    color: #000000;
+}
+
+.day1:hover {
+    background-color: mix($secondaryContainer, $onSurface, 70%);
+}
+
+.day1:active {
+    background-color: mix($secondaryContainer, $onSurface, 50%);
+}
+
+.sidebar-todo-item {
+    margin: 0rem 0.341rem;
+    color: $onBackground;
+}
+
+.sidebar-todo-btn {
+    min-width: 1.909rem;
+    min-height: 1.909rem;
+    border-radius: 50rem;
+}
+
+.sidebar-todo-btn:hover {
+    color: $onSurface;
+    background-color: $surface;
+}
+
+.sidebar-todo-btn:active {
+    color: $onPrimary;
+    background-color: $primary;
+}
+
+.sidebar-toggle {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.432rem;
+    padding: 1.159rem;
+}
+
+.sidebar-toggle:hover {
+    background-color: tint($surfaceVariant, 10%);
+    color: tint($onSurfaceVariant, 10%);
+}
+
+.sidebar-toggle:active {
+    background-color: tint($surfaceVariant, 15%);
+    color: tint($onSurfaceVariant, 15%);
+}
+
+.sidebar-toggle-active {
+    background-color: $primary;
+    color: $onPrimary;
+    border-radius: 1.432rem;
+    padding: 1.159rem;
+}
+
+.sidebar-toggle-active:hover {
+    background-color: tint($primary, 8%);
+    color: tint($onPrimary, 8%);
+}
+
+.sidebar-toggle-active:active {
+    background-color: tint($primary, 20%);
+    color: tint($onPrimary, 20%);
 }

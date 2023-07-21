@@ -4,12 +4,14 @@
 (include "./lib.yuck")
 ; Bar modules
 (include "./modules/dynamiccenter.yuck")
+(include "./modules/dynamicright.yuck")
 (include "./modules/leftspace.yuck")
 (include "./modules/music.yuck")
+(include "./modules/notifications.yuck")
 (include "./modules/osd.yuck")
-(include "./modules/rightspace.yuck")
-(include "./modules/taskbar.yuck")
+(include "./modules/status.yuck")
 (include "./modules/system.yuck")
+(include "./modules/taskbar.yuck")
 (include "./modules/workspaces.yuck")
 ; Other widgets
 (include "./windows/bgdecor.yuck")
@@ -55,7 +57,7 @@
       )
       (box
         :hexpand true
-        (rightspace_widget)
+        (dynamicright_widget)
       )
     )
   )

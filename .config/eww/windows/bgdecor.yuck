@@ -15,7 +15,7 @@
         :vexpand true
         :style "
         ${ANIM_ENTER[0]}
-        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
+        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM - 2}px;
         "
         :class "bgdecor-border"
       )
