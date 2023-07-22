@@ -203,7 +203,7 @@
                   (image
                     :halign "start"
                     :class "overview-search-result-icon"
-                    :path {(entry.icon != '_letter' && entry.icon != '') ? entry.icon : 'images/svg/dark/app.svg'}
+                    :path {(entry.icon != '_letter' && entry.icon != '') ? entry.icon : 'images/svg/app.svg'}
                     :image-width 33
                     :image-height 33
                   )

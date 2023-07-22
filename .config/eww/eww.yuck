@@ -16,6 +16,7 @@
 ; Other widgets
 (include "./windows/bgdecor.yuck")
 (include "./windows/powerview.yuck")
+(include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
 
 (defwidget bar_widget []
@@ -99,7 +100,6 @@
   :namespace "eww"
   :geometry (geometry
     :width "100%"
-    :height "40px"
     :anchor "top center"
   )
   (bar_widget)

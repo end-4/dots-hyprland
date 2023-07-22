@@ -8,6 +8,4 @@ else
     eww open sideright
     eww update open_sideright=true
     eww update open_sideleft=false
-    eww close sideleft
-    eww update notifications="$(scripts/notifget)"
 fi

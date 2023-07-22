@@ -1,22 +1,16 @@
 (defwidget bgdecor_widget []
   (box
+    :vexpand true
     :space-evenly false :orientation "v"
     (box
-      :class "bar-bg"
-      :style "
-      ${ANIM_ENTER[0]}
-      min-height: ${BAR_HEIGHT >= 2 ? BAR_HEIGHT : 0}px;
-      "
+      :class "bar-bg ${BAR_HEIGHT >= 2 ? 'bar-height' : ''}"
     )
     (overlay
+      :vexpand true
       (box
         :width RES_WIDTH
-        :height 1
         :vexpand true
-        :style "
-        ${ANIM_ENTER[0]}
-        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM - 2}px;
-        "
+        :class "bgdecor-height"
         :class "bgdecor-border"
       )
       (image
@@ -49,11 +43,7 @@
       )
     )
     (box
-      :class "bar-bg"
-      :style "
-      ${ANIM_ENTER[0]}
-      min-height: ${BAR_HEIGHT_BOTTOM}px;
-      "
+      :class "bar-bg ${BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'}"
     )
   )
 )
@@ -63,7 +53,7 @@
   :stacking "bg"
   :namespace "noblur"
   :geometry (geometry
-    :width "100%"
+    ; :width "100%"
     :height "100%"
   )
   (bgdecor_widget)

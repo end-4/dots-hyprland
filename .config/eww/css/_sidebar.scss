@@ -62,7 +62,6 @@
     min-height: 1.977rem;
     min-width: 1.977rem;
     margin: 0.205rem;
-    border-radius: 13px;
 }
 
 .day-1 {
@@ -126,37 +125,49 @@
 }
 
 .sidebar-toggle {
-    background-color: $surfaceVariant;
-    color: $onSurfaceVariant;
-    border-radius: 1.432rem;
-    padding: 1.159rem;
+    box {
+        background-color: $surfaceVariant;
+        color: $onSurfaceVariant;
+        border-radius: 1.432rem;
+        padding: 1.159rem;
+    }
 }
 
 .sidebar-toggle:hover {
-    background-color: tint($surfaceVariant, 10%);
-    color: tint($onSurfaceVariant, 10%);
+    box {
+        background-color: tint($surfaceVariant, 10%);
+        color: tint($onSurfaceVariant, 10%);
+    }
 }
 
 .sidebar-toggle:active {
-    background-color: tint($surfaceVariant, 15%);
-    color: tint($onSurfaceVariant, 15%);
+    sidebar {
+        background-color: tint($surfaceVariant, 15%);
+        color: tint($onSurfaceVariant, 15%);
+    }
 }
 
 .sidebar-toggle-active {
-    background-color: $primary;
-    color: $onPrimary;
-    border-radius: 1.432rem;
-    padding: 1.159rem;
+    box {
+        background-color: $primary;
+        color: $onPrimary;
+        border-radius: 1.432rem;
+        padding: 1.159rem;
+    }
 }
 
 .sidebar-toggle-active:hover {
-    background-color: tint($primary, 8%);
-    color: tint($onPrimary, 8%);
+    box {
+        background-color: tint($primary, 8%);
+        color: tint($onPrimary, 8%);
+    }
 }
 
 .sidebar-toggle-active:active {
-    background-color: tint($primary, 20%);
-    color: tint($onPrimary, 20%);
+    box {
+        background-color: tint($primary, 20%);
+        color: tint($onPrimary, 20%);
+    }
 }
 
 .sidebar-action {
@@ -174,4 +185,199 @@
 .sidebar-action:active {
     background-color: tint($background, 15%);
     color: tint($onBackground, 15%);
+}
+
+$bgdetail: $onSecondary;
+$bgdetail2: $onTertiary;
+
+.sidebar-music-thumbnail {
+    min-height: 13.636rem;
+    border-radius: 13px;
+    background-repeat: no-repeat;
+
+    background-color: shade($onSecondary, 50%);
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    ;
+    background-size:
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+
+        4.091rem 4.091rem, 8.182rem 8.182rem, 6.136rem 6.136rem,
+
+        1.364rem 2.727rem, 1.364rem 2.727rem, 2.727rem 5.455rem, 2.727rem 5.455rem,
+        2.727rem 5.455rem, 2.727rem 5.455rem,
+
+        100% 100%,
+    ;
+    background-position:
+        0rem 6.818rem, 0.9rem 6.818rem, 2.045rem 6.818rem, 3.068rem 6.818rem,
+        4.091rem 6.818rem, 5.114rem 6.818rem, 6.136rem 6.818rem, 7.159rem 6.818rem,
+        8.182rem 6.818rem, 9.205rem 6.818rem, 10.227rem 6.818rem,
+
+        37.5rem 2.727rem, 36.477rem 2.727rem, 35.455rem 2.727rem, 34.432rem 2.727rem,
+        33.409rem 2.727rem, 32.386rem 2.727rem, 31.364rem 2.727rem, 30.341rem 2.727rem,
+        29.318rem 2.727rem, 28.295rem 2.727rem, 27.273rem 2.727rem, 26.25rem 2.727rem,
+
+        20.455rem 4.091rem, 11.25rem 9.205rem, 12.273rem 0.341rem,
+
+        24.545rem 12.955rem, 25.909rem 12.955rem, 23.182rem 11.591rem, 25.909rem 11.591rem,
+        2.727rem -0.682rem, 5.455rem -0.682rem,
+
+        top,
+    ;
+}
+
+.sidebar-music-vignette {
+    min-height: 13.636rem;
+    border-radius: 13px;
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
+}
+
+.sidebar-music-source {
+    @include icon-nerd;
+    margin: 0 1.3rem;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-output {
+    @include mainfont;
+    border-radius: 13px;
+    margin: 1.023rem 1.023rem;
+    padding: 0.341rem 1.023rem;
+    color: $onPrimary;
+    background-color: $primary;
+}
+
+.sidebar-music-title-scroll {
+    margin: 0.9rem;
+}
+
+.sidebar-music-title {
+    @include mainfont;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-artist {
+    @include mainfont;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-playbtn {
+    box {
+        min-width: 4.091rem;
+        min-height: 4.091rem;
+        margin: 1.023rem;
+        @include icon-material;
+        border-radius: 1.3rem;
+        color: $inverseOnSurface;
+        background-color: $primary;
+    }
+}
+
+.sidebar-music-trackbtn {
+    box {
+        @include icon-material;
+        margin: 1.023rem;
+        border-radius: 0.886rem;
+        min-width: 2.386rem;
+        min-height: 2.386rem;
+        color: $onPrimaryContainer;
+    }
+}
+
+.sidebar-music-trackbtn:hover {
+    box {
+        background-color: $overlay1;
+    }
+}
+
+.sidebar-music-trackbtn:active {
+    box {
+        background-color: $overlay2;
+    }
+}
+
+.sidebar-music-progress {
+    min-height: 0.19rem;
+    min-width: 4.091rem;
+    border-radius: 50rem;
+    background-color: $surface;
+}
+
+.sidebar-music-progress-btn {
+    margin-top: -0.3rem;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-slider {
+    border-radius: 50rem;
+    margin: 1.3rem;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 0.19rem;
+        min-width: 4.091rem;
+        border-radius: 50rem;
+        background-color: $surface;
+    }
+
+    highlight {
+        min-width: 0.19rem;
+        border-radius: 50rem;
+        background-color: shade($onBackground, 20%);
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 0.341rem;
+        margin: -0.5rem;
+        border-radius: 50rem;
+        background-color: shade($onBackground, 20%);
+    }
+}
+
+.sidebar-divider {
+    background-color: $onSurfaceVariant;
 }

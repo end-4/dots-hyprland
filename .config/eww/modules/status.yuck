@@ -15,14 +15,5 @@
       :text {bluetooth.icon}
     )
     (box :width BG_ROUNDING)
-    ; (button
-      ;   :width BAR_HEIGHT
-      ;   :height BAR_HEIGHT
-      ;   :class "bar-btn bar-group-margin"
-      ;   (label
-        ;     :class "txt-large icon-material"
-        ;     :text "settings"
-      ;   )
-    ; )
   )
 )
