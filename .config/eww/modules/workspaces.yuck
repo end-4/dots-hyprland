@@ -55,7 +55,6 @@
         margin-right: ${26 * (10 - activews) + WORKSPACE_SIDE_PAD}px;
         "
         (label
-          :width 26 :height 26
           :valign "center"
           :class "bar-ws-txt bar-ws-txt-active"
           :text "${activews}"

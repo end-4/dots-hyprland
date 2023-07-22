@@ -2,6 +2,20 @@
     background-color: $background;
 }
 
+.bar-height {
+    transition: 200ms cubic-bezier(0.05,0.7,0.1,1);
+    min-height: 2.727rem;
+}
+
+.bar-bottom-height {
+    transition: 200ms cubic-bezier(0.05,0.7,0.1,1);
+    min-height: 4.091rem;
+}
+
+.bgdecor-height {
+    transition: 200ms cubic-bezier(0.05,0.7,0.1,1);
+}
+
 .flyin-top {
     animation-name: flyin-top;
     animation-duration: 250ms;
@@ -127,7 +141,7 @@
 .bar-batt-percentage {
     font-size: 1rem;
     margin-top: -0.068rem;
-    margin-left: 0.136rem;
+    margin-left: 0.137rem;
     font-weight: 500;
 }
 
@@ -181,6 +195,8 @@
 }
 
 .bar-ws-txt {
+    min-height: 1.773rem;
+    min-width: 1.773rem;
     @include mainfont;
     font-size: 1.0909rem;
 }
@@ -252,7 +268,7 @@
 .bar-music-playstate-txt {
     @include icon-material;
     font-size: 1.4545rem;
-    margin-bottom: -0.136rem;
+    margin-bottom: -0.137rem;
     margin-left: 0rem;
 }
 
@@ -313,7 +329,7 @@
 }
 
 .bar-prog-batt {
-    min-height: 0.954rem;
+    min-height: 0.955rem;
     min-width: 0.068rem;
     padding: 0rem;
     border-radius: 10rem;
@@ -326,9 +342,9 @@
     }
 
     progress {
-        min-height: 0.681rem;
-        min-width: 0.681rem;
-        margin: 0rem 0.136rem;
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
         border-radius: 10rem;
         background-color: $primaryContainer;
     }
@@ -348,9 +364,9 @@
     }
 
     progress {
-        min-height: 0.681rem;
-        min-width: 0.681rem;
-        margin: 0rem 0.136rem;
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
         border-radius: 10rem;
         background-color: $errorContainer;
     }
@@ -372,7 +388,7 @@
     progress {
         min-height: 0.681rem;
         min-width: 0.681rem;
-        margin: 0rem 0.136rem;
+        margin: 0rem 0.137rem;
         border-radius: 10rem;
         background-color: $surfaceVariant;
     }
@@ -461,7 +477,7 @@ menu>menuitem:hover {
     border-radius: 10rem;
     background-color: $primary;
     color: $onPrimary;
-    padding: 0.136rem 0.477rem;
+    padding: 0.137rem 0.477rem;
 }
 
 .bar-notif-icon {

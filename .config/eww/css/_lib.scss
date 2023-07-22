@@ -125,27 +125,27 @@ $activecolor: rgba(128, 128, 128, 0.7);
     font-size: 1.6363rem;
 }
 
-.txt-large {
+.txt-large { //16pt
     @include mainfont;
     font-size: 1.4545rem;
 }
 
-.txt-norm {
+.txt-norm { //14pt
     @include mainfont;
     font-size: 1.2727rem;
 }
 
-.txt-small {
+.txt-small { //12pt
     @include mainfont;
     font-size: 1.0909rem;
 }
 
-.txt-smallie {
+.txt-smallie { //11pt
     @include mainfont;
     font-size: 1rem;
 }
 
-.txt-smaller {
+.txt-smaller { //10pt
     @include mainfont;
     font-size: 0.9091rem;
 }
@@ -189,3 +189,7 @@ tooltip {
     border-radius: 50rem;
     border: 1px solid $onSurfaceVariant;
 }
+
+
+$overlay1: mix($onSurface, rgba(0,0,0,0), 25%);
+$overlay2: mix($onSurface, rgba(0,0,0,0), 40%);

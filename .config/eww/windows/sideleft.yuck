@@ -1,0 +1,198 @@
+(defwidget sideleft_widget []
+  (eventbox
+    :onhoverlost "scripts/toggle-sideleft.sh --close &"
+    (box
+      :orientation "v" :space-evenly false
+      (eventbox
+        :onclick "scripts/toggle-sideleft.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
+      )
+      (box
+        :style "
+        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
+        ${open_sideleft ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+        ${open_sideleft ? '' : 'margin-left: -800px;'}
+        "
+        (box
+          :vexpand true
+          :class "sidebar-window"
+          :orientation "v" :space-evenly false :spacing 15
+          (box
+            :class "sidebar-music-box"
+            :hexpand true
+            (overlay
+              :hexpand true
+              (box ; 1. The background
+                :class "sidebar-music-thumbnail"
+                :style "
+                ${mcover.image == 'null' ? '' : ('background-image: url(\'' + mcover.image + '\'); background-size: 100% auto; background-position: center')}
+                "
+              )
+              (box ; 2. Color tint
+                :class "sidebar-music-vignette"
+                :hexpand true
+              )
+              (box ; 3. Text and controls
+                :orientation "v"
+                :space-evenly false :spacing -5
+                (box ; Media source, output
+                  :space-evenly false
+                  :orientation "h"
+                  (label :xalign 0
+                    :hexpand true
+                    :class "sidebar-music-source txt-hugeass"
+                    :text "${mcover.color.source}"
+                    :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                  )
+                  (box
+                    :orientation "h" :space-evenly false :spacing 5
+                    :halign "end"
+                    :class "sidebar-music-output txt-small"
+                    :style "
+                    ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                    ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                    "
+                    (label
+                      :class "bar-icon-material sidebar-music-device"
+                      :text "${volume.device == 'Headphones' ? '' : ''}"
+                      :style "
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimary + ';')};
+                      "
+                    )
+                    (label
+                      :text "${volume.device}"
+                      :style "
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimary + ';')};
+                      "
+                    )
+                  )
+                )
+                (box ; Title, play button
+                  :space-evenly false
+                  :orientation "h"
+                  (scroll
+                    :class "sidebar-music-title-scroll"
+                    :hexpand true
+                    :hscroll true :vscroll false
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      :valign "center"
+                      (label :xalign 0
+                        :class "sidebar-music-title txt-norm"
+                        :style "
+                        color: ${mcover.materialcolor.onPrimaryContainer};
+                        "
+                        :text "${strlength(mname.title) == 0 ? 'Music' : mname.title}"
+                      )
+                      (label :xalign 0
+                        :class "sidebar-music-artist txt-small"
+                        :style "
+                        color: ${mcover.materialcolor.onPrimaryContainer};
+                        "
+                        :text "${mname.artist}"
+                      )
+                    )
+                  )
+                  (eventbox
+                    :valign "center"
+                    :class "txt-hugeass sidebar-music-playbtn"
+                    :onclick "playerctl play-pause"
+                    :cursor "pointer"
+                    (box
+                      :style "
+                      ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                      "
+                      "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
+                    )
+                  )
+                )
+                (box ; Slider and skip track buttons
+                  :space-evenly false
+                  :orientation "h"
+                  (eventbox
+                    :class "txt-larger sidebar-music-trackbtn"
+                    :onclick "playerctl previous"
+                    (box
+                      :style "
+                      ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                      "
+                      "skip_previous"
+                    )
+                  )
+                  (overlay
+                    :hexpand true
+                    (box
+                      :hexpand true
+                      :valign "center"
+                      :class "sidebar-music-progress"
+                      :style "
+                      background-image:
+                      linear-gradient(to right,
+                        ${mcover.materialcolor.onPrimaryContainer} ${music.position}%,
+                        rgba(200, 200, 200, 0.6) ${music.position}%);
+                      "
+                    )
+                    (label
+                      :class "sidebar-music-progress-btn txt-large"
+                      :valign "center"
+                      :xalign {music.position == '' ? 0 : (music.position / 100)}
+                      :style "
+                      ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                      "
+                      :text "●"
+                    )
+                  )
+                  ; ; Below is the proper scale widget, but doesn't follow Material colors
+                  ; (scale
+                    ;     :hexpand true
+                    ;     :class "sidebar-music-slider"
+                    ;     :style "
+                    ;     highlight {
+                    ;     color: red;
+                    ;     }
+                    ;     "
+                    ;     :value {music.position}
+                    ;     ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                  ; )
+                  (eventbox
+                    :class "txt-larger sidebar-music-trackbtn"
+                    :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                    :cursor "pointer"
+                    (box
+                      :style "
+                      color: ${mcover.materialcolor.onPrimaryContainer};
+                      "
+                      "skip_next"
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (eventbox
+        :onclick "scripts/toggle-sideleft.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :style "min-height: ${BAR_HEIGHT_BOTTOM}px;")
+      )
+    )
+  )
+)
+
+(defwindow sideleft
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "top left"
+  )
+  (sideleft_widget)
+)
