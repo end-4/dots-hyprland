@@ -105,7 +105,7 @@
           "
           (box
             :width 27 :height 27
-            :tooltip "Battery: ${battery.percentage}% (${EWW_BATTERY.BATT.status})"
+            :tooltip "Battery: ${battery.percentage}%"
             :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
             (label
               :halign "center" :valign "center"

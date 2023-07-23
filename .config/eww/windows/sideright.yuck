@@ -132,37 +132,37 @@
                     :class "sidebar-quicktoggle-btn sidebar-quicktoggle-btn-right"
                     :style "margin-left: 3px;"
                     :tooltip "Scroll !"
-                    (eventbox
-                      :hexpand true
-                      :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) &"
-                      (overlay
-                        :hexpand true
-                        (box
-                          :hexpand true
-                          :valign "center"
-                          :class "sidebar-brightness-progress"
-                          :style "
-                          background-image:
-                          linear-gradient(to right, ${coloraccent} ${brightness.level}%, rgba(200, 200, 200, 0.6) ${brightness.level}%);
-                          "
-                        )
-                        (label
-                          :class "sidebar-brightness-progress-btn"
-                          :valign "center"
-                          :xalign {brightness.level / 100}
-                          :style "
-                          color: ${coloraccent};
-                          "
-                          :text "●"
-                        )
-                      )
-                    )
-                    ; (scale
-                      ;   :value "${brightness.level}"
-                      ;   :onchange "light -S {}"
-                      ;   :hexpand true
-                      ;   :class "sidebar-quicktoggle-slider"
+                    ; (eventbox
+                    ;   :hexpand true
+                    ;   :onscroll "echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light &"
+                    ;   (overlay
+                    ;     :hexpand true
+                    ;     (box
+                    ;       :hexpand true
+                    ;       :valign "center"
+                    ;       :class "sidebar-brightness-progress"
+                    ;       :style "
+                    ;       background-image:
+                    ;       linear-gradient(to right, ${coloraccent} ${brightness.level}%, rgba(200, 200, 200, 0.6) ${brightness.level}%);
+                    ;       "
+                    ;     )
+                    ;     (label
+                    ;       :class "sidebar-brightness-progress-btn"
+                    ;       :valign "center"
+                    ;       :xalign {brightness.level / 100}
+                    ;       :style "
+                    ;       color: ${coloraccent};
+                    ;       "
+                    ;       :text "●"
+                    ;     )
+                    ;   )
                     ; )
+                    (scale
+                        :value "${brightness.level}"
+                        :onchange "light -S {}"
+                        :hexpand true
+                        :class "sidebar-quicktoggle-slider"
+                    )
                     
                   )
                 )
