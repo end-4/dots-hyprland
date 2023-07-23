@@ -1,36 +1,36 @@
 {
     "label" : "lock",
-    "action" : "~/.local/bin/lock.sh",
-    "text" : "Lock",
+    "action" : "gtklock",
+    "text" : "lock",
     "keybind" : "l"
 }
 {
     "label" : "hibernate",
     "action" : "systemctl hibernate",
-    "text" : "Hibernate",
+    "text" : "save",
     "keybind" : "h"
 }
 {
     "label" : "logout",
     "action" : "loginctl terminate-user $USER",
-    "text" : "Logout",
+    "text" : "logout",
     "keybind" : "e"
 }
 {
     "label" : "shutdown",
     "action" : "systemctl poweroff",
-    "text" : "Shutdown",
+    "text" : "power_settings_new",
     "keybind" : "s"
 }
 {
     "label" : "suspend",
     "action" : "systemctl suspend",
-    "text" : "Suspend",
+    "text" : "bedtime",
     "keybind" : "u"
 }
 {
     "label" : "reboot",
     "action" : "systemctl reboot",
-    "text" : "Reboot",
+    "text" : "restart_alt",
     "keybind" : "r"
 }
