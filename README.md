@@ -111,7 +111,7 @@ pip install pywal desktop_entry_lib poetry build Pillow
  - Other Dependencies (install it with your distro's package manager)
 ```
 [ Possible package names (tries to match Arch) ]
-bc blueberry bluez boost boost-libs coreutils dunst findutils fzf gawk ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat sox udev upower util-linux xrandr wget wireplumber wofi yad
+bc blueberry bluez boost boost-libs coreutils dunst findutils fzf gawk gnome-control-center ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps pulseaudio ripgrep socat sox udev upower util-linux xrandr wget wireplumber wofi yad
 [ Command for: Fedora (INCOMPLETE command so there's less name hunting for you) ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout wofi qalc sox nlohmann-json-devel
 ```
