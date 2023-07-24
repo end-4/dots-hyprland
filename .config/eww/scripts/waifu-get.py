@@ -28,6 +28,7 @@ if len(sys.argv) == 1:
     printhelp()
 
 ###### variables ######
+debug = False
 mode = 'im' # either 'im' (waifu.im), 'nekos' (nekos.life), or 'pics' (waifu.pics)
 taglist = []
 segs = False
@@ -36,7 +37,9 @@ headers = {}
 
 ###### arguments ######
 for i in range(1, len(sys.argv)): # Add tags
-    if sys.argv[i] == '--segs':
+    if sys.argv[i] == '--debug':
+        debug = True
+    elif sys.argv[i] == '--segs':
         segs = True
     elif sys.argv[i] == '--im':
         mode = 'im'
@@ -44,6 +47,8 @@ for i in range(1, len(sys.argv)): # Add tags
         mode = 'nekos'
     elif sys.argv[i] == '--pics':
         mode = 'pics'
+    elif sys.argv[i] == '--moe':
+        mode = 'moe'
     elif sys.argv[i] == '--help' or sys.argv[i] == '-h':
         printhelp()
     else:
@@ -71,6 +76,9 @@ elif mode == 'pics':
     else:
         url += 'waifu'
 
+elif mode == 'moe':
+    url = 'https://nekos.moe/api/v1/random/image'
+
 else: # default: waifu.im
     url = 'https://api.waifu.im/search'
     headers = {'Accept-Version': 'v5'}
@@ -78,11 +86,14 @@ else: # default: waifu.im
 
 params = {
     'included_tags': taglist,
-    'height': '>=600'
+    'height': '>=600',
+    'nsfw': segs
 }
 response = requests.get(url, params=params, headers=headers)
 
-# print(response.json())
+if debug:
+    print(json.dumps(response.json()))
+    exit()
 
 ###### processing ######
 if response.status_code == 200:
@@ -90,10 +101,20 @@ if response.status_code == 200:
     # Process the response data as needed
     if mode == 'im':
         output['link'] = data['images'][0]['url']
+        output['sauce']  = data['images'][0]['source']
     elif mode == 'nekos':
         output['link'] = data['neko']
-    else:
+        output['sauce'] = data['neko']
+    elif mode == 'moe':
+        image_id = data['images'][0]['id']
+        output['link'] = str('https://nekos.moe/image/' + image_id)
+        output['sauce'] = str('https://nekos.moe/post/' + image_id)
+    elif mode == 'pics':
         output['link'] = data['url']
+        output['sauce'] = data['url']
+    else: # default: waifu.im
+        output['link'] = data['images'][0]['url']
+        output['sauce']  = data['images'][0]['source']
 
     os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', output['link']))
     os.system('eww update waifu=\'{"name":"eww_covers/waifu_loading", "size": [0, 100]}\'')
@@ -102,6 +123,7 @@ if response.status_code == 200:
     with Image.open('./eww_covers/waifu') as img:
         output['size'] = img.size
         output['path'] = 'eww_covers/waifu'
+        output['ext'] = str('.' + img.format.lower())
         print(json.dumps(output))
 
 else:

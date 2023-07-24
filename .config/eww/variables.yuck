@@ -14,7 +14,13 @@
 (defvar BATTERY_LOW 20)
 (defvar OVERVIEW_SCALE 0.18)
 (defvar OVERVIEW_INDICATOR_GAP 1)
+(defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
+(defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]`) ; Note: change $total and $shown in scripts/scroll-waifu too
+(defvar WAIFU_CATEGORIES_ICONS `["favorite", "mop", "school", "pets", "pets", "adjust", "🥵", "visibility_off", "visibility", "join", "photo_camera", "mode_fan", "explosion","checkroom", "💀", "hourglass_bottom", "relax",  "♨️",    "pets",  "🥵pets",    "voice_selection"]`)
+(defvar WAIFU_CATEGORIES       `["waifu", "maid", "uniform", "nekos.life", "nekos.moe",    "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin",        "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu",  ".pics:waifu segs",    ".pics:neko",  ".pics:neko segs",    "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS  `["waifu", "maid", "uniform", "--neko",     "--moe --segs", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
 (defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
 (defvar WORKSPACE_SIDE_PAD 7)
@@ -47,7 +53,11 @@
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
 (defvar overview_results "[]")
+(defvar quote_index 0)
+(defvar scroll_offset_waifu 0)
 (defvar selected '')
+(defvar show_waifu false)
+
 
 ; Dummies
 (deflisten ICON_GET `scripts/get_open_icons`)
@@ -86,9 +96,39 @@
 )
 
 ; Polls
+(defpoll diskfreepercent :initial "0" :interval "10m" `echo $(df --output=pcent / | tr -dc '0-9')`)
+(defpoll diskfree :interval "10m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
+(defpoll diskused :interval "10m" `df -h --output=used / | awk 'NR==2{print $1}'`)
 (defpoll distrologo :initial "endeavouros" :interval "69h" `cat /etc/os-release | grep 'LOGO' | cut -d '=' -f2`)
 (defpoll time
   :initial `{"date": "6/9", "hour": "0", "minute": "0", "monthname": "Month", "day": "Not monday", "year": "2077"}`
   :interval "5s"
   `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`
 )
+(defpoll waifu :initial `{"path": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifu-get.py waifu`)
+
+; INSPIRING quotes
+(defvar quote_content `[
+  "every other compositor is like professional and shit\\\nand we are about to make porn of ours\\\nLMAO",
+  "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
+  "arch is like rick astley to me\\\nnever gonna let you down",
+  "you have any cool ones?\\\nI'm always open for new wallpapers\\\npreferably anime tiddies ofc but yknow",
+  "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
+  "doki doki waku waku",
+  "that was good enough I guess\\\nI have a penis",
+  "...so Nvidia, fuck you",
+  "you cant spell circumference without cum",
+  "sEX"
+]`)
+(defvar quote_author `[
+  "- vaxer",
+  "- vaxry",
+  "- vaxry-chan",
+  "- vaxry",
+  "- vaxry",
+  "- Hyprland community, 2023",
+  "- vaxry",
+  "- Linus Torvalds",
+  "- vaxer",
+  "- vaxer"
+]`)
