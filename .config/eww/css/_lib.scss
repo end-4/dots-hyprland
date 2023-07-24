@@ -15,8 +15,12 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 @mixin icon-material {
-    font-family: 'Material Symbols Rounded';
+    font-family: 'Material Symbols Outlined';
 }
+
+// @mixin icon-material-filled {
+//     font-family: 'Material Symbols Filled';
+// }
 
 @mixin icon-segoe {
     font-family: 'Segoe Fluent Icons';
@@ -113,6 +117,11 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 .txt {
     color: $onBackground;
+}
+
+.txt-badonkers {
+    @include mainfont;
+    font-size: 3rem;
 }
 
 .txt-hugeass {

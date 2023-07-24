@@ -1,0 +1,28 @@
+{
+    "wallpaper": "/home/end/.config/eww/images/wallpaper",
+    "alpha": "100",
+
+    "special": {
+        "background": "#1c1939",
+        "foreground": "#e7e9ec",
+        "cursor": "#e7e9ec"
+    },
+    "colors": {
+        "color0": "#1c1939",
+        "color1": "#BA62BC",
+        "color2": "#7092DB",
+        "color3": "#E19FA1",
+        "color4": "#C2ADC5",
+        "color5": "#A9CEEB",
+        "color6": "#AAE8FC",
+        "color7": "#e7e9ec",
+        "color8": "#a1a3a5",
+        "color9": "#BA62BC",
+        "color10": "#7092DB",
+        "color11": "#E19FA1",
+        "color12": "#C2ADC5",
+        "color13": "#A9CEEB",
+        "color14": "#AAE8FC",
+        "color15": "#e7e9ec"
+    }
+}

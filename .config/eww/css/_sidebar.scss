@@ -192,7 +192,13 @@ $bgdetail2: $onTertiary;
 
 .sidebar-music-thumbnail {
     min-height: 13.636rem;
-    border-radius: 13px;
+    border-radius: 0.886rem;
+    background-color: transparent;
+}
+
+.sidebar-music-thumbnail-fallback {
+    min-height: 13.636rem;
+    border-radius: 0.886rem;
     background-repeat: no-repeat;
 
     background-color: shade($onSecondary, 50%);
@@ -271,19 +277,19 @@ $bgdetail2: $onTertiary;
 
 .sidebar-music-vignette {
     min-height: 13.636rem;
-    border-radius: 13px;
+    border-radius: 0.886rem;
     background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
 }
 
 .sidebar-music-source {
     @include icon-nerd;
-    margin: 0 1.3rem;
+    margin: 0rem 1.3rem;
     color: $onPrimaryContainer;
 }
 
 .sidebar-music-output {
     @include mainfont;
-    border-radius: 13px;
+    border-radius: 0.886rem;
     margin: 1.023rem 1.023rem;
     padding: 0.341rem 1.023rem;
     color: $onPrimary;
@@ -380,4 +386,100 @@ $bgdetail2: $onTertiary;
 
 .sidebar-divider {
     background-color: $onSurfaceVariant;
+}
+
+.sidebar-waifu-scrollbg {
+    min-height: 37.5rem;
+}
+
+.sidebar-waifu-tag {
+    @include mainfont;
+    border-radius: 0.682rem;
+    padding: 0.273rem 0.477rem;
+    margin: 0rem 0.136rem;
+    min-height: 1.364rem;
+    background-color: $secondaryContainer;
+}
+
+.sidebar-waifu-tag:hover {
+    background-color: mix($secondaryContainer, $onSurface, 90%);
+}
+
+.sidebar-waifu-tag:active {
+    background-color: mix($secondaryContainer, $onSurface, 80%);
+}
+
+.sidebar-waifu-pic {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    background-color: transparent;
+    border-radius: 1.364rem;
+    background-position: top center;
+}
+
+.sidebar-waifu-pic-bg {
+    background-color: white;
+    border-radius: 1.432rem;
+}
+
+.sidebar-waifu-pic-cover {
+    background-color: $secondaryContainer;
+    border-radius: 1.295rem;
+}
+
+.sidebar-waifu-actionbtn {
+    box {
+        min-height: 2.727rem;
+        border-radius: 1.432rem;
+        background-color: $primary;
+        color: $onPrimary;
+        padding: 0.341rem 1.023rem;
+    }
+}
+
+.sidebar-waifu-actionbtn:hover {
+    box {
+        background-color: mix($primary, $onSurface, 80%);
+    }
+}
+
+.sidebar-waifu-actionbtn:active {
+    box {
+        background-color: mix($primary, $onSurface, 50%);
+    }
+}
+
+.sidebar-quote {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.432rem;
+    padding: 1.023rem;
+}
+
+.sidebar-prog-resource {
+    min-height: 0.955rem;
+    min-width: 5rem;
+    border-radius: 10rem;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $surfaceVariant;
+    }
+
+    progress {
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $onSurfaceVariant;
+    }
+}
+
+.sidebar-resource-value {
+    padding: 0rem 0.545rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    color: $onSurfaceVariant;
+    background-color: $surfaceVariant;
 }
