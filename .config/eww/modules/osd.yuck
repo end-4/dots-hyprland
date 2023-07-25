@@ -5,12 +5,7 @@
     :onmiddleclick "scripts/toggle-powerview.sh &"
     :onrightclick "scripts/toggle-powerview.sh &"
     (box
-      :width {26*10 + WORKSPACE_SIDE_PAD*2}
-      :style "
-      ${ANIM_ENTER[0]}
-      min-height: ${BAR_HEIGHT - (BAR_USELESS_GAPS * 2)}px;
-      "
-      :class "bar-group-margin"
+      :class "bar-ws-width bar-group-margin"
       (box
         :spacing 15
         :class "bar-group bar-group-standalone bar-group-pad-less"

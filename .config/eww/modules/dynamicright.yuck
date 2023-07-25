@@ -7,17 +7,11 @@
     (box
       :orientation "v" :space-evenly false
       (box ; Module 1: Volume, Brightness
-        :class "dynamic-module"
-        :style "
-        ${flash_notif ? '' : 'margin-top: -${BAR_HEIGHT*2}px;'}
-        "
+        :class "dynamic-module${flash_notif ? '' : '-hidetop'}"
         (notifications_widget)
       )
       (box ; Module 2: Workspaces
-        :class "dynamic-module"
-        :style "
-        ${flash_notif ? 'margin-bottom: -${BAR_HEIGHT*2}px;' : ''}
-        "
+        :class "dynamic-module${flash_notif ? '-hidebottom' : ''}"
         (status_widget)
       )
     )

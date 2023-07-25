@@ -50,6 +50,7 @@
 (defvar BAR_HEIGHT_BOTTOM 0)
 (defvar calendartitle "")
 (defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
+(defvar monthshift 0)
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
 (defvar overview_results "[]")

@@ -7,6 +7,14 @@
     padding: 1.023rem;
 }
 
+.sidebar-height {
+    min-height: 70.909rem;
+}
+
+.sidebar-bottom-height {
+    min-height: 69.545rem;
+}
+
 .sidebar-section-heading {
     @include sidefont;
     color: $onSurfaceVariant;
@@ -22,6 +30,7 @@
     background-color: $secondaryContainer;
     border-radius: 1.432rem;
     padding: 1.023rem;
+    margin-bottom: 0.682rem;
 }
 
 .sidebar-notif-top {
@@ -32,17 +41,16 @@
 }
 
 .sidebar-notif-middle {
-    margin-top: -10px;
     background-color: $secondaryContainer;
     padding: 0rem 1.023rem 1.023rem 1.023rem;
 }
 
 .sidebar-notif-bottom {
-    margin-top: -10px;
     background-color: $secondaryContainer;
     border-bottom-left-radius: 1.432rem;
     border-bottom-right-radius: 1.432rem;
     padding: 0rem 1.023rem 1.023rem 1.023rem;
+    margin-bottom: 0.682rem;
 }
 
 
@@ -104,7 +112,7 @@
 }
 
 .sidebar-todo-item {
-    margin: 0rem 0.341rem;
+    margin: 0.341rem 0.341rem;
     color: $onSurfaceVariant;
 }
 
@@ -482,4 +490,16 @@ $bgdetail2: $onTertiary;
     border-radius: 10rem;
     color: $onSurfaceVariant;
     background-color: $surfaceVariant;
+}
+
+.sidebar-resource-value > label:first-child {
+    margin-right: 0.341rem;
+}
+
+.sidebar-resource-value > progressbar:last-child {
+    margin-left: 0.341rem;
+}
+
+.sidebar-resource-value > box:last-child {
+    margin-left: 0.341rem;
 }

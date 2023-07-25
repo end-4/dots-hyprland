@@ -3,17 +3,15 @@
     :space-evenly false
     (box :hexpand true)
     (systray :pack-direction "rtl" :icon-size 18)
-    (box :width BG_ROUNDING)
+    (box :class "corner-width")
     (label
-      :width BAR_HEIGHT_NORMAL
-      :class "icon-material bar-system-icon txt-norm txt"
+      :class "bar-width icon-material bar-system-icon txt-norm txt"
       :text {WIFI_ICONS[net.level]}
     )
     (label
-      :width BAR_HEIGHT_NORMAL
-      :class "icon-material bar-system-icon txt-norm txt"
+      :class "bar-width icon-material bar-system-icon txt-norm txt"
       :text {bluetooth.icon}
     )
-    (box :width BG_ROUNDING)
+    (box :class "corner-width")
   )
 )

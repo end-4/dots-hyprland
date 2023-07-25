@@ -8,10 +8,8 @@
     (overlay
       :vexpand true
       (box
-        :width RES_WIDTH
         :vexpand true
-        :class "bgdecor-height"
-        :class "bgdecor-border"
+        :class "bgdecor-box"
       )
       (image
         :path "images/svg/corner_topleft.svg"
@@ -53,7 +51,7 @@
   :stacking "bg"
   :namespace "noblur"
   :geometry (geometry
-    ; :width "100%"
+    :width "100%"
     :height "100%"
   )
   (bgdecor_widget)

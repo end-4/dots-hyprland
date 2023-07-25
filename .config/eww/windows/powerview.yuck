@@ -78,14 +78,11 @@
     )
     ; Search box
     (box
+      :class "powerview-search-box-size"
       :halign "center"
-      :width 300
-      :height 60
       (box
         (overlay
           (input
-            :width 280
-            :height {BAR_HEIGHT}
             :class "powerview-search-field"
             :halign "fill" :vexpand true
             :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
@@ -152,7 +149,6 @@
             )
             (centerbox
               :halign "center"
-              :width {round(RES_WIDTH / 1.7, 0)}
               :orientation "h"
               :class "bar-bg powerview-info"
               (label :xalign 0
@@ -186,8 +182,7 @@
           :transition "crossfade"
           :duration "${overview_query == '' ? '170ms' : '200ms'}"
           (scroll
-            :width 502
-            :height {RES_HEIGHT - BAR_HEIGHT - GAPS*3}
+            :class "powerview-search-list-size"
             (box
               :halign "center"
               :orientation "v"

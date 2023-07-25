@@ -6,7 +6,7 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     (box
       :space-evenly false
-      ; (box :width BG_ROUNDING)
+      (box :class "corner-width")
       ; (eventbox
       ;   :class "bar-btn"
       ;   :onclick "scripts/toggle-powerview.sh"
@@ -23,7 +23,7 @@
       ;     )
       ;   )
       ; )
-      ; (box :hexpand true)
+      (box :hexpand true)
     )
   )
 )

@@ -27,7 +27,7 @@
           :text "${arraylength(notifications)} "
         )
       )
-      (box :width BG_ROUNDING)
+      (box :class "corner-width")
     )
   )
 )

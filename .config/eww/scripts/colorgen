@@ -77,12 +77,10 @@ printf '$color7: ' >> './scripts/cache/_colorscheme.colorpallete'
 printf "$themejson" | gojq -r '.colors.color4' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
 echo '' >> './scripts/cache/_colorscheme.colorpallete'
 
-gradientcolor=$(echo -n "$themejson" | gojq -r '.colors.color4')
-
 # Write hyprland color config
 echo '# Auto generated color theme for image at:' "$coverurl" > './scripts/cache/colors_generated.conf'
 echo 'general {' >> './scripts/cache/colors_generated.conf'
-echo '    col.active_border = rgba('"${gradientcolor#*#}FF"') 45deg' >> './scripts/cache/colors_generated.conf'
+echo '    col.active_border = rgba('"${primary#*#}FF"') 45deg' >> './scripts/cache/colors_generated.conf'
 echo '    col.inactive_border = rgba(555555AA)' >> './scripts/cache/colors_generated.conf'
 echo '}' >> './scripts/cache/colors_generated.conf'
 

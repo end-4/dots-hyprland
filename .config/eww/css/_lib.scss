@@ -86,8 +86,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
     }
 
     to {
-        margin-bottom: 0px;
-        margin-top: 0px;
+        margin-top: 0rem;
     }
 }
 
@@ -98,8 +97,8 @@ $activecolor: rgba(128, 128, 128, 0.7);
     }
 
     to {
-        margin-bottom: 0px;
-        margin-top: 0px;
+        margin-bottom: 0rem;
+        margin-top: 0rem;
     }
 }
 
@@ -202,3 +201,101 @@ tooltip {
 
 $overlay1: mix($onSurface, rgba(0,0,0,0), 25%);
 $overlay2: mix($onSurface, rgba(0,0,0,0), 40%);
+
+
+.spacing-v-15 > box {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15 > box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-15 > label {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15 > label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-15 > box {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15 > box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-15 > label {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15 > label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-v-5 > box {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5 > box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-5 > label {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5 > label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-5 > button {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5 > button:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-5 > box {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5 > box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-5 > label {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5 > label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-5 > widget > box {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5 > widget:last-child > box {
+    margin-right: 0rem;
+}
+
+.spacing-v-minus5 > box {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v-minus5 > box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-minus5 > label {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v-minus5 > label:last-child {
+    margin-bottom: 0rem;
+}
+
