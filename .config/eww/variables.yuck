@@ -108,7 +108,6 @@
 (deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
 (deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
 (deflisten workspace :initial `[{"num":"1","clr":"rgba(106,105,105,0.6)"},{"num":"2","clr":"rgba(106,105,105,0.6)"},{"num":"3","clr":"rgba(106,105,105,0.6)"},{"num":"4","clr":"rgba(106,105,105,0.6)"},{"num":"5","clr":"rgba(106,105,105,0.6)"},{"num":"6","clr":"rgba(106,105,105,0.6)"},{"num":"7","clr":"rgba(106,105,105,0.6)"},{"num":"8","clr":"rgba(106,105,105,0.6)"},{"num":"9","clr":"rgba(106,105,105,0.6)"},{"num":"10","clr":"rgba(106,105,105,0.6)"}]` "scripts/workspaces")
-(deflisten winicons "scripts/appicons")
 (deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
 (deflisten awin "scripts/activewin")
 (deflisten audiojson :initial "[]" "scripts/audiolevels")
