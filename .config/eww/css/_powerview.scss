@@ -1,27 +1,35 @@
 @keyframes flyin-top {
   from {
-    margin-top: -60px;
-    margin-bottom: 60px;
+    margin-top: -3.409rem;
+    margin-bottom: 3.409rem;
   }
 
   to {
-    margin-bottom: 0px;
-    margin-top: 0px;
+    margin-bottom: 0rem;
+    margin-top: 0rem;
   }
 }
 
+.powerview-search-box-size {
+  min-width: 20.455rem;
+  min-height: 4.091rem;
+}
+
+.powerview-search-list-size {
+  min-width: 34.227rem;
+  min-height: 61rem;
+}
+
 .powerview-search-field {
-  margin: 4px;
-  padding: 0px 20px;
-  border-radius: 99px;
-  font-size: 12pt;
+  margin: 0.273rem;
+  padding: 0rem 1.364rem;
+  border-radius: 50rem;
   @include elevation2;
 }
 
 .powerview-search-txt {
   @include mainfont;
-  font-size: 12pt;
-  padding: 0 15px;
+  padding: 0rem 1.023rem;
 
   selection {
     background-color: $secondary;
@@ -35,7 +43,6 @@
 
 .powerview-search-prompt-txt {
   @include mainfont;
-  font-size: 12pt;
   color: $onSurfaceVariant;
 }
 
@@ -47,7 +54,7 @@
 .powerview-ws {
   border-radius: 13px;
   background-color: rgba(80, 80, 80, 0.1);
-  margin: 4px;
+  margin: 0.273rem;
 }
 
 .powerview-ws-true {
@@ -71,12 +78,12 @@
 .powerview-search-result {
   @include mainfont;
   border-radius: 22px;
-  font-size: 15pt;
-  min-height: 47px;
-  min-width: 400px;
-  padding: 2px 12px;
-  padding-left: 57px;
-  margin: 0px 5px;
+  font-size: 1.364rem;
+  min-height: 3.205rem;
+  min-width: 27.273rem;
+  padding: 0.136rem 0.818rem;
+  padding-left: 3.886rem;
+  margin: 0rem 0.341rem;
 
   background-color: $background;
   color: $onBackground;
@@ -116,13 +123,14 @@
 .overview-search-result-icon {
   // background-color: $secondaryContainer;
   border-radius: 18px;
-  min-height: 51px;
-  min-width: 51px;
-  margin: 0px 5px;
+  min-height: 3.477rem;
+  min-width: 3.477rem;
+  margin: 0rem 0.341rem;
 }
 
 .powerview-info {
-  padding: 15px;
+  padding: 1.023rem;
   border-radius: 22px;
+  min-width: 75rem;
   @include elevation2;
 }

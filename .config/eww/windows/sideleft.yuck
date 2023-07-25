@@ -11,8 +11,8 @@
         (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
       )
       (box
+        :class "sidebar${BAR_HEIGHT >= 2 ? '' : '-bottom'}-height"
         :style "
-        min-height: ${RES_HEIGHT - BAR_HEIGHT - BAR_HEIGHT_BOTTOM}px;
         ${open_sideleft ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
         ${open_sideleft ? '' : 'margin-left: -800px;'}
         "
@@ -21,15 +21,15 @@
           :vexpand true
           (box
             :vexpand true
-            :class "sidebar-window"
-            :orientation "v" :space-evenly false :spacing 15
+            :class "sidebar-window spacing-v-15"
+            :orientation "v" :space-evenly false
             (box ; Resources
+              :class "spacing-h-5"
               :orientation "h"
-              :space-evenly false
-              :spacing 15
+              :space-evenly false 
               (box
                 :class "sidebar-resource-value"
-                :space-evenly false :spacing 5
+                :space-evenly false
                 (label :class "icon-material txt-large"
                   :valign "center"
                   :text "data_saver_on"
@@ -43,7 +43,7 @@
               )
               (box
                 :class "sidebar-resource-value"
-                :space-evenly false :spacing 10
+                :space-evenly false
                 (label :class "icon-material txt-larger"
                   :valign "center"
                   :text "memory"
@@ -75,7 +75,7 @@
               )
               (box
                 :class "sidebar-resource-value"
-                :space-evenly false :spacing 10
+                :space-evenly false
                 :hexpand true
                 (label :class "icon-material txt-larger"
                   :valign "center"
@@ -94,7 +94,6 @@
               )
             )
             (box ; Music
-              :class "sidebar-music-box"
               :hexpand true
               (overlay
                 :hexpand true
@@ -112,8 +111,9 @@
                   :hexpand true
                 )
                 (box ; 3. Text and controls
+                  :class "spacing-v-minus5"
                   :orientation "v"
-                  :space-evenly false :spacing -5
+                  :space-evenly false
                   (box ; Media source, output
                     :space-evenly false
                     :orientation "h"
@@ -124,7 +124,7 @@
                       :style "color: ${mcover.materialcolor.onPrimaryContainer};"
                     )
                     (box
-                      :orientation "h" :space-evenly false :spacing 5
+                      :orientation "h" :space-evenly false :class "spacing-h-5"
                       :halign "end"
                       :class "sidebar-music-output txt-small"
                       :style "
@@ -251,22 +251,21 @@
               )
             )
             (box
+              :vexpand true
               :orientation "h"
               :space-evenly false
-              :class "sidebar-waifu-scrollbg"
-              :spacing 13
+              :class "sidebar-waifu-scrollbg spacing-h-15"
               (box
                 :space-evenly false :orientation "h"
                 (eventbox
                   :onscroll "scripts/scroll-waifu {} &"
-                  :width 100
                   (box
                     :orientation "v"
-                    :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
+                    ; :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
                     (scroll :vscroll false :hscroll false
                       (box
+                        :class "spacing-v-5"
                         :orientation "v"
-                        :spacing 6
                         :valign "start"
                         :style "
                         ${ANIM_ENTER[1]}
@@ -302,14 +301,15 @@
                   :hexpand true
                   :hscroll true :vscroll false
                   (box
-                    :orientation "v" :space-evenly false :spacing 15
-                    (box :orientation "h" :spacing 5
+                    :class "spacing-v-15"
+                    :orientation "v" :space-evenly false
+                    (box :orientation "h" :class "spacing-h-5"
                       (eventbox
                         :class "sidebar-waifu-actionbtn"
                         :cursor "pointer"
                         :onclick `mkdir -p ~/Pictures/Waifus/ && cp ${waifu.path} ~/Pictures/Waifus/eww_"$(date '+%Y_%m_%_d..%H.%M.%S')"${waifu.ext} && notify-send 'Saved pic to ~/Pictures/Waifus' eww_"$(date '+%Y_%m_%_d..%H.%M.%S')"${waifu.ext} -a 'eww' &`
                         (box
-                          :space-evenly false :spacing 5
+                          :space-evenly false :class "spacing-h-5"
                           (label :class "icon-material txt-large"
                             :text "file_copy"
                           )
@@ -323,7 +323,7 @@
                         :cursor "pointer"
                         :onclick `xdg-open ${waifu.sauce} &`
                         (box
-                          :space-evenly false :spacing 5
+                          :space-evenly false :class "spacing-h-5"
                           (label :class "icon-material txt-large"
                             :text "location_on"
                           )
@@ -404,13 +404,8 @@
                   :wrap true
                   :text {quote_author[quote_index]}
                 )
-                ; (label  :xalign 1 :valign "end"
-                  ;   :class "icon-material txt-hugeass"
-                  ;   :text "format_quote"
-                ; )
               )
             )
-            (box :vexpand true)
           )
         )
       )
@@ -419,7 +414,7 @@
         :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
         :onmiddleclick "playerctl play-pause"
         :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-        (box :style "min-height: ${BAR_HEIGHT_BOTTOM}px;")
+        (box :class {BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'})
       )
     )
   )

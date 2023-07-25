@@ -5,8 +5,7 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onclick "scripts/toggle-sideright.sh &"
     (box
-      :class "bar-group-margin"
-      :width {RES_WIDTH / 5}
+      :class "bar-group-margin bar-sides"
       (box
         :class "bar-group bar-group-standalone bar-group-pad"
         :orientation "h" :space-evenly false :spacing 15
@@ -78,8 +77,7 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onclick "scripts/toggle-sideright.sh &"
     (box
-      :width {round(RES_WIDTH / 3.5, 0)}
-      :class "bar-group-margin"
+      :class "bar-group-margin bar-bottom-sides"
       (box
         :class "bar-group bar-group-round bar-group-pad-less"
         :orientation "h" :space-evenly false :spacing 10
@@ -130,25 +128,24 @@
             :text "${memory.used} + ${memory.swapused}"
           )
           (overlay
-            (box :width 40 :height 40)
+            (box :class "bar-circ-bottom-size")
             (circular-progress
               :halign "end" :valign "center"
+              :class "bar-batt-circ"
               :value {memory.percentage}
-              :height 30 :width 30
               :thickness 3
               :start-at 75
-              :class "bar-batt-circ"
               :hexpand true :valign "center"
+              (box :class "bar-batt-circ-inside")
             )
-            (box :width 40 :height 40)
             (circular-progress
               :halign "end" :valign "center"
               :value {memory.swappercentage}
-              :height 30 :width 30
               :thickness 3
               :start-at 75
               :class "bar-batt-circ-layer2"
               :hexpand true :valign "center"
+              (box :class "bar-batt-circ-layer2-inside")
             )
           )
         )
@@ -163,17 +160,18 @@
             :class "bar-batt-percentage-bottom txt-norm"
             :text {battery.status == ' left' || battery.status == ' to full' ? "${battery.percentage}%" : battery.status}
           )
-          (circular-progress
-            :halign "end" :valign "center"
-            :value {battery.percentage}
-            :height 40 :width 40
-            :thickness 3
-            :start-at 75
-            :class "bar-batt-circ${battery.percentage <= BATTERY_LOW ? '-low' : ''}"
-            :hexpand true :valign "center"
-            (box
-              :valign "center" :halign "center"
-              :class "bar-batt-chargestate-bottom${battery.quickicon == '' ? '' : (battery.percentage <= BATTERY_LOW ? '-charging-low' : '-charging')}"
+          (box :class "bar-circ-bottom-size"
+            (circular-progress
+              :halign "end" :valign "center"
+              :value {battery.percentage}
+              :thickness 3
+              :start-at 75
+              :class "bar-batt-circ${battery.percentage <= BATTERY_LOW ? '-low' : ''}"
+              :hexpand true :valign "center"
+              (box
+                :valign "center" :halign "center"
+                :class "bar-batt-chargestate-bottom${battery.quickicon == '' ? '' : (battery.percentage <= BATTERY_LOW ? '-charging-low' : '-charging')}"
+              )
             )
           )
         )

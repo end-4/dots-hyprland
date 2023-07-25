@@ -6,12 +6,7 @@
     (overlay
       ; Only displays workspace state (has windows or not)
       (box
-        :width {26*10 + WORKSPACE_SIDE_PAD*2}
-        :style "
-        ${ANIM_ENTER[0]}
-        min-height: ${BAR_HEIGHT - (BAR_USELESS_GAPS * 2)}px;
-        "
-        :class "bar-group-margin"
+        :class "bar-ws-width bar-group-margin"
         (box
           :class "bar-group bar-group-standalone bar-group-pad"
         )
@@ -38,10 +33,8 @@
                   )
                 ) : 'false'
                 }"
-              :width 26 :height 26
               :text "${ws-icons[i.num - 1]}"
             )
-            ; "●"
           )
         )
       )
@@ -53,12 +46,10 @@
         margin-right: ${26 * (10 - activews) + WORKSPACE_SIDE_PAD}px;
         "
         (label
-          :width 26 :height 26
           :valign "center"
           :class "bar-ws-txt bar-ws-txt-active"
           :text "${activews}"
         )
-        ; "●"
       )
     )
   )

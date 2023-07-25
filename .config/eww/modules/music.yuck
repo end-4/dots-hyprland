@@ -5,8 +5,7 @@
     :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
     :onclick "scripts/toggle-sideleft.sh &"
     (box
-      :width {RES_WIDTH / 5}
-      :class "bar-group-margin"
+      :class "bar-group-margin bar-sides"
       (box
         :class "bar-group bar-group-standalone bar-group-pad-rightonly"
         :orientation "h"
@@ -57,11 +56,9 @@
       :space-evenly false
       :class "bar-group-margin"
       (box
-        :class "bar-group bar-group-round bar-group-pad-less"
+        :class "bar-bottom-sides bar-group bar-group-round bar-group-pad-less"
         :space-evenly false :spacing 10
-        :width {round(RES_WIDTH / 3.5, 0)}
         (box
-          :width {round(RES_WIDTH / 11, 0)}
           :valign "center"
           :class "bar-music-bottom-cover bar-music-cover"
           :style "
