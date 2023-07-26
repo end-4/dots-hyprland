@@ -13,7 +13,7 @@
       )
       (label
         :vexpand true
-        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-segoe' : ''} sidebar-hyprtoggle-icon-${value} bar-txt-norm"
+        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-material' : ''} sidebar-hyprtoggle-icon-${value} bar-txt-norm"
         :text option-icon
       )
       (box
@@ -337,7 +337,7 @@
                       ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
                       "
                       :onclick "playerctl play-pause"
-                      "${mplay == 'Playing' ? '' : ''}"
+                      "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
                     )
                   )
                   (box ; Slider and skip track buttons
@@ -349,7 +349,7 @@
                       ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
                       "
                       :onclick "playerctl previous"
-                      ""
+                      "skip_previous"
                     )
                     (overlay
                       :hexpand true
@@ -392,7 +392,7 @@
                       color: ${mcover.materialcolor.onPrimaryContainer};
                       "
                       :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-                      ""
+                      "skip_next"
                     )
                   )
                 )
@@ -493,7 +493,7 @@
                           :class "sidebar-resource-circle"
                           :value {EWW_CPU.avg}
                           :thickness 5
-                          (label :class "sidebar-resource-icon-large-segoe" :text "")
+                          (label :class "sidebar-resource-icon-large-material" :text "")
                         )
                         (label
                           :class "sidebar-resource-txt"

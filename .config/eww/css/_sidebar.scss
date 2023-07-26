@@ -379,7 +379,7 @@ $bgdetail2: $onTertiary;
     min-width: 60px;
     min-height: 60px;
     margin: 15px;
-    @include icon-segoe;
+    @include icon-material;
     border-radius: 20px;
     font-size: 16pt;
     color: $inverseOnSurface;
@@ -387,7 +387,8 @@ $bgdetail2: $onTertiary;
 }
 
 .sidebar-music-trackbtn {
-    @include icon-segoe;
+    @include icon-material;
+    font-size: 18pt;
     margin: 15px;
     border-radius: 13px;
     min-width: 35px;
@@ -485,8 +486,8 @@ $bgdetail2: $onTertiary;
     color: $primary;
 }
 
-.sidebar-resource-icon-large-segoe {
-    @include icon-segoe;
+.sidebar-resource-icon-large-material {
+    @include icon-material;
     font-size: 23pt;
 }
 
@@ -564,8 +565,8 @@ $bgdetail2: $onTertiary;
     color: $onBackground;
 }
 
-.sidebar-hyprtoggle-icon-segoe {
-    @include icon-segoe;
+.sidebar-hyprtoggle-icon-material {
+    @include icon-material;
     font-size: 26pt;
     margin-left: 2px;
     margin-right: -2px;

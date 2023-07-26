@@ -66,28 +66,28 @@
               :valign "center"
               :spacing -2
               (button
-                :class "bar-icon-segoe bar-music-btn"
+                :class "bar-icon-material bar-music-btn"
                 :style "
                 color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl previous"
-                ""
+                "skip_previous"
               )
               (button
-                :class "bar-icon-segoe bar-music-btn"
+                :class "bar-icon-material bar-music-btn"
                 :style "
                 color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl play-pause"
-                "${mplay == 'Playing' ? '' : ''}"
+                "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
               )
               (button
-                :class "bar-icon-segoe bar-music-btn"
+                :class "bar-icon-material bar-music-btn"
                 :style "
                 color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
                 "
                 :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-                ""
+                "skip_next"
               )
             )
           )

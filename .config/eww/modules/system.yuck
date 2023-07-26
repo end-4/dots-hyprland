@@ -47,10 +47,6 @@
           :class "bar-icon-material bar-system-icon bar-txt-norm"
           :text {bluetooth.icon}
         )
-        ; (label
-          ;   :class "bar-system-icon bar-icon-segoe"
-          ;   :text "${VOLUME_ICONS[round(volume.percent / 33, 0)]}"
-        ; )
       )
       (box ; Resources
         :space-evenly false :spacing -6

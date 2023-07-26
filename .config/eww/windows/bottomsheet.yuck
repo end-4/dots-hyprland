@@ -141,22 +141,22 @@
                 :halign "start"
                 :class "bottomsheet-music-controlsbox"
                 (button
-                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :class "bar-icon-material bottomsheet-music-btn"
                   :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl previous"
-                  ""
+                  "skip_previous"
                 )
                 (button
-                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :class "bar-icon-material bottomsheet-music-btn"
                   :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl play-pause"
-                  "${mplay == 'Playing' ? '' : ''}"
+                  "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
                 )
                 (button
-                  :class "bar-icon-segoe bottomsheet-music-btn"
+                  :class "bar-icon-material bottomsheet-music-btn"
                   :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
                   :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-                  ""
+                  "skip_next"
                 )
               )
             )
