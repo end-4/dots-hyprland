@@ -42,8 +42,8 @@
       (button
         :class "ws"
         :style "
-        margin-left:  ${26 * (activews - 1) + WORKSPACE_SIDE_PAD}px;
-        margin-right: ${26 * (10 - activews) + WORKSPACE_SIDE_PAD}px;
+        margin-left:  ${1.79 * (activews - 1) + WORKSPACE_SIDE_PAD}rem;
+        margin-right: ${1.79 * (10 - activews) + WORKSPACE_SIDE_PAD}rem;
         "
         (label
           :valign "center"

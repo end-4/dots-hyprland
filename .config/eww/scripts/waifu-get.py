@@ -78,6 +78,8 @@ elif mode == 'pics':
 
 elif mode == 'moe':
     url = 'https://nekos.moe/api/v1/random/image'
+    if segs:
+        url += '?nsfw=true'
 
 else: # default: waifu.im
     url = 'https://api.waifu.im/search'

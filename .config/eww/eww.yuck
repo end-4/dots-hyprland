@@ -15,6 +15,7 @@
 (include "./modules/workspaces.yuck")
 ; Other widgets
 (include "./windows/bgdecor.yuck")
+(include "./windows/powermenu.yuck")
 (include "./windows/powerview.yuck")
 (include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")

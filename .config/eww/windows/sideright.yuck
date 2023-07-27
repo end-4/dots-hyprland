@@ -11,6 +11,7 @@
         (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
       )
       (box
+        :vexpand true
         :class "sidebar${BAR_HEIGHT >= 2 ? '' : '-bottom'}-height"
         :style "
         ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
@@ -186,7 +187,7 @@
             )
             (button
               :class "sidebar-action"
-              :onclick "scripts/toggle-sideright.sh --close && wlogout -p layer-shell &"
+              :onclick "scripts/toggle-sideright.sh --close && ${EWW_CMD} open powermenu && hyprctl dispatch submap powermenu"
               (label
                 :class "icon-material txt-norm"
                 :text "power_settings_new"
@@ -363,6 +364,7 @@
   :namespace "eww"
   :geometry (geometry
     :anchor "top right"
+    :height "100%"
   )
   (sideright_widget)
 )

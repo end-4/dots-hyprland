@@ -11,6 +11,7 @@
         (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
       )
       (box
+        :vexpand true
         :class "sidebar${BAR_HEIGHT >= 2 ? '' : '-bottom'}-height"
         :style "
         ${open_sideleft ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
@@ -426,6 +427,7 @@
   :namespace "eww"
   :geometry (geometry
     :anchor "top left"
+    :height "100%"
   )
   (sideleft_widget)
 )
