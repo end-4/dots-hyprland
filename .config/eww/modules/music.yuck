@@ -70,19 +70,19 @@
               :halign "center" :valign "center"
               :spacing 10
               (button
-                :class "icon-segoe bar-music-btn"
+                :class "icon-material bar-music-btn"
                 :onclick "playerctl previous"
-                ""
+                "skip_previous"
               )
               (button
-                :class "icon-segoe bar-music-btn"
+                :class "icon-material bar-music-btn"
                 :onclick "playerctl play-pause"
-                "${mplay == 'Playing' ? '' : ''}"
+                "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
               )
               (button
-                :class "icon-segoe bar-music-btn"
+                :class "icon-material bar-music-btn"
                 :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
-                ""
+                "skip_next"
               )
             )
           )
