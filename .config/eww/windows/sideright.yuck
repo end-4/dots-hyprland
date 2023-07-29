@@ -183,7 +183,7 @@
                       :width 50 :height 50
                       :cursor "pointer"
                       :class "sidebar-quicktoggle-power-optn"
-                      :onclick "scripts/dashactivate '~/.local/bin/lock.sh' &"
+                      :onclick "gtklock &"
                       (label
                         :halign "center"
                         :class "sidebar-quicktoggle-power-icon"
