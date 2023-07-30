@@ -130,7 +130,7 @@
               (button
                 :class "wifi-arrow-btn"
                 :style "font-family: Material Symbols Rounded;"
-                :onclick "foot sh -c 'sleep 0.01 ; nmtui' &"
+                :onclick "XDG_CURRENT_DESKTOP=GNOME gnome-control-center &"
                 ""
               )
             )
