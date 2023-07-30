@@ -86,7 +86,7 @@
           (button
             :halign "end"
             :class "winnews-user"
-            :onclick "scripts/toggle-winnews.sh --close && gnome-control-center user-accounts &"
+            :onclick "scripts/toggle-winnews.sh --close && XDG_CURRENT_DESKTOP=GNOME gnome-control-center user-accounts &"
             (box :height 35 :width 35
               :class "winstart-user-icon"
             )

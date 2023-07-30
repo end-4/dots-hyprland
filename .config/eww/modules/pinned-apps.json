@@ -4,7 +4,7 @@
         {"name": "Firefox", "exec": "gtk-launch firefox &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/firefox.svg"},
         {"name": "Terminal", "exec": "gtk-launch org.codeberg.dnkl.foot.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/foot.svg"},
         {"name": "Paint", "exec": "gtk-launch org.kde.kolourpaint.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/kolourpaint.svg"},
-        {"name": "Settings", "exec": "gtk-launch org.gnome.Settings.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/gnome-control-center.svg"},
+        {"name": "Settings", "exec": "XDG_CURRENT_DESKTOP=GNOME gtk-launch org.gnome.Settings.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/gnome-control-center.svg"},
         {"name": "Notepad", "exec": "gtk-launch org.gnome.TextEditor &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/org.gnome.TextEditor.svg"}
     ],
     [

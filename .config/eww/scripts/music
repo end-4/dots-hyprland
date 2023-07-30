@@ -60,6 +60,9 @@ get_cover() {
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		music_source='󰐍'
+		COVER_URL=${COVER_URL//blob:/}
+		COVER_URL=${COVER_URL//file:\/\//}
+		COVER_URL=${COVER_URL//%20/ }
 		if [[ "$COVER_URL" = https* ]]; then
 			music_source='󰖟'
 			coverurl="$(playerctl metadata mpris:artUrl)"

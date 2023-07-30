@@ -1,0 +1,26 @@
+#!/usr/bin/bash
+# Switches sww wallpaper
+# Requires: coreutils, xrandr, hyprland
+
+# Select and set image (hyprland)
+imgpath=$(yad --width 1200 --height 800 --file --title='Choose wallpaper')
+screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)
+cursorposx=$(hyprctl cursorpos -j | gojq '.x')
+cursorposy=$(hyprctl cursorpos -j | gojq '.y')
+cursorposy_inverted=$(( screensizey - cursorposy ))
+
+if [ "$imgpath" == '' ]; then
+    echo 'Aborted'
+    exit 0
+fi
+
+echo Sending "$imgpath" to swww. Cursor pos: ["$cursorposx, $cursorposy_inverted"] &
+# Change swww wallpaper
+swww img "$imgpath" --transition-step 230 --transition-fps 60 \
+    --transition-type grow --transition-angle 30 --transition-duration 1 \
+    --transition-pos "$cursorposx, $cursorposy_inverted" &
+
+# Generate colors for eww n stuff
+cp "$imgpath" "$HOME/.config/eww/images/wallpaper/wallpaper"
+cd "$HOME/.config/eww" || exit
+./scripts/launchapp '>wall'
