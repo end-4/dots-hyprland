@@ -3,10 +3,10 @@ state=$(eww get rev_winactions)
 
 if [[ "$state" == "true" || "$1" == "--close" ]]; then
     if [[ "$2" == "settings" ]]; then
-        gnome-control-center &
+        XDG_CURRENT_DESKTOP=GNOME gnome-control-center &
     fi
     if [[ "$2" == "power" ]]; then
-        gnome-control-center power &
+        XDG_CURRENT_DESKTOP=GNOME gnome-control-center power &
     fi
     eww update anim_open_winactions=false
     eww update rev_winactions=false

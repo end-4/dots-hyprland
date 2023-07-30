@@ -82,7 +82,7 @@
               :class "winactions-toggle-icon winactions-toggle-icon-left winwifi${net.level}${net.essid != 'lo' ? '-activated' : ''}"
             )
             (button
-              :onclick "gnome-control-center wifi &"
+              :onclick "XDG_CURRENT_DESKTOP=GNOME gnome-control-center wifi &"
               :class "winactions-toggle-icon winactions-toggle-arrow${(net.essid != 'lo') ? '-activated' : ''}"
             )
           )

@@ -30,6 +30,8 @@ if [[ "$1" == ">"* ]]; then
         python3 scripts/waifupics.py
     elif [[ "${args[0]}" == ">r" ]]; then
         pkill eww && eww daemon && eww open bar && eww open bottomline
+    elif [[ "${args[0]}" == ">img" ]]; then
+        scripts/switchwall
     else
         # notify-send 'eww' 'Invalid command!'
         false
