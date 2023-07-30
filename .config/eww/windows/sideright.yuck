@@ -75,7 +75,7 @@
                 )
                 (button
                   :class "sidebar-quicktoggle-btn${net.essid == 'lo' ? '' : '-active'} sidebar-quicktoggle-btn-right"
-                  :onclick "${EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &'}& foot sh -c 'sleep 0.01 ; nmtui' &"
+                  :onclick "${EWW_CMD} update bar_offset=0 && ${EWW_CMD} update open_sideright=false && XDG_CURRENT_DESKTOP=GNOME gnome-control-center wifi &"
                   :width 30 :height 50
                   (label
                     :class "bar-icon-material-hugeass"
