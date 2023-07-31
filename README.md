@@ -74,7 +74,7 @@ _Click the images for a video showcase with animations!_
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes                 |
 | --- | ------ | ----------- | ------------------------- |
-| Kernel |     |             | Don't abuse power savers! |
+| Kernel |     | cachyos            | Don't abuse power savers! |
 | Login shell  | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
