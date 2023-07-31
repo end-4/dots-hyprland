@@ -3,6 +3,8 @@
     <h3>(just a temporary name cuz i havent come up with a good one yet)</h3>
 </div>
 
+## Notes
+- Requires [eww with systray support](https://github.com/elkowar/eww/pull/743)
 
-- preview
+## Preview
 ![dots-hyprland](./assets/suichanmywaifu.png)
