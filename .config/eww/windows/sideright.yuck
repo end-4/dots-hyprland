@@ -12,14 +12,14 @@
       )
       (box
         :vexpand true
-        :class "sidebar${BAR_HEIGHT >= 2 ? '' : '-bottom'}-height"
+        :class "sidebar-window"
         :style "
         ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
         ${open_sideright ? '' : 'margin-right: -800px;'}
         "
         (box
           :vexpand true
-          :class "sidebar-window spacing-v-15"
+          :class "spacing-v-15"
           :orientation "v" :space-evenly false
           (box
             :class "spacing-v-5"
@@ -57,7 +57,7 @@
                   :class "sidebar-toggle${bluetooth.text == 'Bluetooth off' ? '' : '-active'}"
                   :onclick "scripts/bluetooth toggle &"
                   :cursor "pointer"
-                  :onrightclick "XDG_CURRENT_DESKTOP='gnome' gnome-control-center bluetooth &"
+                  :onrightclick "blueberry &"
                   (box
                     :class "spacing-h-5"
                     :space-evenly false :orientation "h"
@@ -194,51 +194,95 @@
               )
             )
           )
-          (scroll :vscroll true :hscroll false :vexpand true
-            (box
-              :orientation "v" :space-evenly false
-              (for notif in notifications
-                (box
-                  :class "sidebar-notif${
-                  arraylength(notifications) == 1 ? '' : (
-                    notif.id == arraylength(notifications) ? (
-                      notifications[1]['app_name'] == notif.app_name ? '-top' : ''
-                      ) : (
-                      notif.id == 1 ? (
-                        notifications[arraylength(notifications) - 2]['app_name'] == notif.app_name ? '-bottom' : ''
-                        ) : (
-                        notifications[arraylength(notifications) - notif.id + 1]['app_name'] == notif.app_name ? (
-                          notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name ? '-middle' : '-top') : (
-                          notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name ? '-bottom' : ''
-                        )
-                      )
-                    )
-                  )
-                  }"
-                  :orientation "h"
-                  (box :orientation "v" :space-evenly false
-                    (box :orientation "h" :space-evenly false
-                      (label :xalign 0
-                        :wrap true
-                        :class "txt-norm txt-bold"
-                        :text "${notif.summary}"
-                      )
-                      (box :hexpand true)
-                      (label :xalign 0
-                        :wrap true
-                        :class "txt-small"
-                        :text "${notif.app_name} • ${notif.time}"
-                        :text "${arraylength(notifications) == 1 ||
-                        notif.id == arraylength(notifications) ||
-                        notifications[arraylength(notifications) - notif.id - 1]['app_name'] != notif.app_name ?
-                        '${notif.app_name} • ${notif.time}' : notif.time
-                        }"
-                      )
+          (box
+            (revealer
+              :reveal {arraylength(notifications) - notification_cleared > 0}
+              :duration "180ms"
+              :transition "slidedown"
+              (box
+                :class "sidebar-notif-actions"
+                :space-evenly false
+                (label
+                  :class "sidebar-notif-heading txt-norm"
+                  :text "Notifications"
+                )
+                (eventbox
+                  :hexpand true
+                  :onclick "${EWW_CMD} update notification_cleared=${arraylength(notifications)} &"
+                  :class "sidebar-notif-action"
+                  (box
+                    :halign "end"
+                    :space-evenly false :orientation "h"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "clear_all"
                     )
                     (label :xalign 0
-                      :wrap true
-                      :class "txt-smaller txt-subtxt"
-                      :text {notif.body}
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Clear"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (revealer
+            :reveal {arraylength(notifications) - notification_cleared > 0}
+            :duration "180ms"
+            :transition "slidedown"
+            :vexpand true
+            (scroll :vscroll true :hscroll false :vexpand true
+              (box
+                :orientation "v" :space-evenly false
+                (for notif in notifications
+                  (revealer
+                    :reveal {notif.id > notification_cleared}
+                    :transition "slidedown"
+                    :duration "100ms"
+                    (box
+                      :class "sidebar-notif${
+                      arraylength(notifications) - notification_cleared == 1 ? '' : (
+                        notif.id == arraylength(notifications) ? (
+                          notifications[1]['app_name'] == notif.app_name && notifications[1]['urgency'] == notif.urgency ? '-top' : ''
+                          ) : (
+                          notif.id == 1 ? (
+                            notifications[arraylength(notifications) - 2]['app_name'] == notif.app_name && notifications[arraylength(notifications) - 2]['urgency'] == notif.urgency ? '-bottom' : ''
+                            ) : (
+                            notifications[arraylength(notifications) - notif.id + 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id + 1]['urgency'] == notif.urgency && notif.id != notification_cleared + 1? (
+                              notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-middle' : '-top') : (
+                              notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-bottom' : ''
+                            )
+                          )
+                        )
+                      )
+                      } ${notif.urgency == 2 ? 'sidebar-notif-urgent' : 'sidebar-notif-normal'}"
+                      :orientation "h"
+                      (box :orientation "v" :space-evenly false
+                        (box :orientation "h" :space-evenly false
+                          (label :xalign 0
+                            :wrap true
+                            :class "txt-norm txt-bold"
+                            :text "${notif.summary}"
+                          )
+                          (box :hexpand true)
+                          (label :xalign 0
+                            :wrap true
+                            :class "txt-small"
+                            :text "${notif.app_name} • ${notif.time}"
+                            :text "${arraylength(notifications) == 1 ||
+                            notif.id == arraylength(notifications) ||
+                            notifications[arraylength(notifications) - notif.id - 1]['app_name'] != notif.app_name || notifications[arraylength(notifications) - notif.id - 1]['urgency'] != notif.urgency ?
+                            '${notif.app_name} • ${notif.time}' : notif.time
+                            }"
+                          )
+                        )
+                        (label :xalign 0
+                          :wrap true
+                          :class "txt-smaller"
+                          :text {notif.body}
+                        )
+                      )
                     )
                   )
                 )

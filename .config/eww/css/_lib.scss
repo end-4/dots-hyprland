@@ -4,13 +4,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 // Common rules
 @mixin mainfont {
-    font-family: 'Lexend';
-    // font-weight: 500;
-}
-
-@mixin sidefont {
-    font-family: 'Lexend';
-    // font-family: 'Bahnschrift';
+    font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
     // font-weight: 500;
 }
 
@@ -62,6 +56,10 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 @mixin noanim {
     transition: 0ms;
+}
+
+@mixin m3-button {
+    border-radius: 50rem;
 }
 
 @keyframes flyin-top {
@@ -313,5 +311,13 @@ $overlay2: mix($onSurface, rgba(0,0,0,0), 40%);
 }
 
 .spacing-h-10 > label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-10 > widget {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10 > widget:last-child {
     margin-right: 0rem;
 }

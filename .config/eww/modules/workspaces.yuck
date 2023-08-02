@@ -23,7 +23,7 @@
               :class "bar-ws-txt txt-norm bar-ws-txt-${
                 i.haswins ? (
                   i.num == 1 ? (workspace[(i.num)]['haswins'] ? 'left' : 'alone') : (
-                      i.num == 10 ? (workspace[(i.num - 2)]['haswins'] ? ')' : 'alone') : (
+                      i.num == 10 ? (workspace[(i.num - 2)]['haswins'] ? 'right' : 'alone') : (
                       workspace[(i.num - 2)]['haswins'] && workspace[(i.num)]['haswins'] ? 'middle' : (
                         workspace[(i.num - 2)]['haswins'] ? 'right' : (
                         workspace[(i.num)]['haswins'] ? 'left' : 'alone'

@@ -94,7 +94,7 @@
         :hexpand true
         :space-evenly false
         :orientation "v"
-        :class "powermenu-time"
+        :class "powermenu-time txt"
         (powermenu_guidetext :icon "←↑→↓" :text "Arrows to navigate")
         (powermenu_guidetext :icon "↵" :text "Enter to confirm")
         (powermenu_guidetext :icon "Esc" :text "Esc to cancel")
@@ -129,7 +129,7 @@
         :hexpand true
         :space-evenly false
         :orientation "v"
-        :class "powermenu-time"
+        :class "powermenu-time txt"
         (label :xalign 1
           :class "txt-badonkers"
           :text {formattime(EWW_TIME, '%I:%M')}
@@ -234,7 +234,7 @@
       ; toggle fps
       (powermenu_quicklaunch :optn_num 0 :icon "60fps_select" :text "Toggle FPS")
       (powermenu_quicklaunch :optn_num 1 :icon "language" :text "Open browser setup")
-      (powermenu_quicklaunch :optn_num 2 :icon "code" :text "Config Eww")
+      (powermenu_quicklaunch :optn_num 2 :icon "widgets" :text "Config Eww")
       (powermenu_quicklaunch :optn_num 3 :icon "water_drop" :text "Config Hyprland")
       (powermenu_quicklaunch :optn_num 4 :icon "article" :text "Hyprland Wiki")
       (powermenu_quicklaunch :optn_num 5 :icon "auto_awesome" :text "Rickroll")

@@ -15,14 +15,16 @@
 (include "./modules/workspaces.yuck")
 ; Other widgets
 (include "./windows/bgdecor.yuck")
+(include "./windows/notificationspopup.yuck")
 (include "./windows/powermenu.yuck")
 (include "./windows/powerview.yuck")
 (include "./windows/sideleft.yuck")
 (include "./windows/sideright.yuck")
+(include "./windows/visualizer.yuck")
 
 (defwidget bar_widget []
   (centerbox
-    :class "bar-bg flyin-top"
+    :class "bar-bg flyin-top bar-bg-top-decor"
     :style "
     ${ANIM_ENTER[0]}
     "

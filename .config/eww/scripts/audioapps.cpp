@@ -67,8 +67,9 @@ string getIconPath(string iconname) {
     }
     string path = readIfExists("scripts/cache/" + iconname);
     if (path == "") {
-        path = exec(
-            string("geticons -t " + iconTheme + " " + string(iconname) + " | head -n 1").c_str());
+        path = exec(string("geticons -t " + iconTheme + " " + string(iconname) +
+                           " | head -n 1")
+                        .c_str());
         writeToFile("scripts/cache/" + iconname, path);
         // cout << "icon name: " << iconname << '\n';
         // cout << "path: " << path << '\n';
@@ -90,17 +91,20 @@ void addApp(json& client) {
         if (it != obj.end() && *it == client["application.name"]) {
             found = true;
             obj["count"] = int(obj["count"]) + 1;
-            obj["volume"].push_back(
-                json::array({client["object.serial"], volume}));
+            obj["clients"].push_back(
+                json{{"serial", client["object.serial"]},
+                     {"volume", volume},
+                     {"title", client["media.name"]}});
             break;
         }
     }
     if (!found) {
         json newApp =
-            R"({"name": "", "count": 1, "volume": [], "icon": ""})"_json;
+            R"({"name": "", "count": 1, "clients": [], "icon": "", "title": []})"_json;
         newApp["name"] = client["application.name"];
-        newApp["volume"].push_back(
-            json::array({client["object.serial"], volume}));
+        newApp["clients"].push_back(json{{"serial", client["object.serial"]},
+                                         {"volume", volume},
+                                         {"title", client["media.name"]}});
 
         string iconpath;
         auto it = client.find("application.icon_name");
@@ -116,7 +120,7 @@ void addApp(json& client) {
 }
 
 void getAudioClients() {
-    clients = exec("pactl --format json list sink-inputs");
+    clients = exec("pactl --format json list sink-inputs 2>/dev/null");
     clientjson = json::parse(clients);
     for (json client : clientjson) {
         addApp(client);

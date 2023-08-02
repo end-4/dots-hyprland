@@ -77,6 +77,10 @@ done
 # generate initial widget
 generate
 
+if [ "$1" == "--once" ]; then
+  exit
+fi
+
 socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
   # echo "${#workspaces[@]} ${#o[@]}"
   # echo $line
