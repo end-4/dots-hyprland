@@ -41,12 +41,17 @@
 (defvar hover_leftspace false)
 (defvar hover_rightspace false)
 (defvar hover_music false)
+(defvar open_notificationspopup false)
 (defvar open_powermenu false)
 (defvar open_powerview false)
 (defvar open_sideleft false)
 (defvar open_sideright false)
+(defvar open_visualizer false)
 (defvar osd_vol false)
 (defvar osd_bright false)
+(defvar rev_mixer false)
+(defvar rev_mixerbtn false)
+(defvar rev_waifustatus false)
 
 ; Vars
 (defvar BAR_HEIGHT 40)
@@ -54,6 +59,8 @@
 (defvar calendartitle "")
 (defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
 (defvar monthshift 0)
+(defvar notification_read 0)
+(defvar notification_cleared 0)
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
 (defvar overview_results "[]")
@@ -62,6 +69,7 @@
 (defvar scroll_offset_waifu 0)
 (defvar selected '')
 (defvar show_waifu false)
+(defvar waifu_status "")
 
 
 ; Dummies
@@ -75,6 +83,7 @@
 (deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
 (deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
 (defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+(deflisten cavajson :initial "[[0,0]]" `scripts/cavajson`)
 (defpoll fontsize :initial 11 :interval "15m" `gsettings get org.gnome.desktop.interface font-name | cut -d ' ' -f 2 | sed 's/\'//g'`)
 (deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
 (deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)

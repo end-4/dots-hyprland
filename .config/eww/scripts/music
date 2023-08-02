@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-prevtitle=''
-prevartist=''
-
 get_status() {
 	s=$1
 	if [ "$s" = "Playing" ]; then
@@ -67,8 +64,8 @@ get_cover() {
 		if [[ "$COVER_URL" = *"https"* ]]; then
 			music_source='󰖟'
 			coverurl="$(playerctl metadata mpris:artUrl)"
-			coverurl_highres_yt="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
-			coverurl_highres_soundcloud="$(echo $coverurl | sed 's/80x80/500x500/g')"
+			coverurl_highres_yt="${coverurl/hqdefault/maxresdefault}"
+			coverurl_highres_soundcloud="${coverurl/80x80/500x500}"
 			# SoundCloud
 			if [[ "$coverurl" == *"sndcdn"* ]]; then
 				music_source='󰓀'

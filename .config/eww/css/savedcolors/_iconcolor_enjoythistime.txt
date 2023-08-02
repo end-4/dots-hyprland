@@ -1,0 +1,28 @@
+{
+    "wallpaper": "/home/end/.config/eww/eww_covers/cover_art",
+    "alpha": "100",
+
+    "special": {
+        "background": "#161718",
+        "foreground": "#dad9d2",
+        "cursor": "#dad9d2"
+    },
+    "colors": {
+        "color0": "#161718",
+        "color1": "#996B8D",
+        "color2": "#2C8CB0",
+        "color3": "#69919F",
+        "color4": "#9AA19B",
+        "color5": "#B0B5AD",
+        "color6": "#BFB9B0",
+        "color7": "#dad9d2",
+        "color8": "#989793",
+        "color9": "#996B8D",
+        "color10": "#2C8CB0",
+        "color11": "#69919F",
+        "color12": "#9AA19B",
+        "color13": "#B0B5AD",
+        "color14": "#BFB9B0",
+        "color15": "#dad9d2"
+    }
+}

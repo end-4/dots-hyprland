@@ -43,6 +43,9 @@
     (box
       :class "bar-bg ${BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'}"
     )
+    (box
+      :class "bar-bg ${open_visualizer ? 'visualizer-height' : ''}"
+    )
   )
 )
 

@@ -28,6 +28,7 @@ if len(sys.argv) == 1:
     printhelp()
 
 ###### variables ######
+api_name = {'im': 'waifu.im', 'nekos': 'nekos.life', 'pics': 'waifu.pics', 'moe': 'nekos.moe'}
 debug = False
 mode = 'im' # either 'im' (waifu.im), 'nekos' (nekos.life), or 'pics' (waifu.pics)
 taglist = []
@@ -91,6 +92,9 @@ params = {
     'height': '>=600',
     'nsfw': segs
 }
+
+os.system('eww update rev_waifustatus=true')
+os.system('eww update waifu_status=\'Requesting {0} API\''.format(api_name[mode]))
 response = requests.get(url, params=params, headers=headers)
 
 if debug:
@@ -118,6 +122,7 @@ if response.status_code == 200:
         output['link'] = data['images'][0]['url']
         output['sauce']  = data['images'][0]['source']
 
+    os.system('eww update waifu_status=\'Downloading image\'')
     os.system('wget -O "{0}" "{1}" -q –read-timeout=0.1'.format('eww_covers/waifu_tmp', output['link']))
     os.system('eww update waifu=\'{"name":"eww_covers/waifu_loading", "size": [0, 100]}\'')
     os.system('mv ./eww_covers/waifu_tmp ./eww_covers/waifu')
@@ -127,6 +132,8 @@ if response.status_code == 200:
         output['path'] = 'eww_covers/waifu'
         output['ext'] = str('.' + img.format.lower())
         print(json.dumps(output))
+
+    os.system('eww update rev_waifustatus=false')
 
 else:
     print('Request failed with status code:', response.status_code)
