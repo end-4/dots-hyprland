@@ -86,8 +86,8 @@ gradient3=$(echo -n "$themejson" | gojq -r '.colors.color4')
 # Write hyprland color config
 echo '# Auto generated color theme for image at:' "$coverurl" > './scripts/cache/colors_generated.conf'
 echo 'general {' >> './scripts/cache/colors_generated.conf'
-echo '    col.active_border = rgba('"${gradient1#*#}FF"') rgba('"${gradient2#*#}FF"') rgba('"${gradient3#*#}FF"') 45deg' >> './scripts/cache/colors_generated.conf'
-echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './scripts/cache/colors_generated.conf'
+echo '    col.active_border = rgba('"${primary#*#}FF"') 45deg' >> './scripts/cache/colors_generated.conf'
+echo '    col.inactive_border = rgba('"${primary#*#}66"')' >> './scripts/cache/colors_generated.conf'
 echo '}' >> './scripts/cache/colors_generated.conf'
 
 # Print json to stdout

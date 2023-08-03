@@ -181,6 +181,17 @@
             }
             "
           )
+          (revealer
+            :valign "end"
+            :reveal {rev_waifustatus}
+            :duration "100ms"
+            :transition "slidedown"
+            (label
+              :valign "end"
+              :class "txt-smaller sidebar-waifu-status"
+              :text {waifu_status}
+            )
+          )
         )
       )
     )
