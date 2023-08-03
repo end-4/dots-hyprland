@@ -103,7 +103,7 @@
         :class "dashboard-settings-scale"
         :tooltip {hyprjson.blur_size}
         :value {hyprjson.blur_size}
-        :onchange "hyprctl keyword decoration:blur_size {} && scripts/hyprsettings tickle &"
+        :onchange "hyprctl keyword decoration:blur:size {} && scripts/hyprsettings tickle &"
       )
     )
   )
@@ -131,7 +131,7 @@
         :class "dashboard-settings-scale"
         :tooltip {hyprjson.blur_passes}
         :value {hyprjson.blur_passes}
-        :onchange "hyprctl keyword decoration:blur_passes {} && scripts/hyprsettings tickle &"
+        :onchange "hyprctl keyword decoration:blur:passes {} && scripts/hyprsettings tickle &"
       )
     )
   )
