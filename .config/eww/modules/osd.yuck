@@ -11,7 +11,7 @@
         :class "bar-group bar-group-standalone bar-group-pad-less"
         (box
           :space-evenly false :spacing 5
-          (label :class "icon-material txt-norm"
+          (label :class "icon-material txt-norm txt"
             :text "sunny"
           )
           (progress
@@ -28,7 +28,7 @@
             :class "bar-prog-osd"
             :hexpand true :valign "center"
           )
-          (label :class "icon-material txt-norm"
+          (label :class "icon-material txt-norm txt"
             :text "volume_up"
           )
         )

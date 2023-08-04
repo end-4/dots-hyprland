@@ -2,7 +2,8 @@
   (eventbox
     :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
     :onmiddleclick "scripts/toggle-powerview.sh &"
-    :onrightclick "scripts/toggle-powerview.sh &"
+    :onrightclick `hyprctl keyword bind ",mouse:273,exec,hyprctl keyword unbind ,mouse:273 && hyprctl dispatch submap editmode && notify-send 'Edit mode enabled' 'LMB to move, RMB to resize, Esc to exit' -a 'Edit mode' &" &`
+    :onhoverlost `hyprctl keyword unbind ",mouse:273" &`
     (overlay
       ; Only displays workspace state (has windows or not)
       (box

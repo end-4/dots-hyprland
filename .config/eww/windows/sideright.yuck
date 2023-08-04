@@ -12,11 +12,7 @@
       )
       (box
         :vexpand true
-        :class "sidebar-window"
-        :style "
-        ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
-        ${open_sideright ? '' : 'margin-right: -800px;'}
-        "
+        :class "sidebar-window ${open_sideright ? 'anim-enter' : 'anim-exit'} ${open_sideright ? '' : 'sidebar-hide-right'}"
         (box
           :vexpand true
           :class "spacing-v-15"
@@ -227,21 +223,17 @@
               )
             )
           )
-          (revealer
-            :reveal {arraylength(notifications) - notification_cleared > 0}
-            :duration "180ms"
-            :transition "slidedown"
-            :vexpand true
-            (scroll :vscroll true :hscroll false :vexpand true
+          (scroll :vscroll true :hscroll false :vexpand true
+            (box :orientation "v" :space-evenly false
               (box
                 :orientation "v" :space-evenly false
                 (for notif in notifications
                   (revealer
-                    :reveal {notif.id > notification_cleared}
+                    :reveal {notif.id > notification_cleared && notif.id <= notification_revcnt}
                     :transition "slidedown"
                     :duration "100ms"
                     (box
-                      :class "sidebar-notif${
+                      :class "sidebar-notif-common sidebar-notif${
                       arraylength(notifications) - notification_cleared == 1 ? '' : (
                         notif.id == arraylength(notifications) ? (
                           notifications[1]['app_name'] == notif.app_name && notifications[1]['urgency'] == notif.urgency ? '-top' : ''
@@ -284,6 +276,24 @@
                         )
                       )
                     )
+                  )
+                )
+              )
+              (revealer
+                :vexpand true
+                :reveal {arraylength(notifications) - notification_cleared == 0}
+                :duration "180ms"
+                :transition "slidedown"
+                (box
+                  :halign "center" :valign "center"
+                  :space-evenly false :orientation "v"
+                  (label
+                    :class "icon-material txt-badonkers txt"
+                    :text "notifications"
+                  )
+                  (label
+                    :class "txt txt-norm"
+                    :text "All caught up!"
                   )
                 )
               )

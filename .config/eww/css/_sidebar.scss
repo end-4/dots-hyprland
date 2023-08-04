@@ -15,6 +15,14 @@
     min-height: 69.545rem;
 }
 
+.sidebar-hide-left {
+    margin-left: -40rem;
+}
+
+.sidebar-hide-right {
+    margin-right: -40rem;
+}
+
 .sidebar-section-heading {
     @include mainfont;
     color: $onSurfaceVariant;
@@ -26,30 +34,32 @@
     padding: 1.023rem;
 }
 
-.sidebar-notif {
-    background-color: $secondaryContainer;
-    border-radius: 1.432rem;
+.sidebar-notif-common {
+    min-width: 34.091rem;
+    transition: 100ms;
     padding: 1.023rem;
+}
+
+.sidebar-notif {
+    border-radius: 1.432rem;
+    // padding: 1.023rem;
     margin-bottom: 0.682rem;
 }
 
 .sidebar-notif-top {
-    background-color: $secondaryContainer;
     border-top-left-radius: 1.432rem;
     border-top-right-radius: 1.432rem;
-    padding: 1.023rem;
+    // padding: 1.023rem;
 }
 
 .sidebar-notif-middle {
-    background-color: $secondaryContainer;
-    padding: 0rem 1.023rem 1.023rem 1.023rem;
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
 }
 
 .sidebar-notif-bottom {
-    background-color: $secondaryContainer;
     border-bottom-left-radius: 1.432rem;
     border-bottom-right-radius: 1.432rem;
-    padding: 0rem 1.023rem 1.023rem 1.023rem;
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
     margin-bottom: 0.682rem;
 }
 
@@ -472,25 +482,25 @@ $bgdetail2: $onTertiary;
 .sidebar-waifu-pic {
     transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
     background-color: transparent;
-    border-radius: 1.364rem;
-    background-position: top center;
+    border-radius: 1.432rem;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-size: 100% auto;
 }
 
 .sidebar-waifu-pic-bg {
     background-color: white;
-    border-radius: 1.432rem;
+    border-radius: 1.5rem;
 }
 
 .sidebar-waifu-pic-cover {
     background-color: $background;
-    border-radius: 1.295rem;
+    border-radius: 1.364rem;
     border: 1px solid $onBackground;
 }
 
 .sidebar-waifu-actionbtn {
     box {
-        min-height: 2.727rem;
         border-radius: 50rem;
         background-color: $primary;
         color: $onPrimary;
@@ -596,21 +606,20 @@ $bgdetail2: $onTertiary;
 
 .sidebar-mixer-app-icon {
     background-color: $secondaryContainer;
-    border-radius: 13px;
-    min-height: 50px;
-    min-width: 50px;
+    border-radius: 0.886rem;
+    min-height: 3.409rem;
+    min-width: 3.409rem;
 }
 
 .sidebar-mixer-app-serial {
     background-color: $secondaryContainer;
-    border-radius: 13px;
-    min-height: 50px;
+    border-radius: 0.886rem;
+    min-height: 3.409rem;
     margin-bottom: 1.023rem;
 }
 
 .sidebar-mixer-app-num {
-    font-size: 13pt;
-    margin: 0px 10px;
+    margin: 0rem 0.682rem;
     color: $onSecondaryContainer;
 }
 

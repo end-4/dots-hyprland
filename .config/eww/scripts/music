@@ -53,7 +53,7 @@ get_cover() {
 	cd "eww_covers" || exit
 
 	IMGPATH="cover_art"
-	echo '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
+	# echo '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
 	# echo '{"image": "eww_covers/cover_art_default","source":"󱛟"}}'
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
@@ -130,7 +130,7 @@ elif [ "$1" == "name" ]; then
     if [ "$2" != "" ]; then
 		lentolimit=$2
 	fi
-	echo '{"artist": "", "title": ""}'
+	# echo '{"artist": "", "title": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
 	
 		if [[ "$title" == *" - YouTube"* && "$artist" == "" ]]; then
@@ -149,7 +149,7 @@ elif [ "$1" == "name" ]; then
 		
 	done
 else
-	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
+	# echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
 	
 		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then

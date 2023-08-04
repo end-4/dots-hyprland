@@ -15,7 +15,7 @@ wal -i "$IMGPATH" -n -t -s -e $lightdark -q
 themejson=$(cat ~/.cache/wal/colors.json | gojq -c -M)
 themejson="${themejson::-1}"
 themejson="$themejson"',"source":"'"$3"'"}'
-echo "$themejson"
+# echo "$themejson"
 
 maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
 generated_material=$(scripts/material_colors.py --color "$maincol" "$lightdark")
