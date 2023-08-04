@@ -6,9 +6,9 @@ colorscss=$(cat css/_material.scss)
 colornames=$(cat css/_material.scss | cut -d: -f1)
 colorstrings=$(cat css/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
 IFS=$'\n'
-filearr=($(echo "$filelist")) # Get colors
-colorlist=($(echo "$colornames")) # Array of color names
-colorvalues=($(echo "$colorstrings")) # Array of color values
+filearr=( $filelist ) # Get colors
+colorlist=( $colornames ) # Array of color names
+colorvalues=( $colorstrings ) # Array of color values
 
 apply_svgs() {
     for i in "${!filearr[@]}"; do # Loop through folders
@@ -48,6 +48,21 @@ apply_fuzzel() {
     done
 }
 
+apply_foot() {
+    # Check if $HOME/.config/eww/scripts/templates/fuzzel/fuzzel.ini exists
+    if [ ! -f "$HOME/.config/eww/scripts/templates/foot/foot.ini" ]; then
+        echo "Template file not found for Foot. Skipping that."
+        return
+    fi
+    # Copy template to style.css
+    cp "$HOME/.config/eww/scripts/templates/foot/foot.ini" "$HOME/.config/foot/foot.ini"
+    # Apply colors
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/=${colorlist[$i]} #/=${colorvalues[$i]#\#}/g" "$HOME/.config/foot/foot.ini" # note: ff because theyre opaque
+    done
+}
+
 apply_svgs
 apply_gtklock
 apply_fuzzel
+apply_foot
