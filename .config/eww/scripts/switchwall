@@ -3,6 +3,7 @@
 # Requires: coreutils, xrandr, hyprland
 
 # Select and set image (hyprland)
+cd "$HOME/Pictures"
 imgpath=$(yad --width 1200 --height 800 --file --title='Choose wallpaper')
 screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)
 cursorposx=$(hyprctl cursorpos -j | gojq '.x')
