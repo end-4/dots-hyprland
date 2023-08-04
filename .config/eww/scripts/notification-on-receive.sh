@@ -7,3 +7,4 @@
 # eww update flash_notif=false
 
 scripts/toggle-notificationspopup.sh --open
+eww update notification_revcnt=$(eww get notifications | gojq 'length')

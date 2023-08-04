@@ -1,28 +1,28 @@
+.popup-notif-common {
+    min-width: 34.091rem;
+    transition: 100ms;
+    padding: 1.023rem;
+}
+
 .popup-notif {
     border-radius: 1.432rem;
-    padding: 1.023rem;
-    min-width: 34.091rem;
     margin-bottom: 0.682rem;
 }
 
 .popup-notif-top {
     border-top-left-radius: 1.432rem;
     border-top-right-radius: 1.432rem;
-    padding: 1.023rem;
-    min-width: 34.091rem;
 }
 
 .popup-notif-middle {
-    padding: 0rem 1.023rem 1.023rem 1.023rem;
-    min-width: 34.091rem;
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
 }
 
 .popup-notif-bottom {
     border-bottom-left-radius: 1.432rem;
     border-bottom-right-radius: 1.432rem;
-    padding: 0rem 1.023rem 1.023rem 1.023rem;
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
     margin-bottom: 0.682rem;
-    min-width: 34.091rem;
 }
 
 .popup-notif-urgent {

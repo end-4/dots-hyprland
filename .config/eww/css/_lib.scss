@@ -58,6 +58,14 @@ $activecolor: rgba(128, 128, 128, 0.7);
     transition: 0ms;
 }
 
+@mixin anim-enter {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@mixin anim-exit {
+    transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
 @mixin m3-button {
     border-radius: 50rem;
 }
@@ -120,27 +128,32 @@ $activecolor: rgba(128, 128, 128, 0.7);
     font-size: 1.6363rem;
 }
 
-.txt-large { //16pt
+.txt-large {
+    //16pt
     @include mainfont;
     font-size: 1.4545rem;
 }
 
-.txt-norm { //14pt
+.txt-norm {
+    //14pt
     @include mainfont;
     font-size: 1.2727rem;
 }
 
-.txt-small { //12pt
+.txt-small {
+    //12pt
     @include mainfont;
     font-size: 1.0909rem;
 }
 
-.txt-smallie { //11pt
+.txt-smallie {
+    //11pt
     @include mainfont;
     font-size: 1rem;
 }
 
-.txt-smaller { //10pt
+.txt-smaller {
+    //10pt
     @include mainfont;
     font-size: 0.9091rem;
 }
@@ -182,142 +195,158 @@ tooltip {
 }
 
 
-$overlay1: mix($onSurface, rgba(0,0,0,0), 25%);
-$overlay2: mix($onSurface, rgba(0,0,0,0), 40%);
+$overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
+$overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 
-.spacing-v-15 > box {
+.spacing-v-15>box {
     margin-bottom: 1.023rem;
 }
 
-.spacing-v-15 > box:last-child {
+.spacing-v-15>box:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v-15 > scrolledwindow {
+.spacing-v-15>scrolledwindow {
     margin-bottom: 1.023rem;
 }
 
-.spacing-v-15 > scrolledwindow:last-child {
+.spacing-v-15>scrolledwindow:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v-15 > label {
+.spacing-v-15>revealer {
     margin-bottom: 1.023rem;
 }
 
-.spacing-v-15 > label:last-child {
+.spacing-v-15>revealer:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-h-15 > box {
+.spacing-v-15>label {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15>label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-15>box {
     margin-right: 1.023rem;
 }
 
-.spacing-h-15 > box:last-child {
+.spacing-h-15>box:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-15 > label {
+.spacing-h-15>label {
     margin-right: 1.023rem;
 }
 
-.spacing-h-15 > label:last-child {
+.spacing-h-15>label:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-15 > button {
+.spacing-h-15>button {
     margin-right: 1.023rem;
 }
 
-.spacing-h-15 > button:last-child {
+.spacing-h-15>button:last-child {
     margin-right: 0rem;
 }
 
-.spacing-v-5 > box {
+.spacing-v-5>box {
     margin-bottom: 0.341rem;
 }
 
-.spacing-v-5 > box:last-child {
+.spacing-v-5>box:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v-5 > label {
+.spacing-v-5>label {
     margin-bottom: 0.341rem;
 }
 
-.spacing-v-5 > label:last-child {
+.spacing-v-5>label:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v-5 > button {
+.spacing-v-5>button {
     margin-bottom: 0.341rem;
 }
 
-.spacing-v-5 > button:last-child {
+.spacing-v-5>button:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-h-5 > box {
+.spacing-h-5>box {
     margin-right: 0.341rem;
 }
 
-.spacing-h-5 > box:last-child {
+.spacing-h-5>box:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-5 > label {
+.spacing-h-5>label {
     margin-right: 0.341rem;
 }
 
-.spacing-h-5 > label:last-child {
+.spacing-h-5>label:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-5 > widget > box {
+.spacing-h-5>widget>box {
     margin-right: 0.341rem;
 }
 
-.spacing-h-5 > widget:last-child > box {
+.spacing-h-5>widget:last-child>box {
     margin-right: 0rem;
 }
 
-.spacing-v-minus5 > box {
+.spacing-v-minus5>box {
     margin-bottom: -0.341rem;
 }
 
-.spacing-v-minus5 > box:last-child {
+.spacing-v-minus5>box:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v-minus5 > label {
+.spacing-v-minus5>label {
     margin-bottom: -0.341rem;
 }
 
-.spacing-v-minus5 > label:last-child {
+.spacing-v-minus5>label:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-h-10 > box {
+.spacing-h-10>box {
     margin-right: 0.682rem;
 }
 
-.spacing-h-10 > box:last-child {
+.spacing-h-10>box:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-10 > label {
+.spacing-h-10>label {
     margin-right: 0.682rem;
 }
 
-.spacing-h-10 > label:last-child {
+.spacing-h-10>label:last-child {
     margin-right: 0rem;
 }
 
-.spacing-h-10 > widget {
+.spacing-h-10>widget {
     margin-right: 0.682rem;
 }
 
-.spacing-h-10 > widget:last-child {
+.spacing-h-10>widget:last-child {
     margin-right: 0rem;
+}
+
+.anim-enter {
+    @include anim-enter;
+}
+
+.anim-exit {
+    @include anim-exit;
 }

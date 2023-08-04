@@ -19,7 +19,7 @@
 (defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
 (defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
 (defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
-(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]`) ; Note: change $total and $shown in scripts/scroll-waifu too
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19, 20]`) ; Note: change $total and $shown in scripts/scroll-waifu too
 (defvar WAIFU_CATEGORIES_ICONS `["favorite", "mop", "school", "pets", "pets", "adjust", "🥵", "visibility_off", "visibility", "join", "photo_camera", "mode_fan", "explosion","checkroom", "💀", "hourglass_bottom", "relax",  "♨️",    "pets",  "🥵pets",    "voice_selection"]`)
 (defvar WAIFU_CATEGORIES       `["waifu", "maid", "uniform", "nekos.life", "nekos.moe",    "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin",        "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu",  ".pics:waifu segs",    ".pics:neko",  ".pics:neko segs",    "oral"]`)
 (defvar WAIFU_CATEGORIES_ARGS  `["waifu", "maid", "uniform", "--neko",     "--moe --segs", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
@@ -61,6 +61,7 @@
 (defvar monthshift 0)
 (defvar notification_read 0)
 (defvar notification_cleared 0)
+(defvar notification_revcnt 0)
 (defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
 (defvar overview_query "")
 (defvar overview_results "[]")
@@ -79,7 +80,7 @@
 (deflisten awin "scripts/activewin")
 (deflisten activews :initial 1 "scripts/activews")
 (deflisten audiojson :initial "[]" "scripts/audiolevels")
-(deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery")
+(deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery 2>/dev/null")
 (deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
 (deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
 (defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
@@ -100,7 +101,7 @@
 (deflisten tasks "scripts/taskbarloop")
 (deflisten todolist :initial "[]" "cat json/todo.json | gojq -c -M")
 (deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
-(deflisten workspace :initial `[{"num":"1","clr":"rgba(106,105,105,0.6)"},{"num":"2","clr":"rgba(106,105,105,0.6)"},{"num":"3","clr":"rgba(106,105,105,0.6)"},{"num":"4","clr":"rgba(106,105,105,0.6)"},{"num":"5","clr":"rgba(106,105,105,0.6)"},{"num":"6","clr":"rgba(106,105,105,0.6)"},{"num":"7","clr":"rgba(106,105,105,0.6)"},{"num":"8","clr":"rgba(106,105,105,0.6)"},{"num":"9","clr":"rgba(106,105,105,0.6)"},{"num":"10","clr":"rgba(106,105,105,0.6)"}]` "scripts/workspaces")
+(deflisten workspace :initial `[{"num":"1","haswins":"true"},{"num":"2","haswins":"true"},{"num":"3","haswins":"true"},{"num":"4","haswins":"true"},{"num":"5","haswins":"true"},{"num":"6","haswins":"true"},{"num":"7","haswins":"true"},{"num":"8","haswins":"true"},{"num":"9","haswins":"true"},{"num":"10","haswins":"true"}]` "scripts/workspaces")
 (deflisten wsjsona
   :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"1","workspace":{"id":1,"name":"1"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"2","workspace":{"id":2,"name":"2"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"3","workspace":{"id":3,"name":"3"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"4","workspace":{"id":4,"name":"4"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"5","workspace":{"id":5,"name":"5"}}]]`
   "scripts/overview-wrapper1"

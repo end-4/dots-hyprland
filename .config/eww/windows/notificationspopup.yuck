@@ -11,11 +11,11 @@
           :orientation "v" :space-evenly false
           (for notif in notifications
             (revealer
-              :reveal {notif.id > notification_read}
+              :reveal {notif.id > notification_read && notif.id <= notification_revcnt}
               :transition "slidedown"
               :duration "100ms"
               (box
-                :class "popup-notif${
+                :class "popup-notif-common popup-notif${
                 arraylength(notifications) - notification_read == 1 ? '' : (
                   notif.id == arraylength(notifications) ? (
                     notifications[1]['app_name'] == notif.app_name && notifications[1]['urgency'] == notif.urgency ? '-top' : ''
