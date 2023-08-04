@@ -50,7 +50,7 @@ deleted = " 🗑 "
 
 [hostname]
 ssh_only = false
-format =  "[ ](bold bg:yellow fg:blue)[$hostname](bg:yellow bold fg:#000000)[ ](bold fg:yellow bg:green)"
+format =  "[ ](bold bg:cyan fg:blue)[$hostname](bg:cyan bold fg:#000000)[ ](bold fg:cyan bg:green)"
 trim_at = ".companyname.com"
 disabled = false
 
@@ -93,4 +93,4 @@ format = '[$path]($style)[🭞](fg:green )'
 
 [cmd_duration]
 min_time = 0
-format = '[🬈🬖🬥🬅 ](bold bg:cyan fg:#000000)[time:$duration](bold bg:cyan fg:#000000)[ 🬖🬥🬔🬗](bold bg:cyan fg:#000000)'
+format = '[🬈🬖🬥🬅 ](bold bg:yellow fg:#000000)[time:$duration](bold bg:yellow fg:#000000)[ 🬖🬥🬔🬗](bold bg:yellow fg:#000000)'
