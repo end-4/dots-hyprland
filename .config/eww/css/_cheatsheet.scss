@@ -1,0 +1,43 @@
+.cheatsheet-bg {
+    border-radius: 1.432rem;
+    margin-bottom: 0.682rem;
+    background-color: $background;
+    padding: 1.364rem;
+    border: 2px solid $surfaceVariant;
+}
+
+.cheatsheet-key {
+    @include techfont;
+    min-height: 1.364rem;
+    min-width: 1.364rem;
+    margin: 0.17rem;
+    padding: 0.136rem 0.205rem;
+    border-radius: 0.409rem;
+    color: $primary;
+    border: 0.068rem solid $primary;
+    box-shadow: 0rem 0.136rem 0rem $primary;
+    font-weight: 500;
+}
+
+.cheatsheet-key-notkey {
+    min-height: 1.364rem;
+    padding: 0.136rem 0.205rem;
+    margin: 0.17rem;
+    color: $onPrimaryContainer;
+}
+
+.cheatsheet-action {}
+
+.cheatsheet-closebtn {
+    border-radius: 50rem;
+    min-width: 2.386rem;
+    min-height: 2.386rem;
+}
+
+.cheatsheet-closebtn:hover {
+    background-color: $surfaceVariant;
+}
+
+.cheatsheet-closebtn:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 70%);
+}
