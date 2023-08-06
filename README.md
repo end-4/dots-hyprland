@@ -9,6 +9,8 @@
 - Material design 3
 
 ## Gallery
+- Video: https://streamable.com/85ch8x
+- Images ↓
 ![Left sidebar](assets/sideleft.png)
 ![Keybinds](assets/cheatsheet.png)
 ![Wlogout replacement](assets/powermenu.png)
