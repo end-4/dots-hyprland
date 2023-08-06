@@ -48,11 +48,12 @@
             "name": "Eww widgets",
             "binds": [
                 { "keys": [ "" ], "action": "Open overview/launcher" },
+                { "keys": [ "Ctrl", "", "+", "R" ], "action": "Kill and restart Eww" },
                 { "keys": [ "", "+", "B" ], "action": "Toggle left sidebar" },
                 { "keys": [ "", "+", "N" ], "action": "Toggle right sidebar" },
                 { "keys": [ "", "+", "G" ], "action": "Toggle volume mixer" },
                 { "keys": [ "", "+", "M" ], "action": "Toggle useless audio visualizer" },
-                { "keys": [ "(right)Ctrl" ], "action": "Dismiss notification" }
+                { "keys": [ "(right)Ctrl" ], "action": "Dismiss notification & close menus" }
             ],
             "appeartick": 2
         },
@@ -62,7 +63,7 @@
             "binds": [
                 { "keys": [ "PrtSc" ], "action": "Screenshot → Clipboard" },
                 { "keys": [ "", "Shift", "+", "S" ], "action": "Screen snip → Clipboard" },
-                { "keys": [ "", "Shift", "+", "T" ], "action": "OCR (Tesseract) → Clipboard" },
+                { "keys": [ "", "Shift", "+", "T" ], "action": "Image to text → Clipboard" },
                 { "keys": [ "", "Shift", "+", "C" ], "action": "Color picker" },
                 { "keys": [ "", "Alt", "+", "R" ], "action": "Record region" },
                 { "keys": [ "Ctrl", "Alt", "+", "R" ], "action": "Record region with sound" },
@@ -106,6 +107,20 @@
                 { "keys": [ "", "+", "V" ], "action": "Clipboard" },
                 { "keys": [ "", "+", "." ], "action": "Emoji picker" },
                 { "keys": [ "", "+", "Space" ], "action": "Switch language" }
+            ],
+            "appeartick": 3
+        },
+        {
+            "icon": "terminal",
+            "name": "Launcher commands",
+            "binds": [
+                { "keys": [ ">light" ], "action": "Switch to light theme" },
+                { "keys": [ ">dark" ], "action": "Switch to dark theme" },
+                { "keys": [ ">img" ], "action": "Select wallpaper and generate colorscheme" },
+                { "keys": [ ">save", "THEME_NAME" ], "action": "Save current colorscheme as THEME_NAME" },
+                { "keys": [ ">load", "THEME_NAME" ], "action": "Load colorscheme THEME_NAME" },
+                { "keys": [ ">music" ], "action": "Apply colorscheme from media cover" },
+                { "keys": [ ">r" ], "action": "Restart Eww" }
             ],
             "appeartick": 3
         }

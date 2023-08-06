@@ -121,7 +121,7 @@
 
 .day-1 {
     background-color: transparent;
-    color: $onSurfaceVariant;
+    color: mix($onSurfaceVariant, $surfaceVariant, 38%);
 }
 
 .day0 {

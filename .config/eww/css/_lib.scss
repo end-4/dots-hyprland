@@ -108,6 +108,11 @@ $activecolor: rgba(128, 128, 128, 0.7);
     color: $onBackground;
 }
 
+.txt-shadow {
+    text-shadow: 1px 2px 8px rgba(0,0,0,0.69);
+    margin: 10px;
+}
+
 .txt-badonkers {
     @include mainfont;
     font-size: 3rem;

@@ -30,7 +30,7 @@ if [[ "$1" == ">"* ]]; then
     elif [[ "${args[0]}" == ">uwu" ]]; then
         eww update waifu="$(python3 scripts/waifu-get.py)"
     elif [[ "${args[0]}" == ">r" ]]; then
-        pkill eww && eww daemon && eww open bar &
+        pkill eww && eww daemon && eww open bar && eww open bgdecor
     elif [[ "${args[0]}" == ">todo" ]]; then
         scripts/todo add "${1#*>todo }"
         eww update todolist="$(cat json/todo.json | gojq -c -M)"
