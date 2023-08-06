@@ -38,3 +38,10 @@
 .popup-notif-normal > box > label {
     color: mix($onSecondaryContainer, $secondaryContainer, 80%);
 }
+
+.popup-notif-hint {
+    padding: 0.341rem 0.682rem;
+    border-radius: 1.023rem;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+}

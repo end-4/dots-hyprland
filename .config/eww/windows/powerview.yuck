@@ -105,7 +105,7 @@
               (label
                 :class "powerview-search-prompt-txt"
                 :xalign 0
-                :text "Type to search"
+                :text "Search or calculate"
               )
             )
           )

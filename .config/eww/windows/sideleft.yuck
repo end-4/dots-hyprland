@@ -501,7 +501,7 @@
                         :path {app.icon}
                         :image-width 30
                         :image-height 30
-                        :tooltip "${app.name}"
+                        :tooltip {app.name}
                       )
                       (box
                         :orientation "v"
@@ -522,10 +522,12 @@
                                 :orientation "v"
                                 ; :space-evenly false
                                 :class "sidebar-mixer-app-num spacing-v-5 txt-norm"
-                                (label
-                                  :xalign 0 :hexpand true
-                                  :wrap true
-                                  :text "${client.title}"
+                                (scroll :hscroll true :vscroll false
+                                  (label
+                                    :xalign 0 :hexpand true
+                                    :wrap true
+                                    :text "${client.title}"
+                                  )
                                 )
                               )
                               (box

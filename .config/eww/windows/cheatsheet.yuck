@@ -52,7 +52,7 @@
           (for category in column
             (revealer
               :transition "crossfade"
-              :duration "140ms"
+              :duration "150ms"
               :reveal {open_cheatsheet >= category.appeartick}
               (box :space-evenly false :orientation "v"
                 :class "spacing-v-15"
