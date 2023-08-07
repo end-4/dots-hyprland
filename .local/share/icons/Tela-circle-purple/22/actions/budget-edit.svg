@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#565656; } .ColorScheme-Highlight { color:#4285f4; }
+  </style>
+ </defs>
+ <g style="fill:currentColor;opacity:0.3" class="ColorScheme-Text">
+  <rect width="7" height="2" x="3" y="15" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="11" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="7" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="3" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="12" y="17" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="12" y="13" rx=".5" ry=".5"/>
+ </g>
+ <g style="fill:currentColor" class="ColorScheme-Text">
+  <rect width="7" height="2" x="3" y="17" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="13" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="9" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="3" y="5" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="12" y="15" rx=".5" ry=".5"/>
+  <rect width="7" height="2" x="12" y="11" rx=".5" ry=".5"/>
+ </g>
+ <path style="fill:currentColor" class="ColorScheme-Text" d="M 17.806,3 C 17.715,3 17.623,3.0348 17.552,3.1055 L 16.855,3.8086 18.191,5.1445 18.894,4.4473 C 19.035,4.3059 19.035,4.0833 18.894,3.9419 L 18.058,3.1055 C 17.987,3.0348 17.897,3 17.806,3 Z M 16.325,4.3389 13,7.6641 V 9 H 14.336 L 17.661,5.6748 Z"/>
+</svg>

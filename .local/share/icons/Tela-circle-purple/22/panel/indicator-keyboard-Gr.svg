@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#dfdfdf; } .ColorScheme-Highlight { color:#4285f4; }
+  </style>
+ </defs>
+ <rect style="opacity:0" width="22" height="22" x="0" y="0"/>
+ <path style="fill:none;stroke:currentColor;stroke-width:1.99999976;stroke-linecap:round;stroke-linejoin:bevel" class="ColorScheme-Text" d="m 8.0240249,11.999735 1.9999971,0 m -0.9999984,0 -1.13e-5,2.000448 c 0,1 0,1 -1.0000025,0.999552 -0.407777,0 -1.7015092,4.48e-4 -1.9999974,4.48e-4 -1.0000024,0 -1.0000024,0 -1.0000024,-1 l 1.51e-5,-3.00045 -1.51e-5,-2.9995494 c 0,-1 0,-1 1.0000024,-1 0.2508095,0 1.6159785,-3.629e-4 1.9999974,-4.492e-4 1.0000025,4.492e-4 1.0000025,4.492e-4 1.0000025,1.0004492"/>
+ <path style="fill:none;stroke:currentColor;stroke-width:1.99999976;stroke-linecap:round" class="ColorScheme-Text" d="m 18.00315,14.999822 -2.000001,-2.999999 m -2.000001,-1.000002 1.999982,-4e-6 c 0.423836,-1e-6 0.729048,4.55e-4 1.00001,4.55e-4 0.999999,0 0.999999,0 0.999999,-1.000001 0,-0.2567204 1.5e-5,-0.5997726 1.1e-5,-1.0004478 l -1.1e-5,-0.9995519 c 0,-1 0,-1 -0.999999,-1 -0.224504,0 -0.544112,0.00944 -0.874519,0.00719 -1.12549,-0.00765 -2.125473,-0.00756 -2.125473,-0.00756 M 14.003246,15 l 0,-8.0000004"/>
+</svg>

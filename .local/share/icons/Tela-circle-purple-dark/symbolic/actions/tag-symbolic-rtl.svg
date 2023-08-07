@@ -1,0 +1,4 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m15 1.9999v5.6569a1.0001 1.0001 0 0 1-0.29279 0.70711l-7.0711 7.0711a1.0001 1.0001 0 0 1-1.4142 0l-5.6569-5.6569a1.0001 1.0001 0 0 1 0-1.4142l7.0711-7.0711a1.0001 1.0001 0 0 1 0.70711-0.29279l5.6569-1e-7a1.0001 1.0001 0 0 1 0.99989 0.99989zm-1.9998 0.99989h-4.2426l-6.0712 6.0712 4.2426 4.2426 6.0712-6.0712z" color="#000000" fill="#aaaaaa" stroke-linecap="round" stroke-linejoin="round" style="-inkscape-stroke:none"/>
+ <circle transform="scale(-1,1)" cx="-11" cy="5" r="1" fill="#aaaaaa" style="paint-order:fill markers stroke"/>
+</svg>

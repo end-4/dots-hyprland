@@ -1,0 +1,9 @@
+<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+            color:#232629;
+        }</style>
+ <g transform="matrix(2.7487 0 0 2.7487 12.453 -796.63)">
+  <rect transform="matrix(0,-1,-1,0,0,0)" x="-296.73" y="-2.381" width="5.821" height="5.821" rx="2.91" ry="2.91" fill="#7f8c8d"/>
+  <path d="m-1.587 292.77 2.116 2.116m1e-3 -2.116-2.118 2.116" fill="none" stroke="#fff" stroke-linecap="square" stroke-width=".661"/>
+ </g>
+</svg>

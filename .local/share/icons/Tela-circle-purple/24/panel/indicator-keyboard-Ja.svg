@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#dfdfdf; } .ColorScheme-Highlight { color:#4285f4; }
+  </style>
+ </defs>
+ <g transform="translate(1,1)">
+  <rect style="opacity:0" width="22" height="22" x="0" y="0"/>
+  <path style="fill:none;stroke:currentColor;stroke-width:1.99999976;stroke-linecap:round;stroke-linejoin:round" class="ColorScheme-Text" d="m 4.9535835,14.00712 0,1.000002 0.9999987,0 C 9.8694148,14.892073 8.9527728,8.1191334 8.9535818,7.0071209"/>
+  <path style="fill:none;stroke:currentColor;stroke-width:1.99999976;stroke-linecap:round;stroke-linejoin:bevel" class="ColorScheme-Text" d="m 13,12.004811 4,0 m -3.9999,2.999999 0,-5.9999989 M 17,15.00481 17,9.0048111 m -4.000001,0 -1.5e-5,-0.9995518 c 0,-1 0,-1 2.000016,-1.0004491 1.999984,-4.491e-4 1.999977,4.491e-4 1.999984,1.0004491 C 17,10 17,9.0048111 17,9.0048111"/>
+ </g>
+</svg>

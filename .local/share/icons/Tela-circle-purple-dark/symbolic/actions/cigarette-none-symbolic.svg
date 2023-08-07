@@ -1,0 +1,4 @@
+<svg width="16px" height="16px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m4.2441 0 5 5h1.7559c0.55228 0 1 0.44772 1 1v1h3v-1c0-2.2091-1.7909-4-4-4h-3c-1.1046 0-2-0.89543-2-2h-1.7559zm-0.82422 2.0059c0.50362 1.1478 1.4265 2.0706 2.5742 2.5742l-2.5742-2.5742zm8.8223 5.9941 2.7578 2.7578v-1.7578c0-0.554-0.446-1-1-1h-1.7578zm-12.242 0.011719v4h11v-2.4258l-1.5742-1.5742h-9.4258zm12 2.5742v1.4141h1.4141l-1.4141-1.4141z" fill="#aaaaaa"/>
+ <rect transform="rotate(45)" x="1.3137" y="-1" width="20" height="2" rx="0" ry="0" fill="#aaaaaa" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6876" style="paint-order:stroke fill markers"/>
+</svg>

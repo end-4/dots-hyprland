@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="view-financial-account-cash-closed@24x24.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata11">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="622"
+     inkscape:window-height="436"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs3">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+   .ColorScheme-Text { color:#565656; } .ColorScheme-Highlight { color:#4285f4; } .ColorScheme-NeutralText { color:#ff9800; } .ColorScheme-PositiveText { color:#4caf50; } .ColorScheme-NegativeText { color:#f44336; }
+  </style>
+  </defs>
+  <g transform="translate(4,4)"
+     id="g14">
+    <path
+       id="path5"
+       d="M 0,3 V 13 H 16 V 3 Z M 3,4 H 13 V 5 H 14 V 6 H 15 V 10 H 14 V 11 H 13 V 12 H 3 V 11 H 2 V 10 H 1 V 6 H 2 V 5 H 3 Z M 4,5 V 6 H 3 V 7 H 2 V 9 H 3 V 10 H 4 V 11 H 12 V 10 H 13 V 9 H 14 V 7 H 13 V 6 H 12 V 5 Z M 8,6 C 9.104569,6 10,6.895431 10,8 10,9.104569 9.104569,10 8,10 6.8954305,10 6,9.104569 6,8 6,6.895431 6.8954305,6 8,6 Z M 7.974609,7 C 7.432265,7.013775 6.9998251,7.457481 7,8 7,8.552285 7.447715,9 8,9 8.552284,9 9,8.552285 9,8 9,7.447716 8.552284,7 8,7 7.99186,6.9999 7.982749,6.9999 7.974609,7 Z"
+       class="ColorScheme-Text"
+       style="opacity:0.3;fill:currentColor" />
+  </g>
+</svg>

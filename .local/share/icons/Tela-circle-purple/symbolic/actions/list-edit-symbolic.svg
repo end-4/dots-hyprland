@@ -1,0 +1,14 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-40 -726)">
+  <g transform="matrix(1 0 0 1.4998 .14645 -367.46)">
+   <g transform="translate(-.15531 -.25003)">
+    <g transform="matrix(.70711 -.47145 1.0606 .70711 -765.06 237.8)">
+     <g transform="matrix(.70711 .47145 -1.0606 .70711 793.33 192.29)" fill="#555555">
+      <path d="m41.164 738.22 9-6.0006c1 0 2 0.66674 2 1.3335l-9 6.0006h-2z" fill-rule="evenodd"/>
+      <path d="m51.164 731.55c1 0 2 0.66674 2 1.3335l2-1.3335c0-0.66674-0.75185-1.3335-2-1.3335z" enable-background="new"/>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

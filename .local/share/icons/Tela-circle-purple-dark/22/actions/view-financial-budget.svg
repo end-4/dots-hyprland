@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="view-financial-budget@22x22.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata11">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="622"
+     inkscape:window-height="436"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs3">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+   .ColorScheme-Text { color:#aaaaaa; } .ColorScheme-Highlight { color:#4285f4; } .ColorScheme-NeutralText { color:#ff9800; } .ColorScheme-PositiveText { color:#4caf50; } .ColorScheme-NegativeText { color:#f44336; }
+  </style>
+  </defs>
+  <g transform="translate(3,3)"
+     id="g14">
+    <path
+       id="path5"
+       d="M 2.5,1 C 2.223,1 2,1.223 2,1.5 V 2.5 C 2,2.777 2.223,3 2.5,3 H 6.5 C 6.7769999,3 7,2.777 7,2.5 V 1.5 C 7,1.223 6.7769999,1 6.5,1 Z M 2.5,4 C 2.2230001,4 2,4.223 2,4.5 V 5.5 C 2,5.777 2.2230001,6 2.5,6 H 6.5 C 6.777,6 7,5.777 7,5.5 V 4.5 C 7,4.223 6.777,4 6.5,4 Z M 2.5,7 C 2.2230001,7 2,7.223 2,7.5 V 8.5 C 2,8.777 2.2230001,9 2.5,9 H 6.5 C 6.777,9 7,8.777 7,8.5 V 7.5 C 7,7.223 6.777,7 6.5,7 Z M 9.5,7 C 9.223,7 9,7.223 9,7.5 V 8.5 C 9,8.777 9.223,9 9.5,9 H 13.5 C 13.777,9 14,8.777 14,8.5 V 7.5 C 14,7.223 13.777,7 13.5,7 Z M 2.5,10 C 2.223,10 2,10.223 2,10.5 V 11.5 C 2,11.777 2.223,12 2.5,12 H 6.5 C 6.7769999,12 7,11.777 7,11.5 V 10.5 C 7,10.223 6.7769999,10 6.5,10 Z M 9.5,10 C 9.223,10 9,10.223 9,10.5 V 11.5 C 9,11.777 9.223,12 9.5,12 H 13.5 C 13.777,12 14,11.777 14,11.5 V 10.5 C 14,10.223 13.777,10 13.5,10 Z M 2.5,13 C 2.223,13 2,13.223 2,13.5 V 14.5 C 2,14.777 2.223,15 2.5,15 H 6.5 C 6.7769999,15 7,14.777 7,14.5 V 13.5 C 7,13.223 6.7769999,13 6.5,13 Z M 9.5,13 C 9.223,13 9,13.223 9,13.5 V 14.5 C 9,14.777 9.223,15 9.5,15 H 13.5 C 13.777,15 14,14.777 14,14.5 V 13.5 C 14,13.223 13.777,13 13.5,13 Z"
+       class="ColorScheme-Text"
+       style="fill:currentColor" />
+  </g>
+</svg>

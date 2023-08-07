@@ -1,0 +1,9 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#555555">
+  <path d="M6 1a1 1 0 01-1 1 1 1 0 01-1-1 1 1 0 011-1 1 1 0 011 1zm5.988 0a1 1 0 01-1 1 1 1 0 01-1-1 1 1 0 011-1 1 1 0 011 1z"/>
+  <path d="M5.355.648l-.71.704 2.618 2.654 1.508-.024 2.586-2.632-.713-.7-2.299 2.34-.67.01z"/>
+ </g>
+ <path d="m4 3c-1.662 0-3 1.338-3 3v7c0 1.662 1.338 3 3 3h8c1.662 0 3-1.338 3-3v-7c0-1.662-1.338-3-3-3h-8zm0 2h8c0.554 0 1 0.446 1 1v7c0 0.554-0.446 1-1 1h-8c-0.554 0-1-0.446-1-1v-7c0-0.554 0.446-1 1-1z" fill="#555555"/>
+ <rect x="3" y="11" width="10" height="1" rx="0" ry="0" fill="#555555"/>
+ <rect x="11" y="13" width="1" height="2" fill="#555555" opacity=".35" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
+ <g transform="translate(-41 -867)" fill="#aaaaaa">
+  <rect transform="scale(-1,1)" x="-49" y="874" width="6" height="2" color="#000000" enable-background="new"/>
+  <rect transform="scale(-1,1)" x="-49" y="878.98" width="6" height="2" color="#000000" enable-background="new"/>
+  <rect transform="scale(-1,1)" x="-55" y="873" width="4" height="4" rx="2" ry="2" color="#000000" enable-background="new"/>
+  <rect transform="scale(-1,1)" x="-55" y="878" width="4" height="3.9792" rx="1.9896" ry="1.9896" color="#000000" enable-background="new"/>
+  <rect transform="scale(-1,1)" x="-49" y="869" width="6" height="2" color="#000000" enable-background="new"/>
+  <rect transform="scale(-1,1)" x="-55" y="868.02" width="4" height="3.9792" rx="1.9896" ry="1.9896" color="#000000" enable-background="new"/>
+ </g>
+</svg>

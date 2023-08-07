@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+ <circle style="fill:#fdbc4b" cx="10" cy="10" r="5" transform="translate(4 4)"/>
+ <circle style="fill:#5294e2" cx="6" cy="10" r="5" transform="translate(4 4)"/>
+ <circle style="fill:#4fef42" cx="8" cy="6" r="5" transform="translate(4 4)"/>
+</svg>

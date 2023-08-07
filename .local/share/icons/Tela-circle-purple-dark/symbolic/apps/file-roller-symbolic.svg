@@ -1,0 +1,8 @@
+<svg width="16" height="16" version="1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m3 1c-1.108 0-2 0.892-2 2v10c0 1.108 0.892 2 2 2h1v-2h-1v-10h10v10h-1v2h1c1.108 0 2-0.892 2-2v-10c0-1.108-0.892-2-2-2z" fill="#aaaaaa"/>
+ <rect x="7" y="3" width="1" height="1" fill="#aaaaaa" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+ <rect x="8" y="4" width="1" height="1" fill="#aaaaaa" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+ <rect x="7" y="5" width="1" height="1" fill="#aaaaaa" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+ <rect x="8" y="6" width="1" height="1" fill="#aaaaaa" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+ <path d="m5.9727 7c-0.53885 0-0.97266 0.4338-0.97266 0.97266v7.0547c0 0.53885 0.4338 0.97266 0.97266 0.97266h4.0547c0.53885 0 0.97266-0.4338 0.97266-0.97266v-7.0547c0-0.53885-0.4338-0.97266-0.97266-0.97266zm1.0273 1h2v1h-2zm0 3h2v3h-2z" fill="#aaaaaa" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:fill markers stroke"/>
+</svg>

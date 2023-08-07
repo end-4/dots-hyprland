@@ -1,0 +1,22 @@
+<svg width="64" height="64" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#333333;
+      }
+      .ColorScheme-Background{
+        color:#ffffff;
+      }
+      .ColorScheme-Highlight {
+        color:#7e57c2;
+      }</style>
+  <linearGradient id="a" x1="42" x2="44" y1="51" y2="55" gradientTransform="matrix(.99995 0 0 .99995 .0013517 -.0033909)" gradientUnits="userSpaceOnUse">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <circle cx="32" cy="32" r="28" class="ColorScheme-Highlight" fill="#7e57c2"/>
+ <path id="shadow" d="m31.998 4a28 28 0 0 0-27.492 23.002h21.293l1.2031-2c0.56691-0.95241 1.6733-2.0039 2.9961-2.0039h28.504a28 28 0 0 0-26.504-18.998z" fill="#000000" opacity=".2"/>
+ <path d="m32.002 4a28 28 0 0 0-18.47 6.9994h36.947a28 28 0 0 0-18.481-6.9994z" opacity=".15"/>
+ <path d="m32.002 9-9.0039 8.998h5.002v5.8262c0.55581-0.47493 1.2389-0.82617 1.998-0.82617h6.002v-5h5l-8.998-8.9941v-0.0039062z" class="ColorScheme-Background" fill="#ffffff"/>
+ <path d="m57.312 43.892-27.692 15.987a28 28 0 0 0 2.381 0.12094 28 28 0 0 0 25.311-16.108z" fill="url(#a)" opacity=".1"/>
+</svg>

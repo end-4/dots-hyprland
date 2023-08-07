@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1" viewBox="0 0 16 16">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#aaaaaa; } .ColorScheme-Highlight { color:#5294e2; }
+  </style>
+ </defs>
+ <g style="fill:currentColor;opacity:0.5" class="ColorScheme-Text" transform="rotate(90,8,8)">
+  <rect width="2" height="16" x="4" y="0"/>
+  <rect width="2" height="16" x="7" y="0"/>
+  <rect width="2" height="16" x="10" y="0"/>
+ </g>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="12" height="12" x="2" y="2" rx=".8" ry=".8"/>
+</svg>

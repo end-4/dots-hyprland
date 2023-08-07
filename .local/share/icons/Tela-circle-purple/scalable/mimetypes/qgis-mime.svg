@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   version="1.1"
+   id="svg292"
+   sodipodi:docname="qgis-mime.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview294"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="6.109375"
+     inkscape:cx="22.83376"
+     inkscape:cy="31.918159"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg292" />
+  <defs
+     id="defs280">
+    <linearGradient
+       id="a"
+       x1="49.571"
+       x2="51.714"
+       y1="52.714"
+       y2="54.857"
+       gradientTransform="translate(-68.667 -72.001) scale(2.3333)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         id="stop275" />
+      <stop
+         stop-opacity="0"
+         offset="1"
+         id="stop277" />
+    </linearGradient>
+  </defs>
+  <g
+     id="g286">
+    <rect
+       x="8"
+       y="4"
+       width="48"
+       height="56"
+       ry="5"
+       fill="#4747b5"
+       style="paint-order:stroke fill markers;fill:#91af23;fill-opacity:1"
+       id="rect282" />
+    <path
+       d="M56 46 42 60h9c2.77 0 5-2.23 5-5z"
+       fill="url(#a)"
+       fill-rule="evenodd"
+       opacity=".15"
+       style="paint-order:stroke fill markers"
+       id="path284" />
+  </g>
+  <path
+     d="M 47.153295,43.37526 33.567326,29.156993 h -4.429854 v 4.878537 l 13.258033,13.937241 h 4.75779 z"
+     fill="url(#b)"
+     id="path11"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.132144"
+     sodipodi:nodetypes="ccccccc" />
+  <path
+     d="m 34.153741,41.817403 c -0.668161,0.163978 -1.362311,0.252925 -2.078474,0.252925 -5.123495,0 -9.481286,-4.490148 -9.481286,-10.312033 0,-5.822021 4.309278,-10.213671 9.481286,-10.213671 5.171363,0 9.289024,4.390969 9.289024,10.213671 0,0.946349 -0.110466,1.857912 -0.315013,2.720908 l 4.742044,5.053291 c 1.222667,-2.283133 1.906708,-4.938015 1.906708,-7.813352 0,-8.973472 -6.719152,-15.691913 -15.718639,-15.691913 -8.958783,0 -15.677421,6.674649 -15.677421,15.691913 0,9.061192 6.718638,15.86858 15.677421,15.86858 2.312466,0 4.473887,-0.453324 6.409901,-1.278397 z"
+     fill="url(#c)"
+     id="path15"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.132144" />
+</svg>

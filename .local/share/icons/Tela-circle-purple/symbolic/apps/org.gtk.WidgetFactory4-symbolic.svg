@@ -1,0 +1,11 @@
+<svg width="16" height="16.031" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <title>Gnome Symbolic Icon Theme</title>
+ <g transform="translate(-444 35)" fill="#4d4d4d">
+  <path d="m446-33.969c-0.55401 0-1 0.44599-1 1v5c0 0.55401 0.44599 1 1 1h12c0.55401 0 1-0.44599 1-1v-5c0-0.55401-0.44599-1-1-1h-12zm1 2h10v3h-10v-3z" stop-color="#000000" style="paint-order:fill markers stroke"/>
+  <path d="m446-25.969c-0.55401 0-1 0.44599-1 1v5c0 0.55401 0.44599 1 1 1h12c0.55401 0 1-0.44599 1-1v-5c0-0.55401-0.44599-1-1-1zm1 2h10v3h-10z" stop-color="#000000" style="paint-order:fill markers stroke"/>
+  <rect x="454" y="-22.969" width="2" height="1" rx="1.3623e-5" ry="1.3623e-5" opacity=".35" stop-color="#000000" style="paint-order:fill markers stroke"/>
+  <rect x="448" y="-22.969" width="5" height="1" rx="3.4058e-5" ry="1.3623e-5" opacity=".35" stop-color="#000000" style="paint-order:fill markers stroke"/>
+  <rect transform="scale(-1,1)" x="-450" y="-30.969" width="2" height="1" rx="1.3623e-5" ry="1.3623e-5" opacity=".35" stop-color="#000000" style="paint-order:fill markers stroke"/>
+  <rect transform="scale(-1,1)" x="-456" y="-30.969" width="5" height="1" rx="3.4058e-5" ry="1.3623e-5" opacity=".35" stop-color="#000000" style="paint-order:fill markers stroke"/>
+ </g>
+</svg>

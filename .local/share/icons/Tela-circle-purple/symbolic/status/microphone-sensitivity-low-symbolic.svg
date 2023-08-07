@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <circle cx="14" cy="4" r="1" fill="#555555" fill-rule="evenodd" opacity=".35" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <circle cx="14" cy="8" r="1" fill="#555555" fill-rule="evenodd" opacity=".35" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <circle cx="14" cy="12" r="1" fill="#555555" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <path d="m6 0c-1.66 0-3 1.34-3 3v5c0 1.66 1.34 3 3 3s3-1.34 3-3v-5c0-1.66-1.34-3-3-3zm0 2c0.554 0 1 0.446 1 1v5c0 0.554-0.446 1-1 1s-1-0.446-1-1v-5c0-0.554 0.446-1 1-1zm-6 6c0 2.97 2.16 5.4302 5 5.9102v2.0898h2v-2.0898c2.84-0.48 5-2.9402 5-5.9102h-2c0 2.23-1.77 4-4 4s-4-1.77-4-4z" fill="#555555"/>
+</svg>

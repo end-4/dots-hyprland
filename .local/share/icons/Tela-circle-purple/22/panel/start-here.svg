@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#dfdfdf; } .ColorScheme-Highlight { color:#4285f4; }
+  </style>
+ </defs>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="4" y="4" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="4" y="9" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="4" y="14" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="9" y="4" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="9" y="9" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="9" y="14" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="14" y="4" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="14" y="9" rx=".5" ry=".5"/>
+ <rect style="fill:currentColor" class="ColorScheme-Text" width="3" height="3" x="14" y="14" rx=".5" ry=".5"/>
+</svg>

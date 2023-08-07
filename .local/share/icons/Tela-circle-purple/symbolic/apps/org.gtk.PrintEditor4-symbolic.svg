@@ -1,0 +1,7 @@
+<svg width="16px" height="16px" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <filter id="a" x="0" y="0" width="1" height="1">
+  <feColorMatrix in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+ </filter>
+ <path d="m3 1v4c-1.662 0-3 1.338-3 3v4h3v3h10v-3h3v-4c0-1.5303-1.1361-2.7833-2.6133-2.9727l-1.9727 1.9727h1.5859c0.554 0 1 0.446 1 1v2h-1v-1h-3.5859l-2 2h3.5859v2h-6v-2-2h-2v1h-1v-2c0-0.554 0.446-1 1-1h3.5859l2-2h-3.5859v-2h5.5859l2-2h-9.5859z" fill="#555555" style="paint-order:fill markers stroke"/>
+ <path d="m6 10h1l9-9-1-1-9 9z" color="#000000" fill="#555555" stroke-width="2" style="-inkscape-stroke:none"/>
+</svg>

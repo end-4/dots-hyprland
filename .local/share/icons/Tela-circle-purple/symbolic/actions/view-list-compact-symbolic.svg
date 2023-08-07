@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <rect x="3" y="3" width="4" height="4" fill="#555555" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <rect x="8" y="4" width="5" height="2" fill="#555555" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-width="2.2361" style="paint-order:stroke fill markers"/>
+ <rect x="3" y="9" width="4" height="4" fill="#555555" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <rect x="8" y="10" width="5" height="2" fill="#555555" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-width="2.2361" style="paint-order:stroke fill markers"/>
+</svg>

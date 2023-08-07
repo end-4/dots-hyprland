@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 4.233 4.233" xmlns="http://www.w3.org/2000/svg">
+ <rect x=".26456" y=".26456" width="2.6456" height="2.6456" rx=".52913" ry=".52913" fill="#f6f5f4" stroke-width="1.0705" paint-order="stroke markers fill"/>
+ <text transform="scale(1.0006 .99944)" x="0.76005876" y="2.3526602" fill="#cccccc" font-family="sans-serif" font-size="2.0999px" font-weight="400" letter-spacing="0" stroke-width=".25636" word-spacing="0" style="line-height:1.25"><tspan x="0.76005876" y="2.3526602" stroke-width=".25636">O</tspan></text>
+ <rect x="1.3228" y="1.3228" width="2.6456" height="2.6456" rx=".52912" ry=".52912" fill="#5583ff" stroke-width="1.0705" paint-order="stroke markers fill"/>
+ <text transform="scale(1.0006 .99944)" x="1.8670384" y="3.4412334" fill="#ffffff" font-family="sans-serif" font-size="2.1787px" font-weight="400" letter-spacing="0" stroke-width=".26598" word-spacing="0" style="line-height:1.25"><tspan x="1.8670384" y="3.4412334" stroke-width=".26598">B</tspan></text>
+</svg>

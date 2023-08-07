@@ -1,0 +1,19 @@
+<svg width="64" height="64" version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
+        color:#333333;
+      }
+      .ColorScheme-Background {
+        color:#ffffff;
+      }
+      .ColorScheme-Highlight {
+        color:#7e57c2;
+      }</style>
+ </defs>
+ <rect class="ColorScheme-Highlight" x="4" y="4" width="56" height="56" ry="28" fill="#7e57c2"/>
+ <rect x="4" y="4" width="56" height="56" ry="28" fill="#ffffff" opacity=".25"/>
+ <path class="ColorScheme-Background" d="m14 42c-0.554 0-1 0.446-1 1v3c0 0.554 0.446 1 1 1h36c0.554 0 1-0.446 1-1v-3c0-0.554-0.446-1-1-1h-3.0039v2c0 0.554-0.446 1-1 1h-4c-0.554 0-1-0.446-1-1v-2h-2v2c0 0.554-0.446 1-1 1h-4c-0.554 0-1-0.446-1-1v-2h-2v2c0 0.554-0.446 1-1 1h-4c-0.554 0-1-0.446-1-1v-2h-1.9961v2c0 0.554-0.446 1-1 1h-4c-0.554 0-1-0.446-1-1v-2h-3z" fill="#ffffff" opacity=".35"/>
+ <path d="m32.002 4.0012c-5.9602 0-11.47 1.8501-16.001 5.0002h32.001c-4.5301-3.1501-10.04-5.0002-16.001-5.0002z" opacity=".35"/>
+ <rect x="27" y="6" width="10" height="2" ry="1" opacity=".35"/>
+ <path class="ColorScheme-Background" d="m18 39c-0.554 0-1 0.446-1 1v4c0 0.554 0.446 1 1 1h4c0.554 0 1-0.446 1-1v-4c0-0.554-0.446-1-1-1zm7.9961 0c-0.554 0-1 0.446-1 1v4c0 0.554 0.446 1 1 1h4c0.554 0 1-0.446 1-1v-4c0-0.554-0.446-1-1-1zm8 0c-0.554 0-1 0.446-1 1v4c0 0.554 0.446 1 1 1h4c0.554 0 1-0.446 1-1v-4c0-0.554-0.446-1-1-1zm8 0c-0.554 0-1 0.446-1 1v4c0 0.554 0.446 1 1 1h4c0.554 0 1-0.446 1-1v-4c0-0.554-0.446-1-1-1z" fill="#ffffff" opacity=".65"/>
+</svg>

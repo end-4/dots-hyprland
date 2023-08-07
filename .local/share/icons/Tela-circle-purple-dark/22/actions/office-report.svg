@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="office-report@22x22.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata11">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="622"
+     inkscape:window-height="436"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg7" />
+  <defs
+     id="defs3">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+   .ColorScheme-Text { color:#aaaaaa; } .ColorScheme-Highlight { color:#4285f4; } .ColorScheme-NeutralText { color:#ff9800; } .ColorScheme-PositiveText { color:#4caf50; } .ColorScheme-NegativeText { color:#f44336; }
+  </style>
+  </defs>
+  <g transform="translate(3,3)"
+     id="g14">
+    <path
+       id="path5"
+       d="M 9 1 C 8.446 1 8 1.446 8 2 L 8 7 C 8 7.554 8.446 8 9 8 L 14 8 C 14.554 8 15 7.554 15 7 L 15 2 C 15 1.446 14.554 1 14 1 L 9 1 z M 4.5 2 A 2.5 2.5 0 0 0 2 4.5 A 2.5 2.5 0 0 0 4.5 7 A 2.5 2.5 0 0 0 6.9492188 5 L 4 5 L 5.6347656 2.2753906 A 2.5 2.5 0 0 0 4.5 2 z M 10 3 L 13 3 L 13 6 L 10 6 L 10 3 z M 2 8 C 1.446 8 1 8.446 1 9 L 1 14 C 1 14.554 1.446 15 2 15 L 7 15 C 7.554 15 8 14.554 8 14 L 8 9 C 8 8.446 7.554 8 7 8 L 2 8 z M 13 9 L 13 14 L 14 14 L 14 9 L 13 9 z M 3 10 L 6 10 L 6 13 L 3 13 L 3 10 z M 11 11 L 11 14 L 12 14 L 12 11 L 11 11 z M 9 12 L 9 14 L 10 14 L 10 12 L 9 12 z"
+       class="ColorScheme-Text"
+       style="fill:currentColor" />
+  </g>
+</svg>

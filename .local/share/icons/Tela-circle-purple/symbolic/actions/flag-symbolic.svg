@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" enable-background="new" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <title>Paper Symbolic Icon Theme</title>
+ <g transform="translate(-305 -141)">
+  <g transform="translate(62 314)"></g>
+  <path transform="translate(305,141)" d="m5.6055 1c-0.10405-3.3127e-4 -0.20977 0.00154-0.31836 0.00781-0.8109 0.046-1.6912 0.29009-2.709 0.76367l-0.57812 0.26953v13.959h2v-6.0137c1.8078-0.71563 2.4424-0.28011 3.5781 0.24805 1.25 0.58125 3.1126 1.27 5.8438 0l0.57812-0.26758v-8.8555l-1.4219 0.66016c-1.843 0.85643-2.5835 0.65684-3.4961 0.28906-0.85553-0.34479-1.9159-1.0556-3.4766-1.0605zm-0.00391 1.998c0.972 0.00435 1.6136 0.46706 2.7324 0.91797 0.90387 0.36427 2.1824 0.3892 3.666 0.023438v4.627c-1.6914 0.63138-2.475 0.36843-3.5781-0.14453-1.0149-0.47195-2.4623-0.95721-4.4219-0.46484v-4.543c0.51764-0.18798 1.0514-0.39035 1.4004-0.41016h0.00195c0.067975-0.00392 0.13442-0.00615 0.19922-0.00586z" fill="#555" style="-inkscape-stroke:none"/>
+ </g>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:title>Paper Symbolic Icon Theme</dc:title>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+</svg>

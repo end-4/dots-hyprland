@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#aaaaaa">
+  <path d="m6.5 13.988v-12h-5v12z" fill-opacity=".35"/>
+  <path d="M3 .988c-1.645 0-3 1.356-3 3v8c0 1.645 1.355 3 3 3h10c1.645 0 3-1.355 3-3v-8c0-1.644-1.355-3-3-3zm0 2h10c.57 0 1 .43 1 1v8c0 .57-.43 1-1 1H3c-.57 0-1-.43-1-1v-8c0-.57.43-1 1-1zm0 0"/>
+  <path d="m6 1.988h1v12h-1z"/>
+ </g>
+</svg>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933 16.933"
+   version="1.1"
+   id="svg19"
+   sodipodi:docname="text-sln.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     showgrid="false"
+     inkscape:zoom="7.9107571"
+     inkscape:cx="23.133058"
+     inkscape:cy="21.616136"
+     inkscape:window-width="1920"
+     inkscape:window-height="1000"
+     inkscape:window-x="0"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg19" />
+  <defs
+     id="defs7">
+    <linearGradient
+       id="a"
+       x1="49.571"
+       x2="51.714"
+       y1="52.714"
+       y2="54.857"
+       gradientTransform="translate(-68.667 -72.001) scale(2.3333)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         id="stop2" />
+      <stop
+         stop-opacity="0"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+  </defs>
+  <g
+     transform="scale(0.26458)"
+     id="g13">
+    <rect
+       x="8"
+       y="4"
+       width="48"
+       height="56"
+       ry="5"
+       fill="#f4f4f4"
+       style="paint-order:stroke fill markers"
+       id="rect9" />
+    <path
+       d="M 56,46 42,60 h 9 c 2.77,0 5,-2.23 5,-5 z"
+       fill="url(#a)"
+       fill-rule="evenodd"
+       opacity="0.1"
+       style="paint-order:stroke fill markers"
+       id="path11" />
+  </g>
+  <g
+     fill-rule="evenodd"
+     stroke-width="0.265"
+     id="g10"
+     transform="matrix(0.76048487,0,0,0.76048487,2.0278889,2.0277677)">
+    <path
+       d="m 21.068,2.602 a 0.596,0.596 0 0 0 -0.267,0.1 c 0.138,0.171 -0.14,1.785 0.208,2.004 l 0.272,0.17 v 3.892 l -0.427,0.32 c -0.329,0.247 0.03,1.666 -0.056,1.849 0.095,0.058 0.237,0.12 0.362,0.105 a 0.375,0.375 0 0 0 0.12,-0.036 l 1.737,-0.851 c 0.19,-0.093 0.38,-0.17 0.38,-0.38 V 3.87 c 0,-0.21 -0.19,-0.287 -0.38,-0.38 L 21.28,2.638 A 0.374,0.374 0 0 0 21.068,2.603 Z"
+       fill="#35a0f3"
+       style="fill:#a735f3;fill-opacity:1;paint-order:stroke fill markers"
+       transform="matrix(1.1855,0,0,1.1855,-14.244,0.379)"
+       id="path4" />
+    <path
+       d="m 15.041,8.004 5.651,-5.223 c 0.257,-0.237 0.589,-0.153 0.589,0.337 v 1.758 l -5.224,3.996 c -0.092,0.071 -0.33,0.243 -0.538,0.045 L 14.991,8.415 c -0.139,-0.132 -0.06,-0.31 0.05,-0.411 z"
+       fill="#115fb7"
+       style="fill:#8511b7;fill-opacity:1;paint-order:stroke fill markers"
+       transform="matrix(1.1855,0,0,1.1855,-14.244,0.379)"
+       id="path6" />
+    <path
+       d="m 15.041,5.638 5.651,5.223 c 0.257,0.237 0.589,0.153 0.589,-0.338 V 8.766 L 16.057,4.77 C 15.965,4.698 15.727,4.527 15.519,4.724 l -0.528,0.503 c -0.139,0.132 -0.06,0.31 0.05,0.411 z"
+       fill="#1a81da"
+       style="fill:#941ada;fill-opacity:1;paint-order:stroke fill markers"
+       transform="matrix(1.1855,0,0,1.1855,-14.244,0.379)"
+       id="path8" />
+  </g>
+</svg>

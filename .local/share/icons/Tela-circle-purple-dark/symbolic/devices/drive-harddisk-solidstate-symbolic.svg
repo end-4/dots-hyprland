@@ -1,0 +1,4 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m3 1c-1 0-1 1-1 1v12c0 1 1 1 1 1h10c1 0 1-1 1-1v-12c0-1-1-1-1-1h-10zm1 2h8v10h-7-1v-1-9z" fill="#aaaaaa"/>
+ <circle cx="6" cy="11" r="1" fill="#aaaaaa" stroke-linecap="square" stroke-width="4" style="paint-order:fill markers stroke"/>
+</svg>

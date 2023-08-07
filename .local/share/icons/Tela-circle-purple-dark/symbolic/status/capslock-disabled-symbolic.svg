@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-18.803)" fill="#aaaaaa" opacity=".35">
+  <path d="m25.64 3h2.315l2.91 9h-1.91l-0.61-2h-3.076l-0.617 2h-1.91zm1.182 1.297-1.08 3.992h2.18z"/>
+ </g>
+ <path d="m2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-12a2 2 0 0 0-2-2zm0 2h12v12h-12z" fill="#aaaaaa" opacity=".35"/>
+ <rect x="2" y="13" width="12" height="1" fill="#aaaaaa" fill-rule="evenodd" opacity=".15" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+</svg>

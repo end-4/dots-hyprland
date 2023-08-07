@@ -1,0 +1,8 @@
+<svg width="24" height="24" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#aaaaaa; } .ColorScheme-Highlight { color:#5294e2; }
+  </style>
+ </defs>
+ <path d="m14.583 0-14.583 14.583v1.4167h1.4167l14.583-14.583v-1.4167z" style="fill:currentColor" class="ColorScheme-Text"/>
+</svg>

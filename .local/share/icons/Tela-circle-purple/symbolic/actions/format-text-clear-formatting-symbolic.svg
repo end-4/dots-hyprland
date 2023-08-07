@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#555555">
+  <path d="M9 10v1c0 .277.112.526.293.707l.793.793-.793.793A.996.996 0 0 0 9 14v1h1a.996.996 0 0 0 .707-.293l.793-.793.793.793c.18.18.43.293.707.293h1v-1a.996.996 0 0 0-.293-.707l-.793-.793.793-.793A.993.993 0 0 0 14 11v-1h-1a.996.996 0 0 0-.707.293l-.793.793-.793-.793A.996.996 0 0 0 10 10z" color="#363636" fill="#555555" fill-rule="evenodd" font-family="sans-serif" font-weight="400" overflow="visible" style="isolation:auto;mix-blend-mode:normal;text-decoration-color:#363636;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-transform:none"/>
+ </g>
+ <path d="m6 2-2.9473 11h2.0703l1.0723-4h4.8047v-2h-4.2695l0.80469-3h5.4648v-2h-7z" fill="#555555" stroke-linecap="square" stroke-width="2" style="paint-order:fill markers stroke"/>
+</svg>

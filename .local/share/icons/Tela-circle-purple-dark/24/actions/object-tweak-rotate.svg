@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" version="1.1">
+ <defs>
+  <style id="current-color-scheme" type="text/css">
+   .ColorScheme-Text { color:#aaaaaa; } .ColorScheme-Highlight { color:#4285f4; }
+  </style>
+ </defs>
+ <g transform="translate(4,4)">
+  <g transform="rotate(30,6,13)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 5,11 H 7 V 15 H 5 Z"/>
+  </g>
+  <g transform="rotate(30,10,13)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 9,11 H 11 V 15 H 9 Z"/>
+  </g>
+  <g transform="rotate(60,10,8)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 9,6 H 11 V 10 H 9 Z"/>
+  </g>
+  <g transform="rotate(60,6,8)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 5,6 H 7 V 10 H 5 Z"/>
+  </g>
+  <g transform="rotate(45,6,3)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 5,1 H 7 V 5 H 5 Z"/>
+  </g>
+  <g transform="rotate(45,10,3)">
+   <path style="fill:currentColor" class="ColorScheme-Text" d="M 9,1 H 11 V 5 H 9 Z"/>
+  </g>
+  <path style="fill:currentColor" class="ColorScheme-Text" d="M 13,1 H 15 V 5 H 13 Z M 1,1 H 3 V 5 H 1 Z M 1,6 H 3 V 10 H 1 Z M 13,6 H 15 V 10 H 13 Z M 13,11 H 15 V 15 H 13 Z M 1,11 H 3 V 15 H 1 Z"/>
+ </g>
+</svg>

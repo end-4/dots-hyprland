@@ -1,0 +1,23 @@
+<svg width="32" height="32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="a">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity=".235" offset=".508"/>
+   <stop stop-color="#fff" stop-opacity=".157" offset=".835"/>
+   <stop stop-color="#fff" stop-opacity=".392" offset="1"/>
+  </linearGradient>
+  <linearGradient id="c">
+   <stop stop-color="#3d3d3d" offset="0"/>
+   <stop stop-color="#686868" stop-opacity=".498" offset=".5"/>
+   <stop stop-color="#686868" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="b">
+   <stop stop-color="#919caf" offset="0"/>
+   <stop stop-color="#68758e" offset=".262"/>
+   <stop stop-color="#485a6c" offset=".705"/>
+   <stop stop-color="#444c5c" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m16 1c-8.2759 0-15 6.7241-15 15 0 8.2759 6.7241 15 15 15 8.2759 0 15-6.7241 15-15 0-8.2759-6.7241-15-15-15z" color="#000000" fill="#64728a" overflow="visible" stroke-width="1.0345"/>
+ <path d="M16 6.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19zm0 2a7.5 7.5 0 0 1 7.438 6.5H8.563A7.5 7.5 0 0 1 16 8.5zM8.562 17h14.876A7.5 7.5 0 0 1 16 23.5 7.5 7.5 0 0 1 8.562 17z" fill="#fff" overflow="visible"/>
+</svg>

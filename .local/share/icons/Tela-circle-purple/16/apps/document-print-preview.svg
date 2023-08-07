@@ -1,0 +1,9 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <path d="m2 7.2v-6.3c0-0.4986 0.4014-0.9 0.9-0.9h10.2c0.4986 0 0.9 0.4014 0.9 0.9v6.3z" fill="#ececec" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.582" style="paint-order:stroke fill markers"/>
+ <rect x="3.954e-9" y="4" width="16" height="8" rx="1.7143" ry="1.7143" fill="#4d4d4d" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.9097" style="paint-order:stroke fill markers"/>
+ <path d="m2 9v6.1c0 0.4986 0.4014 0.9 0.9 0.9h10.2c0.4986 0 0.9-0.4014 0.9-0.9v-6.1z" fill="#ececec" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.582" style="paint-order:stroke fill markers"/>
+ <rect x="1" y="7" width="14" height="2" rx="1" ry="1" fill="#ffffff" opacity=".35" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3608" style="paint-order:stroke fill markers"/>
+ <circle cx="8" cy="8" r="3" fill="#666666" stroke-width=".1875"/>
+ <circle cx="8" cy="8" r="2" fill="#4d4d4d" stroke-width=".125"/>
+ <circle cx="8.5" cy="7.5" r=".5" fill="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
+</svg>
