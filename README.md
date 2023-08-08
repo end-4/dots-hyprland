@@ -24,6 +24,7 @@
     
   - Pywal and [Material You](https://m3.material.io/styles/color/the-color-system/key-colors-tones) colors
   - Sexy animations
+  - The latest branch, [m3ww](https://github.com/end-4/dots-hyprland/tree/m3ww), can be scaled and supports both light and dark theme properly!
 </details>
  <details> 
   <summary>Bragging</summary>
