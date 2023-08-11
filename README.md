@@ -69,7 +69,6 @@ _Click the images for a video showcase with animations!_
  - Copy
    - `Pictures`, `.config`, `.local` to home folder
    - Stuff in `Import manually` folder if you need them
- - Install proprietary font: Segoe UI Variable (for windoes and hybrid branch)
  - **For ARM users**: Compile .cpp scripts in `~/.config/eww/scripts/` (to that folder) (like this: `g++ ~/.config/ewwscripts/SCRIPTNAME.cpp -o ~/.config/eww/scripts/SCRIPTNAME`)
  
 # 🎨 eww (yes I spend too much time on this)
