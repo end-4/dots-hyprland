@@ -39,7 +39,7 @@ sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMag
 - AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
 ```
 [ yay as AUR helper ]
-yay -S cava eww-wayland-git geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww gojq xdg-desktop-portal-hyprland-git wlogout
+yay -S cava eww-wayland-git geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww gojq xdg-desktop-portal-hyprland-git waybar-hyprland-git wlogout
 ```
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
