@@ -44,6 +44,7 @@ yay -S cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gt
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
    - Run `usermod -aG video <USERNAME>` for brightness control to work
+   - Install proprietary font: Segoe UI Variable (for Windows 11 mode)
 - Stuff that you might wanna install if you didn't start as a lazyass on EndeavourOS+Gnome like me (install these if you decide to use my hyprland.conf)
 ```
 gnome-keyring polkit-gnome 
