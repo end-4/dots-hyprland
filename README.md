@@ -63,16 +63,12 @@ _Click the images for a video showcase with animations!_
 ---
 
 # 🔧 General instructions
- - Make sure you follow these general steps then steps in the readme of your interested branch if there are any
- - **_A guided install script exists, but very incomplete. I recommend against using it._**
- - **Backup**
+ - Don't download the main branch! Use one of the above listed ones.
+ - **BACKUP**
+ - Install dependencies. You can find the list for them in branch-specific readmes.
  - Copy
    - `Pictures`, `.config`, `.local` to home folder
    - Stuff in `Import manually` folder if you need them
- - Install dependencies
-   - See the list in the Dependencies section
-   - Get "Plasma browser integration" extension for your browser
-   - Run `usermod -aG video <USERNAME>` for brightness control to work
  - Install proprietary font: Segoe UI Variable (for windoes and hybrid branch)
  - **For ARM users**: Compile .cpp scripts in `~/.config/eww/scripts/` (to that folder) (like this: `g++ ~/.config/ewwscripts/SCRIPTNAME.cpp -o ~/.config/eww/scripts/SCRIPTNAME`)
  
@@ -80,7 +76,7 @@ _Click the images for a video showcase with animations!_
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes                 |
 | --- | ------ | ----------- | ------------------------- |
-| Kernel |     | cachyos            | Don't abuse power savers! |
+| Kernel |     | cachyos     | Don't abuse power savers. Also I'm not sure what bullshit I'm saying - this is just from personal experience. |
 | Login shell  | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
@@ -107,34 +103,6 @@ _Click the images for a video showcase with animations!_
  - `>multi`: Remember to use many colors for bar icons for next color generations
  - `>r`: Reload (kills and relaunches eww with the default bar)
 
-# 📦 Dependencies
- - Missing something? Please tell me. Thanks!
- - Python dependencies
-```
-[ Command ]
-pip install pywal desktop_entry_lib poetry build Pillow
-```
- - Normal dependencies
-```
-[ Possible package names (normal stuff) ]
-bc blueberry bluez boost boost-libs coreutils dunst findutils fzf gawk gnome-control-center ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox udev upower util-linux xrandr wget wireplumber yad
-[ Command for: Fedora (INCOMPLETE command; so there's less name hunting for you) ]
-sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout qalc sox nlohmann-json-devel
-```
-- AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
-```
-[ yay as AUR helper ]
-yay -S cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module python-material-color-utilities swww gojq wlogout hyprland-git eww-wayland-git
-```
- - Stuff that you might wanna install if you didn't start as a lazyass on EndeavourOS+Gnome like me (install these if you decide to use my hyprland.conf)
-```
-gnome-keyring polkit-gnome 
-```
-
- - Other stuff that I use, mostly utilities (you can skip these)
-```
-tesseract cliphist grim slurp fuzzel
-```
 ---
 
 # 🙏 Attribution
