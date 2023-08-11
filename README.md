@@ -39,11 +39,11 @@ pywal desktop_entry_lib poetry build Pillow
 [ Possible package names (tries to match Arch) ]
 bc blueberry bluez boost boost-libs coreutils curl findutils fzf gawk gnome-control-center ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox udev upower util-linux xrandr wget wireplumber yad
 [ Command for: Fedora (INCOMPLETE command so there's less name hunting for you) ]
-sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout qalc sox nlohmann-json-devel
+sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat swayidle udev upower util-linux wget wireplumber wl-clipboard wlogout qalc sox nlohmann-json-devel
 ```
 - AUR Packages
 ```
-cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module python-material-color-utilities swww gojq wlogout hyprland-git
+cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww gojq xdg-desktop-portal-hyprland-git waybar-hyprland-git wlogout
 ```
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
