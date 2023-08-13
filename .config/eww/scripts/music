@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-prevtitle=''
-prevartist=''
-
 get_status() {
 	s=$1
 	if [ "$s" = "Playing" ]; then
@@ -56,19 +53,19 @@ get_cover() {
 	cd "eww_covers" || exit
 
 	IMGPATH="cover_art"
-	echo '{"image": "eww_covers/cover_art_default", "color": {"alpha":"100","colors":{"color0":"#111215","color1":"#2B698F","color10":"#597591","color11":"#447CC0","color12":"#3A9FB7","color13":"#6192A6","color14":"#60ABCC","color15":"#c4c6ca","color2":"#597591","color3":"#447CC0","color4":"#3A9FB7","color5":"#6192A6","color6":"#60ABCC","color7":"#c4c6ca","color8":"#898a8d","color9":"#2B698F"},"special":{"background":"#111215","cursor":"#c4c6ca","foreground":"#c4c6ca"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󰗃"}}'
+	# echo '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
+	# echo '{"image": "eww_covers/cover_art_default","source":"󱛟"}}'
 
 	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
 		music_source='󰐍'
 		COVER_URL=${COVER_URL//blob:/}
 		COVER_URL=${COVER_URL//file:\/\//}
 		COVER_URL=${COVER_URL//%20/ }
-		if [[ "$COVER_URL" = https* ]]; then
+		if [[ "$COVER_URL" = *"https"* ]]; then
 			music_source='󰖟'
 			coverurl="$(playerctl metadata mpris:artUrl)"
-			coverurl_highres_yt="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
-			coverurl_highres_soundcloud="$(echo $coverurl | sed 's/80x80/500x500/g')"
-
+			coverurl_highres_yt="${coverurl/hqdefault/maxresdefault}"
+			coverurl_highres_soundcloud="${coverurl/80x80/500x500}"
 			# SoundCloud
 			if [[ "$coverurl" == *"sndcdn"* ]]; then
 				music_source='󰓀'
@@ -84,6 +81,11 @@ get_cover() {
 			# Likely YT Music
 			elif [[ "$coverurl" == *"googleusercontent"* ]]; then
 				music_source=''
+				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_other" "$IMGPATH"
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
+			elif [[ "$coverurl" == *"spotify"* ]]; then
+				music_source='󰓇'
 				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
 				cp "$IMGPATH""_other" "$IMGPATH"
 				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
@@ -106,7 +108,7 @@ get_cover() {
 		elif [ "$COVER_URL" = "" ]; then
 		    echo '{"image": "", "color": "$bg"}'
 		else
-			COVER_URL="${COVER_URL:7}"
+			music_source='󱛟'
 			cp "$COVER_URL"  "$IMGPATH"
 			
 			cd ..
@@ -128,7 +130,7 @@ elif [ "$1" == "name" ]; then
     if [ "$2" != "" ]; then
 		lentolimit=$2
 	fi
-	echo '{"artist": "", "title": ""}'
+	# echo '{"artist": "", "title": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
 	
 		if [[ "$title" == *" - YouTube"* && "$artist" == "" ]]; then
@@ -136,6 +138,7 @@ elif [ "$1" == "name" ]; then
 		elif [[ "$title" == *"YouTube Music" && "$artist" == "" ]]; then
 			continue
 		fi
+		# title=$(echo "$title" | cut -d '-' -f2)
 		title=$(scripts/limitlen.py "$title" "$lentolimit")
 		artist=$(scripts/limitlen.py "$artist" "$lentolimit")
 		
@@ -146,7 +149,7 @@ elif [ "$1" == "name" ]; then
 		
 	done
 else
-	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
+	# echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
 	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
 	
 		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
@@ -155,6 +158,7 @@ else
 			continue
 		fi
 		len=$(playerctl metadata mpris:length)
+		# title=$(echo "$title" | cut -d '-' -f2)
 		title=$(scripts/limitlen.py "$title" 40)
 		artist=$(scripts/limitlen.py "$artist" 40)
 

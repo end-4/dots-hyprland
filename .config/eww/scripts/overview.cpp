@@ -51,8 +51,6 @@ void initWorkspaces() {
 }
 
 void addApp(json& client) {
-    if(string(client["class"]).size() == 0) return;
-    
     // Calculate position in overview tile
     int workspaceNum = int(client["workspace"]["id"]) - 1;  // 1-base to 0-base
     if(workspaceNum < 0) return; //Skip scratchpads/specials, as they have negative ids
@@ -69,6 +67,9 @@ void addApp(json& client) {
     newApp["at"] = client["at"];
     newApp["size"] = client["size"];
     // Icon path
+    if(string(client["class"]) == "") {
+        client["class"] = "dummy";
+    }
     string filename = string("./scripts/cache/" + string(client["class"]));
     std::ifstream ifs(filename);
     std::string iconpath((std::istreambuf_iterator<char>(ifs)),

@@ -1,11 +1,6 @@
 #!/usr/bin/bash
 
-focusedws=$(hyprctl activewindow -j | gojq -c -M '.workspace.id')
-echo $focusedws
-
-if [[ "$focusedws" == 'null' ]]; then
-  echo 1
-fi
+hyprctl activeworkspace -j | gojq '.id'
 
 if [ "$1" == "--once" ]; then
   exit 0
@@ -14,7 +9,7 @@ else
     case ${line%>>*} in
       "workspace")
         focusedws=${line#*>>}
-        echo $focusedws
+        echo "$focusedws"
         ;;
     esac  
   done

@@ -1,170 +1,160 @@
-; Const vars
-(defvar FILE_BROWSER "nautilus")
+; Const
 (defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
 (defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
-(defvar BG_ZOOM 1.2)
+; (defvar RES_WIDTH 1920)
+; (defvar RES_HEIGHT 1080)
+(defvar BAR_USELESS_GAPS 3)
+(defvar BAR_HEIGHT_HIDDEN 0)
+(defvar BAR_HEIGHT_NORMAL 40)
+(defvar BAR_HEIGHT_EXTENDED 80)
+(defvar BAR_HEIGHT_BOTTOM_NORMAL 60)
+(defvar GAPS 0)
+(defvar BG_ROUNDING 22)
+(defpoll accent :initial "#16C1C8" :interval "69h" `cat css/_material.scss | grep 'onPrimaryContainer' | awk '{print $2}' | cut -d ";" -f1`)
+(defvar BATTERY_LOW 20)
 (defvar OVERVIEW_SCALE 0.18)
-(defvar TASKVIEW_SCALE 0.12)
+(defvar OVERVIEW_INDICATOR_GAP 1)
+(defvar POWERMENU_COMMANDS `["gtklock &", "loginctl terminate-user $USER &", "systemctl suspend &", "systemctl hibernate &", "systemctl poweroff &", "systemctl reboot &", "# nothing", "# cancel"]`)
+(defvar POWERMENU_QUICKLAUNCHES `["hyprctl keyword debug:overlay $(( 1 - $(hyprctl getoption debug:overlay -j | gojq '.int') ))", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://discord.com/app' && xdg-open 'https://youtube.com/' && xdg-open 'https://github.com/' &", "hyprctl dispatch submap reset && eww close powermenu && code ~/.config/eww/ &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open ~/.config/hypr/hyprland.conf &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://wiki.hyprland.org/' &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' &"]`)
+(defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
+(defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
+(defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19, 20]`) ; Note: change $total and $shown in scripts/scroll-waifu too
+(defvar WAIFU_CATEGORIES_ICONS `["favorite", "mop", "school", "pets", "pets", "adjust", "🥵", "visibility_off", "visibility", "join", "photo_camera", "mode_fan", "explosion","checkroom", "💀", "hourglass_bottom", "relax",  "♨️",    "pets",  "🥵pets",    "voice_selection"]`)
+(defvar WAIFU_CATEGORIES       `["waifu", "maid", "uniform", "nekos.life", "nekos.moe",    "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin",        "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu",  ".pics:waifu segs",    ".pics:neko",  ".pics:neko segs",    "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS  `["waifu", "maid", "uniform", "--neko",     "--moe --segs", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
 (defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
-(defvar wsnums `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`)
+(defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
+(defvar WORKSPACE_SIDE_PAD 0.477) ; In rem!
 (defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
-(deflisten ICON_GET `scripts/get_open_icons`)
-(defvar SUPERCONTEXT_WIDTH 300)
-(defvar SUPERCONTEXT_HEIGHT 300)
-(defvar SUPERCONTEXT_OFFSET_X "[75, 23.1, -60.6, -60.6, 23.1]")
-(defvar SUPERCONTEXT_OFFSET_Y "[0, 67.6, 41.8, -41.8, -67.6]")
-(defvar SUPERCONTEXT_BUTTON_RADIUS 30)
-(defvar TASKVIEW_WORKSPACE_NAMES '["Desktop 1", "Desktop 2", "Desktop 3", "Desktop 4", "Desktop 5", "Desktop 6", "Desktop 7", "Desktop 8", "Desktop 9", "Desktop 10", ]')
-(defvar WINTASKVIEW_RESERVED_BOTTOM 250)
-(defvar WINTASKVIEW_SPACING 30)
-(defvar MIN_ROW_HEIGHT 100)
-(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32]`)
-(defvar WAIFU_CATEGORIES `["waifu","waifu segs","neko","neko segs","megumin","shinobu","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","glomp","slap","kill","kick","happy","wink","poke","dance","cringe"]`)
-(defvar WAIFU_CATEGORIES_ARGS `["waifu","--segs waifu","neko","--segs neko","megumin","shinobu","bully","cuddle","cry","hug","awoo","kiss","lick","pat","smug","bonk","yeet","blush","smile","wave","highfive","handhold","nom","bite","glomp","slap","kill","kick","happy","wink","poke","dance","cringe"]`)
-(defvar username_default "username")
-(defvar quote_content `["haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV", "I have a hentai anal gif playing in my base", "Amazing XXXmas. Cute femboy was fucked\\\nin the ass under the Christmas tree", "baaaaaaaaaaaa", "...so Nvidia, fuck you"]`)
-(defvar quote_author `["- vaxry", "- vaxry", "- Hyprland community, 2022", "-vaxer", "- Linus Torvalds"]`)
 
-; Vars
-(defvar music_reveal false)
-(defvar oquery "")
-(defvar sys_menu_open true)
-(defvar date_rev false)
-(defvar sys_rev false)
-(defvar force_sys_rev true)
-(defvar editing false)
-(defvar osd_track false)
+; Const: animation curves
+(defvar ANIM_NAMES `["Material","Fluent"]`)
+(defvar ANIM_ENTER `["transition: 200ms cubic-bezier(0.05,0.7,0.1,1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 150ms cubic-bezier(0.3,0,0.8,0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05,0.7,0.1,1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_INSTANT "transition: 0ms;")
+(defvar anim_set 0) ; Index of main animation set
+
+; Widget states
+(defvar flash_notif false)
+(defvar hover_leftspace false)
+(defvar hover_rightspace false)
+(defvar hover_music false)
+(defvar open_cheatsheet 0)
+(defvar open_notificationspopup false)
+(defvar open_powermenu false)
+(defvar open_powerview false)
+(defvar open_sideleft false)
+(defvar open_sideright false)
+(defvar open_visualizer false)
 (defvar osd_vol false)
 (defvar osd_bright false)
-(defvar selected '')
-(defvar overview_hover_name "Activities Overview")
-(defvar overview_query "")
-(defvar overview_results "")
-(defvar open_overview false)
-(defvar popup "none")
-(defvar right_hover false)
-(defvar ontf_hover false)
-(defvar music_hover false)
-(defvar edit_hover false)
-(defvar themer_hover false)
-(defvar calendar_hover false)
-(defvar rev_center_ws true)
-(defvar music_open false)
-(defvar themer_open false)
-(defvar focus false)
-(defvar win_hover false)
-(defvar winnotif_hover false)
-(defvar winactions_hover false)
-(defvar winstart_allapps false)
+(defvar rev_mixer false)
+(defvar rev_mixerbtn false)
+(defvar rev_waifustatus false)
+
+; Vars
+(defvar BAR_HEIGHT 40)
+(defvar BAR_HEIGHT_BOTTOM 0)
+(defvar calendartitle "")
+(defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
 (defvar monthshift 0)
-(defvar calendartitle '')
-(defvar winsearch '')
-(defvar winsearch_results "")
-(defvar winsearch_actions "")
-(defvar winsearch_actions_type "")
-(defvar winsearch_prefix "")
-(defvar allapps '')
-(defvar allapps_get '')
-(defvar compact false)
-(defvar resource_metric "cpu")
-(defvar record_sound false)
-(defvar supercontext_pos_x 960)
-(defvar supercontext_pos_y 540)
-(defvar ws_to_swap 0)
-(defvar tray_is_open false)
+(defvar notification_read 0)
+(defvar notification_cleared 0)
+(defvar notification_revcnt 0)
+(defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
+(defvar overview_query "")
+(defvar overview_results "[]")
+(defvar powermenu_option 0)
+(defvar quote_index 0)
+(defvar scroll_offset_waifu 0)
+(defvar selected '')
+(defvar show_waifu false)
+(defvar waifu_status "")
 
-; Dynamic animation: different for open and close
-(defvar rev_wincalendar true)
-(defvar rev_winactions false)
-(defvar rev_winnotif false)
-(defvar rev_winstart false)
-(defvar rev_winpowermenu false)
-(defvar rev_ostg false)
-(defvar rev_ontf false)
-(defvar rev_themer false)
-(defvar rev_dash false)
-(defvar rev_calendar false)
-(defvar rev_wingamebar false)
-(defvar rev_winnews false)
-(defvar rev_dashfs false)
-(defvar rev_bottombar false)
-(defvar rev_supercontext false)
-(defvar rev_wintaskview false)
-(defvar rev_winlang false)
 
-(defvar anim_open_ostg true)
-(defvar anim_open_ontf true)
-(defvar anim_open_search true)
-(defvar anim_open_themer true)
-(defvar anim_open_music true)
-(defvar anim_open_dash true)
-(defvar anim_open_calendar true)
-(defvar anim_open_winactions true)
-(defvar anim_open_winnotif true)
-(defvar anim_open_winstart true)
-(defvar anim_open_winpowermenu true)
-(defvar anim_open_wingamebar true)
-(defvar anim_open_winnews true)
-(defvar anim_open_dashfs true)
-(defvar anim_open_bottombar true)
-(defvar anim_open_supercontext true)
-(defvar anim_open_wintaskview true)
-(defvar anim_open_winlang true)
-
-; Time
-(defpoll time :interval "5s" `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`)
-(defpoll day_only :interval "5s" "date '+%e' | sed 's/ //g'")
-(defpoll time12 :interval "10s" `date '+%l:%M %^P' | sed 's/am/AM/g' | sed 's/pm/PM/g'`)
+; Dummies
+(deflisten ICON_GET `scripts/get_open_icons`)
 
 ; Listeners
-(deflisten airplane "scripts/airplane")
-(deflisten battery "scripts/battery")
-(deflisten bluetooth "scripts/bluetooth")
-(deflisten brightness "scripts/brightness")
-(deflisten memory "scripts/memory")
-(deflisten music "scripts/music")
-(deflisten music_cover "scripts/music cover")
-(deflisten notifications "scripts/notifications")
-(deflisten notif_icons :initial `{"icon": "󰆄", "paused": false, "toggle_icon": ""}` "scripts/notifications icons")
-(deflisten net "scripts/net")
-(deflisten volume "scripts/volume")
-(deflisten workspace "scripts/workspaces")
-(deflisten winnums "scripts/winnumbers")
-(deflisten hyprjson "scripts/hyprsettings")
 (deflisten awin "scripts/activewin")
-(deflisten audiojson "scripts/audiolevels")
-(deflisten mcover "scripts/music cover")
-(deflisten mname "scripts/music name 41")
-(deflisten mname_win "scripts/music name 32")
-(deflisten mplay "playerctl -F metadata -f '{{status}}'")
-(deflisten wsjsona "scripts/overview-wrapper1")
-(deflisten wsjsonb "scripts/overview-wrapper2")
 (deflisten activews :initial 1 "scripts/activews")
-(deflisten tasks "scripts/taskbarloop")
-(deflisten pinnedapps "cat modules/pinned-apps.json | gojq -c -M")
-(deflisten recommended "cat modules/recommended.json | gojq -c -M")
-(deflisten gamebarwidgets "cat modules/gamebar.json | gojq -c -M")
-(deflisten audiodevice `pactl --format=json list sinks | gojq -c -r '.[0]["description"]'`)
-(deflisten cavajson `scripts/cavajson`)
-(deflisten mousepos `scripts/mousetrack`)
-(deflisten taskviewlayout `scripts/taskviewlayout-wrapper`)
+(deflisten audiojson :initial "[]" "scripts/audiolevels")
+(deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery 2>/dev/null")
+(deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
+(deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
+(defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+(deflisten cheatsheet :initial "[]" "cat json/cheatsheet.json | gojq -c -M")
+(deflisten cavajson :initial "[[0,0]]" `scripts/cavajson`)
+(defpoll fontsize :initial 11 :interval "15m" `gsettings get org.gnome.desktop.interface font-name | cut -d ' ' -f 2 | sed 's/\'//g'`)
+(deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
 (deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)
-(defpoll langs :interval "5m" `cat modules/langs.json | gojq -c -M`)
-(defpoll colormode   :interval "5m" "cat scripts/workdir/__mode_colors.txt")
-(defpoll coloraccent :interval "5m" "cat css/_iconcolor.txt | head -1")
+(deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
+(deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
+(deflisten mplay "playerctl -F metadata -f '{{status}}'")
+(deflisten music :initial `{"artist" :"","length":"00:00","position":"0","position_time":"00:00","status":"","title":"Music"}` "scripts/music")
+(deflisten mcover
+  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
+  "scripts/music cover"
+)
+(deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
+(deflisten notifications :initial '[]' "scripts/notify-receive | gojq -c -M 'reverse'")
+(deflisten tasks "scripts/taskbarloop")
+(deflisten todolist :initial "[]" "cat json/todo.json | gojq -c -M")
+(deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
+(deflisten workspace :initial `[{"num":"1","haswins":"true"},{"num":"2","haswins":"true"},{"num":"3","haswins":"true"},{"num":"4","haswins":"true"},{"num":"5","haswins":"true"},{"num":"6","haswins":"true"},{"num":"7","haswins":"true"},{"num":"8","haswins":"true"},{"num":"9","haswins":"true"},{"num":"10","haswins":"true"}]` "scripts/workspaces")
+(deflisten wsjsona
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"1","workspace":{"id":1,"name":"1"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"2","workspace":{"id":2,"name":"2"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"3","workspace":{"id":3,"name":"3"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"4","workspace":{"id":4,"name":"4"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"5","workspace":{"id":5,"name":"5"}}]]`
+  "scripts/overview-wrapper1"
+)
+(deflisten wsjsonb
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"6","workspace":{"id":6,"name":"6"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"7","workspace":{"id":7,"name":"7"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"8","workspace":{"id":8,"name":"8"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"9","workspace":{"id":9,"name":"9"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"10","workspace":{"id":10,"name":"10"}}]]`
+  "scripts/overview-wrapper2"
+)
 
-; Fetch stuff
-(defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
-(defpoll packages :interval "5m" `pacman -Q | wc -l`)
-(defpoll kernel :interval "5m" `uname -r`)
-(defpoll username :interval "5m" :initial "username" `whoami`)
-(defpoll realname :interval "5m" :initial "realname" `getent passwd "$USER" | cut -d ':' -f 5 | cut -d ',' -f 1`)
-(defpoll hostname :interval "5m" :initial "distro" `uname -n`)
-(defpoll wm :interval "5m" :initial "Hyprland" `echo $XDG_CURRENT_DESKTOP`)
-(defpoll diskfreepercent :interval "5m" `echo $(df --output=pcent / | tr -dc '0-9')`)
-(defpoll diskused :interval "5m" `df -h --output=used / | awk 'NR==2{print $1}'`)
-(defpoll diskfree :interval "5m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
-(defpoll disksize :interval "5m" `df -h --output=size / | awk 'NR==2{print $1}'`)
-(deflisten cpuname `cat /proc/cpuinfo | grep 'model name' | awk -F: '{print $2}' | head -n 1`)
-(defpoll waifu_get :interval "5m" `python3 scripts/waifupics.py`)
-(defpoll calendar :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+; Polls
+(defpoll cpuname :interval "69h" :initial "lincox" ` lscpu | grep 'Model name' | sed 's/Model name: *//' | sed 's/ with Radeon Graphics//g'`)
+(defpoll gpunames :interval "69h" :initial "lincox" `lspci | grep "VGA\\\|3D" | cut -d ':' -f3 | cut -d '[' -f2 | cut -d ']' -f1`)
+(defpoll diskfreepercent :initial "0" :interval "10m" `echo $(df --output=pcent / | tr -dc '0-9')`)
+(defpoll diskfree :interval "10m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
+(defpoll diskused :interval "10m" `df -h --output=used / | awk 'NR==2{print $1}'`)
+(defpoll distro :initial "endeavouros" :interval "69h" "grep -w ID /etc/os-release | cut -d\\\" -f2")
+(defpoll hostname :interval "69h" :initial "distro" `uname -n`)
+(defpoll hyprland_version :interval "69h" :initial "v69420" "hyprctl version | head -2 | tail -1")
+(defpoll kernel :interval "69h" :initial "lincox kernel" `uname -r`)
+(defpoll realname :interval "69h" :initial "username" `awk -F':' -v uid=1000 '$3 == uid { print $5 }' /etc/passwd`)
+(defpoll time
+  :initial `{"date": "6/9", "hour": "0", "minute": "0", "monthname": "Month", "day": "Not monday", "year": "2077"}`
+  :interval "5s"
+  `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`
+)
+(defpoll uptime :interval "5m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
+(defpoll username :interval "69h" :initial "username" `whoami`)
+(defpoll waifu :initial `{"path": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifu-get.py waifu`)
+
+; INSPIRING quotes
+(defvar quote_content `[
+  "every other compositor is like professional and shit\\\nand we are about to make porn of ours\\\nLMAO",
+  "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
+  "arch is like rick astley to me\\\nnever gonna let you down",
+  "you have any cool ones?\\\nI'm always open for new wallpapers\\\npreferably anime tiddies ofc but yknow",
+  "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
+  "doki doki waku waku",
+  "that was good enough I guess\\\nI have a penis",
+  "...so Nvidia, fuck you",
+  "you cant spell circumference without cum",
+  "sEX"
+]`)
+(defvar quote_author `[
+  "- vaxer",
+  "- vaxry",
+  "- vaxry-chan",
+  "- vaxry",
+  "- vaxry",
+  "- Hyprland community, 2023",
+  "- vaxry",
+  "- Linus Torvalds",
+  "- vaxer",
+  "- vaxer"
+]`)

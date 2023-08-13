@@ -2,8 +2,8 @@
 
 # define colors
 colors=("#FFFFFF" "#fab387" "#a6e3a1" "#89b4fa") # Active Workspaces
-dimmed=("rgba(174,172,182,0.7)" "#f9e2af" "#94e2d5" "#b4befe") # Inactive workspaces
-empty='rgba(146,145,145,0.5)' # Empty workspaces
+dimmed=("rgba(154,152,162,0.7)" "#f9e2af" "#94e2d5" "#b4befe") # Inactive workspaces
+empty='empty' # Empty workspaces
 
 # get initial focused workspace
 focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
@@ -16,9 +16,9 @@ declare -A workspaces
 status() {
   if [ "${o[$1]}" -eq 1 ]; then 
     mon=${monitormap[${workspaces[$1]}]}
-    echo -n "${dimmed[$mon]}"
+    echo -n "true"
   else
-    echo -n "$empty"
+    echo -n "false"
   fi
 }
 
@@ -56,11 +56,8 @@ generate() {
   echo -n '['
 
   for i in {1..10}; do
-    echo -n ''$([ $i -eq 1 ] || echo ,)'{"num":"'$i'","clr":"'$(status "$i")'"}'
-    # echo -n ''$([ $i -eq 1 ] || echo ,) '{ "number": "'"$i"'", "activity": "'"$(status_activity $i)"'", "color": "'$(status "$i")'" }'
+    echo -n ''$([ $i -eq 1 ] || echo ,)'{"num":"'$i'","haswins":"'$(status "$i")'"}'
   done
-
-  # echo -n ',{"num":"'$focusedws'","clr":"'$(status "$focusedws")'"}'
 
   echo ']'
 }
@@ -79,6 +76,10 @@ for num in "${!workspaces[@]}"; do
 done
 # generate initial widget
 generate
+
+if [ "$1" == "--once" ]; then
+  exit
+fi
 
 socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
   # echo "${#workspaces[@]} ${#o[@]}"

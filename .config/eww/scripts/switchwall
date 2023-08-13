@@ -3,6 +3,7 @@
 # Requires: coreutils, xrandr, hyprland
 
 # Select and set image (hyprland)
+cd "$HOME/Pictures"
 imgpath=$(yad --width 1200 --height 800 --file --title='Choose wallpaper')
 screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)
 cursorposx=$(hyprctl cursorpos -j | gojq '.x')
@@ -21,6 +22,6 @@ swww img "$imgpath" --transition-step 230 --transition-fps 60 \
     --transition-pos "$cursorposx, $cursorposy_inverted" &
 
 # Generate colors for eww n stuff
-cp "$imgpath" "$HOME/.config/eww/images/wallpaper/wallpaper"
+cp "$imgpath" "$HOME/.config/eww/images/wallpaper"
 cd "$HOME/.config/eww" || exit
 ./scripts/launchapp '>wall'

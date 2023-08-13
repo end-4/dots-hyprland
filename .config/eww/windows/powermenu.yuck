@@ -1,0 +1,269 @@
+(defwidget powermenu_button [ icon text optn_num force_height ]
+  (box
+    (button
+      :class "powermenu-btn${force_height ? '-forceheight' : ''}${optn_num == powermenu_option ? '-active' : ''}"
+      :onclick "hyprctl dispatch submap reset && eww close powermenu; ${POWERMENU_COMMANDS[optn_num]}"
+      (box
+        :valign "center"
+        :orientation "v"
+        :space-evenly false
+        (label
+          :class "icon-material txt-badonkers"
+          :text {icon}
+        )
+        (label
+          :class "txt-small"
+          :text {text}
+        )
+      )
+    )
+  )
+)
+
+(defwidget powermenu_quicklaunch [ icon text optn_num ]
+  (box
+    (button
+      :class "powermenu-btn-bottom"
+      :onclick {POWERMENU_QUICKLAUNCHES[optn_num]}
+      (overlay
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false
+          (label
+            :class "icon-material txt-hugeass"
+            :text {icon}
+          )
+          (label
+            :class "txt-small"
+            :text {text}
+          )
+        )
+        ; number indicator
+        (box
+          :class "powermenu-btn-number"
+          :halign "start" :valign "start"
+          (label
+            :class "txt-small"
+            :text {optn_num == 0 ? 'Grave' : optn_num}
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget powermenu_guidetext [ icon text ]
+  (box
+    :class "spacing-h-10"
+    :space-evenly false :orientation "h"
+    (label :xalign 1
+      :class "txt-large powermenu-keybind-min-width"
+      :text "[${icon}]"
+    )
+    (label :xalign 0
+      :class "txt-small"
+      :text {text}
+    )
+  )
+)
+
+(defwidget powermenu_widget []
+  (box
+    :orientation "v"
+    :space-evenly false
+    :class "powermenu-bg"
+    (box ; Top corners
+      :space-evenly false
+      :orientation "h"
+      (image
+        :path "images/svg/corner_topleft.svg"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (box :hexpand true)
+      (image
+        :path "images/svg/corner_topright.svg"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+    )
+    (centerbox
+      :space-evenly false
+      (box ; Guide text
+        :hexpand true
+        :space-evenly false
+        :orientation "v"
+        :class "powermenu-time txt"
+        (powermenu_guidetext :icon "←↑→↓" :text "Arrows to navigate")
+        (powermenu_guidetext :icon "↵" :text "Enter to confirm")
+        (powermenu_guidetext :icon "Esc" :text "Esc to cancel")
+        (powermenu_guidetext :icon "C_S+R" :text "Ctrl+Super+R to force exit")
+        (powermenu_guidetext :icon "#" :text "<Number> to quick-launch")
+      )
+      (box ; Power options
+        :space-evenly false
+        :halign "center"
+        :class "spacing-v-15 powermenu-btn-area"
+        :orientation "v"
+        (box
+          :space-evenly false
+          :class "spacing-h-15"
+          (powermenu_button :optn_num 0 :force_height true :icon "lock" :text "Lock")
+          (powermenu_button :optn_num 1 :force_height true :icon "logout" :text "Logout")
+          (powermenu_button :optn_num 2 :force_height true :icon "bedtime" :text "Sleep")
+        )
+        (box
+          :space-evenly false
+          :class "spacing-h-15"
+          (powermenu_button :optn_num 3 :force_height true :icon "system_update_alt" :text "Hibernate")
+          (powermenu_button :optn_num 4 :force_height true :icon "power_settings_new" :text "Shutdown")
+          (powermenu_button :optn_num 5 :force_height true :icon "restart_alt" :text "Reboot")
+        )
+        ; Cancel button
+        (box :halign "center"
+          (powermenu_button :optn_num 7 :force_height false :icon "Close" :text "Cancel")
+        )
+      )
+      (box ; Clock
+        :hexpand true
+        :space-evenly false
+        :orientation "v"
+        :class "powermenu-time txt"
+        (label :xalign 1
+          :class "txt-badonkers"
+          :text {formattime(EWW_TIME, '%I:%M')}
+        )
+        (label :xalign 1
+          :class "txt-large"
+          :text {formattime(EWW_TIME, '%A, %d/%m')}
+        )
+      )
+    )
+    ; (box :vexpand true)
+    ; Info stuff
+    (box
+      :halign "center" :valign "center"
+      :vexpand true
+      :orientation "h"
+      :space-evenly false
+      :class "spacing-h-15"
+      (box
+        :valign "center"
+        :class "spacing-h-15"
+        :space-evenly false
+        :orientation "h"
+        (label
+          :class "icon-material txt-badonkers powermenu-icon"
+          :text "devices"
+        )
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false
+          :class "spacing-v-5"
+          ; (label :xalign 0
+          ;   :class "txt-large txt"
+          ;   :text "Hardware"
+          ; )
+          (label :xalign 0
+            :wrap true
+            :class "txt-small txt"
+            :text "${cpuname}"
+          )
+          (label :xalign 0
+            :wrap true
+            :class "txt-small txt"
+            :text "${gpunames}"
+          )
+        )
+      )
+      (box
+        :valign "center"
+        :class "spacing-h-10"
+        :space-evenly false
+        :orientation "h"
+        (box
+          :class "powermenu-icon"
+          :style "background-image: url('images/svg/${distro}.svg');"
+        )
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false
+          :class "spacing-v-5"
+          (label :xalign 0
+            :class "txt-large txt"
+            :text "${username}@${hostname}"
+          )
+          (label :xalign 0
+            :class "txt-small txt"
+            :text "${kernel}"
+          )
+        )
+      )
+      (box
+        :valign "center"
+        :class "spacing-h-15"
+        :space-evenly false
+        :orientation "h"
+        (box
+          :class "powermenu-icon"
+          :style "background-image: url('images/svg/hyprland.svg');"
+        )
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false
+          :class "spacing-v-5"
+          (label :xalign 0
+            :class "txt-large txt"
+            :text "Hyprland"
+          )
+          (label :xalign 0
+            :class "txt-small txt"
+            :text "${hyprland_version}"
+          )
+        )
+      )
+    )
+    (box ; Quick-launches
+      :space-evenly false
+      :halign "center"
+      :class "spacing-h-15 powermenu-btn-area"
+      ; toggle fps
+      (powermenu_quicklaunch :optn_num 0 :icon "60fps_select" :text "Toggle FPS")
+      (powermenu_quicklaunch :optn_num 1 :icon "language" :text "Open browser setup")
+      (powermenu_quicklaunch :optn_num 2 :icon "widgets" :text "Config Eww")
+      (powermenu_quicklaunch :optn_num 3 :icon "water_drop" :text "Config Hyprland")
+      (powermenu_quicklaunch :optn_num 4 :icon "article" :text "Hyprland Wiki")
+      (powermenu_quicklaunch :optn_num 5 :icon "auto_awesome" :text "Rickroll")
+    )
+    (box ; Bottom corners
+      :space-evenly false
+      :orientation "h"
+      (image
+        :path "images/svg/corner_bottomleft.svg"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (box :hexpand true)
+      (image
+        :path "images/svg/corner_bottomright.svg"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+    )
+  )
+)
+
+(defwindow powermenu
+  :monitor 0
+  :stacking "overlay"
+  :namespace "noanim"
+  :geometry (geometry
+    :width "100%"
+    :height "100%"
+  )
+  (powermenu_widget)
+)

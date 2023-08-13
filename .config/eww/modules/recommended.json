@@ -1,9 +1,0 @@
-[ 
-    [
-        {"name": "This is NOT Windows 11", "subtext": "end-4/dots-hyprland → windoes", "exec": "xdg-open 'https://github.com/end-4/dots-hyprland/tree/windoes' &", "icon": "images/icons/github.svg"},
-        {"name": "Get Hyprland help", "subtext": "+ chance to be called a retard", "exec": "xdg-open 'https://discord.com/invite/hQ9XvMUjjr' &", "icon": "images/icons/discord.png"}
-    ],
-    [
-        {"name": "r/unixporn", "subtext": "Hot windows n statusbar sex", "exec": "xdg-open 'https://www.reddit.com/r/unixporn/' &", "icon": "images/icons/reddit.svg"}
-    ]
-]

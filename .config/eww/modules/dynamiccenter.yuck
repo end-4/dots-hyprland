@@ -1,0 +1,13 @@
+(defwidget dynamiccenter_widget []
+  (box
+    :orientation "v" :space-evenly false
+    (box ; Module 1: Volume, Brightness
+      :class "dynamic-module${(osd_vol || osd_bright) ? '' : '-hidetop'}"
+      (osd_widget)
+    )
+    (box ; Module 2: Workspaces
+      :class "dynamic-module${(osd_vol || osd_bright) ? '-hidebottom' : ''}"
+      (workspaces_widget)
+    )
+  )
+)

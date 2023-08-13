@@ -1,0 +1,29 @@
+(defwidget leftspace_widget []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onclick "scripts/toggle-sideleft.sh &"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :space-evenly false
+      (box :class "corner-width")
+      ; (eventbox
+      ;   :class "bar-btn"
+      ;   :onclick "scripts/toggle-powerview.sh"
+      ;   (box
+      ;     :class "bar-btn-box"
+      ;     :space-evenly false :spacing 5
+      ;     (label
+      ;       :class "icon-material txt-norm txt"
+      ;       :text "search"
+      ;     )
+      ;     (label
+      ;       :class "txt-smaller txt txt-smaller-offset"
+      ;       :text "Search"
+      ;     )
+      ;   )
+      ; )
+      (box :hexpand true)
+    )
+  )
+)

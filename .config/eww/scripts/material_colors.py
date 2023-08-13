@@ -16,7 +16,7 @@ elif len(sys.argv) > 1 and sys.argv[1] == '--color':
     colorstr = sys.argv[2]
     newtheme = themeFromSourceColor(argbFromHex(colorstr))
 else:
-    img = Image.open(str(Path.home())+'/.config/eww/images/wallpaper/wallpaper')
+    img = Image.open(str(Path.home())+'/.config/eww/images/wallpaper')
     basewidth = 64
     wpercent = (basewidth/float(img.size[0]))
     hsize = int((float(img.size[1])*float(wpercent)))
@@ -75,6 +75,7 @@ print('$onError: ' + hexFromArgb(onError) + ';')
 print('$errorContainer: ' + hexFromArgb(errorContainer) + ';')
 print('$onErrorContainer: ' + hexFromArgb(onErrorContainer) + ';')
 print('$colorbarbg: ' + hexFromArgb(background) + ';')
+print('$background: ' + hexFromArgb(background) + ';')
 print('$onBackground: ' + hexFromArgb(onBackground) + ';')
 print('$surface: ' + hexFromArgb(surface) + ';')
 print('$onSurface: ' + hexFromArgb(onSurface) + ';')

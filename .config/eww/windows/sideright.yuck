@@ -1,0 +1,424 @@
+(defwidget sideright_widget []
+  (eventbox
+    :onhoverlost "scripts/toggle-sideright.sh --close &"
+    (box
+      :orientation "v" :space-evenly false
+      (eventbox
+        :onclick "scripts/toggle-sideright.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
+      )
+      (box
+        :vexpand true
+        :class "sidebar-window ${open_sideright ? 'anim-enter' : 'anim-exit'} ${open_sideright ? '' : 'sidebar-hide-right'}"
+        (box
+          :vexpand true
+          :class "spacing-v-15"
+          :orientation "v" :space-evenly false
+          (box
+            :class "spacing-v-5"
+            :orientation "v" :space-evenly false
+            (box
+              :class "spacing-h-5"
+              :orientation "h"
+              (box
+                (eventbox ; Wifi
+                  :class "sidebar-toggle${net.essid == 'lo' ? '' : '-active'}"
+                  :onclick "scripts/net toggle &"
+                  :cursor "pointer"
+                  :onrightclick "XDG_CURRENT_DESKTOP='gnome' gnome-control-center wifi &"
+                  (box
+                    :class "spacing-h-5"
+                    :space-evenly false :orientation "h"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text {WIFI_ICONS[net.level]}
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Internet"
+                    )
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "chevron_right"
+                    )
+                  )
+                )
+              )
+              (box
+                (eventbox ; Bluetooth
+                  :class "sidebar-toggle${bluetooth.text == 'Bluetooth off' ? '' : '-active'}"
+                  :onclick "scripts/bluetooth toggle &"
+                  :cursor "pointer"
+                  :onrightclick "blueberry &"
+                  (box
+                    :class "spacing-h-5"
+                    :space-evenly false :orientation "h"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text {bluetooth.icon}
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Bluetooth"
+                    )
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "chevron_right"
+                    )
+                  )
+                )
+              )
+              (box
+                (eventbox
+                  :class "sidebar-toggle${hyprjson.nightlight ? '-active' : ''}"
+                  :onclick "scripts/toggle-nightlight.sh &"
+                  :cursor "pointer"
+                  (box
+                    :space-evenly false :orientation "h":class "spacing-h-5"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text {hyprjson.nightlight ? "Nightlight" : ""}
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Night light"
+                    )
+                  )
+                )
+              )
+            )
+            (box
+              :class "spacing-h-5"
+              :orientation "h"
+              (box
+                (eventbox ; Mouse raw input
+                  :class "sidebar-toggle${hyprjson.force_no_accel == 1 ? '-active' : ''}"
+                  :onclick "hyprctl keyword input:force_no_accel ${1 - hyprjson.force_no_accel} &"
+                  :cursor "pointer"
+                  (box
+                    :space-evenly false :orientation "h" :class "spacing-h-5"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "arrow_selector_tool"
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Raw input"
+                    )
+                  )
+                )
+              )
+              (box
+                (eventbox ; Disable touchpad while typing
+                  :class "sidebar-toggle${hyprjson.touchpad_disable_while_typing == 1 ? '-active' : ''}"
+                  :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
+                  :cursor "pointer"
+                  (box
+                    :space-evenly false :orientation "h" :class "spacing-h-5"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "keyboard"
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "→ No touchpad"
+                    )
+                  )
+                )
+              )
+              (box
+                (eventbox
+                  :class "sidebar-toggle"
+                  :onclick "~/.local/bin/record-script.sh &"
+                  :cursor "pointer"
+                  (box
+                    :space-evenly false :orientation "h" :class "spacing-h-5"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "screen_record"
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Record"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (box
+            :orientation "h" :spacing 10
+            (button
+              :class "sidebar-action"
+              :onclick "scripts/toggle-sideright.sh --close && XDG_CURRENT_DESKTOP='gnome' gnome-control-center &"
+              (label
+                :class "icon-material txt-norm"
+                :text "settings"
+              )
+            )
+            (button
+              :class "sidebar-action"
+              :onclick "scripts/toggle-sideright.sh --close && gtklock &"
+              (label
+                :class "icon-material txt-norm"
+                :text "lock"
+              )
+            )
+            (button
+              :class "sidebar-action"
+              :onclick "scripts/toggle-sideright.sh --close && systemctl suspend &"
+              (label
+                :class "icon-material txt-norm"
+                :text "bedtime"
+              )
+            )
+            (button
+              :class "sidebar-action"
+              :onclick "scripts/toggle-sideright.sh --close && ${EWW_CMD} open powermenu && hyprctl dispatch submap powermenu"
+              (label
+                :class "icon-material txt-norm"
+                :text "power_settings_new"
+              )
+            )
+          )
+          (box
+            (revealer
+              :reveal {arraylength(notifications) - notification_cleared > 0}
+              :duration "180ms"
+              :transition "slidedown"
+              (box
+                :class "sidebar-notif-actions"
+                :space-evenly false
+                (label
+                  :class "sidebar-notif-heading txt-norm"
+                  :text "Notifications"
+                )
+                (eventbox
+                  :hexpand true
+                  :onclick "${EWW_CMD} update notification_cleared=${arraylength(notifications)} &"
+                  :class "sidebar-notif-action"
+                  (box
+                    :halign "end"
+                    :space-evenly false :orientation "h"
+                    (label
+                      :class "icon-material txt-norm"
+                      :text "clear_all"
+                    )
+                    (label :xalign 0
+                      :class "txt-txt-norm"
+                      :hexpand true
+                      :text "Clear"
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (scroll :vscroll true :hscroll false :vexpand true
+            (box :orientation "v" :space-evenly false
+              (box
+                :orientation "v" :space-evenly false
+                (for notif in notifications
+                  (revealer
+                    :reveal {notif.id > notification_cleared && notif.id <= notification_revcnt}
+                    :transition "slidedown"
+                    :duration "100ms"
+                    (box
+                      :class "sidebar-notif-common sidebar-notif${
+                      arraylength(notifications) - notification_cleared == 1 ? '' : (
+                        notif.id == arraylength(notifications) ? (
+                          notifications[1]['app_name'] == notif.app_name && notifications[1]['urgency'] == notif.urgency ? '-top' : ''
+                          ) : (
+                          notif.id == 1 ? (
+                            notifications[arraylength(notifications) - 2]['app_name'] == notif.app_name && notifications[arraylength(notifications) - 2]['urgency'] == notif.urgency ? '-bottom' : ''
+                            ) : (
+                            notifications[arraylength(notifications) - notif.id + 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id + 1]['urgency'] == notif.urgency && notif.id != notification_cleared + 1? (
+                              notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-middle' : '-top') : (
+                              notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-bottom' : ''
+                            )
+                          )
+                        )
+                      )
+                      } ${notif.urgency == 2 ? 'sidebar-notif-urgent' : 'sidebar-notif-normal'}"
+                      :orientation "h"
+                      (box :orientation "v" :space-evenly false
+                        (box :orientation "h" :space-evenly false
+                          (label :xalign 0
+                            :wrap true
+                            :class "txt-norm txt-bold"
+                            :text "${notif.summary}"
+                          )
+                          (box :hexpand true)
+                          (label :xalign 0
+                            :wrap true
+                            :class "txt-small"
+                            :text "${notif.app_name} • ${notif.time}"
+                            :text "${arraylength(notifications) == 1 ||
+                            notif.id == arraylength(notifications) ||
+                            notifications[arraylength(notifications) - notif.id - 1]['app_name'] != notif.app_name || notifications[arraylength(notifications) - notif.id - 1]['urgency'] != notif.urgency ?
+                            '${notif.app_name} • ${notif.time}' : notif.time
+                            }"
+                          )
+                        )
+                        (label :xalign 0
+                          :wrap true
+                          :class "txt-smaller"
+                          :text {notif.body}
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              (revealer
+                :vexpand true
+                :reveal {arraylength(notifications) - notification_cleared == 0}
+                :duration "180ms"
+                :transition "slidedown"
+                (box
+                  :halign "center" :valign "center"
+                  :space-evenly false :orientation "v"
+                  (label
+                    :class "icon-material txt-badonkers txt"
+                    :text "notifications"
+                  )
+                  (label
+                    :class "txt txt-norm"
+                    :text "All caught up!"
+                  )
+                )
+              )
+            )
+          )
+          (box
+            :orientation "v" :space-evenly false
+            :class "sidebar-section"
+            (box
+              :space-evenly false :orientation "v"
+              (eventbox
+                :onscroll "scripts/scrollmonth {} &"
+                :onclick "${EWW_CMD} update monthshift=0 &"
+                (box :space-evenly false :orientation "h"
+                  (label :xalign 0
+                    :class "sidebar-section-heading txt-large"
+                    :text {calendartitle}
+                  )
+                  (box :hexpand true)
+                  (label :xalign 0
+                    :class "sidebar-section-heading txt-large"
+                    :text "To-do list"
+                  )
+                )
+              )
+              (box ; Calendar
+                :orientation "v"
+                :space-evenly false
+                (box
+                  :class "sidebar-content"
+                  :orientation "h" :space-evenly false :spacing 8
+                  (eventbox
+                    :onscroll "scripts/scrollmonth {} &"
+                    (box
+                      :orientation "v"
+                      :space-evenly false
+                      (box
+                        (for day in weekdays
+                          (box
+                            :class "sidebar-calendar-btn day${day.today}"
+                            (label
+                              :class "sidebar-calendar-txt txt-smallie"
+                              :text "${day.day}"
+                            )
+                          )
+                        )
+                      )
+                      (for week in calendar
+                        (box
+                          (for day in week
+                            (button
+                              :class "sidebar-calendar-btn day${day.today}"
+                              (label
+                                :class "sidebar-calendar-txt txt-smallie"
+                                :text "${day.day}"
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (box
+                    :class "sidebar-divider"
+                  )
+                  (box
+                    :orientation "v"
+                    :space-evenly false
+                    :hexpand true
+                    :class "sidebar-todo-box"
+                    (scroll
+                      :hscroll false :vscroll true
+                      :vexpand true
+                      (box
+                        :orientation "v"
+                        :space-evenly false
+                        (for task in todolist
+                          (box
+                            :orientation "h"
+                            :space-evenly false
+                            :class "sidebar-todo-item"
+                            (label :xalign 0
+                              :hexpand true
+                              :class "txt-small"
+                              :text {task}
+                              :wrap true
+                            )
+                            (button
+                              :valign "center"
+                              :class "sidebar-todo-btn"
+                              :onclick "scripts/todo del '${task}' && ${EWW_CMD} update todolist=\"$(cat json/todo.json | gojq -c -M)\""
+                              (label
+                                :class "icon-material txt-norm"
+                                :text "Remove"
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (eventbox
+        :onclick "scripts/toggle-sideright.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :class {BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'})
+      )
+    )
+  )
+)
+
+(defwindow sideright
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "top right"
+    :height "100%"
+  )
+  (sideright_widget)
+)

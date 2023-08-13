@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 toggle() {
-  status=$(rfkill -J | jaq -r '.rfkilldevices[] | select(.type == "wlan") | .soft' | head -1)
+  status=$(rfkill -J | gojq -r '.rfkilldevices[] | select(.type == "wlan") | .soft' | head -1)
 
   if [ "$status" = "unblocked" ]; then
     rfkill block wlan
