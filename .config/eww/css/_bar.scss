@@ -248,8 +248,8 @@
 }
 
 .bar-ws-txt {
-    min-height: 1.772rem;
-    min-width: 1.772rem;
+    min-height: 1.770rem;
+    min-width: 1.770rem;
     @include mainfont;
     font-size: 1.0909rem;
     // background: red;
@@ -257,6 +257,7 @@
 
 .ws {
     transition: 100ms cubic-bezier(0, 1, 0, 1);
+    // transition: 0ms;
 }
 
 .bar-ws-txt-active {
@@ -321,7 +322,7 @@
 
 .bar-music-playstate-txt {
     @include icon-material;
-    font-size: 1.4545rem;
+    font-size: 1.4rem;
     margin-bottom: -0.137rem;
     margin-left: 0rem;
 }
@@ -394,7 +395,6 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $onPrimaryContainer;
     }
 
     progress {

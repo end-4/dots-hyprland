@@ -1,0 +1,34 @@
+$transparentize_amount: 0.2;
+$transparentize_surface_amount: 0.41;
+
+$t_primary: transparentize($primary, $transparentize_amount);
+$t_onPrimary: transparentize($onPrimary, $transparentize_amount);
+$t_primaryContainer: transparentize($primaryContainer, $transparentize_amount);
+$t_onPrimaryContainer: transparentize($onPrimaryContainer, $transparentize_amount);
+$t_secondary: transparentize($secondary, $transparentize_amount);
+$t_onSecondary: transparentize($onSecondary, $transparentize_amount);
+$t_secondaryContainer: transparentize($secondaryContainer, $transparentize_amount);
+$t_onSecondaryContainer: transparentize($onSecondaryContainer, $transparentize_amount);
+$t_tertiary: transparentize($tertiary, $transparentize_amount);
+$t_onTertiary: transparentize($onTertiary, $transparentize_amount);
+$t_tertiaryContainer: transparentize($tertiaryContainer, $transparentize_amount);
+$t_onTertiaryContainer: transparentize($onTertiaryContainer, $transparentize_amount);
+$t_error: transparentize($error, $transparentize_amount);
+$t_onError: transparentize($onError, $transparentize_amount);
+$t_errorContainer: transparentize($errorContainer, $transparentize_amount);
+$t_onErrorContainer: transparentize($onErrorContainer, $transparentize_amount);
+$t_colorbarbg: transparentize($colorbarbg, $transparentize_amount);
+$t_background: transparentize($background, $transparentize_amount);
+$t_onBackground: transparentize($onBackground, $transparentize_amount);
+$t_surface: transparentize($surface, $transparentize_surface_amount);
+$t_onSurface: transparentize($onSurface, $transparentize_surface_amount);
+$t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount);
+$t_onSurfaceVariant: transparentize($onSurfaceVariant, $transparentize_surface_amount);
+$t_outline: transparentize($outline, $transparentize_amount);
+$t_shadow: transparentize($shadow, $transparentize_amount);
+$t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);
+$t_inverseOnSurface: transparentize($inverseOnSurface, $transparentize_amount);
+$t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
+
+$hovercolor: mix($t_surface, $t_onSurface, 0.5);
+$activecolor: mix($t_surface, $t_onSurface, 0.3);
