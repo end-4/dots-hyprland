@@ -92,7 +92,7 @@
       (box ; Battery
         :class "bar-circle-pad"
         (circular-progress
-          :value "${battery.percentage}"
+          :value "${battery.percentage > 100 ? 100 : battery.percentage}"
           :class "bar-batt-circle"
           :thickness 3
           :start-at 75
