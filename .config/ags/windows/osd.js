@@ -3,6 +3,6 @@ var indicator = monitor => ({
     name: `indicator${monitor}`,
     className: 'indicator',
     layer: 'overlay',
-    anchor: ['left'],
-    child: { type: 'on-screen-indicator' },
+    anchor: ['top'],
+    child: { type: 'indicator' },
 });

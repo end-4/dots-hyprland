@@ -1,5 +1,5 @@
 $transparentize_amount: 0.2;
-$transparentize_surface_amount: 0.41;
+$transparentize_surface_amount: 0.5;
 
 $t_primary: transparentize($primary, $transparentize_amount);
 $t_onPrimary: transparentize($onPrimary, $transparentize_amount);
@@ -30,5 +30,6 @@ $t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);
 $t_inverseOnSurface: transparentize($inverseOnSurface, $transparentize_amount);
 $t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
 
-$hovercolor: mix($t_surface, $t_onSurface, 0.5);
-$activecolor: mix($t_surface, $t_onSurface, 0.3);
+$hovercolor: mix($t_surface, $t_onSurface, 50%);
+$activecolor: mix($t_surface, $t_onSurface, 30%);
+$subtext: mix($onBackground, $background, 90%);

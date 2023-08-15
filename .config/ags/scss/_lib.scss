@@ -172,12 +172,16 @@ $activecolor: rgba(128, 128, 128, 0.7);
     font-size: 0.7273rem;
 }
 
-.txt-subtxt {
-    color: mix($onBackground, $background, 80%);
+.txt-subtext {
+    color: $subtext;
+}
+
+.txt-semibold {
+    font-weight: 500;
 }
 
 .txt-bold {
-    font-weight: 500;
+    font-weight: bold;
 }
 
 .icon-material {

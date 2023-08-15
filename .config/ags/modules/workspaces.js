@@ -1,6 +1,16 @@
 const { Widget } = ags;
-const { Hyprland } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+const { execAsync, exec, CONFIG_DIR } = ags.Utils;
+const { deflisten } = imports.scripts.scripts;
+
+const HyprlandWorkspaces = deflisten(
+    "HyprlandWorkspaces",
+    CONFIG_DIR + "/scripts/workspaces.sh",
+);
+
+const HyprlandActiveWorkspace = deflisten(
+    "HyprlandActiveWorkspace",
+    CONFIG_DIR + "/scripts/activews.sh",
+);
 
 Widget.widgets['modules/workspaces'] = ({
     fixed = 10,
@@ -39,15 +49,15 @@ Widget.widgets['modules/workspaces'] = ({
                             label: `${i}`,
                             className: 'bar-ws',
                             connections: [
-                                [Hyprland, label => {
-                                    const { workspaces, active } = Hyprland;
-                                    const occupied = workspaces.has(i) && workspaces.get(i).windows > 0;
-                                    const occupiedleft = i - 1 >= 1 && workspaces.has(i - 1) && workspaces.get(i - 1).windows > 0;
-                                    const occupiedright = i + 1 <= fixed && workspaces.has(i + 1) && workspaces.get(i + 1).windows > 0;
-                                    label.toggleClassName('bar-ws-occupied', occupied || active.workspace.id == i);
+                                [HyprlandWorkspaces, label => {
+                                    const wsJson = JSON.parse(HyprlandWorkspaces.state);
+                                    const occupied = wsJson[i - 1]['haswins'];
+                                    const occupiedleft = i - 1 >= 1 && wsJson[i - 2]['haswins'];
+                                    const occupiedright = i + 1 <= fixed && wsJson[i]['haswins'];
+                                    label.toggleClassName('bar-ws-occupied', occupied);
                                     label.toggleClassName('bar-ws-empty', !occupied);
-                                    label.toggleClassName('bar-ws-left', !occupiedleft && active.workspace.id != i - 1);
-                                    label.toggleClassName('bar-ws-right', !occupiedright && active.workspace.id != i + 1);
+                                    label.toggleClassName('bar-ws-left', !occupiedleft);
+                                    label.toggleClassName('bar-ws-right', !occupiedright);
                                 }],
                             ],
                         },
@@ -55,15 +65,16 @@ Widget.widgets['modules/workspaces'] = ({
                 }]
             },
             {
-                // halign: 'center',
                 valign: 'center',
                 type: 'button',
                 className: 'bar-ws bar-ws-active',
-                connections: [[Hyprland, label => {
-                    const { active } = Hyprland;
-                    label.setStyle(`margin-left: ${1.773 * (active.workspace.id - 1) + WORKSPACE_SIDE_PAD}rem; margin-right: ${1.773 * (10 - active.workspace.id) + WORKSPACE_SIDE_PAD}rem;`);
-                    label.label = `${active.workspace.id}`;
-                }]],
+                connections: [
+                    [HyprlandActiveWorkspace, label => {
+                        const ws = HyprlandActiveWorkspace.state;
+                        label.setStyle(`margin-left: ${1.773 * (ws - 1) + WORKSPACE_SIDE_PAD}rem; margin-right: ${1.773 * (10 - ws) + WORKSPACE_SIDE_PAD}rem;`);
+                        label.label = `${HyprlandActiveWorkspace.state}`;
+                    }],
+                ],
             },
         ]
     }

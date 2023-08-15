@@ -7,7 +7,7 @@
     animation-name: flyin-top;
     animation-duration: 250ms;
     animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
-    animation-iteration-count: 1; 
+    animation-iteration-count: 1;
 }
 
 .bar-sidespace {
@@ -102,6 +102,7 @@
     min-height: 1.770rem;
     min-width: 1.770rem;
     font-size: 1.091rem;
+    @include mainfont;
 }
 
 .bar-ws-empty {
@@ -117,7 +118,8 @@
     background-color: $primary;
     color: $onPrimary;
     border-radius: 999px;
-    transition: 100ms cubic-bezier(0, 1, 0, 1);
+    transition: 70ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    // transition: 0ms;
 }
 
 .bar-ws-left {
@@ -302,28 +304,29 @@
 
 .corner {
     background-color: $t_background;
-    border-radius: 1.5rem;
+    border-radius: 21px; //Hard code because Hyprland rounding is in px
+}
+
+.bar-topdesc {
+    margin-top: -0.136rem;
+    margin-bottom: -0.341rem;
 }
 
 .bar-space-button {
     padding: 0.341rem;
-
-    box {
-        border-radius: 999px;
-        padding: 0rem 0.682rem;
-    }
 }
 
-.bar-space-button:hover {
-    box {
-        background-color: $hovercolor;
-    }
+.bar-space-button>box:first-child {
+    border-radius: 999px;
+    padding: 0rem 0.682rem;
 }
 
-.bar-space-button:active {
-    box {
-        background-color: $activecolor;
-    }
+.bar-space-button:hover>box:first-child {
+    background-color: $hovercolor;
+}
+
+.bar-space-button:active>box:first-child {
+    background-color: $activecolor;
 }
 
 .bar-space-button-leftmost {
