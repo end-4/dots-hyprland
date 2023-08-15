@@ -1,6 +1,11 @@
 const { App, Widget } = ags;
-const { Hyprland } = ags.Service;
-const { exec, execAsync } = ags.Utils;
+const { exec, execAsync, CONFIG_DIR } = ags.Utils;
+const { deflisten } = imports.scripts.scripts;
+
+const HyprlandActiveWindow = deflisten(
+    "HyprlandActiveWindow",
+    CONFIG_DIR + "/scripts/activewin.sh",
+);
 
 Widget.widgets['modules/leftspace'] = props => Widget({
     ...props,
@@ -14,20 +19,41 @@ Widget.widgets['modules/leftspace'] = props => Widget({
             {
                 type: 'box', className: 'bar-sidemodule', hexpand: true,
                 children: [{
-                    type: 'button', className: 'bar-space-button bar-space-button-leftmost',
-                    onClick: () => ags.App.toggleWindow('overview'),
+                    type: 'button', 
+                    className: 'bar-space-button bar-space-button-leftmost',
+                    // onClick: () => ags.App.toggleWindow('overview'),
                     child: {
                         type: 'box',
-                        children: [{
-                            type: 'scrollable', hexpand: true, hscroll: 'true', vscroll: 'true',
-                            child: {
-                                type: 'label', xalign: 0,
-                                className: 'txt txt-smallie',
-                                connections: [[Hyprland, label => {
-                                    label.label = Hyprland.active.client.title || 'Desktop';
-                                }]],
+                        orientation: 'vertical',
+                        children: [
+                            {
+                                type: 'scrollable',
+                                hexpand: true, vexpand: true,
+                                hscroll: 'true', vscroll: 'false',
+                                child: {
+                                    type: 'box',
+                                    orientation: 'vertical',
+                                    children: [
+                                        {
+                                            type: 'label', xalign: 0,
+                                            className: 'txt txt-smaller bar-topdesc',
+                                            connections: [[HyprlandActiveWindow, label => {
+                                                const winJson = JSON.parse(HyprlandActiveWindow.state);
+                                                label.label = Object.keys(winJson).length === 0 ? 'Desktop' : winJson['class'];
+                                            }]],
+                                        },
+                                        {
+                                            type: 'label', xalign: 0,
+                                            className: 'txt txt-smallie',
+                                            connections: [[HyprlandActiveWindow, label => {
+                                                const winJson = JSON.parse(HyprlandActiveWindow.state);
+                                                label.label = Object.keys(winJson).length === 0 ? `Workspace ${imports.modules.workspaces.HyprlandActiveWorkspace.state}` : winJson['title'];
+                                            }]],
+                                        }
+                                    ]
+                                }
                             }
-                        }]
+                        ]
                     }
                 }]
             },
