@@ -145,7 +145,7 @@
 (defpoll mousemode :interval "1m" "lsusb.py -i | grep -i mouse > /dev/null && echo 1 || echo 0")
 
 ; Fetch stuff
-(defpoll distro :initial "EndeavourOS" :interval "5m" "grep -w NAME /etc/os-release | cut -d\" -f2")
+(defpoll distro :initial "EndeavourOS" :interval "5m" "grep -w NAME /etc/os-release | cut -d\\\" -f2")
 ; (defpoll uptime :interval "1m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
 (defpoll packages :interval "10m" `pacman -Q | wc -l`)
 (defpoll kernel :interval "69h" `uname -r`)
