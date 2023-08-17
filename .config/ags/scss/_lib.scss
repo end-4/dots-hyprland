@@ -32,15 +32,15 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 @mixin elevation2 {
-    background: $surface;
-    color: $onSurface;
+    // background: $surface;
+    // color: $onSurface;
     box-shadow: 0px 2px 3px $shadow;
     margin: 7px;
 }
 
 @mixin elevation3 {
-    background: $surfaceVariant;
-    color: $onSurfaceVariant;
+    // background: $surfaceVariant;
+    // color: $onSurfaceVariant;
     // box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
     box-shadow: 0px 2px 5px $shadow;
     margin: 7px;

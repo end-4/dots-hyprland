@@ -4,5 +4,5 @@ var indicator = monitor => ({
     className: 'indicator',
     layer: 'overlay',
     anchor: ['top'],
-    child: { type: 'indicator' },
+    child: { type: 'osd' },
 });

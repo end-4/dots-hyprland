@@ -19,7 +19,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e1e3e4; }
+  color: #e2e2e6; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -69,7 +69,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #cdcfd0; }
+  color: #ceced2; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -82,16 +82,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e1e3e4;
+  background-color: #e2e2e6;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #3f484a;
-  color: #bfc8ca;
+  background-color: #42474e;
+  color: #c3c7d0;
   border-radius: 50rem;
-  border: 1px solid #bfc8ca; }
+  border: 1px solid #c3c7d0; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -208,7 +208,7 @@ tooltip {
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .bar-bg {
-  background-color: rgba(25, 28, 29, 0.8);
+  background-color: rgba(27, 27, 27, 0.8);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -222,11 +222,11 @@ tooltip {
   padding: 0.2rem; }
 
 .bar-group {
-  background-color: rgba(45, 48, 49, 0.5);
-  border-top: 1px solid rgba(65, 68, 69, 0.5);
-  border-left: 1px solid rgba(65, 68, 69, 0.5);
-  border-right: 1px solid rgba(55, 58, 59, 0.5);
-  border-bottom: 1px solid rgba(55, 58, 59, 0.5); }
+  background-color: rgba(47, 47, 47, 0.5);
+  border-top: 1px solid rgba(67, 67, 68, 0.5);
+  border-left: 1px solid rgba(67, 67, 68, 0.5);
+  border-right: 1px solid rgba(57, 57, 57, 0.5);
+  border-bottom: 1px solid rgba(57, 57, 57, 0.5); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -281,7 +281,7 @@ tooltip {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(45, 48, 49, 0.5);
+  background-color: rgba(47, 47, 47, 0.5);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -292,15 +292,15 @@ tooltip {
   font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter'; }
 
 .bar-ws-empty {
-  color: #e1e3e4; }
+  color: #e2e2e6; }
 
 .bar-ws-occupied {
-  background-color: #334b50;
-  color: #cde7ee; }
+  background-color: #3c4858;
+  color: #d6e3f7; }
 
 .bar-ws-active {
-  background-color: #52d7f0;
-  color: #00363f;
+  background-color: #9ccaff;
+  color: #00325a;
   border-radius: 999px;
   transition: 70ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
@@ -315,8 +315,8 @@ tooltip {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #a1efff;
-  color: #004e5a; }
+  background-color: #3c4858;
+  color: #d6e3f7; }
 
 .bar-sidemodule {
   min-width: 25.227rem; }
@@ -334,22 +334,23 @@ tooltip {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #334b50;
-  color: #cde7ee; }
+  background-color: #3c4858;
+  color: #d6e3f7; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #004e5a;
-  color: #a1efff; }
+  background-color: #3c4858;
+  color: #d6e3f7; }
 
 .bar-music-playstate-txt {
   font-family: 'Material Symbols Rounded';
-  font-size: 1.4545rem;
+  font-size: 1.568rem;
   margin: -0.1rem 0rem;
-  margin-left: 0.2rem; }
+  margin-left: 0.2rem;
+  margin-right: 0.17rem; }
 
 .bar-music-cover {
   background-position: center;
@@ -407,13 +408,13 @@ tooltip {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #a1efff; }
+    background-color: #3c4858; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #004e5a; }
+    background-color: #d6e3f7; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -434,13 +435,13 @@ tooltip {
 
 .bar-batt-chargestate {
   border-radius: 10rem;
-  background-color: transparent;
-  background-color: #004e5a; }
+  background-color: transparent; }
 
 .bar-batt-chargestate-charging {
   border-radius: 10rem;
   min-width: 0.681rem;
-  min-height: 0.681rem; }
+  min-height: 0.681rem;
+  background-color: #d6e3f7; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -451,7 +452,7 @@ tooltip {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(25, 28, 29, 0.8);
+  background-color: rgba(27, 27, 27, 0.8);
   border-radius: 21px; }
 
 .bar-topdesc {
@@ -472,7 +473,7 @@ tooltip {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .bar-space-button-leftmost box {
-  margin: 0rem 1.5rem; }
+  margin: 0rem 0.682rem; }
 
 .bar-space-area-rightmost > box {
   padding-right: 2.386rem; }
@@ -482,9 +483,13 @@ tooltip {
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(25, 28, 29, 0.8);
+  background-color: rgba(27, 27, 27, 0.8);
   border-radius: 1.023rem;
-  padding: 0rem 1.023rem; }
+  padding: 0.625rem 1.023rem;
+  padding-top: 0.313rem;
+  margin: 10px;
+  box-shadow: 0px 2px 3px #000000;
+  margin: 7px; }
 
 .osd-progress {
   min-height: 0.955rem;
@@ -495,14 +500,25 @@ tooltip {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #a1efff; }
+    background-color: #d0e4ff; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #004e5a;
+    background-color: #00497f;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #a1efff; }
+  color: #d0e4ff; }
+
+.osd-label {
+  font-size: 1.023rem;
+  font-weight: 500;
+  color: #e2e2e6;
+  margin-top: 0.341rem; }
+
+.osd-value-txt {
+  font-size: 1.688rem;
+  font-weight: 500;
+  color: #e2e2e6; }

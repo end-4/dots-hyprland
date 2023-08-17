@@ -6,7 +6,10 @@
 .osd-value {
     background-color: $t_background;
     border-radius: 1.023rem;
-    padding: 0rem 1.023rem;
+    padding: 0.625rem 1.023rem;
+    padding-top: 0.313rem;
+    margin: 10px;
+    @include elevation2;
 }
 
 .osd-progress {
@@ -34,4 +37,17 @@
 
 .osd-icon {
     color: $onPrimaryContainer;
+}
+
+.osd-label {
+    font-size: 1.023rem;
+    font-weight: 500;
+    color: $onBackground;
+    margin-top: 0.341rem;
+}
+
+.osd-value-txt {
+    font-size: 1.688rem;
+    font-weight: 500;
+    color: $onBackground;
 }
