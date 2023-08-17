@@ -204,7 +204,7 @@
                           (box
                             :style "margin: 0px 10px;"
                             (circular-progress
-                              :value {ser[1] <= 100 ? ser[1] : 100}
+                              :value {ser[1] > 100 ? 100 : ser[1]}
                               :start-at 75 :thickness 3
                               :width 37 :height 37
                               :class "bottomsheet-mixer-app-circle"

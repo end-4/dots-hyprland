@@ -19,7 +19,7 @@
         ${osd_bright ? '' : 'margin-left: -200px; margin-right: 200px;'}
         "
         (circular-progress
-          :value {round(brightness.level, 0)}
+          :value {brightness.level > 100 ? 100 : round(brightness.level, 0)}
           :class "osd-circle"
           :thickness 3
           :start-at 75

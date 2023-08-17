@@ -502,7 +502,7 @@
                           :width 80 :height 80
                           :start-at 75
                           :class "sidebar-resource-circle"
-                          :value {EWW_CPU.avg}
+                          :value {EWW_CPU.avg > 100 ? 100 : EWW_CPU.avg}
                           :thickness 5
                           (label :class "sidebar-resource-icon-large-material" :text "")
                         )
@@ -528,7 +528,7 @@
                               :width 55 :height 55
                               :start-at 75
                               :class "sidebar-resource-circle"
-                              :value {memory.percentage}
+                              :value {memory.percentage > 100 ? 100 : memory.percentage}
                               :thickness 4
                               (label :class "sidebar-resource-icon-small" :text "")
                             )
@@ -549,7 +549,7 @@
                               :width 55 :height 55
                               :start-at 75
                               :class "sidebar-resource-circle"
-                              :value {memory.swappercentage}
+                              :value {memory.swappercentage > 100 ? 100 : memory.swappercentage}
                               :thickness 4
                               (label :class "sidebar-resource-icon-small" :text "")
                             )
@@ -570,7 +570,7 @@
                               :width 55 :height 55
                               :start-at 75
                               :class "sidebar-resource-circle"
-                              :value {battery.percentage}
+                              :value {battery.percentage > 100 ? 100 : battery.percentage}
                               :thickness 4
                               (label :class "sidebar-resource-icon-small" :text "Bolt")
                             )

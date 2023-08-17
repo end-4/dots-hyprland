@@ -24,7 +24,7 @@
           :text "Volume"
         )
         (circular-progress
-          :value {volume.percent}
+          :value {volume.percent > 100 ? 100 : volume.percent}
           :class "osd-circle"
           :thickness 3
           :start-at 75
@@ -32,7 +32,7 @@
           (button
             :class "inside-circle"
             (label :class "bar-txt-smaller bar-txt-norm"
-              :text {volume.percent}
+              :text {volume.percent > 100 ? 100 : volume.percent}
             )
           )
         )
