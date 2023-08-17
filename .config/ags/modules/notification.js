@@ -5,6 +5,7 @@ Widget.widgets['modules/notification'] = props => Widget({
     ...props,
     type: 'box',
     className: 'notification',
+    style: 'margin-top: -200px;',
     children: [
         {
             type: 'label', className: 'txt-norm icon-material', label: 'notifications',

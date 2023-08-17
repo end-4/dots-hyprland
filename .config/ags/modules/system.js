@@ -40,7 +40,7 @@ Widget.widgets['modules/system'] = props => Widget({
                     { // Battery
                         valign: 'center',
                         hexpand: true,
-                        type: 'box', className: 'spacing-h-2 bar-batt',
+                        type: 'box', className: 'spacing-h-5 bar-batt',
                         connections: [[Battery, box => {
                             box.toggleClassName('bar-batt-low', Battery.percent <= 20);
                         }]],

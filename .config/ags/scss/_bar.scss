@@ -135,8 +135,9 @@
 .bar-batt {
     border-radius: 999px;
     padding: 0rem 0.341rem;
-    background-color: $onPrimaryContainer;
-    color: $primaryContainer;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    // border: 1px solid $onSecondaryContainer;
 }
 
 .bar-sidemodule {
@@ -160,6 +161,7 @@
     margin-left: 0.273rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
+    // border: 1px solid $onSecondaryContainer;
 }
 
 .bar-music-playstate-playing {
@@ -167,15 +169,17 @@
     min-width: 1.770rem;
     border-radius: 10rem;
     margin-left: 0.273rem;
-    background-color: $primaryContainer;
-    color: $onPrimaryContainer;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    // border: 1px solid $onSecondaryContainer;
 }
 
 .bar-music-playstate-txt {
     @include icon-material;
-    font-size: 1.4545rem;
+    font-size: 1.568rem;
     margin: -0.1rem 0rem;
     margin-left: 0.2rem;
+    margin-right: 0.17rem;
 }
 
 .bar-music-cover {
@@ -246,7 +250,7 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $onPrimaryContainer;
+        background-color: $secondaryContainer;
     }
 
     progress {
@@ -254,7 +258,7 @@
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $primaryContainer;
+        background-color: $onSecondaryContainer;
     }
 }
 
@@ -283,13 +287,13 @@
 .bar-batt-chargestate {
     border-radius: 10rem;
     background-color: transparent;
-    background-color: $primaryContainer;
 }
 
 .bar-batt-chargestate-charging {
     border-radius: 10rem;
     min-width: 0.681rem;
     min-height: 0.681rem;
+    background-color: $onSecondaryContainer;
 }
 
 .bar-batt-chargestate-low {
@@ -331,7 +335,7 @@
 
 .bar-space-button-leftmost {
     box {
-        margin: 0rem 1.5rem;
+        margin: 0rem 0.682rem;
     }
 }
 
