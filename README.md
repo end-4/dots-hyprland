@@ -40,7 +40,7 @@ _Click the images for a video showcase with animations!_
 
 ### [m3ww](https://github.com/end-4/dots-hyprland/tree/m3ww)
    <a href="https://streamable.com/85ch8x">
-    <img src="./assets/m3ww_sideleft.png" alt="Material Eww!">
+    <img src="./assets/m3ww_sideright.png" alt="Material Eww!">
    </a>
 
 ### [NovelKnock](https://github.com/end-4/dots-hyprland/tree/novelknock)
