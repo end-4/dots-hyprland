@@ -50,7 +50,7 @@ yay -S cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gt
    - Run `usermod -aG video <USERNAME>` for brightness control to work
  - Keyring (basically authentication stuff) (Command for Arch Linux)
 ```
-gnome-keyring polkit-gnome 
+sudo pacman -S gnome-keyring polkit-gnome 
 ```
 
  - Other stuff that I use (Command for Arch Linux)
