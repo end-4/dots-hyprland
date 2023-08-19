@@ -50,7 +50,7 @@ yay -S cava eww-wayland-git geticons gtklock gtklock-playerctl-module gtklock-po
 sudo pacman -S gnome-keyring polkit-gnome 
 ```
 
- - Other stuff that I use, mostly utilities (you can skip these)
+ - Utilities i use (Command for Arch Linux)
 ```
-tesseract cliphist grim slurp
+sudo pacman -S tesseract cliphist grim slurp
 ```
