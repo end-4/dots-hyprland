@@ -27,7 +27,7 @@ _[Check the releases](https://github.com/end-4/dots-hyprland/releases) for confi
  - Python dependencies
 ```
 [ Command ]
-pip install pywal desktop_entry_lib poetry build Pillow
+yay -S python-pywal python-desktop-entry-lib python-poetry python-build python-Pill
 ```
  - Normal dependencies
 ```
