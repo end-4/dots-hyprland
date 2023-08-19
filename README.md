@@ -31,26 +31,26 @@ pip install pywal desktop_entry_lib poetry build Pillow
 ```
  - Normal dependencies
 ```
-[ Possible package names (normal stuff) ]
-bc blueberry bluez boost boost-libs coreutils dunst findutils fzf gawk gnome-control-center ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox swaybg swayidle udev upower util-linux xorg-xrandr wget wireplumber wl-clipboard yad
+[ Possible package names (Command for Arch Linux) ]
+sudo pacman -S bc blueberry bluez boost boost-libs coreutils dunst findutils fuzzel fzf gawk gnome-control-center ibus imagemagick libqalculate light networkmanager network-manager-applet nlohmann-json pavucontrol plasma-browser-integration playerctl procps ripgrep socat sox swaybg swayidle udev upower util-linux xorg-xrandr wget wireplumber wl-clipboard yad
 [ Command for: Fedora (INCOMPLETE command; so there's less name hunting for you) ]
 sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMagick light NetworkManager network-manager-applet pavucontrol plasma-browser-integration playerctl procps ripgrep socat udev upower util-linux wget wireplumber wlogout qalc sox nlohmann-json-devel
 ```
-- AUR Packages (ughhh why not arch?) (check their AUR pages and check the Upstream URL for their repos)
+- AUR Packages (with `yay` installed)
 ```
-[ yay as AUR helper ]
+[ Command ]
 yay -S cava eww-wayland-git geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww gojq xdg-desktop-portal-hyprland-git waybar-hyprland-git wlogout
 ```
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
    - Run `usermod -aG video <USERNAME>` for brightness control to work
    - Install proprietary font: Segoe UI Variable (for Windows 11 mode)
-- Stuff that you might wanna install if you didn't start as a lazyass on EndeavourOS+Gnome like me (install these if you decide to use my hyprland.conf)
+- Keyring (Authentication stuff) (Command for Arch Linux)
 ```
-gnome-keyring polkit-gnome 
+sudo pacman -S gnome-keyring polkit-gnome 
 ```
 
  - Other stuff that I use, mostly utilities (you can skip these)
 ```
-tesseract cliphist grim slurp fuzzel
+tesseract cliphist grim slurp
 ```
