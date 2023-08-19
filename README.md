@@ -30,9 +30,9 @@
 ## Dependencies
  - See the main branch for [general dependencies](https://github.com/end-4/dots-hyprland#-dependencies), then install the following:
     - [eww with trigonometric functions](https://github.com/elkowar/eww/pull/823). If the PR hasn't been merged, you should clone my branch and compile it.
- - Python dependencies
+ - Python dependencies (Command)
 ```
-pywal desktop_entry_lib poetry build Pillow
+pip install pywal desktop_entry_lib poetry build Pillow
 ```
  - Normal dependencies
 ```
