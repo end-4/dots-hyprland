@@ -55,5 +55,5 @@ gnome-keyring polkit-gnome
 
  - Other stuff that I use (Command for Arch Linux)
 ```
-tesseract cliphist grim slurp
+sudo pacman -S tesseract cliphist grim slurp
 ```
