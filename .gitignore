@@ -1,1 +1,4 @@
-
+.config/eww/images/svg/*.svg
+.config/eww/eww_covers/*
+.config/eww/scripts/cache/*
+.config/eww/tmp/*
