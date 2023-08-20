@@ -8,10 +8,10 @@ getoptions(){
   input_sensitivity=$(hyprctl getoption input:sensitivity -j | gojq -r -c '.float')
   touchpad_disable_while_typing=$(hyprctl getoption input:touchpad:disable_while_typing -j | gojq -r -c '.int')
   touchpad_clickfinger_behavior=$(hyprctl getoption input:touchpad:clickfinger_behavior -j | gojq -r -c '.int')
-  blur=$(hyprctl getoption decoration:blur -j | gojq -r -c '.int')
-  blur_size=$(hyprctl getoption decoration:blur_size -j | gojq -r -c '.int')
-  blur_passes=$(hyprctl getoption decoration:blur_passes -j | gojq -r -c '.int')
-  blur_xray=$(hyprctl getoption decoration:blur_xray -j | gojq -r -c '.int')
+  blur=$(hyprctl getoption decoration:blur:enabled -j | gojq -r -c '.int')
+  blur_size=$(hyprctl getoption decoration:blur:size -j | gojq -r -c '.int')
+  blur_passes=$(hyprctl getoption decoration:blur:passes -j | gojq -r -c '.int')
+  blur_xray=$(hyprctl getoption decoration:blur:xray -j | gojq -r -c '.int')
   nightlight=$(hyprctl getoption decoration:screen_shader -j | gojq -r -c '.str')
   if [[ "$nightlight" == *"nothing.frag" || "$nightlight" == "[[EMPTY]]" || "$nightlight" == "" ]]; then
     nightlight='false'
