@@ -310,7 +310,7 @@
                     (box)
                     (checkboxhyprctl-win
                       :value "${hyprjson.blur}"
-                      :changevalue "decoration:blur"
+                      :changevalue "decoration:blur:enabled"
                     )
                   )
                   (revealer
@@ -331,7 +331,7 @@
                         :class "winslider winslider-winnews"
                         :value "${hyprjson.blur_size}"
                         :tooltip "Blur size: ${hyprjson.blur_size}"
-                        :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                        :onchange "hyprctl keyword decoration:blur:size {}  && scripts/hyprsettings tickle"
                       )
                     )
                   )
@@ -352,7 +352,7 @@
                         :class "winslider winslider-winnews"
                         :value "${hyprjson.blur_passes * 10}"
                         :tooltip "Blur passes: ${hyprjson.blur_passes}"
-                        :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                        :onchange "hyprctl keyword decoration:blur:passes $(({} / 10))  && scripts/hyprsettings tickle"
                       )
                     )
                   )
@@ -374,7 +374,7 @@
                         (box)
                         (checkboxhyprctl-win
                           :value "${hyprjson.blur_xray}"
-                          :changevalue "decoration:blur_xray"
+                          :changevalue "decoration:blur:xray"
                         )
                       )
                     )

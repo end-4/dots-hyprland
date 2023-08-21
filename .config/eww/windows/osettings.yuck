@@ -403,14 +403,14 @@
                       :style "margin-left: 9px;"
                       (button :valign "center" :yalign 0.5
                         :class "osettings-tag"
-                        :onclick "hyprctl keyword decoration:blur false && scripts/hyprsettings tickle &"
+                        :onclick "hyprctl keyword decoration:blur:enabled false && scripts/hyprsettings tickle &"
                         "no blur"
                       )
                       (button :valign "center" :yalign 0.5
                         :class "osettings-tag"
-                        :onclick "hyprctl keyword decoration:blur true && \
-                        hyprctl keyword decoration:blur_size 7 && \
-                        hyprctl keyword decoration:blur_passes 4 && \
+                        :onclick "hyprctl keyword decoration:blur:enabled true && \
+                        hyprctl keyword decoration:blur:size 7 && \
+                        hyprctl keyword decoration:blur:passes 4 && \
                         scripts/hyprsettings tickle &"
                         "intense"
                       )
@@ -428,7 +428,7 @@
                     (box)
                     (checkboxhyprctl
                       :value "${hyprjson.blur}"
-                      :changevalue "decoration:blur"
+                      :changevalue "decoration:blur:enabled"
                     )
                   )
                   (revealer
@@ -448,7 +448,7 @@
                         :class "osettings-slider"
                         :value "${hyprjson.blur_size}"
                         :tooltip "Blur size: ${hyprjson.blur_size}"
-                        :onchange "hyprctl keyword decoration:blur_size {}  && scripts/hyprsettings tickle"
+                        :onchange "hyprctl keyword decoration:blur:size {}  && scripts/hyprsettings tickle"
                       )
                     )
                   )
@@ -469,7 +469,7 @@
                         :class "osettings-slider"
                         :value "${hyprjson.blur_passes * 10}"
                         :tooltip "Blur passes: ${hyprjson.blur_passes}"
-                        :onchange "hyprctl keyword decoration:blur_passes $(({} / 10))  && scripts/hyprsettings tickle"
+                        :onchange "hyprctl keyword decoration:blur:passes $(({} / 10))  && scripts/hyprsettings tickle"
                       )
                     )
                   )
@@ -492,7 +492,7 @@
                         (box)
                         (checkboxhyprctl
                           :value "${hyprjson.blur_xray}"
-                          :changevalue "decoration:blur_xray"
+                          :changevalue "decoration:blur:xray"
                         )
                       )
                     )
