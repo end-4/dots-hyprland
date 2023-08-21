@@ -43,7 +43,7 @@ sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMag
 ```
 - AUR Packages (Command for Arch Linux with `yay` installed)
 ```
-yay -S cava geticons gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww gojq xdg-desktop-portal-hyprland-git wlogout
+yay -S cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww ttf-material-symbols-git xdg-desktop-portal-hyprland-git wlogout
 ```
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
