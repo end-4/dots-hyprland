@@ -7,7 +7,7 @@
 - A new approach to the status bar:
   - **Only shows what you need.** Does not try to fit everything on the screen at once.
   - **Flexible.** Scrollable modules. Automatically scrolls to notifications module when there's a new one. Bar moves when sidebar is opened.
-  - **Funciton AND form.** Floating bar, but you can still click the topmost pixel.
+  - **Function AND form.** Floating bar, but you can still click the topmost pixel.
   - **OSDs done right.** Volume and Brightness indicators are shown on the topleft and topright corners. They don't block your windows or other bar components.
 - A comfortable experience:
   - Easy on the eyes: uses Material You colors and natural animation curves
