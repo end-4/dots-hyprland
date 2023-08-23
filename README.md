@@ -28,8 +28,6 @@
 
 
 ## Dependencies
- - See the main branch for [general dependencies](https://github.com/end-4/dots-hyprland#-dependencies), then install the following:
-    - [eww with trigonometric functions](https://github.com/elkowar/eww/pull/823). If the PR hasn't been merged, you should clone my branch and compile it.
  - Python dependencies (Command for Arch Linux with `yay` installed)
 ```
 yay -S python-pywal python-desktop-entry-lib python-poetry python-build python-Pill
@@ -43,7 +41,7 @@ sudo dnf install bc blueberry bluez coreutils dunst findutils gawk gojq ImageMag
 ```
 - AUR Packages (Command for Arch Linux with `yay` installed)
 ```
-yay -S cava lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww ttf-material-symbols-git xdg-desktop-portal-hyprland-git wlogout
+yay -S cava eww-wayland-git lexend-fonts-git geticons gojq gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git python-material-color-utilities swww ttf-material-symbols-git xdg-desktop-portal-hyprland-git wlogout
 ```
 - Manual setup
    - Get "Plasma browser integration" extension for your browser
