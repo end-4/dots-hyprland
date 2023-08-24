@@ -7,9 +7,8 @@ assignees: ''
 
 ---
 
-- [  ] I have gone through the instructions for the branch I want
-- Issue with branch: 
+- **I have read the instructions** and I have a problem with branch: 
 ---
 ## The issue
 - (describe your problem here)
-- (if it throws errors, PLEASE, attach logs and describe in detail if possible)
+- (if it throws errors, **PLEASE**, attach logs and describe in detail if possible)
