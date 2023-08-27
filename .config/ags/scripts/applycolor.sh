@@ -78,7 +78,7 @@ apply_hyprland() {
     done
 }
 
-apply_svgs
+# apply_svgs
 apply_gtklock
 apply_fuzzel
 apply_foot

@@ -1,73 +1,63 @@
-const { App, Widget } = ags;
-const { exec, execAsync, CONFIG_DIR } = ags.Utils;
-const { deflisten } = imports.scripts.scripts;
+const { App, Service, Widget } = ags;
+const { CONFIG_DIR, exec, execAsync } = ags.Utils;
+import { deflisten } from '../scripts/scripts.js';
 
 const HyprlandActiveWindow = deflisten(
     "HyprlandActiveWindow",
-    CONFIG_DIR + "/scripts/activewin.sh",
+    `${App.configDir}/scripts/activewin.sh`,
+    "{}",
 );
 
-Widget.widgets['modules/leftspace'] = props => Widget({
+export const ModuleLeftSpace = (props) => Widget.EventBox({
     ...props,
-    type: 'eventbox',
-    onScrollUp: () => execAsync('light -A 5'),
-    onScrollDown: () => execAsync('light -U 5'),
-    // onScrollUp: () => {
-    //     if (Audio.speaker == null) return;
-    //     Audio.speaker.volume += 0.03;
-    //     Service.Indicator.speaker();
-    // },
-    // onScrollDown: () => {
-    //     if (Audio.speaker == null) return;
-    //     Audio.speaker.volume -= 0.03;
-    //     Service.Indicator.speaker();
-    // },
-    child: {
-        type: 'overlay',
-        children: [
-            { type: 'box', hexpand: true, },
-            {
-                type: 'box', className: 'bar-sidemodule', hexpand: true,
-                children: [{
-                    type: 'button',
+    onScrollUp: () => {
+        execAsync('light -A 5');
+        Service.Indicator.speaker();
+    },
+    onScrollDown: () => {
+        execAsync('light -U 5');
+        Service.Indicator.speaker();
+    },
+    child: Widget.Overlay({
+        overlays: [
+            Widget.Box({ hexpand: true }),
+            Widget.Box({
+                className: 'bar-sidemodule', hexpand: true,
+                children: [Widget.Button({
                     className: 'bar-space-button bar-space-button-leftmost',
                     // onClick: () => ags.App.toggleWindow('overview'),
-                    child: {
-                        type: 'box',
-                        orientation: 'vertical',
+                    child: Widget.Box({
+                        vertical: true,
                         children: [
-                            {
-                                type: 'scrollable',
+                            Widget.Scrollable({
                                 hexpand: true, vexpand: true,
-                                hscroll: 'true', vscroll: 'false',
-                                child: {
-                                    type: 'box',
-                                    orientation: 'vertical',
+                                hscroll: 'automatic', vscroll: 'never',
+                                child: Widget.Box({
+                                vertical: true,
                                     children: [
-                                        {
-                                            type: 'label', xalign: 0,
+                                        Widget.Label({
+                                            xalign: 0,
                                             className: 'txt txt-smaller bar-topdesc',
-                                            style: 'color: rgb(190,190,190);',
                                             connections: [[HyprlandActiveWindow, label => {
                                                 const winJson = JSON.parse(HyprlandActiveWindow.state);
                                                 label.label = Object.keys(winJson).length === 0 ? 'Desktop' : winJson['class'];
                                             }]],
-                                        },
-                                        {
-                                            type: 'label', xalign: 0,
+                                        }),
+                                        Widget.Label({
+                                            xalign: 0,
                                             className: 'txt txt-smallie',
                                             connections: [[HyprlandActiveWindow, label => {
                                                 const winJson = JSON.parse(HyprlandActiveWindow.state);
-                                                label.label = Object.keys(winJson).length === 0 ? `Workspace ${imports.modules.workspaces.HyprlandActiveWorkspace.state}` : winJson['title'];
+                                                label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace}` : winJson['title'];
                                             }]],
-                                        }
+                                        })
                                     ]
-                                }
-                            }
+                                })
+                            })
                         ]
-                    }
-                }]
-            },
+                    })
+                })]
+            }),
         ]
-    }
+    })
 });

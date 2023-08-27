@@ -19,11 +19,8 @@
 }
 
 .bar-group {
+    @include elevation-border;
     background-color: mix($t_surface, $t_onSurface, 90%);
-    border-top: 1px solid mix($t_surface, $t_onSurface, 80%);
-    border-left: 1px solid mix($t_surface, $t_onSurface, 80%);
-    border-right: 1px solid mix($t_surface, $t_onSurface, 85%);
-    border-bottom: 1px solid mix($t_surface, $t_onSurface, 85%);
 }
 
 .bar-group-pad {
@@ -314,6 +311,7 @@
 .bar-topdesc {
     margin-top: -0.136rem;
     margin-bottom: -0.341rem;
+    color: rgb(190,190,190);
 }
 
 .bar-space-button {
