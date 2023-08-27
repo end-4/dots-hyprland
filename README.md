@@ -75,7 +75,7 @@ _Click the images for a video showcase with animations!_
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes                 |
 | --- | ------ | ----------- | ------------------------- |
-| Kernel |     | cachyos     | Don't abuse power savers. Also I'm not sure what bullshit I'm saying - this is just from personal experience. |
+| Kernel |     | cachyos, xanmod | Don't abuse power savers. Also I'm not sure what bullshit I'm saying - this is just from personal experience. |
 | Login shell  | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
