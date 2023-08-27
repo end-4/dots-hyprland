@@ -15,3 +15,7 @@ data_format = ascii
 monstercat = 1
 gravity = 1000000
 noise_reduction = 0.34
+
+[input]
+method = pulse
+source = auto
