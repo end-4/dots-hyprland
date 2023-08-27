@@ -2,79 +2,69 @@ const { Widget } = ags;
 const { exec, execAsync } = ags.Utils;
 const { Battery } = ags.Service;
 
-Widget.widgets['modules/system'] = props => Widget({
+export const ModuleSystem = (props) => Widget.EventBox({
     ...props,
-    type: 'eventbox',
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
-    child: {
-        type: 'box',
+    child: Widget.Box({
         className: 'bar-group-margin bar-sides',
         children: [
-            {
-                type: 'box',
+            Widget.Box({
                 className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-15',
                 children: [
-                    { // Clock
-                        type: 'box',
+                    Widget.Box({ // Clock
                         valign: 'center',
                         className: 'spacing-h-5',
                         children: [
-                            {
-                                type: 'label',
+                            Widget.Label({
                                 className: 'txt-norm txt',
                                 connections: [[5000, label => label.label = exec('date "+%H:%M"')]],
-                            },
-                            {
-                                type: 'label',
+                            }),
+                            Widget.Label({
                                 className: 'txt-norm txt',
                                 label: '•',
-                            },
-                            {
-                                type: 'label',
+                            }),
+                            Widget.Label({
                                 className: 'txt-smallie txt',
                                 connections: [[5000, label => label.label = exec('date "+%A, %e/%m"')]],
-                            },
+                            }),
                         ],
-                    },
-                    { // Battery
+                    }),
+                    Widget.Box({ // Battery
                         valign: 'center',
                         hexpand: true,
-                        type: 'box', className: 'spacing-h-5 bar-batt',
+                        className: 'spacing-h-5 bar-batt',
                         connections: [[Battery, box => {
                             box.toggleClassName('bar-batt-low', Battery.percent <= 20);
                         }]],
                         children: [
-                            {
-                                type: 'label',
+                            Widget.Label({
                                 className: 'bar-batt-percentage',
                                 connections: [[Battery, label => {
                                     label.label = `${Battery.percent}`;
                                 }]],
-                            },
-                            {
+                            }),
+                            Widget.ProgressBar({
                                 valign: 'center',
                                 hexpand: true,
-                                type: 'progressbar',
                                 className: 'bar-prog-batt',
                                 connections: [[Battery, progress => {
-                                    progress.setValue(Battery.percent / 100);
+                                    progress.value = Math.abs(Battery.percent / 100); // battery could be initially negative wtf
                                     progress.toggleClassName('bar-prog-batt-low', Battery.percent <= 20);
                                 }]],
-                            },
-                            {
+                            }),
+                            Widget.Box({
                                 valign: 'center',
-                                type: 'box',
                                 className: 'bar-batt-chargestate',
                                 connections: [[Battery, box => {
                                     box.toggleClassName('bar-batt-chargestate-charging', Battery.charging);
                                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= 20);
                                 }]],
-                            },
+                            }),
                         ],
-                    },
+                    }),
                 ],
-            },
+            }),
         ]
-    }
+    })
 });

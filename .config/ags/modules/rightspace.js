@@ -2,10 +2,11 @@
 const { Audio, Mpris } = ags.Service;
 const { App, Service, Widget } = ags;
 const { exec, execAsync, CONFIG_DIR } = ags.Utils;
+import { ModuleNotification } from "./notification.js";
+import { StatusIcons } from "./statusicons.js";
 
-Widget.widgets['modules/rightspace'] = props => Widget({
+export const ModuleRightSpace = (props) => Widget.EventBox({
     ...props,
-    type: 'eventbox',
     onScrollUp: () => {
         if (Audio.speaker == null) return;
         Audio.speaker.volume += 0.03;
@@ -18,14 +19,13 @@ Widget.widgets['modules/rightspace'] = props => Widget({
     },
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
-    child: {
-        type: 'box',
+    child: Widget.Box({
         hexpand: true,
         className: 'spacing-h-5',
         children: [
-            { type: 'modules/notification' },
-            { type: 'box', hexpand: true, },
-            { type: 'modules/statusicons', className: 'bar-space-area-rightmost' },
+            ModuleNotification(),
+            Widget.Box(),
+            StatusIcons({ className: 'bar-space-area-rightmost' }),
         ]
-    }
+    })
 });

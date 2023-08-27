@@ -1,8 +1,9 @@
 const { Widget } = ags;
 const { Gtk } = imports.gi;
 
-Widget.widgets['modules/corners'] = ({ place }) => Widget({
-    type: Gtk.DrawingArea.new,
+
+const Corner = place => Widget({
+    type: Gtk.DrawingArea,
     className: 'corner',
     hexpand: true,
     vexpand: true,
@@ -42,40 +43,28 @@ Widget.widgets['modules/corners'] = ({ place }) => Widget({
     }]],
 });
 
-var corner_topleft = {
+export const corner_topleft = Widget.Window({
     name: 'cornertl',
     anchor: ['top', 'left'],
     exclusive: false,
-    child: {
-        type: 'modules/corners',
-        place: 'topleft',
-    },
-}
-var corner_topright = {
+    child: Corner('topleft'),
+});
+export const corner_topright = Widget.Window({
     name: 'cornertr',
     anchor: ['top', 'right'],
     exclusive: false,
-    child: {
-        type: 'modules/corners',
-        place: 'topright',
-    },
-}
-var corner_bottomleft = {
+    child: Corner('topright'),
+});
+export const corner_bottomleft = Widget.Window({
     name: 'cornerbl',
     anchor: ['bottom', 'left'],
     exclusive: false,
-    child: {
-        type: 'modules/corners',
-        place: 'bottomleft',
-    },
-}
-var corner_bottomright = {
+    child: Corner('bottomleft'),
+});
+export const corner_bottomright = Widget.Window({
     name: 'cornerbr',
     anchor: ['bottom', 'right'],
     exclusive: false,
-    child: {
-        type: 'modules/corners',
-        place: 'bottomright',
-    },
-}
+    child: Corner('bottomright'),
+});
 

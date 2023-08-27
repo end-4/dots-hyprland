@@ -1,0 +1,86 @@
+.overview-search-box {
+    @include md3_decel;
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    min-width: 13.636rem;
+    min-height: 3.409rem;
+    padding: 0rem 1.364rem;
+    background-color: $t_background;
+    color: $onBackground;
+
+    selection {
+        background-color: $secondary;
+        color: $onSecondary;
+    }
+    caret-color: $onSecondaryContainer;
+}
+
+.overview-search-box-extended {
+    min-width: 25.909rem;
+}
+
+.overview-search-prompt {
+    color: $subtext;
+}
+
+.overview-search-results {
+    // min-height: 2.813rem;
+    min-height: 37.5rem;
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    min-width: 27.273rem;
+    padding: 0.682rem;
+    background-color: $t_background;
+    color: $onBackground;
+}
+
+.overview-search-results-icon {
+    margin: 0rem 0.682rem;
+}
+.overview-search-results-txt {
+    margin-right: 0.682rem;
+}
+
+.overview-search-result-btn {
+    @include normal-rounding;
+    padding: 0.341rem;
+    min-width: 2.386rem;
+    min-height: 2.386rem;
+
+    caret-color: transparent;
+}
+
+.overview-search-result-btn:focus,
+.overview-search-result-btn:hover {
+    background-color: $hovercolor;
+}
+
+.overview-search-result-btn:active {
+    background-color: $activecolor;
+}
+
+.overview-tasks {
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    padding: 0.341rem;
+    background-color: $t_background;
+    color: $onBackground;
+}
+
+.overview-tasks-workspace {
+    @include normal-rounding;
+    // @include elevation-border;
+    margin: 0.341rem;
+    background-color: rgba(80, 80, 80, 0.1);
+}
+
+.overview-tasks-window {
+    @include normal-rounding;
+    @include elevation-border;    
+    background-color: $t_t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+

@@ -1,22 +1,29 @@
 // Import
+const { App } = ags;
 const { exec, execAsync, CONFIG_DIR } = ags.Utils;
-Object.keys(imports['modules']).forEach(m => imports['modules'][m]);
-Object.keys(imports['windows']).forEach(m => imports['windows'][m]);
+import { bar } from './windows/bar.js';
+import { corner_topleft, corner_topright, corner_bottomleft, corner_bottomright } from './windows/corners.js';
+import { overview } from './windows/overview.js';
+// import { indicator } from './windows/osd.js';
+import { cheatsheet } from './windows/cheatsheet.js';
+import { switchWall } from './scripts/scripts.js';
 
 // Config object
-var config = {
-    style: CONFIG_DIR + '/style.css',
+export default {
+    style:  `${App.configDir}/style.css`,
     stackTraceOnError: true,
     windows: [
-        imports.windows.bar.bar,
-        imports.windows.corners.corner_topleft,
-        imports.windows.corners.corner_topright,
-        imports.windows.corners.corner_bottomleft,
-        imports.windows.corners.corner_bottomright,
-        imports.windows.osd.indicator(0),
+        bar,
+        corner_topleft,
+        corner_topright,
+        corner_bottomleft,
+        corner_bottomright,
+        overview,
+        // indicator(0),
+        cheatsheet,
     ],
 };
 
-exec('sassc ' + CONFIG_DIR + '/scss/main.scss ' + CONFIG_DIR + '/style.css');
+exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
 ags.App.resetCss();
-ags.App.applyCss(`${CONFIG_DIR}/style.css`);
+ags.App.applyCss(`${App.configDir}/style.css`);

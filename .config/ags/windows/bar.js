@@ -1,42 +1,38 @@
-var left = {
-    type: 'box', className: 'bar-sidemodule',
-    children: [{ type: 'modules/music' }],
-};
+const { Widget } = ags;
+import { ModuleWorkspaces } from "../modules/workspaces.js";
+import { ModuleMusic } from "../modules/music.js";
+import { ModuleSystem } from "../modules/system.js";
+import { ModuleLeftSpace } from "../modules/leftspace.js";
+import { ModuleRightSpace } from "../modules/rightspace.js";
 
-var center = {
-    type: 'box', children: [{ type: 'modules/workspaces' }],
-};
+const left = Widget.Box({
+    className: 'bar-sidemodule',
+    children: [ModuleMusic()],
+});
 
-var right = {
-    type: 'box', className: 'bar-sidemodule',
-    children: [{ type: 'modules/system' }],
-};
+const center = Widget.Box({
+    children: [ModuleWorkspaces()],
+});
 
-var separator = {
-    type: 'box',
-    className: 'bar-separator',
-    halign: 'center',
-    valign: 'center',
-};
+const right = Widget.Box({
+    className: 'bar-sidemodule',
+    children: [ModuleSystem()],
+});
 
-var bar = {
+export const bar = Widget.Window({
     name: 'bar',
     anchor: ['top', 'left', 'right'],
     exclusive: true,
-    child: {
+    child: Widget.CenterBox({
         className: 'bar-bg',
-        type: 'centerbox',
-        children: [
-            { type: 'modules/leftspace' },
-            {
-                type: 'box',
-                children: [
-                    left,
-                    center,
-                    right,
-                ]
-            },
-            { type: 'modules/rightspace' },
-        ],
-    },
-}
+        startWidget: ModuleLeftSpace(),
+        centerWidget: Widget.Box({
+            children: [
+                left,
+                center,
+                right,
+            ]
+        }),
+        endWidget: ModuleRightSpace(),
+    }),
+});

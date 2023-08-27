@@ -248,6 +248,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-15>stack {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15>stack:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-h-15>label {
     margin-right: 1.023rem;
 }
@@ -358,4 +366,19 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 .anim-exit {
     @include anim-exit;
+}
+
+@mixin normal-rounding {
+    border-radius: 1.023rem;
+}
+
+@mixin large-rounding {
+    border-radius: 1.705rem;
+}
+
+@mixin elevation-border {
+    border-top: 1px solid mix($t_surface, $t_onSurface, 80%);
+    border-left: 1px solid mix($t_surface, $t_onSurface, 80%);
+    border-right: 1px solid mix($t_surface, $t_onSurface, 85%);
+    border-bottom: 1px solid mix($t_surface, $t_onSurface, 85%);
 }

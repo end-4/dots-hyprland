@@ -1,6 +1,6 @@
 const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 
-function deflisten(name, command, transformer = (a) => a) {
+export const deflisten = function (name, command, defaultValue, transformer = (a) => a) {
   const { Service } = ags;
   const GObject = imports.gi.GObject;
 
@@ -22,7 +22,7 @@ function deflisten(name, command, transformer = (a) => a) {
     },
     class Subclass extends Service {
       get state() {
-        return this._state || "";
+        return this._state || defaultValue;
       }
 
       set state(value) {
@@ -59,7 +59,7 @@ function deflisten(name, command, transformer = (a) => a) {
   return State;
 }
 
-async function switchWall() {
+export async function switchWall() {
   try {
     path = exec(`bash -c 'cd ~/Pictures && yad --width 1200 --height 800 --file --title="Choose wallpaper"'`);
     screensizey = JSON.parse(exec(`hyprctl monitors -j`))[0]['height'];

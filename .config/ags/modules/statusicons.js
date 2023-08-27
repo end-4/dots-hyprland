@@ -2,134 +2,89 @@ const { Widget, Service } = ags;
 const { exec, execAsync } = ags.Utils;
 const { Audio, Battery, Bluetooth, Network } = ags.Service;
 
-const icons = [
-    { value: 80, widget: { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' } },
-    { value: 60, widget: { type: 'label', className: 'txt-norm icon-material', label: 'network_wifi_3_bar' } },
-    { value: 40, widget: { type: 'label', className: 'txt-norm icon-material', label: 'network_wifi_2_bar' } },
-    { value: 20, widget: { type: 'label', className: 'txt-norm icon-material', label: 'network_wifi_1_bar' } },
-    { value: 0,  widget: { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' } },
-];
-
-Widget.widgets['bluetooth/indicator'] = ({
-    enabled = { type: 'label', className: 'txt-norm icon-material', label: 'bluetooth' },
-    disabled = { type: 'label', className: 'txt-norm icon-material', label: 'bluetooth_disabled' },
-    ...props
-}) => Widget({
-    ...props,
-    type: 'dynamic',
+const BluetoothIndicator = () => Widget.Stack({
     items: [
-        { value: true, widget: enabled },
-        { value: false, widget: disabled },
+        ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
+        ['false', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' })],
     ],
-    connections: [[Bluetooth, dynamic => dynamic.update(value => value === Bluetooth.enabled)]],
+    connections: [[Bluetooth, stack => { stack.shown = String(Bluetooth.enabled); }]],
 });
 
-Widget.widgets['network/wired-indicator'] = ({
-    disabled = { type: 'label', className: 'txt-norm icon-material', label: 'wifi_off' },
-    disconnected = { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_off' },
-    connecting = { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' },
-    connected = { type: 'label', className: 'txt-norm icon-material', label: 'lan' },
-    unknown = { type: 'label', className: 'icon-material', label: 'signal_wifi_0_bar' },
-}) => Widget({
-    type: 'dynamic',
+
+const NetworkWiredIndicator = () => Widget.Stack({
     items: [
-        { value: 'unknown', widget: unknown },
-        { value: 'disconnected', widget: disconnected },
-        { value: 'disabled', widget: disabled },
-        { value: 'connected', widget: connected },
-        { value: 'connecting', widget: connecting },
+        ['unknown', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
+        ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
+        ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
+        ['connected', Widget.Label({ className: 'txt-norm icon-material', label: 'lan' })],
+        ['connecting', Widget.Label({ className: 'icon-material', label: 'signal_wifi_0_bar' })],
     ],
-    connections: [[Network, dynamic => dynamic.update(value => {
+    connections: [[Network, stack => {
         if (!Network.wired)
             return;
 
         const { internet } = Network.wired;
         if (internet === 'connected' || internet === 'connecting')
-            return value === internet;
+            stack.shown = internet;
 
         if (Network.connectivity !== 'full')
-            return value === 'disconnected';
+            stack.shown = 'disconnected';
 
-        return value === 'disabled';
-    })]],
-});
-
-Widget.widgets['network/wifi-indicator'] = ({
-    disabled = { type: 'label', className: 'txt-norm icon-material', label: 'wifi_off' },
-    disconnected = { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_off' },
-    connecting = { type: 'label', className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' },
-    connected = icons,
-}) => Widget({
-    type: 'dynamic',
-    items: [
-        { value: 'disabled', widget: disabled },
-        { value: 'disconnected', widget: disconnected },
-        { value: 'connecting', widget: connecting },
-        ...connected,
-    ],
-    connections: [[Network, dynamic => dynamic.update(value => {
-        if (!Network.wifi)
-            return;
-
-        const { internet, enabled, strength } = Network.wifi;
-        if (internet === 'connected')
-            return value <= strength;
-
-        if (internet === 'connecting')
-            return value === 'connecting';
-
-        if (enabled)
-            return value === 'disconnected';
-
-        return value === 'disabled';
-    })]],
-});
-
-Widget.widgets['network/indicator'] = ({
-    wifi = { type: 'network/wifi-indicator' },
-    wired = { type: 'network/wired-indicator' },
-}) => Widget({
-    type: 'dynamic',
-    items: [
-        { value: 'wired', widget: wired },
-        { value: 'wifi', widget: wifi },
-    ],
-    connections: [[Network, dynamic => {
-        const primary = Network.primary || 'wifi';
-        dynamic.update(value => value === primary);
+        stack.shown = 'disabled';
     }]],
 });
 
-Widget.widgets['audio/speaker-indicator'] = ({
-    items = [
-        { value: 101, widget: { type: 'icon', icon: 'audio-volume-overamplified-symbolic' } },
-        { value: 67, widget: { type: 'icon', icon: 'audio-volume-high-symbolic' } },
-        { value: 34, widget: { type: 'icon', icon: 'audio-volume-medium-symbolic' } },
-        { value: 1, widget: { type: 'icon', icon: 'audio-volume-low-symbolic' } },
-        { value: 0, widget: { type: 'icon', icon: 'audio-volume-muted-symbolic' } },
+const NetworkWifiIndicator = () => Widget.Stack({
+    items: [
+        ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
+        ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
+        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
+        ['4', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' })],
+        ['3', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' })],
+        ['2', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_2_bar' })],
+        ['1', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' })],
+        ['0', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' })],
     ],
-    ...props
-}) => Widget({
-    ...props,
-    type: 'dynamic',
-    items,
-    connections: [[Audio, dynamic => dynamic.update(value => {
-        if (!Audio.speaker)
-            return;
-
-        if (Audio.speaker.isMuted)
-            return value === 0;
-
-        return value <= (Audio.speaker.volume * 100);
-    }), 'speaker-changed']],
+    connections: [[Network,
+        stack => {
+            if (!Network.wifi)
+                return;
+            const { internet, enabled, strength } = Network.wifi;
+            
+            if(internet == 'connected') {
+                stack.shown = String(Math.ceil(strength / 25));
+            }
+            else {
+                stack.shown = 'disconnected'
+            }
+        }
+    ]],
 });
 
-Widget.widgets['modules/statusicons'] = () => Widget({
-    type: 'eventbox',
-    child: {type: 'box',
-    className: 'spacing-h-15',
-    children: [
-        { type: 'bluetooth/indicator', disabled: null },
-        { type: 'network/indicator' },
-    ]}
+const NetworkIndicator = () => Widget.Stack({
+    items: [
+        ['wifi', NetworkWifiIndicator()],
+        ['wired', NetworkWiredIndicator()],
+    ],
+    connections: [[Network, stack => {
+        const primary = Network.primary || 'wifi';
+        stack.shown = primary;
+    }]],
 });
+
+export const StatusIcons = () => Widget.EventBox({
+    child: Widget.Box({
+        className: 'spacing-h-15',
+        children: [
+            Widget.Box({hexpand: true}),
+            BluetoothIndicator(),
+            NetworkIndicator(),
+            Widget.Box({className: 'bar-sidespace'}),
+        ]
+    })
+});
+
+//function to convert celcius to fahrenheit
+function celsiusToFahrenheit(celsius) {
+    return (celsius * 9 / 5) + 32;
+}
