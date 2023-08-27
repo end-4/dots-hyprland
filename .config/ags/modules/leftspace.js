@@ -5,7 +5,6 @@ import { deflisten } from '../scripts/scripts.js';
 const HyprlandActiveWindow = deflisten(
     "HyprlandActiveWindow",
     `${App.configDir}/scripts/activewin.sh`,
-    "{}",
 );
 
 export const ModuleLeftSpace = (props) => Widget.EventBox({
@@ -33,12 +32,14 @@ export const ModuleLeftSpace = (props) => Widget.EventBox({
                                 hexpand: true, vexpand: true,
                                 hscroll: 'automatic', vscroll: 'never',
                                 child: Widget.Box({
-                                vertical: true,
+                                    vertical: true,
                                     children: [
                                         Widget.Label({
                                             xalign: 0,
                                             className: 'txt txt-smaller bar-topdesc',
                                             connections: [[HyprlandActiveWindow, label => {
+                                                if (!HyprlandActiveWindow.state)
+                                                    return;
                                                 const winJson = JSON.parse(HyprlandActiveWindow.state);
                                                 label.label = Object.keys(winJson).length === 0 ? 'Desktop' : winJson['class'];
                                             }]],
@@ -47,8 +48,11 @@ export const ModuleLeftSpace = (props) => Widget.EventBox({
                                             xalign: 0,
                                             className: 'txt txt-smallie',
                                             connections: [[HyprlandActiveWindow, label => {
+                                                if (!HyprlandActiveWindow.state)
+                                                    return;
                                                 const winJson = JSON.parse(HyprlandActiveWindow.state);
-                                                label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace}` : winJson['title'];
+                                                // console.log(ags.Service.Hyprland.active.workspace.id);
+                                                label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace.id}` : winJson['title'];
                                             }]],
                                         })
                                     ]

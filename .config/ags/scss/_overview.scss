@@ -74,7 +74,7 @@
     @include normal-rounding;
     // @include elevation-border;
     margin: 0.341rem;
-    background-color: rgba(80, 80, 80, 0.1);
+    background-color: mix($t_t_surface, $t_onSurface, 93%);
 }
 
 .overview-tasks-window {
