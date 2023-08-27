@@ -4,9 +4,9 @@ const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 import { bar } from './windows/bar.js';
 import { corner_topleft, corner_topright, corner_bottomleft, corner_bottomright } from './windows/corners.js';
 import { overview } from './windows/overview.js';
-// import { indicator } from './windows/osd.js';
+import { Indicator } from './windows/osd.js';
 import { cheatsheet } from './windows/cheatsheet.js';
-import { switchWall } from './scripts/scripts.js';
+import { sideright } from './windows/sideright.js';
 
 // Config object
 export default {
@@ -19,8 +19,9 @@ export default {
         corner_bottomleft,
         corner_bottomright,
         overview,
-        // indicator(0),
+        Indicator(0),
         cheatsheet,
+        sideright,
     ],
 };
 

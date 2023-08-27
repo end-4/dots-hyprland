@@ -19,7 +19,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #ebe0e2; }
+  color: #e8e1e5; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -69,7 +69,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #d7ccce; }
+  color: #aba6a9; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -82,16 +82,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #ebe0e2;
+  background-color: #e8e1e5;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #514348;
-  color: #d4c2c7;
+  background-color: #4b444d;
+  color: #cec3ce;
   border-radius: 50rem;
-  border: 1px solid #d4c2c7; }
+  border: 1px solid #cec3ce; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -214,7 +214,7 @@ tooltip {
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .bar-bg {
-  background-color: rgba(32, 26, 28, 0.85);
+  background-color: rgba(29, 27, 30, 0.75);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -228,11 +228,11 @@ tooltip {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
-  background-color: rgba(52, 46, 48, 0.5); }
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  background-color: rgba(49, 47, 50, 0.3); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -287,7 +287,7 @@ tooltip {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(52, 46, 48, 0.5);
+  background-color: rgba(49, 47, 50, 0.3);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -298,17 +298,17 @@ tooltip {
   font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter'; }
 
 .bar-ws-empty {
-  color: #ebe0e2; }
+  color: #e8e1e5; }
 
 .bar-ws-occupied {
-  background-color: #59404a;
-  color: #fed9e6; }
+  background-color: #4f4255;
+  color: #efdcf4; }
 
 .bar-ws-active {
-  background-color: #ffafd3;
-  color: #63003c;
+  background-color: #e7b3ff;
+  color: #4e0078;
   border-radius: 999px;
-  transition: 70ms cubic-bezier(0.05, 0.7, 0.1, 1); }
+  transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .bar-ws-left {
   border-top-left-radius: 999px;
@@ -321,11 +321,11 @@ tooltip {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #59404a;
-  color: #fed9e6; }
+  background-color: #4f4255;
+  color: #efdcf4; }
 
 .bar-sidemodule {
-  min-width: 25.227rem; }
+  min-width: 26rem; }
 
 .bar-batt-low {
   background-color: #ffb4a9;
@@ -340,16 +340,16 @@ tooltip {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #59404a;
-  color: #fed9e6; }
+  background-color: #4f4255;
+  color: #efdcf4; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #59404a;
-  color: #fed9e6; }
+  background-color: #4f4255;
+  color: #efdcf4; }
 
 .bar-music-playstate-txt {
   font-family: 'Material Symbols Rounded';
@@ -414,13 +414,13 @@ tooltip {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #59404a; }
+    background-color: #4f4255; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #fed9e6; }
+    background-color: #efdcf4; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -447,7 +447,7 @@ tooltip {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #fed9e6; }
+  background-color: #efdcf4; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -458,13 +458,13 @@ tooltip {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(32, 26, 28, 0.85);
+  background-color: rgba(29, 27, 30, 0.75);
   border-radius: 21px; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #bebebe; }
+  color: #aba6a9; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -487,14 +487,14 @@ tooltip {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(32, 26, 28, 0.85);
+  background-color: rgba(29, 27, 30, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -504,16 +504,16 @@ tooltip {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #ffafd3;
-  border: 0.068rem solid #ffafd3;
-  box-shadow: 0rem 0.136rem 0rem #ffafd3;
+  color: #e7b3ff;
+  border: 0.068rem solid #e7b3ff;
+  box-shadow: 0rem 0.136rem 0rem #e7b3ff;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #ffd9e8; }
+  color: #f6d8ff; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -521,17 +521,29 @@ tooltip {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #514348; }
+  background-color: #4b444d; }
 
 .cheatsheet-closebtn:active {
-  background-color: #78696e; }
+  background-color: #726a74; }
+
+.sidebar-right {
+  transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 1.705rem;
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  box-shadow: 0px 2px 3px #000000;
+  margin: 7px;
+  min-width: 29.591rem;
+  background-color: rgba(29, 27, 30, 0.75); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(32, 26, 28, 0.85);
+  background-color: rgba(29, 27, 30, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -548,67 +560,67 @@ tooltip {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #ffd9e8; }
+    background-color: #f6d8ff; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #8c0057;
+    background-color: #6f00a8;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #ffd9e8; }
+  color: #f6d8ff; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #ebe0e2;
+  color: #e8e1e5;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #ebe0e2; }
+  color: #e8e1e5; }
 
 .overview-search-box {
   transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
-  background-color: rgba(32, 26, 28, 0.85);
-  color: #ebe0e2;
-  caret-color: #fed9e6; }
+  background-color: rgba(29, 27, 30, 0.75);
+  color: #e8e1e5;
+  caret-color: #efdcf4; }
   .overview-search-box selection {
-    background-color: #e1bdca;
-    color: #412933; }
+    background-color: #d3c1d8;
+    color: #382c3e; }
 
 .overview-search-box-extended {
   min-width: 25.909rem; }
 
 .overview-search-prompt {
-  color: #d7ccce; }
+  color: #aba6a9; }
 
 .overview-search-results {
   min-height: 37.5rem;
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
-  background-color: rgba(32, 26, 28, 0.85);
-  color: #ebe0e2; }
+  background-color: rgba(29, 27, 30, 0.75);
+  color: #e8e1e5; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem; }
@@ -632,26 +644,26 @@ tooltip {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(32, 26, 28, 0.85);
-  color: #ebe0e2; }
+  background-color: rgba(29, 27, 30, 0.75);
+  color: #e8e1e5; }
 
 .overview-tasks-workspace {
   border-radius: 1.023rem;
   margin: 0.341rem;
-  background-color: rgba(80, 80, 80, 0.1); }
+  background-color: rgba(46, 44, 47, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.023rem;
-  border-top: 1px solid rgba(73, 66, 68, 0.5);
-  border-left: 1px solid rgba(73, 66, 68, 0.5);
-  border-right: 1px solid rgba(62, 56, 58, 0.5);
-  border-bottom: 1px solid rgba(62, 56, 58, 0.5);
-  background-color: rgba(89, 64, 74, 0.5);
-  color: #fed9e6; }
+  border-top: 1px solid rgba(70, 67, 70, 0.3);
+  border-left: 1px solid rgba(70, 67, 70, 0.3);
+  border-right: 1px solid rgba(59, 57, 60, 0.3);
+  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  background-color: rgba(79, 66, 85, 0.3);
+  color: #efdcf4; }

@@ -1,11 +1,11 @@
 const { Gdk, Gtk } = imports.gi;
-const { App, Service, Widget } = ags;
+const { App, Widget } = ags;
 const { Applications, Hyprland } = ags.Service;
-const { execAsync, exec, CONFIG_DIR } = ags.Utils;
+const { execAsync, exec } = ags.Utils;
 
 const SCREEN_WIDTH = 1920;
 const SCREEN_HEIGHT = 1080;
-const MAX_RESULTS = 10;
+const MAX_RESULTS = 15;
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
@@ -14,8 +14,14 @@ function launchCustomCommand(command) {
     if (args[0] == '>raw') { // Mouse raw input
         execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`]).catch(print);
     }
-    if (args[0] == '>img') { // Change wallpaper
-        imports.scripts.scripts.switchWall();
+    else if (args[0] == '>img') { // Change wallpaper
+        execAsync([`${App.configDir}/scripts/switchwall.sh`]).catch(print);
+    }
+    else if (args[0] == '>light') { // Light mode
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt`]).catch(print);
+    }
+    else if (args[0] == '>dark') { // Dark mode
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`]).catch(print);
     }
 }
 
@@ -234,9 +240,9 @@ export const SearchAndWindows = () => {
                 overviewRevealer.set_reveal_child(false);
                 entryPrompt.set_reveal_child(false);
                 entry.toggleClassName('overview-search-box-extended', true);
-                let appsToAdd = 15;
+                let appsToAdd = MAX_RESULTS;
                 Applications.query(entry.text).forEach(app => {
-                    if(appsToAdd == 0) return;
+                    if (appsToAdd == 0) return;
                     resultsBox.add(Widget.Overlay({
                         passThrough: true,
                         child: Widget.Box({
@@ -296,6 +302,8 @@ export const SearchAndWindows = () => {
             entry.set_text('');
             if (visible)
                 entry.grab_focus();
+            else
+                resultsBox.children = [];
         }]],
     });
 };

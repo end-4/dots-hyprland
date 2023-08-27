@@ -1,6 +1,11 @@
-const { Service, Widget } = ags;
-const { CONFIG_DIR, connect, exec, execAsync, timeout, lookUpIcon } = ags.Utils;
-const { deflisten } = imports.scripts.scripts;
+const { App, Service, Widget } = ags;
+const { connect, exec, execAsync, timeout, lookUpIcon } = ags.Utils;
+import { deflisten } from '../scripts/scripts.js';
+
+const Brightness = deflisten(
+    "Brightness",
+    `${App.configDir}/scripts/brightness.sh`,
+);
 
 class IndicatorService extends Service {
     static {
@@ -72,13 +77,7 @@ class Indicator {
     static kbd() { Indicator.instance.kbd(); }
 }
 
-const Brightness = deflisten(
-    "Brightness",
-    `${App.configDir}/scripts/brightness.sh`,
-    "50",
-);
-
-export const ModuleOsd = (props) => Widget.EventBox({
+export const Osd = (props) => Widget.EventBox({
     ...props,
     //make the widget hide when hovering
     onHover: () => {

@@ -1,6 +1,6 @@
 // Transparent version
-$transparentize_amount: 0.15;
-$transparentize_surface_amount: 0.5;
+$transparentize_amount: 0.25;
+$transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
 
 $t_primary: transparentize($primary, $transparentize_amount);
@@ -37,7 +37,7 @@ $t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
 // Common stuff
 $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
-$subtext: mix($onBackground, $background, 90%);
+$subtext: mix($onBackground, $background, 70%);
 
 // Rotate hue by 30deg
 $primary2: adjust-hue($primary, 30deg);

@@ -3,25 +3,17 @@ const { execAsync, exec } = ags.Utils;
 import { deflisten } from '../scripts/scripts.js';
 
 const WORKSPACE_SIDE_PAD = 0.477; // rem
+const NUM_OF_WORKSPACES = 10;
 
-const HyprlandWorkspaces = deflisten(
-    "HyprlandWorkspaces",
-    `${App.configDir}/scripts/workspaces.sh`,
-    `[{"num":"1","haswins":"true"},{"num":"2","haswins":"true"},{"num":"3","haswins":"true"},{"num":"4","haswins":"true"},{"num":"5","haswins":"true"},{"num":"6","haswins":"true"},{"num":"7","haswins":"true"},{"num":"8","haswins":"true"},{"num":"9","haswins":"true"},{"num":"10","haswins":"true"}]`,
+const GoHyprWorkspaces = deflisten(
+    "GoHyprWorkspaces",
+    `${App.configDir}/scripts/gohypr`,
+    (line) => {
+        return JSON.parse(line);
+    }
 );
 
-var HyprlandActiveWorkspaceBash = deflisten(
-    "HyprlandActiveWorkspace",
-    `${App.configDir}/scripts/activews.sh`,
-    "1",
-);
-
-export const ModuleWorkspaces = ({
-    fixed = 10,
-    child,
-} = {}) => Widget.EventBox({
-    // onScrollUp: () => execAsync('hyprctl dispatch workspace -1').catch(print),
-    // onScrollDown: () => execAsync('hyprctl dispatch workspace +1').catch(print),
+export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
     child: Widget.Box({
@@ -41,48 +33,46 @@ export const ModuleWorkspaces = ({
                     Widget.Box({
                         halign: 'center',
                         // homogeneous: true,
-                        children: Array.from({ length: fixed }, (_, i) => i + 1).map(i => Widget.Button({
+                        children: Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => i + 1).map(i => Widget.Button({
                             onPrimaryClick: () => execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
-                            child: child ? Widget(child) : Widget.Label({
+                            child: Widget.Label({
                                 valign: 'center',
                                 label: `${i}`,
-                                className: 'bar-ws',
-                                connections: [
-                                    [HyprlandWorkspaces, label => {
-                                        const wsJson = JSON.parse(HyprlandWorkspaces.state);
-                                        const occupied = wsJson[i - 1]['haswins'];
-                                        const occupiedleft = i - 1 >= 1 && wsJson[i - 2]['haswins'];
-                                        const occupiedright = i + 1 <= fixed && wsJson[i]['haswins'];
-                                        label.toggleClassName('bar-ws-occupied', occupied);
-                                        label.toggleClassName('bar-ws-empty', !occupied);
-                                        label.toggleClassName('bar-ws-left', !occupiedleft);
-                                        label.toggleClassName('bar-ws-right', !occupiedright);
-                                    }],
-                                ],
+                                className: 'bar-ws txt',
                             }),
                         })),
-                        connections: [HyprlandWorkspaces, box => {
-                            const wsJson = JSON.parse(HyprlandWorkspaces.state);
-                            box.children.forEach((child, i) => {
-                                const occupied = wsJson[i]['haswins'];
-                                const occupiedleft = i >= 1 && wsJson[i - 1]['haswins'];
-                                const occupiedright = i + 1 <= fixed && wsJson[i + 1]['haswins'];
-                                child.toggleClassName('bar-ws-occupied', occupied);
-                                child.toggleClassName('bar-ws-empty', !occupied);
-                                child.toggleClassName('bar-ws-left', !occupiedleft);
-                                child.toggleClassName('bar-ws-right', !occupiedright);
-                            }
-                        }],
+                        connections: [
+                            [GoHyprWorkspaces, box => {
+                                if (!GoHyprWorkspaces.state)
+                                    return;
+                                const wsJson = GoHyprWorkspaces.state;
+                                let thisSpace = -1;
+                                const kids = box.children;
+                                kids.forEach((child, i) => {
+                                    child.child.toggleClassName('bar-ws-occupied', false);
+                                });
+
+                                for (const ws of wsJson.workspaces) {
+                                    const i = ws.id;
+                                    const thisChild = kids[i - 1];
+                                    thisSpace = i;
+                                    thisChild.child.toggleClassName('bar-ws-occupied', true);
+                                    thisChild.child.toggleClassName('bar-ws-left', !ws?.leftPopulated && wsJson.activeworkspace != i - 1);
+                                    thisChild.child.toggleClassName('bar-ws-right', !ws?.rightPopulated && wsJson.activeworkspace != i + 1);
+                                };
+                            }],
+                        ],
                     }),
                     Widget.Button({
                         valign: 'center',
                         halign: 'start',
                         className: 'bar-ws bar-ws-active',
                         connections: [
-                            [HyprlandActiveWorkspaceBash, label => {
-                                const ws = HyprlandActiveWorkspaceBash.state;
+                            [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
+                                const ws = GoHyprWorkspaces.state.activeworkspace;
+                                // const ws = ags.Service.Hyprland.active.workspace.id;
                                 label.setStyle(`margin-left: ${1.773 * (ws - 1) + WORKSPACE_SIDE_PAD}rem;`);
-                                label.label = `${HyprlandActiveWorkspaceBash.state}`;
+                                label.label = `${ws}`;
                             }],
                         ],
                     }),
