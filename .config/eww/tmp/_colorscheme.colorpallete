@@ -1,12 +1,12 @@
-//Auto generated color theme for image at: [Local wallpaper]
-$colorbarbg: #085977;
-$colorbg: rgba(8,89,119,0.75);
-$colortext: #e0e6e8;
-$color0: #58A3A9;
-$color1: #5CC6B6;
-$color2: #68C6B6;
-$color3: #2AA5C7;
-$color4: #40A9C0;
-$color5: #A2B6BD;
-$color6: #e0e6e8;
-$color7: #2AA5C7;
+//Auto generated color theme for image at: https://i.scdn.co/image/ab67616d0000b273cb6481222a7a101a8787ee5a
+$colorbarbg: #160815;
+$colorbg: rgba(22,8,21,0.75);
+$colortext: #d4cddc;
+$color0: #6A5499;
+$color1: #913698;
+$color2: #A056A7;
+$color3: #D551B0;
+$color4: #8D8DBC;
+$color5: #DB8DB3;
+$color6: #d4cddc;
+$color7: #D551B0;
