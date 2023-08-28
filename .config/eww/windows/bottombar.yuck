@@ -86,7 +86,7 @@
       )
       ; Cava
       (box
-        ; :class "bottombar-bg"
+        :class "bottombar-bg"
         (box :orientation "h"
           ; it IS necessary NOT to use a for loop
           (cavacol :dir "up" :nth 0)

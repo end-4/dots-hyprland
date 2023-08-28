@@ -28,3 +28,8 @@ gradient_color_8 = '#C1838E'
 monstercat = 1
 gravity = 1000000
 noise_reduction = 0.5
+
+[input]
+
+method = pipewire
+source = alsa:0:front:0:playback
