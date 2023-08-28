@@ -247,6 +247,7 @@ tooltip {
 .module-timedate {
   padding-left: 13px;
   padding-right: 13px;
+  font-family: Material Symbols Rounded;
 }
 
 .hour {
@@ -254,6 +255,7 @@ tooltip {
   // padding-left: 13px;
   color: $colorbar;
   font-size: 20pt;
+  font-family: 'Torus';
 }
 
 .clock {
@@ -268,17 +270,18 @@ tooltip {
 
 .minute {
   color: $color2;
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: 'Torus';
 }
 
 .timedate-time {
   label {
     font-size: 16pt;
+    font-family: 'Torus';
   }
 }
 
 .date {
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: 'Torus';
   color: $color2;
 
   // margin-top: -2px;
