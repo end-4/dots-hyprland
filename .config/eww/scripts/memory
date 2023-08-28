@@ -18,13 +18,20 @@ while true; do
   swapt="$(echo "$swapfreeN" | awk '{ print $2 }')"
   swapu="$(echo "$swapfreeN" | awk '{ print $3 }')"
 
-  free=$(printf '%.1fG' "$(bc -l <<< "($t - $u) / 1000")")
-  perc=$(printf '%.1f' "$(free -m | rg Mem | awk '{print ($3/$2)*100}')")
+  free=0
+  perc=0
 
-  swapfree=$(printf '%.1fG' "$(bc -l <<< "($swapt - $swapu) / 1000")")
-  swapperc=$(printf '%.1f' "$(free -m | rg Swap | awk '{print ($3/$2)*100}')")
+  swapfree=0
+  swappercentage=0
 
-  echo '{ "total": "'"$total"'", "used": "'"$used"'", "free": "'"$free"'", "swaptotal": "'"$swaptotal"'", "swapused": "'"$swapused"'", "swappercentage": '"$swapperc"', "swapfree": "'"$swapfree"'", "percentage": '"$perc"' }'
+  total_mem=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+  available_mem=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
+
+  used_mem=$((total_mem - available_mem))
+
+  percentage=$((used_mem * 100 / total_mem))
+
+  echo '{"total": "'"$total"'", "used": "'"$used"'", "swaptotal": "'"$swaptotal"'", "swapused": "'"$swapused"'", "swappercentage": "'"$swappercentage"'", "swapfree": "'"$swapfree"'", "percentage": "'"$percentage"'" }'
 
   sleep 3
 done

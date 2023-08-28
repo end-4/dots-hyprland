@@ -436,11 +436,11 @@
           (box :space-evenly false :orientation "v"
             :class "dashfs-section"
             (button :class "dashfs-section-button"
-              :onclick "scripts/toggle-dashfs.sh --close && xdg-open 'https://discord.com/app' &"
+              :onclick "scripts/toggle-dashfs.sh --close && webcord' &"
               (box
                 :orientation "h" :space-evenly false
                 (label :class "dashfs-nerd-icon" :text "󰙯 ")
-                (label :class "dashfs-fetch" :text "Discord")
+                (label :class "dashfs-fetch" :text "Webcord")
               )
             )
             (button :class "dashfs-section-button"
