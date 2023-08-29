@@ -20,7 +20,7 @@ sudo pacman -S btop plasma-integration fwl-clipboard xdg-desktop-portal-hyprland
 ````
 
 ````
-yay -S webcord swaybg waybar swayidle fuzzel eww-wayland wlogout gojq networkmanagerapplet python-material-color-utilities geticons gtklock-runshell-module gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module cava nwg-look wps-office vscodium hyprland-git 
+yay -S webcord swaybg waybar swayidle fuzzel eww-wayland wlogout gojq networkmanagerapplet python-material-color-utilities geticons gtklock-runshell-module gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module cava nwg-look wps-office vscodium hyprland-git gtklock
 ````
 
 ````
