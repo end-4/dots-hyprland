@@ -1,6 +1,6 @@
 .membar {
   color: $color5;
-  font-family: "Torus";
+  font-family: "Sans-sherif";
 }
 
 .cpubar {
@@ -37,7 +37,7 @@
 .membar:hover,
 .cpubar:hover,
 .batbar:hover {
-  // border-top: 2px solid;
+  border-top: 2px solid;
 }
 
 .batt-percentage {
@@ -126,13 +126,13 @@
 }
 
 .cpu-menu {
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: "Sans-sherif";
   color: $color4;
   padding-left: 5px;
 }
 
 .mem-menu {
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: "Sans-sherif";
   color: $color5;
   padding-left: 5px;
   padding-right: 5px;
@@ -157,7 +157,7 @@
 }
 
 .sys-menu {
-  font-family: 'Torus', 'Material Symbols Rounded';
+  font-family: "Sans-sherif";
   color: $battcolor;
   margin: 0px;
   padding: 0px;

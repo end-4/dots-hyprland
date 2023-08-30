@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "~/.local/bin/lock.sh",
+    "action" : "gtklock",
     "text" : "Lock",
     "keybind" : "l"
 }
