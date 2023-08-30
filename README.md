@@ -2,6 +2,7 @@
 
 # README
 
+</div>
 My current Dotfiles
 
 # dots
@@ -26,4 +27,7 @@ yay -S webcord swaybg waybar swayidle fuzzel eww-wayland wlogout gojq networkman
 ````
 pip install pywal desktop_entry_lib
 ````
-</div>
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/czlabinger/dots.svg)](https://starchart.cc/czlabinger/dots)
