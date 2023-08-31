@@ -31,6 +31,7 @@ function substitute(str) {
         { from: 'code-url-handler', to: 'code' },
         { from: 'Code', to: 'code' },
         { from: 'GitHub Desktop', to: 'github-desktop' },
+        { from: 'wpsoffice', to: 'wps-office-kingsoft' },
     ];
 
     for (const { from, to } of subs) {
@@ -41,13 +42,59 @@ function substitute(str) {
     return str;
 }
 
-const client = ({ address, size: [w, h], class: c, title }) => Widget.Button({
+function destroyContextMenu(menu) {
+    if (menu !== null) {
+        menu.remove_all();
+        menu.destroy();
+        menu = null;
+    }
+}
+
+const ContextMenuItem = ({ label, onClick }) => Widget({
+    type: Gtk.MenuItem,
+    label: `${label}`,
+    setup: menuItem => {
+        menuItem.connect("activate", onClick);
+    }
+})
+
+const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget({
+    type: Gtk.MenuItem,
+    label: `${label}`,
+    setup: menuItem => {
+        let submenu = new Gtk.Menu();
+        for (let i = 1; i <= 10; i++) {
+            let button = new Gtk.MenuItem({ label: `${i}` });
+            button.connect("activate", () => {
+                execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
+            });
+            submenu.append(button);
+        }
+        menuItem.set_reserve_indicator(true);
+        menuItem.set_submenu(submenu);
+    }
+})
+
+const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title }) => Widget.Button({
     className: 'overview-tasks-window',
     halign: 'center',
     valign: 'center',
     onPrimaryClickRelease: () => {
         execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
         App.toggleWindow('overview');
+    },
+    onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
+    onSecondaryClick: (button) => {
+        const menu = Widget({
+            type: Gtk.Menu,
+            setup: menu => {
+                menu.append(ContextMenuItem({ label: "Close", onClick: () => { execAsync('hyprctl dispatch closewindow address:' + address).catch(print); destroyContextMenu(menu); } }));
+                menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
+                menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
+                menu.show_all();
+            }
+        });
+        menu.popup_at_pointer(null); // Show the menu at the pointer's position
     },
     child: Widget.Box({
         vertical: true,
@@ -72,12 +119,18 @@ const client = ({ address, size: [w, h], class: c, title }) => Widget.Button({
             })
         ]
     }),
-    tooltipText: title,
-    onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
+    tooltipText: `${c}: ${title}`,
     setup: button => {
-        button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
+        button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
         button.drag_source_set_icon_name(substitute(c));
-        button.connect('drag-data-get', (_w, _c, data) => data.set_text(address, address.length));
+        // button.drag_source_set_icon_gicon(icon);
+
+        button.connect('drag-begin', (button) => {  // On drag start, add the dragging class
+            button.toggleClassName('overview-tasks-window-dragging', true);
+        });
+        button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
+            data.set_text(address, address.length);
+        });
     },
 });
 
@@ -100,6 +153,17 @@ const workspace = index => {
                 execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
                 App.toggleWindow('overview');
             },
+            // onSecondaryClick: (eventbox) => {
+            //     const menu = Widget({
+            //         type: Gtk.Menu,
+            //         setup: menu => {
+            //             menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(index) }));
+            //             menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(index) }));
+            //             menu.show_all();
+            //         }
+            //     });
+            //     menu.popup_at_pointer(null); // Show the menu at the pointer's position
+            // },
             setup: eventbox => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
@@ -115,6 +179,7 @@ const workspace = index => {
         // this is for my monitor layout
         // shifts clients back by SCREEN_WIDTHpx if necessary
         clients = clients.map(client => {
+            // console.log(client);
             const [x, y] = client.at;
             if (x > SCREEN_WIDTH)
                 client.at = [x - SCREEN_WIDTH, y];
@@ -205,6 +270,7 @@ export const SearchAndWindows = () => {
             label: 'Search apps or calculate',
         })
     });
+
     const entry = Widget.Entry({
         className: 'overview-search-box txt-small txt',
         halign: 'center',
@@ -294,16 +360,17 @@ export const SearchAndWindows = () => {
             resultsRevealer,
         ],
         connections: [[App, (_b, name, visible) => {
-            overviewTopRow.set_spacing(visible ? 0 : SCREEN_WIDTH * OVERVIEW_SCALE / 20);
+            // overviewTopRow.set_spacing(visible ? 0 : SCREEN_WIDTH * OVERVIEW_SCALE / 20);
 
             if (name !== 'overview')
                 return;
 
-            entry.set_text('');
             if (visible)
                 entry.grab_focus();
-            else
+            else {
                 resultsBox.children = [];
-        }]],
+                entry.set_text('');
+            }
+        }],],
     });
 };

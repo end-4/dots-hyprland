@@ -4,20 +4,31 @@ $activecolor: rgba(128, 128, 128, 0.7);
 
 // Common rules
 @mixin mainfont {
-    font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
-    // font-weight: 500;
+    font-family:
+        'Lexend',
+        'Inter',
+        'Noto Sans',
+        sans-serif;
 }
 
 @mixin icon-material {
-    font-family: 'Material Symbols Rounded';
+    font-family:
+        'Material Symbols Rounded',
+        'Material Symbols Outlined',
+        'Material Symbols Sharp';
 }
 
 @mixin icon-nerd {
-    font-family: 'JetBrainsMono Nerd Font';
+    font-family:
+        'SpaceMono Nerd Font',
+        'JetBrainsMono Nerd Font',
+        monospace;
 }
 
 @mixin techfont {
-    font-family: 'JetBrains Mono Nerd Font';
+    font-family:
+        'JetBrains Mono Nerd Font',
+        monospace;
 }
 
 @mixin subtext {
@@ -109,7 +120,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 .txt-shadow {
-    text-shadow: 1px 2px 8px rgba(0,0,0,0.69);
+    text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
     margin: 10px;
 }
 
@@ -381,4 +392,8 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     border-left: 1px solid mix($t_surface, $t_onSurface, 80%);
     border-right: 1px solid mix($t_surface, $t_onSurface, 85%);
     border-bottom: 1px solid mix($t_surface, $t_onSurface, 85%);
+}
+
+@mixin elevation-border-transparent {
+    border-top: 1px solid transparent;
 }

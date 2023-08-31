@@ -1,8 +1,11 @@
+// sideleft sideright stuff
+
 .sidebar-right {
     @include md3_decel;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
     min-width: 29.591rem;
+    min-height: 29.591rem;
     background-color: $t_background;
 }

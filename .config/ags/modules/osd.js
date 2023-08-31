@@ -70,17 +70,14 @@ class IndicatorService extends Service {
 class Indicator {
     static { Service.export(this, 'Indicator'); }
     static instance = new IndicatorService();
-
     static popup(value, icon) { Indicator.instance.popup(value, icon); }
     static speaker() { Indicator.instance.speaker(); }
     static display() { Indicator.instance.display(); }
     static kbd() { Indicator.instance.kbd(); }
 }
 
-export const Osd = (props) => Widget.EventBox({
-    ...props,
-    //make the widget hide when hovering
-    onHover: () => {
+export const Osd = () => Widget.EventBox({
+    onHover: () => { //make the widget hide when hovering
         Indicator.popup(-1, 'volume_up');
     },
     child: Widget.Box({

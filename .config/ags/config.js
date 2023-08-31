@@ -19,9 +19,9 @@ export default {
         corner_bottomleft,
         corner_bottomright,
         overview,
-        Indicator(0),
+        Indicator(),
         cheatsheet,
-        sideright,
+        sideright,  
     ],
 };
 

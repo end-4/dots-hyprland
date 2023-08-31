@@ -7,8 +7,7 @@ const HyprlandActiveWindow = deflisten(
     `${App.configDir}/scripts/activewin.sh`,
 );
 
-export const ModuleLeftSpace = (props) => Widget.EventBox({
-    ...props,
+export const ModuleLeftSpace = () => Widget.EventBox({
     onScrollUp: () => {
         execAsync('light -A 5');
         Service.Indicator.speaker();

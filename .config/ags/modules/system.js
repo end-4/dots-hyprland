@@ -2,8 +2,7 @@ const { Widget } = ags;
 const { exec, execAsync } = ags.Utils;
 const { Battery } = ags.Service;
 
-export const ModuleSystem = (props) => Widget.EventBox({
-    ...props,
+export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
     child: Widget.Box({

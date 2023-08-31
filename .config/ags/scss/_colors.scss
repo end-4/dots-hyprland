@@ -1,5 +1,6 @@
 // Transparent version
 $transparentize_amount: 0.25;
+$transparentize_surface_amount_less: 0.6;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
 
@@ -10,7 +11,7 @@ $t_onPrimaryContainer: transparentize($onPrimaryContainer, $transparentize_amoun
 $t_secondary: transparentize($secondary, $transparentize_amount);
 $t_onSecondary: transparentize($onSecondary, $transparentize_amount);
 $t_secondaryContainer: transparentize($secondaryContainer, $transparentize_amount);
-$t_t_secondaryContainer: transparentize($secondaryContainer, $transparentize_surface_amount);
+$l_t_secondaryContainer: transparentize($secondaryContainer, $transparentize_surface_amount_less);
 $t_onSecondaryContainer: transparentize($onSecondaryContainer, $transparentize_amount);
 $t_tertiary: transparentize($tertiary, $transparentize_amount);
 $t_onTertiary: transparentize($onTertiary, $transparentize_amount);

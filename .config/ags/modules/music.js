@@ -2,8 +2,7 @@ const { Widget } = ags;
 const { Mpris, Audio } = ags.Service;
 const { execAsync, exec } = ags.Utils;
 
-export const ModuleMusic = (props) => Widget.EventBox({
-    ...props,
+export const ModuleMusic = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
