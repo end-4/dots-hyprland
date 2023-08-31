@@ -26,46 +26,46 @@
   margin: 10px; }
 
 .txt-badonkers {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 3rem; }
 
 .txt-tiddies {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 2.7273rem; }
 
 .txt-hugeass {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1.8182rem; }
 
 .txt-larger {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1.6363rem; }
 
 .txt-large {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1.4545rem; }
 
 .txt-norm {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1.2727rem; }
 
 .txt-small {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1.0909rem; }
 
 .txt-smallie {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 1rem; }
 
 .txt-smaller {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 0.9091rem; }
 
 .txt-smaller-offset {
   margin-top: -0.136rem; }
 
 .txt-tiny {
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter';
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
   font-size: 0.7273rem; }
 
 .txt-subtext {
@@ -78,7 +78,7 @@
   font-weight: bold; }
 
 .icon-material {
-  font-family: 'Material Symbols Rounded'; }
+  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp'; }
 
 .separator {
   border-radius: 50rem;
@@ -213,6 +213,26 @@ tooltip {
 .anim-exit {
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
+menu {
+  padding: 0.681rem;
+  background: #4b444d;
+  color: #cec3ce;
+  border-radius: 1.159rem; }
+
+menubar > menuitem {
+  border-radius: 0.545rem;
+  min-width: 13.636rem;
+  min-height: 2.727rem; }
+
+menu > menuitem {
+  padding: 0.4em 1.5rem;
+  background: transparent;
+  transition: 0.2s ease background;
+  border-radius: 0.545rem; }
+
+menu > menuitem:hover {
+  background: rgba(255, 255, 255, 0.1); }
+
 .bar-bg {
   background-color: rgba(29, 27, 30, 0.75);
   min-height: 2.727rem;
@@ -295,7 +315,7 @@ tooltip {
   min-height: 1.770rem;
   min-width: 1.770rem;
   font-size: 1.091rem;
-  font-family: 'Lexend', 'Product Sans', 'Bahnschrift', 'Inter'; }
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
 
 .bar-ws-empty {
   color: #e8e1e5; }
@@ -352,7 +372,7 @@ tooltip {
   color: #efdcf4; }
 
 .bar-music-playstate-txt {
-  font-family: 'Material Symbols Rounded';
+  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
   font-size: 1.568rem;
   margin: -0.1rem 0rem;
   margin-left: 0.2rem;
@@ -459,7 +479,7 @@ tooltip {
 
 .corner {
   background-color: rgba(29, 27, 30, 0.75);
-  border-radius: 21px; }
+  border-radius: 1.705rem; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
@@ -498,7 +518,7 @@ tooltip {
   padding: 1.364rem; }
 
 .cheatsheet-key {
-  font-family: 'JetBrains Mono Nerd Font';
+  font-family: 'JetBrains Mono Nerd Font', monospace;
   min-height: 1.364rem;
   min-width: 1.364rem;
   margin: 0.17rem;
@@ -536,6 +556,7 @@ tooltip {
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 29.591rem;
+  min-height: 29.591rem;
   background-color: rgba(29, 27, 30, 0.75); }
 
 .osd-bg {
@@ -665,5 +686,16 @@ tooltip {
   border-left: 1px solid rgba(70, 67, 70, 0.3);
   border-right: 1px solid rgba(59, 57, 60, 0.3);
   border-bottom: 1px solid rgba(59, 57, 60, 0.3);
-  background-color: rgba(79, 66, 85, 0.3);
+  background-color: rgba(79, 66, 85, 0.4);
   color: #efdcf4; }
+
+.overview-tasks-window:hover {
+  background-color: rgba(105, 86, 115, 0.43); }
+
+.overview-tasks-window:active {
+  background-color: rgba(105, 86, 115, 0.43); }
+
+.overview-tasks-window-dragging {
+  border-top: 1px solid transparent;
+  background-color: rgba(79, 66, 85, 0.2);
+  border: 1px; }

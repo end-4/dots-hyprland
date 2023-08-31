@@ -79,8 +79,21 @@
 
 .overview-tasks-window {
     @include normal-rounding;
-    @include elevation-border;    
-    background-color: $t_t_secondaryContainer;
+    @include elevation-border;
+    background-color: $l_t_secondaryContainer;
     color: $onSecondaryContainer;
 }
 
+.overview-tasks-window:hover {
+    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+}
+
+.overview-tasks-window:active {
+    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+}
+
+.overview-tasks-window-dragging {
+    @include elevation-border-transparent;
+    background-color: transparentize($l_t_secondaryContainer, 0.2);
+    border: 1px;
+}

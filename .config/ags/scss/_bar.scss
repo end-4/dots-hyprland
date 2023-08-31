@@ -305,7 +305,8 @@
 
 .corner {
     background-color: $t_background;
-    border-radius: 21px; //Hard code because Hyprland rounding is in px
+    // border-radius: 21px; //Hard code because Hyprland rounding is in px
+    @include large-rounding;
 }
 
 .bar-topdesc {

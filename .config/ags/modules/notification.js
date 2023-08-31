@@ -1,8 +1,7 @@
 const { Widget } = ags;
 const { Notifications } = ags.Service;
 
-export const ModuleNotification = props => Widget.Box({
-    ...props,
+export const ModuleNotification = () => Widget.Box({
     className: 'notification',
     children: [
         Widget.Label({

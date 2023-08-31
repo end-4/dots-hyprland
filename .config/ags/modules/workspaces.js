@@ -31,51 +31,56 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                 }),
                 overlays: [
                     Widget.Box({
-                        halign: 'center',
-                        // homogeneous: true,
-                        children: Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => i + 1).map(i => Widget.Button({
-                            onPrimaryClick: () => execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
-                            child: Widget.Label({
-                                valign: 'center',
-                                label: `${i}`,
-                                className: 'bar-ws txt',
-                            }),
-                        })),
-                        connections: [
-                            [GoHyprWorkspaces, box => {
-                                if (!GoHyprWorkspaces.state)
-                                    return;
-                                const wsJson = GoHyprWorkspaces.state;
-                                let thisSpace = -1;
-                                const kids = box.children;
-                                kids.forEach((child, i) => {
-                                    child.child.toggleClassName('bar-ws-occupied', false);
-                                });
+                        children: [
+                            Widget.Box({
+                                halign: 'center',
+                                // homogeneous: true,
+                                children: Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => i + 1).map(i => Widget.Button({
+                                    onPrimaryClick: () => execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
+                                    child: Widget.Label({
+                                        valign: 'center',
+                                        label: `${i}`,
+                                        className: 'bar-ws txt',
+                                    }),
+                                })),
+                                connections: [
+                                    [GoHyprWorkspaces, box => {
+                                        if (!GoHyprWorkspaces.state)
+                                            return;
+                                        const wsJson = GoHyprWorkspaces.state;
+                                        const kids = box.children;
+                                        kids.forEach((child, i) => {
+                                            child.child.toggleClassName('bar-ws-occupied', false);
+                                        });
 
-                                for (const ws of wsJson.workspaces) {
-                                    const i = ws.id;
-                                    const thisChild = kids[i - 1];
-                                    thisSpace = i;
-                                    thisChild.child.toggleClassName('bar-ws-occupied', true);
-                                    thisChild.child.toggleClassName('bar-ws-left', !ws?.leftPopulated && wsJson.activeworkspace != i - 1);
-                                    thisChild.child.toggleClassName('bar-ws-right', !ws?.rightPopulated && wsJson.activeworkspace != i + 1);
-                                };
-                            }],
-                        ],
-                    }),
-                    Widget.Button({
-                        valign: 'center',
-                        halign: 'start',
-                        className: 'bar-ws bar-ws-active',
-                        connections: [
-                            [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
-                                const ws = GoHyprWorkspaces.state.activeworkspace;
-                                // const ws = ags.Service.Hyprland.active.workspace.id;
-                                label.setStyle(`margin-left: ${1.773 * (ws - 1) + WORKSPACE_SIDE_PAD}rem;`);
-                                label.label = `${ws}`;
-                            }],
-                        ],
-                    }),
+                                        for (const ws of wsJson.workspaces) {
+                                            const i = ws.id;
+                                            const thisChild = kids[i - 1];
+                                            thisChild?.child.toggleClassName('bar-ws-occupied', true);
+                                            thisChild?.child.toggleClassName('bar-ws-left', !ws?.leftPopulated && wsJson.activeworkspace != i - 1);
+                                            thisChild?.child.toggleClassName('bar-ws-right', !ws?.rightPopulated && wsJson.activeworkspace != i + 1);
+                                        };
+                                    }],
+                                ],
+                            }),
+                            Widget.Button({
+                                valign: 'center',
+                                halign: 'start',
+                                className: 'bar-ws bar-ws-active',
+                                connections: [
+                                    [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
+                                        const ws = GoHyprWorkspaces.state.activeworkspace;
+                                        // const ws = ags.Service.Hyprland.active.workspace.id;
+                                        label.setStyle(`
+                                        margin-left: -${1.773 * (10 - ws + 1)}rem;
+                                        margin-right: ${1.773 * (10 - ws + 1)}rem;
+                                        `);
+                                        label.label = `${ws}`;
+                                    }],
+                                ],
+                            }),
+                        ]
+                    })
                 ]
             })
         ]

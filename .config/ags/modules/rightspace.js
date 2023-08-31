@@ -5,8 +5,7 @@ const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 import { ModuleNotification } from "./notification.js";
 import { StatusIcons } from "./statusicons.js";
 
-export const ModuleRightSpace = (props) => Widget.EventBox({
-    ...props,
+export const ModuleRightSpace = () => Widget.EventBox({
     onScrollUp: () => {
         if (Audio.speaker == null) return;
         Audio.speaker.volume += 0.03;
