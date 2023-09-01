@@ -85,6 +85,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     },
     onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
     onSecondaryClick: (button) => {
+        button.toggleClassName('overview-tasks-window-selected', true);
         const menu = Widget({
             type: Gtk.Menu,
             setup: menu => {
@@ -94,6 +95,12 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                 menu.show_all();
             }
         });
+        menu.connect("deactivate", () => {
+            button.toggleClassName('overview-tasks-window-selected', false);
+        })
+        menu.connect("selection-done", () => {
+            button.toggleClassName('overview-tasks-window-selected', false);
+        })
         menu.popup_at_pointer(null); // Show the menu at the pointer's position
     },
     child: Widget.Box({

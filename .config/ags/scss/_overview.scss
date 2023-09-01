@@ -79,7 +79,7 @@
 
 .overview-tasks-window {
     @include normal-rounding;
-    @include elevation-border;
+    @include elevation-border-softer;
     background-color: $l_t_secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -89,6 +89,10 @@
 }
 
 .overview-tasks-window:active {
+    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+}
+
+.overview-tasks-window-selected {
     background-color: mix($l_t_secondaryContainer, $primary, 95%);
 }
 

@@ -2,7 +2,7 @@ const { App, Widget } = ags;
 const { execAsync, exec } = ags.Utils;
 import { deflisten } from '../scripts/scripts.js';
 
-const WORKSPACE_SIDE_PAD = 0.477; // rem
+const WORKSPACE_SIDE_PAD = 0.545; // rem
 const NUM_OF_WORKSPACES = 10;
 
 const GoHyprWorkspaces = deflisten(
@@ -32,6 +32,9 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                 }),
                 overlays: [
                     Widget.Box({
+                        style: `
+                        padding: 0rem ${WORKSPACE_SIDE_PAD}rem;
+                        `,
                         children: [
                             Widget.Box({
                                 halign: 'center',

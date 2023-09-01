@@ -8,10 +8,19 @@ import { Indicator } from './windows/osd.js';
 import { cheatsheet } from './windows/cheatsheet.js';
 import { SideRight } from './windows/sideright.js';
 
+const CLOSE_ANIM_TIME = 150;
+
+exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
+ags.App.resetCss();
+ags.App.applyCss(`${App.configDir}/style.css`);
+
 // Config object
 export default {
     style: `${App.configDir}/style.css`,
     stackTraceOnError: true,
+    closeWindowDelay: {
+        'sideright': CLOSE_ANIM_TIME,
+    },
     windows: [
         bar,
         corner_topleft,
@@ -21,10 +30,6 @@ export default {
         overview,
         Indicator(),
         cheatsheet,
-        SideRight(),  
+        SideRight(),
     ],
 };
-
-exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
-ags.App.resetCss();
-ags.App.applyCss(`${App.configDir}/style.css`);

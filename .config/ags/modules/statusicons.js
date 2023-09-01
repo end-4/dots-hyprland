@@ -2,10 +2,10 @@ const { Widget, Service } = ags;
 const { exec, execAsync } = ags.Utils;
 const { Audio, Battery, Bluetooth, Network } = ags.Service;
 
-const BluetoothIndicator = () => Widget.Stack({
+export const BluetoothIndicator = () => Widget.Stack({
     items: [
-        ['true', Widget.Label({ className: 'txt-norm icon-material txt', label: 'bluetooth' })],
-        ['false', Widget.Label({ className: 'txt-norm icon-material txt', label: 'bluetooth_disabled' })],
+        ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
+        ['false', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' })],
     ],
     connections: [[Bluetooth, stack => { stack.shown = String(Bluetooth.enabled); }]],
 });
@@ -13,11 +13,11 @@ const BluetoothIndicator = () => Widget.Stack({
 
 const NetworkWiredIndicator = () => Widget.Stack({
     items: [
-        ['unknown', Widget.Label({ className: 'txt-norm icon-material txt', label: 'wifi_off' })],
-        ['disconnected', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_off' })],
-        ['disabled', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_statusbar_not_connected' })],
-        ['connected', Widget.Label({ className: 'txt-norm icon-material txt', label: 'lan' })],
-        ['connecting', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_0_bar' })],
+        ['unknown', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
+        ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
+        ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
+        ['connected', Widget.Label({ className: 'txt-norm icon-material', label: 'lan' })],
+        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' })],
     ],
     connections: [[Network, stack => {
         if (!Network.wired)
@@ -36,14 +36,14 @@ const NetworkWiredIndicator = () => Widget.Stack({
 
 const NetworkWifiIndicator = () => Widget.Stack({
     items: [
-        ['disabled', Widget.Label({ className: 'txt-norm icon-material txt', label: 'wifi_off' })],
-        ['disconnected', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_off' })],
-        ['connecting', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_statusbar_not_connected' })],
-        ['4', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_4_bar' })],
-        ['3', Widget.Label({ className: 'txt-norm icon-material txt', label: 'network_wifi_3_bar' })],
-        ['2', Widget.Label({ className: 'txt-norm icon-material txt', label: 'network_wifi_2_bar' })],
-        ['1', Widget.Label({ className: 'txt-norm icon-material txt', label: 'network_wifi_1_bar' })],
-        ['0', Widget.Label({ className: 'txt-norm icon-material txt', label: 'signal_wifi_0_bar' })],
+        ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
+        ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
+        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
+        ['4', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' })],
+        ['3', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' })],
+        ['2', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_2_bar' })],
+        ['1', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' })],
+        ['0', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' })],
     ],
     connections: [[Network,
         stack => {
@@ -61,7 +61,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
     ]],
 });
 
-const NetworkIndicator = () => Widget.Stack({
+export const NetworkIndicator = () => Widget.Stack({
     items: [
         ['wifi', NetworkWifiIndicator()],
         ['wired', NetworkWiredIndicator()],
