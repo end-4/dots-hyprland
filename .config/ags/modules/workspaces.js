@@ -16,6 +16,7 @@ const GoHyprWorkspaces = deflisten(
 export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onMiddleClick: () => App.toggleWindow('overview'),
     child: Widget.Box({
         homogeneous: true,
         className: 'bar-ws-width',

@@ -19,7 +19,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e8e1e5; }
+  color: #e2e2e5; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -69,7 +69,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #aba6a9; }
+  color: #a6a7a9; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -82,16 +82,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e8e1e5;
+  background-color: #e2e2e5;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #4b444d;
-  color: #cec3ce;
+  background-color: #41474d;
+  color: #c1c7ce;
   border-radius: 50rem;
-  border: 1px solid #cec3ce; }
+  border: 1px solid #c1c7ce; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -215,8 +215,8 @@ tooltip {
 
 menu {
   padding: 0.681rem;
-  background: #4b444d;
-  color: #cec3ce;
+  background: #41474d;
+  color: #c1c7ce;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -234,7 +234,7 @@ menu > menuitem:hover {
   background: rgba(255, 255, 255, 0.1); }
 
 .bar-bg {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(26, 28, 30, 0.75);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -248,11 +248,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
-  background-color: rgba(49, 47, 50, 0.3); }
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
+  background-color: rgba(46, 48, 50, 0.3); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -307,7 +307,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(49, 47, 50, 0.3);
+  background-color: rgba(46, 48, 50, 0.3);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -318,15 +318,15 @@ menu > menuitem:hover {
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
 
 .bar-ws-empty {
-  color: #e8e1e5; }
+  color: #e2e2e5; }
 
 .bar-ws-occupied {
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #384956;
+  color: #d3e5f6; }
 
 .bar-ws-active {
-  background-color: #e7b3ff;
-  color: #4e0078;
+  background-color: #87ceff;
+  color: #00344f;
   border-radius: 999px;
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
@@ -341,8 +341,8 @@ menu > menuitem:hover {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #384956;
+  color: #d3e5f6; }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -360,16 +360,16 @@ menu > menuitem:hover {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #384956;
+  color: #d3e5f6; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #384956;
+  color: #d3e5f6; }
 
 .bar-music-playstate-txt {
   font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
@@ -407,12 +407,12 @@ menu > menuitem:hover {
   border-radius: 10rem; }
 
 .bar-music-hide-false {
-  transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   transition-duration: 100ms;
   opacity: 1; }
 
 .bar-music-hide-true {
-  transition: 180ms cubic-bezier(0.3, 0, 0.8, 0.15);
+  transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);
   transition-duration: 100ms;
   opacity: 0; }
 
@@ -434,13 +434,13 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #4f4255; }
+    background-color: #384956; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #efdcf4; }
+    background-color: #d3e5f6; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -467,7 +467,7 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #efdcf4; }
+  background-color: #d3e5f6; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -478,13 +478,13 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(26, 28, 30, 0.75);
   border-radius: 1.705rem; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #aba6a9; }
+  color: #a6a7a9; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -507,14 +507,14 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(26, 28, 30, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -524,16 +524,16 @@ menu > menuitem:hover {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #e7b3ff;
-  border: 0.068rem solid #e7b3ff;
-  box-shadow: 0rem 0.136rem 0rem #e7b3ff;
+  color: #87ceff;
+  border: 0.068rem solid #87ceff;
+  box-shadow: 0rem 0.136rem 0rem #87ceff;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #f6d8ff; }
+  color: #c7e6ff; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -541,30 +541,34 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #4b444d; }
+  background-color: #41474d; }
 
 .cheatsheet-closebtn:active {
-  background-color: #726a74; }
+  background-color: #676d74; }
 
 .sidebar-right {
-  transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(29, 27, 30, 0.75); }
+  background-color: rgba(26, 28, 30, 0.75); }
+
+.sideright-hide {
+  margin-right: -29.591rem;
+  transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(26, 28, 30, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -581,67 +585,67 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #f6d8ff; }
+    background-color: #c7e6ff; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #6f00a8;
+    background-color: #004b6f;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #f6d8ff; }
+  color: #c7e6ff; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e8e1e5;
+  color: #e2e2e5;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e8e1e5; }
+  color: #e2e2e5; }
 
 .overview-search-box {
-  transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5;
-  caret-color: #efdcf4; }
+  background-color: rgba(26, 28, 30, 0.75);
+  color: #e2e2e5;
+  caret-color: #d3e5f6; }
   .overview-search-box selection {
-    background-color: #d3c1d8;
-    color: #382c3e; }
+    background-color: #b7c9d9;
+    color: #21323e; }
 
 .overview-search-box-extended {
   min-width: 25.909rem; }
 
 .overview-search-prompt {
-  color: #aba6a9; }
+  color: #a6a7a9; }
 
 .overview-search-results {
   min-height: 37.5rem;
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5; }
+  background-color: rgba(26, 28, 30, 0.75);
+  color: #e2e2e5; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem; }
@@ -665,37 +669,37 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5; }
+  background-color: rgba(26, 28, 30, 0.75);
+  color: #e2e2e5; }
 
 .overview-tasks-workspace {
   border-radius: 1.023rem;
   margin: 0.341rem;
-  background-color: rgba(46, 44, 47, 0.207); }
+  background-color: rgba(43, 45, 47, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.023rem;
-  border-top: 1px solid rgba(70, 67, 70, 0.3);
-  border-left: 1px solid rgba(70, 67, 70, 0.3);
-  border-right: 1px solid rgba(59, 57, 60, 0.3);
-  border-bottom: 1px solid rgba(59, 57, 60, 0.3);
-  background-color: rgba(79, 66, 85, 0.4);
-  color: #efdcf4; }
+  border-top: 1px solid rgba(66, 68, 70, 0.3);
+  border-left: 1px solid rgba(66, 68, 70, 0.3);
+  border-right: 1px solid rgba(56, 58, 60, 0.3);
+  border-bottom: 1px solid rgba(56, 58, 60, 0.3);
+  background-color: rgba(56, 73, 86, 0.4);
+  color: #d3e5f6; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(105, 86, 115, 0.43); }
+  background-color: rgba(70, 96, 115, 0.43); }
 
 .overview-tasks-window:active {
-  background-color: rgba(105, 86, 115, 0.43); }
+  background-color: rgba(70, 96, 115, 0.43); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(79, 66, 85, 0.2);
+  background-color: rgba(56, 73, 86, 0.2);
   border: 1px; }

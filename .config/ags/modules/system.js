@@ -25,7 +25,7 @@ export const ModuleSystem = () => Widget.EventBox({
                             }),
                             Widget.Label({
                                 className: 'txt-smallie txt',
-                                connections: [[5000, label => label.label = exec('date "+%A, %e/%m"')]],
+                                connections: [[5000, label => label.label = exec('date "+%A, %d/%m"')]],
                             }),
                         ],
                     }),

@@ -130,6 +130,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
         });
         button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
             data.set_text(address, address.length);
+            button.toggleClassName('overview-tasks-window-dragging', false);
         });
     },
 });
@@ -220,6 +221,11 @@ const OverviewRow = ({ startWorkspace = 1, workspaces = 5, windowName = 'overvie
 
 
 export const SearchAndWindows = () => {
+    const clickOutsideToClose = Widget.EventBox({
+        onPrimaryClick: () => App.toggleWindow('overview'),
+        onSecondaryClick: () => App.toggleWindow('overview'),
+        onMiddleClick: () => App.toggleWindow('overview'),
+    });
     const resultsBox = Widget.Box({
         vertical: true,
         vexpand: true,
@@ -349,6 +355,7 @@ export const SearchAndWindows = () => {
     return Widget.Box({
         vertical: true,
         children: [
+            clickOutsideToClose,
             entry,
             // Widget.Overlay({
             //     child: entry,
