@@ -1,3 +1,4 @@
+const { App, Service } = ags;
 const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 
 export const deflisten = function (name, command, transformer = (a) => a) {

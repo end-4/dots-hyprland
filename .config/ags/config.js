@@ -6,11 +6,11 @@ import { corner_topleft, corner_topright, corner_bottomleft, corner_bottomright 
 import { overview } from './windows/overview.js';
 import { Indicator } from './windows/osd.js';
 import { cheatsheet } from './windows/cheatsheet.js';
-import { sideright } from './windows/sideright.js';
+import { SideRight } from './windows/sideright.js';
 
 // Config object
 export default {
-    style:  `${App.configDir}/style.css`,
+    style: `${App.configDir}/style.css`,
     stackTraceOnError: true,
     windows: [
         bar,
@@ -21,7 +21,7 @@ export default {
         overview,
         Indicator(),
         cheatsheet,
-        sideright,  
+        SideRight(),  
     ],
 };
 

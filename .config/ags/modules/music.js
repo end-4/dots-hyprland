@@ -25,6 +25,7 @@ export const ModuleMusic = () => Widget.EventBox({
                         })],
                         connections: [[Mpris, label => {
                             const mpris = Mpris.getPlayer('');
+                            if(!mpris) return;
                             label.toggleClassName('bar-music-playstate-playing', mpris !== null && mpris.playBackStatus == 'Playing');
                             label.toggleClassName('bar-music-playstate', mpris !== null || mpris.playBackStatus == 'Paused');
                         }]],

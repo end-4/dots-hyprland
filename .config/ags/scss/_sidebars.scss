@@ -9,3 +9,8 @@
     min-height: 29.591rem;
     background-color: $t_background;
 }
+
+.sideright-hide {
+    margin-right: -29.591rem;
+    @include md3_accel;
+}
