@@ -62,7 +62,7 @@ $activecolor: rgba(128, 128, 128, 0.7);
 }
 
 @mixin md3_accel {
-    transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);
+    transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
 }
 
 @mixin noanim {
@@ -315,6 +315,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-5>button {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>button:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-h-5>label {
     margin-right: 0.341rem;
 }
@@ -355,6 +363,22 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-10>revealer {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>revealer:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-10>button {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>button:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-h-10>label {
     margin-right: 0.682rem;
 }
@@ -371,12 +395,24 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-10>stack {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>stack:last-child {
+    margin-right: 0rem;
+}
+
 .anim-enter {
     @include anim-enter;
 }
 
 .anim-exit {
     @include anim-exit;
+}
+
+@mixin small-rounding {
+    border-radius: 0.682rem;
 }
 
 @mixin normal-rounding {
@@ -387,13 +423,76 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     border-radius: 1.705rem;
 }
 
+@mixin elevation-border-softer {
+    border-top: 1px solid mix($t_t_surface, $t_onSurface, 80%);
+    border-left: 1px solid mix($t_t_surface, $t_onSurface, 80%);
+    border-right: 1px solid mix($t_t_surface, $t_onSurface, 85%);
+    border-bottom: 1px solid mix($t_t_surface, $t_onSurface, 85%);
+}
+
 @mixin elevation-border {
-    border-top: 1px solid mix($t_surface, $t_onSurface, 80%);
-    border-left: 1px solid mix($t_surface, $t_onSurface, 80%);
-    border-right: 1px solid mix($t_surface, $t_onSurface, 85%);
-    border-bottom: 1px solid mix($t_surface, $t_onSurface, 85%);
+    border-top: 1px solid mix($t_t_surface, $onSurface, 90%);
+    border-left: 1px solid mix($t_t_surface, $onSurface, 90%);
+    border-right: 1px solid mix($t_t_surface, $onSurface, 95%);
+    border-bottom: 1px solid mix($t_t_surface, $onSurface, 95%);
+}
+
+@mixin elevation-border-heavier {
+    border-top: 1px solid mix($t_t_surface, $onSurface, 80%);
+    border-left: 1px solid mix($t_t_surface, $onSurface, 80%);
+    border-right: 1px solid mix($t_t_surface, $onSurface, 85%);
+    border-bottom: 1px solid mix($t_t_surface, $onSurface, 85%);
 }
 
 @mixin elevation-border-transparent {
     border-top: 1px solid transparent;
+}
+
+@mixin button-minsize {
+    min-width: 2.727rem;
+    min-height: 2.727rem;
+}
+
+.button-minsize {
+    @include button-minsize;
+}
+
+@mixin group-padding {
+    padding: 0.341rem;
+}
+
+.group-padding {
+    @include group-padding;
+}
+
+.margin-right-5 {
+    margin-right: 0.341rem;
+}
+
+.margin-left-5 {
+    margin-left: 0.341rem;
+}
+
+.margin-top-5 {
+    margin-top: 0.341rem;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 0.341rem;
+}
+
+.margin-right-10 {
+    margin-right: 0.682rem;
+}
+
+.margin-left-10 {
+    margin-left: 0.682rem;
+}
+
+.margin-top-10 {
+    margin-top: 0.682rem;
+}
+
+.margin-bottom-10 {
+    margin-bottom: 0.682rem;
 }

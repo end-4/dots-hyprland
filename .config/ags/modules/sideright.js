@@ -2,8 +2,11 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Service, Widget } = ags;
 const { Applications, Hyprland } = ags.Service;
 const { execAsync, exec } = ags.Utils;
+import { ModuleConnections } from "./connectiontoggles.js";
+import { ModuleHyprToggles } from "./hyprtoggles.js";
+import { ModuleMiscToggles } from "./misctoggles.js";
 
-const CLOSE_ANIM_TIME = 180;
+const CLOSE_ANIM_TIME = 151;
 
 export class MenuService extends Service {
     static { Service.register(this); }
@@ -17,13 +20,9 @@ export class MenuService extends Service {
         MenuService.opened = MenuService.opened === menu ? '' : menu;
         MenuService.instance.emit('changed');
         if (MenuService.opened === '') {
-            // run async: wait for the menu to close then close
-            // the window
-            setTimeout(() => {
-                App.toggleWindow(menu);
-            }, CLOSE_ANIM_TIME);
+            App.toggleWindow(menu);
         }
-        console.log('MenuService: ', MenuService.opened, menu);
+        // console.log('MenuService: ', MenuService.opened, menu);
     }
 
     constructor() {
@@ -48,14 +47,18 @@ export const SidebarRight = () => Widget.Box({
         Widget.Box({
             vertical: true,
             vexpand: true,
-            className: 'sidebar-right',
+            className: 'sidebar-right sideright-hide',
             children: [
                 Widget.Box({
                     vertical: true,
                     vexpand: true,
+                    className: 'spacing-v-5',
                     children: [
-
-                        Widget.Label('test'),
+                        ModuleConnections(),
+                        ModuleHyprToggles(),
+                        Widget.Box({
+                            children: [Widget.Box({ hexpand: true }), ModuleMiscToggles(),]
+                        })
                     ]
                 }),
             ],

@@ -16,11 +16,12 @@ export const ModuleRightSpace = () => Widget.EventBox({
         Audio.speaker.volume -= 0.03;
         Service.Indicator.speaker();
     },
+    onPrimaryClick: () => Service.MenuService.toggle('sideright'),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
         hexpand: true,
-        className: 'spacing-h-5',
+        className: 'spacing-h-5 txt',
         children: [
             ModuleNotification(),
             Widget.Box(),

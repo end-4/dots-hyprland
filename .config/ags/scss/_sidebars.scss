@@ -8,9 +8,71 @@
     min-width: 29.591rem;
     min-height: 29.591rem;
     background-color: $t_background;
+    padding: 1.023rem;
 }
 
 .sideright-hide {
     margin-right: -29.591rem;
     @include md3_accel;
+}
+
+.sidebar-group {
+    @include normal-rounding;
+    @include elevation-border;
+    @include group-padding;
+    background-color: $t_surface;
+}
+
+.sidebar-button {
+    padding: 0rem 0.682rem;
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-button-nopad {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-button:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-button:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
+}
+
+.sidebar-button-nopad:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-button-nopad:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
+}
+
+.sidebar-button-left {
+    border-top-left-radius: 0.682rem;
+    border-bottom-left-radius: 0.682rem;
+}
+
+.sidebar-button-right {
+    border-top-right-radius: 0.682rem;
+    border-bottom-right-radius: 0.682rem;
+}
+
+.sidebar-button-alone {
+    border-radius: 0.682rem;
+}
+
+.sidebar-button-active {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.sidebar-button-active:hover {
+    background-color: mix($primary, $hovercolor, 90%);
+}
+
+.sidebar-button-active:active {
+    background-color: mix($primary, $hovercolor, 70%);
 }

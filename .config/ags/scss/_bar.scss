@@ -20,7 +20,7 @@
 
 .bar-group {
     @include elevation-border;
-    background-color: mix($t_surface, $t_onSurface, 90%);
+    background-color: $t_surface;
 }
 
 .bar-group-pad {
@@ -84,7 +84,7 @@
 }
 
 .bar-ws-width {
-    min-width: 18.382rem;
+    min-width: 18.614rem;
 }
 
 .bar-separator {
