@@ -17,7 +17,7 @@ These are all the dependencies I know.
 
 Assuming you are using pacman and yay
 ````    
-sudo pacman -S btop plasma-integration fwl-clipboard xdg-desktop-portal-hyprland playerctl  bc blueberry bluez coreutils dunst findutils gawk imagemagick light networkmanager pavucontrol procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wofi libqalculate sox nlohmann-json boost boost-libs baobab grim slurp wlroots notify-osd
+sudo pacman -S btop plasma-integration fwl-clipboard xdg-desktop-portal-hyprland playerctl  bc blueberry bluez coreutils dunst findutils gawk imagemagick light networkmanager pavucontrol procps pulseaudio ripgrep socat udev upower util-linux wget wireplumber wofi libqalculate sox nlohmann-json boost boost-libs baobab grim slurp wlroots notify-osd fish starship
 ````
 
 ````
