@@ -3,13 +3,18 @@
     <h3> All hyped up with Ags </h3>
 </div>
 
+
+## THIS BRANCH IS A WORK IN PROGRESS, THIS README IS NOT COMPLETE.
+- mostly stuff copied from older branches, will be updated later
+
+
+
 ## Design
 - **Scalable widgets**: Just change the font size, they'll be scaled!
 
 ## Gallery
 
 ## Dependencies
- - Requires [eww with systray support](https://github.com/elkowar/eww/pull/743)
  - Python dependencies
 ```
 pywal desktop_entry_lib poetry build Pillow
