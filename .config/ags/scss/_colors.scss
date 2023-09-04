@@ -1,6 +1,7 @@
 // Transparent version
 $transparentize_amount: 0.25;
 $transparentize_surface_amount_less: 0.6;
+$transparentize_surface_amount_less_less: 0.4;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
 
@@ -29,6 +30,9 @@ $t_t_surface: transparentize($surface, $transparentize_surface_amount_more);
 $t_onSurface: transparentize($onSurface, $transparentize_surface_amount);
 $t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount);
 $t_onSurfaceVariant: transparentize($onSurfaceVariant, $transparentize_surface_amount);
+$t_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_more);
+$l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less);
+$l_l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less_less);
 $t_outline: transparentize($outline, $transparentize_amount);
 $t_shadow: transparentize($shadow, $transparentize_amount);
 $t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);

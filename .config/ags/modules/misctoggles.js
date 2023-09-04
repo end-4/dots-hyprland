@@ -5,11 +5,21 @@ const { execAsync, exec } = ags.Utils;
 
 const RECORD_SCRIPT_DIR = `${App.configDir}/scripts/record-script.sh`;
 const RECORDER_PROCESS = 'record-script.sh';
+const CLOSE_ANIM_TIME = 150;
 
 const MaterialIcon = (icon, size) => Widget.Label({
     className: `icon-material txt-${size}`,
     label: icon,
 })
+
+async function toggleSystemdService(serviceName, button) {
+    const serviceState = exec(`systemctl is-enabled ${serviceName}`) == 'enabled';
+    // console.log(`pkexec bash -c "systemctl ${serviceState ? 'disable' : 'enable'} ${serviceName}"`)
+    exec(`pkexec bash -c "systemctl ${serviceState ? 'disable' : 'enable'} ${serviceName}"`);
+    const newServiceState = exec(`systemctl is-enabled ${serviceName}`) == 'enabled';
+    button.toggleClassName('sidebar-button-active', newServiceState);
+    serviceState.toggleClassName('invisible', newServiceState);
+}
 
 // Styles in scss/sidebars.scss
 const ModuleNightLight = (props = {}) => Widget.Button({
@@ -40,7 +50,7 @@ const ModuleRecord = (props = {}) => Widget.Button({
         execAsync(['bash', '-c', RECORD_SCRIPT_DIR]).catch(print);
         setTimeout(() => {
             button.toggleClassName('sidebar-button-active', exec(`pidof ${RECORDER_PROCESS} >/dev/null && echo 1 || echo`) == '1');
-        }, 100);
+        }, CLOSE_ANIM_TIME);
     },
     child: MaterialIcon('screen_record', 'larger'),
     setup: button => {
@@ -50,20 +60,17 @@ const ModuleRecord = (props = {}) => Widget.Button({
 
 const SystemdService = (serviceName) => {
     const serviceState = Widget.Label({
-        xalign: 1, halign: 'end',
-        label: '?',
+        className: `icon-material txt-larger`,
+        label: 'check',
         setup: label => {
-            label.set_text(exec(`bash -c "systemctl is-enabled ${serviceName} >/dev/null && echo ON || echo OFF"`));
+            // label.toggleClassName('invisible', exec(`bash -c "systemctl is-enabled ${serviceName} >/dev/null && echo ON || echo OFF"`) == 'OFF');
         }
-    })
+    });
     return Widget.Button({
         className: 'button-minsize sidebar-button sidebar-button-alone txt-small',
         style: `min-width: 10.227rem;`,
         onPrimaryClick: (button) => {
-            const serviceState = exec(`systemctl is-enabled ${serviceName}`) == 'enabled';
-            console.log(`pkexec bash -c "systemctl ${serviceState ? 'disable' : 'enable'} ${serviceName}"`)
-            exec(`pkexec bash -c "systemctl ${serviceState ? 'disable' : 'enable'} ${serviceName}"`);
-            button.toggleClassName('sidebar-button-active', exec(`systemctl is-enabled ${serviceName}`) == 'enabled');
+            toggleSystemdService(serviceName, button);
         },
         setup: button => {
             button.toggleClassName('sidebar-button-active', exec(`systemctl is-enabled ${serviceName}`) == 'enabled');

@@ -1,6 +1,9 @@
 * {
   all: unset; }
 
+.techfont {
+  font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace; }
+
 @keyframes flyin-top {
   from {
     margin-top: -2.795rem; }
@@ -19,7 +22,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e5e1e5; }
+  color: #ede0de; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -69,7 +72,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #a9a6aa; }
+  color: #b0a5a3; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -82,16 +85,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e5e1e5;
+  background-color: #ede0de;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #48454f;
-  color: #c9c5d0;
+  background-color: #534341;
+  color: #d8c2bf;
   border-radius: 50rem;
-  border: 1px solid #c9c5d0; }
+  border: 1px solid #d8c2bf; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -207,6 +210,12 @@ tooltip {
 .spacing-h-10 > revealer:last-child {
   margin-right: 0rem; }
 
+.spacing-h-10 > overlay {
+  margin-right: 0.682rem; }
+
+.spacing-h-10 > overlay:last-child {
+  margin-right: 0rem; }
+
 .spacing-h-10 > button {
   margin-right: 0.682rem; }
 
@@ -230,6 +239,12 @@ tooltip {
 
 .spacing-h-10 > stack:last-child {
   margin-right: 0rem; }
+
+.spacing-v-10 > box {
+  margin-bottom: 0.682rem; }
+
+.spacing-v-10 > box:last-child {
+  margin-bottom: 0rem; }
 
 .anim-enter {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1); }
@@ -268,10 +283,21 @@ tooltip {
 .margin-bottom-10 {
   margin-bottom: 0.682rem; }
 
+.invisible {
+  opacity: 0;
+  background-color: transparent;
+  color: transparent; }
+
+.spacing-v--5 > box {
+  margin-bottom: -0.341rem; }
+
+.spacing-v--5 > box:last-child {
+  margin-bottom: 0rem; }
+
 menu {
   padding: 0.681rem;
-  background: #48454f;
-  color: #c9c5d0;
+  background: #534341;
+  color: #d8c2bf;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -289,7 +315,7 @@ menu > menuitem:hover {
   background: rgba(255, 255, 255, 0.1); }
 
 .bar-bg {
-  background-color: rgba(28, 27, 31, 0.75);
+  background-color: rgba(33, 26, 25, 0.75);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -303,11 +329,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
-  background-color: rgba(28, 27, 31, 0.3); }
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
+  background-color: rgba(33, 26, 25, 0.3); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -320,8 +346,7 @@ menu > menuitem:hover {
   padding-right: 0.547rem; }
 
 .bar-group-pad-music {
-  padding-right: 1.023rem;
-  padding-left: 0.273rem; }
+  padding-right: 1.023rem; }
 
 .bar-group-pad-left {
   padding-left: 1.364rem;
@@ -362,7 +387,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(48, 47, 51, 0.3);
+  background-color: rgba(53, 46, 45, 0.3);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -373,15 +398,15 @@ menu > menuitem:hover {
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
 
 .bar-ws-empty {
-  color: #e5e1e5; }
+  color: #ede0de; }
 
 .bar-ws-occupied {
-  background-color: #484459;
-  color: #e5dff9; }
+  background-color: #5d3f3b;
+  color: #ffdad5; }
 
 .bar-ws-active {
-  background-color: #c9beff;
-  color: #2f2176;
+  background-color: #ffb4a9;
+  color: #5f1510;
   border-radius: 999px;
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
@@ -396,8 +421,8 @@ menu > menuitem:hover {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #484459;
-  color: #e5dff9; }
+  background-color: #5d3f3b;
+  color: #ffdad5; }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -415,16 +440,24 @@ menu > menuitem:hover {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #484459;
-  color: #e5dff9; }
+  background-color: #5d3f3b;
+  color: #ffdad5; }
+
+.bar-music-circprog {
+  margin-left: 0.273rem;
+  min-width: 0.068rem;
+  min-height: 1.770rem;
+  padding: 0rem;
+  background-color: #5d3f3b;
+  color: #ffdad5; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #484459;
-  color: #e5dff9; }
+  background-color: #5d3f3b;
+  color: #ffdad5; }
 
 .bar-music-playstate-txt {
   font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
@@ -489,13 +522,13 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #484459; }
+    background-color: #5d3f3b; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #e5dff9; }
+    background-color: #ffdad5; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -522,7 +555,7 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #e5dff9; }
+  background-color: #ffdad5; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -533,13 +566,13 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(28, 27, 31, 0.75);
+  background-color: rgba(33, 26, 25, 0.75);
   border-radius: 1.705rem; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #a9a6aa; }
+  color: #b0a5a3; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -562,33 +595,33 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(28, 27, 31, 0.75);
+  background-color: rgba(33, 26, 25, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
-  font-family: 'JetBrains Mono Nerd Font', monospace;
+  font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace;
   min-height: 1.364rem;
   min-width: 1.364rem;
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #c9beff;
-  border: 0.068rem solid #c9beff;
-  box-shadow: 0rem 0.136rem 0rem #c9beff;
+  color: #ffb4a9;
+  border: 0.068rem solid #ffb4a9;
+  box-shadow: 0rem 0.136rem 0rem #ffb4a9;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #e6deff; }
+  color: #ffdad4; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -596,23 +629,23 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #48454f; }
+  background-color: #534341; }
 
 .cheatsheet-closebtn:active {
-  background-color: #6f6b76; }
+  background-color: #7b6967; }
 
 .sidebar-right {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(28, 27, 31, 0.75);
+  background-color: rgba(33, 26, 25, 0.75);
   padding: 1.023rem; }
 
 .sideright-hide {
@@ -621,33 +654,41 @@ menu > menuitem:hover {
 
 .sidebar-group {
   border-radius: 1.023rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   padding: 0.341rem;
-  background-color: rgba(28, 27, 31, 0.3); }
+  background-color: rgba(33, 26, 25, 0.3); }
+
+.sidebar-group-nopad {
+  border-radius: 1.023rem;
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
+  background-color: rgba(33, 26, 25, 0.3); }
 
 .sidebar-button {
   padding: 0rem 0.682rem;
-  background-color: rgba(72, 68, 89, 0.75);
-  color: #e5dff9; }
+  background-color: rgba(93, 63, 59, 0.75);
+  color: #ffdad5; }
 
 .sidebar-button-nopad {
-  background-color: rgba(72, 68, 89, 0.75);
-  color: #e5dff9; }
+  background-color: rgba(93, 63, 59, 0.75);
+  color: #ffdad5; }
 
 .sidebar-button:hover {
-  background-color: rgba(103, 99, 121, 0.75); }
+  background-color: rgba(125, 94, 90, 0.75); }
 
 .sidebar-button:active {
-  background-color: rgba(135, 130, 153, 0.75); }
+  background-color: rgba(158, 125, 121, 0.75); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(103, 99, 121, 0.75); }
+  background-color: rgba(125, 94, 90, 0.75); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(135, 130, 153, 0.75); }
+  background-color: rgba(158, 125, 121, 0.75); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.682rem;
@@ -661,21 +702,61 @@ menu > menuitem:hover {
   border-radius: 0.682rem; }
 
 .sidebar-button-active {
-  background-color: #c9beff;
-  color: #2f2176; }
+  background-color: #ffb4a9;
+  color: #5f1510; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(199, 188, 252, 0.94); }
+  background-color: rgba(252, 179, 168, 0.94); }
 
 .sidebar-button-active:active {
-  background-color: rgba(194, 184, 243, 0.82); }
+  background-color: rgba(243, 175, 165, 0.82); }
+
+.sidebar-sysinfo-grouppad {
+  padding: 1.159rem; }
+
+.sidebar-memory-ram-cirgprog {
+  min-width: 0.682rem;
+  min-height: 4.091rem;
+  padding: 0.273rem;
+  background-color: #5d3f3b;
+  color: #ffdad5; }
+
+.sidebar-memory-swap-cirgprog {
+  min-width: 0.682rem;
+  min-height: 2.455rem;
+  padding: 0.273rem;
+  margin: 0.818rem;
+  background-color: #5d3f3b;
+  color: #ffdad5; }
+
+.sidebar-notification {
+  border-radius: 0.682rem;
+  background-color: rgba(83, 67, 65, 0.6);
+  color: #d8c2bf;
+  padding: 0.682rem; }
+
+.sidebar-notif-icon {
+  min-width: 2.045rem;
+  min-height: 2.045rem; }
+
+.sidebar-notif-body {
+  color: #b4a09d; }
+
+.sidebar-notif-close-btn {
+  border-radius: 0.682rem; }
+
+.sidebar-notif-close-btn:hover {
+  background: rgba(128, 128, 128, 0.4); }
+
+.sidebar-notif-close-btn:active {
+  background: rgba(128, 128, 128, 0.7); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(28, 27, 31, 0.75);
+  background-color: rgba(33, 26, 25, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -692,67 +773,67 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #e6deff; }
+    background-color: #ffdad4; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #463a8d;
+    background-color: #7e2b23;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #e6deff; }
+  color: #ffdad4; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e5e1e5;
+  color: #ede0de;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e5e1e5; }
+  color: #ede0de; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
-  background-color: rgba(28, 27, 31, 0.75);
-  color: #e5e1e5;
-  caret-color: #e5dff9; }
+  background-color: rgba(33, 26, 25, 0.75);
+  color: #ede0de;
+  caret-color: #ffdad5; }
   .overview-search-box selection {
-    background-color: #c9c3dc;
-    color: #312e42; }
+    background-color: #e7bdb7;
+    color: #442926; }
 
 .overview-search-box-extended {
   min-width: 25.909rem; }
 
 .overview-search-prompt {
-  color: #a9a6aa; }
+  color: #b0a5a3; }
 
 .overview-search-results {
   min-height: 37.5rem;
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
-  background-color: rgba(28, 27, 31, 0.75);
-  color: #e5e1e5; }
+  background-color: rgba(33, 26, 25, 0.75);
+  color: #ede0de; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem; }
@@ -776,40 +857,40 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(129, 126, 130, 0.28);
-  border-left: 1px solid rgba(129, 126, 130, 0.28);
-  border-right: 1px solid rgba(93, 91, 95, 0.24);
-  border-bottom: 1px solid rgba(93, 91, 95, 0.24);
+  border-top: 1px solid rgba(135, 125, 124, 0.28);
+  border-left: 1px solid rgba(135, 125, 124, 0.28);
+  border-right: 1px solid rgba(99, 90, 88, 0.24);
+  border-bottom: 1px solid rgba(99, 90, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(28, 27, 31, 0.75);
-  color: #e5e1e5; }
+  background-color: rgba(33, 26, 25, 0.75);
+  color: #ede0de; }
 
 .overview-tasks-workspace {
   border-radius: 1.023rem;
   margin: 0.341rem;
-  background-color: rgba(45, 44, 48, 0.207); }
+  background-color: rgba(50, 43, 42, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.023rem;
-  border-top: 1px solid rgba(75, 73, 77, 0.22);
-  border-left: 1px solid rgba(75, 73, 77, 0.22);
-  border-right: 1px solid rgba(64, 62, 66, 0.215);
-  border-bottom: 1px solid rgba(64, 62, 66, 0.215);
-  background-color: rgba(72, 68, 89, 0.4);
-  color: #e5dff9; }
+  border-top: 1px solid rgba(81, 72, 71, 0.22);
+  border-left: 1px solid rgba(81, 72, 71, 0.22);
+  border-right: 1px solid rgba(69, 61, 60, 0.215);
+  border-bottom: 1px solid rgba(69, 61, 60, 0.215);
+  background-color: rgba(93, 63, 59, 0.4);
+  color: #ffdad5; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(94, 89, 118, 0.43); }
+  background-color: rgba(121, 83, 78, 0.43); }
 
 .overview-tasks-window:active {
-  background-color: rgba(94, 89, 118, 0.43); }
+  background-color: rgba(121, 83, 78, 0.43); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(94, 89, 118, 0.43); }
+  background-color: rgba(121, 83, 78, 0.43); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(72, 68, 89, 0.2);
+  background-color: rgba(93, 63, 59, 0.2);
   border: 1px; }

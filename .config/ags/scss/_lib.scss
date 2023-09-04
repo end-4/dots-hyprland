@@ -25,10 +25,12 @@ $activecolor: rgba(128, 128, 128, 0.7);
         monospace;
 }
 
-@mixin techfont {
-    font-family:
-        'JetBrains Mono Nerd Font',
-        monospace;
+@mixin techfont { // Monospace for sys info n stuff. Doesn't have to be a nerd font, but it's cool.
+    font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace;
+}
+
+.techfont {
+    @include techfont;
 }
 
 @mixin subtext {
@@ -371,6 +373,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-10>overlay {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>overlay:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-h-10>button {
     margin-right: 0.682rem;
 }
@@ -403,6 +413,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-v-10>box {
+    margin-bottom: 0.682rem;
+}
+
+.spacing-v-10>box:last-child {
+    margin-bottom: 0rem;
+}
+
 .anim-enter {
     @include anim-enter;
 }
@@ -412,15 +430,15 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 }
 
 @mixin small-rounding {
-    border-radius: 0.682rem;
+    border-radius: 0.682rem; // 10px
 }
 
 @mixin normal-rounding {
-    border-radius: 1.023rem;
+    border-radius: 1.023rem; // small-rounding + 5px
 }
 
 @mixin large-rounding {
-    border-radius: 1.705rem;
+    border-radius: 1.705rem; // normal-rounding + 10px
 }
 
 @mixin elevation-border-softer {
@@ -495,4 +513,18 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 .margin-bottom-10 {
     margin-bottom: 0.682rem;
+}
+
+.invisible {
+    opacity: 0;
+    background-color: transparent;
+    color: transparent;
+}
+
+.spacing-v--5>box {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v--5>box:last-child {
+    margin-bottom: 0rem;
 }

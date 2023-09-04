@@ -23,6 +23,12 @@
     background-color: $t_surface;
 }
 
+.sidebar-group-nopad {
+    @include normal-rounding;
+    @include elevation-border;
+    background-color: $t_surface;
+}
+
 .sidebar-button {
     padding: 0rem 0.682rem;
     background-color: $t_secondaryContainer;
@@ -75,4 +81,58 @@
 
 .sidebar-button-active:active {
     background-color: mix($primary, $hovercolor, 70%);
+}
+
+.sidebar-sysinfo-grouppad {
+    padding: 1.159rem;
+}
+
+.sidebar-memory-ram-cirgprog {
+    min-width: 0.682rem;
+    min-height: 4.091rem;
+    padding: 0.273rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-memory-swap-cirgprog {
+    min-width: 0.682rem;
+    min-height: 2.455rem;
+    padding: 0.273rem;
+    margin: 0.818rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+// .sidebar-sysinfo-txt {
+//     font-size: 1.0909rem;
+//     @include techfont;
+// }
+
+.sidebar-notification {
+    @include small-rounding;
+    background-color: $l_l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: 0.682rem;
+}
+
+.sidebar-notif-icon {
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+}
+
+.sidebar-notif-body {
+    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+}
+
+.sidebar-notif-close-btn {
+    @include small-rounding;
+}
+
+.sidebar-notif-close-btn:hover {
+    background: $hovercolor;
+}
+
+.sidebar-notif-close-btn:active {
+    background: $activecolor;
 }
