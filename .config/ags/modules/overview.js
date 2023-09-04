@@ -89,7 +89,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
         const menu = Widget({
             type: Gtk.Menu,
             setup: menu => {
-                menu.append(ContextMenuItem({ label: "Close", onClick: () => { execAsync('hyprctl dispatch closewindow address:' + address).catch(print); destroyContextMenu(menu); } }));
+                menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync('hyprctl dispatch closewindow address:' + address).catch(print); destroyContextMenu(menu); } }));
                 menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
                 menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
                 menu.show_all();

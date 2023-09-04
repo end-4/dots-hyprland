@@ -5,6 +5,9 @@ const { execAsync, exec } = ags.Utils;
 import { ModuleConnections } from "./connectiontoggles.js";
 import { ModuleHyprToggles } from "./hyprtoggles.js";
 import { ModuleMiscToggles } from "./misctoggles.js";
+import { ModuleSysInfo } from "./sysinfo.js";
+import { ModuleNotificationList } from "./notificationlist.js";
+const { Box, EventBox } = ags.Widget;
 
 const CLOSE_ANIM_TIME = 151;
 
@@ -14,15 +17,9 @@ export class MenuService extends Service {
     static instance = new MenuService();
     static opened = '';
     static toggle(menu) {
-        if (MenuService.opened === '') {
-            App.toggleWindow(menu);
-        }
         MenuService.opened = MenuService.opened === menu ? '' : menu;
         MenuService.instance.emit('changed');
-        if (MenuService.opened === '') {
-            App.toggleWindow(menu);
-        }
-        // console.log('MenuService: ', MenuService.opened, menu);
+        App.toggleWindow(menu);
     }
 
     constructor() {
@@ -36,29 +33,40 @@ export class MenuService extends Service {
     }
 }
 
-export const SidebarRight = () => Widget.Box({
+export const SidebarRight = () => Box({
     vertical: true,
     children: [
-        Widget.EventBox({
+        EventBox({
             onPrimaryClick: () => MenuService.toggle('sideright'),
             onSecondaryClick: () => MenuService.toggle('sideright'),
             onMiddleClick: () => MenuService.toggle('sideright'),
         }),
-        Widget.Box({
+        Box({
             vertical: true,
             vexpand: true,
             className: 'sidebar-right sideright-hide',
             children: [
-                Widget.Box({
+                Box({
                     vertical: true,
                     vexpand: true,
                     className: 'spacing-v-5',
                     children: [
                         ModuleConnections(),
                         ModuleHyprToggles(),
-                        Widget.Box({
-                            children: [Widget.Box({ hexpand: true }), ModuleMiscToggles(),]
-                        })
+                        Box({
+                            className: 'spacing-h-5',
+                            children: [
+                                Box({
+                                    hexpand: true,
+                                    homogeneous: true,
+                                    children: [
+                                        ModuleSysInfo(),
+                                    ]
+                                }),
+                                ModuleMiscToggles(),
+                            ]
+                        }),
+                        ModuleNotificationList(),
                     ]
                 }),
             ],
@@ -67,4 +75,4 @@ export const SidebarRight = () => Widget.Box({
             }]],
         }),
     ]
-})
+});
