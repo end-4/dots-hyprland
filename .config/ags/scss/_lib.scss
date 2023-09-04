@@ -1,6 +1,11 @@
 // Common colors
 $hovercolor: rgba(128, 128, 128, 0.4);
 $activecolor: rgba(128, 128, 128, 0.7);
+$rounding_small: 0.818rem;
+$rounding_mediumsmall: 0.955rem;
+$rounding_medium: 1.159rem;
+$rounding_mediumlarge: 1.364rem;
+$rounding_large: 1.705rem;
 
 // Common rules
 @mixin mainfont {
@@ -341,6 +346,22 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-5>scrolledwindow {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>scrolledwindow:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-5>scrollbar {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>scrollbar:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-v-minus5>box {
     margin-bottom: -0.341rem;
 }
@@ -421,6 +442,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-bottom: 0rem;
 }
 
+.spacing-v-10>button {
+    margin-bottom: 0.682rem;
+}
+
+.spacing-v-10>button:last-child {
+    margin-bottom: 0rem;
+}
+
 .anim-enter {
     @include anim-enter;
 }
@@ -430,15 +459,15 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 }
 
 @mixin small-rounding {
-    border-radius: 0.682rem; // 10px
+    border-radius: $rounding_small; // 10px
 }
 
 @mixin normal-rounding {
-    border-radius: 1.023rem; // small-rounding + 5px
+    border-radius: $rounding_medium; // small-rounding + 5px
 }
 
 @mixin large-rounding {
-    border-radius: 1.705rem; // normal-rounding + 10px
+    border-radius: $rounding_large; // normal-rounding + 10px
 }
 
 @mixin elevation-border-softer {
@@ -519,6 +548,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     opacity: 0;
     background-color: transparent;
     color: transparent;
+}
+
+.spacing-h--5>box {
+    margin-right: -0.341rem;
+}
+
+.spacing-h--5>box:last-child {
+    margin-right: 0rem;
 }
 
 .spacing-v--5>box {

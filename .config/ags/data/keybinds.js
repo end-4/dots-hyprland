@@ -119,6 +119,8 @@ export const keybindList = [[
         "binds": [
             { "keys": [">raw"], "action": "Toggle mouse acceleration" },
             { "keys": [">img"], "action": "Select wallpaper and generate colorscheme" },
+            { "keys": [">light"], "action": "Use light theme for next color generations" },
+            { "keys": [">dark"], "action": "Use dark theme for next color generations" },
         ],
         "appeartick": 3
     }

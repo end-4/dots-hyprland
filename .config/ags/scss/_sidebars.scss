@@ -30,7 +30,7 @@
 }
 
 .sidebar-button {
-    padding: 0rem 0.682rem;
+    padding: 0rem $rounding_small;
     background-color: $t_secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -57,17 +57,21 @@
 }
 
 .sidebar-button-left {
-    border-top-left-radius: 0.682rem;
-    border-bottom-left-radius: 0.682rem;
+    border-top-left-radius: $rounding_small;
+    border-bottom-left-radius: $rounding_small;
 }
 
 .sidebar-button-right {
-    border-top-right-radius: 0.682rem;
-    border-bottom-right-radius: 0.682rem;
+    border-top-right-radius: $rounding_small;
+    border-bottom-right-radius: $rounding_mediumsmall;
 }
 
 .sidebar-button-alone {
-    border-radius: 0.682rem;
+    @include small-rounding;
+}
+
+.sidebar-button-alone-normal {
+    border-radius: $rounding_small;
 }
 
 .sidebar-button-active {
@@ -83,12 +87,29 @@
     background-color: mix($primary, $hovercolor, 70%);
 }
 
+.sidebar-navrail {
+    // background-color: $t_surface;
+    padding: 0rem $rounding_medium;
+}
+
+.sidebar-navrail-btn>box>label {
+    border-radius: 9999px;
+}
+
+.sidebar-navrail-btn:hover>box>label:first-child {
+    background-color: $hovercolor;
+}
+
+.sidebar-navrail-btn:active>box>label:first-child {
+    background-color: $activecolor;
+}
+
 .sidebar-sysinfo-grouppad {
     padding: 1.159rem;
 }
 
 .sidebar-memory-ram-cirgprog {
-    min-width: 0.682rem;
+    min-width: $rounding_small;
     min-height: 4.091rem;
     padding: 0.273rem;
     background-color: $secondaryContainer;
@@ -96,7 +117,7 @@
 }
 
 .sidebar-memory-swap-cirgprog {
-    min-width: 0.682rem;
+    min-width: $rounding_small;
     min-height: 2.455rem;
     padding: 0.273rem;
     margin: 0.818rem;
@@ -109,24 +130,61 @@
 //     @include techfont;
 // }
 
-.sidebar-notification {
+.sidebar-notification-low {
     @include small-rounding;
     background-color: $l_l_t_surfaceVariant;
     color: $onSurfaceVariant;
-    padding: 0.682rem;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.sidebar-notification-normal {
+    @include small-rounding;
+    background-color: $l_l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.sidebar-notification-critical {
+    @include small-rounding;
+    background-color: $error;
+    color: $onError;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.sidebar-notif-body-low {
+    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+}
+
+.sidebar-notif-body-normal {
+    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+}
+
+.sidebar-notif-body-critical {
+    color: mix($onError, $error, 73%);
 }
 
 .sidebar-notif-icon {
-    min-width: 2.045rem;
-    min-height: 2.045rem;
+    min-width: 3.409rem;
+    min-height: 3.409rem;
+    border-radius: 9999px;
 }
 
-.sidebar-notif-body {
-    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+.sidebar-notif-icon-material {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-notif-icon-material-urgent {
+    background-color: $t_errorContainer;
+    color: $onErrorContainer;
 }
 
 .sidebar-notif-close-btn {
     @include small-rounding;
+    padding: 0rem 0.136rem;
 }
 
 .sidebar-notif-close-btn:hover {
@@ -135,4 +193,62 @@
 
 .sidebar-notif-close-btn:active {
     background: $activecolor;
+}
+
+.sidebar-viewport {
+    border-radius: $rounding_small;
+}
+
+.sidebar-scrollbar {
+    trough {
+        // margin: $rounding_small 0rem;
+        min-width: 0.545rem;
+        border-radius: 9999px;
+        // background-color: $t_surfaceVariant; // If I manage to make the scrollbar show separately
+        background-color: transparent;
+    }
+    slider {
+        min-width: 0.273rem;
+        min-height: 2.045rem;
+        border-radius: 9999px;
+        background-color: $t_onSurfaceVariant;
+    }
+    slider:hover {
+        background-color: mix($t_onSurfaceVariant, $onSurfaceVariant, 80%);
+    }
+    slider:active {
+        background-color: mix($onSurfaceVariant, $surfaceVariant, 50%);
+    }
+}
+
+.sidebar-calendar-btn {
+    min-height: 2.659rem;
+    min-width:  2.659rem;
+    border-radius: 9999px;
+    color: $onSurface;
+}
+
+.sidebar-calendar-btn:hover {
+    background-color: $hovercolor;
+}
+
+.sidebar-calendar-btn:active {
+    background-color: $activecolor;
+}
+
+.sidebar-calendar-btn-today {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.sidebar-calendar-btn-today:hover {
+    background-color: mix($primary, $hovercolor, 90%);
+}
+
+.sidebar-calendar-btn-today:active {
+    background-color: mix($primary, $hovercolor, 70%);
+}
+
+.sidebar-calendar-btn-othermonth {
+    color: mix($onSurface, $surface, 50%);
 }

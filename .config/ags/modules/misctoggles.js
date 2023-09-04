@@ -2,15 +2,11 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Service, Widget } = ags;
 const { Bluetooth, Hyprland, Network } = ags.Service;
 const { execAsync, exec } = ags.Utils;
+import { MaterialIcon } from "./lib/materialicon.js";
 
 const RECORD_SCRIPT_DIR = `${App.configDir}/scripts/record-script.sh`;
 const RECORDER_PROCESS = 'record-script.sh';
 const CLOSE_ANIM_TIME = 150;
-
-const MaterialIcon = (icon, size) => Widget.Label({
-    className: `icon-material txt-${size}`,
-    label: icon,
-})
 
 async function toggleSystemdService(serviceName, button) {
     const serviceState = exec(`systemctl is-enabled ${serviceName}`) == 'enabled';
@@ -24,7 +20,7 @@ async function toggleSystemdService(serviceName, button) {
 // Styles in scss/sidebars.scss
 const ModuleNightLight = (props = {}) => Widget.Button({
     ...props,
-    className: 'button-minsize sidebar-button-nopad sidebar-button-alone txt-small',
+    className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
     onPrimaryClick: (button) => {
         // Set the value to 1 - value
         const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
@@ -45,7 +41,7 @@ const ModuleNightLight = (props = {}) => Widget.Button({
 
 const ModuleRecord = (props = {}) => Widget.Button({
     ...props,
-    className: 'button-minsize sidebar-button-nopad sidebar-button-alone txt-small',
+    className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
     onPrimaryClick: () => {
         execAsync(['bash', '-c', RECORD_SCRIPT_DIR]).catch(print);
         setTimeout(() => {
@@ -67,8 +63,7 @@ const SystemdService = (serviceName) => {
         }
     });
     return Widget.Button({
-        className: 'button-minsize sidebar-button sidebar-button-alone txt-small',
-        style: `min-width: 10.227rem;`,
+        className: 'button-minsize sidebar-button sidebar-button-alone-normal txt-small',
         onPrimaryClick: (button) => {
             toggleSystemdService(serviceName, button);
         },
@@ -102,9 +97,16 @@ export const ModuleMiscToggles = () => {
         })
     })
     const ModulePowerSavers = Widget.Button({
-        className: 'button-minsize sidebar-button-nopad sidebar-button-alone txt-small',
-        child: MaterialIcon('energy_savings_leaf', 'larger'),
-        onPrimaryClick: () => { PowerSavers.revealChild = !PowerSavers.revealChild; },
+        className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
+        child: MaterialIcon('keyboard_arrow_leftenergy_savings_leaf', 'larger', {
+            xalign: 0.2,
+        }),
+        onPrimaryClick: (button) => {
+            const revealed = PowerSavers.revealChild;
+            PowerSavers.revealChild = !revealed;
+            button.toggleClassName('sidebar-button-active', !revealed);
+            button.child.label = revealed ? 'keyboard_arrow_leftenergy_savings_leaf' : 'keyboard_arrow_rightenergy_savings_leaf';
+        },
     })
     return Widget.Box({
         className: 'sidebar-group spacing-h-10',
