@@ -23,11 +23,14 @@ export const ModuleSysInfo = (props = {}) => {
         className: 'sidebar-memory-ram-cirgprog margin-right-10', // margin right 10 here cuz overlay can't have margins itself
         valign: 'center',
     });
-    const memoryCircles = Widget.Overlay({
-        child: ramCircle,
-        overlays: [
-            swapCircle,
-        ]
+    const memoryCircles = Widget.Box({
+        homogeneous: true,
+        children: [Widget.Overlay({
+            child: ramCircle,
+            overlays: [
+                swapCircle,
+            ]
+        })]
     });
     const ramText = Widget.Label({
         halign: 'start', xalign: 0,
@@ -45,14 +48,14 @@ export const ModuleSysInfo = (props = {}) => {
             Widget.Box({
                 className: 'spacing-h-5',
                 children: [
-                    MaterialIcon('memory', 'large'),
+                    MaterialIcon('memory', 'large', {setup: icon => icon.toggleClassName('txt', true)}),
                     ramText
                 ]
             }),
             Widget.Box({
                 className: 'spacing-h-5',
                 children: [
-                    MaterialIcon('swap_horiz', 'large'),
+                    MaterialIcon('swap_horiz', 'large', {setup: icon => icon.toggleClassName('txt', true)}),
                     swapText
                 ]
             }),
@@ -66,7 +69,7 @@ export const ModuleSysInfo = (props = {}) => {
             vscroll: 'never',
             hscroll: 'automatic',
             child: Widget.Box({
-                className: 'sidebar-sysinfo-grouppad spacing-h-10',
+                className: 'sidebar-sysinfo-grouppad spacing-h--5',
                 children: [
                     memoryCircles,
                     memoryText,

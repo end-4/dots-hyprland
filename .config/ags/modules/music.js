@@ -8,7 +8,6 @@ const TrackProgress = () => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         circprog.setProgress(mpris.position / mpris.length);
-        console.log(mpris.position / mpris.length);
     }
     return Widget({
         type: CircularProgress,

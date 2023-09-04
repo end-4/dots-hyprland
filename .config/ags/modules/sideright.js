@@ -2,12 +2,14 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Service, Widget } = ags;
 const { Applications, Hyprland } = ags.Service;
 const { execAsync, exec } = ags.Utils;
+const { Box, EventBox } = ags.Widget;
 import { ModuleConnections } from "./connectiontoggles.js";
 import { ModuleHyprToggles } from "./hyprtoggles.js";
 import { ModuleMiscToggles } from "./misctoggles.js";
 import { ModuleSysInfo } from "./sysinfo.js";
 import { ModuleNotificationList } from "./notificationlist.js";
-const { Box, EventBox } = ags.Widget;
+import { ModuleMusicControls } from "./musiccontrols.js";
+import { ModuleCalendar } from "./calendar.js";
 
 const CLOSE_ANIM_TIME = 151;
 
@@ -20,6 +22,16 @@ export class MenuService extends Service {
         MenuService.opened = MenuService.opened === menu ? '' : menu;
         MenuService.instance.emit('changed');
         App.toggleWindow(menu);
+    }
+    static close(menu) {
+        MenuService.opened = '';
+        MenuService.instance.emit('changed');
+        App.closeWindow(menu);
+    }
+    static open(menu) {
+        MenuService.opened = menu;
+        MenuService.instance.emit('changed');
+        App.openWindow(menu);
     }
 
     constructor() {
@@ -66,7 +78,12 @@ export const SidebarRight = () => Box({
                                 ModuleMiscToggles(),
                             ]
                         }),
-                        ModuleNotificationList(),
+                        ModuleMusicControls(),
+                        ModuleNotificationList({ vexpand: true, }),
+                        // Widget.Box({
+                        //     vexpand: true,
+                        // }),
+                        ModuleCalendar(),
                     ]
                 }),
             ],
