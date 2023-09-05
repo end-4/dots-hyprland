@@ -67,7 +67,7 @@ _Click the images for a video showcase with animations!_
  - **BACKUP**
  - Install dependencies. You can find the list for them in branch-specific readmes.
  - Copy
-   - `Pictures`, `.config`, `.local` to home folder
+   - `.config`, `.local` to home folder
    - Stuff in `Import manually` folder if you need them
  - **For ARM users**: Compile .cpp files in `.config/eww/scripts/` (to that folder) (like this: `g++ ~/.config/ewwscripts/SCRIPTNAME.cpp -o ~/.config/eww/scripts/SCRIPTNAME`)
  
