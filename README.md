@@ -15,9 +15,8 @@
 # ✨ Cool stuff
  <details open> 
   <summary>Notable features</summary>
-    
   - An overview widget that shows window positions in workspaces + app search (GNOME overview replacement)
-  - `hybrid` branch: Can toggle Windows 11-like mode hehee
+  - `hybrid` branch: Can toggle Windows 11 mode :amogus:
 </details>
 <details open> 
   <summary>Details</summary>
@@ -29,8 +28,8 @@
  <details> 
   <summary>Bragging</summary>
      
-   - [`hybrid`](https://github.com/end-4/dots-hyprland/tree/hybrid) branch is featured in [Athena OS](https://www.athenaos.org/en/configuration/hyprland/) 
-   - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023. Now featured in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery) and [Hyprland Wiki](https://wiki.hyprland.org/Configuring/Example-configurations/)
+   - [`hybrid`](https://github.com/end-4/dots-hyprland/tree/hybrid) branch is available in [Athena OS](https://www.athenaos.org/en/configuration/hyprland/) 
+   - [`summer-gruv`](https://github.com/end-4/dots-hyprland/tree/summer-gruv) branch is the winner of Hyprland ricing competition Summer 2023. Now shown in the [Hyprland repo](https://github.com/hyprwm/hyprland#gallery) and [Hyprland Wiki](https://wiki.hyprland.org/Configuring/Example-configurations/)
    - [`windoes`](https://github.com/end-4/dots-hyprland/tree/windoes) branch received a "Tasty rice" flair [on r/unixporn](https://www.reddit.com/r/unixporn/comments/13zdhqd/hyprland_windows_rice_with_too_much_eww_with_blur/)
 </details>
 
@@ -76,7 +75,7 @@ _Click the images for a video showcase with animations!_
  ## Performance
 |  ⌄  | Do use | Not recommended | Notes                 |
 | --- | ------ | ----------- | ------------------------- |
-| Kernel |     | cachyos, xanmod | Don't abuse power savers. Also I'm not sure what bullshit I'm saying - this is just from personal experience. |
+| Kernel |     | cachyos, xanmod | Don't abuse power savers. Also I'm not sure what the hell I'm saying - this is just from personal experience. |
 | Login shell  | bash/zsh | fish | It's okay to use fish in a terminal - that's what I do |
 
  ## Setup
@@ -111,7 +110,7 @@ _Click the images for a video showcase with animations!_
  - Bing AI for helping me code like 80% of the C++ functions lmao
  - Maybe more, but I might not remember them all.. Still, thanks.
 
-# 🌟 Stars
+# 🌟 stonks
 - _A star really makes my day! Thanks!_
 
 [![Stars](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
