@@ -16,6 +16,7 @@ const CLOSE_ANIM_TIME = 151;
 export class MenuService extends Service {
     static { Service.register(this); }
     static { Service.export(this, 'MenuService'); }
+    // static { Service['MenuService'] = this; }
     static instance = new MenuService();
     static opened = '';
     static toggle(menu) {

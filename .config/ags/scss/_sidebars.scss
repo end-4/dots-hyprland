@@ -104,6 +104,15 @@
     background-color: $activecolor;
 }
 
+.sidebar-navrail-btn-active>box>label:first-child {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.sidebar-navrail-btn-active:hover>box>label:first-child {
+    background-color: mix($primary, $hovercolor, 90%);
+}
+
 .sidebar-sysinfo-grouppad {
     padding: 1.159rem;
 }
@@ -118,9 +127,9 @@
 
 .sidebar-memory-swap-cirgprog {
     min-width: $rounding_small;
-    min-height: 2.455rem;
+    min-height: 2.255rem;
     padding: 0.273rem;
-    margin: 0.818rem;
+    margin: 0.918rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
 }

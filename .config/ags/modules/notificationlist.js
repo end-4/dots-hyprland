@@ -92,13 +92,14 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
             className: 'spacing-h-5',
             children: [
                 Label({
+                    valign: 'center',
                     className: 'txt-smallie',
                     label: GLib.DateTime.new_from_unix_local(time).format('%H:%M'),
                 }),
                 Button({
                     className: 'sidebar-notif-close-btn',
                     onClicked: () => Notifications.close(id),
-                    child: MaterialIcon('close', 'norm', {
+                    child: MaterialIcon('close', 'large', {
                         valign: 'center',
                     }),
                 }),
