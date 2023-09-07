@@ -5,8 +5,12 @@ const { exec, execAsync, timeout } = ags.Utils;
 import { MenuService } from "./sideright.js";
 import { BluetoothIndicator, NetworkIndicator } from "./statusicons.js";
 import { MaterialIcon } from "./lib/materialicon.js";
+import { getCalendarLayout } from "../scripts/calendarlayout.js";
 
-let calendarJson = JSON.parse(exec(`${App.configDir}/scripts/calendarlayout`));
+let calendarJson = getCalendarLayout(undefined, true);
+console.log(calendarJson);
+let todoJson = JSON.parse(ags.Utils.readFile(`${App.configDir}/data/todo.json`));
+
 const weekDays = [
     { day: 'Mo', today: 0 },
     { day: 'Tu', today: 0 },
@@ -47,13 +51,42 @@ const calendarWidget = Widget.Box({
     ]
 })
 
+const todoWidget = Widget.Box({
+    hexpand: true,
+    vertical: true,
+    className: 'spacing-v-5',
+    children: [
+        Widget.Label({
+            className: 'txt txt-large',
+            label: 'Tasks & Ideas',
+        }),
+        Widget.Box({
+            vertical: true,
+            children: todoJson.map((task, i) => Widget.Box({
+                children: [
+                    Widget.Button({
+                        child: MaterialIcon('remove', 'norm'),
+                    }),
+                    Widget.Label({
+                        hexpand: true,
+                        xalign: 0,
+                        wrap: true,
+                        className: 'txt txt-smallie sidebar-todo-txt',
+                        label: task.content,
+                    })
+                ]
+            }))
+        }),
+    ]
+})
+
 const defaultShown = 'calendar';
 const contentStack = Widget.Stack({
     hexpand: true,
     items: [
         ['calendar', calendarWidget],
-        ['todo', Widget.Label({ label: 'To Do list will be here' })],
-        ['stars', Widget.Label({ label: 'Stars will be here' })],
+        ['todo', todoWidget],
+        ['stars', Widget.Label({ label: 'GitHub feed will be here' })],
     ],
     transition: 'slide_up_down',
     transitionDuration: 180,
@@ -99,7 +132,7 @@ export const ModuleCalendar = () => Box({
             children: [
                 StackButton(box, 'calendar', 'calendar_month', 'Calendar'),
                 StackButton(box, 'todo', 'lists', 'To Do'),
-                StackButton(box, 'stars', 'star', 'Stars'),
+                StackButton(box, 'stars', 'star', 'GitHub'),
             ]
         }), false, false, 0);
         // ags.Widget({ // TDOO: replace this sad default calendar with a custom one
@@ -109,26 +142,26 @@ export const ModuleCalendar = () => Box({
     }
 })
 
-// Example stack widget
-const NetworkWiredIndicator = () => Widget.Stack({
-    items: [
-        ['unknown', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
-        ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
-        ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
-        ['connected', Widget.Label({ className: 'txt-norm icon-material', label: 'lan' })],
-        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' })],
-    ],
-    connections: [[Network, stack => {
-        if (!Network.wired)
-            return;
 
-        const { internet } = Network.wired;
-        if (internet === 'connected' || internet === 'connecting')
-            stack.shown = internet;
-
-        if (Network.connectivity !== 'full')
-            stack.shown = 'disconnected';
-
-        stack.shown = 'disabled';
-    }]],
-});
+// Button({
+//     className: 'calendar-header-button',
+//     onClicked: () => {
+//         if (calMonth.value == 0) {
+//             calMonth.value = 11;
+//             calYear.value--;
+//         }
+//         else calMonth.value--;
+//     },
+//     child: Label('')
+// }),
+// Button({
+//     className: 'calendar-header-button',
+//     onClicked: () => {
+//         if (calMonth.value == 11) {
+//             calMonth.value = 0;
+//             calYear.value++;
+//         }
+//         else calMonth.value++;
+//     },
+//     child: Label('')
+// })

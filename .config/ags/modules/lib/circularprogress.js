@@ -21,7 +21,7 @@ export const CircularProgress = new GObject.Class({
         this.connect('draw', Lang.bind(this, this._onDraw));
     },
 
-    setProgress: function (progress) {
+    setProgress: function (progress) { // TODO: maybe just use a css property and see if it transitions smoothly
         this._progress = progress;
         this.queue_draw();
     },

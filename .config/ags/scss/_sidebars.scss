@@ -5,7 +5,7 @@
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
-    min-width: 29.591rem;
+    // min-width: 29.591rem;
     min-height: 29.591rem;
     background-color: $t_background;
     padding: 1.023rem;
@@ -216,23 +216,26 @@
         // background-color: $t_surfaceVariant; // If I manage to make the scrollbar show separately
         background-color: transparent;
     }
+
     slider {
         min-width: 0.273rem;
         min-height: 2.045rem;
         border-radius: 9999px;
         background-color: $t_onSurfaceVariant;
     }
+
     slider:hover {
         background-color: mix($t_onSurfaceVariant, $onSurfaceVariant, 80%);
     }
+
     slider:active {
         background-color: mix($onSurfaceVariant, $surfaceVariant, 50%);
     }
 }
 
 .sidebar-calendar-btn {
-    min-height: 2.659rem;
-    min-width:  2.659rem;
+    min-height: 2.386rem;
+    min-width: 2.386rem;
     border-radius: 9999px;
     color: $onSurface;
 }
@@ -261,3 +264,13 @@
 .sidebar-calendar-btn-othermonth {
     color: mix($onSurface, $surface, 50%);
 }
+
+// cool gradient background for music controls
+// .main-window {
+//     background: linear-gradient(127deg, alpha(@background_color_0, .55), alpha(@background_color_0, 0) 70.71%),
+//         linear-gradient(217deg, alpha(@background_color_1, .55), alpha(@background_color_1, 0) 70.71%),
+//         linear-gradient(336deg, alpha(@background_color_2, .55), alpha(@background_color_2, 0) 70.71%);
+//     transition-property: background;
+//     transition-duration: 250ms;
+//     transition-timing-function: ease;
+// }
