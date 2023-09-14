@@ -3,6 +3,7 @@ const { App, Service, Widget } = ags;
 const { Bluetooth, Hyprland, Network } = ags.Service;
 const { execAsync, exec } = ags.Utils;
 import { MaterialIcon } from "./lib/materialicon.js";
+import { setupCursorHover } from "./lib/cursorhover.js";
 
 const RECORD_SCRIPT_DIR = `${App.configDir}/scripts/record-script.sh`;
 const RECORDER_PROCESS = 'record-script.sh';
@@ -24,19 +25,20 @@ const ModuleNightLight = (props = {}) => Widget.Button({
     onPrimaryClick: (button) => {
         // Set the value to 1 - value
         const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        console.log(shaderPath);
+        // console.log(shaderPath);
         if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            console.log('disabling');
+            // console.log('disabling');
             execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
             button.toggleClassName('sidebar-button-active', false);
         }
         else {
-            console.log('enabling');
+            // console.log('enabling');
             execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
             button.toggleClassName('sidebar-button-active', true);
         }
     },
     child: MaterialIcon('nightlight', 'larger'),
+    setup: (button) => setupCursorHover(button),
 })
 
 const ModuleRecord = (props = {}) => Widget.Button({
@@ -51,6 +53,7 @@ const ModuleRecord = (props = {}) => Widget.Button({
     child: MaterialIcon('screen_record', 'larger'),
     setup: button => {
         button.toggleClassName('sidebar-button-active', exec(`pidof ${RECORDER_PROCESS} >/dev/null && echo 1 || echo`));
+        setupCursorHover(button);
     }
 })
 
@@ -69,6 +72,7 @@ const SystemdService = (serviceName) => {
         },
         setup: button => {
             button.toggleClassName('sidebar-button-active', exec(`systemctl is-enabled ${serviceName}`) == 'enabled');
+            setupCursorHover(button);
         },
         child: Widget.Box({
             setup: box => {
@@ -107,6 +111,7 @@ export const ModuleMiscToggles = () => {
             button.toggleClassName('sidebar-button-active', !revealed);
             button.child.label = revealed ? 'keyboard_arrow_leftenergy_savings_leaf' : 'keyboard_arrow_rightenergy_savings_leaf';
         },
+        setup: (button) => setupCursorHover(button),
     })
     return Widget.Box({
         className: 'sidebar-group spacing-h-10',

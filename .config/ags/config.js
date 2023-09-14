@@ -7,6 +7,7 @@ import { overview } from './windows/overview.js';
 import { Indicator } from './windows/osd.js';
 import { cheatsheet } from './windows/cheatsheet.js';
 import { SideRight } from './windows/sideright.js';
+import { SideLeft } from './windows/sideleft.js';
 
 const CLOSE_ANIM_TIME = 150;
 
@@ -20,6 +21,7 @@ export default {
     stackTraceOnError: true,
     closeWindowDelay: {
         'sideright': CLOSE_ANIM_TIME,
+        'sideleft': CLOSE_ANIM_TIME,
     },
     windows: [
         bar,
@@ -31,5 +33,6 @@ export default {
         Indicator(),
         cheatsheet,
         SideRight(),
+        SideLeft(),
     ],
 };

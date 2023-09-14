@@ -11,7 +11,7 @@ export const ModuleNotification = () => Widget.Box({
         Widget.Label({
             connections: [[Notifications, label => {
                 // notifications is a map, to get the last elememnt lets make an array
-                label.label = Array.from(Notifications.popups)?.pop()?.[1].summary || '';
+                label.label = Notifications?.popups[0]?.summary || '';
             }]],
         }),
     ],

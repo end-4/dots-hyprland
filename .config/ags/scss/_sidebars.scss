@@ -16,6 +16,22 @@
     @include md3_accel;
 }
 
+.sidebar-left {
+    @include md3_decel;
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    min-width: 29.591rem; // COMMENT THIS LATER IF USE TEXT WRAP
+    min-height: 29.591rem;
+    background-color: $t_background;
+    padding: 1.023rem;
+}
+
+.sideleft-hide {
+    margin-left: -29.591rem;
+    @include md3_accel;
+}
+
 .sidebar-group {
     @include normal-rounding;
     @include elevation-border;
@@ -120,7 +136,7 @@
 .sidebar-memory-ram-cirgprog {
     min-width: $rounding_small;
     min-height: 4.091rem;
-    padding: 0.273rem;
+    padding: 0.409rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -128,7 +144,7 @@
 .sidebar-memory-swap-cirgprog {
     min-width: $rounding_small;
     min-height: 2.255rem;
-    padding: 0.273rem;
+    padding: 0.409rem;
     margin: 0.918rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
@@ -164,15 +180,15 @@
 }
 
 .sidebar-notif-body-low {
-    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
 }
 
 .sidebar-notif-body-normal {
-    color: mix($onSurfaceVariant, $surfaceVariant, 73%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
 }
 
 .sidebar-notif-body-critical {
-    color: mix($onError, $error, 73%);
+    color: mix($onError, $error, 67%);
 }
 
 .sidebar-notif-icon {
@@ -234,8 +250,8 @@
 }
 
 .sidebar-calendar-btn {
-    min-height: 2.386rem;
-    min-width: 2.386rem;
+    min-height: 2.523rem;
+    min-width:  2.523rem;
     border-radius: 9999px;
     color: $onSurface;
 }
@@ -246,6 +262,11 @@
 
 .sidebar-calendar-btn:active {
     background-color: $activecolor;
+}
+
+.sidebar-calendar-btn-txt {
+    margin-left: -10.341rem;
+    margin-right: -10.341rem;
 }
 
 .sidebar-calendar-btn-today {
@@ -274,3 +295,78 @@
 //     transition-duration: 250ms;
 //     transition-timing-function: ease;
 // }
+
+.sidebar-calendar-header {
+    margin: 0.341rem;
+}
+
+.sidebar-calendar-monthyear-btn {
+    border-radius: 9999px;
+    padding: 0rem 0.682rem;
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-calendar-monthyear-btn:hover {
+    background-color: $hovercolor;
+}
+
+.sidebar-calendar-monthyear-btn:active {
+    background-color: $activecolor;
+}
+
+.sidebar-calendar-monthshift-btn {
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+    border-radius: 9999px;
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-calendar-monthshift-btn:hover {
+    background-color: $hovercolor;
+}
+
+.sidebar-calendar-monthshift-btn:active {
+    background-color: $activecolor;
+}
+
+.sidebar-todo-selector-tab {
+    min-height: 2.5rem;   
+    color: $onSurface;
+    border-radius: $rounding_small;
+}
+
+.sidebar-todo-selector-tab:hover {
+    background-color: $hovercolor;
+}
+
+.sidebar-todo-selector-tab:active {
+    background-color: $activecolor;
+}
+
+.sidebar-todo-selector-tab:hover>box>label {
+    font-weight: 500;
+}
+
+.sidebar-todo-selector-tab-active>box>label {
+    color: $primary;
+}
+
+.sidebar-todo-selector-tab-active>box>label:last-child {
+    text-decoration: underline;
+}
+
+.sidebar-todo-item-action {
+    border-radius: 9999px;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+}
+
+.sidebar-todo-item-action:hover {
+    background-color: $hovercolor;
+}
+
+.sidebar-todo-item-action:active {
+    background-color: $activecolor;
+}

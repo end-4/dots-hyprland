@@ -79,7 +79,6 @@ export const StatusIcons = () => Widget.EventBox({
             Widget.Box({hexpand: true}),
             BluetoothIndicator(),
             NetworkIndicator(),
-            Widget.Box({className: 'bar-sidespace'}),
         ]
     })
 });

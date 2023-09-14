@@ -22,7 +22,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e8e1e5; }
+  color: #eddfdd; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -72,7 +72,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #aba6a9; }
+  color: #b0a4a2; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -85,16 +85,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e8e1e5;
+  background-color: #eddfdd;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #4b444d;
-  color: #cec3ce;
+  background-color: #534341;
+  color: #d8c1bd;
   border-radius: 50rem;
-  border: 1px solid #cec3ce; }
+  border: 1px solid #d8c1bd; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -186,10 +186,16 @@ tooltip {
 .spacing-h-5 > widget:last-child > box {
   margin-right: 0rem; }
 
-.spacing-h-5 > * > box {
+.spacing-h-5 > scrolledwindow {
   margin-right: 0.341rem; }
 
-.spacing-h-5 > *:last-child > box {
+.spacing-h-5 > scrolledwindow:last-child {
+  margin-right: 0rem; }
+
+.spacing-h-5 > scrollbar {
+  margin-right: 0.341rem; }
+
+.spacing-h-5 > scrollbar:last-child {
   margin-right: 0rem; }
 
 .spacing-v-minus5 > box {
@@ -314,8 +320,8 @@ tooltip {
 
 menu {
   padding: 0.681rem;
-  background: #4b444d;
-  color: #cec3ce;
+  background: #534341;
+  color: #d8c1bd;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -333,7 +339,7 @@ menu > menuitem:hover {
   background: rgba(255, 255, 255, 0.1); }
 
 .bar-bg {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(32, 26, 25, 0.75);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -347,11 +353,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
-  background-color: rgba(29, 27, 30, 0.3); }
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
+  background-color: rgba(32, 26, 25, 0.3); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -405,7 +411,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(49, 47, 50, 0.3);
+  background-color: rgba(53, 46, 45, 0.3);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -416,15 +422,15 @@ menu > menuitem:hover {
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
 
 .bar-ws-empty {
-  color: #e8e1e5; }
+  color: #eddfdd; }
 
 .bar-ws-occupied {
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .bar-ws-active {
-  background-color: #e7b3ff;
-  color: #4e0078;
+  background-color: #ffb4a5;
+  color: #680100;
   border-radius: 999px;
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
@@ -439,8 +445,8 @@ menu > menuitem:hover {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -458,26 +464,27 @@ menu > menuitem:hover {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .bar-music-circprog {
   margin-left: 0.273rem;
   min-width: 0.068rem;
   min-height: 1.770rem;
   padding: 0rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .bar-music-playstate-txt {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
   font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
   font-size: 1.568rem;
   margin: -0.1rem 0rem;
@@ -540,13 +547,13 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #4f4255; }
+    background-color: #5d3f3a; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #efdcf4; }
+    background-color: #ffdad3; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -573,7 +580,7 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #efdcf4; }
+  background-color: #ffdad3; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -584,13 +591,13 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(32, 26, 25, 0.75);
   border-radius: 1.705rem; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #aba6a9; }
+  color: #b0a4a2; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -613,14 +620,14 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(32, 26, 25, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -630,16 +637,16 @@ menu > menuitem:hover {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #e7b3ff;
-  border: 0.068rem solid #e7b3ff;
-  box-shadow: 0rem 0.136rem 0rem #e7b3ff;
+  color: #ffb4a5;
+  border: 0.068rem solid #ffb4a5;
+  box-shadow: 0rem 0.136rem 0rem #ffb4a5;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #f6d8ff; }
+  color: #ffdad2; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -647,23 +654,22 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #4b444d; }
+  background-color: #534341; }
 
 .cheatsheet-closebtn:active {
-  background-color: #726a74; }
+  background-color: #7b6966; }
 
 .sidebar-right {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
-  min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(32, 26, 25, 0.75);
   padding: 1.023rem; }
 
 .sideright-hide {
@@ -672,41 +678,41 @@ menu > menuitem:hover {
 
 .sidebar-group {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   padding: 0.341rem;
-  background-color: rgba(29, 27, 30, 0.3); }
+  background-color: rgba(32, 26, 25, 0.3); }
 
 .sidebar-group-nopad {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
-  background-color: rgba(29, 27, 30, 0.3); }
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
+  background-color: rgba(32, 26, 25, 0.3); }
 
 .sidebar-button {
   padding: 0rem 0.818rem;
-  background-color: rgba(79, 66, 85, 0.75);
-  color: #efdcf4; }
+  background-color: rgba(93, 63, 58, 0.75);
+  color: #ffdad3; }
 
 .sidebar-button-nopad {
-  background-color: rgba(79, 66, 85, 0.75);
-  color: #efdcf4; }
+  background-color: rgba(93, 63, 58, 0.75);
+  color: #ffdad3; }
 
 .sidebar-button:hover {
-  background-color: rgba(111, 97, 117, 0.75); }
+  background-color: rgba(125, 94, 89, 0.75); }
 
 .sidebar-button:active {
-  background-color: rgba(143, 128, 149, 0.75); }
+  background-color: rgba(158, 125, 119, 0.75); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(111, 97, 117, 0.75); }
+  background-color: rgba(125, 94, 89, 0.75); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(143, 128, 149, 0.75); }
+  background-color: rgba(158, 125, 119, 0.75); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -723,17 +729,16 @@ menu > menuitem:hover {
   border-radius: 0.818rem; }
 
 .sidebar-button-active {
-  background-color: #e7b3ff;
-  color: #4e0078; }
+  background-color: #ffb4a5;
+  color: #680100; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(228, 178, 252, 0.94); }
+  background-color: rgba(252, 179, 164, 0.94); }
 
 .sidebar-button-active:active {
-  background-color: rgba(221, 174, 243, 0.82); }
+  background-color: rgba(243, 175, 161, 0.82); }
 
 .sidebar-navrail {
-  background-color: rgba(29, 27, 30, 0.3);
   padding: 0rem 1.159rem; }
 
 .sidebar-navrail-btn > box > label {
@@ -745,6 +750,13 @@ menu > menuitem:hover {
 .sidebar-navrail-btn:active > box > label:first-child {
   background-color: rgba(128, 128, 128, 0.7); }
 
+.sidebar-navrail-btn-active > box > label:first-child {
+  background-color: #ffb4a5;
+  color: #680100; }
+
+.sidebar-navrail-btn-active:hover > box > label:first-child {
+  background-color: rgba(252, 179, 164, 0.94); }
+
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
 
@@ -752,43 +764,46 @@ menu > menuitem:hover {
   min-width: 0.818rem;
   min-height: 4.091rem;
   padding: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .sidebar-memory-swap-cirgprog {
   min-width: 0.818rem;
-  min-height: 2.455rem;
+  min-height: 2.255rem;
   padding: 0.273rem;
-  margin: 0.818rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  margin: 0.918rem;
+  background-color: #5d3f3a;
+  color: #ffdad3; }
 
 .sidebar-notification-low {
   border-radius: 0.818rem;
-  background-color: rgba(75, 68, 77, 0.6);
-  color: #cec3ce;
-  padding: 0.818rem; }
+  background-color: rgba(83, 67, 65, 0.6);
+  color: #d8c1bd;
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
 
 .sidebar-notification-normal {
   border-radius: 0.818rem;
-  background-color: rgba(75, 68, 77, 0.6);
-  color: #cec3ce;
-  padding: 0.818rem; }
+  background-color: rgba(83, 67, 65, 0.6);
+  color: #d8c1bd;
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
 
 .sidebar-notification-critical {
   border-radius: 0.818rem;
   background-color: #ffb4a9;
   color: #680003;
-  padding: 0.818rem; }
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
 
 .sidebar-notif-body-low {
-  color: #aba1ab; }
+  color: #ac9794; }
 
 .sidebar-notif-body-normal {
-  color: #aba1ab; }
+  color: #ac9794; }
 
 .sidebar-notif-body-critical {
-  color: #913130; }
+  color: #9a3b3a; }
 
 .sidebar-notif-icon {
   min-width: 3.409rem;
@@ -796,8 +811,12 @@ menu > menuitem:hover {
   border-radius: 9999px; }
 
 .sidebar-notif-icon-material {
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5d3f3a;
+  color: #ffdad3; }
+
+.sidebar-notif-icon-material-urgent {
+  background-color: rgba(147, 0, 6, 0.75);
+  color: #ffb4a9; }
 
 .sidebar-notif-close-btn {
   border-radius: 0.818rem;
@@ -809,21 +828,31 @@ menu > menuitem:hover {
 .sidebar-notif-close-btn:active {
   background: rgba(128, 128, 128, 0.7); }
 
+.sidebar-viewport {
+  border-radius: 0.818rem; }
+
 .sidebar-scrollbar trough {
   min-width: 0.545rem;
   border-radius: 9999px;
-  background-color: rgba(75, 68, 77, 0.3); }
+  background-color: transparent; }
 
 .sidebar-scrollbar slider {
   min-width: 0.273rem;
+  min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(206, 195, 206, 0.3); }
+  background-color: rgba(216, 193, 189, 0.3); }
+
+.sidebar-scrollbar slider:hover {
+  background-color: rgba(216, 193, 189, 0.44); }
+
+.sidebar-scrollbar slider:active {
+  background-color: #96827f; }
 
 .sidebar-calendar-btn {
-  min-height: 2.659rem;
-  min-width: 2.659rem;
+  min-height: 2.523rem;
+  min-width: 2.523rem;
   border-radius: 9999px;
-  color: #e8e1e5; }
+  color: #eddfdd; }
 
 .sidebar-calendar-btn:hover {
   background-color: rgba(128, 128, 128, 0.4); }
@@ -832,24 +861,52 @@ menu > menuitem:hover {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-calendar-btn-today {
-  background-color: #e7b3ff;
-  color: #4e0078; }
+  background-color: #ffb4a5;
+  color: #680100; }
 
 .sidebar-calendar-btn-today:hover {
-  background-color: rgba(228, 178, 252, 0.94); }
+  background-color: rgba(252, 179, 164, 0.94); }
 
 .sidebar-calendar-btn-today:active {
-  background-color: rgba(221, 174, 243, 0.82); }
+  background-color: rgba(243, 175, 161, 0.82); }
 
 .sidebar-calendar-btn-othermonth {
-  color: #837e82; }
+  color: #877d7b; }
+
+.sidebar-calendar-header {
+  margin: 0.341rem; }
+
+.sidebar-calendar-monthyear-btn {
+  border-radius: 9999px;
+  padding: 0rem 0.682rem;
+  background-color: rgba(93, 63, 58, 0.75);
+  color: #ffdad3; }
+
+.sidebar-calendar-monthyear-btn:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-calendar-monthyear-btn:active {
+  background-color: rgba(128, 128, 128, 0.7); }
+
+.sidebar-calendar-monthshift-btn {
+  min-width: 2.045rem;
+  min-height: 2.045rem;
+  border-radius: 9999px;
+  background-color: rgba(93, 63, 58, 0.75);
+  color: #ffdad3; }
+
+.sidebar-calendar-monthshift-btn:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-calendar-monthshift-btn:active {
+  background-color: rgba(128, 128, 128, 0.7); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(29, 27, 30, 0.75);
+  background-color: rgba(32, 26, 25, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -866,67 +923,67 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #f6d8ff; }
+    background-color: #ffdad2; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #6f00a8;
+    background-color: #920500;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #f6d8ff; }
+  color: #ffdad2; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e8e1e5;
+  color: #eddfdd;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e8e1e5; }
+  color: #eddfdd; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5;
-  caret-color: #efdcf4; }
+  background-color: rgba(32, 26, 25, 0.75);
+  color: #eddfdd;
+  caret-color: #ffdad3; }
   .overview-search-box selection {
-    background-color: #d3c1d8;
-    color: #382c3e; }
+    background-color: #e7bdb5;
+    color: #442924; }
 
 .overview-search-box-extended {
   min-width: 25.909rem; }
 
 .overview-search-prompt {
-  color: #aba6a9; }
+  color: #b0a4a2; }
 
 .overview-search-results {
   min-height: 37.5rem;
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5; }
+  background-color: rgba(32, 26, 25, 0.75);
+  color: #eddfdd; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem; }
@@ -950,40 +1007,40 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(131, 126, 130, 0.28);
-  border-left: 1px solid rgba(131, 126, 130, 0.28);
-  border-right: 1px solid rgba(94, 91, 94, 0.24);
-  border-bottom: 1px solid rgba(94, 91, 94, 0.24);
+  border-top: 1px solid rgba(135, 125, 123, 0.28);
+  border-left: 1px solid rgba(135, 125, 123, 0.28);
+  border-right: 1px solid rgba(98, 89, 88, 0.24);
+  border-bottom: 1px solid rgba(98, 89, 88, 0.24);
   box-shadow: 0px 2px 3px #000000;
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(29, 27, 30, 0.75);
-  color: #e8e1e5; }
+  background-color: rgba(32, 26, 25, 0.75);
+  color: #eddfdd; }
 
 .overview-tasks-workspace {
   border-radius: 1.159rem;
   margin: 0.341rem;
-  background-color: rgba(46, 44, 47, 0.207); }
+  background-color: rgba(49, 43, 42, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(77, 73, 77, 0.22);
-  border-left: 1px solid rgba(77, 73, 77, 0.22);
-  border-right: 1px solid rgba(65, 62, 65, 0.215);
-  border-bottom: 1px solid rgba(65, 62, 65, 0.215);
-  background-color: rgba(79, 66, 85, 0.4);
-  color: #efdcf4; }
+  border-top: 1px solid rgba(80, 72, 71, 0.22);
+  border-left: 1px solid rgba(80, 72, 71, 0.22);
+  border-right: 1px solid rgba(68, 61, 60, 0.215);
+  border-bottom: 1px solid rgba(68, 61, 60, 0.215);
+  background-color: rgba(93, 63, 58, 0.4);
+  color: #ffdad3; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(105, 86, 115, 0.43); }
+  background-color: rgba(121, 83, 77, 0.43); }
 
 .overview-tasks-window:active {
-  background-color: rgba(105, 86, 115, 0.43); }
+  background-color: rgba(121, 83, 77, 0.43); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(105, 86, 115, 0.43); }
+  background-color: rgba(121, 83, 77, 0.43); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(79, 66, 85, 0.2);
+  background-color: rgba(93, 63, 58, 0.2);
   border: 1px; }

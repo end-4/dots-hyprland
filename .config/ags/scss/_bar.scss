@@ -256,7 +256,6 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $secondaryContainer;
     }
 
     progress {
@@ -278,7 +277,6 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $onErrorContainer;
     }
 
     progress {
@@ -286,7 +284,7 @@
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $errorContainer;
+        background-color: $onError;
     }
 }
 
@@ -314,6 +312,12 @@
 
 .corner {
     background-color: $t_background;
+    // border-radius: 21px; //Hard code because Hyprland rounding is in px
+    @include large-rounding;
+}
+
+.corner-black {
+    background-color: black;
     // border-radius: 21px; //Hard code because Hyprland rounding is in px
     @include large-rounding;
 }

@@ -1,8 +1,8 @@
 const { Widget } = ags;
-const { Bluetooth, Network } = ags.Service;
+const { Bluetooth, MenuService, Network } = ags.Service;
 const { execAsync, exec } = ags.Utils;
-import { MenuService } from "./sideright.js";
 import { BluetoothIndicator, NetworkIndicator } from "./statusicons.js";
+import { setupCursorHover } from "./lib/cursorhover.js";
 
 const MaterialIcon = (icon, size, props = {}) => Widget.Label({
     ...props,
@@ -18,6 +18,7 @@ const OptionsArrow = (command, props = {}) => Widget.Button({
         MenuService.toggle('sideright');
     },
     child: MaterialIcon('keyboard_arrow_right', 'large'),
+    setup: (button) => setupCursorHover(button),
 })
 
 const ToggleButtonWifi = () => Widget.Button({
@@ -37,7 +38,8 @@ const ToggleButtonWifi = () => Widget.Button({
     }),
     connections: [[Network, button => {
         button.toggleClassName('sidebar-button-active', Network.wifi?.internet == 'connected' || Network.wired?.internet == 'connected')
-    }]]
+    }]],
+    setup: (button) => setupCursorHover(button),
 });
 
 const ToggleButtonBluetooth = () => Widget.Button({
@@ -65,7 +67,8 @@ const ToggleButtonBluetooth = () => Widget.Button({
     }),
     connections: [[Bluetooth, button => {
         button.toggleClassName('sidebar-button-active', Bluetooth?.enabled)
-    }]]
+    }]],
+    setup: (button) => setupCursorHover(button),
 });
 
 // Styles in scss/sidebars.scss
