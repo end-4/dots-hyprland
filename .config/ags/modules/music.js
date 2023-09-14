@@ -36,6 +36,7 @@ export const ModuleMusic = () => Widget.EventBox({
                         children: [Widget.Overlay({
                             child: Widget.Box({
                                 valign: 'center',
+                                className: 'bar-music-playstate',
                                 children: [Widget.Label({
                                     valign: 'center',
                                     className: 'bar-music-playstate-txt',

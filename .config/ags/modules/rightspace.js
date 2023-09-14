@@ -4,6 +4,7 @@ const { App, Service, Widget } = ags;
 const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 import { ModuleNotification } from "./notification.js";
 import { StatusIcons } from "./statusicons.js";
+import { RoundedCorner } from "./lib/roundedcorner.js";
 
 export const ModuleRightSpace = () => Widget.EventBox({
     onScrollUp: () => {
@@ -20,12 +21,18 @@ export const ModuleRightSpace = () => Widget.EventBox({
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
-        hexpand: true,
-        className: 'spacing-h-5 txt',
+        homogeneous: false,
         children: [
-            ModuleNotification(),
-            Widget.Box(),
-            StatusIcons({ className: 'bar-space-area-rightmost' }),
+            Widget.Box({
+                hexpand: true,
+                className: 'spacing-h-5 txt',
+                children: [
+                    ModuleNotification(),
+                    Widget.Box(),
+                    StatusIcons(),
+                ]
+            }),
+            RoundedCorner('topright', { className: 'corner-black' })
         ]
     })
 });

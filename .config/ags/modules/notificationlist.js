@@ -4,6 +4,7 @@ const { Notifications } = ags.Service;
 const { lookUpIcon, timeout } = ags.Utils;
 const { Box, Icon, Scrollable, Label, Button } = ags.Widget;
 import { MaterialIcon } from "./lib/materialicon.js";
+import { setupCursorHover } from "./lib/cursorhover.js";
 
 const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
     if (image) {
@@ -32,23 +33,23 @@ const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
         hexpand: false,
         className: 'sidebar-notif-icon',
         setup: box => {
-            if (icon != 'NO_ICON') box.add(Icon({
+            if (icon != 'NO_ICON') box.pack_start(Icon({
                 icon, size: 30,
                 halign: 'center', hexpand: true,
                 valign: 'center',
                 setup: () => box.toggleClassName('sidebar-notif-icon-material', true),
-            }));
-            else if (urgency == 'critical') box.add(MaterialIcon('release_alert', 'hugeass', {
+            }), false, true, 0);
+            else if (urgency == 'critical') box.pack_start(MaterialIcon('release_alert', 'hugeass', {
                 hexpand: true,
                 setup: () => {
                     box.toggleClassName('sidebar-notif-icon-material-urgent', true);
                     box.toggleClassName('txt-semibold', true);
                 },
-            }))
-            else box.add(MaterialIcon('chat', 'hugeass', {
+            }), false, true, 0)
+            else box.pack_start(MaterialIcon('chat', 'hugeass', {
                 hexpand: true,
                 setup: () => box.toggleClassName('sidebar-notif-icon-material', true),
-            }))
+            }), false, true, 0)
         }
     });
 };
@@ -71,7 +72,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                             hexpand: true,
                             maxWidthChars: 24,
                             ellipsize: 3,
-                            // wrap: true, // TODO: fix this (currently throws for size smaller than min size stuff)
+                            wrap: true,
                             useMarkup: summary.startsWith('<'),
                             label: summary,
                         }),
@@ -83,7 +84,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                     useMarkup: true,
                     xalign: 0,
                     justification: 'left',
-                    // wrap: true, // TODO: fix this (currently throws for size smaller than min size stuff)
+                    wrap: true, 
                     label: body,
                 }),
             ]
@@ -93,8 +94,20 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
             children: [
                 Label({
                     valign: 'center',
-                    className: 'txt-smallie',
-                    label: GLib.DateTime.new_from_unix_local(time).format('%H:%M'),
+                    className: 'txt-smaller txt-semibold',
+                    justification: 'right',
+                    setup: (label) => {
+                        const messageTime = GLib.DateTime.new_from_unix_local(time);
+                        if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
+                            label.label = messageTime.format('%H:%M');
+                        }
+                        else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
+                            label.label = messageTime.format('%H:%M\nYesterday');
+                        }
+                        else {
+                            label.label = messageTime.format('%H:%M\n%d/%m');
+                        }
+                    }
                 }),
                 Button({
                     className: 'sidebar-notif-close-btn',
@@ -102,6 +115,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                     child: MaterialIcon('close', 'large', {
                         valign: 'center',
                     }),
+                    setup: (button) => setupCursorHover(button),
                 }),
             ]
         }),
@@ -133,10 +147,8 @@ export const ModuleNotificationList = props => {
                     vertical: true,
                     vexpand: true,
                     connections: [[Notifications, box => {
-                        box.children = Array.from(Notifications.notifications.values()).reverse()
+                        box.children = Notifications.notifications.reverse()
                             .map(n => Notification(n));
-
-                        box.visible = Notifications.notifications.size > 0;
                     }]],
                 }));
             }
@@ -145,31 +157,11 @@ export const ModuleNotificationList = props => {
     listContents.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
     const vScrollbar = listContents.get_vscrollbar();
     vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-    // const listScrollbar = Widget({
-    //     type: Gtk.Scrollbar,
-    //     orientation: Gtk.Orientation.VERTICAL,
-    //     className: 'sidebar-scrollbar',
-    //     connections: [
-    //         ['value-changed', (scrollbar) => {
-    //             const value = vScrollbar.get_value();
-    //             scrolledWindow.set_vadjustment(value);
-    //         }],
-    //         [1000, (scrollbar) => {
-    //             console.log(listContents.get_children()[0]);
-    //         }]
-    //     ]
-    // })
-    // what the heck
-    // vScrollbar.connect('value-changed', () => { 
-    //     listContents.set_vadjustment(vScrollbar.get_vadjustment());
-    //     console.log('changedd skrolllll');
-    // });
     return Box({
         ...props,
         className: 'sidebar-group spacing-h-5',
         children: [
             listContents,
-            // listScrollbar,
         ]
     });
 }

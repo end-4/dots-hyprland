@@ -2,6 +2,8 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Widget } = ags;
 const { Applications, Hyprland } = ags.Service;
 const { execAsync, exec } = ags.Utils;
+import { addTodoItem } from "./calendar.js";
+import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 
 const SCREEN_WIDTH = 1920;
 const SCREEN_HEIGHT = 1080;
@@ -22,6 +24,9 @@ function launchCustomCommand(command) {
     }
     else if (args[0] == '>dark') { // Dark mode
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`]).catch(print);
+    }
+    else if (args[0] == '>todo') { // Dark mode
+        addTodoItem(args.slice(1).join(' '));
     }
 }
 
@@ -139,6 +144,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
             data.set_text(address, address.length);
             button.toggleClassName('overview-tasks-window-dragging', false);
         });
+        setupCursorHoverAim(button);
     },
 });
 
@@ -298,6 +304,7 @@ export const SearchAndWindows = () => {
                 // Custom commands
                 if (text[0] == '>') {
                     launchCustomCommand(text);
+                    return;
                 }
                 // Fallback: launch command
                 const args = text.split(' ');

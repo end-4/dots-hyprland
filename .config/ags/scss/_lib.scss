@@ -7,13 +7,25 @@ $rounding_medium: 1.159rem;
 $rounding_mediumlarge: 1.364rem;
 $rounding_large: 1.705rem;
 
+.test {
+    background-image: linear-gradient(45deg,
+            #F4D609 0%, #F4D609 10%, #212121 10%, #212121 20%,
+            #F4D609 20%, #F4D609 30%, #212121 30%, #212121 40%,
+            #F4D609 40%, #F4D609 50%, #212121 50%, #212121 60%,
+            #F4D609 60%, #F4D609 70%, #212121 70%, #212121 80%,
+            #F4D609 80%, #F4D609 90%, #212121 90%, #212121 100%);
+    background-repeat: repeat;
+}
+
 // Common rules
 @mixin mainfont {
     font-family:
+        // 'Urbanist',
         'Lexend',
         'Inter',
         'Noto Sans',
         sans-serif;
+    // font-weight: 500;
 }
 
 @mixin icon-material {
@@ -30,7 +42,8 @@ $rounding_large: 1.705rem;
         monospace;
 }
 
-@mixin techfont { // Monospace for sys info n stuff. Doesn't have to be a nerd font, but it's cool.
+@mixin techfont {
+    // Monospace for sys info n stuff. Doesn't have to be a nerd font, but it's cool.
     font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace;
 }
 
@@ -52,7 +65,7 @@ $rounding_large: 1.705rem;
 @mixin elevation2 {
     // background: $surface;
     // color: $onSurface;
-    box-shadow: 0px 2px 3px $shadow;
+    box-shadow: 0px 2px 3px transparentize($shadow, 0.5);
     margin: 7px;
 }
 
@@ -343,6 +356,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 }
 
 .spacing-h-5>widget:last-child>box {
+    margin-right: 0rem;
+}
+
+.spacing-h-5>progressbar {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>progressbar:last-child {
     margin-right: 0rem;
 }
 

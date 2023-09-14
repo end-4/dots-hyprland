@@ -11,7 +11,7 @@ import { ModuleNotificationList } from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
 import { ModuleCalendar } from "./calendar.js";
 
-const CLOSE_ANIM_TIME = 151;
+const CLOSE_ANIM_TIME = 150;
 
 export class MenuService extends Service {
     static { Service.register(this); }
@@ -38,7 +38,7 @@ export class MenuService extends Service {
     constructor() {
         super();
         App.instance.connect('window-toggled', (_a, name, visible) => {
-            if (name === 'sideright' && !visible) {
+            if (!visible) {
                 MenuService.opened = '';
                 MenuService.instance.emit('changed');
             }
@@ -50,9 +50,9 @@ export const SidebarRight = () => Box({
     vertical: true,
     children: [
         EventBox({
-            onPrimaryClick: () => MenuService.toggle('sideright'),
-            onSecondaryClick: () => MenuService.toggle('sideright'),
-            onMiddleClick: () => MenuService.toggle('sideright'),
+            onPrimaryClick: () => MenuService.close('sideright'),
+            onSecondaryClick: () => MenuService.close('sideright'),
+            onMiddleClick: () => MenuService.close('sideright'),
         }),
         Box({
             vertical: true,

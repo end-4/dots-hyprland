@@ -2,6 +2,7 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Service, Widget } = ags;
 const { Bluetooth, Hyprland, Network } = ags.Service;
 const { execAsync, exec } = ags.Utils;
+import { setupCursorHover } from "./lib/cursorhover.js";
 
 const MaterialIcon = (icon, size, props = {}) => Widget.Label({
     ...props,
@@ -35,6 +36,7 @@ const HyprToggleButton = (icon, name, hyprlandConfigValue, props = {}) => Widget
     }),
     setup: button => {
         button.toggleClassName('sidebar-button-active', Hyprland.HyprctlGet(`getoption ${hyprlandConfigValue}`).int == 1);
+        setupCursorHover(button);
     }
 })
 

@@ -1,6 +1,10 @@
 * {
   all: unset; }
 
+.test {
+  background-image: linear-gradient(45deg, #F4D609 0%, #F4D609 10%, #212121 10%, #212121 20%, #F4D609 20%, #F4D609 30%, #212121 30%, #212121 40%, #F4D609 40%, #F4D609 50%, #212121 50%, #212121 60%, #F4D609 60%, #F4D609 70%, #212121 70%, #212121 80%, #F4D609 80%, #F4D609 90%, #212121 90%, #212121 100%);
+  background-repeat: repeat; }
+
 .techfont {
   font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace; }
 
@@ -22,7 +26,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e0e3e3; }
+  color: #1b1b1b; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -72,7 +76,7 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #a4a7a7; }
+  color: #5f5f5f; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -85,16 +89,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e0e3e3;
+  background-color: #1b1b1b;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #3f4949;
-  color: #bec8c8;
+  background-color: #dfe3ec;
+  color: #43474e;
   border-radius: 50rem;
-  border: 1px solid #bec8c8; }
+  border: 1px solid #43474e; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -184,6 +188,12 @@ tooltip {
   margin-right: 0.341rem; }
 
 .spacing-h-5 > widget:last-child > box {
+  margin-right: 0rem; }
+
+.spacing-h-5 > progressbar {
+  margin-right: 0.341rem; }
+
+.spacing-h-5 > progressbar:last-child {
   margin-right: 0rem; }
 
 .spacing-h-5 > scrolledwindow {
@@ -320,8 +330,8 @@ tooltip {
 
 menu {
   padding: 0.681rem;
-  background: #3f4949;
-  color: #bec8c8;
+  background: #dfe3ec;
+  color: #43474e;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -339,7 +349,7 @@ menu > menuitem:hover {
   background: rgba(255, 255, 255, 0.1); }
 
 .bar-bg {
-  background-color: rgba(25, 28, 28, 0.75);
+  background-color: rgba(253, 252, 255, 0.75);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -353,11 +363,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  background-color: rgba(25, 28, 28, 0.3); }
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  background-color: rgba(253, 252, 255, 0.3); }
 
 .bar-group-pad {
   padding: 0rem 1.023rem; }
@@ -411,7 +421,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(45, 48, 48, 0.3);
+  background-color: rgba(230, 230, 232, 0.3);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -422,15 +432,15 @@ menu > menuitem:hover {
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
 
 .bar-ws-empty {
-  color: #e0e3e3; }
+  color: #1b1b1b; }
 
 .bar-ws-occupied {
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .bar-ws-active {
-  background-color: #4cd9df;
-  color: #00373a;
+  background-color: #0061a7;
+  color: #ffffff;
   border-radius: 999px;
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
@@ -445,45 +455,46 @@ menu > menuitem:hover {
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .bar-sidemodule {
   min-width: 26rem; }
 
 .bar-batt-low {
-  background-color: #ffb4a9;
-  color: #680003; }
+  background-color: #ba1b1b;
+  color: #ffffff; }
 
 .bar-batt-prog-low {
-  background-color: #ffb4a9;
-  color: #680003; }
+  background-color: #ba1b1b;
+  color: #ffffff; }
 
 .bar-music-playstate {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .bar-music-circprog {
   margin-left: 0.273rem;
   min-width: 0.068rem;
   min-height: 1.770rem;
   padding: 0rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .bar-music-playstate-txt {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
   font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
   font-size: 1.568rem;
   margin: -0.1rem 0rem;
@@ -545,14 +556,13 @@ menu > menuitem:hover {
   .bar-prog-batt trough {
     min-height: 0.954rem;
     min-width: 0.068rem;
-    border-radius: 10rem;
-    background-color: #324b4c; }
+    border-radius: 10rem; }
   .bar-prog-batt progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #cce8e9; }
+    background-color: #101c2b; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -562,14 +572,13 @@ menu > menuitem:hover {
   .bar-prog-batt-low trough {
     min-height: 0.954rem;
     min-width: 0.068rem;
-    border-radius: 10rem;
-    background-color: #ffb4a9; }
+    border-radius: 10rem; }
   .bar-prog-batt-low progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #930006; }
+    background-color: #ffffff; }
 
 .bar-batt-chargestate {
   border-radius: 10rem;
@@ -579,10 +588,10 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #cce8e9; }
+  background-color: #101c2b; }
 
 .bar-batt-chargestate-low {
-  background-color: #930006; }
+  background-color: #ffdad4; }
 
 .bar-batt-percentage {
   font-size: 1rem;
@@ -590,13 +599,17 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(25, 28, 28, 0.75);
+  background-color: rgba(253, 252, 255, 0.75);
+  border-radius: 1.705rem; }
+
+.corner-black {
+  background-color: black;
   border-radius: 1.705rem; }
 
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #a4a7a7; }
+  color: #5f5f5f; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -619,14 +632,14 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  box-shadow: 0px 2px 3px #000000;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(25, 28, 28, 0.75);
+  background-color: rgba(253, 252, 255, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -636,16 +649,16 @@ menu > menuitem:hover {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #4cd9df;
-  border: 0.068rem solid #4cd9df;
-  box-shadow: 0rem 0.136rem 0rem #4cd9df;
+  color: #0061a7;
+  border: 0.068rem solid #0061a7;
+  box-shadow: 0rem 0.136rem 0rem #0061a7;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #6ff6fc; }
+  color: #001c37; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -653,66 +666,83 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #3f4949; }
+  background-color: #dfe3ec; }
 
 .cheatsheet-closebtn:active {
-  background-color: #656f6f; }
+  background-color: #b0b4bd; }
 
 .sidebar-right {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  box-shadow: 0px 2px 3px #000000;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px;
-  min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(25, 28, 28, 0.75);
+  background-color: rgba(253, 252, 255, 0.75);
   padding: 1.023rem; }
 
 .sideright-hide {
   margin-right: -29.591rem;
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
+.sidebar-left {
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 1.705rem;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  margin: 7px;
+  min-width: 29.591rem;
+  min-height: 29.591rem;
+  background-color: rgba(253, 252, 255, 0.75);
+  padding: 1.023rem; }
+
+.sideleft-hide {
+  margin-left: -29.591rem;
+  transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
+
 .sidebar-group {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
   padding: 0.341rem;
-  background-color: rgba(25, 28, 28, 0.3); }
+  background-color: rgba(253, 252, 255, 0.3); }
 
 .sidebar-group-nopad {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  background-color: rgba(25, 28, 28, 0.3); }
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  background-color: rgba(253, 252, 255, 0.3); }
 
 .sidebar-button {
   padding: 0rem 0.818rem;
-  background-color: rgba(50, 75, 76, 0.75);
-  color: #cce8e9; }
+  background-color: rgba(214, 227, 247, 0.75);
+  color: #101c2b; }
 
 .sidebar-button-nopad {
-  background-color: rgba(50, 75, 76, 0.75);
-  color: #cce8e9; }
+  background-color: rgba(214, 227, 247, 0.75);
+  color: #101c2b; }
 
 .sidebar-button:hover {
-  background-color: rgba(81, 106, 107, 0.75); }
+  background-color: rgba(174, 187, 206, 0.75); }
 
 .sidebar-button:active {
-  background-color: rgba(112, 138, 139, 0.75); }
+  background-color: rgba(135, 147, 165, 0.75); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(81, 106, 107, 0.75); }
+  background-color: rgba(174, 187, 206, 0.75); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(112, 138, 139, 0.75); }
+  background-color: rgba(135, 147, 165, 0.75); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -729,14 +759,14 @@ menu > menuitem:hover {
   border-radius: 0.818rem; }
 
 .sidebar-button-active {
-  background-color: #4cd9df;
-  color: #00373a; }
+  background-color: #0061a7;
+  color: #ffffff; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(77, 215, 220, 0.94); }
+  background-color: rgba(3, 98, 166, 0.94); }
 
 .sidebar-button-active:active {
-  background-color: rgba(81, 208, 214, 0.82); }
+  background-color: rgba(12, 100, 163, 0.82); }
 
 .sidebar-navrail {
   padding: 0rem 1.159rem; }
@@ -751,11 +781,11 @@ menu > menuitem:hover {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-navrail-btn-active > box > label:first-child {
-  background-color: #4cd9df;
-  color: #00373a; }
+  background-color: #0061a7;
+  color: #ffffff; }
 
 .sidebar-navrail-btn-active:hover > box > label:first-child {
-  background-color: rgba(77, 215, 220, 0.94); }
+  background-color: rgba(3, 98, 166, 0.94); }
 
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
@@ -763,47 +793,47 @@ menu > menuitem:hover {
 .sidebar-memory-ram-cirgprog {
   min-width: 0.818rem;
   min-height: 4.091rem;
-  padding: 0.273rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  padding: 0.409rem;
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .sidebar-memory-swap-cirgprog {
   min-width: 0.818rem;
   min-height: 2.255rem;
-  padding: 0.273rem;
+  padding: 0.409rem;
   margin: 0.918rem;
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .sidebar-notification-low {
   border-radius: 0.818rem;
-  background-color: rgba(63, 73, 73, 0.6);
-  color: #bec8c8;
+  background-color: rgba(223, 227, 236, 0.6);
+  color: #43474e;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
 .sidebar-notification-normal {
   border-radius: 0.818rem;
-  background-color: rgba(63, 73, 73, 0.6);
-  color: #bec8c8;
+  background-color: rgba(223, 227, 236, 0.6);
+  color: #43474e;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
 .sidebar-notification-critical {
   border-radius: 0.818rem;
-  background-color: #ffb4a9;
-  color: #680003;
+  background-color: #ba1b1b;
+  color: #ffffff;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
 .sidebar-notif-body-low {
-  color: #9ca6a6; }
+  color: #767a82; }
 
 .sidebar-notif-body-normal {
-  color: #9ca6a6; }
+  color: #767a82; }
 
 .sidebar-notif-body-critical {
-  color: #913130; }
+  color: #e8b4b4; }
 
 .sidebar-notif-icon {
   min-width: 3.409rem;
@@ -811,12 +841,12 @@ menu > menuitem:hover {
   border-radius: 9999px; }
 
 .sidebar-notif-icon-material {
-  background-color: #324b4c;
-  color: #cce8e9; }
+  background-color: #d6e3f7;
+  color: #101c2b; }
 
 .sidebar-notif-icon-material-urgent {
-  background-color: rgba(147, 0, 6, 0.75);
-  color: #ffb4a9; }
+  background-color: rgba(255, 218, 212, 0.75);
+  color: #410001; }
 
 .sidebar-notif-close-btn {
   border-radius: 0.818rem;
@@ -840,19 +870,19 @@ menu > menuitem:hover {
   min-width: 0.273rem;
   min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(190, 200, 200, 0.3); }
+  background-color: rgba(67, 71, 78, 0.3); }
 
 .sidebar-scrollbar slider:hover {
-  background-color: rgba(190, 200, 200, 0.44); }
+  background-color: rgba(67, 71, 78, 0.44); }
 
 .sidebar-scrollbar slider:active {
-  background-color: #7f8989; }
+  background-color: #91959d; }
 
 .sidebar-calendar-btn {
-  min-height: 2.659rem;
-  min-width: 2.659rem;
+  min-height: 2.523rem;
+  min-width: 2.523rem;
   border-radius: 9999px;
-  color: #e0e3e3; }
+  color: #1b1b1b; }
 
 .sidebar-calendar-btn:hover {
   background-color: rgba(128, 128, 128, 0.4); }
@@ -860,30 +890,93 @@ menu > menuitem:hover {
 .sidebar-calendar-btn:active {
   background-color: rgba(128, 128, 128, 0.7); }
 
+.sidebar-calendar-btn-txt {
+  margin-left: -10.341rem;
+  margin-right: -10.341rem; }
+
 .sidebar-calendar-btn-today {
-  background-color: #4cd9df;
-  color: #00373a; }
+  background-color: #0061a7;
+  color: #ffffff; }
 
 .sidebar-calendar-btn-today:hover {
-  background-color: rgba(77, 215, 220, 0.94); }
+  background-color: rgba(3, 98, 166, 0.94); }
 
 .sidebar-calendar-btn-today:active {
-  background-color: rgba(81, 208, 214, 0.82); }
+  background-color: rgba(12, 100, 163, 0.82); }
 
 .sidebar-calendar-btn-othermonth {
-  color: #7d8080; }
+  color: #8c8c8d; }
+
+.sidebar-calendar-header {
+  margin: 0.341rem; }
+
+.sidebar-calendar-monthyear-btn {
+  border-radius: 9999px;
+  padding: 0rem 0.682rem;
+  background-color: rgba(214, 227, 247, 0.75);
+  color: #101c2b; }
+
+.sidebar-calendar-monthyear-btn:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-calendar-monthyear-btn:active {
+  background-color: rgba(128, 128, 128, 0.7); }
+
+.sidebar-calendar-monthshift-btn {
+  min-width: 2.045rem;
+  min-height: 2.045rem;
+  border-radius: 9999px;
+  background-color: rgba(214, 227, 247, 0.75);
+  color: #101c2b; }
+
+.sidebar-calendar-monthshift-btn:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-calendar-monthshift-btn:active {
+  background-color: rgba(128, 128, 128, 0.7); }
+
+.sidebar-todo-selector-tab {
+  min-height: 2.5rem;
+  color: #1b1b1b;
+  border-radius: 0.818rem; }
+
+.sidebar-todo-selector-tab:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-todo-selector-tab:active {
+  background-color: rgba(128, 128, 128, 0.7); }
+
+.sidebar-todo-selector-tab:hover > box > label {
+  font-weight: 500; }
+
+.sidebar-todo-selector-tab-active > box > label {
+  color: #0061a7; }
+
+.sidebar-todo-selector-tab-active > box > label:last-child {
+  text-decoration: underline; }
+
+.sidebar-todo-item-action {
+  border-radius: 9999px;
+  min-width: 1.705rem;
+  min-height: 1.705rem; }
+
+.sidebar-todo-item-action:hover {
+  background-color: rgba(128, 128, 128, 0.4); }
+
+.sidebar-todo-item-action:active {
+  background-color: rgba(128, 128, 128, 0.7); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(25, 28, 28, 0.75);
+  background-color: rgba(253, 252, 255, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
   margin: 10px;
-  box-shadow: 0px 2px 3px #000000;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px; }
 
 .osd-progress {
@@ -895,67 +988,67 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #6ff6fc; }
+    background-color: #001c37; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #004f53;
+    background-color: #d0e4ff;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #6ff6fc; }
+  color: #001c37; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e0e3e3;
+  color: #1b1b1b;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e0e3e3; }
+  color: #1b1b1b; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  box-shadow: 0px 2px 3px #000000;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
-  background-color: rgba(25, 28, 28, 0.75);
-  color: #e0e3e3;
-  caret-color: #cce8e9; }
+  background-color: rgba(253, 252, 255, 0.75);
+  color: #1b1b1b;
+  caret-color: #101c2b; }
   .overview-search-box selection {
-    background-color: #b1cccd;
-    color: #1b3436; }
+    background-color: #535f70;
+    color: #ffffff; }
 
 .overview-search-box-extended {
   min-width: 25.909rem; }
 
 .overview-search-prompt {
-  color: #a4a7a7; }
+  color: #5f5f5f; }
 
 .overview-search-results {
   min-height: 37.5rem;
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  box-shadow: 0px 2px 3px #000000;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
-  background-color: rgba(25, 28, 28, 0.75);
-  color: #e0e3e3; }
+  background-color: rgba(253, 252, 255, 0.75);
+  color: #1b1b1b; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem; }
@@ -979,40 +1072,40 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(125, 128, 128, 0.28);
-  border-left: 1px solid rgba(125, 128, 128, 0.28);
-  border-right: 1px solid rgba(89, 92, 92, 0.24);
-  border-bottom: 1px solid rgba(89, 92, 92, 0.24);
-  box-shadow: 0px 2px 3px #000000;
+  border-top: 1px solid rgba(140, 140, 141, 0.28);
+  border-left: 1px solid rgba(140, 140, 141, 0.28);
+  border-right: 1px solid rgba(180, 180, 182, 0.24);
+  border-bottom: 1px solid rgba(180, 180, 182, 0.24);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(25, 28, 28, 0.75);
-  color: #e0e3e3; }
+  background-color: rgba(253, 252, 255, 0.75);
+  color: #1b1b1b; }
 
 .overview-tasks-workspace {
   border-radius: 1.159rem;
   margin: 0.341rem;
-  background-color: rgba(42, 45, 45, 0.207); }
+  background-color: rgba(234, 233, 236, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(72, 75, 75, 0.22);
-  border-left: 1px solid rgba(72, 75, 75, 0.22);
-  border-right: 1px solid rgba(60, 63, 63, 0.215);
-  border-bottom: 1px solid rgba(60, 63, 63, 0.215);
-  background-color: rgba(50, 75, 76, 0.4);
-  color: #cce8e9; }
+  border-top: 1px solid rgba(200, 199, 202, 0.22);
+  border-left: 1px solid rgba(200, 199, 202, 0.22);
+  border-right: 1px solid rgba(213, 212, 215, 0.215);
+  border-bottom: 1px solid rgba(213, 212, 215, 0.215);
+  background-color: rgba(214, 227, 247, 0.4);
+  color: #101c2b; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(55, 100, 102, 0.43); }
+  background-color: rgba(177, 204, 233, 0.43); }
 
 .overview-tasks-window:active {
-  background-color: rgba(55, 100, 102, 0.43); }
+  background-color: rgba(177, 204, 233, 0.43); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(55, 100, 102, 0.43); }
+  background-color: rgba(177, 204, 233, 0.43); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(50, 75, 76, 0.2);
+  background-color: rgba(214, 227, 247, 0.2);
   border: 1px; }

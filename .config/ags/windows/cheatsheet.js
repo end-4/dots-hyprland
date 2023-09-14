@@ -1,5 +1,6 @@
 const { App, Service, Widget } = ags;
 import { Keybinds } from "../modules/keybinds.js";
+import { setupCursorHover } from "../modules/lib/cursorhover.js";
 
 const cheatsheetHeader = () => Widget.CenterBox({
     vertical: false,
@@ -40,7 +41,8 @@ const cheatsheetHeader = () => Widget.CenterBox({
         child: Widget.Label({
             className: 'icon-material txt txt-hugeass',
             label: 'close'
-        })
+        }),
+        setup: (button) => setupCursorHover(button),
     }),
 });
 

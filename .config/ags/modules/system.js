@@ -54,12 +54,19 @@ export const ModuleSystem = () => Widget.EventBox({
                                     progress.toggleClassName('bar-prog-batt-low', Battery.percent <= 20);
                                 }]],
                             }),
-                            Widget.Box({
-                                valign: 'center',
-                                className: 'bar-batt-chargestate',
-                                connections: [[Battery, box => {
-                                    box.toggleClassName('bar-batt-chargestate-charging', Battery.charging);
-                                    box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= 20);
+                            Widget.Revealer({
+                                transitionDuration: 150,
+                                revealChild: false,
+                                transition: 'slide_left',
+                                child: Widget.Box({
+                                    valign: 'center',
+                                    className: 'bar-batt-chargestate-charging',
+                                    connections: [[Battery, box => {
+                                        box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= 20);
+                                    }]],
+                                }),
+                                connections: [[Battery, revealer => {
+                                    revealer.revealChild = Battery.charging;
                                 }]],
                             }),
                         ],
