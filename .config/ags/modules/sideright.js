@@ -20,18 +20,33 @@ export class MenuService extends Service {
     static instance = new MenuService();
     static opened = '';
     static toggle(menu) {
-        MenuService.opened = MenuService.opened === menu ? '' : menu;
+        if (MenuService.opened === menu) {
+            MenuService.opened = '';
+            console.log('closing', menu);
+            App.closeWindow(menu);
+        }
+        else {
+            if (MenuService.opened != '') {
+                console.log('closing', MenuService.opened);
+                App.closeWindow(MenuService.opened);
+            }
+            MenuService.opened = menu;
+            console.log('opening', menu);
+            App.openWindow(menu);
+        }
         MenuService.instance.emit('changed');
-        App.toggleWindow(menu);
     }
     static close(menu) {
         MenuService.opened = '';
         MenuService.instance.emit('changed');
+        console.log('closing', menu);
         App.closeWindow(menu);
     }
     static open(menu) {
+        App.closeWindow(MenuService.opened);
         MenuService.opened = menu;
         MenuService.instance.emit('changed');
+        console.log('opening', menu);
         App.openWindow(menu);
     }
 

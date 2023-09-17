@@ -301,12 +301,11 @@ export const SearchAndWindows = () => {
             }
             else {
                 App.toggleWindow('overview');
-                // Custom commands
-                if (text[0] == '>') {
+                if (text[0] == '>') { // Custom commands
                     launchCustomCommand(text);
                     return;
                 }
-                // Fallback: launch command
+                // Fallback: Execute command
                 const args = text.split(' ');
                 execAsync(args).catch(print);
             }
