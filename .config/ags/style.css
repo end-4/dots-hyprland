@@ -426,31 +426,65 @@ menu > menuitem:hover {
   margin: 0rem 0.341rem; }
 
 .bar-ws {
-  min-height: 1.770rem;
-  min-width: 1.770rem;
+  min-height: 1.636rem;
+  min-width: 1.772rem;
   font-size: 1.091rem;
-  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif; }
-
-.bar-ws-empty {
-  color: #1b1b1b; }
-
-.bar-ws-occupied {
-  background-color: #d6e3f7;
-  color: #101c2b; }
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
+  border-top: 0.068rem solid;
+  border-bottom: 0.068rem solid;
+  border-color: transparent; }
 
 .bar-ws-active {
+  min-height: 1.636rem;
+  min-width: 1.636rem;
+  font-size: 1.091rem;
+  font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
+  border: 0.068rem solid;
+  border-color: transparent;
   background-color: #0061a7;
   color: #ffffff;
   border-radius: 999px;
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
-.bar-ws-left {
-  border-top-left-radius: 999px;
-  border-bottom-left-radius: 999px; }
+.bar-ws-occupied {
+  background-color: #d6e3f7;
+  color: #101c2b;
+  min-width: 1.772rem;
+  border-top: 0.068rem solid #101c2b;
+  border-bottom: 0.068rem solid #101c2b; }
 
-.bar-ws-right {
+.bar-ws-occupied-left {
+  background-color: #d6e3f7;
+  color: #101c2b;
+  min-width: 1.704rem;
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+  border-left: 0.068rem solid #101c2b;
+  border-top: 0.068rem solid #101c2b;
+  border-bottom: 0.068rem solid #101c2b;
+  border-right: 0px solid transparent; }
+
+.bar-ws-occupied-right {
+  background-color: #d6e3f7;
+  color: #101c2b;
+  min-width: 1.704rem;
   border-top-right-radius: 999px;
-  border-bottom-right-radius: 999px; }
+  border-bottom-right-radius: 999px;
+  border-right: 0.068rem solid #101c2b;
+  border-top: 0.068rem solid #101c2b;
+  border-bottom: 0.068rem solid #101c2b;
+  border-left: 0px solid transparent; }
+
+.bar-ws-occupied-left-right {
+  background-color: #d6e3f7;
+  color: #101c2b;
+  min-width: 1.636rem;
+  border-radius: 9999px;
+  border: 0.068rem solid #101c2b; }
+
+.bar-ws-empty {
+  color: #1b1b1b;
+  border-color: transparent; }
 
 .bar-batt {
   border-radius: 999px;
@@ -636,7 +670,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   margin-bottom: 0.682rem;
   background-color: rgba(253, 252, 255, 0.75);
@@ -678,7 +712,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-height: 29.591rem;
   background-color: rgba(253, 252, 255, 0.75);
@@ -695,7 +729,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 29.591rem;
   min-height: 29.591rem;
@@ -976,7 +1010,7 @@ menu > menuitem:hover {
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
   margin: 10px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px; }
 
 .osd-progress {
@@ -1018,7 +1052,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
@@ -1043,7 +1077,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 27.273rem;
   padding: 0.682rem;
@@ -1076,7 +1110,7 @@ menu > menuitem:hover {
   border-left: 1px solid rgba(140, 140, 141, 0.28);
   border-right: 1px solid rgba(180, 180, 182, 0.24);
   border-bottom: 1px solid rgba(180, 180, 182, 0.24);
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   padding: 0.341rem;
   background-color: rgba(253, 252, 255, 0.75);

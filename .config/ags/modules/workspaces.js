@@ -55,14 +55,17 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                         const kids = box.children;
                                         kids.forEach((child, i) => {
                                             child.child.toggleClassName('bar-ws-occupied', false);
+                                            child.child.toggleClassName('bar-ws-occupied-left', false);
+                                            child.child.toggleClassName('bar-ws-occupied-right', false);
+                                            child.child.toggleClassName('bar-ws-occupied-left-right', false);
                                         });
 
                                         for (const ws of wsJson.workspaces) {
                                             const i = ws.id;
                                             const thisChild = kids[i - 1];
-                                            thisChild?.child.toggleClassName('bar-ws-occupied', true);
-                                            thisChild?.child.toggleClassName('bar-ws-left', !ws?.leftPopulated && wsJson.activeworkspace != i - 1);
-                                            thisChild?.child.toggleClassName('bar-ws-right', !ws?.rightPopulated && wsJson.activeworkspace != i + 1);
+                                            const isLeft = !ws?.leftPopulated && wsJson.activeworkspace != i - 1;
+                                            const isRight = !ws?.rightPopulated && wsJson.activeworkspace != i + 1;
+                                            thisChild?.child.toggleClassName(`bar-ws-occupied${isLeft ? '-left' : ''}${isRight ? '-right' : ''}`, true);
                                         };
                                     }],
                                 ],
@@ -70,7 +73,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                             Widget.Button({
                                 valign: 'center',
                                 halign: 'start',
-                                className: 'bar-ws bar-ws-active',
+                                className: 'bar-ws-active',
                                 connections: [
                                     [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
                                         const ws = GoHyprWorkspaces.state.activeworkspace;

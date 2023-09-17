@@ -96,22 +96,23 @@
 }
 
 .bar-ws {
-    min-height: 1.770rem;
-    min-width: 1.770rem;
+    min-height: 1.636rem;
+    min-width: 1.772rem;
     font-size: 1.091rem;
     @include mainfont;
-}
-
-.bar-ws-empty {
-    color: $onBackground;
-}
-
-.bar-ws-occupied {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    border-top: 0.068rem solid;
+    border-bottom: 0.068rem solid;
+    border-color: transparent;
 }
 
 .bar-ws-active {
+    min-height: 1.636rem;
+    min-width: 1.636rem;
+    font-size: 1.091rem;
+    @include mainfont;
+    border: 0.068rem solid;
+    border-color: transparent;
+
     background-color: $primary;
     color: $onPrimary;
     border-radius: 999px;
@@ -119,14 +120,51 @@
     // transition: 0ms;
 }
 
-.bar-ws-left {
-    border-top-left-radius: 999px;
-    border-bottom-left-radius: 999px;
+.bar-ws-occupied {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    min-width: 1.772rem;
+    border-top: 0.068rem solid $onSecondaryContainer;
+    border-bottom: 0.068rem solid $onSecondaryContainer;
 }
 
-.bar-ws-right {
+.bar-ws-occupied-left {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    min-width: 1.704rem;
+    border-top-left-radius: 999px;
+    border-bottom-left-radius: 999px;
+
+    border-left: 0.068rem solid $onSecondaryContainer;
+    border-top: 0.068rem solid $onSecondaryContainer;
+    border-bottom: 0.068rem solid $onSecondaryContainer;
+    border-right: 0px solid transparent;
+}
+
+.bar-ws-occupied-right {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    min-width: 1.704rem;
     border-top-right-radius: 999px;
     border-bottom-right-radius: 999px;
+
+    border-right: 0.068rem solid $onSecondaryContainer;
+    border-top: 0.068rem solid $onSecondaryContainer;
+    border-bottom: 0.068rem solid $onSecondaryContainer;
+    border-left: 0px solid transparent;
+}
+
+.bar-ws-occupied-left-right {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    min-width: 1.636rem;
+    border-radius: 9999px;
+    border: 0.068rem solid $onSecondaryContainer;
+}
+
+.bar-ws-empty {
+    color: $onBackground;
+    border-color: transparent;
 }
 
 .bar-batt {
