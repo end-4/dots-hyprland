@@ -2,11 +2,49 @@ const { Gdk, Gtk } = imports.gi;
 const { App, Service, Widget } = ags;
 const { Applications, Hyprland } = ags.Service;
 const { execAsync, exec } = ags.Utils;
-const { Box, EventBox } = ags.Widget;
+const { Box, EventBox, Button, Label, Scrollable } = ags.Widget;
 const { MenuService } = ags.Service;
 
+const CLIPBOARD_SHOWN_ENTRIES = 20;
+
+const ClipboardItems = () => {
+    return Box({
+        vertical: true,
+        className: 'spacing-v-5',
+        connections: [[MenuService, box => {
+            if(MenuService.opened != 'sideleft') return;
+
+            let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
+            clipboardContents = clipboardContents.split('\n');
+            console.log(clipboardContents);;
+            console.log(`bash -c 'echo "${clipboardContents[0]}" | cliphist decode'`);
+            console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | cliphist decode'`));
+
+            box.children = clipboardContents.map((text, i) => {
+                if (i >= CLIPBOARD_SHOWN_ENTRIES) return;
+                return Button({
+                    onClicked: () => {
+                        console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | cliphist decode | wl-copy'`));
+                        MenuService.close('sideleft');
+                    },
+                    className: 'sidebar-clipboard-item',
+                    child: Box({
+                        children: [
+                            Label({
+                                label: text,
+                                className: 'txt-small',
+                                truncate: 'end',
+                            })
+                        ]
+                    })
+                })
+            }
+            );
+        }]]
+    });
+}
+
 export const SidebarLeft = () => Box({
-    className: 'test',
     vertical: true,
     children: [
         EventBox({
@@ -19,12 +57,11 @@ export const SidebarLeft = () => Box({
             vexpand: true,
             className: 'sidebar-left sideleft-hide',
             children: [
-                Widget.Button({
-                    onHoverLost: () => {
-                        console.log('lost!');
-                        MenuService.close('sideleft');
-                    },
-                    style: 'min-width: 40px; min-height: 40px;',
+                Widget.Box({
+                    className: 'spacing-v-5',
+                    children: [
+                        ClipboardItems(),
+                    ]
                 })
             ],
             connections: [[MenuService, box => {
@@ -33,3 +70,4 @@ export const SidebarLeft = () => Box({
         }),
     ]
 });
+

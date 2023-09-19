@@ -52,14 +52,14 @@ function getDateInXMonthsTime(x) {
     return targetDate;
 }
 
-const weekDays = [
+const weekDays = [ // stupid stupid stupid!! how tf is Sunday the first day of the week??
+    { day: 'Su', today: 0 },
     { day: 'Mo', today: 0 },
     { day: 'Tu', today: 0 },
     { day: 'We', today: 0 },
     { day: 'Th', today: 0 },
     { day: 'Fr', today: 0 },
     { day: 'Sa', today: 0 },
-    { day: 'Su', today: 0 },
 ]
 
 const CalendarDay = (day, today) => Widget.Button({
@@ -85,7 +85,7 @@ const CalendarWidget = () => {
     });
     const addCalendarChildren = (box, calendarJson) => {
         box.children = calendarJson.map((row, i) => Widget.Box({
-            homogeneous: true,
+            // homogeneous: true,
             className: 'spacing-h-5',
             children: row.map((day, i) =>
                 CalendarDay(day.day, day.today)

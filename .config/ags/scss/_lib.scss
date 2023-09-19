@@ -586,3 +586,7 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 .spacing-v--5>box:last-child {
     margin-bottom: 0rem;
 }
+
+*:focus {
+    // border: 2px solid $onSurface;
+}
