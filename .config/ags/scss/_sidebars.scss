@@ -12,7 +12,7 @@
 }
 
 .sideright-hide {
-    margin-right: -29.591rem;
+    margin-right: -30.682rem;
     @include md3_accel;
 }
 
@@ -28,7 +28,7 @@
 }
 
 .sideleft-hide {
-    margin-left: -29.591rem;
+    margin-left: -30.682rem;
     @include md3_accel;
 }
 
@@ -369,4 +369,20 @@
 
 .sidebar-todo-item-action:active {
     background-color: $activecolor;
+}
+
+.sidebar-clipboard-item {
+    border-radius: $rounding_small;
+    min-height: 2.045rem;
+    padding: 0.341rem;
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-clipboard-item:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 90%);
+}
+
+.sidebar-clipboard-item:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
