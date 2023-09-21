@@ -76,7 +76,8 @@ apply_fuzzel() {
     cp "scripts/templates/fuzzel/fuzzel.ini" "$HOME/.config/fuzzel/fuzzel.ini"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/${colorlist[$i]}ff/${colorvalues[$i]#\#}ff/g" "$HOME/.config/fuzzel/fuzzel.ini" # note: ff because theyre opaque
+        sed -i "s/${colorlist[$i]}ff/${colorvalues[$i]#\#}ff/g" "$HOME/.config/fuzzel/fuzzel.ini"
+        sed -i "s/${colorlist[$i]}cc/${colorvalues[$i]#\#}cc/g" "$HOME/.config/fuzzel/fuzzel.ini"
     done
 }
 

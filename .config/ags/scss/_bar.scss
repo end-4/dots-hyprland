@@ -181,12 +181,12 @@
 
 .bar-batt-low {
     background-color: $error;
-    color: $onError;
+    color: $errorContainer;
 }
 
 .bar-batt-prog-low {
     background-color: $error;
-    color: $onError;
+    color: $errorContainer;
 }
 
 .bar-music-playstate {
@@ -322,7 +322,7 @@
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $onError;
+        background-color: $errorContainer;
     }
 }
 
