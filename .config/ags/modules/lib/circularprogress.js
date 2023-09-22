@@ -35,6 +35,7 @@ export const CircularProgress = new GObject.Class({
         const marginRight = styleContext.get_margin(Gtk.StateFlags.NORMAL).right;
         const marginTop = styleContext.get_margin(Gtk.StateFlags.NORMAL).top;
         const marginBottom = styleContext.get_margin(Gtk.StateFlags.NORMAL).bottom;
+        this._progress = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL) / 100.0;
 
         const bg_stroke = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
         const fg_stroke = bg_stroke - padding;

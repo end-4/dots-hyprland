@@ -23,6 +23,13 @@ export const ModuleSysInfo = (props = {}) => {
         className: 'sidebar-memory-ram-circprog margin-right-10', // margin right 10 here cuz overlay can't have margins itself
         valign: 'center',
     });
+    const cpuCircle = Widget.Box({
+        children: [Widget({
+            type: CircularProgress,
+            className: 'sidebar-cpu-circprog margin-right-10', // margin right 10 here cuz overlay can't have margins itself
+            valign: 'center',
+        })]
+    });
     const memoryCircles = Widget.Box({
         homogeneous: true,
         children: [Widget.Overlay({
@@ -48,14 +55,14 @@ export const ModuleSysInfo = (props = {}) => {
             Widget.Box({
                 className: 'spacing-h-5',
                 children: [
-                    MaterialIcon('memory', 'large', {setup: icon => icon.toggleClassName('txt', true)}),
+                    MaterialIcon('memory', 'large', { setup: icon => icon.toggleClassName('txt', true) }),
                     ramText
                 ]
             }),
             Widget.Box({
                 className: 'spacing-h-5',
                 children: [
-                    MaterialIcon('swap_horiz', 'large', {setup: icon => icon.toggleClassName('txt', true)}),
+                    MaterialIcon('swap_horiz', 'large', { setup: icon => icon.toggleClassName('txt', true) }),
                     swapText
                 ]
             }),
@@ -73,7 +80,8 @@ export const ModuleSysInfo = (props = {}) => {
                 children: [
                     memoryCircles,
                     memoryText,
-                    // TODO: add graph or something with Cpu
+                    // cpuCircle,
+                    // maybe make cpu a graph?
                 ],
                 connections: [
                     [3000, () => {
@@ -84,9 +92,11 @@ export const ModuleSysInfo = (props = {}) => {
                         const swapString = exec(`bash -c 'free -h --si | rg "Swap:"'`);
                         const [swapTotal, swapUsed] = swapString.split(/\s+/).slice(1, 3);
                         const swapPerc = Number(exec(`bash -c "printf '%.1f' \\\"$(free -m | rg Swap | awk '{print ($3/$2)*100}')\\\""`));
+                        // const cpuPerc = parseFloat(exec(`bash -c "top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'"`));
                         // Set circular progress
-                        ramCircle.setProgress(ramPerc / 100);
-                        swapCircle.setProgress(swapPerc / 100);
+                        ramCircle.style = `font-size: ${ramPerc}px;`
+                        swapCircle.style = `font-size: ${swapPerc}px;`
+                        // cpuCircle.style = `font-size: ${cpuPerc}px;`
                         // Set text
                         ramText.label = `${ramUsed} / ${ramTotal}`;
                         swapText.label = `${swapUsed} / ${swapTotal}`;
