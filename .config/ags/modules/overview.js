@@ -25,7 +25,7 @@ function launchCustomCommand(command) {
     else if (args[0] == '>dark') { // Dark mode
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`]).catch(print);
     }
-    else if (args[0] == '>todo') { // Dark mode
+    else if (args[0] == '>todo') { // Todo
         addTodoItem(args.slice(1).join(' '));
     }
 }
