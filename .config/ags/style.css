@@ -824,14 +824,14 @@ menu > menuitem:hover {
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
 
-.sidebar-memory-ram-cirgprog {
+.sidebar-memory-ram-circprog {
   min-width: 0.818rem;
   min-height: 4.091rem;
   padding: 0.409rem;
   background-color: #d6e3f7;
   color: #101c2b; }
 
-.sidebar-memory-swap-cirgprog {
+.sidebar-memory-swap-circprog {
   min-width: 0.818rem;
   min-height: 2.255rem;
   padding: 0.409rem;

@@ -15,12 +15,12 @@ const CPU_HISTORY_LENGTH = 10;
 export const ModuleSysInfo = (props = {}) => {
     const swapCircle = Widget({
         type: CircularProgress,
-        className: 'sidebar-memory-swap-cirgprog',
+        className: 'sidebar-memory-swap-circprog',
         valign: 'center',
     });
     const ramCircle = Widget({
         type: CircularProgress,
-        className: 'sidebar-memory-ram-cirgprog margin-right-10', // margin right 10 here cuz overlay can't have margins itself
+        className: 'sidebar-memory-ram-circprog margin-right-10', // margin right 10 here cuz overlay can't have margins itself
         valign: 'center',
     });
     const memoryCircles = Widget.Box({
