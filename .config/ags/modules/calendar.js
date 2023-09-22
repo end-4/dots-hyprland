@@ -1,4 +1,4 @@
-const { Gdk, Gtk } = imports.gi;
+const { Gio, Gdk, Gtk } = imports.gi;
 const { App, Widget } = ags;
 const { Box, CenterBox, Label, Button } = ags.Widget;
 const { exec, execAsync, timeout } = ags.Utils;
@@ -8,29 +8,46 @@ import { setupCursorHover } from "./lib/cursorhover.js";
 
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
-export let todoJson = JSON.parse(ags.Utils.readFile(`${App.configDir}/data/todo.json`));
+
+function fileExists(filePath) {
+    let file = Gio.File.new_for_path(filePath);
+    return file.query_exists(null);
+}
+// export let todoJson = JSON.parse(ags.Utils.readFile(`${App.configDir}/../../.cache/ags/user/todo.json`));
+// actually we have to check if the file exists first, create it if not
+export let todoJson = undefined;
+if (fileExists(`${App.configDir}/../../.cache/ags/user/todo.json`)) {
+    todoJson = JSON.parse(ags.Utils.readFile(`${App.configDir}/../../.cache/ags/user/todo.json`));
+}
+else {
+    todoJson = [];
+    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/../../.cache/ags/user/todo.json`)
+        .catch(err => print(err));
+}
 
 export function addTodoItem(content) {
     todoJson.push({ content, done: false });
-    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/data/todo.json`)
+    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/../../.cache/ags/user/todo.json`)
         .catch(err => print(err));
+    // update todo widget
+    updateItemLists();
 }
 
 export function checkTodoItem(index) {
     todoJson[index].done = true;
-    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/data/todo.json`)
+    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/../../.cache/ags/user/todo.json`)
         .catch(err => print(err));
 }
 
 export function uncheckedTodoItems(index) {
     todoJson[index].done = false;
-    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/data/todo.json`)
+    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/../../.cache/ags/user/todo.json`)
         .catch(err => print(err));
 }
 
 export function removeTodoItem(index) {
     todoJson.splice(index, 1);
-    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/data/todo.json`)
+    ags.Utils.writeFile(JSON.stringify(todoJson), `${App.configDir}/../../.cache/ags/user/todo.json`)
         .catch(err => print(err));
 }
 
@@ -164,55 +181,56 @@ const CalendarWidget = () => {
 
 const defaultTodoSelected = 'undone';
 
-const TodoWidget = () => {
-    const drawTodoItems = (todoJson, isDone) => todoJson.map((task, i) => {
-        if (task.done != isDone) return null;
-        return Widget.Box({
-            className: 'spacing-h-5',
-            children: [
-                Widget.Label({
-                    className: 'txt txt-small',
-                    label: '•',
-                }),
-                Widget.Label({
-                    hexpand: true,
-                    xalign: 0,
-                    wrap: true,
-                    className: 'txt txt-small sidebar-todo-txt',
-                    label: task.content,
-                }),
-                Widget.Button({
-                    valign: 'center',
-                    className: 'txt sidebar-todo-item-action',
-                    child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { valign: 'center' }),
-                    onPrimaryClick: () => {
-                        if (isDone)
-                            uncheckedTodoItems(i);
-                        else
-                            checkTodoItem(i);
-                        updateItemLists();
-                    },
-                    setup: (button) => setupCursorHover(button),
-                }),
-                Widget.Button({
-                    valign: 'center',
-                    className: 'txt sidebar-todo-item-action',
-                    child: MaterialIcon('delete_forever', 'norm', { valign: 'center' }),
-                    onPrimaryClick: () => {
-                        removeTodoItem(i);
-                        updateItemLists();
-                    },
-                    setup: (button) => setupCursorHover(button),
-                }),
-            ]
-        });
+function updateItemLists() {
+    undoneItems.children = drawTodoItems(todoJson, false);
+    doneItems.children = drawTodoItems(todoJson, true);
+}
+const drawTodoItems = (todoJson, isDone) => todoJson.map((task, i) => {
+    if (task.done != isDone) return null;
+    return Widget.Box({
+        className: 'spacing-h-5',
+        children: [
+            Widget.Label({
+                className: 'txt txt-small',
+                label: '•',
+            }),
+            Widget.Label({
+                hexpand: true,
+                xalign: 0,
+                wrap: true,
+                className: 'txt txt-small sidebar-todo-txt',
+                label: task.content,
+            }),
+            Widget.Button({
+                valign: 'center',
+                className: 'txt sidebar-todo-item-action',
+                child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { valign: 'center' }),
+                onPrimaryClick: () => {
+                    if (isDone)
+                        uncheckedTodoItems(i);
+                    else
+                        checkTodoItem(i);
+                    updateItemLists();
+                },
+                setup: (button) => setupCursorHover(button),
+            }),
+            Widget.Button({
+                valign: 'center',
+                className: 'txt sidebar-todo-item-action',
+                child: MaterialIcon('delete_forever', 'norm', { valign: 'center' }),
+                onPrimaryClick: () => {
+                    removeTodoItem(i);
+                    updateItemLists();
+                },
+                setup: (button) => setupCursorHover(button),
+            }),
+        ]
     });
-    const undoneItems = Widget.Box({ vertical: true, children: drawTodoItems(todoJson, false) });
-    const doneItems = Widget.Box({ vertical: true, children: drawTodoItems(todoJson, true) });
-    function updateItemLists() {
-        undoneItems.children = drawTodoItems(todoJson, false);
-        doneItems.children = drawTodoItems(todoJson, true);
-    }
+});
+const undoneItems = Widget.Box({ vertical: true, children: drawTodoItems(todoJson, false) });
+const doneItems = Widget.Box({ vertical: true, children: drawTodoItems(todoJson, true) });
+
+const TodoWidget = () => {
     const itemsBox = Widget.Stack({
         transition: 'slide_left_right',
         items: [

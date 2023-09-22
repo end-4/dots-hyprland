@@ -13,6 +13,23 @@ const GoHyprWorkspaces = deflisten(
     }
 );
 
+const activeWorkspaceIndicator = Widget.Button({
+    valign: 'center',
+    halign: 'start',
+    className: 'bar-ws-active',
+    connections: [
+        [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
+            const ws = GoHyprWorkspaces.state.activeworkspace;
+            // const ws = ags.Service.Hyprland.active.workspace.id;
+            label.setStyle(`
+            margin-left: -${1.773 * (10 - ws + 1)}rem;
+            margin-right: ${1.773 * (10 - ws + 1)}rem;
+            `);
+            label.label = `${ws}`;
+        }],
+    ],
+});
+
 export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
@@ -70,22 +87,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                     }],
                                 ],
                             }),
-                            Widget.Button({
-                                valign: 'center',
-                                halign: 'start',
-                                className: 'bar-ws-active',
-                                connections: [
-                                    [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
-                                        const ws = GoHyprWorkspaces.state.activeworkspace;
-                                        // const ws = ags.Service.Hyprland.active.workspace.id;
-                                        label.setStyle(`
-                                        margin-left: -${1.773 * (10 - ws + 1)}rem;
-                                        margin-right: ${1.773 * (10 - ws + 1)}rem;
-                                        `);
-                                        label.label = `${ws}`;
-                                    }],
-                                ],
-                            }),
+                            activeWorkspaceIndicator,
                         ]
                     })
                 ]
