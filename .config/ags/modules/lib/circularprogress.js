@@ -9,6 +9,7 @@ const { execAsync, exec } = ags.Utils;
 // margin for space between widget and parent
 // background-color for trough color
 // color for progress color
+// font size for progress value (0-100px)
 // TODO: border-radius for rounded ends (unimportant)
 export const CircularProgress = new GObject.Class({
     Name: 'CircularProgressBar',
