@@ -21,24 +21,24 @@ export class MenuService extends Service {
     static opened = '';
     static toggle(menu) {
         if (MenuService.opened === menu) {
-            MenuService.opened = '';
-            console.log('closing', menu);
-            App.closeWindow(menu);
+            MenuService.close(menu);
         }
         else {
+            console.log('closing"', MenuService.opened, '"');
             if (MenuService.opened != '') {
-                console.log('closing', MenuService.opened);
-                App.closeWindow(MenuService.opened);
+                MenuService.closeButDontUpdate(MenuService.opened);
             }
-            MenuService.opened = menu;
-            console.log('opening', menu);
-            App.openWindow(menu);
+            MenuService.open(menu);
         }
-        MenuService.instance.emit('changed');
     }
     static close(menu) {
         MenuService.opened = '';
         MenuService.instance.emit('changed');
+        console.log('closing', menu);
+        App.closeWindow(menu);
+    }
+    static closeButDontUpdate(menu) {
+        MenuService.opened = '';
         console.log('closing', menu);
         App.closeWindow(menu);
     }
@@ -52,12 +52,6 @@ export class MenuService extends Service {
 
     constructor() {
         super();
-        App.instance.connect('window-toggled', (_a, name, visible) => {
-            if (!visible) {
-                MenuService.opened = '';
-                MenuService.instance.emit('changed');
-            }
-        });
     }
 }
 

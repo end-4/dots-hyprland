@@ -96,7 +96,9 @@ export const ModuleSysInfo = (props = {}) => {
                         // Set circular progress
                         ramCircle.style = `font-size: ${ramPerc}px;`
                         swapCircle.style = `font-size: ${swapPerc}px;`
-                        // cpuCircle.style = `font-size: ${cpuPerc}px;`
+
+                        // ramCircle.style = `font-size: ${Math.random()*100}px;`
+                        // swapCircle.style = `font-size: ${Math.random()*100}px;`
                         // Set text
                         ramText.label = `${ramUsed} / ${ramTotal}`;
                         swapText.label = `${swapUsed} / ${swapTotal}`;
