@@ -10,6 +10,7 @@ import { ModuleSysInfo } from "./sysinfo.js";
 import { ModuleNotificationList } from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
 import { ModuleCalendar } from "./calendar.js";
+import { ModulePowerButton } from "./powerbutton.js";
 
 const CLOSE_ANIM_TIME = 150;
 
@@ -73,7 +74,19 @@ export const SidebarRight = () => Box({
                     vexpand: true,
                     className: 'spacing-v-5',
                     children: [
-                        ModuleConnections(),
+                        Box({
+                            className: 'spacing-h-5',
+                            children: [
+                                Box({
+                                    hexpand: true,
+                                    homogeneous: true,
+                                    children: [
+                                        ModuleConnections(),
+                                    ]
+                                }),
+                                ModulePowerButton(),
+                            ]
+                        }),
                         ModuleHyprToggles(),
                         Box({
                             className: 'spacing-h-5',

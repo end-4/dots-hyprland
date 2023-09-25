@@ -305,6 +305,11 @@ export const SearchAndWindows = () => {
                     launchCustomCommand(text);
                     return;
                 }
+                // Calculate if start with number
+                else if (text[0] >= '0' && text[0] <= '9') {
+                    execAsync([`bash`, `-c`, `qalc '${text}' | rev | cut -d'=' -f1 | rev | wl-copy`]).catch(print);
+                    return;
+                }
                 // Fallback: Execute command
                 const args = text.split(' ');
                 execAsync(args).catch(print);
@@ -328,41 +333,39 @@ export const SearchAndWindows = () => {
                 let appsToAdd = MAX_RESULTS;
                 Applications.query(entry.text).forEach(app => {
                     if (appsToAdd == 0) return;
-                    resultsBox.add(Widget.Overlay({
-                        passThrough: true,
+                    resultsBox.add(Widget.Button({
+                        className: 'overview-search-result-btn',
+                        onClicked: () => {
+                            App.toggleWindow('overview');
+                            app.launch();
+                        },
                         child: Widget.Box({
-                            className: 'overview-search-result-btn',
-                        }),
-                        overlays: [
-                            Widget.Entry({
-                                className: 'overview-search-result-btn',
-                                onAccept: ({ text }) => {
-                                    // launch app with args in text
-                                    App.toggleWindow('overview');
-                                    app.launch();
-                                },
-                            }),
-                            Widget.Box({
-                                vertical: false,
-                                children: [
-                                    Widget.Icon({
-                                        className: 'overview-search-results-icon',
-                                        icon: app.iconName,
-                                        size: 35, // TODO: Make this follow font size. made for 11pt.
-                                    }),
-                                    Widget.Label({
-                                        className: 'overview-search-results-txt txt txt-norm',
-                                        label: app.name,
-                                    })
-                                ]
-                            })
-                        ]
+                            children: [
+                                Widget.Box({
+                                    vertical: false,
+                                    children: [
+                                        Widget.Icon({
+                                            className: 'overview-search-results-icon',
+                                            icon: app.iconName,
+                                            size: 35, // TODO: Make this follow font size. made for 11pt.
+                                        }),
+                                        Widget.Label({
+                                            className: 'overview-search-results-txt txt txt-norm',
+                                            label: app.name,
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
                     }));
                     appsToAdd--;
                 });
                 resultsBox.show_all();
             }
         }]],
+        setup: entry => {
+            entry.set_placeholder_text('Search apps or calculate');
+        }
     });
 
     return Widget.Box({
@@ -380,8 +383,6 @@ export const SearchAndWindows = () => {
             resultsRevealer,
         ],
         connections: [[App, (_b, name, visible) => {
-            // overviewTopRow.set_spacing(visible ? 0 : SCREEN_WIDTH * OVERVIEW_SCALE / 20);
-
             if (name !== 'overview')
                 return;
 
