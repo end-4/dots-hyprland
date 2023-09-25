@@ -29,7 +29,6 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                         className: 'bar-sidemodule', hexpand: true,
                         children: [Widget.Button({
                             className: 'bar-space-button',
-                            // onClick: () => ags.App.toggleWindow('overview'),
                             child: Widget.Box({
                                 vertical: true,
                                 children: [
