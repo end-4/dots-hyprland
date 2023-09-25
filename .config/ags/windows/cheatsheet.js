@@ -36,7 +36,7 @@ const cheatsheetHeader = () => Widget.CenterBox({
         halign: 'end',
         className: "cheatsheet-closebtn icon-material txt txt-hugeass",
         onClicked: () => {
-            App.toggleWindow('cheatsheet');
+            ags.Service.MenuService.toggle('cheatsheet');
         },
         child: Widget.Label({
             className: 'icon-material txt txt-hugeass',

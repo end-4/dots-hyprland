@@ -86,7 +86,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     valign: 'center',
     onPrimaryClickRelease: () => {
         execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
-        App.toggleWindow('overview');
+        ags.Service.MenuService.toggle('overview');
     },
     onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
     onSecondaryClick: (button) => {
@@ -165,7 +165,7 @@ const workspace = index => {
             vexpand: true,
             onPrimaryClick: () => {
                 execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
-                App.toggleWindow('overview');
+                ags.Service.MenuService.toggle('overview');
             },
             // onSecondaryClick: (eventbox) => {
             //     const menu = Widget({
@@ -235,9 +235,9 @@ const OverviewRow = ({ startWorkspace = 1, workspaces = 5, windowName = 'overvie
 
 export const SearchAndWindows = () => {
     const clickOutsideToClose = Widget.EventBox({
-        onPrimaryClick: () => App.toggleWindow('overview'),
-        onSecondaryClick: () => App.toggleWindow('overview'),
-        onMiddleClick: () => App.toggleWindow('overview'),
+        onPrimaryClick: () => ags.Service.MenuService.toggle('overview'),
+        onSecondaryClick: () => ags.Service.MenuService.toggle('overview'),
+        onMiddleClick: () => ags.Service.MenuService.toggle('overview'),
     });
     const resultsBox = Widget.Box({
         vertical: true,
@@ -296,11 +296,11 @@ export const SearchAndWindows = () => {
         onAccept: ({ text }) => {
             const list = Applications.query(text);
             if (list[0]) {
-                App.toggleWindow('overview');
+                ags.Service.MenuService.toggle('overview');;
                 list[0].launch();
             }
             else {
-                App.toggleWindow('overview');
+                ags.Service.MenuService.toggle('overview');;
                 if (text[0] == '>') { // Custom commands
                     launchCustomCommand(text);
                     return;
@@ -336,7 +336,7 @@ export const SearchAndWindows = () => {
                     resultsBox.add(Widget.Button({
                         className: 'overview-search-result-btn',
                         onClicked: () => {
-                            App.toggleWindow('overview');
+                            ags.Service.MenuService.toggle('overview');;
                             app.launch();
                         },
                         child: Widget.Box({
