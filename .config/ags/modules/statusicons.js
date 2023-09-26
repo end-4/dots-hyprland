@@ -50,8 +50,8 @@ const NetworkWifiIndicator = () => Widget.Stack({
             if (!Network.wifi)
                 return;
             const { internet, enabled, strength } = Network.wifi;
-            
-            if(internet == 'connected') {
+
+            if (internet == 'connected') {
                 stack.shown = String(Math.ceil(strength / 25));
             }
             else {
@@ -72,18 +72,15 @@ export const NetworkIndicator = () => Widget.Stack({
     }]],
 });
 
-export const StatusIcons = () => Widget.EventBox({
-    child: Widget.Box({
-        className: 'spacing-h-15',
-        children: [
-            Widget.Box({hexpand: true}),
-            BluetoothIndicator(),
-            NetworkIndicator(),
-        ]
-    })
+export const StatusIcons = (props = {}) => Widget.Box({
+    ...props,
+    children: [Widget.EventBox({
+        child: Widget.Box({
+            className: 'spacing-h-15',
+            children: [
+                BluetoothIndicator(),
+                NetworkIndicator(),
+            ]
+        })
+    })]
 });
-
-//function to convert celcius to fahrenheit
-function celsiusToFahrenheit(celsius) {
-    return (celsius * 9 / 5) + 32;
-}

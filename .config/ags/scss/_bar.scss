@@ -392,3 +392,14 @@
 .bar-space-area-rightmost>box {
     padding-right: 2.386rem;
 }
+
+.bar-systray {
+    border-radius: 9999px;
+    min-height: 1.909rem;
+    min-width: 1.909rem;
+}
+
+.bar-systray-item {
+    border-radius: 9999px;
+    min-width: 1.909rem;
+}
