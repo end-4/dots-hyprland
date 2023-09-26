@@ -5,6 +5,7 @@ const { exec, execAsync, CONFIG_DIR } = ags.Utils;
 import { ModuleNotification } from "./notification.js";
 import { StatusIcons } from "./statusicons.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
+import { Tray } from "./tray.js";
 
 export const ModuleRightSpace = () => Widget.EventBox({
     onScrollUp: () => {
@@ -28,8 +29,16 @@ export const ModuleRightSpace = () => Widget.EventBox({
                 className: 'spacing-h-5 txt',
                 children: [
                     ModuleNotification(),
-                    Widget.Box(),
-                    StatusIcons(),
+                    Widget.Box({
+                        hexpand: true,
+                        className: 'spacing-h-15 txt',
+                        children: [
+                        ],
+                        setup: box => {
+                            box.pack_end(StatusIcons(), false, false, 0);
+                            box.pack_end(Tray(), false, false, 0);
+                        }
+                    }),
                 ]
             }),
             RoundedCorner('topright', { className: 'corner-black' })

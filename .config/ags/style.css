@@ -346,7 +346,7 @@ menu > menuitem {
   border-radius: 0.545rem; }
 
 menu > menuitem:hover {
-  background: rgba(255, 255, 255, 0.1); }
+  background-color: #cfd3dc; }
 
 .bar-bg {
   background-color: rgba(253, 252, 255, 0.75);
@@ -663,6 +663,15 @@ menu > menuitem:hover {
 
 .bar-space-area-rightmost > box {
   padding-right: 2.386rem; }
+
+.bar-systray {
+  border-radius: 9999px;
+  min-height: 1.909rem;
+  min-width: 1.909rem; }
+
+.bar-systray-item {
+  border-radius: 9999px;
+  min-width: 1.909rem; }
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
