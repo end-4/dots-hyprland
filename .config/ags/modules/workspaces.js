@@ -2,8 +2,9 @@ const { App, Widget } = ags;
 const { execAsync, exec } = ags.Utils;
 import { deflisten } from '../scripts/scripts.js';
 
-const WORKSPACE_SIDE_PAD = 0.545; // rem
+const WORKSPACE_SIDE_PAD = 0.546; // rem
 const NUM_OF_WORKSPACES = 10;
+let lastWorkspace = 0;
 
 const GoHyprWorkspaces = deflisten(
     "GoHyprWorkspaces",
@@ -21,11 +22,23 @@ const activeWorkspaceIndicator = Widget.Button({
         [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
             const ws = GoHyprWorkspaces.state.activeworkspace;
             // const ws = ags.Service.Hyprland.active.workspace.id;
-            label.setStyle(`
-            margin-left: -${1.773 * (10 - ws + 1)}rem;
-            margin-right: ${1.773 * (10 - ws + 1)}rem;
-            `);
-            label.label = `${ws}`;
+            if (ws < 0) { // Special workspace (Hyprland)
+                label.setStyle(`
+                    margin-left: -${1.772 * (10 - lastWorkspace + 1)}rem;
+                    margin-right: ${1.772 * (10 - lastWorkspace + 1)}rem;
+                    margin-top: 0.341rem;
+                    margin-bottom: -0.341rem;
+                `);
+                label.label = `+`;
+            }
+            else {
+                label.setStyle(`
+                    margin-left: -${1.772 * (10 - ws + 1)}rem;
+                    margin-right: ${1.772 * (10 - ws + 1)}rem;
+                    `);
+                label.label = `${ws}`;
+                lastWorkspace = ws;
+            }
         }],
     ],
 });
@@ -42,9 +55,9 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                 passThrough: true,
                 child: Widget.Box({
                     homogeneous: true,
-                    className: 'bar-group-margin',
+                    className: 'bar-group-center',
                     children: [Widget.Box({
-                        className: 'bar-group bar-group-standalone bar-group-pad',
+                        className: 'bar-group-standalone bar-group-pad',
                     })]
                 }),
                 overlays: [

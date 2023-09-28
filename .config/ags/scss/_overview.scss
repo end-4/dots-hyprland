@@ -13,15 +13,30 @@
         background-color: $secondary;
         color: $onSecondary;
     }
-    caret-color: $onSecondaryContainer;
+    caret-color: transparent;
 }
 
 .overview-search-box-extended {
     min-width: 25.909rem;
+    caret-color: $onSecondaryContainer;
 }
 
 .overview-search-prompt {
     color: $subtext;
+}
+
+.overview-search-icon {
+    margin: 0rem 1.023rem;
+}
+
+.overview-search-prompt-box {
+    margin-left: -17.045rem;
+    margin-right: $elevation2_margin + 1px;
+}
+
+.overview-search-icon-box {
+    margin-left: -17.045rem;
+    margin-right: $elevation2_margin + 1px;
 }
 
 .overview-search-results {

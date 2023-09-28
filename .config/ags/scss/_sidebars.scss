@@ -134,23 +134,23 @@
 }
 
 .sidebar-memory-ram-circprog {
+    @include fluent_decel_long;
     min-width: $rounding_small;
     min-height: 4.091rem;
     padding: 0.409rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
-    @include fluent_decel_long;
     font-size: 0px;
 }
 
 .sidebar-memory-swap-circprog {
+    @include fluent_decel_long;
     min-width: $rounding_small;
     min-height: 2.255rem;
     padding: 0.409rem;
     margin: 0.918rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
-    @include fluent_decel_long;
     font-size: 0px;
 }
 
