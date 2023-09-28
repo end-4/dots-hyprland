@@ -62,17 +62,21 @@ $rounding_large: 1.705rem;
     margin: 7px;
 }
 
+$elevation2_margin: 7px;
 @mixin elevation2 {
-    // background: $surface;
-    // color: $onSurface;
     box-shadow: 0px 2px 3px transparentize($shadow, 0.55);
-    margin: 7px;
+    margin: $elevation2_margin;
+}
+
+@mixin elevation2-margin {
+    margin: $elevation2_margin;
+}
+
+@mixin elevation2-padding {
+    padding: $elevation2_margin;
 }
 
 @mixin elevation3 {
-    // background: $surfaceVariant;
-    // color: $onSurfaceVariant;
-    // box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
     box-shadow: 0px 2px 5px $shadow;
     margin: 7px;
 }
@@ -499,6 +503,10 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     border-radius: $rounding_large; // normal-rounding + 10px
 }
 
+@mixin full-rounding {
+    border-radius: 9999px;
+}
+
 @mixin elevation-border-softer {
     border-top: 1px solid mix($t_t_surface, $t_onSurface, 80%);
     border-left: 1px solid mix($t_t_surface, $t_onSurface, 80%);
@@ -595,6 +603,16 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-bottom: 0rem;
 }
 
+.spacing-h--20>box {
+    margin-left: -1.364rem;
+}
+.spacing-h--20>box:first-child {
+    margin-left: 0rem;
+}
+
 *:focus {
     // border: 2px solid $onSurface;
 }
+
+$white: white;
+$black: black;

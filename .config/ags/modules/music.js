@@ -4,18 +4,19 @@ const { execAsync, exec } = ags.Utils;
 import { CircularProgress } from "./lib/circularprogress.js";
 
 const TrackProgress = () => {
-    const updateProgress = (circprog) => {
+    const _updateProgress = (circprog) => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
-        circprog.setProgress(mpris.position / mpris.length);
+        // Set circular progress (font size cuz hack for anims)
+        circprog.style = `font-size: ${mpris.position / mpris.length * 100}px;`
     }
     return Widget({
         type: CircularProgress,
         className: 'bar-music-circprog',
         valign: 'center',
         connections: [ // Update on change/once every 3 seconds
-            [Mpris, updateProgress],
-            [3000, updateProgress]
+            [Mpris, _updateProgress],
+            [3000, _updateProgress]
         ]
     });
 }

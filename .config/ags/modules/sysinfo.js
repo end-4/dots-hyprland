@@ -93,7 +93,7 @@ export const ModuleSysInfo = (props = {}) => {
                         const [swapTotal, swapUsed] = swapString.split(/\s+/).slice(1, 3);
                         const swapPerc = Number(exec(`bash -c "printf '%.1f' \\\"$(free -m | rg Swap | awk '{print ($3/$2)*100}')\\\""`));
                         // const cpuPerc = parseFloat(exec(`bash -c "top -bn1 | grep 'Cpu(s)' | awk '{print $2 + $4}'"`));
-                        // Set circular progress
+                        // Set circular progress (font size cuz hack for anims)
                         ramCircle.style = `font-size: ${ramPerc}px;`
                         swapCircle.style = `font-size: ${swapPerc}px;`
 

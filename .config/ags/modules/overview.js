@@ -4,6 +4,7 @@ const { Applications, Hyprland } = ags.Service;
 const { execAsync, exec } = ags.Utils;
 import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
+import { MaterialIcon } from './lib/materialicon.js';
 
 const SCREEN_WIDTH = 1920;
 const SCREEN_HEIGHT = 1080;
@@ -280,14 +281,36 @@ export const SearchAndWindows = () => {
             ]
         }),
     });
-    const entryPrompt = Widget.Revealer({
+    const entryPromptRevealer = Widget.Revealer({
         transition: 'crossfade',
         transitionDuration: 150,
         revealChild: true,
+        halign: 'center',
         child: Widget.Label({
             className: 'overview-search-prompt',
             label: 'Search apps or calculate',
         })
+    });
+
+    const entryPrompt = Widget.Box({
+        className: 'overview-search-icon-box',
+        setup: box => box.pack_start(entryPromptRevealer, true, true, 0),
+    });
+
+    const entryIconRevealer = Widget.Revealer({
+        transition: 'crossfade',
+        transitionDuration: 150,
+        revealChild: false,
+        halign: 'end',
+        child: Widget.Label({
+            className: 'txt txt-large icon-material overview-search-icon',
+            label: 'search',
+        }),
+    });
+
+    const entryIcon = Widget.Box({
+        className: 'overview-search-prompt-box',
+        setup: box => box.pack_start(entryIconRevealer, true, true, 0),
     });
 
     const entry = Widget.Entry({
@@ -316,82 +339,97 @@ export const SearchAndWindows = () => {
             }
         },
         // Actually onChange but this is ta workaround for a bug
-        connections: [['notify::text', (entry) => {
-            resultsBox.get_children().forEach(ch => ch.destroy());
-            //check empty if so then dont do stuff
-            if (entry.text == '') {
-                resultsRevealer.set_reveal_child(false);
-                overviewRevealer.set_reveal_child(true);
-                entryPrompt.set_reveal_child(true);
-                entry.toggleClassName('overview-search-box-extended', false);
-            }
-            else {
-                resultsRevealer.set_reveal_child(true);
-                overviewRevealer.set_reveal_child(false);
-                entryPrompt.set_reveal_child(false);
-                entry.toggleClassName('overview-search-box-extended', true);
-                let appsToAdd = MAX_RESULTS;
-                Applications.query(entry.text).forEach(app => {
-                    if (appsToAdd == 0) return;
-                    resultsBox.add(Widget.Button({
-                        className: 'overview-search-result-btn',
-                        onClicked: () => {
-                            ags.Service.MenuService.toggle('overview');;
-                            app.launch();
-                        },
-                        child: Widget.Box({
-                            children: [
-                                Widget.Box({
-                                    vertical: false,
-                                    children: [
-                                        Widget.Icon({
-                                            className: 'overview-search-results-icon',
-                                            icon: app.iconName,
-                                            size: 35, // TODO: Make this follow font size. made for 11pt.
-                                        }),
-                                        Widget.Label({
-                                            className: 'overview-search-results-txt txt txt-norm',
-                                            label: app.name,
-                                        })
-                                    ]
-                                })
-                            ]
-                        })
-                    }));
-                    appsToAdd--;
-                });
-                resultsBox.show_all();
-            }
-        }]],
-        setup: entry => {
-            entry.set_placeholder_text('Search apps or calculate');
-        }
+        connections: [
+            ['notify::text', (entry) => {
+                resultsBox.get_children().forEach(ch => ch.destroy());
+                //check empty if so then dont do stuff
+                if (entry.text == '') {
+                    resultsRevealer.set_reveal_child(false);
+                    overviewRevealer.set_reveal_child(true);
+                    entryPromptRevealer.set_reveal_child(true);
+                    entryIconRevealer.set_reveal_child(false);
+                    entry.toggleClassName('overview-search-box-extended', false);
+                }
+                else {
+                    resultsRevealer.set_reveal_child(true);
+                    overviewRevealer.set_reveal_child(false);
+                    entryPromptRevealer.set_reveal_child(false);
+                    entryIconRevealer.set_reveal_child(true);
+                    entry.toggleClassName('overview-search-box-extended', true);
+                    let appsToAdd = MAX_RESULTS;
+                    Applications.query(entry.text).forEach(app => {
+                        if (appsToAdd == 0) return;
+                        resultsBox.add(Widget.Button({
+                            className: 'overview-search-result-btn',
+                            onClicked: () => {
+                                ags.Service.MenuService.toggle('overview');;
+                                app.launch();
+                            },
+                            child: Widget.Box({
+                                children: [
+                                    Widget.Box({
+                                        vertical: false,
+                                        children: [
+                                            Widget.Icon({
+                                                className: 'overview-search-results-icon',
+                                                icon: app.iconName,
+                                                size: 35, // TODO: Make this follow font size. made for 11pt.
+                                            }),
+                                            Widget.Label({
+                                                className: 'overview-search-results-txt txt txt-norm',
+                                                label: app.name,
+                                            })
+                                        ]
+                                    })
+                                ]
+                            })
+                        }));
+                        appsToAdd--;
+                    });
+                    resultsBox.show_all();
+                }
+            }]
+        ],
+        // setup: entry => {
+        //     entry.set_placeholder_text('Search apps or calculate');
+        // }
     });
 
     return Widget.Box({
         vertical: true,
         children: [
             clickOutsideToClose,
-            entry,
-            // Widget.Overlay({
-            //     child: entry,
-            //     overlays: [
-            //         entryPrompt,
-            //     ]
-            // }),
+            Widget.Box({
+                halign: 'center',
+                children: [
+                    entry,
+                    entryPrompt,
+                    entryIcon,
+                ]
+            }),
             overviewRevealer,
             resultsRevealer,
         ],
-        connections: [[App, (_b, name, visible) => {
-            if (name !== 'overview')
-                return;
+        connections: [
+            [App, (_b, name, visible) => {
+                if (name !== 'overview')
+                    return;
 
-            if (visible)
-                entry.grab_focus();
-            else {
-                resultsBox.children = [];
-                entry.set_text('');
-            }
-        }],],
+                if (visible);
+                // entry.grab_focus();
+                else {
+                    resultsBox.children = [];
+                    entry.set_text('');
+                }
+            }],
+            ['key-press-event', (widget, event) => {
+                console.log(event);
+                if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
+                    entry.grab_focus();
+                    entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
+                    entry.set_position(-1);
+                }
+            }]
+        ],
     });
 };
