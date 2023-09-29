@@ -4,24 +4,24 @@
 // Init
 $black: black;
 $white: white;
-$darkSecondaryContainer: $secondaryContainer;
-$darkOnSecondaryContainer: $onSecondaryContainer;
-$darkPrimary: $primary;
-$darkOnPrimary: $onPrimary;
+$notchSecondaryContainer: $secondaryContainer;
+$notchOnSecondaryContainer: $onSecondaryContainer;
+$notchPrimary: $primary;
+$notchOnPrimary: $onPrimary;
 
 // Check dark mode. Set colors accordingly for the fake snotch that's always black
 @if $darkmode ==true {
-    $darkSecondaryContainer: $secondaryContainer;
-    $darkOnSecondaryContainer: $onSecondaryContainer;
-    $darkPrimary: $primary;
-    $darkOnPrimary: $onPrimary;
+    $notchSecondaryContainer: $secondaryContainer;
+    $notchOnSecondaryContainer: $onSecondaryContainer;
+    $notchPrimary: $primary;
+    $notchOnPrimary: $onPrimary;
 }
 
 @else {
-    $darkSecondaryContainer: $onSecondaryContainer;
-    $darkOnSecondaryContainer: $secondaryContainer;
-    $darkPrimary: $primaryContainer;
-    $darkOnPrimary: $onPrimaryContainer;
+    $notchSecondaryContainer: $onSecondaryContainer;
+    $notchOnSecondaryContainer: $secondaryContainer;
+    $notchPrimary: $primaryContainer;
+    $notchOnPrimary: $onPrimaryContainer;
 }
 
 .bar-bg {
@@ -152,8 +152,8 @@ $darkOnPrimary: $onPrimary;
     border: 0.068rem solid;
     border-color: transparent;
 
-    background-color: $darkPrimary;
-    color: $darkOnPrimary;
+    background-color: $notchPrimary;
+    color: $notchOnPrimary;
     border-radius: 999px;
     transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);
     // transition: 0ms;
@@ -165,45 +165,45 @@ $darkOnPrimary: $onPrimary;
 }
 
 .bar-ws-occupied {
-    background-color: $darkSecondaryContainer;
-    color: $darkOnSecondaryContainer;
+    background-color: $notchSecondaryContainer;
+    color: $notchOnSecondaryContainer;
     min-width: 1.772rem;
-    border-top: 0.068rem solid $darkOnSecondaryContainer;
-    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
+    border-top: 0.068rem solid $notchOnSecondaryContainer;
+    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
 }
 
 .bar-ws-occupied-left {
-    background-color: $darkSecondaryContainer;
-    color: $darkOnSecondaryContainer;
+    background-color: $notchSecondaryContainer;
+    color: $notchOnSecondaryContainer;
     min-width: 1.704rem;
     border-top-left-radius: 999px;
     border-bottom-left-radius: 999px;
 
-    border-left: 0.068rem solid $darkOnSecondaryContainer;
-    border-top: 0.068rem solid $darkOnSecondaryContainer;
-    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
+    border-left: 0.068rem solid $notchOnSecondaryContainer;
+    border-top: 0.068rem solid $notchOnSecondaryContainer;
+    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
     border-right: 0px solid transparent;
 }
 
 .bar-ws-occupied-right {
-    background-color: $darkSecondaryContainer;
-    color: $darkOnSecondaryContainer;
+    background-color: $notchSecondaryContainer;
+    color: $notchOnSecondaryContainer;
     min-width: 1.704rem;
     border-top-right-radius: 999px;
     border-bottom-right-radius: 999px;
 
-    border-right: 0.068rem solid $darkOnSecondaryContainer;
-    border-top: 0.068rem solid $darkOnSecondaryContainer;
-    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
+    border-right: 0.068rem solid $notchOnSecondaryContainer;
+    border-top: 0.068rem solid $notchOnSecondaryContainer;
+    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
     border-left: 0px solid transparent;
 }
 
 .bar-ws-occupied-left-right {
-    background-color: $darkSecondaryContainer;
-    color: $darkOnSecondaryContainer;
+    background-color: $notchSecondaryContainer;
+    color: $notchOnSecondaryContainer;
     min-width: 1.636rem;
     border-radius: 9999px;
-    border: 0.068rem solid $darkOnSecondaryContainer;
+    border: 0.068rem solid $notchOnSecondaryContainer;
 }
 
 .bar-ws-empty {
