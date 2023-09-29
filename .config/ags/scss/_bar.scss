@@ -1,6 +1,29 @@
 // Made to be pixel-perfect with 11pt font size
 // 1rem = 11pt = 14.6666666667px
 
+// Init
+$black: black;
+$white: white;
+$darkSecondaryContainer: $secondaryContainer;
+$darkOnSecondaryContainer: $onSecondaryContainer;
+$darkPrimary: $primary;
+$darkOnPrimary: $onPrimary;
+
+// Check dark mode. Set colors accordingly for the fake snotch that's always black
+@if $darkmode ==true {
+    $darkSecondaryContainer: $secondaryContainer;
+    $darkOnSecondaryContainer: $onSecondaryContainer;
+    $darkPrimary: $primary;
+    $darkOnPrimary: $onPrimary;
+}
+
+@else {
+    $darkSecondaryContainer: $onSecondaryContainer;
+    $darkOnSecondaryContainer: $secondaryContainer;
+    $darkPrimary: $primaryContainer;
+    $darkOnPrimary: $onPrimaryContainer;
+}
+
 .bar-bg {
     background-color: $t_background;
     min-height: 2.727rem;
@@ -28,14 +51,14 @@
     border-bottom-right-radius: 1.364rem;
     padding: 0.2rem;
     // background-color: $t_surface;
-    background-color: black; // Hard code: fake notch
+    background-color: $black; // Hard code: fake notch
 }
 
 .corner-bar-group {
     border-radius: 1.364rem; // Half of bar height
     border-width: 0.068rem;
     // background-color: $t_surface;
-    background-color: black; // Hard code: fake notch
+    background-color: $black; // Hard code: fake notch
 }
 
 .bar-group-pad {
@@ -118,7 +141,7 @@
     border-top: 0.068rem solid;
     border-bottom: 0.068rem solid;
     border-color: transparent;
-    color: white;
+    color: $white;
 }
 
 .bar-ws-active {
@@ -129,8 +152,8 @@
     border: 0.068rem solid;
     border-color: transparent;
 
-    background-color: $primary;
-    color: $onPrimary;
+    background-color: $darkPrimary;
+    color: $darkOnPrimary;
     border-radius: 999px;
     transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);
     // transition: 0ms;
@@ -142,45 +165,45 @@
 }
 
 .bar-ws-occupied {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $darkSecondaryContainer;
+    color: $darkOnSecondaryContainer;
     min-width: 1.772rem;
-    border-top: 0.068rem solid $onSecondaryContainer;
-    border-bottom: 0.068rem solid $onSecondaryContainer;
+    border-top: 0.068rem solid $darkOnSecondaryContainer;
+    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
 }
 
 .bar-ws-occupied-left {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $darkSecondaryContainer;
+    color: $darkOnSecondaryContainer;
     min-width: 1.704rem;
     border-top-left-radius: 999px;
     border-bottom-left-radius: 999px;
 
-    border-left: 0.068rem solid $onSecondaryContainer;
-    border-top: 0.068rem solid $onSecondaryContainer;
-    border-bottom: 0.068rem solid $onSecondaryContainer;
+    border-left: 0.068rem solid $darkOnSecondaryContainer;
+    border-top: 0.068rem solid $darkOnSecondaryContainer;
+    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
     border-right: 0px solid transparent;
 }
 
 .bar-ws-occupied-right {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $darkSecondaryContainer;
+    color: $darkOnSecondaryContainer;
     min-width: 1.704rem;
     border-top-right-radius: 999px;
     border-bottom-right-radius: 999px;
 
-    border-right: 0.068rem solid $onSecondaryContainer;
-    border-top: 0.068rem solid $onSecondaryContainer;
-    border-bottom: 0.068rem solid $onSecondaryContainer;
+    border-right: 0.068rem solid $darkOnSecondaryContainer;
+    border-top: 0.068rem solid $darkOnSecondaryContainer;
+    border-bottom: 0.068rem solid $darkOnSecondaryContainer;
     border-left: 0px solid transparent;
 }
 
 .bar-ws-occupied-left-right {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $darkSecondaryContainer;
+    color: $darkOnSecondaryContainer;
     min-width: 1.636rem;
     border-radius: 9999px;
-    border: 0.068rem solid $onSecondaryContainer;
+    border: 0.068rem solid $darkOnSecondaryContainer;
 }
 
 .bar-ws-empty {
@@ -378,7 +401,7 @@
 }
 
 .corner-black {
-    background-color: black; // Hard code because fake screen corner
+    background-color: $black; // Hard code because fake screen corner
     // border-radius: 21px; //Hard code because Hyprland rounding is in px
     @include large-rounding;
     border-width: 20px;
