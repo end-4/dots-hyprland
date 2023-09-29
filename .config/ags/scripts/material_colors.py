@@ -26,8 +26,10 @@ else:
 colorscheme=0
 if("-l" in sys.argv):
     colorscheme = newtheme.get('schemes').get('light')
+    print('$darkmode: false;')
 else:
     colorscheme = newtheme.get('schemes').get('dark')
+    print('$darkmode: true;')
 
 primary = colorscheme.get_primary()
 onPrimary = colorscheme.get_onPrimary()
