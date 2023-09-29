@@ -8,7 +8,7 @@ import { MaterialIcon } from './lib/materialicon.js';
 
 const SCREEN_WIDTH = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1 | head -1"`));
 const SCREEN_HEIGHT = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1"`));
-const MAX_RESULTS = 15;
+const MAX_RESULTS = 10;
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
@@ -29,6 +29,14 @@ function launchCustomCommand(command) {
     else if (args[0] == '>todo') { // Todo
         addTodoItem(args.slice(1).join(' '));
     }
+}
+
+function startsWithNumber(str) {
+    // Create a regular expression pattern to match a number at the beginning of the string
+    var pattern = /^\d/;
+
+    // Use the test() method of the pattern to check if the string matches the pattern
+    return pattern.test(str);
 }
 
 function substitute(str) {
@@ -235,12 +243,15 @@ const OverviewRow = ({ startWorkspace = 1, workspaces = 5, windowName = 'overvie
 
 
 export const SearchAndWindows = () => {
+    var _appSearchResults = [];
+
     const clickOutsideToClose = Widget.EventBox({
         onPrimaryClick: () => ags.Service.MenuService.toggle('overview'),
         onSecondaryClick: () => ags.Service.MenuService.toggle('overview'),
         onMiddleClick: () => ags.Service.MenuService.toggle('overview'),
     });
     const resultsBox = Widget.Box({
+        className: 'spacing-v-15 overview-search-results',
         vertical: true,
         vexpand: true,
     });
@@ -250,15 +261,7 @@ export const SearchAndWindows = () => {
         transition: 'slide_down',
         // duration: 200,
         halign: 'center',
-        child: Widget.Box({
-            className: 'spacing-v-15 overview-search-results',
-            children: [
-                Widget.Scrollable({
-                    hexpand: true,
-                    child: resultsBox,
-                })
-            ]
-        })
+        child: resultsBox,
     });
     const overviewTopRow = OverviewRow({
         startWorkspace: 1,
@@ -316,31 +319,25 @@ export const SearchAndWindows = () => {
     const entry = Widget.Entry({
         className: 'overview-search-box txt-small txt',
         halign: 'center',
-        onAccept: ({ text }) => {
-            const list = Applications.query(text);
-            if (list[0]) {
-                ags.Service.MenuService.toggle('overview');;
-                list[0].launch();
+        onAccept: ({ text }) => { // This is when you press Enter
+            ags.Service.MenuService.toggle('overview');;
+            if (_appSearchResults.length > 0) {
+                _appSearchResults[0].launch();
+                return;
             }
             else {
-                ags.Service.MenuService.toggle('overview');;
                 if (text[0] == '>') { // Custom commands
                     launchCustomCommand(text);
                     return;
                 }
-                // Calculate if start with number
-                else if (text[0] >= '0' && text[0] <= '9') {
-                    execAsync([`bash`, `-c`, `qalc '${text}' | rev | cut -d'=' -f1 | rev | wl-copy`]).catch(print);
-                    return;
-                }
-                // Fallback: Execute command
-                const args = text.split(' ');
-                execAsync(args).catch(print);
             }
+            // Fallback: Execute command
+            const args = text.split(' ');
+            execAsync(args).catch(print);
         },
         // Actually onChange but this is ta workaround for a bug
         connections: [
-            ['notify::text', (entry) => {
+            ['notify::text', (entry) => { // This is when you type
                 resultsBox.get_children().forEach(ch => ch.destroy());
                 //check empty if so then dont do stuff
                 if (entry.text == '') {
@@ -351,13 +348,48 @@ export const SearchAndWindows = () => {
                     entry.toggleClassName('overview-search-box-extended', false);
                 }
                 else {
+                    const text = entry.text;
                     resultsRevealer.set_reveal_child(true);
                     overviewRevealer.set_reveal_child(false);
                     entryPromptRevealer.set_reveal_child(false);
                     entryIconRevealer.set_reveal_child(true);
                     entry.toggleClassName('overview-search-box-extended', true);
+                    _appSearchResults = Applications.query(text);
+
+                    // Calculate if start with number
+                    if (startsWithNumber(text)) {
+                        const fullResult = eval(text);
+                        console.log(fullResult);
+                        resultsBox.add(Widget.Button({
+                            className: 'overview-search-result-btn',
+                            onClicked: () => {
+                                ags.Service.MenuService.toggle('overview');
+                                const args = text.split(' ');
+                                execAsync(calculate).catch(print);
+                            },
+                            child: Widget.Box({
+                                children: [
+                                    Widget.Box({
+                                        vertical: false,
+                                        children: [
+                                            Widget.Label({
+                                                className: `icon-material overview-search-results-icon`,
+                                                label: 'calculate',
+                                            }),
+                                            Widget.Label({
+                                                className: 'overview-search-results-txt txt txt-norm',
+                                                label: `${entry.text} = ${fullResult}`,
+                                            })
+                                        ]
+                                    })
+                                ]
+                            })
+                        }));
+                    }
+
+                    // Add application entries
                     let appsToAdd = MAX_RESULTS;
-                    Applications.query(entry.text).forEach(app => {
+                    _appSearchResults.forEach(app => {
                         if (appsToAdd == 0) return;
                         resultsBox.add(Widget.Button({
                             className: 'overview-search-result-btn',
@@ -386,6 +418,59 @@ export const SearchAndWindows = () => {
                         }));
                         appsToAdd--;
                     });
+
+                    // Add fallback: run command
+                    resultsBox.add(Widget.Button({
+                        className: 'overview-search-result-btn',
+                        onClicked: () => {
+                            ags.Service.MenuService.toggle('overview');
+                            const args = text.split(' ');
+                            execAsync(args).catch(print);
+                        },
+                        child: Widget.Box({
+                            children: [
+                                Widget.Box({
+                                    vertical: false,
+                                    children: [
+                                        Widget.Label({
+                                            className: `icon-material overview-search-results-icon`,
+                                            label: 'settings_b_roll',
+                                        }),
+                                        Widget.Label({
+                                            className: 'overview-search-results-txt txt txt-norm',
+                                            label: `Run command: ${entry.text}`,
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
+                    }));
+
+                    // Add fallback: search
+                    resultsBox.add(Widget.Button({
+                        className: 'overview-search-result-btn',
+                        onClicked: () => {
+                            ags.Service.MenuService.toggle('overview');
+                            execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
+                        },
+                        child: Widget.Box({
+                            children: [
+                                Widget.Box({
+                                    vertical: false,
+                                    children: [
+                                        Widget.Label({
+                                            className: `icon-material overview-search-results-icon`,
+                                            label: 'travel_explore',
+                                        }),
+                                        Widget.Label({
+                                            className: 'overview-search-results-txt txt txt-norm',
+                                            label: `Search "${entry.text}" on Google`,
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
+                    }));
                     resultsBox.show_all();
                 }
             }]
@@ -423,7 +508,6 @@ export const SearchAndWindows = () => {
                 }
             }],
             ['key-press-event', (widget, event) => {
-                console.log(event);
                 if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
                     entry.grab_focus();
                     entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));

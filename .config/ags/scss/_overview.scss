@@ -41,7 +41,7 @@
 
 .overview-search-results {
     // min-height: 2.813rem;
-    min-height: 37.5rem;
+    // min-height: 37.5rem;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
@@ -53,6 +53,7 @@
 
 .overview-search-results-icon {
     margin: 0rem 0.682rem;
+    font-size: 2.386rem;
 }
 .overview-search-results-txt {
     margin-right: 0.682rem;
