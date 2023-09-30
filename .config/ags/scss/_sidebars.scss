@@ -300,16 +300,6 @@
     color: mix($onSurface, $surface, 50%);
 }
 
-// cool gradient background for music controls
-// .main-window {
-//     background: linear-gradient(127deg, alpha(@background_color_0, .55), alpha(@background_color_0, 0) 70.71%),
-//         linear-gradient(217deg, alpha(@background_color_1, .55), alpha(@background_color_1, 0) 70.71%),
-//         linear-gradient(336deg, alpha(@background_color_2, .55), alpha(@background_color_2, 0) 70.71%);
-//     transition-property: background;
-//     transition-duration: 250ms;
-//     transition-timing-function: ease;
-// }
-
 .sidebar-calendar-header {
     margin: 0.341rem;
 }

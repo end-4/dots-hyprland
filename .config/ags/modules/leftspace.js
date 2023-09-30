@@ -4,6 +4,42 @@ import { deflisten } from '../scripts/scripts.js';
 import { setupCursorHover } from "./lib/cursorhover.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
 
+// Removes everything after the last 
+// em dash, en dash, minus, vertical bar, or middle dot    (note: maybe add open parenthesis?)
+// For example:
+// • Discord | #ricing-theming | r/unixporn — Mozilla Firefox    -->   • Discord | #ricing-theming 
+// GJS Error · Issue #112 · Aylur/ags — Mozilla Firefox          -->   GJS Error · Issue #112 
+function truncateTitle(str) {
+    console.log('original string: ', str);
+    let lastDash = -1;
+    let found = -1; // 0: em dash, 1: en dash, 2: minus, 3: vertical bar, 4: middle dot
+    for (let i = str.length - 1; i >= 0; i--) {
+        if (str[i] === '—') {
+            found = 0;
+            lastDash = i;
+        }
+        else if (str[i] === '–' && found < 1) {
+            found = 1;
+            lastDash = i;
+        }
+        else if (str[i] === '-' && found < 2) {
+            found = 2;
+            lastDash = i;
+        }
+        else if (str[i] === '|' && found < 3) {
+            found = 3;
+            lastDash = i;
+        }
+        else if (str[i] === '·' && found < 4) {
+            found = 4;
+            lastDash = i;
+        }
+    }
+    console.log('new string:', str.substring(0, lastDash));
+    if (lastDash === -1) return str;
+    return str.substring(0, lastDash);
+}
+
 const HyprlandActiveWindow = deflisten(
     "HyprlandActiveWindow",
     `${App.configDir}/scripts/activewin.sh`,
@@ -56,7 +92,7 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                                             return;
                                                         const winJson = JSON.parse(HyprlandActiveWindow.state);
                                                         // console.log(ags.Service.Hyprland.active.workspace.id);
-                                                        label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace.id}` : winJson['title'];
+                                                        label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace.id}` : truncateTitle(winJson['title']);
                                                     }]],
                                                 })
                                             ]

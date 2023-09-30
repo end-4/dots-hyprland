@@ -10,7 +10,7 @@ $notchPrimary: $primary;
 $notchOnPrimary: $onPrimary;
 
 // Check dark mode. Set colors accordingly for the fake snotch that's always black
-@if $darkmode ==true {
+@if $darkmode == true {
     $notchSecondaryContainer: $secondaryContainer;
     $notchOnSecondaryContainer: $onSecondaryContainer;
     $notchPrimary: $primary;
