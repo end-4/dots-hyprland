@@ -13,6 +13,7 @@ const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 function launchCustomCommand(command) {
+    ags.Service.MenuService.close('overview');
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
         execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`]).catch(print);
@@ -31,11 +32,17 @@ function launchCustomCommand(command) {
     }
 }
 
-function startsWithNumber(str) {
-    // Create a regular expression pattern to match a number at the beginning of the string
-    var pattern = /^\d/;
+function execAndClose(command, terminal) {
+    ags.Service.MenuService.close('overview');
+    if (terminal) {
+        execAsync([`bash`, `-c`, `foot fish -C "${command}"`]).catch(print);
+    }
+    else
+        execAsync(command).catch(print);
+}
 
-    // Use the test() method of the pattern to check if the string matches the pattern
+function startsWithNumber(str) {
+    var pattern = /^\d/;
     return pattern.test(str);
 }
 
@@ -63,6 +70,58 @@ function destroyContextMenu(menu) {
         menu = null;
     }
 }
+
+const ExecuteCommandButton = ({ command, terminal = false }) => Widget.Button({
+    className: 'overview-search-result-btn',
+    onClicked: () => execAndClose(command, terminal),
+    child: Widget.Box({
+        children: [
+            Widget.Box({
+                vertical: false,
+                children: [
+                    Widget.Label({
+                        className: `icon-material overview-search-results-icon`,
+                        label: `${terminal ? 'terminal' : 'settings_b_roll'}`,
+                    }),
+                    // Widget.Label({
+                    //     className: 'overview-search-results-txt txt txt-norm',
+                    //     label: `Execute${terminal ? ' in terminal' : ''}`,
+                    // }),
+                    Widget.Label({
+                        className: 'overview-search-results-txt-cmd',
+                        label: `${command}`,
+                    })
+                ]
+            })
+        ]
+    })
+})
+
+const CalculationResultButton = ({ result, text }) => Widget.Button({
+    className: 'overview-search-result-btn',
+    onClicked: () => {
+        ags.Service.MenuService.toggle('overview');
+        console.log(result);
+        execAsync('bash', '-c', `wl-copy '${result}'`).catch(print);
+    },
+    child: Widget.Box({
+        children: [
+            Widget.Box({
+                vertical: false,
+                children: [
+                    Widget.Label({
+                        className: `icon-material overview-search-results-icon`,
+                        label: 'calculate',
+                    }),
+                    Widget.Label({
+                        className: 'overview-search-results-txt txt txt-norm',
+                        label: `= ${result}`,
+                    })
+                ]
+            })
+        ]
+    })
+})
 
 const ContextMenuItem = ({ label, onClick }) => Widget({
     type: Gtk.MenuItem,
@@ -320,8 +379,8 @@ export const SearchAndWindows = () => {
         className: 'overview-search-box txt-small txt',
         halign: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
-            ags.Service.MenuService.toggle('overview');;
             if (_appSearchResults.length > 0) {
+                ags.Service.MenuService.close('overview');
                 _appSearchResults[0].launch();
                 return;
             }
@@ -332,8 +391,12 @@ export const SearchAndWindows = () => {
                 }
             }
             // Fallback: Execute command
-            const args = text.split(' ');
-            execAsync(args).catch(print);
+            if (text.startsWith('sudo')) {
+                execAndClose(text, true);
+            }
+            else {
+                execAndClose(text, false);
+            }
         },
         // Actually onChange but this is ta workaround for a bug
         connections: [
@@ -358,33 +421,12 @@ export const SearchAndWindows = () => {
 
                     // Calculate if start with number
                     if (startsWithNumber(text)) {
-                        const fullResult = eval(text);
-                        console.log(fullResult);
-                        resultsBox.add(Widget.Button({
-                            className: 'overview-search-result-btn',
-                            onClicked: () => {
-                                ags.Service.MenuService.toggle('overview');
-                                const args = text.split(' ');
-                                execAsync(calculate).catch(print);
-                            },
-                            child: Widget.Box({
-                                children: [
-                                    Widget.Box({
-                                        vertical: false,
-                                        children: [
-                                            Widget.Label({
-                                                className: `icon-material overview-search-results-icon`,
-                                                label: 'calculate',
-                                            }),
-                                            Widget.Label({
-                                                className: 'overview-search-results-txt txt txt-norm',
-                                                label: `${entry.text} = ${fullResult}`,
-                                            })
-                                        ]
-                                    })
-                                ]
-                            })
-                        }));
+                        try {
+                            const fullResult = eval(text);
+                            resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
+                        } catch (e) {
+                            // console.log(e);
+                        }
                     }
 
                     // Add application entries
@@ -419,32 +461,8 @@ export const SearchAndWindows = () => {
                         appsToAdd--;
                     });
 
-                    // Add fallback: run command
-                    resultsBox.add(Widget.Button({
-                        className: 'overview-search-result-btn',
-                        onClicked: () => {
-                            ags.Service.MenuService.toggle('overview');
-                            const args = text.split(' ');
-                            execAsync(args).catch(print);
-                        },
-                        child: Widget.Box({
-                            children: [
-                                Widget.Box({
-                                    vertical: false,
-                                    children: [
-                                        Widget.Label({
-                                            className: `icon-material overview-search-results-icon`,
-                                            label: 'settings_b_roll',
-                                        }),
-                                        Widget.Label({
-                                            className: 'overview-search-results-txt txt txt-norm',
-                                            label: `Run command: ${entry.text}`,
-                                        })
-                                    ]
-                                })
-                            ]
-                        })
-                    }));
+                    // Fallbacks
+                    resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
 
                     // Add fallback: search
                     resultsBox.add(Widget.Button({
@@ -464,7 +482,7 @@ export const SearchAndWindows = () => {
                                         }),
                                         Widget.Label({
                                             className: 'overview-search-results-txt txt txt-norm',
-                                            label: `Search "${entry.text}" on Google`,
+                                            label: `Google "${entry.text}"`,
                                         })
                                     ]
                                 })

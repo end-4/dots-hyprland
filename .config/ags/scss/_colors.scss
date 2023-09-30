@@ -4,6 +4,13 @@ $transparentize_surface_amount_less: 0.6;
 $transparentize_surface_amount_less_less: 0.4;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
+@if $darkmode == true { // Less transparency
+    $transparentize_amount: 0.15;
+    $transparentize_surface_amount_less: 0.5;
+    $transparentize_surface_amount_less_less: 0.3;
+    $transparentize_surface_amount: 0.6;
+    $transparentize_surface_amount_more: 0.7;
+}
 
 $t_primary: transparentize($primary, $transparentize_amount);
 $t_onPrimary: transparentize($onPrimary, $transparentize_amount);

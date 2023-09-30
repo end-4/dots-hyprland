@@ -16,14 +16,17 @@ const cheatsheetHeader = () => Widget.CenterBox({
             Widget.Box({
                 children: [
                     Widget.Label({
+                        valign: 'center',
                         className: "cheatsheet-key txt-small",
                         label: "",
                     }),
                     Widget.Label({
+                        valign: 'center',
                         className: "cheatsheet-key-notkey txt-small",
                         label: "+",
                     }),
                     Widget.Label({
+                        valign: 'center',
                         className: "cheatsheet-key txt-small",
                         label: "/",
                     })

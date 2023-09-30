@@ -20,7 +20,6 @@ export const corner_bottomleft = Widget.Window({
     layer: 'top',
     anchor: ['bottom', 'left'],
     exclusive: false,
-    layer: 'overlay',
     child: RoundedCorner('bottomleft', {className: 'corner-black',}),
 });
 export const corner_bottomright = Widget.Window({

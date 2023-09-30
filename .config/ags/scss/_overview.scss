@@ -6,6 +6,7 @@
     min-width: 13.636rem;
     min-height: 3.409rem;
     padding: 0rem 1.364rem;
+    padding-right: 2.864rem;
     background-color: $t_background;
     color: $onBackground;
 
@@ -30,12 +31,12 @@
 }
 
 .overview-search-prompt-box {
-    margin-left: -17.045rem;
+    margin-left: -18.545rem;
     margin-right: $elevation2_margin + 1px;
 }
 
 .overview-search-icon-box {
-    margin-left: -17.045rem;
+    margin-left: -18.545rem;
     margin-right: $elevation2_margin + 1px;
 }
 
@@ -45,7 +46,7 @@
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
-    min-width: 27.273rem;
+    min-width: 28.773rem;
     padding: 0.682rem;
     background-color: $t_background;
     color: $onBackground;
@@ -57,6 +58,12 @@
 }
 .overview-search-results-txt {
     margin-right: 0.682rem;
+}
+
+.overview-search-results-txt-cmd {
+    margin-right: 0.682rem;
+    @include techfont;
+    font-size: 1.227rem;
 }
 
 .overview-search-result-btn {
