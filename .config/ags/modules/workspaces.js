@@ -14,33 +14,41 @@ const GoHyprWorkspaces = deflisten(
     }
 );
 
-const activeWorkspaceIndicator = Widget.Button({
-    valign: 'center',
-    halign: 'start',
-    className: 'bar-ws-active',
-    connections: [
-        [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
-            const ws = GoHyprWorkspaces.state.activeworkspace;
-            // const ws = ags.Service.Hyprland.active.workspace.id;
-            if (ws < 0) { // Special workspace (Hyprland)
-                label.setStyle(`
-                    margin-left: -${1.772 * (10 - lastWorkspace + 1)}rem;
-                    margin-right: ${1.772 * (10 - lastWorkspace + 1)}rem;
-                    margin-top: 0.341rem;
-                    margin-bottom: -0.341rem;
-                `);
-                label.label = `+`;
-            }
-            else {
-                label.setStyle(`
-                    margin-left: -${1.772 * (10 - ws + 1)}rem;
-                    margin-right: ${1.772 * (10 - ws + 1)}rem;
-                    `);
-                label.label = `${ws}`;
-                lastWorkspace = ws;
-            }
-        }],
-    ],
+const activeWorkspaceIndicator = Widget.Box({
+    // style: 'margin-left: -1px;',
+    children: [
+        Widget.Box({
+            valign: 'center',
+            halign: 'start',
+            className: 'bar-ws-active-box',
+            connections: [
+                [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
+                    const ws = GoHyprWorkspaces.state.activeworkspace;
+                    // const ws = ags.Service.Hyprland.active.workspace.id;
+                    if (ws < 0) { // Special workspace (Hyprland)
+                        label.setStyle(`
+                            margin-left: -${1.772 * (10 - lastWorkspace + 1)}rem;
+                            margin-top: 0.409rem;
+                        `);
+                        // label.label = `+`;
+                    }
+                    else {
+                        label.setStyle(`
+                        margin-left: -${1.772 * (10 - ws + 1)}rem;
+                        `);
+                        // label.label = `${ws}`;
+                        lastWorkspace = ws;
+                    }
+                }],
+            ],
+            children: [
+                Widget.Label({
+                    valign: 'center',
+                    className: 'bar-ws-active',
+                })
+            ]
+        })
+    ]
 });
 
 export const ModuleWorkspaces = () => Widget.EventBox({
