@@ -12,7 +12,7 @@ const ClipboardItems = () => {
         vertical: true,
         className: 'spacing-v-5',
         connections: [[MenuService, box => {
-            if(MenuService.opened != 'sideleft') return;
+            if (MenuService.opened != 'sideleft') return;
 
             let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
             clipboardContents = clipboardContents.split('\n');
@@ -26,7 +26,7 @@ const ClipboardItems = () => {
                 return Button({
                     onClicked: () => {
                         print(`bash` + `-c` + `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`);
-                        execAsync(`bash`,  `-c`, `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`).catch(print);
+                        execAsync(`bash`, `-c`, `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`).catch(print);
                         MenuService.close('sideleft');
                     },
                     className: 'sidebar-clipboard-item',
@@ -66,9 +66,16 @@ export const SidebarLeft = () => Box({
                     ]
                 })
             ],
-            connections: [[MenuService, box => {
-                box.toggleClassName('sideleft-hide', !('sideleft' === MenuService.opened));
-            }]],
+            connections: [
+                [MenuService, box => {
+                    box.toggleClassName('sideleft-hide', !('sideleft' === MenuService.opened));
+                }],
+                ['key-press-event', (box, event) => {
+                    if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                        MenuService.close('sideright');
+                    }
+                }]
+            ],
         }),
     ]
 });

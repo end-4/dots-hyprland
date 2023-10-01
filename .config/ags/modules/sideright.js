@@ -13,6 +13,9 @@ import { ModuleCalendar } from "./calendar.js";
 import { ModulePowerButton } from "./powerbutton.js";
 
 const CLOSE_ANIM_TIME = 150;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export class MenuService extends Service {
     static { Service.register(this); }
@@ -53,6 +56,14 @@ export class MenuService extends Service {
 
     constructor() {
         super();
+        // the below listener messes things up
+        // App.instance.connect('window-toggled', (_a, name, visible) => {
+        //     // sleep(CLOSE_ANIM_TIME);
+        //     if (!visible && MenuService.opened != '') {
+        //         MenuService.opened = '';
+        //         MenuService.instance.emit('changed');
+        //     }
+        // });
     }
 }
 
@@ -110,9 +121,16 @@ export const SidebarRight = () => Box({
                     ]
                 }),
             ],
-            connections: [[MenuService, box => {
-                box.toggleClassName('sideright-hide', !('sideright' === MenuService.opened));
-            }]],
+            connections: [
+                [MenuService, box => { // Hide anims when closing
+                    box.toggleClassName('sideright-hide', !('sideright' === MenuService.opened));
+                }],
+                ['key-press-event', (box, event) => {
+                    if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                        MenuService.close('sideright');
+                    }
+                }]
+            ],
         }),
     ]
 });
