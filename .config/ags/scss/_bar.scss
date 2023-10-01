@@ -158,11 +158,15 @@ $notchOnPrimary: $onPrimary;
     color: $notchOnPrimary;
     border-radius: 999px;
     margin: 0.068rem;
-
-    // test
-    // min-height: 1.5rem;
-    // min-width: 1.5rem;
     // background-color: red;
+}
+
+.bar-ws-active-middledecor {
+    min-width: 0.682rem;
+    min-height: 0.682rem;
+    border-radius: 9999px;
+    background-color: $black;
+    margin: 0rem 0.409rem;
 }
 
 .bar-ws-occupied {
