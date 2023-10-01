@@ -1,3 +1,4 @@
+// const { Gdk, Vte } = imports.gi;
 const { App, Widget } = ags;
 const { execAsync, exec } = ags.Utils;
 import { deflisten } from '../scripts/scripts.js';
@@ -45,6 +46,7 @@ const activeWorkspaceIndicator = Widget.Box({
                 Widget.Label({
                     valign: 'center',
                     className: 'bar-ws-active',
+                    label: `•`,
                 })
             ]
         })
