@@ -18,7 +18,7 @@ export const CircularProgress = new GObject.Class({
 
     _init: function () {
         this.parent();
-        this._progress = 0.0;
+        this._progress = 100.0;
         this.connect('draw', Lang.bind(this, this._onDraw));
     },
 
