@@ -1,4 +1,4 @@
-const { Widget } = ags;
+import { Widget } from '../../imports.js';
 const { Gtk } = imports.gi;
 const Lang = imports.lang;
 

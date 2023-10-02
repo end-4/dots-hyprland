@@ -1,4 +1,4 @@
-const { App, Service, Widget } = ags;
+import { Service, Widget } from '../imports.js';
 import { Keybinds } from "../modules/keybinds.js";
 import { setupCursorHover } from "../modules/lib/cursorhover.js";
 
@@ -39,7 +39,7 @@ const cheatsheetHeader = () => Widget.CenterBox({
         halign: 'end',
         className: "cheatsheet-closebtn icon-material txt txt-hugeass",
         onClicked: () => {
-            ags.Service.MenuService.toggle('cheatsheet');
+            MenuService.toggle('cheatsheet');
         },
         child: Widget.Label({
             className: 'icon-material txt txt-hugeass',

@@ -1,4 +1,4 @@
-const { Widget } = ags;
+import { Widget } from '../imports.js';
 import { keybindList } from "../data/keybinds.js";
 
 export const Keybinds = () => Widget.Box({

@@ -1,5 +1,5 @@
-const { App, Service, Widget } = ags;
-const { CONFIG_DIR, exec, execAsync } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { CONFIG_DIR, exec, execAsync } = Utils;
 import { deflisten } from '../scripts/scripts.js';
 import { setupCursorHover } from "./lib/cursorhover.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
@@ -10,7 +10,6 @@ import { RoundedCorner } from "./lib/roundedcorner.js";
 // • Discord | #ricing-theming | r/unixporn — Mozilla Firefox    -->   • Discord | #ricing-theming 
 // GJS Error · Issue #112 · Aylur/ags — Mozilla Firefox          -->   GJS Error · Issue #112 
 function truncateTitle(str) {
-    console.log('original string: ', str);
     let lastDash = -1;
     let found = -1; // 0: em dash, 1: en dash, 2: minus, 3: vertical bar, 4: middle dot
     for (let i = str.length - 1; i >= 0; i--) {
@@ -35,7 +34,6 @@ function truncateTitle(str) {
             lastDash = i;
         }
     }
-    console.log('new string:', str.substring(0, lastDash));
     if (lastDash === -1) return str;
     return str.substring(0, lastDash);
 }
@@ -91,8 +89,7 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                                         if (!HyprlandActiveWindow.state)
                                                             return;
                                                         const winJson = JSON.parse(HyprlandActiveWindow.state);
-                                                        // console.log(ags.Service.Hyprland.active.workspace.id);
-                                                        label.label = Object.keys(winJson).length === 0 ? `Workspace ${ags.Service.Hyprland.active.workspace.id}` : truncateTitle(winJson['title']);
+                                                        label.label = Object.keys(winJson).length === 0 ? `Workspace ${Service.Hyprland.active.workspace.id}` : truncateTitle(winJson['title']);
                                                     }]],
                                                 })
                                             ]

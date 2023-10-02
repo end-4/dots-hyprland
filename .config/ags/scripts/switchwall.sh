@@ -22,11 +22,7 @@ swww img "$imgpath" --transition-step 230 --transition-fps 60 \
 --transition-pos "$cursorposx, $cursorposy_inverted" &
 
 # Generate colors for ags n stuff
-ags run-js "print('Sending ${imgpath} to swww. Cursor pos: [${cursorposx}, ${cursorposy_inverted}]'); ags.Utils.exec('swww img ${imgpath} --transition-step 230 --transition-fps 60 --transition-type grow --transition-angle 30 --transition-duration 1 --transition-pos \"${cursorposx}, ${cursorposy_inverted}\"');" &
+ags run-js "print('Sending ${imgpath} to swww. Cursor pos: [${cursorposx}, ${cursorposy_inverted}]'); Utils.exec('swww img ${imgpath} --transition-step 230 --transition-fps 60 --transition-type grow --transition-angle 30 --transition-duration 1 --transition-pos \"${cursorposx}, ${cursorposy_inverted}\"');" &
 "$HOME"/.config/ags/scripts/colorgen.sh ${imgpath} --apply
 sassc "$HOME"/.config/ags/scss/main.scss "$HOME"/.config/ags/style.css
-ags run-js "ags.App.resetCss(); ags.App.applyCss('${HOME}/.config/ags/style.css');" &
-
-# await execAsync(['sassc', `${CONFIG_DIR}/scss/main.scss`, `${CONFIG_DIR}/style.css`]);
-# ags.App.resetCss();
-# ags.App.applyCss(`${CONFIG_DIR}/style.css`);
+ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');" &

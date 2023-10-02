@@ -1,11 +1,11 @@
-const { App, Service } = ags;
-const { execAsync, CONFIG_DIR } = ags.Utils;
+const { App, Service, Utils } = ags;
+const { execAsync, CONFIG_DIR } = Utils;
 
 async function setupScss() {
     try {
         await execAsync(['sassc', `${CONFIG_DIR}/scss/main.scss`, `${CONFIG_DIR}/style.css`]);
-        ags.App.resetCss();
-        ags.App.applyCss(`${CONFIG_DIR}/style.css`);
+        App.resetCss();
+        App.applyCss(`${CONFIG_DIR}/style.css`);
     } catch (error) {
         print(error);
     }
@@ -25,6 +25,6 @@ class ThemeService extends Service {
 }
 
 var Theme = class Theme {
-    static { Service.export(this, 'Theme'); }
+    static { globalThis['Theme'] = this; }
     static instance = new ThemeService();
 };

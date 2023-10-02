@@ -1,4 +1,4 @@
-const { Widget } = ags;
+import { Widget } from '../imports.js';
 import { ModuleWorkspaces } from "../modules/workspaces.js";
 import { ModuleMusic } from "../modules/music.js";
 import { ModuleSystem } from "../modules/system.js";

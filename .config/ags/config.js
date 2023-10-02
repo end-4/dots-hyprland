@@ -1,6 +1,5 @@
 // Import
-const { App } = ags;
-const { exec, execAsync, CONFIG_DIR } = ags.Utils;
+import { App, Utils } from './imports.js';
 import { bar } from './windows/bar.js';
 import { corner_topleft, corner_topright, corner_bottomleft, corner_bottomright } from './windows/corners.js';
 import { overview } from './windows/overview.js';
@@ -11,9 +10,10 @@ import { SideLeft } from './windows/sideleft.js';
 
 const CLOSE_ANIM_TIME = 150;
 
-exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
-ags.App.resetCss();
-ags.App.applyCss(`${App.configDir}/style.css`);
+// SCSS compilation
+Utils.exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
+App.resetCss();
+App.applyCss(`${App.configDir}/style.css`);
 
 // Config object
 export default {

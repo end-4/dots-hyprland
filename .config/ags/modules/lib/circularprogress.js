@@ -1,7 +1,8 @@
 const { Gdk, Gtk } = imports.gi;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
-const { execAsync, exec } = ags.Utils;
+import { Utils } from '../../imports.js';
+const { execAsync, exec } = Utils;
 
 // min-height for diameter
 // min-width for trough stroke

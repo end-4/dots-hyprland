@@ -1,8 +1,8 @@
 const { Gdk, Gtk } = imports.gi;
-const { App, Service, Widget } = ags;
-const { Applications, Hyprland } = ags.Service;
-const { execAsync, exec } = ags.Utils;
-const { Box, EventBox } = ags.Widget;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Applications, Hyprland } = Service;
+const { execAsync, exec } = Utils;
+const { Box, EventBox } = Widget;
 import { ModuleConnections } from "./connectiontoggles.js";
 import { ModuleHyprToggles } from "./hyprtoggles.js";
 import { ModuleMiscToggles } from "./misctoggles.js";
@@ -19,11 +19,11 @@ function sleep(ms) {
 
 export class MenuService extends Service {
     static { Service.register(this); }
-    static { Service.export(this, 'MenuService'); }
-    // static { Service['MenuService'] = this; }
+    static { globalThis['MenuService'] = this; }
     static instance = new MenuService();
     static opened = '';
     static toggle(menu) {
+        console.log("CURRENTLY OPEN WINDOW:'", MenuService.opened, "'");
         if (MenuService.opened === menu) {
             MenuService.close(menu);
         }
@@ -36,17 +36,20 @@ export class MenuService extends Service {
         }
     }
     static close(menu) {
+        console.log('CLOSING: \'', menu, '\'');
         MenuService.opened = '';
         MenuService.instance.emit('changed');
         console.log('closing', menu);
         App.closeWindow(menu);
     }
     static closeButDontUpdate(menu) {
+        console.log('CLOSING BUT DONT UPDATE: \'', menu, '\'');
         MenuService.opened = '';
         console.log('closing', menu);
         App.closeWindow(menu);
     }
     static open(menu) {
+        console.log('OPENING: \'', menu, '\'');
         App.closeWindow(MenuService.opened);
         MenuService.opened = menu;
         MenuService.instance.emit('changed');
@@ -134,3 +137,4 @@ export const SidebarRight = () => Box({
         }),
     ]
 });
+

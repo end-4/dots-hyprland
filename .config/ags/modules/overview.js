@@ -1,7 +1,7 @@
 const { Gdk, Gtk } = imports.gi;
-const { App, Widget } = ags;
-const { Applications, Hyprland } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Applications, Hyprland } = Service;
+const { execAsync, exec } = Utils;
 import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 import { MaterialIcon } from './lib/materialicon.js';
@@ -13,7 +13,7 @@ const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 function launchCustomCommand(command) {
-    ags.Service.MenuService.close('overview');
+    MenuService.close('overview');
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
         execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`]).catch(print);
@@ -33,7 +33,7 @@ function launchCustomCommand(command) {
 }
 
 function execAndClose(command, terminal) {
-    ags.Service.MenuService.close('overview');
+    MenuService.close('overview');
     if (terminal) {
         execAsync([`bash`, `-c`, `foot fish -C "${command}"`]).catch(print);
     }
@@ -100,7 +100,7 @@ const ExecuteCommandButton = ({ command, terminal = false }) => Widget.Button({
 const CalculationResultButton = ({ result, text }) => Widget.Button({
     className: 'overview-search-result-btn',
     onClicked: () => {
-        ags.Service.MenuService.toggle('overview');
+        MenuService.toggle('overview');
         console.log(result);
         execAsync('bash', '-c', `wl-copy '${result}'`).catch(print);
     },
@@ -154,7 +154,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     valign: 'center',
     onPrimaryClickRelease: () => {
         execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
-        ags.Service.MenuService.toggle('overview');
+        MenuService.toggle('overview');
     },
     onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
     onSecondaryClick: (button) => {
@@ -233,7 +233,7 @@ const workspace = index => {
             vexpand: true,
             onPrimaryClick: () => {
                 execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
-                ags.Service.MenuService.toggle('overview');
+                MenuService.toggle('overview');
             },
             // onSecondaryClick: (eventbox) => {
             //     const menu = Widget({
@@ -305,9 +305,9 @@ export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
     const clickOutsideToClose = Widget.EventBox({
-        onPrimaryClick: () => ags.Service.MenuService.toggle('overview'),
-        onSecondaryClick: () => ags.Service.MenuService.toggle('overview'),
-        onMiddleClick: () => ags.Service.MenuService.toggle('overview'),
+        onPrimaryClick: () => MenuService.toggle('overview'),
+        onSecondaryClick: () => MenuService.toggle('overview'),
+        onMiddleClick: () => MenuService.toggle('overview'),
     });
     const resultsBox = Widget.Box({
         className: 'spacing-v-15 overview-search-results',
@@ -380,7 +380,7 @@ export const SearchAndWindows = () => {
         halign: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
             if (_appSearchResults.length > 0) {
-                ags.Service.MenuService.close('overview');
+                MenuService.close('overview');
                 _appSearchResults[0].launch();
                 return;
             }
@@ -436,7 +436,7 @@ export const SearchAndWindows = () => {
                         resultsBox.add(Widget.Button({
                             className: 'overview-search-result-btn',
                             onClicked: () => {
-                                ags.Service.MenuService.toggle('overview');;
+                                MenuService.toggle('overview');;
                                 app.launch();
                             },
                             child: Widget.Box({
@@ -468,7 +468,7 @@ export const SearchAndWindows = () => {
                     resultsBox.add(Widget.Button({
                         className: 'overview-search-result-btn',
                         onClicked: () => {
-                            ags.Service.MenuService.toggle('overview');
+                            MenuService.toggle('overview');
                             execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
                         },
                         child: Widget.Box({

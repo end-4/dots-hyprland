@@ -1,8 +1,8 @@
 // This is for the right pill of the bar. 
 // For the cool memory indicator on the sidebar, see sysinfo.js
-const { Widget } = ags;
-const { exec, execAsync } = ags.Utils;
-const { Battery } = ags.Service;
+import { Service, Utils, Widget } from '../imports.js';
+const { exec, execAsync } = Utils;
+const { Battery } = Service;
 
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),

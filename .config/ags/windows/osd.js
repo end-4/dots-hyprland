@@ -1,6 +1,7 @@
+import { Widget } from '../imports.js';
 import { Osd } from "../modules/osd.js";
 
-export const Indicator = monitor => ags.Widget.Window({
+export const Indicator = monitor => Widget.Window({
     name: `indicator${monitor}`,
     monitor,
     className: 'indicator',

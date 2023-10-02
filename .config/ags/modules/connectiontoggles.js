@@ -1,6 +1,6 @@
-const { Widget } = ags;
-const { Bluetooth, MenuService, Network } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { Widget, Utils, Service } from '../imports.js';
+const { Bluetooth, MenuService, Network } = Service;
+const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from "./statusicons.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 

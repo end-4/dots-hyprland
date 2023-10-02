@@ -1,7 +1,7 @@
 const { Gdk, Gtk } = imports.gi;
-const { App, Service, Widget } = ags;
-const { Bluetooth, Hyprland, Network } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Bluetooth, Hyprland, Network } = Service;
+const { execAsync, exec } = Utils;
 import { setupCursorHover } from "./lib/cursorhover.js";
 
 const MaterialIcon = (icon, size, props = {}) => Widget.Label({
@@ -16,7 +16,7 @@ const HyprToggleButton = (icon, name, hyprlandConfigValue, props = {}) => Widget
     className: 'button-minsize sidebar-button sidebar-button-alone txt-small',
     onPrimaryClick: (button) => {
         // Set the value to 1 - value
-        const optionEnabled = Hyprland.HyprctlGet(`getoption ${hyprlandConfigValue}`).int == 1;
+        const optionEnabled = JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1;
         if (optionEnabled)
             execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} 0`]).catch(print);
         else
@@ -35,7 +35,7 @@ const HyprToggleButton = (icon, name, hyprlandConfigValue, props = {}) => Widget
         ],
     }),
     setup: button => {
-        button.toggleClassName('sidebar-button-active', Hyprland.HyprctlGet(`getoption ${hyprlandConfigValue}`).int == 1);
+        button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
         setupCursorHover(button);
     }
 })

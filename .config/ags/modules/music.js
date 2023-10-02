@@ -1,6 +1,6 @@
-const { Widget } = ags;
-const { Mpris, Audio } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { Service, Utils, Widget } from '../imports.js';
+const { Mpris, Audio } = Service;
+const { execAsync, exec } = Utils;
 import { CircularProgress } from "./lib/circularprogress.js";
 
 const TrackProgress = () => {

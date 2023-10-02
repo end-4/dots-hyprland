@@ -1,7 +1,6 @@
-
-const { Audio, Mpris } = ags.Service;
-const { App, Service, Widget } = ags;
-const { exec, execAsync, CONFIG_DIR } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Audio, Mpris } = Service;
+const { exec, execAsync, CONFIG_DIR } = Utils;
 import { ModuleNotification } from "./notification.js";
 import { StatusIcons } from "./statusicons.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
@@ -18,7 +17,7 @@ export const ModuleRightSpace = () => Widget.EventBox({
         Audio.speaker.volume -= 0.03;
         Service.Indicator.speaker();
     },
-    onPrimaryClick: () => Service.MenuService.toggle('sideright'),
+    onPrimaryClick: () => MenuService.toggle('sideright'),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
