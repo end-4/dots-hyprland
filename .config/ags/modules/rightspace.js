@@ -10,12 +10,12 @@ export const ModuleRightSpace = () => Widget.EventBox({
     onScrollUp: () => {
         if (Audio.speaker == null) return;
         Audio.speaker.volume += 0.03;
-        Service.Indicator.speaker();
+        Indicator.speaker();
     },
     onScrollDown: () => {
         if (Audio.speaker == null) return;
         Audio.speaker.volume -= 0.03;
-        Service.Indicator.speaker();
+        Indicator.speaker();
     },
     onPrimaryClick: () => MenuService.toggle('sideright'),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
