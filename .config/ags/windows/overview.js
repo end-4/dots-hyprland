@@ -8,6 +8,7 @@ export const overview = Widget.Window({
     focusable: true,
     popup: true,
     anchor: ['top'],
+    layer: 'overlay',
     child: Widget.Box({
         vertical: true,
         children: [

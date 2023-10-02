@@ -56,7 +56,8 @@ const activeWorkspaceIndicator = Widget.Box({
 export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
-    onMiddleClick: () => ags.Service.MenuService.toggle('overview'),
+    onMiddleClickRelease: () => ags.Service.MenuService.toggle('overview'),
+    onSecondaryClickRelease: () => execAsync(['bash', '-c', 'pkill wvkbd-mobintl || wvkbd-mobintl']).catch(print),
     child: Widget.Box({
         homogeneous: true,
         className: 'bar-ws-width',
