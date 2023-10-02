@@ -1,8 +1,8 @@
 const { GLib, Gtk } = imports.gi;
-const { Widget } = ags;
-const { Notifications } = ags.Service;
-const { lookUpIcon, timeout } = ags.Utils;
-const { Box, Icon, Scrollable, Label, Button } = ags.Widget;
+import { Service, Utils, Widget } from '../imports.js';
+const { Notifications } = Service;
+const { lookUpIcon, timeout } = Utils;
+const { Box, Icon, Scrollable, Label, Button } = Widget;
 import { MaterialIcon } from "./lib/materialicon.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 

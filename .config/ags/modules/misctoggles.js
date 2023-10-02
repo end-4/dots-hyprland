@@ -1,7 +1,5 @@
-const { Gdk, Gtk } = imports.gi;
-const { App, Service, Widget } = ags;
-const { Bluetooth, Hyprland, Network } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { App, Utils, Widget } from '../imports.js';
+const { execAsync, exec } = Utils;
 import { MaterialIcon } from "./lib/materialicon.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 

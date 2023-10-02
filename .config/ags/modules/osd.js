@@ -1,5 +1,5 @@
-const { App, Service, Widget } = ags;
-const { connect, exec, execAsync, timeout, lookUpIcon } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { connect, exec, execAsync, timeout, lookUpIcon } = Utils;
 import { deflisten } from '../scripts/scripts.js';
 
 const Brightness = deflisten(
@@ -29,7 +29,7 @@ class IndicatorService extends Service {
     }
 
     speaker() {
-        const value = ags.Service.Audio.speaker.volume;
+        const value = Service.Audio.speaker.volume;
         const icon = value => {
             const icons = [];
             icons[0] = 'audio-volume-muted-symbolic';
@@ -48,7 +48,7 @@ class IndicatorService extends Service {
     display() {
         // brightness is async, so lets wait a bit
         timeout(10, () => {
-            const value = ags.Service.Brightness.screen;
+            const value = Service.Brightness.screen;
             const icon = 'display-brightness-symbolic'
             Indicator.popup(value, icon);
         });
@@ -57,7 +57,7 @@ class IndicatorService extends Service {
     kbd() {
         // brightness is async, so lets wait a bit
         timeout(10, () => {
-            const value = ags.Service.Brightness.kbd;
+            const value = Service.Brightness.kbd;
             this.popup((value * 33 + 1) / 100, 'keyboard-brightness-symbolic');
         });
     }
@@ -68,7 +68,7 @@ class IndicatorService extends Service {
 }
 
 class Indicator {
-    static { Service.export(this, 'Indicator'); }
+    static { globalThis['Indicator'] = this; }
     static instance = new IndicatorService();
     static popup(value, icon) { Indicator.instance.popup(value, icon); }
     static speaker() { Indicator.instance.speaker(); }

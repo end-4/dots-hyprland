@@ -1,6 +1,6 @@
-const { Widget, Service } = ags;
-const { exec, execAsync } = ags.Utils;
-const { Audio, Battery, Bluetooth, Network } = ags.Service;
+const { Utils, Service, Widget } = ags;
+const { exec, execAsync } = Utils;
+const { Audio, Battery, Bluetooth, Network } = Service;
 
 export const BluetoothIndicator = () => Widget.Stack({
     items: [

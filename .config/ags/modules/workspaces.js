@@ -1,6 +1,5 @@
 // const { Gdk, Vte } = imports.gi;
-const { App, Widget } = ags;
-const { execAsync, exec } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
 import { deflisten } from '../scripts/scripts.js';
 
 const WORKSPACE_SIDE_PAD = 0.546; // rem
@@ -23,9 +22,8 @@ const activeWorkspaceIndicator = Widget.Box({
             halign: 'start',
             className: 'bar-ws-active-box',
             connections: [
-                [GoHyprWorkspaces/*ags.Service.Hyprland*/, label => {
+                [GoHyprWorkspaces, label => {
                     const ws = GoHyprWorkspaces.state.activeworkspace;
-                    // const ws = ags.Service.Hyprland.active.workspace.id;
                     if (ws < 0) { // Special workspace (Hyprland)
                         label.setStyle(`
                             margin-left: -${1.772 * (10 - lastWorkspace + 1)}rem;
@@ -54,10 +52,10 @@ const activeWorkspaceIndicator = Widget.Box({
 });
 
 export const ModuleWorkspaces = () => Widget.EventBox({
-    onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
-    onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
-    onMiddleClickRelease: () => ags.Service.MenuService.toggle('overview'),
-    onSecondaryClickRelease: () => execAsync(['bash', '-c', 'pkill wvkbd-mobintl || wvkbd-mobintl']).catch(print),
+    onScrollUp: () => Utils.execAsync('hyprctl dispatch workspace -1'),
+    onScrollDown: () => Utils.execAsync('hyprctl dispatch workspace +1'),
+    onMiddleClickRelease: () => MenuService.toggle('overview'),
+    onSecondaryClickRelease: () => Utils.execAsync(['bash', '-c', 'pkill wvkbd-mobintl || wvkbd-mobintl']).catch(print),
     child: Widget.Box({
         homogeneous: true,
         className: 'bar-ws-width',
@@ -81,7 +79,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                 halign: 'center',
                                 // homogeneous: true,
                                 children: Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => i + 1).map(i => Widget.Button({
-                                    onPrimaryClick: () => execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
+                                    onPrimaryClick: () => Utils.execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
                                     child: Widget.Label({
                                         valign: 'center',
                                         label: `${i}`,

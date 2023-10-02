@@ -3,9 +3,9 @@
 const { Gdk, Gtk } = imports.gi;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
-const { App, Service, Widget } = ags;
-const { Bluetooth, Hyprland, Network } = ags.Service;
-const { execAsync, exec } = ags.Utils;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Bluetooth, Hyprland, Network } = Service;
+const { execAsync, exec } = Utils;
 import { CircularProgress } from "./lib/circularprogress.js";
 import { MaterialIcon } from "./lib/materialicon.js";
 

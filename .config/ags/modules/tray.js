@@ -1,6 +1,6 @@
-const { SystemTray } = ags.Service;
-const { Widget } = ags;
-const { Box, Icon, Button, Revealer } = ags.Widget;
+import { Service, Widget } from '../imports.js';
+const { SystemTray } = Service;
+const { Box, Icon, Button, Revealer } = Widget;
 const { Gravity } = imports.gi.Gdk;
 
 const revealerDuration = 200;

@@ -1,9 +1,9 @@
 const { Gdk, Gtk } = imports.gi;
-const { App, Service, Widget } = ags;
-const { Applications, Hyprland } = ags.Service;
-const { execAsync, exec } = ags.Utils;
-const { Box, EventBox, Button, Label, Scrollable } = ags.Widget;
-const { MenuService } = ags.Service;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { Applications, Hyprland } = Service;
+const { execAsync, exec } = Utils;
+const { Box, EventBox, Button, Label, Scrollable } = Widget;
+const { MenuService } = Service;
 
 const CLIPBOARD_SHOWN_ENTRIES = 20;
 

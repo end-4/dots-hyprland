@@ -1,5 +1,4 @@
-const { Service, Widget } = ags;
-const { Applications } = ags.Service;
+import { Widget } from '../imports.js';
 import { SidebarLeft } from "../modules/sideleft.js";
 
 export const SideLeft = () => Widget.Window({

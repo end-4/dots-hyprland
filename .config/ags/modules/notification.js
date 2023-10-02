@@ -1,5 +1,5 @@
-const { Widget } = ags;
-const { Notifications } = ags.Service;
+import { Service, Widget } from '../imports.js';
+const { Notifications } = Service;
 
 export const ModuleNotification = () => Widget.Box({
     className: 'notification',

@@ -1,5 +1,4 @@
-const { Service, Widget } = ags;
-const { Applications } = ags.Service;
+import { Widget } from '../imports.js';
 import { SearchAndWindows } from "../modules/overview.js";
 
 export const overview = Widget.Window({
