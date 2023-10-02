@@ -46,11 +46,11 @@ const HyprlandActiveWindow = deflisten(
 export const ModuleLeftSpace = () => Widget.EventBox({
     onScrollUp: () => {
         execAsync('light -A 5');
-        Service.Indicator.speaker();
+        Indicator.speaker();
     },
     onScrollDown: () => {
         execAsync('light -U 5');
-        Service.Indicator.speaker();
+        Indicator.speaker();
     },
     child: Widget.Box({
         homogeneous: false,

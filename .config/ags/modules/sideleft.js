@@ -11,38 +11,39 @@ const ClipboardItems = () => {
     return Box({
         vertical: true,
         className: 'spacing-v-5',
-        connections: [[MenuService, box => {
-            if (MenuService.opened != 'sideleft') return;
+        connections: [
+            [MenuService, box => {
+                if (MenuService.opened != 'sideleft') return;
 
-            let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
-            clipboardContents = clipboardContents.split('\n');
+                let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
+                clipboardContents = clipboardContents.split('\n');
 
-            console.log(clipboardContents);
-            console.log(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`);
-            console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`));
+                console.log(clipboardContents);
+                console.log(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`);
+                console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`));
 
-            box.children = clipboardContents.map((text, i) => {
-                if (i >= CLIPBOARD_SHOWN_ENTRIES) return;
-                return Button({
-                    onClicked: () => {
-                        print(`bash` + `-c` + `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`);
-                        execAsync(`bash`, `-c`, `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`).catch(print);
-                        MenuService.close('sideleft');
-                    },
-                    className: 'sidebar-clipboard-item',
-                    child: Box({
-                        children: [
-                            Label({
-                                label: text,
-                                className: 'txt-small',
-                                truncate: 'end',
-                            })
-                        ]
+                box.children = clipboardContents.map((text, i) => {
+                    if (i >= CLIPBOARD_SHOWN_ENTRIES) return;
+                    return Button({
+                        onClicked: () => {
+                            print(`bash` + `-c` + `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`);
+                            execAsync(`bash`, `-c`, `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`).catch(print);
+                            MenuService.close('sideleft');
+                        },
+                        className: 'sidebar-clipboard-item',
+                        child: Box({
+                            children: [
+                                Label({
+                                    label: text,
+                                    className: 'txt-small',
+                                    truncate: 'end',
+                                })
+                            ]
+                        })
                     })
-                })
-            }
-            );
-        }]]
+                });
+            }]
+        ]
     });
 }
 
