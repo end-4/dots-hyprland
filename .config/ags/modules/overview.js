@@ -102,7 +102,7 @@ const CalculationResultButton = ({ result, text }) => Widget.Button({
     onClicked: () => {
         MenuService.toggle('overview');
         console.log(result);
-        execAsync('bash', '-c', `wl-copy '${result}'`).catch(print);
+        execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
     },
     child: Widget.Box({
         children: [
@@ -379,6 +379,17 @@ export const SearchAndWindows = () => {
         className: 'overview-search-box txt-small txt',
         halign: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
+            if (startsWithNumber(text)) {
+                try {
+                    const fullResult = eval(text);
+                    // copy
+                    execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
+                    MenuService.close('overview');
+                    return;
+                } catch (e) {
+                    // console.log(e);
+                }
+            }
             if (_appSearchResults.length > 0) {
                 MenuService.close('overview');
                 _appSearchResults[0].launch();
