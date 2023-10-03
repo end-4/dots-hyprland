@@ -50,3 +50,5 @@ $t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
 $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
 $subtext: mix($onBackground, $background, 70%);
+$actiontext: mix($onBackground, $background, 85%);
+

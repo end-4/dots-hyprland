@@ -52,7 +52,11 @@ $rounding_large: 1.705rem;
 }
 
 @mixin subtext {
-    color: rgb(160, 160, 160);
+    color: $subtext;
+}
+
+@mixin actiontext {
+    color: $actiontext;
 }
 
 @mixin elevation-safe {
@@ -63,6 +67,7 @@ $rounding_large: 1.705rem;
 }
 
 $elevation2_margin: 7px;
+
 @mixin elevation2 {
     box-shadow: 0px 2px 3px transparentize($shadow, 0.55);
     margin: $elevation2_margin;
@@ -81,19 +86,23 @@ $elevation2_margin: 7px;
     margin: 7px;
 }
 
-@mixin md3_decel { // Used for large, opening/moving transitions, as it feels fast
+@mixin md3_decel {
+    // Used for large, opening/moving transitions, as it feels fast
     transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
 }
 
-@mixin md3_accel { // Used for large, closing transitions
+@mixin md3_accel {
+    // Used for large, closing transitions
     transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
 }
 
-@mixin fluent_decel { // Used for small transitions, as this looks clear
+@mixin fluent_decel {
+    // Used for small transitions, as this looks clear
     transition: 200ms cubic-bezier(0.1, 1, 0, 1);
 }
 
-@mixin fluent_decel_long { // Used for small transitions, as this looks clear
+@mixin fluent_decel_long {
+    // Used for small transitions, as this looks clear
     transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
 }
 
@@ -216,7 +225,11 @@ $elevation2_margin: 7px;
 }
 
 .txt-subtext {
-    color: $subtext;
+    @include subtext;
+}
+
+.txt-action {
+    @include actiontext;
 }
 
 .txt-semibold {
@@ -606,6 +619,7 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 .spacing-h--20>box {
     margin-left: -1.364rem;
 }
+
 .spacing-h--20>box:first-child {
     margin-left: 0rem;
 }

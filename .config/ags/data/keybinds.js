@@ -109,7 +109,7 @@ export const keybindList = [[
         "binds": [
             { "keys": ["", "+", "V"], "action": "Clipboard history  >>  clipboard" },
             { "keys": ["", "+", "."], "action": "Emoji picker  >>  clipboard" },
-            { "keys": ["", "+", "Space"], "action": "Switch language" }
+            { "keys": ["", "+", "  󱁐  "], "action": "Switch language" }
         ],
         "appeartick": 3
     },

@@ -6,6 +6,19 @@ import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 import { MaterialIcon } from './lib/materialicon.js';
 
+// Add math funcs
+const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
+const pi = Math.PI;
+// trigonometric funcs for deg
+const sind = x => sin(x * pi / 180);
+const cosd = x => cos(x * pi / 180);
+const tand = x => tan(x * pi / 180);
+const cotd = x => cot(x * pi / 180);
+const asind = x => asin(x) * 180 / pi;
+const acosd = x => acos(x) * 180 / pi;
+const atand = x => atan(x) * 180 / pi;
+const acotd = x => acot(x) * 180 / pi;
+
 const SCREEN_WIDTH = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1 | head -1"`));
 const SCREEN_HEIGHT = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1"`));
 const MAX_RESULTS = 10;
@@ -97,31 +110,73 @@ const ExecuteCommandButton = ({ command, terminal = false }) => Widget.Button({
     })
 })
 
-const CalculationResultButton = ({ result, text }) => Widget.Button({
-    className: 'overview-search-result-btn',
-    onClicked: () => {
-        MenuService.toggle('overview');
-        console.log(result);
-        execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
-    },
-    child: Widget.Box({
-        children: [
-            Widget.Box({
-                vertical: false,
-                children: [
-                    Widget.Label({
-                        className: `icon-material overview-search-results-icon`,
-                        label: 'calculate',
-                    }),
-                    Widget.Label({
-                        className: 'overview-search-results-txt txt txt-norm',
-                        label: `= ${result}`,
-                    })
-                ]
-            })
-        ]
+const CalculationResultButton = ({ result, text }) => {
+    const actionText = Widget.Revealer({
+        revealChild: false,
+        transition: "crossfade",
+        transitionDuration: 150,
+        child: Widget.Label({
+            className: 'overview-search-results-txt txt txt-small txt-action',
+            label: `Copy result`,
+        })
+    });
+    const actionTextRevealer = Widget.Revealer({
+        revealChild: false,
+        transition: "slide_left",
+        transitionDuration: 100,
+        child: actionText,
     })
-})
+    return Widget.Button({
+        className: 'overview-search-result-btn',
+        onClicked: () => {
+            MenuService.toggle('overview');
+            console.log(result);
+            execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
+        },
+        child: Widget.Box({
+            children: [
+                Widget.Box({
+                    vertical: false,
+                    children: [
+                        Widget.Label({
+                            className: `icon-material overview-search-results-icon`,
+                            label: 'calculate',
+                        }),
+                        Widget.Box({
+                            vertical: true,
+                            children: [
+                                Widget.Label({
+                                    halign: 'start',
+                                    className: 'overview-search-results-txt txt txt-smallie txt-subtext',
+                                    label: `Expression`,
+                                    truncate: "end",
+                                }),
+                                Widget.Label({
+                                    halign: 'start',
+                                    className: 'overview-search-results-txt txt txt-norm',
+                                    label: `${result}`,
+                                    truncate: "end",
+                                }),
+                            ]
+                        }),
+                        Widget.Box({ hexpand: true }),
+                        actionTextRevealer,
+                    ],
+                })
+            ]
+        }),
+        connections: [
+            ['focus-in-event', (button) => {
+                actionText.revealChild = true;
+                actionTextRevealer.revealChild = true;
+            }],
+            ['focus-out-event', (button) => {
+                actionText.revealChild = false;
+                actionTextRevealer.revealChild = false;
+            }],
+        ]
+    });
+}
 
 const ContextMenuItem = ({ label, onClick }) => Widget({
     type: Gtk.MenuItem,
@@ -379,16 +434,14 @@ export const SearchAndWindows = () => {
         className: 'overview-search-box txt-small txt',
         halign: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
-            if (startsWithNumber(text)) {
-                try {
-                    const fullResult = eval(text);
-                    // copy
-                    execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
-                    MenuService.close('overview');
-                    return;
-                } catch (e) {
-                    // console.log(e);
-                }
+            try {
+                const fullResult = eval(text);
+                // copy
+                execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
+                MenuService.close('overview');
+                return;
+            } catch (e) {
+                // console.log(e);
             }
             if (_appSearchResults.length > 0) {
                 MenuService.close('overview');
@@ -430,16 +483,13 @@ export const SearchAndWindows = () => {
                     entry.toggleClassName('overview-search-box-extended', true);
                     _appSearchResults = Applications.query(text);
 
-                    // Calculate if start with number
-                    if (startsWithNumber(text)) {
-                        try {
-                            const fullResult = eval(text);
-                            resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
-                        } catch (e) {
-                            // console.log(e);
-                        }
+                    // Calculate
+                    try {
+                        const fullResult = eval(text);
+                        resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
+                    } catch (e) {
+                        // console.log(e);
                     }
-
                     // Add application entries
                     let appsToAdd = MAX_RESULTS;
                     _appSearchResults.forEach(app => {
