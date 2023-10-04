@@ -5,6 +5,8 @@ const { execAsync, exec } = Utils;
 import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 import { MaterialIcon } from './lib/materialicon.js';
+import { searchItem } from './lib/searchitem.js';
+import { ContextMenuItem } from './lib/contextmenuitem.js';
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
@@ -42,6 +44,18 @@ function launchCustomCommand(command) {
     }
     else if (args[0] == '>todo') { // Todo
         addTodoItem(args.slice(1).join(' '));
+    }
+    else if (args[0] == '>shutdown') { // Shut down
+        execAsync([`bash`, `-c`, `systemctl poweroff`]).catch(print);
+    }
+    else if (args[0] == '>reboot') { // Reboot
+        execAsync([`bash`, `-c`, `systemctl reboot`]).catch(print);
+    }
+    else if (args[0] == '>sleep') { // Sleep
+        execAsync([`bash`, `-c`, `systemctl suspend`]).catch(print);
+    }
+    else if (args[0] == '>logout') { // Log out
+        execAsync([`bash`, `-c`, `loginctl terminate-user $USER`]).catch(print);
     }
 }
 
@@ -83,85 +97,57 @@ function destroyContextMenu(menu) {
         menu = null;
     }
 }
+const CalculationResultButton = ({ result, text }) => searchItem({
+    materialIconName: 'calculate',
+    name: `Math result`,
+    actionName: "Copy",
+    content: `${result}`,
+    onActivate: () => {
+        MenuService.toggle('overview');
+        console.log(result);
+        execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
+    },
+});
 
-const ExecuteCommandButton = ({ command, terminal = false }) => Widget.Button({
-    className: 'overview-search-result-btn',
-    onClicked: () => execAndClose(command, terminal),
-    child: Widget.Box({
-        children: [
-            Widget.Box({
-                vertical: false,
-                children: [
-                    Widget.Label({
-                        className: `icon-material overview-search-results-icon`,
-                        label: `${terminal ? 'terminal' : 'settings_b_roll'}`,
-                    }),
-                    // Widget.Label({
-                    //     className: 'overview-search-results-txt txt txt-norm',
-                    //     label: `Execute${terminal ? ' in terminal' : ''}`,
-                    // }),
-                    Widget.Label({
-                        className: 'overview-search-results-txt-cmd',
-                        label: `${command}`,
-                    })
-                ]
-            })
-        ]
-    })
-})
-
-const CalculationResultButton = ({ result, text }) => {
+const DesktopEntryButton = (app) => {
     const actionText = Widget.Revealer({
         revealChild: false,
         transition: "crossfade",
-        transitionDuration: 150,
+        transitionDuration: 200,
         child: Widget.Label({
             className: 'overview-search-results-txt txt txt-small txt-action',
-            label: `Copy result`,
+            label: 'Launch',
         })
     });
     const actionTextRevealer = Widget.Revealer({
         revealChild: false,
         transition: "slide_left",
-        transitionDuration: 100,
+        transitionDuration: 300,
         child: actionText,
-    })
+    });
     return Widget.Button({
         className: 'overview-search-result-btn',
         onClicked: () => {
             MenuService.toggle('overview');
-            console.log(result);
-            execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
+            app.launch();
         },
         child: Widget.Box({
             children: [
                 Widget.Box({
                     vertical: false,
                     children: [
-                        Widget.Label({
-                            className: `icon-material overview-search-results-icon`,
-                            label: 'calculate',
+                        Widget.Icon({
+                            className: 'overview-search-results-icon',
+                            icon: app.iconName,
+                            size: 35, // TODO: Make this follow font size. made for 11pt.
                         }),
-                        Widget.Box({
-                            vertical: true,
-                            children: [
-                                Widget.Label({
-                                    halign: 'start',
-                                    className: 'overview-search-results-txt txt txt-smallie txt-subtext',
-                                    label: `Expression`,
-                                    truncate: "end",
-                                }),
-                                Widget.Label({
-                                    halign: 'start',
-                                    className: 'overview-search-results-txt txt txt-norm',
-                                    label: `${result}`,
-                                    truncate: "end",
-                                }),
-                            ]
+                        Widget.Label({
+                            className: 'overview-search-results-txt txt txt-norm',
+                            label: app.name,
                         }),
                         Widget.Box({ hexpand: true }),
                         actionTextRevealer,
-                    ],
+                    ]
                 })
             ]
         }),
@@ -175,16 +161,38 @@ const CalculationResultButton = ({ result, text }) => {
                 actionTextRevealer.revealChild = false;
             }],
         ]
-    });
+    })
 }
 
-const ContextMenuItem = ({ label, onClick }) => Widget({
-    type: Gtk.MenuItem,
-    label: `${label}`,
-    setup: menuItem => {
-        menuItem.connect("activate", onClick);
-    }
+const ExecuteCommandButton = ({ command, terminal = false }) => searchItem({
+    materialIconName: `${terminal ? 'terminal' : 'settings_b_roll'}`,
+    name: `Run command`,
+    actionName: `Execute ${terminal ? 'in terminal' : ''}`,
+    content: `${command}`,
+    onActivate: () => execAndClose(command, terminal),
 })
+
+const CustomCommandButton = ({ text = '' }) => searchItem({
+    materialIconName: 'settings_suggest',
+    name: 'Action',
+    actionName: 'Run',
+    content: `${text}`,
+    onActivate: () => {
+        MenuService.toggle('overview');
+        launchCustomCommand(text);
+    },
+});
+
+const SearchButton = ({ text = '' }) => searchItem({
+    materialIconName: 'travel_explore',
+    name: 'Search Google',
+    actionName: 'Go',
+    content: `${text}`,
+    onActivate: () => {
+        MenuService.toggle('overview');
+        execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
+    },
+});
 
 const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget({
     type: Gtk.MenuItem,
@@ -434,14 +442,16 @@ export const SearchAndWindows = () => {
         className: 'overview-search-box txt-small txt',
         halign: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
-            try {
-                const fullResult = eval(text);
-                // copy
-                execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
-                MenuService.close('overview');
-                return;
-            } catch (e) {
-                // console.log(e);
+            if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround
+                try {
+                    const fullResult = eval(text);
+                    // copy
+                    execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
+                    MenuService.close('overview');
+                    return;
+                } catch (e) {
+                    // console.log(e);
+                }
             }
             if (_appSearchResults.length > 0) {
                 MenuService.close('overview');
@@ -484,72 +494,33 @@ export const SearchAndWindows = () => {
                     _appSearchResults = Applications.query(text);
 
                     // Calculate
-                    try {
-                        const fullResult = eval(text);
-                        resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
-                    } catch (e) {
-                        // console.log(e);
+                    if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround.
+                        try {
+                            const fullResult = eval(text);
+                            resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
+                        } catch (e) {
+                            // console.log(e);
+                        }
+                    }
+                    if (text.startsWith('>')) { // Eval on typing is dangerous, this is a workaround.
+                        resultsBox.add(CustomCommandButton({ text: entry.text }));
                     }
                     // Add application entries
                     let appsToAdd = MAX_RESULTS;
                     _appSearchResults.forEach(app => {
                         if (appsToAdd == 0) return;
-                        resultsBox.add(Widget.Button({
-                            className: 'overview-search-result-btn',
-                            onClicked: () => {
-                                MenuService.toggle('overview');;
-                                app.launch();
-                            },
-                            child: Widget.Box({
-                                children: [
-                                    Widget.Box({
-                                        vertical: false,
-                                        children: [
-                                            Widget.Icon({
-                                                className: 'overview-search-results-icon',
-                                                icon: app.iconName,
-                                                size: 35, // TODO: Make this follow font size. made for 11pt.
-                                            }),
-                                            Widget.Label({
-                                                className: 'overview-search-results-txt txt txt-norm',
-                                                label: app.name,
-                                            })
-                                        ]
-                                    })
-                                ]
-                            })
-                        }));
+                        resultsBox.add(DesktopEntryButton(app));
                         appsToAdd--;
                     });
 
                     // Fallbacks
-                    resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
+                    // if the first word is an actual command
+                    if (exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+                        resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
+                    }
 
                     // Add fallback: search
-                    resultsBox.add(Widget.Button({
-                        className: 'overview-search-result-btn',
-                        onClicked: () => {
-                            MenuService.toggle('overview');
-                            execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
-                        },
-                        child: Widget.Box({
-                            children: [
-                                Widget.Box({
-                                    vertical: false,
-                                    children: [
-                                        Widget.Label({
-                                            className: `icon-material overview-search-results-icon`,
-                                            label: 'travel_explore',
-                                        }),
-                                        Widget.Label({
-                                            className: 'overview-search-results-txt txt txt-norm',
-                                            label: `Google "${entry.text}"`,
-                                        })
-                                    ]
-                                })
-                            ]
-                        })
-                    }));
+                    resultsBox.add(SearchButton({ text: entry.text }));
                     resultsBox.show_all();
                 }
             }]

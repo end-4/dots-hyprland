@@ -1,0 +1,15 @@
+.osk-window {
+    @include md3_decel;
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    min-height: 29.591rem;
+    min-width: 50rem;
+    background-color: $t_background;
+    padding: 1.023rem;
+}
+
+.osk-hide {
+    margin-bottom: -30.682rem;
+    @include md3_accel;
+}
