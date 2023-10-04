@@ -5,6 +5,10 @@
   background-image: linear-gradient(45deg, #F4D609 0%, #F4D609 10%, #212121 10%, #212121 20%, #F4D609 20%, #F4D609 30%, #212121 30%, #212121 40%, #F4D609 40%, #F4D609 50%, #212121 50%, #212121 60%, #F4D609 60%, #F4D609 70%, #212121 70%, #212121 80%, #F4D609 80%, #F4D609 90%, #212121 90%, #212121 100%);
   background-repeat: repeat; }
 
+.test-size {
+  min-height: 3rem;
+  min-width: 3rem; }
+
 .techfont {
   font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace; }
 
@@ -26,7 +30,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e0e3e3; }
+  color: #e3e1e6; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -76,10 +80,10 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #a4a7a7; }
+  color: #a7a6aa; }
 
 .txt-action {
-  color: #c2c5c5; }
+  color: #c5c3c8; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -92,16 +96,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e0e3e3;
+  background-color: #e3e1e6;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #3f4848;
-  color: #bec9c9;
+  background-color: #44464e;
+  color: #c6c6d0;
   border-radius: 50rem;
-  border: 1px solid #bec9c9; }
+  border: 1px solid #c6c6d0; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -339,8 +343,8 @@ tooltip {
 
 menu {
   padding: 0.681rem;
-  background: #3f4848;
-  color: #bec9c9;
+  background: #44464e;
+  color: #c6c6d0;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -355,10 +359,10 @@ menu > menuitem {
   border-radius: 0.545rem; }
 
 menu > menuitem:hover {
-  background-color: #4c5555; }
+  background-color: #51535b; }
 
 .bar-bg {
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -372,11 +376,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
-  background-color: rgba(25, 28, 28, 0.4); }
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
+  background-color: rgba(27, 27, 31, 0.4); }
 
 .bar-group-center {
   border-bottom-left-radius: 1.364rem;
@@ -441,7 +445,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(45, 48, 48, 0.4);
+  background-color: rgba(47, 47, 51, 0.4);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -463,8 +467,8 @@ menu > menuitem:hover {
   min-width: 1.5rem;
   font-size: 1.091rem;
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
-  background-color: #3fdadf;
-  color: #003739;
+  background-color: #b2c5ff;
+  color: #002a78;
   border-radius: 999px;
   margin: 0.068rem; }
 
@@ -476,50 +480,50 @@ menu > menuitem:hover {
   margin: 0rem 0.409rem; }
 
 .bar-ws-occupied {
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   min-width: 1.772rem;
-  border-top: 0.068rem solid #cce8e8;
-  border-bottom: 0.068rem solid #cce8e8; }
+  border-top: 0.068rem solid #dde2fa;
+  border-bottom: 0.068rem solid #dde2fa; }
 
 .bar-ws-occupied-left {
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   min-width: 1.704rem;
   border-top-left-radius: 999px;
   border-bottom-left-radius: 999px;
-  border-left: 0.068rem solid #cce8e8;
-  border-top: 0.068rem solid #cce8e8;
-  border-bottom: 0.068rem solid #cce8e8;
+  border-left: 0.068rem solid #dde2fa;
+  border-top: 0.068rem solid #dde2fa;
+  border-bottom: 0.068rem solid #dde2fa;
   border-right: 0px solid transparent; }
 
 .bar-ws-occupied-right {
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   min-width: 1.704rem;
   border-top-right-radius: 999px;
   border-bottom-right-radius: 999px;
-  border-right: 0.068rem solid #cce8e8;
-  border-top: 0.068rem solid #cce8e8;
-  border-bottom: 0.068rem solid #cce8e8;
+  border-right: 0.068rem solid #dde2fa;
+  border-top: 0.068rem solid #dde2fa;
+  border-bottom: 0.068rem solid #dde2fa;
   border-left: 0px solid transparent; }
 
 .bar-ws-occupied-left-right {
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   min-width: 1.636rem;
   border-radius: 9999px;
-  border: 0.068rem solid #cce8e8; }
+  border: 0.068rem solid #dde2fa; }
 
 .bar-ws-empty {
-  color: #e0e3e3;
+  color: #e3e1e6;
   border-color: transparent; }
 
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #324b4c;
-  color: #cce8e8; }
+  background-color: #414659;
+  color: #dde2fa; }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -537,8 +541,8 @@ menu > menuitem:hover {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #324b4c;
-  color: #cce8e8; }
+  background-color: #414659;
+  color: #dde2fa; }
 
 .bar-music-circprog {
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
@@ -546,16 +550,16 @@ menu > menuitem:hover {
   min-width: 0.068rem;
   min-height: 1.770rem;
   padding: 0rem;
-  background-color: #324b4c;
-  color: #cce8e8; }
+  background-color: #414659;
+  color: #dde2fa; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #324b4c;
-  color: #cce8e8; }
+  background-color: #414659;
+  color: #dde2fa; }
 
 .bar-music-playstate-txt {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -626,7 +630,7 @@ menu > menuitem:hover {
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #cce8e8; }
+    background-color: #dde2fa; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -652,7 +656,7 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #cce8e8; }
+  background-color: #dde2fa; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -663,7 +667,7 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   border-radius: 1.705rem;
   border-width: 0.068rem; }
 
@@ -675,7 +679,7 @@ menu > menuitem:hover {
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #a4a7a7; }
+  color: #a7a6aa; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -707,14 +711,14 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -724,16 +728,16 @@ menu > menuitem:hover {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #3fdadf;
-  border: 0.068rem solid #3fdadf;
-  box-shadow: 0rem 0.136rem 0rem #3fdadf;
+  color: #b2c5ff;
+  border: 0.068rem solid #b2c5ff;
+  box-shadow: 0rem 0.136rem 0rem #b2c5ff;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #64f7fc; }
+  color: #dae2ff; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -741,22 +745,22 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #3f4848; }
+  background-color: #44464e; }
 
 .cheatsheet-closebtn:active {
-  background-color: #656f6f; }
+  background-color: #6b6c75; }
 
 .sidebar-right {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-height: 29.591rem;
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   padding: 1.023rem; }
 
 .sideright-hide {
@@ -766,15 +770,15 @@ menu > menuitem:hover {
 .sidebar-left {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   padding: 1.023rem; }
 
 .sideleft-hide {
@@ -783,41 +787,41 @@ menu > menuitem:hover {
 
 .sidebar-group {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   padding: 0.341rem;
-  background-color: rgba(25, 28, 28, 0.4); }
+  background-color: rgba(27, 27, 31, 0.4); }
 
 .sidebar-group-nopad {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
-  background-color: rgba(25, 28, 28, 0.4); }
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
+  background-color: rgba(27, 27, 31, 0.4); }
 
 .sidebar-button {
   padding: 0rem 0.818rem;
-  background-color: rgba(50, 75, 76, 0.85);
-  color: #cce8e8; }
+  background-color: rgba(65, 70, 89, 0.85);
+  color: #dde2fa; }
 
 .sidebar-button-nopad {
-  background-color: rgba(50, 75, 76, 0.85);
-  color: #cce8e8; }
+  background-color: rgba(65, 70, 89, 0.85);
+  color: #dde2fa; }
 
 .sidebar-button:hover {
-  background-color: rgba(81, 106, 107, 0.85); }
+  background-color: rgba(96, 101, 121, 0.85); }
 
 .sidebar-button:active {
-  background-color: rgba(112, 138, 138, 0.85); }
+  background-color: rgba(127, 132, 153, 0.85); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(81, 106, 107, 0.85); }
+  background-color: rgba(96, 101, 121, 0.85); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(112, 138, 138, 0.85); }
+  background-color: rgba(127, 132, 153, 0.85); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -834,14 +838,14 @@ menu > menuitem:hover {
   border-radius: 0.818rem; }
 
 .sidebar-button-active {
-  background-color: #3fdadf;
-  color: #003739; }
+  background-color: #b2c5ff;
+  color: #002a78; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(65, 216, 220, 0.94); }
+  background-color: rgba(177, 195, 252, 0.94); }
 
 .sidebar-button-active:active {
-  background-color: rgba(69, 209, 214, 0.82); }
+  background-color: rgba(173, 190, 243, 0.82); }
 
 .sidebar-navrail {
   padding: 0rem 1.159rem; }
@@ -856,12 +860,12 @@ menu > menuitem:hover {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-navrail-btn-active > box > label:first-child {
-  background-color: #324b4c;
-  color: #cce8e8; }
+  background-color: #414659;
+  color: #dde2fa; }
 
 .sidebar-navrail-btn-active:hover > box > label:first-child {
-  background-color: rgba(52, 76, 77, 0.94);
-  color: rgba(202, 229, 229, 0.94); }
+  background-color: rgba(67, 72, 90, 0.94);
+  color: rgba(218, 223, 247, 0.94); }
 
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
@@ -871,8 +875,8 @@ menu > menuitem:hover {
   min-width: 0.818rem;
   min-height: 4.091rem;
   padding: 0.409rem;
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   font-size: 0px; }
 
 .sidebar-memory-swap-circprog {
@@ -881,30 +885,30 @@ menu > menuitem:hover {
   min-height: 2.255rem;
   padding: 0.409rem;
   margin: 0.918rem;
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   font-size: 0px; }
 
 .sidebar-cpu-circprog {
   min-width: 0.818rem;
   min-height: 3.409rem;
   padding: 0.409rem;
-  background-color: #324b4c;
-  color: #cce8e8;
+  background-color: #414659;
+  color: #dde2fa;
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
   font-size: 0px; }
 
 .sidebar-notification-low {
   border-radius: 0.818rem;
-  background-color: rgba(63, 72, 72, 0.4);
-  color: #bec9c9;
+  background-color: rgba(68, 70, 78, 0.4);
+  color: #c6c6d0;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
 .sidebar-notification-normal {
   border-radius: 0.818rem;
-  background-color: rgba(63, 72, 72, 0.4);
-  color: #bec9c9;
+  background-color: rgba(68, 70, 78, 0.4);
+  color: #c6c6d0;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
@@ -916,10 +920,10 @@ menu > menuitem:hover {
   padding-right: 1.363rem; }
 
 .sidebar-notif-body-low {
-  color: #949e9e; }
+  color: #9b9ca5; }
 
 .sidebar-notif-body-normal {
-  color: #949e9e; }
+  color: #9b9ca5; }
 
 .sidebar-notif-body-critical {
   color: #9a3b3a; }
@@ -930,8 +934,8 @@ menu > menuitem:hover {
   border-radius: 9999px; }
 
 .sidebar-notif-icon-material {
-  background-color: rgba(50, 75, 76, 0.85);
-  color: #cce8e8; }
+  background-color: rgba(65, 70, 89, 0.85);
+  color: #dde2fa; }
 
 .sidebar-notif-icon-material-urgent {
   background-color: rgba(147, 0, 6, 0.85);
@@ -959,19 +963,19 @@ menu > menuitem:hover {
   min-width: 0.273rem;
   min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(190, 201, 201, 0.4); }
+  background-color: rgba(198, 198, 208, 0.4); }
 
 .sidebar-scrollbar slider:hover {
-  background-color: rgba(190, 201, 201, 0.52); }
+  background-color: rgba(198, 198, 208, 0.52); }
 
 .sidebar-scrollbar slider:active {
-  background-color: #7f8989; }
+  background-color: #85868f; }
 
 .sidebar-calendar-btn {
   min-height: 2.523rem;
   min-width: 2.523rem;
   border-radius: 9999px;
-  color: #e0e3e3; }
+  color: #e3e1e6; }
 
 .sidebar-calendar-btn:hover {
   background-color: rgba(128, 128, 128, 0.4); }
@@ -984,17 +988,17 @@ menu > menuitem:hover {
   margin-right: -10.341rem; }
 
 .sidebar-calendar-btn-today {
-  background-color: #3fdadf;
-  color: #003739; }
+  background-color: #b2c5ff;
+  color: #002a78; }
 
 .sidebar-calendar-btn-today:hover {
-  background-color: rgba(65, 216, 220, 0.94); }
+  background-color: rgba(177, 195, 252, 0.94); }
 
 .sidebar-calendar-btn-today:active {
-  background-color: rgba(69, 209, 214, 0.82); }
+  background-color: rgba(173, 190, 243, 0.82); }
 
 .sidebar-calendar-btn-othermonth {
-  color: #7d8080; }
+  color: #7f7e83; }
 
 .sidebar-calendar-header {
   margin: 0.341rem; }
@@ -1002,35 +1006,35 @@ menu > menuitem:hover {
 .sidebar-calendar-monthyear-btn {
   border-radius: 9999px;
   padding: 0rem 0.682rem;
-  background-color: rgba(63, 72, 72, 0.4);
-  color: #bec9c9; }
+  background-color: rgba(68, 70, 78, 0.4);
+  color: #c6c6d0; }
 
 .sidebar-calendar-monthyear-btn:hover {
-  background-color: rgba(102, 112, 112, 0.46);
-  color: #b1bcbc; }
+  background-color: rgba(108, 109, 118, 0.46);
+  color: #b9b9c3; }
 
 .sidebar-calendar-monthyear-btn:active {
-  background-color: #586262;
-  color: #a5afaf; }
+  background-color: #5e6068;
+  color: #acacb6; }
 
 .sidebar-calendar-monthshift-btn {
   min-width: 2.045rem;
   min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(63, 72, 72, 0.4);
-  color: #bec9c9; }
+  background-color: rgba(68, 70, 78, 0.4);
+  color: #c6c6d0; }
 
 .sidebar-calendar-monthshift-btn:hover {
-  background-color: rgba(102, 112, 112, 0.46);
-  color: #b1bcbc; }
+  background-color: rgba(108, 109, 118, 0.46);
+  color: #b9b9c3; }
 
 .sidebar-calendar-monthshift-btn:active {
-  background-color: #586262;
-  color: #a5afaf; }
+  background-color: #5e6068;
+  color: #acacb6; }
 
 .sidebar-todo-selector-tab {
   min-height: 2.5rem;
-  color: #e0e3e3;
+  color: #e3e1e6;
   border-radius: 0.818rem; }
 
 .sidebar-todo-selector-tab:hover {
@@ -1043,7 +1047,7 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .sidebar-todo-selector-tab-active > box > label {
-  color: #3fdadf; }
+  color: #b2c5ff; }
 
 .sidebar-todo-selector-tab-active > box > label:last-child {
   text-decoration: underline; }
@@ -1063,21 +1067,21 @@ menu > menuitem:hover {
   border-radius: 0.818rem;
   min-height: 2.045rem;
   padding: 0.341rem;
-  background-color: rgba(50, 75, 76, 0.85);
-  color: #cce8e8; }
+  background-color: rgba(65, 70, 89, 0.85);
+  color: #dde2fa; }
 
 .sidebar-clipboard-item:hover {
-  background-color: rgba(65, 91, 92, 0.85); }
+  background-color: rgba(81, 86, 105, 0.85); }
 
 .sidebar-clipboard-item:active {
-  background-color: rgba(81, 106, 107, 0.85); }
+  background-color: rgba(96, 101, 121, 0.85); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(25, 28, 28, 0.85);
+  background-color: rgba(27, 27, 31, 0.85);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -1094,55 +1098,55 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #64f7fc; }
+    background-color: #dae2ff; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #004f52;
+    background-color: #224290;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #64f7fc; }
+  color: #dae2ff; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e0e3e3;
+  color: #e3e1e6;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e0e3e3; }
+  color: #e3e1e6; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
   padding-right: 2.864rem;
-  background-color: rgba(25, 28, 28, 0.85);
-  color: #e0e3e3;
+  background-color: rgba(27, 27, 31, 0.85);
+  color: #e3e1e6;
   caret-color: transparent; }
   .overview-search-box selection {
-    background-color: #b1cccd;
-    color: #1b3435; }
+    background-color: #c1c6dd;
+    color: #2b3042; }
 
 .overview-search-box-extended {
   min-width: 25.909rem;
-  caret-color: #cce8e8; }
+  caret-color: #dde2fa; }
 
 .overview-search-prompt {
-  color: #a4a7a7; }
+  color: #a7a6aa; }
 
 .overview-search-icon {
   margin: 0rem 1.023rem; }
@@ -1157,16 +1161,16 @@ menu > menuitem:hover {
 
 .overview-search-results {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 28.773rem;
   padding: 0.682rem;
-  background-color: rgba(25, 28, 28, 0.85);
-  color: #e0e3e3; }
+  background-color: rgba(27, 27, 31, 0.85);
+  color: #e3e1e6; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem;
@@ -1196,40 +1200,58 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 105, 0.37);
-  border-left: 1px solid rgba(102, 105, 105, 0.37);
-  border-right: 1px solid rgba(71, 74, 74, 0.335);
-  border-bottom: 1px solid rgba(71, 74, 74, 0.335);
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(25, 28, 28, 0.85);
-  color: #e0e3e3; }
+  background-color: rgba(27, 27, 31, 0.85);
+  color: #e3e1e6; }
 
 .overview-tasks-workspace {
   border-radius: 1.159rem;
   margin: 0.341rem;
-  background-color: rgba(42, 45, 45, 0.307); }
+  background-color: rgba(44, 44, 48, 0.307); }
 
 .overview-tasks-window {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(72, 75, 75, 0.32);
-  border-left: 1px solid rgba(72, 75, 75, 0.32);
-  border-right: 1px solid rgba(60, 63, 63, 0.315);
-  border-bottom: 1px solid rgba(60, 63, 63, 0.315);
-  background-color: rgba(50, 75, 76, 0.5);
-  color: #cce8e8; }
+  border-top: 1px solid rgba(74, 73, 78, 0.32);
+  border-left: 1px solid rgba(74, 73, 78, 0.32);
+  border-right: 1px solid rgba(62, 62, 66, 0.315);
+  border-bottom: 1px solid rgba(62, 62, 66, 0.315);
+  background-color: rgba(65, 70, 89, 0.5);
+  color: #dde2fa; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(52, 95, 96, 0.525); }
+  background-color: rgba(80, 87, 112, 0.525); }
 
 .overview-tasks-window:active {
-  background-color: rgba(52, 95, 96, 0.525); }
+  background-color: rgba(80, 87, 112, 0.525); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(52, 95, 96, 0.525); }
+  background-color: rgba(80, 87, 112, 0.525); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(50, 75, 76, 0.3);
+  background-color: rgba(65, 70, 89, 0.3);
   border: 1px; }
+
+.osk-window {
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 1.705rem;
+  border-top: 1px solid rgba(104, 104, 108, 0.37);
+  border-left: 1px solid rgba(104, 104, 108, 0.37);
+  border-right: 1px solid rgba(73, 72, 77, 0.335);
+  border-bottom: 1px solid rgba(73, 72, 77, 0.335);
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
+  margin: 7px;
+  min-height: 29.591rem;
+  min-width: 50rem;
+  background-color: rgba(27, 27, 31, 0.85);
+  padding: 1.023rem; }
+
+.osk-hide {
+  margin-bottom: -30.682rem;
+  transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }

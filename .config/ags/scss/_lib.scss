@@ -17,6 +17,11 @@ $rounding_large: 1.705rem;
     background-repeat: repeat;
 }
 
+.test-size {
+    min-height: 3rem;
+    min-width: 3rem;
+}
+
 // Common rules
 @mixin mainfont {
     font-family:

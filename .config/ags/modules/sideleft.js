@@ -73,7 +73,7 @@ export const SidebarLeft = () => Box({
                 }],
                 ['key-press-event', (box, event) => {
                     if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                        MenuService.close('sideright');
+                        MenuService.close('sideleft');
                     }
                 }]
             ],

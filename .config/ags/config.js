@@ -4,6 +4,7 @@ import { bar } from './windows/bar.js';
 import { corner_topleft, corner_topright, corner_bottomleft, corner_bottomright } from './windows/corners.js';
 import { overview } from './windows/overview.js';
 import { Indicator } from './windows/osd.js';
+import { osk } from './windows/osk.js';
 import { cheatsheet } from './windows/cheatsheet.js';
 import { SideRight } from './windows/sideright.js';
 import { SideLeft } from './windows/sideleft.js';
@@ -34,5 +35,6 @@ export default {
         cheatsheet,
         SideRight(),
         SideLeft(),
+        osk, // On-screen keyboard
     ],
 };
