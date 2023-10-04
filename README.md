@@ -8,3 +8,8 @@
 - Planned stuff
   - Keyboard friendly widgets: accessible with or without a mouse (if that's possible. doubts it isn't)
   - Flexible: Scalable. Light/Dark mode support. Adapts to your wallpaper.
+
+
+- notes
+  - morewaita icon pack
+  - 11pt font size best
