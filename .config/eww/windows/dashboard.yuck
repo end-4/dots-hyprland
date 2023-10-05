@@ -87,7 +87,7 @@
     :space-evenly false :spacing 3
     (eventbox
       :cursor "pointer"
-      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
       (box
         :orientation "v"
         :space-evenly false
@@ -115,7 +115,7 @@
     :space-evenly false :spacing 3
     (eventbox
       :cursor "pointer"
-      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
       (box
         :orientation "v"
         :space-evenly false
@@ -263,7 +263,7 @@
     :spacing 3
     (eventbox
       :cursor "pointer"
-      :onclick "hyprctl keyword decoration:blur ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
       (box
         :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
         (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
@@ -271,7 +271,7 @@
     )
     (eventbox
       :cursor "pointer"
-      :onclick "hyprctl keyword decoration:blur_xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
+      :onclick "hyprctl keyword decoration:blur:xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
       (box
         :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
         (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
