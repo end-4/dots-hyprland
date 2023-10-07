@@ -1,11 +1,12 @@
 import { App, Service, Utils, Widget } from '../imports.js';
 const { connect, exec, execAsync, timeout, lookUpIcon } = Utils;
 import { deflisten } from '../scripts/scripts.js';
+import Brightness from '../scripts/brightness.js';
 
-const Brightness = deflisten(
-    "Brightness",
-    `${App.configDir}/scripts/brightness.sh`,
-);
+// const Brightness = deflisten(
+//     "Brightness",
+//     `${App.configDir}/scripts/brightness.sh`,
+// );
 
 class IndicatorService extends Service {
     static {
@@ -48,7 +49,7 @@ class IndicatorService extends Service {
     display() {
         // brightness is async, so lets wait a bit
         timeout(10, () => {
-            const value = Service.Brightness.screen;
+            const value = Brightness.screen_value;
             const icon = 'display-brightness-symbolic'
             Indicator.popup(value, icon);
         });
@@ -57,7 +58,7 @@ class IndicatorService extends Service {
     kbd() {
         // brightness is async, so lets wait a bit
         timeout(10, () => {
-            const value = Service.Brightness.kbd;
+            const value = Brightness.kbd;
             this.popup((value * 33 + 1) / 100, 'keyboard-brightness-symbolic');
         });
     }
@@ -107,12 +108,11 @@ export const Osd = () => Widget.EventBox({
                                     }),
                                     Widget.Label({
                                         hexpand: false, className: 'osd-value-txt',
-                                        connections: [[Brightness, (label) => {
-                                            const value = Brightness.state;
-                                            label.label = `${Math.round(value)}`;
-                                            // if (Brightness.state > -1) label.label = `${Math.round(Brightness.state)}`;
-                                        }
-                                        ]],
+                                        connections: [
+                                            [Brightness, self => {
+                                                self.label = `${Math.round(Brightness.screen_value * 100)}`;
+                                            }, 'notify::screen-value'],
+                                        ],
                                     }),
                                 ]
                             }),
@@ -120,9 +120,9 @@ export const Osd = () => Widget.EventBox({
                                 className: 'osd-progress',
                                 hexpand: true,
                                 vertical: false,
-                                connections: [[Brightness, (progress) => {
-                                    progress.value = Brightness.state / 100;
-                                }]],
+                                connections: [[Brightness, progress => {
+                                    progress.value = Brightness.screen_value;
+                                }, 'notify::screen-value']],
                             })
                         ],
                     }),

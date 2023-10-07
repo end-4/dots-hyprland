@@ -80,6 +80,7 @@ function substitute(str) {
         { from: 'Code', to: 'code' },
         { from: 'GitHub Desktop', to: 'github-desktop' },
         { from: 'wpsoffice', to: 'wps-office-kingsoft' },
+        { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
     ];
 
     for (const { from, to } of subs) {
@@ -294,7 +295,7 @@ const workspace = index => {
         children: [Widget.EventBox({
             hexpand: true,
             vexpand: true,
-            onPrimaryClick: () => {
+            onPrimaryClickRelease: () => {
                 execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
                 MenuService.toggle('overview');
             },
