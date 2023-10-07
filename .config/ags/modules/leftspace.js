@@ -1,8 +1,10 @@
 import { App, Service, Utils, Widget } from '../imports.js';
+const { Hyprland } = Service;
 const { CONFIG_DIR, exec, execAsync } = Utils;
 import { deflisten } from '../scripts/scripts.js';
 import { setupCursorHover } from "./lib/cursorhover.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
+import Brightness from '../scripts/brightness.js';
 
 // Removes everything after the last 
 // em dash, en dash, minus, vertical bar, or middle dot    (note: maybe add open parenthesis?)
@@ -38,19 +40,14 @@ function truncateTitle(str) {
     return str.substring(0, lastDash);
 }
 
-const HyprlandActiveWindow = deflisten(
-    "HyprlandActiveWindow",
-    `${App.configDir}/scripts/activewin.sh`,
-);
-
 export const ModuleLeftSpace = () => Widget.EventBox({
     onScrollUp: () => {
-        execAsync('light -A 5');
-        Indicator.speaker();
+        Indicator.speaker(); // Since the brightness and speaker are both on the same window
+        Brightness.screen_value += 0.05;
     },
     onScrollDown: () => {
-        execAsync('light -U 5');
-        Indicator.speaker();
+        Indicator.speaker(); // Since the brightness and speaker are both on the same window
+        Brightness.screen_value -= 0.05;
     },
     child: Widget.Box({
         homogeneous: false,
@@ -75,22 +72,18 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                                 Widget.Label({
                                                     xalign: 0,
                                                     className: 'txt txt-smaller bar-topdesc',
-                                                    connections: [[HyprlandActiveWindow, label => {
-                                                        if (!HyprlandActiveWindow.state)
-                                                            return;
-                                                        const winJson = JSON.parse(HyprlandActiveWindow.state);
-                                                        label.label = Object.keys(winJson).length === 0 ? 'Desktop' : winJson['class'];
+                                                    connections: [[Hyprland.active.client, label => {
+                                                        label.label = Hyprland.active.client._class.length === 0 ? 'Desktop' : Hyprland.active.client._class;
                                                     }]],
                                                 }),
                                                 Widget.Label({
                                                     xalign: 0,
                                                     className: 'txt txt-smallie',
-                                                    connections: [[HyprlandActiveWindow, label => {
-                                                        if (!HyprlandActiveWindow.state)
-                                                            return;
-                                                        const winJson = JSON.parse(HyprlandActiveWindow.state);
-                                                        label.label = Object.keys(winJson).length === 0 ? `Workspace ${Service.Hyprland.active.workspace.id}` : truncateTitle(winJson['title']);
-                                                    }]],
+                                                    connections: [
+                                                        [Hyprland.active.client, label => {
+                                                            label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace._id}` : truncateTitle(Hyprland.active.client._title);
+                                                        }]
+                                                    ],
                                                 })
                                             ]
                                         })
