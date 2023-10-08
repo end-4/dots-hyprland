@@ -30,7 +30,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e8e1e5; }
+  color: #ece0da; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -80,10 +80,10 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #aba6a9; }
+  color: #afa5a0; }
 
 .txt-action {
-  color: #cac3c7; }
+  color: #cdc2bd; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -96,16 +96,16 @@
 
 .separator {
   border-radius: 50rem;
-  background-color: #e8e1e5;
+  background-color: #ece0da;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
 
 tooltip {
-  background-color: #4b444d;
-  color: #cec3ce;
+  background-color: #51443b;
+  color: #d6c3b7;
   border-radius: 50rem;
-  border: 1px solid #cec3ce; }
+  border: 1px solid #d6c3b7; }
 
 .spacing-v-15 > box {
   margin-bottom: 1.023rem; }
@@ -343,8 +343,8 @@ tooltip {
 
 menu {
   padding: 0.681rem;
-  background: #4b444d;
-  color: #cec3ce;
+  background: #51443b;
+  color: #d6c3b7;
   border-radius: 1.159rem; }
 
 menubar > menuitem {
@@ -359,10 +359,10 @@ menu > menuitem {
   border-radius: 0.545rem; }
 
 menu > menuitem:hover {
-  background-color: #58515a; }
+  background-color: #5e5147; }
 
 .bar-bg {
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   min-height: 2.727rem;
   animation-name: flyin-top;
   animation-duration: 250ms;
@@ -376,11 +376,11 @@ menu > menuitem:hover {
   padding: 0.2rem; }
 
 .bar-group {
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
-  background-color: rgba(29, 27, 30, 0.4); }
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
+  background-color: rgba(32, 26, 23, 0.4); }
 
 .bar-group-center {
   border-bottom-left-radius: 1.364rem;
@@ -445,7 +445,7 @@ menu > menuitem:hover {
 .bar-separator {
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(49, 47, 50, 0.4);
+  background-color: rgba(52, 46, 43, 0.4);
   border-radius: 999px;
   margin: 0rem 0.341rem; }
 
@@ -467,8 +467,8 @@ menu > menuitem:hover {
   min-width: 1.5rem;
   font-size: 1.091rem;
   font-family: 'Lexend', 'Inter', 'Noto Sans', sans-serif;
-  background-color: #e7b3ff;
-  color: #4e0078;
+  background-color: #ffb77f;
+  color: #4f2500;
   border-radius: 999px;
   margin: 0.068rem; }
 
@@ -480,50 +480,50 @@ menu > menuitem:hover {
   margin: 0rem 0.409rem; }
 
 .bar-ws-occupied {
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   min-width: 1.772rem;
-  border-top: 0.068rem solid #efdcf4;
-  border-bottom: 0.068rem solid #efdcf4; }
+  border-top: 0.068rem solid #ffdcc3;
+  border-bottom: 0.068rem solid #ffdcc3; }
 
 .bar-ws-occupied-left {
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   min-width: 1.704rem;
   border-top-left-radius: 999px;
   border-bottom-left-radius: 999px;
-  border-left: 0.068rem solid #efdcf4;
-  border-top: 0.068rem solid #efdcf4;
-  border-bottom: 0.068rem solid #efdcf4;
+  border-left: 0.068rem solid #ffdcc3;
+  border-top: 0.068rem solid #ffdcc3;
+  border-bottom: 0.068rem solid #ffdcc3;
   border-right: 0px solid transparent; }
 
 .bar-ws-occupied-right {
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   min-width: 1.704rem;
   border-top-right-radius: 999px;
   border-bottom-right-radius: 999px;
-  border-right: 0.068rem solid #efdcf4;
-  border-top: 0.068rem solid #efdcf4;
-  border-bottom: 0.068rem solid #efdcf4;
+  border-right: 0.068rem solid #ffdcc3;
+  border-top: 0.068rem solid #ffdcc3;
+  border-bottom: 0.068rem solid #ffdcc3;
   border-left: 0px solid transparent; }
 
 .bar-ws-occupied-left-right {
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   min-width: 1.636rem;
   border-radius: 9999px;
-  border: 0.068rem solid #efdcf4; }
+  border: 0.068rem solid #ffdcc3; }
 
 .bar-ws-empty {
-  color: #e8e1e5;
+  color: #ece0da;
   border-color: transparent; }
 
 .bar-batt {
   border-radius: 999px;
   padding: 0rem 0.341rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5b412f;
+  color: #ffdcc3; }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -541,8 +541,8 @@ menu > menuitem:hover {
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5b412f;
+  color: #ffdcc3; }
 
 .bar-music-circprog {
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
@@ -550,16 +550,16 @@ menu > menuitem:hover {
   min-width: 0.068rem;
   min-height: 1.770rem;
   padding: 0rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5b412f;
+  color: #ffdcc3; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5b412f;
+  color: #ffdcc3; }
 
 .bar-music-playstate-txt {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -630,7 +630,7 @@ menu > menuitem:hover {
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #efdcf4; }
+    background-color: #ffdcc3; }
 
 .bar-prog-batt-low {
   min-height: 0.954rem;
@@ -656,7 +656,7 @@ menu > menuitem:hover {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: #efdcf4; }
+  background-color: #ffdcc3; }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -667,7 +667,7 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   border-radius: 1.705rem;
   border-width: 0.068rem; }
 
@@ -679,7 +679,7 @@ menu > menuitem:hover {
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #aba6a9; }
+  color: #afa5a0; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -711,14 +711,14 @@ menu > menuitem:hover {
 
 .cheatsheet-bg {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -728,16 +728,16 @@ menu > menuitem:hover {
   margin: 0.17rem;
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
-  color: #e7b3ff;
-  border: 0.068rem solid #e7b3ff;
-  box-shadow: 0rem 0.136rem 0rem #e7b3ff;
+  color: #ffb77f;
+  border: 0.068rem solid #ffb77f;
+  box-shadow: 0rem 0.136rem 0rem #ffb77f;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #f6d8ff; }
+  color: #ffdcc3; }
 
 .cheatsheet-closebtn {
   border-radius: 50rem;
@@ -745,22 +745,22 @@ menu > menuitem:hover {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #4b444d; }
+  background-color: #51443b; }
 
 .cheatsheet-closebtn:active {
-  background-color: #726a74; }
+  background-color: #796a60; }
 
 .sidebar-right {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-height: 29.591rem;
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   padding: 1.023rem; }
 
 .sideright-hide {
@@ -770,15 +770,15 @@ menu > menuitem:hover {
 .sidebar-left {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 29.591rem;
   min-height: 29.591rem;
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   padding: 1.023rem; }
 
 .sideleft-hide {
@@ -787,41 +787,41 @@ menu > menuitem:hover {
 
 .sidebar-group {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   padding: 0.341rem;
-  background-color: rgba(29, 27, 30, 0.4); }
+  background-color: rgba(32, 26, 23, 0.4); }
 
 .sidebar-group-nopad {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
-  background-color: rgba(29, 27, 30, 0.4); }
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
+  background-color: rgba(32, 26, 23, 0.4); }
 
 .sidebar-button {
   padding: 0rem 0.818rem;
-  background-color: rgba(79, 66, 85, 0.85);
-  color: #efdcf4; }
+  background-color: rgba(91, 65, 47, 0.85);
+  color: #ffdcc3; }
 
 .sidebar-button-nopad {
-  background-color: rgba(79, 66, 85, 0.85);
-  color: #efdcf4; }
+  background-color: rgba(91, 65, 47, 0.85);
+  color: #ffdcc3; }
 
 .sidebar-button:hover {
-  background-color: rgba(111, 97, 117, 0.85); }
+  background-color: rgba(124, 96, 77, 0.85); }
 
 .sidebar-button:active {
-  background-color: rgba(143, 128, 149, 0.85); }
+  background-color: rgba(157, 127, 106, 0.85); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(111, 97, 117, 0.85); }
+  background-color: rgba(124, 96, 77, 0.85); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(143, 128, 149, 0.85); }
+  background-color: rgba(157, 127, 106, 0.85); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -838,14 +838,14 @@ menu > menuitem:hover {
   border-radius: 0.818rem; }
 
 .sidebar-button-active {
-  background-color: #e7b3ff;
-  color: #4e0078; }
+  background-color: #ffb77f;
+  color: #4f2500; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(228, 178, 252, 0.94); }
+  background-color: rgba(252, 182, 127, 0.94); }
 
 .sidebar-button-active:active {
-  background-color: rgba(221, 174, 243, 0.82); }
+  background-color: rgba(243, 178, 127, 0.82); }
 
 .sidebar-navrail {
   padding: 0rem 1.159rem; }
@@ -860,12 +860,12 @@ menu > menuitem:hover {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-navrail-btn-active > box > label:first-child {
-  background-color: #4f4255;
-  color: #efdcf4; }
+  background-color: #5b412f;
+  color: #ffdcc3; }
 
 .sidebar-navrail-btn-active:hover > box > label:first-child {
-  background-color: rgba(80, 68, 86, 0.94);
-  color: rgba(236, 218, 241, 0.94); }
+  background-color: rgba(92, 67, 49, 0.94);
+  color: rgba(252, 218, 193, 0.94); }
 
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
@@ -875,8 +875,8 @@ menu > menuitem:hover {
   min-width: 0.818rem;
   min-height: 4.091rem;
   padding: 0.409rem;
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   font-size: 0px; }
 
 .sidebar-memory-swap-circprog {
@@ -885,30 +885,30 @@ menu > menuitem:hover {
   min-height: 2.255rem;
   padding: 0.409rem;
   margin: 0.918rem;
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   font-size: 0px; }
 
 .sidebar-cpu-circprog {
   min-width: 0.818rem;
   min-height: 3.409rem;
   padding: 0.409rem;
-  background-color: #4f4255;
-  color: #efdcf4;
+  background-color: #5b412f;
+  color: #ffdcc3;
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
   font-size: 0px; }
 
 .sidebar-notification-low {
   border-radius: 0.818rem;
-  background-color: rgba(75, 68, 77, 0.4);
-  color: #cec3ce;
+  background-color: rgba(81, 68, 59, 0.4);
+  color: #d6c3b7;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
 .sidebar-notification-normal {
   border-radius: 0.818rem;
-  background-color: rgba(75, 68, 77, 0.4);
-  color: #cec3ce;
+  background-color: rgba(81, 68, 59, 0.4);
+  color: #d6c3b7;
   padding: 0.818rem;
   padding-right: 1.363rem; }
 
@@ -920,10 +920,10 @@ menu > menuitem:hover {
   padding-right: 1.363rem; }
 
 .sidebar-notif-body-low {
-  color: #a399a3; }
+  color: #aa998e; }
 
 .sidebar-notif-body-normal {
-  color: #a399a3; }
+  color: #aa998e; }
 
 .sidebar-notif-body-critical {
   color: #9a3b3a; }
@@ -934,8 +934,8 @@ menu > menuitem:hover {
   border-radius: 9999px; }
 
 .sidebar-notif-icon-material {
-  background-color: rgba(79, 66, 85, 0.85);
-  color: #efdcf4; }
+  background-color: rgba(91, 65, 47, 0.85);
+  color: #ffdcc3; }
 
 .sidebar-notif-icon-material-urgent {
   background-color: rgba(147, 0, 6, 0.85);
@@ -963,19 +963,19 @@ menu > menuitem:hover {
   min-width: 0.273rem;
   min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(206, 195, 206, 0.4); }
+  background-color: rgba(214, 195, 183, 0.4); }
 
 .sidebar-scrollbar slider:hover {
-  background-color: rgba(206, 195, 206, 0.52); }
+  background-color: rgba(214, 195, 183, 0.52); }
 
 .sidebar-scrollbar slider:active {
-  background-color: #8d848e; }
+  background-color: #948479; }
 
 .sidebar-calendar-btn {
   min-height: 2.523rem;
   min-width: 2.523rem;
   border-radius: 9999px;
-  color: #e8e1e5; }
+  color: #ece0da; }
 
 .sidebar-calendar-btn:hover {
   background-color: rgba(128, 128, 128, 0.4); }
@@ -988,17 +988,17 @@ menu > menuitem:hover {
   margin-right: -10.341rem; }
 
 .sidebar-calendar-btn-today {
-  background-color: #e7b3ff;
-  color: #4e0078; }
+  background-color: #ffb77f;
+  color: #4f2500; }
 
 .sidebar-calendar-btn-today:hover {
-  background-color: rgba(228, 178, 252, 0.94); }
+  background-color: rgba(252, 182, 127, 0.94); }
 
 .sidebar-calendar-btn-today:active {
-  background-color: rgba(221, 174, 243, 0.82); }
+  background-color: rgba(243, 178, 127, 0.82); }
 
 .sidebar-calendar-btn-othermonth {
-  color: #837e82; }
+  color: #867d79; }
 
 .sidebar-calendar-header {
   margin: 0.341rem; }
@@ -1006,35 +1006,35 @@ menu > menuitem:hover {
 .sidebar-calendar-monthyear-btn {
   border-radius: 9999px;
   padding: 0rem 0.682rem;
-  background-color: rgba(75, 68, 77, 0.4);
-  color: #cec3ce; }
+  background-color: rgba(81, 68, 59, 0.4);
+  color: #d6c3b7; }
 
 .sidebar-calendar-monthyear-btn:hover {
-  background-color: rgba(115, 107, 117, 0.46);
-  color: #c1b6c1; }
+  background-color: rgba(122, 107, 97, 0.46);
+  color: #c9b6ab; }
 
 .sidebar-calendar-monthyear-btn:active {
-  background-color: #655d67;
-  color: #b4aab4; }
+  background-color: #6c5d54;
+  color: #bbaa9e; }
 
 .sidebar-calendar-monthshift-btn {
   min-width: 2.045rem;
   min-height: 2.045rem;
   border-radius: 9999px;
-  background-color: rgba(75, 68, 77, 0.4);
-  color: #cec3ce; }
+  background-color: rgba(81, 68, 59, 0.4);
+  color: #d6c3b7; }
 
 .sidebar-calendar-monthshift-btn:hover {
-  background-color: rgba(115, 107, 117, 0.46);
-  color: #c1b6c1; }
+  background-color: rgba(122, 107, 97, 0.46);
+  color: #c9b6ab; }
 
 .sidebar-calendar-monthshift-btn:active {
-  background-color: #655d67;
-  color: #b4aab4; }
+  background-color: #6c5d54;
+  color: #bbaa9e; }
 
 .sidebar-todo-selector-tab {
   min-height: 2.5rem;
-  color: #e8e1e5;
+  color: #ece0da;
   border-radius: 0.818rem; }
 
 .sidebar-todo-selector-tab:hover {
@@ -1047,7 +1047,7 @@ menu > menuitem:hover {
   font-weight: 500; }
 
 .sidebar-todo-selector-tab-active > box > label {
-  color: #e7b3ff; }
+  color: #ffb77f; }
 
 .sidebar-todo-selector-tab-active > box > label:last-child {
   text-decoration: underline; }
@@ -1067,21 +1067,21 @@ menu > menuitem:hover {
   border-radius: 0.818rem;
   min-height: 2.045rem;
   padding: 0.341rem;
-  background-color: rgba(79, 66, 85, 0.85);
-  color: #efdcf4; }
+  background-color: rgba(91, 65, 47, 0.85);
+  color: #ffdcc3; }
 
 .sidebar-clipboard-item:hover {
-  background-color: rgba(95, 81, 101, 0.85); }
+  background-color: rgba(107, 81, 62, 0.85); }
 
 .sidebar-clipboard-item:active {
-  background-color: rgba(111, 97, 117, 0.85); }
+  background-color: rgba(124, 96, 77, 0.85); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -1098,55 +1098,55 @@ menu > menuitem:hover {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #f6d8ff; }
+    background-color: #ffdcc3; }
   .osd-progress progress {
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #6f00a8;
+    background-color: #703700;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1); }
 
 .osd-icon {
-  color: #f6d8ff; }
+  color: #ffdcc3; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e8e1e5;
+  color: #ece0da;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e8e1e5; }
+  color: #ece0da; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
   padding-right: 2.864rem;
-  background-color: rgba(29, 27, 30, 0.85);
-  color: #e8e1e5;
+  background-color: rgba(32, 26, 23, 0.85);
+  color: #ece0da;
   caret-color: transparent; }
   .overview-search-box selection {
-    background-color: #d3c1d8;
-    color: #382c3e; }
+    background-color: #e3bfa6;
+    color: #422c1b; }
 
 .overview-search-box-extended {
   min-width: 25.909rem;
-  caret-color: #efdcf4; }
+  caret-color: #ffdcc3; }
 
 .overview-search-prompt {
-  color: #aba6a9; }
+  color: #afa5a0; }
 
 .overview-search-icon {
   margin: 0rem 1.023rem; }
@@ -1161,16 +1161,16 @@ menu > menuitem:hover {
 
 .overview-search-results {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 28.773rem;
   padding: 0.682rem;
-  background-color: rgba(29, 27, 30, 0.85);
-  color: #e8e1e5; }
+  background-color: rgba(32, 26, 23, 0.85);
+  color: #ece0da; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem;
@@ -1200,58 +1200,98 @@ menu > menuitem:hover {
 
 .overview-tasks {
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(29, 27, 30, 0.85);
-  color: #e8e1e5; }
+  background-color: rgba(32, 26, 23, 0.85);
+  color: #ece0da; }
 
 .overview-tasks-workspace {
   border-radius: 1.159rem;
   margin: 0.341rem;
-  background-color: rgba(46, 44, 47, 0.307); }
+  background-color: rgba(49, 43, 39, 0.307); }
 
 .overview-tasks-window {
   border-radius: 1.159rem;
-  border-top: 1px solid rgba(77, 73, 77, 0.32);
-  border-left: 1px solid rgba(77, 73, 77, 0.32);
-  border-right: 1px solid rgba(65, 62, 65, 0.315);
-  border-bottom: 1px solid rgba(65, 62, 65, 0.315);
-  background-color: rgba(79, 66, 85, 0.5);
-  color: #efdcf4; }
+  border-top: 1px solid rgba(80, 72, 69, 0.32);
+  border-left: 1px solid rgba(80, 72, 69, 0.32);
+  border-right: 1px solid rgba(68, 61, 58, 0.315);
+  border-bottom: 1px solid rgba(68, 61, 58, 0.315);
+  background-color: rgba(91, 65, 47, 0.5);
+  color: #ffdcc3; }
 
 .overview-tasks-window:hover {
-  background-color: rgba(100, 81, 108, 0.525); }
+  background-color: rgba(113, 81, 58, 0.525); }
 
 .overview-tasks-window:active {
-  background-color: rgba(100, 81, 108, 0.525); }
+  background-color: rgba(113, 81, 58, 0.525); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(100, 81, 108, 0.525); }
+  background-color: rgba(113, 81, 58, 0.525); }
 
 .overview-tasks-window-dragging {
   border-top: 1px solid transparent;
-  background-color: rgba(79, 66, 85, 0.3);
+  background-color: rgba(91, 65, 47, 0.3);
   border: 1px; }
 
 .osk-window {
-  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: 170ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
-  border-top: 1px solid rgba(107, 104, 107, 0.37);
-  border-left: 1px solid rgba(107, 104, 107, 0.37);
-  border-right: 1px solid rgba(76, 72, 76, 0.335);
-  border-bottom: 1px solid rgba(76, 72, 76, 0.335);
+  border-top: 1px solid rgba(111, 103, 98, 0.37);
+  border-left: 1px solid rgba(111, 103, 98, 0.37);
+  border-right: 1px solid rgba(79, 71, 68, 0.335);
+  border-bottom: 1px solid rgba(79, 71, 68, 0.335);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  min-height: 29.591rem;
-  min-width: 50rem;
-  background-color: rgba(29, 27, 30, 0.85);
+  background-color: rgba(32, 26, 23, 0.85);
   padding: 1.023rem; }
 
 .osk-hide {
+  margin-top: 30.682rem;
   margin-bottom: -30.682rem;
-  transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
+  transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15); }
+
+.osk-key {
+  border-radius: 0.818rem;
+  background-color: rgba(81, 68, 59, 0.4);
+  color: #d6c3b7;
+  padding: 0.188rem;
+  font-weight: 500;
+  font-size: 1.0909rem; }
+
+.osk-key:hover {
+  background-color: rgba(94, 81, 71, 0.4); }
+
+.osk-key:active {
+  background-color: rgba(121, 106, 96, 0.4); }
+
+.osk-key-active {
+  background-color: rgba(121, 106, 96, 0.4); }
+
+.osk-key-normal {
+  min-width: 3.125rem;
+  min-height: 3.125rem; }
+
+.osk-key-fn {
+  min-width: 3.140625rem;
+  min-height: 1.5625rem; }
+
+.osk-key-tab {
+  min-width: 5rem;
+  min-height: 3.125rem; }
+
+.osk-key-caps {
+  min-width: 5.9375rem;
+  min-height: 3.125rem; }
+
+.osk-key-shift {
+  min-width: 7.8125rem;
+  min-height: 3.125rem; }
+
+.osk-key-control {
+  min-width: 4.0625rem;
+  min-height: 3.125rem; }

@@ -1,5 +1,6 @@
 const { Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
+import { MenuService } from "../scripts/menuservice.js";
 const { Applications, Hyprland } = Service;
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
@@ -15,59 +16,6 @@ import { ModulePowerButton } from "./powerbutton.js";
 const CLOSE_ANIM_TIME = 150;
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-export class MenuService extends Service {
-    static { Service.register(this); }
-    static { globalThis['MenuService'] = this; }
-    static instance = new MenuService();
-    static opened = '';
-    static toggle(menu) {
-        console.log("CURRENTLY OPEN WINDOW:'", MenuService.opened, "'");
-        if (MenuService.opened === menu) {
-            MenuService.close(menu);
-        }
-        else {
-            console.log('closing"', MenuService.opened, '"');
-            if (MenuService.opened != '') {
-                MenuService.closeButDontUpdate(MenuService.opened);
-            }
-            MenuService.open(menu);
-        }
-    }
-    static close(menu) {
-        console.log('CLOSING: \'', menu, '\'');
-        MenuService.opened = '';
-        MenuService.instance.emit('changed');
-        console.log('closing', menu);
-        App.closeWindow(menu);
-    }
-    static closeButDontUpdate(menu) {
-        console.log('CLOSING BUT DONT UPDATE: \'', menu, '\'');
-        MenuService.opened = '';
-        console.log('closing', menu);
-        App.closeWindow(menu);
-    }
-    static open(menu) {
-        console.log('OPENING: \'', menu, '\'');
-        App.closeWindow(MenuService.opened);
-        MenuService.opened = menu;
-        MenuService.instance.emit('changed');
-        console.log('opening', menu);
-        App.openWindow(menu);
-    }
-
-    constructor() {
-        super();
-        // the below listener messes things up
-        // App.instance.connect('window-toggled', (_a, name, visible) => {
-        //     // sleep(CLOSE_ANIM_TIME);
-        //     if (!visible && MenuService.opened != '') {
-        //         MenuService.opened = '';
-        //         MenuService.instance.emit('changed');
-        //     }
-        // });
-    }
 }
 
 export const SidebarRight = () => Box({

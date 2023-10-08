@@ -3,7 +3,7 @@ import { App, Service, Utils, Widget } from '../imports.js';
 const { Applications, Hyprland } = Service;
 const { execAsync, exec } = Utils;
 const { Box, EventBox, Button, Label, Scrollable } = Widget;
-const { MenuService } = Service;
+import { MenuService } from "../scripts/menuservice.js";
 
 const CLIPBOARD_SHOWN_ENTRIES = 20;
 
