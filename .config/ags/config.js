@@ -23,6 +23,7 @@ export default {
     closeWindowDelay: {
         'sideright': CLOSE_ANIM_TIME,
         'sideleft': CLOSE_ANIM_TIME,
+        'osk': CLOSE_ANIM_TIME,
     },
     windows: [
         bar,

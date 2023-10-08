@@ -1,15 +1,71 @@
+$osk_key_height: 3.125rem;
+$osk_key_width: 3.125rem;
+$osk_key_padding: 0.188rem;
+
 .osk-window {
-    @include md3_decel;
+    @include md3_decel_fast;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
-    min-height: 29.591rem;
-    min-width: 50rem;
+    // min-height: 29.591rem;
+    // min-width: 50rem;
     background-color: $t_background;
     padding: 1.023rem;
 }
 
 .osk-hide {
+    margin-top: 30.682rem;
     margin-bottom: -30.682rem;
-    @include md3_accel;
+    @include md3_accel_fast;
+}
+
+.osk-key {
+    @include small-rounding;
+    background-color: $t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $osk_key_padding;
+    font-weight: 500;
+    font-size: 1.0909rem;
+}
+
+.osk-key:hover {
+    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
+}
+
+.osk-key:active {
+    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+}
+
+.osk-key-active {
+    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+}
+
+.osk-key-normal {
+    min-width: $osk_key_width;
+    min-height: $osk_key_height;
+}
+
+.osk-key-fn {
+    min-width: $osk_key_width * 1.005;
+    min-height: $osk_key_height / 2;
+}
+
+.osk-key-tab {
+    min-width: $osk_key_width * 1.6;
+    min-height: $osk_key_height;
+}
+
+.osk-key-caps {
+    min-width: $osk_key_width * 1.9;
+    min-height: $osk_key_height;
+}
+
+.osk-key-shift {
+    min-width: $osk_key_width * 2.5;
+    min-height: $osk_key_height;
+}
+
+.osk-key-control {
+    min-width: $osk_key_width * 1.3;
+    min-height: $osk_key_height;
 }

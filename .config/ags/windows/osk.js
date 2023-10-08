@@ -1,3 +1,4 @@
+const { Gdk, Gtk } = imports.gi;
 import { Widget } from '../imports.js';
 import { OnScreenKeyboard } from "../modules/onscreenkeyboard.js";
 
@@ -14,3 +15,10 @@ export const osk = Widget.Window({ // On-screen keyboard
         ]
     }),
 })
+
+
+// export const osk = Widget({
+//     type: Gtk.Window,
+//     child: OnScreenKeyboard(),
+// })
+// osk.show_all();
