@@ -1,6 +1,8 @@
-$osk_key_height: 3.125rem;
-$osk_key_width: 3.125rem;
+$osk_key_height: 2.5rem;
+$osk_key_width: 2.5rem;
 $osk_key_padding: 0.188rem;
+$osk_key_rounding: 0.682rem;
+$osk_key_fontsize: 1.091rem;
 
 .osk-window {
     @include md3_decel_fast;
@@ -20,12 +22,12 @@ $osk_key_padding: 0.188rem;
 }
 
 .osk-key {
-    @include small-rounding;
+    border-radius: $osk_key_rounding;
     background-color: $t_surfaceVariant;
     color: $onSurfaceVariant;
     padding: $osk_key_padding;
     font-weight: 500;
-    font-size: 1.0909rem;
+    font-size: $osk_key_fontsize;
 }
 
 .osk-key:hover {
@@ -34,6 +36,7 @@ $osk_key_padding: 0.188rem;
 
 .osk-key:active {
     background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+    font-size: $osk_key_fontsize;
 }
 
 .osk-key-active {

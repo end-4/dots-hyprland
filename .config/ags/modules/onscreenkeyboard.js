@@ -8,11 +8,13 @@ import { MaterialIcon } from './lib/materialicon.js';
 import { defaultOskLayout, oskLayouts } from '../data/keyboardlayouts.js';
 
 const keyboardJson = oskLayouts[defaultOskLayout];
-execAsync(`ydotoold`); // Start ydotool daemon
+execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
-    execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)]);
+    execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)])
+        .then(console.log('Released all keys'))
+        .catch(print);
 }
 var modsPressed = false;
 
@@ -71,8 +73,9 @@ export const OnScreenKeyboard = () => Box({
                 keyboardItself(keyboardJson),
             ],
             connections: [
-                [MenuService, box => { // Hide anims when closing
+                [MenuService, box => { // Anims + release when opening/closing
                     box.toggleClassName('osk-hide', !('osk' === MenuService.opened));
+                    releaseAllKeys();
                 }],
             ],
         }),

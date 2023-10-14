@@ -42,6 +42,12 @@ function launchCustomCommand(command) {
     else if (args[0] == '>dark') { // Dark mode
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`]).catch(print);
     }
+    else if (args[0] == '>material') { // Light mode
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "material" > ~/.cache/ags/user/colorbackend.txt`]).catch(print);
+    }
+    else if (args[0] == '>pywal') { // Dark mode
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "pywal" > ~/.cache/ags/user/colorbackend.txt`]).catch(print);
+    }
     else if (args[0] == '>todo') { // Todo
         addTodoItem(args.slice(1).join(' '));
     }
@@ -75,12 +81,12 @@ function startsWithNumber(str) {
 
 function substitute(str) {
     const subs = [
-        { from: 'Caprine', to: 'facebook-messenger' },
-        { from: 'code-url-handler', to: 'code' },
-        { from: 'Code', to: 'code' },
+        { from: 'code-url-handler', to: 'visual-studio-code' },
+        { from: 'Code', to: 'visual-studio-code' },
         { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wpsoffice', to: 'wps-office-kingsoft' },
+        { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
         { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
+        { from: 'Minecraft* 1.20.1', to: 'minecraft' },
     ];
 
     for (const { from, to } of subs) {
@@ -104,7 +110,7 @@ const CalculationResultButton = ({ result, text }) => searchItem({
     actionName: "Copy",
     content: `${result}`,
     onActivate: () => {
-        MenuService.toggle('overview');
+        MenuService.close('overview');
         console.log(result);
         execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
     },
@@ -129,7 +135,7 @@ const DesktopEntryButton = (app) => {
     return Widget.Button({
         className: 'overview-search-result-btn',
         onClicked: () => {
-            MenuService.toggle('overview');
+            MenuService.close('overview');
             app.launch();
         },
         child: Widget.Box({
@@ -179,7 +185,7 @@ const CustomCommandButton = ({ text = '' }) => searchItem({
     actionName: 'Run',
     content: `${text}`,
     onActivate: () => {
-        MenuService.toggle('overview');
+        MenuService.close('overview');
         launchCustomCommand(text);
     },
 });
@@ -190,7 +196,7 @@ const SearchButton = ({ text = '' }) => searchItem({
     actionName: 'Go',
     content: `${text}`,
     onActivate: () => {
-        MenuService.toggle('overview');
+        MenuService.close('overview');
         execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
     },
 });
@@ -218,7 +224,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     valign: 'center',
     onPrimaryClickRelease: () => {
         execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
-        MenuService.toggle('overview');
+        MenuService.close('overview');
     },
     onMiddleClick: () => execAsync('hyprctl dispatch closewindow address:' + address).catch(print),
     onSecondaryClick: (button) => {
@@ -297,7 +303,7 @@ const workspace = index => {
             vexpand: true,
             onPrimaryClickRelease: () => {
                 execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
-                MenuService.toggle('overview');
+                MenuService.close('overview');
             },
             // onSecondaryClick: (eventbox) => {
             //     const menu = Widget({
@@ -369,9 +375,9 @@ export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
     const clickOutsideToClose = Widget.EventBox({
-        onPrimaryClick: () => MenuService.toggle('overview'),
-        onSecondaryClick: () => MenuService.toggle('overview'),
-        onMiddleClick: () => MenuService.toggle('overview'),
+        onPrimaryClick: () => MenuService.close('overview'),
+        onSecondaryClick: () => MenuService.close('overview'),
+        onMiddleClick: () => MenuService.close('overview'),
     });
     const resultsBox = Widget.Box({
         className: 'spacing-v-15 overview-search-results',
@@ -386,14 +392,6 @@ export const SearchAndWindows = () => {
         halign: 'center',
         child: resultsBox,
     });
-    const overviewTopRow = OverviewRow({
-        startWorkspace: 1,
-        workspaces: 5,
-    });
-    const overviewBottomRow = OverviewRow({
-        startWorkspace: 6,
-        workspaces: 5,
-    });
     const overviewRevealer = Widget.Revealer({
         revealChild: true,
         transition: 'slide_down',
@@ -402,8 +400,8 @@ export const SearchAndWindows = () => {
             vertical: true,
             className: 'overview-tasks',
             children: [
-                overviewTopRow,
-                overviewBottomRow,
+                OverviewRow({ startWorkspace: 1, workspaces: 5 }),
+                OverviewRow({ startWorkspace: 6, workspaces: 5 }),
             ]
         }),
     });
@@ -416,11 +414,6 @@ export const SearchAndWindows = () => {
             className: 'overview-search-prompt',
             label: 'Search apps or calculate',
         })
-    });
-
-    const entryPrompt = Widget.Box({
-        className: 'overview-search-icon-box',
-        setup: box => box.pack_start(entryPromptRevealer, true, true, 0),
     });
 
     const entryIconRevealer = Widget.Revealer({
@@ -459,19 +452,15 @@ export const SearchAndWindows = () => {
                 _appSearchResults[0].launch();
                 return;
             }
-            else {
-                if (text[0] == '>') { // Custom commands
-                    launchCustomCommand(text);
-                    return;
-                }
+            else if (text[0] == '>') { // Custom commands
+                launchCustomCommand(text);
+                return;
             }
             // Fallback: Execute command
-            if (text.startsWith('sudo')) {
+            if (text.startsWith('sudo'))
                 execAndClose(text, true);
-            }
-            else {
+            else
                 execAndClose(text, false);
-            }
         },
         // Actually onChange but this is ta workaround for a bug
         connections: [
@@ -526,9 +515,6 @@ export const SearchAndWindows = () => {
                 }
             }]
         ],
-        // setup: entry => {
-        //     entry.set_placeholder_text('Search apps or calculate');
-        // }
     });
 
     return Widget.Box({
@@ -539,7 +525,10 @@ export const SearchAndWindows = () => {
                 halign: 'center',
                 children: [
                     entry,
-                    entryPrompt,
+                    Widget.Box({
+                        className: 'overview-search-icon-box',
+                        setup: box => box.pack_start(entryPromptRevealer, true, true, 0),
+                    }),
                     entryIcon,
                 ]
             }),
