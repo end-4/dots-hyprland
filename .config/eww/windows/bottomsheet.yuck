@@ -16,7 +16,7 @@
       :style "min-height: 300px;"
       (box ; Media cover background (behind blur)
         :class "bottomsheet-back-bg"
-        :style "background-image: url('${mcover.image}');"
+        ;:style "background-image: url('${mcover.image}');"
       )
     )
   )
@@ -25,13 +25,19 @@
 (defwidget bottomsheet_widget []
   (eventbox
     :onhoverlost {pinned_bottomsheet ? '' : 'scripts/toggle-bottomsheet.sh --close &'}
+    :style "
+    "
     (box
       :orientation "v"
       :space-evenly false
       :style "
       ${open_bottomsheet ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
       ${open_bottomsheet ? '' : ('margin-bottom: -400px;')}
+      
+      border-radius: 10px;
+      margin-left: 5px;
       "
+      :width "1910px"
       (eventbox
         :onclick "scripts/toggle-bottomsheet.sh --close &"
         :onrightclick "scripts/toggle-bottomsheet.sh --close &"
@@ -67,7 +73,8 @@
           :orientation "h"
           :space-evenly false :spacing -35
           :class "bottomsheet-bg"
-          (box ; Pin button
+	  :style "background-color: ${mcover.materialcolor.secondaryContainerRgba == 'null' ? "rgba(0,0,0,0.5)" : mcover.materialcolor.secondaryContainerRgba}"
+	  (box ; Pin button
             :orientation "v"
             :spacing 15
             :valign "start"
@@ -87,15 +94,9 @@
               :onclick "${EWW_CMD} update pinned_bottomsheet=${!pinned_bottomsheet} &"
               :class "bottomsheet-windowctl-btn${pinned_bottomsheet ? '-true' : ''}"
               :style "
-              ${mcover.materialcolor.primary == 'null' ? '' : 'background-color:
-                ${pinned_bottomsheet ?
-                (mcover.materialcolor.primary == 'null' ? coloraccent : mcover.materialcolor.primary) :
-                (mcover.materialcolor.secondaryContainer == 'null' ? coloraccent : mcover.materialcolor.secondaryContainer)};
-              color:
-                ${pinned_bottomsheet ?
-                (mcover.materialcolor.onPrimary == 'null' ? 'black' : mcover.materialcolor.onPrimary) :
-                (mcover.materialcolor.onSecondaryContainer == 'null' ? 'black' : mcover.materialcolor.onSecondaryContainer)};
-              '}"
+              ${mcover.materialcolor.secondaryContainer == 'null' ? '' : 'background-color: ${mcover.materialcolor.secondaryContainer};'}
+              ${mcover.materialcolor.onSecondaryContainer == 'null' ? '' : 'color: ${mcover.materialcolor.onSecondaryContainer};'}
+              "
               "push_pin"
             )
           )
@@ -237,8 +238,8 @@
   ; :focusable true
   :geometry (geometry
     :anchor "bottom center"
-    :y 1
-    :width "100%"
+    :y 5
+    :width "1910px"
   )
   (bottomsheet_widget)
 )

@@ -28,8 +28,9 @@ secondaryContainer=$(echo "$generated_material" | grep '$secondaryContainer: ' |
 tertiary=$(echo "$generated_material" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
 onPrimary=$(echo "$generated_material" | grep '$onPrimary: ' | sed 's/$onPrimary: //g' | sed 's/;//g')
 primary=$(echo "$generated_material" | grep '$primary: ' | sed 's/$primary: //g' | sed 's/;//g')
+secondaryContainerRgba=$(python scripts/mcover_rgba.py "${secondaryContainer}")
 
-printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'", "secondaryContainer": "'"$secondaryContainer"'", "onSecondaryContainer": "'"$onSecondaryContainer"'"}}\n'
+printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'", "secondaryContainer": "'"$secondaryContainer"'", "onSecondaryContainer": "'"$onSecondaryContainer"'", "secondaryContainerRgba": "'"$secondaryContainerRgba"'"}}\n'
 
 # Get color in rgb
 colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
