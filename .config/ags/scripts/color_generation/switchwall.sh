@@ -22,6 +22,6 @@ swww img "$imgpath" --transition-step 230 --transition-fps 60 \
 --transition-pos "$cursorposx, $cursorposy_inverted" &
 
 # Generate colors for ags n stuff
-"$HOME"/.config/ags/scripts/colorgen.sh "${imgpath}" --apply
+"$HOME"/.config/ags/scripts/color_generation/colorgen.sh "${imgpath}" --apply
 sassc "$HOME"/.config/ags/scss/main.scss "$HOME"/.config/ags/style.css
 ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');" &

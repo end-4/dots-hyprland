@@ -105,7 +105,7 @@ apply_hyprland() {
     cp "scripts/templates/hypr/colors.conf" "$HOME/.config/hypr/colors.conf"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/(${colorlist[$i]}/(${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors.conf" # note: ff because theyre opaque
+        sed -i "s/(${colorlist[$i]}/(${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors.conf"
     done
 }
 
@@ -130,7 +130,7 @@ apply_gtk() { # Using gradience-cli
 
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/\"${colorlist[$i]}\"/\"${colorvalues[$i]}\"/g" "scripts/templates/gradience/preset.json" # note: ff because theyre opaque
+        sed -i "s/\"${colorlist[$i]}\"/\"${colorvalues[$i]}\"/g" "scripts/templates/gradience/preset.json"
     done
     sed -i "s|\"\$windowBgColor\"|\"$window_bg_color\"|g" "scripts/templates/gradience/preset.json"
     sed -i "s|\"\$cardBgColor\"|\"$card_bg_color\"|g" "scripts/templates/gradience/preset.json"
