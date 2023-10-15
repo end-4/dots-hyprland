@@ -15,17 +15,11 @@ const SysTrayItem = item => Button({
     binds: [['tooltipMarkup', item, 'tooltipMarkup']],
     setup: btn => {
         const id = item.menu.connect('popped-up', menu => {
-            // btn.toggleClassName('active');
-            // menu.connect('notify::visible', menu => {
-            //     btn.toggleClassName('active', menu.visible);
-            // });
             menu.disconnect(id);
         });
     },
-    onPrimaryClick: btn =>
-        item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
-    onSecondaryClick: btn =>
-        item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
+    onPrimaryClick: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
+    onSecondaryClick: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
 });
 
 export const Tray = (props = {}) => Box({
@@ -43,6 +37,8 @@ export const Tray = (props = {}) => Box({
                         ['items', new Map()],
                         ['onAdded', (box, id) => {
                             const item = SystemTray.getItem(id);
+                            if(!item) return;
+                            item.menu.className = 'menu';
                             if (box._items.has(id) || !item)
                                 return;
 
@@ -72,3 +68,22 @@ export const Tray = (props = {}) => Box({
         })
     ]
 });
+
+// export const Tray = () => Box({
+//     className: 'systray',
+//     connections: [[SystemTray, box => {
+//         if (!SystemTray.items.length) {
+//           box.className = ['systray', 'empty'];
+//         };
+//         box.children = SystemTray.items.map(item => Button({
+//             child: Icon(),
+// onPrimaryClick: (_, event) => item.activate(event),
+//     onSecondaryClick: (_, event) => item.openMenu(event),
+//             connections: [[item, button => {
+//                 button.child.icon = item.icon;
+//                 button.tooltipMarkup = item.tooltipMarkup; 
+//                 item.menu.className = 'traymenu';
+//             }]],
+//         }));
+//     }]],
+// });

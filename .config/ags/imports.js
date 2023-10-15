@@ -1,9 +1,8 @@
 const resource = file => `resource:///com/github/Aylur/ags/${file}.js`;
 const require = async file => (await import(resource(file))).default;
-const service = async file => (await require(`service/${file}`)).instance;
+const service = async file => (await require(`service/${file}`));
 
 export const App = await require('app');
-App.connect = (...args) => App.instance.connect(...args);
 
 export const Widget = await require('widget');
 export const Service = await require('service');
@@ -35,5 +34,10 @@ globalThis['Utils'] = Utils;
 // globalThis['Notifications'] = Notifications;
 // globalThis['SystemTray'] = SystemTray;
 
+const { exec } = Utils;
+const SCREEN_WIDTH = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1 | head -1"`));
+const SCREEN_HEIGHT = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1"`));
+globalThis['SCREEN_WIDTH'] = SCREEN_WIDTH;
+globalThis['SCREEN_HEIGHT'] = SCREEN_HEIGHT;
 
 

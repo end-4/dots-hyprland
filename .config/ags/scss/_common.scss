@@ -21,3 +21,9 @@
 .menu>menuitem:hover {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
+
+.separator-line {
+    background-color: $surfaceVariant;
+    min-width: 0.068rem;
+    min-height: 0.068rem;
+}

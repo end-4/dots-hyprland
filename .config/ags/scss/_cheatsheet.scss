@@ -42,3 +42,8 @@
 .cheatsheet-closebtn:active {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 70%);
 }
+
+.cheatsheet-category-title {
+    @include titlefont;
+    font-size: 1.705rem;
+}

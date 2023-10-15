@@ -103,6 +103,7 @@
 .overview-tasks-window {
     @include normal-rounding;
     @include elevation-border-softer;
+    @include md3_decel;
     background-color: $l_t_secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -112,15 +113,13 @@
 }
 
 .overview-tasks-window:active {
-    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+    background-color: mix($l_t_secondaryContainer, $primary, 90%);
 }
 
 .overview-tasks-window-selected {
-    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+    background-color: mix($l_t_secondaryContainer, $primary, 90%);
 }
 
 .overview-tasks-window-dragging {
-    @include elevation-border-transparent;
-    background-color: transparentize($l_t_secondaryContainer, 0.2);
-    border: 1px;
+    opacity: 0.2;
 }

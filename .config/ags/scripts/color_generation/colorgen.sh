@@ -23,9 +23,9 @@ fi
 
 cd "$HOME/.config/ags/scripts/" || exit
 if [ "$backend" = "material" ]; then
-    color_generation/generate_colors_material.py --path "$1" "$lightdark" > tmp/generated_colors.txt
+    color_generation/generate_colors_material.py --path "$1" "$lightdark" > $HOME/.cache/ags/user/generated_colors.txt
     if [ "$2" = "--apply" ]; then
-        cp tmp/generated_colors.txt "$HOME/.config/ags/scss/_material.scss"
+        cp $HOME/.cache/ags/user/generated_colors.txt "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "pywal" ]; then
@@ -34,21 +34,21 @@ elif [ "$backend" = "pywal" ]; then
     echo wal -i "$1" -n -t -s -e "$lightdark" -q 
     wal -i "$1" -n -t -s -e $lightdark -q 
     # copy scss
-    cp "$HOME/.cache/wal/colors.scss" tmp/generated_colors.txt
+    cp "$HOME/.cache/wal/colors.scss" $HOME/.cache/ags/user/generated_colors.txt
     
-    cat color_generation/pywal_to_material.scss >> tmp/generated_colors.txt
+    cat color_generation/pywal_to_material.scss >> $HOME/.cache/ags/user/generated_colors.txt
     if [ "$2" = "--apply" ]; then
-        sassc tmp/generated_colors.txt tmp/generated_colors_classes.scss --style compact
-        sed -i "s/ { color//g" tmp/generated_colors_classes.scss
-        sed -i "s/\./$/g" tmp/generated_colors_classes.scss
-        sed -i "s/}//g" tmp/generated_colors_classes.scss
+        sassc $HOME/.cache/ags/user/generated_colors.txt $HOME/.cache/ags/user/generated_colors_classes.scss --style compact
+        sed -i "s/ { color//g" $HOME/.cache/ags/user/generated_colors_classes.scss
+        sed -i "s/\./$/g" $HOME/.cache/ags/user/generated_colors_classes.scss
+        sed -i "s/}//g" $HOME/.cache/ags/user/generated_colors_classes.scss
         if [ "$lightdark" = "-l" ]; then
-            printf "\n"'$darkmode: false;'"\n" >> tmp/generated_colors_classes.scss
+            printf "\n"'$darkmode: false;'"\n" >> $HOME/.cache/ags/user/generated_colors_classes.scss
         else
-            printf "\n"'$darkmode: true;'"\n" >> tmp/generated_colors_classes.scss
+            printf "\n"'$darkmode: true;'"\n" >> $HOME/.cache/ags/user/generated_colors_classes.scss
         fi
 
-        cp tmp/generated_colors_classes.scss "$HOME/.config/ags/scss/_material.scss"
+        cp $HOME/.cache/ags/user/generated_colors_classes.scss "$HOME/.config/ags/scss/_material.scss"
 
         color_generation/applycolor.sh
     fi

@@ -1,5 +1,5 @@
 // Common colors
-$hovercolor: rgba(128, 128, 128, 0.4);
+$hovercolor: rgba(128, 128, 128, 0.3);
 $activecolor: rgba(128, 128, 128, 0.7);
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
@@ -23,18 +23,32 @@ $rounding_large: 1.705rem;
 }
 
 // Common rules
-@mixin mainfont {
+@mixin titlefont {
+    // Geometric sans-serif
     font-family:
-        // 'Urbanist', // Too thin, but it does look unique
-        'AR One Sans',
+        'Gabarito',
         'Lexend',
+        sans-serif;
+}
+
+.txt-title {
+    @include titlefont;
+    font-size: 2.250rem;
+}
+
+@mixin mainfont {
+    // Other clean sans-serif
+    font-family:
+        'AR One Sans',
         'Inter',
+        'Roboto',
         'Noto Sans',
         sans-serif;
     // font-weight: 500;
 }
 
 @mixin icon-material {
+    // Material Design Icons
     font-family:
         'Material Symbols Rounded',
         'Material Symbols Outlined',
@@ -42,6 +56,7 @@ $rounding_large: 1.705rem;
 }
 
 @mixin icon-nerd {
+    // Nerd Fonts
     font-family:
         'SpaceMono Nerd Font',
         'JetBrainsMono Nerd Font',
@@ -260,7 +275,7 @@ $elevation2_margin: 7px;
     @include icon-material;
 }
 
-.separator {
+.separator-circle {
     border-radius: 50rem;
     background-color: $onSurface;
     margin: 0rem 0.682rem;
@@ -445,6 +460,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 }
 
 .spacing-h-10>box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-10>label {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>label:last-child {
     margin-right: 0rem;
 }
 

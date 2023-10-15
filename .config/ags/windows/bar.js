@@ -24,10 +24,11 @@ const right = Widget.Box({
     children: [ModuleSystem()],
 });
 
-export const bar = Widget.Window({
+export const Bar = () => Widget.Window({
     name: 'bar',
     anchor: ['top', 'left', 'right'],
     exclusive: true,
+    visible: true,
     child: Widget.CenterBox({
         className: 'bar-bg',
         startWidget: ModuleLeftSpace(),

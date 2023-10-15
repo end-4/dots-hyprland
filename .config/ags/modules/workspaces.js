@@ -38,7 +38,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => Utils.execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => Utils.execAsync('hyprctl dispatch workspace +1'),
     onMiddleClickRelease: () => MenuService.toggle('overview'),
-    onSecondaryClickRelease: () => Utils.execAsync(['bash', '-c', 'pkill wvkbd-mobintl || wvkbd-mobintl']).catch(print),
+    onSecondaryClickRelease: () => MenuService.toggle('osk'),
     child: Widget.Box({
         homogeneous: true,
         className: 'bar-ws-width',

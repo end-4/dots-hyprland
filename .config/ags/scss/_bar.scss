@@ -10,7 +10,7 @@ $notchPrimary: $primary;
 $notchOnPrimary: $onPrimary;
 
 // Check dark mode. Set colors accordingly for the fake snotch that's always black
-@if $darkmode == true {
+@if $darkmode ==true {
     $notchSecondaryContainer: $secondaryContainer;
     $notchOnSecondaryContainer: $onSecondaryContainer;
     $notchPrimary: $primary;
@@ -27,10 +27,6 @@ $notchOnPrimary: $onPrimary;
 .bar-bg {
     background-color: $t_background;
     min-height: 2.727rem;
-    animation-name: flyin-top;
-    animation-duration: 250ms;
-    animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
-    animation-iteration-count: 1;
 }
 
 .bar-sidespace {
@@ -131,6 +127,18 @@ $notchOnPrimary: $onPrimary;
     background-color: mix($t_surface, $t_onSurface, 90%);
     border-radius: 999px;
     margin: 0rem 0.341rem;
+}
+
+.bar-clock {
+    @include titlefont;
+    font-size: 1.2727rem;
+    color: $onBackground;
+}
+
+.bar-date {
+    @include titlefont;
+    font-size: 1rem;
+    color: $onBackground;
 }
 
 .bar-ws {

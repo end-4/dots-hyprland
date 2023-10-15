@@ -3,11 +3,6 @@ const { connect, exec, execAsync, timeout, lookUpIcon } = Utils;
 import { deflisten } from '../scripts/scripts.js';
 import Brightness from '../scripts/brightness.js';
 
-// const Brightness = deflisten(
-//     "Brightness",
-//     `${App.configDir}/scripts/brightness.sh`,
-// );
-
 class IndicatorService extends Service {
     static {
         Service.register(this, {
