@@ -1,4 +1,4 @@
-const { Utils, Service, Widget } = ags;
+import { Service, Utils, Widget } from '../imports.js';
 const { exec, execAsync } = Utils;
 const { Audio, Battery, Bluetooth, Network } = Service;
 

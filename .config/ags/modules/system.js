@@ -18,7 +18,7 @@ export const ModuleSystem = () => Widget.EventBox({
                         className: 'spacing-h-5',
                         children: [
                             Widget.Label({
-                                className: 'txt-norm txt',
+                                className: 'bar-clock',
                                 connections: [[5000, label => label.label = exec('date "+%H:%M"')]],
                             }),
                             Widget.Label({

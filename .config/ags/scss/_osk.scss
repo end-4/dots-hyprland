@@ -72,3 +72,21 @@ $osk_key_fontsize: 1.091rem;
     min-width: $osk_key_width * 1.3;
     min-height: $osk_key_height;
 }
+
+.osk-control-button {
+    border-radius: $osk_key_rounding;
+    background-color: $t_surfaceVariant;
+    color: $onSurfaceVariant;
+    font-weight: 500;
+    font-size: $osk_key_fontsize;
+    padding: 0.682rem;
+}
+
+.osk-control-button:hover {
+    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
+}
+
+.osk-control-button:active {
+    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+    font-size: $osk_key_fontsize;
+}

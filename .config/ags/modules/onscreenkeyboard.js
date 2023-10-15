@@ -5,9 +5,11 @@ const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 import { MaterialIcon } from './lib/materialicon.js';
+import { separatorLine } from './lib/separator.js';
 import { defaultOskLayout, oskLayouts } from '../data/keyboardlayouts.js';
 
-const keyboardJson = oskLayouts[defaultOskLayout];
+const keyboardLayout = defaultOskLayout;
+const keyboardJson = oskLayouts[keyboardLayout];
 execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 
 function releaseAllKeys() {
@@ -17,6 +19,45 @@ function releaseAllKeys() {
         .catch(print);
 }
 var modsPressed = false;
+
+const keyboardControlButton = (icon, text, runFunction) => Button({
+    className: 'osk-control-button spacing-h-10',
+    onClicked: () => runFunction(),
+    child: Widget.Box({
+        children: [
+            MaterialIcon(icon, 'norm'),
+            Widget.Label({
+                label: `${text}`,
+            }),
+        ]
+    })
+})
+
+const keyboardControls = Box({
+    vertical: true,
+    className: 'spacing-v-5',
+    children: [
+        Button({
+            className: 'osk-control-button txt-norm icon-material',
+            onClicked: () => {
+                releaseAllKeys();
+                MenuService.toggle('osk');
+            },
+            label: 'keyboard_hide',
+        }),
+        Button({
+            className: 'osk-control-button txt-norm',
+            label: `${keyboardJson['name_short']}`,
+        }),
+        Button({
+            className: 'osk-control-button txt-norm icon-material',
+            onClicked: () => { // TODO: Proper clipboard widget, since fuzzel doesn't receive mouse inputs
+                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel --no-fuzzy --dmenu | cliphist decode | wl-copy"]).catch(print);
+            },
+            label: 'assignment',
+        }),
+    ]
+})
 
 const keyboardItself = (kbJson) => {
     return Box({
@@ -66,16 +107,17 @@ export const OnScreenKeyboard = () => Box({
     vertical: true,
     children: [
         Box({
-            vertical: true,
             vexpand: true,
-            className: 'osk-window osk-hide',
+            className: 'osk-window osk-hide spacing-h-10',
             children: [
+                keyboardControls,
+                separatorLine,
                 keyboardItself(keyboardJson),
             ],
             connections: [
                 [MenuService, box => { // Anims + release when opening/closing
                     box.toggleClassName('osk-hide', !('osk' === MenuService.opened));
-                    releaseAllKeys();
+                    // releaseAllKeys();
                 }],
             ],
         }),

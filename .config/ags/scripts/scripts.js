@@ -1,4 +1,4 @@
-const { App, Service, Utils } = ags;
+import { App, Service, Utils, Widget } from '../imports.js';
 const { exec, execAsync, CONFIG_DIR } = Utils;
 
 export const deflisten = function (name, command, transformer = (a) => a) {

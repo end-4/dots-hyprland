@@ -21,32 +21,35 @@ const acosd = x => acos(x) * 180 / pi;
 const atand = x => atan(x) * 180 / pi;
 const acotd = x => acot(x) * 180 / pi;
 
-const SCREEN_WIDTH = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1 | head -1"`));
-const SCREEN_HEIGHT = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1"`));
 const MAX_RESULTS = 10;
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
+const searchPromptTexts = [
+    'Try "Kolourpaint"',
+    'Try "6*cos(1*pi)"',
+    'Try "sudo pacman -Syu"',
+]
 
 function launchCustomCommand(command) {
     MenuService.close('overview');
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
-        execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`]).catch(print);
+        execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") )) &`]).catch(print);
     }
     else if (args[0] == '>img') { // Change wallpaper
-        execAsync([`${App.configDir}/scripts/switchwall.sh`]).catch(print);
+        execAsync([`bash`, `-c`, `${App.configDir}/scripts/switchwall.sh &`]).catch(print);
     }
     else if (args[0] == '>light') { // Light mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt &`]).catch(print);
     }
     else if (args[0] == '>dark') { // Dark mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt &`]).catch(print);
     }
     else if (args[0] == '>material') { // Light mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "material" > ~/.cache/ags/user/colorbackend.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "material" > ~/.cache/ags/user/colorbackend.txt &`]).catch(print);
     }
     else if (args[0] == '>pywal') { // Dark mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "pywal" > ~/.cache/ags/user/colorbackend.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "pywal" > ~/.cache/ags/user/colorbackend.txt &`]).catch(print);
     }
     else if (args[0] == '>todo') { // Todo
         addTodoItem(args.slice(1).join(' '));
@@ -68,7 +71,7 @@ function launchCustomCommand(command) {
 function execAndClose(command, terminal) {
     MenuService.close('overview');
     if (terminal) {
-        execAsync([`bash`, `-c`, `foot fish -C "${command}"`]).catch(print);
+        execAsync([`bash`, `-c`, `foot fish -C "${command}" &`]).catch(print);
     }
     else
         execAsync(command).catch(print);
@@ -112,7 +115,7 @@ const CalculationResultButton = ({ result, text }) => searchItem({
     onActivate: () => {
         MenuService.close('overview');
         console.log(result);
-        execAsync(['bash', '-c', `wl-copy '${result}'`]).catch(print);
+        execAsync(['bash', '-c', `wl-copy '${result}' &`]).catch(print);
     },
 });
 
@@ -206,6 +209,7 @@ const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widge
     label: `${label}`,
     setup: menuItem => {
         let submenu = new Gtk.Menu();
+        submenu.className = 'menu';
         for (let i = 1; i <= 10; i++) {
             let button = new Gtk.MenuItem({ label: `${i}` });
             button.connect("activate", () => {
@@ -231,6 +235,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
         button.toggleClassName('overview-tasks-window-selected', true);
         const menu = Widget({
             type: Gtk.Menu,
+            className: 'menu',
             setup: menu => {
                 menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync('hyprctl dispatch closewindow address:' + address).catch(print); destroyContextMenu(menu); } }));
                 menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
@@ -271,6 +276,9 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     }),
     tooltipText: `${c}: ${title}`,
     setup: button => {
+        setupCursorHoverAim(button);
+
+
         button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
         button.drag_source_set_icon_name(substitute(c));
         // button.drag_source_set_icon_gicon(icon);
@@ -282,7 +290,15 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
             data.set_text(address, address.length);
             button.toggleClassName('overview-tasks-window-dragging', false);
         });
-        setupCursorHoverAim(button);
+
+        // button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
+        // button.connect('drag-data-get', (_w, _c, data) => data.set_text(address, address.length));
+        // button.connect('drag-begin', (_, context) => {
+        //     Gtk.drag_set_icon_surface(context, createSurfaceFromWidget(button));
+        //     button.toggleClassName('hidden', true);
+        // });
+        // button.connect('drag-end', () => button.toggleClassName('hidden', false));
+
     },
 });
 
@@ -302,7 +318,7 @@ const workspace = index => {
             hexpand: true,
             vexpand: true,
             onPrimaryClickRelease: () => {
-                execAsync(`hyprctl dispatch workspace ${index}`).catch(print);
+                execAsync([`bash`, `-c`, `hyprctl dispatch workspace ${index} &`]).catch(print);
                 MenuService.close('overview');
             },
             // onSecondaryClick: (eventbox) => {
@@ -319,7 +335,7 @@ const workspace = index => {
             setup: eventbox => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
-                    execAsync(`hyprctl dispatch movetoworkspacesilent ${index},address:${data.get_text()}`).catch(print);
+                    execAsync([`bash`, `-c`, `hyprctl dispatch movetoworkspacesilent ${index},address:${data.get_text()} &`]).catch(print);
                 });
             },
             child: fixed,
@@ -411,8 +427,8 @@ export const SearchAndWindows = () => {
         revealChild: true,
         halign: 'center',
         child: Widget.Label({
-            className: 'overview-search-prompt',
-            label: 'Search apps or calculate',
+            className: 'overview-search-prompt txt-small txt',
+            label: searchPromptTexts[Math.floor(Math.random() * searchPromptTexts.length)],
         })
     });
 
@@ -440,7 +456,7 @@ export const SearchAndWindows = () => {
                 try {
                     const fullResult = eval(text);
                     // copy
-                    execAsync(['bash', '-c', `wl-copy '${fullResult}'`]).catch(print);
+                    execAsync(['bash', '-c', `wl-copy '${fullResult}' &`]).catch(print);
                     MenuService.close('overview');
                     return;
                 } catch (e) {
@@ -465,6 +481,7 @@ export const SearchAndWindows = () => {
         // Actually onChange but this is ta workaround for a bug
         connections: [
             ['notify::text', (entry) => { // This is when you type
+                const isAction = entry.text.startsWith('>');
                 resultsBox.get_children().forEach(ch => ch.destroy());
                 //check empty if so then dont do stuff
                 if (entry.text == '') {
@@ -492,7 +509,7 @@ export const SearchAndWindows = () => {
                             // console.log(e);
                         }
                     }
-                    if (text.startsWith('>')) { // Eval on typing is dangerous, this is a workaround.
+                    if (isAction) { // Eval on typing is dangerous, this is a workaround.
                         resultsBox.add(CustomCommandButton({ text: entry.text }));
                     }
                     // Add application entries
@@ -505,7 +522,7 @@ export const SearchAndWindows = () => {
 
                     // Fallbacks
                     // if the first word is an actual command
-                    if (exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+                    if (!isAction && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                         resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
                     }
 
@@ -537,23 +554,22 @@ export const SearchAndWindows = () => {
         ],
         connections: [
             [App, (_b, name, visible) => {
-                if (name !== 'overview')
+                if (name !== 'overview' || visible)
                     return;
-
-                if (visible);
-                // entry.grab_focus();
-                else {
-                    resultsBox.children = [];
-                    entry.set_text('');
-                }
+                
+                resultsBox.children = [];
+                entry.set_text('');
             }],
-            ['key-press-event', (widget, event) => {
+            ['key-press-event', (widget, event) => { // Typing
+                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                    MenuService.closeButOnlyUpdate();
+                }
                 if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
                     entry.grab_focus();
                     entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
                     entry.set_position(-1);
                 }
-            }]
+            }],
         ],
     });
 };

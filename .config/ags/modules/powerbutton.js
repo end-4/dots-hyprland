@@ -9,7 +9,7 @@ const ModulePower = (props = {}) => Widget.Button({
     ...props,
     className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
     onPrimaryClick: () => {
-        execAsync(['bash', '-c', 'wlogout -p layer-shell']).catch(print);
+        MenuService.toggle('session');
     },
     child: MaterialIcon('power_settings_new', 'larger'),
     setup: button => {

@@ -6,6 +6,7 @@ export const SideRight = () => Widget.Window({
     //exclusive: true, // make this true maybe cuz very cool
     focusable: true,
     popup: true,
+    visible: false,
     anchor: ['right', 'top', 'bottom'],
     child: Widget.Box({
         children: [

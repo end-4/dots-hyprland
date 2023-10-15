@@ -5,6 +5,7 @@ export const defaultOskLayout = "qwerty_full"
 export const oskLayouts = {
     qwerty_full: {
         name: "QWERTY - Full",
+        name_short: "US",
         comment: "Like physical keyboard",
         // A key looks like this: { k: "a", ks: "A", t: "normal" } (key, key-shift, type)
         // key types are: normal, tab, caps, shift, control, fn (normal w/ half height), space, expand
