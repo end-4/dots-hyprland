@@ -19,7 +19,11 @@ export const ModuleSystem = () => Widget.EventBox({
                         children: [
                             Widget.Label({
                                 className: 'bar-clock',
-                                connections: [[5000, label => label.label = exec('date "+%H:%M"')]],
+                                connections: [[5000, label => {
+                                    execAsync([`date`, "+%H:%M"]).then(timeString => {
+                                        label.label = timeString;
+                                    }).catch(print);
+                                }]],
                             }),
                             Widget.Label({
                                 className: 'txt-norm txt',
@@ -27,7 +31,11 @@ export const ModuleSystem = () => Widget.EventBox({
                             }),
                             Widget.Label({
                                 className: 'txt-smallie txt',
-                                connections: [[5000, label => label.label = exec('date "+%A, %d/%m"')]],
+                                connections: [[5000, label => {
+                                    execAsync([`date`, "+%A, %d/%m"]).then(dateString => {
+                                        label.label = dateString;
+                                    }).catch(print);
+                                }]],
                             }),
                         ],
                     }),

@@ -17,9 +17,9 @@ async function toggleSystemdService(serviceName, button) {
 }
 
 // Styles in scss/sidebars.scss
-const ModuleNightLight = (props = {}) => Widget.Button({
-    ...props,
-    className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
+export const ModuleNightLight = (props = {}) => Widget.Button({
+    className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Night Light',
     onPrimaryClick: (button) => {
         // Set the value to 1 - value
         const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
@@ -35,8 +35,9 @@ const ModuleNightLight = (props = {}) => Widget.Button({
             button.toggleClassName('sidebar-button-active', true);
         }
     },
-    child: MaterialIcon('nightlight', 'larger'),
+    child: MaterialIcon('nightlight', 'norm'),
     setup: (button) => setupCursorHover(button),
+    ...props,
 })
 
 const ModuleRecord = (props = {}) => Widget.Button({

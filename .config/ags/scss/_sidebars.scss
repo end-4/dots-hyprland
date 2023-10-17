@@ -21,7 +21,7 @@
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
-    min-width: 29.591rem; // COMMENT THIS LATER IF USE TEXT WRAP
+    min-width: 29.591rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     min-height: 29.591rem;
     background-color: $t_background;
     padding: 1.023rem;
@@ -34,24 +34,46 @@
 
 .sidebar-group {
     @include normal-rounding;
-    @include elevation-border;
+    // @include elevation-border;
     @include group-padding;
     background-color: $t_surface;
 }
 
 .sidebar-group-nopad {
     @include normal-rounding;
-    @include elevation-border;
+    // @include elevation-border;
     background-color: $t_surface;
 }
 
+.sidebar-group-invisible {
+    padding: 0.341rem 0.682rem;
+}
+
+.sidebar-iconbutton {
+    @include md3_decel;
+    border-radius: 9999px;
+    color: $onSurface;
+    min-width: 2.727rem;
+    min-height: 2.727rem;
+}
+
+.sidebar-iconbutton:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-iconbutton:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
+}
+
 .sidebar-button {
+    @include md3_decel;
     padding: 0rem $rounding_small;
     background-color: $t_secondaryContainer;
     color: $onSecondaryContainer;
 }
 
 .sidebar-button-nopad {
+    @include md3_decel;
     background-color: $t_secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -103,6 +125,12 @@
     background-color: mix($primary, $hovercolor, 70%);
 }
 
+.sidebar-buttons-separator {
+    min-width: 0.068rem;
+    min-height: 0.068rem;
+    background-color: $onSurfaceVariant;
+}
+
 .sidebar-navrail {
     // background-color: $t_surface;
     padding: 0rem $rounding_medium;
@@ -110,6 +138,7 @@
 
 .sidebar-navrail-btn>box>label {
     border-radius: 9999px;
+    @include md3_decel;
 }
 
 .sidebar-navrail-btn:hover>box>label:first-child {
@@ -266,7 +295,7 @@
 
 .sidebar-calendar-btn {
     min-height: 2.523rem;
-    min-width:  2.523rem;
+    min-width: 2.523rem;
     border-radius: 9999px;
     color: $onSurface;
 }
@@ -341,7 +370,7 @@
 }
 
 .sidebar-todo-selector-tab {
-    min-height: 2.5rem;   
+    min-height: 2.5rem;
     color: $onSurface;
     border-radius: $rounding_small;
 }

@@ -35,8 +35,8 @@ const activeWorkspaceIndicator = Widget.Box({
 });
 
 export const ModuleWorkspaces = () => Widget.EventBox({
-    onScrollUp: () => Utils.execAsync('hyprctl dispatch workspace -1'),
-    onScrollDown: () => Utils.execAsync('hyprctl dispatch workspace +1'),
+    onScrollUp: () => Utils.execAsync(['bash', '-c', 'hyprctl dispatch workspace -1 &']),
+    onScrollDown: () => Utils.execAsync(['bash', '-c', 'hyprctl dispatch workspace +1 &']),
     onMiddleClickRelease: () => MenuService.toggle('overview'),
     onSecondaryClickRelease: () => MenuService.toggle('osk'),
     child: Widget.Box({
@@ -62,7 +62,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                 halign: 'center',
                                 // homogeneous: true,
                                 children: Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => i + 1).map(i => Widget.Button({
-                                    onPrimaryClick: () => Utils.execAsync(`hyprctl dispatch workspace ${i}`).catch(print),
+                                    onPrimaryClick: () => Utils.execAsync(['bash', '-c', `hyprctl dispatch workspace ${i} &`]).catch(print),
                                     child: Widget.Label({
                                         valign: 'center',
                                         label: `${i}`,

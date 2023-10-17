@@ -38,7 +38,7 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-group {
-    @include elevation-border;
+    // @include elevation-border;
     background-color: $t_surface;
 }
 

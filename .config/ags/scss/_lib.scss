@@ -33,7 +33,12 @@ $rounding_large: 1.705rem;
 
 .txt-title {
     @include titlefont;
-    font-size: 2.250rem;
+    font-size: 2.045rem;
+}
+
+.txt-title-small {
+    @include titlefont;
+    font-size: 2.045rem;
 }
 
 @mixin mainfont {

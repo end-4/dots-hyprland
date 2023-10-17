@@ -1,22 +1,16 @@
 const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../imports.js';
+import { Utils, Widget } from '../imports.js';
 import { MenuService } from "../scripts/menuservice.js";
-const { Applications, Hyprland } = Service;
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
-import { ModuleConnections } from "./connectiontoggles.js";
-import { ModuleHyprToggles } from "./hyprtoggles.js";
-import { ModuleMiscToggles } from "./misctoggles.js";
-import { ModuleSysInfo } from "./sysinfo.js";
+import {
+    ToggleIconBluetooth, ToggleIconWifi, HyprToggleIcon,
+    ModuleEditIcon, ModuleSettingsIcon, ModulePowerIcon
+} from "./quicktoggles.js";
+import { ModuleMiscToggles, ModuleNightLight } from "./misctoggles.js";
 import { ModuleNotificationList } from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
 import { ModuleCalendar } from "./calendar.js";
-import { ModulePowerButton } from "./powerbutton.js";
-
-const CLOSE_ANIM_TIME = 150;
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 export const SidebarRight = () => Box({
     vertical: true,
@@ -34,40 +28,51 @@ export const SidebarRight = () => Box({
                 Box({
                     vertical: true,
                     vexpand: true,
-                    className: 'spacing-v-5',
+                    className: 'spacing-v-15',
                     children: [
                         Box({
-                            className: 'spacing-h-5',
+                            vertical: true,
+                            className: 'spacing-v-5',
                             children: [
-                                Box({
-                                    hexpand: true,
-                                    homogeneous: true,
+                                Box({ // Header
+                                    className: 'spacing-h-5 sidebar-group-invisible',
                                     children: [
-                                        ModuleConnections(),
+                                        Widget.Label({
+                                            className: 'txt-title-small txt',
+                                            connections: [[5000, label => {
+                                                execAsync([`date`, "+%H:%M"]).then(timeString => {
+                                                    label.label = timeString;
+                                                }).catch(print);
+                                            }]],
+                                        }),
+                                        Widget.Label({
+                                            halign: 'center',
+                                            className: 'txt-small txt',
+                                            connections: [[5000, label => {
+                                                execAsync(['bash', '-c', `uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'`]).then(upTimeString => {
+                                                    label.label = `• uptime ${upTimeString}`;
+                                                }).catch(print);
+                                            }]],
+                                        }),
+                                        Widget.Box({ hexpand: true }),
+                                        // ModuleEditIcon({ halign: 'end' }), // TODO: Make this work
+                                        ModuleSettingsIcon({ halign: 'end' }),
+                                        ModulePowerIcon({ halign: 'end' }),
                                     ]
                                 }),
-                                ModulePowerButton(),
-                            ]
-                        }),
-                        ModuleHyprToggles(),
-                        Box({
-                            className: 'spacing-h-5',
-                            children: [
                                 Box({
-                                    hexpand: true,
-                                    homogeneous: true,
+                                    className: 'sidebar-group spacing-h-10',
                                     children: [
-                                        ModuleSysInfo(),
+                                        ToggleIconWifi({ hexpand: 'true' }),
+                                        ToggleIconBluetooth({ hexpand: 'true' }),
+                                        HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', { hexpand: 'true' }),
+                                        HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', { hexpand: 'true' }),
+                                        ModuleNightLight({ hexpand: 'true' }),
                                     ]
                                 }),
-                                ModuleMiscToggles(),
                             ]
                         }),
-                        ModuleMusicControls(),
                         ModuleNotificationList({ vexpand: true, }),
-                        // Widget.Box({
-                        //     vexpand: true,
-                        // }),
                         ModuleCalendar(),
                     ]
                 }),

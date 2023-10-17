@@ -112,6 +112,10 @@
     background-color: mix($l_t_secondaryContainer, $primary, 95%);
 }
 
+.overview-tasks-window:focus {
+    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+}
+
 .overview-tasks-window:active {
     background-color: mix($l_t_secondaryContainer, $primary, 90%);
 }

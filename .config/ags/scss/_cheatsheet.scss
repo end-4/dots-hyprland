@@ -30,6 +30,7 @@
 // .cheatsheet-action {}
 
 .cheatsheet-closebtn {
+    @include md3_decel;
     border-radius: 50rem;
     min-width: 2.386rem;
     min-height: 2.386rem;
