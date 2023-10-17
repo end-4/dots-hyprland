@@ -22,15 +22,6 @@ const SessionButton = (name, icon, command, props = {}) => {
         className: 'session-button',
         child: Widget.Overlay({
             className: 'session-button-box',
-            // vertical: true,
-            // children: [
-            //     Widget.Label({
-            //         vexpand: true,
-            //         className: 'txt-badonkers icon-material',
-            //         label: icon,
-            //     }),
-            //     buttonDescription,
-            // ]
             child: Widget.Label({
                 vexpand: true,
                 className: 'icon-material',
@@ -40,8 +31,18 @@ const SessionButton = (name, icon, command, props = {}) => {
                 buttonDescription,
             ]
         }),
-        onHover: () => buttonDescription.revealChild = true,
-        onHoverLost: () => buttonDescription.revealChild = false,
+        onHover: (button) => {
+            const display = Gdk.Display.get_default();
+            const cursor = Gdk.Cursor.new_from_name(display, 'pointer');
+            button.get_window().set_cursor(cursor);
+            buttonDescription.revealChild = true;
+        },
+        onHoverLost: (button) => {
+            const display = Gdk.Display.get_default();
+            const cursor = Gdk.Cursor.new_from_name(display, 'default');
+            button.get_window().set_cursor(cursor);
+            buttonDescription.revealChild = false;
+        },
         connections: [
             ['focus-in-event', (self) => {
                 buttonDescription.revealChild = true;

@@ -1,7 +1,6 @@
 .session-bg {
     margin-top: -2.727rem;
-    background-color: rgba(0, 0, 0, 0.65);
-    // background-color: $t_background;
+    background-color: mix($t_t_background, $background, 40%);
 }
 
 .session-button {
@@ -19,8 +18,8 @@
 }
 
 .session-button-desc {
-    background-color: $hovercolor;
-    color: $onSurfaceVariant;
+    background-color: mix($surface, $surfaceVariant, 50%);
+    color: mix($onSurface, $onSurfaceVariant, 50%);
     border-bottom-left-radius: $rounding_large;
     border-bottom-right-radius: $rounding_large;
     padding: 0.205rem 0.341rem;

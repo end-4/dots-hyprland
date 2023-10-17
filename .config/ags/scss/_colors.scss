@@ -31,6 +31,7 @@ $t_errorContainer: transparentize($errorContainer, $transparentize_amount);
 $t_onErrorContainer: transparentize($onErrorContainer, $transparentize_amount);
 $t_colorbarbg: transparentize($colorbarbg, $transparentize_amount);
 $t_background: transparentize($background, $transparentize_amount);
+$t_t_background: transparentize($background, $transparentize_surface_amount_more);
 $t_onBackground: transparentize($onBackground, $transparentize_amount);
 $t_surface: transparentize($surface, $transparentize_surface_amount);
 $t_t_surface: transparentize($surface, $transparentize_surface_amount_more);

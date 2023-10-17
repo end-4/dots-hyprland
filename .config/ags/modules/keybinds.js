@@ -23,7 +23,7 @@ export const Keybinds = () => Widget.Box({
                         }),
                         Widget.Label({
                             xalign: 0,
-                            className: "cheatsheet-category-title",
+                            className: "cheatsheet-category-title txt",
                             label: category.name,
                         }),
                     ]
