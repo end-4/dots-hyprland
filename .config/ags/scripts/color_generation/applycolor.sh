@@ -111,13 +111,6 @@ apply_hyprland() {
 
 apply_gtk() { # Using gradience-cli
     lightdark=$(get_light_dark)
-    if [ "$lightdark" = "-l" ]; then
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme false
-    else
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme true
-    fi
 
     background=$(cat scss/_material.scss | grep "background" | awk '{print $2}' | cut -d ";" -f1)
     secondaryContainer=$(cat scss/_material.scss | grep "secondaryContainer" | awk '{print $2}' | cut -d ";" -f1)
@@ -137,6 +130,19 @@ apply_gtk() { # Using gradience-cli
     sed -i "s|\"\$headerbarBorderColor\"|\"$headerbar_border_color\"|g" "scripts/templates/gradience/preset.json"
 
     gradience-cli apply -p scripts/templates/gradience/preset.json --gtk both
+
+    # Set light/dark preference 
+    # And set GTK theme manually as Gradience defaults to light adw-gtk3 
+    # (which is unreadable when broken when you use dark mode)
+    if [ "$lightdark" = "-l" ]; then
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme false
+        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+    else
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme true
+        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+    fi
 }
 
 # apply_svgs

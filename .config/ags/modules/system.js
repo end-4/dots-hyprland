@@ -45,6 +45,7 @@ export const ModuleSystem = () => Widget.EventBox({
                         className: 'spacing-h-5 bar-batt',
                         connections: [[Battery, box => {
                             box.toggleClassName('bar-batt-low', Battery.percent <= 20);
+                            box.toggleClassName('bar-batt-full', Battery.charged);
                         }]],
                         children: [
                             Widget.Label({
@@ -60,6 +61,7 @@ export const ModuleSystem = () => Widget.EventBox({
                                 connections: [[Battery, progress => {
                                     progress.value = Math.abs(Battery.percent / 100); // battery could be initially negative wtf
                                     progress.toggleClassName('bar-prog-batt-low', Battery.percent <= 20);
+                                    progress.toggleClassName('bar-prog-batt-full', Battery.charged);
                                 }]],
                             }),
                             Widget.Revealer({
@@ -71,6 +73,7 @@ export const ModuleSystem = () => Widget.EventBox({
                                     className: 'bar-batt-chargestate-charging',
                                     connections: [[Battery, box => {
                                         box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= 20);
+                                        box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
                                     }]],
                                 }),
                                 connections: [[Battery, revealer => {

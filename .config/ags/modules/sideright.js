@@ -4,10 +4,9 @@ import { MenuService } from "../scripts/menuservice.js";
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
 import {
-    ToggleIconBluetooth, ToggleIconWifi, HyprToggleIcon,
+    ToggleIconBluetooth, ToggleIconWifi, HyprToggleIcon, ModuleNightLight,
     ModuleEditIcon, ModuleSettingsIcon, ModulePowerIcon
 } from "./quicktoggles.js";
-import { ModuleMiscToggles, ModuleNightLight } from "./misctoggles.js";
 import { ModuleNotificationList } from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
 import { ModuleCalendar } from "./calendar.js";
@@ -35,10 +34,10 @@ export const SidebarRight = () => Box({
                             className: 'spacing-v-5',
                             children: [
                                 Box({ // Header
-                                    className: 'spacing-h-5 sidebar-group-invisible',
+                                    className: 'spacing-h-5 sidebar-group-invisible-morehorizpad',
                                     children: [
                                         Widget.Label({
-                                            className: 'txt-title-small txt',
+                                            className: 'txt-title txt',
                                             connections: [[5000, label => {
                                                 execAsync([`date`, "+%H:%M"]).then(timeString => {
                                                     label.label = timeString;
@@ -60,16 +59,17 @@ export const SidebarRight = () => Box({
                                         ModulePowerIcon({ halign: 'end' }),
                                     ]
                                 }),
-                                Box({
+                                Widget({
+                                    type: Gtk.Grid,
                                     className: 'sidebar-group spacing-h-10',
-                                    children: [
-                                        ToggleIconWifi({ hexpand: 'true' }),
-                                        ToggleIconBluetooth({ hexpand: 'true' }),
-                                        HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', { hexpand: 'true' }),
-                                        HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', { hexpand: 'true' }),
-                                        ModuleNightLight({ hexpand: 'true' }),
-                                    ]
-                                }),
+                                    setup: (self) => {
+                                        self.add(ToggleIconWifi({ hexpand: 'true' }));
+                                        self.add(ToggleIconBluetooth({ hexpand: 'true' }));
+                                        self.add(HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', { hexpand: 'true' }));
+                                        self.add(HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', { hexpand: 'true' }));
+                                        self.add(ModuleNightLight({ hexpand: 'true' }));
+                                    }
+                                })
                             ]
                         }),
                         ModuleNotificationList({ vexpand: true, }),

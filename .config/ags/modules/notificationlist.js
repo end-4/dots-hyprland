@@ -6,14 +6,15 @@ const { Box, Icon, Scrollable, Label, Button } = Widget;
 import { MaterialIcon } from "./lib/materialicon.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 
-const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
-    if (image) {
+const NotificationIcon = (notifObject) => {
+    // { appEntry, appIcon, image }, urgency = 'normal'
+    if (notifObject.image) {
         return Box({
             valign: 'center',
             hexpand: false,
             className: 'sidebar-notif-icon',
             style: `
-                background-image: url("${image}");
+                background-image: url("${notifObject.image}");
                 background-size: auto 100%;
                 background-repeat: no-repeat;
                 background-position: center;
@@ -22,11 +23,11 @@ const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
     }
 
     let icon = 'NO_ICON';
-    if (lookUpIcon(appIcon))
-        icon = appIcon;
+    if (lookUpIcon(notifObject.appIcon))
+        icon = notifObject.appIcon;
 
-    if (lookUpIcon(appEntry))
-        icon = appEntry;
+    if (lookUpIcon(notifObject.appEntry))
+        icon = notifObject.appEntry;
 
     return Box({
         valign: 'center',
@@ -39,7 +40,7 @@ const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
                 valign: 'center',
                 setup: () => box.toggleClassName('sidebar-notif-icon-material', true),
             }), false, true, 0);
-            else if (urgency == 'critical') box.pack_start(MaterialIcon('release_alert', 'hugeass', {
+            else if (notifObject.urgency == 'critical') box.pack_start(MaterialIcon('release_alert', 'hugeass', {
                 hexpand: true,
                 setup: () => {
                     box.toggleClassName('sidebar-notif-icon-material-urgent', true);
@@ -54,10 +55,10 @@ const NotificationIcon = ({ appEntry, appIcon, image }, urgency = 'normal') => {
     });
 };
 
-const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) => Box({
-    className: `sidebar-notification-${urgency} spacing-h-10`,
+const Notification = (notifObject) => Box({
+    className: `sidebar-notification-${notifObject.urgency} spacing-h-10`,
     children: [
-        NotificationIcon(icon, urgency),
+        NotificationIcon(notifObject),
         Box({
             valign: 'center',
             vertical: true,
@@ -67,14 +68,14 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                     children: [
                         Label({
                             xalign: 0,
-                            className: 'txt-smallie txt-semibold',
+                            className: 'txt-small txt-semibold titlefont',
                             justification: 'left',
                             hexpand: true,
                             maxWidthChars: 24,
                             ellipsize: 3,
                             wrap: true,
-                            useMarkup: summary.startsWith('<'),
-                            label: summary,
+                            useMarkup: notifObject.summary.startsWith('<'),
+                            label: notifObject.summary,
                         }),
                     ]
                 }),
@@ -84,8 +85,8 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                     useMarkup: true,
                     xalign: 0,
                     justification: 'left',
-                    wrap: true, 
-                    label: body,
+                    wrap: true,
+                    label: notifObject.body,
                 }),
             ]
         }),
@@ -97,7 +98,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                     className: 'txt-smaller txt-semibold',
                     justification: 'right',
                     setup: (label) => {
-                        const messageTime = GLib.DateTime.new_from_unix_local(time);
+                        const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
                         if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
                             label.label = messageTime.format('%H:%M');
                         }
@@ -111,7 +112,7 @@ const Notification = ({ id, summary, body, actions, urgency, time, ...icon }) =>
                 }),
                 Button({
                     className: 'sidebar-notif-close-btn',
-                    onClicked: () => Notifications.close(id),
+                    onClicked: () => notifObject.close(),
                     child: MaterialIcon('close', 'large', {
                         valign: 'center',
                     }),
@@ -159,7 +160,7 @@ export const ModuleNotificationList = props => {
     vScrollbar.get_style_context().add_class('sidebar-scrollbar');
     return Box({
         ...props,
-        className: 'sidebar-group spacing-h-5',
+        className: 'sidebar-group-invisible spacing-h-5',
         children: [
             listContents,
         ]

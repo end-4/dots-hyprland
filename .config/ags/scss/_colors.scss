@@ -4,7 +4,9 @@ $transparentize_surface_amount_less: 0.6;
 $transparentize_surface_amount_less_less: 0.4;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
-@if $darkmode == true { // Less transparency
+
+@if $darkmode ==true {
+    // Less transparency
     $transparentize_amount: 0.15;
     $transparentize_surface_amount_less: 0.5;
     $transparentize_surface_amount_less_less: 0.3;
@@ -12,6 +14,21 @@ $transparentize_surface_amount_more: 0.8;
     $transparentize_surface_amount_more: 0.7;
 }
 
+// Extended material
+$success: #4f6354;
+$onSuccess: #ffffff;
+$successContainer: #d1e8d5;
+$onSuccessContainer: #0c1f13;
+
+@if $darkmode ==true {
+    // Dark variant
+    $success: #b5ccba;
+    $onSuccess: #213528;
+    $successContainer: #374b3e;
+    $onSuccessContainer: #d1e9d6;
+}
+
+// Transparent material
 $t_primary: transparentize($primary, $transparentize_amount);
 $t_onPrimary: transparentize($onPrimary, $transparentize_amount);
 $t_primaryContainer: transparentize($primaryContainer, $transparentize_amount);
@@ -46,10 +63,14 @@ $t_shadow: transparentize($shadow, $transparentize_amount);
 $t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);
 $t_inverseOnSurface: transparentize($inverseOnSurface, $transparentize_amount);
 $t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
+// Transparent material (extended)
+$t_success: transparentize($error, $transparentize_amount);
+$t_onSuccess: transparentize($onError, $transparentize_amount);
+$t_successContainer: transparentize($errorContainer, $transparentize_amount);
+$t_onSuccessContainer: transparentize($onErrorContainer, $transparentize_amount);
 
 // Common stuff
 $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
 $subtext: mix($onBackground, $background, 70%);
 $actiontext: mix($onBackground, $background, 85%);
-
