@@ -567,13 +567,8 @@ export const SearchAndWindows = () => {
         ],
         connections: [
             [App, (_b, name, visible) => {
-                if (name !== 'overview')
-                    return;
-
-                if (visible) {
+                if (name == 'overview' && !visible) {
                     entryPromptRevealer.child.label = searchPromptTexts[Math.floor(Math.random() * searchPromptTexts.length)];
-                }
-                else {
                     resultsBox.children = [];
                     entry.set_text('');
                 }

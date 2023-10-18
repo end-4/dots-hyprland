@@ -227,8 +227,8 @@ $notchOnPrimary: $onPrimary;
 .bar-batt {
     border-radius: 999px;
     padding: 0rem 0.341rem;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $t_secondaryContainer;
+    color: $t_onSecondaryContainer;
     // border: 1px solid $onSecondaryContainer;
 }
 
@@ -241,9 +241,19 @@ $notchOnPrimary: $onPrimary;
     color: $errorContainer;
 }
 
+.bar-batt-full {
+    background-color: $successContainer;
+    color: $onSuccessContainer;
+}
+
 .bar-batt-prog-low {
     background-color: $error;
     color: $errorContainer;
+}
+
+.bar-batt-prog-full {
+    background-color: $successContainer;
+    color: $onSuccessContainer;
 }
 
 .bar-music-playstate {
@@ -359,28 +369,19 @@ $notchOnPrimary: $onPrimary;
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $onSecondaryContainer;
+        background-color: $t_onSecondaryContainer;
     }
 }
 
 .bar-prog-batt-low {
-    min-height: 0.954rem;
-    min-width: 0.068rem;
-    padding: 0rem;
-    border-radius: 10rem;
-
-    trough {
-        min-height: 0.954rem;
-        min-width: 0.068rem;
-        border-radius: 10rem;
-    }
-
     progress {
-        min-height: 0.680rem;
-        min-width: 0.680rem;
-        margin: 0rem 0.137rem;
-        border-radius: 10rem;
         background-color: $errorContainer;
+    }
+}
+
+.bar-prog-batt-full {
+    progress {
+        background-color: $onSuccessContainer;
     }
 }
 
@@ -393,11 +394,15 @@ $notchOnPrimary: $onPrimary;
     border-radius: 10rem;
     min-width: 0.681rem;
     min-height: 0.681rem;
-    background-color: $onSecondaryContainer;
+    background-color: $t_onSecondaryContainer;
 }
 
 .bar-batt-chargestate-low {
     background-color: $errorContainer;
+}
+
+.bar-batt-chargestate-full {
+    background-color: $onSuccessContainer;
 }
 
 .bar-batt-percentage {

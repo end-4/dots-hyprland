@@ -1,7 +1,7 @@
 import { App, Service, Utils, Widget } from '../imports.js';
 const { Audio, Mpris } = Service;
 const { exec, execAsync, CONFIG_DIR } = Utils;
-import { ModuleNotification } from "./notification.js";
+import { ModuleNotification } from "./notificationbar.js";
 import { StatusIcons } from "./statusicons.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
 import { Tray } from "./tray.js";

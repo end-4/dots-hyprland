@@ -6,7 +6,7 @@
     @include elevation-border;
     @include elevation2;
     // min-width: 29.591rem;
-    min-height: 29.591rem;
+    // min-height: 29.591rem;
     background-color: $t_background;
     padding: 1.023rem;
 }
@@ -21,8 +21,8 @@
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
-    min-width: 29.591rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
-    min-height: 29.591rem;
+    // min-width: 29.591rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
+    // min-height: 29.591rem;
     background-color: $t_background;
     padding: 1.023rem;
 }
@@ -46,6 +46,10 @@
 }
 
 .sidebar-group-invisible {
+    @include group-padding;
+}
+
+.sidebar-group-invisible-morehorizpad {
     padding: 0.341rem 0.682rem;
 }
 
@@ -294,6 +298,7 @@
 }
 
 .sidebar-calendar-btn {
+    @include md3_decel;
     min-height: 2.523rem;
     min-width: 2.523rem;
     border-radius: 9999px;
@@ -370,6 +375,7 @@
 }
 
 .sidebar-todo-selector-tab {
+    @include md3_decel;
     min-height: 2.5rem;
     color: $onSurface;
     border-radius: $rounding_small;

@@ -27,3 +27,10 @@
     min-width: 0.068rem;
     min-height: 0.068rem;
 }
+
+tooltip {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 50rem;
+    border: 1px solid $onSurfaceVariant;
+}

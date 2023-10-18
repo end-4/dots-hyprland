@@ -276,6 +276,14 @@ $elevation2_margin: 7px;
     font-weight: bold;
 }
 
+.titlefont {
+    @include titlefont;
+}
+
+.mainfont {
+    @include mainfont;
+}
+
 .icon-material {
     @include icon-material;
 }
@@ -288,17 +296,8 @@ $elevation2_margin: 7px;
     min-height: 0.545rem;
 }
 
-tooltip {
-    background-color: $surfaceVariant;
-    color: $onSurfaceVariant;
-    border-radius: 50rem;
-    border: 1px solid $onSurfaceVariant;
-}
-
-
 $overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
 $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
-
 
 .spacing-v-15>box {
     margin-bottom: 1.023rem;

@@ -70,6 +70,29 @@ export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => W
     ...props,
 })
 
+export const ModuleNightLight = (props = {}) => Widget.Button({
+    className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Night Light',
+    onPrimaryClick: (button) => {
+        // Set the value to 1 - value
+        const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
+        // console.log(shaderPath);
+        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
+            // console.log('disabling');
+            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
+            button.toggleClassName('sidebar-button-active', false);
+        }
+        else {
+            // console.log('enabling');
+            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
+            button.toggleClassName('sidebar-button-active', true);
+        }
+    },
+    child: MaterialIcon('nightlight', 'norm'),
+    setup: (button) => setupCursorHover(button),
+    ...props,
+})
+
 export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this work
     ...props,
     className: 'txt-small sidebar-iconbutton',
@@ -107,4 +130,6 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
         setupCursorHover(button);
     }
 })
+
+
 
