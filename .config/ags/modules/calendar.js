@@ -67,7 +67,7 @@ const CalendarDay = (day, today) => Widget.Button({
 const CalendarWidget = () => {
     const calendarMonthYear = Widget.Button({
         className: 'txt txt-large sidebar-calendar-monthyear-btn',
-        onPrimaryClick: () => shiftCalendarXMonths(0),
+        onClicked: () => shiftCalendarXMonths(0),
         setup: (button) => {
             button.label = `${new Date().toLocaleString('default', { month: 'long' })} ${new Date().getFullYear()}`;
             setupCursorHover(button);
@@ -182,7 +182,7 @@ const drawTodoItems = (todoJson, isDone) => todoJson.map((task, i) => {
                 valign: 'center',
                 className: 'txt sidebar-todo-item-action',
                 child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { valign: 'center' }),
-                onPrimaryClick: () => {
+                onClicked: () => {
                     todoItemsBox.shown = defaultTodoSelected;
                     if (isDone)
                         uncheckedTodoItems(i);
@@ -196,7 +196,7 @@ const drawTodoItems = (todoJson, isDone) => todoJson.map((task, i) => {
                 valign: 'center',
                 className: 'txt sidebar-todo-item-action',
                 child: MaterialIcon('delete_forever', 'norm', { valign: 'center' }),
-                onPrimaryClick: () => {
+                onClicked: () => {
                     removeTodoItem(i);
                     updateItemLists();
                 },
@@ -241,7 +241,7 @@ const TodoWidget = () => {
                     const undoneButton = Widget.Button({
                         hexpand: true,
                         className: 'sidebar-todo-selector-tab',
-                        onPrimaryClick: (button) => {
+                        onClicked: (button) => {
                             todoItemsBox.shown = 'undone';
                             button.toggleClassName('sidebar-todo-selector-tab-active', true);
                             doneButton.toggleClassName('sidebar-todo-selector-tab-active', false);
@@ -265,7 +265,7 @@ const TodoWidget = () => {
                     const doneButton = Widget.Button({
                         hexpand: true,
                         className: 'sidebar-todo-selector-tab',
-                        onPrimaryClick: (button) => {
+                        onClicked: (button) => {
                             todoItemsBox.shown = 'done';
                             button.toggleClassName('sidebar-todo-selector-tab-active', true);
                             undoneButton.toggleClassName('sidebar-todo-selector-tab-active', false);
@@ -340,7 +340,7 @@ const contentStack = Widget.Stack({
 
 const StackButton = (parentBox, stackItemName, icon, name) => Widget.Button({
     className: 'button-minsize sidebar-navrail-btn sidebar-button-alone txt-small spacing-h-5',
-    onPrimaryClick: (button) => {
+    onClicked: (button) => {
         contentStack.shown = stackItemName;
         const kids = parentBox.get_children()[0].get_children();
         for (let i = 0; i < kids.length; i++) {
