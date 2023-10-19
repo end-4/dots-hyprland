@@ -9,8 +9,8 @@
 - Definitely wip
 
 ## Preview
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/7b16a137-7652-4aed-908b-b0a8a925965a)
-
+![image](./assets/illogical_impulse_dark.png)
+![image](./assets/illogical_impulse_light.png)
 
 ## Instructions
 - Note: Currently using AGS 1.3.0. (It's still in early stages so breaking changes happen a lot)
