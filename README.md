@@ -3,15 +3,14 @@
     <h3> Next-level hype with AGS </h3>
 </div>
 
-- -- WORK IN PROGRESS --
-- [AGS](https://github.com/Aylur/ags/) is pretty much GJS on layer shells, so anything should be possible. I plan to make stuff work properly on a range of devices, so it'll probably take quite some time.
-- Planned stuff
-  - Keyboard friendly widgets: accessible with or without a mouse (if that's possible. doubts it isn't)
-  - Flexible: Scalable. Light/Dark mode support. Adapts to your wallpaper.
+## Description
+- [AGS](https://github.com/Aylur/ags/)-powered.
+- Scalable. Light/Dark mode support. Material colors that adapt to your wallpaper
+- Definitely wip
 
+## Preview
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/7b16a137-7652-4aed-908b-b0a8a925965a)
 
-- notes
-  - 11pt font size best
 
 ## Instructions
 See the wiki > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse)
