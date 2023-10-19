@@ -19,7 +19,7 @@ async function toggleSystemdService(serviceName, button) {
 const ModuleRecord = (props = {}) => Widget.Button({
     ...props,
     className: 'button-minsize sidebar-button-nopad sidebar-button-alone-normal txt-small',
-    onPrimaryClick: () => {
+    onClicked: () => {
         execAsync(['bash', '-c', RECORD_SCRIPT_DIR]).catch(print);
         setTimeout(() => {
             button.toggleClassName('sidebar-button-active', exec(`pidof ${RECORDER_PROCESS} >/dev/null && echo 1 || echo`) == '1');
@@ -42,7 +42,7 @@ const SystemdService = (serviceName) => {
     });
     return Widget.Button({
         className: 'button-minsize sidebar-button sidebar-button-alone-normal txt-small',
-        onPrimaryClick: (button) => {
+        onClicked: (button) => {
             toggleSystemdService(serviceName, button);
         },
         setup: button => {
@@ -80,7 +80,7 @@ export const ModuleMiscToggles = () => {
         child: MaterialIcon('keyboard_arrow_leftenergy_savings_leaf', 'larger', {
             xalign: 0.2,
         }),
-        onPrimaryClick: (button) => {
+        onClicked: (button) => {
             const revealed = PowerSavers.revealChild;
             PowerSavers.revealChild = !revealed;
             button.toggleClassName('sidebar-button-active', !revealed);

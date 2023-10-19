@@ -68,22 +68,3 @@ export const Tray = (props = {}) => Box({
         })
     ]
 });
-
-// export const Tray = () => Box({
-//     className: 'systray',
-//     connections: [[SystemTray, box => {
-//         if (!SystemTray.items.length) {
-//           box.className = ['systray', 'empty'];
-//         };
-//         box.children = SystemTray.items.map(item => Button({
-//             child: Icon(),
-// onPrimaryClick: (_, event) => item.activate(event),
-//     onSecondaryClick: (_, event) => item.openMenu(event),
-//             connections: [[item, button => {
-//                 button.child.icon = item.icon;
-//                 button.tooltipMarkup = item.tooltipMarkup; 
-//                 item.menu.className = 'traymenu';
-//             }]],
-//         }));
-//     }]],
-// });

@@ -53,11 +53,10 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
 export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: `${name}`,
-    onPrimaryClick: (button) => {
+    onClicked: (button) => {
         // Set the value to 1 - value
         Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
             const currentOption = JSON.parse(result).int;
-            console.log(currentOption);
             execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
             button.toggleClassName('sidebar-button-active', currentOption == 0);
         }).catch(print);
@@ -73,17 +72,14 @@ export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => W
 export const ModuleNightLight = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Night Light',
-    onPrimaryClick: (button) => {
+    onClicked: (button) => {
         // Set the value to 1 - value
         const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        // console.log(shaderPath);
         if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            // console.log('disabling');
             execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
             button.toggleClassName('sidebar-button-active', false);
         }
         else {
-            // console.log('enabling');
             execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
             button.toggleClassName('sidebar-button-active', true);
         }

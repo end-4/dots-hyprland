@@ -467,6 +467,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-right: 0rem;
 }
 
+.spacing-h-10>flowboxchild>button {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>flowboxchild:last-child>button {
+    margin-right: 0rem;
+}
+
 .spacing-h-10>label {
     margin-right: 0.682rem;
 }

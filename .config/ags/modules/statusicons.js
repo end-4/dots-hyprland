@@ -3,6 +3,7 @@ const { exec, execAsync } = Utils;
 const { Audio, Battery, Bluetooth, Network } = Service;
 
 export const BluetoothIndicator = () => Widget.Stack({
+    transition: 'slide_up_down',
     items: [
         ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
         ['false', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' })],
@@ -12,6 +13,7 @@ export const BluetoothIndicator = () => Widget.Stack({
 
 
 const NetworkWiredIndicator = () => Widget.Stack({
+    transition: 'slide_up_down',
     items: [
         ['unknown', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
         ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
@@ -35,6 +37,7 @@ const NetworkWiredIndicator = () => Widget.Stack({
 });
 
 const NetworkWifiIndicator = () => Widget.Stack({
+    transition: 'slide_up_down',
     items: [
         ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
         ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
@@ -62,6 +65,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
 });
 
 export const NetworkIndicator = () => Widget.Stack({
+    transition: 'slide_up_down',
     items: [
         ['wifi', NetworkWifiIndicator()],
         ['wired', NetworkWiredIndicator()],

@@ -241,6 +241,12 @@
 .spacing-h-10 > box:last-child {
   margin-right: 0rem; }
 
+.spacing-h-10 > flowboxchild > button {
+  margin-right: 0.682rem; }
+
+.spacing-h-10 > flowboxchild:last-child > button {
+  margin-right: 0rem; }
+
 .spacing-h-10 > label {
   margin-right: 0.682rem; }
 
@@ -1368,7 +1374,7 @@ tooltip {
 
 .session-bg {
   margin-top: -2.727rem;
-  background-color: rgba(32, 26, 25, 0.72); }
+  background-color: rgba(32, 26, 25, 0.37); }
 
 .session-button {
   border-radius: 1.705rem;
