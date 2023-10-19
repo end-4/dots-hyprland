@@ -13,4 +13,5 @@
 
 
 ## Instructions
-See the wiki > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse)
+- Note: Currently using AGS 1.3.0. (It's still in early stages so breaking changes happen a lot)
+- See the wiki > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse)
