@@ -13,6 +13,7 @@
 
 .sideright-hide {
     margin-right: -30.682rem;
+    opacity: 0;
     @include md3_accel;
 }
 
@@ -29,6 +30,7 @@
 
 .sideleft-hide {
     margin-left: -30.682rem;
+    opacity: 0;
     @include md3_accel;
 }
 

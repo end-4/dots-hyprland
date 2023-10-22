@@ -5,7 +5,7 @@ const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
 import {
     ToggleIconBluetooth, ToggleIconWifi, HyprToggleIcon, ModuleNightLight,
-    ModuleEditIcon, ModuleSettingsIcon, ModulePowerIcon
+    ModuleEditIcon, ModuleReloadIcon, ModuleSettingsIcon, ModulePowerIcon
 } from "./quicktoggles.js";
 import { ModuleNotificationList } from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
@@ -78,6 +78,7 @@ export const SidebarRight = () => Box({
                                         }),
                                         Widget.Box({ hexpand: true }),
                                         // ModuleEditIcon({ halign: 'end' }), // TODO: Make this work
+                                        ModuleReloadIcon({ halign: 'end' }),
                                         ModuleSettingsIcon({ halign: 'end' }),
                                         ModulePowerIcon({ halign: 'end' }),
                                     ]

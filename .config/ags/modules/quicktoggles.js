@@ -102,9 +102,24 @@ export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this
     }
 })
 
+export const ModuleReloadIcon = (props = {}) => Widget.Button({
+    ...props,
+    className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Reload Hyprland',
+    onClicked: () => {
+        execAsync(['bash', '-c', 'hyprctl reload &']);
+        MenuService.toggle('sideright');
+    },
+    child: MaterialIcon('refresh', 'norm'),
+    setup: button => {
+        setupCursorHover(button);
+    }
+})
+
 export const ModuleSettingsIcon = (props = {}) => Widget.Button({
     ...props,
     className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Open Settings',
     onClicked: () => {
         execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center', '&']);
         MenuService.toggle('sideright');
@@ -118,6 +133,7 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
 export const ModulePowerIcon = (props = {}) => Widget.Button({
     ...props,
     className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Session',
     onClicked: () => {
         MenuService.toggle('session');
     },
