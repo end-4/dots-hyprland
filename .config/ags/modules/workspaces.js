@@ -16,7 +16,7 @@ const activeWorkspaceIndicator = Widget.Box({
             className: 'bar-ws-active-box',
             connections: [
                 [Hyprland.active.workspace, (box) => {
-                    const ws = Hyprland.active.workspace._id;
+                    const ws = Hyprland.active.workspace.id;
                     box.setStyle(`
                         margin-left: -${1.772 * (10 - ws + 1)}rem;
                     `);

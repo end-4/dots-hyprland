@@ -803,6 +803,7 @@ tooltip {
 
 .sideright-hide {
   margin-right: -30.682rem;
+  opacity: 0;
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .sidebar-left {
@@ -819,6 +820,7 @@ tooltip {
 
 .sideleft-hide {
   margin-left: -30.682rem;
+  opacity: 0;
   transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .sidebar-group {
@@ -1313,6 +1315,7 @@ tooltip {
 .osk-hide {
   margin-top: 30.682rem;
   margin-bottom: -30.682rem;
+  opacity: 0;
   transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15); }
 
 .osk-key {
@@ -1374,7 +1377,7 @@ tooltip {
 
 .session-bg {
   margin-top: -2.727rem;
-  background-color: rgba(32, 26, 25, 0.37); }
+  background-color: rgba(32, 26, 25, 0.51); }
 
 .session-button {
   border-radius: 1.705rem;
