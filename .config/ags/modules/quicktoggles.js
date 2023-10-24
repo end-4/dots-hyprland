@@ -1,5 +1,6 @@
 import { Widget, Utils, Service } from '../imports.js';
-const { Bluetooth, Network } = Service;
+import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
+import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from "./statusicons.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
@@ -94,7 +95,7 @@ export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this
     className: 'txt-small sidebar-iconbutton',
     onClicked: () => {
         execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center', '&']);
-        MenuService.toggle('sideright');
+        App.toggleWindow('sideright');
     },
     child: MaterialIcon('edit', 'norm'),
     setup: button => {
@@ -108,7 +109,7 @@ export const ModuleReloadIcon = (props = {}) => Widget.Button({
     tooltipText: 'Reload Hyprland',
     onClicked: () => {
         execAsync(['bash', '-c', 'hyprctl reload &']);
-        MenuService.toggle('sideright');
+        App.toggleWindow('sideright');
     },
     child: MaterialIcon('refresh', 'norm'),
     setup: button => {
@@ -122,7 +123,7 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
     tooltipText: 'Open Settings',
     onClicked: () => {
         execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center', '&']);
-        MenuService.toggle('sideright');
+        App.toggleWindow('sideright');
     },
     child: MaterialIcon('settings', 'norm'),
     setup: button => {
@@ -135,7 +136,7 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Session',
     onClicked: () => {
-        MenuService.toggle('session');
+        App.toggleWindow('session');
     },
     child: MaterialIcon('power_settings_new', 'norm'),
     setup: button => {

@@ -1,6 +1,5 @@
 const { Gdk, Gtk } = imports.gi;
 import { Utils, Widget } from '../imports.js';
-import { MenuService } from "../scripts/menuservice.js";
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
 import {
@@ -34,18 +33,20 @@ const togglesFlowBox = Widget({
     }
 })
 
-export const SidebarRight = () => Box({
-    vertical: true,
+export default () => Box({
+    // vertical: true,
+    vexpand: true,
+    hexpand: true,
     children: [
         EventBox({
-            onPrimaryClick: () => MenuService.close('sideright'),
-            onSecondaryClick: () => MenuService.close('sideright'),
-            onMiddleClick: () => MenuService.close('sideright'),
+            onPrimaryClick: () => App.closeWindow('sideright'),
+            onSecondaryClick: () => App.closeWindow('sideright'),
+            onMiddleClick: () => App.closeWindow('sideright'),
         }),
         Box({
             vertical: true,
             vexpand: true,
-            className: 'sidebar-right sideright-hide',
+            className: 'sidebar-right',
             children: [
                 Box({
                     vertical: true,
@@ -91,17 +92,6 @@ export const SidebarRight = () => Box({
                     ]
                 }),
             ],
-            connections: [
-                [MenuService, box => { // Hide anims when closing
-                    box.toggleClassName('sideright-hide', !('sideright' === MenuService.opened));
-                }],
-                ['key-press-event', (box, event) => {
-                    if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                        MenuService.close('sideright');
-                    }
-                }]
-            ],
         }),
     ]
 });
-

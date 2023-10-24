@@ -1,7 +1,10 @@
 import { App, Service, Utils, Widget } from '../imports.js';
+const { Audio } = Service;
 const { connect, exec, execAsync, timeout, lookUpIcon } = Utils;
 import { deflisten } from '../scripts/scripts.js';
 import Brightness from '../scripts/brightness.js';
+
+console.log(Brightness.screen_value);
 
 class IndicatorService extends Service {
     static {
@@ -14,39 +17,26 @@ class IndicatorService extends Service {
     _count = 0;
 
     popup(value, icon) {
-        this.emit('popup', value, icon);
+        this.emit('popup', value);
         this._count++;
         timeout(this._delay, () => {
             this._count--;
 
             if (this._count === 0)
-                this.emit('popup', -1, icon);
+                this.emit('popup', -1);
         });
     }
 
     speaker() {
-        const value = Service.Audio.speaker.volume;
-        const icon = value => {
-            const icons = [];
-            icons[0] = 'audio-volume-muted-symbolic';
-            icons[1] = 'audio-volume-low-symbolic';
-            icons[34] = 'audio-volume-medium-symbolic';
-            icons[67] = 'audio-volume-high-symbolic';
-            icons[101] = 'audio-volume-overamplified-symbolic';
-            for (const i of [101, 67, 34, 1, 0]) {
-                if (i <= value * 100)
-                    return icons[i];
-            }
-        };
-        Indicator.popup(value, icon(value));
+        const value = Audio.speaker.volume;
+        Indicator.popup(value);
     }
 
     display() {
         // brightness is async, so lets wait a bit
         timeout(10, () => {
             const value = Brightness.screen_value;
-            const icon = 'display-brightness-symbolic'
-            Indicator.popup(value, icon);
+            Indicator.popup(value);
         });
     }
 
@@ -72,7 +62,7 @@ class Indicator {
     static kbd() { Indicator.instance.kbd(); }
 }
 
-export const Osd = () => Widget.EventBox({
+export default () => Widget.EventBox({
     onHover: () => { //make the widget hide when hovering
         Indicator.popup(-1, 'volume_up');
     },

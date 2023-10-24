@@ -1,5 +1,5 @@
 import { Service, Widget } from '../imports.js';
-const { Notifications } = Service;
+import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 
 export const ModuleNotification = () => Widget.Box({
     className: 'notification',

@@ -49,7 +49,7 @@ const cheatsheetHeader = () => Widget.CenterBox({
         halign: 'end',
         className: "cheatsheet-closebtn icon-material txt txt-hugeass",
         onClicked: () => {
-            MenuService.toggle('cheatsheet');
+            App.toggleWindow('cheatsheet');
         },
         child: Widget.Label({
             className: 'icon-material txt txt-hugeass',
@@ -60,16 +60,17 @@ const cheatsheetHeader = () => Widget.CenterBox({
 });
 
 const clickOutsideToClose = Widget.EventBox({
-    onPrimaryClick: () => MenuService.close('cheatsheet'),
-    onSecondaryClick: () => MenuService.close('cheatsheet'),
-    onMiddleClick: () => MenuService.close('cheatsheet'),
+    onPrimaryClick: () => App.closeWindow('cheatsheet'),
+    onSecondaryClick: () => App.closeWindow('cheatsheet'),
+    onMiddleClick: () => App.closeWindow('cheatsheet'),
 });
 
-export const Cheatsheet = () => Widget.Window({
+export default () => Widget.Window({
     name: 'cheatsheet',
     exclusive: false,
     focusable: true,
     popup: true,
+    visible: false,
     child: Widget.Box({
         vertical: true,
         children: [
@@ -83,13 +84,5 @@ export const Cheatsheet = () => Widget.Window({
                 ]
             }),
         ],
-        connections: [
-            ['key-press-event', (widget, event) => { // Typing
-                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                    MenuService.closeButOnlyUpdate();
-                    console.log('uwu');
-                }
-            }],
-        ]
     })
 });

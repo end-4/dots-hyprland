@@ -2,7 +2,6 @@ const { Gdk, Gtk } = imports.gi;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 import { Utils } from '../../imports.js';
-const { execAsync, exec } = Utils;
 
 // min-height for diameter
 // min-width for trough stroke
@@ -12,9 +11,9 @@ const { execAsync, exec } = Utils;
 // color for progress color
 // font size for progress value (0-100px)
 // TODO: border-radius for rounded ends (unimportant)
-export const CircularProgress = new GObject.Class({
-    Name: 'CircularProgressBar',
-    GTypeName: 'CircularProgressBar',
+export const AnimatedCircularProgressClass = new GObject.Class({
+    Name: 'AnimatedCircularProgressBar',
+    GTypeName: 'AnimatedCircularProgressBar',
     Extends: Gtk.DrawingArea,
 
     _init: function () {

@@ -1,7 +1,7 @@
 import { Widget } from '../imports.js';
 import { SearchAndWindows } from "../modules/overview.js";
 
-export const Overview = () => Widget.Window({
+export default () => Widget.Window({
     name: 'overview',
     exclusive: false,
     focusable: true,

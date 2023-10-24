@@ -4,7 +4,9 @@ const { Gdk, Gtk } = imports.gi;
 const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 import { App, Service, Utils, Widget } from '../imports.js';
-const { Bluetooth, Hyprland, Network } = Service;
+import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
 import { CircularProgress } from "./lib/circularprogress.js";
 import { MaterialIcon } from "./lib/materialicon.js";
@@ -96,10 +98,6 @@ export const ModuleSysInfo = (props = {}) => {
                         // Set circular progress (font size cuz hack for anims)
                         ramCircle.style = `font-size: ${ramPerc}px;`
                         swapCircle.style = `font-size: ${swapPerc}px;`
-
-                        // ramCircle.style = `font-size: ${Math.random()*100}px;`
-                        // swapCircle.style = `font-size: ${Math.random()*100}px;`
-                        // Set text
                         ramText.label = `${ramUsed} / ${ramTotal}`;
                         swapText.label = `${swapUsed} / ${swapTotal}`;
                     }]

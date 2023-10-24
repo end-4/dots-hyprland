@@ -1,7 +1,8 @@
 import { Service, Utils, Widget } from '../imports.js';
-const { Mpris, Audio } = Service;
+import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 const { execAsync, exec } = Utils;
-import { CircularProgress } from "./lib/circularprogress.js";
+import { AnimatedCircularProgressClass } from "./lib/animatedcircularprogress.js";
 
 const TrackProgress = () => {
     const _updateProgress = (circprog) => {
@@ -10,15 +11,16 @@ const TrackProgress = () => {
         // Set circular progress (font size cuz hack for anims)
         circprog.style = `font-size: ${mpris.position / mpris.length * 100}px;`
     }
-    return Widget({
-        type: CircularProgress,
-        className: 'bar-music-circprog',
-        valign: 'center',
-        connections: [ // Update on change/once every 3 seconds
-            [Mpris, _updateProgress],
-            [3000, _updateProgress]
-        ]
-    });
+    return Widget.Box({});
+    // return Widget({
+    //     type: AnimatedCircularProgressClass,
+    //     className: 'bar-music-circprog',
+    //     valign: 'center',
+    //     // connections: [ // Update on change/once every 3 seconds
+    //     //     [Mpris, _updateProgress],
+    //     //     [3000, _updateProgress]
+    //     // ]
+    // });
 }
 
 export const ModuleMusic = () => Widget.EventBox({

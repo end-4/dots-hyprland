@@ -15,6 +15,10 @@ $osk_key_fontsize: 1.091rem;
     padding: 1.023rem;
 }
 
+.osk-show {
+    @include md3_decel_fast;
+}
+
 .osk-hide {
     margin-top: 30.682rem;
     margin-bottom: -30.682rem;

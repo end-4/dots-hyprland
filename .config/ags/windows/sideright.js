@@ -1,16 +1,25 @@
 import { Widget } from '../imports.js';
-import { SidebarRight } from "../modules/sideright.js";
+import PopupWindow from './lib/popupwindow.js';
+import SidebarRight from "../modules/sideright.js";
 
-export const SideRight = () => Widget.Window({
-    name: 'sideright',
-    //exclusive: true, // make this true maybe cuz very cool
+// export default () => Widget.Window({
+//     name: 'sideright',
+//     //exclusive: true, // make this true maybe cuz very cool
+//     focusable: true,
+//     popup: true,
+//     visible: false,
+//     child: Widget.Box({
+//         children: [
+//             SidebarRight(),
+//         ]
+//     }),
+// });
+
+export default () => PopupWindow({
     focusable: true,
-    popup: true,
-    visible: false,
     anchor: ['right', 'top', 'bottom'],
-    child: Widget.Box({
-        children: [
-            SidebarRight(),
-        ]
-    }),
+    name: 'sideright',
+    showClassName: 'sideright-show',
+    hideClassName: 'sideright-hide',
+    child: SidebarRight(),
 });

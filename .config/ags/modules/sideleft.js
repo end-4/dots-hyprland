@@ -1,9 +1,9 @@
 const { Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
-const { Applications, Hyprland } = Service;
+import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 const { Box, EventBox, Button, Label, Scrollable } = Widget;
-import { MenuService } from "../scripts/menuservice.js";
 
 const CLIPBOARD_SHOWN_ENTRIES = 20;
 
@@ -12,8 +12,9 @@ const ClipboardItems = () => {
         vertical: true,
         className: 'spacing-v-5',
         connections: [
-            [MenuService, box => {
-                if (MenuService.opened != 'sideleft') return;
+            [App, (box, name, visible) => {
+                if (name != 'sideleft')
+                    return;
 
                 let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
                 clipboardContents = clipboardContents.split('\n');
@@ -28,7 +29,7 @@ const ClipboardItems = () => {
                         onClicked: () => {
                             print(`bash` + `-c` + `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`);
                             execAsync(`bash`, `-c`, `echo "${clipboardContents[i]}" | sed "s/  /\\\t/" | cliphist decode | wl-copy`).catch(print);
-                            MenuService.close('sideleft');
+                            App.closeWindow('sideleft');
                         },
                         className: 'sidebar-clipboard-item',
                         child: Box({
@@ -51,9 +52,9 @@ export const SidebarLeft = () => Box({
     vertical: true,
     children: [
         EventBox({
-            onPrimaryClick: () => MenuService.close('sideleft'),
-            onSecondaryClick: () => MenuService.close('sideleft'),
-            onMiddleClick: () => MenuService.close('sideleft'),
+            onPrimaryClick: () => App.closeWindow('sideleft'),
+            onSecondaryClick: () => App.closeWindow('sideleft'),
+            onMiddleClick: () => App.closeWindow('sideleft'),
         }),
         Box({
             vertical: true,
@@ -66,16 +67,6 @@ export const SidebarLeft = () => Box({
                         ClipboardItems(),
                     ]
                 })
-            ],
-            connections: [
-                [MenuService, box => {
-                    box.toggleClassName('sideleft-hide', !('sideleft' === MenuService.opened));
-                }],
-                ['key-press-event', (box, event) => {
-                    if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                        MenuService.close('sideleft');
-                    }
-                }]
             ],
         }),
     ]

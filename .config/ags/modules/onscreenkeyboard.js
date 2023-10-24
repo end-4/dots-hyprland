@@ -1,6 +1,5 @@
 const { Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
-import { MenuService } from "../scripts/menuservice.js";
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
@@ -41,7 +40,7 @@ const keyboardControls = Box({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => {
                 releaseAllKeys();
-                MenuService.toggle('osk');
+                App.toggleWindow('osk');
             },
             label: 'keyboard_hide',
         }),
@@ -103,23 +102,13 @@ const keyboardItself = (kbJson) => {
     })
 }
 
-export const OnScreenKeyboard = () => Box({
-    vertical: true,
+export default () => Box({
+    vexpand: true,
+    hexpand: true,
+    className: 'osk-window spacing-h-10',
     children: [
-        Box({
-            vexpand: true,
-            className: 'osk-window osk-hide spacing-h-10',
-            children: [
-                keyboardControls,
-                separatorLine,
-                keyboardItself(keyboardJson),
-            ],
-            connections: [
-                [MenuService, box => { // Anims + release when opening/closing
-                    box.toggleClassName('osk-hide', !('osk' === MenuService.opened));
-                    // releaseAllKeys();
-                }],
-            ],
-        }),
-    ]
+        keyboardControls,
+        separatorLine,
+        keyboardItself(keyboardJson),
+    ],
 });

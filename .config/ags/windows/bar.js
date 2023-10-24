@@ -1,4 +1,7 @@
-import { Widget } from '../imports.js';
+const { Gdk, Gtk } = imports.gi;
+import { App, Service, Utils, Widget } from '../imports.js';
+const { execAsync, exec } = Utils;
+
 import { ModuleWorkspaces } from "../modules/workspaces.js";
 import { ModuleMusic } from "../modules/music.js";
 import { ModuleSystem } from "../modules/system.js";
@@ -24,7 +27,7 @@ const right = Widget.Box({
     children: [ModuleSystem()],
 });
 
-export const Bar = () => Widget.Window({
+export default () => Widget.Window({
     name: 'bar',
     anchor: ['top', 'left', 'right'],
     exclusive: true,
@@ -41,5 +44,10 @@ export const Bar = () => Widget.Window({
             ]
         }),
         endWidget: ModuleRightSpace(),
+        setup: (self) => {
+            const styleContext = self.get_style_context();
+            const minHeight = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+            // execAsync(['bash', '-c', `hyprctl keyword monitor ,addreserved,${minHeight},0,0,0`]).catch(print);
+        }
     }),
 });

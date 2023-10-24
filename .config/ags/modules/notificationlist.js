@@ -1,6 +1,6 @@
 const { GLib, Gtk } = imports.gi;
 import { Service, Utils, Widget } from '../imports.js';
-const { Notifications } = Service;
+import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 const { lookUpIcon, timeout } = Utils;
 const { Box, Icon, Scrollable, Label, Button } = Widget;
 import { MaterialIcon } from "./lib/materialicon.js";

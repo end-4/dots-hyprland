@@ -1,6 +1,7 @@
 const { Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
-const { Applications, Hyprland } = Service;
+import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
@@ -35,13 +36,13 @@ const searchPromptTexts = [
 ]
 
 function launchCustomCommand(command) {
-    MenuService.close('overview');
+    App.closeWindow('overview');
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
         execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`, `&`]).catch(print);
     }
     else if (args[0] == '>img') { // Change wallpaper
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/switchwall.sh`, `&`]).catch(print);
+        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh`, `&`]).catch(print);
     }
     else if (args[0] == '>light') { // Light mode
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt`, `&`]).catch(print);
@@ -73,7 +74,7 @@ function launchCustomCommand(command) {
 }
 
 function execAndClose(command, terminal) {
-    MenuService.close('overview');
+    App.closeWindow('overview');
     if (terminal) {
         execAsync([`bash`, `-c`, `foot fish -C "${command}"`, `&`]).catch(print);
     }
@@ -117,7 +118,7 @@ const CalculationResultButton = ({ result, text }) => searchItem({
     actionName: "Copy",
     content: `${result}`,
     onActivate: () => {
-        MenuService.close('overview');
+        App.closeWindow('overview');
         console.log(result);
         execAsync(['bash', '-c', `wl-copy '${result}'`, `&`]).catch(print);
     },
@@ -142,7 +143,7 @@ const DesktopEntryButton = (app) => {
     return Widget.Button({
         className: 'overview-search-result-btn',
         onClicked: () => {
-            MenuService.close('overview');
+            App.closeWindow('overview');
             app.launch();
         },
         child: Widget.Box({
@@ -192,7 +193,7 @@ const CustomCommandButton = ({ text = '' }) => searchItem({
     actionName: 'Run',
     content: `${text}`,
     onActivate: () => {
-        MenuService.close('overview');
+        App.closeWindow('overview');
         launchCustomCommand(text);
     },
 });
@@ -203,7 +204,7 @@ const SearchButton = ({ text = '' }) => searchItem({
     actionName: 'Go',
     content: `${text}`,
     onActivate: () => {
-        MenuService.close('overview');
+        App.closeWindow('overview');
         execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
     },
 });
@@ -232,7 +233,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     valign: 'center',
     onClicked: () => {
         execAsync([`bash`, `-c`, `hyprctl dispatch focuswindow address:${address}`, `&`]).catch(print);
-        MenuService.close('overview');
+        App.closeWindow('overview');
     },
     onMiddleClick: () => execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print),
     onSecondaryClick: (button) => {
@@ -322,7 +323,7 @@ const workspace = index => {
             vexpand: true,
             onPrimaryClickRelease: () => {
                 execAsync([`bash`, `-c`, `hyprctl dispatch workspace ${index}`, `&`]).catch(print);
-                MenuService.close('overview');
+                App.closeWindow('overview');
             },
             // onSecondaryClick: (eventbox) => {
             //     const menu = Widget({
@@ -394,9 +395,9 @@ export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
     const clickOutsideToClose = Widget.EventBox({
-        onPrimaryClick: () => MenuService.close('overview'),
-        onSecondaryClick: () => MenuService.close('overview'),
-        onMiddleClick: () => MenuService.close('overview'),
+        onPrimaryClick: () => App.closeWindow('overview'),
+        onSecondaryClick: () => App.closeWindow('overview'),
+        onMiddleClick: () => App.closeWindow('overview'),
     });
     const resultsBox = Widget.Box({
         className: 'spacing-v-15 overview-search-results',
@@ -461,14 +462,14 @@ export const SearchAndWindows = () => {
                     const fullResult = eval(text);
                     // copy
                     execAsync(['bash', '-c', `wl-copy '${fullResult}'`, `&`]).catch(print);
-                    MenuService.close('overview');
+                    App.closeWindow('overview');
                     return;
                 } catch (e) {
                     // console.log(e);
                 }
             }
             if (_appSearchResults.length > 0) {
-                MenuService.close('overview');
+                App.closeWindow('overview');
                 _appSearchResults[0].launch();
                 return;
             }
@@ -485,7 +486,7 @@ export const SearchAndWindows = () => {
             }
 
             else {
-                MenuService.close('overview');
+                App.closeWindow('overview');
                 execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
             }
         },
@@ -571,16 +572,6 @@ export const SearchAndWindows = () => {
                     entryPromptRevealer.child.label = searchPromptTexts[Math.floor(Math.random() * searchPromptTexts.length)];
                     resultsBox.children = [];
                     entry.set_text('');
-                }
-            }],
-            ['key-press-event', (widget, event) => { // Typing
-                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                    MenuService.closeButOnlyUpdate();
-                }
-                if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
-                    entry.grab_focus();
-                    entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
-                    entry.set_position(-1);
                 }
             }],
         ],

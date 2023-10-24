@@ -11,6 +11,10 @@
     padding: 1.023rem;
 }
 
+.sideright-show {
+    @include md3_decel;
+}
+
 .sideright-hide {
     margin-right: -30.682rem;
     opacity: 0;
