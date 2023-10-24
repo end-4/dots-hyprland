@@ -1,5 +1,6 @@
 import { App, Service, Utils, Widget } from '../imports.js';
-const { Audio, Mpris } = Service;
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
+import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 const { exec, execAsync, CONFIG_DIR } = Utils;
 import { ModuleNotification } from "./notificationbar.js";
 import { StatusIcons } from "./statusicons.js";
@@ -17,7 +18,7 @@ export const ModuleRightSpace = () => Widget.EventBox({
         Audio.speaker.volume -= 0.03;
         Indicator.speaker();
     },
-    onPrimaryClick: () => MenuService.toggle('sideright'),
+    onPrimaryClick: () => App.toggleWindow('sideright'),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
@@ -31,8 +32,6 @@ export const ModuleRightSpace = () => Widget.EventBox({
                     Widget.Box({
                         hexpand: true,
                         className: 'spacing-h-15 txt',
-                        children: [
-                        ],
                         setup: box => {
                             box.pack_end(StatusIcons(), false, false, 0);
                             box.pack_end(Tray(), false, false, 0);

@@ -1,6 +1,5 @@
-// const { Gdk, Vte } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
-const { Hyprland } = Service
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import { deflisten } from '../scripts/scripts.js';
 
 const WORKSPACE_SIDE_PAD = 0.546; // rem
@@ -37,8 +36,8 @@ const activeWorkspaceIndicator = Widget.Box({
 export const ModuleWorkspaces = () => Widget.EventBox({
     onScrollUp: () => Utils.execAsync(['bash', '-c', 'hyprctl dispatch workspace -1 &']),
     onScrollDown: () => Utils.execAsync(['bash', '-c', 'hyprctl dispatch workspace +1 &']),
-    onMiddleClickRelease: () => MenuService.toggle('overview'),
-    onSecondaryClickRelease: () => MenuService.toggle('osk'),
+    onMiddleClickRelease: () => App.toggleWindow('overview'),
+    onSecondaryClickRelease: () => App.toggleWindow('osk'),
     child: Widget.Box({
         homogeneous: true,
         className: 'bar-ws-width',

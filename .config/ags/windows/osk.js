@@ -1,25 +1,12 @@
 const { Gdk, Gtk } = imports.gi;
 import { Widget } from '../imports.js';
-import { OnScreenKeyboard } from "../modules/onscreenkeyboard.js";
+import PopupWindow from './lib/popupwindow.js';
+import OnScreenKeyboard from "../modules/onscreenkeyboard.js";
 
-export const Osk = () => Widget.Window({ // On-screen keyboard
-    name: 'osk',
-    // exclusive: true,
-    popup: true,
-    visible: false,
+export default () => PopupWindow({
     anchor: ['bottom'],
-    layer: 'overlay',
-    child: Widget.Box({
-        vertical: true,
-        children: [
-            OnScreenKeyboard(),
-        ]
-    }),
-})
-
-
-// export const osk = Widget({
-//     type: Gtk.Window,
-//     child: OnScreenKeyboard(),
-// })
-// osk.show_all();
+    name: 'osk',
+    showClassName: 'osk-show',
+    hideClassName: 'osk-hide',
+    child: OnScreenKeyboard(),
+});

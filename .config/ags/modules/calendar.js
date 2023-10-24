@@ -14,6 +14,7 @@ function fileExists(filePath) {
 }
 // export let todoJson = JSON.parse(Utils.readFile(`${App.configDir}/../../.cache/ags/user/todo.json`));
 // actually we have to check if the file exists first, create it if not
+Utils.exec(`touch ~/.cache/ags/user/todo.json`);
 export let todoJson = undefined;
 if (fileExists(`${App.configDir}/../../.cache/ags/user/todo.json`)) {
     todoJson = JSON.parse(Utils.readFile(`${App.configDir}/../../.cache/ags/user/todo.json`));

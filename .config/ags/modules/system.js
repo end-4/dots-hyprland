@@ -2,7 +2,7 @@
 // For the cool memory indicator on the sidebar, see sysinfo.js
 import { Service, Utils, Widget } from '../imports.js';
 const { exec, execAsync } = Utils;
-const { Battery } = Service;
+import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),

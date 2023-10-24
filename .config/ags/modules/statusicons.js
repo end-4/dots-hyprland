@@ -1,6 +1,9 @@
 import { Service, Utils, Widget } from '../imports.js';
 const { exec, execAsync } = Utils;
-const { Audio, Battery, Bluetooth, Network } = Service;
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
+import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
+import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
+import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 
 export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',

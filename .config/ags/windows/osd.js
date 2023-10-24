@@ -1,7 +1,7 @@
 import { Widget } from '../imports.js';
-import { Osd } from "../modules/osd.js";
+import Osd from "../modules/onscreendisplay.js";
 
-export const Indicator = monitor => Widget.Window({
+export default (monitor) => Widget.Window({
     name: `indicator${monitor}`,
     monitor,
     className: 'indicator',

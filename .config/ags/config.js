@@ -1,18 +1,20 @@
 // Import
 import { App, Utils } from './imports.js';
 // Windows
-import { Bar } from './windows/bar.js';
-import { Cheatsheet } from './windows/cheatsheet.js';
+import Bar from './windows/bar.js';
+import Cheatsheet from './windows/cheatsheet.js';
 import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './windows/corners.js';
-import { Indicator } from './windows/osd.js';
-import { Osk } from './windows/osk.js';
-import { Overview } from './windows/overview.js';
-import { Session } from './windows/session.js';
-import { SideLeft } from './windows/sideleft.js';
-import { SideRight } from './windows/sideright.js';
+import Indicator from './windows/osd.js';
+import Osk from './windows/osk.js';
+import Overview from './windows/overview.js';
+import Session from './windows/session.js';
+// import { SideLeft } from './windows/sideleft.js';
+import SideRight from './windows/sideright.js';
 
 const CLOSE_ANIM_TIME = 150;
 
+// Init
+Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
 // SCSS compilation
 Utils.exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
 App.resetCss();
@@ -42,7 +44,7 @@ export default {
         Indicator(),
         Cheatsheet(),
         SideRight(),
-        SideLeft(),
+        // SideLeft(),
         Osk(), // On-screen keyboard
         Session(),
     ],

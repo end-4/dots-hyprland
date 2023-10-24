@@ -57,16 +57,16 @@ const SessionButton = (name, icon, command, props = {}) => {
     });
 }
 
-export const SessionScreen = () => {
+export default () => {
     // lock, logout, sleep
-    const lockButton = SessionButton('Lock', 'lock', () => { MenuService.close('session'); execAsync('gtklock') });
-    const logoutButton = SessionButton('Logout', 'logout', () => { MenuService.close('session'); execAsync(['bash', '-c', 'loginctl terminate-user $USER']) });
-    const sleepButton = SessionButton('Sleep', 'sleep', () => { MenuService.close('session'); execAsync('systemctl suspend') });
+    const lockButton = SessionButton('Lock', 'lock', () => { App.closeWindow('session'); execAsync('gtklock') });
+    const logoutButton = SessionButton('Logout', 'logout', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'loginctl terminate-user $USER']) });
+    const sleepButton = SessionButton('Sleep', 'sleep', () => { App.closeWindow('session'); execAsync('systemctl suspend') });
     // hibernate, shutdown, reboot
-    const hibernateButton = SessionButton('Hibernate', 'downloading', () => { MenuService.close('session'); execAsync('systemctl hibernate') });
-    const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { MenuService.close('session'); execAsync('systemctl poweroff') });
-    const rebootButton = SessionButton('Reboot', 'restart_alt', () => { MenuService.close('session'); execAsync('systemctl reboot') });
-    const cancelButton = SessionButton('Cancel', 'close', () => MenuService.close('session'), { className: 'session-button-cancel' });
+    const hibernateButton = SessionButton('Hibernate', 'downloading', () => { App.closeWindow('session'); execAsync('systemctl hibernate') });
+    const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { App.closeWindow('session'); execAsync('systemctl poweroff') });
+    const rebootButton = SessionButton('Reboot', 'restart_alt', () => { App.closeWindow('session'); execAsync('systemctl reboot') });
+    const cancelButton = SessionButton('Cancel', 'close', () => App.closeWindow('session'), { className: 'session-button-cancel' });
     return Widget.Box({
         className: 'session-bg',
         style: `
@@ -76,9 +76,9 @@ export const SessionScreen = () => {
         vertical: true,
         children: [
             Widget.EventBox({
-                onPrimaryClick: () => MenuService.close('session'),
-                onSecondaryClick: () => MenuService.close('session'),
-                onMiddleClick: () => MenuService.close('session'),
+                onPrimaryClick: () => App.closeWindow('session'),
+                onSecondaryClick: () => App.closeWindow('session'),
+                onMiddleClick: () => App.closeWindow('session'),
             }),
             Widget.Box({
                 halign: 'center',
@@ -138,11 +138,6 @@ export const SessionScreen = () => {
         connections: [
             [App, (_b, name, visible) => {
                 if (visible) lockButton.grab_focus(); // Lock is the default option
-            }],
-            ['key-press-event', (box, event) => {
-                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                    MenuService.closeButOnlyUpdate();
-                }
             }],
         ],
     });
