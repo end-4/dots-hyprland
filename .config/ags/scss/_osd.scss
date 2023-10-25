@@ -48,6 +48,7 @@
 }
 
 .osd-value-txt {
+    @include titlefont;
     font-size: 1.688rem;
     font-weight: 500;
     color: $onBackground;

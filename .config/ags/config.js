@@ -8,7 +8,7 @@ import Indicator from './windows/osd.js';
 import Osk from './windows/osk.js';
 import Overview from './windows/overview.js';
 import Session from './windows/session.js';
-// import { SideLeft } from './windows/sideleft.js';
+import SideLeft from './windows/sideleft.js';
 import SideRight from './windows/sideright.js';
 
 const CLOSE_ANIM_TIME = 150;
@@ -44,7 +44,7 @@ export default {
         Indicator(),
         Cheatsheet(),
         SideRight(),
-        // SideLeft(),
+        SideLeft(),
         Osk(), // On-screen keyboard
         Session(),
     ],

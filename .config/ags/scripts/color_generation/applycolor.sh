@@ -151,5 +151,3 @@ apply_fuzzel
 apply_foot
 apply_hyprland
 apply_gtk
-
-notify-send 'You might wanna log out' 'For GTK apps to apply the new colors.' -a 'System'

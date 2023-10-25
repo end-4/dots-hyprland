@@ -1,16 +1,11 @@
-import { Widget } from '../imports.js';
-import { SidebarLeft } from "../modules/sideleft.js";
+import PopupWindow from './lib/popupwindow.js';
+import SidebarLeft from "../modules/sideleft.js";
 
-export const SideLeft = () => Widget.Window({
-    name: 'sideleft',
-    //exclusive: true, // make this true maybe cuz very cool
+export default () => PopupWindow({
     focusable: true,
-    popup: true,
-    visible: false,
     anchor: ['left', 'bottom'],
-    child: Widget.Box({
-        children: [
-            SidebarLeft(),
-        ]
-    }),
+    name: 'sideleft',
+    showClassName: 'sideleft-show',
+    hideClassName: 'sideleft-hide',
+    child: SidebarLeft(),
 });

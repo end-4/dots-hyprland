@@ -17,7 +17,7 @@
 
 .sideright-hide {
     margin-right: -30.682rem;
-    opacity: 0;
+    // opacity: 0;
     @include md3_accel;
 }
 
@@ -32,9 +32,13 @@
     padding: 1.023rem;
 }
 
+.sideleft-show {
+    @include md3_decel;
+}
+
 .sideleft-hide {
     margin-left: -30.682rem;
-    opacity: 0;
+    // opacity: 0;
     @include md3_accel;
 }
 

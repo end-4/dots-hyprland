@@ -22,7 +22,7 @@ $osk_key_fontsize: 1.091rem;
 .osk-hide {
     margin-top: 30.682rem;
     margin-bottom: -30.682rem;
-    opacity: 0;
+    // opacity: 0;
     @include md3_accel_fast;
 }
 
