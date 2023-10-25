@@ -17,7 +17,7 @@ fi
 
 echo Sending "$imgpath" to swww. Cursor pos: ["$cursorposx, $cursorposy_inverted"] &
 # Change swww wallpaper
-swww img "$imgpath" --transition-step 230 --transition-fps 60 \
+swww img "$imgpath" --transition-step 100 --transition-fps 60 \
 --transition-type grow --transition-angle 30 --transition-duration 1 \
 --transition-pos "$cursorposx, $cursorposy_inverted" &
 

@@ -49,8 +49,9 @@ export default () => Widget.EventBox({
                                     className: 'osd-progress',
                                     hexpand: true,
                                     vertical: false,
-                                    connections: [[Brightness, progress => {
-                                        progress.value = Brightness.screen_value;
+                                    connections: [[Brightness, (progress) => {
+                                        const updateValue = Brightness.screen_value;
+                                        progress.value = updateValue;
                                     }, 'notify::screen-value']],
                                 })
                             ],
@@ -82,7 +83,8 @@ export default () => Widget.EventBox({
                                     hexpand: true,
                                     vertical: false,
                                     connections: [[Audio, (progress) => {
-                                        progress.value = Audio.speaker?.volume;
+                                        const updateValue = Audio.speaker?.volume;
+                                        if(!isNaN(updateValue)) progress.value = updateValue;
                                     }]],
                                 })
                             ],

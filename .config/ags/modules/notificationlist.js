@@ -135,6 +135,33 @@ const Notification = (notifObject) => Box({
 });
 
 export const ModuleNotificationList = props => {
+    const listTitle = Box({
+        valign: 'start',
+        className: 'sidebar-group-invisible txt',
+        children: [
+            Label({
+                hexpand: true,
+                xalign: 0,
+                className: 'txt-title-small',
+                label: 'Notifications',
+            }),
+            Button({
+                className: 'sidebar-notif-close-btn',
+                child: Box({
+                    children: [
+                        MaterialIcon('clear_all', 'small'),
+                        Label({
+                            className: 'txt-small',
+                            label: 'Clear all',
+                        })
+                    ]
+                }),
+                setup: button => {
+                    setupCursorHover(button);
+                },
+            })
+        ]
+    })
     const listContents = Scrollable({
         hexpand: true,
         hscroll: 'never',
@@ -160,8 +187,10 @@ export const ModuleNotificationList = props => {
     vScrollbar.get_style_context().add_class('sidebar-scrollbar');
     return Box({
         ...props,
-        className: 'sidebar-group-invisible spacing-h-5',
+        className: 'sidebar-group-invisible spacing-v-5',
+        vertical: true,
         children: [
+            listTitle,
             listContents,
         ]
     });

@@ -33,6 +33,17 @@ const togglesFlowBox = Widget({
     }
 })
 
+const togglesBox = Widget.Box({
+    className: 'sidebar-group spacing-h-10',
+    children: [
+        ToggleIconWifi({ hexpand: 'true' }),
+        ToggleIconBluetooth({ hexpand: 'true' }),
+        HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', { hexpand: 'true' }),
+        HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', { hexpand: 'true' }),
+        ModuleNightLight({ hexpand: 'true' }),
+    ]
+})
+
 export default () => Box({
     // vertical: true,
     vexpand: true,
@@ -84,7 +95,8 @@ export default () => Box({
                                         ModulePowerIcon({ halign: 'end' }),
                                     ]
                                 }),
-                                togglesFlowBox,
+                                // togglesFlowBox,
+                                togglesBox,
                             ]
                         }),
                         ModuleNotificationList({ vexpand: true, }),

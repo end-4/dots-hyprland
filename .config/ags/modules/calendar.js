@@ -171,10 +171,9 @@ const todoItems = (isDone) => Widget.Scrollable({
                             onClicked: () => {
                                 todoItemsBox.shown = defaultTodoSelected;
                                 if (isDone)
-                                    uncheckedTodoItems(i);
+                                    Todo.uncheck(i);
                                 else
-                                    checkTodoItem(i);
-                                updateItemLists();
+                                    Todo.check(i);
                             },
                             setup: (button) => setupCursorHover(button),
                         }),
@@ -183,15 +182,26 @@ const todoItems = (isDone) => Widget.Scrollable({
                             className: 'txt sidebar-todo-item-action',
                             child: MaterialIcon('delete_forever', 'norm', { valign: 'center' }),
                             onClicked: () => {
-                                removeTodoItem(i);
-                                updateItemLists();
+                                Todo.remove(i);
                             },
                             setup: (button) => setupCursorHover(button),
                         }),
                     ]
                 });
             })
-        }, 'changed']]
+            if (self.children.length == 0) {
+                self.children = [
+                    Widget.Box({
+                        hexpand: true,
+                        vertical: true,
+                        children: [
+                            MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
+                            Label({label: `${isDone ? 'Finished tasks will go here' : 'Whatever!'}`})
+                        ]
+                    })
+                ]
+            }
+        }, 'updated']]
     })
 });
 

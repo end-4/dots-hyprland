@@ -23,6 +23,26 @@ $rounding_large: 1.705rem;
 }
 
 // Common rules
+@mixin small-rounding {
+    border-radius: $rounding_small; // 10px
+    -gtk-outline-radius: $rounding_small; // 10px
+}
+
+@mixin normal-rounding {
+    border-radius: $rounding_medium; // small-rounding + 5px
+    -gtk-outline-radius: $rounding_medium; // small-rounding + 5px
+}
+
+@mixin large-rounding {
+    border-radius: $rounding_large; // normal-rounding + 10px
+    -gtk-outline-radius: $rounding_large; // normal-rounding + 10px
+}
+
+@mixin full-rounding {
+    border-radius: 9999px;
+    -gtk-outline-radius: 9999px;
+}
+
 @mixin titlefont {
     // Geometric sans-serif
     font-family:
@@ -38,7 +58,7 @@ $rounding_large: 1.705rem;
 
 .txt-title-small {
     @include titlefont;
-    font-size: 2.045rem;
+    font-size: 1.364rem;
 }
 
 @mixin mainfont {
@@ -152,10 +172,6 @@ $elevation2_margin: 7px;
 
 @mixin anim-exit {
     transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
-}
-
-@mixin m3-button {
-    border-radius: 50rem;
 }
 
 @keyframes flyin-top {
@@ -289,7 +305,7 @@ $elevation2_margin: 7px;
 }
 
 .separator-circle {
-    border-radius: 50rem;
+    @include full-rounding;
     background-color: $onSurface;
     margin: 0rem 0.682rem;
     min-width: 0.545rem;
@@ -555,22 +571,6 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     @include anim-exit;
 }
 
-@mixin small-rounding {
-    border-radius: $rounding_small; // 10px
-}
-
-@mixin normal-rounding {
-    border-radius: $rounding_medium; // small-rounding + 5px
-}
-
-@mixin large-rounding {
-    border-radius: $rounding_large; // normal-rounding + 10px
-}
-
-@mixin full-rounding {
-    border-radius: 9999px;
-}
-
 @mixin elevation-border-softer {
     border-top: 1px solid mix($t_t_surface, $t_onSurface, 80%);
     border-left: 1px solid mix($t_t_surface, $t_onSurface, 80%);
@@ -673,10 +673,6 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 .spacing-h--20>box:first-child {
     margin-left: 0rem;
-}
-
-*:focus {
-    // border: 2px solid $onSurface;
 }
 
 $white: white;

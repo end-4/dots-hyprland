@@ -95,24 +95,29 @@ $notchOnPrimary: $onPrimary;
 
 .bar-group-standalone {
     border-radius: 1.364rem;
+    -gtk-outline-radius: 1.364rem;
 }
 
 .bar-group-round {
     border-radius: 10rem;
+    -gtk-outline-radius: 10rem;
 }
 
 .bar-group-middle {
     border-radius: 0.477rem;
+    -gtk-outline-radius: 0.477rem;
 }
 
 .bar-group-left {
     border-radius: 0.477rem;
+    -gtk-outline-radius: 0.477rem;
     border-top-left-radius: 1.364rem;
     border-bottom-left-radius: 1.364rem;
 }
 
 .bar-group-right {
     border-radius: 0.477rem;
+    -gtk-outline-radius: 0.477rem;
     border-top-right-radius: 1.364rem;
     border-bottom-right-radius: 1.364rem;
 }
@@ -122,10 +127,10 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-separator {
+    @include full-rounding;
     min-width: 0.341rem;
     min-height: 0.341rem;
     background-color: mix($t_surface, $t_onSurface, 90%);
-    border-radius: 999px;
     margin: 0rem 0.341rem;
 }
 
@@ -212,10 +217,10 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-ws-occupied-left-right {
+    @include full-rounding;
     background-color: $notchSecondaryContainer;
     color: $notchOnSecondaryContainer;
     min-width: 1.636rem;
-    border-radius: 9999px;
     border: 0.068rem solid $notchOnSecondaryContainer;
 }
 
@@ -225,7 +230,7 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-batt {
-    border-radius: 999px;
+    @include full-rounding;
     padding: 0rem 0.341rem;
     background-color: $t_secondaryContainer;
     color: $t_onSecondaryContainer;
@@ -413,14 +418,12 @@ $notchOnPrimary: $onPrimary;
 
 .corner {
     background-color: $t_background;
-    // border-radius: 21px; //Hard code because Hyprland rounding is in px
     @include large-rounding;
     border-width: 0.068rem;
 }
 
 .corner-black {
     background-color: $black; // Hard code because fake screen corner
-    // border-radius: 21px; //Hard code because Hyprland rounding is in px
     @include large-rounding;
     border-width: 20px;
 }
@@ -436,7 +439,7 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-space-button>box:first-child {
-    border-radius: 999px;
+    @include full-rounding;
     padding: 0rem 0.682rem;
 }
 
@@ -459,12 +462,12 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-systray {
-    border-radius: 9999px;
+    @include full-rounding;
     min-height: 1.909rem;
     min-width: 1.909rem;
 }
 
 .bar-systray-item {
-    border-radius: 9999px;
+    @include full-rounding;
     min-width: 1.909rem;
 }
