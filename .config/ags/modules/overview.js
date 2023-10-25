@@ -3,11 +3,11 @@ import { App, Service, Utils, Widget } from '../imports.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
-import { addTodoItem } from "./calendar.js";
 import { setupCursorHover, setupCursorHoverAim } from "./lib/cursorhover.js";
 import { MaterialIcon } from './lib/materialicon.js';
 import { searchItem } from './lib/searchitem.js';
 import { ContextMenuItem } from './lib/contextmenuitem.js';
+import Todo from "../scripts/todo.js";
 
 var searching = false;
 // Add math funcs
@@ -57,7 +57,7 @@ function launchCustomCommand(command) {
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "pywal" > ~/.cache/ags/user/colorbackend.txt`, `&`]).catch(print);
     }
     else if (args[0] == '>todo') { // Todo
-        addTodoItem(args.slice(1).join(' '));
+        Todo.add(args.slice(1).join(' '));
     }
     else if (args[0] == '>shutdown') { // Shut down
         execAsync([`bash`, `-c`, `systemctl poweroff`]).catch(print);

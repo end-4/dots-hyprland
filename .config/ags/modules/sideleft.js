@@ -19,9 +19,9 @@ const ClipboardItems = () => {
                 let clipboardContents = exec('cliphist list'); // Output is lines like this: 1000    copied text
                 clipboardContents = clipboardContents.split('\n');
 
-                console.log(clipboardContents);
-                console.log(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`);
-                console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`));
+                // console.log(clipboardContents);
+                // console.log(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`);
+                // console.log(exec(`bash -c 'echo "${clipboardContents[0]}" | sed "s/  /\\t/" | cliphist decode'`));
 
                 box.children = clipboardContents.map((text, i) => {
                     if (i >= CLIPBOARD_SHOWN_ENTRIES) return;
@@ -48,7 +48,7 @@ const ClipboardItems = () => {
     });
 }
 
-export const SidebarLeft = () => Box({
+export default () => Box({
     vertical: true,
     children: [
         EventBox({
@@ -56,19 +56,20 @@ export const SidebarLeft = () => Box({
             onSecondaryClick: () => App.closeWindow('sideleft'),
             onMiddleClick: () => App.closeWindow('sideleft'),
         }),
-        Box({
-            vertical: true,
-            vexpand: true,
-            className: 'sidebar-left sideleft-hide',
-            children: [
-                Widget.Box({
-                    className: 'spacing-v-5',
-                    children: [
-                        ClipboardItems(),
-                    ]
-                })
-            ],
-        }),
+        ClipboardItems(),
+        // Box({
+        //     vertical: true,
+        //     vexpand: true,
+        //     className: 'sidebar-left',
+        //     children: [
+        //         Widget.Box({
+        //             className: 'spacing-v-5',
+        //             children: [
+        //                 ClipboardItems(),
+        //             ]
+        //         })
+        //     ],
+        // }),
     ]
 });
 
