@@ -1,12 +1,18 @@
+*:focus {
+    outline: 1px solid $t_onSurface;
+}
+
 .menu {
     padding: 0.681rem;
     background: $surfaceVariant;
     color: $onSurfaceVariant;
     border-radius: 1.159rem;
+    -gtk-outline-radius: 1.159rem;
 }
 
 .menubar>menuitem {
     border-radius: 0.545rem;
+    -gtk-outline-radius: 0.545rem;
     min-width: 13.636rem;
     min-height: 2.727rem;
 }
@@ -16,6 +22,7 @@
     background: transparent;
     transition: 0.2s ease background;
     border-radius: 0.545rem;
+    -gtk-outline-radius: 0.545rem;
 }
 
 .menu>menuitem:hover {
@@ -29,8 +36,8 @@
 }
 
 tooltip {
+    @include large-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
-    border-radius: 50rem;
     border: 1px solid $onSurfaceVariant;
 }

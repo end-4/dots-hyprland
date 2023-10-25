@@ -33,28 +33,28 @@ class TodoService extends Service {
 
     add(content) {
         this._todoJson.push({ content, done: false });
-        Utils.writeFile(JSON.stringify(this.todoJson), this._todoPath)
+        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
             .catch(print);
         this.emit('updated');
     }
 
     check(index) {
         this._todoJson[index].done = true;
-        Utils.writeFile(JSON.stringify(this.todoJson), this._todoPath)
+        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
             .catch(print);
         this.emit('updated');
     }
 
     uncheck(index) {
         this._todoJson[index].done = false;
-        Utils.writeFile(JSON.stringify(this.todoJson), this._todoPath)
+        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
             .catch(print);
         this.emit('updated');
     }
 
     remove(index) {
         this._todoJson.splice(index, 1);
-        Utils.writeFile(JSON.stringify(this.todoJson), this._todoPath)
+        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
             .catch(print);
         this.emit('updated');
     }
@@ -70,8 +70,8 @@ class TodoService extends Service {
             }).catch(print);
         }
         else {
-            this._todoJson = JSON.parse(Utils.readFile(this._todoPath));
-            console.log('Todo list: ', this._todoJson);
+            const fileContents = Utils.readFile(this._todoPath);
+            this._todoJson = JSON.parse(fileContents);
         }
     }
 }
@@ -80,7 +80,7 @@ class TodoService extends Service {
 const service = new TodoService();
 
 // make it global for easy use with cli
-globalThis.indicator = service;
+globalThis.todo = service;
 
 // export to use in other modules
 export default service;

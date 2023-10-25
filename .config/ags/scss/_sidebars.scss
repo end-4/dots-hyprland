@@ -64,8 +64,8 @@
 }
 
 .sidebar-iconbutton {
+    @include full-rounding;
     @include md3_decel;
-    border-radius: 9999px;
     color: $onSurface;
     min-width: 2.727rem;
     min-height: 2.727rem;
@@ -123,7 +123,7 @@
 }
 
 .sidebar-button-alone-normal {
-    border-radius: $rounding_small;
+    @include small-rounding;
 }
 
 .sidebar-button-active {
@@ -151,7 +151,7 @@
 }
 
 .sidebar-navrail-btn>box>label {
-    border-radius: 9999px;
+    @include full-rounding;
     @include md3_decel;
 }
 
@@ -250,9 +250,9 @@
 }
 
 .sidebar-notif-icon {
+    @include full-rounding;
     min-width: 3.409rem;
     min-height: 3.409rem;
-    border-radius: 9999px;
 }
 
 .sidebar-notif-icon-material {
@@ -279,22 +279,20 @@
 }
 
 .sidebar-viewport {
-    border-radius: $rounding_small;
+    @include small-rounding;
 }
 
 .sidebar-scrollbar {
     trough {
-        // margin: $rounding_small 0rem;
+        @include full-rounding;
         min-width: 0.545rem;
-        border-radius: 9999px;
-        // background-color: $t_surfaceVariant; // If I manage to make the scrollbar show separately
         background-color: transparent;
     }
 
     slider {
+        @include full-rounding;
         min-width: 0.273rem;
         min-height: 2.045rem;
-        border-radius: 9999px;
         background-color: $t_onSurfaceVariant;
     }
 
@@ -308,10 +306,10 @@
 }
 
 .sidebar-calendar-btn {
+    @include full-rounding;
     @include md3_decel;
     min-height: 2.523rem;
     min-width: 2.523rem;
-    border-radius: 9999px;
     color: $onSurface;
 }
 
@@ -350,7 +348,7 @@
 }
 
 .sidebar-calendar-monthyear-btn {
-    border-radius: 9999px;
+    @include full-rounding;
     padding: 0rem 0.682rem;
     background-color: $t_surfaceVariant;
     color: $onSurfaceVariant;
@@ -367,9 +365,9 @@
 }
 
 .sidebar-calendar-monthshift-btn {
+    @include full-rounding;
     min-width: 2.045rem;
     min-height: 2.045rem;
-    border-radius: 9999px;
     background-color: $t_surfaceVariant;
     color: $onSurfaceVariant;
 }
@@ -385,10 +383,10 @@
 }
 
 .sidebar-todo-selector-tab {
+    @include small-rounding;
     @include md3_decel;
     min-height: 2.5rem;
     color: $onSurface;
-    border-radius: $rounding_small;
 }
 
 .sidebar-todo-selector-tab:hover {

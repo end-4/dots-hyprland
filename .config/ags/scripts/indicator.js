@@ -34,7 +34,7 @@ class IndicatorService extends Service {
 const service = new IndicatorService();
 
 // make it global for easy use with cli
-globalThis.indicator = service;
+globalThis['indicator'] = service;
 
 // export to use in other modules
 export default service;
