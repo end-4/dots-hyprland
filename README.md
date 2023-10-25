@@ -14,7 +14,7 @@
 
 ## Instructions
 - Notes:
-  - Currently using AGS 1.3.0. Breaking changes happen, so you should use the correct version to ensure functionality.
+  - Currently using AGS 1.5.0. Breaking changes happen, so it's likely that you'll need the exact version
   - Recommended GTK font size: 11pt. All sizes should work, but this works best. I'll fix this later.
 - See the wiki for more detailed instructions > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse) 
 
