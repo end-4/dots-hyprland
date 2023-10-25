@@ -62,13 +62,17 @@ class TodoService extends Service {
     constructor() {
         super();
         this._todoPath = `${App.configDir}/../../.cache/ags/user/todo.json`;
-        if(!fileExists(this._todoPath)) { // No? create file with empty array
+        if (!fileExists(this._todoPath)) { // No? create file with empty array
+            Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
             Utils.exec(`touch ${this._todoPath}`);
-            Utils.writeFile("[]", this._todoPath);
+            Utils.writeFile("[]", this._todoPath).then(() => {
+                this._todoJson = JSON.parse(Utils.readFile(this._todoPath))
+            }).catch(print);
         }
-        console.log(Utils.readFile(this._todoPath));
-        this._todoJson = JSON.parse(Utils.readFile(this._todoPath));
-        console.log('Todo list: ', this._todoJson);
+        else {
+            this._todoJson = JSON.parse(Utils.readFile(this._todoPath));
+            console.log('Todo list: ', this._todoJson);
+        }
     }
 }
 
