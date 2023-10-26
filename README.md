@@ -55,3 +55,7 @@ sudo pacman -S gnome-keyring polkit-gnome
 ```
 sudo pacman -S tesseract cliphist grim slurp
 ```
+
+## Disclaimer
+- If mom gets in while you're using the anime widget on the sidebar, it's your fault for being careless.
+- And other disclaimers that come with open source stuff
