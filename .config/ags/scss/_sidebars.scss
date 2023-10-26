@@ -278,6 +278,19 @@
     background: $activecolor;
 }
 
+.sidebar-notif-closeall-btn {
+    @include small-rounding;
+    padding: 0.341rem 0.341rem;
+}
+
+.sidebar-notif-closeall-btn:hover {
+    background: $hovercolor;
+}
+
+.sidebar-notif-closeall-btn:active {
+    background: $activecolor;
+}
+
 .sidebar-viewport {
     @include small-rounding;
 }

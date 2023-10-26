@@ -2,7 +2,7 @@ const { GLib, Gtk } = imports.gi;
 import { Service, Utils, Widget } from '../imports.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 const { lookUpIcon, timeout } = Utils;
-const { Box, Icon, Scrollable, Label, Button } = Widget;
+const { Box, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./lib/materialicon.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 
@@ -69,7 +69,7 @@ const Notification = (notifObject) => Box({
                         Label({
                             xalign: 0,
                             className: 'txt-small txt-semibold titlefont',
-                            justification: 'left',
+                            justify: Gtk.Justification.LEFT,
                             hexpand: true,
                             maxWidthChars: 24,
                             ellipsize: 3,
@@ -84,7 +84,7 @@ const Notification = (notifObject) => Box({
                     className: 'txt-smallie sidebar-notif-body-${urgency}',
                     useMarkup: true,
                     xalign: 0,
-                    justification: 'left',
+                    justify: Gtk.Justification.LEFT,
                     wrap: true,
                     label: notifObject.body,
                 }),
@@ -96,7 +96,8 @@ const Notification = (notifObject) => Box({
                 Label({
                     valign: 'center',
                     className: 'txt-smaller txt-semibold',
-                    justification: 'right',
+                    justify: Gtk.Justification.RIGHT,
+                    xalign: 1,
                     setup: (label) => {
                         const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
                         if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
@@ -135,33 +136,41 @@ const Notification = (notifObject) => Box({
 });
 
 export const ModuleNotificationList = props => {
-    const listTitle = Box({
-        valign: 'start',
-        className: 'sidebar-group-invisible txt',
-        children: [
-            Label({
-                hexpand: true,
-                xalign: 0,
-                className: 'txt-title-small',
-                label: 'Notifications',
-            }),
-            Button({
-                className: 'sidebar-notif-close-btn',
-                child: Box({
-                    children: [
-                        MaterialIcon('clear_all', 'small'),
-                        Label({
-                            className: 'txt-small',
-                            label: 'Clear all',
-                        })
-                    ]
+    const listTitle = Revealer({
+        revealChild: false,
+        connections: [[Notifications, (revealer) => {
+            revealer.revealChild = (Notifications.notifications.length > 0);
+        }]],
+        child: Box({
+            valign: 'start',
+            className: 'sidebar-group-invisible txt',
+            children: [
+                Label({
+                    hexpand: true,
+                    xalign: 0,
+                    className: 'txt-title-small',
+                    label: 'Notifications',
                 }),
-                setup: button => {
-                    setupCursorHover(button);
-                },
-            })
-        ]
-    })
+                Button({
+                    className: 'sidebar-notif-closeall-btn',
+                    onClicked: () => Notifications.clear(),
+                    child: Box({
+                        className: 'spacing-h-5',
+                        children: [
+                            MaterialIcon('clear_all', 'norm'),
+                            Label({
+                                className: 'txt-small',
+                                label: 'Clear',
+                            })
+                        ]
+                    }),
+                    setup: button => {
+                        setupCursorHover(button);
+                    },
+                })
+            ]
+        })
+    });
     const listContents = Scrollable({
         hexpand: true,
         hscroll: 'never',
