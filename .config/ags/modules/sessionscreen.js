@@ -99,7 +99,7 @@ export default () => {
                                         label: 'Session',
                                     }),
                                     Widget.Label({
-                                        justification: 'center',
+                                        justify: Gtk.Justification.CENTER,
                                         className: 'txt-small txt',
                                         label: 'Use arrow keys to navigate.\nEnter to select, Esc to cancel.'
                                     }),

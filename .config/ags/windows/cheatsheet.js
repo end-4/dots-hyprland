@@ -38,7 +38,7 @@ const cheatsheetHeader = () => Widget.CenterBox({
                 ]
             }),
             Widget.Label({
-                justification: 'center',
+                justify: Gtk.Justification.CENTER,
                 className: 'txt-small txt',
                 label: 'Sheet data stored in ~/.config/ags/data/keybinds.js\nChange keybinds in ~/.config/hypr/keybinds.conf'
             }),
