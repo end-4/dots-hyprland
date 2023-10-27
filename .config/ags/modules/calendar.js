@@ -5,6 +5,7 @@ import { MaterialIcon } from "./lib/materialicon.js";
 import { getCalendarLayout } from "../scripts/calendarlayout.js";
 import Todo from "../scripts/todo.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
+import { NavigationIndicator } from "./lib/navigationindicator.js";
 
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
@@ -218,7 +219,11 @@ const todoItemsBox = Widget.Stack({
 });
 
 const TodoWidget = () => {
-    const TodoTabButton = (parentBox, isDone) => Widget.Button({
+    const navIndicator = NavigationIndicator(2, false, {
+        className: 'sidebar-todo-selector-highlight',
+        style: 'font-size: 0px;'
+    })
+    const TodoTabButton = (parentBox, isDone, navIndex) => Widget.Button({
         hexpand: true,
         className: 'sidebar-todo-selector-tab',
         onClicked: (button) => {
@@ -228,6 +233,7 @@ const TodoWidget = () => {
                 if (kids[i] != button) kids[i].toggleClassName('sidebar-todo-selector-tab-active', false);
                 else button.toggleClassName('sidebar-todo-selector-tab-active', true);
             }
+            navIndicator.style = `font-size: ${navIndex}px;`;
         },
         child: Box({
             halign: 'center',
@@ -245,7 +251,6 @@ const TodoWidget = () => {
             setupCursorHover(button);
         },
     })
-
     return Widget.Box({
         hexpand: true,
         vertical: true,
@@ -256,26 +261,20 @@ const TodoWidget = () => {
                 vertical: true,
                 children: [
                     Widget.Box({
-                        className: 'sidebar-todo-selector-rail spacing-h-5',
+                        className: 'sidebar-todo-selectors spacing-h-5',
                         homogeneous: true,
                         setup: (box) => {
-                            const undoneButton = TodoTabButton(box, false);
-                            const doneButton = TodoTabButton(box, true);
+                            const undoneButton = TodoTabButton(box, false, 0);
+                            const doneButton = TodoTabButton(box, true, 1);
                             box.pack_start(undoneButton, false, true, 0);
                             box.pack_start(doneButton, false, true, 0);
                         }
                     }),
-                    // TODO: add a cool sliding indicator here
-                    // Widget.Box({ 
-                    //     className: 'sidebar-todo-selector-rail spacing-h-5',
-                    //     homogeneous: true,
-                    //     setup: (box) => {
-                    //         const undoneButton = TodoTabButton(box, false);
-                    //         const doneButton = TodoTabButton(box, true);
-                    //         box.pack_start(undoneButton, false, true, 0);
-                    //         box.pack_start(doneButton, false, true, 0);
-                    //     }
-                    // })
+                    Widget.Box({
+                        className: 'sidebar-todo-selector-highlight-offset',
+                        homogeneous: true,
+                        children: [navIndicator]
+                    })
                 ]
             }), false, false, 0);
             box.pack_end(todoItemsBox, true, true, 0);

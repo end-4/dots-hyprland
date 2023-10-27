@@ -418,6 +418,18 @@
     color: $primary;
 }
 
+.sidebar-todo-selector-highlight-offset {
+    margin-top: -0.205rem;
+    margin-bottom: 0.205rem;
+}
+
+.sidebar-todo-selector-highlight {
+    transition: 180ms ease-in-out; // Doesn't look that good, but it syncs with GtkStack animation of the actual todo widget content
+    color: $primary;
+    padding: 0rem 2.045rem;
+    min-height: 0.205rem;
+}
+
 .sidebar-todo-item-action {
     border-radius: 9999px;
     min-width: 1.705rem;
