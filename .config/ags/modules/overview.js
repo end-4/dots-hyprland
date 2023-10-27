@@ -28,7 +28,7 @@ const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 const searchPromptTexts = [
     'Try "Kolourpaint"',
-    'Try "6*cos(1*pi)"',
+    'Try "6*cos(pi)"',
     'Try "sudo pacman -Syu"',
     'Try "How to basic"',
     'Drag n\' drop to move windows',

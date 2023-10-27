@@ -97,7 +97,6 @@ const Notification = (notifObject) => Box({
                     valign: 'center',
                     className: 'txt-smaller txt-semibold',
                     justify: Gtk.Justification.RIGHT,
-                    xalign: 1,
                     setup: (label) => {
                         const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
                         if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {

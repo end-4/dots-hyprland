@@ -419,13 +419,11 @@ $notchOnPrimary: $onPrimary;
 .corner {
     background-color: $t_background;
     @include large-rounding;
-    border-width: 0.068rem;
 }
 
 .corner-black {
     background-color: $black; // Hard code because fake screen corner
     @include large-rounding;
-    border-width: 20px;
 }
 
 .bar-topdesc {

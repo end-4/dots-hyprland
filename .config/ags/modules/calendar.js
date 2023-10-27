@@ -190,17 +190,20 @@ const todoItems = (isDone) => Widget.Scrollable({
                 });
             })
             if (self.children.length == 0) {
+                self.homogeneous = true;
                 self.children = [
                     Widget.Box({
                         hexpand: true,
                         vertical: true,
+                        valign: 'center',
                         children: [
                             MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
-                            Label({label: `${isDone ? 'Finished tasks will go here' : 'Whatever!'}`})
+                            Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
                         ]
                     })
                 ]
             }
+            else self.homogeneous = false;
         }, 'updated']]
     })
 });
@@ -215,6 +218,34 @@ const todoItemsBox = Widget.Stack({
 });
 
 const TodoWidget = () => {
+    const TodoTabButton = (parentBox, isDone) => Widget.Button({
+        hexpand: true,
+        className: 'sidebar-todo-selector-tab',
+        onClicked: (button) => {
+            todoItemsBox.shown = `${isDone ? 'done' : 'undone'}`;
+            const kids = parentBox.get_children();
+            for (let i = 0; i < kids.length; i++) {
+                if (kids[i] != button) kids[i].toggleClassName('sidebar-todo-selector-tab-active', false);
+                else button.toggleClassName('sidebar-todo-selector-tab-active', true);
+            }
+        },
+        child: Box({
+            halign: 'center',
+            className: 'spacing-h-5',
+            children: [
+                MaterialIcon(`${isDone ? 'task_alt' : 'format_list_bulleted'}`, 'larger'),
+                Label({
+                    className: 'txt txt-smallie',
+                    label: `${isDone ? 'Done' : 'Unfinished'}`,
+                })
+            ]
+        }),
+        setup: (button) => {
+            button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === `${isDone ? 'done' : 'undone'}`);
+            setupCursorHover(button);
+        },
+    })
+
     return Widget.Box({
         hexpand: true,
         vertical: true,
@@ -222,85 +253,30 @@ const TodoWidget = () => {
         setup: (box) => {
             // undone/done selector rail
             box.pack_start(Widget.Box({
-                className: 'sidebar-todo-selector-rail spacing-h-5',
-                homogeneous: true,
-                setup: (box) => {
-                    // TODO: use this
-                    // const todoTab = (isDone) => Widget.Button({
-                    //     hexpand: true,
-                    //     className: 'sidebar-todo-selector-tab',
-                    //     onClicked: (button) => {
-                    //         todoItemsBox.shown = `${isDone ? 'done' : 'undone'}`;
-                    //         button.toggleClassName('sidebar-todo-selector-tab-active', true);
-                    //         doneButton.toggleClassName('sidebar-todo-selector-tab-active', false);
-                    //     },
-                    //     child: Box({
-                    //         halign: 'center',
-                    //         vertical: true,
-                    //         children: [
-                    //             MaterialIcon('format_list_bulleted', 'larger'),
-                    //             Label({
-                    //                 className: 'txt txt-smallie',
-                    //                 label: `${isDone ? 'Done' : 'Unfinished'}`,
-                    //             })
-                    //         ]
-                    //     }),
-                    //     setup: (button) => {
-                    //         button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === `${isDone ? 'done' : 'undone'}`);
-                    //         setupCursorHover(button);
-                    //     },
-                    // });
-                    const undoneButton = Widget.Button({
-                        hexpand: true,
-                        className: 'sidebar-todo-selector-tab',
-                        onClicked: (button) => {
-                            todoItemsBox.shown = 'undone';
-                            button.toggleClassName('sidebar-todo-selector-tab-active', true);
-                            doneButton.toggleClassName('sidebar-todo-selector-tab-active', false);
-                        },
-                        child: Box({
-                            halign: 'center',
-                            vertical: true,
-                            children: [
-                                MaterialIcon('format_list_bulleted', 'larger'),
-                                Label({
-                                    className: 'txt txt-smallie',
-                                    label: 'Unfinished',
-                                })
-                            ]
-                        }),
-                        setup: (button) => {
-                            button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === 'undone');
-                            setupCursorHover(button);
-                        },
-                    });
-                    const doneButton = Widget.Button({
-                        hexpand: true,
-                        className: 'sidebar-todo-selector-tab',
-                        onClicked: (button) => {
-                            todoItemsBox.shown = 'done';
-                            button.toggleClassName('sidebar-todo-selector-tab-active', true);
-                            undoneButton.toggleClassName('sidebar-todo-selector-tab-active', false);
-                        },
-                        child: Box({
-                            halign: 'center',
-                            vertical: true,
-                            children: [
-                                MaterialIcon('task_alt', 'larger'),
-                                Label({
-                                    className: 'txt txt-smallie',
-                                    label: 'Done',
-                                })
-                            ]
-                        }),
-                        setup: (button) => {
-                            button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === 'done')
-                            setupCursorHover(button);
-                        },
-                    });
-                    box.pack_start(undoneButton, false, true, 0);
-                    box.pack_start(doneButton, false, true, 0);
-                }
+                vertical: true,
+                children: [
+                    Widget.Box({
+                        className: 'sidebar-todo-selector-rail spacing-h-5',
+                        homogeneous: true,
+                        setup: (box) => {
+                            const undoneButton = TodoTabButton(box, false);
+                            const doneButton = TodoTabButton(box, true);
+                            box.pack_start(undoneButton, false, true, 0);
+                            box.pack_start(doneButton, false, true, 0);
+                        }
+                    }),
+                    // TODO: add a cool sliding indicator here
+                    // Widget.Box({ 
+                    //     className: 'sidebar-todo-selector-rail spacing-h-5',
+                    //     homogeneous: true,
+                    //     setup: (box) => {
+                    //         const undoneButton = TodoTabButton(box, false);
+                    //         const doneButton = TodoTabButton(box, true);
+                    //         box.pack_start(undoneButton, false, true, 0);
+                    //         box.pack_start(doneButton, false, true, 0);
+                    //     }
+                    // })
+                ]
             }), false, false, 0);
             box.pack_end(todoItemsBox, true, true, 0);
         }
@@ -328,9 +304,9 @@ const StackButton = (parentBox, stackItemName, icon, name) => Widget.Button({
         contentStack.shown = stackItemName;
         const kids = parentBox.get_children()[0].get_children();
         for (let i = 0; i < kids.length; i++) {
-            kids[i].toggleClassName('sidebar-navrail-btn-active', false);
+            if (kids[i] != button) kids[i].toggleClassName('sidebar-navrail-btn-active', false);
+            else button.toggleClassName('sidebar-navrail-btn-active', true);
         }
-        button.toggleClassName('sidebar-navrail-btn-active', true);
     },
     child: Box({
         className: 'spacing-v-5',
