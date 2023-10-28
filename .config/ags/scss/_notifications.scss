@@ -1,0 +1,97 @@
+@mixin notif-rounding {
+    @include small-rounding;
+}
+
+.notif-low {
+    @include notif-rounding;
+    background-color: $t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-normal {
+    @include notif-rounding;
+    background-color: $l_l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-critical {
+    @include notif-rounding;
+    background-color: $error;
+    color: $onError;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-body-low {
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
+}
+
+.notif-body-normal {
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
+}
+
+.notif-body-critical {
+    color: mix($onError, $error, 67%);
+}
+
+.notif-icon {
+    @include full-rounding;
+    min-width: 3.409rem;
+    min-height: 3.409rem;
+}
+
+.notif-icon-material {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-low {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-normal {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-critical {
+    background-color: $t_errorContainer;
+    color: $onErrorContainer;
+}
+
+.notif-close-btn {
+    @include notif-rounding;
+    padding: 0rem 0.136rem;
+}
+
+.notif-close-btn:hover {
+    background: $hovercolor;
+}
+
+.notif-close-btn:active {
+    background: $activecolor;
+}
+
+.notif-closeall-btn {
+    @include notif-rounding;
+    padding: 0.341rem 0.341rem;
+}
+
+.notif-closeall-btn:hover {
+    background-color: $hovercolor;
+}
+
+.notif-closeall-btn:active {
+    background-color: $activecolor;
+}
+
+.osd-notif {
+    @include notif-rounding;
+    background-color: transparentize($background, $transparentize_surface_amount_subtract_surface);
+    min-width: 30.682rem;
+}

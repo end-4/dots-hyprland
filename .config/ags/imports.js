@@ -30,7 +30,7 @@ globalThis['Utils'] = Utils; ///////////////////////////
 // globalThis['Hyprland'] = Hyprland;
 // globalThis['Mpris'] = Mpris;
 // globalThis['Network'] = Network;
-// globalThis['Notifications'] = Notifications;
+globalThis['Notifications'] = Notifications;
 // globalThis['SystemTray'] = SystemTray;
 
 const { exec } = Utils;

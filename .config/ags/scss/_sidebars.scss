@@ -213,84 +213,6 @@
 //     @include techfont;
 // }
 
-.sidebar-notification-low {
-    @include small-rounding;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
-    padding: $rounding_small;
-    padding-right: $rounding_small + 0.545rem;
-}
-
-.sidebar-notification-normal {
-    @include small-rounding;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
-    padding: $rounding_small;
-    padding-right: $rounding_small + 0.545rem;
-}
-
-.sidebar-notification-critical {
-    @include small-rounding;
-    background-color: $error;
-    color: $onError;
-    padding: $rounding_small;
-    padding-right: $rounding_small + 0.545rem;
-}
-
-.sidebar-notif-body-low {
-    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
-}
-
-.sidebar-notif-body-normal {
-    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
-}
-
-.sidebar-notif-body-critical {
-    color: mix($onError, $error, 67%);
-}
-
-.sidebar-notif-icon {
-    @include full-rounding;
-    min-width: 3.409rem;
-    min-height: 3.409rem;
-}
-
-.sidebar-notif-icon-material {
-    background-color: $t_secondaryContainer;
-    color: $onSecondaryContainer;
-}
-
-.sidebar-notif-icon-material-urgent {
-    background-color: $t_errorContainer;
-    color: $onErrorContainer;
-}
-
-.sidebar-notif-close-btn {
-    @include small-rounding;
-    padding: 0rem 0.136rem;
-}
-
-.sidebar-notif-close-btn:hover {
-    background: $hovercolor;
-}
-
-.sidebar-notif-close-btn:active {
-    background: $activecolor;
-}
-
-.sidebar-notif-closeall-btn {
-    @include small-rounding;
-    padding: 0.341rem 0.341rem;
-}
-
-.sidebar-notif-closeall-btn:hover {
-    background: $hovercolor;
-}
-
-.sidebar-notif-closeall-btn:active {
-    background: $activecolor;
-}
-
 .sidebar-viewport {
     @include small-rounding;
 }
@@ -397,7 +319,7 @@
 
 .sidebar-todo-selector-tab {
     @include small-rounding;
-    @include md3_decel;
+    transition: 0ms;
     min-height: 2.5rem;
     color: $onSurface;
 }
@@ -437,11 +359,11 @@
 }
 
 .sidebar-todo-item-action:hover {
-    background-color: $hovercolor;
+    background-color: mix($t_surface, $t_onSurface, 90%);
 }
 
 .sidebar-todo-item-action:active {
-    background-color: $activecolor;
+    background-color: mix($t_surface, $t_onSurface, 80%);
 }
 
 .sidebar-clipboard-item {

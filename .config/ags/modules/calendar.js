@@ -170,7 +170,6 @@ const todoItems = (isDone) => Widget.Scrollable({
                             className: 'txt sidebar-todo-item-action',
                             child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { valign: 'center' }),
                             onClicked: () => {
-                                todoItemsBox.shown = defaultTodoSelected;
                                 if (isDone)
                                     Todo.uncheck(i);
                                 else
@@ -197,6 +196,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                         hexpand: true,
                         vertical: true,
                         valign: 'center',
+                        className: 'txt',
                         children: [
                             MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
                             Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
@@ -219,21 +219,23 @@ const todoItemsBox = Widget.Stack({
 });
 
 const TodoWidget = () => {
-    const navIndicator = NavigationIndicator(2, false, {
-        className: 'sidebar-todo-selector-highlight',
-        style: 'font-size: 0px;'
-    })
-    const TodoTabButton = (parentBox, isDone, navIndex) => Widget.Button({
+    const TodoTabButton = (isDone, navIndex) => Widget.Button({
         hexpand: true,
         className: 'sidebar-todo-selector-tab',
         onClicked: (button) => {
             todoItemsBox.shown = `${isDone ? 'done' : 'undone'}`;
-            const kids = parentBox.get_children();
+            const kids = button.get_parent().get_children();
             for (let i = 0; i < kids.length; i++) {
                 if (kids[i] != button) kids[i].toggleClassName('sidebar-todo-selector-tab-active', false);
                 else button.toggleClassName('sidebar-todo-selector-tab-active', true);
             }
-            navIndicator.style = `font-size: ${navIndex}px;`;
+            // Fancy highlighter line width
+            const buttonWidth = button.get_allocated_width();
+            const highlightWidth = button.get_children()[0].get_allocated_width();
+            navIndicator.style = `
+                font-size: ${navIndex}px; 
+                padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
+            `;
         },
         child: Box({
             halign: 'center',
@@ -250,6 +252,21 @@ const TodoWidget = () => {
             button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === `${isDone ? 'done' : 'undone'}`);
             setupCursorHover(button);
         },
+    });
+    const undoneButton = TodoTabButton(false, 0);
+    const doneButton = TodoTabButton(true, 1);
+    const navIndicator = NavigationIndicator(2, false, {
+        className: 'sidebar-todo-selector-highlight',
+        style: 'font-size: 0px;',
+        setup: (self) => {
+            // Fancy highlighter line width
+            const buttonWidth = undoneButton.get_allocated_width();
+            const highlightWidth = undoneButton.get_children()[0].get_allocated_width();
+            navIndicator.style = `
+                font-size: ${navIndex}px; 
+                padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
+            `;
+        }
     })
     return Widget.Box({
         hexpand: true,
@@ -264,8 +281,6 @@ const TodoWidget = () => {
                         className: 'sidebar-todo-selectors spacing-h-5',
                         homogeneous: true,
                         setup: (box) => {
-                            const undoneButton = TodoTabButton(box, false, 0);
-                            const doneButton = TodoTabButton(box, true, 1);
                             box.pack_start(undoneButton, false, true, 0);
                             box.pack_start(doneButton, false, true, 0);
                         }
@@ -297,11 +312,11 @@ const contentStack = Widget.Stack({
     }
 })
 
-const StackButton = (parentBox, stackItemName, icon, name) => Widget.Button({
+const StackButton = (stackItemName, icon, name) => Widget.Button({
     className: 'button-minsize sidebar-navrail-btn sidebar-button-alone txt-small spacing-h-5',
     onClicked: (button) => {
         contentStack.shown = stackItemName;
-        const kids = parentBox.get_children()[0].get_children();
+        const kids = button.get_parent().get_children();
         for (let i = 0; i < kids.length; i++) {
             if (kids[i] != button) kids[i].toggleClassName('sidebar-navrail-btn-active', false);
             else button.toggleClassName('sidebar-navrail-btn-active', true);
@@ -336,8 +351,8 @@ export const ModuleCalendar = () => Box({
             vertical: true,
             className: 'sidebar-navrail spacing-v-10',
             children: [
-                StackButton(box, 'calendar', 'calendar_month', 'Calendar'),
-                StackButton(box, 'todo', 'lists', 'To Do'),
+                StackButton('calendar', 'calendar_month', 'Calendar'),
+                StackButton('todo', 'lists', 'To Do'),
                 // StackButton(box, 'stars', 'star', 'GitHub'),
             ]
         }), false, false, 0);

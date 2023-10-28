@@ -677,3 +677,11 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 $white: white;
 $black: black;
+
+.instant {
+    transition: 0ms;
+}
+
+.md3_decel {
+    @include md3_decel;
+}

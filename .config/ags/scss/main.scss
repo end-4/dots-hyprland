@@ -17,3 +17,12 @@
 @import './overview';
 @import './osk';
 @import './session';
+@import './notifications';
+
+// Classes for interaction
+.growingRadial {
+    transition: 300ms cubic-bezier(0.2, 0.0, 0, 1.0);
+}
+.fadingRadial {
+    transition: 50ms cubic-bezier(0.2, 0.0, 0, 1.0);
+}

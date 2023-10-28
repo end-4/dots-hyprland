@@ -1,9 +1,10 @@
 // Transparent version
 $transparentize_amount: 0.25;
 $transparentize_surface_amount_less: 0.6;
-$transparentize_surface_amount_less_less: 0.4;
+$transparentize_surface_amount_less_less: 0.35;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
+$transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
 
 @if $darkmode ==true {
     // Less transparency
@@ -12,6 +13,7 @@ $transparentize_surface_amount_more: 0.8;
     $transparentize_surface_amount_less_less: 0.3;
     $transparentize_surface_amount: 0.6;
     $transparentize_surface_amount_more: 0.7;
+    $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
 }
 
 // Extended material
@@ -38,6 +40,7 @@ $t_onSecondary: transparentize($onSecondary, $transparentize_amount);
 $t_secondaryContainer: transparentize($secondaryContainer, $transparentize_amount);
 $l_t_secondaryContainer: transparentize($secondaryContainer, $transparentize_surface_amount_less);
 $t_onSecondaryContainer: transparentize($onSecondaryContainer, $transparentize_amount);
+$t_t_t_onSecondaryContainer: transparentize($onSecondaryContainer, 0.93);
 $t_tertiary: transparentize($tertiary, $transparentize_amount);
 $t_onTertiary: transparentize($onTertiary, $transparentize_amount);
 $t_tertiaryContainer: transparentize($tertiaryContainer, $transparentize_amount);
