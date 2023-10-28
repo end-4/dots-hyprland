@@ -1,5 +1,4 @@
-// This file is for popup notifications
-// For the quick notification title on the bar, see notificationbar.js
+// This file is for brightness/volume indicator and popup notifications
 // For the notification widget on the sidebar, see notificationlist.js
 // The actual widget for each single notification is in lib/notification.js
 

@@ -1,5 +1,4 @@
 // This file is for the notification widget on the sidebar
-// For the quick notification title on the bar, see notificationbar.js
 // For the popup notifications, see onscreendisplay.js
 // The actual widget for each single notification is in lib/notification.js
 

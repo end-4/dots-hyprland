@@ -29,7 +29,6 @@ export const ModuleRightSpace = () => Widget.EventBox({
                 hexpand: true,
                 className: 'spacing-h-5 txt',
                 children: [
-                    ModuleNotification(),
                     Widget.Box({
                         hexpand: true,
                         className: 'spacing-h-15 txt',
