@@ -38,7 +38,7 @@
   transition: 0ms; }
 
 .txt {
-  color: #e1e2e5; }
+  color: #1b1b1f; }
 
 .txt-shadow {
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
@@ -88,10 +88,10 @@
   font-size: 0.7273rem; }
 
 .txt-subtext {
-  color: #a5a7a9; }
+  color: #5f5e62; }
 
 .txt-action {
-  color: #c3c4c7; }
+  color: #3d3d41; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -111,7 +111,7 @@
 .separator-circle {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  background-color: #e1e2e5;
+  background-color: #1b1b1f;
   margin: 0rem 0.682rem;
   min-width: 0.545rem;
   min-height: 0.545rem; }
@@ -362,10 +362,16 @@
 .spacing-h--20 > box:first-child {
   margin-left: 0rem; }
 
+.instant {
+  transition: 0ms; }
+
+.md3_decel {
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1); }
+
 .menu {
   padding: 0.681rem;
-  background: #41484d;
-  color: #c0c7cd;
+  background: #e4e1ec;
+  color: #46464f;
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem; }
 
@@ -383,22 +389,22 @@
   -gtk-outline-radius: 0.545rem; }
 
 .menu > menuitem:hover {
-  background-color: #4e555a; }
+  background-color: #d4d2dc; }
 
 .separator-line {
-  background-color: #41484d;
+  background-color: #e4e1ec;
   min-width: 0.068rem;
   min-height: 0.068rem; }
 
 tooltip {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  background-color: #41484d;
-  color: #c0c7cd;
-  border: 1px solid #c0c7cd; }
+  background-color: #e4e1ec;
+  color: #46464f;
+  border: 1px solid #46464f; }
 
 .bar-bg {
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   min-height: 2.727rem; }
 
 .bar-sidespace {
@@ -408,7 +414,7 @@ tooltip {
   padding: 0.2rem; }
 
 .bar-group {
-  background-color: rgba(25, 28, 30, 0.4); }
+  background-color: rgba(255, 251, 255, 0.3); }
 
 .bar-group-center {
   border-bottom-left-radius: 1.364rem;
@@ -480,18 +486,18 @@ tooltip {
   -gtk-outline-radius: 9999px;
   min-width: 0.341rem;
   min-height: 0.341rem;
-  background-color: rgba(45, 48, 50, 0.4);
+  background-color: rgba(232, 229, 233, 0.3);
   margin: 0rem 0.341rem; }
 
 .bar-clock {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   font-size: 1.2727rem;
-  color: #e1e2e5; }
+  color: #1b1b1f; }
 
 .bar-date {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   font-size: 1rem;
-  color: #e1e2e5; }
+  color: #1b1b1f; }
 
 .bar-ws {
   min-height: 1.636rem;
@@ -511,8 +517,8 @@ tooltip {
   min-width: 1.5rem;
   font-size: 1.091rem;
   font-family: 'AR One Sans', 'Inter', 'Roboto', 'Noto Sans', sans-serif;
-  background-color: #79d0ff;
-  color: #00344a;
+  background-color: #e0e0ff;
+  color: #00006f;
   border-radius: 999px;
   margin: 0.068rem; }
 
@@ -524,79 +530,79 @@ tooltip {
   margin: 0rem 0.409rem; }
 
 .bar-ws-occupied {
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #191a2c;
+  color: #e1e0f9;
   min-width: 1.772rem;
-  border-top: 0.068rem solid #d1e5f4;
-  border-bottom: 0.068rem solid #d1e5f4; }
+  border-top: 0.068rem solid #e1e0f9;
+  border-bottom: 0.068rem solid #e1e0f9; }
 
 .bar-ws-occupied-left {
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #191a2c;
+  color: #e1e0f9;
   min-width: 1.704rem;
   border-top-left-radius: 999px;
   border-bottom-left-radius: 999px;
-  border-left: 0.068rem solid #d1e5f4;
-  border-top: 0.068rem solid #d1e5f4;
-  border-bottom: 0.068rem solid #d1e5f4;
+  border-left: 0.068rem solid #e1e0f9;
+  border-top: 0.068rem solid #e1e0f9;
+  border-bottom: 0.068rem solid #e1e0f9;
   border-right: 0px solid transparent; }
 
 .bar-ws-occupied-right {
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #191a2c;
+  color: #e1e0f9;
   min-width: 1.704rem;
   border-top-right-radius: 999px;
   border-bottom-right-radius: 999px;
-  border-right: 0.068rem solid #d1e5f4;
-  border-top: 0.068rem solid #d1e5f4;
-  border-bottom: 0.068rem solid #d1e5f4;
+  border-right: 0.068rem solid #e1e0f9;
+  border-top: 0.068rem solid #e1e0f9;
+  border-bottom: 0.068rem solid #e1e0f9;
   border-left: 0px solid transparent; }
 
 .bar-ws-occupied-left-right {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #191a2c;
+  color: #e1e0f9;
   min-width: 1.636rem;
-  border: 0.068rem solid #d1e5f4; }
+  border: 0.068rem solid #e1e0f9; }
 
 .bar-ws-empty {
-  color: #e1e2e5;
+  color: #1b1b1f;
   border-color: transparent; }
 
 .bar-batt {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   padding: 0rem 0.341rem;
-  background-color: rgba(55, 73, 85, 0.85);
-  color: rgba(209, 229, 244, 0.85); }
+  background-color: rgba(225, 224, 249, 0.75);
+  color: rgba(25, 26, 44, 0.75); }
 
 .bar-sidemodule {
   min-width: 26rem; }
 
 .bar-batt-low {
-  background-color: #ffb4a9;
-  color: #930006; }
+  background-color: #ba1b1b;
+  color: #ffdad4; }
 
 .bar-batt-full {
-  background-color: #374b3e;
-  color: #d1e9d6; }
+  background-color: #d1e8d5;
+  color: #0c1f13; }
 
 .bar-batt-prog-low {
-  background-color: #ffb4a9;
-  color: #930006; }
+  background-color: #ba1b1b;
+  color: #ffdad4; }
 
 .bar-batt-prog-full {
-  background-color: #374b3e;
-  color: #d1e9d6; }
+  background-color: #d1e8d5;
+  color: #0c1f13; }
 
 .bar-music-playstate {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #374955;
-  color: #d1e5f4; }
+  background-color: #e1e0f9;
+  color: #191a2c; }
 
 .bar-music-circprog {
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
@@ -604,16 +610,16 @@ tooltip {
   min-width: 0.068rem;
   min-height: 1.770rem;
   padding: 0rem;
-  background-color: #374955;
-  color: #d1e5f4; }
+  background-color: #e1e0f9;
+  color: #191a2c; }
 
 .bar-music-playstate-playing {
   min-height: 1.770rem;
   min-width: 1.770rem;
   border-radius: 10rem;
   margin-left: 0.273rem;
-  background-color: #374955;
-  color: #d1e5f4; }
+  background-color: #e1e0f9;
+  color: #191a2c; }
 
 .bar-music-playstate-txt {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -684,13 +690,13 @@ tooltip {
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: rgba(209, 229, 244, 0.85); }
+    background-color: rgba(25, 26, 44, 0.75); }
 
 .bar-prog-batt-low progress {
-  background-color: #930006; }
+  background-color: #ffdad4; }
 
 .bar-prog-batt-full progress {
-  background-color: #d1e9d6; }
+  background-color: #0c1f13; }
 
 .bar-batt-chargestate {
   border-radius: 10rem;
@@ -700,13 +706,13 @@ tooltip {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: rgba(209, 229, 244, 0.85); }
+  background-color: rgba(25, 26, 44, 0.75); }
 
 .bar-batt-chargestate-low {
-  background-color: #930006; }
+  background-color: #ffdad4; }
 
 .bar-batt-chargestate-full {
-  background-color: #d1e9d6; }
+  background-color: #0c1f13; }
 
 .bar-batt-percentage {
   font-size: 1rem;
@@ -714,7 +720,7 @@ tooltip {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem; }
 
@@ -726,7 +732,7 @@ tooltip {
 .bar-topdesc {
   margin-top: -0.136rem;
   margin-bottom: -0.341rem;
-  color: #a5a7a9; }
+  color: #5f5e62; }
 
 .bar-space-button {
   padding: 0.341rem; }
@@ -762,14 +768,14 @@ tooltip {
 .cheatsheet-bg {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -780,16 +786,16 @@ tooltip {
   padding: 0.136rem 0.205rem;
   border-radius: 0.409rem;
   -gtk-outline-radius: 0.409rem;
-  color: #79d0ff;
-  border: 0.068rem solid #79d0ff;
-  box-shadow: 0rem 0.136rem 0rem #79d0ff;
+  color: #3f44ea;
+  border: 0.068rem solid #3f44ea;
+  box-shadow: 0rem 0.136rem 0rem #3f44ea;
   font-weight: 500; }
 
 .cheatsheet-key-notkey {
   min-height: 1.364rem;
   padding: 0.136rem 0.205rem;
   margin: 0.17rem;
-  color: #c3e7ff; }
+  color: #00006f; }
 
 .cheatsheet-closebtn {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -799,10 +805,10 @@ tooltip {
   min-height: 2.386rem; }
 
 .cheatsheet-closebtn:hover {
-  background-color: #41484d; }
+  background-color: #e4e1ec; }
 
 .cheatsheet-closebtn:active {
-  background-color: #676e73; }
+  background-color: #b5b3bd; }
 
 .cheatsheet-category-title {
   font-family: 'Gabarito', 'Lexend', sans-serif;
@@ -812,13 +818,13 @@ tooltip {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   padding: 1.023rem; }
 
 .sideright-show {
@@ -832,13 +838,13 @@ tooltip {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   padding: 1.023rem; }
 
 .sideleft-show {
@@ -852,12 +858,12 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   padding: 0.341rem;
-  background-color: rgba(25, 28, 30, 0.4); }
+  background-color: rgba(255, 251, 255, 0.3); }
 
 .sidebar-group-nopad {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  background-color: rgba(25, 28, 30, 0.4); }
+  background-color: rgba(255, 251, 255, 0.3); }
 
 .sidebar-group-invisible {
   padding: 0.341rem; }
@@ -869,38 +875,38 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  color: #e1e2e5;
+  color: #1b1b1f;
   min-width: 2.727rem;
   min-height: 2.727rem; }
 
 .sidebar-iconbutton:hover {
-  background-color: rgba(86, 104, 117, 0.85); }
+  background-color: rgba(185, 184, 208, 0.75); }
 
 .sidebar-iconbutton:active {
-  background-color: rgba(117, 135, 149, 0.85); }
+  background-color: rgba(145, 145, 167, 0.75); }
 
 .sidebar-button {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   padding: 0rem 0.818rem;
-  background-color: rgba(55, 73, 85, 0.85);
-  color: #d1e5f4; }
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
 
 .sidebar-button-nopad {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: rgba(55, 73, 85, 0.85);
-  color: #d1e5f4; }
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
 
 .sidebar-button:hover {
-  background-color: rgba(86, 104, 117, 0.85); }
+  background-color: rgba(185, 184, 208, 0.75); }
 
 .sidebar-button:active {
-  background-color: rgba(117, 135, 149, 0.85); }
+  background-color: rgba(145, 145, 167, 0.75); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(86, 104, 117, 0.85); }
+  background-color: rgba(185, 184, 208, 0.75); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(117, 135, 149, 0.85); }
+  background-color: rgba(145, 145, 167, 0.75); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -919,19 +925,19 @@ tooltip {
   -gtk-outline-radius: 0.818rem; }
 
 .sidebar-button-active {
-  background-color: #79d0ff;
-  color: #00344a; }
+  background-color: #3f44ea;
+  color: #ffffff; }
 
 .sidebar-button-active:hover {
-  background-color: rgba(121, 206, 253, 0.93); }
+  background-color: rgba(64, 69, 232, 0.93); }
 
 .sidebar-button-active:active {
-  background-color: rgba(121, 202, 246, 0.79); }
+  background-color: rgba(68, 72, 227, 0.79); }
 
 .sidebar-buttons-separator {
   min-width: 0.068rem;
   min-height: 0.068rem;
-  background-color: #c0c7cd; }
+  background-color: #46464f; }
 
 .sidebar-navrail {
   padding: 0rem 1.159rem; }
@@ -948,12 +954,12 @@ tooltip {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-navrail-btn-active > box > label:first-child {
-  background-color: #374955;
-  color: #d1e5f4; }
+  background-color: #e1e0f9;
+  color: #191a2c; }
 
 .sidebar-navrail-btn-active:hover > box > label:first-child {
-  background-color: rgba(56, 74, 86, 0.93);
-  color: rgba(207, 227, 242, 0.93); }
+  background-color: rgba(223, 222, 247, 0.93);
+  color: rgba(27, 28, 46, 0.93); }
 
 .sidebar-sysinfo-grouppad {
   padding: 1.159rem; }
@@ -963,8 +969,8 @@ tooltip {
   min-width: 0.818rem;
   min-height: 4.091rem;
   padding: 0.409rem;
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #e1e0f9;
+  color: #191a2c;
   font-size: 0px; }
 
 .sidebar-memory-swap-circprog {
@@ -973,87 +979,18 @@ tooltip {
   min-height: 2.255rem;
   padding: 0.409rem;
   margin: 0.918rem;
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #e1e0f9;
+  color: #191a2c;
   font-size: 0px; }
 
 .sidebar-cpu-circprog {
   min-width: 0.818rem;
   min-height: 3.409rem;
   padding: 0.409rem;
-  background-color: #374955;
-  color: #d1e5f4;
+  background-color: #e1e0f9;
+  color: #191a2c;
   transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
   font-size: 0px; }
-
-.sidebar-notification-low {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd;
-  padding: 0.818rem;
-  padding-right: 1.363rem; }
-
-.sidebar-notification-normal {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd;
-  padding: 0.818rem;
-  padding-right: 1.363rem; }
-
-.sidebar-notification-critical {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  background-color: #ffb4a9;
-  color: #680003;
-  padding: 0.818rem;
-  padding-right: 1.363rem; }
-
-.sidebar-notif-body-low {
-  color: #969da3; }
-
-.sidebar-notif-body-normal {
-  color: #969da3; }
-
-.sidebar-notif-body-critical {
-  color: #9a3b3a; }
-
-.sidebar-notif-icon {
-  border-radius: 9999px;
-  -gtk-outline-radius: 9999px;
-  min-width: 3.409rem;
-  min-height: 3.409rem; }
-
-.sidebar-notif-icon-material {
-  background-color: rgba(55, 73, 85, 0.85);
-  color: #d1e5f4; }
-
-.sidebar-notif-icon-material-urgent {
-  background-color: rgba(147, 0, 6, 0.85);
-  color: #ffb4a9; }
-
-.sidebar-notif-close-btn {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  padding: 0rem 0.136rem; }
-
-.sidebar-notif-close-btn:hover {
-  background: rgba(128, 128, 128, 0.3); }
-
-.sidebar-notif-close-btn:active {
-  background: rgba(128, 128, 128, 0.7); }
-
-.sidebar-notif-closeall-btn {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  padding: 0.341rem 0.341rem; }
-
-.sidebar-notif-closeall-btn:hover {
-  background: rgba(128, 128, 128, 0.3); }
-
-.sidebar-notif-closeall-btn:active {
-  background: rgba(128, 128, 128, 0.7); }
 
 .sidebar-viewport {
   border-radius: 0.818rem;
@@ -1070,13 +1007,13 @@ tooltip {
   -gtk-outline-radius: 9999px;
   min-width: 0.273rem;
   min-height: 2.045rem;
-  background-color: rgba(192, 199, 205, 0.4); }
+  background-color: rgba(70, 70, 79, 0.3); }
 
 .sidebar-scrollbar slider:hover {
-  background-color: rgba(192, 199, 205, 0.52); }
+  background-color: rgba(70, 70, 79, 0.44); }
 
 .sidebar-scrollbar slider:active {
-  background-color: #81888d; }
+  background-color: #95949e; }
 
 .sidebar-calendar-btn {
   border-radius: 9999px;
@@ -1084,7 +1021,7 @@ tooltip {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   min-height: 2.523rem;
   min-width: 2.523rem;
-  color: #e1e2e5; }
+  color: #1b1b1f; }
 
 .sidebar-calendar-btn:hover {
   background-color: rgba(128, 128, 128, 0.3); }
@@ -1097,17 +1034,17 @@ tooltip {
   margin-right: -10.341rem; }
 
 .sidebar-calendar-btn-today {
-  background-color: #79d0ff;
-  color: #00344a; }
+  background-color: #3f44ea;
+  color: #ffffff; }
 
 .sidebar-calendar-btn-today:hover {
-  background-color: rgba(121, 206, 253, 0.93); }
+  background-color: rgba(64, 69, 232, 0.93); }
 
 .sidebar-calendar-btn-today:active {
-  background-color: rgba(121, 202, 246, 0.79); }
+  background-color: rgba(68, 72, 227, 0.79); }
 
 .sidebar-calendar-btn-othermonth {
-  color: #7d7f82; }
+  color: #8d8b8f; }
 
 .sidebar-calendar-header {
   margin: 0.341rem; }
@@ -1116,39 +1053,39 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   padding: 0rem 0.682rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd; }
+  background-color: rgba(228, 225, 236, 0.3);
+  color: #46464f; }
 
 .sidebar-calendar-monthyear-btn:hover {
-  background-color: rgba(104, 111, 116, 0.46);
-  color: #b3bac0; }
+  background-color: rgba(167, 165, 175, 0.37);
+  color: #56565f; }
 
 .sidebar-calendar-monthyear-btn:active {
-  background-color: #5a6167;
-  color: #a7aeb3; }
+  background-color: #c4c2cd;
+  color: #66656e; }
 
 .sidebar-calendar-monthshift-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 2.045rem;
   min-height: 2.045rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd; }
+  background-color: rgba(228, 225, 236, 0.3);
+  color: #46464f; }
 
 .sidebar-calendar-monthshift-btn:hover {
-  background-color: rgba(104, 111, 116, 0.46);
-  color: #b3bac0; }
+  background-color: rgba(167, 165, 175, 0.37);
+  color: #56565f; }
 
 .sidebar-calendar-monthshift-btn:active {
-  background-color: #5a6167;
-  color: #a7aeb3; }
+  background-color: #c4c2cd;
+  color: #66656e; }
 
 .sidebar-todo-selector-tab {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
-  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  transition: 0ms;
   min-height: 2.5rem;
-  color: #e1e2e5; }
+  color: #1b1b1f; }
 
 .sidebar-todo-selector-tab:hover {
   background-color: rgba(128, 128, 128, 0.3); }
@@ -1160,7 +1097,7 @@ tooltip {
   font-weight: 500; }
 
 .sidebar-todo-selector-tab-active > box > label {
-  color: #79d0ff; }
+  color: #3f44ea; }
 
 .sidebar-todo-selector-highlight-offset {
   margin-top: -0.205rem;
@@ -1168,7 +1105,7 @@ tooltip {
 
 .sidebar-todo-selector-highlight {
   transition: 180ms ease-in-out;
-  color: #79d0ff;
+  color: #3f44ea;
   padding: 0rem 2.045rem;
   min-height: 0.205rem; }
 
@@ -1178,30 +1115,30 @@ tooltip {
   min-height: 1.705rem; }
 
 .sidebar-todo-item-action:hover {
-  background-color: rgba(128, 128, 128, 0.3); }
+  background-color: rgba(232, 229, 233, 0.3); }
 
 .sidebar-todo-item-action:active {
-  background-color: rgba(128, 128, 128, 0.7); }
+  background-color: rgba(209, 206, 210, 0.3); }
 
 .sidebar-clipboard-item {
   border-radius: 0.818rem;
   min-height: 2.045rem;
   padding: 0.341rem;
-  background-color: rgba(55, 73, 85, 0.85);
-  color: #d1e5f4; }
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
 
 .sidebar-clipboard-item:hover {
-  background-color: rgba(70, 89, 101, 0.85); }
+  background-color: rgba(205, 204, 229, 0.75); }
 
 .sidebar-clipboard-item:active {
-  background-color: rgba(86, 104, 117, 0.85); }
+  background-color: rgba(185, 184, 208, 0.75); }
 
 .osd-bg {
   min-width: 8.864rem;
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -1219,57 +1156,60 @@ tooltip {
     min-height: 0.954rem;
     min-width: 0.068rem;
     border-radius: 10rem;
-    background-color: #c3e7ff; }
+    background-color: #00006f; }
   .osd-progress progress {
     transition: 200ms cubic-bezier(0.1, 1, 0, 1);
     min-height: 0.680rem;
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: #004c6a; }
+    background-color: #e0e0ff; }
 
 .osd-icon {
-  color: #c3e7ff; }
+  color: #00006f; }
 
 .osd-label {
   font-size: 1.023rem;
   font-weight: 500;
-  color: #e1e2e5;
+  color: #1b1b1f;
   margin-top: 0.341rem; }
 
 .osd-value-txt {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   font-size: 1.688rem;
   font-weight: 500;
-  color: #e1e2e5; }
+  color: #1b1b1f; }
+
+.osd-notifs {
+  padding-top: 0.313rem; }
 
 .overview-search-box {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
   padding-right: 2.864rem;
-  background-color: rgba(25, 28, 30, 0.85);
-  color: #e1e2e5;
+  background-color: rgba(255, 251, 255, 0.75);
+  color: #1b1b1f;
   caret-color: transparent; }
   .overview-search-box selection {
-    background-color: #b5c9d7;
-    color: #20333e; }
+    background-color: #5d5d72;
+    color: #ffffff; }
 
 .overview-search-box-extended {
   min-width: 25.909rem;
-  caret-color: #d1e5f4; }
+  caret-color: #191a2c; }
 
 .overview-search-prompt {
-  color: #a5a7a9; }
+  color: #5f5e62; }
 
 .overview-search-icon {
   margin: 0rem 1.023rem; }
@@ -1285,16 +1225,16 @@ tooltip {
 .overview-search-results {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   min-width: 28.773rem;
   padding: 0.682rem;
-  background-color: rgba(25, 28, 30, 0.85);
-  color: #e1e2e5; }
+  background-color: rgba(255, 251, 255, 0.75);
+  color: #1b1b1f; }
 
 .overview-search-results-icon {
   margin: 0rem 0.682rem;
@@ -1326,44 +1266,41 @@ tooltip {
 .overview-tasks {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(25, 28, 30, 0.85);
-  color: #e1e2e5; }
+  background-color: rgba(255, 251, 255, 0.75);
+  color: #1b1b1f; }
 
 .overview-tasks-workspace {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   margin: 0.341rem;
-  background-color: rgba(42, 45, 47, 0.307); }
+  background-color: rgba(236, 232, 236, 0.207); }
 
 .overview-tasks-window {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  border-top: 1px solid rgba(72, 74, 77, 0.32);
-  border-left: 1px solid rgba(72, 74, 77, 0.32);
-  border-right: 1px solid rgba(60, 63, 65, 0.315);
-  border-bottom: 1px solid rgba(60, 63, 65, 0.315);
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: rgba(55, 73, 85, 0.5);
-  color: #d1e5f4; }
+  background-color: rgba(225, 224, 249, 0.4);
+  color: #191a2c;
+  border: 0.068rem solid rgba(25, 26, 44, 0.07); }
 
 .overview-tasks-window:hover {
-  background-color: rgba(64, 91, 108, 0.525); }
+  background-color: rgba(197, 197, 246, 0.43); }
 
 .overview-tasks-window:focus {
-  background-color: rgba(64, 91, 108, 0.525); }
+  background-color: rgba(197, 197, 246, 0.43); }
 
 .overview-tasks-window:active {
-  background-color: rgba(72, 107, 128, 0.55); }
+  background-color: rgba(175, 176, 244, 0.46); }
 
 .overview-tasks-window-selected {
-  background-color: rgba(72, 107, 128, 0.55); }
+  background-color: rgba(175, 176, 244, 0.46); }
 
 .overview-tasks-window-dragging {
   opacity: 0.2; }
@@ -1372,13 +1309,13 @@ tooltip {
   transition: 170ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
-  border-top: 1px solid rgba(102, 105, 107, 0.37);
-  border-left: 1px solid rgba(102, 105, 107, 0.37);
-  border-right: 1px solid rgba(71, 73, 76, 0.335);
-  border-bottom: 1px solid rgba(71, 73, 76, 0.335);
+  border-top: 1px solid rgba(141, 139, 143, 0.28);
+  border-left: 1px solid rgba(141, 139, 143, 0.28);
+  border-right: 1px solid rgba(182, 179, 183, 0.24);
+  border-bottom: 1px solid rgba(182, 179, 183, 0.24);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(25, 28, 30, 0.85);
+  background-color: rgba(255, 251, 255, 0.75);
   padding: 1.023rem; }
 
 .osk-show {
@@ -1391,21 +1328,21 @@ tooltip {
 
 .osk-key {
   border-radius: 0.682rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd;
+  background-color: rgba(228, 225, 236, 0.3);
+  color: #46464f;
   padding: 0.188rem;
   font-weight: 500;
   font-size: 1.091rem; }
 
 .osk-key:hover {
-  background-color: rgba(78, 85, 90, 0.4); }
+  background-color: rgba(212, 210, 220, 0.3); }
 
 .osk-key:active {
-  background-color: rgba(103, 110, 115, 0.4);
+  background-color: rgba(181, 179, 189, 0.3);
   font-size: 1.091rem; }
 
 .osk-key-active {
-  background-color: rgba(103, 110, 115, 0.4); }
+  background-color: rgba(181, 179, 189, 0.3); }
 
 .osk-key-normal {
   min-width: 2.5rem;
@@ -1433,39 +1370,39 @@ tooltip {
 
 .osk-control-button {
   border-radius: 0.682rem;
-  background-color: rgba(65, 72, 77, 0.4);
-  color: #c0c7cd;
+  background-color: rgba(228, 225, 236, 0.3);
+  color: #46464f;
   font-weight: 500;
   font-size: 1.091rem;
   padding: 0.682rem; }
 
 .osk-control-button:hover {
-  background-color: rgba(78, 85, 90, 0.4); }
+  background-color: rgba(212, 210, 220, 0.3); }
 
 .osk-control-button:active {
-  background-color: rgba(103, 110, 115, 0.4);
+  background-color: rgba(181, 179, 189, 0.3);
   font-size: 1.091rem; }
 
 .session-bg {
   margin-top: -2.727rem;
-  background-color: rgba(25, 28, 30, 0.51); }
+  background-color: rgba(255, 251, 255, 0.44); }
 
 .session-button {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   min-width: 8.182rem;
   min-height: 8.182rem;
-  background-color: #41484d;
-  color: #c0c7cd;
+  background-color: #e4e1ec;
+  color: #46464f;
   font-size: 3rem; }
 
 .session-button-focused {
-  background-color: #374955;
-  color: #d1e5f4; }
+  background-color: #e1e0f9;
+  color: #191a2c; }
 
 .session-button-desc {
-  background-color: #2d3236;
-  color: #d1d5d9;
+  background-color: #f2eef6;
+  color: #313137;
   border-bottom-left-radius: 1.705rem;
   border-bottom-right-radius: 1.705rem;
   padding: 0.205rem 0.341rem;
@@ -1476,6 +1413,95 @@ tooltip {
   -gtk-outline-radius: 1.705rem;
   min-width: 8.182rem;
   min-height: 5.455rem;
-  background-color: #41484d;
-  color: #c0c7cd;
+  background-color: #e4e1ec;
+  color: #46464f;
   font-size: 3rem; }
+
+.notif-low {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  background-color: rgba(228, 225, 236, 0.3);
+  color: #46464f;
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
+
+.notif-normal {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  background-color: rgba(228, 225, 236, 0.65);
+  color: #46464f;
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
+
+.notif-critical {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  background-color: #ba1b1b;
+  color: #ffffff;
+  padding: 0.818rem;
+  padding-right: 1.363rem; }
+
+.notif-body-low {
+  color: #7a7983; }
+
+.notif-body-normal {
+  color: #7a7983; }
+
+.notif-body-critical {
+  color: #e8b4b4; }
+
+.notif-icon {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  min-width: 3.409rem;
+  min-height: 3.409rem; }
+
+.notif-icon-material {
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
+
+.notif-icon-material-low {
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
+
+.notif-icon-material-normal {
+  background-color: rgba(225, 224, 249, 0.75);
+  color: #191a2c; }
+
+.notif-icon-material-critical {
+  background-color: rgba(255, 218, 212, 0.75);
+  color: #410001; }
+
+.notif-close-btn {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  padding: 0rem 0.136rem; }
+
+.notif-close-btn:hover {
+  background: rgba(128, 128, 128, 0.3); }
+
+.notif-close-btn:active {
+  background: rgba(128, 128, 128, 0.7); }
+
+.notif-closeall-btn {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  padding: 0.341rem 0.341rem; }
+
+.notif-closeall-btn:hover {
+  background-color: rgba(128, 128, 128, 0.3); }
+
+.notif-closeall-btn:active {
+  background-color: rgba(128, 128, 128, 0.7); }
+
+.osd-notif {
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  background-color: rgba(255, 251, 255, 0.55);
+  min-width: 30.682rem; }
+
+.growingRadial {
+  transition: 300ms cubic-bezier(0.2, 0, 0, 1); }
+
+.fadingRadial {
+  transition: 50ms cubic-bezier(0.2, 0, 0, 1); }

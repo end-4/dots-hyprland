@@ -95,6 +95,7 @@ function substitute(str) {
         { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
         { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
         { from: 'Minecraft* 1.20.1', to: 'minecraft' },
+        { from: '', to: 'image-missing' },
     ];
 
     for (const { from, to } of subs) {
