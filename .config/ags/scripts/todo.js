@@ -24,7 +24,7 @@ class TodoService extends Service {
     }
 
     connectWidget(widget, callback) {
-        connect(this, widget, callback, 'updated');
+        this.connect(widget, callback, 'updated');
     }
 
     get todo_json() {
