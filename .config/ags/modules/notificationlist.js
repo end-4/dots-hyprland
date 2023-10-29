@@ -11,7 +11,51 @@ import { MaterialIcon } from "./lib/materialicon.js";
 import { setupCursorHover } from "./lib/cursorhover.js";
 import Notification from "./lib/notification.js";
 
-export const ModuleNotificationList = props => {
+const NotificationList = Box({
+    vertical: true,
+    valign: 'start',
+    className: 'spacing-v-5-revealer',
+    connections: [
+        [Notifications, (box, id) => {
+            if (box.children.length == 0) {
+                Notifications.notifications
+                    .forEach(n => {
+                        box.pack_end(Notification({
+                            notifObject: n,
+                            isPopup: false,
+                        }), false, false, 0)
+                    });
+                box.show_all();
+            }
+            else if (id) {
+                const notif = Notifications.getNotification(id);
+
+                const NewNotif = Notification({
+                    notifObject: notif,
+                    isPopup: false,
+                });
+
+                if (NewNotif) {
+                    box.pack_end(NewNotif, false, false, 0);
+                    box.show_all();
+                }
+            }
+        }, 'notified'],
+
+        [Notifications, (box, id) => {
+            if (!id) return;
+            for (const ch of box.children) {
+                if (ch._id === id) {
+                    ch._destroyWithAnims();
+                }
+            }
+        }, 'closed'],
+
+        [Notifications, box => box.visible = Notifications.notifications.length > 0],
+    ],
+});
+
+export default (props) => {
     const listTitle = Revealer({
         revealChild: false,
         connections: [[Notifications, (revealer) => {
@@ -29,7 +73,9 @@ export const ModuleNotificationList = props => {
                 }),
                 Button({
                     className: 'notif-closeall-btn',
-                    onClicked: () => Notifications.clear(),
+                    onClicked: () => {
+                        Notifications.clear();
+                    },
                     child: Box({
                         className: 'spacing-h-5',
                         children: [
@@ -56,13 +102,8 @@ export const ModuleNotificationList = props => {
             className: 'sidebar-viewport',
             setup: (viewport) => {
                 viewport.add(Box({
-                    className: 'spacing-v-5',
-                    vertical: true,
                     vexpand: true,
-                    connections: [[Notifications, box => {
-                        box.children = Notifications.notifications.reverse()
-                            .map(n => Notification(n));
-                    }]],
+                    children: [NotificationList],
                 }));
             }
         })

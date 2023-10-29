@@ -3,7 +3,6 @@ import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 const { exec, execAsync, CONFIG_DIR } = Utils;
 import Indicator from '../scripts/indicator.js';
-import { ModuleNotification } from "./notificationbar.js";
 import { StatusIcons } from "./statusicons.js";
 import { RoundedCorner } from "./lib/roundedcorner.js";
 import { Tray } from "./tray.js";

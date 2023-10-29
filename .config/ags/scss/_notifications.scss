@@ -1,10 +1,12 @@
+$notif_surface: $t_background;
+
 @mixin notif-rounding {
     @include small-rounding;
 }
 
 .notif-low {
     @include notif-rounding;
-    background-color: $t_surfaceVariant;
+    background-color: $l_l_t_surfaceVariant;
     color: $onSurfaceVariant;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
@@ -20,6 +22,33 @@
 
 .notif-critical {
     @include notif-rounding;
+    background-color: $error;
+    color: $onError;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-low {
+    @include notif-rounding;
+    min-width: 30.682rem;
+    background-color: $notif_surface;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-normal {
+    @include notif-rounding;
+    min-width: 30.682rem;
+    background-color: $notif_surface;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-critical {
+    @include notif-rounding;
+    min-width: 30.682rem;
     background-color: $error;
     color: $onError;
     padding: $rounding_small;

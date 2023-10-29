@@ -156,11 +156,11 @@
 }
 
 .sidebar-navrail-btn:hover>box>label:first-child {
-    background-color: $hovercolor;
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
 .sidebar-navrail-btn:active>box>label:first-child {
-    background-color: $activecolor;
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
 }
 
 .sidebar-navrail-btn-active>box>label:first-child {
@@ -290,13 +290,13 @@
 }
 
 .sidebar-calendar-monthyear-btn:hover {
-    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
-    color: mix($onSurfaceVariant, $surfaceVariant, 90%);
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 95%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 95%);
 }
 
 .sidebar-calendar-monthyear-btn:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
-    color: mix($onSurfaceVariant, $surfaceVariant, 80%);
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 85%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
 .sidebar-calendar-monthshift-btn {
@@ -308,13 +308,13 @@
 }
 
 .sidebar-calendar-monthshift-btn:hover {
-    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
-    color: mix($onSurfaceVariant, $surfaceVariant, 90%);
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 95%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 95%);
 }
 
 .sidebar-calendar-monthshift-btn:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
-    color: mix($onSurfaceVariant, $surfaceVariant, 80%);
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 85%);
+    color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
 .sidebar-todo-selector-tab {
@@ -325,15 +325,11 @@
 }
 
 .sidebar-todo-selector-tab:hover {
-    background-color: $hovercolor;
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
 .sidebar-todo-selector-tab:active {
-    background-color: $activecolor;
-}
-
-.sidebar-todo-selector-tab:hover>box>label {
-    font-weight: 500;
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
 }
 
 .sidebar-todo-selector-tab-active>box>label {
@@ -359,11 +355,11 @@
 }
 
 .sidebar-todo-item-action:hover {
-    background-color: mix($t_surface, $t_onSurface, 90%);
+    background-color: mix($t_surface, $t_onSurface, 95%);
 }
 
 .sidebar-todo-item-action:active {
-    background-color: mix($t_surface, $t_onSurface, 80%);
+    background-color: mix($t_surface, $t_onSurface, 85%);
 }
 
 .sidebar-clipboard-item {

@@ -403,6 +403,14 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-bottom: 0rem;
 }
 
+.spacing-v-5-revealer>revealer>box {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5-revealer>revealer:last-child>box {
+    margin-bottom: 0rem;
+}
+
 .spacing-h-5>box {
     margin-right: 0.341rem;
 }

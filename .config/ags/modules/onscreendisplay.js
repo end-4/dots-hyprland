@@ -2,10 +2,11 @@
 // For the notification widget on the sidebar, see notificationlist.js
 // The actual widget for each single notification is in lib/notification.js
 
+const { GLib, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../imports.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
-const { connect, exec, execAsync, timeout, lookUpIcon } = Utils;
+const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import Brightness from '../scripts/brightness.js';
 import Indicator from '../scripts/indicator.js';
 import Notification from './lib/notification.js';
@@ -87,9 +88,10 @@ const PopupNotification = (notifObject) => Widget.Box({
             child: Widget.Revealer({
                 revealChild: true,
                 child: Widget.Box({
-                    className: 'osd-notif',
-                    children: [Notification(notifObject, {
-                        halign: 'fill',
+                    children: [Notification({
+                        notifObject: notifObject,
+                        isPopup: true,
+                        props: { halign: 'fill' },
                     })],
                 }),
             })
@@ -97,27 +99,82 @@ const PopupNotification = (notifObject) => Widget.Box({
     ]
 })
 
+const naiveNotifPopupList = Widget.Box({
+    vertical: true,
+    className: 'spacing-v-5',
+    connections: [
+        [Notifications, (box) => {
+            box.children = Notifications.popups.reverse()
+                .map(notifItem => PopupNotification(notifItem));
+        }],
+    ],
+})
+
+const notifPopupList = Box({
+    vertical: true,
+    className: 'spacing-v-5-revealer',
+    properties: [
+        ['map', new Map()],
+
+        ['dismiss', (box, id, force = false) => {
+            if (!id || !box._map.has(id) || box._map.get(id)._hovered && !force)
+                return;
+
+            const notif = box._map.get(id);
+            // console.log(notif);
+            notif.revealChild = false;
+            Utils.timeout(200, () => {
+                notif._destroyWithAnims();
+            })
+        }],
+
+        ['notify', (box, id) => {
+            if (!id || Notifications.dnd)
+                return;
+
+            if (!Notifications.getNotification(id))
+                return;
+
+            box._map.delete(id);
+
+            const notif = Notifications.getNotification(id);
+            box._map.set(id, Notification({
+                notifObject: notif,
+                isPopup: true,
+            }));
+
+            box.children = Array.from(box._map.values()).reverse();
+
+            Utils.timeout(10, () => {
+                box.get_parent().revealChild = true;
+            });
+
+            box._map.get(id).interval = Utils.interval(4500, () => {
+                const notif = box._map.get(id);
+                if (!notif._hovered) {
+                    if (notif.interval) {
+                        Utils.timeout(500, () => notif.destroy());
+                        GLib.source_remove(notif.interval);
+                        notif.interval = undefined;
+                    }
+                }
+            });
+        }],
+    ],
+    connections: [
+        [Notifications, (box, id) => box._notify(box, id), 'notified'],
+        [Notifications, (box, id) => box._dismiss(box, id), 'dismissed'],
+        [Notifications, (box, id) => box._dismiss(box, id, true), 'closed'],
+    ],
+});
+
 const notificationPopups = Widget.Revealer({
     className: 'osd-notifs',
     transition: 'slide_down',
     connections: [[Notifications, (self) => {
         self.revealChild = Notifications.popups.length > 0;
     }]],
-    child: Widget.Box({
-        vertical: true,
-        className: 'spacing-v-5',
-        connections: [
-            [Notifications, (box) => {
-                box.children = Notifications.popups.reverse()
-                    .map(notifItem => PopupNotification(notifItem));
-                // console.log(Notifications.popups.at(-1))
-                // box.pack_start(PopupNotification(Notifications.popups.at(-1)), false, false, 0);
-            }],
-            // [Notifications, () => {
-            //     console.log('byeeeeee');
-            // }, 'dismissed']
-        ],
-    })
+    child: notifPopupList,
 })
 
 export default () => Widget.EventBox({

@@ -6,7 +6,7 @@ import {
     ToggleIconBluetooth, ToggleIconWifi, HyprToggleIcon, ModuleNightLight,
     ModuleEditIcon, ModuleReloadIcon, ModuleSettingsIcon, ModulePowerIcon
 } from "./quicktoggles.js";
-import { ModuleNotificationList } from "./notificationlist.js";
+import ModuleNotificationList from "./notificationlist.js";
 import { ModuleMusicControls } from "./musiccontrols.js";
 import { ModuleCalendar } from "./calendar.js";
 
