@@ -13,15 +13,14 @@ export function setupCursorHover(button) {
     clickColor.blue += CLICK_BRIGHTEN_AMOUNT;
     clickColor.red += CLICK_BRIGHTEN_AMOUNT;
     clickColor = clickColor.to_string();
-
+    
+    const display = Gdk.Display.get_default();
     button.connect('enter-notify-event', () => {
-        const display = Gdk.Display.get_default();
         const cursor = Gdk.Cursor.new_from_name(display, 'pointer');
         button.get_window().set_cursor(cursor);
     });
 
     button.connect('leave-notify-event', () => {
-        const display = Gdk.Display.get_default();
         const cursor = Gdk.Cursor.new_from_name(display, 'default');
         button.get_window().set_cursor(cursor);
     });
