@@ -1,0 +1,43 @@
+@mixin bg-textshadow {
+    text-shadow: mix($shadow, $secondaryContainer, 50%) 1px 0 3px;
+}
+
+.bg-time-box {
+    @include large-rounding;
+    margin: 2.045rem;
+    padding: 0.682rem;
+}
+
+.bg-time-clock {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 5.795rem;
+    color: $t_onBackground;
+}
+
+.bg-time-date {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 2.591rem;
+    color: $t_onBackground;
+}
+
+.bg-distro-box {
+    @include large-rounding;
+    margin: 2.045rem;
+    padding: 0.682rem;
+}
+
+.bg-distro-txt {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 1.432rem;
+    color: $t_onBackground;
+}
+
+.bg-distro-name {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 1.432rem;
+    color: $t_onPrimaryContainer;
+}

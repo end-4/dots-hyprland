@@ -3,6 +3,7 @@ import { App, Utils } from './imports.js';
 // Windows
 import Bar from './windows/bar/main.js';
 import Cheatsheet from './windows/cheatsheet/main.js';
+import DesktopBackground from './windows/desktopbackground/main.js';
 import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './windows/screencorners/main.js';
 import Indicator from './windows/indicators/main.js';
 import Osk from './windows/onscreenkeyboard/main.js';
@@ -36,6 +37,7 @@ export default {
         CornerTopright(),
         CornerBottomleft(),
         CornerBottomright(),
+        DesktopBackground(),
         Overview(),
         Indicator(),
         Cheatsheet(),

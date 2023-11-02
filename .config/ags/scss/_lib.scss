@@ -675,6 +675,30 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     margin-bottom: 0rem;
 }
 
+.spacing-v--5>label {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v--5>label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v--10>box {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v--10>label {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>label:last-child {
+    margin-bottom: 0rem;
+}
+
 .spacing-h--20>box {
     margin-left: -1.364rem;
 }

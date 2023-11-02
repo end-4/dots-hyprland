@@ -105,7 +105,7 @@ apply_hyprland() {
     cp "scripts/templates/hypr/colors.conf" "$HOME/.config/hypr/colors.conf"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/(${colorlist[$i]}/(${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors.conf"
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors.conf"
     done
 }
 
