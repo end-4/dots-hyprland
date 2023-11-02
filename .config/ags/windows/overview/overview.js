@@ -43,6 +43,9 @@ function launchCustomCommand(command) {
     else if (args[0] == '>img') { // Change wallpaper
         execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh`, `&`]).catch(print);
     }
+    else if (args[0] == '>color') { // Generate colorscheme from color picker
+        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh`, `&`]).catch(print);
+    }
     else if (args[0] == '>light') { // Light mode
         execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt`, `&`]).catch(print);
     }
@@ -119,7 +122,6 @@ const CalculationResultButton = ({ result, text }) => searchItem({
     content: `${result}`,
     onActivate: () => {
         App.closeWindow('overview');
-        console.log(result);
         execAsync(['bash', '-c', `wl-copy '${result}'`, `&`]).catch(print);
     },
 });
@@ -315,9 +317,9 @@ const workspace = index => {
         min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
         min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
         `,
-        connections: [[Hyprland, box => {
-            box.toggleClassName('active', Hyprland.active.workspace.id === index);
-        }]],
+        // connections: [[Hyprland, box => {
+        //     box.toggleClassName('active', Hyprland.active.workspace.id === index);
+        // }]],
         children: [Widget.EventBox({
             hexpand: true,
             vexpand: true,
