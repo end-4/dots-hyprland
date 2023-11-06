@@ -71,8 +71,8 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                             children: [
                                                 Widget.Label({
                                                     xalign: 0,
-                                                    className: 'txt txt-smaller bar-topdesc',
-                                                    connections: [[Hyprland, label => { // Hyprland.active.client
+                                                    className: 'txt-smaller bar-topdesc txt',
+                                                    connections: [[Hyprland.active.client, label => { // Hyprland.active.client
                                                         label.label = Hyprland.active.client._class.length === 0 ? 'Desktop' : Hyprland.active.client._class;
                                                     }]],
                                                 }),
@@ -80,7 +80,7 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                                     xalign: 0,
                                                     className: 'txt txt-smallie',
                                                     connections: [
-                                                        [Hyprland, label => { // Hyprland.active.client
+                                                        [Hyprland.active.client, label => { // Hyprland.active.client
                                                             label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : truncateTitle(Hyprland.active.client._title);
                                                         }]
                                                     ],

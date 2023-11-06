@@ -87,7 +87,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                         const child = kids[i];
                                         child.child.toggleClassName(`bar-ws-occupied${!occupied[i - 1] ? '-left' : ''}${!occupied[i + 1] ? '-right' : ''}`, true);
                                     }
-                                }],
+                                }, 'notify::workspaces'],
                             ],
                         }),
                         overlays: [

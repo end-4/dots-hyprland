@@ -56,6 +56,8 @@ export const keybindList = [[
             { "keys": ["Esc"], "action": "Exit a window" },
             { "keys": ["rightCtrl"], "action": "Dismiss/close sidebar" },
 
+            { "keys": ["Ctrl", "", "+", "T"], "action": "Change wallpaper+colorscheme" },
+
             // { "keys": ["", "+", "B"], "action": "Toggle left sidebar" },
             // { "keys": ["", "+", "N"], "action": "Toggle right sidebar" },
             // { "keys": ["", "+", "G"], "action": "Toggle volume mixer" },
@@ -99,7 +101,6 @@ export const keybindList = [[
         "name": "Apps",
         "binds": [
             { "keys": ["", "+", "T"], "action": "Launch terminal: foot" },
-            { "keys": ["", "+", "↵"], "action": "Launch terminal: WezTerm" },
             { "keys": ["", "+", "W"], "action": "Launch browser: Firefox" },
             { "keys": ["", "+", "C"], "action": "Launch editor: vscode" },
             { "keys": ["", "+", "X"], "action": "Launch editor: GNOME Text Editor" },
@@ -113,7 +114,6 @@ export const keybindList = [[
         "binds": [
             { "keys": ["", "+", "V"], "action": "Clipboard history  >>  clipboard" },
             { "keys": ["", "+", "."], "action": "Emoji picker  >>  clipboard" },
-            { "keys": ["", "+", "  󱁐  "], "action": "Switch language" }
         ],
         "appeartick": 3
     },

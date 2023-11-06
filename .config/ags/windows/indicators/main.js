@@ -1,5 +1,8 @@
 import { Widget } from '../../imports.js';
-import Osd from "./onscreendisplay.js";
+import Indicator from '../../scripts/indicator.js';
+import IndicatorValues from './indicatorvalues.js';
+import MusicControls from './musiccontrols.js';
+import NotificationPopups from './notificationpopups.js';
 
 export default (monitor) => Widget.Window({
     name: `indicator${monitor}`,
@@ -8,5 +11,18 @@ export default (monitor) => Widget.Window({
     layer: 'overlay',
     visible: true,
     anchor: ['top'],
-    child: Osd(),
+    child: Widget.EventBox({
+        onHover: () => { //make the widget hide when hovering
+            Indicator.popup(-1);
+        },
+        child: Widget.Box({
+            vertical: true,
+            style: 'min-height: 2px;',
+            children: [
+                IndicatorValues(),
+                MusicControls(),
+                NotificationPopups(),
+            ]
+        })
+    }),
 });

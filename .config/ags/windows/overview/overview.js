@@ -153,10 +153,18 @@ const DesktopEntryButton = (app) => {
                 Widget.Box({
                     vertical: false,
                     children: [
-                        Widget.Icon({
-                            className: 'overview-search-results-icon',
-                            icon: app.iconName,
-                            size: 35, // TODO: Make this follow font size. made for 11pt.
+                        Widget.Box({
+                            homogeneous: true,
+                            setup: (box) => {
+                                const styleContext = box.get_style_context();
+                                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                                box.add(Widget.Icon({
+                                    className: 'overview-search-results-icon',
+                                    icon: app.iconName,
+                                    size: Math.max(width, height),
+                                }))
+                            }
                         }),
                         Widget.Label({
                             className: 'overview-search-results-txt txt txt-norm',
@@ -327,17 +335,6 @@ const workspace = index => {
                 execAsync([`bash`, `-c`, `hyprctl dispatch workspace ${index}`, `&`]).catch(print);
                 App.closeWindow('overview');
             },
-            // onSecondaryClick: (eventbox) => {
-            //     const menu = Widget({
-            //         type: Gtk.Menu,
-            //         setup: menu => {
-            //             menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(index) }));
-            //             menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(index) }));
-            //             menu.show_all();
-            //         }
-            //     });
-            //     menu.popup_at_pointer(null); // Show the menu at the pointer's position
-            // },
             setup: eventbox => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
@@ -353,7 +350,6 @@ const workspace = index => {
         // this is for my monitor layout
         // shifts clients back by SCREEN_WIDTHpx if necessary
         clients = clients.map(client => {
-            // console.log(client);
             const [x, y] = client.at;
             if (x > SCREEN_WIDTH)
                 client.at = [x - SCREEN_WIDTH, y];
@@ -383,13 +379,16 @@ const OverviewRow = ({ startWorkspace = 1, workspaces = 5, windowName = 'overvie
             box.get_children().forEach(ch => ch.update(json));
         }).catch(print);
     }]],
-    setup: box => box._update(box),
-    connections: [[Hyprland, box => {
-        if (!App.getWindow(windowName).visible)
-            return;
-
-        box._update(box);
-    }]],
+    setup: (box) => box._update(box),
+    connections: [
+        [Hyprland, box => { if (!App.getWindow(windowName).visible) return; box._update(box); }, 'client-added'],
+        [Hyprland, box => { if (!App.getWindow(windowName).visible) return; box._update(box); }, 'client-removed'],
+        [App, (box, name, visible) => { // Update on open
+            if (name == 'overview' && visible) {
+                box._update(box);
+            }
+        }],
+    ],
 });
 
 

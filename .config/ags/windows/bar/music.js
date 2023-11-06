@@ -3,6 +3,7 @@ import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
+import { showMusicControls } from '../../variables.js';
 
 const TrackProgress = () => {
     const _updateProgress = (circprog) => {
@@ -24,6 +25,7 @@ const TrackProgress = () => {
 export const ModuleMusic = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onPrimaryClick: () => showMusicControls.setValue(!showMusicControls.value),
     onSecondaryClick: () => Mpris.getPlayer('')?.next(),
     onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
@@ -38,12 +40,14 @@ export const ModuleMusic = () => Widget.EventBox({
                             child: Widget.Box({
                                 valign: 'center',
                                 className: 'bar-music-playstate',
+                                homogeneous: true,
                                 children: [Widget.Label({
                                     valign: 'center',
                                     className: 'bar-music-playstate-txt',
+                                    justification: 'center',
                                     connections: [[Mpris, label => {
                                         const mpris = Mpris.getPlayer('');
-                                        label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? '' : ''}`;
+                                        label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
                                     }]],
                                 })],
                                 connections: [[Mpris, label => {

@@ -1,4 +1,6 @@
-// sideleft sideright stuff
+@mixin group-padding {
+    padding: 0.341rem;
+}
 
 .sidebar-right {
     @include md3_decel;
