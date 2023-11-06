@@ -137,6 +137,7 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
     tooltipText: 'Session',
     onClicked: () => {
         App.toggleWindow('session');
+        App.closeWindow('sideright');
     },
     child: MaterialIcon('power_settings_new', 'norm'),
     setup: button => {

@@ -4,6 +4,7 @@ import { App, Utils } from './imports.js';
 import Bar from './windows/bar/main.js';
 import Cheatsheet from './windows/cheatsheet/main.js';
 import DesktopBackground from './windows/desktopbackground/main.js';
+import Dock from './windows/dock/main.js';
 import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './windows/screencorners/main.js';
 import Indicator from './windows/indicators/main.js';
 import Osk from './windows/onscreenkeyboard/main.js';
@@ -18,6 +19,8 @@ const CLOSE_ANIM_TIME = 150;
 Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
 
 // SCSS compilation
+Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
+Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
 Utils.exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
 App.resetCss();
 App.applyCss(`${App.configDir}/style.css`);
@@ -38,6 +41,7 @@ export default {
         CornerBottomleft(),
         CornerBottomright(),
         DesktopBackground(),
+        Dock(),
         Overview(),
         Indicator(),
         Cheatsheet(),

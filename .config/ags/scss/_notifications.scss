@@ -1,7 +1,7 @@
 $notif_surface: $t_background;
 
 @mixin notif-rounding {
-    @include small-rounding;
+    @include normal-rounding;
 }
 
 .notif-low {
