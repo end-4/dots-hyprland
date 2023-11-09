@@ -19,8 +19,8 @@ export const ModuleRightSpace = () => Widget.EventBox({
         Indicator.popup(1);
     },
     onPrimaryClick: () => App.toggleWindow('sideright'),
-    onSecondaryClick: () => Mpris.getPlayer('')?.next(),
-    onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
+    onSecondaryClickRelease: () => Mpris.getPlayer('')?.next(),
+    onMiddleClickRelease: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
         homogeneous: false,
         children: [

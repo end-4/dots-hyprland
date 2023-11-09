@@ -138,23 +138,7 @@ export default () => Box({
                     distroAndVersion,
                 ]
             }),
-            // onHover: () => {
-            //     const kids = resources.get_children();
-            //     console.log(kids);
-
-            //     kids.forEach((child, i) => {
-            //         child.get_children()[0].revealChild = true;
-            //     });
-            // },
-            // onHoverLost: () => {
-            //     const kids = resources.get_children();
-            //     console.log(kids);
-
-            //     kids.forEach((child, i) => {
-            //         child.get_children()[0].revealChild = false;
-            //     });
-            // },
-            onPrimaryClick: () => {
+            onPrimaryClickRelease: () => {
                 const kids = resources.get_children();
 
                 kids.forEach((child, i) => {

@@ -49,7 +49,7 @@ const TrackProgress = (props = {}) => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         // Set circular progress (font size cuz that's how this hacky circprog works)
-        circprog.style = `font-size: ${mpris.position / mpris.length * 100}px;`
+        circprog.style = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
         ...props,
@@ -101,7 +101,7 @@ const CoverArt = (props = {}) => Box({
                 className: 'osd-music-cover-fallback',
                 homogeneous: true,
                 children: [Label({
-                    className: 'icon-material txt-hugeass txt-onSecondaryContainer',
+                    className: 'icon-material txt-hugeass',
                     label: 'music_note',
                 })]
             }),
@@ -222,35 +222,26 @@ const TrackTime = (props = {}) => {
 const PlayState = () => {
     var position = 0;
     const trackCircProg = TrackProgress({});
-    return Widget.Button({ // Wrap a box cuz overlay can't have margins itself
+    return Widget.Button({
         className: 'osd-music-playstate',
         child: Widget.Overlay({
-            child: Widget.Box({
-                valign: 'center',
-                homogeneous: true,
-                children: [Widget.Label({
-                    justification: 'center',
-                    halign: 'fill',
-                    valign: 'center',
-                    className: 'osd-music-playstate-txt',
-                    connections: [[Mpris, label => {
-                        const mpris = Mpris.getPlayer('');
-                        label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
-                    }]],
-                })],
-            }),
+            child: trackCircProg,
             overlays: [
-                trackCircProg,
-                EventBox({
-                    onPrimaryClickRelease: () => Mpris.getPlayer('')?.playPause(),
-                    onScrollUp: () => {
-
+                Widget.Button({
+                    className: 'osd-music-playstate-btn',
+                    onClicked: () => {
+                        Mpris.getPlayer('')?.playPause()
                     },
-                    child: Box({
+                    child: Widget.Label({
+                        justification: 'center',
                         halign: 'fill',
-                        valign: 'fill',
-                    })
-                })
+                        valign: 'center',
+                        connections: [[Mpris, label => {
+                            const mpris = Mpris.getPlayer('');
+                            label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
+                        }]],
+                    }),
+                }),
             ],
             setup: self => {
                 self.set_overlay_pass_through(self.get_children()[1], true);

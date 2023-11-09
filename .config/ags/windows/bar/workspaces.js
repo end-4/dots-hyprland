@@ -72,7 +72,7 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                 }),
                             })),
                             connections: [
-                                [Hyprland, (box) => { // TODO: connect to the right signal so that it doesn't update too much
+                                [Hyprland, (box) => {
                                     // console.log('update');
                                     const kids = box.children;
                                     kids.forEach((child, i) => {

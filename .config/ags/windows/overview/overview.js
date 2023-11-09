@@ -3,7 +3,7 @@ import { App, Service, Utils, Widget } from '../../imports.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
-import { setupCursorHover, setupCursorHoverAim } from "../../lib/cursorhover.js";
+import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
 import { searchItem } from '../../lib/searchitem.js';
 import { ContextMenuItem } from '../../lib/contextmenuitem.js';
 import Todo from "../../scripts/todo.js";
@@ -162,7 +162,7 @@ const DesktopEntryButton = (app) => {
                                 box.add(Widget.Icon({
                                     className: 'overview-search-results-icon',
                                     icon: app.iconName,
-                                    size: Math.max(width, height),
+                                    size: Math.max([width, height, 10]),
                                 }))
                             }
                         }),
@@ -237,84 +237,87 @@ const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widge
     }
 })
 
-const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title }) => Widget.Button({
-    className: 'overview-tasks-window',
-    halign: 'center',
-    valign: 'center',
-    onClicked: () => {
-        execAsync([`bash`, `-c`, `hyprctl dispatch focuswindow address:${address}`, `&`]).catch(print);
-        App.closeWindow('overview');
-    },
-    onMiddleClick: () => execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print),
-    onSecondaryClick: (button) => {
-        button.toggleClassName('overview-tasks-window-selected', true);
-        const menu = Widget({
-            type: Gtk.Menu,
-            className: 'menu',
-            setup: menu => {
-                menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print); destroyContextMenu(menu); } }));
-                menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
-                menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
-                menu.show_all();
-            }
-        });
-        menu.connect("deactivate", () => {
-            button.toggleClassName('overview-tasks-window-selected', false);
-        })
-        menu.connect("selection-done", () => {
-            button.toggleClassName('overview-tasks-window-selected', false);
-        })
-        menu.popup_at_pointer(null); // Show the menu at the pointer's position
-    },
-    child: Widget.Box({
-        vertical: true,
-        children: [
-            Widget.Icon({
-                style: `
-            min-width: ${w * OVERVIEW_SCALE - 4}px;
-            min-height: ${h * OVERVIEW_SCALE - 4}px;
-            `,
-                size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
-                icon: substitute(c),
-            }),
-            Widget.Scrollable({
-                hexpand: true,
-                vexpand: true,
-                child: Widget.Label({
+const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title }) => {
+    if (w <= 0 || h <= 0) return null;
+    return Widget.Button({
+        className: 'overview-tasks-window',
+        halign: 'center',
+        valign: 'center',
+        onClicked: () => {
+            execAsync([`bash`, `-c`, `hyprctl dispatch focuswindow address:${address}`, `&`]).catch(print);
+            App.closeWindow('overview');
+        },
+        onMiddleClickRelease: () => execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print),
+        onSecondaryClick: (button) => {
+            button.toggleClassName('overview-tasks-window-selected', true);
+            const menu = Widget({
+                type: Gtk.Menu,
+                className: 'menu',
+                setup: menu => {
+                    menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print); destroyContextMenu(menu); } }));
+                    menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
+                    menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
+                    menu.show_all();
+                }
+            });
+            menu.connect("deactivate", () => {
+                button.toggleClassName('overview-tasks-window-selected', false);
+            })
+            menu.connect("selection-done", () => {
+                button.toggleClassName('overview-tasks-window-selected', false);
+            })
+            menu.popup_at_pointer(null); // Show the menu at the pointer's position
+        },
+        child: Widget.Box({
+            vertical: true,
+            children: [
+                Widget.Icon({
                     style: `
+                        min-width: ${Math.max(w * OVERVIEW_SCALE - 4, 1)}px;
+                        min-height: ${Math.max(h * OVERVIEW_SCALE - 4, 1)}px;
+                    `,
+                    size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
+                    icon: substitute(c),
+                }),
+                Widget.Scrollable({
+                    hexpand: true,
+                    vexpand: true,
+                    child: Widget.Label({
+                        style: `
                 font-size: ${Math.min(w, h) * OVERVIEW_SCALE / 20}px;
                 `,
-                    label: title,
+                        label: title,
+                    })
                 })
-            })
-        ]
-    }),
-    tooltipText: `${c}: ${title}`,
-    setup: (button) => {
-        setupCursorHoverAim(button);
+            ]
+        }),
+        tooltipText: `${c}: ${title}`,
+        setup: (button) => {
+            setupCursorHoverGrab(button);
 
-        button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
-        button.drag_source_set_icon_name(substitute(c));
-        // button.drag_source_set_icon_gicon(icon);
+            button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
+            button.drag_source_set_icon_name(substitute(c));
+            // button.drag_source_set_icon_gicon(icon);
 
-        button.connect('drag-begin', (button) => {  // On drag start, add the dragging class
-            button.toggleClassName('overview-tasks-window-dragging', true);
-        });
-        button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
-            data.set_text(address, address.length);
-            button.toggleClassName('overview-tasks-window-dragging', false);
-        });
+            button.connect('drag-begin', (button) => {  // On drag start, add the dragging class
+                button.toggleClassName('overview-tasks-window-dragging', true);
+            });
+            button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
+                data.set_text(address, address.length);
+                button.toggleClassName('overview-tasks-window-dragging', false);
+            });
 
-        // button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
-        // button.connect('drag-data-get', (_w, _c, data) => data.set_text(address, address.length));
-        // button.connect('drag-begin', (_, context) => {
-        //     Gtk.drag_set_icon_surface(context, createSurfaceFromWidget(button));
-        //     button.toggleClassName('hidden', true);
-        // });
-        // button.connect('drag-end', () => button.toggleClassName('hidden', false));
+            // button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
+            // button.connect('drag-data-get', (_w, _c, data) => data.set_text(address, address.length));
+            // button.connect('drag-begin', (_, context) => {
+            //     Gtk.drag_set_icon_surface(context, createSurfaceFromWidget(button));
+            //     button.toggleClassName('hidden', true);
+            // });
+            // button.connect('drag-end', () => button.toggleClassName('hidden', false));
 
-    },
-});
+        },
+    });
+}
 
 const workspace = index => {
     const fixed = Gtk.Fixed.new();
@@ -325,9 +328,6 @@ const workspace = index => {
         min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
         min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
         `,
-        // connections: [[Hyprland, box => {
-        //     box.toggleClassName('active', Hyprland.active.workspace.id === index);
-        // }]],
         children: [Widget.EventBox({
             hexpand: true,
             vexpand: true,
@@ -371,7 +371,7 @@ const arr = (s, n) => {
     return array;
 };
 
-const OverviewRow = ({ startWorkspace = 1, workspaces = 5, windowName = 'overview' }) => Widget.Box({
+const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
     children: arr(startWorkspace, workspaces).map(workspace),
     properties: [['update', box => {
         execAsync('hyprctl -j clients').then(clients => {
