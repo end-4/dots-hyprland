@@ -55,15 +55,15 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
                 child: Widget.Box({
                     homogeneous: true,
                     className: 'dock-app-icon',
-                    setup: (box) => {
-                        const styleContext = box.get_style_context();
-                        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                        box.add(Widget.Icon({
-                            icon: icon,
-                            size: Math.max(width, height),
-                        }))
-                    }
+                    child: Widget.Icon({
+                        icon: icon,
+                        setup: (self) => Utils.timeout(1, () => {
+                            const styleContext = self.get_parent().get_style_context();
+                            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                            self.size = Math.max(width, height, 1);
+                        })
+                    }),
                 }),
                 overlays: [Widget.Box({
                     class_name: 'indicator',

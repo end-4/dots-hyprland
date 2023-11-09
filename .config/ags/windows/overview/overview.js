@@ -154,17 +154,17 @@ const DesktopEntryButton = (app) => {
                     vertical: false,
                     children: [
                         Widget.Box({
+                            className: 'overview-search-results-icon',
                             homogeneous: true,
-                            setup: (box) => {
-                                const styleContext = box.get_style_context();
-                                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                                box.add(Widget.Icon({
-                                    className: 'overview-search-results-icon',
-                                    icon: app.iconName,
-                                    size: Math.max([width, height, 10]),
-                                }))
-                            }
+                            child: Widget.Icon({
+                                icon: app.iconName,
+                                setup: (self) => Utils.timeout(1, () => {
+                                    const styleContext = self.get_parent().get_style_context();
+                                    const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                                    const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                                    self.size = Math.max(width, height, 1);
+                                })
+                            }),
                         }),
                         Widget.Label({
                             className: 'overview-search-results-txt txt txt-norm',
@@ -274,8 +274,8 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                         min-width: ${Math.max(w * OVERVIEW_SCALE - 4, 1)}px;
                         min-height: ${Math.max(h * OVERVIEW_SCALE - 4, 1)}px;
                     `,
-                    size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
                     icon: substitute(c),
+                    size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
                 }),
                 Widget.Scrollable({
                     hexpand: true,

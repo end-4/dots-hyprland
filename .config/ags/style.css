@@ -488,7 +488,7 @@ tooltip {
   border: 1px solid #d7c2ba; }
 
 .bar-bg {
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   min-height: 2.727rem; }
 
 .bar-sidespace {
@@ -658,8 +658,8 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   padding: 0rem 0.341rem;
-  background-color: rgba(93, 64, 51, 0.85);
-  color: rgba(255, 219, 202, 0.85); }
+  background-color: rgba(93, 64, 51, 0.93);
+  color: rgba(255, 219, 202, 0.93); }
 
 .bar-sidemodule {
   min-width: 26rem; }
@@ -767,7 +767,7 @@ tooltip {
     min-width: 0.680rem;
     margin: 0rem 0.137rem;
     border-radius: 10rem;
-    background-color: rgba(255, 219, 202, 0.85); }
+    background-color: rgba(255, 219, 202, 0.93); }
 
 .bar-prog-batt-low progress {
   background-color: #930006; }
@@ -783,7 +783,7 @@ tooltip {
   border-radius: 10rem;
   min-width: 0.681rem;
   min-height: 0.681rem;
-  background-color: rgba(255, 219, 202, 0.85); }
+  background-color: rgba(255, 219, 202, 0.93); }
 
 .bar-batt-chargestate-low {
   background-color: #930006; }
@@ -797,7 +797,7 @@ tooltip {
   font-weight: 500; }
 
 .corner {
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem; }
 
@@ -852,7 +852,7 @@ tooltip {
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   margin-bottom: 0.682rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   padding: 1.364rem; }
 
 .cheatsheet-key {
@@ -966,7 +966,7 @@ tooltip {
   -gtk-outline-radius: 1.705rem;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   padding: 0.682rem; }
 
 .dock-app-btn {
@@ -993,7 +993,7 @@ tooltip {
   min-height: 3.409rem; }
 
 .osd-value {
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   border-radius: 1.023rem;
   padding: 0.625rem 1.023rem;
   padding-top: 0.313rem;
@@ -1052,7 +1052,7 @@ tooltip {
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
   padding-right: 2.864rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   color: #ede0db;
   caret-color: transparent; }
   .overview-search-box selection {
@@ -1088,7 +1088,7 @@ tooltip {
   margin: 7px;
   min-width: 28.773rem;
   padding: 0.682rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   color: #ede0db; }
 
 .overview-search-results-icon {
@@ -1130,7 +1130,7 @@ tooltip {
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
   padding: 0.341rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   color: #ede0db; }
 
 .overview-tasks-workspace {
@@ -1172,7 +1172,7 @@ tooltip {
   border-bottom: 1px solid rgba(129, 121, 118, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   padding: 1.023rem; }
 
 .osk-show {
@@ -1250,7 +1250,7 @@ tooltip {
   border-bottom: 1px solid rgba(129, 121, 118, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   padding: 1.023rem; }
 
 .sideright-show {
@@ -1270,7 +1270,7 @@ tooltip {
   border-bottom: 1px solid rgba(129, 121, 118, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   padding: 1.023rem; }
 
 .sideleft-show {
@@ -1306,33 +1306,33 @@ tooltip {
   min-height: 2.727rem; }
 
 .sidebar-iconbutton:hover {
-  background-color: rgba(125, 95, 81, 0.85); }
+  background-color: rgba(125, 95, 81, 0.93); }
 
 .sidebar-iconbutton:active {
-  background-color: rgba(158, 126, 111, 0.85); }
+  background-color: rgba(158, 126, 111, 0.93); }
 
 .sidebar-button {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   padding: 0rem 0.818rem;
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .sidebar-button-nopad {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .sidebar-button:hover {
-  background-color: rgba(125, 95, 81, 0.85); }
+  background-color: rgba(125, 95, 81, 0.93); }
 
 .sidebar-button:active {
-  background-color: rgba(158, 126, 111, 0.85); }
+  background-color: rgba(158, 126, 111, 0.93); }
 
 .sidebar-button-nopad:hover {
-  background-color: rgba(125, 95, 81, 0.85); }
+  background-color: rgba(125, 95, 81, 0.93); }
 
 .sidebar-button-nopad:active {
-  background-color: rgba(158, 126, 111, 0.85); }
+  background-color: rgba(158, 126, 111, 0.93); }
 
 .sidebar-button-left {
   border-top-left-radius: 0.818rem;
@@ -1547,18 +1547,18 @@ tooltip {
   border-radius: 0.818rem;
   min-height: 2.045rem;
   padding: 0.341rem;
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .sidebar-clipboard-item:hover {
-  background-color: rgba(109, 80, 66, 0.85); }
+  background-color: rgba(109, 80, 66, 0.93); }
 
 .sidebar-clipboard-item:active {
-  background-color: rgba(125, 95, 81, 0.85); }
+  background-color: rgba(125, 95, 81, 0.93); }
 
 .session-bg {
   margin-top: -2.727rem;
-  background-color: rgba(18, 14, 13, 0.37); }
+  background-color: rgba(18, 14, 13, 0.64); }
 
 .session-button {
   border-radius: 1.705rem;
@@ -1618,7 +1618,7 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   min-width: 30.682rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   color: #d7c2ba;
   padding: 0.818rem;
   padding-right: 1.363rem; }
@@ -1627,7 +1627,7 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   min-width: 30.682rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(18, 14, 13, 0.93);
   color: #d7c2ba;
   padding: 0.818rem;
   padding-right: 1.363rem; }
@@ -1657,19 +1657,19 @@ tooltip {
   min-height: 3.409rem; }
 
 .notif-icon-material {
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .notif-icon-material-low {
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .notif-icon-material-normal {
-  background-color: rgba(93, 64, 51, 0.85);
+  background-color: rgba(93, 64, 51, 0.93);
   color: #ffdbca; }
 
 .notif-icon-material-critical {
-  background-color: rgba(147, 0, 6, 0.85);
+  background-color: rgba(147, 0, 6, 0.93);
   color: #ffb4a9; }
 
 .notif-close-btn {
@@ -1697,7 +1697,7 @@ tooltip {
 .osd-notif {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  background-color: rgba(18, 14, 13, 0.3);
+  background-color: rgba(18, 14, 13, 0.22);
   min-width: 30.682rem; }
 
 .osd-music {
@@ -1707,17 +1707,17 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   min-width: 29.659rem;
-  background-color: rgba(18, 14, 13, 0.85);
+  background-color: rgba(2, 2, 6, 0.93);
   padding: 0rem 1.023rem;
-  background: linear-gradient(127deg, rgba(18, 14, 13, 0.6), rgba(18, 14, 13, 0.45) 70.71%), linear-gradient(217deg, rgba(83, 68, 61, 0.6), rgba(83, 68, 61, 0.45) 70.71%), linear-gradient(336deg, rgba(93, 64, 51, 0.6), rgba(93, 64, 51, 0.45) 70.71%); }
+  background: linear-gradient(127deg, rgba(2, 2, 6, 0.6), rgba(2, 2, 6, 0.37) 70.71%), linear-gradient(217deg, rgba(153, 79, 56, 0.6), rgba(153, 79, 56, 0.37) 70.71%), linear-gradient(336deg, rgba(48, 81, 158, 0.6), rgba(48, 81, 158, 0.37) 70.71%); }
 
 .osd-music-cover-fallback {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   min-width: 7.5rem;
   min-height: 7.5rem;
-  background-color: rgba(21, 17, 16, 0.15);
-  color: #ded0cb; }
+  background-color: rgba(18, 18, 20, 0.15);
+  color: #caaaaf; }
 
 .osd-music-cover {
   border-radius: 0.818rem;
@@ -1741,12 +1741,12 @@ tooltip {
 .osd-music-title {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   font-size: 1.364rem;
-  color: #ded0cb; }
+  color: #caaaaf; }
 
 .osd-music-artists {
   font-family: 'AR One Sans', 'Geist', 'Inter', 'Roboto', 'Noto Sans', sans-serif;
   font-size: 1.0909rem;
-  color: #ded0cb; }
+  color: #caaaaf; }
 
 .osd-music-pill {
   border-radius: 9999px;
@@ -1754,8 +1754,8 @@ tooltip {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   min-width: 1.833rem;
   padding: 0.273rem 0.682rem;
-  background-color: #332925;
-  color: #ded0cb; }
+  background-color: #4e291f;
+  color: #caaaaf; }
 
 .osd-music-controls {
   border-radius: 9999px;
@@ -1763,22 +1763,22 @@ tooltip {
   font-family: 'Gabarito', 'Lexend', sans-serif;
   min-width: 1.833rem;
   padding: 0.205rem;
-  background-color: #332925;
-  color: #ded0cb; }
+  background-color: #4e291f;
+  color: #caaaaf; }
 
 .osd-music-controlbtn {
   min-width: 2.045rem;
   min-height: 2.045rem;
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  background-color: #332925;
-  color: #ded0cb; }
+  background-color: #4e291f;
+  color: #caaaaf; }
 
 .osd-music-controlbtn:hover {
-  background-color: #443a36; }
+  background-color: #5a362d; }
 
 .osd-music-controlbtn:active {
-  background-color: #4d423e; }
+  background-color: #613c35; }
 
 .osd-music-controlbtn-txt {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -1791,15 +1791,15 @@ tooltip {
   min-width: 0.409rem;
   min-height: 3.068rem;
   padding: 0.273rem;
-  background-color: #332925;
-  color: #ded0cb; }
+  background-color: #4e291f;
+  color: #caaaaf; }
 
 .osd-music-playstate {
   min-height: 3.068rem;
   min-width: 3.068rem;
   border-radius: 10rem;
-  background-color: #332925;
-  color: #ded0cb; }
+  background-color: #4e291f;
+  color: #caaaaf; }
 
 .osd-music-playstate-btn > label {
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);

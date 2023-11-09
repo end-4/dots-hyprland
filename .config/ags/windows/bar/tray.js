@@ -9,7 +9,6 @@ const SysTrayItem = item => Button({
     className: 'bar-systray-item',
     child: Icon({
         hpack: 'center',
-        size: 16,
         binds: [['icon', item, 'icon']]
     }),
     binds: [['tooltipMarkup', item, 'tooltipMarkup']],

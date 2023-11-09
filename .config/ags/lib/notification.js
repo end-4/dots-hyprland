@@ -35,11 +35,17 @@ const NotificationIcon = (notifObject) => {
         className: 'notif-icon',
         setup: box => {
             if (icon != 'NO_ICON') box.pack_start(Icon({
-                icon, size: 30,
+                icon: icon,
                 hpack: 'center', hexpand: true,
                 vpack: 'center',
-                setup: () => {
+                setup: (self) => {
                     box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true);
+                    Utils.timeout(1, () => {
+                        const styleContext = self.get_parent().get_style_context();
+                        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                        self.size = Math.max(width * 0.9, height * 0.9, 1); // im too lazy to add another box lol
+                    })
                 },
             }), false, true, 0);
             else box.pack_start(MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : 'chat'}`, 'hugeass', {
@@ -80,7 +86,7 @@ export default ({
             self.window.set_cursor(null);
             if (wholeThing._hovered)
                 wholeThing._hovered = false;
-            if(isPopup) {
+            if (isPopup) {
                 command();
             }
         },
