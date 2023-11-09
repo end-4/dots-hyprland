@@ -8,7 +8,7 @@ const revealerDuration = 200;
 const SysTrayItem = item => Button({
     className: 'bar-systray-item',
     child: Icon({
-        halign: 'center',
+        hpack: 'center',
         size: 16,
         binds: [['icon', item, 'icon']]
     }),
@@ -24,7 +24,7 @@ const SysTrayItem = item => Button({
 
 export const Tray = (props = {}) => {
     const trayContent = Box({
-        valign: 'center',
+        vpack: 'center',
         className: 'bar-systray bar-group',
         properties: [
             ['items', new Map()],

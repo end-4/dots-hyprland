@@ -17,7 +17,7 @@ export default (monitor) => Widget.Window({
         },
         child: Widget.Box({
             vertical: true,
-            style: 'min-height: 2px;',
+            css: 'min-height: 2px;',
             children: [
                 IndicatorValues(),
                 MusicControls(),

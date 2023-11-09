@@ -2,11 +2,10 @@ import { Widget } from '../imports.js';
 const { Gtk } = imports.gi;
 const Lang = imports.lang;
 
-export const RoundedCorner = (place, props) => Widget({
+export const RoundedCorner = (place, props) => Widget.DrawingArea({
     ...props,
-    type: Gtk.DrawingArea,
-    halign: place.includes('left') ? 'start' : 'end',
-    valign: place.includes('top') ? 'start' : 'end',
+    hpack: place.includes('left') ? 'start' : 'end',
+    vpack: place.includes('top') ? 'start' : 'end',
     setup: widget => {
         const c = widget.get_style_context().get_property('background-color', Gtk.StateFlags.NORMAL);
         const r = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);

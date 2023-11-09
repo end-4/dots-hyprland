@@ -59,7 +59,7 @@ export function setupCursorHoverGrab(button) {
 // button.add_events(Gdk.EventMask.POINTER_MOTION_MASK);
 // button.connect('motion-notify-event', (widget, event) => {
 //     [dummy, cursorX, cursorY] = event.get_coords(); // Get the mouse coordinates relative to the widget
-//     if(!clicked) widget.style = `
+//     if(!clicked) widget.css = `
 //         background-image: radial-gradient(circle at ${cursorX}px ${cursorY}px, rgba(0,0,0,0), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, ${clickColor} 0%, ${clickColor} 0%, ${clickColor} 0%, ${clickColor} 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%);
 //     `;
 // });
@@ -68,18 +68,18 @@ export function setupCursorHoverGrab(button) {
 //     clicked = true;
 //     [dummy, cursorX, cursorY] = event.get_coords(); // Get the mouse coordinates relative to the widget
 //     cursorX = Math.round(cursorX); cursorY = Math.round(cursorY);
-//     widget.style = `
+//     widget.css = `
 //         background-image: radial-gradient(circle at ${cursorX}px ${cursorY}px, rgba(0,0,0,0), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, ${clickColor} 0%, ${clickColor} 0%, ${clickColor} 0%, ${clickColor} 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%);
 //     `;
 //     widget.toggleClassName('growingRadial', true);
-//     widget.style = `
+//     widget.css = `
 //         background-image: radial-gradient(circle at ${cursorX}px ${cursorY}px, rgba(0,0,0,0), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, ${clickColor} 0%, ${clickColor} 0%, ${clickColor} 70%, ${clickColor} 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 70%);
 //     `
 // });
 // button.connect('button-release-event', (widget, event) => {
 //     widget.toggleClassName('growingRadial', false);
 //     widget.toggleClassName('fadingRadial', false);
-//     widget.style = `
+//     widget.css = `
 //     background-image: radial-gradient(circle at ${cursorX}px ${cursorY}px, rgba(0,0,0,0), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 70%, rgba(0,0,0,0) 70%);
 //     `
 //     clicked = false;

@@ -16,8 +16,7 @@ import ModuleNotificationList from "./notificationlist.js";
 import { ModuleCalendar } from "./calendar.js";
 
 // const NUM_OF_TOGGLES_PER_LINE = 5;
-// const togglesFlowBox = Widget({
-//     type: Gtk.FlowBox,
+// const togglesFlowBox = Widget.FlowBox({
 //     className: 'sidebar-group spacing-h-10',
 //     setup: (self) => {
 //         self.set_max_children_per_line(NUM_OF_TOGGLES_PER_LINE);
@@ -84,7 +83,7 @@ export default () => Box({
                                             }]],
                                         }),
                                         Widget.Label({
-                                            halign: 'center',
+                                            hpack: 'center',
                                             className: 'txt-small txt',
                                             connections: [[5000, label => {
                                                 execAsync(['bash', '-c', `uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'`]).then(upTimeString => {
@@ -93,10 +92,10 @@ export default () => Box({
                                             }]],
                                         }),
                                         Widget.Box({ hexpand: true }),
-                                        // ModuleEditIcon({ halign: 'end' }), // TODO: Make this work
-                                        ModuleReloadIcon({ halign: 'end' }),
-                                        ModuleSettingsIcon({ halign: 'end' }),
-                                        ModulePowerIcon({ halign: 'end' }),
+                                        // ModuleEditIcon({ hpack: 'end' }), // TODO: Make this work
+                                        ModuleReloadIcon({ hpack: 'end' }),
+                                        ModuleSettingsIcon({ hpack: 'end' }),
+                                        ModulePowerIcon({ hpack: 'end' }),
                                     ]
                                 }),
                                 // togglesFlowBox,

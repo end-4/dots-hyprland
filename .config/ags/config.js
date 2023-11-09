@@ -10,7 +10,6 @@ import Indicator from './windows/indicators/main.js';
 import Osk from './windows/onscreenkeyboard/main.js';
 import Overview from './windows/overview/main.js';
 import Session from './windows/session/main.js'; 
-import SideLeft from './windows/sideleft/main.js';
 import SideRight from './windows/sideright/main.js';
 
 const CLOSE_ANIM_TIME = 150;
@@ -27,7 +26,7 @@ App.applyCss(`${App.configDir}/style.css`);
 
 // Config object
 export default {
-    style: `${App.configDir}/style.css`,
+    css: `${App.configDir}/style.css`,
     stackTraceOnError: true,
     closeWindowDelay: { // For animations
         'sideright': CLOSE_ANIM_TIME,
@@ -46,7 +45,6 @@ export default {
         Indicator(),
         Cheatsheet(),
         SideRight(),
-        SideLeft(),
         Osk(), // On-screen keyboard
         Session(), // Power menu, if that's what you like to call it
     ],

@@ -13,7 +13,7 @@ import Notification from "../../lib/notification.js";
 
 const NotificationList = Box({
     vertical: true,
-    valign: 'start',
+    vpack: 'start',
     className: 'spacing-v-5-revealer',
     connections: [
         [Notifications, (box, id) => {
@@ -62,7 +62,7 @@ export default (props) => {
             revealer.revealChild = (Notifications.notifications.length > 0);
         }]],
         child: Box({
-            valign: 'start',
+            vpack: 'start',
             className: 'sidebar-group-invisible txt',
             children: [
                 Label({
@@ -97,15 +97,9 @@ export default (props) => {
         hexpand: true,
         hscroll: 'never',
         vscroll: 'automatic',
-        child: Widget({
-            type: Gtk.Viewport,
-            className: 'sidebar-viewport',
-            setup: (viewport) => {
-                viewport.add(Box({
-                    vexpand: true,
-                    children: [NotificationList],
-                }));
-            }
+        child: Box({
+            vexpand: true,
+            children: [NotificationList],
         })
     });
     listContents.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);

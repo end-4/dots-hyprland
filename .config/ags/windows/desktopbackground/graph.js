@@ -42,13 +42,12 @@ function generateRandomEdges(numVertices, numEdges) { // TODO: make sure whole g
 var edges = generateRandomEdges(NUM_OF_VERTICES, NUM_OF_EDGES);
 
 export default () => Box({
-    halign: 'fill',
-    valign: 'fill',
+    hpack: 'fill',
+    vpack: 'fill',
     homogeneous: true,
     children: [
-        Widget({
+        Widget.DrawingArea({
             className: 'bg-graph',
-            type: Gtk.DrawingArea,
             setup: (area) => {
                 area.connect('draw', Lang.bind(area, (area, cr) => {
                     // area.set_size_request(SCREEN_WIDTH, SCREEN_HEIGHT);

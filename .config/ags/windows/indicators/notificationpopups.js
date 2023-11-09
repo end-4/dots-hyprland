@@ -21,7 +21,7 @@ const PopupNotification = (notifObject) => Widget.Box({
                     children: [Notification({
                         notifObject: notifObject,
                         isPopup: true,
-                        props: { halign: 'fill' },
+                        props: { hpack: 'fill' },
                     })],
                 }),
             })

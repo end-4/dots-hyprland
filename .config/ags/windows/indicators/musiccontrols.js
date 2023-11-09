@@ -49,12 +49,12 @@ const TrackProgress = (props = {}) => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         // Set circular progress (font size cuz that's how this hacky circprog works)
-        circprog.style = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
+        circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
         ...props,
         className: 'osd-music-circprog',
-        valign: 'center',
+        vpack: 'center',
         connections: [ // Update on change/once every 3 seconds
             [Mpris, _updateProgress],
             [3000, _updateProgress]
@@ -112,7 +112,7 @@ const CoverArt = (props = {}) => Box({
                         const player = Mpris.getPlayer();
                         if (!player) return;
                         const coverPath = player.coverPath;
-                        self.style = `background-image: url('${coverPath}');`;
+                        self.css = `background-image: url('${coverPath}');`;
                     }]],
                 })
             ]
@@ -163,7 +163,7 @@ const TrackSource = (props = {}) => Widget.Revealer({
         homogeneous: true,
         children: [
             Label({
-                halign: 'fill',
+                hpack: 'fill',
                 justification: 'center',
                 className: 'icon-nerd',
                 connections: [[Mpris, (self) => {
@@ -234,8 +234,8 @@ const PlayState = () => {
                     },
                     child: Widget.Label({
                         justification: 'center',
-                        halign: 'fill',
-                        valign: 'center',
+                        hpack: 'fill',
+                        vpack: 'center',
                         connections: [[Mpris, label => {
                             const mpris = Mpris.getPlayer('');
                             label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
@@ -244,7 +244,9 @@ const PlayState = () => {
                 }),
             ],
             setup: self => {
-                self.set_overlay_pass_through(self.get_children()[1], true);
+                Utils.timeout(1, () => {
+                    self.set_overlay_pass_through(self.get_children()[1], true);
+                })
             },
         })
     });
@@ -253,14 +255,14 @@ const PlayState = () => {
 const MusicControlsWidget = () => Box({
     className: 'osd-music spacing-h-20',
     children: [
-        CoverArt({ valign: 'center' }),
+        CoverArt({ vpack: 'center' }),
         Box({
             vertical: true,
             className: 'spacing-v-5 osd-music-info',
             children: [
                 Box({
                     vertical: true,
-                    valign: 'center',
+                    vpack: 'center',
                     hexpand: true,
                     children: [
                         TrackTitle(),
@@ -271,10 +273,10 @@ const MusicControlsWidget = () => Box({
                 Box({
                     className: 'spacing-h-10',
                     setup: (box) => {
-                        box.pack_start(TrackControls({ valign: 'center' }), false, false, 0);
+                        box.pack_start(TrackControls({ vpack: 'center' }), false, false, 0);
                         box.pack_end(PlayState(), false, false, 0);
-                        box.pack_end(TrackTime({ valign: 'center' }), false, false, 0)
-                        // box.pack_end(TrackSource({ valign: 'center' }), false, false, 0);
+                        box.pack_end(TrackTime({ vpack: 'center' }), false, false, 0)
+                        // box.pack_end(TrackSource({ vpack: 'center' }), false, false, 0);
                     }
                 })
             ]

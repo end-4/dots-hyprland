@@ -67,8 +67,8 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
                 }),
                 overlays: [Widget.Box({
                     class_name: 'indicator',
-                    valign: 'end',
-                    halign: 'center',
+                    vpack: 'end',
+                    hpack: 'center',
                 })],
             }),
         }),
@@ -255,7 +255,7 @@ export default () => {
         },
         child: Box({
             homogeneous: true,
-            style: 'min-height: 2px;',
+            css: 'min-height: 2px;',
             children: [
                 dockRevealer,
             ]

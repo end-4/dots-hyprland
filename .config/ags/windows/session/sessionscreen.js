@@ -6,7 +6,7 @@ const { exec, execAsync } = Utils;
 
 const SessionButton = (name, icon, command, props = {}) => {
     const buttonDescription = Widget.Revealer({
-        valign: 'end',
+        vpack: 'end',
         transitionDuration: 200,
         transition: 'slide_down',
         revealChild: false,
@@ -67,7 +67,7 @@ export default () => {
     const cancelButton = SessionButton('Cancel', 'close', () => App.closeWindow('session'), { className: 'session-button-cancel' });
     return Widget.Box({
         className: 'session-bg',
-        style: `
+        css: `
         min-width: ${SCREEN_WIDTH * 2}px; 
         min-height: ${SCREEN_HEIGHT * 2}px;
         `, // Hack to draw over reserved bar space
@@ -79,18 +79,18 @@ export default () => {
                 onMiddleClick: () => App.closeWindow('session'),
             }),
             Widget.Box({
-                halign: 'center',
+                hpack: 'center',
                 vexpand: true,
                 vertical: true,
                 children: [
                     Widget.Box({
-                        valign: 'center',
+                        vpack: 'center',
                         vertical: true,
                         className: 'spacing-v-15',
                         children: [
                             Widget.Box({
                                 vertical: true,
-                                style: 'margin-bottom: 0.682rem;',
+                                css: 'margin-bottom: 0.682rem;',
                                 children: [
                                     Widget.Label({
                                         className: 'txt-title txt',
@@ -104,7 +104,7 @@ export default () => {
                                 ]
                             }),
                             Widget.Box({
-                                halign: 'center',
+                                hpack: 'center',
                                 className: 'spacing-h-15',
                                 children: [ // lock, logout, sleep
                                     lockButton,
@@ -113,7 +113,7 @@ export default () => {
                                 ]
                             }),
                             Widget.Box({
-                                halign: 'center',
+                                hpack: 'center',
                                 className: 'spacing-h-15',
                                 children: [ // hibernate, shutdown, reboot
                                     hibernateButton,
@@ -122,7 +122,7 @@ export default () => {
                                 ]
                             }),
                             Widget.Box({
-                                halign: 'center',
+                                hpack: 'center',
                                 className: 'spacing-h-15',
                                 children: [ // hibernate, shutdown, reboot
                                     cancelButton,
