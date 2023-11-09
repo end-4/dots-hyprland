@@ -9,18 +9,18 @@ $rounding_large: 1.705rem;
 
 // Common rules
 @mixin small-rounding {
-    border-radius: $rounding_small; // 10px
-    -gtk-outline-radius: $rounding_small; // 10px
+    border-radius: $rounding_small;
+    -gtk-outline-radius: $rounding_small;
 }
 
 @mixin normal-rounding {
-    border-radius: $rounding_medium; // small-rounding + 5px
-    -gtk-outline-radius: $rounding_medium; // small-rounding + 5px
+    border-radius: $rounding_medium;
+    -gtk-outline-radius: $rounding_medium;
 }
 
 @mixin large-rounding {
-    border-radius: $rounding_large; // normal-rounding + 10px
-    -gtk-outline-radius: $rounding_large; // normal-rounding + 10px
+    border-radius: $rounding_large;
+    -gtk-outline-radius: $rounding_large;
 }
 
 @mixin full-rounding {
@@ -35,10 +35,12 @@ $rounding_large: 1.705rem;
         'Lexend',
         sans-serif;
 }
+
 @mixin mainfont {
     // Other clean sans-serif
     font-family:
         'AR One Sans',
+        'Geist',
         'Inter',
         'Roboto',
         'Noto Sans',

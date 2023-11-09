@@ -1,8 +1,15 @@
+// Black-ize colors
+@if $darkmode == true {
+    $background: mix($background, #000000, 55%);
+    $surface: mix($surface, #000000, 65%);
+    $surfaceVariant: mix($surfaceVariant, #000000, 55%);
+}
+
 // Transparent versions
 // Transparentize amounts
 $transparentize_amount: 0.3;
 $transparentize_surface_amount_less: 0.6;
-$transparentize_surface_amount_less_less: 0.35;
+$transparentize_surface_amount_less_less: 0.55;
 $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
 $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
@@ -11,9 +18,9 @@ $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount 
     // Less transparency
     $transparentize_amount: 0.15;
     $transparentize_surface_amount_less: 0.5;
-    $transparentize_surface_amount_less_less: 0.3;
-    $transparentize_surface_amount: 0.6;
-    $transparentize_surface_amount_more: 0.7;
+    $transparentize_surface_amount_less_less: 0.55;
+    $transparentize_surface_amount: 0.85;
+    $transparentize_surface_amount_more: 0.9;
     $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
 }
 

@@ -15,8 +15,7 @@ import {
 import ModuleNotificationList from "./notificationlist.js";
 import { ModuleCalendar } from "./calendar.js";
 
-const NUM_OF_TOGGLES_PER_LINE = 5;
-
+// const NUM_OF_TOGGLES_PER_LINE = 5;
 // const togglesFlowBox = Widget({
 //     type: Gtk.FlowBox,
 //     className: 'sidebar-group spacing-h-10',

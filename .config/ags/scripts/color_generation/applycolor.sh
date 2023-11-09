@@ -114,20 +114,14 @@ apply_gtk() { # Using gradience-cli
 
     background=$(cat scss/_material.scss | grep "background" | awk '{print $2}' | cut -d ";" -f1)
     secondaryContainer=$(cat scss/_material.scss | grep "secondaryContainer" | awk '{print $2}' | cut -d ";" -f1)
-    window_bg_color=$(transparentize "$background" 0.9)
-    card_bg_color=$(transparentize "$background" 0.2)
-    headerbar_border_color=$(transparentize "$secondaryContainer" 0.12)
     
     # Copy template 
     cp "scripts/templates/gradience/preset_template.json" "scripts/templates/gradience/preset.json"
 
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/\"${colorlist[$i]}\"/\"${colorvalues[$i]}\"/g" "scripts/templates/gradience/preset.json"
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "scripts/templates/gradience/preset.json"
     done
-    sed -i "s|\"\$windowBgColor\"|\"$window_bg_color\"|g" "scripts/templates/gradience/preset.json"
-    sed -i "s|\"\$cardBgColor\"|\"$card_bg_color\"|g" "scripts/templates/gradience/preset.json"
-    sed -i "s|\"\$headerbarBorderColor\"|\"$headerbar_border_color\"|g" "scripts/templates/gradience/preset.json"
 
     gradience-cli apply -p scripts/templates/gradience/preset.json --gtk both
 

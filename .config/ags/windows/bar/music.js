@@ -10,7 +10,7 @@ const TrackProgress = () => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         // Set circular progress (font size cuz that's how this hacky circprog works)
-        circprog.style = `font-size: ${mpris.position / mpris.length * 100}px;`
+        circprog.style = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
         className: 'bar-music-circprog',
@@ -25,9 +25,9 @@ const TrackProgress = () => {
 export const ModuleMusic = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
-    onPrimaryClick: () => showMusicControls.setValue(!showMusicControls.value),
-    onSecondaryClick: () => Mpris.getPlayer('')?.next(),
-    onMiddleClick: () => Mpris.getPlayer('')?.playPause(),
+    onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
+    onSecondaryClickRelease: () => Mpris.getPlayer('')?.next(),
+    onMiddleClickRelease: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
         className: 'bar-group-margin bar-sides',
         children: [
