@@ -48,7 +48,7 @@ const NotificationIcon = (notifObject) => {
                     })
                 },
             }), false, true, 0);
-            else box.pack_start(MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : 'chat'}`, 'hugeass', {
+            else box.pack_start(MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : 'chat'}`, 'hugerass', {
                 hexpand: true,
                 setup: () => box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true),
             }), false, true, 0)
