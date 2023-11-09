@@ -36,13 +36,13 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
                             vertical: true,
                             children: [
                                 Widget.Label({
-                                    halign: 'start',
+                                    hpack: 'start',
                                     className: 'overview-search-results-txt txt txt-smallie txt-subtext',
                                     label: `${name}`,
                                     truncate: "end",
                                 }),
                                 Widget.Label({
-                                    halign: 'start',
+                                    hpack: 'start',
                                     className: 'overview-search-results-txt txt txt-norm',
                                     label: `${content}`,
                                     truncate: "end",

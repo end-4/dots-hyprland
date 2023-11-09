@@ -12,7 +12,7 @@ const ResourceValue = (name, icon, interval, valueUpdateCmd, displayFunc, props 
             transition: 'slide_left',
             transitionDuration: 200,
             child: Box({
-                valign: 'center',
+                vpack: 'center',
                 vertical: true,
                 className: 'margin-right-15',
                 children: [
@@ -34,7 +34,7 @@ const ResourceValue = (name, icon, interval, valueUpdateCmd, displayFunc, props 
                 className: 'bg-system-circprog',
                 connections: [[interval, (self) => {
                     execAsync(['bash', '-c', `${valueUpdateCmd}`]).then((newValue) => {
-                        self.style = `font-size: ${Math.round(newValue)}px;`
+                        self.css = `font-size: ${Math.round(newValue)}px;`
                     }).catch(print);
                 }]]
             }),
@@ -42,14 +42,16 @@ const ResourceValue = (name, icon, interval, valueUpdateCmd, displayFunc, props 
                 MaterialIcon(`${icon}`, 'hugeass'),
             ],
             setup: self => {
-                self.set_overlay_pass_through(self.get_children()[1], true);
+                Utils.timeout(1, () => {
+                    self.set_overlay_pass_through(self.get_children()[1], true);
+                })
             },
         }),
     ]
 })
 
 const resources = Box({
-    valign: 'fill',
+    vpack: 'fill',
     vertical: true,
     className: 'spacing-v-15',
     children: [
@@ -59,21 +61,21 @@ const resources = Box({
                     .then((output) => {
                         label.label = `${output}`
                     }).catch(print);
-            }, { halign: 'end' }),
+            }, { hpack: 'end' }),
         ResourceValue('Swap', 'swap_horiz', 10000, `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
             (label) => {
                 execAsync(['bash', '-c', `free -h | awk '/^Swap/ {print $3 " / " $2}' | sed 's/Gi/Gib/g'`])
                     .then((output) => {
                         label.label = `${output}`
                     }).catch(print);
-            }, { halign: 'end' }),
+            }, { hpack: 'end' }),
         ResourceValue('Disk space', 'hard_drive_2', 3600000, `echo $(df --output=pcent / | tr -dc '0-9')`,
             (label) => {
                 execAsync(['bash', '-c', `df -h --output=avail / | awk 'NR==2{print $1}'`])
                     .then((output) => {
                         label.label = `${output} available`
                     }).catch(print);
-            }, { halign: 'end' }),
+            }, { hpack: 'end' }),
     ]
 });
 
@@ -81,7 +83,7 @@ const distroAndVersion = Box({
     vertical: true,
     children: [
         Box({
-            halign: 'end',
+            hpack: 'end',
             children: [
                 Label({
                     className: 'bg-distro-txt',
@@ -101,7 +103,7 @@ const distroAndVersion = Box({
             ]
         }),
         Box({
-            halign: 'end',
+            hpack: 'end',
             children: [
                 Label({
                     className: 'bg-distro-txt',
@@ -124,13 +126,13 @@ const distroAndVersion = Box({
 })
 
 export default () => Box({
-    halign: 'end',
-    valign: 'end',
+    hpack: 'end',
+    vpack: 'end',
     children: [
         EventBox({
             child: Box({
-                halign: 'end',
-                valign: 'end',
+                hpack: 'end',
+                vpack: 'end',
                 className: 'bg-distro-box spacing-v-20',
                 vertical: true,
                 children: [

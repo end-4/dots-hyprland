@@ -66,7 +66,7 @@ export default () => Widget.Revealer({
         }, 'popup'],
     ],
     child: Widget.Box({
-        halign: 'center',
+        hpack: 'center',
         vertical: false,
         children: [
             brightnessIndicator,

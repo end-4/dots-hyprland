@@ -14,7 +14,7 @@ export const ModuleSystem = () => Widget.EventBox({
                 className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-15',
                 children: [
                     Widget.Box({ // Clock
-                        valign: 'center',
+                        vpack: 'center',
                         className: 'spacing-h-5',
                         children: [
                             Widget.Label({
@@ -40,7 +40,7 @@ export const ModuleSystem = () => Widget.EventBox({
                         ],
                     }),
                     Widget.Box({ // Battery
-                        valign: 'center',
+                        vpack: 'center',
                         hexpand: true,
                         className: 'spacing-h-5 bar-batt',
                         connections: [[Battery, box => {
@@ -55,7 +55,7 @@ export const ModuleSystem = () => Widget.EventBox({
                                 }]],
                             }),
                             Widget.ProgressBar({
-                                valign: 'center',
+                                vpack: 'center',
                                 hexpand: true,
                                 className: 'bar-prog-batt',
                                 connections: [[Battery, progress => {
@@ -69,7 +69,7 @@ export const ModuleSystem = () => Widget.EventBox({
                                 revealChild: false,
                                 transition: 'slide_left',
                                 child: Widget.Box({
-                                    valign: 'center',
+                                    vpack: 'center',
                                     className: 'bar-batt-chargestate-charging',
                                     connections: [[Battery, box => {
                                         box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= 20);

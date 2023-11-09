@@ -11,10 +11,10 @@ const NotificationIcon = (notifObject) => {
     // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
         return Box({
-            valign: 'center',
+            vpack: 'center',
             hexpand: false,
             className: 'notif-icon',
-            style: `
+            css: `
                 background-image: url("${notifObject.image}");
                 background-size: auto 100%;
                 background-repeat: no-repeat;
@@ -30,14 +30,14 @@ const NotificationIcon = (notifObject) => {
         icon = notifObject.appEntry;
 
     return Box({
-        valign: 'center',
+        vpack: 'center',
         hexpand: false,
         className: 'notif-icon',
         setup: box => {
             if (icon != 'NO_ICON') box.pack_start(Icon({
                 icon, size: 30,
-                halign: 'center', hexpand: true,
-                valign: 'center',
+                hpack: 'center', hexpand: true,
+                vpack: 'center',
                 setup: () => {
                     box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true);
                 },
@@ -61,7 +61,7 @@ export default ({
     )
     const destroyWithAnims = () => {
         widget.sensitive = false;
-        notificationBox.setStyle(rightAnim1);
+        notificationBox.setCss(rightAnim1);
         Utils.timeout(200, () => {
             wholeThing.revealChild = false;
         });
@@ -111,7 +111,7 @@ export default ({
         children: [
             NotificationIcon(notifObject),
             Box({
-                valign: 'center',
+                vpack: 'center',
                 vertical: true,
                 hexpand: true,
                 children: [
@@ -145,7 +145,7 @@ export default ({
                 className: 'spacing-h-5',
                 children: [
                     Label({
-                        valign: 'center',
+                        vpack: 'center',
                         className: 'txt-smaller txt-semibold',
                         justify: Gtk.Justification.RIGHT,
                         setup: (label) => {
@@ -167,7 +167,7 @@ export default ({
                             destroyWithAnims()
                         },
                         child: MaterialIcon('close', 'large', {
-                            valign: 'center',
+                            vpack: 'center',
                         }),
                         setup: (button) => setupCursorHover(button),
                     }),
@@ -224,19 +224,19 @@ export default ({
 
                 if (offset > 0) {
                     if (initialDir < 0)
-                        self.setStyle(`margin-left: 0px; margin-right: 0px;`);
+                        self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else
-                        self.setStyle(`
+                        self.setCss(`
                             margin-left:   ${Number(offset + startMargin)}px;
                             margin-right: -${Number(offset + startMargin)}px;
                         `);
                 }
                 else if (offset < 0) {
                     if (initialDir > 0)
-                        self.setStyle(`margin-left: 0px; margin-right: 0px;`);
+                        self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else {
                         offset = Math.abs(offset);
-                        self.setStyle(`
+                        self.setCss(`
                             margin-right: ${Number(offset + startMargin)}px;
                             margin-left: -${Number(offset + startMargin)}px;
                         `);
@@ -260,11 +260,11 @@ export default ({
 
                 if (Math.abs(offset) > dragThreshold && offset * initialDir > 0) {
                     if (offset > 0) {
-                        self.setStyle(rightAnim1);
+                        self.setCss(rightAnim1);
                         widget.sensitive = false;
                     }
                     else {
-                        self.setStyle(leftAnim1);
+                        self.setCss(leftAnim1);
                         widget.sensitive = false;
                     }
                     Utils.timeout(200, () => {
@@ -276,7 +276,7 @@ export default ({
                     });
                 }
                 else {
-                    self.setStyle(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+                    self.setCss(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
                                    margin-left:  ${startMargin}px;
                                    margin-right: ${startMargin}px;
                                    margin-bottom: unset; margin-top: unset;

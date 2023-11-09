@@ -219,8 +219,7 @@ const SearchButton = ({ text = '' }) => searchItem({
     },
 });
 
-const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget({
-    type: Gtk.MenuItem,
+const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget.MenuItem({
     label: `${label}`,
     setup: menuItem => {
         let submenu = new Gtk.Menu();
@@ -241,8 +240,8 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     if (w <= 0 || h <= 0) return null;
     return Widget.Button({
         className: 'overview-tasks-window',
-        halign: 'center',
-        valign: 'center',
+        hpack: 'center',
+        vpack: 'center',
         onClicked: () => {
             execAsync([`bash`, `-c`, `hyprctl dispatch focuswindow address:${address}`, `&`]).catch(print);
             App.closeWindow('overview');
@@ -250,8 +249,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
         onMiddleClickRelease: () => execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print),
         onSecondaryClick: (button) => {
             button.toggleClassName('overview-tasks-window-selected', true);
-            const menu = Widget({
-                type: Gtk.Menu,
+            const menu = Widget.Menu({
                 className: 'menu',
                 setup: menu => {
                     menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print); destroyContextMenu(menu); } }));
@@ -272,7 +270,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
             vertical: true,
             children: [
                 Widget.Icon({
-                    style: `
+                    css: `
                         min-width: ${Math.max(w * OVERVIEW_SCALE - 4, 1)}px;
                         min-height: ${Math.max(h * OVERVIEW_SCALE - 4, 1)}px;
                     `,
@@ -283,7 +281,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                     hexpand: true,
                     vexpand: true,
                     child: Widget.Label({
-                        style: `
+                        css: `
                 font-size: ${Math.min(w, h) * OVERVIEW_SCALE / 20}px;
                 `,
                         label: title,
@@ -323,8 +321,8 @@ const workspace = index => {
     const fixed = Gtk.Fixed.new();
     const widget = Widget.Box({
         className: 'overview-tasks-workspace',
-        valign: 'center',
-        style: `
+        vpack: 'center',
+        css: `
         min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
         min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
         `,
@@ -410,7 +408,7 @@ export const SearchAndWindows = () => {
         revealChild: false,
         transition: 'slide_down',
         // duration: 200,
-        halign: 'center',
+        hpack: 'center',
         child: resultsBox,
     });
     const overviewRevealer = Widget.Revealer({
@@ -430,7 +428,7 @@ export const SearchAndWindows = () => {
         transition: 'crossfade',
         transitionDuration: 150,
         revealChild: true,
-        halign: 'center',
+        hpack: 'center',
         child: Widget.Label({
             className: 'overview-search-prompt txt-small txt',
             label: searchPromptTexts[Math.floor(Math.random() * searchPromptTexts.length)],
@@ -441,7 +439,7 @@ export const SearchAndWindows = () => {
         transition: 'crossfade',
         transitionDuration: 150,
         revealChild: false,
-        halign: 'end',
+        hpack: 'end',
         child: Widget.Label({
             className: 'txt txt-large icon-material overview-search-icon',
             label: 'search',
@@ -455,7 +453,7 @@ export const SearchAndWindows = () => {
 
     const entry = Widget.Entry({
         className: 'overview-search-box txt-small txt',
-        halign: 'center',
+        hpack: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
             const isAction = text.startsWith('>');
             if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround
@@ -554,7 +552,7 @@ export const SearchAndWindows = () => {
         children: [
             clickOutsideToClose,
             Widget.Box({
-                halign: 'center',
+                hpack: 'center',
                 children: [
                     entry,
                     Widget.Box({

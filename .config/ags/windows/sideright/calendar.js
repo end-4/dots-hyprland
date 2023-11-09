@@ -48,7 +48,7 @@ const CalendarDay = (day, today) => Widget.Button({
     child: Widget.Overlay({
         child: Box({}),
         overlays: [Label({
-            halign: 'center',
+            hpack: 'center',
             className: 'txt-smallie txt-semibold sidebar-calendar-btn-txt',
             label: String(day),
         })],
@@ -122,7 +122,7 @@ const CalendarWidget = () => {
         onScrollUp: () => shiftCalendarXMonths(-1),
         onScrollDown: () => shiftCalendarXMonths(1),
         child: Widget.Box({
-            halign: 'center',
+            hpack: 'center',
             children: [
                 Widget.Box({
                     hexpand: true,
@@ -166,9 +166,9 @@ const todoItems = (isDone) => Widget.Scrollable({
                             label: task.content,
                         }),
                         Widget.Button({
-                            valign: 'center',
+                            vpack: 'center',
                             className: 'txt sidebar-todo-item-action',
-                            child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { valign: 'center' }),
+                            child: MaterialIcon(`${isDone ? 'remove_done' : 'check'}`, 'norm', { vpack: 'center' }),
                             onClicked: () => {
                                 if (isDone)
                                     Todo.uncheck(i);
@@ -178,9 +178,9 @@ const todoItems = (isDone) => Widget.Scrollable({
                             setup: (button) => setupCursorHover(button),
                         }),
                         Widget.Button({
-                            valign: 'center',
+                            vpack: 'center',
                             className: 'txt sidebar-todo-item-action',
-                            child: MaterialIcon('delete_forever', 'norm', { valign: 'center' }),
+                            child: MaterialIcon('delete_forever', 'norm', { vpack: 'center' }),
                             onClicked: () => {
                                 Todo.remove(i);
                             },
@@ -195,7 +195,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                     Widget.Box({
                         hexpand: true,
                         vertical: true,
-                        valign: 'center',
+                        vpack: 'center',
                         className: 'txt',
                         children: [
                             MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
@@ -210,7 +210,7 @@ const todoItems = (isDone) => Widget.Scrollable({
 });
 
 const todoItemsBox = Widget.Stack({
-    valign: 'fill',
+    vpack: 'fill',
     transition: 'slide_left_right',
     items: [
         ['undone', todoItems(false)],
@@ -232,13 +232,13 @@ const TodoWidget = () => {
             // Fancy highlighter line width
             const buttonWidth = button.get_allocated_width();
             const highlightWidth = button.get_children()[0].get_allocated_width();
-            navIndicator.style = `
+            navIndicator.css = `
                 font-size: ${navIndex}px; 
                 padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
             `;
         },
         child: Box({
-            halign: 'center',
+            hpack: 'center',
             className: 'spacing-h-5',
             children: [
                 MaterialIcon(`${isDone ? 'task_alt' : 'format_list_bulleted'}`, 'larger'),
@@ -257,12 +257,12 @@ const TodoWidget = () => {
     const doneButton = TodoTabButton(true, 1);
     const navIndicator = NavigationIndicator(2, false, {
         className: 'sidebar-todo-selector-highlight',
-        style: 'font-size: 0px;',
+        css: 'font-size: 0px;',
         setup: (self) => {
             // Fancy highlighter line width
             const buttonWidth = undoneButton.get_allocated_width();
             const highlightWidth = undoneButton.get_children()[0].get_allocated_width();
-            navIndicator.style = `
+            navIndicator.css = `
                 font-size: ${navIndex}px; 
                 padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
             `;
@@ -346,7 +346,7 @@ export const ModuleCalendar = () => Box({
     className: 'sidebar-group spacing-h-5',
     setup: (box) => {
         box.pack_start(Box({
-            valign: 'center',
+            vpack: 'center',
             homogeneous: true,
             vertical: true,
             className: 'sidebar-navrail spacing-v-10',
@@ -356,9 +356,6 @@ export const ModuleCalendar = () => Box({
                 // StackButton(box, 'stars', 'star', 'GitHub'),
             ]
         }), false, false, 0);
-        // ags.Widget({ // TDOO: replace this sad default calendar with a custom one
-        //     type: imports.gi.Gtk.Calendar,
-        // }),
         box.pack_end(contentStack, false, false, 0);
     }
 })

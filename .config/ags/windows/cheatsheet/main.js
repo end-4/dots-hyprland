@@ -11,27 +11,27 @@ const cheatsheetHeader = () => Widget.CenterBox({
         className: "spacing-h-15",
         children: [
             Widget.Box({
-                halign: 'center',
+                hpack: 'center',
                 className: 'spacing-h-5',
                 children: [
                     Widget.Label({
-                        halign: 'center',
-                        style: 'margin-right: 0.682rem;',
+                        hpack: 'center',
+                        css: 'margin-right: 0.682rem;',
                         className: 'txt-title txt',
                         label: 'Cheat sheet',
                     }),
                     Widget.Label({
-                        valign: 'center',
+                        vpack: 'center',
                         className: "cheatsheet-key txt-small",
                         label: "",
                     }),
                     Widget.Label({
-                        valign: 'center',
+                        vpack: 'center',
                         className: "cheatsheet-key-notkey txt-small",
                         label: "+",
                     }),
                     Widget.Label({
-                        valign: 'center',
+                        vpack: 'center',
                         className: "cheatsheet-key txt-small",
                         label: "/",
                     })
@@ -45,8 +45,8 @@ const cheatsheetHeader = () => Widget.CenterBox({
         ]
     }),
     endWidget: Widget.Button({
-        valign: 'start',
-        halign: 'end',
+        vpack: 'start',
+        hpack: 'end',
         className: "cheatsheet-closebtn icon-material txt txt-hugeass",
         onClicked: () => {
             App.toggleWindow('cheatsheet');

@@ -14,7 +14,6 @@ const TimeAndDate = () => Box({
         Label({
             className: 'bg-time-clock',
             xalign: 0,
-            label: 'Time',
             connections: [[5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%H:%M");
             }]],
@@ -22,7 +21,6 @@ const TimeAndDate = () => Box({
         Label({
             className: 'bg-time-date',
             xalign: 0,
-            label: 'Date',
             connections: [[5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%A, %d/%m/%Y");
             }]],
@@ -40,7 +38,7 @@ const QuickLaunches = () => Box({
             label: 'Quick Launches',
         }),
         Box({
-            halign: 'start',
+            hpack: 'start',
             className: 'spacing-h-5',
             children: quickLaunchItems.map((item, i) => Button({
                 onClicked: () => {
@@ -59,8 +57,8 @@ const QuickLaunches = () => Box({
 })
 
 export default () => Box({
-    halign: 'start',
-    valign: 'end',
+    hpack: 'start',
+    vpack: 'end',
     vertical: true,
     className: 'bg-time-box spacing-v-20',
     children: [

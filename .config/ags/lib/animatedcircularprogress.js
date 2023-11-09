@@ -11,9 +11,9 @@ import { Utils, Widget } from '../imports.js';
 // color for progress color
 // font size for progress value (0-100px) (hacky i know, but i want animations)
 // TODO: border-radius for rounded ends maybe (unimportant)
-export const AnimatedCircProg = (props) => Widget({
+export const AnimatedCircProg = (props) => Widget.DrawingArea({
     ...props,
-    type: Gtk.DrawingArea,
+    // type: Gtk.DrawingArea,
     setup: (area) => {
         const styleContext = area.get_style_context();
         const width = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);

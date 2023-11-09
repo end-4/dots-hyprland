@@ -10,11 +10,11 @@ const TrackProgress = () => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
         // Set circular progress (font size cuz that's how this hacky circprog works)
-        circprog.style = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
+        circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
         className: 'bar-music-circprog',
-        valign: 'center',
+        vpack: 'center',
         connections: [ // Update on change/once every 3 seconds
             [Mpris, _updateProgress],
             [3000, _updateProgress]
@@ -38,11 +38,11 @@ export const ModuleMusic = () => Widget.EventBox({
                         homogeneous: true,
                         children: [Widget.Overlay({
                             child: Widget.Box({
-                                valign: 'center',
+                                vpack: 'center',
                                 className: 'bar-music-playstate',
                                 homogeneous: true,
                                 children: [Widget.Label({
-                                    valign: 'center',
+                                    vpack: 'center',
                                     className: 'bar-music-playstate-txt',
                                     justification: 'center',
                                     connections: [[Mpris, label => {
