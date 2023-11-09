@@ -248,31 +248,22 @@ const TodoWidget = () => {
                 })
             ]
         }),
-        setup: (button) => {
+        setup: (button) => Utils.timeout(1, () => {
             button.toggleClassName('sidebar-todo-selector-tab-active', defaultTodoSelected === `${isDone ? 'done' : 'undone'}`);
             setupCursorHover(button);
-        },
+        }),
     });
     const undoneButton = TodoTabButton(false, 0);
     const doneButton = TodoTabButton(true, 1);
     const navIndicator = NavigationIndicator(2, false, {
         className: 'sidebar-todo-selector-highlight',
         css: 'font-size: 0px;',
-        setup: (self) => {
-            // Fancy highlighter line width
-            const buttonWidth = undoneButton.get_allocated_width();
-            const highlightWidth = undoneButton.get_children()[0].get_allocated_width();
-            navIndicator.css = `
-                font-size: ${navIndex}px; 
-                padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
-            `;
-        }
     })
     return Widget.Box({
         hexpand: true,
         vertical: true,
         className: 'spacing-v-10',
-        setup: (box) => {
+        setup: (box) => Utils.timeout(1, () => {
             // undone/done selector rail
             box.pack_start(Widget.Box({
                 vertical: true,
@@ -293,7 +284,7 @@ const TodoWidget = () => {
                 ]
             }), false, false, 0);
             box.pack_end(todoItemsBox, true, true, 0);
-        }
+        })
     });
 };
 
@@ -307,9 +298,9 @@ const contentStack = Widget.Stack({
     ],
     transition: 'slide_up_down',
     transitionDuration: 180,
-    setup: (stack) => {
+    setup: (stack) => Utils.timeout(1, () => {
         stack.shown = defaultShown;
-    }
+    })
 })
 
 const StackButton = (stackItemName, icon, name) => Widget.Button({
@@ -336,10 +327,10 @@ const StackButton = (stackItemName, icon, name) => Widget.Button({
             }),
         ]
     }),
-    setup: (button) => {
+    setup: (button) => Utils.timeout(1, () => {
         button.toggleClassName('sidebar-navrail-btn-active', defaultShown === stackItemName);
         setupCursorHover(button);
-    }
+    })
 });
 
 export const ModuleCalendar = () => Box({

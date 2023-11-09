@@ -12,6 +12,8 @@ import { showMusicControls } from '../../variables.js';
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';
 
+// TODO: per-player controls
+
 function lengthStr(length) {
     const min = Math.floor(length / 60);
     const sec = Math.floor(length % 60);

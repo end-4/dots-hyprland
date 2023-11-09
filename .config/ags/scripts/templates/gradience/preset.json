@@ -133,7 +133,7 @@
     },
     "custom_css": {
         "gtk4": ".vertical>headerbar>windowhandle>box {background-color: @window_bg_color;}",
-        "gtk3": ".frame>list{background:@window_bg_color;}"
+        "gtk3": ".frame>list{background:@window_bg_color;} .tweak-titlebar-left {background-color: @window_bg_color;}"
     },
     "plugins": {}
 }
