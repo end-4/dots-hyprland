@@ -80,6 +80,11 @@
     font-size: 2.7273rem;
 }
 
+.txt-hugerass {
+    @include mainfont;
+    font-size: 2.045rem;
+}
+
 .txt-hugeass {
     @include mainfont;
     font-size: 1.8182rem;

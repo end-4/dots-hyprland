@@ -1,7 +1,6 @@
-// Black-ize colors
-@if $darkmode == true {
+@if $darkmode == true { // Modifications to make material colors look good with blur
     $background: mix($background, #000000, 55%);
-    $surface: mix($surface, #000000, 65%);
+    $surface: mix($surface, $primaryContainer, 98%);
     $surfaceVariant: mix($surfaceVariant, #000000, 55%);
 }
 
@@ -19,7 +18,7 @@ $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount 
     $transparentize_amount: 0.07;
     $transparentize_surface_amount_less: 0.5;
     $transparentize_surface_amount_less_less: 0.55;
-    $transparentize_surface_amount: 0.85;
+    $transparentize_surface_amount: 0.69;
     $transparentize_surface_amount_more: 0.9;
     $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
 }
