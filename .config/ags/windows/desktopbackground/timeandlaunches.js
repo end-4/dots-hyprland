@@ -63,7 +63,7 @@ export default () => Box({
     className: 'bg-time-box spacing-v-20',
     children: [
         TimeAndDate(),
-        QuickLaunches(),
+        // QuickLaunches(),
     ],
 })
 

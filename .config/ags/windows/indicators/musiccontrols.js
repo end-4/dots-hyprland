@@ -10,9 +10,12 @@ import { MaterialIcon } from '../../lib/materialicon.js';
 import { showMusicControls } from '../../variables.js';
 
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
+const PREFERRED_PLAYER = 'firefox';
 var lastCoverPath = '';
 
-// TODO: per-player controls
+export const getPlayer = (name = PREFERRED_PLAYER) => {
+    return Mpris.getPlayer(name) || Mpris.players[0] || null;
+}
 
 function lengthStr(length) {
     const min = Math.floor(length / 60);
@@ -46,56 +49,56 @@ function detectMediaSource(link) {
     return domain;
 }
 
-const TrackProgress = (props = {}) => {
+const TrackProgress = ({ player, ...rest }) => {
     const _updateProgress = (circprog) => {
-        const mpris = Mpris.getPlayer('');
-        if (!mpris) return;
-        // Set circular progress (font size cuz that's how this hacky circprog works)
-        circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
+        const player = Mpris.getPlayer();
+        if (!player) return;
+        // Set circular progress (see definition of AnimatedCircProg for explanation)
+        circprog.css = `font-size: ${Math.max(player.position / player.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
-        ...props,
+        ...rest,
         className: 'osd-music-circprog',
         vpack: 'center',
         connections: [ // Update on change/once every 3 seconds
             [Mpris, _updateProgress],
             [3000, _updateProgress]
-        ]
+        ],
     })
 }
 
-const TrackTitle = (props = {}) => Label({
-    ...props,
+const TrackTitle = ({ player, ...rest }) => Label({
+    ...rest,
     label: 'No music playing',
     xalign: 0,
     truncate: 'end',
     className: 'osd-music-title',
-    connections: [[Mpris, (self) => {
-        const player = Mpris.getPlayer();
+    connections: [[player, (self) => {
+        const player = Mpris.getPlayer(); // Else it would say "... - YouTube Music"
         if (!player) return;
         if (player.trackTitle != '')
             self.label = player.trackTitle;
         else
             self.label = 'No music playing';
-    }]]
+    }, 'notify::track-title']]
 });
 
-const TrackArtists = (props = {}) => Label({
-    ...props,
+const TrackArtists = ({ player, ...rest }) => Label({
+    ...rest,
     xalign: 0,
     className: 'osd-music-artists',
-    connections: [[Mpris, (self) => {
+    connections: [[player, (self) => {
         const player = Mpris.getPlayer();
         if (!player) return;
         if (player.trackArtists.length != 0)
             self.label = player.trackArtists.join(', ');
         else
             self.label = '';
-    }]]
+    }, 'notify::track-artists']]
 })
 
-const CoverArt = (props = {}) => Box({
-    ...props,
+const CoverArt = ({ player, ...rest }) => Box({
+    ...rest,
     className: 'osd-music-cover',
     children: [
         Widget.Overlay({
@@ -110,24 +113,53 @@ const CoverArt = (props = {}) => Box({
             overlays: [ // Real
                 Box({
                     className: 'osd-music-cover-art',
-                    connections: [[Mpris, (self) => {
-                        const player = Mpris.getPlayer();
-                        if (!player) return;
-                        const coverPath = player.coverPath;
-                        self.css = `background-image: url('${coverPath}');`;
-                    }]],
+                    connections: [
+                        [player, (self) => {
+                            const player = Mpris.getPlayer();
+                            if (!player) return;
+                            const coverPath = player.coverPath;
+
+                            // Player styles
+                            if (!player) {
+                                App.applyCss(`${App.configDir}/style.css`);
+                                return;
+                            }
+
+                            if (player.coverPath == lastCoverPath) return;
+                            lastCoverPath = player.coverPath;
+                            if (fileExists(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`)) {
+                                self.css = `background-image: url('${coverPath}');`;
+                                App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                return;
+                            }
+
+                            Utils.timeout(200, () => { // Wait a bit for the cover to download
+                                // Material colors
+                                execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${player.coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
+                                    .then(() => {
+                                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q`)
+                                        exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
+                                        exec(`sassc ${App.configDir}/scss/_music.scss ${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                        self.css = `background-image: url('${coverPath}');`;
+                                        App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                    })
+                                    .catch(print);
+                            })
+                        }, 'notify::cover-path']
+                    ],
                 })
             ]
         })
-    ]
+    ],
 })
 
-const TrackControls = (props = {}) => Widget.Revealer({
+const TrackControls = ({ player, ...rest }) => Widget.Revealer({
     revealChild: false,
     transition: 'slide_right',
     transitionDuration: 200,
     child: Widget.Box({
-        ...props,
+        ...rest,
+        vpack: 'center',
         className: 'osd-music-controls spacing-h-3',
         children: [
             Button({
@@ -147,20 +179,20 @@ const TrackControls = (props = {}) => Widget.Revealer({
         ],
     }),
     connections: [[Mpris, (self) => {
-        const mpris = Mpris.getPlayer('');
-        if (!mpris)
+        const player = Mpris.getPlayer();
+        if (!player)
             self.revealChild = false;
         else
             self.revealChild = true;
-    }]]
+    }, 'notify::play-back-status']]
 });
 
-const TrackSource = (props = {}) => Widget.Revealer({
+const TrackSource = ({ player, ...rest }) => Widget.Revealer({
     revealChild: false,
     transition: 'slide_left',
     transitionDuration: 200,
     child: Widget.Box({
-        ...props,
+        ...rest,
         className: 'osd-music-pill spacing-h-5',
         homogeneous: true,
         children: [
@@ -168,11 +200,11 @@ const TrackSource = (props = {}) => Widget.Revealer({
                 hpack: 'fill',
                 justification: 'center',
                 className: 'icon-nerd',
-                connections: [[Mpris, (self) => {
+                connections: [[player, (self) => {
                     const player = Mpris.getPlayer();
                     if (!player) return;
                     self.label = detectMediaSource(player.trackCoverUrl);
-                }]]
+                }, 'notify::cover-path']]
             }),
         ],
     }),
@@ -185,13 +217,14 @@ const TrackSource = (props = {}) => Widget.Revealer({
     }]]
 });
 
-const TrackTime = (props = {}) => {
+const TrackTime = ({ player, ...rest }) => {
     return Widget.Revealer({
         revealChild: false,
         transition: 'slide_left',
         transitionDuration: 200,
         child: Widget.Box({
-            ...props,
+            ...rest,
+            vpack: 'center',
             className: 'osd-music-pill spacing-h-5',
             children: [
                 Label({
@@ -212,8 +245,7 @@ const TrackTime = (props = {}) => {
             ],
         }),
         connections: [[Mpris, (self) => {
-            const mpris = Mpris.getPlayer('');
-            if (!mpris)
+            if (!player)
                 self.revealChild = false;
             else
                 self.revealChild = true;
@@ -221,9 +253,9 @@ const TrackTime = (props = {}) => {
     })
 }
 
-const PlayState = () => {
+const PlayState = ({ player }) => {
     var position = 0;
-    const trackCircProg = TrackProgress({});
+    const trackCircProg = TrackProgress({ player: player });
     return Widget.Button({
         className: 'osd-music-playstate',
         child: Widget.Overlay({
@@ -232,32 +264,31 @@ const PlayState = () => {
                 Widget.Button({
                     className: 'osd-music-playstate-btn',
                     onClicked: () => {
-                        Mpris.getPlayer('')?.playPause()
+                        Mpris.getPlayer().playPause()
                     },
                     child: Widget.Label({
                         justification: 'center',
                         hpack: 'fill',
                         vpack: 'center',
-                        connections: [[Mpris, label => {
-                            const mpris = Mpris.getPlayer('');
-                            label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
-                        }]],
+                        connections: [[player, (label) => {
+                            if (!player) return;
+                            label.label = `${player.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
+                        }, 'notify::play-back-status']],
                     }),
                 }),
             ],
-            setup: self => {
-                Utils.timeout(1, () => {
-                    self.set_overlay_pass_through(self.get_children()[1], true);
-                })
-            },
+            // setup: self => Utils.timeout(1, () => {
+            //     self.set_overlay_pass_through(self.get_children()[1], true);
+            // }),
+            passThrough: true,
         })
     });
 }
 
-const MusicControlsWidget = () => Box({
+const MusicControlsWidget = (player) => Box({
     className: 'osd-music spacing-h-20',
     children: [
-        CoverArt({ vpack: 'center' }),
+        CoverArt({ player: player, vpack: 'center' }),
         Box({
             vertical: true,
             className: 'spacing-v-5 osd-music-info',
@@ -267,18 +298,18 @@ const MusicControlsWidget = () => Box({
                     vpack: 'center',
                     hexpand: true,
                     children: [
-                        TrackTitle(),
-                        TrackArtists(),
+                        TrackTitle({ player: player }),
+                        TrackArtists({ player: player }),
                     ]
                 }),
                 Box({ vexpand: true }),
                 Box({
                     className: 'spacing-h-10',
                     setup: (box) => {
-                        box.pack_start(TrackControls({ vpack: 'center' }), false, false, 0);
-                        box.pack_end(PlayState(), false, false, 0);
-                        box.pack_end(TrackTime({ vpack: 'center' }), false, false, 0)
-                        // box.pack_end(TrackSource({ vpack: 'center' }), false, false, 0);
+                        box.pack_start(TrackControls({ player: player }), false, false, 0);
+                        box.pack_end(PlayState({ player: player }), false, false, 0);
+                        box.pack_end(TrackTime({ player: player }), false, false, 0)
+                        // box.pack_end(TrackSource({ vpack: 'center', player: player }), false, false, 0);
                     }
                 })
             ]
@@ -289,32 +320,25 @@ const MusicControlsWidget = () => Box({
 export default () => Widget.Revealer({
     transition: 'slide_down',
     transitionDuration: 200,
-    child: MusicControlsWidget(),
+    child: Box({
+        connections: [[Mpris, box => {
+            const player = getPlayer();
+            if (!player) {
+                box._player = null;
+                return;
+            }
+
+            if (box._player === player)
+                return;
+
+            box._player = player;
+            box.get_children().forEach(ch => ch.destroy());
+            box.child = MusicControlsWidget(player);
+        }, 'notify::players']],
+    }),
     connections: [
         [showMusicControls, (revealer) => {
             revealer.revealChild = showMusicControls.value;
         }],
-        [Mpris, () => {
-            const mpris = Mpris.getPlayer('');
-            if (!mpris) {
-                App.applyCss(`${App.configDir}/style.css`);
-                return;
-            }
-            if (mpris.coverPath == lastCoverPath) return;
-            if (fileExists(`${mpris.coverPath}${COVER_COLORSCHEME_SUFFIX}`))
-                App.applyCss(`${mpris.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
-            Utils.timeout(200, () => { // Wait a bit for the cover to download
-                // Material colors
-                execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${mpris.coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
-                    .then(() => {
-                        exec(`wal -i "${mpris.coverPath}" -n -t -s -e -q`)
-                        exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
-                        exec(`sassc ${App.configDir}/scss/_music.scss ${mpris.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
-                        App.applyCss(`${mpris.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
-                    })
-                    .catch(print);
-            })
-            lastCoverPath = mpris.coverPath;
-        }]
     ],
 })
