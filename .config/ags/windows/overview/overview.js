@@ -108,13 +108,6 @@ function substitute(str) {
     return str;
 }
 
-function destroyContextMenu(menu) {
-    if (menu !== null) {
-        menu.remove_all();
-        menu.destroy();
-        menu = null;
-    }
-}
 const CalculationResultButton = ({ result, text }) => searchItem({
     materialIconName: 'calculate',
     name: `Math result`,
@@ -225,7 +218,9 @@ const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widge
         let submenu = new Gtk.Menu();
         submenu.className = 'menu';
         for (let i = 1; i <= 10; i++) {
-            let button = new Gtk.MenuItem({ label: `${i}` });
+            let button = new Gtk.MenuItem({
+                label: `Workspace ${i}`
+            });
             button.connect("activate", () => {
                 execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
             });
@@ -251,12 +246,28 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
             button.toggleClassName('overview-tasks-window-selected', true);
             const menu = Widget.Menu({
                 className: 'menu',
-                setup: menu => {
-                    menu.append(ContextMenuItem({ label: "Close (Middle-click)", onClick: () => { execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print); destroyContextMenu(menu); } }));
-                    menu.append(ContextWorkspaceArray({ label: "Dump windows to workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
-                    menu.append(ContextWorkspaceArray({ label: "Swap windows with workspace", onClickBinary: `${App.configDir}/scripts/dumptows`, thisWorkspace: Number(id) }));
-                    menu.show_all();
-                }
+                children: [
+                    Widget.MenuItem({
+                        child: Widget.Label({
+                            xalign: 0,
+                            label: "Close (Middle-click)",
+                        }),
+                        onActivate: () => {
+                            execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`])
+                                .catch(print);
+                        }
+                    }),
+                    ContextWorkspaceArray({
+                        label: "Dump windows to workspace",
+                        onClickBinary: `${App.configDir}/scripts/dumptows`,
+                        thisWorkspace: Number(id)
+                    }),
+                    ContextWorkspaceArray({
+                        label: "Swap windows with workspace",
+                        onClickBinary: `${App.configDir}/scripts/dumptows`,
+                        thisWorkspace: Number(id)
+                    }),
+                ],
             });
             menu.connect("deactivate", () => {
                 button.toggleClassName('overview-tasks-window-selected', false);

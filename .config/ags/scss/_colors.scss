@@ -1,5 +1,5 @@
 @if $darkmode == true { // Modifications to make material colors look good with blur
-    $background: mix($background, #000000, 55%);
+    $background: mix(mix($background, $primary, 95%), #000000, 50%);
     $surface: mix($surface, $primaryContainer, 98%);
     $surfaceVariant: mix($surfaceVariant, #000000, 55%);
 }
