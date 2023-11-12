@@ -3,17 +3,17 @@ const GObject = imports.gi.GObject;
 const Lang = imports.lang;
 import { Utils, Widget } from '../imports.js';
 
+// -- Styling --
 // min-height for diameter
 // min-width for trough stroke
 // padding for space between trough and progress
 // margin for space between widget and parent
 // background-color for trough color
 // color for progress color
+// -- Usage --
 // font size for progress value (0-100px) (hacky i know, but i want animations)
-// TODO: border-radius for rounded ends maybe (unimportant)
 export const AnimatedCircProg = (props) => Widget.DrawingArea({
     ...props,
-    // type: Gtk.DrawingArea,
     setup: (area) => {
         const styleContext = area.get_style_context();
         const width = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
