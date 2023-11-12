@@ -7,8 +7,8 @@
 $music_gradient1: $background;
 $music_gradient2: $color2;
 $music_gradient3: $color4;
-$music_colorstart_transparentize: 0.4;
-$music_extra_transparentize: 0.3;
+$music_colorstart_transparentize: 0.36;
+$music_extra_transparentize: 0.15;
 
 $secondaryContainer: mix($background, $color2, 50%);
 $onSecondaryContainer: mix($color7, $color2, 90%);

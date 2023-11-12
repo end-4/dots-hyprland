@@ -12,7 +12,8 @@ import Overview from './windows/overview/main.js';
 import Session from './windows/session/main.js'; 
 import SideRight from './windows/sideright/main.js';
 
-const CLOSE_ANIM_TIME = 150;
+// Longer than actual anim time (150, see styles) to make sure windows animate fully
+const CLOSE_ANIM_TIME = 200; 
 
 // Init cache
 Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);

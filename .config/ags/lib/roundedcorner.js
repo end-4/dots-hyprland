@@ -6,7 +6,7 @@ export const RoundedCorner = (place, props) => Widget.DrawingArea({
     ...props,
     hpack: place.includes('left') ? 'start' : 'end',
     vpack: place.includes('top') ? 'start' : 'end',
-    setup: widget => {
+    setup: (widget) => Utils.timeout(1, () => {
         const c = widget.get_style_context().get_property('background-color', Gtk.StateFlags.NORMAL);
         const r = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
         widget.set_size_request(r, r);
@@ -46,5 +46,5 @@ export const RoundedCorner = (place, props) => Widget.DrawingArea({
             // cr.setSourceRGBA(borderColor.red, borderColor.green, borderColor.blue, borderColor.alpha);
             // cr.stroke();
         }));
-    },
+    }),
 });
