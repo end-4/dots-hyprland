@@ -11,6 +11,7 @@ function guessMessageType(summary) {
     if(summary.includes('recording')) return 'screen_record';
     if(summary.includes('battery') || summary.includes('power')) return 'power';
     if(summary.includes('screenshot')) return 'screenshot_monitor';
+    if(summary.includes('welcome')) return 'waving_hand';
     if(summary.includes('time')) return 'scheduleb';
     if(summary.includes('installed')) return 'download';
     if(summary.includes('update')) return 'update';
@@ -140,6 +141,7 @@ export default ({
                                 justify: Gtk.Justification.LEFT,
                                 hexpand: true,
                                 maxWidthChars: 24,
+                                truncate: 'end',
                                 ellipsize: 3,
                                 wrap: true,
                                 useMarkup: notifObject.summary.startsWith('<'),

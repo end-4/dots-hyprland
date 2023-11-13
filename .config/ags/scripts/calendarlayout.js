@@ -1,101 +1,81 @@
-export function getCalendarLayout(d, highlight) {
-    if (!d) d = new Date();
-    var calendar = [...Array(6)].map(() => Array(7));
-    var today = [...Array(6)].map(() => Array(7));
-    const year = d.getFullYear();
-    const month = d.getMonth() + 1;
-    const day = d.getDate();
-    const weekdayOfMonthFirst = new Date(`${year}-${month}-01`).getDay();
-    const leapYear = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
-    const daysInMonth = (((month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) ? 31 : ((month == 2 && leapYear) ? 29 : ((month == 2 && !leapYear) ? 28 : 30)));
-    const daysInNextMonth = ((month == 1 && leapYear) ? 29 : ((month == 1 && !leapYear) ? 28 : ((month == 7 || month == 12) ? 31 : (((month <= 6 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) ? 30 : 31))));
-    const daysInLastMonth = ((month == 3 && leapYear) ? 29 : ((month == 3 && !leapYear) ? 28 : ((month == 1 || month == 8) ? 31 : ((month <= 7 && month % 2 == 1) || (month >= 9 && month % 2 == 0)) ? 30 : 31)));
+const { GLib, Gio } = imports.gi;
+
+function checkLeapYear(year) {
+    return (
+        year % 400 == 0 ||
+        (year % 4 == 0 && year % 100 != 0));
+}
+
+function getMonthDays(month, year) {
+    const leapYear = checkLeapYear(year);
+    if ((month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) return 31;
+    if (month == 2 && leapYear) return 29;
+    if (month == 2 && !leapYear) return 28;
+    return 30;
+}
+
+function getNextMonthDays(month, year) {
+    const leapYear = checkLeapYear(year);
+    if (month == 1 && leapYear) return 29;
+    if (month == 1 && !leapYear) return 28;
+    if (month == 12) return 31;
+    if ((month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) return 30;
+    return 31;
+}
+
+function getPrevMonthDays(month, year) {
+    const leapYear = checkLeapYear(year);
+    if (month == 3 && leapYear) return 29;
+    if (month == 3 && !leapYear) return 28;
+    if (month == 1) return 31;
+    if ((month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) return 30;
+    return 31;
+}
+
+export function getCalendarLayout(dateObject, highlight) {
+    if (!dateObject) dateObject = new Date();
+    const weekday = (dateObject.getDay() + 6) % 7; // MONDAY IS THE FIRST DAY OF THE WEEK
+    const day = dateObject.getDate();
+    const month = dateObject.getMonth() + 1;
+    const year = dateObject.getFullYear();
+    const weekdayOfMonthFirst = (weekday + 35 - (day - 1)) % 7;
+    const daysInMonth = getMonthDays(month, year);
+    const daysInNextMonth = getNextMonthDays(month, year);
+    const daysInPrevMonth = getPrevMonthDays(month, year);
+
+    // Fill
     var monthDiff = (weekdayOfMonthFirst == 0 ? 0 : -1);
-    var dim = daysInLastMonth;
-    var toFill = (weekdayOfMonthFirst == 0 ? 1 : (daysInLastMonth + 1 - weekdayOfMonthFirst));
+    var toFill = (weekdayOfMonthFirst == 0 ?
+        1 : (daysInPrevMonth - (weekdayOfMonthFirst - 1)));
+    var dim = daysInPrevMonth;
+    var calendar = [...Array(6)].map(() => Array(7));
     var i = 0, j = 0;
     while (i < 6 && j < 7) {
-        calendar[i][j] = toFill;
-        if (toFill == day && monthDiff == 0 && highlight) today[i][j] = 1;
-        else if (monthDiff == 0) today[i][j] = 0;
-        else today[i][j] = -1;
+        calendar[i][j] = {
+            "day": toFill,
+            "today": ((toFill == day && monthDiff == 0 && highlight) ? 1 : (
+                monthDiff == 0 ? 0 :
+                    -1
+            ))
+        };
+        // Increment
         toFill++;
-        if (toFill > dim) {
+        if (toFill > dim) { // Next month?
             monthDiff++;
-            if (monthDiff == 0) dim = daysInMonth;
-            else if (monthDiff == 1) dim = daysInNextMonth;
+            if (monthDiff == 0)
+                dim = daysInMonth;
+            else if (monthDiff == 1)
+                dim = daysInNextMonth;
             toFill = 1;
         }
+        // Next tile
         j++;
         if (j == 7) {
             j = 0;
             i++;
         }
-    }
-    var cal = [];
-    for (var i = 0; i < 6; i++) {
-        var arr = [];
-        for (var j = 0; j < 7; j++) {
-            arr.push({
-                day: calendar[i][j],
-                today: today[i][j]
-            });
-        }
-        cal.push(arr);
-    }
 
-    return cal;
+    }
+    return calendar;
 }
 
-export default getCalendarLayout;
-
-// export function getCalendarLayout(d, highlight) {
-//     if (!d) d = new Date();
-//     var calendar = [...Array(6)].map(() => Array(7));
-//     var today = [...Array(6)].map(() => Array(7));
-//     const year = d.getFullYear();
-//     const month = d.getMonth() + 1;
-//     const day = d.getDate();
-//     const weekdayOfMonthFirst = new Date(`${year}-${month}-01`).getDay();
-//     const leapYear = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
-//     const daysInMonth = (((month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) ? 31 : ((month == 2 && leapYear) ? 29 : ((month == 2 && !leapYear) ? 28 : 30)));
-//     const daysInNextMonth = ((month == 1 && leapYear) ? 29 : ((month == 1 && !leapYear) ? 28 : ((month == 7 || month == 12) ? 31 : (((month <= 6 && month % 2 == 1) || (month >= 8 && month % 2 == 0)) ? 30 : 31))));
-//     const daysInLastMonth = ((month == 3 && leapYear) ? 29 : ((month == 3 && !leapYear) ? 28 : ((month == 1 || month == 8) ? 31 : ((month <= 7 && month % 2 == 1) || (month >= 9 && month % 2 == 0)) ? 30 : 31)));
-//     var monthDiff = (weekdayOfMonthFirst == 1 ? 0 : -1);
-//     var dim = daysInLastMonth;
-//     var toFill = (weekdayOfMonthFirst == 1 ? 1 : (weekdayOfMonthFirst == 0 ? (daysInLastMonth - 5) : (daysInLastMonth + 2 - weekdayOfMonthFirst)));
-//     var i = 0, j = 0;
-//     while (i < 6 && j < 7) {
-//         calendar[i][j] = toFill;
-//         if (toFill == day && monthDiff == 0 && highlight) today[i][j] = 1;
-//         else if (monthDiff == 0) today[i][j] = 0;
-//         else today[i][j] = -1;
-//         toFill++;
-//         if (toFill > dim) {
-//             monthDiff++;
-//             if (monthDiff == 0) dim = daysInMonth;
-//             else if (monthDiff == 1) dim = daysInNextMonth;
-//             toFill = 1;
-//         }
-//         j++;
-//         if (j == 7) {
-//             j = 0;
-//             i++;
-//         }
-//     }
-//     var cal = [];
-//     for (var i = 0; i < 6; i++) {
-//         var arr = [];
-//         for (var j = 0; j < 7; j++) {
-//             arr.push({
-//                 day: calendar[i][j],
-//                 today: today[i][j]
-//             });
-//         }
-//         cal.push(arr);
-//     }
-
-//     return cal;
-// }
-
-// export default getCalendarLayout;

@@ -112,40 +112,47 @@ const CoverArt = ({ player, ...rest }) => Box({
             }),
             overlays: [ // Real
                 Box({
-                    className: 'osd-music-cover-art',
-                    connections: [
-                        [player, (self) => {
+                    properties: [
+                        ['updateCover', (self) => {
                             const player = Mpris.getPlayer();
-                            if (!player) return;
-                            const coverPath = player.coverPath;
 
-                            // Player styles
-                            if (!player) {
+                            // Player closed
+                            // Note that cover path still remains, so we're checking title
+                            if (!player || player.trackTitle == "") {
+                                self.css = `background-image: none;`;
                                 App.applyCss(`${App.configDir}/style.css`);
                                 return;
                             }
 
-                            if (player.coverPath == lastCoverPath) return;
+                            const coverPath = player.coverPath;
+                            if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
+                                self.css = `background-image: url('${coverPath}');`;
+                            }
                             lastCoverPath = player.coverPath;
+
+                            // If a colorscheme has already been generated, skip generation
                             if (fileExists(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`)) {
                                 self.css = `background-image: url('${coverPath}');`;
                                 App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
                                 return;
                             }
 
-                            Utils.timeout(200, () => { // Wait a bit for the cover to download
-                                // Material colors
-                                execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${player.coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
-                                    .then(() => {
-                                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q`)
-                                        exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
-                                        exec(`sassc ${App.configDir}/scss/_music.scss ${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
-                                        self.css = `background-image: url('${coverPath}');`;
-                                        App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
-                                    })
-                                    .catch(print);
-                            })
-                        }, 'notify::cover-path']
+                            // Generate colors
+                            execAsync(['bash', '-c',
+                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${player.coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
+                                .then(() => {
+                                    exec(`wal -i "${player.coverPath}" -n -t -s -e -q`)
+                                    exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
+                                    exec(`sassc ${App.configDir}/scss/_music.scss ${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                    self.css = `background-image: url('${coverPath}');`;
+                                    App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                })
+                                .catch(print);
+                        }],
+                    ],
+                    className: 'osd-music-cover-art',
+                    connections: [
+                        [player, (self) => self._updateCover(self), 'notify::cover-path']
                     ],
                 })
             ]
