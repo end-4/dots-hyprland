@@ -33,14 +33,14 @@ function getDateInXMonthsTime(x) {
     return targetDate;
 }
 
-const weekDays = [ // stupid stupid stupid!! how tf is Sunday the first day of the week??
-    { day: 'Su', today: 0 },
+const weekDays = [ // MONDAY IS THE FIRST DAY OF THE WEEK :HESRIGHTYOUKNOW:
     { day: 'Mo', today: 0 },
     { day: 'Tu', today: 0 },
     { day: 'We', today: 0 },
     { day: 'Th', today: 0 },
     { day: 'Fr', today: 0 },
     { day: 'Sa', today: 0 },
+    { day: 'Su', today: 0 },
 ]
 
 const CalendarDay = (day, today) => Widget.Button({
@@ -83,7 +83,7 @@ const CalendarWidget = () => {
             newDate = new Date();
         else
             newDate = getDateInXMonthsTime(monthshift);
-        calendarJson = getCalendarLayout(newDate, monthshift == 0);
+        calendarJson = getCalendarLayout(newDate, (monthshift == 0));
         calendarMonthYear.label = `${monthshift == 0 ? '' : '• '}${newDate.toLocaleString('default', { month: 'long' })} ${newDate.getFullYear()}`;
         addCalendarChildren(calendarDays, calendarJson);
     }
