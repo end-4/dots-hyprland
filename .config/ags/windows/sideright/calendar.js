@@ -1,4 +1,4 @@
-const { Gio, Gdk, Gtk } = imports.gi;
+const { Gio, Gdk, GLib, Gtk } = imports.gi;
 import { App, Widget, Utils } from '../../imports.js';
 const { Box, CenterBox, Label, Button } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
@@ -74,15 +74,12 @@ const CalendarWidget = () => {
         }))
     }
     function shiftCalendarXMonths(x) {
-        if (x == 0)
-            monthshift = 0;
-        else
-            monthshift += x;
-        var newDate = undefined;
-        if (monthshift == 0)
-            newDate = new Date();
-        else
-            newDate = getDateInXMonthsTime(monthshift);
+        if (x == 0) monthshift = 0;
+        else monthshift += x;
+        var newDate;
+        if (monthshift == 0) newDate = new Date();
+        else newDate = getDateInXMonthsTime(monthshift);
+
         calendarJson = getCalendarLayout(newDate, (monthshift == 0));
         calendarMonthYear.label = `${monthshift == 0 ? '' : '• '}${newDate.toLocaleString('default', { month: 'long' })} ${newDate.getFullYear()}`;
         addCalendarChildren(calendarDays, calendarJson);

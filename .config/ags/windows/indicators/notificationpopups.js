@@ -42,7 +42,7 @@ const naiveNotifPopupList = Widget.Box({
 
 const notifPopupList = Box({
     vertical: true,
-    className: 'spacing-v-5-revealer',
+    className: 'osd-notifs spacing-v-5-revealer',
     properties: [
         ['map', new Map()],
 
@@ -52,42 +52,26 @@ const notifPopupList = Box({
 
             const notif = box._map.get(id);
             notif.revealChild = false;
-            Utils.timeout(200, () => {
-                notif._destroyWithAnims();
-            })
+            notif._destroyWithAnims();
         }],
 
         ['notify', (box, id) => {
-            if (!id || Notifications.dnd)
-                return;
-
-            if (!Notifications.getNotification(id))
-                return;
+            // console.log('new notiffy', id, Notifications.getNotification(id))
+            if (!id || Notifications.dnd) return;
+            if (!Notifications.getNotification(id)) return;
 
             box._map.delete(id);
 
             const notif = Notifications.getNotification(id);
-            box._map.set(id, Notification({
+            const newNotif = Notification({
                 notifObject: notif,
                 isPopup: true,
-            }));
-
-            box.children = Array.from(box._map.values()).reverse();
-
-            Utils.timeout(10, () => {
-                box.get_parent().revealChild = true;
             });
+            box._map.set(id, newNotif);
+            box.pack_end(box._map.get(id), false, false, 0);
+            box.show_all();
 
-            box._map.get(id).interval = Utils.interval(4500, () => {
-                const notif = box._map.get(id);
-                if (!notif._hovered) {
-                    if (notif.interval) {
-                        Utils.timeout(500, () => notif.destroy());
-                        GLib.source_remove(notif.interval);
-                        notif.interval = undefined;
-                    }
-                }
-            });
+            // box.children = Array.from(box._map.values()).reverse();
         }],
     ],
     connections: [
@@ -97,11 +81,4 @@ const notifPopupList = Box({
     ],
 });
 
-export default () => Widget.Revealer({
-    className: 'osd-notifs',
-    transition: 'slide_down',
-    connections: [[Notifications, (self) => {
-        self.revealChild = Notifications.popups.length > 0;
-    }]],
-    child: notifPopupList,
-})
+export default () => notifPopupList;

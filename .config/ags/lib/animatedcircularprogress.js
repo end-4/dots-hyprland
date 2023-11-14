@@ -12,8 +12,15 @@ import { Utils, Widget } from '../imports.js';
 // color for progress color
 // -- Usage --
 // font size for progress value (0-100px) (hacky i know, but i want animations)
-export const AnimatedCircProg = (props) => Widget.DrawingArea({
-    ...props,
+export const AnimatedCircProg = ({
+    initFrom = 0,
+    initTo = 0,
+    initAnimTime = 2900,
+    initAnimPoints = 1,
+    ...rest
+}) => Widget.DrawingArea({
+    ...rest,
+    css: `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`,
     setup: (area) => {
         const styleContext = area.get_style_context();
         const width = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
@@ -71,6 +78,27 @@ export const AnimatedCircProg = (props) => Widget.DrawingArea({
             cr.fill();
             cr.arc(end_x, end_y, fg_stroke / 2, 0, 0 - 0.01);
             cr.fill();
-        }))
+        }));
+
+        // Init animation
+        if (initFrom != initTo) {
+            // area.css = `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`;
+            Utils.timeout(20, () => {
+                area.css = `font-size: ${initTo}px;`;
+            })
+            // const transitionDistance = initTo - initFrom;
+            // const oneStep = initAnimTime / initAnimPoints;
+            // area.css = `
+            //     font-size: ${initFrom}px;
+            //     transition: ${oneStep}ms linear;
+            // `;
+            // for (let i = 0; i < initAnimPoints; i++) {
+            //     Utils.timeout(Math.max(10, i * oneStep), () => {
+            //         if(!area) return;
+            //         area.css = `${initFrom != initTo ? 'font-size: ' + (initFrom + (transitionDistance / initAnimPoints * (i + 1))) + 'px;' : ''}`;
+            //     });
+            // }
+        }
+        else area.css = 'font-size: 0px;';
     },
 })

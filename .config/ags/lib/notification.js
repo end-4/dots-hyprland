@@ -3,19 +3,20 @@
 const { GLib, Gdk, Gtk } = imports.gi;
 import { Utils, Widget } from '../imports.js';
 const { lookUpIcon, timeout } = Utils;
-const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
+const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./materialicon.js";
 import { setupCursorHover } from "./cursorhover.js";
+import { AnimatedCircProg } from "./animatedcircularprogress.js";
 
 function guessMessageType(summary) {
-    if(summary.includes('recording')) return 'screen_record';
-    if(summary.includes('battery') || summary.includes('power')) return 'power';
-    if(summary.includes('screenshot')) return 'screenshot_monitor';
-    if(summary.includes('welcome')) return 'waving_hand';
-    if(summary.includes('time')) return 'scheduleb';
-    if(summary.includes('installed')) return 'download';
-    if(summary.includes('update')) return 'update';
-    if(summary.startsWith('file')) return 'folder_copy';
+    if (summary.includes('recording')) return 'screen_record';
+    if (summary.includes('battery') || summary.includes('power')) return 'power';
+    if (summary.includes('screenshot')) return 'screenshot_monitor';
+    if (summary.includes('welcome')) return 'waving_hand';
+    if (summary.includes('time')) return 'scheduleb';
+    if (summary.includes('installed')) return 'download';
+    if (summary.includes('update')) return 'update';
+    if (summary.startsWith('file')) return 'folder_copy';
     return 'chat';
 }
 
@@ -71,6 +72,7 @@ const NotificationIcon = (notifObject) => {
 export default ({
     notifObject,
     isPopup = false,
+    popupTimeout = 3000,
     props = {},
 } = {}) => {
     const command = (isPopup ?
@@ -147,11 +149,29 @@ export default ({
                                 useMarkup: notifObject.summary.startsWith('<'),
                                 label: notifObject.summary,
                             }),
+                            Label({
+                                vpack: 'center',
+                                className: 'txt-smaller txt-semibold',
+                                justify: Gtk.Justification.RIGHT,
+                                setup: (label) => {
+                                    // Let's ignore how it won't work for Jan1 cuz I'm lazy
+                                    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
+                                    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
+                                        label.label = messageTime.format('%H:%M');
+                                    }
+                                    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
+                                        label.label = messageTime.format('Yesterday');
+                                    }
+                                    else {
+                                        label.label = messageTime.format('%d/%m');
+                                    }
+                                }
+                            }),
                         ]
                     }),
                     Label({
                         xalign: 0,
-                        className: 'txt-smallie notif-body-${urgency}',
+                        className: `txt-smallie notif-body-${notifObject.urgency}`,
                         useMarkup: true,
                         xalign: 0,
                         justify: Gtk.Justification.LEFT,
@@ -160,26 +180,15 @@ export default ({
                     }),
                 ]
             }),
-            Box({
-                className: 'spacing-h-5',
-                children: [
-                    Label({
-                        vpack: 'center',
-                        className: 'txt-smaller txt-semibold',
-                        justify: Gtk.Justification.RIGHT,
-                        setup: (label) => {
-                            const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
-                            if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
-                                label.label = messageTime.format('%H:%M');
-                            }
-                            else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
-                                label.label = messageTime.format('%H:%M\nYesterday');
-                            }
-                            else {
-                                label.label = messageTime.format('%H:%M\n%d/%m');
-                            }
-                        }
-                    }),
+            Overlay({
+                child: AnimatedCircProg({
+                    className: `notif-circprog-${notifObject.urgency}`,
+                    vpack: 'center',
+                    initFrom: (isPopup ? 100 : 0),
+                    initTo: 0,
+                    initAnimTime: popupTimeout,
+                }),
+                overlays: [
                     Button({
                         className: 'notif-close-btn',
                         onClicked: () => {
