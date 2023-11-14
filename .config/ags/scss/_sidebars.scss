@@ -18,9 +18,9 @@
 }
 
 .sideright-hide {
+    @include md3_accel;
     margin-right: -30.682rem;
     // opacity: 0;
-    @include md3_accel;
 }
 
 .sidebar-left {

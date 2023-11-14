@@ -124,3 +124,27 @@ $notif_surface: $t_background;
     background-color: transparentize($background, $transparentize_surface_amount_subtract_surface);
     min-width: 30.682rem;
 }
+
+.notif-circprog-low {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onSecondaryContainer;
+}
+
+.notif-circprog-normal {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onSecondaryContainer;
+}
+
+.notif-circprog-critical {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onError;
+}

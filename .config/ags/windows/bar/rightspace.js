@@ -9,12 +9,12 @@ import { Tray } from "./tray.js";
 
 export const ModuleRightSpace = () => Widget.EventBox({
     onScrollUp: () => {
-        if (Audio.speaker == null) return;
+        if (!Audio.speaker) return;
         Audio.speaker.volume += 0.03;
         Indicator.popup(1);
     },
     onScrollDown: () => {
-        if (Audio.speaker == null) return;
+        if (!Audio.speaker) return;
         Audio.speaker.volume -= 0.03;
         Indicator.popup(1);
     },

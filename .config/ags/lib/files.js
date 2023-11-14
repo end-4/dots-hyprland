@@ -15,11 +15,12 @@ const FIRST_RUN_NOTIF_BODY = `Looks like this is your first run.\nHit <span fore
 
 export async function firstRunWelcome() {
     if (!fileExists(FIRST_RUN_PATH)) {
-        console.log('uwu');
+        console.log('UwU.. Greetings!');
         Utils.writeFile(FIRST_RUN_FILE_CONTENT, FIRST_RUN_PATH)
             .then(() => {
+                // Note that we add a little delay to make sure the cool circular progress works
                 Utils.execAsync(['bash', '-c',
-                    `notify-send '${FIRST_RUN_NOTIF_TITLE}' '${FIRST_RUN_NOTIF_BODY}' -a '${APP_NAME}' &`
+                    `sleep 1; notify-send '${FIRST_RUN_NOTIF_TITLE}' '${FIRST_RUN_NOTIF_BODY}' -a '${APP_NAME}' &`
                 ]).catch(print)
             })
             .catch(print);
