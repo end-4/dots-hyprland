@@ -23,7 +23,8 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $onPrimaryContainer;
+        background-color: $secondaryContainer;
+        // border: 0.068rem solid $onSecondaryContainer;
     }
 
     progress {
@@ -32,7 +33,7 @@
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $primaryContainer;
+        background-color: $onSecondaryContainer;
     }
 }
 

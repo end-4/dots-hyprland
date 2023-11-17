@@ -1,11 +1,15 @@
+///////////// COLOR MODIFICATIONS /////////////
+// Material colors provide excellent readability, but can be uninteresting.
+// This is an attempt to improve that.
 @if $darkmode == true { // Modifications to make material colors look good with blur
     $background: mix(mix($background, $primary, 95%), #000000, 50%);
     $surface: mix($surface, $primaryContainer, 98%);
     $surfaceVariant: mix($surfaceVariant, #000000, 55%);
 }
 
-// Transparent versions
-// Transparentize amounts
+///////////// TRANSPARENCY /////////////
+$transparency_enabled: false;
+// Amounts
 $transparentize_amount: 0.3;
 $transparentize_surface_amount_less: 0.6;
 $transparentize_surface_amount_less_less: 0.55;
@@ -13,7 +17,7 @@ $transparentize_surface_amount: 0.7;
 $transparentize_surface_amount_more: 0.8;
 $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
 
-@if $darkmode == true {
+@if $darkmode ==true {
     // Less transparency
     $transparentize_amount: 0.07;
     $transparentize_surface_amount_less: 0.5;
@@ -21,6 +25,10 @@ $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount 
     $transparentize_surface_amount: 0.69;
     $transparentize_surface_amount_more: 0.9;
     $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
+}
+
+@if $transparency_enabled ==false {
+    $transparentize_amount: 0;
 }
 
 // Extended material
@@ -37,7 +45,7 @@ $onSuccessContainer: #0c1f13;
     $onSuccessContainer: #d1e9d6;
 }
 
-// Transparent material
+// Transparent versions
 $t_primary: transparentize($primary, $transparentize_amount);
 $t_onPrimary: transparentize($onPrimary, $transparentize_amount);
 $t_primaryContainer: transparentize($primaryContainer, $transparentize_amount);

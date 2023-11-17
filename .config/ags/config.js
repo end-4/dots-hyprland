@@ -17,7 +17,7 @@ import SideRight from './windows/sideright/main.js';
 const CLOSE_ANIM_TIME = 200;
 
 // Init cache and check first run
-Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
+Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user/colorschemes'`);
 firstRunWelcome();
 
 // SCSS compilation

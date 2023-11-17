@@ -2,11 +2,9 @@
 //     border: 1px solid white; // Debugging
 // }
 
-// *:focus {
-//     outline-width: 1px;
-//     outline-color: $t_onSurface;
-//     outline-css: inset;
-// }
+*:focus {
+    outline: 1px solid $surface;
+}
 
 .menu {
     padding: 0.681rem;
