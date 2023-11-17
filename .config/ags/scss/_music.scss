@@ -1,16 +1,16 @@
 @import './material';
-@import './musicmaterial';
+// @import './musicmaterial';
 @import './wal';
 @import './musicwal';
 @import './colors';
 @import './lib_mixins';
-$music_gradient1: $background;
+$music_gradient1: mix($color6, $background, 20%);
 $music_gradient2: $color2;
 $music_gradient3: $color4;
 $music_colorstart_transparentize: 0.36;
 $music_extra_transparentize: 0.15;
 
-$secondaryContainer: mix($background, $color2, 50%);
+$secondaryContainer: mix(mix($background, $color2, 50%), $color6, 80%);
 $onSecondaryContainer: mix($color7, $color2, 90%);
 
 .osd-music {

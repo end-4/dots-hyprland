@@ -155,6 +155,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                     className: 'spacing-h-5',
                     children: [
                         Widget.Label({
+                            valign: 'start',
                             className: 'txt txt-small',
                             label: '•',
                         }),

@@ -350,6 +350,10 @@
     min-height: 0.205rem;
 }
 
+.sidebar-todo-item {
+    padding-right: 0.545rem;
+}
+
 .sidebar-todo-item-action {
     border-radius: 9999px;
     min-width: 1.705rem;
@@ -357,11 +361,11 @@
 }
 
 .sidebar-todo-item-action:hover {
-    background-color: mix($t_surface, $t_onSurface, 95%);
+    background-color: mix($t_surface, $t_onSurface, 80%);
 }
 
 .sidebar-todo-item-action:active {
-    background-color: mix($t_surface, $t_onSurface, 85%);
+    background-color: mix($t_surface, $t_onSurface, 65%);
 }
 
 .sidebar-clipboard-item {
@@ -380,12 +384,44 @@
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
 
-// cool gradient background from amberol
-// .main-window {
-//     background: linear-gradient(127deg, alpha(@background_color_0, .55), alpha(@background_color_0, 0) 70.71%),
-//         linear-gradient(217deg, alpha(@background_color_1, .55), alpha(@background_color_1, 0) 70.71%),
-//         linear-gradient(336deg, alpha(@background_color_2, .55), alpha(@background_color_2, 0) 70.71%);
-//     transition-property: background;
-//     transition-duration: 250ms;
-//     transition-timing-function: ease;
-// }
+.sidebar-todo-new {
+    @include full-rounding;
+    color: $onSecondaryContainer;
+    margin: 0.341rem;
+    padding: 0.205rem 0.545rem;
+    border: 0.068rem solid $onSurface;
+}
+
+.sidebar-todo-new:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
+}
+
+.sidebar-todo-new:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-todo-add {
+    @include small-rounding;
+    background-color: $primary;
+    color: $onPrimary;
+    min-width: 2.727rem;
+    min-height: 2.727rem;
+    // margin: 0.341rem;
+    // padding: 0.205rem 0.545rem;
+}
+
+.sidebar-todo-add:hover {
+    background-color: mix($primary, $onPrimary, 97%);
+}
+
+.sidebar-todo-add:active {
+    background-color: mix($primary, $onPrimary, 80%);
+}
+
+.sidebar-todo-entry {
+    @include small-rounding;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    margin: 0rem 0.341rem;
+    padding: 0.136rem 0.682rem;
+}

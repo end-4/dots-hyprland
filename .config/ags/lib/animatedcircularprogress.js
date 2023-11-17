@@ -20,7 +20,7 @@ export const AnimatedCircProg = ({
     ...rest
 }) => Widget.DrawingArea({
     ...rest,
-    css: `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`,
+    css: `${initFrom != initTo ? 'font-size: ' + initFrom + 'px; transition: ' + initAnimTime + 'ms linear;' : ''}`,
     setup: (area) => {
         const styleContext = area.get_style_context();
         const width = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);

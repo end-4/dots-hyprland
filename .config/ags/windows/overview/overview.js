@@ -4,7 +4,7 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
-import { searchItem } from '../../lib/searchitem.js';
+import { searchItem } from './searchitem.js';
 import { ContextMenuItem } from '../../lib/contextmenuitem.js';
 import Todo from "../../scripts/todo.js";
 
@@ -582,6 +582,16 @@ export const SearchAndWindows = () => {
                     entryPromptRevealer.child.label = searchPromptTexts[Math.floor(Math.random() * searchPromptTexts.length)];
                     resultsBox.children = [];
                     entry.set_text('');
+                }
+            }],
+            ['key-press-event', (widget, event) => { // Typing
+                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                    MenuService.closeButOnlyUpdate();
+                }
+                if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
+                    entry.grab_focus();
+                    entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
+                    entry.set_position(-1);
                 }
             }],
         ],

@@ -20,7 +20,7 @@ export async function firstRunWelcome() {
             .then(() => {
                 // Note that we add a little delay to make sure the cool circular progress works
                 Utils.execAsync(['bash', '-c',
-                    `sleep 1; notify-send '${FIRST_RUN_NOTIF_TITLE}' '${FIRST_RUN_NOTIF_BODY}' -a '${APP_NAME}' &`
+                    `sleep 0.5; notify-send "Millis since epoch" "$(date +%s%N | cut -b1-13)"; sleep 0.5; notify-send '${FIRST_RUN_NOTIF_TITLE}' '${FIRST_RUN_NOTIF_BODY}' -a '${APP_NAME}' &`
                 ]).catch(print)
             })
             .catch(print);

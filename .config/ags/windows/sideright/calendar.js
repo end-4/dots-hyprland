@@ -1,6 +1,6 @@
 const { Gio, Gdk, GLib, Gtk } = imports.gi;
 import { App, Widget, Utils } from '../../imports.js';
-const { Box, CenterBox, Label, Button } = Widget;
+const { Box, Button, CenterBox, Label, Revealer } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { getCalendarLayout } from "../../scripts/calendarlayout.js";
 import Todo from "../../scripts/todo.js";
@@ -149,7 +149,7 @@ const todoItems = (isDone) => Widget.Scrollable({
             self.children = Todo.todo_json.map((task, i) => {
                 if (task.done != isDone) return null;
                 return Widget.Box({
-                    className: 'spacing-h-5',
+                    className: 'sidebar-todo-item spacing-h-5',
                     children: [
                         Widget.Label({
                             className: 'txt txt-small',
@@ -203,14 +203,105 @@ const todoItems = (isDone) => Widget.Scrollable({
             }
             else self.homogeneous = false;
         }, 'updated']]
-    })
+    }),
+    setup: (listContents) => {
+        listContents.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        const vScrollbar = listContents.get_vscrollbar();
+        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+    }
 });
+
+const UndoneTodoList = () => {
+    const newTaskButton = Revealer({
+        transition: 'slide_left',
+        transitionDuration: 200,
+        revealChild: true,
+        child: Button({
+            className: 'txt-small sidebar-todo-new',
+            halign: 'end',
+            valign: 'center',
+            label: '+ New task',
+            setup: (button) => setupCursorHover(button),
+            onClicked: (self) => {
+                newTaskButton.revealChild = false;
+                newTaskRevealer.revealChild = true;
+                confirmAddTask.revealChild = true;
+                cancelAddTask.revealChild = true;
+                newTaskEntry.grab_focus();
+            }
+        })
+    });
+    const cancelAddTask = Revealer({
+        transition: 'slide_right',
+        transitionDuration: 200,
+        revealChild: false,
+        child: Button({
+            className: 'txt-norm icon-material sidebar-todo-add',
+            halign: 'end',
+            valign: 'center',
+            label: 'close',
+            setup: (button) => setupCursorHover(button),
+            onClicked: (self) => {
+                newTaskRevealer.revealChild = false;
+                confirmAddTask.revealChild = false;
+                cancelAddTask.revealChild = false;
+                newTaskButton.revealChild = true;
+            }
+        })
+    });
+    const newTaskEntry = Widget.Entry({
+        hexpand: true,
+        valign: 'center',
+        className: 'txt-small sidebar-todo-entry',
+        onAccept: ({ text }) => {
+            Todo.add(text)
+            newTaskEntry.text = '';
+        }
+    });
+    const newTaskRevealer = Revealer({
+        transition: 'slide_right',
+        transitionDuration: 200,
+        revealChild: false,
+        child: newTaskEntry
+    });
+    const confirmAddTask = Revealer({
+        transition: 'slide_right',
+        transitionDuration: 200,
+        revealChild: false,
+        child: Button({
+            className: 'txt-norm icon-material sidebar-todo-add',
+            halign: 'end',
+            valign: 'center',
+            label: 'arrow_upward',
+            setup: (button) => setupCursorHover(button),
+            onClicked: (self) => {
+                Todo.add(newTaskEntry.text);
+                newTaskEntry.text = '';
+            }
+        })
+    });
+    return Box({ // The list, with a New button
+        vertical: true,
+        className: 'spacing-v-5',
+        setup: (box) => {
+            box.pack_start(todoItems(false), true, true, 0);
+            box.pack_start(Box({
+                children: [
+                    cancelAddTask,
+                    newTaskRevealer,
+                    confirmAddTask,
+                    newTaskButton,
+                ]
+            }), false, false, 0);
+        },
+    });
+}
 
 const todoItemsBox = Widget.Stack({
     vpack: 'fill',
     transition: 'slide_left_right',
     items: [
-        ['undone', todoItems(false)],
+        ['undone', UndoneTodoList()],
         ['done', todoItems(true)],
     ],
 });

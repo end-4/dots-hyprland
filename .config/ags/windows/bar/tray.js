@@ -1,3 +1,4 @@
+const { GLib, Gdk, Gtk } = imports.gi;
 import { Service, Widget } from '../../imports.js';
 import SystemTray from 'resource:///com/github/Aylur/ags/service/systemtray.js';
 const { Box, Icon, Button, Revealer } = Widget;

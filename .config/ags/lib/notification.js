@@ -24,7 +24,7 @@ const NotificationIcon = (notifObject) => {
     // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
         return Box({
-            vpack: 'center',
+            valign: Gtk.Align.CENTER,
             hexpand: false,
             className: 'notif-icon',
             css: `
@@ -43,14 +43,14 @@ const NotificationIcon = (notifObject) => {
         icon = notifObject.appEntry;
 
     return Box({
-        vpack: 'center',
+        valign: Gtk.Align.CENTER,
         hexpand: false,
         className: 'notif-icon',
         setup: box => {
             if (icon != 'NO_ICON') box.pack_start(Icon({
                 icon: icon,
-                hpack: 'center', hexpand: true,
-                vpack: 'center',
+                halign: Gtk.Align.CENTER, hexpand: true,
+                valign: Gtk.Align.CENTER,
                 setup: (self) => {
                     box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true);
                     Utils.timeout(1, () => {
@@ -131,7 +131,7 @@ export default ({
         children: [
             NotificationIcon(notifObject),
             Box({
-                vpack: 'center',
+                valign: Gtk.Align.CENTER,
                 vertical: true,
                 hexpand: true,
                 children: [
@@ -150,7 +150,7 @@ export default ({
                                 label: notifObject.summary,
                             }),
                             Label({
-                                vpack: 'center',
+                                valign: Gtk.Align.CENTER,
                                 className: 'txt-smaller txt-semibold',
                                 justify: Gtk.Justification.RIGHT,
                                 setup: (label) => {
@@ -183,7 +183,7 @@ export default ({
             Overlay({
                 child: AnimatedCircProg({
                     className: `notif-circprog-${notifObject.urgency}`,
-                    vpack: 'center',
+                    valign: Gtk.Align.CENTER,
                     initFrom: (isPopup ? 100 : 0),
                     initTo: 0,
                     initAnimTime: popupTimeout,
@@ -195,7 +195,7 @@ export default ({
                             destroyWithAnims()
                         },
                         child: MaterialIcon('close', 'large', {
-                            vpack: 'center',
+                            valign: Gtk.Align.CENTER,
                         }),
                         setup: (button) => setupCursorHover(button),
                     }),

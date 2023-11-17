@@ -1,3 +1,4 @@
+const { GLib, Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
