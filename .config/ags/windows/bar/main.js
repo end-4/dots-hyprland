@@ -30,7 +30,7 @@ const right = Widget.Box({
 export default () => Widget.Window({
     name: 'bar',
     anchor: ['top', 'left', 'right'],
-    exclusive: true,
+    exclusivity: 'exclusive',
     visible: true,
     child: Widget.CenterBox({
         className: 'bar-bg',

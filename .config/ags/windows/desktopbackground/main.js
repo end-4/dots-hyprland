@@ -10,7 +10,7 @@ export default () => Widget.Window({
     name: 'desktopbackground',
     anchor: ['top', 'bottom', 'left', 'right'],
     layer: 'background',
-    exclusive: false,
+    exclusivity: 'normal',
     visible: true,
     child: Widget.Overlay({
         child: Widget.Box({

@@ -152,6 +152,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                     className: 'sidebar-todo-item spacing-h-5',
                     children: [
                         Widget.Label({
+                            vpack: 'start',
                             className: 'txt txt-small',
                             label: '•',
                         }),
@@ -219,12 +220,12 @@ const UndoneTodoList = () => {
         child: Button({
             className: 'txt-small sidebar-todo-new',
             halign: 'end',
-            valign: 'center',
+            vpack: 'center',
             label: '+ New task',
             setup: (button) => setupCursorHover(button),
             onClicked: (self) => {
                 newTaskButton.revealChild = false;
-                newTaskRevealer.revealChild = true;
+                newTaskEntryRevealer.revealChild = true;
                 confirmAddTask.revealChild = true;
                 cancelAddTask.revealChild = true;
                 newTaskEntry.grab_focus();
@@ -238,31 +239,35 @@ const UndoneTodoList = () => {
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',
             halign: 'end',
-            valign: 'center',
+            vpack: 'center',
             label: 'close',
             setup: (button) => setupCursorHover(button),
             onClicked: (self) => {
-                newTaskRevealer.revealChild = false;
+                newTaskEntryRevealer.revealChild = false;
                 confirmAddTask.revealChild = false;
                 cancelAddTask.revealChild = false;
                 newTaskButton.revealChild = true;
+                newTaskEntry.text = '';
             }
         })
     });
     const newTaskEntry = Widget.Entry({
-        hexpand: true,
-        valign: 'center',
+        // hexpand: true,
+        vpack: 'center',
         className: 'txt-small sidebar-todo-entry',
+        placeholderText: 'Add a task...',
         onAccept: ({ text }) => {
+            if (text == '') return;
             Todo.add(text)
             newTaskEntry.text = '';
-        }
+        },
+        onChange: ({ text }) => confirmAddTask.child.toggleClassName('sidebar-todo-add-available', text != ''),
     });
-    const newTaskRevealer = Revealer({
+    const newTaskEntryRevealer = Revealer({
         transition: 'slide_right',
         transitionDuration: 200,
         revealChild: false,
-        child: newTaskEntry
+        child: newTaskEntry,
     });
     const confirmAddTask = Revealer({
         transition: 'slide_right',
@@ -271,10 +276,11 @@ const UndoneTodoList = () => {
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',
             halign: 'end',
-            valign: 'center',
+            vpack: 'center',
             label: 'arrow_upward',
             setup: (button) => setupCursorHover(button),
             onClicked: (self) => {
+                if (newTaskEntry.text == '') return;
                 Todo.add(newTaskEntry.text);
                 newTaskEntry.text = '';
             }
@@ -286,12 +292,12 @@ const UndoneTodoList = () => {
         setup: (box) => {
             box.pack_start(todoItems(false), true, true, 0);
             box.pack_start(Box({
-                children: [
-                    cancelAddTask,
-                    newTaskRevealer,
-                    confirmAddTask,
-                    newTaskButton,
-                ]
+                setup: (self) => {
+                    self.pack_start(cancelAddTask, false, false, 0);
+                    self.pack_start(newTaskEntryRevealer, true, true, 0);
+                    self.pack_start(confirmAddTask, false, false, 0);
+                    self.pack_start(newTaskButton, false, false, 0);
+                }
             }), false, false, 0);
         },
     });

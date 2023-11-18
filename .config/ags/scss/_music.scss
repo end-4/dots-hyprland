@@ -72,8 +72,8 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 .osd-music-artists {
     @include md3_decel;
     @include mainfont;
-    font-size: 1.0909rem;
-    color: $onSecondaryContainer;
+    font-size: 0.955rem;
+    color: mix($onSecondaryContainer, $secondaryContainer, 80%);
 }
 
 .osd-music-pill {

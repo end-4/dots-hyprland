@@ -5,7 +5,7 @@ export default () => Widget.Window({
     name: 'dock',
     layer: 'top',
     anchor: ['bottom'],
-    exclusive: false,
+    exclusivity: 'normal',
     visible: true,
     child: Dock(),
 });
