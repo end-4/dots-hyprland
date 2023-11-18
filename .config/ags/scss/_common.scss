@@ -6,7 +6,7 @@
     outline: 1px solid $surface;
 }
 
-.menu {
+menu {
     padding: 0.681rem;
     background: $surfaceVariant;
     color: $onSurfaceVariant;
@@ -14,14 +14,14 @@
     -gtk-outline-radius: 1.159rem;
 }
 
-.menubar>menuitem {
+menubar>menuitem {
     border-radius: 0.545rem;
     -gtk-outline-radius: 0.545rem;
     min-width: 13.636rem;
     min-height: 2.727rem;
 }
 
-.menu>menuitem {
+menu>menuitem {
     padding: 0.4em 1.5rem;
     background: transparent;
     transition: 0.2s ease background;
@@ -29,7 +29,7 @@
     -gtk-outline-radius: 0.545rem;
 }
 
-.menu>menuitem:hover {
+menu>menuitem:hover {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
 

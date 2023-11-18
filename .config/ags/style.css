@@ -471,27 +471,27 @@
 *:focus {
   outline: 1px solid #221b17; }
 
-.menu {
+menu {
   padding: 0.681rem;
   background: #2d2520;
   color: #d6c3b7;
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem; }
 
-.menubar > menuitem {
+menubar > menuitem {
   border-radius: 0.545rem;
   -gtk-outline-radius: 0.545rem;
   min-width: 13.636rem;
   min-height: 2.727rem; }
 
-.menu > menuitem {
+menu > menuitem {
   padding: 0.4em 1.5rem;
   background: transparent;
   transition: 0.2s ease background;
   border-radius: 0.545rem;
   -gtk-outline-radius: 0.545rem; }
 
-.menu > menuitem:hover {
+menu > menuitem:hover {
   background-color: #3e352f; }
 
 .separator-line {
@@ -1593,26 +1593,51 @@ tooltip {
   background-color: #7c604d; }
 
 .sidebar-todo-add {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem;
-  background-color: #ffb77f;
-  color: #4f2500;
-  min-width: 2.727rem;
-  min-height: 2.727rem; }
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  min-width: 1.705rem;
+  min-height: 1.705rem;
+  color: #ffdcc3;
+  border: 0.068rem solid #ece0da; }
 
 .sidebar-todo-add:hover {
-  background-color: #fab37b; }
+  background-color: #604633; }
 
 .sidebar-todo-add:active {
+  background-color: #7c604d; }
+
+.sidebar-todo-add-available {
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  min-width: 1.705rem;
+  min-height: 1.705rem;
+  background-color: #ffb77f;
+  color: #4f2500;
+  border: 0.068rem solid #ffb77f; }
+
+.sidebar-todo-add-available:hover {
+  background-color: #fab37b; }
+
+.sidebar-todo-add-available:active {
   background-color: #dc9a66; }
 
 .sidebar-todo-entry {
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   background-color: #2d2520;
   color: #d6c3b7;
+  caret-color: #d6c3b7;
   margin: 0rem 0.341rem;
-  padding: 0.136rem 0.682rem; }
+  min-height: 1.773rem;
+  min-width: 0rem;
+  padding: 0.205rem 0.682rem;
+  border: 0.068rem solid #82746c; }
+
+.sidebar-todo-entry:focus {
+  border: 0.068rem solid #c5b3a8; }
 
 .session-bg {
   margin-top: -2.727rem;
@@ -1829,8 +1854,8 @@ tooltip {
 .osd-music-artists {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
   font-family: 'AR One Sans', 'Geist', 'Inter', 'Roboto', 'Noto Sans', sans-serif;
-  font-size: 1.0909rem;
-  color: #ddd0ca; }
+  font-size: 0.955rem;
+  color: #bdb0a9; }
 
 .osd-music-pill {
   transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);

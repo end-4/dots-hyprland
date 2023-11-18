@@ -67,7 +67,7 @@ const clickOutsideToClose = Widget.EventBox({
 
 export default () => Widget.Window({
     name: 'cheatsheet',
-    exclusive: false,
+    exclusivity: 'normal',
     focusable: true,
     popup: true,
     visible: false,

@@ -401,27 +401,53 @@
 }
 
 .sidebar-todo-add {
-    @include small-rounding;
-    background-color: $primary;
-    color: $onPrimary;
-    min-width: 2.727rem;
-    min-height: 2.727rem;
-    // margin: 0.341rem;
-    // padding: 0.205rem 0.545rem;
+    @include full-rounding;
+    @include md3_decel;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    color: $onSecondaryContainer;
+    border: 0.068rem solid $onSurface;
 }
 
 .sidebar-todo-add:hover {
-    background-color: mix($primary, $onPrimary, 97%);
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
 }
 
 .sidebar-todo-add:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-todo-add-available {
+    @include md3_decel;
+    @include full-rounding;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    background-color: $primary;
+    color: $onPrimary;
+    border: 0.068rem solid $primary;
+}
+
+.sidebar-todo-add-available:hover {
+    background-color: mix($primary, $onPrimary, 97%);
+}
+
+.sidebar-todo-add-available:active {
     background-color: mix($primary, $onPrimary, 80%);
 }
 
 .sidebar-todo-entry {
+    @include md3_decel;
     @include small-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
+    caret-color: $onSurfaceVariant;
     margin: 0rem 0.341rem;
-    padding: 0.136rem 0.682rem;
+    min-height: 1.773rem;
+    min-width: 0rem;
+    padding: 0.205rem 0.682rem;
+    border: 0.068rem solid mix($onSurfaceVariant, $surfaceVariant, 50%);
+}
+
+.sidebar-todo-entry:focus {
+    border: 0.068rem solid mix($onSurfaceVariant, $surfaceVariant, 90%);
 }
