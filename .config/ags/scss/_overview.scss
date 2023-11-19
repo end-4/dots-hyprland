@@ -102,6 +102,10 @@
     background-color: mix($t_t_surface, $t_onSurface, 93%);
 }
 
+.overview-tasks-workspace-number {
+    color: mix($t_onSurface, $t_surface, 93%);
+}
+
 .overview-tasks-window {
     @include normal-rounding;
     // @include elevation-border-softer;

@@ -163,6 +163,14 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
 
 const workspace = index => {
     const fixed = Gtk.Fixed.new();
+    const WorkspaceNumber = (index) => Widget.Label({
+        className: 'overview-tasks-workspace-number',
+        label: `${index}`,
+        css: `
+            margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE * 0.06}px;
+            font-size: ${SCREEN_HEIGHT * OVERVIEW_SCALE * 0.08}px;
+        `,
+    })
     const widget = Widget.Box({
         className: 'overview-tasks-workspace',
         vpack: 'center',
@@ -199,6 +207,7 @@ const workspace = index => {
         });
 
         fixed.get_children().forEach(ch => ch.destroy());
+        fixed.put(WorkspaceNumber(index), 0, 0);
         clients.forEach(c => c.mapped && fixed.put(client(c), c.at[0] * OVERVIEW_SCALE, c.at[1] * OVERVIEW_SCALE));
         fixed.show_all();
     };
