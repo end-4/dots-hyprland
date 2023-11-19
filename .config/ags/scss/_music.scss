@@ -4,13 +4,13 @@
 @import './musicwal';
 @import './colors';
 @import './lib_mixins';
-$music_gradient1: mix($color6, $background, 20%);
+$music_gradient1: mix($color5, $background, 20%);
 $music_gradient2: $color2;
 $music_gradient3: $color4;
-$music_colorstart_transparentize: 0.36;
+$music_colorstart_transparentize: 0.40;
 $music_extra_transparentize: 0.15;
 
-$secondaryContainer: mix(mix($background, $color2, 50%), $color6, 80%);
+$secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6, 80%), 0.5);
 $onSecondaryContainer: mix($color7, $color2, 90%);
 
 .osd-music {
@@ -22,10 +22,12 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     min-width: 29.659rem;
     background-color: $t_background;
     padding: 0rem 1.023rem;
-    background:
+    background: // Inspired by Amberol
         linear-gradient(127deg, transparentize($music_gradient1, $music_colorstart_transparentize), transparentize($music_gradient1, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
         linear-gradient(217deg, transparentize($music_gradient2, $music_colorstart_transparentize), transparentize($music_gradient2, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
+        radial-gradient(circle at 0% 100%, $color6 13%, rgba(0,0,0,0) 100%),
         linear-gradient(336deg, transparentize($music_gradient3, $music_colorstart_transparentize), transparentize($music_gradient3, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient($background, $background), // We don't want wallpaper tint, so here's a fully opaque surface
     ;
 }
 
@@ -101,8 +103,6 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     min-width: 2.045rem;
     min-height: 2.045rem;
     @include full-rounding;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
 }
 
 .osd-music-controlbtn:hover {

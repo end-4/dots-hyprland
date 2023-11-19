@@ -34,16 +34,6 @@ get_light_dark() {
     echo "$lightdark"
 }
 
-# apply_svgs() {
-#     for i in "${!filearr[@]}"; do # Loop through folders
-#         colorvalue=$(echo "$colorscss" | grep "${filearr[$i]}" | awk '{print $2}' | cut -d ";" -f1)
-#         for file in images/svg/template/"${filearr[$i]}"/*; do # Loop through files
-#             cp "$file" images/svg/
-#             sed -i "s/black/$colorvalue/g" images/svg/"${file##*/}"
-#         done
-#     done
-# }
-
 apply_gtklock() {
     # Check if scripts/templates/gtklock/main.scss exists
     if [ ! -f "scripts/templates/gtklock/main.scss" ]; then
@@ -76,8 +66,7 @@ apply_fuzzel() {
     cp "scripts/templates/fuzzel/fuzzel.ini" "$HOME/.config/fuzzel/fuzzel.ini"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/${colorlist[$i]}ff/${colorvalues[$i]#\#}ff/g" "$HOME/.config/fuzzel/fuzzel.ini"
-        sed -i "s/${colorlist[$i]}cc/${colorvalues[$i]#\#}cc/g" "$HOME/.config/fuzzel/fuzzel.ini"
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME/.config/fuzzel/fuzzel.ini"
     done
 }
 

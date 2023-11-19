@@ -8,6 +8,7 @@ export default () => Widget.Window({ // On-screen keyboard
     visible: false,
     focusable: true,
     layer: 'overlay',
+    exclusivity: 'ignore',
     // anchor: ['top', 'bottom', 'left', 'right'],
     child: SessionScreen(),
 })

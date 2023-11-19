@@ -37,7 +37,7 @@ export default {
         'osk': CLOSE_ANIM_TIME,
     },
     windows: [
-        Bar(),
+        // Bar() is below
         CornerTopleft(),
         CornerTopright(),
         CornerBottomleft(),
@@ -53,3 +53,10 @@ export default {
     ],
 };
 
+// We don't want context menus of the bar's tray go under the rounded corner below,
+// So bar is returned after 1ms, making it get spawned after the corner
+// And having an Utils.timeout in that window array just gives an error
+// Not having it in default export is fine since we don't need to toggle it
+Bar(); 
+
+// uwu

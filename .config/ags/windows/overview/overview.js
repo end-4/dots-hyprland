@@ -1,14 +1,15 @@
-const { Gdk, Gtk } = imports.gi;
+const { Gdk, Gio, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
-import { searchItem } from './searchitem.js';
-import { ContextMenuItem } from '../../lib/contextmenuitem.js';
-import Todo from "../../scripts/todo.js";
+import { execAndClose, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
+import {
+    CalculationResultButton, CustomCommandButton, DirectoryButton,
+    DesktopEntryButton, ExecuteCommandButton, SearchButton
+} from './searchbuttons.js';
 
-var searching = false;
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
 const pi = Math.PI;
@@ -34,61 +35,6 @@ const searchPromptTexts = [
     'Type to search',
 ]
 
-function launchCustomCommand(command) {
-    App.closeWindow('overview');
-    const args = command.split(' ');
-    if (args[0] == '>raw') { // Mouse raw input
-        execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`, `&`]).catch(print);
-    }
-    else if (args[0] == '>img') { // Change wallpaper
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh`, `&`]).catch(print);
-    }
-    else if (args[0] == '>color') { // Generate colorscheme from color picker
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh`, `&`]).catch(print);
-    }
-    else if (args[0] == '>light') { // Light mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "-l" > ~/.cache/ags/user/colormode.txt`, `&`]).catch(print);
-    }
-    else if (args[0] == '>dark') { // Dark mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "" > ~/.cache/ags/user/colormode.txt`, `&`]).catch(print);
-    }
-    else if (args[0] == '>material') { // Light mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "material" > ~/.cache/ags/user/colorbackend.txt`, `&`]).catch(print);
-    }
-    else if (args[0] == '>pywal') { // Dark mode
-        execAsync([`bash`, `-c`, `mkdir -p ~/.cache/ags/user && echo "pywal" > ~/.cache/ags/user/colorbackend.txt`, `&`]).catch(print);
-    }
-    else if (args[0] == '>todo') { // Todo
-        Todo.add(args.slice(1).join(' '));
-    }
-    else if (args[0] == '>shutdown') { // Shut down
-        execAsync([`bash`, `-c`, `systemctl poweroff`]).catch(print);
-    }
-    else if (args[0] == '>reboot') { // Reboot
-        execAsync([`bash`, `-c`, `systemctl reboot`]).catch(print);
-    }
-    else if (args[0] == '>sleep') { // Sleep
-        execAsync([`bash`, `-c`, `systemctl suspend`]).catch(print);
-    }
-    else if (args[0] == '>logout') { // Log out
-        execAsync([`bash`, `-c`, `loginctl terminate-user $USER`]).catch(print);
-    }
-}
-
-function execAndClose(command, terminal) {
-    App.closeWindow('overview');
-    if (terminal) {
-        execAsync([`bash`, `-c`, `foot fish -C "${command}"`, `&`]).catch(print);
-    }
-    else
-        execAsync(command).catch(print);
-}
-
-function startsWithNumber(str) {
-    var pattern = /^\d/;
-    return pattern.test(str);
-}
-
 function substitute(str) {
     const subs = [
         { from: 'code-url-handler', to: 'visual-studio-code' },
@@ -107,110 +53,6 @@ function substitute(str) {
 
     return str;
 }
-
-const CalculationResultButton = ({ result, text }) => searchItem({
-    materialIconName: 'calculate',
-    name: `Math result`,
-    actionName: "Copy",
-    content: `${result}`,
-    onActivate: () => {
-        App.closeWindow('overview');
-        execAsync(['bash', '-c', `wl-copy '${result}'`, `&`]).catch(print);
-    },
-});
-
-const DesktopEntryButton = (app) => {
-    const actionText = Widget.Revealer({
-        revealChild: false,
-        transition: "crossfade",
-        transitionDuration: 200,
-        child: Widget.Label({
-            className: 'overview-search-results-txt txt txt-small txt-action',
-            label: 'Launch',
-        })
-    });
-    const actionTextRevealer = Widget.Revealer({
-        revealChild: false,
-        transition: "slide_left",
-        transitionDuration: 300,
-        child: actionText,
-    });
-    return Widget.Button({
-        className: 'overview-search-result-btn',
-        onClicked: () => {
-            App.closeWindow('overview');
-            app.launch();
-        },
-        child: Widget.Box({
-            children: [
-                Widget.Box({
-                    vertical: false,
-                    children: [
-                        Widget.Box({
-                            className: 'overview-search-results-icon',
-                            homogeneous: true,
-                            child: Widget.Icon({
-                                icon: app.iconName,
-                                setup: (self) => Utils.timeout(1, () => {
-                                    const styleContext = self.get_parent().get_style_context();
-                                    const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                                    const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                                    self.size = Math.max(width, height, 1);
-                                })
-                            }),
-                        }),
-                        Widget.Label({
-                            className: 'overview-search-results-txt txt txt-norm',
-                            label: app.name,
-                        }),
-                        Widget.Box({ hexpand: true }),
-                        actionTextRevealer,
-                    ]
-                })
-            ]
-        }),
-        connections: [
-            ['focus-in-event', (button) => {
-                actionText.revealChild = true;
-                actionTextRevealer.revealChild = true;
-            }],
-            ['focus-out-event', (button) => {
-                actionText.revealChild = false;
-                actionTextRevealer.revealChild = false;
-            }],
-        ]
-    })
-}
-
-const ExecuteCommandButton = ({ command, terminal = false }) => searchItem({
-    materialIconName: `${terminal ? 'terminal' : 'settings_b_roll'}`,
-    name: `Run command`,
-    actionName: `Execute ${terminal ? 'in terminal' : ''}`,
-    content: `${command}`,
-    onActivate: () => execAndClose(command, terminal),
-})
-
-const CustomCommandButton = ({ text = '' }) => searchItem({
-    materialIconName: 'settings_suggest',
-    name: 'Action',
-    actionName: 'Run',
-    content: `${text}`,
-    onActivate: () => {
-        App.closeWindow('overview');
-        launchCustomCommand(text);
-    },
-});
-
-const SearchButton = ({ text = '' }) => searchItem({
-    materialIconName: 'travel_explore',
-    name: 'Search Google',
-    actionName: 'Go',
-    content: `${text}`,
-    onActivate: () => {
-        App.closeWindow('overview');
-        execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
-    },
-});
 
 const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget.MenuItem({
     label: `${label}`,
@@ -315,15 +157,6 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                 data.set_text(address, address.length);
                 button.toggleClassName('overview-tasks-window-dragging', false);
             });
-
-            // button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.COPY);
-            // button.connect('drag-data-get', (_w, _c, data) => data.set_text(address, address.length));
-            // button.connect('drag-begin', (_, context) => {
-            //     Gtk.drag_set_icon_surface(context, createSurfaceFromWidget(button));
-            //     button.toggleClassName('hidden', true);
-            // });
-            // button.connect('drag-end', () => button.toggleClassName('hidden', false));
-
         },
     });
 }
@@ -467,6 +300,8 @@ export const SearchAndWindows = () => {
         hpack: 'center',
         onAccept: ({ text }) => { // This is when you press Enter
             const isAction = text.startsWith('>');
+            const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
+
             if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround
                 try {
                     const fullResult = eval(text);
@@ -477,6 +312,9 @@ export const SearchAndWindows = () => {
                 } catch (e) {
                     // console.log(e);
                 }
+            }
+            if (isDir) {
+                execAsync(['bash', '-c', `xdg-open "${text}"`, `&`]).catch(print);
             }
             if (_appSearchResults.length > 0) {
                 App.closeWindow('overview');
@@ -503,16 +341,16 @@ export const SearchAndWindows = () => {
         // Actually onChange but this is ta workaround for a bug
         connections: [
             ['notify::text', (entry) => { // This is when you type
-                const isAction = entry.text.startsWith('>');
+                const isAction = entry.text[0] == '>';
+                const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
                 resultsBox.get_children().forEach(ch => ch.destroy());
-                //check empty if so then dont do stuff
+                // check empty if so then dont do stuff
                 if (entry.text == '') {
                     resultsRevealer.set_reveal_child(false);
                     overviewRevealer.set_reveal_child(true);
                     entryPromptRevealer.set_reveal_child(true);
                     entryIconRevealer.set_reveal_child(false);
                     entry.toggleClassName('overview-search-box-extended', false);
-                    searching = false;
                 }
                 else {
                     const text = entry.text;
@@ -524,13 +362,20 @@ export const SearchAndWindows = () => {
                     _appSearchResults = Applications.query(text);
 
                     // Calculate
-                    if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround.
+                    if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a small workaround.
                         try {
                             const fullResult = eval(text);
                             resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
                         } catch (e) {
                             // console.log(e);
                         }
+                    }
+                    if (isDir) {
+                        var contents = [];
+                        contents = ls({ path: text, silent: true });
+                        contents.forEach((item) => {
+                            resultsBox.add(DirectoryButton(item));
+                        })
                     }
                     if (isAction) { // Eval on typing is dangerous, this is a workaround.
                         resultsBox.add(CustomCommandButton({ text: entry.text }));
@@ -552,7 +397,6 @@ export const SearchAndWindows = () => {
                     // Add fallback: search
                     resultsBox.add(SearchButton({ text: entry.text }));
                     resultsBox.show_all();
-                    searching = true;
                 }
             }]
         ],
