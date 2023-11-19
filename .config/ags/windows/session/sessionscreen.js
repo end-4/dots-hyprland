@@ -68,9 +68,9 @@ export default () => {
     return Widget.Box({
         className: 'session-bg',
         css: `
-        min-width: ${SCREEN_WIDTH * 2}px; 
-        min-height: ${SCREEN_HEIGHT * 2}px;
-        `, // Hack to draw over reserved bar space
+        min-width: ${SCREEN_WIDTH * 1.5}px; 
+        min-height: ${SCREEN_HEIGHT * 1.5}px;
+        `, // idk why but height = screen height doesn't fill
         vertical: true,
         children: [
             Widget.EventBox({
