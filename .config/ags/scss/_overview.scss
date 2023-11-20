@@ -14,6 +14,7 @@
         background-color: $secondary;
         color: $onSecondary;
     }
+
     caret-color: transparent;
 }
 
@@ -58,6 +59,7 @@
     min-width: 2.386rem;
     min-height: 2.386rem;
 }
+
 .overview-search-results-txt {
     margin-right: 0.682rem;
 }
@@ -103,6 +105,7 @@
 }
 
 .overview-tasks-workspace-number {
+    @include mainfont;
     color: mix($t_onSurface, $t_surface, 93%);
 }
 

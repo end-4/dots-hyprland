@@ -1,6 +1,58 @@
-import { Service, Utils, Widget } from '../imports.js';
+import { App, Service, Utils, Widget } from '../imports.js';
+import { MaterialIcon } from './materialicon.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
+import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
+
+export const NotificationIndicator = (notifCenterName = 'sideright') => {
+    const widget = Widget.Revealer({
+        transition: 150,
+        transition: 'slide_left',
+        revealChild: false,
+        connections: [
+            [Notifications, (self, id) => {
+                if (!id || Notifications.dnd) return;
+                if (!Notifications.getNotification(id)) return;
+                self.revealChild = true;
+            }, 'notified'],
+            [App, (self, currentName, visible) => {
+                if (visible && currentName === notifCenterName) {
+                    self.revealChild = false;
+                }
+            }],
+        ],
+        child: Widget.Box({
+            // className: 'spacing-h-5',
+            children: [
+                MaterialIcon('notifications', 'norm'),
+                Widget.Label({
+                    className: 'txt-small titlefont',
+                    properties: [
+                        ['increment', (self) => self._unreadCount++],
+                        ['markread', (self) => self._unreadCount = 0],
+                        ['update', (self) => self.label = `${self._unreadCount}`],
+                        ['unreadCount', 0],
+                    ],
+                    connections: [
+                        [Notifications, (self, id) => {
+                            if (!id || Notifications.dnd) return;
+                            if (!Notifications.getNotification(id)) return;
+                            self._increment(self);
+                            self._update(self);
+                        }, 'notified'],
+                        [App, (self, currentName, visible) => {
+                            if (visible && currentName === notifCenterName) {
+                                self._markread(self);
+                                self._update(self);
+                            }
+                        }],
+                    ]
+                })
+            ]
+        })
+    });
+    return widget;
+}
 
 export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
@@ -78,13 +130,12 @@ export const NetworkIndicator = () => Widget.Stack({
 
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
-    children: [Widget.EventBox({
-        child: Widget.Box({
-            className: 'spacing-h-15',
-            children: [
-                BluetoothIndicator(),
-                NetworkIndicator(),
-            ]
-        })
-    })]
+    child: Widget.Box({
+        className: 'spacing-h-15',
+        children: [
+            NotificationIndicator(),
+            BluetoothIndicator(),
+            NetworkIndicator(),
+        ]
+    })
 });

@@ -25,6 +25,8 @@ const acotd = x => acot(x) * 180 / pi;
 
 const MAX_RESULTS = 10;
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
+const OVERVIEW_WS_NUM_SCALE = 0.08;
+const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.06;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 const searchPromptTexts = [
     'Try "Kolourpaint"',
@@ -167,8 +169,8 @@ const workspace = index => {
         className: 'overview-tasks-workspace-number',
         label: `${index}`,
         css: `
-            margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE * 0.06}px;
-            font-size: ${SCREEN_HEIGHT * OVERVIEW_SCALE * 0.08}px;
+            margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE * OVERVIEW_WS_NUM_MARGIN_SCALE}px;
+            font-size: ${SCREEN_HEIGHT * OVERVIEW_SCALE * OVERVIEW_WS_NUM_SCALE}px;
         `,
     })
     const widget = Widget.Box({
