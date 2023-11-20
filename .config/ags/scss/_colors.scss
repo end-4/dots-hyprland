@@ -1,13 +1,17 @@
 ///////////// COLOR MODIFICATIONS /////////////
 // Material colors provide excellent readability, but can be uninteresting.
 // This is an attempt to improve that.
-// dark mode
-@if $darkmode == true { // Modifications to make material colors look good with blur
+@if $darkmode ==true {
     $background: mix(mix($background, $primary, 95%), #000000, 50%);
     $surface: mix($surface, $primaryContainer, 98%);
     $surfaceVariant: mix($surfaceVariant, #000000, 55%);
 }
-// too lazy to do that for light mode for now xd
+
+@if $darkmode ==false {
+    $background: mix($background, $primary, 87%);
+    $surface: mix($surface, $primary, 93%);
+    $surfaceVariant: mix($surfaceVariant, #FFFFFF, 55%);
+}
 
 ///////////// TRANSPARENCY /////////////
 $transparency_enabled: false;

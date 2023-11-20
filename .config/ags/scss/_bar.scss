@@ -461,3 +461,18 @@ $notchOnPrimary: $onPrimary;
     @include full-rounding;
     min-width: 1.909rem;
 }
+
+.bar-statusicons {
+    @include full-rounding;
+    @include md3_decel;
+    margin: 0.2rem;
+    padding: 0rem 0.614rem;
+}
+
+.bar-statusicons-hover {
+    background-color: mix($t_background, $t_onBackground, 90%);
+}
+
+.bar-statusicons-active {
+    background-color: mix($t_background, $t_onBackground, 80%);
+}
