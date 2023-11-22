@@ -1,8 +1,0 @@
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <style type="text/css" id="current-color-scheme">
-        .ColorScheme-Text{
-            color:#363636;
-        }
-    </style>
-    <path d="M16 7V6h1v1zm0 3V9h1v1zm-2 1V9h1v2zm12 12v1h-1v-1zm1-1v1h-1v-1zm-4 3v1h-2v-1zm-1 0v1h-1v-1zm0 2v1h-1v-1zm2-1v2h-1v-2zm4 2h-2v-1h2zm-2-2v2h-1v-2zm1-1v1h-3v-1zm1-2v2h-1v-2zm-9 1h1v1h-1zm1 1h1v1h-1zm-2 2v-1h3v1zm6-7h-1v-1h1zm0-1h-2v-1h2zm-3 0h-1v-1h1zm-3 1h1v2h-1zm0 2h1v1h-1zm10-6h-1v-2h1zm0-1h-1v-1h1zm-1-1h-3v-1h3zm-1 1h-1v-1h1zm1 2h-2v-1h2zm-2 4v-2h1v2zm2-2h-2v-1h2zm1 1h-1v-3h1zm0 2h-2v-1h2zm-8-4h-1v-2h1zm2-4h-1v-1h1zm-1 2h-2v-2h2zm1 2h-1v-1h1zm0-1v-2h1v2zm2-2h-2v-1h2zm1 1h-1v-1h1zm0 2h-2v-1h2zM9 13h1v2H9zm5 4h1v1h-1zm-1-1h1v1h-1zm0 11h3v1h-3zm5 0h1v1h-1zm-5-2h1v1h-1zm1 1h1v1h-1zm2-2v2h-1v-2zm0 2h1v1h-1zm1 0v-4h1v4zm-4-4h4v1h-4zm7 1h3v1h-3zm3 1v-4h1v4zm0-3h-3v-1h3zm-2-1v3h-1v-3zm-5-1v2h-1v-2zm-2 2h2v1h-2zm-4-4h2v1h-2zm3 1h2v1h-2zm5-1v-1h1v1zm-2 2v-2h1v2zm1 1v-4h1v4zM15 5V4h1v1zm0 4V8h1v1zm-8 8h1v1H7zm7-4h2v1h-2zm-3 0h2v1h-2zm1 1h2v1h-2zm-2 1h7v1h-7zm-2 0h2v2H8zm-1-2h1v1H7zm0 1v2H6v-2zm-2 2h2v1H5zm-1-1h1v1H4zm0 3h4v1H4zm0-5h2v1H4zm12-1v-1h1v1zm3 0h-6v1h6zm-6 0V8h1v4zm4-1v-1h1v1zm1 2V8h1v5zm-1-5V7h1v1zm1-1V6h1v1zm-1-1V5h1v1zm0-1V4h2v1zm-4 2V5h1v2zm1 1V4h1v4zM6 26v-4h4v4zm-2 2v-1h8v1zm8 0h-1v-8h1zm0-8v1H4v-1zm-8 0h1v8H4zm18-10V6h4v4zm-2 2v-1h8v1zm8 0h-1V4h1zm0-8v1h-8V4zm-8 0h1v8h-1zM6 10V6h4v4zm-2 2v-1h8v1zm8 0h-1V4h1zm0-8v1H4V4zM4 4h1v8H4z" class="ColorScheme-Text" fill="currentColor"/>
-</svg>

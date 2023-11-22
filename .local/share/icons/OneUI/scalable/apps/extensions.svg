@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="gnome-extensions.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="12.883333"
+     inkscape:cx="31.979301"
+     inkscape:cy="32.018111"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="false" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#ff0091;fill-opacity:1" />
+  <path
+     id="rect1014"
+     style="fill:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="m 19,13 h 26 c 3.324,0 6,2.676 6,6 v 26 c 0,3.324 -2.676,6 -6,6 H 19 c -3.324,0 -6,-2.676 -6,-6 V 19 c 0,-3.324 2.676,-6 6,-6 z" />
+  <path
+     id="rect1447"
+     style="fill:#0768ff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+     d="m 32,13 h 13 c 3.324,0 6,2.676 6,6 V 32 H 32 Z"
+     sodipodi:nodetypes="cscccc" />
+  <path
+     id="rect1140"
+     style="fill:#00ffde;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 19 13 C 15.676 13 13 15.676 13 19 L 13 32 L 32 32 L 32 25.314453 A 4.5 4.5 0 0 0 35.5 27 A 4.5 4.5 0 0 0 40 22.5 A 4.5 4.5 0 0 0 35.5 18 A 4.5 4.5 0 0 0 32 19.685547 L 32 13 L 19 13 z " />
+  <path
+     id="rect1662"
+     style="fill:#ffacae;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 32 32 L 32 38.671875 A 4.5 4.5 0 0 0 28.5 37 A 4.5 4.5 0 0 0 24 41.5 A 4.5 4.5 0 0 0 28.5 46 A 4.5 4.5 0 0 0 32 44.314453 L 32 51 L 45 51 C 48.324 51 51 48.324 51 45 L 51 32 L 32 32 z " />
+</svg>

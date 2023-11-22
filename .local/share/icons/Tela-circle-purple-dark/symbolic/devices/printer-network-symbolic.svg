@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m4 1v3h2v-1h4v1h2v-3h-8zm-2 4c-0.5 0-1 0.5-1 1v3h2v-2h10v2h2v-3c0-0.5-0.5-1-1-1h-4-4-4zm-1 5v3s0 1 1 1h5v2h2v-2h5c1 0 1-1 1-1v-3h-2v2h-9-1v-1-1h-2z" fill="#aaaaaa"/>
- <rect x="4" y="10" width="1" height="1" fill="#aaaaaa" style="paint-order:fill markers stroke"/>
-</svg>

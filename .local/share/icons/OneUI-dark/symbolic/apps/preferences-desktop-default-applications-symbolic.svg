@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="preferences-desktop-default-applications-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="18.473165"
+     inkscape:cx="-3.5456838"
+     inkscape:cy="14.345133"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path1618"
+     style="color:#000000;fill:#dedede;stroke:none;stroke-width:3.77953;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+     d="M 8.0019531 0.99609375 A 1.0001006 1.0001006 0 0 0 7.109375 1.5507812 L 5.4628906 4.8203125 L 1.8457031 5.3671875 A 1.0001006 1.0001006 0 0 0 1.2988281 7.0722656 L 3.8984375 9.640625 L 3.3066406 13.25 A 1.0001006 1.0001006 0 0 0 4.7460938 14.298828 L 8.0019531 12.623047 L 11.25 14.298828 A 1.0001006 1.0001006 0 0 0 12.697266 13.25 L 12.105469 9.640625 L 14.705078 7.0722656 A 1.0001006 1.0001006 0 0 0 14.150391 5.3730469 L 10.533203 4.8203125 L 8.8945312 1.5507812 A 1.0001006 1.0001006 0 0 0 8.0019531 0.99609375 z M 8 2 L 9.875 5.7285156 L 14 6.359375 L 11.033203 9.2949219 L 11.707031 13.412109 L 8 11.498047 L 4.2910156 13.412109 L 4.9648438 9.2949219 L 2 6.359375 L 6.125 5.7285156 L 8 2 z "
+     transform="scale(0.26458333)" />
+</svg>

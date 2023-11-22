@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="preferences-desktop-apps-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="26.125"
+     inkscape:cx="7.7129187"
+     inkscape:cy="10.641148"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path923"
+     style="fill:#dedede;fill-opacity:1;stroke-width:3.99999;stroke-linecap:round;stroke-linejoin:round"
+     d="M 4 1 C 2.3431458 0.99999994 0.99999994 2.3431458 1 4 C 0.99999994 5.6568542 2.3431458 7.0000001 4 7 C 5.6568542 7.0000001 7.0000001 5.6568542 7 4 C 7.0000001 2.3431458 5.6568542 0.99999994 4 1 z M 12 1 C 10.343146 0.99999994 8.9999999 2.3431458 9 4 C 8.9999999 5.6568542 10.343146 7.0000001 12 7 C 13.656854 7.0000001 15 5.6568542 15 4 C 15 2.3431458 13.656854 0.99999994 12 1 z M 4 9 C 2.3431458 8.9999999 0.99999994 10.343146 1 12 C 0.99999994 13.656854 2.3431458 15 4 15 C 5.6568542 15 7.0000001 13.656854 7 12 C 7.0000001 10.343146 5.6568542 8.9999999 4 9 z M 12 9 C 10.343146 9 9 10.343146 9 12 C 9 13.656854 10.343146 15 12 15 C 13.656854 15 15 13.656854 15 12 C 15 10.343146 13.656854 9 12 9 z "
+     transform="scale(0.26458333)" />
+</svg>

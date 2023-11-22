@@ -1,6 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#dedede; }</style>
- </defs>
- <path d="m5 3c-1.108 0-2 0.892-2 2v3h5v-5zm4 0v5h5v-3c0-1.108-0.892-2-2-2zm-6 6v3c0 1.108 0.892 2 2 2h3v-5zm6 0v5h3c1.108 0 2-0.892 2-2v-3z" fill="#333333" stroke-width="1.365"/>
-</svg>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="weather-few-clouds-night-small.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="22.627417"
+     inkscape:cx="-8.2643105"
+     inkscape:cy="7.2699416"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="false" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path1345"
+     style="fill:#fdd35e;fill-opacity:1;stroke-width:2.3151;stroke-linecap:round;stroke-linejoin:round"
+     d="M 2.0484538,0.29610595 A 1.8520833,1.8520833 0 0 0 0.52916667,2.1166666 1.8520833,1.8520833 0 0 0 2.38125,3.96875 1.8520833,1.8520833 0 0 0 4.2018106,2.4494629 1.5875,1.5875 0 0 1 3.4395833,2.6458333 a 1.5875,1.5875 0 0 1 -1.5875,-1.5875 1.5875,1.5875 0 0 1 0.1963705,-0.76222735 z" />
+  <path
+     id="path3043"
+     style="fill:#f9f9f9;fill-opacity:1;stroke-width:4.16666;stroke-linecap:round;stroke-linejoin:round"
+     d="m 3.5,9 c -1.3807119,-10e-8 -2.50000006,1.119288 -2.5,2.5 -6e-8,1.380712 1.1192881,2.5 2.5,2.5 h 2 2 C 8.331,14 9,13.331 9,12.5 9,11.669 8.331,11 7.5,11 H 5.9492188 C 5.7116432,9.8361219 4.6878781,9.0001287 3.5,9 Z"
+     transform="scale(0.26458333)"
+     sodipodi:nodetypes="csccssscc" />
+</svg>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933333"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="youtube-music.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="true"
+     units="px"
+     height="48px"
+     inkscape:zoom="7.9999996"
+     inkscape:cx="21.812501"
+     inkscape:cy="46.875002"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:lockguides="true" />
+  <defs
+     id="defs2" />
+  <path
+     id="path1039"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round"
+     d="m 8.4666669,0.52916666 c -5.7150004,0 -7.93750024,2.22249974 -7.93750024,7.93750024 0,5.7150001 2.22249984,7.9375001 7.93750024,7.9375001 5.7150001,0 7.9375001,-2.2225 7.9375001,-7.9375001 0,-5.7150005 -2.2225,-7.93750024 -7.9375001,-7.93750024 z" />
+  <circle
+     style="fill:#ff0000;fill-opacity:1;stroke-width:2.59772;stroke-linecap:round;stroke-linejoin:round"
+     id="path849"
+     cx="8.4666662"
+     cy="8.4666662"
+     r="6.3499999" />
+  <path
+     id="rect1220"
+     style="fill:#ffffff;stroke-width:1.97235;stroke-linecap:round;stroke-linejoin:round"
+     d="M 6.8791674,6.3499999 10.583334,8.4666665 6.8791674,10.583333 Z"
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="path852"
+     style="fill:#ffffff;stroke-width:11.0769;stroke-linecap:round;stroke-linejoin:round"
+     d="M 32 16 C 23.163444 16 15.999999 23.163444 16 32 C 16.000002 40.836555 23.163446 48 32 48 C 40.836555 47.999996 47.999996 40.836551 48 32 C 48 23.163445 40.836558 16.000003 32 16 z M 32 18 A 14 14 0 0 1 46 32 A 14 14 0 0 1 32 46 A 14 14 0 0 1 18 32 A 14 14 0 0 1 32 18 z "
+     transform="scale(0.26458333)" />
+</svg>

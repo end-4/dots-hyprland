@@ -1,0 +1,8 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g id="distribute-remove-overlaps" transform="matrix(.72727 0 0 .66667 -840.73 -548.91)">
+  <path d="m1156 823.36h22v24h-22z" opacity="0"/>
+  <rect x="1158.7" y="827.86" width="16.5" height="3" fill="#dedede" stroke-width=".93428"/>
+  <rect x="1158.7" y="833.86" width="16.5" height="3" fill="#dedede" stroke-width=".93428"/>
+  <rect x="1158.7" y="839.86" width="16.5" height="3" fill="#dedede" stroke-width=".93428"/>
+ </g>
+</svg>

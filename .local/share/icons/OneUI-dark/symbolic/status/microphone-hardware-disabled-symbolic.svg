@@ -1,0 +1,5 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <rect x="5" width="6" height="12.025" rx="3" ry="3" fill="#dedede" fill-rule="evenodd" opacity=".35" stroke-width="1.0966"/>
+ <path d="m3.5 7.025c-0.277 0-0.5 0.223-0.5 0.5v1.5c0 2.6 1.967 4.725 4.5 4.975v1.024h-2a0.5 0.5 0 1 0 0 1h5a0.5 0.5 0 1 0 0-1h-2v-1.025a4.988 4.988 0 0 0 4.5-4.975v-1.5a0.5 0.5 0 1 0-1 0v1.5c0 2.216-1.784 4-4 4s-4-1.784-4-4v-1.5c0-0.277-0.223-0.5-0.5-0.5z" fill="#dedede" fill-rule="evenodd" opacity=".35"/>
+ <rect y="7" width="16" height="2" rx="1" ry="1" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.549" style="paint-order:stroke fill markers"/>
+</svg>

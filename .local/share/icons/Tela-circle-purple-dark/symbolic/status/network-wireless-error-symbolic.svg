@@ -1,6 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(-305 615)">
-  <path d="m313-613.99c-2.8954 0-5.7909 1.1027-8 3.3106l8 9.6875 3-3.6328v-5.3672h4.4316l0.56836-0.6875c-2.2091-2.2078-5.1046-3.3106-8-3.3106z" fill="#aaaaaa" opacity=".35"/>
-  <path class="error" d="m317-609-1e-5 4 0.25 2h1.5l0.25-2 1e-5 -4zm0 7v2h2v-2z" color="#aaaaaa444" fill="#f44336"/>
- </g>
-</svg>

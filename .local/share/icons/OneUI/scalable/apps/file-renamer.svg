@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="file-renamer.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="9.1098921"
+     inkscape:cx="24.698426"
+     inkscape:cy="43.524116"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#6c7f8e;fill-opacity:1" />
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     id="rect2905"
+     width="40"
+     height="12"
+     x="12"
+     y="26"
+     ry="3" />
+  <path
+     id="rect7591"
+     style="fill:#456987;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+     d="m 15,28 h 17 v 8 H 15 c -0.554,0 -1,-0.446 -1,-1 v -6 c 0,-0.554 0.446,-1 1,-1 z"
+     sodipodi:nodetypes="sccssss" />
+  <path
+     id="rect3075"
+     style="fill:#d4d9dc;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 29 17 C 28.446 17 28 17.446 28 18 C 28 18.554 28.446 19 29 19 L 30.035156 19 A 1 1 0 0 1 31 19.964844 L 31 44.035156 A 1 1 0 0 1 30.035156 45 L 29 45 C 28.446 45 28 45.446 28 46 C 28 46.554 28.446 47 29 47 L 35 47 C 35.554 47 36 46.554 36 46 C 36 45.446 35.554 45 35 45 L 34 45 A 1 1 0 0 1 33 44 L 33 20 A 1 1 0 0 1 34 19 L 35 19 C 35.554 19 36 18.554 36 18 C 36 17.446 35.554 17 35 17 L 29 17 z " />
+</svg>

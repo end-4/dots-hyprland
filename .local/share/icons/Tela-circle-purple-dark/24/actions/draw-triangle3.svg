@@ -1,1 +1,0 @@
-arrow-up.svg

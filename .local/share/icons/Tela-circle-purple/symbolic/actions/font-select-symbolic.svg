@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
- <path style="fill:#555555" d="M 16,5 V 11 L 12,8 Z"/>
- <path style="fill:#555555" d="M 11,5 C 11,4 10,3.01 9,3 H 6 V 5 H 9 V 6 H 8 C 6,6 5,7.5 5,8.5 5,9.5 6,11 8,11 H 11 M 8,8 H 9 V 9 H 8 C 7,9 7,8.62 7,8.5 7,8.38 7,8 8,8 Z"/>
- <path style="fill:#555555" d="M 0,5 V 11 L 4,8 Z"/>
-</svg>

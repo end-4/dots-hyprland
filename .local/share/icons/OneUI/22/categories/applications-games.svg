@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="applications-games.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="38.65"
+     inkscape:cx="10.996119"
+     inkscape:cy="11.009056"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 1,11 C 1,3.8 3.8,1 11,1 18.2,1 21,3.8 21,11 21,18.2 18.2,21 11,21 3.8,21 1,18.2 1,11"
+     id="path2"
+     style="fill:#7760aa;fill-opacity:1;stroke-width:0.1" />
+  <path
+     id="rect1140"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     d="M 7 6 C 6.446 6 6 6.446 6 7 L 6 9 L 4 9 C 3.446 9 3 9.446 3 10 C 3 10.554 3.446 11 4 11 L 6 11 L 6 13 C 6 13.554 6.446 14 7 14 C 7.554 14 8 13.554 8 13 L 8 11 L 10 11 C 10.554 11 11 10.554 11 10 C 11 9.446 10.554 9 10 9 L 8 9 L 8 7 C 8 6.446 7.554 6 7 6 z " />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     id="path1371"
+     cx="13.5"
+     cy="15.5"
+     r="1.5" />
+  <circle
+     style="fill:#ffffff;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     id="path1475"
+     cx="17.5"
+     cy="11.5"
+     r="1.5" />
+</svg>

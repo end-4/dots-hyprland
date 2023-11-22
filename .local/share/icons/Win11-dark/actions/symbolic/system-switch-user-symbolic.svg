@@ -1,9 +1,0 @@
-<svg width="16.003" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g fill="#dedede" stroke-linecap="round" stroke-linejoin="round">
-  <path d="m7.9449 0.50003a7.5 7.5 0 0 0-7.4434 7.5 7.5 7.5 0 0 0 7.5 7.5 7.5 7.5 0 0 0 7.5-7.5 7.5 7.5 0 0 0-7.5-7.5 7.5 7.5 0 0 0-0.056641 0zm0.00295 1a6.5 6.5 0 0 1 0.053691 0 6.5 6.5 0 0 1 6.5 6.5 6.5 6.5 0 0 1-6.5 6.5 6.5 6.5 0 0 1-6.5-6.5 6.5 6.5 0 0 1 6.4463-6.5z" style="paint-order:stroke fill markers"/>
-  <rect x="4.5015" y="6.0001" width="7" height="1" ry=".5" stroke-width="1.0377" style="paint-order:stroke fill markers"/>
-  <rect transform="rotate(45)" x="8.8748" y="-3.683" width="4" height="1" ry=".5" stroke-width=".78446" style="paint-order:stroke fill markers"/>
-  <rect transform="scale(-1)" x="-11.502" y="-10" width="7" height="1" ry=".5" stroke-width="1.0377" style="paint-order:stroke fill markers"/>
-  <rect transform="rotate(225)" x="-13.755" y="-3.6809" width="4" height="1" ry=".5" stroke-width=".78446" style="paint-order:stroke fill markers"/>
- </g>
-</svg>

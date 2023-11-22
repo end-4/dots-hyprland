@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="gnome-music-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="45.254834"
+     inkscape:cx="13.313495"
+     inkscape:cy="10.208854"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="true" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect17629"
+     style="opacity:1;fill:#dedede;stroke-width:0.999999"
+     d="M 8.5,1 C 8.467326,1 8.43519,1.00384 8.404297,1.00977 8.371731,1.01602 8.340502,1.024911 8.310547,1.037114 8.308687,1.0378702 8.306537,1.038294 8.304687,1.039064 8.281823,1.048704 8.261196,1.061432 8.240234,1.07422 8.234984,1.07673 8.229771,1.07934 8.224609,1.08203 8.223119,1.0830142 8.222189,1.08494 8.220699,1.08594 8.218739,1.08723 8.216779,1.08853 8.214839,1.08985 8.191214,1.106278 8.168824,1.124369 8.148433,1.144537 l -0.00195,0.00195 c -0.019258,0.019258 -0.036825,0.040302 -0.052734,0.0625 -0.00264,0.00322 -0.00525,0.00648 -0.00781,0.00977 v 0.00195 c -0.00333,0.0045 -0.00659,0.00906 -0.00977,0.013672 C 8.062074,1.256868 8.049484,1.279963 8.03906,1.304691 8.027742,1.33154 8.018251,1.359645 8.011716,1.388675 c -6.72e-4,0.0026 -0.00132,0.0052 -0.00195,0.00781 v 0.00195 c -5.1e-6,0.0013 -5.1e-6,0.0026 0,0.00391 -0.00555,0.028328 -0.00919,0.058034 -0.00977,0.087891 -5.1e-6,0.0013 -5.1e-6,0.0026 0,0.00391 v 0.00195 C 7.9999897,1.4974237 8,1.49867 8,1.5 V 9.0527344 C 7.3420597,8.3800309 6.440965,8.0005855 5.5,8 3.5670034,7.9999999 1.9999999,9.5670034 2,11.5 1.9999999,13.432997 3.5670034,15 5.5,15 7.4329966,15 9.0000001,13.432997 9,11.5 V 2.0117188 c 2.487646,0.1481321 3.654327,1.4082636 4.302734,2.7050781 0.690203,1.3804044 0.69336,2.78125 0.69336,2.78125 0.003,0.2747035 0.227236,0.4954436 0.501953,0.4941406 0.274717,0.0013 0.498947,-0.2194371 0.501953,-0.4941406 0,0 0.0047,-1.6039224 -0.804688,-3.2226563 C 13.385948,2.6566576 11.667629,1 8.5019531,1 Z"
+     transform="scale(0.26458333)"
+     sodipodi:nodetypes="sssccccccsccccscccccccsccssccsccccss" />
+</svg>

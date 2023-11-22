@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="folder-template-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="49.5"
+     inkscape:cx="7.989899"
+     inkscape:cy="8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="true" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path2103"
+     style="color:#000000;fill:#dedede;stroke:none;stroke-width:3.7818;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none;fill-opacity:1"
+     d="M 14.525391 3 A 0.50030215 0.49997363 0 0 0 14.216797 3.0878906 L 1.2109375 12.091797 A 0.50030215 0.49997363 0 0 0 1.4921875 13 L 14.498047 13 A 0.50030215 0.49997363 0 0 0 15 12.498047 L 15 3.5 A 0.50030215 0.49997363 0 0 0 14.734375 3.0585938 A 0.50030215 0.49997363 0 0 0 14.525391 3 z M 14.003906 4.453125 L 14.003906 12.003906 L 3.09375 12.003906 L 14.003906 4.453125 z M 12.498047 7 A 0.50015607 0.50054377 0 0 0 12.203125 7.0976562 L 8.2011719 10.097656 A 0.50015607 0.50054377 0 0 0 8.5039062 11 L 12.505859 11 A 0.50015607 0.50054377 0 0 0 13 10.505859 L 13 7.4980469 A 0.50015607 0.50054377 0 0 0 12.726562 7.0546875 A 0.50015607 0.50054377 0 0 0 12.498047 7 z M 12.003906 8.4941406 L 12.003906 10.001953 L 9.9941406 10.001953 L 12.003906 8.4941406 z "
+     transform="scale(0.26458333)" />
+</svg>

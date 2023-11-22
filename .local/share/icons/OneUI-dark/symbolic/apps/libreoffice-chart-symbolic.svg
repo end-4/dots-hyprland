@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="libreoffice-chart-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="39.577249"
+     inkscape:cx="3.6510875"
+     inkscape:cy="7.0495046"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect923"
+     style="fill:#dedede;stroke-width:6;stroke-linejoin:round"
+     d="M 4 0 C 2.8919999 0 2 0.89200012 2 2 L 2 14 C 2 15.108 2.8919999 16 4 16 L 12 16 C 13.108 16 14 15.108 14 14 L 14 6 L 8 0 L 4 0 z M 9 0 L 14 5 L 14 2 C 14 0.89200012 13.108 0 12 0 L 9 0 z M 6.5 6 L 7.5 6 L 7.5 12 L 6.5 12 L 6.5 6 z M 8.5 7 L 9.5 7 L 9.5 12 L 8.5 12 L 8.5 7 z M 4.5 8 L 5.5 8 L 5.5 12 L 4.5 12 L 4.5 8 z M 10.5 9 L 11.5 9 L 11.5 12 L 10.5 12 L 10.5 9 z "
+     transform="scale(0.26458333)" />
+</svg>

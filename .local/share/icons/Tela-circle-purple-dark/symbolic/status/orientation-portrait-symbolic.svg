@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m6 12v-8l4 4z" fill="#aaaaaa"/>
- <path d="m4 0c-1.108 0-2 0.892-2 2v12c0 1.108 0.892 2 2 2h8c1.108 0 2-0.892 2-2v-12c0-1.108-0.892-2-2-2h-8zm0 2h8v12h-8v-12z" fill="#aaaaaa" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-width="2" style="paint-order:stroke fill markers"/>
-</svg>

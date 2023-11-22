@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g id="layercompo">
+  <path d="m0 0h16v16h-16z" opacity="0"/>
+  <path d="m7 8a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3" fill="#dedede" stroke-width=".89533"/>
+  <path d="m15 8a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3z" fill="#dedede" opacity=".35" stroke-width=".89533"/>
+ </g>
+</svg>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="konversation.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="8.6330532"
+     inkscape:cx="15.521739"
+     inkscape:cy="51.024822"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="false" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#0091ea;fill-opacity:1" />
+  <path
+     id="rect6858"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:1.06654"
+     d="m 19,17 c -3.324,0 -6,2.676 -6,6 v 14 c 0,3.324 2.676,6 6,6 h 4 v 8 l 8,-8 h 14 c 3.324,0 6,-2.676 6,-6 V 23 c 0,-3.324 -2.676,-6 -6,-6 z"
+     sodipodi:nodetypes="sssscccsssss" />
+  <path
+     id="rect845"
+     style="fill:#005fb5;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     d="M 41.923828 21.501953 A 1.50015 1.50015 0 0 0 41.722656 21.525391 L 25.722656 24.525391 A 1.50015 1.50015 0 0 0 24.5 26 L 24.5 34 A 1.50015 1.50015 0 0 0 25.722656 35.474609 L 41.722656 38.474609 A 1.50015 1.50015 0 0 0 43.5 37 L 43.5 23 A 1.50015 1.50015 0 0 0 41.923828 21.501953 z M 20 25 C 18.892 25 18 25.892 18 27 L 18 33 C 18 34.108 18.892 35 20 35 L 23 35 L 23 25 L 20 25 z M 45 27 L 45 33 C 46.656854 33 48 31.656854 48 30 C 48 28.343146 46.656854 27 45 27 z M 25 36 L 25 39 C 25 39.554 25.446 40 26 40 L 28 40 C 28.554 40 29 39.554 29 39 L 29 37 L 25 36 z " />
+</svg>

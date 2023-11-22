@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="user-desktop.svg"
+   width="24"
+   height="24"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="13.0625"
+     inkscape:cx="-0.84210527"
+     inkscape:cy="7.1578948"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="false"
+     inkscape:lockguides="false" />
+  <path
+     d="M 2,12 C 2,4.8 4.8,2 12,2 19.2,2 22,4.8 22,12 22,19.2 19.2,22 12,22 4.8,22 2,19.2 2,12"
+     id="path2"
+     style="fill:#e7a12e;fill-opacity:1;stroke-width:0.1" />
+  <path
+     id="rect6301"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:5.47725;stroke-linecap:round;stroke-linejoin:round"
+     d="M 7,6 C 5.8919999,6 5,6.8920001 5,8 v 8 c 0,1.108 0.8919999,2 2,2 h 10 c 1.108,0 2,-0.892 2,-2 V 8 C 19,6.8920001 18.108,6 17,6 Z m 1,2 c 0.5522847,10e-8 0.9999999,0.4477153 1,1 -10e-8,0.5522851 -0.4477153,1 -1,1 -0.5522847,0 -0.9999999,-0.4477149 -1,-1 1e-7,-0.5522847 0.4477153,-0.9999999 1,-1 z m 0,3 c 0.5522847,0 0.9999999,0.447715 1,1 -10e-8,0.552285 -0.4477153,1 -1,1 -0.5522847,0 -0.9999999,-0.447715 -1,-1 1e-7,-0.552285 0.4477153,-1 1,-1 z"
+     sodipodi:nodetypes="sssssssssssssssssss" />
+  <path
+     id="rect7350"
+     style="fill:#c5560a;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     d="m 6,15 v 1 c 0,0.554 0.446,1 1,1 h 10 c 0.554,0 1,-0.446 1,-1 V 15 H 17 7 Z" />
+</svg>

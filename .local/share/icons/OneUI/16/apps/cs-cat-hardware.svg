@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="cs-cat-hardware.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="11.313708"
+     inkscape:cx="10.16466"
+     inkscape:cy="9.5901357"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="false" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect6274"
+     style="fill:#407e7e;fill-opacity:1;stroke-width:0.999999;stroke-linecap:round;stroke-linejoin:round"
+     d="M 5 0 C 4.4460003 0 4 0.38866948 4 1 L 4 2 C 2.8919999 2 2 2.8919999 2 4 L 1 4 C 0.44600038 4 1.4802974e-16 4.4460003 0 5 C 0 5.5540001 0.44600038 6 1 6 L 2 6 L 2 10 L 1 10 C 0.44600038 10 0 10.446 0 11 C 0 11.554 0.44600038 12 1 12 L 2 12 C 2 13.108 2.8919999 14 4 14 L 4 15 C 4 15.554 4.4460003 16 5 16 C 5.5540001 16 6.0036011 15.609391 6 15 L 6 14 L 10 14 L 10 15 C 10 15.554 10.446 16 11 16 C 11.554 16 12 15.554 12 15 L 12 14 C 13.108 14 14 13.108 14 12 L 15 12 C 15.554 12 16 11.554 16 11 C 16 10.446 15.554 10 15 10 L 14 10 L 14 6 L 15 6 C 15.554 6 16 5.5540001 16 5 C 16 4.4460003 15.554 4 15 4 L 14 4 C 14 2.8919999 13.108 2 12 2 L 12 1 C 12 0.44600026 11.554 -1.4802974e-16 11 0 C 10.446 0 10 0.42199471 10 1 L 10 2 L 6 2 L 6 1 C 6 0.44600026 5.5540001 -1.4802974e-16 5 0 z M 4 4 L 12 4 L 12 12 L 4 12 L 4 4 z "
+     transform="scale(0.26458333)" />
+</svg>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333332"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="network-wired-secure-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="48.3125"
+     inkscape:cx="7.9896507"
+     inkscape:cy="8"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg8"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     id="rect815-3"
+     style="fill:#dedede;fill-opacity:1;stroke-width:0.0268498"
+     d="M 7.9472656 4.5 C 6.8633852 4.5278493 6 5.428307 6 6.53125 L 6 7.5 L 5.6152344 7.5 L 5 7.5 L 5 11 L 5 11.5 L 5.5 11.5 L 10.5 11.5 L 11 11.5 L 11 11 L 11 8 L 11 7.5 L 10.5 7.5 L 10 7.5 L 10 6.53125 C 10 5.4112497 9.1079999 4.5 8 4.5 C 7.9826875 4.5 7.9644701 4.4995579 7.9472656 4.5 z M 3.4316406 4.5683594 L 0.82421875 7.1757812 L 0 8 L 0.82421875 8.8242188 L 3.4316406 11.431641 L 4.2558594 10.607422 L 1.6464844 8 L 4.2558594 5.3925781 L 3.4316406 4.5683594 z M 12.568359 4.5683594 L 11.744141 5.3925781 L 14.353516 8 L 11.744141 10.607422 L 12.568359 11.431641 L 15.175781 8.8242188 L 16 8 L 15.175781 7.1757812 L 12.568359 4.5683594 z M 8 5.5 C 8.5539997 5.5 9 5.9460003 9 6.5 L 9 7.5 L 7 7.5 L 7 6.5 C 7 5.9460003 7.4459999 5.5 8 5.5 z "
+     transform="scale(0.26458333)" />
+</svg>

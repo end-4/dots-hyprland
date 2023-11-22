@@ -1,0 +1,21 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <rect width="16" height="16" fill="none"/>
+ <path d="m1.5 1.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m1 1v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m6.5 1.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m6 1v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m11.5 1.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m11 1v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m1.5 6.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m1 6v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m6.5 6.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m6 6v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m11.5 6.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m11 6v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m1.5 11.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m1 11v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m6.5 11.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m6 11v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+ <path d="m11.5 11.5h3v3h-3z" color="#000000" fill="#363636" opacity=".35" style="-inkscape-stroke:none"/>
+ <path d="m11 11v4h4v-4zm1 1h2v2h-2z" color="#000000" fill="#363636" style="-inkscape-stroke:none"/>
+</svg>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="aisleriot.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1"
+     inkscape:cx="30"
+     inkscape:cy="33.5"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#a24949;fill-opacity:1" />
+  <path
+     id="rect945"
+     style="fill:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+     d="m 22,12 h 20 c 2.216,0 4,1.784 4,4 v 32 c 0,2.216 -1.784,4 -4,4 H 22 c -2.216,0 -4,-1.784 -4,-4 V 16 c 0,-2.216 1.784,-4 4,-4 z" />
+  <path
+     id="path2938"
+     style="fill:#d31818;fill-opacity:1;stroke-width:3.42855;stroke-linecap:round;stroke-linejoin:round"
+     d="m 28.571407,24 c -2.524712,0 -4.571395,2.046683 -4.571395,4.571395 -0.01051,3.562172 6.659835,9.436272 7.999941,11.428489 1.173754,-1.912262 8.03082,-7.835773 7.999942,-11.428489 C 39.999895,26.046683 37.953212,24 35.4285,24 33.39067,24.000918 32.183382,25.863077 31.999953,26.693695 31.783202,25.843867 30.697315,24.000918 28.571407,24 Z"
+     sodipodi:nodetypes="ccccccc" />
+</svg>

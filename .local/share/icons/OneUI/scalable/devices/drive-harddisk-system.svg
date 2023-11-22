@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="drive-harddisk-system.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="6.4416667"
+     inkscape:cx="21.733506"
+     inkscape:cy="51.772315"
+     inkscape:window-width="1920"
+     inkscape:window-height="1000"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#97a3b4;fill-opacity:1;stroke:none" />
+  <path
+     id="path2789"
+     style="color:#000000;fill:#ffffff;stroke:none;stroke-width:4.00842;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+     d="m 19.949422,15 c -0.887184,-3.2e-5 -1.669311,0.579535 -1.924093,1.425781 l -6.025297,25.00011 c -0.005,1.433251 0.578927,2.574187 1.924094,2.574218 h 36.15178 C 51.421073,44.000078 51.996854,43.002466 52,41.425891 L 45.974704,16.425781 C 45.71992,15.579535 44.937794,14.999968 44.05061,15 Z"
+     sodipodi:nodetypes="ccccccccc" />
+  <rect
+     style="fill:#58677b;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     id="rect1131"
+     width="40"
+     height="10"
+     x="12"
+     y="39"
+     ry="3" />
+  <path
+     d="m 38,50 c 0,-8.64 3.36,-12 12,-12 8.64,0 12,3.36 12,12 0,8.64 -3.36,12 -12,12 -8.64,0 -12,-3.36 -12,-12"
+     id="path2-3"
+     style="fill:#718299;fill-opacity:1;stroke:none;stroke-width:0.12" />
+  <path
+     id="rect1303"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:1.98748;stroke-linecap:round;stroke-linejoin:round"
+     d="M 44.5 43 C 43.669 43 43 43.669 43 44.5 L 43 51.5 C 43 52.331 43.669 53 44.5 53 L 55.5 53 C 56.331 53 57 52.331 57 51.5 L 57 44.5 C 57 43.669 56.331 43 55.5 43 L 44.5 43 z M 42 55 C 41.446 55 41 55.446 41 56 C 41 56.554 41.446 57 42 57 L 58 57 C 58.554 57 59 56.554 59 56 C 59 55.446 58.554 55 58 55 L 42 55 z " />
+</svg>

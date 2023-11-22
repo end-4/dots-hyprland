@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="22"
+   height="22"
+   viewBox="0 0 5.8208332 5.8208335"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   sodipodi:docname="drive-removable-media-usb.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     height="22px"
+     inkscape:zoom="19.059742"
+     inkscape:cx="9.4177561"
+     inkscape:cy="12.749386"
+     inkscape:window-width="1447"
+     inkscape:window-height="831"
+     inkscape:window-x="419"
+     inkscape:window-y="109"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+        .ColorScheme-Text { color:#363636; }
+    </style>
+  </defs>
+  <path
+     id="rect846-3"
+     style="fill:currentColor;stroke-width:0.704186"
+     class="ColorScheme-Text"
+     d="M 8.3886719,3 C 7.8961217,3 7.5,3.3961217 7.5,3.8886719 V 8 H 7.570312 C 6.7001514,8 6,8.7001504 6,9.5703125 V 15.126953 C 6,17.272816 7.7271839,19 9.8730469,19 H 12.126953 C 14.272816,19 16,17.272816 16,15.126953 V 9.5703125 C 16,8.7001504 15.299846,8 14.429688,8 H 14.5 V 3.8886719 C 14.5,3.3961217 14.103878,3 13.611328,3 Z m 0.40625,1 H 13.205078 C 13.368267,4 13.5,4.1317328 13.5,4.2949219 V 8 h -5 V 4.2949219 C 8.5,4.1317328 8.6317328,4 8.7949219,4 Z M 9.8828125,5 C 9.6690235,5.0107672 9.5,5.1877403 9.5,5.4042969 V 6.5957031 C 9.5,6.8192454 9.6807546,7 9.9042969,7 H 10.095703 C 10.319245,7 10.5,6.8192454 10.5,6.5957031 V 5.4042969 C 10.5,5.1807546 10.319245,5 10.095703,5 H 9.9042969 c -0.00699,0 -0.014588,-3.473e-4 -0.021484,0 z M 11.882812,5 C 11.669024,5.0107672 11.5,5.1877403 11.5,5.4042969 V 6.5957031 C 11.5,6.8192454 11.680755,7 11.904297,7 h 0.191406 C 12.319245,7 12.5,6.8192454 12.5,6.5957031 V 5.4042969 C 12.5,5.1807546 12.319245,5 12.095703,5 h -0.191406 c -0.007,0 -0.01459,-3.473e-4 -0.02149,0 z"
+     transform="scale(0.26458333)" />
+</svg>

@@ -1,1 +1,0 @@
-clip.svg

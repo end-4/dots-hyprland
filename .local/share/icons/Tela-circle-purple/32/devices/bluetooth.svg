@@ -1,6 +1,0 @@
-<svg width="32" height="32" version="1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <g transform="translate(-1.23 -1.23) scale(.53846)" stroke-width="1.857">
-  <circle cx="32" cy="32" r="26" fill="#324090" paint-order="markers stroke fill"/>
-  <path d="m22 23 18 18-9 8.5v-35l9 8.5-18 16" fill="none" stroke="#fff" stroke-linecap="square"/>
- </g>
-</svg>

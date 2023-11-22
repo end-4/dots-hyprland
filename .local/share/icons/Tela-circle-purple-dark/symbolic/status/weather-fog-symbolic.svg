@@ -1,7 +1,0 @@
-<svg width="16" height="16" enable-background="new" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
- <g transform="translate(-561 243)" fill="#aaaaaa" stroke-width="2">
-  <path d="m561-240h13c3-1e-5 3 3 3 3h-13s-3-1e-5 -3-3z" color="#aaaaaa" opacity=".35"/>
-  <path d="m574-236h-13c-2e-5 3 3 3 3 3h13s0-3-3-3z" color="#aaaaaa" opacity=".35"/>
-  <path d="m561-232h13c3-2e-5 3 3 3 3h-13s-3-2e-5 -3-3z" color="#aaaaaa" opacity=".35"/>
- </g>
-</svg>

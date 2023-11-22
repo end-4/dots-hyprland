@@ -1,8 +1,0 @@
-<svg height='24' width='24' xmlns='http://www.w3.org/2000/svg'>
-    <g transform='translate(-713 -25)'>
-        <path color='#000' d='M720.938 29.003c-.36.047-.938.25-.938 1v2s-1 0-1 1v3h-1s-1 0-1 1v5.5c0 .5.5.5.5.5h.5c0 1 1 1 1 1s0 1 1 1h10c1 0 1-1 1-1s1 0 1-1h.5c.5 0 .5-.419.5-.5v-5.5c0-1-1-1-1-1h-1v-3c0-1-1-1-1-1v-2c0-1-1-1-1.187-1h-7.625c-.047 0-.13-.015-.25 0zm.062 1h8v6h-8zm-2.437 7a.25.25 0 0 1 .093 0H731.344s.656 0 .656.563v4.437h-14v-4.437c0-.422.378-.536.563-.563zm1.437 6h10v1h-10z' fill='#ffffff' font-family='Sans' font-weight='400' overflow='visible' style='line-height:normal;-inkscape-font-specification:Sans;text-indent:0;text-align:start;text-decoration-line:none;text-transform:none;marker:none'/>
-        <path d='M720 37.003v4h10v-4z' fill='#ffffff' opacity='.5'/>
-        <path d='M724 30.997l2.03.01-.03.99h1l-1.96 3.001-2.04-3.001.993.002z' fill='#ffffff'/>
-        
-    </g>
-</svg>

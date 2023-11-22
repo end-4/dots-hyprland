@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="preferences-ubuntu-panel-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="16.104167"
+     inkscape:cx="-1.5523932"
+     inkscape:cy="3.1358344"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect1748"
+     style="fill:#363636;fill-opacity:1;stroke-width:3.99999;stroke-linecap:round;stroke-linejoin:round"
+     d="M 3 2 C 1.8919999 2 1 2.8919999 1 4 L 1 12 C 1 13.108 1.8919999 14 3 14 L 13 14 C 14.108 14 15 13.108 15 12 L 15 4 C 15 2.8919999 14.108 2 13 2 L 3 2 z M 3 3 L 13 3 C 13.554 3 14 3.446 14 4 L 14 12 C 14 12.554 13.554 13 13 13 L 3 13 C 2.446 13 2 12.554 2 12 L 2 4 C 2 3.446 2.446 3 3 3 z M 3 4 L 3 6 L 5 6 L 5 4 L 3 4 z M 3 7 L 3 9 L 5 9 L 5 7 L 3 7 z M 3 10 L 3 12 L 5 12 L 5 10 L 3 10 z "
+     transform="scale(0.26458333)" />
+</svg>

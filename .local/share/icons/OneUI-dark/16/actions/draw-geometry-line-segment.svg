@@ -1,0 +1,8 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="draw-geometry-line-segment" transform="translate(45,-175)">
+  <path d="m-44.206 190.13 13.487-13.7" fill="none" stroke="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0"/>
+  <rect x="-45" y="175" width="16" height="16" color="#000000" fill="none"/>
+  <rect x="-41.816" y="185.19" width="2.5502" height="2.5587" color="#000000" fill="#ff2100" fill-opacity=".39216" fill-rule="evenodd" stroke="#d40000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0"/>
+  <rect transform="translate(6.0404 -6.1115)" x="-41.816" y="185.19" width="2.5502" height="2.5587" color="#000000" fill="#ff2100" fill-opacity=".39216" fill-rule="evenodd" stroke="#d40000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0"/>
+ </g>
+</svg>

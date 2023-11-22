@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <g id="symbol-bigger" transform="translate(-319.65 -108.19)">
+  <rect x="319.65" y="108.19" width="16" height="16" color="#000000" fill-opacity="0" stroke-width=".98681"/>
+  <ellipse cx="327.65" cy="116.19" rx="4.4855" ry="4.4906" color="#000000" fill="none" stroke="#c80000" stroke-dasharray="1.01888, 1.01888" stroke-linejoin="round" stroke-miterlimit="0" stroke-width="1.0189"/>
+ </g>
+ <path d="m8 1a7 7 0 0 0-7 7 7 7 0 0 0 7 7 7 7 0 0 0 7-7 7 7 0 0 0-7-7zm0 1a6 6 0 0 1 6 6 6 6 0 0 1-6 6 6 6 0 0 1-6-6 6 6 0 0 1 6-6z" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1"/>
+</svg>

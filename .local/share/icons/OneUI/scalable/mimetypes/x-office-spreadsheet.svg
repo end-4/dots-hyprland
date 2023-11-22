@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="x-office-spreadsheet.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="4.5549462"
+     inkscape:cx="21.515073"
+     inkscape:cy="67.948113"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#3cdb69;fill-opacity:1;stroke:none" />
+  <rect
+     style="fill:#9eefb8;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+     id="rect1878"
+     width="36.37027"
+     height="9.1721582"
+     x="13.816907"
+     y="17.588434" />
+  <path
+     id="rect843"
+     style="fill:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     d="M 16 16 C 13.784 16 12 17.784 12 20 L 12 44 C 12 46.216 13.784 48 16 48 L 48 48 C 50.216 48 52 46.216 52 44 L 52 20 C 52 17.784 50.216 16 48 16 L 16 16 z M 17 19 L 47 19 C 48.108 19 49 19.892 49 21 L 49 25 L 15 25 L 15 21 C 15 19.892 15.892 19 17 19 z M 15 28 L 25 28 L 25 35 L 15 35 L 15 28 z M 28 28 L 37 28 L 37 35 L 28 35 L 28 28 z M 40 28 L 49 28 L 49 35 L 40 35 L 40 28 z M 15 38 L 25 38 L 25 45 L 17 45 C 15.892 45 15 44.108 15 43 L 15 38 z M 28 38 L 37 38 L 37 45 L 28 45 L 28 38 z M 40 38 L 49 38 L 49 43 C 49 44.108 48.108 45 47 45 L 40 45 L 40 38 z " />
+</svg>

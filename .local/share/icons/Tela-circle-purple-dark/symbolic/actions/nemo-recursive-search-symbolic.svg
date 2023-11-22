@@ -1,8 +1,0 @@
-<svg width="16" height="16" version="1.0" xmlns="http://www.w3.org/2000/svg">
- <g>
-  <g transform="rotate(180,7.997,8.011)" fill="#aaaaaa" font-weight="400">
-   <path d="m4 6v2h4.994s0.791 0.014 1.553 0.395c0.761 0.38 1.447 0.938 1.447 2.605v2h2v-2c0-2.333-1.314-3.775-2.553-4.395-1.238-0.619-2.447-0.605-2.447-0.605z" color="#000000" overflow="visible" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
-   <path d="m7 3.022v1c0 0.257-0.13 0.529-0.313 0.719l-2.28 2.281 2.28 2.281c0.183 0.19 0.313 0.462 0.313 0.72v1h-1c-0.31 0-0.552-0.091-0.75-0.282l-3.656-3.719 3.656-3.719c0.198-0.19 0.44-0.28 0.75-0.28z" color="#bebebe" overflow="visible" style="text-decoration-line:none;text-indent:0;text-transform:none"/>
-  </g>
- </g>
-</svg>

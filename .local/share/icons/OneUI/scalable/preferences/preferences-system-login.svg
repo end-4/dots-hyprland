@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="preferences-system-login.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="6.0390625"
+     inkscape:cx="10.514877"
+     inkscape:cy="61.350582"
+     inkscape:window-width="1567"
+     inkscape:window-height="932"
+     inkscape:window-x="56"
+     inkscape:window-y="50"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#7999af;fill-opacity:1" />
+  <path
+     id="rect924"
+     style="fill:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 32 13 A 5 5 0 0 0 27 18 A 5 5 0 0 0 32 23 A 5 5 0 0 0 37 18 A 5 5 0 0 0 32 13 z M 32 26 C 26.477153 26 22 30.477153 22 36 L 42 36 C 42 30.477153 37.522847 26 32 26 z M 14 43 C 12.338 43 11 44.338 11 46 L 11 48 C 11 49.662 12.338 51 14 51 L 50 51 C 51.662 51 53 49.662 53 48 L 53 46 C 53 44.338 51.662 43 50 43 L 14 43 z M 16 45 A 2 2 0 0 1 18 47 A 2 2 0 0 1 16 49 A 2 2 0 0 1 14 47 A 2 2 0 0 1 16 45 z M 22 45 A 2 2 0 0 1 24 47 A 2 2 0 0 1 22 49 A 2 2 0 0 1 20 47 A 2 2 0 0 1 22 45 z M 28 45 A 2 2 0 0 1 30 47 A 2 2 0 0 1 28 49 A 2 2 0 0 1 26 47 A 2 2 0 0 1 28 45 z M 34 45 A 2 2 0 0 1 36 47 A 2 2 0 0 1 34 49 A 2 2 0 0 1 32 47 A 2 2 0 0 1 34 45 z " />
+</svg>

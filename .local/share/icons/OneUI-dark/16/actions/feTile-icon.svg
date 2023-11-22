@@ -1,0 +1,14 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g id="layercompo" fill="#dedede">
+  <path d="m4.5022 4.6943 1.4915 1.4876-0.37287 0.37191h0.99435v-0.99176l-0.37287 0.37191-1.4915-1.4876z"/>
+  <rect x="1" y="1" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="8" y="1" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="12" y="1" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="8" y="5" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="12" y="5" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="8" y="9" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="12" y="9" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="8" y="13" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  <rect x="12" y="13" width="3" height="3" rx="0" ry="0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+ </g>
+</svg>

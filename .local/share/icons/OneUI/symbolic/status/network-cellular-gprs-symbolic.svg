@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="network-cellular-gprs-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="22.627417"
+     inkscape:cx="13.390835"
+     inkscape:cy="5.1486213"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="false" />
+  <defs
+     id="defs11942" />
+  <path
+     d="m 3.0376633,3.2444558 -0.067096,0.08387 q -0.2893512,0.3375764 -0.8470862,0.3375764 -0.4948325,0 -0.7778935,-0.3270927 Q 1.0646235,3.00962 1.0583332,2.4099501 V 1.8102802 q 0,-0.6416049 0.2558033,-0.96031061 0.2579,-0.32080244 0.7695065,-0.32080244 0.4361236,0 0.6814431,0.24322277 Q 3.0125024,1.0156127 3.0376633,1.4664135 H 2.6539585 Q 2.6308942,1.1812558 2.4946056,1.0219029 2.3604137,0.86045333 2.0857398,0.86045333 q -0.3291895,0 -0.4822521,0.21596507 Q 1.4504251,1.2902867 1.4441349,1.762055 v 0.6227341 q 0,0.4612846 0.1761268,0.7087008 0.1761268,0.2453195 0.5053163,0.2453195 0.3103187,0 0.4717683,-0.1509658 l 0.056612,-0.052419 V 2.4309176 H 2.0962235 V 2.1038249 h 0.9414398 z"
+     style="fill:#363636;fill-opacity:1"
+     id="path841" />
+</svg>

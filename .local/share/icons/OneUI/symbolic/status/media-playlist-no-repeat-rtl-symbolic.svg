@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="media-playlist-no-repeat-rtl-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="22.627417"
+     inkscape:cx="0.79549513"
+     inkscape:cy="7.4025241"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="true" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect866"
+     style="fill:#363636;fill-opacity:1;stroke-width:5.83336;stroke-linecap:round;stroke-linejoin:round"
+     d="M 7.4492188 3 L 5 10 L 6.1660156 10 L 6.75 8.3671875 L 9.3164062 8.3671875 L 9.8984375 10 L 11.181641 10 L 8.7324219 3 L 7.4492188 3 z M 8.0332031 4.1660156 L 9.0839844 7.3164062 L 6.9824219 7.3164062 L 8.0332031 4.1660156 z M 3.2460938 9 C 3.1191587 8.9993038 2.9901106 9.0496776 2.8886719 9.1503906 L 0.5 11.537109 L 0 12.037109 L 0.5 12.537109 L 2.8886719 14.927734 C 3.07842 15.117478 3.3813666 15.1232 3.578125 14.945312 C 3.5844746 14.939568 3.5895803 14.933857 3.5957031 14.927734 C 3.7915734 14.731867 3.7915696 14.416577 3.5957031 14.220703 L 1.9140625 12.537109 L 14.5 12.537109 C 14.777 12.537109 15 12.314111 15 12.037109 C 15 11.760109 14.777002 11.537109 14.5 11.537109 L 1.9140625 11.537109 L 3.5957031 9.8574219 C 3.7916074 9.6615894 3.7915734 9.3462609 3.5957031 9.1503906 C 3.497768 9.0524555 3.3730254 9.0006954 3.2460938 9 z "
+     transform="scale(0.26458333)" />
+</svg>

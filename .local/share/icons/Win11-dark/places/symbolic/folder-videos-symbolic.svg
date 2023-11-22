@@ -1,6 +1,0 @@
-<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <style id="current-color-scheme" type="text/css">.ColorScheme-Text { color:#dedede; }</style>
- </defs>
- <path d="m2 1c-1.108 0-2 0.892-2 2v9c0 1.108 0.892 2 2 2h12c1.108 0 2-0.892 2-2v-9c0-1.108-0.892-2-2-2h-12zm0 1h1v1h-2c0-0.554 0.446-1 1-1zm2 0h8v5h-8v-5zm9 0h1c0.554 0 1 0.446 1 1h-2v-1zm-12 2h2v1h-2v-1zm12 0h2v1h-2v-1zm-12 2h2v1h-2v-1zm12 0h2v1h-2v-1zm-12 2h2v1h-2v-1zm3 0h8v5h-8v-5zm9 0h2v1h-2v-1zm-12 2h2v1h-2v-1zm12 0h2v1h-2v-1zm-12 2h2v1h-1c-0.554 0-1-0.446-1-1zm12 0h2c0 0.554-0.446 1-1 1h-1v-1z" style="fill:currentColor" class="ColorScheme-Text"/>
-</svg>

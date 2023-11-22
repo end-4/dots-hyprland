@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="wine.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="3.265625"
+     inkscape:cx="27.559809"
+     inkscape:cy="10.870813"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#0078d4;fill-opacity:1;stroke:none" />
+  <path
+     id="rect917"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.338538;stroke-linecap:round;stroke-linejoin:round"
+     d="M 14.072266 14 C 14.032563 14 14 14.032563 14 14.072266 L 14 30.927734 C 14 30.967437 14.032563 31 14.072266 31 L 30.927734 31 C 30.967437 31 31 30.967437 31 30.927734 L 31 14.072266 C 31 14.032563 30.967437 14 30.927734 14 L 14.072266 14 z M 33.072266 14 C 33.032563 14 33 14.032563 33 14.072266 L 33 30.927734 C 33 30.967437 33.032563 31 33.072266 31 L 49.927734 31 C 49.967437 31 50 30.967437 50 30.927734 L 50 14.072266 C 50 14.032563 49.967437 14 49.927734 14 L 33.072266 14 z M 14.072266 33 C 14.032563 33 14 33.032563 14 33.072266 L 14 49.927734 C 14 49.967437 14.032563 50 14.072266 50 L 30.927734 50 C 30.967437 50 31 49.967437 31 49.927734 L 31 33.072266 C 31 33.032563 30.967437 33 30.927734 33 L 14.072266 33 z M 33.072266 33 C 33.032563 33 33 33.032563 33 33.072266 L 33 49.927734 C 33 49.967437 33.032563 50 33.072266 50 L 49.927734 50 C 49.967437 50 50 49.967437 50 49.927734 L 50 33.072266 C 50 33.032563 49.967437 33 49.927734 33 L 33.072266 33 z " />
+</svg>

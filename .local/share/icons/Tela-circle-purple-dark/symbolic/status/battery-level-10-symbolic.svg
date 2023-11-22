@@ -1,5 +1,0 @@
-<svg width="16" height="16" enable-background="new" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path class="error" d="m5 12v1h2.2617a4.5 4.5 0 0 1-0.23242-1h-2.0293z" fill="#e74c3c" stroke-width=".35355"/>
- <path class="warning" d="m11.5 8a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5 3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5zm-0.5 1h1v3h-1v-3zm0 4h1v1h-1v-1z" fill="#ff7f2a"/>
- <path d="m6 0v1h-2c-0.554 0-1 0.446-1 1v12c0 0.554 0.446 1 1 1h4.6855a4.5 4.5 0 0 1-1.418-2h-2.2676v-10h6v4.0352a4.5 4.5 0 0 1 0.5-0.035156 4.5 4.5 0 0 1 1.5 0.25781v-5.2578c0-0.554-0.446-1-1-1h-2v-1h-4z" fill="#aaaaaa"/>
-</svg>

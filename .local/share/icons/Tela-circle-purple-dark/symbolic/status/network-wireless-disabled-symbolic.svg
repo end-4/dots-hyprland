@@ -1,6 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(-345,615)">
-  <path transform="translate(345,-615)" d="m8 1.0078c-0.66508 0-1.3296 0.061247-1.9863 0.17773l6.8867 6.8867 3.0996-3.752c-2.209-2.2078-5.1045-3.3125-8-3.3125zm-4.1895 0.80273c-1.3874 0.55181-2.6877 1.3876-3.8105 2.5098l8 9.6875 3.6211-4.3867-7.8105-7.8105z" fill="#aaaaaa"/>
- </g>
- <path d="m2 0 12 12-1.4142 1.4142-12-12z" color="#000000" fill="#aaaaaa" stroke-linecap="square" stroke-width="3.4112" style="-inkscape-stroke:none;paint-order:fill markers stroke"/>
-</svg>

@@ -1,0 +1,5 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <path d="m1 2c-0.554 0-1 0.446-1 1v7c0 0.554 0.446 1 1 1h9.3379a3.5 3.5 0 0 1-0.30078-1h-9.0371v-7h13v3.0352a3.5 3.5 0 0 1 1 0.30273v-3.3379c0-0.554-0.446-1-1-1h-13zm1 2v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm-10 2v1h2v-1h-2zm3 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h1v-1h-1zm2 0v1h0.050781a3.5 3.5 0 0 1 1.9492-0.96289v-0.037109h-2zm-9 2v1h2v-1h-2zm3 0v1h5v-1h-5z" fill="#dedede" style="paint-order:stroke fill markers"/>
+ <path d="m13.5 7a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5 2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5zm0 1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5 1.5 1.5 0 0 1-1.5-1.5 1.5 1.5 0 0 1 1.5-1.5z" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.25" style="paint-order:stroke fill markers"/>
+ <circle cx="13.5" cy="9.5" r=".5" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" style="paint-order:stroke fill markers"/>
+</svg>

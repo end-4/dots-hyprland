@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="internet-chat-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="26.125"
+     inkscape:cx="8.076555"
+     inkscape:cy="4.2296651"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect923"
+     style="opacity:1;fill:#dedede;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round"
+     d="M 0.79375005,0.26458333 H 3.4395833 c 0.2931584,0 0.5291667,0.23600835 0.5291667,0.5291667 V 2.3812499 c 0,0.2931583 -0.2360083,0.5291667 -0.5291667,0.5291667 h -1.5875 l -0.79375,1.0583333 V 2.9104166 H 0.79375005 c -0.29315835,0 -0.5291667,-0.2360084 -0.5291667,-0.5291667 V 0.79375003 c 0,-0.29315835 0.23600835,-0.5291667 0.5291667,-0.5291667 z"
+     sodipodi:nodetypes="ssssscccssss" />
+</svg>

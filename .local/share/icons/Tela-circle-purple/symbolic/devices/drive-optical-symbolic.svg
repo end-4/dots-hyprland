@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.5 0 0 .5 -4 -506.18)" fill="#555">
-  <path transform="translate(0 1004.4)" d="m14 8c-2 0-4 2-4 4v16c0 2 2 4 4 4h20c2 0 4-2 4-4v-16c0-2-2-4-4-4zm20 4v16h-20v-16zm-19.344 22c1.465 3.519 5.099 6 9.344 6s7.879-2.481 9.344-6z" fill="#555"/>
- </g>
- <path d="m12 8a1.0003 1.0005 0 1 1-2.0005 0 1.0003 1.0005 0 1 1 2.0005 0z" fill="#555" stroke-width="1.0453"/>
-</svg>

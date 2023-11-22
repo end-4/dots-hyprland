@@ -1,7 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m6 3v1h7c0.554 0 1 0.446 1 1v6c0 0.554-0.446 1-1 1h-9v1h9c1.108 0 2-0.892 2-2v-2h1v-2h-1v-2c0-1.108-0.892-2-2-2z" fill="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" style="paint-order:stroke fill markers"/>
- <path d="m6 5v0.5c0 1.3994-0.81858 2.5934-2 3.1543v2.3457h7v-6z" fill="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" style="paint-order:stroke fill markers"/>
- <g transform="translate(-.069557)" fill="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" style="paint-order:stroke fill markers" aria-label="">
-  <path d="m5.0696 5.5c0 0.29167-0.052083 0.57292-0.15625 0.84375-0.09375 0.27083-0.22917 0.51562-0.40625 0.73438s-0.39062 0.40625-0.64062 0.5625c-0.23958 0.14583-0.50521 0.25-0.79688 0.3125v5.0469h-1v-5.0469c-0.29167-0.0625-0.5625-0.16667-0.8125-0.3125-0.23958-0.15625-0.44792-0.34375-0.625-0.5625s-0.31771-0.46354-0.42188-0.73438c-0.09375-0.27083-0.14062-0.55208-0.14062-0.84375v-2.5h1v-2h1v2h1v-2h1v2h1zm-4 0c0 0.41667 0.14583 0.77083 0.4375 1.0625s0.64583 0.4375 1.0625 0.4375 0.77083-0.14583 1.0625-0.4375 0.4375-0.64583 0.4375-1.0625v-1.5h-3z" fill="#363636" stroke-width="4"/>
- </g>
-</svg>

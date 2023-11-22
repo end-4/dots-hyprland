@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   enable-background="new"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="media-skip-backward-symbolic.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="31.333669"
+     inkscape:cx="6.0637648"
+     inkscape:cy="8.1222534"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     id="path2"
+     style="fill:#dedede;fill-opacity:1;stroke-width:0.689784"
+     d="m 1.5,4.0006052 c -0.277,0 -0.5,0.223 -0.5,0.5 v 6.9999998 c 0,0.277 0.223,0.5 0.5,0.5 0.277,0 0.5,-0.223 0.5,-0.5 v -3.4999998 -3.5 c 0,-0.277 -0.223,-0.5 -0.5,-0.5 z m 0.5,4 c 0,0.069849 0.011902,0.1403353 0.037109,0.2109375 0.050386,0.1398179 0.1434548,0.2553931 0.2753906,0.3398437 l 5.5664062,3.3320306 c 0.1497231,0.09552 0.3128136,0.132099 0.4921876,0.111329 0.1793529,-0.02077 0.3271856,-0.09473 0.4472656,-0.220703 C 8.9384244,11.648061 9,11.501537 9,11.332636 V 8.9634958 l 4.878906,2.9199212 c 0.149723,0.09552 0.312814,0.132099 0.492188,0.111329 0.179353,-0.02077 0.327185,-0.09473 0.447265,-0.220703 C 14.938424,11.648062 15,11.501537 15,11.332636 V 4.668574 C 15,4.4996726 14.938437,4.353145 14.818359,4.2271677 14.698279,4.101188 14.550467,4.0272256 14.371094,4.0064646 c -0.02237,-0.00266 -0.04452,-0.00501 -0.06641,-0.00586 -0.153224,-0.00599 -0.295205,0.032393 -0.425782,0.1171875 L 9,7.0396677 V 4.668574 C 9,4.4996726 8.9384374,4.353145 8.8183594,4.2271677 8.6982794,4.101188 8.5504668,4.0272256 8.3710938,4.0064646 c -0.02237,-0.00266 -0.044516,-0.00501 -0.066406,-0.00586 -0.153223,-0.00599 -0.2952043,0.032393 -0.4257813,0.1171875 L 2.3105469,7.4517771 C 2.1800814,7.537601 2.087524,7.6517962 2.0371094,7.7916208 2.0119019,7.8615431 2,7.9307558 2,8.0006052 Z" />
+</svg>

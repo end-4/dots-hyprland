@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="brasero.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="12.078125"
+     inkscape:cx="31.958603"
+     inkscape:cy="37.050453"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#8896aa;fill-opacity:1;stroke:none" />
+  <path
+     id="path6859"
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3.63636;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 32 12 A 20 20 0 0 0 12 32 A 20 20 0 0 0 32 52 A 20 20 0 0 0 52 32 A 20 20 0 0 0 32 12 z M 32 25 A 7 7 0 0 1 39 32 A 7 7 0 0 1 32 39 A 7 7 0 0 1 25 32 A 7 7 0 0 1 32 25 z " />
+  <path
+     id="path7319"
+     style="opacity:1;fill:#c4ccd7;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 32 22 A 10 10 0 0 0 22 32 A 10 10 0 0 0 32 42 A 10 10 0 0 0 42 32 A 10 10 0 0 0 32 22 z M 32 27 A 5 5 0 0 1 37 32 A 5 5 0 0 1 32 37 A 5 5 0 0 1 27 32 A 5 5 0 0 1 32 27 z " />
+  <path
+     id="path970"
+     style="fill:#f7c96f;fill-opacity:1;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 16 37 C 13.514719 37 11.5 39.014719 11.5 41.5 C 11.5 43.985281 13.514719 46 16 46 C 16.141006 45.9969 16.281787 45.987073 16.421875 45.970703 C 20.337888 50.362125 25.973524 52.974528 32 53 C 37.718927 52.986807 42.994514 50.664156 46.824219 46.824219 L 44.009766 44.009766 C 40.898139 47.124468 36.617724 48.994686 32 49 C 27.413728 48.98304 23.033501 47.111121 19.847656 43.818359 C 20.271703 43.119196 20.497228 42.317703 20.5 41.5 C 20.5 39.014719 18.485281 37 16 37 z " />
+</svg>

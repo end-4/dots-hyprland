@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg848"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="drive-removable-media-usb-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview850"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="24.15625"
+     inkscape:cx="3.1875809"
+     inkscape:cy="7.3065977"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs845" />
+  <g
+     inkscape:label="레이어 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="rect1876"
+       style="fill:#363636;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+       d="M 6,1 C 5.4460003,1 5,1.446 5,2 V 5 C 4.4460003,5 4,5.4459999 4,6 v 6 c 0,1.662 1.338,3 3,3 h 2 c 1.662,0 3,-1.338 3,-3 V 6 C 12,5.4459999 11.554,5 11,5 V 2 C 11,1.446 10.554,1 10,1 Z m 0,1 h 4 V 5 H 6 Z M 5,6 h 6 v 5.947266 c 4.33e-4,0.0172 0,0.03542 0,0.05273 0,1.108 -0.892,2 -2,2 H 7 c -1.1080001,0 -2,-0.892 -2,-2 0,-0.01731 -4.33e-4,-0.03553 0,-0.05273 z"
+       transform="scale(0.26458333)" />
+  </g>
+</svg>

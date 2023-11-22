@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   enable-background="new"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="media-playback-pause-symbolic.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="31.333669"
+     inkscape:cx="6.0637648"
+     inkscape:cy="8.1222534"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     id="rect1521"
+     style="fill:#363636;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 5 3 C 4.446 3 4 3.446 4 4 L 4 12 C 4 12.554 4.446 13 5 13 C 5.554 13 6 12.554 6 12 L 6 4 C 6 3.446 5.554 3 5 3 z M 11 3 C 10.446 3 10 3.446 10 4 L 10 12 C 10 12.554 10.446 13 11 13 C 11.554 13 12 12.554 12 12 L 12 4 C 12 3.446 11.554 3 11 3 z " />
+</svg>

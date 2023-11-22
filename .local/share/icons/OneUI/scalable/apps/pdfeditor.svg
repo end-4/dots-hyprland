@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="pdfeditor.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="12.078125"
+     inkscape:cx="21.940492"
+     inkscape:cy="35.146184"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#e73131;fill-opacity:1" />
+  <path
+     id="path5563"
+     style="font-weight:500;font-size:20.1907px;line-height:1.25;font-family:'Noto Sans CJK KR';-inkscape-font-specification:'Noto Sans CJK KR Medium';fill:#ffffff;stroke-width:0.472999"
+     d="m 12,19 v 14 h 2.185677 v -5.301222 h 2.090886 c 3.015144,0 5.239061,-1.405655 5.239061,-4.444939 C 21.515624,20.081585 19.292346,19 16.201823,19 Z m 12.211719,0 v 14 h 3.711458 C 32.069002,33 34.50026,30.510234 34.50026,25.951306 34.50026,21.373384 32.069048,19 27.810156,19 Z m 13.172395,0 v 14 h 2.185677 v -6.021525 h 5.144272 V 25.13545 H 39.569791 V 20.861399 H 45.6 V 19 Z m -23.198437,1.784224 h 1.808333 c 2.204825,0 3.354167,0.608052 3.354167,2.469615 0,1.804575 -1.073395,2.660716 -3.259376,2.660716 h -1.903124 z m 12.211718,0.02021 h 1.261459 c 2.977454,0 4.579167,1.651692 4.579166,5.14687 0,3.476183 -1.601712,5.242419 -4.579166,5.242419 h -1.261459 z" />
+  <path
+     id="rect7249"
+     style="fill:#7d0000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round"
+     d="m 13.5,44 h 20.25 c 0.831,0 1.5,0.669 1.5,1.5 0,0.831 -0.669,1.5 -1.5,1.5 H 13.5 C 12.669,47 12,46.331 12,45.5 12,44.669 12.669,44 13.5,44 Z"
+     sodipodi:nodetypes="sssssss" />
+  <path
+     id="path6563"
+     style="color:#000000;fill:#7d0000;stroke:none;stroke-width:2;stroke-linejoin:round;-inkscape-stroke:none"
+     d="m 41.053782,40.899495 -1.414213,0 -1.655901,4.633483 c -0.260647,0.781857 0.483201,1.525705 1.265058,1.265058 l 4.633483,-1.6559 v -1.414214 z"
+     sodipodi:nodetypes="ccccccc" />
+  <rect
+     style="fill:#ffffff;stroke-width:2;stroke-linejoin:round"
+     id="rect1233"
+     width="6"
+     height="14"
+     x="56.949718"
+     y="-13.109097"
+     transform="rotate(45)" />
+</svg>

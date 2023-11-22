@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933333"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="goa-account-msn.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     height="48px"
+     inkscape:zoom="7.9999996"
+     inkscape:cx="-2.0625001"
+     inkscape:cy="20.625001"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:lockguides="true" />
+  <defs
+     id="defs2" />
+  <path
+     d="m 0.52916666,8.4666666 c 0,-5.715 2.22249994,-7.93749994 7.93749994,-7.93749994 5.7149994,0 7.9374994,2.22249994 7.9374994,7.93749994 0,5.7149994 -2.2225,7.9374994 -7.9374994,7.9374994 -5.715,0 -7.93749994,-2.2225 -7.93749994,-7.9374994"
+     id="path2"
+     style="fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:0.079375" />
+  <rect
+     style="opacity:1;fill:#f25022;fill-opacity:1;stroke-width:1.37504;stroke-linejoin:round"
+     id="rect942"
+     width="4.4979167"
+     height="4.4979167"
+     x="3.7041664"
+     y="3.7041664" />
+  <rect
+     style="opacity:1;fill:#00a4ef;fill-opacity:1;stroke-width:1.58751;stroke-linejoin:round"
+     id="rect1090"
+     width="4.4979167"
+     height="4.4979167"
+     x="3.7041664"
+     y="8.7312498" />
+  <rect
+     style="opacity:1;fill:#7fba00;fill-opacity:1;stroke-width:1.58751;stroke-linejoin:round"
+     id="rect1274"
+     width="4.4979167"
+     height="4.4979167"
+     x="8.7312498"
+     y="3.7041664" />
+  <rect
+     style="opacity:1;fill:#ffb900;fill-opacity:1;stroke-width:1.58751;stroke-linejoin:round"
+     id="rect1408"
+     width="4.4979167"
+     height="4.4979167"
+     x="8.7312498"
+     y="8.7312498" />
+</svg>

@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m2 0c-1.108 0-2 0.892-2 2v8c0 1.108 0.892 2 2 2h1v-2h-1v-8h10v4h0.41406l1 1h0.58594v-5c0-1.108-0.892-2-2-2zm3 4-1.4961 3.7422c0.03618-0.040593 0.073475-0.08104 0.11133-0.11914 0.33359-0.33577 0.76679-0.62305 1.3848-0.62305h1.5859l0.13281-0.13281zm4 1-0.5 1h1.25z" fill="#aaaaaa" fill-rule="evenodd" stop-color="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
- <path d="m8 7-1 1h-2c-0.47 0-1 0.54-1 1v6c0 0.45 0.532 1 1 1h10c0.47 0 1-0.55 1-1v-6c0-0.46-0.53-1-1-1h-2l-1-1zm2 2c1.66 0 3 1.34 3 3 0 1.65-1.34 3-3 3s-3-1.35-3-3c0-1.66 1.34-3 3-3zm0 1a2 2 0 1 0 2 2c0-1.11-0.89-2-2-2z" color="#000000" fill="#aaaaaa" stroke-width="2" style="-inkscape-stroke:none"/>
-</svg>

@@ -1,0 +1,7 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m5 1c-1.108 0-2 0.892-2 2v2h1v-2c0-0.554 0.446-1 1-1h9c0.554 0 1 0.446 1 1v7c0 0.554-0.446 1-1 1h-1v1h1c1.108 0 2-0.892 2-2v-7c0-1.108-0.892-2-2-2z" fill="#dedede" stroke-dasharray="1.05591, 1.58387" stroke-linejoin="round" stroke-width="1.0559"/>
+ <path d="m5 2c-0.554 0-1 0.446-1 1v2h7c1.108 0 2 0.892 2 2v4h1c0.554 0 1-0.446 1-1v-7c0-0.554-0.446-1-1-1z" fill="#dedede" opacity=".35" stroke-dasharray="0.87857, 1.31786" stroke-linejoin="round" stroke-width=".87857"/>
+ <path d="m2 5c-1.108 0-2 0.892-2 2v7c0 1.108 0.892 2 2 2h9c1.108 0 2-0.892 2-2v-7c0-1.108-0.892-2-2-2h-9zm0 1h9c0.554 0 1 0.446 1 1v7c0 0.554-0.446 1-1 1h-9c-0.554 0-1-0.446-1-1v-7c0-0.554 0.446-1 1-1z" fill="#dedede" opacity=".65" stroke-dasharray="1.05591, 1.58387" stroke-linejoin="round" stroke-width="1.0559"/>
+ <rect x="1" y="6" width="11" height="9" rx="1" ry="1" fill="#dedede" opacity=".35" stroke-dasharray="0.87857, 1.31786" stroke-linejoin="round" stroke-width=".87857"/>
+ <path d="m2 5c-1.108 0-2 0.892-2 2h1c0-0.554 0.446-1 1-1v-1zm2 0v1h2v-1h-2zm4 0v1h2v-1h-2zm4 0.26758v1.7324 1h1v-1c0-0.74278-0.40192-1.3874-1-1.7324zm-12 3.7324v2h1v-2h-1zm12 1v2h1v-2h-1zm-12 3v1c0 0.74278 0.40192 1.3874 1 1.7324v-1.7324-1h-1zm12 1c0 0.554-0.446 1-1 1v1c1.108 0 2-0.892 2-2h-1zm-9 1v1h2v-1h-2zm4 0v1h2v-1h-2z" fill="#dedede" stroke-dasharray="1.05591, 1.58387" stroke-linejoin="round" stroke-width="1.0559"/>
+</svg>

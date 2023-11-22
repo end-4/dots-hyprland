@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="cs-desklets.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="16.705398"
+     inkscape:cy="26.162951"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#eab800;fill-opacity:1" />
+  <path
+     id="rect924"
+     style="fill:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 18 14 C 15.784 14 14 15.784 14 18 L 14 46 C 14 48.216 15.784 50 18 50 L 36 50 C 37.003845 50 37.254079 49.742884 38 49 L 49 38 C 50.0038 36.996155 50.007 36.419704 50 35 L 50 18 C 50 15.784 48.216 14 46 14 A 4 4 0 0 1 42 18 A 4 4 0 0 1 38 14 L 36 14 A 4 4 0 0 1 32 18 A 4 4 0 0 1 28 14 L 26 14 A 4 4 0 0 1 22 18 A 4 4 0 0 1 18 14 z M 40 36 L 47 36 L 36 47 L 36 40 C 36 37.784 37.784 36 40 36 z " />
+</svg>

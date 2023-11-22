@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="libreoffice-calc.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="6.1875"
+     inkscape:cx="21.575758"
+     inkscape:cy="41.858586"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#74b646;fill-opacity:1;stroke:none" />
+  <path
+     id="rect2173"
+     style="fill:#ffffff"
+     d="m 21,10 h 12 l 15,15 v 24 c 0,2.77 -2.23,5 -5,5 H 21 c -2.77,0 -5,-2.23 -5,-5 V 15 c 0,-2.77 2.23,-5 5,-5 z"
+     sodipodi:nodetypes="sccssssss" />
+  <path
+     id="rect2357"
+     style="fill:#b3e491;fill-opacity:1;stroke-width:0.370066"
+     d="m 36,10 h 7 c 2.77,0 5,2.23 5,5 v 7 z"
+     sodipodi:nodetypes="csscc" />
+  <path
+     id="rect7531"
+     style="fill:#4a8521;fill-opacity:1"
+     d="M 24 30 C 22.892 30 22 30.892 22 32 L 22 42 C 22 43.108 22.892 44 24 44 L 40 44 C 41.108 44 42 43.108 42 42 L 42 32 C 42 30.892 41.108 30 40 30 L 24 30 z M 24 32 L 31 32 L 31 36 L 24 36 L 24 32 z M 33 32 L 40 32 L 40 36 L 33 36 L 33 32 z M 24 38 L 31 38 L 31 42 L 24 42 L 24 38 z M 33 38 L 40 38 L 40 42 L 33 42 L 33 38 z " />
+</svg>

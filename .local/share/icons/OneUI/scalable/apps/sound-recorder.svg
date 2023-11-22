@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="sound-recorder.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="6.53125"
+     inkscape:cx="64.15311"
+     inkscape:cy="27.789474"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#e83d43;fill-opacity:1;stroke:none" />
+  <path
+     id="rect844"
+     style="fill:#f9f9f9;stroke-width:0.7423;stroke-linecap:round;stroke-linejoin:round"
+     d="M 36 12 C 34.892 12 34 12.892 34 14 L 34 50 C 34 51.108 34.892 52 36 52 C 37.108 52 38 51.108 38 50 L 38 14 C 38 12.892 37.108 12 36 12 z M 20 18 C 18.892 18 18 18.892 18 20 L 18 44 C 18 45.108 18.892 46 20 46 C 21.108 46 22 45.108 22 44 L 22 20 C 22 18.892 21.108 18 20 18 z M 52 28 C 50.892 28 50 28.892 50 30 L 50 34 C 50 35.108 50.892 36 52 36 C 53.108 36 54 35.108 54 34 L 54 30 C 54 28.892 53.108 28 52 28 z " />
+  <path
+     id="rect848"
+     style="fill:#ffb1b7;fill-opacity:1;stroke-width:0.6277;stroke-linecap:round;stroke-linejoin:round"
+     d="M 28 24 C 26.892001 24 26 24.892001 26 26 L 26 38 C 26 39.107999 26.892001 40 28 40 C 29.107999 40 30 39.107999 30 38 L 30 26 C 30 24.892001 29.107999 24 28 24 z M 44 24 C 42.892 24 42 24.892 42 26 L 42 38 C 42 39.108 42.892 40 44 40 C 45.108 40 46 39.108 46 38 L 46 26 C 46 24.892 45.108 24 44 24 z M 12 28 C 10.892 28 10 28.892 10 30 L 10 34 C 10 35.108 10.892 36 12 36 C 13.108 36 14 35.108 14 34 L 14 30 C 14 28.892 13.108 28 12 28 z " />
+</svg>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="mark-location-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="36.946329"
+     inkscape:cx="6.1711137"
+     inkscape:cy="9.107806"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path999"
+     style="color:#000000;fill:#363636;stroke-width:3.77903;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none;fill-opacity:1"
+     d="M 8 0 C 4.7048723 0 2 2.7060708 2 6.0019531 C 2.0004609 8.0365004 3.0573682 9.5358912 3.75 10.578125 A 1.4997809 1.5001244 0 0 0 3.8300781 10.689453 L 6.8261719 14.439453 A 1.4997809 1.5001244 0 0 0 9.1660156 14.439453 L 12.169922 10.689453 A 1.4997809 1.5001244 0 0 0 12.185547 10.660156 C 13.061485 9.517365 13.999554 7.9709641 14 6.0019531 C 14 2.7060708 11.295127 5.9211895e-16 8 0 z M 8.0039062 1 C 10.758726 0.99999807 13 3.2491725 13 6.0039062 C 12.999626 7.6567995 12.21777 8.9860536 11.398438 10.054688 C 11.396019 10.057181 11.393107 10.06007 11.390625 10.0625 L 8.3945312 13.810547 C 8.1943853 14.061988 7.8134261 14.061988 7.6132812 13.810547 L 4.609375 10.0625 C 4.6014758 10.050519 4.5927784 10.038014 4.5859375 10.025391 C 3.893045 8.9830355 3.0003795 7.6786395 3 6.0039062 C 3 3.2491725 5.2490854 1 8.0039062 1 z M 8 3 A 2.9999999 2.9999999 0 0 0 5 6 A 2.9999999 2.9999999 0 0 0 8 9 A 2.9999999 2.9999999 0 0 0 11 6 A 2.9999999 2.9999999 0 0 0 8 3 z M 8 4 A 2.0000001 2.0000001 0 0 1 10 6 A 2.0000001 2.0000001 0 0 1 8 8 A 2.0000001 2.0000001 0 0 1 6 6 A 2.0000001 2.0000001 0 0 1 8 4 z "
+     transform="scale(0.26458333)" />
+</svg>

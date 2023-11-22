@@ -1,0 +1,6 @@
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+ <path d="m12 2v4.0234a5.5 5.5 0 0 1 1 0.18555v-3.209h1v3.6035a5.5 5.5 0 0 1 1 0.6543v-5.2578h-3zm-4 3v2.2676a5.5 5.5 0 0 1 1-0.6543v-0.61328h1v0.21289a5.5 5.5 0 0 1 1-0.17578v-1.0371h-3zm-4 3v6h2.6133a5.5 5.5 0 0 1-0.61328-2.5v1.5h-1v-4h1v2.5a5.5 5.5 0 0 1 1-3.1426v-0.35742h-3zm-4 3v3h3v-3h-3zm1 1h1v1h-1v-1z" fill="#333333"/>
+ <path d="m11.5 7a4.5 4.5 0 0 0-4.5 4.5 4.5 4.5 0 0 0 4.5 4.5 4.5 4.5 0 0 0 4.5-4.5 4.5 4.5 0 0 0-4.5-4.5zm0 1a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5 3.5 3.5 0 0 1-3.5-3.5 3.5 3.5 0 0 1 3.5-3.5z" fill="#d35f5f" stroke-linecap="square" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <rect x="11" y="9" width="1" height="3" rx="0" ry="0" fill="#d35f5f" stroke-linecap="square" stroke-width="2" style="paint-order:stroke fill markers"/>
+ <rect x="11" y="13" width="1" height="1" fill="#d35f5f" stroke-linecap="square" stroke-width="2" style="paint-order:stroke fill markers"/>
+</svg>

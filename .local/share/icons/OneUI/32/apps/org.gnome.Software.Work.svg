@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="org.gnome.Software.Work.svg"
+   width="32"
+   height="32"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="24.5"
+     inkscape:cx="15.979592"
+     inkscape:cy="16"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <rect
+     style="fill:#49a0e5;fill-opacity:1;stroke-width:4;stroke-linejoin:round"
+     id="rect845"
+     width="24"
+     height="32"
+     x="4"
+     y="0"
+     ry="4" />
+  <path
+     id="rect1092"
+     style="fill:#f9f9f9;fill-opacity:1;stroke-width:3.26598;stroke-linejoin:round"
+     d="M 13.777344 5 L 9.5351562 9.2421875 L 7.4140625 7.1210938 L 6 8.5351562 L 8.1210938 10.65625 L 9.5351562 12.070312 L 10.949219 10.65625 L 15.191406 6.4140625 L 13.777344 5 z M 17 9 L 17 11 L 25 11 L 25 9 L 17 9 z M 13.777344 19 L 9.5351562 23.242188 L 7.4140625 21.121094 L 6 22.535156 L 8.1210938 24.65625 L 9.5351562 26.070312 L 10.949219 24.65625 L 15.191406 20.414062 L 13.777344 19 z M 17 23 L 17 25 L 25 25 L 25 23 L 17 23 z " />
+</svg>

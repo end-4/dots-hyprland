@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="games-mines.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="11.313708"
+     inkscape:cx="26.604893"
+     inkscape:cy="43.973203"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#666666;fill-opacity:1" />
+  <path
+     id="rect1145"
+     style="fill:#ffffff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round"
+     d="M 32 10 C 30.338 10 29 11.338 29 13 L 29 16.320312 A 16 16 0 0 0 19.890625 21.544922 L 17.044922 19.902344 C 16.59513 19.642656 16.108381 19.511104 15.625 19.498047 C 14.561561 19.469322 13.518578 20.010458 12.947266 21 C 12.116266 22.439334 12.605588 24.266656 14.044922 25.097656 L 16.921875 26.757812 A 16 16 0 0 0 16 32 A 16 16 0 0 0 16.921875 37.242188 L 14.044922 38.902344 C 12.605588 39.733344 12.116266 41.560666 12.947266 43 C 13.778266 44.439334 15.605588 44.928656 17.044922 44.097656 L 19.890625 42.455078 A 16 16 0 0 0 29 47.679688 L 29 51 C 29 52.662 30.338 54 32 54 C 33.662 54 35 52.662 35 51 L 35 47.679688 A 16 16 0 0 0 44.109375 42.455078 L 46.955078 44.097656 C 48.394412 44.928656 50.221734 44.439334 51.052734 43 C 51.883734 41.560666 51.394412 39.733344 49.955078 38.902344 L 47.078125 37.242188 A 16 16 0 0 0 48 32 A 16 16 0 0 0 47.107422 26.740234 L 49.955078 25.097656 C 51.394412 24.266656 51.883734 22.439334 51.052734 21 C 50.481422 20.010458 49.438439 19.469322 48.375 19.498047 C 47.891619 19.511104 47.40487 19.642656 46.955078 19.902344 L 44.107422 21.546875 A 16 16 0 0 0 35 16.285156 L 35 13 C 35 11.338 33.662 10 32 10 z " />
+</svg>

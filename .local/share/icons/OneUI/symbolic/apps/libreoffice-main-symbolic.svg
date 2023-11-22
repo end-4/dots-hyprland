@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="libreoffice-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="19.788625"
+     inkscape:cx="-3.2594483"
+     inkscape:cy="8.6413282"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945" />
+  <defs
+     id="defs11942" />
+  <path
+     id="rect923"
+     style="fill:#363636;stroke-width:6;stroke-linejoin:round"
+     d="M 4,0 C 2.8919999,0 2,0.89199994 2,2 v 12 c 0,1.108 0.8919999,2 2,2 h 8 c 1.108,0 2,-0.892 2,-2 V 6.0000001 L 8.0000001,0 Z M 9.0000001,0 14,5.0000001 V 2 C 14,0.89199994 13.108,0 12,0 Z"
+     transform="scale(0.26458333)"
+     sodipodi:nodetypes="ssssssccsccssc" />
+</svg>

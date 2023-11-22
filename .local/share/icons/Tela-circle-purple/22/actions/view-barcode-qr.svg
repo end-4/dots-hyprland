@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
- <defs>
-  <style id="current-color-scheme" type="text/css">
-   .ColorScheme-Text { color:#555555; } .ColorScheme-Highlight { color:#4285f4; } .ColorScheme-NeutralText { color:#ff9800; } .ColorScheme-PositiveText { color:#4caf50; } .ColorScheme-NegativeText { color:#f44336; }
-  </style>
- </defs>
- <path style="fill:currentColor" class="ColorScheme-Text" d="M 16,-4.9999997e-8 V 6.0000001 H 10 V -4.9999997e-8 Z m -7.9999998,0 V 0.99999995 h -1 V -4.9999997e-8 Z m 0,0.999999999999997 h 1 V 3 h -1 v 1 h -1 V 2 h 1 z M 8.0000002,4 h 1 v 2.0000001 h -1 z m 0,2.0000001 v 1 H 7.0000001 v -1 z m -1.0000001,1 v 2 h -2 v -1 h 1 v -1 z m -2,1 H 3 v -1 H 5.0000002 Z M 3,8.0000001 v 1 H -4.9999998e-8 v -2 H 2 v 1 z m 4.0000001,1 H 9.0000002 V 11 h -1 V 10 H 7.0000001 Z M 9.0000002,11 H 10 v 1 H 9.0000002 Z m 0,1 v 1 1 h -1 V 13 H 7.0000001 v -1 z m -1,2 v 2 H 7.0000001 v -2 z m 1,0 H 11 v 2 H 9.0000002 Z M 11,14 v -1 h 1 v 1 z m 1,0 h 1 v 2 h -1 z m 0,-1 v -1 h 2 v 1 z m 2,0 h 1 v 1 h 1 v 1 h -1 v 1 h -1 z m -3,0 h -1 v -1 h 1 z m -1,-2 v -1 h 1 v 1 z m 1,-1 V 9.0000001 h 2 V 11 H 12 V 10 Z M 11,9.0000001 H 9.0000002 v -1 H 10 v -1 h 1 z m -1.9999998,-1 h -1 v -1 h 1 z M 6.0000001,-4.9999999e-8 V 6.0000001 H -5e-8 V -4.9999997e-8 Z M 15,0.99999995 H 11 V 5 h 4 z m -9.9999999,0 H 0.99999995 V 5 H 5.0000002 Z M 14,2 V 4 H 12 V 2 Z M 4,2 V 4 H 2 V 2 Z m 11,5.0000001 v 1 h 1 v 1 h -2 v -1 h -2 v -1 h 2 z M 16,10 v 2 h -1 v -1 h -1 v -1 h 1 z m -9.9999999,0 v 6 H -4.9999999e-8 v -6 z m -1,1 H 0.99999995 v 4 H 5.0000001 Z M 4,12 v 2 H 2 v -2 z"/>
-</svg>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="blanket.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="5.6568543"
+     inkscape:cx="35.708892"
+     inkscape:cy="49.76264"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="false" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#3497da;fill-opacity:1;stroke:none" />
+  <path
+     id="rect15391"
+     style="fill:#f9f9f9;stroke-width:2;stroke-linejoin:round"
+     d="m 17,12 5,12 v 19 3 5 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -5 h 3 v 5 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -5 h 13 v 5 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -5 h 3 v 5 c 0,0.554 0.446,1 1,1 0.554,0 1,-0.446 1,-1 v -5 h 3 V 17 c 0,-2.77 -2.23,-5 -5,-5 z"
+     sodipodi:nodetypes="ccccsssccsssccsssccsssccssc" />
+  <path
+     id="rect16641"
+     style="fill:#9bcced;fill-opacity:1;stroke-width:2;stroke-linejoin:round"
+     d="M 17 12 L 17 22 L 32 22 L 32 17 C 32 14.23 29.77 12 27 12 L 17 12 z M 32 22 L 32 32 L 42 32 L 42 22 L 32 22 z M 42 22 L 52 22 L 52 17 C 52 14.23 49.77 12 47 12 L 37 12 C 39.77 12 42 14.23 42 17 L 42 22 z M 42 32 L 42 42 L 52 42 L 52 32 L 42 32 z M 42 42 L 32 42 L 32 45 L 32 46 L 32 51 C 32 51.554 32.446 52 33 52 C 33.554 52 34 51.554 34 51 L 34 46 L 37 46 L 37 51 C 37 51.554 37.446 52 38 52 C 38.554 52 39 51.554 39 51 L 39 46 L 42 46 L 42 42 z M 32 42 L 32 32 L 22 32 L 22 42 L 32 42 z " />
+  <path
+     id="rect13019"
+     style="fill:#217bb7;stroke-width:1.66667;stroke-linejoin:round"
+     d="M 17 12 C 14.23 12 12 14.23 12 17 L 12 41 L 12 42 L 12 47 C 12 47.554 12.446 48 13 48 C 13.554 48 14 47.554 14 47 L 14 42 L 17 42 L 17 47 C 17 47.554 17.446 48 18 48 C 18.554 48 19 47.554 19 47 L 19 42 L 22 42 L 22 17 C 22 14.23 19.77 12 17 12 z " />
+</svg>

@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m3 1c-0.554 0-1 0.446-1 1v12c0 0.554 0.446 1 1 1h10c0.554 0 1-0.446 1-1v-12c0-0.554-0.446-1-1-1h-10zm1 2h8v10h-8v-10z" fill="#555555" stroke-linecap="square" stroke-width="4" style="paint-order:fill markers stroke"/>
- <path d="m8 6c-1.6575 0-3 1.3425-3 3v3h3c1.6575 0 3-1.3425 3-3s-1.3425-3-3-3zm0 2a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1z" fill="#555555" stroke-width=".75"/>
-</svg>

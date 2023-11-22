@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="user-desktop.svg"
+   width="22"
+   height="22"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="36.946329"
+     inkscape:cx="6.2793789"
+     inkscape:cy="10.840048"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="false"
+     inkscape:lockguides="false" />
+  <path
+     d="M 1,11 C 1,3.8 3.8,1 11,1 18.2,1 21,3.8 21,11 21,18.2 18.2,21 11,21 3.8,21 1,18.2 1,11"
+     id="path2"
+     style="fill:#e7a12e;fill-opacity:1;stroke-width:0.1" />
+  <path
+     id="rect6301"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:5.47725;stroke-linecap:round;stroke-linejoin:round"
+     d="M 6,5 C 4.8919999,5 4,5.8920001 4,7 v 8 c 0,1.108 0.8919999,2 2,2 h 10 c 1.108,0 2,-0.892 2,-2 V 7 C 18,5.8920001 17.108,5 16,5 Z m 1,2 c 0.5522847,1e-7 0.9999999,0.4477153 1,1 -1e-7,0.5522851 -0.4477153,1 -1,1 C 6.4477153,9 6.0000001,8.5522851 6,8 c 1e-7,-0.5522847 0.4477153,-0.9999999 1,-1 z m 0,3 c 0.5522847,0 0.9999999,0.447715 1,1 -1e-7,0.552285 -0.4477153,1 -1,1 -0.5522847,0 -0.9999999,-0.447715 -1,-1 1e-7,-0.552285 0.4477153,-1 1,-1 z"
+     sodipodi:nodetypes="sssssssssssssssssss" />
+  <path
+     id="rect7350"
+     style="fill:#c5560a;fill-opacity:1;stroke-width:4;stroke-linecap:round;stroke-linejoin:round"
+     d="M 5 14 L 5 15 C 5 15.554 5.446 16 6 16 L 16 16 C 16.554 16 17 15.554 17 15 L 17 14 L 16 14 L 6 14 L 5 14 z " />
+</svg>

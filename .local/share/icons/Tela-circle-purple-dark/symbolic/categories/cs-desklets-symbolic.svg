@@ -1,6 +1,0 @@
-<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <g transform="translate(0 -1036.4)" fill="#aaaaaa" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".25" stroke-width="1.0016">
-  <path transform="translate(0 1036.4)" d="m3 1c-1.108 0-2 0.892-2 2v10c0 1.108 0.892 2 2 2h7l2-2h-9v-8h10v7l2-2v-7c0-1.108-0.892-2-2-2h-10z" style="paint-order:markers stroke fill"/>
-  <path d="m9 1045.4h4l2 1-5 5-1-2z" style="paint-order:markers stroke fill"/>
- </g>
-</svg>

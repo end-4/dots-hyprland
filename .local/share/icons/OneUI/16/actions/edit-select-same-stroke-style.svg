@@ -1,0 +1,43 @@
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g id="edit-select-all" transform="translate(-45 -707.36)">
+  <g fill="#363636">
+   <path d="m45 707.36h1v1h-1z"/>
+   <path d="m47 707.36h1v1h-1z"/>
+   <path d="m49 707.36h1v1h-1z"/>
+   <path d="m51 707.36h1v1h-1z"/>
+   <path d="m53 707.36h1v1h-1z"/>
+   <path d="m55 707.36h1v1h-1z"/>
+   <path d="m57 707.36h1v1h-1z"/>
+   <path d="m59 707.36h1v1h-1z"/>
+   <path d="m45 709.36h1v1h-1z"/>
+   <path d="m45 711.36h1v1h-1z"/>
+   <path d="m45 713.36h1v1h-1z"/>
+   <path d="m45 715.36h1v1h-1z"/>
+   <path d="m45 717.36h1v1h-1z"/>
+   <path d="m45 719.36h1v1h-1z"/>
+   <path d="m45 721.36h1v1h-1z"/>
+   <path d="m59 709.36h1v1h-1z"/>
+   <path d="m59 711.36h1v1h-1z"/>
+   <path d="m59 713.36h1v1h-1z"/>
+   <path d="m59 715.36h1v1h-1z"/>
+   <path d="m59 717.36h1v1h-1z"/>
+   <path d="m59 719.36h1v1h-1z"/>
+   <path d="m59 721.36h1v1h-1z"/>
+   <path d="m47 721.36h1v1h-1z"/>
+   <path d="m49 721.36h1v1h-1z"/>
+   <path d="m51 721.36h1v1h-1z"/>
+   <path d="m53 721.36h1v1h-1z"/>
+   <path d="m55 721.36h1v1h-1z"/>
+   <path d="m57 721.36h1v1h-1z"/>
+   <path transform="translate(45 707.36)" d="m2 2v11h11v-11zm2 2h7v7h-7z" opacity=".5" style="paint-order:stroke fill markers"/>
+   <rect x="47" y="713.36" width="2" height="3" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="56" y="713.36" width="2" height="3" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="51" y="709.36" width="3" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="51" y="718.36" width="3" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="47" y="718.36" width="2" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="47" y="709.36" width="2" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="56" y="709.36" width="2" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+   <rect x="56" y="718.36" width="2" height="2" opacity=".999" style="paint-order:stroke fill markers"/>
+  </g>
+ </g>
+</svg>

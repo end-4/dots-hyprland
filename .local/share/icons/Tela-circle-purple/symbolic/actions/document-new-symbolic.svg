@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m7 5h2v2h2v2h-2v2h-2v-2h-2v-2h2z" fill="#555"/>
- <path d="m2 0c-0.55226 5.5218e-5 -0.99994 0.44774-1 1v14c5.52e-5 0.55226 0.44774 0.99994 1 1h12c0.55226-5.5e-5 0.99994-0.44774 1-1v-11c-5.1e-5 -0.2652-0.10543-0.51952-0.29297-0.70703l-3-3c-0.18751-0.18754-0.44183-0.29292-0.70703-0.29297zm1 2h7.5859l2.4141 2.4141v9.5859h-10z" color="#000000" fill="#555" stroke-linecap="round" stroke-linejoin="round" style="-inkscape-stroke:none"/>
-</svg>

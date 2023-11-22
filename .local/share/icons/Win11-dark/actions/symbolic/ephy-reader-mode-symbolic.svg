@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m1 2v11h5c1 0 2 1 2 1s1-0.99609 2-1h5v-11h-5c-1 0-2 1-2 1s-1-1-2-1zm1 1h4c1 0 2 1 2 1s1-1 2-1h4v9h-4c-1 0-2 1-2 1s-1-1-2-1h-4z" fill="#dedede"/>
- <path d="M3 5v1h4V5H3zm6 0v1h4V5H9zM3 7v1h4V7H3zm6 0v1h4V7H9zM3 9v1h4V9H3zm6 0v1h4V9H9z" fill="#dedede" opacity=".3"/>
-</svg>

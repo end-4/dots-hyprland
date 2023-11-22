@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="tablet-symbolic.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="44.3125"
+     inkscape:cx="7.9887165"
+     inkscape:cy="6.1946403"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     id="path2"
+     fill="#dedede"
+     style="paint-order:stroke fill markers"
+     d="M 1 2 C 0.446 2 0 2.446 0 3 L 0 13 C 0 13.554 0.446 14 1 14 L 15 14 C 15.554 14 16 13.554 16 13 L 16 3 C 16 2.446 15.554 2 15 2 L 1 2 z M 1 3 L 15 3 L 15 13 L 1 13 L 1 3 z M 5 11 L 5 12 L 11 12 L 11 11 L 5 11 z " />
+</svg>

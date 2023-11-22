@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933333"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="calligragemini.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="true"
+     units="px"
+     height="48px"
+     inkscape:zoom="7.9999996"
+     inkscape:cx="22.875001"
+     inkscape:cy="38.937502"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     inkscape:lockguides="true" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="SVGID_1_"
+       gradientUnits="userSpaceOnUse"
+       x1="24.837999"
+       y1="33.653999"
+       x2="46.732201"
+       y2="55.548199">
+      <stop
+         offset="0.3569"
+         style="stop-color:#EF6B2E"
+         id="stop14" />
+      <stop
+         offset="0.6328"
+         style="stop-color:#F19F00"
+         id="stop16" />
+    </linearGradient>
+    <linearGradient
+       id="SVGID_2_"
+       gradientUnits="userSpaceOnUse"
+       x1="24.858801"
+       y1="30.3876"
+       x2="46.752998"
+       y2="8.4933004">
+      <stop
+         offset="0.3707"
+         style="stop-color:#16B8C3"
+         id="stop23" />
+      <stop
+         offset="0.7422"
+         style="stop-color:#02AEF0"
+         id="stop25" />
+    </linearGradient>
+  </defs>
+  <path
+     id="path1039"
+     style="fill:#cccccc;fill-opacity:1;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round"
+     d="m 8.4666668,0.52916666 c -5.7150003,0 -7.93750014,2.22249954 -7.93750014,7.93749994 0,5.7150004 2.22249984,7.9375004 7.93750014,7.9375004 5.7150002,0 7.9375002,-2.2225 7.9375002,-7.9375004 0,-5.7150004 -2.2225,-7.93749994 -7.9375002,-7.93749994 z" />
+  <path
+     id="path1039-3"
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.511528;stroke-linecap:round;stroke-linejoin:round"
+     d="m 8.4666664,0.79374998 c -5.5245001,0 -7.67291642,2.14841622 -7.67291642,7.67291632 0,5.5244997 2.14841632,7.6729167 7.67291642,7.6729167 5.5244996,0 7.6729166,-2.148417 7.6729166,-7.6729167 0,-5.5245001 -2.148417,-7.67291632 -7.6729166,-7.67291632 z" />
+  <g
+     id="g21"
+     transform="matrix(0.2517709,0,0,0.2517709,0.65729094,0.67405125)">
+    <linearGradient
+       id="linearGradient852"
+       gradientUnits="userSpaceOnUse"
+       x1="24.837999"
+       y1="33.653999"
+       x2="46.732201"
+       y2="55.548199">
+      <stop
+         offset="0.3569"
+         style="stop-color:#EF6B2E"
+         id="stop848" />
+      <stop
+         offset="0.6328"
+         style="stop-color:#F19F00"
+         id="stop850" />
+    </linearGradient>
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       fill="url(#SVGID_1_)"
+       d="m 29,39.8 c 2.5,1.5 8.6,0.6 13.4,3.7 4.8,3.1 7.5,8.1 7.6,8.3 0.1,0.2 0.1,0.4 -0.2,0.7 -0.3,0.3 -0.8,0.3 -0.8,0.3 0,0 -11.1,1.8 -18.2,-4.9 -7.2,-6.7 -6.6,-13.5 -6.6,-13.5 0,0 0.4,2.9 4.8,5.4 z"
+       id="path19"
+       style="fill:url(#SVGID_1_)" />
+  </g>
+  <g
+     id="g30"
+     transform="matrix(0.2517709,0,0,0.2517709,0.65729094,0.67405125)">
+    <linearGradient
+       id="linearGradient860"
+       gradientUnits="userSpaceOnUse"
+       x1="24.858801"
+       y1="30.3876"
+       x2="46.752998"
+       y2="8.4933004">
+      <stop
+         offset="0.3707"
+         style="stop-color:#16B8C3"
+         id="stop856" />
+      <stop
+         offset="0.7422"
+         style="stop-color:#02AEF0"
+         id="stop858" />
+    </linearGradient>
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       fill="url(#SVGID_2_)"
+       d="m 24.1,29.7 c 0,0 -0.5,-6.9 6.6,-13.5 7.2,-6.8 18.3,-5 18.3,-5 0,0 0.5,0.1 0.8,0.3 0.3,0.2 0.3,0.5 0.2,0.7 -0.1,0.2 -2.8,5.3 -7.6,8.3 -4.8,3 -10.9,2.2 -13.4,3.7 -4.3,2.6 -4.9,5.5 -4.9,5.5 z"
+       id="path28"
+       style="fill:url(#SVGID_2_)" />
+  </g>
+  <g
+     id="g34"
+     transform="matrix(0.2517709,0,0,0.2517709,0.65729094,0.67405125)">
+    <path
+       fill-rule="evenodd"
+       clip-rule="evenodd"
+       fill="#1b1f24"
+       d="m 24,32 c 0,11.6 9.4,21 21,21 H 31 C 19.4,53 10,43.6 10,32 10,20.4 19.4,11 31,11 H 45 C 33.4,11 24,20.4 24,32 Z"
+       id="path32" />
+  </g>
+</svg>

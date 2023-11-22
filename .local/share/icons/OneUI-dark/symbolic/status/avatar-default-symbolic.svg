@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333332 4.2333335"
+   version="1.1"
+   id="svg11945"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="contacts-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11947"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="in"
+     inkscape:zoom="22.627417"
+     inkscape:cx="6.5849319"
+     inkscape:cy="9.0156114"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11945"
+     showguides="false" />
+  <defs
+     id="defs11942" />
+  <path
+     id="path12598"
+     style="fill:#dedede;fill-opacity:1;stroke-width:0.999999"
+     d="M 8 1 A 2.9999999 2.9999999 0 0 0 5 4 A 2.9999999 2.9999999 0 0 0 8 7 A 2.9999999 2.9999999 0 0 0 11 4 A 2.9999999 2.9999999 0 0 0 8 1 z M 7.9980469 8 C 5.0898157 8.0009865 2.583918 10.152945 2 13.001953 C 3.6014407 14.573543 5.9992441 15 7.9980469 15 C 9.9992443 15 12.398353 14.571093 14 12.998047 C 13.414913 10.149109 10.906444 7.9996168 7.9980469 8 z "
+     transform="scale(0.26458333)" />
+</svg>

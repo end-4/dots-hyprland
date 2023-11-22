@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933334"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="hoffice-hwp.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     units="px"
+     height="64px"
+     inkscape:zoom="4"
+     inkscape:cx="19.75"
+     inkscape:cy="53.625"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <defs
+     id="defs2" />
+  <path
+     id="path1039"
+     style="fill:#209ddf;fill-opacity:1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"
+     d="M 32 2 C 10.399999 2 2 10.4 2 32 C 2 53.600001 10.399999 62 32 62 C 53.6 62 62 53.600001 62 32 C 62 10.4 53.6 2 32 2 z "
+     transform="scale(0.26458334)" />
+  <path
+     id="rect978"
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:1.99616;stroke-linecap:round;stroke-linejoin:round"
+     d="M 30 13 L 30 17 L 21 17 L 21 21 L 43 21 L 43 17 L 34 17 L 34 13 L 30 13 z M 32 22 A 8.0000005 8.0000005 0 0 0 24 30 A 8.0000005 8.0000005 0 0 0 32 38 A 8.0000005 8.0000005 0 0 0 40 30 A 8.0000005 8.0000005 0 0 0 32 22 z M 32 26 A 4.0000003 4.0000003 0 0 1 36 30 A 4.0000003 4.0000003 0 0 1 32 34 A 4.0000003 4.0000003 0 0 1 28 30 A 4.0000003 4.0000003 0 0 1 32 26 z M 32 39 A 2.4999999 2.4999999 0 0 0 29.5 41.5 A 2.4999999 2.4999999 0 0 0 32 44 A 2.4999999 2.4999999 0 0 0 34.5 41.5 A 2.4999999 2.4999999 0 0 0 32 39 z M 20 40 L 20 46 L 20 49 L 44 49 L 44 45 L 24 45 L 24 40 L 20 40 z "
+     transform="scale(0.26458334)" />
+</svg>

@@ -1,1 +1,0 @@
-upload.svg

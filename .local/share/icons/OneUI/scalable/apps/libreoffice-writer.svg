@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewbox="0 0 200 200"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="libreoffice-writer.svg"
+   width="64"
+   height="64"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="9.2365823"
+     inkscape:cx="26.146035"
+     inkscape:cy="35.944031"
+     inkscape:window-width="1920"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4"
+     showguides="true" />
+  <path
+     d="M 2,32 C 2,10.4 10.4,2 32,2 53.6,2 62,10.4 62,32 62,53.6 53.6,62 32,62 10.4,62 2,53.6 2,32"
+     id="path2"
+     style="stroke-width:0.3;fill:#2b98ec;fill-opacity:1;stroke:none" />
+  <path
+     id="rect2173"
+     style="fill:#ffffff"
+     d="m 21,10 c -2.77,0 -5,2.23 -5,5 v 34 c 0,2.770001 2.23,5 5,5 h 22 c 2.77,0 5,-2.229999 5,-5 V 25 L 33,10 Z m 1.75,19 h 7.5 c 0.4155,0 0.75,0.3345 0.75,0.75 0,0.4155 -0.3345,0.75 -0.75,0.75 h -7.5 C 22.3345,30.5 22,30.1655 22,29.75 22,29.3345 22.3345,29 22.75,29 Z m 0,4.5 h 7.5 c 0.4155,0 0.75,0.3345 0.75,0.75 0,0.4155 -0.3345,0.75 -0.75,0.75 h -7.5 C 22.3345,35 22,34.6655 22,34.25 22,33.8345 22.3345,33.5 22.75,33.5 Z m 0,4.5 h 18.5 c 0.4155,0 0.75,0.3345 0.75,0.75 0,0.4155 -0.3345,0.75 -0.75,0.75 H 22.75 C 22.3345,39.5 22,39.1655 22,38.75 22,38.3345 22.3345,38 22.75,38 Z m 0,4.5 h 18.5 C 41.6655,42.5 42,42.8345 42,43.25 42,43.6655 41.6655,44 41.25,44 H 22.75 C 22.3345,44 22,43.6655 22,43.25 22,42.8345 22.3345,42.5 22.75,42.5 Z"
+     sodipodi:nodetypes="ssssssccsssssssssssssssssssssssssssss" />
+  <path
+     id="rect2357"
+     style="fill:#a9cdf5;fill-opacity:1;stroke-width:0.370066"
+     d="m 36,10 h 7 c 2.77,0 5,2.23 5,5 v 7.000001 z"
+     sodipodi:nodetypes="csscc" />
+  <path
+     d="M 34.5,29 C 33.669,29 33,29.669 33,30.5 v 4 c 0,0.831 0.669,1.5 1.5,1.5 h 6 c 0.831,0 1.5,-0.669 1.5,-1.5 v -4 C 42,29.669 41.331,29 40.5,29 Z"
+     style="fill:#3f77b9;fill-opacity:1;stroke-width:1.80907;stroke-linecap:round;stroke-linejoin:round"
+     id="path1385"
+     sodipodi:nodetypes="sssssssss" />
+</svg>
