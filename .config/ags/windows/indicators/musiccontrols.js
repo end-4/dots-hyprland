@@ -2,7 +2,6 @@ const { Gio, GLib, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
 const { exec, execAsync } = Utils;
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-import Indicator from '../../scripts/indicator.js';
 
 const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -49,6 +48,15 @@ function detectMediaSource(link) {
     return domain;
 }
 
+const DEFAULT_MUSIC_FONT = 'Gabarito';
+function getTrackfont(player) {
+    const title = player.trackTitle;
+    const artists = player.trackArtists.join(' ');
+    if(artists.includes('TANO*C')) return 'Chakra Petch'; // Rigid square replacement
+    if(title.includes('東方')) return 'serif'; // Rigid square replacement
+    return DEFAULT_MUSIC_FONT;
+}
+
 const TrackProgress = ({ player, ...rest }) => {
     const _updateProgress = (circprog) => {
         const player = Mpris.getPlayer();
@@ -67,11 +75,12 @@ const TrackProgress = ({ player, ...rest }) => {
     })
 }
 
-const TrackTitle = ({ player, ...rest }) => Label({
+const TrackTitle = ({ player, ...rest }) => Label({ 
     ...rest,
     label: 'No music playing',
     xalign: 0,
     truncate: 'end',
+    // wrap: true,
     className: 'osd-music-title',
     connections: [[player, (self) => {
         const player = Mpris.getPlayer(); // Else it would say "... - YouTube Music"
@@ -80,6 +89,10 @@ const TrackTitle = ({ player, ...rest }) => Label({
             self.label = player.trackTitle;
         else
             self.label = 'No music playing';
+
+        // Set font based on track/artist
+        const fontForThisTrack = getTrackfont(player);
+        self.css = `font-family: '${fontForThisTrack}'`;
     }, 'notify::track-title']]
 });
 

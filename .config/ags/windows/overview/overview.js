@@ -9,6 +9,7 @@ import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
 } from './searchbuttons.js';
+import { dumpToWorkspace, swapWorkspace } from "./actions.js";
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
@@ -25,8 +26,8 @@ const acotd = x => acot(x) * 180 / pi;
 
 const MAX_RESULTS = 10;
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
-const OVERVIEW_WS_NUM_SCALE = 0.08;
-const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.06;
+const OVERVIEW_WS_NUM_SCALE = 0.09;
+const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 const searchPromptTexts = [
     'Try "Kolourpaint"',
@@ -56,9 +57,9 @@ function substitute(str) {
     return str;
 }
 
-const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widget.MenuItem({
+const ContextWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
     label: `${label}`,
-    setup: menuItem => {
+    setup: (menuItem) => {
         let submenu = new Gtk.Menu();
         submenu.className = 'menu';
         for (let i = 1; i <= 10; i++) {
@@ -66,7 +67,8 @@ const ContextWorkspaceArray = ({ label, onClickBinary, thisWorkspace }) => Widge
                 label: `Workspace ${i}`
             });
             button.connect("activate", () => {
-                execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
+                // execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
+                actionFunc(thisWorkspace, i);
             });
             submenu.append(button);
         }
@@ -103,12 +105,12 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                     }),
                     ContextWorkspaceArray({
                         label: "Dump windows to workspace",
-                        onClickBinary: `${App.configDir}/scripts/dumptows`,
+                        actionFunc: dumpToWorkspace,
                         thisWorkspace: Number(id)
                     }),
                     ContextWorkspaceArray({
                         label: "Swap windows with workspace",
-                        onClickBinary: `${App.configDir}/scripts/dumptows`,
+                        actionFunc: swapWorkspace,
                         thisWorkspace: Number(id)
                     }),
                 ],
@@ -346,7 +348,7 @@ export const SearchAndWindows = () => {
 
             else {
                 App.closeWindow('overview');
-                execAsync(['xdg-open', `https://www.google.com/search?q=${text}`]).catch(print);
+                execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} -site:quora.com' &`]).catch(print); // fuck quora
             }
         },
         // Actually onChange but this is ta workaround for a bug

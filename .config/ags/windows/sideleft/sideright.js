@@ -85,6 +85,7 @@ export default () => Box({
                                         Widget.Label({
                                             hpack: 'center',
                                             className: 'txt-small txt',
+                                            truncate: 'end',
                                             connections: [[5000, label => {
                                                 execAsync(['bash', '-c', `uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'`]).then(upTimeString => {
                                                     label.label = `• uptime ${upTimeString}`;

@@ -1,7 +1,7 @@
 const { Gio, GLib } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
 const { execAsync, exec } = Utils;
-import Todo from "../../scripts/todo.js";
+import Todo from "../../services/todo.js";
 
 export function launchCustomCommand(command) {
     App.closeWindow('overview');
