@@ -1,5 +1,5 @@
 import { Widget } from '../../imports.js';
-import Indicator from '../../scripts/indicator.js';
+import Indicator from '../../services/indicator.js';
 import IndicatorValues from './indicatorvalues.js';
 import MusicControls from './musiccontrols.js';
 import NotificationPopups from './notificationpopups.js';

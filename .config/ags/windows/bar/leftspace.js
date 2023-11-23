@@ -3,8 +3,8 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { CONFIG_DIR, exec, execAsync } = Utils;
 import { setupCursorHover } from "../../lib/cursorhover.js";
 import { RoundedCorner } from "../../lib/roundedcorner.js";
-import Brightness from '../../scripts/brightness.js';
-import Indicator from '../../scripts/indicator.js';
+import Brightness from '../../services/brightness.js';
+import Indicator from '../../services/indicator.js';
 
 // Removes everything after the last 
 // em dash, en dash, minus, vertical bar, or middle dot    (note: maybe add open parenthesis?)

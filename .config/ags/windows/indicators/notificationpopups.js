@@ -4,8 +4,6 @@ import { App, Service, Utils, Widget } from '../../imports.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
-import Brightness from '../../scripts/brightness.js';
-import Indicator from '../../scripts/indicator.js';
 import Notification from '../../lib/notification.js';
 
 const PopupNotification = (notifObject) => Widget.Box({

@@ -2,8 +2,8 @@ const { Gio, Gdk, Gtk } = imports.gi;
 import { App, Widget, Utils } from '../../imports.js';
 const { Box, CenterBox, Label, Button } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
-import { getCalendarLayout } from "../../scripts/calendarlayout.js";
-import Todo from "../../scripts/todo.js";
+import { getCalendarLayout } from "../../lib/calendarlayout.js";
+import Todo from "../../services/todo.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
 import { NavigationIndicator } from "../../lib/navigationindicator.js";
 
