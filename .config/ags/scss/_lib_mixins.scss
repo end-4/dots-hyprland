@@ -59,14 +59,14 @@ $rounding_large: 1.705rem;
 @mixin icon-nerd {
     // Nerd Fonts
     font-family:
-        'SpaceMono Nerd Font',
-        'JetBrainsMono Nerd Font',
+        'SpaceMono NF',
+        'JetBrainsMono NF',
         monospace;
 }
 
 @mixin techfont {
     // Monospace for sys info n stuff. Doesn't have to be a nerd font, but it's cool.
-    font-family: 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono Nerd Font', monospace;
+    font-family: 'JetBrains Mono NF', 'JetBrains Mono NL', 'SpaceMono NF', monospace;
 }
 
 @mixin subtext {
