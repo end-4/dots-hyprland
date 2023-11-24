@@ -39,11 +39,12 @@ $rounding_large: 1.705rem;
 @mixin mainfont {
     // Other clean sans-serif
     font-family:
-        'AR One Sans',
         'Geist',
+        'AR One Sans',
         'Inter',
         'Roboto',
         'Noto Sans',
+        'Ubuntu',
         sans-serif;
     // font-weight: 500;
 }

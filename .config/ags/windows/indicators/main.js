@@ -2,6 +2,7 @@ import { Widget } from '../../imports.js';
 import Indicator from '../../services/indicator.js';
 import IndicatorValues from './indicatorvalues.js';
 import MusicControls from './musiccontrols.js';
+import ColorScheme from './colorscheme.js';
 import NotificationPopups from './notificationpopups.js';
 
 export default (monitor) => Widget.Window({
@@ -22,6 +23,7 @@ export default (monitor) => Widget.Window({
                 IndicatorValues(),
                 MusicControls(),
                 NotificationPopups(),
+                ColorScheme(),
             ]
         })
     }),
