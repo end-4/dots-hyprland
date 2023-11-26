@@ -368,6 +368,19 @@
     background-color: mix($t_surface, $t_onSurface, 65%);
 }
 
+.sidebar-todo-crosser {
+    transition: margin 200ms cubic-bezier(0.1, 1, 0, 1), background-color 0ms;
+    min-width: 0rem;
+}
+
+.sidebar-todo-crosser-crossed {
+    background-color: $onBackground;
+}
+
+.sidebar-todo-crosser-removed {
+    background-color: $error;
+}
+
 .sidebar-clipboard-item {
     border-radius: $rounding_small;
     min-height: 2.045rem;
