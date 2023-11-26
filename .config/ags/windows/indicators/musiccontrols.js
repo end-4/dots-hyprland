@@ -48,12 +48,12 @@ function detectMediaSource(link) {
     return domain;
 }
 
-const DEFAULT_MUSIC_FONT = 'Gabarito';
+const DEFAULT_MUSIC_FONT = 'Gabarito, sans-serif';
 function getTrackfont(player) {
     const title = player.trackTitle;
     const artists = player.trackArtists.join(' ');
-    if(artists.includes('TANO*C')) return 'Chakra Petch'; // Rigid square replacement
-    if(title.includes('東方')) return 'serif'; // Rigid square replacement
+    if(artists.includes('TANO*C')) return 'Chakra Petch, sans-serif'; // Rigid square replacement
+    if(title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
     return DEFAULT_MUSIC_FONT;
 }
 
@@ -92,7 +92,7 @@ const TrackTitle = ({ player, ...rest }) => Label({
 
         // Set font based on track/artist
         const fontForThisTrack = getTrackfont(player);
-        self.css = `font-family: '${fontForThisTrack}'`;
+        self.css = `font-family: ${fontForThisTrack};`;
     }, 'notify::track-title']]
 });
 

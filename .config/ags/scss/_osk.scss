@@ -5,14 +5,18 @@ $osk_key_rounding: 0.682rem;
 $osk_key_fontsize: 1.091rem;
 
 .osk-window {
-    @include md3_decel_fast;
+    // @include md3_decel_fast;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
     // min-height: 29.591rem;
     // min-width: 50rem;
     background-color: $t_background;
+}
+
+.osk-body {
     padding: 1.023rem;
+    padding-top: 0px;
 }
 
 .osk-show {
@@ -24,6 +28,15 @@ $osk_key_fontsize: 1.091rem;
     margin-bottom: -30.682rem;
     // opacity: 0;
     @include md3_accel_fast;
+}
+
+.osk-dragline {
+    @include full-rounding;
+    background-color: $surfaceVariant;
+    min-height: 0.341rem;
+    min-width: 10.227rem;
+    margin-top: 0.545rem;
+    margin-bottom: 0.205rem;
 }
 
 .osk-key {

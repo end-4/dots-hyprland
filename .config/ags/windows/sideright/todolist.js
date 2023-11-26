@@ -8,18 +8,13 @@ import { NavigationIndicator } from "../../lib/navigationindicator.js";
 
 const defaultTodoSelected = 'undone';
 
-const todoListItem = (task, id, isDone) => {
+const todoListItem = (task, id, isDone, isEven = false) => {
     const crosser = Widget.Box({
         className: 'sidebar-todo-crosser',
     });
     const todoContent = Widget.Box({
         className: 'sidebar-todo-item spacing-h-5',
         children: [
-            Widget.Label({
-                vpack: 'start',
-                className: 'txt txt-small',
-                label: '•',
-            }),
             Widget.Label({
                 hexpand: true,
                 xalign: 0,
