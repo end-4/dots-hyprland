@@ -2,7 +2,7 @@
 // Material colors provide excellent readability, but can be uninteresting.
 // This is an attempt to improve that.
 @if $darkmode ==true {
-    $background: mix(mix($background, $primary, 95%), #000000, 50%);
+    $background: mix(mix($background, $primary, 90%), #000000, 50%);
     $surface: mix($surface, $primaryContainer, 98%);
     $surfaceVariant: mix($surfaceVariant, #000000, 55%);
 }
