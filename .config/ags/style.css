@@ -1260,7 +1260,6 @@ tooltip {
   opacity: 0.2; }
 
 .osk-window {
-  transition: 170ms cubic-bezier(0.05, 0.7, 0.1, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   border-top: 1px solid rgba(164, 162, 167, 0.19);
@@ -1269,8 +1268,11 @@ tooltip {
   border-bottom: 1px solid rgba(128, 127, 132, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
   margin: 7px;
-  background-color: #16161b;
-  padding: 1.023rem; }
+  background-color: #16161b; }
+
+.osk-body {
+  padding: 1.023rem;
+  padding-top: 0px; }
 
 .osk-show {
   transition: 170ms cubic-bezier(0.05, 0.7, 0.1, 1); }
@@ -1279,6 +1281,15 @@ tooltip {
   margin-top: 30.682rem;
   margin-bottom: -30.682rem;
   transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15); }
+
+.osk-dragline {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  background-color: #27272b;
+  min-height: 0.341rem;
+  min-width: 10.227rem;
+  margin-top: 0.545rem;
+  margin-bottom: 0.205rem; }
 
 .osk-key {
   border-radius: 0.682rem;
@@ -1631,6 +1642,9 @@ tooltip {
 
 .sidebar-todo-item {
   padding-right: 0.545rem; }
+
+.sidebar-todo-item-even {
+  background-color: rgba(39, 39, 43, 0.1); }
 
 .sidebar-todo-item-action {
   border-radius: 9999px;

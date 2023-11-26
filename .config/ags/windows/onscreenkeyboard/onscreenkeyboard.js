@@ -1,4 +1,6 @@
+const { GLib, Gdk, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../lib/materialicon.js';
@@ -16,6 +18,16 @@ function releaseAllKeys() {
         .catch(print);
 }
 var modsPressed = false;
+
+const topDecor = Box({
+    vertical: true,
+    children: [
+        Box({
+            hpack: 'center',
+            className: 'osk-dragline'
+        })
+    ]
+});
 
 const keyboardControlButton = (icon, text, runFunction) => Button({
     className: 'osk-control-button spacing-h-10',
@@ -100,13 +112,59 @@ const keyboardItself = (kbJson) => {
     })
 }
 
-export default () => Box({
+const keyboardWindow = Box({
     vexpand: true,
     hexpand: true,
-    className: 'osk-window spacing-h-10',
+    vertical: true,
+    className: 'osk-window spacing-v-5',
     children: [
-        keyboardControls,
-        separatorLine,
-        keyboardItself(keyboardJson),
+        topDecor,
+        Box({
+            className: 'osk-body spacing-h-10',
+            children: [
+                keyboardControls,
+                separatorLine,
+                keyboardItself(keyboardJson),
+            ],
+        })
     ],
+    connections: [[App, (box, name, visible) => { // Update on open
+        if (name == 'osk' && visible) {
+            keyboardWindow.setCss(`margin-bottom: -0px;`);
+        }
+    }],],
 });
+
+const gestureEvBox = EventBox({ child: keyboardWindow })
+const gesture = Gtk.GestureDrag.new(gestureEvBox);
+gesture.connect('drag-begin', () => {
+    Hyprland.sendMessage('j/cursorpos').then((out) => {
+        gesture.startY = JSON.parse(out).y;
+    }).catch(print);
+});
+gesture.connect('drag-update', () => {
+    Hyprland.sendMessage('j/cursorpos').then((out) => {
+        const currentY = JSON.parse(out).y;
+        const offset = gesture.startY - currentY;
+
+        if (offset > 0) return;
+
+        keyboardWindow.setCss(`
+            margin-bottom: ${offset}px;
+        `);
+    }).catch(print);
+});
+gesture.connect('drag-end', () => {
+    var offset = gesture.get_offset()[2];
+    if (offset > 50) {
+        App.closeWindow('osk');
+    }
+    else {
+        keyboardWindow.setCss(`
+            transition: margin-bottom 170ms cubic-bezier(0.05, 0.7, 0.1, 1);
+            margin-bottom: 0px;
+        `);
+    }
+})
+
+export default () => gestureEvBox;

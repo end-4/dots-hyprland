@@ -283,7 +283,6 @@ export default ({
                     self._ready = true;
                     return;
                 }
-
                 const offset = gesture.get_offset()[1];
 
                 if (Math.abs(offset) > dragThreshold && offset * initialDir > 0) {

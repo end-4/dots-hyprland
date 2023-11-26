@@ -354,6 +354,10 @@
     padding-right: 0.545rem;
 }
 
+.sidebar-todo-item-even {
+    background-color: $t_t_surfaceVariant;
+}
+
 .sidebar-todo-item-action {
     border-radius: 9999px;
     min-width: 1.705rem;
