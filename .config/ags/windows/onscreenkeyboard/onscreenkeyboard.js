@@ -6,6 +6,7 @@ const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { separatorLine } from '../../lib/separator.js';
 import { defaultOskLayout, oskLayouts } from '../../data/keyboardlayouts.js';
+import { setupCursorHoverGrab } from '../../lib/cursorhover.js';
 
 const keyboardLayout = defaultOskLayout;
 const keyboardJson = oskLayouts[keyboardLayout];
@@ -24,7 +25,11 @@ const topDecor = Box({
     children: [
         Box({
             hpack: 'center',
-            className: 'osk-dragline'
+            className: 'osk-dragline',
+            homogeneous: true,
+            children: [EventBox({
+                setup: (self) => setupCursorHoverGrab(self),
+            })]
         })
     ]
 });
