@@ -12,12 +12,7 @@ const SysTrayItem = item => Button({
         hpack: 'center',
         binds: [['icon', item, 'icon']]
     }),
-    binds: [['tooltipMarkup', item, 'tooltipMarkup']],
-    // setup: btn => {
-    //     const id = item.menu.connect('popped-up', menu => {
-    //         menu.disconnect(id);
-    //     });
-    // },
+    binds: [['tooltipMarkup', item, 'tooltip-markup']],
     onClicked: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
     onSecondaryClick: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
 });

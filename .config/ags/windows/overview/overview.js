@@ -1,5 +1,5 @@
 const { Gdk, Gio, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+import { App, Service, Utils, Variable, Widget } from '../../imports.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
@@ -37,6 +37,8 @@ const searchPromptTexts = [
     'Drag n\' drop to move windows',
     'Type to search',
 ]
+
+const overviewTick = Variable(false);
 
 function substitute(str) {
     const subs = [
@@ -192,6 +194,7 @@ const workspace = index => {
             setup: eventbox => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
+                    overviewTick.value = !overviewTick.value;
                     execAsync([`bash`, `-c`, `hyprctl dispatch movetoworkspacesilent ${index},address:${data.get_text()}`, `&`]).catch(print);
                 });
             },
@@ -236,8 +239,11 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     }]],
     setup: (box) => box._update(box),
     connections: [
+        // Update on change
+        [overviewTick, box => { if (!App.getWindow(windowName).visible) return; Utils.timeout(2, () => box._update(box)); }],
         [Hyprland, box => { if (!App.getWindow(windowName).visible) return; box._update(box); }, 'client-added'],
         [Hyprland, box => { if (!App.getWindow(windowName).visible) return; box._update(box); }, 'client-removed'],
+        // Update on show
         [App, (box, name, visible) => { // Update on open
             if (name == 'overview' && visible) {
                 box._update(box);
