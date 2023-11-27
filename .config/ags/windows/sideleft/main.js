@@ -1,11 +1,11 @@
 import PopupWindow from '../../lib/popupwindow.js';
-import SidebarRight from "./sideright.js";
+import SidebarLeft from "./sideleft.js";
 
 export default () => PopupWindow({
     focusable: true,
-    anchor: ['right', 'top', 'bottom'],
-    name: 'sideright',
-    showClassName: 'sideright-show',
-    hideClassName: 'sideright-hide',
-    child: SidebarRight(),
+    anchor: ['left', 'top', 'bottom'],
+    name: 'sideleft',
+    showClassName: 'sideleft-show',
+    hideClassName: 'sideleft-hide',
+    child: SidebarLeft(),
 });

@@ -11,6 +11,7 @@ import Indicator from './windows/indicators/main.js';
 import Osk from './windows/onscreenkeyboard/main.js';
 import Overview from './windows/overview/main.js';
 import Session from './windows/session/main.js';
+import SideLeft from './windows/sideleft/main.js';
 import SideRight from './windows/sideright/main.js';
 
 // Longer than actual anim time (150, see styles) to make sure windows animate fully
@@ -47,6 +48,7 @@ export default {
         Overview(),
         Indicator(),
         Cheatsheet(),
+        SideLeft(),
         SideRight(),
         Osk(), // On-screen keyboard
         Session(), // Power menu, if that's what you like to call it
