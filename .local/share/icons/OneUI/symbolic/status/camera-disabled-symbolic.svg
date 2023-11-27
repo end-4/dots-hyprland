@@ -1,9 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g fill="#363636" opacity=".35" stroke-linecap="round" stroke-linejoin="round">
-  <path d="m10.5 6a3.5 3.5 0 0 0-3.5 3.5 3.5 3.5 0 0 0 3.5 3.5 3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5zm0 1a2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5 2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5z" stroke-width="1.4"/>
-  <path d="m2 4c-1.108 0-2 0.892-2 2v7c0 1.108 0.892 2 2 2h12c1.108 0 2-0.892 2-2v-7c0-1.108-0.892-2-2-2zm0 1h12c0.554 0 1 0.446 1 1v7c0 0.554-0.446 1-1 1h-12c-0.554 0-1-0.446-1-1v-7c0-0.554 0.446-1 1-1z"/>
-  <rect x="7" y="2" width="6" height="1" rx="0" ry="0"/>
-  <rect x="2" y="6" width="2" height="1" rx="0" ry="0"/>
- </g>
- <rect transform="rotate(45)" x="1.5135" y="-.69975" width="20" height="1" rx=".5" ry=".5" fill="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width=".48307" style="paint-order:markers stroke fill"/>
-</svg>

@@ -1,5 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path class="ColorScheme-Text" d="m4 7v3h2v-3h-2zm3 0v2h2v-2h-2zm3 0v3h0.16992c0.30033-0.85468 0.9754-1.5298 1.8301-1.8301v-1.1699h-2zm-3 3v3h2v-3h-2zm-3 1v2h2v-2h-2z" color="#363636" fill="#363636"/>
- <path d="m6 1-4 4v1.4141 6.5859c0 1.108 0.892 2 2 2h5v-1h-5c-0.554 0-1-0.446-1-1v-7.5859l3.4141-3.4141h5.5859c0.554 0 1 0.446 1 1v5h1v-5c0-1.108-0.892-2-2-2h-6z" fill="#363636"/>
- <path d="m13 9c-1.108 0-2 0.892-2 2v1c-0.554 0-1 0.446-1 1v2c0 0.554 0.446 1 1 1h4c0.554 0 1-0.446 1-1v-2c0-0.554-0.446-1-1-1v-1c0-1.108-0.892-2-2-2zm0 1c0.554 0 1 0.446 1 1v1h-2v-1c0-0.554 0.446-1 1-1zm-2 3h4v2h-4z" fill="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="paint-order:stroke fill markers"/>
-</svg>

@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1" xmlns="http://www.w3.org/2000/svg">
- <path d="m8 1c-2.216 0-4 1.784-4 4v2h2v-2c0-1.108 0.892-2 2-2s2 0.892 2 2v2h2v-2c0-2.216-1.784-4-4-4z" fill="#d2d2d2" stroke="#000" stroke-opacity=".33725"/>
- <rect transform="matrix(0,-1,-1,0,0,0)" x="-15" y="-14" width="8" height="12" rx="1" ry="1" fill="#f1b937" stroke="#ac801b" stroke-opacity=".7451"/>
-</svg>

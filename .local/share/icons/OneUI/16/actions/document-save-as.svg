@@ -1,9 +1,0 @@
-<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <defs>
-  <style id="current-color-scheme" type="text/css">.ColorScheme-Text {
-        color:#363636;
-      }</style>
- </defs>
- <path d="m3 1c-1.108 0-2 0.892-2 2v10c0 1.108 0.892 2 2 2h4v-1h-3v-2c0-0.554 0.446-1 1-1h2v-1h-2c-1.108 0-2 0.892-2 2v2c-0.554 0-1-0.446-1-1v-10c0-0.554 0.446-1 1-1h2v3c0 1.108 0.892 2 2 2h0.5 1.5c1.108 0 2-0.892 2-2v-2.5859l3 3v1.5859h1v-0.58594-0.41406-1l-4-4h-1-4-1-2zm3 1h2v4h-1c-0.554 0-1-0.446-1-1v-3z" style="fill:currentColor" class="ColorScheme-Text"/>
- <path class="ColorScheme-Text" d="m12 8-4 4v2h2l4-4zm-0.31055 1.6895 0.5918 0.5918-1.6875 1.6875v0.01563l-1.2812 1.2969-0.59375-0.59375z" fill="currentColor"/>
-</svg>

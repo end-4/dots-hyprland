@@ -1,9 +1,0 @@
-<svg height='16' width='16' xmlns='http://www.w3.org/2000/svg'>
-    <g color='#363636' transform='translate(-533 -57)'>
-        <rect fill='#363636' height='1' overflow='visible' style='marker:none' width='14' x='534' y='58'/>
-        <rect fill='#363636' height='1' overflow='visible' style='marker:none' width='14' x='534' y='61'/>
-        <path d='M534 67h10v1h-10zM546 68v2h-10v1h10v2l3-2.5z' fill='#363636' overflow='visible' style='marker:none'/>
-        <rect fill='#363636' height='1' overflow='visible' style='marker:none' width='14' x='534' y='64'/>
-        
-    </g>
-</svg>

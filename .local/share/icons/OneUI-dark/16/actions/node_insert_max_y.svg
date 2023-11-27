@@ -1,9 +1,0 @@
-<svg width="16" height="16.016" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g transform="rotate(-90 8.008 8.0002)">
-  <rect transform="matrix(0,1,1,0,0,0)" y=".0164" width="16" height="16" color="#000000" fill="none"/>
-  <path d="m0.36914 0.017578a0.5 0.5 0 0 0-0.30273 0.23438 0.5 0.5 0 0 0 0.18555 0.68164s0.77717 0.4392 1.5996 1.5547c0.82244 1.1155 1.6562 2.8758 1.6562 5.5195s-0.83418 4.4006-1.6562 5.5117-1.5977 1.5449-1.5977 1.5449a0.5 0.5 0 0 0-0.18945 0.68164 0.5 0.5 0 0 0 0.68164 0.18945s0.97813-0.56251 1.9102-1.8223c0.93202-1.2598 1.8516-3.2492 1.8516-6.1055s-0.91991-4.8497-1.8516-6.1133c-0.93166-1.2636-1.9082-1.8281-1.9082-1.8281a0.5 0.5 0 0 0-0.37891-0.048828z" color="#000000" fill="#dedede" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" style="-inkscape-stroke:none"/>
-  <path d="m1.5322 5.5082v5.006h4.976v-5.006z" color="#000000" fill="#3daee9" fill-rule="evenodd" opacity=".35" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" style="-inkscape-stroke:none"/>
-  <path d="m1.0312 5.5078a0.50005 0.50005 0 0 1 0.5-0.5h4.9766a0.50005 0.50005 0 0 1 0.5 0.5v5.0059a0.50005 0.50005 0 0 1-0.5 0.5h-4.9766a0.50005 0.50005 0 0 1-0.5-0.5zm1 0.5v4.0059h3.9766v-4.0059z" color="#000000" fill="#3daee9" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" style="-inkscape-stroke:none"/>
-  <path d="m8.0164 7v2h3v3h2v-3h3v-2h-3v-3h-2v3z" fill="#dedede" fill-rule="evenodd"/>
- </g>
-</svg>

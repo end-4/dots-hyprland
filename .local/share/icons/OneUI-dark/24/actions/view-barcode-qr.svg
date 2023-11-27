@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <style type="text/css" id="current-color-scheme">
-        .ColorScheme-Text {
-            color:#dedede;
-        }
-    </style><g transform="translate(1,1)">
-    <path class="ColorScheme-Text" fill="currentColor" d="M 3,3 V 9 H 9 V 3 Z m 7,0 v 1 h 1 V 3 Z m 1,1 v 1 h -1 v 1 h 2 V 4 Z m 2,-1 v 6 h 6 V 3 Z M 4,4 H 8 V 8 H 4 Z m 10,0 h 4 V 8 H 14 Z M 5,5 V 7 H 7 V 5 Z m 10,0 v 2 h 2 V 5 Z m -5,2 v 1 h 1 V 7 Z m 1,1 v 1 h 1 V 8 Z m -7,2 v 1 h 1 v -1 z m 1,1 v 1 h 2 v -1 z m 2,0 H 8 9 V 10 H 8 7 Z m 2,0 v 1 h 2 v -2 h -1 v 1 z m 2,1 v 1 h -1 v 1 h 1 v 1 h 1 c 0,-1 0,-2 0,-3 z m 0,3 h -1 v 1 h 1 z M 4,11 H 3 v 1 h 1 z m 8,-1 v 1 h 1 v -1 z m 1,1 v 1 c 1,0 2,0 3,0 v -1 h -1 v -1 h -1 v 1 z m 4,-1 c 0,0.666667 0,1.333333 0,2 h 1 v -1 h 1 V 10 Z M 3,13 v 6 h 6 v -6 z m 10,0 v 4 h 1 v 1 h 1 v -1 h 2 v -1 h 1 v -1 h -1 v -2 z m 5,2 h 1 v -2 h -1 z m 0,1 v 1 h 1 v -1 z m -3,2 v 1 h 2 V 18 Z M 4,14 h 4 v 4 H 4 Z m 10,0 h 2 v 2 h -2 z m -9,1 v 2 h 2 v -2 z m 5,2 v 1 h 1 v -1 z m 2,1 v 1 h 1 v -1 z m 6,0 v 1 h 1 v -1 z"/>
-</g></svg>

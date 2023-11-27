@@ -1,8 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g transform='translate(-533 191)'>
-        <path color='#000' d='M533-176v1h15v-1z' fill='#dedede' fill-rule='evenodd' font-family='sans-serif' font-weight='400' overflow='visible' style='line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal' white-space='normal'/>
-        <path d='M540.5-185c-.277 0-.5.223-.5.5v2.5h-3l3.5 4.5 3.563-4.5H541v-2.5a.499.499 0 0 0-.5-.5z' fill='#dedede'/>
-        
-        <path class='warning' d='M533.5-190a.499.499 0 1 0 0 1h1a.499.499 0 1 0 0-1zm2.551 0c.252 2.247 2.135 4 4.45 4 2.313 0 4.196-1.753 4.448-4zm10.45 0a.499.499 0 1 0 0 1h1a.499.499 0 1 0 0-1zm-1.759 3.242a.499.499 0 0 0-.354.854l.708.707a.498.498 0 0 0 .707 0 .499.499 0 0 0 0-.707l-.707-.707a.501.501 0 0 0-.354-.147zm-8.58.01a.497.497 0 0 0-.258.137l-.707.707a.499.499 0 0 0 0 .707.5.5 0 0 0 .354.148.5.5 0 0 0 .353-.148l.708-.707a.499.499 0 0 0-.45-.844z' fill='#dedede'/>
-    </g>
-</svg>

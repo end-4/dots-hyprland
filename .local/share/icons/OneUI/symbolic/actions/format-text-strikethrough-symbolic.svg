@@ -1,4 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <path d="m1 7v1h14v-1z" color="#000000" fill="#363636" overflow="visible" stroke-width=".70711" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none"/>
- <path d="m4 3v1h6c1.108 0 2 0.892 2 2h1c0-1.662-1.338-3-3-3h-6zm-0.81836 6c-0.11095 0.31399-0.18164 0.64708-0.18164 1 0 1.662 1.338 3 3 3h6 1v-1-3h-1v3h-6c-1.108 0-2-0.892-2-2 0-0.36693 0.10429-0.705 0.27539-1h-1.0938z" fill="#363636"/>
-</svg>

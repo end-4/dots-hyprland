@@ -1,6 +1,0 @@
-<svg height="16" width="16" xmlns="http://www.w3.org/2000/svg">
-    <g color="#000" fill="#dedede">
-        <path d="M13 7v1H3V7z" font-family="sans-serif" font-weight="400" overflow="visible" style="line-height:normal;font-variant-ligatures:none;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;shape-padding:0;isolation:auto;mix-blend-mode:normal;marker:none" white-space="normal"/>
-        <path d="M5 5l-.002 5a36.975 36.975 0 0 1-2.323-1.166A44.8 44.8 0 0 1 .416 7.5a51.555 51.555 0 0 1 2.26-1.32A42.81 42.81 0 0 1 4.999 5zM11 5l.002 5c.76-.348 1.535-.737 2.323-1.166A44.8 44.8 0 0 0 15.584 7.5a51.555 51.555 0 0 0-2.26-1.32A43.084 43.084 0 0 0 11.001 5z" overflow="visible" style="marker:none"/>
-    </g>
-</svg>

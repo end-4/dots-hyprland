@@ -1,8 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g id="draw-geometry-circle-from-three-points" transform="matrix(1.1162 0 0 1.1162 -719.06 -98.253)">
-  <path d="m658.06 95.558c0 0.80381-0.1598 1.6073-0.4674 2.3499-0.3076 0.74262-0.7628 1.4238-1.3311 1.9922-0.5683 0.56841-1.2494 1.0235-1.9918 1.3311-0.7424 0.3075-1.5456 0.4673-2.3489 0.4673-0.8033-1e-4 -1.6061-0.1599-2.348-0.4676-0.7419-0.3076-1.4222-0.7628-1.9898-1.3312-0.5676-0.56838-1.0221-1.2495-1.3292-1.9921-0.3071-0.74256-0.4667-1.546-0.4667-2.3497 0-0.80373 0.1596-1.6071 0.4667-2.3497s0.7616-1.4237 1.3292-1.9921c0.5676-0.56837 1.2479-1.0235 1.9898-1.3312s1.5447-0.46752 2.348-0.46757c0.8033-4e-5 1.6065 0.15974 2.3489 0.46731 0.7424 0.30758 1.4235 0.76271 1.9918 1.3311 0.5683 0.56838 1.0235 1.2496 1.3311 1.9922 0.3076 0.74262 0.4674 1.5461 0.4674 2.3499" fill="none" stroke="#363636" stroke-dashoffset="23.2" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="4.27"/>
-  <rect x="648.94" y="88.475" width="2.5502" height="2.5587" color="#000000" fill="#ff2100" fill-opacity=".39216" fill-rule="evenodd" stroke="#d40000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" stroke-width=".89593"/>
-  <rect x="644.67" y="94.853" width="2.5502" height="2.5587" color="#000000" fill="#ff2100" fill-opacity=".39216" fill-rule="evenodd" stroke="#d40000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" stroke-width=".89593"/>
-  <rect x="655.56" y="98.055" width="2.5502" height="2.5587" color="#000000" fill="#ff2100" fill-opacity=".39216" fill-rule="evenodd" stroke="#d40000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="0" stroke-width=".89593"/>
- </g>
-</svg>

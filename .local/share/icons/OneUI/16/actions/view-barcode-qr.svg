@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <style type="text/css" id="current-color-scheme">
-        .ColorScheme-Text {
-            color:#363636;
-        }
-    </style>
-    <path class="ColorScheme-Text" fill="currentColor" d="M 2 2 L 2 6 L 6 6 L 6 2 L 2 2 z M 8 2 L 8 3 L 9 3 L 9 2 L 8 2 z M 8 3 L 7 3 L 7 5 L 8 5 L 8 3 z M 8 5 L 8 6 L 9 6 L 9 5 L 8 5 z M 8 6 L 7 6 L 7 7 L 8 7 L 8 6 z M 8 7 L 8 8 L 8 9 L 10 9 L 10 8 L 9 8 L 9 7 L 8 7 z M 10 8 L 11 8 L 11 7 L 10 7 L 10 8 z M 11 8 L 11 9 L 12 9 L 12 8 L 11 8 z M 12 8 L 13 8 L 13 7 L 12 7 L 12 8 z M 13 8 L 13 9 L 12 9 L 12 10 L 13 10 L 14 10 L 14 9 L 14 8 L 13 8 z M 12 10 L 10 10 L 10 12 L 12 12 L 12 11 L 12 10 z M 10 12 L 9 12 L 9 13 L 10 13 L 10 12 z M 10 13 L 10 14 L 11 14 L 11 13 L 10 13 z M 9 13 L 8 13 L 8 14 L 9 14 L 9 13 z M 8 13 L 8 11 L 7 11 L 7 13 L 8 13 z M 8 11 L 9 11 L 9 10 L 8 10 L 8 11 z M 7 7 L 6 7 L 5 7 L 5 8 L 6 8 L 6 9 L 7 9 L 7 7 z M 5 8 L 3 8 L 3 9 L 5 9 L 5 8 z M 3 8 L 3 7 L 2 7 L 2 8 L 3 8 z M 10 2 L 10 6 L 14 6 L 14 2 L 10 2 z M 3 3 L 5 3 L 5 5 L 3 5 L 3 3 z M 11 3 L 13 3 L 13 5 L 11 5 L 11 3 z M 2 10 L 2 14 L 6 14 L 6 10 L 2 10 z M 3 11 L 5 11 L 5 13 L 3 13 L 3 11 z M 13 11 L 13 12 L 13 13 L 14 13 L 14 11 L 13 11 z M 13 13 L 12 13 L 12 14 L 13 14 L 13 13 z"/>
-</svg>

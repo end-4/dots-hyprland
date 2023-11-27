@@ -1,4 +1,0 @@
-<svg version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><style type="text/css" id="current-color-scheme">.ColorScheme-Text { color: #363636; }.ColorScheme-NegativeText { color: #da4453; }</style>
-    <path d="M 9,2 6.5605469,4.4394531 7.2675781,5.1464844 9.0019531,3.4121094 11.125,5.5351562 l 0.0059,-0.00391 0.0039,0.00391 2.828125,-2.828125 C 13.965857,2.7120316 13.255859,2 13.255859,2 l -2.125,2.125 L 9.0039062,2 9.0019562,2.00195 Z M 2,4.1210938 V 14 h 9.878906 l -1,-1 H 3 V 9 h 2.4609375 l 3.5351563,3.535156 0.00195,-0.002 L 9,12.535156 9.7070312,11.828125 C 8.4294582,10.554663 7.1530097,9.2780277 5.875,8 H 3 V 5.1210938 Z M 3,6 v 1 l 1.8808594,0.00195 -1,-1 z" fill="currentColor" class="ColorScheme-Text"/>
-    <path d="M 2.664062,1.999999 1.9570307,2.7070302 13.25,14 13.957031,13.267578 Z" fill="currentColor" class="ColorScheme-NegativeText"/>
-</svg>

@@ -1,8 +1,0 @@
-<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g transform='translate(-513 191)'>
-        <path color='#000' d='M513-176v1h15v-1z' fill='#363636' fill-rule='evenodd' font-family='sans-serif' font-weight='400' overflow='visible' style='line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal' white-space='normal'/>
-        <path d='M515.551-181.951a.5.5 0 0 0-.353.148.499.499 0 0 0 0 .707l.707.707a.498.498 0 0 0 .707 0 .499.499 0 0 0 0-.707l-.707-.707a.5.5 0 0 0-.354-.148zm9.898.002a.498.498 0 0 0-.353.146l-.707.707a.499.499 0 1 0 .707.707l.707-.707a.499.499 0 0 0-.354-.853zM520.5-181c-2.314 0-4.197 1.753-4.449 4h8.898c-.251-2.247-2.135-4-4.449-4zm-7 3a.499.499 0 1 0 0 1h1a.499.499 0 1 0 0-1zm13 0a.499.499 0 1 0 0 1h1a.499.499 0 1 0 0-1z' fill='#363636'/>
-        
-        <path d='M520.5-189.5L517-185h3v2.5a.499.499 0 1 0 1 0v-2.5h3z' fill='#363636'/>
-    </g>
-</svg>

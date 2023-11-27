@@ -1,4 +1,0 @@
-<svg width="16px" height="16px" version="1.1">
- <path d="m4 2v3h-2v1h2v4h-2v1h2v3h1v-3h4v3h1v-3h2v-1h-2v-4h2v-1h-2v-3h-1v3h-4v-3zm9.5 0c-0.277 0-0.5 0.223-0.5 0.5v9c0 0.277 0.223 0.5 0.5 0.5s0.5-0.223 0.5-0.5v-9c0-0.277-0.223-0.5-0.5-0.5zm-8.5 4h4v4h-4zm8.5 7a0.5 0.5 0 0 0-0.5 0.5 0.5 0.5 0 0 0 0.5 0.5 0.5 0.5 0 0 0 0.5-0.5 0.5 0.5 0 0 0-0.5-0.5z" fill="#dedede" opacity=".35"/>
- <rect transform="rotate(45)" x=".31371" y="-.5" width="22" height="1" rx=".5" ry=".5" fill="#dedede"/>
-</svg>

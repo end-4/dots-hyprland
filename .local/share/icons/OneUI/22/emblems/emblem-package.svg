@@ -1,6 +1,0 @@
-<svg width="22" height="22" version="1.1" xmlns="http://www.w3.org/2000/svg">
- <g transform="matrix(.8 0 0 .8 1.4 1.4)">
-  <circle cx="12" cy="12" r="10" fill="#c87137"/>
-  <path d="m8.25 7-2.5 2.5h5v-2.5zm5 0v2.5h5l-2.5-2.5zm-7.5 3.75v6.25h12.5v-6.25z" fill="#fff"/>
- </g>
-</svg>
