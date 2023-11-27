@@ -30,7 +30,8 @@ const OVERVIEW_WS_NUM_SCALE = 0.09;
 const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 const searchPromptTexts = [
-    'Try "Kolourpaint"',
+    'Try "~/.config"',
+    'Try "Files"',
     'Try "6*cos(pi)"',
     'Try "sudo pacman -Syu"',
     'Try "How to basic"',
@@ -39,6 +40,11 @@ const searchPromptTexts = [
 ]
 
 const overviewTick = Variable(false);
+
+function iconExists(iconName) {
+    let iconTheme = Gtk.IconTheme.get_default();
+    return iconTheme.has_icon(iconName);
+}
 
 function substitute(str) {
     const subs = [
@@ -56,6 +62,7 @@ function substitute(str) {
             return to;
     }
 
+    if(!iconExists(str)) str = str.toLowerCase().replace(/\s+/g, '-'); // Turn into kebab-case
     return str;
 }
 
@@ -71,6 +78,7 @@ const ContextWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.M
             button.connect("activate", () => {
                 // execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
                 actionFunc(thisWorkspace, i);
+                overviewTick.value = !overviewTick.value;
             });
             submenu.append(button);
         }
