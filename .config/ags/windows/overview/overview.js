@@ -4,7 +4,7 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
-import { execAndClose, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
+import { execAndClose, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
@@ -417,7 +417,7 @@ export const SearchAndWindows = () => {
 
                     // Fallbacks
                     // if the first word is an actual command
-                    if (!isAction && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+                    if (!isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                         resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
                     }
 

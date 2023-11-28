@@ -3,6 +3,12 @@ import { App, Service, Utils, Widget } from '../../imports.js';
 const { execAsync, exec } = Utils;
 import Todo from "../../services/todo.js";
 
+export function hasUnterminatedBackslash(inputString) {
+    // Use a regular expression to match a trailing odd number of backslashes
+    const regex = /\\+$/;
+    return regex.test(inputString);
+}
+
 export function launchCustomCommand(command) {
     App.closeWindow('overview');
     const args = command.split(' ');
