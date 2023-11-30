@@ -112,6 +112,7 @@ apply_gtk() { # Using gradience-cli
         sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "scripts/templates/gradience/preset.json"
     done
 
+    mkdir -p "$HOME/.config/presets" # create gradience presets folder
     gradience-cli apply -p scripts/templates/gradience/preset.json --gtk both
 
     # Set light/dark preference 
@@ -119,11 +120,9 @@ apply_gtk() { # Using gradience-cli
     # (which is unreadable when broken when you use dark mode)
     if [ "$lightdark" = "-l" ]; then
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme false
         gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
     else
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-        gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme true
         gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
     fi
 }
