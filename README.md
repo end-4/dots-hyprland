@@ -6,7 +6,6 @@
 ## Description
 - [AGS](https://github.com/Aylur/ags/)-powered.
 - Scalable. Light/Dark mode support. Material colors that adapt to your wallpaper
-- Definitely wip
 
 ## Preview
 ![image](./assets/illogical_impulse_dark.png)
