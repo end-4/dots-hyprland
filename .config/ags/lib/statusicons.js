@@ -3,6 +3,7 @@ import { MaterialIcon } from './materialicon.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
@@ -128,12 +129,38 @@ export const NetworkIndicator = () => Widget.Stack({
     }]],
 });
 
+export const KeyboardLayout = () => Widget.Stack({
+    transition: 'slide_up_down',
+    items: [
+        ['def', Widget.Label({ label: Utils.exec(`${App.configDir}/scripts/layout.sh`) })],
+        ['en', Widget.Label({ label: '🇬🇧' })],
+        ['ru', Widget.Label({ label: '🇷🇺' })],
+        ['undef', Widget.Label({ label: '🧐' })],
+    ],
+    connections: [
+        [Hyprland, ( stack, kbName, layoutName ) => {
+            if (kbName) {
+                if (layoutName.includes('English')) {
+                    stack.shown = 'en'
+                } else if (layoutName.includes('Russian')) {
+                    stack.shown = 'ru'
+                } else {
+                    stack.shown = 'undef'
+                }
+            } else {
+                stack.shown = 'def'
+            }
+        }, 'keyboard-layout']
+    ],
+});
+
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
             NotificationIndicator(),
+            KeyboardLayout(),
             BluetoothIndicator(),
             NetworkIndicator(),
         ]
