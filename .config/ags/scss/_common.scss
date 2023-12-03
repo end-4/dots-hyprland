@@ -7,6 +7,7 @@
 }
 
 menu {
+    @include elevation-border-softer;
     padding: 0.681rem;
     background: $surfaceVariant;
     color: $onSurfaceVariant;

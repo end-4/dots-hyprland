@@ -468,3 +468,17 @@
 .sidebar-todo-entry:focus {
     border: 0.068rem solid mix($onSurfaceVariant, $surfaceVariant, 90%);
 }
+
+.sidebar-module {
+    @include normal-rounding;
+    @include group-padding;
+    background-color: $t_surface;
+}
+
+.sidebar-module-btn-arrow {
+    @include full-rounding;
+    @include icon-material;
+    background-color: $t_surfaceVariant;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+}

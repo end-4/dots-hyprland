@@ -132,8 +132,8 @@
         "dark_": {}
     },
     "custom_css": {
-        "gtk4": ".vertical>headerbar>windowhandle>box {background-color: @window_bg_color;}",
-        "gtk3": ".frame>list{background:@window_bg_color;} .tweak-titlebar-left {background-color: @window_bg_color;}"
+        "gtk4": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; ",
+        "gtk3": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; "
     },
     "plugins": {}
 }

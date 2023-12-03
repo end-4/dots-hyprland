@@ -1,6 +1,6 @@
 // Import
 import { App, Utils } from './imports.js';
-import { firstRunWelcome } from './lib/files.js';
+import { firstRunWelcome } from './services/messages.js';
 // Windows
 import Bar from './windows/bar/main.js';
 import Cheatsheet from './windows/cheatsheet/main.js';
@@ -19,7 +19,6 @@ const CLOSE_ANIM_TIME = 200;
 
 // Init cache and check first run
 Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user/colorschemes'`);
-firstRunWelcome();
 
 // SCSS compilation
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles

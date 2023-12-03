@@ -92,7 +92,7 @@ const TrackTitle = ({ player, ...rest }) => Label({
 
         // Set font based on track/artist
         const fontForThisTrack = getTrackfont(player);
-        self.css = `font-family: ${fontForThisTrack};`;
+        self.css = `font-family: ${fontForThisTrack}, ${DEFAULT_MUSIC_FONT};`;
     }, 'notify::track-title']]
 });
 

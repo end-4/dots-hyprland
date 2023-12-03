@@ -125,6 +125,7 @@ export const keybindList = [[
             { "keys": [">img"], "action": "Select wallpaper and generate colorscheme" },
             { "keys": [">light"], "action": "Switch to light theme" },
             { "keys": [">dark"], "action": "Switch to dark theme" },
+            { "keys": [">color"], "action": "Pick acccent color" },
             { "keys": [">todo"], "action": "Type something after that to add a To-do item" },
         ],
         "appeartick": 3

@@ -18,15 +18,15 @@ else
         exit 0
     fi
 
-    echo Sending "$imgpath" to swww. Cursor pos: ["$cursorposx, $cursorposy_inverted"] &
+    echo Sending "$imgpath" to swww. Cursor pos: ["$cursorposx, $cursorposy_inverted"]
     # Change swww wallpaper
     swww img "$imgpath" --transition-step 100 --transition-fps 60 \
     --transition-type grow --transition-angle 30 --transition-duration 1 \
-    --transition-pos "$cursorposx, $cursorposy_inverted" &
+    --transition-pos "$cursorposx, $cursorposy_inverted"
 fi
 
 # Generate colors for ags n stuff
 "$HOME"/.config/ags/scripts/color_generation/colorgen.sh "${imgpath}" --apply
 sassc "$HOME"/.config/ags/scss/main.scss "$HOME"/.config/ags/style.css
-ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');" &
 ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
+ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');"

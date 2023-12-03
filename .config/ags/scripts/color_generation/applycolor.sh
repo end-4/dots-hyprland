@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+sleep 0 # idk i want some delay or colors dont get applied properly
 cd "$HOME/.config/ags" || exit
 
 # filelist=$(ls 'images/svg/template/' | grep -v /)
@@ -77,11 +78,13 @@ apply_foot() {
         return
     fi
     # Copy template
-    cp "scripts/templates/foot/foot.ini" "$HOME/.config/foot/foot.ini"
+    cp "scripts/templates/foot/foot.ini" "$HOME/.config/foot/foot_new.ini"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME/.config/foot/foot.ini" # note: ff because theyre opaque
+        sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME/.config/foot/foot_new.ini" # note: ff because theyre opaque
     done
+
+    cp "$HOME/.config/foot/foot_new.ini" "$HOME/.config/foot/foot.ini"
 }
 
 apply_hyprland() {
@@ -91,11 +94,13 @@ apply_hyprland() {
         return
     fi
     # Copy template
-    cp "scripts/templates/hypr/colors.conf" "$HOME/.config/hypr/colors.conf"
+    cp "scripts/templates/hypr/colors.conf" "$HOME/.config/hypr/colors_new.conf"
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors.conf"
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors_new.conf"
     done
+    
+    mv "$HOME/.config/hypr/colors_new.conf" "$HOME/.config/hypr/colors.conf"
 }
 
 apply_gtk() { # Using gradience-cli
@@ -119,17 +124,17 @@ apply_gtk() { # Using gradience-cli
     # And set GTK theme manually as Gradience defaults to light adw-gtk3 
     # (which is unreadable when broken when you use dark mode)
     if [ "$lightdark" = "-l" ]; then
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
-        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3
+        gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
+        gsettings set org.gnome.desktop.interface color-scheme 'default'
     else
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
         gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
     fi
 }
 
 # apply_svgs
-apply_gtklock
-apply_fuzzel
+apply_hyprland &
+apply_gtk &
+apply_gtklock &
+apply_fuzzel &
 apply_foot
-apply_hyprland
-apply_gtk
