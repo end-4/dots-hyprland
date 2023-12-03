@@ -129,10 +129,30 @@ export const NetworkIndicator = () => Widget.Stack({
     }]],
 });
 
-export const KeyboardLayout = () => Widget.Stack({
+const KeyboardLayout = () => Widget.Stack({
     transition: 'slide_up_down',
     items: [
-        ['def', Widget.Label({ label: Utils.exec(`${App.configDir}/scripts/layout.sh`) })],
+        ['def', Widget.Label({
+            setup: (label) => {
+                Utils.execAsync('hyprctl -j devices')
+                .then(hyprctlOut => {
+                    const keyboard = JSON.parse(hyprctlOut).keyboards.find(device => device.name === 'at-translated-set-2-keyboard');
+                    if (keyboard) {
+                        const layout = keyboard.active_keymap;
+                        if (layout.includes('English')) {
+                            label.label = '🇬🇧';
+                        } else if (layout.includes('Russian')) {
+                            label.label = '🇷🇺';
+                        } else {
+                            label.label = '🧐';
+                        }
+                    } else {
+                        label.label = 'Error: Keyboard not found';
+                    }
+                })
+                .catch(print);
+            }
+        })],
         ['en', Widget.Label({ label: '🇬🇧' })],
         ['ru', Widget.Label({ label: '🇷🇺' })],
         ['undef', Widget.Label({ label: '🧐' })],
