@@ -206,8 +206,8 @@ export const StatusIcons = (props = {}) => Widget.Box({
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
-            NotificationIndicator(),
             KeyboardLayout({ useFlag: false }),
+            NotificationIndicator(),
             BluetoothIndicator(),
             NetworkIndicator(),
         ]

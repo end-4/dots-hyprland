@@ -270,7 +270,7 @@ export const SearchAndWindows = () => {
         onMiddleClick: () => App.closeWindow('overview'),
     });
     const resultsBox = Widget.Box({
-        className: 'spacing-v-15 overview-search-results',
+        className: 'overview-search-results',
         vertical: true,
         vexpand: true,
     });

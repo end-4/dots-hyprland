@@ -14,7 +14,7 @@ const FIRST_RUN_FILE_CONTENT = "Just a file to confirm that you have been greete
 const APP_NAME = "ags";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
 const FIRST_RUN_NOTIF_BODY = `Looks like this is your first run.\nHit <span foreground="#c06af1" font_weight="bold">Super + /</span> for a list of keybinds.`;
-
+ 
 export async function firstRunWelcome() {
     if (!fileExists(FIRST_RUN_PATH)) {
         console.log('uuwuwuwuwuwuwuwuu');
@@ -34,7 +34,6 @@ const BATTERY_WARN_TITLES = ["Low battery", "Very low battery", 'Critical Batter
 const BATTERY_WARN_BODIES = ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY']
 var batteryWarned = false;
 async function batteryMessage() {
-    console.log('uwu')
     const perc = Battery.percent;
     const charging = Battery.charging;
     if(charging) {
@@ -42,13 +41,11 @@ async function batteryMessage() {
         return;
     }
     for (let i = BATTERY_WARN_LEVELS.length - 1; i >= 0; i--) {
-        console.log(perc, BATTERY_WARN_LEVELS[i], batteryWarned, i)
         if (perc <= BATTERY_WARN_LEVELS[i] && !charging && !batteryWarned) {
             batteryWarned = true;
             Utils.execAsync(['bash', '-c',
                 `notify-send "${BATTERY_WARN_TITLES[i]}" "${BATTERY_WARN_BODIES[i]}" -u critical -a 'ags' &`
             ]).catch(print);
-            console.log('warn', i)
             break;
         }
     }
