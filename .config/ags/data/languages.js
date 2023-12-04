@@ -1,0 +1,56 @@
+// For keyboard layout in lib/statusicons.js
+// Add your language here if you use multi-lang xkb input. Else, ignore
+// Note that something like "French (Canada)" should go before "French"
+//                      and "English (US)" should go before "English"
+export const languages = [
+    {
+        layout: 'us',
+        name: 'English (US)',
+        flag: '🇺🇸'
+    },
+    {
+        layout: 'ru',
+        name: 'Russian',
+        flag: '🇷🇺',
+    },
+    {
+        layout: 'pl',
+        name: 'Polish',
+        flag: '🇷🇵🇵🇱',
+    },
+    {
+        layout: 'ca',
+        name: 'French (Canada)',
+        flag: '🇫🇷',
+    },
+    {
+        layout: 'fr',
+        name: 'French',
+        flag: '🇫🇷',
+    },
+    {
+        layout: 'tr',
+        name: 'Turkish',
+        flag: '🇹🇷',
+    },
+    {
+        layout: 'jp',
+        name: 'Japanese',
+        flag: '🇯🇵',
+    },
+    {
+        layout: 'cn',
+        name: 'Chinese',
+        flag: '🇨🇳',
+    },
+    {
+        layout: 'vn',
+        name: 'Vietnamese',
+        flag: '🇻🇳',
+    },
+    {
+        layout: 'undef',
+        name: 'Undefined',
+        flag: '🧐',
+    },
+]

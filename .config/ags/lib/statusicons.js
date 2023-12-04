@@ -4,6 +4,23 @@ import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+import { languages } from '../data/languages.js';
+
+// A guessing func to try to support langs not listed in data/languages.js
+function isLanguageMatch(abbreviation, word) {
+    const lowerAbbreviation = abbreviation.toLowerCase();
+    const lowerWord = word.toLowerCase();
+    let j = 0;
+    for (let i = 0; i < lowerWord.length; i++) {
+        if (lowerWord[i] === lowerAbbreviation[j]) {
+            j++;
+        }
+        if (j === lowerAbbreviation.length) {
+            return true;
+        }
+    }
+    return false;
+}
 
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
@@ -23,7 +40,6 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
             }],
         ],
         child: Widget.Box({
-            // className: 'spacing-h-5',
             children: [
                 MaterialIcon('notifications', 'norm'),
                 Widget.Label({
@@ -129,50 +145,62 @@ export const NetworkIndicator = () => Widget.Stack({
     }]],
 });
 
-const KeyboardLayout = () => Widget.Stack({
-    transition: 'slide_up_down',
-    items: [
-        ['def', Widget.Label({
-            setup: (label) => {
-                Utils.execAsync('hyprctl -j devices')
-                .then(hyprctlOut => {
-                    const keyboard = JSON.parse(hyprctlOut).keyboards.find(device => device.name === 'at-translated-set-2-keyboard');
-                    if (keyboard) {
-                        const layout = keyboard.active_keymap;
-                        if (layout.includes('English')) {
-                            label.label = '🇬🇧';
-                        } else if (layout.includes('Russian')) {
-                            label.label = '🇷🇺';
-                        } else {
-                            label.label = '🧐';
-                        }
-                    } else {
-                        label.label = 'Error: Keyboard not found';
-                    }
-                })
-                .catch(print);
-            }
-        })],
-        ['en', Widget.Label({ label: '🇬🇧' })],
-        ['ru', Widget.Label({ label: '🇷🇺' })],
-        ['undef', Widget.Label({ label: '🧐' })],
-    ],
-    connections: [
-        [Hyprland, ( stack, kbName, layoutName ) => {
-            if (kbName) {
-                if (layoutName.includes('English')) {
-                    stack.shown = 'en'
-                } else if (layoutName.includes('Russian')) {
-                    stack.shown = 'ru'
-                } else {
-                    stack.shown = 'undef'
+const KeyboardLayout = ({ useFlag } = {}) => {
+    var initLangs = [];
+    var languageStackArray = [];
+    var currentKeyboard;
+
+    const updateCurrentKeyboards = () => {
+        currentKeyboard = JSON.parse(Utils.exec('hyprctl -j devices')).keyboards
+            .find(device => device.name === 'at-translated-set-2-keyboard');
+        if (currentKeyboard) {
+            initLangs = currentKeyboard.layout.split(',').map(lang => lang.trim());
+        }
+        languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
+            const lang = languages.find(lang => lang.layout == initLangs[i]);
+            if (!lang) return [
+                initLangs[i],
+                Widget.Label({ label: initLangs[i] })
+            ];
+            return [
+                lang.layout,
+                Widget.Label({ label: (useFlag ? lang.flag : lang.layout) })
+            ];
+        });
+    };
+    updateCurrentKeyboards();
+    const widgetRevealer = Widget.Revealer({
+        transition: 150,
+        transition: 'slide_left',
+        revealChild: languageStackArray.length > 1,
+    });
+    const widgetContent = Widget.Stack({
+        transition: 'slide_up_down',
+        items: [
+            ...languageStackArray,
+            ['undef', Widget.Label({ label: '?' })]
+        ],
+        connections: [
+            [Hyprland, (stack, kbName, layoutName) => {
+                if (!kbName) {
+                    return;
                 }
-            } else {
-                stack.shown = 'def'
-            }
-        }, 'keyboard-layout']
-    ],
-});
+                widgetRevealer.revealChild = true;
+                var lang = languages.find(lang => layoutName.includes(lang.name));
+                if (lang) {
+                    widgetContent.shown = lang.layout;
+                }
+                else { // Attempt to support langs not listed
+                    lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
+                    if (!lang) stack.shown = 'undef';
+                    else stack.shown = lang[0];
+                }
+            }, 'keyboard-layout']
+        ],
+    });
+    widgetRevealer.child = widgetContent;
+    return widgetRevealer;
+}
 
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
@@ -180,7 +208,7 @@ export const StatusIcons = (props = {}) => Widget.Box({
         className: 'spacing-h-15',
         children: [
             NotificationIndicator(),
-            KeyboardLayout(),
+            KeyboardLayout({ useFlag: false }),
             BluetoothIndicator(),
             NetworkIndicator(),
         ]
