@@ -175,6 +175,7 @@ const KeyboardLayout = ({ useFlag } = {}) => {
         revealChild: languageStackArray.length > 1,
     });
     const widgetContent = Widget.Stack({
+        className: 'spacing-h-15',
         transition: 'slide_up_down',
         items: [
             ...languageStackArray,
