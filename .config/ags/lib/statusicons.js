@@ -3,6 +3,7 @@ import { MaterialIcon } from './materialicon.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
@@ -128,12 +129,58 @@ export const NetworkIndicator = () => Widget.Stack({
     }]],
 });
 
+const KeyboardLayout = () => Widget.Stack({
+    transition: 'slide_up_down',
+    items: [
+        ['def', Widget.Label({
+            setup: (label) => {
+                Utils.execAsync('hyprctl -j devices')
+                .then(hyprctlOut => {
+                    const keyboard = JSON.parse(hyprctlOut).keyboards.find(device => device.name === 'at-translated-set-2-keyboard');
+                    if (keyboard) {
+                        const layout = keyboard.active_keymap;
+                        if (layout.includes('English')) {
+                            label.label = '🇬🇧';
+                        } else if (layout.includes('Russian')) {
+                            label.label = '🇷🇺';
+                        } else {
+                            label.label = '🧐';
+                        }
+                    } else {
+                        label.label = 'Error: Keyboard not found';
+                    }
+                })
+                .catch(print);
+            }
+        })],
+        ['en', Widget.Label({ label: '🇬🇧' })],
+        ['ru', Widget.Label({ label: '🇷🇺' })],
+        ['undef', Widget.Label({ label: '🧐' })],
+    ],
+    connections: [
+        [Hyprland, ( stack, kbName, layoutName ) => {
+            if (kbName) {
+                if (layoutName.includes('English')) {
+                    stack.shown = 'en'
+                } else if (layoutName.includes('Russian')) {
+                    stack.shown = 'ru'
+                } else {
+                    stack.shown = 'undef'
+                }
+            } else {
+                stack.shown = 'def'
+            }
+        }, 'keyboard-layout']
+    ],
+});
+
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
             NotificationIndicator(),
+            KeyboardLayout(),
             BluetoothIndicator(),
             NetworkIndicator(),
         ]
