@@ -185,7 +185,6 @@ const KeyboardLayout = ({ useFlag } = {}) => {
                 if (!kbName) {
                     return;
                 }
-                widgetRevealer.revealChild = true;
                 var lang = languages.find(lang => layoutName.includes(lang.name));
                 if (lang) {
                     widgetContent.shown = lang.layout;
