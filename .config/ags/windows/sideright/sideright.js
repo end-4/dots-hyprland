@@ -1,4 +1,4 @@
-const { Gdk, Gtk } = imports.gi;
+const { GLib, Gdk, Gtk } = imports.gi;
 import { Utils, Widget } from '../../imports.js';
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
@@ -77,9 +77,7 @@ export default () => Box({
                                         Widget.Label({
                                             className: 'txt-title txt',
                                             connections: [[5000, label => {
-                                                execAsync([`date`, "+%H:%M"]).then(timeString => {
-                                                    label.label = timeString;
-                                                }).catch(print);
+                                                label.label = GLib.DateTime.new_now_local().format("%H:%M");
                                             }]],
                                         }),
                                         Widget.Label({

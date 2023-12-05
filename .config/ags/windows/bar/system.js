@@ -2,6 +2,7 @@
 // For the cool memory indicator on the sidebar, see sysinfo.js
 import { Service, Utils, Widget } from '../../imports.js';
 const { exec, execAsync } = Utils;
+const { GLib } = imports.gi;
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 
 const BATTERY_LOW = 20;
@@ -13,9 +14,7 @@ const barClock = Widget.Box({
         Widget.Label({
             className: 'bar-clock',
             connections: [[5000, label => {
-                execAsync([`date`, "+%H:%M"]).then(timeString => {
-                    label.label = timeString;
-                }).catch(print);
+                label.label = GLib.DateTime.new_now_local().format("%H:%M");
             }]],
         }),
         Widget.Label({
@@ -25,9 +24,7 @@ const barClock = Widget.Box({
         Widget.Label({
             className: 'txt-smallie txt',
             connections: [[5000, label => {
-                execAsync([`date`, "+%A, %d/%m"]).then(dateString => {
-                    label.label = dateString;
-                }).catch(print);
+                label.label = GLib.DateTime.new_now_local().format("%A, %d/%m");
             }]],
         }),
     ],
