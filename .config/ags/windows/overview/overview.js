@@ -4,7 +4,7 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
-import { execAndClose, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
+import { execAndClose, expandTilde, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
@@ -325,7 +325,7 @@ export const SearchAndWindows = () => {
     const entry = Widget.Entry({
         className: 'overview-search-box txt-small txt',
         hpack: 'center',
-        onAccept: ({ text }) => { // This is when you press Enter
+        onAccept: ({ text }) => { // This is when you hit Enter
             const isAction = text.startsWith('>');
             const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
 
@@ -341,7 +341,9 @@ export const SearchAndWindows = () => {
                 }
             }
             if (isDir) {
-                execAsync(['bash', '-c', `xdg-open "${text}"`, `&`]).catch(print);
+                App.closeWindow('overview');
+                execAsync(['bash', '-c', `xdg-open "${expandTilde(text)}"`, `&`]).catch(print);
+                return;
             }
             if (_appSearchResults.length > 0) {
                 App.closeWindow('overview');
@@ -349,6 +351,7 @@ export const SearchAndWindows = () => {
                 return;
             }
             else if (text[0] == '>') { // Custom commands
+                App.closeWindow('overview');
                 launchCustomCommand(text);
                 return;
             }

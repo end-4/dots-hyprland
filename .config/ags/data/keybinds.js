@@ -119,7 +119,7 @@ export const keybindList = [[
     },
     {
         "icon": "terminal",
-        "name": "Launcher commands",
+        "name": "Launcher actions",
         "binds": [
             { "keys": [">raw"], "action": "Toggle mouse acceleration" },
             { "keys": [">img"], "action": "Select wallpaper and generate colorscheme" },

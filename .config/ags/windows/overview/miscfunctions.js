@@ -10,7 +10,6 @@ export function hasUnterminatedBackslash(inputString) {
 }
 
 export function launchCustomCommand(command) {
-    App.closeWindow('overview');
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
         execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`, `&`]).catch(print);
@@ -68,7 +67,7 @@ export function startsWithNumber(str) {
     return pattern.test(str);
 }
 
-function expandTilde(path) {
+export function expandTilde(path) {
     if (path.startsWith('~')) {
         return GLib.get_home_dir() + path.slice(1);
     } else {

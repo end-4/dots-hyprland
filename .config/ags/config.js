@@ -1,3 +1,4 @@
+"strict mode";
 // Import
 import { App, Utils } from './imports.js';
 import { firstRunWelcome } from './services/messages.js';

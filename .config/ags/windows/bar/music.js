@@ -71,7 +71,7 @@ export const ModuleMusic = () => Widget.EventBox({
                                 if (mpris)
                                     label.label = `${mpris.trackTitle} • ${mpris.trackArtists.join(', ')}`;
                                 else
-                                    label.label = 'No mewwsic';
+                                    label.label = 'No media';
                             }]],
                         })
                     })
