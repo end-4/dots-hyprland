@@ -181,7 +181,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                     Widget.Revealer({
                         transition: 'slide_down',
                         transitionDuration: 150,
-                        revealChild: (Math.min(w, h) * OVERVIEW_SCALE > 80),
+                        revealChild: (Math.min(w, h) * OVERVIEW_SCALE > 70),
                         child: Widget.Scrollable({
                             hexpand: true,
                             vscroll: 'never',
@@ -189,7 +189,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                             child: Widget.Label({
                                 truncate: 'end',
                                 css: `
-                                    font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.5}px;
+                                    font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
                                     margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
                                 `,
                                 // If the title is too short, include the class

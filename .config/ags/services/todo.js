@@ -1,4 +1,4 @@
-const { Gio, Gdk, Gtk } = imports.gi;
+const { Gio, Gdk, GLib, Gtk } = imports.gi;
 import { Service, Utils } from '../imports.js';
 const { exec, execAsync } = Utils;
 
@@ -61,7 +61,7 @@ class TodoService extends Service {
 
     constructor() {
         super();
-        this._todoPath = `${App.configDir}/../../.cache/ags/user/todo.json`;
+        this._todoPath = `${GLib.get_user_cache_dir()}/ags/user/todo.json`;
         if (!fileExists(this._todoPath)) { // No? create file with empty array
             Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
             Utils.exec(`touch ${this._todoPath}`);
