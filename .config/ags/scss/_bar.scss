@@ -327,13 +327,13 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-music-hide-false {
-    @include md3_decel;
+    @include menu_decel;
     transition-duration: 100ms;
     opacity: 1;
 }
 
 .bar-music-hide-true {
-    @include md3_accel;
+    @include menu_accel;
     transition-duration: 100ms;
     opacity: 0;
 }
@@ -464,7 +464,7 @@ $notchOnPrimary: $onPrimary;
 
 .bar-statusicons {
     @include full-rounding;
-    @include md3_decel;
+    @include menu_decel;
     margin: 0.2rem;
     padding: 0rem 0.614rem;
 }

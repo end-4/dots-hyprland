@@ -150,6 +150,10 @@
     font-weight: bold;
 }
 
+.txt-italic {
+    font-style: italic;
+}
+
 .titlefont {
     @include titlefont;
 }
@@ -429,6 +433,6 @@
     transition: 0ms;
 }
 
-.md3_decel {
-    @include md3_decel;
+.menu_decel {
+    @include menu_decel;
 }

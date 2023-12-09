@@ -1,5 +1,5 @@
 .overview-search-box {
-    @include md3_decel;
+    @include menu_decel;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
@@ -112,7 +112,7 @@
 .overview-tasks-window {
     @include normal-rounding;
     // @include elevation-border-softer;
-    @include md3_decel;
+    @include menu_decel;
     background-color: $l_t_secondaryContainer;
     color: $onSecondaryContainer;
     border: 0.068rem solid $t_t_t_onSecondaryContainer;

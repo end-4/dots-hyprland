@@ -7,38 +7,38 @@ import subprocess
 img = 0
 newtheme=0
 if len(sys.argv) > 1 and sys.argv[1] == '--path':
-    try:
-        img = Image.open(sys.argv[2])
-        basewidth = 64
-        wpercent = (basewidth/float(img.size[0]))
-        hsize = int((float(img.size[1])*float(wpercent)))
-        img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
-        newtheme = themeFromImage(img)
-    except FileNotFoundError:
-        print('[generate_colors_material.py] File not found', file=sys.stderr);
-        exit()
-    except:
-        print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
-        exit()
+    # try:
+    img = Image.open(sys.argv[2])
+    basewidth = 64
+    wpercent = (basewidth/float(img.size[0]))
+    hsize = int((float(img.size[1])*float(wpercent)))
+    img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
+    newtheme = themeFromImage(img)
+    # except FileNotFoundError:
+    #     print('[generate_colors_material.py] File not found', file=sys.stderr);
+    #     exit()
+    # except:
+    #     print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
+    #     exit()
 elif len(sys.argv) > 1 and sys.argv[1] == '--color':
     colorstr = sys.argv[2]
     newtheme = themeFromSourceColor(argbFromHex(colorstr))
 else:
-    try:
-        imagePath = subprocess.check_output("swww query | awk -F 'image: ' '{print $2}'", shell=True)
-        imagePath = imagePath[:-1].decode("utf-8") 
-        img = Image.open(imagePath)
-        basewidth = 64
-        wpercent = (basewidth/float(img.size[0]))
-        hsize = int((float(img.size[1])*float(wpercent)))
-        img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
-        newtheme = themeFromImage(img)
-    except FileNotFoundError:
-        print('[generate_colors_material.py] File not found', file=sys.stderr)
-        exit()
-    except:
-        print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
-        exit()
+    # try:
+    imagePath = subprocess.check_output("swww query | awk -F 'image: ' '{print $2}'", shell=True)
+    imagePath = imagePath[:-1].decode("utf-8") 
+    img = Image.open(imagePath)
+    basewidth = 64
+    wpercent = (basewidth/float(img.size[0]))
+    hsize = int((float(img.size[1])*float(wpercent)))
+    img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
+    newtheme = themeFromImage(img)
+    # except FileNotFoundError:
+    #     print('[generate_colors_material.py] File not found', file=sys.stderr)
+    #     exit()
+    # except:
+    #     print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
+    #     exit()
 
 colorscheme=0
 if("-l" in sys.argv):

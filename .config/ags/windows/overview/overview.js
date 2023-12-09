@@ -4,6 +4,7 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
+import { DoubleRevealer } from "../../lib/doublerevealer.js";
 import { execAndClose, expandTilde, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
@@ -116,7 +117,8 @@ const ContextWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.M
     }
 })
 
-const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title }) => {
+const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title, xwayland }) => {
+    const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
     if (w <= 0 || h <= 0) return null;
     title = truncateTitle(title);
     return Widget.Button({
@@ -178,16 +180,18 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                         icon: substitute(c),
                         size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
                     }),
-                    Widget.Revealer({
-                        transition: 'slide_down',
-                        transitionDuration: 150,
-                        revealChild: (Math.min(w, h) * OVERVIEW_SCALE > 70),
+                    // TODO: Add xwayland tag instead of just having italics
+                    DoubleRevealer({
+                        transition1: 'slide_right',
+                        transition2: 'slide_down',
+                        revealChild: revealInfoCondition,
                         child: Widget.Scrollable({
                             hexpand: true,
                             vscroll: 'never',
                             hscroll: 'automatic',
                             child: Widget.Label({
                                 truncate: 'end',
+                                className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
                                 css: `
                                     font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
                                     margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;

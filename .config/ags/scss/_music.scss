@@ -14,7 +14,7 @@ $secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6,
 $onSecondaryContainer: mix($color7, $color2, 90%);
 
 .osd-music {
-    @include md3_decel;
+    @include menu_decel;
     @include elevation2;
     margin-top: 0.313rem;
     @include normal-rounding;
@@ -33,7 +33,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 
 
 .osd-music-cover-fallback {
-    @include md3_decel;
+    @include menu_decel;
     @include small-rounding;
     // margin: 1.023rem;
     min-width: 7.5rem;
@@ -44,7 +44,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 
 .osd-music-cover {
     @include small-rounding;
-    @include md3_decel;
+    @include menu_decel;
     // Must be -top and -bottom or it'll mess up horizontal spacing
     margin-top: 1.023rem;
     margin-bottom: 1.023rem;
@@ -65,21 +65,21 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 }
 
 .osd-music-title {
-    @include md3_decel;
+    @include menu_decel;
     @include titlefont;
     font-size: 1.364rem;
     color: $onSecondaryContainer;
 }
 
 .osd-music-artists {
-    @include md3_decel;
+    @include menu_decel;
     @include mainfont;
     font-size: 0.955rem;
     color: mix($onSecondaryContainer, $secondaryContainer, 80%);
 }
 
 .osd-music-pill {
-    @include md3_decel;
+    @include menu_decel;
     @include full-rounding;
     @include titlefont;
     min-width: 1.833rem;
@@ -89,7 +89,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 }
 
 .osd-music-controls {
-    @include md3_decel;
+    @include menu_decel;
     @include full-rounding;
     @include titlefont;
     min-width: 1.833rem;
@@ -99,7 +99,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 }
 
 .osd-music-controlbtn {
-    @include md3_decel;
+    @include menu_decel;
     min-width: 2.045rem;
     min-height: 2.045rem;
     @include full-rounding;
@@ -114,7 +114,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 }
 
 .osd-music-controlbtn-txt {
-    @include md3_decel;
+    @include menu_decel;
     transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
     @include icon-material;
     font-size: 1.364rem;
@@ -131,7 +131,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
 }
 
 .osd-music-playstate {
-    @include md3_decel;
+    @include menu_decel;
     min-height: 3.068rem;
     min-width: 3.068rem;
     border-radius: 10rem;

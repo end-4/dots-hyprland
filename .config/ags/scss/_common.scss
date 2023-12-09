@@ -6,6 +6,13 @@
     outline: 1px solid $surface;
 }
 
+* {
+    selection {
+        background-color: $secondary;
+        color: $onSecondary;
+    }
+}
+
 menu {
     @include elevation-border-softer;
     padding: 0.681rem;

@@ -3,9 +3,7 @@ import { App, Widget, Utils } from '../../imports.js';
 const { Box, Button, CenterBox, Label, Revealer } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { getCalendarLayout } from "../../lib/calendarlayout.js";
-import Todo from "../../services/todo.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
-import { NavigationIndicator } from "../../lib/navigationindicator.js";
 
 import { TodoWidget } from "./todolist.js";
 

@@ -5,7 +5,7 @@ $osk_key_rounding: 0.682rem;
 $osk_key_fontsize: 1.091rem;
 
 .osk-window {
-    // @include md3_decel_fast;
+    // @include menu_decel_fast;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;
@@ -20,14 +20,14 @@ $osk_key_fontsize: 1.091rem;
 }
 
 .osk-show {
-    @include md3_decel_fast;
+    @include menu_decel_fast;
 }
 
 .osk-hide {
     margin-top: 30.682rem;
     margin-bottom: -30.682rem;
     // opacity: 0;
-    @include md3_accel_fast;
+    @include menu_accel_fast;
 }
 
 .osk-dragline {

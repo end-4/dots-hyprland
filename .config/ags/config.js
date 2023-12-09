@@ -15,8 +15,8 @@ import Session from './windows/session/main.js';
 import SideLeft from './windows/sideleft/main.js';
 import SideRight from './windows/sideright/main.js';
 
-// Longer than actual anim time (150, see styles) to make sure windows animate fully
-const CLOSE_ANIM_TIME = 200;
+// Longer than actual anim time (see styles) to make sure windows animate fully
+const CLOSE_ANIM_TIME = 210;
 
 // Init cache and check first run
 Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user/colorschemes'`);

@@ -340,7 +340,7 @@ const MusicControlsWidget = (player) => Box({
 
 export default () => Widget.Revealer({
     transition: 'slide_down',
-    transitionDuration: 200,
+    transitionDuration: 170,
     child: Box({
         connections: [[Mpris, box => {
             const player = getPlayer();

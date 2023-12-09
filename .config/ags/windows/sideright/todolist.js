@@ -21,6 +21,7 @@ const todoListItem = (task, id, isDone, isEven = false) => {
                 wrap: true,
                 className: 'txt txt-small sidebar-todo-txt',
                 label: task.content,
+                selectable: true,
             }),
             Widget.Button({ // Check/Uncheck
                 vpack: 'center',
@@ -241,7 +242,7 @@ export const TodoWidget = () => {
     });
     const undoneButton = TodoTabButton(false, 0);
     const doneButton = TodoTabButton(true, 1);
-    const navIndicator = NavigationIndicator(2, false, {
+    const navIndicator = NavigationIndicator(2, false, { // The line thing
         className: 'sidebar-todo-selector-highlight',
         css: 'font-size: 0px;',
     })
