@@ -135,7 +135,27 @@ const chatWelcome = Box({
                         tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
                     }),
                 ]
-            })
+            }),
+            Revealer({
+                transition: 'slide_down',
+                transitionDuration: 150,
+                connections: [[ChatGPT, (self, hasKey) => {
+                    console.log('hmm test');
+                    self.revealChild = (ChatGPT.key.length == 0);
+                }, 'hasKey']],
+                child: Button({
+                    child: Label({
+                        useMarkup: true,
+                        className: 'txt sidebar-chat-welcome-txt',
+                        justify: Gtk.Justification.CENTER,
+                        label: 'Add an OpenAI API Key to continue.\nYou can grab one <u>here</u>'
+                    }),
+                    setup: (button) => setupCursorHover(button),
+                    onClicked: () => {
+                        Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+                    }
+                })
+            }),
         ]
     })
 })
