@@ -14,23 +14,21 @@ const pinnedApps = [
     'org.gnome.Nautilus',
 ];
 
+const iconNameMap = new Map()
+Applications.list.forEach((app) => {
+    iconNameMap.set(app.desktop.split('.desktop')[0].toLowerCase(), app['icon-name'])
+})
+
 function substitute(str) {
     const subs = [
-        { from: 'code-url-handler', to: 'visual-studio-code' },
-        { from: 'Code', to: 'visual-studio-code' },
-        { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
-        { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
-        { from: 'Minecraft* 1.20.1', to: 'minecraft' },
-        { from: '', to: 'image-missing' },
+        { from: 'Gimp-2.10', to: 'gimp' },
     ];
 
     for (const { from, to } of subs) {
         if (from === str)
             return to;
     }
-
-    return str;
+    return iconNameMap.get(str.toLowerCase()) || 'image-missing';
 }
 
 const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow address:${address}`);

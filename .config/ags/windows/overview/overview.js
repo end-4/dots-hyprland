@@ -71,29 +71,21 @@ function truncateTitle(str) {
     return str.substring(0, lastDash);
 }
 
-function iconExists(iconName) {
-    let iconTheme = Gtk.IconTheme.get_default();
-    return iconTheme.has_icon(iconName);
-}
+const iconNameMap = new Map()
+Applications.list.forEach((app) => {
+    iconNameMap.set(app.desktop.split('.desktop')[0].toLowerCase(), app['icon-name'])
+})
 
 function substitute(str) {
     const subs = [
-        { from: 'code-url-handler', to: 'visual-studio-code' },
-        { from: 'Code', to: 'visual-studio-code' },
-        { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
-        { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
-        { from: 'Minecraft* 1.20.1', to: 'minecraft' },
-        { from: '', to: 'image-missing' },
+        { from: 'Gimp-2.10', to: 'gimp' },
     ];
 
     for (const { from, to } of subs) {
         if (from === str)
             return to;
     }
-
-    if (!iconExists(str)) str = str.toLowerCase().replace(/\s+/g, '-'); // Turn into kebab-case
-    return str;
+    return iconNameMap.get(str.toLowerCase()) || 'image-missing';
 }
 
 const ContextWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
