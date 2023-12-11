@@ -1,3 +1,9 @@
+$sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 20%);
+$system: #75A79A;
+$onSystem: #CBDED9;
+$chatgpt: #19C37D;
+$onChatgpt: #D5F4E7;
+
 @mixin group-padding {
     padding: 0.341rem;
 }
@@ -208,15 +214,6 @@
     color: $onSecondaryContainer;
     @include fluent_decel_long;
     font-size: 0px;
-}
-
-// .sidebar-sysinfo-txt {
-//     font-size: 1.0909rem;
-//     @include techfont;
-// }
-
-.sidebar-viewport {
-    @include small-rounding;
 }
 
 .sidebar-scrollbar {
@@ -483,10 +480,10 @@
     min-height: 1.705rem;
 }
 
-$sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 50%);
-
 .sidebar-chat-viewport {
-    margin: 0.682rem;   
+    @include menu_decel;
+    margin: 0.682rem 0rem;
+    padding: 0.682rem 0rem;
 }
 
 .sidebar-chat-textarea {
@@ -496,6 +493,7 @@ $sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 50%);
 }
 
 .sidebar-chat-entry {
+    color: $onSurfaceVariant;
     caret-color: $onSurfaceVariant;
     min-height: 1.773rem;
     min-width: 0rem;
@@ -528,4 +526,83 @@ $sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 50%);
 
 .sidebar-chat-send-available:active {
     background-color: mix($primary, $onPrimary, 80%);
+}
+
+.sidebar-chat-message {
+    margin: 0.682rem;
+}
+
+.sidebar-chat-indicator {
+    @include full-rounding;
+    min-width: 0.136rem;
+}
+
+.sidebar-chat-indicator-user {
+    background-color: $primary;
+}
+
+.sidebar-chat-indicator-bot {
+    background-color: $chatgpt;
+}
+
+.sidebar-chat-indicator-System {
+    background-color: $system;
+}
+
+.sidebar-chat-name {
+    @include titlefont;
+    padding: 0.341rem;
+    margin-left: -0.136rem;
+    padding: 0.341rem;
+    padding-left: 0.818rem;
+}
+
+.sidebar-chat-txt {
+    margin-left: -0.136rem;
+    padding: 0.341rem;
+    padding-left: 0.818rem;
+}
+
+.sidebar-chat-welcome-txt {
+    margin: 0rem 3.409rem;
+}
+
+.sidebar-chat-welcome-icon {
+    @include full-rounding;
+    font-size: 4rem;
+}
+
+.sidebar-chat-welcome-logo {
+    @include full-rounding;
+    @include menu_decel;
+    min-height: 4.773rem;
+    min-width: 4.773rem;
+    font-size: 4rem;
+    background-color: white;
+    color: black;
+}
+
+.sidebar-chat-chip {
+    @include menu_decel;
+    @include small-rounding;
+    padding: 0.205rem 0.341rem;
+}
+
+.sidebar-chat-chip-action {
+    color: $sidebar_chat_textareaColor;
+    border: 0.068rem solid $sidebar_chat_textareaColor;
+}
+
+.sidebar-chat-chip-action:hover {
+    background-color: $sidebar_chat_textareaColor;
+}
+
+.sidebar-chat-chip-action:active {
+    background-color: mix($sidebar_chat_textareaColor, $onSurfaceVariant, 70%);
+    color: mix($sidebar_chat_textareaColor, $surfaceVariant, 70%);
+}
+
+.sidebar-chat-chip-action-active {
+    color: $sidebar_chat_textareaColor;
+    border: 0.068rem solid $sidebar_chat_textareaColor;
 }

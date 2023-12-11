@@ -48,7 +48,7 @@ menu>menuitem:hover {
 }
 
 tooltip {
-    @include large-rounding;
+    @include normal-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
     border: 1px solid $onSurfaceVariant;

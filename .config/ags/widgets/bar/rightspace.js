@@ -1,7 +1,7 @@
-import { App, Service, Utils, Widget } from '../../imports.js';
+import { App, Utils, Widget } from '../../imports.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-const { exec, execAsync, CONFIG_DIR } = Utils;
+const { execAsync } = Utils;
 import Indicator from '../../services/indicator.js';
 import { StatusIcons } from "../../lib/statusicons.js";
 import { RoundedCorner } from "../../lib/roundedcorner.js";
@@ -32,7 +32,7 @@ export const ModuleRightSpace = () => {
         // onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
         // onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
         onPrimaryClick: () => App.toggleWindow('sideright'),
-        onSecondaryClickRelease: () => Mpris.getPlayer('')?.next(),
+        onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
         onMiddleClickRelease: () => Mpris.getPlayer('')?.playPause(),
         child: Widget.Box({
             homogeneous: false,

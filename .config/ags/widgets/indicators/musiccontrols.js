@@ -52,7 +52,7 @@ const DEFAULT_MUSIC_FONT = 'Gabarito, sans-serif';
 function getTrackfont(player) {
     const title = player.trackTitle;
     const artists = player.trackArtists.join(' ');
-    if(artists.includes('TANO*C')) return 'Chakra Petch, sans-serif'; // Rigid square replacement
+    if(artists.includes('TANO*C') || artists.includes('USAO') || artists.includes('Kobaryo')) return 'Chakra Petch'; // Rigid square replacement
     if(title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
     return DEFAULT_MUSIC_FONT;
 }

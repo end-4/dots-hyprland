@@ -93,7 +93,7 @@ $t_onSuccess: transparentize($onError, $transparentize_amount);
 $t_successContainer: transparentize($errorContainer, $transparentize_amount);
 $t_onSuccessContainer: transparentize($onErrorContainer, $transparentize_amount);
 
-// Common stuff
+// Others
 $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
 $subtext: mix($onBackground, $background, 70%);

@@ -26,7 +26,7 @@ export const ModuleMusic = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
     onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
-    onSecondaryClickRelease: () => Mpris.getPlayer('')?.next(),
+    onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
     onMiddleClickRelease: () => Mpris.getPlayer('')?.playPause(),
     child: Widget.Box({
         className: 'bar-group-margin bar-sides',

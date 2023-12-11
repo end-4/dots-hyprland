@@ -3,8 +3,17 @@ import Service from 'resource:///com/github/Aylur/ags/service.js';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
+import { fileExists } from './messages.js';
 
-const OPENAI_API_KEY = Utils.readFile(`${GLib.get_user_cache_dir()}/ags/user/openai_api_key.txt`).trim();
+function expandTilde(path) {
+    if (path.startsWith('~')) {
+        return GLib.get_home_dir() + path.slice(1);
+    } else {
+        return path;
+    }
+}
+
+const KEY_FILE_LOCATION = `~/.cache/ags/user/openai_api_key.txt`;
 
 class ChatGPTMessage extends Service {
     static {
@@ -65,17 +74,39 @@ class ChatGPTMessage extends Service {
 class ChatGPTService extends Service {
     static {
         Service.register(this, {
-            'newMsg': ['int'],
+            'initialized': [],
             'clear': [],
+            'newMsg': ['int'],
+            'hasKey': ['boolean'],
         });
     }
 
     messages = [];
+    _key = '';
     _decoder = new TextDecoder();
     url = GLib.Uri.parse('https://api.openai.com/v1/chat/completions', GLib.UriFlags.NONE);
 
-    get messages() { return this.messages }
+    constructor() {
+        super();
+        if (fileExists(expandTilde(KEY_FILE_LOCATION))) {
+            this._key = Utils.readFile(expandTilde(KEY_FILE_LOCATION)).trim();
+        }
+        else {
+            this.emit('hasKey', false);
+        }
+        this.emit('initialized');
+    }
 
+    get keyPath() { return KEY_FILE_LOCATION }
+    get key() { return this._key }
+    set key(keyValue) {
+        this._key = keyValue;
+        Utils.writeFile(this._key, expandTilde(KEY_FILE_LOCATION))
+            .then(this.emit('hasKey', true))
+            .catch(err => print(err));
+    }
+
+    get messages() { return this.messages }
     get lastMessage() { return this.messages[this.messages.length - 1] }
 
     clear() {
@@ -109,6 +140,11 @@ class ChatGPTService extends Service {
             });
     }
 
+    addMessage(role, message) {
+        this.messages.push(new ChatGPTMessage(role, message));
+        this.emit('newMsg', this.messages.length - 1);
+    }
+
     send(msg) {
         this.messages.push(new ChatGPTMessage('user', msg));
         this.emit('newMsg', this.messages.length - 1);
@@ -127,7 +163,7 @@ class ChatGPTService extends Service {
             method: 'POST',
             uri: this.url,
         });
-        message.request_headers.append('Authorization', `Bearer ${OPENAI_API_KEY}`);
+        message.request_headers.append('Authorization', `Bearer ${this._key}`);
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(JSON.stringify(body)));
 
         session.send_async(message, GLib.DEFAULT_PRIORITY, null, (_, result) => {

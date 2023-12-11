@@ -7,14 +7,15 @@ import { setupCursorHover } from "../../lib/cursorhover.js";
 import { NavigationIndicator } from "../../lib/navigationindicator.js";
 import toolBox from './toolbox.js';
 import chatGPT from './chatgpt.js';
+import { chatEntry } from './chatgpt.js';
 
-const defaultTab = 'assistant';
+const defaultTab = 'apis';
 
 const contentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
     items: [
-        ['assistant', chatGPT],
+        ['apis', chatGPT],
         ['tools', toolBox],
     ],
 })
@@ -66,7 +67,7 @@ const navBar = Box({
         Box({
             homogeneous: true,
             children: [
-                TabButton(contentStack, 'assistant', navIndicator, 0, 'forum', 'ChatGPT'),
+                TabButton(contentStack, 'apis', navIndicator, 0, 'api', 'APIs'),
                 TabButton(contentStack, 'tools', navIndicator, 1, 'home_repair_service', 'Tools'),
             ]
         }),
@@ -93,5 +94,17 @@ export default () => Box({
                 contentStack,
             ]
         }),
-    ]
+    ],
+    connections: [
+        ['key-press-event', (widget, event) => { // Typing
+            if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 &&
+                widget != chatEntry && event.get_keyval()[1] != Gdk.KEY_space) {
+                if (contentStack.shown == 'apis') {
+                    chatEntry.grab_focus();
+                    chatEntry.set_text(chatEntry.text + String.fromCharCode(event.get_keyval()[1]));
+                    chatEntry.set_position(-1);
+                }
+            }
+        }],
+    ],
 });

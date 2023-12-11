@@ -197,7 +197,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                                     margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
                                 `,
                                 // If the title is too short, include the class
-                                label: (title.length < 5 ? `${c}: ${title}` : title),
+                                label: (title.length <= 1 ? `${c}: ${title}` : title),
                             })
                         })
                     })
@@ -373,7 +373,9 @@ export const SearchAndWindows = () => {
     const entry = Widget.Entry({
         className: 'overview-search-box txt-small txt',
         hpack: 'center',
-        onAccept: ({ text }) => { // This is when you hit Enter
+        onAccept: (self) => { // This is when you hit Enter
+            const text = self.text;
+            if(text.length == 0) return;
             const isAction = text.startsWith('>');
             const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
 
@@ -507,9 +509,6 @@ export const SearchAndWindows = () => {
                 }
             }],
             ['key-press-event', (widget, event) => { // Typing
-                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
-                    MenuService.closeButOnlyUpdate();
-                }
                 if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
                     entry.grab_focus();
                     entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
