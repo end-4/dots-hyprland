@@ -140,15 +140,15 @@ const chatWelcome = Box({
                 transition: 'slide_down',
                 transitionDuration: 150,
                 connections: [[ChatGPT, (self, hasKey) => {
-                    console.log('hmm test');
                     self.revealChild = (ChatGPT.key.length == 0);
                 }, 'hasKey']],
                 child: Button({
                     child: Label({
                         useMarkup: true,
+                        wrap: true,
                         className: 'txt sidebar-chat-welcome-txt',
                         justify: Gtk.Justification.CENTER,
-                        label: 'Add an OpenAI API Key to continue.\nYou can grab one <u>here</u>'
+                        label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
                     }),
                     setup: (button) => setupCursorHover(button),
                     onClicked: () => {
@@ -185,7 +185,6 @@ const chatSendButton = Button({
     setup: (button) => setupCursorHover(button),
     onClicked: (btn) => {
         const entry = btn.parent.children[0]; // First child of parent
-        console.log('clickked!! text=' + entry.text);
         if (entry.text.length == 0) return;
         ChatGPT.send(entry.text);
         entry.text = ''

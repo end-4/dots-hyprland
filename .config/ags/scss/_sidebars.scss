@@ -558,6 +558,7 @@ $onChatgpt: #D5F4E7;
 }
 
 .sidebar-chat-txt {
+    @include readingfont;
     margin-left: -0.136rem;
     padding: 0.341rem;
     padding-left: 0.818rem;

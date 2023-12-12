@@ -9,17 +9,6 @@ import toolBox from './toolbox.js';
 import chatGPT from './chatgpt.js';
 import { chatEntry } from './chatgpt.js';
 
-const defaultTab = 'apis';
-
-const contentStack = Stack({
-    vexpand: true,
-    transition: 'slide_left_right',
-    items: [
-        ['apis', chatGPT],
-        ['tools', toolBox],
-    ],
-})
-
 const TabButton = (stack, stackItem, navIndicator, navIndex, icon, label) => Widget.Button({
     // hexpand: true,
     className: 'sidebar-todo-selector-tab',
@@ -55,6 +44,32 @@ const TabButton = (stack, stackItem, navIndicator, navIndex, icon, label) => Wid
         setupCursorHover(button);
     }),
 });
+
+const apiStack = Stack({
+    vexpand: true,
+    transition: 'slide_left_right',
+    items: [
+        ['chatgpt', chatGPT],
+    ],
+})
+
+const apiView = Box({
+    vertical: true,
+    children: [
+        // TODO: add a workspace-like indicator for APIs here
+        apiStack,
+    ]
+});
+
+const defaultTab = 'apis';
+const contentStack = Stack({
+    vexpand: true,
+    transition: 'slide_left_right',
+    items: [
+        ['apis', apiView],
+        ['tools', toolBox],
+    ],
+})
 
 const navIndicator = NavigationIndicator(2, false, { // The line thing
     className: 'sidebar-todo-selector-highlight',
@@ -99,7 +114,7 @@ export default () => Box({
         ['key-press-event', (widget, event) => { // Typing
             if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 &&
                 widget != chatEntry && event.get_keyval()[1] != Gdk.KEY_space) {
-                if (contentStack.shown == 'apis') {
+                if (contentStack.shown == 'apis' && apiStack.shown == 'chatgpt') {
                     chatEntry.grab_focus();
                     chatEntry.set_text(chatEntry.text + String.fromCharCode(event.get_keyval()[1]));
                     chatEntry.set_position(-1);

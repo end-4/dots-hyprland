@@ -13,7 +13,11 @@ function expandTilde(path) {
     }
 }
 
+// We're using many models to not be restricted to 3 messages per minute.
+// The whole chat will be sent every request anyway.
 const KEY_FILE_LOCATION = `~/.cache/ags/user/openai_api_key.txt`;
+const CHAT_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-0613"]
+const ONE_CYCLE_COUNT = 3;
 
 class ChatGPTMessage extends Service {
     static {
@@ -78,10 +82,14 @@ class ChatGPTService extends Service {
             'clear': [],
             'newMsg': ['int'],
             'hasKey': ['boolean'],
+            'cycleModels': ['boolean'],
         });
     }
 
     messages = [];
+    _cycleModels = true;
+    _thisMinuteCount = 0;
+    _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();
     url = GLib.Uri.parse('https://api.openai.com/v1/chat/completions', GLib.UriFlags.NONE);
@@ -104,6 +112,12 @@ class ChatGPTService extends Service {
         Utils.writeFile(this._key, expandTilde(KEY_FILE_LOCATION))
             .then(this.emit('hasKey', true))
             .catch(err => print(err));
+    }
+
+    get cycleModels() { return this._cycleModels }
+    set cycleModels(value) {
+        this._cycleModels = value;
+        this.emit('cycleModels', value);
     }
 
     get messages() { return this.messages }
@@ -153,10 +167,11 @@ class ChatGPTService extends Service {
         this.emit('newMsg', this.messages.length - 1);
 
         const body = {
-            model: "gpt-3.5-turbo",
+            model: CHAT_MODELS[this._modelIndex],
             messages: this.messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
             stream: true,
         };
+        console.log('using model', body.model);
 
         const session = new Soup.Session();
         const message = new Soup.Message({
@@ -173,6 +188,13 @@ class ChatGPTService extends Service {
                 base_stream: stream
             }), aiResponse);
         });
+
+        if (this._cycleModels) {
+            this._thisMinuteCount++;
+            this._modelIndex = (this._thisMinuteCount - (this._thisMinuteCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
+            console.log(this._modelIndex);
+        }
+
     }
 }
 
