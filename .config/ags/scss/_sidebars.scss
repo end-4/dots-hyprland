@@ -586,11 +586,10 @@ $onChatgpt: #D5F4E7;
 .sidebar-chat-chip {
     @include menu_decel;
     @include small-rounding;
-    padding: 0.205rem 0.341rem;
+    padding: 0.341rem 0.477rem;
 }
 
 .sidebar-chat-chip-action {
-    color: $sidebar_chat_textareaColor;
     border: 0.068rem solid $sidebar_chat_textareaColor;
 }
 

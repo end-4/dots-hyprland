@@ -44,7 +44,7 @@ export default {
         CornerBottomleft(),
         CornerBottomright(),
         DesktopBackground(),
-        // Dock(), // Buggy
+        Dock(), // Buggy
         Overview(),
         Indicator(),
         Cheatsheet(),

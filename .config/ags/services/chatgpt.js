@@ -105,6 +105,8 @@ class ChatGPTService extends Service {
         this.emit('initialized');
     }
 
+    get modelName() { return CHAT_MODELS[this._modelIndex] }
+
     get keyPath() { return KEY_FILE_LOCATION }
     get key() { return this._key }
     set key(keyValue) {

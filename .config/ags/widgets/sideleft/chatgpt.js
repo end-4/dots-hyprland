@@ -1,15 +1,23 @@
-const { Gdk, GLib, Gtk } = imports.gi;
+const { Gdk, GLib, Gtk, Pango } = imports.gi;
 import { App, Utils, Widget } from '../../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import ChatGPT from '../../services/chatgpt.js';
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
+import chatgpt from '../../services/chatgpt.js';
 
 const USERNAME = GLib.get_user_name();
 const CHATGPT_CURSOR = '  ⬤';
 
-const SystemMessage = (content) => {
+// Pango stuff
+// const attrList = new Pango.AttrList();
+// const fontAttr = new Pango.AttrFontDesc();
+// const fontDesc = Pango.FontDescription.from_string("JetBrainsMono Nerd Font Regular 11");
+// fontAttr.set_desc(fontDesc);
+// attrList.insert(fontAttr);
+
+const SystemMessage = (content, commandName) => {
     const thisMessage = Box({
         className: 'sidebar-chat-message',
         children: [
@@ -23,17 +31,19 @@ const SystemMessage = (content) => {
                         xalign: 0,
                         className: 'txt txt-bold sidebar-chat-name',
                         wrap: true,
-                        label: 'System',
+                        label: `System  •  ${commandName}`,
                     }),
                     Label({
+                        // attributes: attrList,
                         className: 'txt sidebar-chat-txt',
                         useMarkup: true,
                         xalign: 0,
                         wrap: true,
+                        maxWidthChars: 40,
                         selectable: true,
                         label: content,
                     })
-                ]
+                ],
             })
         ]
     });
@@ -97,11 +107,6 @@ const chatWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            // Label({
-            //     hpack: 'center',
-            //     className: 'txt icon-material sidebar-chat-welcome-icon',
-            //     label: 'api',
-            // }),
             Icon({
                 hpack: 'center',
                 className: 'sidebar-chat-welcome-logo',
@@ -178,17 +183,42 @@ const chatContent = Box({
     ]
 });
 
+const sendChatMessage = () => {
+    // Check if text or API key is empty
+    if (chatEntry.text.length == 0) return;
+    if (ChatGPT.key.length == 0) {
+        ChatGPT.key = chatEntry.text;
+        chatContent.add(SystemMessage(`Key saved to\n<tt>${ChatGPT.keyPath}</tt>`, 'API Key'));
+        chatEntry.text = '';
+        return;
+    }
+    // Commands
+    if (chatEntry.text.startsWith('/')) {
+        if (chatEntry.text.startsWith('/clear')) ChatGPT.clear();
+        else if (chatEntry.text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using <tt>${ChatGPT.modelName}</tt>`, '/model'))
+        else if (chatEntry.text.startsWith('/key')) {
+            const parts = chatEntry.text.split(' ');
+            if (parts.length == 1) chatContent.add(SystemMessage(`See  <tt>${ChatGPT.keyPath}</tt>`, '/key'));
+            else {
+                ChatGPT.key = parts[1];
+                chatContent.add(SystemMessage(`Updated API Key at\n<tt>${ChatGPT.keyPath}</tt>`, '/key'));
+            }
+        }
+        else chatContent.add(SystemMessage(`Invalid command.`, 'Error'))
+    }
+    else {
+        ChatGPT.send(chatEntry.text);
+    }
+
+    chatEntry.text = '';
+}
+
 const chatSendButton = Button({
     className: 'txt-norm icon-material sidebar-chat-send',
     vpack: 'center',
     label: 'arrow_upward',
     setup: (button) => setupCursorHover(button),
-    onClicked: (btn) => {
-        const entry = btn.parent.children[0]; // First child of parent
-        if (entry.text.length == 0) return;
-        ChatGPT.send(entry.text);
-        entry.text = ''
-    },
+    onClicked: (btn) => sendChatMessage(),
 });
 
 export const chatEntry = Entry({
@@ -202,17 +232,7 @@ export const chatEntry = Entry({
     onChange: (entry) => {
         chatSendButton.toggleClassName('sidebar-chat-send-available', entry.text.length > 0);
     },
-    onAccept: (self) => {
-        if (self.text.length == 0) return;
-        if (ChatGPT.key.length > 0) {
-            ChatGPT.send(self.text);
-        }
-        else {
-            ChatGPT.key = self.text;
-            chatContent.add(SystemMessage(`Saved API Key to\n<tt>${ChatGPT.keyPath}</tt>`));
-        }
-        self.text = '';
-    },
+    onAccept: () => sendChatMessage(),
 });
 
 export default Widget.Box({
@@ -235,22 +255,26 @@ export default Widget.Box({
             children: [
                 Box({ hexpand: true }),
                 Button({
-                    className: 'sidebar-chat-chip sidebar-chat-chip-action',
+                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+                    onClicked: () => chatEntry.text = '/key',
+                    setup: (button) => setupCursorHover(button),
+                    label: '/key',
+                }),
+                Button({
+                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+                    onClicked: () => chatContent.add(SystemMessage(
+                        `Currently using <tt>${ChatGPT.modelName}</tt>`,
+                        '/model'
+                    )),
+                    setup: (button) => setupCursorHover(button),
+                    label: '/model',
+                }),
+                Button({
+                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
                     onClicked: () => ChatGPT.clear(),
                     setup: (button) => setupCursorHover(button),
-                    child: Box({
-                        children: [
-                            Label({
-                                className: 'txt txt-norm icon-material',
-                                label: 'clear_all',
-                            }),
-                            Label({
-                                className: 'txt txt-small',
-                                label: 'Clear',
-                            }),
-                        ]
-                    })
-                })
+                    label: '/clear',
+                }),
             ]
         }),
         Box({ // Entry area

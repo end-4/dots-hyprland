@@ -9,8 +9,15 @@ import { MaterialIcon } from '../../lib/materialicon.js';
 import { showMusicControls } from '../../variables.js';
 
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
-const PREFERRED_PLAYER = 'firefox';
+const PREFERRED_PLAYER = 'plasma-browser-integration';
 var lastCoverPath = '';
+
+function isRealPlayer(player) {
+    return (
+        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') &&
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld')
+    );
+}
 
 export const getPlayer = (name = PREFERRED_PLAYER) => {
     return Mpris.getPlayer(name) || Mpris.players[0] || null;
@@ -52,8 +59,8 @@ const DEFAULT_MUSIC_FONT = 'Gabarito, sans-serif';
 function getTrackfont(player) {
     const title = player.trackTitle;
     const artists = player.trackArtists.join(' ');
-    if(artists.includes('TANO*C') || artists.includes('USAO') || artists.includes('Kobaryo')) return 'Chakra Petch'; // Rigid square replacement
-    if(title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
+    if (artists.includes('TANO*C') || artists.includes('USAO') || artists.includes('Kobaryo')) return 'Chakra Petch'; // Rigid square replacement
+    if (title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
     return DEFAULT_MUSIC_FONT;
 }
 
@@ -75,7 +82,7 @@ const TrackProgress = ({ player, ...rest }) => {
     })
 }
 
-const TrackTitle = ({ player, ...rest }) => Label({ 
+const TrackTitle = ({ player, ...rest }) => Label({
     ...rest,
     label: 'No music playing',
     xalign: 0,
@@ -83,14 +90,9 @@ const TrackTitle = ({ player, ...rest }) => Label({
     // wrap: true,
     className: 'osd-music-title',
     connections: [[player, (self) => {
-        const player = Mpris.getPlayer(); // Else it would say "... - YouTube Music"
-        if (!player) return;
-        if (player.trackTitle != '')
-            self.label = player.trackTitle;
-        else
-            self.label = 'No music playing';
-
-        // Set font based on track/artist
+        // Player name
+        self.label = player.trackTitle.length > 0 ? player.trackTitle : 'No media';
+        // Font based on track/artist
         const fontForThisTrack = getTrackfont(player);
         self.css = `font-family: ${fontForThisTrack}, ${DEFAULT_MUSIC_FONT};`;
     }, 'notify::track-title']]
@@ -102,12 +104,7 @@ const TrackArtists = ({ player, ...rest }) => Label({
     className: 'osd-music-artists',
     truncate: 'end',
     connections: [[player, (self) => {
-        const player = Mpris.getPlayer();
-        if (!player) return;
-        if (player.trackArtists.length != 0)
-            self.label = player.trackArtists.join(', ');
-        else
-            self.label = '';
+        self.label = player.trackArtists.length > 0 ? player.trackArtists.join(', ') : '';
     }, 'notify::track-artists']]
 })
 
@@ -153,7 +150,7 @@ const CoverArt = ({ player, ...rest }) => Box({
 
                             // Generate colors
                             execAsync(['bash', '-c',
-                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${player.coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
+                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
                                 .then(() => {
                                     exec(`wal -i "${player.coverPath}" -n -t -s -e -q`)
                                     exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
@@ -222,8 +219,6 @@ const TrackSource = ({ player, ...rest }) => Widget.Revealer({
                 justification: 'center',
                 className: 'icon-nerd',
                 connections: [[player, (self) => {
-                    const player = Mpris.getPlayer();
-                    if (!player) return;
                     self.label = detectMediaSource(player.trackCoverUrl);
                 }, 'notify::cover-path']]
             }),
@@ -292,7 +287,6 @@ const PlayState = ({ player }) => {
                         hpack: 'fill',
                         vpack: 'center',
                         connections: [[player, (label) => {
-                            if (!player) return;
                             label.label = `${player.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
                         }, 'notify::play-back-status']],
                     }),
@@ -343,18 +337,21 @@ export default () => Widget.Revealer({
     transitionDuration: 170,
     child: Box({
         connections: [[Mpris, box => {
-            const player = getPlayer();
-            if (!player) {
+            let foundPlayer = false;
+
+            Mpris.players.forEach((player, i) => {
+                if (isRealPlayer(player)) {
+                    foundPlayer = true;
+                    box._player = player;
+                    box.children = [MusicControlsWidget(player)];
+                }
+            });
+
+            if (!foundPlayer) {
                 box._player = null;
+                box.get_children().forEach(ch => ch.destroy());
                 return;
             }
-
-            if (box._player === player)
-                return;
-
-            box._player = player;
-            box.get_children().forEach(ch => ch.destroy());
-            box.child = MusicControlsWidget(player);
         }, 'notify::players']],
     }),
     connections: [

@@ -3,7 +3,7 @@ import Dock from './dock.js';
 
 export default () => Widget.Window({
     name: 'dock',
-    layer: 'top',
+    layer: 'bottom',
     anchor: ['bottom'],
     exclusivity: 'normal',
     visible: true,
