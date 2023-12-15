@@ -99,7 +99,6 @@ $rounding_large: 1.705rem;
 $elevation2_margin: 7px;
 
 @mixin elevation2 {
-    // Shadows are demanding and we have border + blur xray so...
     box-shadow: 0px 2px 3px transparentize($shadow, 0.55);
     margin: $elevation2_margin;
 }

@@ -74,7 +74,7 @@ export const CalculationResultButton = ({ result, text }) => searchItem({
     content: `${result}`,
     onActivate: () => {
         App.closeWindow('overview');
-        execAsync(['bash', '-c', `wl-copy '${result}'`, `&`]).catch(print);
+        execAsync(['wl-copy', `${result}`]).catch(print);
     },
 });
 

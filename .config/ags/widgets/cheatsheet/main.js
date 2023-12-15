@@ -38,9 +38,11 @@ const cheatsheetHeader = () => Widget.CenterBox({
                 ]
             }),
             Widget.Label({
+                useMarkup: true,
+                selectable: true,
                 justify: Gtk.Justification.CENTER,
                 className: 'txt-small txt',
-                label: 'Sheet data stored in ~/.config/ags/data/keybinds.js\nChange keybinds in ~/.config/hypr/keybinds.conf'
+                label: 'Sheet data stored in <tt>~/.config/ags/data/keybinds.js</tt>\nChange keybinds in <tt>~/.config/hypr/keybinds.conf</tt>'
             }),
         ]
     }),

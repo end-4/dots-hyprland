@@ -111,7 +111,6 @@
 
 .overview-tasks-window {
     @include normal-rounding;
-    // @include elevation-border-softer;
     @include menu_decel;
     background-color: $l_t_secondaryContainer;
     color: $onSecondaryContainer;

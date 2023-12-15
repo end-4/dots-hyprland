@@ -44,6 +44,19 @@ export function setupCursorHoverGrab(button) {
     });
 }
 
+export function setupCursorHoverInfo(button) {
+    const display = Gdk.Display.get_default();
+    button.connect('enter-notify-event', () => {
+        const cursor = Gdk.Cursor.new_from_name(display, 'help');
+        button.get_window().set_cursor(cursor);
+    });
+
+    button.connect('leave-notify-event', () => {
+        const cursor = Gdk.Cursor.new_from_name(display, 'default');
+        button.get_window().set_cursor(cursor);
+    });
+}
+
 // failed radial ripple experiment
 //
 // var clicked = false;

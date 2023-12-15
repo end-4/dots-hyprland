@@ -49,6 +49,9 @@ export const ModuleLeftSpace = () => Widget.EventBox({
         Indicator.popup(1); // Since the brightness and speaker are both on the same window
         Brightness.screen_value -= 0.05;
     },
+    onPrimaryClick: () => {
+        App.toggleWindow('sideleft');
+    },
     child: Widget.Box({
         homogeneous: false,
         children: [
@@ -58,39 +61,36 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                     Widget.Box({ hexpand: true }),
                     Widget.Box({
                         className: 'bar-sidemodule', hexpand: true,
-                        children: [Widget.Button({
+                        children: [Widget.Box({
+                            vertical: true,
                             className: 'bar-space-button',
-                            child: Widget.Box({
-                                vertical: true,
-                                children: [
-                                    Widget.Scrollable({
-                                        hexpand: true, vexpand: true,
-                                        hscroll: 'automatic', vscroll: 'never',
-                                        child: Widget.Box({
-                                            vertical: true,
-                                            children: [
-                                                Widget.Label({
-                                                    xalign: 0,
-                                                    className: 'txt-smaller bar-topdesc txt',
-                                                    connections: [[Hyprland.active.client, label => { // Hyprland.active.client
-                                                        label.label = Hyprland.active.client._class.length === 0 ? 'Desktop' : Hyprland.active.client._class;
-                                                    }]],
-                                                }),
-                                                Widget.Label({
-                                                    xalign: 0,
-                                                    className: 'txt txt-smallie',
-                                                    connections: [
-                                                        [Hyprland.active.client, label => { // Hyprland.active.client
-                                                            label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : truncateTitle(Hyprland.active.client._title);
-                                                        }]
-                                                    ],
-                                                })
-                                            ]
-                                        })
+                            children: [
+                                Widget.Scrollable({
+                                    hexpand: true, vexpand: true,
+                                    hscroll: 'automatic', vscroll: 'never',
+                                    child: Widget.Box({
+                                        vertical: true,
+                                        children: [
+                                            Widget.Label({
+                                                xalign: 0,
+                                                className: 'txt-smaller bar-topdesc txt',
+                                                connections: [[Hyprland.active.client, label => { // Hyprland.active.client
+                                                    label.label = Hyprland.active.client._class.length === 0 ? 'Desktop' : Hyprland.active.client._class;
+                                                }]],
+                                            }),
+                                            Widget.Label({
+                                                xalign: 0,
+                                                className: 'txt txt-smallie',
+                                                connections: [
+                                                    [Hyprland.active.client, label => { // Hyprland.active.client
+                                                        label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : truncateTitle(Hyprland.active.client._title);
+                                                    }]
+                                                ],
+                                            })
+                                        ]
                                     })
-                                ]
-                            }),
-                            setup: (button) => setupCursorHover(button),
+                                })
+                            ]
                         })]
                     }),
                 ]

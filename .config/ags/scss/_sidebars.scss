@@ -557,11 +557,59 @@ $onChatgpt: #D5F4E7;
     padding-left: 0.818rem;
 }
 
-.sidebar-chat-txt {
-    @include readingfont;
+.sidebar-chat-txtblock {
     margin-left: -0.136rem;
     padding: 0.341rem;
     padding-left: 0.818rem;
+}
+
+.sidebar-chat-txt {
+    @include readingfont;
+}
+
+.sidebar-chat-codeblock {
+    @include normal-rounding;
+    // @include elevation2;
+    background-color: $termbg;
+    color: $termfg;
+    margin: 0rem 0.682rem;
+    border: 0.068rem solid $t_t_t_onSecondaryContainer;
+}
+
+.sidebar-chat-codeblock-topbar {
+    @include mainfont;
+    border-radius: $rounding_medium - 0.273rem;
+    margin: 0.273rem;
+    margin-bottom: 0rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border: 0.068rem solid mix($secondaryContainer, $onSecondaryContainer, 90%);
+    border-top-left-radius: $rounding_small + 0.068rem;
+    border-top-right-radius: $rounding_small + 0.068rem;
+    padding: 0.341rem 0.477rem;
+}
+
+.sidebar-chat-codeblock-topbar-txt {
+    @include full-rounding;
+    padding: 0.273rem;
+}
+
+.sidebar-chat-codeblock-topbar-btn {
+    @include full-rounding;
+    padding: 0.273rem;
+}
+
+.sidebar-chat-codeblock-topbar-btn:hover {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+}
+
+.sidebar-chat-codeblock-topbar-btn:active {
+    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
+}
+
+.sidebar-chat-codeblock-code {
+    @include techfont;
+    padding: 0.682rem;
 }
 
 .sidebar-chat-welcome-txt {

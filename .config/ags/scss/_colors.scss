@@ -98,3 +98,15 @@ $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
 $subtext: mix($onBackground, $background, 70%);
 $actiontext: mix($onBackground, $background, 85%);
+
+// Terminal colors
+$termbg: mix($t_surfaceVariant, $t_onSurfaceVariant, 80%);
+$termfg: $onSurfaceVariant;
+$term0: $t_background;
+$term1: $error;
+$term2: $inversePrimary;
+$term3: $onPrimaryContainer;
+$term4: $onPrimaryContainer;
+$term5: $onSecondaryContainer;
+$term6: $primary;
+$term7: $onSurfaceVariant;

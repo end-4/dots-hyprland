@@ -383,7 +383,7 @@ export const SearchAndWindows = () => {
                 try {
                     const fullResult = eval(text);
                     // copy
-                    execAsync(['bash', '-c', `wl-copy '${fullResult}'`, `&`]).catch(print);
+                    execAsync(['wl-copy', `${fullResult}`]).catch(print);
                     App.closeWindow('overview');
                     return;
                 } catch (e) {

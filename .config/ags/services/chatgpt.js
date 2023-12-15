@@ -86,7 +86,20 @@ class ChatGPTService extends Service {
         });
     }
 
-    messages = [];
+    messages = [
+        {
+            "role": "user",
+            "content": "Remember that you should act as a sidebar assistant. You have markdown capabilities, so you're encouraged to underline important keywords or use them in other ways (headings, bulletpoints, numbering, etc.) when possible and appropriate. Don't claim to be an AI language model, we all know that. When asked to explain something, don't be overly formal. Rather, use a natural tone and style.",
+            "thinking": false,
+            "done": false
+        },
+        {
+            "role": "assistant",
+            "content": "Got it!",
+            "thinking": true,
+            "done": false
+        }
+    ];
     _cycleModels = true;
     _thisMinuteCount = 0;
     _modelIndex = 0;
@@ -126,7 +139,20 @@ class ChatGPTService extends Service {
     get lastMessage() { return this.messages[this.messages.length - 1] }
 
     clear() {
-        this.messages = []
+        this.messages = [
+            {
+                "_role": "user",
+                "_content": "Remember that you should act as a sidebar assistant. You have markdown capabilities, so you're encouraged to underline important keywords or use them in other ways (headings, bulletpoints, numbering, etc.) when possible and appropriate. Don't claim to be an AI language model, we all know that. When asked to explain something, don't be overly formal. Rather, use a natural tone and style.",
+                "_thinking": false,
+                "_done": false
+            },
+            {
+                "_role": "assistant",
+                "_content": "Got it!",
+                "_thinking": true,
+                "_done": false
+            }
+        ]
         this.emit('clear');
     }
 
@@ -173,7 +199,6 @@ class ChatGPTService extends Service {
             messages: this.messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
             stream: true,
         };
-        console.log('using model', body.model);
 
         const session = new Soup.Session();
         const message = new Soup.Message({
@@ -194,9 +219,8 @@ class ChatGPTService extends Service {
         if (this._cycleModels) {
             this._thisMinuteCount++;
             this._modelIndex = (this._thisMinuteCount - (this._thisMinuteCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
-            console.log(this._modelIndex);
         }
-
+        console.log(this.messages)
     }
 }
 

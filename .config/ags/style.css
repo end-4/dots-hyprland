@@ -333,9 +333,11 @@
 *:focus {
   outline: 1px solid #1e1c20; }
 
-* selection {
-  background-color: #cec2db;
-  color: #342d40; }
+* {
+  caret-color: #d6baff; }
+  * selection {
+    background-color: #cec2db;
+    color: #342d40; }
 
 menu {
   border-top: 1px solid rgba(59, 57, 61, 0.121);
@@ -1687,11 +1689,53 @@ tooltip {
   padding: 0.341rem;
   padding-left: 0.818rem; }
 
-.sidebar-chat-txt {
-  font-family: 'Lexend', 'Noto Sans', sans-serif;
+.sidebar-chat-txtblock {
   margin-left: -0.136rem;
   padding: 0.341rem;
   padding-left: 0.818rem; }
+
+.sidebar-chat-txt {
+  font-family: 'Lexend', 'Noto Sans', sans-serif; }
+
+.sidebar-chat-codeblock {
+  border-radius: 1.159rem;
+  -gtk-outline-radius: 1.159rem;
+  background-color: rgba(73, 70, 76, 0.31);
+  color: #cbc4cf;
+  margin: 0rem 0.682rem;
+  border: 0.068rem solid rgba(234, 222, 247, 0.07); }
+
+.sidebar-chat-codeblock-topbar {
+  font-family: 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Noto Sans', 'Ubuntu', sans-serif;
+  border-radius: 0.886rem;
+  margin: 0.273rem;
+  margin-bottom: 0rem;
+  background-color: #4b4358;
+  color: #eadef7;
+  border: 0.068rem solid #5b5368;
+  border-top-left-radius: 0.886rem;
+  border-top-right-radius: 0.886rem;
+  padding: 0.341rem 0.477rem; }
+
+.sidebar-chat-codeblock-topbar-txt {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  padding: 0.273rem; }
+
+.sidebar-chat-codeblock-topbar-btn {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  padding: 0.273rem; }
+
+.sidebar-chat-codeblock-topbar-btn:hover {
+  background-color: #6b6278; }
+
+.sidebar-chat-codeblock-topbar-btn:active {
+  background-color: #8b8198; }
+
+.sidebar-chat-codeblock-code {
+  font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
+  padding: 0.682rem; }
 
 .sidebar-chat-welcome-txt {
   margin: 0rem 3.409rem; }
@@ -1906,7 +1950,7 @@ tooltip {
   min-width: 29.659rem;
   background-color: #141316;
   padding: 0rem 1.023rem;
-  background: linear-gradient(127deg, rgba(41, 39, 44, 0.7), rgba(41, 39, 44, 0.55) 70.71%), linear-gradient(217deg, rgba(73, 69, 78, 0.7), rgba(73, 69, 78, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #4b4358 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(75, 67, 88, 0.7), rgba(75, 67, 88, 0.55) 70.71%), linear-gradient(#141316, #141316); }
+  background: linear-gradient(127deg, rgba(36, 34, 39, 0.7), rgba(36, 34, 39, 0.55) 70.71%), linear-gradient(217deg, rgba(73, 69, 78, 0.7), rgba(73, 69, 78, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #4b4358 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(75, 67, 88, 0.7), rgba(75, 67, 88, 0.55) 70.71%), linear-gradient(#141316, #141316); }
 
 .osd-music-cover-fallback {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -1994,7 +2038,6 @@ tooltip {
   min-width: 0.409rem;
   min-height: 3.068rem;
   padding: 0.273rem;
-  background-color: rgba(53, 49, 58, 0.5);
   color: #d7d1d7; }
 
 .osd-music-playstate {

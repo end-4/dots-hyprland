@@ -8,6 +8,16 @@ import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { showMusicControls } from '../../variables.js';
 
+function expandTilde(path) {
+    if (path.startsWith('~')) {
+        return GLib.get_home_dir() + path.slice(1);
+    } else {
+        return path;
+    }
+}
+
+const LIGHTDARK_FILE_LOCATION = '~/.cache/ags/user/colormode.txt'
+const lightDark = Utils.readFile(expandTilde(LIGHTDARK_FILE_LOCATION)).trim();
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 const PREFERRED_PLAYER = 'plasma-browser-integration';
 var lastCoverPath = '';
@@ -136,27 +146,28 @@ const CoverArt = ({ player, ...rest }) => Box({
                             }
 
                             const coverPath = player.coverPath;
+                            const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
                             if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
                                 self.css = `background-image: url('${coverPath}');`;
                             }
                             lastCoverPath = player.coverPath;
 
                             // If a colorscheme has already been generated, skip generation
-                            if (fileExists(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`)) {
+                            if (fileExists(stylePath)) {
                                 self.css = `background-image: url('${coverPath}');`;
-                                App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                App.applyCss(stylePath);
                                 return;
                             }
 
                             // Generate colors
                             execAsync(['bash', '-c',
-                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss`])
+                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
                                 .then(() => {
-                                    exec(`wal -i "${player.coverPath}" -n -t -s -e -q`)
+                                    exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                                     exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
-                                    exec(`sassc ${App.configDir}/scss/_music.scss ${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                    exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
                                     self.css = `background-image: url('${coverPath}');`;
-                                    App.applyCss(`${player.coverPath}${COVER_COLORSCHEME_SUFFIX}`);
+                                    App.applyCss(`${stylePath}`);
                                 })
                                 .catch(print);
                         }],

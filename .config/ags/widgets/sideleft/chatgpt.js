@@ -4,100 +4,8 @@ const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack }
 const { execAsync, exec } = Utils;
 import ChatGPT from '../../services/chatgpt.js';
 import { MaterialIcon } from "../../lib/materialicon.js";
-import { setupCursorHover } from "../../lib/cursorhover.js";
-import chatgpt from '../../services/chatgpt.js';
-
-const USERNAME = GLib.get_user_name();
-const CHATGPT_CURSOR = '  ⬤';
-
-// Pango stuff
-// const attrList = new Pango.AttrList();
-// const fontAttr = new Pango.AttrFontDesc();
-// const fontDesc = Pango.FontDescription.from_string("JetBrainsMono Nerd Font Regular 11");
-// fontAttr.set_desc(fontDesc);
-// attrList.insert(fontAttr);
-
-const SystemMessage = (content, commandName) => {
-    const thisMessage = Box({
-        className: 'sidebar-chat-message',
-        children: [
-            Box({
-                className: `sidebar-chat-indicator sidebar-chat-indicator-System`,
-            }),
-            Box({
-                vertical: true,
-                children: [
-                    Label({
-                        xalign: 0,
-                        className: 'txt txt-bold sidebar-chat-name',
-                        wrap: true,
-                        label: `System  •  ${commandName}`,
-                    }),
-                    Label({
-                        // attributes: attrList,
-                        className: 'txt sidebar-chat-txt',
-                        useMarkup: true,
-                        xalign: 0,
-                        wrap: true,
-                        maxWidthChars: 40,
-                        selectable: true,
-                        label: content,
-                    })
-                ],
-            })
-        ]
-    });
-    return thisMessage;
-}
-
-const ChatMessage = (message) => {
-    const thisMessage = Box({
-        className: 'sidebar-chat-message',
-        children: [
-            Box({
-                className: `sidebar-chat-indicator ${message.role == 'user' ? 'sidebar-chat-indicator-user' : 'sidebar-chat-indicator-bot'}`,
-            }),
-            Box({
-                vertical: true,
-                hpack: 'fill',
-                hexpand: true,
-                children: [
-                    Label({
-                        hpack: 'fill',
-                        xalign: 0,
-                        className: 'txt txt-bold sidebar-chat-name',
-                        wrap: true,
-                        label: (message.role == 'user' ? USERNAME : 'ChatGPT'),
-                    }),
-                    Label({
-                        hpack: 'fill',
-                        className: 'txt sidebar-chat-txt',
-                        useMarkup: true,
-                        xalign: 0,
-                        wrap: true,
-                        selectable: true,
-                        label: message.content,
-                        connections: [
-                            [message, (label, isThinking) => {
-                                label.toggleClassName('thinking', message.thinking);
-                            }, 'notify::thinking'],
-                            [message, (label) => { // Message update
-                                label.label = message.content + (message.role == 'user' ? '' : CHATGPT_CURSOR);
-                                const scrolledWindow = thisMessage.get_parent().get_parent();
-                                var adjustment = scrolledWindow.get_vadjustment();
-                                adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-                            }, 'notify::content'],
-                            [message, (label, isDone) => { // Remove the cursor
-                                label.label = message.content;
-                            }, 'notify::done'],
-                        ]
-                    })
-                ]
-            })
-        ]
-    });
-    return thisMessage;
-}
+import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
+import { SystemMessage, ChatMessage } from "./chatmessage.js";
 
 const chatWelcome = Box({
     vexpand: true,
@@ -134,10 +42,11 @@ const chatWelcome = Box({
                         justify: Gtk.Justification.CENTER,
                         label: 'Powered by OpenAI',
                     }),
-                    Label({
+                    Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
                         tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
+                        setup: (self) => setupCursorHoverInfo(self),
                     }),
                 ]
             }),
@@ -183,6 +92,28 @@ const chatContent = Box({
     ]
 });
 
+const markdownTest = `# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+1. yes
+2. no
+127. well
+- __Underline__ __ No underline __
+- **Bold** ** No bold **
+- **Italics** ** No Italics **
+- A color: #D6BAFF
+- another: #9A3B59
+  - sub-item
+\`\`\`javascript
+// A code block!
+myArray = [23, 123, 43, 54, '6969'];
+console.log('uwu');
+\`\`\`
+To update arch lincox, run \`sudo pacman -Syu\`
+`;
+
 const sendChatMessage = () => {
     // Check if text or API key is empty
     if (chatEntry.text.length == 0) return;
@@ -204,7 +135,10 @@ const sendChatMessage = () => {
                 chatContent.add(SystemMessage(`Updated API Key at\n<tt>${ChatGPT.keyPath}</tt>`, '/key'));
             }
         }
-        else chatContent.add(SystemMessage(`Invalid command.`, 'Error'))
+        else if (chatEntry.text.startsWith('/test'))
+            chatContent.add(SystemMessage(markdownTest, `Markdown test`));
+        else
+            chatContent.add(SystemMessage(`Invalid command.`, 'Error'))
     }
     else {
         ChatGPT.send(chatEntry.text);
@@ -251,7 +185,7 @@ export default Widget.Box({
             }
         }),
         Box({
-            className: 'spcing-h-5',
+            className: 'spacing-h-5',
             children: [
                 Box({ hexpand: true }),
                 Button({
