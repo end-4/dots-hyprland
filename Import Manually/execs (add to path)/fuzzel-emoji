@@ -1,12 +1,23 @@
 #!/bin/bash
 if [ $? -eq 0 ]
 then
-    sed '1,/^### DATA ###$/d' $0 | wofi --show dmenu -i | cut -d ' ' -f 1 | tr -d '\n' | wtype -
+    sed '1,/^### DATA ###$/d' $0 | fuzzel --no-fuzzy --dmenu | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
 else
-    sed '1,/^### DATA ###$/d' $0 | wofi --show dmenu -i | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
+    sed '1,/^### DATA ###$/d' $0 | fuzzel --no-fuzzy --dmenu | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
 fi
 exit
 ### DATA ###
+¿? question upside down reversed spanish
+← left arrow
+↑ up arrow
+→ right arrow
+↓ down arrow
+←↑→↓ all directions up down left right arrows
+AH↗️HA↘️HA↗️HA↘️HA↗️HA↘️HA↗️HA↘️ pekora arrows hahaha rabbit
+• dot circle separator
+「」 japanese quote square bracket
+¯\_(ツ)_/¯ shrug idk i dont know
+↵ enter key return
 😀 grinning face face smile happy joy :D grin
 😃 grinning face with big eyes face happy joy haha :D :) smile funny
 😄 grinning face with smiling eyes face happy joy funny haha laugh like :D :) smile
@@ -76,7 +87,7 @@ exit
 😮 face with open mouth face surprise impressed wow whoa :O
 😯 hushed face face woo shh
 😲 astonished face face xox surprised poisoned
-😳 flushed face face blush shy flattered
+😳 flushed face face blush shy flattered sex
 🥺 pleading face face begging mercy
 😦 frowning face with open mouth face aw what
 😧 anguished face face stunned nervous
@@ -84,7 +95,7 @@ exit
 😰 anxious face with sweat face nervous sweat
 😥 sad but relieved face face phew sweat nervous
 😢 crying face face tears sad depressed upset :'(
-😭 loudly crying face face cry tears sad upset depressed
+😭 loudly crying face face cry tears sad upset depressed sob
 😱 face screaming in fear face munch scared omg
 😖 confounded face face confused sick unwell oops :S
 😣 persevering face face sick no upset oops
@@ -1008,7 +1019,7 @@ exit
 🎱 pool 8 ball pool hobby game luck magic
 🔮 crystal ball disco party magic circus fortune teller
 🧿 nazar amulet bead charm
-🎮 video game play console PS4 controller
+🎮 video game play console PS4 Wii GameCube controller
 🕹️ joystick game play
 🎰 slot machine bet gamble vegas fruit machine luck casino
 🎲 game die dice random tabletop play luck
