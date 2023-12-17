@@ -1,5 +1,3 @@
-// This file uses parts of md2pango (https://github.com/ubunatic/md2pango).
-
 const { Gdk, Gio, GLib, Gtk, Pango } = imports.gi;
 import { App, Utils, Widget } from '../../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
@@ -9,7 +7,7 @@ import { MaterialIcon } from "../../lib/materialicon.js";
 import { convert } from "./md2pango.js";
 
 const USERNAME = GLib.get_user_name();
-const CHATGPT_CURSOR = '  ⬤';
+const CHATGPT_CURSOR = '  >> ';
 
 function copyToClipboard(text) {
     const clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
@@ -57,9 +55,12 @@ const CodeBlock = (content = '', lang = 'txt') => {
             })
         ]
     })
+    // let sourceBuffer = new Gtk.Source.Buffer();
+    // let sourceView = new GtkSource.View({ buffer: sourceBuffer });
+    // sourceBuffer.set_language(GtkSource.LanguageManager.get_default().get_language('javascript'));
     const code = Label({ // TODO: Make this in a scrolled window, add copy button etc.
         hpack: 'fill',
-        className: 'txt sidebar-chat-codeblock-code',
+        className: 'txt txt-smaller sidebar-chat-codeblock-code',
         useMarkup: false,
         xalign: 0,
         wrap: true,
@@ -77,16 +78,21 @@ const CodeBlock = (content = '', lang = 'txt') => {
         children: [
             topBar,
             code,
+            // sourceView,
         ]
     })
     return codeBlock;
 }
 
+const Divider = () => Box({
+    className: 'sidebar-chat-divider',
+})
+
 const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
         properties: [
-            ['fullUpdate', (self, content) => {
+            ['fullUpdate', (self, content, useCursor = false) => {
                 // Clear and add first text widget
                 contentBox.get_children().forEach(ch => ch.destroy());
                 contentBox.add(TextBlock())
@@ -96,13 +102,16 @@ const MessageContent = (content) => {
                 let lastProcessed = 0;
                 let inCode = false;
                 for (const [index, line] of lines.entries()) {
-                    if (line.startsWith('```')) {
+                    // Code blocks
+                    const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
+                    if (codeBlockRegex.test(line)) {
+                        // console.log(`code at line ${index}`);
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
                         if (!inCode) {
                             lastLabel.label = convert(blockContent);
-                            contentBox.add(CodeBlock('', line.slice(3)));
+                            contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
                             lastLabel._updateText(blockContent);
@@ -112,13 +121,24 @@ const MessageContent = (content) => {
                         lastProcessed = index + 1;
                         inCode = !inCode;
                     }
+                    // Breaks
+                    const dividerRegex = /^\s*---/;
+                    if (!inCode && dividerRegex.test(line)) {
+                        const kids = self.get_children();
+                        const lastLabel = kids[kids.length - 1];
+                        const blockContent = lines.slice(lastProcessed, index).join('\n');
+                        lastLabel.label = convert(blockContent);
+                        contentBox.add(Divider());
+                        contentBox.add(TextBlock());
+                        lastProcessed = index + 1;
+                    }
                 }
                 if (lastProcessed < lines.length) {
                     const kids = self.get_children();
                     const lastLabel = kids[kids.length - 1];
-                    const blockContent = lines.slice(lastProcessed, lines.length).join('\n');
+                    let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = convert(blockContent);
+                        lastLabel.label = `${convert(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
                     else
                         lastLabel._updateText(blockContent);
                 }
@@ -136,7 +156,7 @@ const MessageContent = (content) => {
             }]
         ]
     });
-    contentBox._fullUpdate(contentBox, content);
+    contentBox._fullUpdate(contentBox, content, false);
     return contentBox;
 }
 
@@ -167,14 +187,19 @@ export const ChatMessage = (message) => {
                         messageContentBox.toggleClassName('thinking', message.thinking);
                     }, 'notify::thinking'],
                     [message, (self) => { // Message update
-                        messageContentBox._fullUpdate(messageContentBox, message.role == 'user' ?
-                            message.content : (message.content + CHATGPT_CURSOR));
+                        messageContentBox._fullUpdate(messageContentBox, message.content, message.role != 'user');
                         const scrolledWindow = thisMessage.get_parent().get_parent();
                         var adjustment = scrolledWindow.get_vadjustment();
                         adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
                     }, 'notify::content'],
+                    // [message, (self, delta) => { // Message update
+                    //     messageContentBox._addDelta(messageContentBox, delta, message.role != 'user');
+                    //     const scrolledWindow = thisMessage.get_parent().get_parent();
+                    //     var adjustment = scrolledWindow.get_vadjustment();
+                    //     adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
+                    // }, 'delta'],
                     [message, (label, isDone) => { // Remove the cursor
-                        messageContentBox._fullUpdate(messageContentBox, message.content);
+                        messageContentBox._fullUpdate(messageContentBox, message.content, false);
                     }, 'notify::done'],
                 ]
             })
@@ -211,87 +236,6 @@ export const SystemMessage = (content, commandName) => {
             var adjustment = scrolledWindow.get_vadjustment();
             adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
         })
-    });
-    return thisMessage;
-}
-// {
-//     const thisMessage = Box({
-//         className: 'sidebar-chat-message',
-//         children: [
-//             Box({
-//                 className: `sidebar-chat-indicator sidebar-chat-indicator-System`,
-//             }),
-//             Box({
-//                 vertical: true,
-//                 children: [
-//                     Label({
-//                         xalign: 0,
-//                         className: 'txt txt-bold sidebar-chat-name',
-//                         wrap: true,
-//                         label: `System  •  ${commandName}`,
-//                     }),
-//                     Label({
-//                         // attributes: attrList,
-//                         className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
-//                         useMarkup: true,
-//                         xalign: 0,
-//                         wrap: true,
-//                         maxWidthChars: 40,
-//                         selectable: true,
-//                         label: convert(content),
-//                     })
-//                 ],
-//             })
-//         ]
-//     });
-//     return thisMessage;
-// }
-
-export const SimpleChatMessage = (message) => {
-    const thisMessage = Box({
-        className: 'sidebar-chat-message',
-        children: [
-            Box({
-                className: `sidebar-chat-indicator ${message.role == 'user' ? 'sidebar-chat-indicator-user' : 'sidebar-chat-indicator-bot'}`,
-            }),
-            Box({
-                vertical: true,
-                hpack: 'fill',
-                hexpand: true,
-                children: [
-                    Label({
-                        hpack: 'fill',
-                        xalign: 0,
-                        className: 'txt txt-bold sidebar-chat-name',
-                        wrap: true,
-                        label: (message.role == 'user' ? USERNAME : 'ChatGPT'),
-                    }),
-                    Label({
-                        hpack: 'fill',
-                        className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
-                        useMarkup: true,
-                        xalign: 0,
-                        wrap: true,
-                        selectable: true,
-                        label: message.content,
-                        connections: [
-                            [message, (label, isThinking) => {
-                                label.toggleClassName('thinking', message.thinking);
-                            }, 'notify::thinking'],
-                            [message, (label) => { // Message update
-                                label.label = message.content + (message.role == 'user' ? '' : CHATGPT_CURSOR);
-                                const scrolledWindow = thisMessage.get_parent().get_parent();
-                                var adjustment = scrolledWindow.get_vadjustment();
-                                adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-                            }, 'notify::content'],
-                            [message, (label, isDone) => { // Remove the cursor
-                                label.label = message.content;
-                            }, 'notify::done'],
-                        ]
-                    })
-                ]
-            })
-        ]
     });
     return thisMessage;
 }

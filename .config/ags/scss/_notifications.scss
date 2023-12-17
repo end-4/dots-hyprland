@@ -98,7 +98,8 @@ $notif_surface: $t_background;
     padding: 0rem 0.136rem;
 }
 
-.notif-close-btn:hover {
+.notif-close-btn:hover,
+.notif-close-btn:focus {
     background: $hovercolor;
 }
 
@@ -111,7 +112,8 @@ $notif_surface: $t_background;
     padding: 0.341rem 0.341rem;
 }
 
-.notif-closeall-btn:hover {
+.notif-closeall-btn:hover,
+.notif-closeall-btn:focus {
     background-color: $hovercolor;
 }
 

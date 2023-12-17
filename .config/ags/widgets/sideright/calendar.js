@@ -95,13 +95,13 @@ const CalendarWidget = () => {
                         className: 'sidebar-calendar-monthshift-btn',
                         onClicked: () => shiftCalendarXMonths(-1),
                         child: MaterialIcon('chevron_left', 'norm'),
-                        setup: (button) => setupCursorHover(button),
+                        setup: setupCursorHover,
                     }),
                     Button({
                         className: 'sidebar-calendar-monthshift-btn',
                         onClicked: () => shiftCalendarXMonths(1),
                         child: MaterialIcon('chevron_right', 'norm'),
-                        setup: (button) => setupCursorHover(button),
+                        setup: setupCursorHover,
                     })
                 ]
             }), false, false, 0);

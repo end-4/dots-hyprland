@@ -63,7 +63,7 @@ window {
 // #powerbar-box {}
 
 #poweroff-button,
-#reboot-button,,
+#reboot-button,
 #suspend-button {
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
@@ -75,7 +75,10 @@ window {
 
 #poweroff-button:hover,
 #reboot-button:hover,
-#suspend-button:hover {
+#suspend-button:hover,
+#poweroff-button:focus,
+#reboot-button:focus,
+#suspend-button:focus {
     background-color: mix($secondaryContainer, white, 80%);
 }
 

@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: 2021 Uwe Jugel
-//
 // SPDX-License-Identifier: MIT
-
 // This file is part of md2pango (https://github.com/ubunatic/md2pango).
 
-const H1 = "H1", H2 = "H2", H3 = "H3", H4 = "H4", H5 = "H5", UL = "BULLET", OL = "LIST", CODE = "CODE"
-const BOLD = "BOLD", EMPH = "EMPH", PRE = "PRE", LINK = "LINK", HEXCOLOR = "HEXCOLOR", UND = "UND"
+const monospaceFonts = 'JetBrains Mono NF, JetBrains Mono Nerd Font, JetBrains Mono NL, SpaceMono NF, SpaceMono Nerd Font, monospace'
+
+const H1 = "H1", H2 = "H2", H3 = "H3", H4 = "H4", H5 = "H5", BULLET = "BULLET", NUMBERING = "NUMBERING", CODE = "CODE"
+const BOLD = "BOLD", EMPH = "EMPH", INLCODE = "INLCODE", LINK = "LINK", HEXCOLOR = "HEXCOLOR", UND = "UND"
 
 let sub_h1, sub_h2, sub_h3, sub_h4, sub_h5
 
@@ -18,18 +18,19 @@ const m2p_sections = [
     sub_h3 = { name: H3, re: /^(###\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='100%'>$2</span>" },
     sub_h4 = { name: H4, re: /^(####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='90%'>$2</span>" },
     sub_h5 = { name: H5, re: /^(#####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='80%'>$2</span>" },
-    { name: UL, re: /^(\s*[\*\-]\s)(.*)(\s*)$/, sub: " • $2" },
-    { name: OL, re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: " $1$2" },
-    { name: CODE, re: /^```[a-z_]*$/, sub: "<tt>" },
+    { name: BULLET, re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: "$1• $3" },
+    { name: NUMBERING, re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: " $1$2" },
 ]
 
 // m2p_styles defines how to replace inline styled text
 const m2p_styles = [
-    { name: BOLD, re: /(\*\*|__)(\S[\s\S]*?\S)(\*\*|__)/g, sub: "<b>$2</b>" },
-    { name: EMPH, re: /(\*|_)(\S[\s\S]*?\S)(\*|_)/g, sub: "<i>$2</i>" },
-    // { name: HEXCOLOR, re: /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})z/g, sub: "<span bgcolor='\#$1'>#$1</span>" },
-    { name: PRE, re: /(`)([^`]*)(`)/g, sub: "<b><tt>$2</tt></b>" },
-    { name: UND, re: /(__|\*\*)(\S[\s\S]*?\S)(__|\*\*)/g, sub: "<u>$2</u>" },
+    { name: BOLD, re: /(\*\*)(\S[\s\S]*?\S)(\*\*)/g, sub: "<b>$2</b>" },
+    { name: UND, re: /(__)(\S[\s\S]*?\S)(__)/g, sub: "<u>$2</u>" },
+    { name: EMPH, re: /\*(\S.*?\S)\*/g, sub: "<i>$1</i>" },
+    { name: EMPH, re: /_(\S.*?\S)_/g, sub: "<i>$1</i>" },
+    { name: HEXCOLOR, re: /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g, sub: `<span bgcolor='#$1' fgcolor='#000000' font_family='${monospaceFonts}'> #$1 </span>` },
+    { name: INLCODE, re: /(`)([^`]*)(`)/g, sub: `<span font_weight='bold' font_family='${monospaceFonts}' bgcolor='#000000' fgcolor='#ffffff'> $2 </span>` },
+    // { name: UND, re: /(__|\*\*)(\S[\s\S]*?\S)(__|\*\*)/g, sub: "<u>$2</u>" },
 ]
 
 const re_comment = /^\s*<!--.*-->\s*$/
@@ -115,7 +116,7 @@ export function convert(text) {
             }
         }
 
-        // all macros processed, lets remove remaining comments
+        // all macros processed, let's remove remaining comments
         if (line.match(re_comment)) {
             continue
         }

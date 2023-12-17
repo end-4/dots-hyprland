@@ -1,5 +1,5 @@
 const { Gdk, Gio, Gtk } = imports.gi;
-import { App, Service, Utils, Variable, Widget } from '../../imports.js';
+import { App, Service, Utils, Variable, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
@@ -510,7 +510,7 @@ export const SearchAndWindows = () => {
             }],
             ['key-press-event', (widget, event) => { // Typing
                 if (event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 && widget != entry) {
-                    entry.grab_focus();
+                    Utils.timeout(1, () => entry.grab_focus());
                     entry.set_text(entry.text + String.fromCharCode(event.get_keyval()[1]));
                     entry.set_position(-1);
                 }

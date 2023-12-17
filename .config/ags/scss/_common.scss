@@ -2,15 +2,17 @@
 //     border: 1px solid $onSurfaceVariant; // Debugging
 // }
 
-*:focus {
-    outline: 1px solid $surface;
-}
+// *:focus {
+//     outline: 1px solid mix($onSurface, $surface, 40%);
+//     -gtk-outline-radius: $rounding_small;
+// }
 
 * {
     selection {
         background-color: $secondary;
         color: $onSecondary;
     }
+
     caret-color: $primary;
 }
 
@@ -38,7 +40,8 @@ menu>menuitem {
     -gtk-outline-radius: 0.545rem;
 }
 
-menu>menuitem:hover {
+menu>menuitem:hover,
+menu>menuitem:focus {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
 
@@ -53,4 +56,52 @@ tooltip {
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
     border: 1px solid $onSurfaceVariant;
+}
+
+.configtoggle-box {
+    padding: 0.205rem;
+    border: 0.136rem solid transparent;
+}
+
+.configtoggle-box:focus {
+    padding: 0.205rem;
+    border: 0.136rem solid mix($onSurface, $surface, 40%);
+}
+
+.switch-bg {
+    @include menu_decel;
+    @include full-rounding;
+    background-color: mix($surface, $background, 50%);
+    border: 0.136rem solid $onSurface;
+    min-width: 2.727rem;
+    min-height: 1.364rem;
+}
+
+.switch-bg-true {
+    background-color: $primary;
+    border: 0.136rem solid $primary;
+}
+
+.switch-fg {
+    @include full-rounding;
+    @include menu_decel;
+    background-color: $onSurface;
+    color: $surface;
+    min-width: 0.819rem;
+    min-height: 0.819rem;
+    margin-left: 0.341rem;
+}
+
+.switch-fg-true {
+    background-color: $onPrimary;
+    color: $primary;
+    min-width: 1.295rem;
+    min-height: 1.295rem;
+    margin-left: 1.364rem;
+}
+
+.switch-fg-toggling-false {
+    @include menu_decel;
+    min-width: 1.636rem;
+    min-height: 0.819rem;
 }

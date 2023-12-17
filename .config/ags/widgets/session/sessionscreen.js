@@ -1,7 +1,7 @@
 // This is for the cool memory indicator on the sidebar
 // For the right pill of the bar, see system.js
 const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+import { App, Service, Utils, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 const { exec, execAsync } = Utils;
 
 const SessionButton = (name, icon, command, props = {}) => {

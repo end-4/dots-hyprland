@@ -28,7 +28,7 @@ const topDecor = Box({
             className: 'osk-dragline',
             homogeneous: true,
             children: [EventBox({
-                setup: (self) => setupCursorHoverGrab(self),
+                setup: setupCursorHoverGrab,
             })]
         })
     ]

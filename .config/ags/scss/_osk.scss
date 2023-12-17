@@ -48,7 +48,8 @@ $osk_key_fontsize: 1.091rem;
     font-size: $osk_key_fontsize;
 }
 
-.osk-key:hover {
+.osk-key:hover,
+.osk-key:focus {
     background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
 }
 
@@ -100,7 +101,8 @@ $osk_key_fontsize: 1.091rem;
     padding: 0.682rem;
 }
 
-.osk-control-button:hover {
+.osk-control-button:hover,
+.osk-control-button:focus {
     background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
 }
 

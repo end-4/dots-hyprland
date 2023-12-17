@@ -1,5 +1,5 @@
 const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+import { App, Service, Utils, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 const { execAsync, exec } = Utils;

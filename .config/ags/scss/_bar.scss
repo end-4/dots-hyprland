@@ -345,7 +345,8 @@ $notchOnPrimary: $onPrimary;
     min-width: 2.591rem;
 }
 
-.bar-music-btn:hover {
+.bar-music-btn:hover,
+.bar-music-btn:focus {
     background-color: $hovercolor;
 }
 
@@ -433,7 +434,8 @@ $notchOnPrimary: $onPrimary;
     padding: 0rem 0.682rem;
 }
 
-.bar-space-button:hover>box:first-child {
+.bar-space-button:hover>box:first-child,
+.bar-space-button:focus>box:first-child {
     background-color: $hovercolor;
 }
 

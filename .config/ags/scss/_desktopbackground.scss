@@ -64,7 +64,8 @@
     padding: 0.273rem 0.682rem;
 }
 
-.bg-quicklaunch-btn:hover {
+.bg-quicklaunch-btn:hover,
+.bg-quicklaunch-btn:focus {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 95%);
 }
 

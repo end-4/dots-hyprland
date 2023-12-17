@@ -41,7 +41,7 @@ const todoListItem = (task, id, isDone, isEven = false) => {
                             Todo.check(id);
                     })
                 },
-                setup: (button) => setupCursorHover(button),
+                setup: setupCursorHover,
             }),
             Widget.Button({ // Remove
                 vpack: 'center',
@@ -58,7 +58,7 @@ const todoListItem = (task, id, isDone, isEven = false) => {
                         Todo.remove(id);
                     })
                 },
-                setup: (button) => setupCursorHover(button),
+                setup: setupCursorHover,
             }),
             crosser,
         ]
@@ -115,7 +115,7 @@ const UndoneTodoList = () => {
             halign: 'end',
             vpack: 'center',
             label: '+ New task',
-            setup: (button) => setupCursorHover(button),
+            setup: setupCursorHover,
             onClicked: (self) => {
                 newTaskButton.revealChild = false;
                 newTaskEntryRevealer.revealChild = true;
@@ -134,7 +134,7 @@ const UndoneTodoList = () => {
             halign: 'end',
             vpack: 'center',
             label: 'close',
-            setup: (button) => setupCursorHover(button),
+            setup: setupCursorHover,
             onClicked: (self) => {
                 newTaskEntryRevealer.revealChild = false;
                 confirmAddTask.revealChild = false;
@@ -171,7 +171,7 @@ const UndoneTodoList = () => {
             halign: 'end',
             vpack: 'center',
             label: 'arrow_upward',
-            setup: (button) => setupCursorHover(button),
+            setup: setupCursorHover,
             onClicked: (self) => {
                 if (newTaskEntry.text == '') return;
                 Todo.add(newTaskEntry.text);

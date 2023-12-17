@@ -6,6 +6,61 @@ import ChatGPT from '../../services/chatgpt.js';
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 import { SystemMessage, ChatMessage } from "./chatmessage.js";
+import { ConfigToggle } from '../../lib/configwidgets.js';
+
+const apiKeyInstructions = Box({
+    homogeneous: true,
+    children: [Revealer({
+        transition: 'slide_down',
+        transitionDuration: 150,
+        connections: [[ChatGPT, (self, hasKey) => {
+            self.revealChild = (ChatGPT.key.length == 0);
+        }, 'hasKey']],
+        child: Button({
+            child: Label({
+                useMarkup: true,
+                wrap: true,
+                className: 'txt sidebar-chat-welcome-txt',
+                justify: Gtk.Justification.CENTER,
+                label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
+            }),
+            setup: setupCursorHover,
+            onClicked: () => {
+                Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+            }
+        })
+    })]
+});
+
+const chatSettings = Revealer({
+    transition: 'slide_down',
+    transitionDuration: 150,
+    revealChild: true,
+    connections: [
+        [ChatGPT, (self) => {
+            self.revealChild = false;
+        }, 'newMsg'],
+        [ChatGPT, (self) => {
+            self.revealChild = true;
+        }, 'clear'],
+    ],
+    child: Box({
+        vertical: true,
+        hpack: 'fill',
+        className: 'sidebar-chat-settings',
+        children: [
+            ConfigToggle({
+                icon: 'cycle',
+                name: 'Cycle models',
+                desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nIf unsure, leave On.',
+                initValue: ChatGPT.cycleModels,
+                onChange: (self, newValue) => {
+                    ChatGPT.cycleModels = newValue;
+                },
+            }),
+        ]
+    })
+});
 
 const chatWelcome = Box({
     vexpand: true,
@@ -46,30 +101,12 @@ const chatWelcome = Box({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
                         tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
-                        setup: (self) => setupCursorHoverInfo(self),
+                        setup: setupCursorHoverInfo,
                     }),
                 ]
             }),
-            Revealer({
-                transition: 'slide_down',
-                transitionDuration: 150,
-                connections: [[ChatGPT, (self, hasKey) => {
-                    self.revealChild = (ChatGPT.key.length == 0);
-                }, 'hasKey']],
-                child: Button({
-                    child: Label({
-                        useMarkup: true,
-                        wrap: true,
-                        className: 'txt sidebar-chat-welcome-txt',
-                        justify: Gtk.Justification.CENTER,
-                        label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
-                    }),
-                    setup: (button) => setupCursorHover(button),
-                    onClicked: () => {
-                        Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
-                    }
-                })
-            }),
+            apiKeyInstructions,
+            chatSettings,
         ]
     })
 })
@@ -100,11 +137,14 @@ const markdownTest = `# Heading 1
 1. yes
 2. no
 127. well
+- Bulletpoint starting with minus
+* Bulletpoint starting with asterisk
+---
 - __Underline__ __ No underline __
 - **Bold** ** No bold **
-- **Italics** ** No Italics **
+- _Italics1_ *Italics2* _ No Italics _
 - A color: #D6BAFF
-- another: #9A3B59
+- nvidia green: #7ABB08
   - sub-item
 \`\`\`javascript
 // A code block!
@@ -119,20 +159,20 @@ const sendChatMessage = () => {
     if (chatEntry.text.length == 0) return;
     if (ChatGPT.key.length == 0) {
         ChatGPT.key = chatEntry.text;
-        chatContent.add(SystemMessage(`Key saved to\n<tt>${ChatGPT.keyPath}</tt>`, 'API Key'));
+        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key'));
         chatEntry.text = '';
         return;
     }
     // Commands
     if (chatEntry.text.startsWith('/')) {
         if (chatEntry.text.startsWith('/clear')) ChatGPT.clear();
-        else if (chatEntry.text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using <tt>${ChatGPT.modelName}</tt>`, '/model'))
+        else if (chatEntry.text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model'))
         else if (chatEntry.text.startsWith('/key')) {
             const parts = chatEntry.text.split(' ');
-            if (parts.length == 1) chatContent.add(SystemMessage(`See  <tt>${ChatGPT.keyPath}</tt>`, '/key'));
+            if (parts.length == 1) chatContent.add(SystemMessage(`See \`${ChatGPT.keyPath}\``, '/key'));
             else {
                 ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n<tt>${ChatGPT.keyPath}</tt>`, '/key'));
+                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key'));
             }
         }
         else if (chatEntry.text.startsWith('/test'))
@@ -151,7 +191,7 @@ const chatSendButton = Button({
     className: 'txt-norm icon-material sidebar-chat-send',
     vpack: 'center',
     label: 'arrow_upward',
-    setup: (button) => setupCursorHover(button),
+    setup: setupCursorHover,
     onClicked: (btn) => sendChatMessage(),
 });
 
@@ -191,22 +231,22 @@ export default Widget.Box({
                 Button({
                     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
                     onClicked: () => chatEntry.text = '/key',
-                    setup: (button) => setupCursorHover(button),
+                    setup: setupCursorHover,
                     label: '/key',
                 }),
                 Button({
                     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
                     onClicked: () => chatContent.add(SystemMessage(
-                        `Currently using <tt>${ChatGPT.modelName}</tt>`,
+                        `Currently using \`${ChatGPT.modelName}\``,
                         '/model'
                     )),
-                    setup: (button) => setupCursorHover(button),
+                    setup: setupCursorHover,
                     label: '/model',
                 }),
                 Button({
                     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
                     onClicked: () => ChatGPT.clear(),
-                    setup: (button) => setupCursorHover(button),
+                    setup: setupCursorHover,
                     label: '/clear',
                 }),
             ]

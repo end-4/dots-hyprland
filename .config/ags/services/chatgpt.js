@@ -5,6 +5,33 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from './messages.js';
 
+// const distro = Utils.exec('lsb_release -d | cut -f2-');
+
+// This is for custom prompt
+// It's hard to make gpt-3.5 listen to all these, I know
+const initMessages =
+    [
+        {
+            role: "user",
+            content: `You're a sidebar assistant on a Linux system. 
+- When asked to perform tasks, if there's an appropriate command, you only need to include a bash code block.
+- Try to use **bold**, _italics_ and __underline__ where possible.
+- When providing code blocks or facts, precede with h2 heading (\`##\`) and use 2 spaces for indentation, not 4.
+- Use dividers (\`---\`) to separate different information.
+- Unless requested otherwise or asked writing questions, be as short and concise as possible.
+- You should a natural tone like a real conversation!
+`,
+            thinking: false,
+            done: true
+        },
+        {
+            role: "assistant",
+            content: "Got it! I'll try to give commands to perform Linux tasks. I'll try to use markdown features extensively, use divider when appropriate, and use a heading for code blocks. All code blocks should use 2 spaces for indent. I'll be concise and speak naturally.",
+            thinking: false,
+            done: true,
+        }
+    ]
+
 function expandTilde(path) {
     if (path.startsWith('~')) {
         return GLib.get_home_dir() + path.slice(1);
@@ -16,12 +43,15 @@ function expandTilde(path) {
 // We're using many models to not be restricted to 3 messages per minute.
 // The whole chat will be sent every request anyway.
 const KEY_FILE_LOCATION = `~/.cache/ags/user/openai_api_key.txt`;
-const CHAT_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-0613"]
+const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
 const ONE_CYCLE_COUNT = 3;
 
 class ChatGPTMessage extends Service {
     static {
-        Service.register(this, {},
+        Service.register(this,
+            {
+                'delta': ['string'],
+            },
             {
                 'content': ['string'],
                 'thinking': ['boolean'],
@@ -72,6 +102,7 @@ class ChatGPTMessage extends Service {
         else {
             this.content += delta;
         }
+        this.emit('delta', delta);
     }
 }
 
@@ -82,26 +113,12 @@ class ChatGPTService extends Service {
             'clear': [],
             'newMsg': ['int'],
             'hasKey': ['boolean'],
-            'cycleModels': ['boolean'],
         });
     }
 
-    messages = [
-        {
-            "role": "user",
-            "content": "Remember that you should act as a sidebar assistant. You have markdown capabilities, so you're encouraged to underline important keywords or use them in other ways (headings, bulletpoints, numbering, etc.) when possible and appropriate. Don't claim to be an AI language model, we all know that. When asked to explain something, don't be overly formal. Rather, use a natural tone and style.",
-            "thinking": false,
-            "done": false
-        },
-        {
-            "role": "assistant",
-            "content": "Got it!",
-            "thinking": true,
-            "done": false
-        }
-    ];
+    _messages = [...initMessages];
     _cycleModels = true;
-    _thisMinuteCount = 0;
+    _requestCount = 0;
     _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();
@@ -132,27 +149,14 @@ class ChatGPTService extends Service {
     get cycleModels() { return this._cycleModels }
     set cycleModels(value) {
         this._cycleModels = value;
-        this.emit('cycleModels', value);
+        if(!value) this._modelIndex = 0;
     }
 
-    get messages() { return this.messages }
-    get lastMessage() { return this.messages[this.messages.length - 1] }
+    get messages() { return this._messages }
+    get lastMessage() { return this._messages[this._messages.length - 1] }
 
     clear() {
-        this.messages = [
-            {
-                "_role": "user",
-                "_content": "Remember that you should act as a sidebar assistant. You have markdown capabilities, so you're encouraged to underline important keywords or use them in other ways (headings, bulletpoints, numbering, etc.) when possible and appropriate. Don't claim to be an AI language model, we all know that. When asked to explain something, don't be overly formal. Rather, use a natural tone and style.",
-                "_thinking": false,
-                "_done": false
-            },
-            {
-                "_role": "assistant",
-                "_content": "Got it!",
-                "_thinking": true,
-                "_done": false
-            }
-        ]
+        this._messages = [...initMessages];
         this.emit('clear');
     }
 
@@ -183,20 +187,20 @@ class ChatGPTService extends Service {
     }
 
     addMessage(role, message) {
-        this.messages.push(new ChatGPTMessage(role, message));
-        this.emit('newMsg', this.messages.length - 1);
+        this._messages.push(new ChatGPTMessage(role, message));
+        this.emit('newMsg', this._messages.length - 1);
     }
 
     send(msg) {
-        this.messages.push(new ChatGPTMessage('user', msg));
-        this.emit('newMsg', this.messages.length - 1);
+        this._messages.push(new ChatGPTMessage('user', msg));
+        this.emit('newMsg', this._messages.length - 1);
         const aiResponse = new ChatGPTMessage('assistant', 'thinking...', true, false)
-        this.messages.push(aiResponse);
-        this.emit('newMsg', this.messages.length - 1);
+        this._messages.push(aiResponse);
+        this.emit('newMsg', this._messages.length - 1);
 
         const body = {
             model: CHAT_MODELS[this._modelIndex],
-            messages: this.messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
+            messages: this._messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
             stream: true,
         };
 
@@ -217,10 +221,10 @@ class ChatGPTService extends Service {
         });
 
         if (this._cycleModels) {
-            this._thisMinuteCount++;
-            this._modelIndex = (this._thisMinuteCount - (this._thisMinuteCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
+            this._requestCount++;
+            if(this._cycleModels)
+                this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
         }
-        console.log(this.messages)
     }
 }
 

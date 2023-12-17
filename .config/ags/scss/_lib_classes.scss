@@ -129,13 +129,13 @@
     font-size: 0.9091rem;
 }
 
-.txt-smaller-offset {
-    margin-top: -0.136rem;
-}
-
 .txt-tiny {
     @include mainfont;
     font-size: 0.7273rem;
+}
+
+.txt-poof {
+    font-size: 0px;
 }
 
 .txt-subtext {
@@ -437,6 +437,6 @@
     transition: 0ms;
 }
 
-.menu_decel {
+.menu-decel {
     @include menu_decel;
 }

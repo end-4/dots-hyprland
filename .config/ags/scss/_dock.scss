@@ -10,7 +10,8 @@
     padding: 0.273rem;
 }
 
-.dock-app-btn:hover {
+.dock-app-btn:hover,
+.dock-app-btn:focus {
     background-color: mix($t_surface, $t_onSurface, 95%);
 }
 

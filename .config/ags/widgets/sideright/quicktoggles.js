@@ -22,7 +22,7 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
             button.tooltipText = (`${Network.wifi?.ssid} | Right-click to configure` || 'Unknown');
         }],
     ],
-    setup: (button) => setupCursorHover(button),
+    setup: setupCursorHover,
     ...props,
 });
 
@@ -47,7 +47,7 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
             button.toggleClassName('sidebar-button-active', Bluetooth?.enabled)
         }],
     ],
-    setup: (button) => setupCursorHover(button),
+    setup: setupCursorHover,
     ...props,
 });
 
@@ -86,7 +86,7 @@ export const ModuleNightLight = (props = {}) => Widget.Button({
         }
     },
     child: MaterialIcon('nightlight', 'norm'),
-    setup: (button) => setupCursorHover(button),
+    setup: setupCursorHover,
     ...props,
 })
 

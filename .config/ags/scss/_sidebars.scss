@@ -1,4 +1,4 @@
-$sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 20%);
+$sidebar_chat_textareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 $system: #75A79A;
 $onSystem: #CBDED9;
 $chatgpt: #19C37D;
@@ -79,7 +79,8 @@ $onChatgpt: #D5F4E7;
     min-height: 2.727rem;
 }
 
-.sidebar-iconbutton:hover {
+.sidebar-iconbutton:hover,
+.sidebar-iconbutton:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
 
@@ -100,7 +101,8 @@ $onChatgpt: #D5F4E7;
     color: $onSecondaryContainer;
 }
 
-.sidebar-button:hover {
+.sidebar-button:hover,
+.sidebar-button:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
 
@@ -108,7 +110,8 @@ $onChatgpt: #D5F4E7;
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
 }
 
-.sidebar-button-nopad:hover {
+.sidebar-button-nopad:hover,
+.sidebar-button-nopad:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
 
@@ -139,7 +142,8 @@ $onChatgpt: #D5F4E7;
     color: $onPrimary;
 }
 
-.sidebar-button-active:hover {
+.sidebar-button-active:hover,
+.sidebar-button-active:focus {
     background-color: mix($primary, $hovercolor, 90%);
 }
 
@@ -163,7 +167,8 @@ $onChatgpt: #D5F4E7;
     @include menu_decel;
 }
 
-.sidebar-navrail-btn:hover>box>label:first-child {
+.sidebar-navrail-btn:hover>box>label:first-child,
+.sidebar-navrail-btn:focus>box>label:first-child {
     background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
@@ -176,7 +181,8 @@ $onChatgpt: #D5F4E7;
     color: $onSecondaryContainer;
 }
 
-.sidebar-navrail-btn-active:hover>box>label:first-child {
+.sidebar-navrail-btn-active:hover>box>label:first-child,
+.sidebar-navrail-btn-active:focus>box>label:first-child {
     background-color: mix($secondaryContainer, $hovercolor, 90%);
     color: mix($onSecondaryContainer, $hovercolor, 90%);
 }
@@ -230,7 +236,8 @@ $onChatgpt: #D5F4E7;
         background-color: $t_onSurfaceVariant;
     }
 
-    slider:hover {
+    slider:hover,
+    slider:focus {
         background-color: mix($t_onSurfaceVariant, $onSurfaceVariant, 80%);
     }
 
@@ -247,7 +254,8 @@ $onChatgpt: #D5F4E7;
     color: $onSurface;
 }
 
-.sidebar-calendar-btn:hover {
+.sidebar-calendar-btn:hover,
+.sidebar-calendar-btn:focus {
     background-color: $hovercolor;
 }
 
@@ -265,7 +273,8 @@ $onChatgpt: #D5F4E7;
     color: $onPrimary;
 }
 
-.sidebar-calendar-btn-today:hover {
+.sidebar-calendar-btn-today:hover,
+.sidebar-calendar-btn-today:focus {
     background-color: mix($primary, $hovercolor, 90%);
 }
 
@@ -288,7 +297,8 @@ $onChatgpt: #D5F4E7;
     color: $onSurfaceVariant;
 }
 
-.sidebar-calendar-monthyear-btn:hover {
+.sidebar-calendar-monthyear-btn:hover,
+.sidebar-calendar-monthyear-btn:focus {
     background-color: mix($t_surfaceVariant, $onSurfaceVariant, 95%);
     color: mix($onSurfaceVariant, $surfaceVariant, 95%);
 }
@@ -323,7 +333,8 @@ $onChatgpt: #D5F4E7;
     color: $onSurface;
 }
 
-.sidebar-todo-selector-tab:hover {
+.sidebar-todo-selector-tab:hover,
+.sidebar-todo-selector-tab:focus {
     background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
@@ -361,7 +372,8 @@ $onChatgpt: #D5F4E7;
     min-height: 1.705rem;
 }
 
-.sidebar-todo-item-action:hover {
+.sidebar-todo-item-action:hover,
+.sidebar-todo-item-action:focus {
     background-color: mix($t_surface, $t_onSurface, 80%);
 }
 
@@ -390,7 +402,8 @@ $onChatgpt: #D5F4E7;
     color: $onSecondaryContainer;
 }
 
-.sidebar-clipboard-item:hover {
+.sidebar-clipboard-item:hover,
+.sidebar-clipboard-item:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 90%);
 }
 
@@ -406,7 +419,8 @@ $onChatgpt: #D5F4E7;
     border: 0.068rem solid $onSurface;
 }
 
-.sidebar-todo-new:hover {
+.sidebar-todo-new:hover,
+.sidebar-todo-new:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
 }
 
@@ -423,7 +437,8 @@ $onChatgpt: #D5F4E7;
     border: 0.068rem solid $onSurface;
 }
 
-.sidebar-todo-add:hover {
+.sidebar-todo-add:hover,
+.sidebar-todo-add:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
 }
 
@@ -441,7 +456,8 @@ $onChatgpt: #D5F4E7;
     border: 0.068rem solid $primary;
 }
 
-.sidebar-todo-add-available:hover {
+.sidebar-todo-add-available:hover,
+.sidebar-todo-add-available:focus {
     background-color: mix($primary, $onPrimary, 97%);
 }
 
@@ -507,7 +523,8 @@ $onChatgpt: #D5F4E7;
     background-color: $sidebar_chat_textareaColor;
 }
 
-.sidebar-chat-send:hover {
+.sidebar-chat-send:hover,
+.sidebar-chat-send:focus {
     background-color: mix($sidebar_chat_textareaColor, $t_onSecondaryContainer, 97%);
 }
 
@@ -520,7 +537,8 @@ $onChatgpt: #D5F4E7;
     color: $onPrimary;
 }
 
-.sidebar-chat-send-available:hover {
+.sidebar-chat-send-available:hover,
+.sidebar-chat-send-available:focus {
     background-color: mix($primary, $onPrimary, 97%);
 }
 
@@ -599,7 +617,8 @@ $onChatgpt: #D5F4E7;
     padding: 0.273rem;
 }
 
-.sidebar-chat-codeblock-topbar-btn:hover {
+.sidebar-chat-codeblock-topbar-btn:hover,
+.sidebar-chat-codeblock-topbar-btn:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
 }
 
@@ -612,8 +631,18 @@ $onChatgpt: #D5F4E7;
     padding: 0.682rem;
 }
 
+.sidebar-chat-divider {
+    min-height: 1px;
+    background-color: $sidebar_chat_textareaColor;
+    margin: 0rem 0.545rem;
+}
+
 .sidebar-chat-welcome-txt {
     margin: 0rem 3.409rem;
+}
+
+.sidebar-chat-settings {
+    margin: 0rem 5.455rem;
 }
 
 .sidebar-chat-welcome-icon {
@@ -641,7 +670,8 @@ $onChatgpt: #D5F4E7;
     border: 0.068rem solid $sidebar_chat_textareaColor;
 }
 
-.sidebar-chat-chip-action:hover {
+.sidebar-chat-chip-action:hover,
+.sidebar-chat-chip-action:focus {
     background-color: $sidebar_chat_textareaColor;
 }
 

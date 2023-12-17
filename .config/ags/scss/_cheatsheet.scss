@@ -37,7 +37,8 @@
     min-height: 2.386rem;
 }
 
-.cheatsheet-closebtn:hover {
+.cheatsheet-closebtn:hover,
+.cheatsheet-closebtn:focus {
     background-color: $surfaceVariant;
 }
 

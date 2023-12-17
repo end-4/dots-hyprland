@@ -79,8 +79,8 @@
     caret-color: transparent;
 }
 
-.overview-search-result-btn:focus,
-.overview-search-result-btn:hover {
+.overview-search-result-btn:hover,
+.overview-search-result-btn:focus {
     background-color: $hovercolor;
 }
 
@@ -117,10 +117,7 @@
     border: 0.068rem solid $t_t_t_onSecondaryContainer;
 }
 
-.overview-tasks-window:hover {
-    background-color: mix($l_t_secondaryContainer, $primary, 95%);
-}
-
+.overview-tasks-window:hover,
 .overview-tasks-window:focus {
     background-color: mix($l_t_secondaryContainer, $primary, 95%);
 }

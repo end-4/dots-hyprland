@@ -1,6 +1,6 @@
 const { Gdk, Gtk } = imports.gi;
 const Lang = imports.lang;
-import { App, Service, Utils, Widget } from '../../imports.js';
+import { App, Service, Utils, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 const { execAsync, exec } = Utils;
 const { Box, Label } = Widget;
 

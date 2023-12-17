@@ -197,7 +197,7 @@ export default ({
                         child: MaterialIcon('close', 'large', {
                             valign: Gtk.Align.CENTER,
                         }),
-                        setup: (button) => setupCursorHover(button),
+                        setup: setupCursorHover,
                     }),
                 ]
             }),

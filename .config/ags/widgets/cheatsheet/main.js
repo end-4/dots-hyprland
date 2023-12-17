@@ -57,7 +57,7 @@ const cheatsheetHeader = () => Widget.CenterBox({
             className: 'icon-material txt txt-hugeass',
             label: 'close'
         }),
-        setup: (button) => setupCursorHover(button),
+        setup: setupCursorHover,
     }),
 });
 

@@ -110,7 +110,8 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     @include full-rounding;
 }
 
-.osd-music-controlbtn:hover {
+.osd-music-controlbtn:hover,
+.osd-music-controlbtn:focus {
     background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
 }
 
