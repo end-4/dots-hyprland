@@ -4,10 +4,11 @@ import { Service, Utils, Widget } from '../../imports.js';
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
+import { MaterialIcon } from '../../lib/materialicon.js';
 
 const BATTERY_LOW = 20;
 
-const barClock = Widget.Box({
+const BarClock = () => Widget.Box({
     vpack: 'center',
     className: 'spacing-h-5',
     children: [
@@ -30,49 +31,92 @@ const barClock = Widget.Box({
     ],
 });
 
-const barBattery = Widget.Box({
-    vpack: 'center',
-    hexpand: true,
-    className: 'spacing-h-5 bar-batt',
-    connections: [[Battery, box => {
-        box.toggleClassName('bar-batt-low', Battery.percent <= BATTERY_LOW);
-        box.toggleClassName('bar-batt-full', Battery.charged);
-    }]],
-    children: [
-        Widget.Label({ // Percentage
-            className: 'bar-batt-percentage',
-            connections: [[Battery, label => {
-                label.label = `${Battery.percent}`;
-            }]],
-        }),
-        Widget.ProgressBar({ // Progress
-            vpack: 'center',
-            hexpand: true,
-            className: 'bar-prog-batt',
-            connections: [[Battery, progress => {
-                progress.value = Math.abs(Battery.percent / 100); // battery could be initially negative wtf
-                progress.toggleClassName('bar-prog-batt-low', Battery.percent <= BATTERY_LOW);
-                progress.toggleClassName('bar-prog-batt-full', Battery.charged);
-            }]],
-        }),
-        Widget.Revealer({ // A dot for charging state
-            transitionDuration: 150,
-            revealChild: false,
-            transition: 'slide_left',
-            child: Widget.Box({
-                vpack: 'center',
-                className: 'bar-batt-chargestate-charging',
-                connections: [[Battery, box => {
-                    box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-                    box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
+const BarBattery = () => {
+    const BarResourceValue = (name, icon, command) => Widget.Box({
+        vpack: 'center',
+        className: 'bar-batt spacing-h-5',
+        children: [
+            MaterialIcon(icon, 'small'),
+            Widget.ProgressBar({ // Progress
+                vpack: 'center', hexpand: true,
+                className: 'bar-prog-batt',
+                connections: [[5000, (progress) => execAsync(['bash', '-c', command])
+                    .then((output) => {
+                        progress.value = Number(output) / 100;
+                        progress.tooltipText = `${name}: ${Number(output)}%`
+                    })
+                    .catch(print)
+                ]],
+            }),
+        ]
+    });
+    const batteryWidget = Widget.Box({
+        vpack: 'center',
+        hexpand: true,
+        className: 'spacing-h-5 bar-batt',
+        connections: [[Battery, box => {
+            box.toggleClassName('bar-batt-low', Battery.percent <= BATTERY_LOW);
+            box.toggleClassName('bar-batt-full', Battery.charged);
+        }]],
+        children: [
+            MaterialIcon('settings_heart', 'small'),
+            Widget.Label({ // Percentage
+                className: 'bar-batt-percentage',
+                connections: [[Battery, label => {
+                    label.label = `${Battery.percent}`;
                 }]],
             }),
-            connections: [[Battery, revealer => {
-                revealer.revealChild = Battery.charging;
-            }]],
-        }),
-    ],
-});
+            Widget.ProgressBar({ // Progress
+                vpack: 'center',
+                hexpand: true,
+                className: 'bar-prog-batt',
+                connections: [[Battery, progress => {
+                    progress.value = Math.abs(Battery.percent / 100); // battery could be initially negative wtf
+                    progress.toggleClassName('bar-prog-batt-low', Battery.percent <= BATTERY_LOW);
+                    progress.toggleClassName('bar-prog-batt-full', Battery.charged);
+                    batteryWidget.tooltipText = `Battery: ${Battery.percent}%`
+                }]],
+            }),
+            Widget.Revealer({ // A dot for charging state
+                transitionDuration: 150,
+                revealChild: false,
+                transition: 'slide_left',
+                child: Widget.Box({
+                    vpack: 'center',
+                    className: 'bar-batt-chargestate-charging',
+                    connections: [[Battery, box => {
+                        box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
+                        box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
+                    }]],
+                }),
+                connections: [[Battery, revealer => {
+                    revealer.revealChild = Battery.charging;
+                }]],
+            }),
+        ],
+    });
+    const memUsage = Widget.Box({
+        className: 'spacing-h-5',
+        children: [
+            BarResourceValue('RAM usage', 'memory', `free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
+            BarResourceValue('Swap usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
+        ]
+    })
+    const widgetStack = Widget.Stack({
+        transition: 'slide_up_down',
+        vpack: 'center',
+        hexpand: true,
+        items: [
+            ['fallback', memUsage],
+            ['battery', batteryWidget],
+        ],
+        setup: (stack) => Utils.timeout(1, () => {
+            if (Battery) stack.shown = 'battery';
+            else stack.shown = 'fallback';
+        })
+    })
+    return widgetStack;
+}
 
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
@@ -83,8 +127,8 @@ export const ModuleSystem = () => Widget.EventBox({
             Widget.Box({
                 className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-15',
                 children: [
-                    barClock,
-                    barBattery,
+                    BarClock(),
+                    BarBattery(),
                 ],
             }),
         ]
