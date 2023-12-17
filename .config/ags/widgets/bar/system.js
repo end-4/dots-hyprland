@@ -111,7 +111,7 @@ const BarBattery = () => {
             ['battery', batteryWidget],
         ],
         setup: (stack) => Utils.timeout(1, () => {
-            if (Battery) stack.shown = 'battery';
+            if (Battery.available) stack.shown = 'battery';
             else stack.shown = 'fallback';
         })
     })

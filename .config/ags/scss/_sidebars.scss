@@ -326,35 +326,35 @@ $onChatgpt: #D5F4E7;
     color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
-.sidebar-todo-selector-tab {
+.sidebar-selector-tab {
     @include small-rounding;
     transition: 0ms;
     min-height: 2.5rem;
     color: $onSurface;
 }
 
-.sidebar-todo-selector-tab:hover,
-.sidebar-todo-selector-tab:focus {
+.sidebar-selector-tab:hover,
+.sidebar-selector-tab:focus {
     background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
-.sidebar-todo-selector-tab:active {
+.sidebar-selector-tab:active {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
 }
 
-.sidebar-todo-selector-tab-active>box>label {
+.sidebar-selector-tab-active>box>label {
     color: $primary;
 }
 
-.sidebar-todo-selector-highlight-offset {
+.sidebar-selector-highlight-offset {
     margin-top: -0.205rem;
     margin-bottom: 0.205rem;
 }
 
-.sidebar-todo-selector-highlight {
+.sidebar-selector-highlight {
     transition: 180ms ease-in-out; // Doesn't look that good, but it syncs with GtkStack animation of the actual todo widget content
     color: $primary;
-    padding: 0rem 2.045rem;
+    // padding: 0rem 2.045rem;
     min-height: 0.205rem;
 }
 

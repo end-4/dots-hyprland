@@ -11,14 +11,14 @@ import { chatEntry } from './chatgpt.js';
 
 const TabButton = (stack, stackItem, navIndicator, navIndex, icon, label) => Widget.Button({
     // hexpand: true,
-    className: 'sidebar-todo-selector-tab',
+    className: 'sidebar-selector-tab',
     onClicked: (self) => {
         stack.shown = stackItem;
         // Add active class to self and remove for others
         const allTabs = self.get_parent().get_children();
         for (let i = 0; i < allTabs.length; i++) {
-            if (allTabs[i] != self) allTabs[i].toggleClassName('sidebar-todo-selector-tab-active', false);
-            else self.toggleClassName('sidebar-todo-selector-tab-active', true);
+            if (allTabs[i] != self) allTabs[i].toggleClassName('sidebar-selector-tab-active', false);
+            else self.toggleClassName('sidebar-selector-tab-active', true);
         }
         // Fancy highlighter line width
         const buttonWidth = self.get_allocated_width();
@@ -40,7 +40,7 @@ const TabButton = (stack, stackItem, navIndicator, navIndex, icon, label) => Wid
         ]
     }),
     setup: (button) => Utils.timeout(1, () => {
-        button.toggleClassName('sidebar-todo-selector-tab-active', defaultTab === stackItem);
+        button.toggleClassName('sidebar-selector-tab-active', defaultTab === stackItem);
         setupCursorHover(button);
     }),
 });
@@ -72,8 +72,8 @@ const contentStack = Stack({
 })
 
 const navIndicator = NavigationIndicator(2, false, { // The line thing
-    className: 'sidebar-todo-selector-highlight',
-    css: 'font-size: 0px;',
+    className: 'sidebar-selector-highlight',
+    css: 'font-size: 0px; padding: 0rem 4.773rem;', // Shushhhh
 })
 
 const navBar = Box({

@@ -93,12 +93,12 @@
   font-family: 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Noto Sans', 'Ubuntu', sans-serif;
   font-size: 0.9091rem; }
 
-.txt-smaller-offset {
-  margin-top: -0.136rem; }
-
 .txt-tiny {
   font-family: 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Noto Sans', 'Ubuntu', sans-serif;
   font-size: 0.7273rem; }
+
+.txt-poof {
+  font-size: 0px; }
 
 .txt-subtext {
   color: #a8a3a8; }
@@ -327,11 +327,8 @@
 .instant {
   transition: 0ms; }
 
-.menu_decel {
+.menu-decel {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1); }
-
-*:focus {
-  outline: 1px solid #1e1c20; }
 
 * {
   caret-color: #d6baff; }
@@ -363,7 +360,8 @@ menu > menuitem {
   border-radius: 0.545rem;
   -gtk-outline-radius: 0.545rem; }
 
-menu > menuitem:hover {
+menu > menuitem:hover,
+menu > menuitem:focus {
   background-color: #38363b; }
 
 .separator-line {
@@ -377,6 +375,49 @@ tooltip {
   background-color: #28262b;
   color: #cbc4cf;
   border: 1px solid #cbc4cf; }
+
+.configtoggle-box {
+  padding: 0.205rem;
+  border: 0.136rem solid transparent; }
+
+.configtoggle-box:focus {
+  padding: 0.205rem;
+  border: 0.136rem solid #6e6b6f; }
+
+.switch-bg {
+  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  background-color: #19181b;
+  border: 0.136rem solid #e7e1e6;
+  min-width: 2.864rem;
+  min-height: 1.637rem; }
+
+.switch-bg-true {
+  background-color: #d6baff;
+  border: 0.136rem solid #d6baff; }
+
+.switch-fg {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  background-color: #e7e1e6;
+  color: #1e1c20;
+  min-width: 0.819rem;
+  min-height: 0.819rem;
+  margin-left: 0.477rem; }
+
+.switch-fg-true {
+  background-color: #3d1c70;
+  color: #d6baff;
+  min-width: 1.431rem;
+  min-height: 1.431rem;
+  margin-left: 1.431rem; }
+
+.switch-fg-toggling-false {
+  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  min-width: 1.636rem;
+  min-height: 0.819rem; }
 
 .bar-bg {
   background-color: #141316;
@@ -641,7 +682,8 @@ tooltip {
   min-height: 2.591rem;
   min-width: 2.591rem; }
 
-.bar-music-btn:hover {
+.bar-music-btn:hover,
+.bar-music-btn:focus {
   background-color: rgba(128, 128, 128, 0.3); }
 
 .bar-prog-batt {
@@ -710,7 +752,8 @@ tooltip {
   -gtk-outline-radius: 9999px;
   padding: 0rem 0.682rem; }
 
-.bar-space-button:hover > box:first-child {
+.bar-space-button:hover > box:first-child,
+.bar-space-button:focus > box:first-child {
   background-color: rgba(128, 128, 128, 0.3); }
 
 .bar-space-button:active > box:first-child {
@@ -754,7 +797,7 @@ tooltip {
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   margin-bottom: 0.682rem;
   background-color: #141316;
   padding: 1.364rem; }
@@ -785,7 +828,8 @@ tooltip {
   min-width: 2.386rem;
   min-height: 2.386rem; }
 
-.cheatsheet-closebtn:hover {
+.cheatsheet-closebtn:hover,
+.cheatsheet-closebtn:focus {
   background-color: #28262b; }
 
 .cheatsheet-closebtn:active {
@@ -847,7 +891,8 @@ tooltip {
   min-height: 2.045rem;
   padding: 0.273rem 0.682rem; }
 
-.bg-quicklaunch-btn:hover {
+.bg-quicklaunch-btn:hover,
+.bg-quicklaunch-btn:focus {
   background-color: #302e33; }
 
 .bg-quicklaunch-btn:active {
@@ -869,7 +914,7 @@ tooltip {
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   background-color: #141316;
   padding: 0.682rem; }
 
@@ -878,7 +923,8 @@ tooltip {
   -gtk-outline-radius: 1.159rem;
   padding: 0.273rem; }
 
-.dock-app-btn:hover {
+.dock-app-btn:hover,
+.dock-app-btn:focus {
   background-color: rgba(40, 38, 42, 0.31); }
 
 .dock-app-btn:active {
@@ -903,7 +949,7 @@ tooltip {
   padding-top: 0.313rem;
   margin: 10px;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px; }
+  margin: 0.476rem; }
 
 .osd-progress {
   min-height: 0.955rem;
@@ -947,7 +993,7 @@ tooltip {
   background-color: #141316;
   padding: 1.023rem;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px; }
+  margin: 0.476rem; }
 
 .osd-color {
   border-radius: 9999px;
@@ -1012,7 +1058,7 @@ tooltip {
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   min-width: 13.636rem;
   min-height: 3.409rem;
   padding: 0rem 1.364rem;
@@ -1036,11 +1082,11 @@ tooltip {
 
 .overview-search-prompt-box {
   margin-left: -18.545rem;
-  margin-right: 8px; }
+  margin-right: 0.544rem; }
 
 .overview-search-icon-box {
   margin-left: -18.545rem;
-  margin-right: 8px; }
+  margin-right: 0.544rem; }
 
 .overview-search-results {
   border-radius: 1.705rem;
@@ -1050,7 +1096,7 @@ tooltip {
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   min-width: 28.773rem;
   padding: 0.682rem;
   background-color: #141316;
@@ -1078,8 +1124,8 @@ tooltip {
   min-height: 2.386rem;
   caret-color: transparent; }
 
-.overview-search-result-btn:focus,
-.overview-search-result-btn:hover {
+.overview-search-result-btn:hover,
+.overview-search-result-btn:focus {
   background-color: rgba(128, 128, 128, 0.3); }
 
 .overview-search-result-btn:active {
@@ -1093,7 +1139,7 @@ tooltip {
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   padding: 0.341rem;
   background-color: #141316;
   color: #e7e1e6; }
@@ -1116,9 +1162,7 @@ tooltip {
   color: #eadef7;
   border: 0.068rem solid rgba(234, 222, 247, 0.07); }
 
-.overview-tasks-window:hover {
-  background-color: rgba(94, 83, 111, 0.525); }
-
+.overview-tasks-window:hover,
 .overview-tasks-window:focus {
   background-color: rgba(94, 83, 111, 0.525); }
 
@@ -1139,7 +1183,7 @@ tooltip {
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   background-color: #141316; }
 
 .osk-body {
@@ -1171,7 +1215,8 @@ tooltip {
   font-weight: 500;
   font-size: 1.091rem; }
 
-.osk-key:hover {
+.osk-key:hover,
+.osk-key:focus {
   background-color: rgba(56, 54, 59, 0.31); }
 
 .osk-key:active {
@@ -1213,7 +1258,8 @@ tooltip {
   font-size: 1.091rem;
   padding: 0.682rem; }
 
-.osk-control-button:hover {
+.osk-control-button:hover,
+.osk-control-button:focus {
   background-color: rgba(56, 54, 59, 0.31); }
 
 .osk-control-button:active {
@@ -1222,14 +1268,13 @@ tooltip {
 
 .sidebar-right {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  border-radius: 1.705rem;
-  -gtk-outline-radius: 1.705rem;
   border-top: 1px solid rgba(166, 162, 166, 0.19);
   border-left: 1px solid rgba(166, 162, 166, 0.19);
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
+  border-radius: 1.229rem;
   min-width: 27.818rem;
   background-color: #141316;
   padding: 1.023rem; }
@@ -1243,14 +1288,13 @@ tooltip {
 
 .sidebar-left {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  border-radius: 1.705rem;
-  -gtk-outline-radius: 1.705rem;
   border-top: 1px solid rgba(166, 162, 166, 0.19);
   border-left: 1px solid rgba(166, 162, 166, 0.19);
   border-right: 1px solid rgba(131, 127, 131, 0.145);
   border-bottom: 1px solid rgba(131, 127, 131, 0.145);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
+  border-radius: 1.229rem;
   min-width: 27.818rem;
   background-color: #141316;
   padding: 1.023rem; }
@@ -1287,7 +1331,8 @@ tooltip {
   min-width: 2.727rem;
   min-height: 2.727rem; }
 
-.sidebar-iconbutton:hover {
+.sidebar-iconbutton:hover,
+.sidebar-iconbutton:focus {
   background-color: #6b6278; }
 
 .sidebar-iconbutton:active {
@@ -1304,13 +1349,15 @@ tooltip {
   background-color: #4b4358;
   color: #eadef7; }
 
-.sidebar-button:hover {
+.sidebar-button:hover,
+.sidebar-button:focus {
   background-color: #6b6278; }
 
 .sidebar-button:active {
   background-color: #8b8198; }
 
-.sidebar-button-nopad:hover {
+.sidebar-button-nopad:hover,
+.sidebar-button-nopad:focus {
   background-color: #6b6278; }
 
 .sidebar-button-nopad:active {
@@ -1336,7 +1383,8 @@ tooltip {
   background-color: #d6baff;
   color: #3d1c70; }
 
-.sidebar-button-active:hover {
+.sidebar-button-active:hover,
+.sidebar-button-active:focus {
   background-color: rgba(212, 185, 253, 0.93); }
 
 .sidebar-button-active:active {
@@ -1355,7 +1403,8 @@ tooltip {
   -gtk-outline-radius: 9999px;
   transition: 300ms cubic-bezier(0.1, 1, 0, 1); }
 
-.sidebar-navrail-btn:hover > box > label:first-child {
+.sidebar-navrail-btn:hover > box > label:first-child,
+.sidebar-navrail-btn:focus > box > label:first-child {
   background-color: rgba(101, 98, 105, 0.379); }
 
 .sidebar-navrail-btn:active > box > label:first-child {
@@ -1365,7 +1414,8 @@ tooltip {
   background-color: #4b4358;
   color: #eadef7; }
 
-.sidebar-navrail-btn-active:hover > box > label:first-child {
+.sidebar-navrail-btn-active:hover > box > label:first-child,
+.sidebar-navrail-btn-active:focus > box > label:first-child {
   background-color: rgba(76, 68, 89, 0.93);
   color: rgba(232, 220, 245, 0.93); }
 
@@ -1413,7 +1463,8 @@ tooltip {
   min-height: 2.045rem;
   background-color: rgba(203, 196, 207, 0.31); }
 
-.sidebar-scrollbar slider:hover {
+.sidebar-scrollbar slider:hover,
+.sidebar-scrollbar slider:focus {
   background-color: rgba(203, 196, 207, 0.448); }
 
 .sidebar-scrollbar slider:active {
@@ -1427,7 +1478,8 @@ tooltip {
   min-width: 2.523rem;
   color: #e7e1e6; }
 
-.sidebar-calendar-btn:hover {
+.sidebar-calendar-btn:hover,
+.sidebar-calendar-btn:focus {
   background-color: rgba(128, 128, 128, 0.3); }
 
 .sidebar-calendar-btn:active {
@@ -1441,7 +1493,8 @@ tooltip {
   background-color: #d6baff;
   color: #3d1c70; }
 
-.sidebar-calendar-btn-today:hover {
+.sidebar-calendar-btn-today:hover,
+.sidebar-calendar-btn-today:focus {
   background-color: rgba(212, 185, 253, 0.93); }
 
 .sidebar-calendar-btn-today:active {
@@ -1460,7 +1513,8 @@ tooltip {
   background-color: rgba(40, 38, 43, 0.31);
   color: #cbc4cf; }
 
-.sidebar-calendar-monthyear-btn:hover {
+.sidebar-calendar-monthyear-btn:hover,
+.sidebar-calendar-monthyear-btn:focus {
   background-color: rgba(76, 73, 80, 0.3445);
   color: #c3bcc7; }
 
@@ -1484,30 +1538,30 @@ tooltip {
   background-color: #403e44;
   color: #b3acb6; }
 
-.sidebar-todo-selector-tab {
+.sidebar-selector-tab {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   transition: 0ms;
   min-height: 2.5rem;
   color: #e7e1e6; }
 
-.sidebar-todo-selector-tab:hover {
+.sidebar-selector-tab:hover,
+.sidebar-selector-tab:focus {
   background-color: rgba(101, 98, 105, 0.379); }
 
-.sidebar-todo-selector-tab:active {
+.sidebar-selector-tab:active {
   background-color: #514e54; }
 
-.sidebar-todo-selector-tab-active > box > label {
+.sidebar-selector-tab-active > box > label {
   color: #d6baff; }
 
-.sidebar-todo-selector-highlight-offset {
+.sidebar-selector-highlight-offset {
   margin-top: -0.205rem;
   margin-bottom: 0.205rem; }
 
-.sidebar-todo-selector-highlight {
+.sidebar-selector-highlight {
   transition: 180ms ease-in-out;
   color: #d6baff;
-  padding: 0rem 2.045rem;
   min-height: 0.205rem; }
 
 .sidebar-todo-item {
@@ -1521,7 +1575,8 @@ tooltip {
   min-width: 1.705rem;
   min-height: 1.705rem; }
 
-.sidebar-todo-item-action:hover {
+.sidebar-todo-item-action:hover,
+.sidebar-todo-item-action:focus {
   background-color: rgba(70, 67, 72, 0.31); }
 
 .sidebar-todo-item-action:active {
@@ -1544,7 +1599,8 @@ tooltip {
   background-color: #4b4358;
   color: #eadef7; }
 
-.sidebar-clipboard-item:hover {
+.sidebar-clipboard-item:hover,
+.sidebar-clipboard-item:focus {
   background-color: #5b5368; }
 
 .sidebar-clipboard-item:active {
@@ -1558,7 +1614,8 @@ tooltip {
   padding: 0.205rem 0.545rem;
   border: 0.068rem solid #e7e1e6; }
 
-.sidebar-todo-new:hover {
+.sidebar-todo-new:hover,
+.sidebar-todo-new:focus {
   background-color: #50485d; }
 
 .sidebar-todo-new:active {
@@ -1573,7 +1630,8 @@ tooltip {
   color: #eadef7;
   border: 0.068rem solid #e7e1e6; }
 
-.sidebar-todo-add:hover {
+.sidebar-todo-add:hover,
+.sidebar-todo-add:focus {
   background-color: #50485d; }
 
 .sidebar-todo-add:active {
@@ -1589,7 +1647,8 @@ tooltip {
   color: #3d1c70;
   border: 0.068rem solid #d6baff; }
 
-.sidebar-todo-add-available:hover {
+.sidebar-todo-add-available:hover,
+.sidebar-todo-add-available:focus {
   background-color: #d1b5fb; }
 
 .sidebar-todo-add-available:active {
@@ -1633,7 +1692,7 @@ tooltip {
 .sidebar-chat-textarea {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  border: 0.068rem solid #49464c;
+  border: 0.068rem solid #69656d;
   padding: 0.682rem; }
 
 .sidebar-chat-entry {
@@ -1647,19 +1706,21 @@ tooltip {
   min-width: 1.705rem;
   min-height: 1.705rem;
   border-radius: 0.478rem;
-  background-color: #49464c; }
+  background-color: #69656d; }
 
-.sidebar-chat-send:hover {
-  background-color: #4e4b51; }
+.sidebar-chat-send:hover,
+.sidebar-chat-send:focus {
+  background-color: #6d6971; }
 
 .sidebar-chat-send:active {
-  background-color: #69646e; }
+  background-color: #837d89; }
 
 .sidebar-chat-send-available {
   background-color: #d6baff;
   color: #3d1c70; }
 
-.sidebar-chat-send-available:hover {
+.sidebar-chat-send-available:hover,
+.sidebar-chat-send-available:focus {
   background-color: #d1b5fb; }
 
 .sidebar-chat-send-available:active {
@@ -1707,11 +1768,11 @@ tooltip {
 
 .sidebar-chat-codeblock-topbar {
   font-family: 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Noto Sans', 'Ubuntu', sans-serif;
-  border-radius: 0.886rem;
   margin: 0.273rem;
   margin-bottom: 0rem;
   background-color: #4b4358;
   color: #eadef7;
+  border-radius: 0.886rem;
   border: 0.068rem solid #5b5368;
   border-top-left-radius: 0.886rem;
   border-top-right-radius: 0.886rem;
@@ -1727,7 +1788,8 @@ tooltip {
   -gtk-outline-radius: 9999px;
   padding: 0.273rem; }
 
-.sidebar-chat-codeblock-topbar-btn:hover {
+.sidebar-chat-codeblock-topbar-btn:hover,
+.sidebar-chat-codeblock-topbar-btn:focus {
   background-color: #6b6278; }
 
 .sidebar-chat-codeblock-topbar-btn:active {
@@ -1737,8 +1799,16 @@ tooltip {
   font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
   padding: 0.682rem; }
 
+.sidebar-chat-divider {
+  min-height: 1px;
+  background-color: #69656d;
+  margin: 0rem 0.545rem; }
+
 .sidebar-chat-welcome-txt {
   margin: 0rem 3.409rem; }
+
+.sidebar-chat-settings {
+  margin: 0rem 5.455rem; }
 
 .sidebar-chat-welcome-icon {
   border-radius: 9999px;
@@ -1762,18 +1832,19 @@ tooltip {
   padding: 0.341rem 0.477rem; }
 
 .sidebar-chat-chip-action {
-  border: 0.068rem solid #49464c; }
+  border: 0.068rem solid #69656d; }
 
-.sidebar-chat-chip-action:hover {
-  background-color: #49464c; }
+.sidebar-chat-chip-action:hover,
+.sidebar-chat-chip-action:focus {
+  background-color: #69656d; }
 
 .sidebar-chat-chip-action:active {
-  background-color: #706c73;
-  color: #3f3c42; }
+  background-color: #86828a;
+  color: #565259; }
 
 .sidebar-chat-chip-action-active {
-  color: #49464c;
-  border: 0.068rem solid #49464c; }
+  color: #69656d;
+  border: 0.068rem solid #69656d; }
 
 .session-bg {
   margin-top: -2.727rem;
@@ -1896,7 +1967,8 @@ tooltip {
   -gtk-outline-radius: 1.159rem;
   padding: 0rem 0.136rem; }
 
-.notif-close-btn:hover {
+.notif-close-btn:hover,
+.notif-close-btn:focus {
   background: rgba(128, 128, 128, 0.3); }
 
 .notif-close-btn:active {
@@ -1907,7 +1979,8 @@ tooltip {
   -gtk-outline-radius: 1.159rem;
   padding: 0.341rem 0.341rem; }
 
-.notif-closeall-btn:hover {
+.notif-closeall-btn:hover,
+.notif-closeall-btn:focus {
   background-color: rgba(128, 128, 128, 0.3); }
 
 .notif-closeall-btn:active {
@@ -1916,7 +1989,7 @@ tooltip {
 .osd-notif {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  background-color: rgba(20, 19, 22, 0.38);
+  background-color: rgba(20, 19, 22, 0.46);
   min-width: 30.682rem; }
 
 .notif-circprog-low {
@@ -1943,7 +2016,7 @@ tooltip {
 .osd-music {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.45);
-  margin: 7px;
+  margin: 0.476rem;
   margin-top: 0.313rem;
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
@@ -2020,7 +2093,8 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px; }
 
-.osd-music-controlbtn:hover {
+.osd-music-controlbtn:hover,
+.osd-music-controlbtn:focus {
   background-color: rgba(94, 89, 97, 0.55); }
 
 .osd-music-controlbtn:active {

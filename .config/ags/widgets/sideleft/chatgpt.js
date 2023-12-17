@@ -52,10 +52,19 @@ const chatSettings = Revealer({
             ConfigToggle({
                 icon: 'cycle',
                 name: 'Cycle models',
-                desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nIf unsure, leave On.',
+                desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
                 initValue: ChatGPT.cycleModels,
                 onChange: (self, newValue) => {
                     ChatGPT.cycleModels = newValue;
+                },
+            }),
+            ConfigToggle({
+                icon: 'description',
+                name: 'Assistant prompt',
+                desc: 'Tells ChatGPT\n  1. It\'s a sidebar assistant on Linux\n  2. Be short and concise\n  3. Use markdown features extensively\nTurn this off for a vanilla ChatGPT experience.',
+                initValue: ChatGPT.assistantPrompt,
+                onChange: (self, newValue) => {
+                    ChatGPT.assistantPrompt = newValue;
                 },
             }),
         ]
@@ -222,6 +231,11 @@ export default Widget.Box({
                 scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
                 const vScrollbar = scrolledWindow.get_vscrollbar();
                 vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+
+                Utils.timeout(1, () => {
+                    const viewport = scrolledWindow.child;
+                    viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
+                })
             }
         }),
         Box({

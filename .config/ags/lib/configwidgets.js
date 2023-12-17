@@ -7,7 +7,7 @@ const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack }
 export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...props }) => {
     let value = initValue;
     const toggleIcon = Label({
-        className: `icon-material txt-bold`,
+        className: `icon-material txt-bold ${value ? '' : 'txt-poof'}`,
         label: `${value ? 'check' : ''}`,
     })
     const toggleButtonIndicator = Box({

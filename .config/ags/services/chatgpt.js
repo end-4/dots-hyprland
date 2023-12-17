@@ -5,17 +5,15 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from './messages.js';
 
-// const distro = Utils.exec('lsb_release -d | cut -f2-');
-
 // This is for custom prompt
 // It's hard to make gpt-3.5 listen to all these, I know
 const initMessages =
     [
         {
             role: "user",
-            content: `You're a sidebar assistant on a Linux system. 
-- When asked to perform tasks, if there's an appropriate command, you only need to include a bash code block.
-- Try to use **bold**, _italics_ and __underline__ where possible.
+            content: `
+- When asked to perform system tasks, remember that this is a Linux system. If there's an appropriate command, you only need to include a bash code block.
+- Try to use **bold**, _italics_ and __underline__ extensively. Using bullet points is also encouraged.
 - When providing code blocks or facts, precede with h2 heading (\`##\`) and use 2 spaces for indentation, not 4.
 - Use dividers (\`---\`) to separate different information.
 - Unless requested otherwise or asked writing questions, be as short and concise as possible.
@@ -117,7 +115,7 @@ class ChatGPTService extends Service {
     }
 
     _messages = [...initMessages];
-    _cycleModels = true;
+    _cycleModels = false;
     _requestCount = 0;
     _modelIndex = 0;
     _key = '';
@@ -149,7 +147,10 @@ class ChatGPTService extends Service {
     get cycleModels() { return this._cycleModels }
     set cycleModels(value) {
         this._cycleModels = value;
-        if(!value) this._modelIndex = 0;
+        if (!value) this._modelIndex = 0;
+        else {
+            this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
+        }
     }
 
     get messages() { return this._messages }
@@ -158,6 +159,14 @@ class ChatGPTService extends Service {
     clear() {
         this._messages = [...initMessages];
         this.emit('clear');
+    }
+
+    get assistantPrompt() {
+        return (this._messages.length > 0);
+    }
+    set assistantPrompt(value) {
+        if (value) this._messages = [...initMessages];
+        else this._messages = [];
     }
 
     readResponse(stream, aiResponse) {
@@ -222,7 +231,7 @@ class ChatGPTService extends Service {
 
         if (this._cycleModels) {
             this._requestCount++;
-            if(this._cycleModels)
+            if (this._cycleModels)
                 this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
         }
     }

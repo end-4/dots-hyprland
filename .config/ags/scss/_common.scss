@@ -73,8 +73,8 @@ tooltip {
     @include full-rounding;
     background-color: mix($surface, $background, 50%);
     border: 0.136rem solid $onSurface;
-    min-width: 2.727rem;
-    min-height: 1.364rem;
+    min-width: 2.864rem;
+    min-height: 1.637rem;
 }
 
 .switch-bg-true {
@@ -89,15 +89,15 @@ tooltip {
     color: $surface;
     min-width: 0.819rem;
     min-height: 0.819rem;
-    margin-left: 0.341rem;
+    margin-left: 0.477rem;
 }
 
 .switch-fg-true {
     background-color: $onPrimary;
     color: $primary;
-    min-width: 1.295rem;
-    min-height: 1.295rem;
-    margin-left: 1.364rem;
+    min-width: 1.431rem;
+    min-height: 1.431rem;
+    margin-left: 1.431rem;
 }
 
 .switch-fg-toggling-false {
