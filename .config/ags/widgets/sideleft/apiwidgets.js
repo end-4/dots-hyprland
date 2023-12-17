@@ -7,6 +7,49 @@ import { MaterialIcon } from "../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 import { SystemMessage, ChatMessage } from "./chatmessage.js";
 import { ConfigToggle } from '../../lib/configwidgets.js';
+import { markdownTest } from './md2pango.js';
+
+const chatGPTInfo = Box({
+    vertical: true,
+    className: 'spacing-v-15',
+    children: [
+        Icon({
+            hpack: 'center',
+            className: 'sidebar-chat-welcome-logo',
+            icon: `${App.configDir}/assets/openai-logomark.svg`,
+            setup: (self) => Utils.timeout(1, () => {
+                const styleContext = self.get_style_context();
+                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
+            })
+        }),
+        Label({
+            className: 'txt txt-title-small sidebar-chat-welcome-txt',
+            wrap: true,
+            justify: Gtk.Justification.CENTER,
+            label: 'ChatGPT',
+        }),
+        Box({
+            className: 'spacing-h-5',
+            hpack: 'center',
+            children: [
+                Label({
+                    className: 'txt-smallie txt-subtext',
+                    wrap: true,
+                    justify: Gtk.Justification.CENTER,
+                    label: 'Powered by OpenAI',
+                }),
+                Button({
+                    className: 'txt-subtext txt-norm icon-material',
+                    label: 'info',
+                    tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
+                    setup: setupCursorHoverInfo,
+                }),
+            ]
+        }),
+    ]
+})
 
 const apiKeyInstructions = Box({
     homogeneous: true,
@@ -32,7 +75,7 @@ const apiKeyInstructions = Box({
     })]
 });
 
-const chatSettings = Revealer({
+const chatGPTSettings = Revealer({
     transition: 'slide_down',
     transitionDuration: 150,
     revealChild: true,
@@ -79,43 +122,9 @@ const chatWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            Icon({
-                hpack: 'center',
-                className: 'sidebar-chat-welcome-logo',
-                icon: `${App.configDir}/assets/openai-logomark.svg`,
-                setup: (self) => Utils.timeout(1, () => {
-                    const styleContext = self.get_style_context();
-                    const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                    const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                    self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
-                })
-            }),
-            Label({
-                className: 'txt txt-title-small sidebar-chat-welcome-txt',
-                wrap: true,
-                justify: Gtk.Justification.CENTER,
-                label: 'ChatGPT',
-            }),
-            Box({
-                className: 'spacing-h-5',
-                hpack: 'center',
-                children: [
-                    Label({
-                        className: 'txt-smallie txt-subtext',
-                        wrap: true,
-                        justify: Gtk.Justification.CENTER,
-                        label: 'Powered by OpenAI',
-                    }),
-                    Button({
-                        className: 'txt-subtext txt-norm icon-material',
-                        label: 'info',
-                        tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
-                        setup: setupCursorHoverInfo,
-                    }),
-                ]
-            }),
+            chatGPTInfo,
             apiKeyInstructions,
-            chatSettings,
+            chatGPTSettings,
         ]
     })
 })
@@ -138,30 +147,49 @@ const chatContent = Box({
     ]
 });
 
-const markdownTest = `# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-1. yes
-2. no
-127. well
-- Bulletpoint starting with minus
-* Bulletpoint starting with asterisk
----
-- __Underline__ __ No underline __
-- **Bold** ** No bold **
-- _Italics1_ *Italics2* _ No Italics _
-- A color: #D6BAFF
-- nvidia green: #7ABB08
-  - sub-item
-\`\`\`javascript
-// A code block!
-myArray = [23, 123, 43, 54, '6969'];
-console.log('uwu');
-\`\`\`
-To update arch lincox, run \`sudo pacman -Syu\`
-`;
+const chatView = Scrollable({
+    className: 'sidebar-chat-viewport',
+    vexpand: true,
+    child: chatContent,
+    setup: (scrolledWindow) => {
+        scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        const vScrollbar = scrolledWindow.get_vscrollbar();
+        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+
+        Utils.timeout(1, () => {
+            const viewport = scrolledWindow.child;
+            viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
+        })
+    }
+})
+
+const chatCommands = Box({
+    className: 'spacing-h-5',
+    children: [
+        Box({ hexpand: true }),
+        Button({
+            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+            onClicked: () => chatEntry.text = '/key',
+            setup: setupCursorHover,
+            label: '/key',
+        }),
+        Button({
+            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+            onClicked: () => chatContent.add(SystemMessage(
+                `Currently using \`${ChatGPT.modelName}\``,
+                '/model'
+            )),
+            setup: setupCursorHover,
+            label: '/model',
+        }),
+        Button({
+            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+            onClicked: () => ChatGPT.clear(),
+            setup: setupCursorHover,
+            label: '/clear',
+        }),
+    ]
+});
 
 const sendChatMessage = () => {
     // Check if text or API key is empty
@@ -223,48 +251,8 @@ export default Widget.Box({
     className: 'spacing-v-10',
     homogeneous: false,
     children: [
-        Scrollable({
-            className: 'sidebar-chat-viewport',
-            vexpand: true,
-            child: chatContent,
-            setup: (scrolledWindow) => {
-                scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-                const vScrollbar = scrolledWindow.get_vscrollbar();
-                vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-
-                Utils.timeout(1, () => {
-                    const viewport = scrolledWindow.child;
-                    viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
-                })
-            }
-        }),
-        Box({
-            className: 'spacing-h-5',
-            children: [
-                Box({ hexpand: true }),
-                Button({
-                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-                    onClicked: () => chatEntry.text = '/key',
-                    setup: setupCursorHover,
-                    label: '/key',
-                }),
-                Button({
-                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-                    onClicked: () => chatContent.add(SystemMessage(
-                        `Currently using \`${ChatGPT.modelName}\``,
-                        '/model'
-                    )),
-                    setup: setupCursorHover,
-                    label: '/model',
-                }),
-                Button({
-                    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-                    onClicked: () => ChatGPT.clear(),
-                    setup: setupCursorHover,
-                    label: '/clear',
-                }),
-            ]
-        }),
+        chatView,
+        chatCommands,
         Box({ // Entry area
             className: 'sidebar-chat-textarea spacing-h-10',
             children: [

@@ -228,3 +228,28 @@ if (__is_nodejs_main) {
     }
     args.forEach((f) => process.stdout.write(convert(readFile(f))))
 }
+
+export const markdownTest = `# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+1. yes
+2. no
+127. well
+- Bulletpoint starting with minus
+* Bulletpoint starting with asterisk
+---
+- __Underline__ __ No underline __
+- **Bold** ** No bold **
+- _Italics1_ *Italics2* _ No Italics _
+- A color: #D6BAFF
+- nvidia green: #7ABB08
+  - sub-item
+\`\`\`javascript
+// A code block!
+myArray = [23, 123, 43, 54, '6969'];
+console.log('uwu');
+\`\`\`
+To update arch lincox, run \`sudo pacman -Syu\`
+`;
