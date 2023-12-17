@@ -10,9 +10,9 @@ $onChatgpt: #D5F4E7;
 
 .sidebar-right {
     @include menu_decel;
-    @include large-rounding;
     @include elevation-border;
     @include elevation2;
+    border-radius: $rounding_large - $elevation_margin;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
     background-color: $t_background;
@@ -31,9 +31,9 @@ $onChatgpt: #D5F4E7;
 
 .sidebar-left {
     @include menu_decel;
-    @include large-rounding;
     @include elevation-border;
     @include elevation2;
+    border-radius: $rounding_large - $elevation_margin;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
     background-color: $t_background;
@@ -596,11 +596,11 @@ $onChatgpt: #D5F4E7;
 
 .sidebar-chat-codeblock-topbar {
     @include mainfont;
-    border-radius: $rounding_medium - 0.273rem;
     margin: 0.273rem;
     margin-bottom: 0rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
+    border-radius: $rounding_medium - 0.273rem;
     border: 0.068rem solid mix($secondaryContainer, $onSecondaryContainer, 90%);
     border-top-left-radius: $rounding_small + 0.068rem;
     border-top-right-radius: $rounding_small + 0.068rem;

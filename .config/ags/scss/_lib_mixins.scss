@@ -89,31 +89,32 @@ $rounding_large: 1.705rem;
     color: $actiontext;
 }
 
+
+$elevation_margin: 0.476rem;
+
 @mixin elevation-safe {
     background: $surface;
     color: $onSurface;
     box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.69);
-    margin: 7px;
+    margin: $elevation_margin;
 }
-
-$elevation2_margin: 7px;
 
 @mixin elevation2 {
     box-shadow: 0px 2px 3px transparentize($shadow, 0.55);
-    margin: $elevation2_margin;
+    margin: $elevation_margin;
 }
 
 @mixin elevation2-margin {
-    margin: $elevation2_margin;
+    margin: $elevation_margin;
 }
 
 @mixin elevation2-padding {
-    padding: $elevation2_margin;
+    padding: $elevation_margin;
 }
 
 @mixin elevation3 {
     box-shadow: 0px 2px 5px $shadow;
-    margin: 7px;
+    margin: $elevation_margin;
 }
 
 @mixin menu_decel {
