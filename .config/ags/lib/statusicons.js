@@ -105,32 +105,42 @@ const NetworkWiredIndicator = () => Widget.Stack({
     }]],
 });
 
+const SimpleNetworkIndicator = () => Widget.Icon({
+    connections: [[Network, self => {
+        const icon = Network[Network.primary || 'wifi']?.iconName;
+        self.icon = icon || '';
+        self.visible = icon;
+    }]],
+});
+
 const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     items: [
+        ['fallback', SimpleNetworkIndicator()],
         ['disabled', Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' })],
         ['disconnected', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' })],
-        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_statusbar_not_connected' })],
-        ['4', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' })],
-        ['3', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' })],
-        ['2', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_2_bar' })],
-        ['1', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' })],
+        ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'settings_ethernet' })],
         ['0', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' })],
+        ['1', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' })],
+        ['2', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_2_bar' })],
+        ['3', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' })],
+        ['4', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' })],
     ],
-    connections: [[Network,
-        stack => {
-            if (!Network.wifi)
-                return;
-            const { internet, enabled, strength } = Network.wifi;
-
-            if (internet == 'connected') {
-                stack.shown = String(Math.ceil(strength / 25));
-            }
-            else {
-                stack.shown = 'disconnected'
-            }
+    connections: [[Network, (stack) => {
+        if (!Network.wifi) {
+            stack.shown = 'fallback';
+            return;
         }
-    ]],
+        if (Network.wifi.internet == 'connected') {
+            stack.shown = String(Math.ceil(Network.wifi.strength / 25));
+        }
+        else if (Network.wifi.internet == 'disconnected' || Network.wifi.internet == 'connecting') {
+            stack.shown = Network.wifi.internet;
+        }
+        else {
+            stack.shown = 'fallback';
+        }
+    }]],
 });
 
 export const NetworkIndicator = () => Widget.Stack({
