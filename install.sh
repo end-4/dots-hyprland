@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+BLUE='\033[0;34m'
+WHITE= '\033[0;37m' 
+RED= '\033[0;31m'
 
 echo 'Hi there!'
 echo 'This script 1. only works for ArchLinux and Arch-based distros.'
@@ -16,16 +19,21 @@ yay -S brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gno
 
 user=$(whoami)
 echo "sudo usermod -aG video $user"
-sudo usermod -aG video "$user"
+sudo usermod -aG video "$user" || echo "failed to add user to video group"
 echo "sudo usermod -aG input $user"
-sudo usermod -aG input "$user"
+sudo usermod -aG input "$user" || echo "failed to add user to input group"
+clear
+echo "Step 1 Complete."
 #####################################################################################
-echo '2. Install AGS manually'
-
+echo '2. Installing AGS manually'
+sleep 1
 echo 'git clone --recursive https://github.com/Aylur/ags.git && cd ags'
-git clone --recursive https://github.com/Aylur/ags.git && cd ags
+git clone --recursive https://github.com/Aylur/ags.git && cd ags || echo "failed to clone into ags. Aborting..." && exit
+clear
+echo "Done Cloning! Setting up npm and meson..."
+sleep 1
 echo 'npm install && meson setup build'
-npm install && meson setup build 
+npm install && meson setup build
 echo 'meson install -C build'
 echo '(Make sure you say yes when asked to use sudo here)'
 meson install -C build
@@ -33,9 +41,9 @@ meson install -C build
 echo '3. Copying'
 
 echo 'cp -r "./.config" "$HOME"'
-cp -r "./.config" "$HOME"
+cp -r "./.config" "$HOME" || echo "cp threw error. You could cp this yourself."
 echo 'cp -r "./.local" "$HOME"'
-cp -r "./.local" "$HOME"
+cp -r "./.local" "$HOME" || echo "cp threw error. You could cp this yourself."
 #####################################################################################
 echo 'Finished. See the "Import manually" folder and grab anything you need.'
 
