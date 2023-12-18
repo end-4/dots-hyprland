@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-BLUE='\033[0;34m'
-WHITE= '\033[0;37m' 
-RED= '\033[0;31m'
 
 echo 'Hi there!'
 echo 'This script 1. only works for ArchLinux and Arch-based distros.'
