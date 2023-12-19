@@ -19,6 +19,7 @@ echo 'User removed from video and input groups.'
 
 # Removing installed yay packages and dependencies
 
-yay -Rns brightnessctl foot fuzzel gjs grim gtk-layer-shell libdbusmenu-gtk3 plasma-browser-integration playerctl python-pywal ripgrep sassc slurp starship swayidle swaylock typescript webp-pixbuf-loader wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-poetry python-build swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wlogout
+yay -Rns adw-gtk3-git brightnessctl cava foot fuzzel gjs gojq gradience-git grim gtk-layer-shell gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git libdbusmenu-gtk3 plasma-browser-integration playerctl python-build python-material-color-utilities python-poetry python-pywal ripgrep sassc slurp starship swayidle swaylock swww tesseract ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd typescript webp-pixbuf-loader wl-clipboard wlogout yad ydotool
+
 
 echo 'Uninstall Complete.'
