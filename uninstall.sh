@@ -15,7 +15,7 @@ echo 'Removing user from video and input groups and removing packages...'
 user=$(whoami)
 sudo deluser "$user" video
 sudo deluser "$user" input
-echo 'User rmoved from video and input groups.'
+echo 'User removed from video and input groups.'
 
 # Removing installed yay packages and dependencies
 
