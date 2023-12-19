@@ -19,14 +19,12 @@ echo "sudo usermod -aG video $user"
 sudo usermod -aG video "$user" || echo "failed to add user to video group"
 echo "sudo usermod -aG input $user"
 sudo usermod -aG input "$user" || echo "failed to add user to input group"
-clear
 echo "Step 1 Complete."
 #####################################################################################
 echo '2. Installing AGS manually'
 sleep 1
 echo 'git clone --recursive https://github.com/Aylur/ags.git && cd ags'
 git clone --recursive https://github.com/Aylur/ags.git && cd ags || echo "failed to clone into ags. Aborting..." && exit
-clear
 echo "Done Cloning! Setting up npm and meson..."
 sleep 1
 echo 'npm install && meson setup build'
