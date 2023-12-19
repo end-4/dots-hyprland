@@ -5,10 +5,10 @@ echo 'Removing copied config and local folders...'
 rm -rf "$HOME/.config/ags fish frontconfig foot fuzzel gtklock hypr mpv swaylock wlogout starship.toml"
 rm -rf "$HOME/.local/bin"
 
-# Undo Step 2: Uninstall AGS
-echo 'Uninstalling AGS...'
-sudo meson uninstall -C ~/ags/build
-rm -rf ~/ags
+# Undo Step 2: Uninstall AGS - Disabled for now
+# echo 'Uninstalling AGS...'
+# sudo meson uninstall -C ~/ags/build
+# rm -rf ~/ags
 
 # Undo Step 1: Remove added user from video and input groups and remove yay packages
 echo 'Removing user from video and input groups and removing packages...'
