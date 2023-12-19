@@ -2,8 +2,8 @@
 
 # Undo Step 3: Removing copied config and local folders
 echo 'Removing copied config and local folders...'
-rm -rf "$HOME/.config"
-rm -rf "$HOME/.local"
+rm -rf "$HOME/.config/ags fish frontconfig foot fuzzel gtklock hypr mpv swaylock wlogout starship.toml"
+rm -rf "$HOME/.local/bin"
 
 # Undo Step 2: Uninstall AGS
 echo 'Uninstalling AGS...'
