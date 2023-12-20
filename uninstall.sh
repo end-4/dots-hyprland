@@ -12,10 +12,10 @@ read
 
 # Undo Step 3: Removing copied config and local folders
 echo 'Removing copied config and local folders...'
-echo 'rm -rf "$HOME/.config/ags fish frontconfig foot fuzzel gtklock hypr mpv swaylock wlogout starship.toml" '
-rm -rf "$HOME/.config/ags fish frontconfig foot fuzzel gtklock hypr mpv swaylock wlogout starship.toml"
-echo 'rm -rf "$HOME/.local/bin/fuzzel-emoji rubyshot" '
-rm -rf "$HOME/.local/bin/fuzzel-emoji rubyshot"
+echo 'rm -rf "$HOME/.config/ags" "$HOME/.config/fish" "$HOME/.config/frontconfig" "$HOME/.config/foot" "$HOME/.config/fuzzel" "$HOME/.config/gtklock" "$HOME/.config/hypr" "$HOME/.config/mpv" "$HOME/.config/swaylock" "$HOME/.config/wlogout" "$HOME/.config/starship.toml" '
+rm -rf "$HOME/.config/ags" "$HOME/.config/fish" "$HOME/.config/frontconfig" "$HOME/.config/foot" "$HOME/.config/fuzzel" "$HOME/.config/gtklock" "$HOME/.config/hypr" "$HOME/.config/mpv" "$HOME/.config/swaylock" "$HOME/.config/wlogout" "$HOME/.config/starship.toml"
+echo 'rm -rf "$HOME/.local/bin/fuzzel-emoji" "$HOME/.config/rubyshot" '
+rm -rf "$HOME/.local/bin/fuzzel-emoji" "$HOME/.config/rubyshot"
 
 ##############################################################################################################################
 
