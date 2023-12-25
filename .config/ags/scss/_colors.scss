@@ -1,0 +1,128 @@
+///////////// COLOR MODIFICATIONS /////////////
+// Material colors provide excellent readability, but can be uninteresting.
+// This is an attempt to improve that.
+$transparency_enabled: false;
+
+@if $transparency_enabled ==false {
+    @if $darkmode ==true {
+        $background: mix(mix($background, $primary, 94%), #000000, 50%);
+        $surface: mix($surface, $primaryContainer, 98%);
+        $surfaceVariant: mix($surfaceVariant, #000000, 55%);
+    }
+
+    @if $darkmode ==false {
+        $background: mix($background, $primary, 87%);
+        $surface: mix($surface, $primary, 93%);
+        $surfaceVariant: mix($surfaceVariant, #FFFFFF, 55%);
+    }
+}
+
+@if $transparency_enabled ==true {
+    @if $darkmode ==true {
+        $background: mix(mix($background, $primary, 94%), #000000, 50%);
+        $surface: mix($surface, $primaryContainer, 98%);
+        $surfaceVariant: mix($surfaceVariant, #000000, 55%);
+    }
+
+    @if $darkmode ==false {
+        $background: mix($background, $primary, 94%);
+        $surface: mix($surface, $primary, 93%);
+        $surfaceVariant: mix($surfaceVariant, #FFFFFF, 55%);
+    }
+}
+
+// Amounts
+$transparentize_amount: 0.3;
+$transparentize_surface_amount_less: 0.6;
+$transparentize_surface_amount_less_less: 0.55;
+$transparentize_surface_amount: 0.7;
+$transparentize_surface_amount_more: 0.8;
+$transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
+
+@if $darkmode ==true {
+    // Less transparency
+    $transparentize_amount: 0.15;
+    $transparentize_surface_amount_less: 0.5;
+    $transparentize_surface_amount_less_less: 0.55;
+    $transparentize_surface_amount: 0.69;
+    $transparentize_surface_amount_more: 0.9;
+    $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
+}
+
+@if $transparency_enabled ==false {
+    $transparentize_amount: 0;
+}
+
+// Extended material
+$success: #4f6354;
+$onSuccess: #ffffff;
+$successContainer: #d1e8d5;
+$onSuccessContainer: #0c1f13;
+
+@if $darkmode ==true {
+    // Dark variant
+    $success: #b5ccba;
+    $onSuccess: #213528;
+    $successContainer: #374b3e;
+    $onSuccessContainer: #d1e9d6;
+}
+
+// Transparent versions
+$t_primary: transparentize($primary, $transparentize_amount);
+$t_onPrimary: transparentize($onPrimary, $transparentize_amount);
+$t_primaryContainer: transparentize($primaryContainer, $transparentize_amount);
+$t_onPrimaryContainer: transparentize($onPrimaryContainer, $transparentize_amount);
+$t_secondary: transparentize($secondary, $transparentize_amount);
+$t_onSecondary: transparentize($onSecondary, $transparentize_amount);
+$t_secondaryContainer: transparentize($secondaryContainer, $transparentize_amount);
+$l_t_secondaryContainer: transparentize($secondaryContainer, $transparentize_surface_amount_less);
+$t_onSecondaryContainer: transparentize($onSecondaryContainer, $transparentize_amount);
+$t_t_t_onSecondaryContainer: transparentize($onSecondaryContainer, 0.93);
+$t_tertiary: transparentize($tertiary, $transparentize_amount);
+$t_onTertiary: transparentize($onTertiary, $transparentize_amount);
+$t_tertiaryContainer: transparentize($tertiaryContainer, $transparentize_amount);
+$t_onTertiaryContainer: transparentize($onTertiaryContainer, $transparentize_amount);
+$t_error: transparentize($error, $transparentize_amount);
+$t_onError: transparentize($onError, $transparentize_amount);
+$t_errorContainer: transparentize($errorContainer, $transparentize_amount);
+$t_onErrorContainer: transparentize($onErrorContainer, $transparentize_amount);
+$t_colorbarbg: transparentize($colorbarbg, $transparentize_amount);
+$t_background: transparentize($background, $transparentize_amount);
+$t_t_background: transparentize($background, $transparentize_surface_amount_more);
+$t_onBackground: transparentize($onBackground, $transparentize_amount);
+$t_surface: transparentize($surface, $transparentize_surface_amount);
+$t_t_surface: transparentize($surface, $transparentize_surface_amount_more);
+$t_onSurface: transparentize($onSurface, $transparentize_surface_amount);
+$t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount);
+$t_onSurfaceVariant: transparentize($onSurfaceVariant, $transparentize_surface_amount);
+$t_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_more);
+$l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less);
+$l_l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less_less);
+$t_outline: transparentize($outline, $transparentize_amount);
+$t_shadow: transparentize($shadow, $transparentize_amount);
+$t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);
+$t_inverseOnSurface: transparentize($inverseOnSurface, $transparentize_amount);
+$t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
+// Transparent material (extended)
+$t_success: transparentize($error, $transparentize_amount);
+$t_onSuccess: transparentize($onError, $transparentize_amount);
+$t_successContainer: transparentize($errorContainer, $transparentize_amount);
+$t_onSuccessContainer: transparentize($onErrorContainer, $transparentize_amount);
+
+// Others
+$hovercolor: mix($t_surface, $t_onSurface, 50%);
+$activecolor: mix($t_surface, $t_onSurface, 30%);
+$subtext: mix($onBackground, $background, 70%);
+$actiontext: mix($onBackground, $background, 85%);
+
+// Terminal colors
+$termbg: mix($t_surfaceVariant, $t_onSurfaceVariant, 80%);
+$termfg: $onSurfaceVariant;
+$term0: $t_background;
+$term1: $error;
+$term2: $inversePrimary;
+$term3: $onPrimaryContainer;
+$term4: $onPrimaryContainer;
+$term5: $onSecondaryContainer;
+$term6: $primary;
+$term7: $onSurfaceVariant;

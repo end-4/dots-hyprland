@@ -1,0 +1,36 @@
+.session-bg {
+    margin-top: -2.727rem;
+    background-color: mix($t_t_background, $background, 40%);
+}
+
+.session-button {
+    @include large-rounding;
+    min-width: 8.182rem;
+    min-height: 8.182rem;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    font-size: 3rem;
+}
+
+.session-button-focused {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.session-button-desc {
+    background-color: mix($surface, $surfaceVariant, 50%);
+    color: mix($onSurface, $onSurfaceVariant, 50%);
+    border-bottom-left-radius: $rounding_large;
+    border-bottom-right-radius: $rounding_large;
+    padding: 0.205rem 0.341rem;
+    font-weight: 700;
+}
+
+.session-button-cancel {
+    @include large-rounding;
+    min-width: 8.182rem;
+    min-height: 5.455rem;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    font-size: 3rem;
+}
