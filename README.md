@@ -69,8 +69,6 @@
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
    </a>
 
-- For even older stuff I never wanna touch again, check the releases
-
 ---
 
 # 🙏 Attribution
