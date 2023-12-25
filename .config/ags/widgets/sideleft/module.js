@@ -18,6 +18,9 @@ export const SidebarModule = ({
                             className: 'txt-small txt',
                             label: `${name}`,
                         }),
+                        Box({
+                            hexpand: true,
+                        }),
                         Label({
                             className: 'sidebar-module-btn-arrow',
                         })

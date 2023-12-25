@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Catppuccin Gedit theme based on Oblivion theme and Cappuccin for Visual Studio Code.
+-->
+
+<style-scheme id="catppuccin_latte" _name="Catppuccin latte" version="1.0">
+
+  <author>sacerdos</author>
+  <_description>Soothing pastel theme for Gedit</_description>
+
+  <!-- Catppuccin Palette -->
+  <color name="latte_rosewater" value="#dc8a78"/>
+  <color name="latte_flamingo"  value="#dd7878"/>
+  <color name="latte_pink"      value="#ea76cb"/>
+  <color name="latte_mauve"     value="#8839ef"/>
+  <color name="latte_red"       value="#d20f39"/>
+  <color name="latte_maroon"    value="#e64553"/>
+  <color name="latte_peach"     value="#fe640b"/>
+  <color name="latte_yellow"    value="#df8e1d"/>
+  <color name="latte_green"     value="#40a02b"/>
+  <color name="latte_teal"      value="#179299"/>
+  <color name="latte_sky"       value="#04a5e5"/>
+  <color name="latte_sapphire"  value="#209fb5"/>
+  <color name="latte_blue"      value="#1e66f5"/>
+  <color name="latte_lavender"  value="#7287fd"/>
+  <color name="latte_text"      value="#4c4f69"/>
+  <color name="latte_subtext1"  value="#5c5f77"/>
+  <color name="latte_subtext0"  value="#6c6f85"/>
+  <color name="latte_overlay2"  value="#7c7f93"/>
+  <color name="latte_overlay1"  value="#8c8fa1"/>
+  <color name="latte_overlay0"  value="#9ca0b0"/>
+  <color name="latte_surface2"  value="#acb0be"/>
+  <color name="latte_surface1"  value="#bcc0cc"/>
+  <color name="latte_surface0"  value="#ccd0da"/>
+  <color name="latte_base"      value="#eff1f5"/>
+  <color name="latte_mantle"    value="#e6e9ef"/>
+  <color name="latte_crust"     value="#dce0e8"/>
+
+  <!-- Global Settings -->
+  <style name="text"                        foreground="latte_text" background = "latte_base"/>
+  <style name="selection"                   foreground="latte_text" background="latte_surface2"/>
+  <style name="cursor"                      foreground="latte_rosewater"/>
+  <style name="secondary-cursor"            foreground="latte_rosewater"/>
+  <style name="current-line"                background="latte_surface0"/>
+  <style name="line-numbers"                foreground="latte_text" background="latte_crust"/>
+  <style name="draw-spaces"                 foreground="latte_text"/>
+  <style name="background-pattern"          background="latte_base"/>
+
+  <!-- Bracket Matching -->
+  <style name="bracket-match"               foreground="latte_mauve"/>
+  <style name="bracket-mismatch"            foreground="latte_text" background="latte_peach"/>
+
+  <!-- Right Margin -->
+  <style name="right-margin"                foreground="latte_text" background="latte_crust"/>
+
+  <!-- Search Matching -->
+  <style name="search-match"                foreground="latte_text" background="latte_blue"/>
+
+  <!-- Comments -->
+  <style name="def:comment"                 foreground="latte_overlay0"/>
+  <style name="def:shebang"                 foreground="latte_overlay0" bold="true"/>
+  <style name="def:doc-comment-element"     italic="true"/>
+
+  <!-- Constants -->
+  <style name="def:constant"                foreground="latte_green"/>
+  <style name="def:string"                  foreground="latte_green"/>
+  <style name="def:special-char"            foreground="latte_lavender"/>
+  <style name="def:special-constant"        foreground="latte_lavender"/>
+  <style name="def:floating-point"          foreground="latte_lavender"/>
+
+  <!-- Identifiers -->
+  <style name="def:identifier"              foreground="latte_blue"/>
+
+  <!-- Statements -->
+  <style name="def:statement"               foreground="latte_sapphire" bold="true"/>
+
+  <!-- Types -->
+  <style name="def:type"                    foreground="latte_maroon" bold="true"/>
+
+  <!-- Markup -->
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:strong-emphasis"         foreground="latte_yellow" bold="true"/>
+  <style name="def:inline-code"             foreground="latte_green"/>
+  <style name="def:insertion"               underline="single"/>
+  <style name="def:deletion"                strikethrough="true"/>
+  <style name="def:link-text"               foreground="latte_rosewater"/>
+  <style name="def:link-symbol"             foreground="latte_blue" bold="true"/>
+  <style name="def:link-destination"        foreground="latte_blue" italic="true" underline="single"/>
+  <style name="def:heading"                 foreground="latte_teal" bold="true"/>
+  <style name="def:thematic-break"          foreground="latte_green" bold="true"/>
+  <style name="def:preformatted-section"    foreground="latte_green"/>
+  <style name="def:list-marker"             foreground="latte_teal" bold="true"/>
+
+  <!-- Others -->
+  <style name="def:preprocessor"            foreground="latte_teal"/>
+  <style name="def:error"                   foreground="latte_maroon" bold="true"/>
+  <style name="def:warning"                 foreground="latte_peach"/>
+  <style name="def:note"                    foreground="latte_blue" bold="true"/>
+  <style name="def:net-address"             italic="true" underline="single"/>
+</style-scheme>

@@ -86,7 +86,8 @@ const Taskbar = () => Widget.Box({
             return a._workspace > b._workspace;
         }],
         ['update', (box) => {
-            Hyprland.clients.forEach(client => {
+            for (let i = 0; i < Hyprland.clients.length; i++) {
+                const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
                 for (const appName of pinnedApps) {
@@ -101,7 +102,7 @@ const Taskbar = () => Widget.Box({
                 newButton._workspace = client.workspace.id;
                 newButton.revealChild = true;
                 box._map.set(client.address, newButton);
-            })
+            }
             box.children = Array.from(box._map.values());
         }],
         ['add', (box, address) => {

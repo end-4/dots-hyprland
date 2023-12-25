@@ -6,7 +6,7 @@ import ChatGPT from '../../../services/chatgpt.js';
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
 import { SystemMessage, ChatMessage } from "./chatgpt_chatmessage.js";
-import { ConfigToggle } from '../../../lib/configwidgets.js';
+import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../../lib/configwidgets.js';
 import { markdownTest } from '../../../lib/md2pango.js';
 
 const chatGPTTabIcon = Icon({
@@ -68,36 +68,58 @@ export const chatGPTSettings = Revealer({
     transitionDuration: 150,
     revealChild: true,
     connections: [
-        [ChatGPT, (self) => {
+        [ChatGPT, (self) => Utils.timeout(200, () => {
             self.revealChild = false;
-        }, 'newMsg'],
-        [ChatGPT, (self) => {
+        }), 'newMsg'],
+        [ChatGPT, (self) => Utils.timeout(200, () => {
             self.revealChild = true;
-        }, 'clear'],
+        }), 'clear'],
     ],
     child: Box({
         vertical: true,
-        hpack: 'fill',
         className: 'sidebar-chat-settings',
         children: [
-            ConfigToggle({
-                icon: 'cycle',
-                name: 'Cycle models',
-                desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                initValue: ChatGPT.cycleModels,
-                onChange: (self, newValue) => {
-                    ChatGPT.cycleModels = newValue;
+            ConfigSegmentedSelection({
+                hpack: 'center',
+                icon: 'casino',
+                name: 'Randomness',
+                desc: 'ChatGPT\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
+                options: [
+                    { value: 0.00, name: 'Precise', },
+                    { value: 0.50, name: 'Balanced', },
+                    { value: 1.00, name: 'Creative', },
+                ],
+                initIndex: 1,
+                onChange: (value, name) => {
+                    ChatGPT.temperature = value;
                 },
             }),
-            ConfigToggle({
-                icon: 'description',
-                name: 'Assistant prompt',
-                desc: 'Tells ChatGPT\n  1. It\'s a sidebar assistant on Linux\n  2. Be short and concise\n  3. Use markdown features extensively\nLeave this off for a vanilla ChatGPT experience.',
-                initValue: ChatGPT.assistantPrompt,
-                onChange: (self, newValue) => {
-                    ChatGPT.assistantPrompt = newValue;
-                },
-            }),
+            ConfigGap({ vertical: true, size: 10 }), // Note: size can only be 5, 10, or 15 
+            Box({
+                vertical: true,
+                hpack: 'fill',
+                className: 'sidebar-chat-settings-toggles',
+                children: [
+                    ConfigToggle({
+                        icon: 'cycle',
+                        name: 'Cycle models',
+                        desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
+                        initValue: ChatGPT.cycleModels,
+                        onChange: (self, newValue) => {
+                            ChatGPT.cycleModels = newValue;
+                        },
+                    }),
+                    ConfigToggle({
+                        icon: 'description',
+                        name: 'Assistant prompt',
+                        desc: 'Tells ChatGPT\n  1. It\'s a sidebar assistant on Linux\n  2. Be short and concise\n  3. Use markdown features extensively\nLeave this off for a vanilla ChatGPT experience.',
+                        initValue: ChatGPT.assistantPrompt,
+                        onChange: (self, newValue) => {
+                            ChatGPT.assistantPrompt = newValue;
+                        },
+                    }),
+                ]
+            })
         ]
     })
 });
@@ -136,7 +158,7 @@ export const chatGPTWelcome = Box({
         children: [
             chatGPTInfo,
             openaiApiKeyInstructions,
-            chatGPTSettings,
+            chatGPTSettings, ``
         ]
     })
 });
@@ -148,21 +170,30 @@ export const chatContent = Box({
         [ChatGPT, (box, id) => {
             const message = ChatGPT.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message))
+            box.add(ChatMessage(message, chatGPTView))
         }, 'newMsg'],
-        [ChatGPT, (box) => {
-            box.children = [chatGPTWelcome];
-        }, 'clear'],
-        [ChatGPT, (box) => {
-            box.children = [chatGPTWelcome];
-        }, 'initialized'],
     ]
 });
+
+const clearChat = () => {
+    ChatGPT.clear();
+    const children = chatContent.get_children();
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        child.destroy();
+    }
+}
 
 export const chatGPTView = Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
-    child: chatContent,
+    child: Box({
+        vertical: true,
+        children: [
+            chatGPTWelcome,
+            chatContent,
+        ]
+    }),
     setup: (scrolledWindow) => {
         scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         const vScrollbar = scrolledWindow.get_vscrollbar();
@@ -183,7 +214,8 @@ export const chatGPTCommands = Box({
             className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
             onClicked: () => chatContent.add(SystemMessage(
                 `Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
-                '/key')),
+                '/key',
+                chatGPTView)),
             setup: setupCursorHover,
             label: '/key',
         }),
@@ -191,14 +223,15 @@ export const chatGPTCommands = Box({
             className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
             onClicked: () => chatContent.add(SystemMessage(
                 `Currently using \`${ChatGPT.modelName}\``,
-                '/model'
+                '/model',
+                chatGPTView
             )),
             setup: setupCursorHover,
             label: '/model',
         }),
         Button({
             className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-            onClicked: () => ChatGPT.clear(),
+            onClicked: () => clearChat(),
             setup: setupCursorHover,
             label: '/clear',
         }),
@@ -210,26 +243,29 @@ export const chatGPTSendMessage = (text) => {
     if (text.length == 0) return;
     if (ChatGPT.key.length == 0) {
         ChatGPT.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key'));
+        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key', chatGPTView));
         text = '';
         return;
     }
     // Commands
     if (text.startsWith('/')) {
-        if (text.startsWith('/clear')) ChatGPT.clear();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model'))
+        if (text.startsWith('/clear')) clearChat();
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model', chatGPTView))
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
-            if (parts.length == 1) chatContent.add(SystemMessage(`Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``, '/key'));
+            if (parts.length == 1) chatContent.add(SystemMessage(
+                `Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                '/key',
+                chatGPTView));
             else {
                 ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key'));
+                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key', chatGPTView));
             }
         }
         else if (text.startsWith('/test'))
-            chatContent.add(SystemMessage(markdownTest, `Markdown test`));
+            chatContent.add(SystemMessage(markdownTest, `Markdown test`, chatGPTView));
         else
-            chatContent.add(SystemMessage(`Invalid command.`, 'Error'))
+            chatContent.add(SystemMessage(`Invalid command.`, 'Error', chatGPTView))
     }
     else {
         ChatGPT.send(text);
