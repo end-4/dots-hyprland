@@ -74,12 +74,14 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                 [Hyprland, (box) => {
                                     // console.log('update');
                                     const kids = box.children;
-                                    kids.forEach((child, i) => {
+                                    for (let i = 0; i < kids.length; i++) {
+                                        const child = kids[i];
                                         child.child.toggleClassName('bar-ws-occupied', false);
                                         child.child.toggleClassName('bar-ws-occupied-left', false);
                                         child.child.toggleClassName('bar-ws-occupied-right', false);
                                         child.child.toggleClassName('bar-ws-occupied-left-right', false);
-                                    });
+                                    }
+
                                     const occupied = Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => Hyprland.getWorkspace(i + 1)?.windows > 0);
                                     for (let i = 0; i < occupied.length; i++) {
                                         if (!occupied[i]) continue;

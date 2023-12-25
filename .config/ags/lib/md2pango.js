@@ -12,12 +12,11 @@ let sub_h1, sub_h2, sub_h3, sub_h4, sub_h5
 // m2p_sections defines how to detect special markdown sections.
 // These expressions scan the full line to detect headings, lists, and code.
 const m2p_sections = [
-    //                                             h1 is actually 210% on github, but it's unecessary large imo
-    sub_h1 = { name: H1, re: /^(#\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='150%'>$2</span>" },
-    sub_h2 = { name: H2, re: /^(##\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='125%'>$2</span>" },
-    sub_h3 = { name: H3, re: /^(###\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='100%'>$2</span>" },
-    sub_h4 = { name: H4, re: /^(####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='90%'>$2</span>" },
-    sub_h5 = { name: H5, re: /^(#####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='80%'>$2</span>" },
+    sub_h1 = { name: H1, re: /^(#\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='170%'>$2</span>" },
+    sub_h2 = { name: H2, re: /^(##\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='150%'>$2</span>" },
+    sub_h3 = { name: H3, re: /^(###\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='125%'>$2</span>" },
+    sub_h4 = { name: H4, re: /^(####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='100%'>$2</span>" },
+    sub_h5 = { name: H5, re: /^(#####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='90%'>$2</span>" },
     { name: BULLET, re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: "$1• $3" },
     { name: NUMBERING, re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: " $1$2" },
 ]
@@ -226,7 +225,11 @@ if (__is_nodejs_main) {
         console.log(`Usage: ${process.argv[1]} FILE [FILE...]`)
         process.exit(0)
     }
-    args.forEach((f) => process.stdout.write(convert(readFile(f))))
+    for (let i = 0; i < args.length; i++) {
+        const f = args[i];
+        process.stdout.write(convert(readFile(f)));
+    }
+
 }
 
 export const markdownTest = `# Heading 1

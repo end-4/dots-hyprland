@@ -360,7 +360,11 @@ export default () => Widget.Revealer({
 
             if (!foundPlayer) {
                 box._player = null;
-                box.get_children().forEach(ch => ch.destroy());
+                const children = box.get_children();
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    child.destroy();
+                }
                 return;
             }
         }, 'notify::players']],

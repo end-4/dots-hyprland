@@ -123,7 +123,7 @@ const BarBattery = () => {
             ['fallback', memUsage],
             ['battery', batteryWidget],
         ],
-        setup: (stack) => Utils.timeout(1, () => {
+        setup: (stack) => Utils.timeout(1, () => { // On desktops systems with no battery, show memory usage instead
             if (Battery.available) stack.shown = 'battery';
             else stack.shown = 'fallback';
         })
@@ -134,6 +134,7 @@ const BarBattery = () => {
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
         className: 'bar-group-margin bar-sides',
         children: [

@@ -121,6 +121,7 @@ class ChatGPTService extends Service {
     _assistantPrompt = false;
     _messages = [];
     _cycleModels = true;
+    _temperature = 0.5;
     _requestCount = 0;
     _modelIndex = 0;
     _key = '';
@@ -158,6 +159,9 @@ class ChatGPTService extends Service {
             this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
         }
     }
+
+    get temperature() { return this._temperature }
+    set temperature(value) { this._temperature = value; }
 
     get messages() { return this._messages }
     get lastMessage() { return this._messages[this._messages.length - 1] }
@@ -218,6 +222,8 @@ class ChatGPTService extends Service {
         const body = {
             model: CHAT_MODELS[this._modelIndex],
             messages: this._messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
+            temperature: this._temperature,
+            // temperature: 2, // <- Nuts
             stream: true,
         };
 
