@@ -1,0 +1,129 @@
+// * {
+//     border: 1px solid $onSurfaceVariant; // Debugging
+// }
+
+// *:focus {
+//     outline: 1px solid mix($onSurface, $surface, 40%);
+//     -gtk-outline-radius: $rounding_small;
+// }
+
+* {
+    selection {
+        background-color: $secondary;
+        color: $onSecondary;
+    }
+
+    caret-color: $primary;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+tooltip {
+    animation-name: appear;
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+}
+
+menu {
+    @include elevation-border-softer;
+    padding: 0.681rem;
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.159rem;
+    -gtk-outline-radius: 1.159rem;
+
+    animation-name: appear;
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+}
+
+menubar>menuitem {
+    border-radius: 0.545rem;
+    -gtk-outline-radius: 0.545rem;
+    min-width: 13.636rem;
+    min-height: 2.727rem;
+}
+
+menu>menuitem {
+    padding: 0.4em 1.5rem;
+    background: transparent;
+    transition: 0.2s ease background;
+    border-radius: 0.545rem;
+    -gtk-outline-radius: 0.545rem;
+}
+
+menu>menuitem:hover,
+menu>menuitem:focus {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
+}
+
+.separator-line {
+    background-color: $surfaceVariant;
+    min-width: 0.068rem;
+    min-height: 0.068rem;
+}
+
+tooltip {
+    @include normal-rounding;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border: 1px solid $onSurfaceVariant;
+}
+
+.configtoggle-box {
+    padding: 0.205rem;
+    border: 0.136rem solid transparent;
+}
+
+.configtoggle-box:focus {
+    padding: 0.205rem;
+    border: 0.136rem solid mix($onSurface, $surface, 40%);
+}
+
+.switch-bg {
+    @include menu_decel;
+    @include full-rounding;
+    background-color: mix($surface, $background, 50%);
+    border: 0.136rem solid $onSurface;
+    min-width: 2.864rem;
+    min-height: 1.637rem;
+}
+
+.switch-bg-true {
+    background-color: $primary;
+    border: 0.136rem solid $primary;
+}
+
+.switch-fg {
+    @include full-rounding;
+    @include menu_decel;
+    background-color: $onSurface;
+    color: $surface;
+    min-width: 0.819rem;
+    min-height: 0.819rem;
+    margin-left: 0.477rem;
+}
+
+.switch-fg-true {
+    background-color: $onPrimary;
+    color: $primary;
+    min-width: 1.431rem;
+    min-height: 1.431rem;
+    margin-left: 1.431rem;
+}
+
+.switch-fg-toggling-false {
+    @include menu_decel;
+    min-width: 1.636rem;
+    min-height: 0.819rem;
+}

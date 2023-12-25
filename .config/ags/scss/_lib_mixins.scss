@@ -1,0 +1,205 @@
+// Common colors
+$hovercolor: rgba(128, 128, 128, 0.3);
+$activecolor: rgba(128, 128, 128, 0.7);
+$rounding_small: 0.818rem;
+$rounding_mediumsmall: 0.955rem;
+$rounding_medium: 1.159rem;
+$rounding_mediumlarge: 1.364rem;
+$rounding_large: 1.705rem;
+
+// Common rules
+@mixin small-rounding {
+    border-radius: $rounding_small;
+    -gtk-outline-radius: $rounding_small;
+}
+
+@mixin normal-rounding {
+    border-radius: $rounding_medium;
+    -gtk-outline-radius: $rounding_medium;
+}
+
+@mixin large-rounding {
+    border-radius: $rounding_large;
+    -gtk-outline-radius: $rounding_large;
+}
+
+@mixin full-rounding {
+    border-radius: 9999px;
+    -gtk-outline-radius: 9999px;
+}
+
+@mixin titlefont {
+    // Geometric sans-serif
+    font-family:
+        'Gabarito',
+        'Poppins',
+        'Lexend',
+        sans-serif;
+}
+
+@mixin mainfont {
+    // Other clean sans-serif
+    font-family:
+        'Geist',
+        'AR One Sans',
+        'Reddit Sans',
+        'Inter',
+        'Roboto',
+        'Ubuntu',
+        'Noto Sans',
+        sans-serif;
+    // font-weight: 500;
+}
+
+@mixin icon-material {
+    // Material Design Icons
+    font-family:
+        'Material Symbols Rounded',
+        'Material Symbols Outlined',
+        'Material Symbols Sharp';
+}
+
+@mixin icon-nerd {
+    // Nerd Fonts
+    font-family:
+        'SpaceMono NF', 'SpaceMono Nerd Font',
+        'JetBrains Mono NF', 'JetBrains Mono Nerd Font',
+        monospace;
+}
+
+@mixin techfont {
+    // Monospace for sys info n stuff. Doesn't have to be a nerd font, but it's cool.
+    font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
+}
+
+@mixin readingfont {
+    // The most readable fonts, for a comfortable reading experience
+    // in stuff like ChatGPT widget
+    font-family:
+        'Lexend',
+        'Noto Sans',
+        sans-serif;
+    // font-weight: 500;
+}
+
+@mixin subtext {
+    color: $subtext;
+}
+
+@mixin actiontext {
+    color: $actiontext;
+}
+
+
+$elevation_margin: 0.476rem;
+
+@mixin elevation-safe {
+    background: $surface;
+    color: $onSurface;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.69);
+    margin: $elevation_margin;
+}
+
+@mixin elevation2 {
+    box-shadow: 0px 2px 3px transparentize($shadow, 0.55);
+    margin: $elevation_margin;
+}
+
+@mixin elevation2-margin {
+    margin: $elevation_margin;
+}
+
+@mixin elevation2-padding {
+    padding: $elevation_margin;
+}
+
+@mixin elevation3 {
+    box-shadow: 0px 2px 5px $shadow;
+    margin: $elevation_margin;
+}
+
+@mixin menu_decel {
+    transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+}
+
+@mixin menu_decel_fast {
+    transition: 170ms cubic-bezier(0.1, 1, 0, 1);
+}
+
+@mixin menu_accel {
+    transition: 160ms cubic-bezier(0.38, 0.04, 1, 0.07);
+}
+
+@mixin menu_accel_fast {
+    transition: 100ms cubic-bezier(0.38, 0.04, 1, 0.07);
+}
+
+@mixin fluent_decel {
+    // Used for small transitions, as this looks clear
+    transition: 200ms cubic-bezier(0.1, 1, 0, 1);
+}
+
+@mixin fluent_decel_long {
+    // Used for small transitions, as this looks clear
+    transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
+}
+
+@mixin fluent_accel {
+    transition: 150ms cubic-bezier(0.42, 0, 1, 1);
+}
+
+@mixin noanim {
+    transition: 0ms;
+}
+
+@mixin anim-enter {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@mixin anim-exit {
+    transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+@function tint($color, $percentage) {
+    @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+    @return mix(rgb(0, 0, 0), $color, $percentage);
+}
+
+$overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
+$overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
+
+@mixin elevation-border-softer {
+    border-top: 1px solid mix($t_t_surface, $t_onSurface, 90%);
+    border-left: 1px solid mix($t_t_surface, $t_onSurface, 90%);
+    border-right: 1px solid mix($t_t_surface, $t_onSurface, 95%);
+    border-bottom: 1px solid mix($t_t_surface, $t_onSurface, 95%);
+}
+
+@mixin elevation-border {
+    border-top: 1px solid mix($t_t_surface, $onSurface, 90%);
+    border-left: 1px solid mix($t_t_surface, $onSurface, 90%);
+    border-right: 1px solid mix($t_t_surface, $onSurface, 95%);
+    border-bottom: 1px solid mix($t_t_surface, $onSurface, 95%);
+}
+
+@mixin elevation-border-heavier {
+    border-top: 1px solid mix($t_t_surface, $onSurface, 80%);
+    border-left: 1px solid mix($t_t_surface, $onSurface, 80%);
+    border-right: 1px solid mix($t_t_surface, $onSurface, 85%);
+    border-bottom: 1px solid mix($t_t_surface, $onSurface, 85%);
+}
+
+@mixin elevation-border-transparent {
+    border-top: 1px solid transparent;
+}
+
+@mixin button-minsize {
+    min-width: 2.727rem;
+    min-height: 2.727rem;
+}
+
+$white: white;
+$black: black;

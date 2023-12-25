@@ -1,0 +1,116 @@
+.osd-bg {
+    min-width: 8.864rem;
+    min-height: 3.409rem;
+}
+
+.osd-value {
+    background-color: $t_background;
+    border-radius: 1.023rem;
+    padding: 0.625rem 1.023rem;
+    padding-top: 0.313rem;
+    margin: 10px;
+    @include elevation2;
+}
+
+.osd-progress {
+    min-height: 0.955rem;
+    min-width: 0.068rem;
+    padding: 0rem;
+    border-radius: 10rem;
+    @include fluent_decel;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $secondaryContainer;
+        // border: 0.068rem solid $onSecondaryContainer;
+    }
+
+    progress {
+        @include fluent_decel;
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $onSecondaryContainer;
+    }
+}
+
+.osd-icon {
+    color: $onPrimaryContainer;
+}
+
+.osd-label {
+    font-size: 1.023rem;
+    font-weight: 500;
+    color: $onBackground;
+    margin-top: 0.341rem;
+}
+
+.osd-value-txt {
+    @include titlefont;
+    font-size: 1.688rem;
+    font-weight: 500;
+    color: $onBackground;
+}
+
+.osd-notifs {
+    padding-top: 0.313rem;
+}
+
+.osd-colorscheme {
+    border-radius: 1.023rem;
+    background-color: $t_background;
+    padding: 1.023rem;
+    @include elevation2;
+}
+
+.osd-color {
+    @include full-rounding;
+    min-width: 2.727rem;
+    min-height: 1.705rem;
+    padding: 0rem 0.341rem;
+    font-weight: bold;
+
+    box {
+        @include full-rounding;
+        margin: 0.409rem;
+    }
+}
+
+.osd-color-primary {
+    background-color: $primary;
+    color: $onPrimary;
+    box { background-color: $onPrimary; }
+}
+.osd-color-primaryContainer {
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
+    box { background-color: $onPrimaryContainer; }
+}
+.osd-color-secondary {
+    background-color: $secondary;
+    color: $onSecondary;
+    box { background-color: $onSecondary; }
+}
+.osd-color-secondaryContainer {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    box { background-color: $onSecondaryContainer; }
+}
+.osd-color-surfaceVariant {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    box { background-color: $onSurfaceVariant; }
+}
+.osd-color-surface {
+    background-color: $surface;
+    color: $onSurface;
+    box { background-color: $onSurface; }
+}
+.osd-color-background {
+    background-color: $background;
+    color: $onBackground;
+    box { background-color: $onBackground; }
+}

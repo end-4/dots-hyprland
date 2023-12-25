@@ -1,0 +1,57 @@
+$primary: lighten($color4, 20%);
+$onPrimary: darken($color2, 20%);
+$primaryContainer: darken($color2, 10%);
+$onPrimaryContainer: lighten($color4, 10%);
+$secondary: desaturate(lighten($color5, 20%), 20%);
+$onSecondary: desaturate(darken($color3, 20%), 20%);
+$secondaryContainer: desaturate(darken($color3, 20%), 20%);
+$onSecondaryContainer: desaturate(lighten($color5, 20%), 20%);
+$tertiary: adjust-hue(lighten($color4, 20%), 30deg);
+$onTertiary: adjust-hue(darken($color2, 20%), 30deg);
+$tertiaryContainer: adjust-hue(darken($color2, 10%), 30deg);
+$tertiaryContainer: adjust-hue(lighten($color4, 10%), 30deg);
+$error: #ffb4a9;
+$onError: #680003;
+$errorContainer: #930006;
+$onErrorContainer: #ffb4a9;
+$colorbarbg: $color0;
+$background: $color0;
+$onBackground: $color7;
+$surface: $color0;
+$onSurface: $color7;
+$surfaceVariant: $color1;
+$onSurfaceVariant: $color7;
+$outline: $color7;
+$shadow: #000000;
+$inverseSurface: invert($surface);
+$inverseOnSurface: invert($onSurface);
+$inversePrimary: invert($primary);
+
+.primary { color: $primary; }
+.onPrimary { color: $onPrimary; }
+.primaryContainer { color: $primaryContainer; }
+.onPrimaryContainer { color: $onPrimaryContainer; }
+.secondary { color: $secondary; }
+.onSecondary { color: $onSecondary; }
+.secondaryContainer { color: $secondaryContainer; }
+.onSecondaryContainer { color: $onSecondaryContainer; }
+.tertiary { color: $tertiary; }
+.onTertiary { color: $onTertiary; }
+.tertiaryContainer { color: $tertiaryContainer; }
+.onTertiaryContainer { color: $tertiaryContainer; }
+.error { color: $error; }
+.onError { color: $onError; }
+.errorContainer { color: $errorContainer; }
+.onErrorContainer { color: $onErrorContainer; }
+.colorbarbg { color: $colorbarbg; }
+.background { color: $background; }
+.onBackground { color: $onBackground; }
+.surface { color: $surface; }
+.onSurface { color: $onSurface; }
+.surfaceVariant { color: $surfaceVariant; }
+.onSurfaceVariant { color: $onSurfaceVariant; }
+.outline { color: $outline; }
+.shadow { color: $shadow; }
+.inverseSurface { color: $inverseSurface; }
+.inverseOnSurface { color: $inverseOnSurface; }
+.inversePrimary { color: $inversePrimary; }

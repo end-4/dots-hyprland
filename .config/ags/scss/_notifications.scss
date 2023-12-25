@@ -1,0 +1,152 @@
+$notif_surface: $t_background;
+
+@mixin notif-rounding {
+    @include normal-rounding;
+}
+
+.notif-low {
+    @include notif-rounding;
+    background-color: $l_l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-normal {
+    @include notif-rounding;
+    background-color: $l_l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-critical {
+    @include notif-rounding;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-low {
+    @include notif-rounding;
+    min-width: 30.682rem;
+    background-color: $notif_surface;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-normal {
+    @include notif-rounding;
+    min-width: 30.682rem;
+    background-color: $notif_surface;
+    color: $onSurfaceVariant;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-critical {
+    @include notif-rounding;
+    min-width: 30.682rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    padding: $rounding_small;
+    padding-right: $rounding_small + 0.545rem;
+}
+
+.notif-body-low {
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
+}
+
+.notif-body-normal {
+    color: mix($onSurfaceVariant, $surfaceVariant, 67%);
+}
+
+.notif-body-critical {
+    color: mix($onSecondaryContainer, $secondaryContainer, 67%);
+}
+
+.notif-icon {
+    @include full-rounding;
+    min-width: 3.409rem;
+    min-height: 3.409rem;
+}
+
+.notif-icon-material {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-low {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-normal {
+    background-color: $t_secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-icon-material-critical {
+    background-color: $t_onSecondaryContainer;
+    color: $secondaryContainer;
+}
+
+.notif-close-btn {
+    @include notif-rounding;
+    padding: 0rem 0.136rem;
+}
+
+.notif-close-btn:hover,
+.notif-close-btn:focus {
+    background: $hovercolor;
+}
+
+.notif-close-btn:active {
+    background: $activecolor;
+}
+
+.notif-closeall-btn {
+    @include notif-rounding;
+    padding: 0.341rem 0.341rem;
+}
+
+.notif-closeall-btn:hover,
+.notif-closeall-btn:focus {
+    background-color: $hovercolor;
+}
+
+.notif-closeall-btn:active {
+    background-color: $activecolor;
+}
+
+.osd-notif {
+    @include notif-rounding;
+    background-color: transparentize($background, $transparentize_surface_amount_subtract_surface);
+    min-width: 30.682rem;
+}
+
+.notif-circprog-low {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onSecondaryContainer;
+}
+
+.notif-circprog-normal {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onSecondaryContainer;
+}
+
+.notif-circprog-critical {
+    transition: 0ms linear;
+    min-width: 0.136rem; // line width
+    min-height: 1.770rem;
+    padding: 0rem;
+    color: $onSecondaryContainer;
+}

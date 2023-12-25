@@ -1,0 +1,89 @@
+@mixin bg-textshadow {
+    // text-shadow: mix($shadow, $secondaryContainer, 50%) 1px 0px 3px;
+}
+
+.bg-time-box {
+    @include large-rounding;
+    margin: 2.045rem;
+    padding: 0.682rem;
+}
+
+.bg-time-clock {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 5.795rem;
+    color: $onBackground;
+}
+
+.bg-time-date {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 2.591rem;
+    color: $onBackground;
+}
+
+.bg-distro-box {
+    @include large-rounding;
+    margin: 2.045rem;
+    padding: 0.682rem;
+}
+
+.bg-distro-txt {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 1.432rem;
+    color: $onBackground;
+}
+
+.bg-distro-name {
+    @include bg-textshadow;
+    font-family: 'Gabarito';
+    font-size: 1.432rem;
+    color: $onSecondaryContainer;
+}
+
+.bg-graph {
+    color: rgba(255, 255, 255, 0.5);
+    border-radius: 0.614rem;
+    border: 0.682rem solid;
+}
+
+.bg-quicklaunch-title {
+    @include mainfont;
+    color: $onSurfaceVariant;
+}
+
+.bg-quicklaunch-btn {
+    @include mainfont;
+    @include full-rounding;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border: 0.068rem solid $subtext;
+    min-width: 4.432rem;
+    min-height: 2.045rem;
+    padding: 0.273rem 0.682rem;
+}
+
+.bg-quicklaunch-btn:hover,
+.bg-quicklaunch-btn:focus {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 95%);
+}
+
+.bg-quicklaunch-btn:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
+}
+
+.bg-system-bg {
+    @include normal-rounding;
+    // background-color: $background;
+}
+
+.bg-system-circprog {
+    @include fluent_decel_long;
+    // margin-left: 0.273rem;
+    min-width: 0.205rem; // Trough stroke width
+    min-height: 4.091rem; // Diameter
+    font-size: 0px;
+    padding: 0rem;
+    background-color: $surfaceVariant;
+}
