@@ -5,11 +5,11 @@
 
 ## Description
 - [AGS](https://github.com/Aylur/ags/)-powered.
-- Scalable. Light/Dark mode support. Material colors that adapt to your wallpaper
+- Scalable. Light/Dark mode support. Material colors adapt to your wallpaper
 
 ## Preview
-![image](./assets/illogical_impulse_dark.png)
-![image](./assets/illogical_impulse_light.png)
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/415e5cce-9236-4fae-b445-866b06890602)
+
 
 ## Instructions
 - See the wiki for instructions > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse) 
