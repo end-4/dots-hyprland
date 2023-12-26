@@ -39,7 +39,7 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
         }
     },
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center bluetooth', '&']);
+        execAsync(['bash', '-c', 'blueberry &']);
     },
     child: BluetoothIndicator(),
     connections: [
