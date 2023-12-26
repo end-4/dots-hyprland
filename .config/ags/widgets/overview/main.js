@@ -3,7 +3,7 @@ import { SearchAndWindows } from "./overview.js";
 
 export default () => Widget.Window({
     name: 'overview',
-    exclusivity: 'normal',
+    exclusivity: 'ignore',
     focusable: true,
     popup: true,
     visible: false,

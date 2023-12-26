@@ -29,14 +29,12 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
 export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Bluetooth | Right-click to configure',
-    onClicked: () => { // Provided service doesn't work hmmm
+    onClicked: () => {
         const status = Bluetooth?.enabled;
-        if (status) {
+        if (status) 
             exec('rfkill block bluetooth');
-        }
-        else {
+        else 
             exec('rfkill unblock bluetooth');
-        }
     },
     onSecondaryClickRelease: () => {
         execAsync(['bash', '-c', 'blueberry &']);
