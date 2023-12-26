@@ -106,7 +106,7 @@ const Taskbar = () => Widget.Box({
             box.children = Array.from(box._map.values());
         }],
         ['add', (box, address) => {
-            if (!address) { // Since the first active emit is undefined
+            if (!address) { // First active emit is undefined
                 box._update(box);
                 return;
             }
@@ -174,7 +174,7 @@ const PinnedApps = () => Widget.Box({
                     const running = Hyprland.clients
                         .find(client => client.class.toLowerCase().includes(term)) || false;
 
-                    button.toggleClassName('nonrunning', !running);
+                    button.toggleClassName('notrunning', !running);
                     button.toggleClassName('focused', Hyprland.active.client.address == running.address);
                     button.set_tooltip_text(running ? running.title : app.name);
                 }, 'notify::clients']],

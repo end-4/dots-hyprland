@@ -62,6 +62,7 @@ const navIndicator = NavigationIndicator(2, false, { // The line thing
 
 const navBar = Box({
     vertical: true,
+    hexpand: true,
     children: [
         Box({
             homogeneous: true,
@@ -74,10 +75,38 @@ const navBar = Box({
     ]
 })
 
+const pinButton = Button({
+    properties: [
+        ['enabled', false],
+    ],
+    vpack: 'start',
+    className: 'sidebar-pin',
+    child: MaterialIcon('push_pin', 'larger'),
+    tooltipText: 'Pin sidebar',
+    onClicked: (self) => {
+        self._enabled = !self._enabled;
+        self.toggleClassName('sidebar-pin-enabled', self._enabled);
+
+        const sideleftWindow = App.getWindow('sideleft');
+        const sideleftContent = sideleftWindow.get_children()[0].get_children()[0].get_children()[1];
+        // console.log(sideleftWindow.exclusivity);
+        sideleftWindow.exclusivity = (self._enabled ? 'exclusive' : 'normal');
+        sideleftWindow.layer = (self._enabled ? 'bottom' : 'top');
+        sideleftContent.toggleClassName('sidebar-pinned', self._enabled);
+    },
+    // QoL: Focus Pin button on open. Hit keybind -> space/enter = toggle pin state
+    connections: [[App, (self, currentName, visible) => {
+        if (currentName === 'sideleft' && visible) {
+            self.grab_focus();
+        }
+    }]]
+})
+
 export default () => Box({
     // vertical: true,
     vexpand: true,
     hexpand: true,
+    css: 'min-width: 2px;',
     children: [
         EventBox({
             onPrimaryClick: () => App.closeWindow('sideleft'),
@@ -89,9 +118,20 @@ export default () => Box({
             vexpand: true,
             className: 'sidebar-left',
             children: [
-                navBar,
+                Box({
+                    className: 'spacing-h-10',
+                    children: [
+                        navBar,
+                        pinButton,
+                    ]
+                }),
                 contentStack,
-            ]
+            ],
+            connections: [[App, (self, currentName, visible) => {
+                if (currentName === 'sideleft') {
+                    self.toggleClassName('sidebar-pinned', pinButton._enabled && visible);
+                }
+            }]]
         }),
     ],
     connections: [
