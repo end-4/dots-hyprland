@@ -1769,9 +1769,24 @@ tooltip {
   min-width: 1.705rem;
   min-height: 1.705rem; }
 
+.sidebar-chat-apiswitcher {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  padding: 0.341rem;
+  background-color: #1e1c20; }
+
+.sidebar-chat-apiswitcher-icon {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  min-width: 2.182rem;
+  min-height: 2.182rem;
+  color: #e7e1e6; }
+
+.sidebar-chat-apiswitcher-icon-enabled {
+  color: #d6baff; }
+
 .sidebar-chat-viewport {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  margin: 0.682rem 0rem;
   padding: 0.682rem 0rem; }
 
 .sidebar-chat-textarea {

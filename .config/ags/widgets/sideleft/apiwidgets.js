@@ -1,10 +1,12 @@
+const { Gtk, Gdk } = imports.gi;
 import { App, Utils, Widget } from '../../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
-import { chatGPTView, chatGPTCommands, chatGPTSendMessage } from './apis/chatgpt.js';
+import { chatGPTView, chatGPTCommands, chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { waifuView, waifuCommands, waifuCallAPI, waifuTabIcon } from './apis/waifu.js';
 
 const APIS = [
     {
@@ -12,20 +14,18 @@ const APIS = [
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
-        tabIcon: Box({}),
-    }
+        tabIcon: chatGPTTabIcon,
+    },
+    {
+        name: 'Waifus',
+        sendCommand: waifuCallAPI,
+        contentWidget: waifuView,
+        commandBar: waifuCommands,
+        tabIcon: waifuTabIcon,
+    },
 ];
 let currentApiId = 0;
-
-const apiSwitcher = Box({
-    vertical: true,
-    children: [
-        Box({
-            homogeneous: true,
-            children: APIS.map(api => api.tabIcon),
-        }),
-    ]
-})
+APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
 
 export const chatEntry = Entry({
     className: 'sidebar-chat-entry',
@@ -75,7 +75,36 @@ const apiCommandStack = Stack({
     items: APIS.map(api => [api.name, api.commandBar]),
 })
 
+function switchToTab(id) {
+    APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', false);
+    APIS[id].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
+    apiContentStack.shown = APIS[id].name;
+    apiCommandStack.shown = APIS[id].name;
+    currentApiId = id;
+}
+const apiSwitcher = Box({
+    homogeneous: true,
+    children: [
+        Box({
+            className: 'sidebar-chat-apiswitcher spacing-h-5',
+            hpack: 'center',
+            children: APIS.map((api, id) => Button({
+                child: api.tabIcon,
+                tooltipText: api.name,
+                setup: setupCursorHover,
+                onClicked: () => {
+                    switchToTab(id);
+                }
+            })),
+        }),
+    ]
+})
+
 export default Widget.Box({
+    properties: [
+        ['nextTab', () => switchToTab(Math.min(currentApiId + 1, APIS.length - 1))],
+        ['prevTab', () => switchToTab(Math.max(0, currentApiId-1))],
+    ],
     vertical: true,
     className: 'spacing-v-10',
     homogeneous: false,
@@ -84,5 +113,5 @@ export default Widget.Box({
         apiContentStack,
         apiCommandStack,
         textboxArea,
-    ]
+    ],
 });

@@ -500,9 +500,26 @@ $onChatgpt: $onPrimary;
     min-height: 1.705rem;
 }
 
+.sidebar-chat-apiswitcher {
+    @include full-rounding;
+    @include group-padding;
+    background-color: $surface;
+}
+
+.sidebar-chat-apiswitcher-icon {
+    @include full-rounding;
+    min-width:  2.182rem;
+    min-height: 2.182rem;
+    color: $onSurface;
+}
+
+.sidebar-chat-apiswitcher-icon-enabled {
+    color: $primary;
+}
+
 .sidebar-chat-viewport {
     @include menu_decel;
-    margin: 0.682rem 0rem;
+    // margin: 0.682rem 0rem;
     padding: 0.682rem 0rem;
 }
 
@@ -721,3 +738,4 @@ $onChatgpt: $onPrimary;
 .sidebar-pin-enabled:active {
     background-color: mix($primary, $onPrimary, 80%);
 }
+
