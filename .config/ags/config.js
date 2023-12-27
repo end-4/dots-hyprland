@@ -52,13 +52,6 @@ export default {
         SideRight(),
         Osk(), // On-screen keyboard
         Session(), // Power menu, if that's what you like to call it
+        Bar()
     ],
 };
-
-// We don't want context menus of the bar's tray go under the rounded corner below,
-// so bar is returned after default export, making it get spawned after the corner
-// (having an Utils.timeout in that window array just gives an error)
-// Not having it in default export is fine since we don't need to toggle it
-Bar(); 
-
-// uwu 

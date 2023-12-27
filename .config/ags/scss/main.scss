@@ -35,5 +35,6 @@
 .sidebar-pinned {
     margin: 0rem;
     border-radius: 0rem;
-    border: 0rem solid transparent;
+    border-bottom-right-radius: $rounding_large;
+    border: 0rem solid;
 }
