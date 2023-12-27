@@ -41,6 +41,8 @@ echo 'cp -r "./.local" "$HOME"'
 cp -r "./.local" "$HOME" || echo "cp threw error. You could cp this yourself."
 #####################################################################################
 echo 'Finished. See the "Import manually" folder and grab anything you need.'
+echo 'Press Ctrl+Super+T to select a wallpaper'
+echo 'Press Super+/ for a list of keybinds'
 
 
 
