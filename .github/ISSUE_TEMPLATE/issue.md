@@ -1,7 +1,7 @@
 ---
 name: Issue
 about: for reporting any issue
-title: ''
+title: "[Issue]"
 labels: ''
 assignees: ''
 
