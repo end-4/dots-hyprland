@@ -57,7 +57,7 @@ const contentStack = Stack({
 
 const navIndicator = NavigationIndicator(2, false, { // The line thing
     className: 'sidebar-selector-highlight',
-    css: 'font-size: 0px; padding: 0rem 4.773rem;', // Shushhhh
+    css: 'font-size: 0px; padding: 0rem 4.160rem;', // Shushhhh
 })
 
 const navBar = Box({
@@ -88,11 +88,23 @@ const pinButton = Button({
         self.toggleClassName('sidebar-pin-enabled', self._enabled);
 
         const sideleftWindow = App.getWindow('sideleft');
+        const barWindow = App.getWindow('bar');
+        const cornerTopLeftWindow = App.getWindow('cornertl');
         const sideleftContent = sideleftWindow.get_children()[0].get_children()[0].get_children()[1];
-        // console.log(sideleftWindow.exclusivity);
+
         sideleftWindow.exclusivity = (self._enabled ? 'exclusive' : 'normal');
-        sideleftWindow.layer = (self._enabled ? 'bottom' : 'top');
         sideleftContent.toggleClassName('sidebar-pinned', self._enabled);
+
+        if(self._enabled) {
+            sideleftWindow.layer = 'bottom';
+            barWindow.layer = 'bottom';
+            cornerTopLeftWindow.layer = 'bottom';
+        }
+        else {
+            sideleftWindow.layer = 'top';
+            barWindow.layer = 'top';
+            cornerTopLeftWindow.layer = 'top';
+        }
     },
     // QoL: Focus Pin button on open. Hit keybind -> space/enter = toggle pin state
     connections: [[App, (self, currentName, visible) => {
