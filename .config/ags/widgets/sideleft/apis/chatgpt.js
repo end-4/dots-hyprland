@@ -9,19 +9,16 @@ import { SystemMessage, ChatMessage } from "./chatgpt_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../../lib/configwidgets.js';
 import { markdownTest } from '../../../lib/md2pango.js';
 
-const chatGPTTabIcon = Icon({
+export const chatGPTTabIcon = Box({
     hpack: 'center',
-    className: 'sidebar-chat-welcome-logo',
-    icon: `${App.configDir}/assets/openai-logomark.svg`,
-    setup: (self) => Utils.timeout(1, () => {
-        const styleContext = self.get_style_context();
-        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-        self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
-    })
+    className: 'sidebar-chat-apiswitcher-icon',
+    homogeneous: true,
+    children: [
+        MaterialIcon('forum', 'norm'),
+    ],
 });
 
-export const chatGPTInfo = Box({
+const chatGPTInfo = Box({
     vertical: true,
     className: 'spacing-v-15',
     children: [
@@ -195,11 +192,12 @@ export const chatGPTView = Scrollable({
         ]
     }),
     setup: (scrolledWindow) => {
+        // Show scrollbar
         scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         const vScrollbar = scrolledWindow.get_vscrollbar();
         vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-
-        Utils.timeout(1, () => { // Fix click-to-scroll-widget-to-view behavior
+        // Avoid click-to-scroll-widget-to-view behavior
+        Utils.timeout(1, () => { 
             const viewport = scrolledWindow.child;
             viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
         })

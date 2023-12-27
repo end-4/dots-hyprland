@@ -28,7 +28,7 @@ const m2p_styles = [
     { name: EMPH, re: /\*(\S.*?\S)\*/g, sub: "<i>$1</i>" },
     // { name: EMPH, re: /_(\S.*?\S)_/g, sub: "<i>$1</i>" },
     { name: HEXCOLOR, re: /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g, sub: `<span bgcolor='#$1' fgcolor='#000000' font_family='${monospaceFonts}'> #$1 </span>` },
-    { name: INLCODE, re: /(`)([^`]*)(`)/g, sub: `<span font_weight='bold' font_family='${monospaceFonts}' bgcolor='#000000' fgcolor='#ffffff'> $2 </span>` },
+    { name: INLCODE, re: /(`)([^`]*)(`)/g, sub: `<span font_weight='bold' font_family='${monospaceFonts}'> $2 </span>` },
     // { name: UND, re: /(__|\*\*)(\S[\s\S]*?\S)(__|\*\*)/g, sub: "<u>$2</u>" },
 ]
 
