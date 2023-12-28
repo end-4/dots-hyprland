@@ -6,11 +6,15 @@ const { Gravity } = imports.gi.Gdk;
 
 const revealerDuration = 200;
 
+const {iconSize,gap} = trayPreferences.getValue();
+
 const SysTrayItem = item => Button({
     className: 'bar-systray-item',
     child: Icon({
         hpack: 'center',
-        binds: [['icon', item, 'icon']]
+        binds: [['icon', item, 'icon']],
+        css: `margin-left: ${gap}px;`,
+        size: iconSize
     }),
     binds: [['tooltipMarkup', item, 'tooltip-markup']],
     onClicked: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
