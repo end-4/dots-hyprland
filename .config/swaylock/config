@@ -1,22 +1,22 @@
 ignore-empty-password
-font=monospace
-font-size=80
+font=sans-serif
+font-size=50
 
 clock
 timestr=%R
 #datestr=%a, %e of %B
 
-screenshots
+#screenshots
+color=00000099
 
-fade-in=0.1
-
-effect-blur=20x2
-# effect-greyscale
-effect-scale=0.3
+#fade-in=0.1
+#effect-blur=20x2
+#effect-greyscale
+#effect-scale=0.3
 
 indicator
-indicator-radius=250
-indicator-thickness=20
+indicator-radius=150
+indicator-thickness=12
 indicator-caps-lock
 
 key-hl-color=d4d4d4
