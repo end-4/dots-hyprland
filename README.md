@@ -72,7 +72,7 @@
 ---
 
 # 🙏 Attribution
- - AGS: [Aylur's config](https://github.com/Aylur/dotfiles)
+ - AGS: [Aylur's config](https://github.com/Aylur/dotfiles), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
  - Open source contributors for their software and ricers for their insipration (would be a too long list to put here!)
