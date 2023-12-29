@@ -51,10 +51,10 @@ export const Tray = (props = {}) => {
                     trayRevealer.revealChild = false;
             }],
         ],
-        connections: [
-            [SystemTray, (box, id) => box._onAdded(box, id), 'added'],
-            [SystemTray, (box, id) => box._onRemoved(box, id), 'removed'],
-        ],
+        setup: (self) => self
+            .hook(SystemTray, (box, id) => box._onAdded(box, id), 'added')
+            .hook(SystemTray, (box, id) => box._onRemoved(box, id), 'removed')
+        ,
     });
     const trayRevealer = Widget.Revealer({
         revealChild: false,

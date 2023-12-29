@@ -27,18 +27,18 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
         transition: 150,
         transition: 'slide_left',
         revealChild: false,
-        connections: [
-            [Notifications, (self, id) => {
+        setup: (self) => self
+            .hook(Notifications, (self, id) => {
                 if (!id || Notifications.dnd) return;
                 if (!Notifications.getNotification(id)) return;
                 self.revealChild = true;
-            }, 'notified'],
-            [App, (self, currentName, visible) => {
+            }, 'notified')
+            .hook(App, (self, currentName, visible) => {
                 if (visible && currentName === notifCenterName) {
                     self.revealChild = false;
                 }
-            }],
-        ],
+            })
+        ,
         child: Widget.Box({
             children: [
                 MaterialIcon('notifications', 'norm'),
@@ -50,20 +50,20 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
                         ['update', (self) => self.label = `${self._unreadCount}`],
                         ['unreadCount', 0],
                     ],
-                    connections: [
-                        [Notifications, (self, id) => {
+                    setup: (self) => self
+                        .hook(Notifications, (self, id) => {
                             if (!id || Notifications.dnd) return;
                             if (!Notifications.getNotification(id)) return;
                             self._increment(self);
                             self._update(self);
-                        }, 'notified'],
-                        [App, (self, currentName, visible) => {
+                        }, 'notified')
+                        .hook(App, (self, currentName, visible) => {
                             if (visible && currentName === notifCenterName) {
                                 self._markread(self);
                                 self._update(self);
                             }
-                        }],
-                    ]
+                        })
+                    ,
                 })
             ]
         })
@@ -77,7 +77,11 @@ export const BluetoothIndicator = () => Widget.Stack({
         ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
         ['false', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' })],
     ],
-    connections: [[Bluetooth, stack => { stack.shown = String(Bluetooth.enabled); }]],
+    setup: (self) => self
+        .hook(Bluetooth, stack => {
+            stack.shown = String(Bluetooth.enabled);
+        })
+    ,
 });
 
 
@@ -90,7 +94,7 @@ const NetworkWiredIndicator = () => Widget.Stack({
         ['connected', Widget.Label({ className: 'txt-norm icon-material', label: 'lan' })],
         ['connecting', Widget.Label({ className: 'txt-norm icon-material', label: 'settings_ethernet' })],
     ],
-    connections: [[Network, stack => {
+    setup: (self) => self.hook(Network, stack => {
         if (!Network.wired)
             return;
 
@@ -101,15 +105,15 @@ const NetworkWiredIndicator = () => Widget.Stack({
             stack.shown = 'disconnected';
         else
             stack.shown = 'fallback';
-    }]],
+    }),
 });
 
 const SimpleNetworkIndicator = () => Widget.Icon({
-    connections: [[Network, self => {
+    setup: (self) => self.hook(Network, self => {
         const icon = Network[Network.primary || 'wifi']?.iconName;
         self.icon = icon || '';
         self.visible = icon;
-    }]],
+    }),
 });
 
 const NetworkWifiIndicator = () => Widget.Stack({
@@ -124,7 +128,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
         ['3', Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_3_bar' })],
         ['4', Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_4_bar' })],
     ],
-    connections: [[Network, (stack) => {
+    setup: (self) => self.hook(Network, (stack) => {
         if (!Network.wifi) {
             return;
         }
@@ -134,7 +138,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
         else if (Network.wifi.internet == 'disconnected' || Network.wifi.internet == 'connecting') {
             stack.shown = Network.wifi.internet;
         }
-    }]],
+    }),
 });
 
 export const NetworkIndicator = () => Widget.Stack({
@@ -144,8 +148,8 @@ export const NetworkIndicator = () => Widget.Stack({
         ['wifi', NetworkWifiIndicator()],
         ['wired', NetworkWiredIndicator()],
     ],
-    connections: [[Network, stack => {
-        if(!Network.primary) {
+    setup: (self) => self.hook(Network, stack => {
+        if (!Network.primary) {
             stack.shown = 'wifi';
             return;
         }
@@ -154,7 +158,7 @@ export const NetworkIndicator = () => Widget.Stack({
             stack.shown = primary;
         else
             stack.shown = 'fallback';
-    }]],
+    }),
 });
 
 const KeyboardLayout = ({ useFlag } = {}) => {
@@ -192,22 +196,20 @@ const KeyboardLayout = ({ useFlag } = {}) => {
             ...languageStackArray,
             ['undef', Widget.Label({ label: '?' })]
         ],
-        connections: [
-            [Hyprland, (stack, kbName, layoutName) => {
-                if (!kbName) {
-                    return;
-                }
-                var lang = languages.find(lang => layoutName.includes(lang.name));
-                if (lang) {
-                    widgetContent.shown = lang.layout;
-                }
-                else { // Attempt to support langs not listed
-                    lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
-                    if (!lang) stack.shown = 'undef';
-                    else stack.shown = lang[0];
-                }
-            }, 'keyboard-layout']
-        ],
+        setup: (self) => self.hook(Hyprland, (stack, kbName, layoutName) => {
+            if (!kbName) {
+                return;
+            }
+            var lang = languages.find(lang => layoutName.includes(lang.name));
+            if (lang) {
+                widgetContent.shown = lang.layout;
+            }
+            else { // Attempt to support langs not listed
+                lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
+                if (!lang) stack.shown = 'undef';
+                else stack.shown = lang[0];
+            }
+        }, 'keyboard-layout'),
     });
     widgetRevealer.child = widgetContent;
     return widgetRevealer;

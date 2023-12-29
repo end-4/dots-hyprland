@@ -11,11 +11,11 @@ export const ModuleRightSpace = () => {
     const barTray = Tray();
     const barStatusIcons = StatusIcons({
         className: 'bar-statusicons',
-        connections: [[App, (self, currentName, visible) => {
+        setup: (self) => self.hook(App, (self, currentName, visible) => {
             if (currentName === 'sideright') {
                 self.toggleClassName('bar-statusicons-active', visible);
             }
-        }]],
+        }),
     });
 
     return Widget.EventBox({

@@ -50,9 +50,7 @@ export default () => Widget.Revealer({
     transition: 'slide_down',
     transitionDuration: 200,
     child: colorschemeContent,
-    connections: [
-        [showColorScheme, (revealer) => {
-            revealer.revealChild = showColorScheme.value;
-        }],
-    ],
+    setup: (self) => self.hook(showColorScheme, (revealer) => {
+        revealer.revealChild = showColorScheme.value;
+    }),
 })

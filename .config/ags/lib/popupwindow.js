@@ -17,11 +17,13 @@ export default ({
 
     child: Box({
         className: `${showClassName} ${hideClassName}`,
-        connections: [[App, (self, currentName, visible) => {
-            if (currentName === name) {
-                self.toggleClassName(hideClassName, !visible);
-            }
-        }]],
+        setup: (self) => self
+            .hook(App, (self, currentName, visible) => {
+                if (currentName === name) {
+                    self.toggleClassName(hideClassName, !visible);
+                }
+            })
+        ,
         child: child,
     }),
 });
