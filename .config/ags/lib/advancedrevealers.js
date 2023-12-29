@@ -1,23 +1,25 @@
 const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Variable, Widget } from '../imports.js';
+import { App, SCREEN_WIDTH, SCREEN_HEIGHT, Service, Utils, Variable, Widget } from '../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 
 export const MarginRevealer = ({
     transition = 'slide_down',
     child,
     revealChild,
-    showClass = 'element-show', // These are for animation curve
+    showClass = 'element-show', // These are for animation curve, they don't really hide
     hideClass = 'element-hide', // Don't put margins in these classes!
     extraProperties = [],
     ...rest
 }) => {
-    child.toggleClassName(`${revealChild ? showClass : hideClass}`, true);
     const widget = Scrollable({
+        ...rest,
+        css: `min-height: 0px;`,
         properties: [
             ['revealChild', true], // It'll be set to false after init if it's supposed to hide
             ['transition', transition],
             ['show', (self) => {
                 if (self._revealChild) return;
+                self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
                 child.toggleClassName(hideClass, false);
                 child.toggleClassName(showClass, true);
                 self._revealChild = true;
@@ -38,17 +40,21 @@ export const MarginRevealer = ({
                     child.css = `margin-top: -${child.get_allocated_height()}px;`;
             }],
             ['toggle', (self) => {
+                console.log('toggle');
                 if (self._revealChild) self._hide(self);
                 else self._show(self);
             }],
             ...extraProperties,
         ],
-        child: child,
         setup: (self) => {
-            self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
+            if (!revealChild)
+                self.set_policy(Gtk.PolicyType.ALWAYS, Gtk.PolicyType.ALWAYS);
+            else
+                self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
+            self.child = child;
         },
-        ...rest,
     });
+    child.toggleClassName(`${revealChild ? showClass : hideClass}`, true);
     return widget;
 }
 

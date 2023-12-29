@@ -3,6 +3,7 @@ const { GLib, Gtk } = imports.gi;
 import { App, Service, Utils, Widget } from '../../imports.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 const { Box, Label, ProgressBar, Revealer } = Widget;
+import { MarginRevealer } from '../../lib/advancedrevealers.js';
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
 
@@ -56,11 +57,14 @@ const volumeIndicator = OsdValue('Volume',
     }]],
 );
 
-export default () => Revealer({
+export default () => MarginRevealer({
     transition: 'slide_down',
+    showClass: 'osd-show',
+    hideClass: 'osd-hide',
     connections: [
         [Indicator, (revealer, value) => {
-            revealer.revealChild = (value > -1);
+            if(value > -1) revealer._show(revealer);
+            else revealer._hide(revealer);
         }, 'popup'],
     ],
     child: Box({
