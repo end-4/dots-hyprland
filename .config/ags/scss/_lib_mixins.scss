@@ -161,6 +161,18 @@ $elevation_margin: 0.476rem;
     transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
 }
 
+@mixin element_decel {
+    transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
+}
+
+@mixin element_accel {
+    transition: 300ms cubic-bezier(0.55, 0, 1, 0.45);
+}
+
+@mixin element_easeInOut {
+    transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
+}
+
 @function tint($color, $percentage) {
     @return mix(rgb(245, 250, 255), $color, $percentage);
 }

@@ -4,6 +4,7 @@ const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack }
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
+import WaifuService from '../../../services/waifus.js';
 
 export const waifuTabIcon = Box({
     hpack: 'center',
@@ -14,12 +15,27 @@ export const waifuTabIcon = Box({
     ]
 });
 
+const waifuContent = Box({
+    className: 'spacing-v-15',
+    vertical: true,
+    connections: [
+        [WaifuService, (box, id) => {
+            const message = WaifuService.responses[id];
+            if (!message) return;
+            box.add(Label({
+                label: message,
+            }))
+        }, 'newResponse'],
+    ]
+});
+
 export const waifuView = Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({
         vertical: true,
         children: [
+            waifuContent,
         ]
     }),
     setup: (scrolledWindow) => {
@@ -45,11 +61,12 @@ export const waifuCommands = Box({
                 // command do something
             },
             setup: setupCursorHover,
-            label: '/A command button',
+            label: '/call',
         }),
     ]
 });
 
 export const waifuCallAPI = (text) => {
     // Do something on send
+    WaifuService.fetch(text);
 }

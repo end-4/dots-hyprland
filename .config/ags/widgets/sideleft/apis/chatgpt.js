@@ -8,6 +8,7 @@ import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover
 import { SystemMessage, ChatMessage } from "./chatgpt_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../../lib/configwidgets.js';
 import { markdownTest } from '../../../lib/md2pango.js';
+import { MarginRevealer } from '../../../lib/advancedrevealers.js';
 
 export const chatGPTTabIcon = Box({
     hpack: 'center',
@@ -60,16 +61,15 @@ const chatGPTInfo = Box({
     ]
 })
 
-export const chatGPTSettings = Revealer({
+export const chatGPTSettings = MarginRevealer({
     transition: 'slide_down',
-    transitionDuration: 150,
     revealChild: true,
     connections: [
         [ChatGPT, (self) => Utils.timeout(200, () => {
-            self.revealChild = false;
+            self._hide(self);
         }), 'newMsg'],
         [ChatGPT, (self) => Utils.timeout(200, () => {
-            self.revealChild = true;
+            self._show(self);
         }), 'clear'],
     ],
     child: Box({
@@ -249,6 +249,16 @@ export const chatGPTSendMessage = (text) => {
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
         else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/prompt')) {
+            const firstSpaceIndex = text.indexOf(' ');
+            const prompt = text.slice(firstSpaceIndex + 1);
+            if (firstSpaceIndex == -1 || prompt.length < 1) {
+                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', chatGPTView))
+            }
+            else {
+                ChatGPT.addMessage('user', prompt)
+            }
+        }
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(

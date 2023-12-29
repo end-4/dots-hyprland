@@ -159,6 +159,12 @@
 .spacing-h-15 > revealer:last-child > * {
   margin-right: 0rem; }
 
+.spacing-h-15 > scrolledwindow > * {
+  margin-right: 1.023rem; }
+
+.spacing-h-15 > scrolledwindow:last-child > * {
+  margin-right: 0rem; }
+
 .spacing-v-5 > box {
   margin-bottom: 0.341rem; }
 
@@ -175,6 +181,12 @@
   margin-bottom: 0.341rem; }
 
 .spacing-v-5-revealer > revealer:last-child > * {
+  margin-bottom: 0rem; }
+
+.spacing-v-5-revealer > scrolledwindow > * {
+  margin-bottom: 0.341rem; }
+
+.spacing-v-5-revealer > scrolledwindow:last-child > * {
   margin-bottom: 0rem; }
 
 .spacing-h-5 > * {
@@ -195,6 +207,12 @@
 .spacing-h-5 > revealer:last-child > * {
   margin-right: 0rem; }
 
+.spacing-h-5 > scrolledwindow > * {
+  margin-right: 0.341rem; }
+
+.spacing-h-5 > scrolledwindow:last-child > * {
+  margin-right: 0rem; }
+
 .spacing-v-minus5 > * {
   margin-bottom: -0.341rem; }
 
@@ -211,6 +229,12 @@
   margin-right: 0.682rem; }
 
 .spacing-h-10 > revealer:last-child > * {
+  margin-right: 0rem; }
+
+.spacing-h-10 > scrolledwindow > * {
+  margin-right: 0.682rem; }
+
+.spacing-h-10 > scrolledwindow:last-child > * {
   margin-right: 0rem; }
 
 .spacing-h-10 > flowboxchild > * {
@@ -329,6 +353,12 @@
 
 .menu-decel {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1); }
+
+.element-show {
+  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
+
+.element-hide {
+  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
 
 * {
   caret-color: #d6baff; }
@@ -844,13 +874,14 @@ tooltip {
 .bar-systray {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  min-height: 1.909rem;
-  min-width: 1.909rem; }
+  margin: 0.137rem 0rem;
+  padding: 0rem 0.682rem; }
 
 .bar-systray-item {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  min-width: 1.909rem; }
+  min-height: 1.032rem;
+  min-width: 1.032rem; }
 
 .bar-statusicons {
   border-radius: 9999px;
@@ -2089,16 +2120,17 @@ tooltip {
   background-color: #eadef7;
   color: #4b4358; }
 
-.notif-close-btn {
+.notif-expand-btn {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  padding: 0rem 0.136rem; }
+  min-width: 1.841rem;
+  min-height: 1.841rem; }
 
-.notif-close-btn:hover,
-.notif-close-btn:focus {
+.notif-expand-btn:hover,
+.notif-expand-btn:focus {
   background: rgba(128, 128, 128, 0.3); }
 
-.notif-close-btn:active {
+.notif-expand-btn:active {
   background: rgba(128, 128, 128, 0.7); }
 
 .notif-closeall-btn {
@@ -2122,23 +2154,23 @@ tooltip {
 .notif-circprog-low {
   transition: 0ms linear;
   min-width: 0.136rem;
-  min-height: 1.770rem;
+  min-height: 3.409rem;
   padding: 0rem;
   color: #eadef7; }
 
 .notif-circprog-normal {
   transition: 0ms linear;
   min-width: 0.136rem;
-  min-height: 1.770rem;
+  min-height: 3.409rem;
   padding: 0rem;
   color: #eadef7; }
 
 .notif-circprog-critical {
   transition: 0ms linear;
   min-width: 0.136rem;
-  min-height: 1.770rem;
+  min-height: 3.409rem;
   padding: 0rem;
-  color: #eadef7; }
+  color: #4b4358; }
 
 .osd-music {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);

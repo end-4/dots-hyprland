@@ -7,6 +7,7 @@ const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./materialicon.js";
 import { setupCursorHover } from "./cursorhover.js";
 import { AnimatedCircProg } from "./animatedcircularprogress.js";
+import { MarginRevealer } from './advancedrevealers.js';
 
 function guessMessageType(summary) {
     if (summary.includes('recording')) return 'screen_record';
@@ -43,16 +44,15 @@ const NotificationIcon = (notifObject) => {
         icon = notifObject.appEntry;
 
     return Box({
-        valign: Gtk.Align.CENTER,
+        vpack: 'center',
         hexpand: false,
         className: `notif-icon notif-icon-material-${notifObject.urgency}`,
         homogeneous: true,
         children: [
             (icon != 'NO_ICON' ?
                 Icon({
+                    vpack: 'center',
                     icon: icon,
-                    halign: Gtk.Align.CENTER, hexpand: true,
-                    valign: Gtk.Align.CENTER,
                     setup: (self) => Utils.timeout(1, () => {
                         const styleContext = self.get_parent().get_style_context();
                         const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
@@ -81,7 +81,7 @@ export default ({
     )
     const destroyWithAnims = () => {
         widget.sensitive = false;
-        notificationBox.setCss(rightAnim1);
+        notificationBox.setCss(middleClickClose);
         Utils.timeout(200, () => {
             wholeThing.revealChild = false;
         });
@@ -125,82 +125,124 @@ export default ({
     });
 
     const display = Gdk.Display.get_default();
+    const notifTextPreview = Revealer({
+        transition: 'slide_down',
+        transitionDuration: 300,
+        revealChild: true,
+        child: Label({
+            xalign: 0,
+            className: `txt-smallie notif-body-${notifObject.urgency}`,
+            useMarkup: true,
+            xalign: 0,
+            justify: Gtk.Justification.LEFT,
+            maxWidthChars: 24,
+            truncate: 'end',
+            label: notifObject.body.split("\n")[0],
+        }),
+    });
+    const notifTextExpanded = Revealer({
+        transition: 'slide_up',
+        transitionDuration: 300,
+        revealChild: false,
+        child: Label({
+            xalign: 0,
+            className: `txt-smallie notif-body-${notifObject.urgency}`,
+            useMarkup: true,
+            xalign: 0,
+            justify: Gtk.Justification.LEFT,
+            maxWidthChars: 24,
+            wrap: true,
+            label: notifObject.body,
+        }),
+    });
+    const notifIcon = Box({
+        vpack: 'start',
+        homogeneous: true,
+        children: [
+            Overlay({
+                child: NotificationIcon(notifObject),
+                overlays: [
+                    AnimatedCircProg({
+                        className: `notif-circprog-${notifObject.urgency}`,
+                        valign: Gtk.Align.CENTER,
+                        initFrom: (isPopup ? 100 : 0),
+                        initTo: 0,
+                        initAnimTime: popupTimeout,
+                    })
+                ]
+            }),
+        ]
+    });
+    const notifText = Box({
+        valign: Gtk.Align.CENTER,
+        vertical: true,
+        hexpand: true,
+        children: [
+            Box({
+                children: [
+                    Label({
+                        xalign: 0,
+                        className: 'txt-small txt-semibold titlefont',
+                        justify: Gtk.Justification.LEFT,
+                        hexpand: true,
+                        maxWidthChars: 24,
+                        truncate: 'end',
+                        ellipsize: 3,
+                        // wrap: true,
+                        useMarkup: notifObject.summary.startsWith('<'),
+                        label: notifObject.summary,
+                    }),
+                    Label({
+                        valign: Gtk.Align.CENTER,
+                        className: 'txt-smaller txt-semibold',
+                        justify: Gtk.Justification.RIGHT,
+                        setup: (label) => {
+                            // Let's ignore how it won't work for Jan1 cuz I'm lazy
+                            const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
+                            if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
+                                label.label = messageTime.format('%H:%M');
+                            }
+                            else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
+                                label.label = messageTime.format('Yesterday');
+                            }
+                            else {
+                                label.label = messageTime.format('%d/%m');
+                            }
+                        }
+                    }),
+                ]
+            }),
+            notifTextPreview,
+            notifTextExpanded,
+        ]
+    });
+    const notifExpandButton = Button({
+        vpack: 'start',
+        className: 'notif-expand-btn',
+        onClicked: (self) => {
+            if (notifTextPreview.revealChild) { // Expanding...
+                notifTextPreview.revealChild = false;
+                notifTextExpanded.revealChild = true;
+                self.child.label = 'expand_less';
+            }
+            else {
+                notifTextPreview.revealChild = true;
+                notifTextExpanded.revealChild = false;
+                self.child.label = 'expand_more';
+            }
+        },
+        child: MaterialIcon('expand_more', 'norm', {
+            vpack: 'center',
+        }),
+        setup: setupCursorHover,
+    });
     const notificationContent = Box({
         ...props,
         className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10`,
         children: [
-            NotificationIcon(notifObject),
-            Box({
-                valign: Gtk.Align.CENTER,
-                vertical: true,
-                hexpand: true,
-                children: [
-                    Box({
-                        children: [
-                            Label({
-                                xalign: 0,
-                                className: 'txt-small txt-semibold titlefont',
-                                justify: Gtk.Justification.LEFT,
-                                hexpand: true,
-                                maxWidthChars: 24,
-                                truncate: 'end',
-                                ellipsize: 3,
-                                wrap: true,
-                                useMarkup: notifObject.summary.startsWith('<'),
-                                label: notifObject.summary,
-                            }),
-                            Label({
-                                valign: Gtk.Align.CENTER,
-                                className: 'txt-smaller txt-semibold',
-                                justify: Gtk.Justification.RIGHT,
-                                setup: (label) => {
-                                    // Let's ignore how it won't work for Jan1 cuz I'm lazy
-                                    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
-                                    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
-                                        label.label = messageTime.format('%H:%M');
-                                    }
-                                    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
-                                        label.label = messageTime.format('Yesterday');
-                                    }
-                                    else {
-                                        label.label = messageTime.format('%d/%m');
-                                    }
-                                }
-                            }),
-                        ]
-                    }),
-                    Label({
-                        xalign: 0,
-                        className: `txt-smallie notif-body-${notifObject.urgency}`,
-                        useMarkup: true,
-                        xalign: 0,
-                        justify: Gtk.Justification.LEFT,
-                        wrap: true,
-                        label: notifObject.body,
-                    }),
-                ]
-            }),
-            Overlay({
-                child: AnimatedCircProg({
-                    className: `notif-circprog-${notifObject.urgency}`,
-                    valign: Gtk.Align.CENTER,
-                    initFrom: (isPopup ? 100 : 0),
-                    initTo: 0,
-                    initAnimTime: popupTimeout,
-                }),
-                overlays: [
-                    Button({
-                        className: 'notif-close-btn',
-                        onClicked: () => {
-                            destroyWithAnims()
-                        },
-                        child: MaterialIcon('close', 'large', {
-                            valign: Gtk.Align.CENTER,
-                        }),
-                        setup: setupCursorHover,
-                    }),
-                ]
-            }),
+            notifIcon,
+            notifText,
+            notifExpandButton,
 
             // what is this? i think it should be at the bottom not on the right
             // Box({
@@ -236,10 +278,16 @@ export default ({
                         margin-right: -${Number(maxOffset + endMargin)}rem;
                         opacity: 0;`;
 
+    const middleClickClose = `transition: 200ms cubic-bezier(0.85, 0, 0.15, 1);
+                              margin-left:   ${Number(maxOffset + endMargin)}rem;
+                              margin-right: -${Number(maxOffset + endMargin)}rem;
+                              opacity: 0;`;
+
     const notificationBox = Box({
         properties: [
             ['leftAnim1', leftAnim1],
             ['rightAnim1', rightAnim1],
+            ['middleClickClose', middleClickClose],
             ['ready', false],
         ],
         homogeneous: true,

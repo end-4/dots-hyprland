@@ -9,7 +9,7 @@ import GtkSource from "gi://GtkSource?version=3.0";
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/data/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
-const CHATGPT_CURSOR = '  >> ';
+const CHATGPT_CURSOR = '  (o) ';
 const MESSAGE_SCROLL_DELAY = 13; // In milliseconds, the time before an updated message scrolls to bottom
 
 /////////////////////// Custom source view colorscheme /////////////////////////
@@ -92,10 +92,6 @@ const CodeBlock = (content = '', lang = 'txt') => {
             }),
             Button({
                 className: 'sidebar-chat-codeblock-topbar-btn',
-                onClicked: (self) => {
-                    // execAsync(['bash', '-c', `wl-copy '${content}'`, `&`]).catch(print);
-                    execAsync([`wl-copy`, `${sourceView.label}`]).catch(print);
-                },
                 child: Box({
                     className: 'spacing-h-5',
                     children: [
@@ -104,8 +100,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
                             label: 'Copy',
                         })
                     ]
-                })
-            })
+                }),
+                onClicked: (self) => {
+                    const copyContent = sourceView.get_buffer().get_text(0, 0, 0); // TODO: fix this
+                    console.log(copyContent);
+                    execAsync([`wl-copy`, `${copyContent}`]).catch(print);
+                },
+            }),
         ]
     })
     // Source view

@@ -464,13 +464,14 @@ $notchOnPrimary: $onPrimary;
 
 .bar-systray {
     @include full-rounding;
-    min-height: 1.909rem;
-    min-width: 1.909rem;
+    margin: 0.137rem 0rem;
+    padding: 0rem 0.682rem;
 }
 
 .bar-systray-item {
     @include full-rounding;
-    min-width: 1.909rem;
+    min-height: 1.032rem;
+    min-width: 1.032rem;
 }
 
 .bar-statusicons {

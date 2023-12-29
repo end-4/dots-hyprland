@@ -10,6 +10,7 @@ export default (monitor) => Widget.Window({
     monitor,
     className: 'indicator',
     layer: 'overlay',
+    // exclusivity: 'ignore',
     visible: true,
     anchor: ['top'],
     child: Widget.EventBox({
@@ -18,6 +19,7 @@ export default (monitor) => Widget.Window({
         },
         child: Widget.Box({
             vertical: true,
+            className: 'osd-window',
             css: 'min-height: 2px;',
             children: [
                 IndicatorValues(),
@@ -28,3 +30,4 @@ export default (monitor) => Widget.Window({
         })
     }),
 });
+

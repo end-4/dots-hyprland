@@ -15,6 +15,7 @@ const APIS = [
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
         tabIcon: chatGPTTabIcon,
+        placeholderText: 'Message ChatGPT',
     },
     {
         name: 'Waifus',
@@ -22,6 +23,7 @@ const APIS = [
         contentWidget: waifuView,
         commandBar: waifuCommands,
         tabIcon: waifuTabIcon,
+        placeholderText: 'Enter tags',
     },
 ];
 let currentApiId = 0;
@@ -80,6 +82,7 @@ function switchToTab(id) {
     APIS[id].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
     apiContentStack.shown = APIS[id].name;
     apiCommandStack.shown = APIS[id].name;
+    chatEntry.placeholderText = APIS[id].placeholderText,
     currentApiId = id;
 }
 const apiSwitcher = Box({
