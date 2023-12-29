@@ -12,7 +12,6 @@ export const MarginRevealer = ({
     ...rest
 }) => {
     child.toggleClassName(`${revealChild ? showClass : hideClass}`, true);
-    if(!revealChild) child.css = 'min-height: 2px;';
     const widget = Scrollable({
         properties: [
             ['revealChild', true], // It'll be set to false after init if it's supposed to hide
