@@ -172,6 +172,8 @@ export default () => Box({
                 if (event.get_keyval()[1] == Gdk.KEY_p)
                     pinButton._toggle(pinButton);
                 // Switch sidebar tab
+                else if (event.get_keyval()[1] === Gdk.KEY_Tab)
+                    switchToTab((currentTabId + 1) % contents.length);
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Up)
                     switchToTab(Math.max(currentTabId - 1), 0);
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Down)
