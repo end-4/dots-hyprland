@@ -154,3 +154,53 @@ $notif_surface: $t_background;
     padding: 0rem;
     color: $secondaryContainer;
 }
+
+.notif-actions {
+    min-height: 2.045rem;
+}
+
+.notif-action {
+    @include small-rounding;
+}
+
+.notif-action-low {
+    background-color: $l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+}
+
+.notif-action-low:focus,
+.notif-action-low:hover {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+}
+
+.notif-action-low:active {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+}
+
+.notif-action-normal {
+    background-color: $l_t_surfaceVariant;
+    color: $onSurfaceVariant;
+}
+
+.notif-action-normal:focus,
+.notif-action-normal:hover {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+}
+
+.notif-action-normal:active {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+}
+
+.notif-action-critical {
+    background-color: $t_onSurfaceVariant;
+    color: $onSurfaceVariant;
+}
+
+.notif-action-critical:focus,
+.notif-action-critical:hover {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+}
+
+.notif-action-critical:active {
+    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+}

@@ -144,15 +144,37 @@ export default ({
         transition: 'slide_up',
         transitionDuration: 120,
         revealChild: false,
-        child: Label({
-            xalign: 0,
-            className: `txt-smallie notif-body-${notifObject.urgency}`,
-            useMarkup: true,
-            xalign: 0,
-            justify: Gtk.Justification.LEFT,
-            maxWidthChars: 24,
-            wrap: true,
-            label: notifObject.body,
+        child: Box({
+            vertical: true,
+            className: 'spacing-v-10',
+            children: [
+                Label({
+                    xalign: 0,
+                    className: `txt-smallie notif-body-${notifObject.urgency}`,
+                    useMarkup: true,
+                    xalign: 0,
+                    justify: Gtk.Justification.LEFT,
+                    maxWidthChars: 24,
+                    wrap: true,
+                    label: notifObject.body,
+                }),
+                Box({
+                    homogeneous: true,
+                    className: 'notif-actions',
+                    children: [
+                        Button({
+                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            label: 'Close',
+                            onClicked: () => destroyWithAnims(),
+                        }),
+                        ...notifObject.actions.map(action => Widget.Button({
+                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            onClicked: () => notifObject.invoke(action.id),
+                            label: action.label,
+                        }))
+                    ],
+                })
+            ]
         }),
     });
     const notifIcon = Box({
@@ -217,11 +239,13 @@ export default ({
                 notifTextPreview.revealChild = false;
                 notifTextExpanded.revealChild = true;
                 self.child.label = 'expand_less';
+                expanded = true;
             }
             else {
                 notifTextPreview.revealChild = true;
                 notifTextExpanded.revealChild = false;
                 self.child.label = 'expand_more';
+                expanded = true;
             }
         },
         child: MaterialIcon('expand_more', 'norm', {
@@ -240,7 +264,6 @@ export default ({
     })
 
     // Gesture stuff
-
     const gesture = Gtk.GestureDrag.new(widget);
     var initDirX = 0;
     var initDirVertical = -1; // -1: unset, 0: horizontal, 1: vertical
@@ -320,11 +343,13 @@ export default ({
                     notifTextPreview.revealChild = false;
                     notifTextExpanded.revealChild = true;
                     expanded = true;
+                    notifExpandButton.child.label = 'expand_less';
                 }
                 else if (initDirVertical == 1 && offset_y < -MOVE_THRESHOLD && expanded) {
                     notifTextPreview.revealChild = true;
                     notifTextExpanded.revealChild = false;
                     expanded = false;
+                    notifExpandButton.child.label = 'expand_more';
                 }
 
             }, 'drag-update')

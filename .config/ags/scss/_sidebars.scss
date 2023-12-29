@@ -503,10 +503,11 @@ $onChatgpt: $onPrimary;
 .sidebar-chat-apiswitcher {
     @include full-rounding;
     @include group-padding;
-    background-color: $surface;
+    background-color: $t_surface;
 }
 
 .sidebar-chat-apiswitcher-icon {
+    @include menu_decel;
     @include full-rounding;
     min-width:  2.182rem;
     min-height: 2.182rem;
@@ -514,7 +515,8 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-apiswitcher-icon-enabled {
-    color: $primary;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
 }
 
 .sidebar-chat-viewport {
