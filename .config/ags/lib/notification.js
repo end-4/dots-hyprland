@@ -127,7 +127,7 @@ export default ({
     const display = Gdk.Display.get_default();
     const notifTextPreview = Revealer({
         transition: 'slide_down',
-        transitionDuration: 300,
+        transitionDuration: 120,
         revealChild: true,
         child: Label({
             xalign: 0,
@@ -142,7 +142,7 @@ export default ({
     });
     const notifTextExpanded = Revealer({
         transition: 'slide_up',
-        transitionDuration: 300,
+        transitionDuration: 120,
         revealChild: false,
         child: Label({
             xalign: 0,
@@ -242,10 +242,13 @@ export default ({
     // Gesture stuff
 
     const gesture = Gtk.GestureDrag.new(widget);
-    var initialDir = 0;
+    var initDirX = 0;
+    var initDirVertical = -1; // -1: unset, 0: horizontal, 1: vertical
+    var expanded = false;
     // in px
     const startMargin = 0;
-    const dragThreshold = 100;
+    const MOVE_THRESHOLD = 10;
+    const DRAG_CONFIRM_THRESHOLD = 100;
     // in rem
     const maxOffset = 10.227;
     const endMargin = 20.455;
@@ -276,35 +279,54 @@ export default ({
         children: [notificationContent],
         setup: (self) => self
             .hook(gesture, self => {
-                var offset = gesture.get_offset()[1];
-                if (initialDir == 0 && offset != 0)
-                    initialDir = (offset > 0 ? 1 : -1)
+                var offset_x = gesture.get_offset()[1];
+                var offset_y = gesture.get_offset()[2];
+                if (initDirVertical == -1) {
+                    if (Math.abs(offset_y) > MOVE_THRESHOLD)
+                        initDirVertical = 1;
+                    if (initDirX == 0 && Math.abs(offset_x) > MOVE_THRESHOLD) {
+                        initDirVertical = 0;
+                        initDirX = (offset_x > 0 ? 1 : -1);
+                    }
+                }
 
-                if (offset > 0) {
-                    if (initialDir < 0)
+                if (initDirVertical == 0 && offset_x > MOVE_THRESHOLD) {
+                    if (initDirX < 0)
                         self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else
                         self.setCss(`
-                            margin-left:   ${Number(offset + startMargin)}px;
-                            margin-right: -${Number(offset + startMargin)}px;
+                            margin-left:   ${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
+                            margin-right: -${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
                         `);
                 }
-                else if (offset < 0) {
-                    if (initialDir > 0)
+                else if (initDirVertical == 0 && offset_x < -MOVE_THRESHOLD) {
+                    if (initDirX > 0)
                         self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else {
-                        offset = Math.abs(offset);
+                        offset_x = Math.abs(offset_x);
                         self.setCss(`
-                            margin-right: ${Number(offset + startMargin)}px;
-                            margin-left: -${Number(offset + startMargin)}px;
+                            margin-right: ${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
+                            margin-left: -${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
                         `);
                     }
                 }
 
-                wholeThing._dragging = Math.abs(offset) > 10;
+                wholeThing._dragging = Math.abs(offset_x) > 10;
 
                 if (widget.window)
                     widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
+                
+                if (initDirVertical == 1 && offset_y > MOVE_THRESHOLD && !expanded) {
+                    notifTextPreview.revealChild = false;
+                    notifTextExpanded.revealChild = true;
+                    expanded = true;
+                }
+                else if (initDirVertical == 1 && offset_y < -MOVE_THRESHOLD && expanded) {
+                    notifTextPreview.revealChild = true;
+                    notifTextExpanded.revealChild = false;
+                    expanded = false;
+                }
+
             }, 'drag-update')
             .hook(gesture, self => {
                 if (!self._ready) {
@@ -312,10 +334,10 @@ export default ({
                     self._ready = true;
                     return;
                 }
-                const offset = gesture.get_offset()[1];
+                const offset_h = gesture.get_offset()[1];
 
-                if (Math.abs(offset) > dragThreshold && offset * initialDir > 0) {
-                    if (offset > 0) {
+                if (Math.abs(offset_h) > DRAG_CONFIRM_THRESHOLD && offset_h * initDirX > 0) {
+                    if (offset_h > 0) {
                         self.setCss(rightAnim1);
                         widget.sensitive = false;
                     }
@@ -342,7 +364,8 @@ export default ({
 
                     wholeThing._dragging = false;
                 }
-                initialDir = 0;
+                initDirX = 0;
+                initDirVertical = -1;
             }, 'drag-end')
         ,
     })
