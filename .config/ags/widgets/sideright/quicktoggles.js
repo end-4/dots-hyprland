@@ -68,24 +68,32 @@ export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => W
     ...props,
 })
 
-export const ModuleNightLight = (props = {}) => Widget.Button({
+export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make this work
+    properties: [
+        ['enabled', false],
+        ['yellowlight', undefined],
+    ],
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Night Light',
-    onClicked: (button) => {
-        const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
-            button.toggleClassName('sidebar-button-active', false);
+    onClicked: (self) => {
+        self._enabled = !self._enabled;
+        self.toggleClassName('sidebar-button-active', self._enabled);
+        if (self._enabled) {
+            self._inhibitor = Utils.subprocess(
+                ['wlsunset'],
+                (output) => print(output),
+                (err) => logError(err),
+                self,
+            );
         }
         else {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
-            button.toggleClassName('sidebar-button-active', true);
+            self._inhibitor.force_exit();
         }
     },
     child: MaterialIcon('nightlight', 'norm'),
     setup: setupCursorHover,
     ...props,
-})
+});
 
 export const ModuleInvertColors = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
