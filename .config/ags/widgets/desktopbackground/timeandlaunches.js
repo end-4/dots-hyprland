@@ -14,16 +14,18 @@ const TimeAndDate = () => Box({
         Label({
             className: 'bg-time-clock',
             xalign: 0,
-            connections: [[5000, label => {
+            label: GLib.DateTime.new_now_local().format("%H:%M"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%H:%M");
-            }]],
+            }),
         }),
         Label({
             className: 'bg-time-date',
             xalign: 0,
-            connections: [[5000, label => {
+            label: GLib.DateTime.new_now_local().format("%A, %d/%m/%Y"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%A, %d/%m/%Y");
-            }]],
+            }),
         }),
     ]
 })
@@ -46,7 +48,7 @@ const QuickLaunches = () => Box({
                 },
                 className: 'bg-quicklaunch-btn',
                 child: Label({
-                    label: `${ item["name"]}`,
+                    label: `${item["name"]}`,
                 }),
                 setup: (self) => {
                     setupCursorHover(self);

@@ -30,12 +30,10 @@ const PopupNotification = (notifObject) => Widget.Box({
 const naiveNotifPopupList = Widget.Box({
     vertical: true,
     className: 'spacing-v-5',
-    connections: [
-        [Notifications, (box) => {
-            box.children = Notifications.popups.reverse()
-                .map(notifItem => PopupNotification(notifItem));
-        }],
-    ],
+    setup: (self) => self.hook(Notifications, (box) => {
+        box.children = Notifications.popups.reverse()
+            .map(notifItem => PopupNotification(notifItem));
+    }),
 })
 
 const notifPopupList = Box({
@@ -72,11 +70,11 @@ const notifPopupList = Box({
             // box.children = Array.from(box._map.values()).reverse();
         }],
     ],
-    connections: [
-        [Notifications, (box, id) => box._notify(box, id), 'notified'],
-        [Notifications, (box, id) => box._dismiss(box, id), 'dismissed'],
-        [Notifications, (box, id) => box._dismiss(box, id, true), 'closed'],
-    ],
+    setup: (self) => self
+        .hook(Notifications, (box, id) => box._notify(box, id), 'notified')
+        .hook(Notifications, (box, id) => box._dismiss(box, id), 'dismissed')
+        .hook(Notifications, (box, id) => box._dismiss(box, id, true), 'closed')
+    ,
 });
 
 export default () => notifPopupList;

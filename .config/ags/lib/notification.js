@@ -161,18 +161,24 @@ export default ({
         children: [
             Overlay({
                 child: NotificationIcon(notifObject),
-                overlays: [
-                    AnimatedCircProg({
-                        className: `notif-circprog-${notifObject.urgency}`,
-                        valign: Gtk.Align.CENTER,
-                        initFrom: (isPopup ? 100 : 0),
-                        initTo: 0,
-                        initAnimTime: popupTimeout,
-                    })
-                ]
+                overlays: isPopup ? [AnimatedCircProg({
+                    className: `notif-circprog-${notifObject.urgency}`,
+                    valign: Gtk.Align.CENTER,
+                    initFrom: (isPopup ? 100 : 0),
+                    initTo: 0,
+                    initAnimTime: popupTimeout,
+                })] : [],
             }),
         ]
     });
+    let notifTime = '';
+    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
+    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
+        notifTime = messageTime.format('%H:%M');
+    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
+        notifTime = 'Yesterday';
+    else
+        notifTime = messageTime.format('%d/%m');
     const notifText = Box({
         valign: Gtk.Align.CENTER,
         vertical: true,
@@ -188,27 +194,14 @@ export default ({
                         maxWidthChars: 24,
                         truncate: 'end',
                         ellipsize: 3,
-                        // wrap: true,
                         useMarkup: notifObject.summary.startsWith('<'),
                         label: notifObject.summary,
                     }),
                     Label({
-                        valign: Gtk.Align.CENTER,
+                        vpack: 'center',
+                        justification: 'right',
                         className: 'txt-smaller txt-semibold',
-                        justify: Gtk.Justification.RIGHT,
-                        setup: (label) => {
-                            // Let's ignore how it won't work for Jan1 cuz I'm lazy
-                            const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
-                            if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
-                                label.label = messageTime.format('%H:%M');
-                            }
-                            else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
-                                label.label = messageTime.format('Yesterday');
-                            }
-                            else {
-                                label.label = messageTime.format('%d/%m');
-                            }
-                        }
+                        label: notifTime,
                     }),
                 ]
             }),
@@ -243,17 +236,6 @@ export default ({
             notifIcon,
             notifText,
             notifExpandButton,
-
-            // what is this? i think it should be at the bottom not on the right
-            // Box({
-            //     className: 'actions',
-            //     children: actions.map(action => Button({
-            //         className: 'action-button',
-            //         onClicked: () => Notifications.invoke(id, action.id),
-            //         hexpand: true,
-            //         child: Label(action.label),
-            //     })),
-            // }),
         ]
     })
 
@@ -284,16 +266,16 @@ export default ({
                               opacity: 0;`;
 
     const notificationBox = Box({
-        properties: [
-            ['leftAnim1', leftAnim1],
-            ['rightAnim1', rightAnim1],
-            ['middleClickClose', middleClickClose],
-            ['ready', false],
-        ],
+        attribute: {
+            'leftAnim1': leftAnim1,
+            'rightAnim1': rightAnim1,
+            'middleClickClose': middleClickClose,
+            'ready': false,
+        },
         homogeneous: true,
         children: [notificationContent],
-        connections: [
-            [gesture, self => {
+        setup: (self) => self
+            .hook(gesture, self => {
                 var offset = gesture.get_offset()[1];
                 if (initialDir == 0 && offset != 0)
                     initialDir = (offset > 0 ? 1 : -1)
@@ -323,9 +305,8 @@ export default ({
 
                 if (widget.window)
                     widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
-            }, 'drag-update'],
-
-            [gesture, self => {
+            }, 'drag-update')
+            .hook(gesture, self => {
                 if (!self._ready) {
                     wholeThing.revealChild = true;
                     self._ready = true;
@@ -362,9 +343,8 @@ export default ({
                     wholeThing._dragging = false;
                 }
                 initialDir = 0;
-            }, 'drag-end'],
-
-        ],
+            }, 'drag-end')
+        ,
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];

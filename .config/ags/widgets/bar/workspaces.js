@@ -15,15 +15,13 @@ const activeWorkspaceIndicator = Widget.Box({
             vpack: 'center',
             hpack: 'start',
             className: 'bar-ws-active-box',
-            connections: [
-                [Hyprland.active.workspace, (box) => {
-                    const ws = Hyprland.active.workspace.id;
-                    box.setCss(`
+            setup: (self) => self.hook(Hyprland.active.workspace, (box) => {
+                const ws = Hyprland.active.workspace.id;
+                box.setCss(`
                         margin-left: ${1.774 * (ws - 1) + 0.068}rem;
                     `);
-                    lastWorkspace = ws;
-                }],
-            ],
+                lastWorkspace = ws;
+            }),
             children: [
                 Widget.Label({
                     vpack: 'center',
@@ -70,26 +68,24 @@ export const ModuleWorkspaces = () => Widget.EventBox({
                                     className: 'bar-ws txt',
                                 }),
                             })),
-                            connections: [
-                                [Hyprland, (box) => {
-                                    // console.log('update');
-                                    const kids = box.children;
-                                    for (let i = 0; i < kids.length; i++) {
-                                        const child = kids[i];
-                                        child.child.toggleClassName('bar-ws-occupied', false);
-                                        child.child.toggleClassName('bar-ws-occupied-left', false);
-                                        child.child.toggleClassName('bar-ws-occupied-right', false);
-                                        child.child.toggleClassName('bar-ws-occupied-left-right', false);
-                                    }
+                            setup: (self) => self.hook(Hyprland, (box) => {
+                                // console.log('update');
+                                const kids = box.children;
+                                for (let i = 0; i < kids.length; i++) {
+                                    const child = kids[i];
+                                    child.child.toggleClassName('bar-ws-occupied', false);
+                                    child.child.toggleClassName('bar-ws-occupied-left', false);
+                                    child.child.toggleClassName('bar-ws-occupied-right', false);
+                                    child.child.toggleClassName('bar-ws-occupied-left-right', false);
+                                }
 
-                                    const occupied = Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => Hyprland.getWorkspace(i + 1)?.windows > 0);
-                                    for (let i = 0; i < occupied.length; i++) {
-                                        if (!occupied[i]) continue;
-                                        const child = kids[i];
-                                        child.child.toggleClassName(`bar-ws-occupied${!occupied[i - 1] ? '-left' : ''}${!occupied[i + 1] ? '-right' : ''}`, true);
-                                    }
-                                }, 'notify::workspaces'],
-                            ],
+                                const occupied = Array.from({ length: NUM_OF_WORKSPACES }, (_, i) => Hyprland.getWorkspace(i + 1)?.windows > 0);
+                                for (let i = 0; i < occupied.length; i++) {
+                                    if (!occupied[i]) continue;
+                                    const child = kids[i];
+                                    child.child.toggleClassName(`bar-ws-occupied${!occupied[i - 1] ? '-left' : ''}${!occupied[i + 1] ? '-right' : ''}`, true);
+                                }
+                            }, 'notify::workspaces'),
                         }),
                         overlays: [
                             activeWorkspaceIndicator,

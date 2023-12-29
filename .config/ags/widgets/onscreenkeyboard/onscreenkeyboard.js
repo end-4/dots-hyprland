@@ -133,11 +133,11 @@ const keyboardWindow = Box({
             ],
         })
     ],
-    connections: [[App, (box, name, visible) => { // Update on open
+    setup: (self) => self.hook(App, (box, name, visible) => { // Update on open
         if (name == 'osk' && visible) {
             keyboardWindow.setCss(`margin-bottom: -0px;`);
         }
-    }],],
+    }),
 });
 
 const gestureEvBox = EventBox({ child: keyboardWindow })
