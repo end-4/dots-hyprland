@@ -1,48 +1,47 @@
 #!/usr/bin/env bash
+set -e
+cd "$(dirname "$0")"
 
-echo 'Hi there!'
-echo 'This script 1. only works for ArchLinux and Arch-based distros.'
-echo '            2. has not been tested, use at your own risk.'
-echo '            3. will show all commands that it runs.'
-echo '            4. should be run from its folder.'
-echo '== BACKUP YOUR CONFIG FOLDER IF NEEDED! =='
-echo 'Ctrl+C to exit. Enter to continue.'
-read
+printf 'Hi there!\n'
+printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
+printf '            2. has not been tested, use at your own risk.\n'
+printf '            3. will show all commands that it runs.\n'
+printf "\e[36m== BACKUP YOUR CONFIG FOLDER IF NEEDED! ==\n"
+printf 'Ctrl+C to exit. Enter to continue.\n'
+read -r
 #####################################################################################
-echo '1. Get packages and add user to video/input groups'
+printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
-echo 'yay -S blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle swaylock typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git'
-yay -S blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle swaylock typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git
+set -v
+yay -S --needed --noconfirm blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle swaylock typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git
 
 user=$(whoami)
-echo "sudo usermod -aG video $user"
-sudo usermod -aG video "$user" || echo "failed to add user to video group"
-echo "sudo usermod -aG input $user"
-sudo usermod -aG input "$user" || echo "failed to add user to input group"
-echo "Step 1 Complete."
+sudo usermod -aG video "$user"
+sudo usermod -aG input "$user"
+
 #####################################################################################
-echo '2. Installing AGS manually'
+set +v
+printf '\e[36m2. Installing AGS manually\e[97m\n'
 sleep 1
-echo 'git clone --recursive https://github.com/Aylur/ags.git && cd ags'
-git clone --recursive https://github.com/Aylur/ags.git && cd ags || echo "failed to clone into ags. Aborting..." && exit
-echo "Done Cloning! Setting up npm and meson..."
+set -v
+git clone --recursive https://github.com/Aylur/ags.git
+set +v
 sleep 1
-echo 'npm install && meson setup build'
+set -v
 npm install && meson setup build
-echo 'meson install -C build'
-echo '(Make sure you say yes when asked to use sudo here)'
 meson install -C build
 #####################################################################################
-echo '3. Copying'
+set +v
+printf '\e[36m3. Copying\e[97m\n'
 
-echo 'cp -r "./.config" "$HOME"'
-cp -r "./.config" "$HOME" || echo "cp threw error. You could cp this yourself."
-echo 'cp -r "./.local" "$HOME"'
-cp -r "./.local" "$HOME" || echo "cp threw error. You could cp this yourself."
+set -v
+cp -r "./.config" "$HOME"
+cp -r "./.local" "$HOME"
 #####################################################################################
-echo 'Finished. See the "Import manually" folder and grab anything you need.'
-echo 'Press Ctrl+Super+T to select a wallpaper'
-echo 'Press Super+/ for a list of keybinds'
+set +v
+printf 'Finished. See the "Import manually" folder and grab anything you need.\e[97m\n'
+printf 'Press Ctrl+Super+T to select a wallpaper\e[97m\n'
+printf 'Press Super+/ for a list of keybinds\e[97m\n'
 
 
 
