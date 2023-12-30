@@ -9,7 +9,7 @@ const TrackProgress = () => {
     const _updateProgress = (circprog) => {
         const mpris = Mpris.getPlayer('');
         if (!mpris) return;
-        // Set circular progress (font size cuz that's how this hacky circprog works)
+        // Set circular progress value
         circprog.css = `font-size: ${Math.max(mpris.position / mpris.length * 100, 0)}px;`
     }
     return AnimatedCircProg({
@@ -65,7 +65,7 @@ export const ModuleMusic = () => Widget.EventBox({
                     Widget.Scrollable({
                         hexpand: true,
                         child: Widget.Label({
-                            className: 'txt txt-smallie',
+                            className: 'txt-smallie txt-onSurfaceVariant',
                             connections: [[Mpris, label => {
                                 const mpris = Mpris.getPlayer('');
                                 if (mpris)

@@ -66,6 +66,7 @@ const WorkspaceContents = (count = 10) => {
                 const layout = PangoCairo.create_layout(cr);
                 const fontDesc = Pango.font_description_from_string(`${workspaceFontFamily[0]} ${workspaceFontSize}`);
                 layout.set_font_description(fontDesc);
+                cr.setAntialias(Cairo.Antialias.BEST);
                 // Get kinda min radius for number indicators
                 layout.set_text("0".repeat(count.toString().length), -1);
                 const [layoutWidth, layoutHeight] = layout.get_pixel_size();
@@ -84,7 +85,7 @@ const WorkspaceContents = (count = 10) => {
                             cr.fill();
                         }
                         else {
-                            cr.rectangle(wsCenterX - workspaceRadius , wsCenterY - workspaceRadius, workspaceRadius , workspaceRadius * 2)
+                            cr.rectangle(wsCenterX - workspaceRadius, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
                             cr.fill();
                         }
                         if (!(area._workspaceMask & (1 << (i + 1)))) { // Right
@@ -92,7 +93,7 @@ const WorkspaceContents = (count = 10) => {
                             cr.fill();
                         }
                         else {
-                            cr.rectangle(wsCenterX, wsCenterY - workspaceRadius, workspaceRadius , workspaceRadius * 2)
+                            cr.rectangle(wsCenterX, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
                             cr.fill();
                         }
 
@@ -118,7 +119,7 @@ const WorkspaceContents = (count = 10) => {
                 cr.fill();
                 // inner decor
                 cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
-                cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius * 0.19, 0, 2 * Math.PI);
+                cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius * 0.2, 0, 2 * Math.PI);
                 cr.fill();
             }))
         ,
@@ -148,12 +149,15 @@ export default () => EventBox({
         self.add_events(Gdk.EventMask.POINTER_MOTION_MASK);
         self.on('motion-notify-event', (self, event) => {
             if (!self._clicked) return;
+            console.log('switching move');
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
             const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES / widgetWidth);
             Hyprland.sendMessage(`dispatch workspace ${wsId}`)
         })
         self.on('button-press-event', (self, event) => {
+            if (!(event.get_button()[1] === 1)) return; // We're only interested in left-click here
+            console.log('switching');
             self._clicked = true;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;

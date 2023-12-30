@@ -78,20 +78,16 @@ export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make th
     onClicked: (self) => {
         self._enabled = !self._enabled;
         self.toggleClassName('sidebar-button-active', self._enabled);
-        if (self._enabled) {
-            self._inhibitor = Utils.subprocess(
-                ['wlsunset'],
-                (output) => print(output),
-                (err) => logError(err),
-                self,
-            );
-        }
-        else {
-            self._inhibitor.force_exit();
-        }
+        // if (self._enabled) Utils.execAsync(['bash', '-c', 'wlsunset & disown'])
+        if (self._enabled) Utils.execAsync('wlsunset')
+        else Utils.execAsync('pkill wlsunset');
     },
     child: MaterialIcon('nightlight', 'norm'),
-    setup: setupCursorHover,
+    setup: (self) => {
+        setupCursorHover(self);
+        self._enabled = !!exec('pidof wlsunset');
+        self.toggleClassName('sidebar-button-active', self._enabled);
+    },
     ...props,
 });
 
