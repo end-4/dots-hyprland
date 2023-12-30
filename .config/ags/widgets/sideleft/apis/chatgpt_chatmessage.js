@@ -102,8 +102,8 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     ]
                 }),
                 onClicked: (self) => {
-                    const copyContent = sourceView.get_buffer().get_text(0, 0, 0); // TODO: fix this
-                    console.log(copyContent);
+                    const buffer = sourceView.get_buffer();
+                    const copyContent = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), false); // TODO: fix this
                     execAsync([`wl-copy`, `${copyContent}`]).catch(print);
                 },
             }),
@@ -164,7 +164,6 @@ const MessageContent = (content) => {
                     // Code blocks
                     const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
-                        // console.log(`code at line ${index}`);
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
