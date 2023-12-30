@@ -254,6 +254,14 @@
     margin-bottom: 0rem;
 }
 
+.spacing-h-4>* {
+    margin-right: 0.273rem;
+}
+
+.spacing-h-4>*:last-child {
+    margin-right: 0rem;
+}
+
 .spacing-h-5>* {
     margin-right: 0.341rem;
 }

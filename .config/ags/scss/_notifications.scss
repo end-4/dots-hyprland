@@ -134,7 +134,7 @@ $notif_surface: $t_background;
 .notif-circprog-low {
     transition: 0ms linear;
     min-width: 0.136rem; // line width
-    min-height: 3.409rem;
+    min-height: 3.136rem;
     padding: 0rem;
     color: $onSecondaryContainer;
 }
@@ -142,7 +142,7 @@ $notif_surface: $t_background;
 .notif-circprog-normal {
     transition: 0ms linear;
     min-width: 0.136rem; // line width
-    min-height: 3.409rem;
+    min-height: 3.136rem;
     padding: 0rem;
     color: $onSecondaryContainer;
 }
@@ -150,7 +150,7 @@ $notif_surface: $t_background;
 .notif-circprog-critical {
     transition: 0ms linear;
     min-width: 0.136rem; // line width
-    min-height: 3.409rem;
+    min-height: 3.136rem;
     padding: 0rem;
     color: $secondaryContainer;
 }
@@ -164,43 +164,43 @@ $notif_surface: $t_background;
 }
 
 .notif-action-low {
-    background-color: $l_t_surfaceVariant;
+    background-color: mix($t_onSurfaceVariant, $t_surface, 10%);
     color: $onSurfaceVariant;
 }
 
 .notif-action-low:focus,
 .notif-action-low:hover {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+    background-color: mix($t_onSurfaceVariant, $t_surface, 18%);
 }
 
 .notif-action-low:active {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+    background-color: mix($t_onSurfaceVariant, $t_surface, 23%);
 }
 
 .notif-action-normal {
-    background-color: $l_t_surfaceVariant;
+    background-color: mix($t_onSurfaceVariant, $t_surface, 10%);
     color: $onSurfaceVariant;
 }
 
 .notif-action-normal:focus,
 .notif-action-normal:hover {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+    background-color: mix($t_onSurfaceVariant, $t_surface, 18%);
 }
 
 .notif-action-normal:active {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+    background-color: mix($t_onSurfaceVariant, $t_surface, 23%);
 }
 
 .notif-action-critical {
-    background-color: $t_onSurfaceVariant;
+    background-color: mix($t_onSecondaryContainer, $t_secondaryContainer, 10%);
     color: $onSurfaceVariant;
 }
 
 .notif-action-critical:focus,
 .notif-action-critical:hover {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 10%);
+    background-color: mix($t_onSecondaryContainer, $t_secondaryContainer, 18%);
 }
 
 .notif-action-critical:active {
-    background-color: mix($t_onSurfaceVariant, $l_t_surfaceVariant, 15%);
+    background-color: mix($t_onSecondaryContainer, $t_secondaryContainer, 23%);
 }

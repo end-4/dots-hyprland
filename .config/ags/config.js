@@ -4,7 +4,7 @@ import { App, Utils } from './imports.js';
 // Widgets
 import Bar from './widgets/bar/main.js';
 import Cheatsheet from './widgets/cheatsheet/main.js';
-import DesktopBackground from './widgets/desktopbackground/main.js';
+// import DesktopBackground from './widgets/desktopbackground/main.js';
 import Dock from './widgets/dock/main.js';
 import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './widgets/screencorners/main.js';
 import Indicator from './widgets/indicators/main.js';
@@ -39,12 +39,11 @@ export default {
         'osk': CLOSE_ANIM_TIME,
     },
     windows: [
-        // Bar() is below
         CornerTopleft(),
         CornerTopright(),
         CornerBottomleft(),
         CornerBottomright(),
-        DesktopBackground(),
+        // DesktopBackground(),
         Dock(), // Buggy
         Overview(),
         Indicator(),
@@ -53,6 +52,6 @@ export default {
         SideRight(),
         Osk(), // On-screen keyboard
         Session(), // Power menu, if that's what you like to call it
-        Bar()
+        Bar(),
     ],
 };

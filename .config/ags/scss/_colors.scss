@@ -5,15 +5,18 @@ $transparency_enabled: false;
 
 @if $transparency_enabled ==false {
     @if $darkmode ==true {
+        $primary: mix($primary, white, 70%);
+        $primaryContainer: mix($primaryContainer, white, 90%);
         $background: mix(mix($background, $primary, 94%), #000000, 50%);
         $surface: mix($surface, $primaryContainer, 98%);
-        $surfaceVariant: mix($surfaceVariant, #000000, 55%);
+        $surfaceVariant: mix($surfaceVariant, #000000, 75%);
+        // $secondaryContainer: mix($secondaryContainer, $primaryContainer, 90%);
     }
 
     @if $darkmode ==false {
         $background: mix($background, $primary, 87%);
         $surface: mix($surface, $primary, 93%);
-        $surfaceVariant: mix($surfaceVariant, #FFFFFF, 55%);
+        $surfaceVariant: mix($surfaceVariant, #FFFFFF, 25%);
     }
 }
 
