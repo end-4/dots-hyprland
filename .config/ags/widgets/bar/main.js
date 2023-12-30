@@ -6,19 +6,19 @@ import { ModuleLeftSpace } from "./leftspace.js";
 import { ModuleMusic } from "./music.js";
 import { ModuleRightSpace } from "./rightspace.js";
 import { ModuleSystem } from "./system.js";
-import { ModuleWorkspaces } from "./workspaces.js";
+import ModuleWorkspaces from "./workspaces.js";
 import { RoundedCorner } from "../../lib/roundedcorner.js";
 
 const left = Widget.Box({
     className: 'bar-sidemodule',
-    children: [ModuleMusic()],
+    children: [
+        ModuleMusic()
+    ],
 });
 
 const center = Widget.Box({
     children: [
-        RoundedCorner('topright', { className: 'corner-bar-group' }),
         ModuleWorkspaces(),
-        RoundedCorner('topleft', { className: 'corner-bar-group' }),
     ],
 });
 
@@ -36,7 +36,7 @@ export default () => Widget.Window({
         className: 'bar-bg',
         startWidget: ModuleLeftSpace(),
         centerWidget: Widget.Box({
-            className: 'spacing-h--20',
+            className: 'spacing-h-4',
             children: [
                 left,
                 center,

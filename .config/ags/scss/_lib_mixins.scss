@@ -40,6 +40,7 @@ $rounding_large: 1.705rem;
 @mixin mainfont {
     // Other clean sans-serif
     font-family:
+        'Rubik',
         'Geist',
         'AR One Sans',
         'Reddit Sans',
@@ -158,6 +159,18 @@ $elevation_margin: 0.476rem;
 
 @mixin anim-exit {
     transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+@mixin element_decel {
+    transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
+}
+
+@mixin element_accel {
+    transition: 300ms cubic-bezier(0.55, 0, 1, 0.45);
+}
+
+@mixin element_easeInOut {
+    transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 @function tint($color, $percentage) {

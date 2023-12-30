@@ -41,18 +41,18 @@ import { ModuleCalendar } from "./calendar.js";
 const timeRow = Box({
     className: 'spacing-h-5 sidebar-group-invisible-morehorizpad',
     children: [
-        Widget.Label({
-            className: 'txt-title txt',
-            connections: [[5000, label => {
-                label.label = GLib.DateTime.new_now_local().format("%H:%M");
-            }]],
-        }),
+        // Widget.Label({
+        //     className: 'txt-title txt',
+        //     connections: [[5000, label => {
+        //         label.label = GLib.DateTime.new_now_local().format("%H:%M");
+        //     }]],
+        // }),
         Widget.Label({
             hpack: 'center',
             className: 'txt-small txt',
             connections: [[5000, label => {
                 execAsync(['bash', '-c', `uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'`]).then(upTimeString => {
-                    label.label = `• up: ${upTimeString}`;
+                    label.label = `System uptime: ${upTimeString}`;
                 }).catch(print);
             }]],
         }),
@@ -81,6 +81,7 @@ const togglesBox = Widget.Box({
 export default () => Box({
     vexpand: true,
     hexpand: true,
+    css: 'min-width: 2px;',
     children: [
         EventBox({
             onPrimaryClick: () => App.closeWindow('sideright'),

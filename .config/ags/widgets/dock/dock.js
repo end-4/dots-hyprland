@@ -86,7 +86,8 @@ const Taskbar = () => Widget.Box({
             return a._workspace > b._workspace;
         }],
         ['update', (box) => {
-            Hyprland.clients.forEach(client => {
+            for (let i = 0; i < Hyprland.clients.length; i++) {
+                const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
                 for (const appName of pinnedApps) {
@@ -101,11 +102,11 @@ const Taskbar = () => Widget.Box({
                 newButton._workspace = client.workspace.id;
                 newButton.revealChild = true;
                 box._map.set(client.address, newButton);
-            })
+            }
             box.children = Array.from(box._map.values());
         }],
         ['add', (box, address) => {
-            if (!address) { // Since the first active emit is undefined
+            if (!address) { // First active emit is undefined
                 box._update(box);
                 return;
             }
@@ -137,14 +138,11 @@ const Taskbar = () => Widget.Box({
             })
         }],
     ],
-    connections: [
-        // [Hyprland, (box) => box._update(box)],
-        [Hyprland, (box, address) => box._add(box, address), 'client-added'],
-        [Hyprland, (box, address) => box._remove(box, address), 'client-removed'],
-    ],
     setup: (self) => {
+        self.hook(Hyprland, (box, address) => box._add(box, address), 'client-added')
+            .hook(Hyprland, (box, address) => box._remove(box, address), 'client-removed')
         Utils.timeout(100, () => self._update(self));
-    }
+    },
 });
 
 const PinnedApps = () => Widget.Box({
@@ -165,18 +163,18 @@ const PinnedApps = () => Widget.Box({
                     app.launch();
                 },
                 onMiddleClick: () => app.launch(),
+                tooltipText: app.name,
                 setup: (self) => {
                     self.revealChild = true;
-                },
-                tooltipText: app.name,
-                connections: [[Hyprland, button => {
-                    const running = Hyprland.clients
-                        .find(client => client.class.toLowerCase().includes(term)) || false;
+                    self.hook(Hyprland, button => {
+                        const running = Hyprland.clients
+                            .find(client => client.class.toLowerCase().includes(term)) || false;
 
-                    button.toggleClassName('nonrunning', !running);
-                    button.toggleClassName('focused', Hyprland.active.client.address == running.address);
-                    button.set_tooltip_text(running ? running.title : app.name);
-                }, 'notify::clients']],
+                        button.toggleClassName('notrunning', !running);
+                        button.toggleClassName('focused', Hyprland.active.client.address == running.address);
+                        button.set_tooltip_text(running ? running.title : app.name);
+                    }, 'notify::clients')
+                },
             })
             newButton.revealChild = true;
             return newButton;
@@ -237,13 +235,13 @@ export default () => {
         transition: 'slide_up',
         transitionDuration: 200,
         child: dockContent,
-        connections: [
-            // [Hyprland, (self) => self._updateShow(self)],
-            // [Hyprland.active.workspace, (self) => self._updateShow(self)],
-            // [Hyprland.active.client, (self) => self._updateShow(self)],
-            // [Hyprland, (self) => self._updateShow(self), 'client-added'],
-            // [Hyprland, (self) => self._updateShow(self), 'client-removed'],
-        ],
+        // setup: (self) => self
+        //     .hook(Hyprland, (self) => self._updateShow(self))
+        //     .hook(Hyprland.active.workspace, (self) => self._updateShow(self))
+        //     .hook(Hyprland.active.client, (self) => self._updateShow(self))
+        //     .hook(Hyprland, (self) => self._updateShow(self), 'client-added')
+        //     .hook(Hyprland, (self) => self._updateShow(self), 'client-removed')
+        // ,
     })
     return EventBox({
         onHover: () => {

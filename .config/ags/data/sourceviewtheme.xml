@@ -29,7 +29,7 @@
   <style name="current-line"                background="#3E3D32"/>
   <style name="current-line-number"         background="#eeeeec"/>
   <style name="draw-spaces"                 foreground="#babdb6"/>
-  <style name="background-pattern"          background="#rgba(0,0,0,0)"/>
+  <style name="background-pattern"          background="#000000"/>
 
   <!-- Bracket Matching -->
   <!-- <style name="bracket-match"               foreground="white" background="grey"/> -->

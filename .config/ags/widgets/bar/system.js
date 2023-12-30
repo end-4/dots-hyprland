@@ -1,146 +1,173 @@
 // This is for the right pill of the bar. 
 // For the cool memory indicator on the sidebar, see sysinfo.js
 import { Service, Utils, Widget } from '../../imports.js';
+const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../lib/materialicon.js';
+import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 
 const BATTERY_LOW = 20;
 
+const BatBatteryProgress = () => {
+    const _updateProgress = (circprog) => { // Set circular progress value
+        circprog.css = `font-size: ${Battery.percent}px;`
+
+        circprog.toggleClassName('bar-batt-circprog-low', Battery.percent <= BATTERY_LOW);
+        circprog.toggleClassName('bar-batt-circprog-full', Battery.charged);
+    }
+    return AnimatedCircProg({
+        className: 'bar-batt-circprog',
+        vpack: 'center', hpack: 'center',
+        connections: [
+            [Battery, _updateProgress],
+        ],
+    })
+}
+
 const BarClock = () => Widget.Box({
     vpack: 'center',
-    className: 'spacing-h-5',
+    className: 'spacing-h-5 txt-onSurfaceVariant',
     children: [
         Widget.Label({
             className: 'bar-clock',
-            connections: [[5000, label => {
+            label: GLib.DateTime.new_now_local().format("%H:%M"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%H:%M");
-            }]],
+            }),
         }),
         Widget.Label({
-            className: 'txt-norm txt',
+            className: 'txt-norm',
             label: '•',
         }),
         Widget.Label({
-            className: 'txt-smallie txt',
-            connections: [[5000, label => {
+            className: 'txt-smallie',
+            label: GLib.DateTime.new_now_local().format("%A, %d/%m"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%A, %d/%m");
-            }]],
+            }),
         }),
     ],
 });
 
-const BarBattery = () => {
-    const BarResourceValue = (name, icon, command) => Widget.Box({
-        vpack: 'center',
-        className: 'bar-batt spacing-h-5',
-        children: [
-            MaterialIcon(icon, 'small'),
-            Widget.ProgressBar({ // Progress
-                vpack: 'center', hexpand: true,
-                className: 'bar-prog-batt',
-                connections: [[5000, (progress) => execAsync(['bash', '-c', command])
-                    .then((output) => {
-                        progress.value = Number(output) / 100;
-                        progress.tooltipText = `${name}: ${Number(output)}%`
-                    })
-                    .catch(print)
-                ]],
-            }),
-        ]
-    });
-    const batteryWidget = Widget.Box({
-        vpack: 'center',
-        hexpand: true,
-        className: 'spacing-h-5 bar-batt',
-        connections: [[Battery, box => {
-            box.toggleClassName('bar-batt-low', Battery.percent <= BATTERY_LOW);
-            box.toggleClassName('bar-batt-full', Battery.charged);
-        }]],
-        children: [
-            MaterialIcon('settings_heart', 'small'),
-            Widget.Label({ // Percentage
-                className: 'bar-batt-percentage',
-                connections: [[Battery, label => {
-                    label.label = `${Battery.percent}`;
-                }]],
-            }),
-            Widget.ProgressBar({ // Progress
-                vpack: 'center',
-                hexpand: true,
-                className: 'bar-prog-batt',
-                connections: [[Battery, progress => {
-                    progress.value = Math.abs(Battery.percent / 100); // battery could be initially negative wtf
-                    progress.toggleClassName('bar-prog-batt-low', Battery.percent <= BATTERY_LOW);
-                    progress.toggleClassName('bar-prog-batt-full', Battery.charged);
-                    batteryWidget.tooltipText = `Battery: ${Battery.percent}%`
-                }]],
-            }),
-            Widget.Revealer({ // A dot for charging state
-                transitionDuration: 150,
-                revealChild: false,
-                transition: 'slide_left',
-                child: Widget.Box({
-                    className: 'spacing-h-3',
-                    children: [
-                        Widget.Box({
-                            vpack: 'center',
-                            className: 'bar-batt-chargestate-charging-smaller',
-                            connections: [[Battery, box => {
-                                box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-                                box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-                            }]],
-                        }),
-                        Widget.Box({
-                            vpack: 'center',
-                            className: 'bar-batt-chargestate-charging',
-                            connections: [[Battery, box => {
-                                box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-                                box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-                            }]],
-                        }),
-                    ]
-                }),
-                connections: [[Battery, revealer => {
-                    revealer.revealChild = Battery.charging;
-                }]],
-            }),
-        ],
-    });
-    const memUsage = Widget.Box({
+const UtilButton = ({ name, icon, onClicked }) => Button({
+    vpack: 'center',
+    tooltipText: name,
+    onClicked: onClicked,
+    className: 'bar-util-btn icon-material txt-norm',
+    label: `${icon}`,
+})
+
+const Utilities = () => Scrollable({
+    hexpand: true,
+    child: Box({
+        hpack: 'center',
         className: 'spacing-h-5',
         children: [
-            BarResourceValue('RAM usage', 'memory', `free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
-            BarResourceValue('Swap usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
+            UtilButton({
+                name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
+                    Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
+                        .catch(print)
+                }
+            }),
+            UtilButton({
+                name: 'Color picker', icon: 'colorize', onClicked: () => {
+                    Utils.execAsync(['hyprpicker', '-a']).catch(print)
+                }
+            }),
+            UtilButton({
+                name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
+                    App.toggleWindow('osk');
+                }
+            }),
         ]
     })
-    const widgetStack = Widget.Stack({
-        transition: 'slide_up_down',
-        vpack: 'center',
-        hexpand: true,
-        items: [
-            ['fallback', memUsage],
-            ['battery', batteryWidget],
-        ],
-        setup: (stack) => Utils.timeout(1, () => {
-            if (Battery.available) stack.shown = 'battery';
-            else stack.shown = 'fallback';
-        })
-    })
-    return widgetStack;
-}
+})
+
+const BarBattery = () => Box({
+    className: 'spacing-h-4 txt-onSurfaceVariant',
+    children: [
+        // Revealer({ // A dot for charging state
+        //     transitionDuration: 150,
+        //     revealChild: false,
+        //     transition: 'crossfade',
+        //     child: Widget.Box({
+        //         className: 'spacing-h-3',
+        //         children: [
+        //             Widget.Box({
+        //                 vpack: 'center',
+        //                 className: 'bar-batt-chargestate-charging-smaller',
+        //                 setup: (self) => self.hook(Battery, box => {
+        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
+        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
+        //                 }),
+        //             }),
+        //             Widget.Box({
+        //                 vpack: 'center',
+        //                 className: 'bar-batt-chargestate-charging',
+        //                 setup: (self) => self.hook(Battery, box => {
+        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
+        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
+        //                 }),
+        //             }),
+        //         ]
+        //     }),
+        //     setup: (self) => self.hook(Battery, revealer => {
+        //         revealer.revealChild = Battery.charging;
+        //     }),
+        // }),
+        Stack({
+            transition: 'slide_up_down',
+            items: [
+                ['discharging', Widget.Label({
+                    className: 'txt-norm txt',
+                    label: '•',
+                }),],
+                ['charging', MaterialIcon('bolt', 'norm')],
+            ],
+            setup: (self) => self.hook(Battery, revealer => {
+                self.shown = Battery.charging ? 'charging' : 'discharging';
+            }),
+        }),
+        Label({
+            className: 'txt-smallie txt-onSurfaceVariant',
+            setup: (self) => self.hook(Battery, label => {
+                label.label = `${Battery.percent}%`;
+            }),
+        }),
+        Overlay({
+            child: Widget.Box({
+                vpack: 'center',
+                className: 'bar-batt',
+                homogeneous: true,
+                children: [
+                    MaterialIcon('settings_heart', 'small'),
+                ],
+                setup: (self) => self.hook(Battery, box => {
+                    box.toggleClassName('bar-batt-low', Battery.percent <= BATTERY_LOW);
+                    box.toggleClassName('bar-batt-full', Battery.charged);
+                }),
+            }),
+            overlays: [
+                BatBatteryProgress(),
+            ]
+        }),
+    ]
+});
 
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
         className: 'bar-group-margin bar-sides',
         children: [
             Widget.Box({
-                className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-15',
+                className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-5',
                 children: [
                     BarClock(),
+                    Utilities(),
                     BarBattery(),
                 ],
             }),

@@ -50,7 +50,9 @@ else:
     #     exit()
 
 colorscheme=0
+darkmode = True
 if("-l" in sys.argv):
+    darkmode = False
     colorscheme = newtheme.get('schemes').get('light')
     print('$darkmode: false;')
 else:
@@ -85,8 +87,9 @@ inverseSurface = hexFromArgb(colorscheme.get_inverseSurface())
 inverseOnSurface = hexFromArgb(colorscheme.get_inverseOnSurface())
 inversePrimary = hexFromArgb(colorscheme.get_inversePrimary())
 
-# post proccessing
-background = darken(background, 0.6)
+# make material less boring
+if darkmode:
+    background = darken(background, 0.6)
 
 print('$primary: ' + primary + ';')
 print('$onPrimary: ' + onPrimary + ';')

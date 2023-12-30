@@ -4,6 +4,7 @@ const { exec, execAsync } = Utils;
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 
 const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
+import { MarginRevealer } from '../../lib/advancedrevealers.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { showMusicControls } from '../../variables.js';
@@ -343,9 +344,11 @@ const MusicControlsWidget = (player) => Box({
     ]
 })
 
-export default () => Widget.Revealer({
+export default () => MarginRevealer({
     transition: 'slide_down',
-    transitionDuration: 170,
+    revealChild: false,
+    showClass: 'osd-show',
+    hideClass: 'osd-hide',
     child: Box({
         connections: [[Mpris, box => {
             let foundPlayer = false;
@@ -360,14 +363,19 @@ export default () => Widget.Revealer({
 
             if (!foundPlayer) {
                 box._player = null;
-                box.get_children().forEach(ch => ch.destroy());
+                const children = box.get_children();
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    child.destroy();
+                }
                 return;
             }
         }, 'notify::players']],
     }),
     connections: [
         [showMusicControls, (revealer) => {
-            revealer.revealChild = showMusicControls.value;
+            if(showMusicControls.value) revealer._show(revealer);
+            else revealer._hide(revealer);
         }],
     ],
 })

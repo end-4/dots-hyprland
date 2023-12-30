@@ -12,7 +12,7 @@ $onChatgpt: $onPrimary;
     @include menu_decel;
     @include elevation-border;
     @include elevation2;
-    border-radius: $rounding_large - $elevation_margin;
+    border-radius: $rounding_large - $elevation_margin + 0.068rem;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
     background-color: $t_background;
@@ -33,7 +33,7 @@ $onChatgpt: $onPrimary;
     @include menu_decel;
     @include elevation-border;
     @include elevation2;
-    border-radius: $rounding_large - $elevation_margin;
+    border-radius: $rounding_large - $elevation_margin + 0.068rem;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
     background-color: $t_background;
@@ -332,7 +332,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-selector-tab {
     @include small-rounding;
-    transition: 0ms;
+    @include menu_decel;
     min-height: 2.5rem;
     color: $onSurface;
 }
@@ -500,9 +500,28 @@ $onChatgpt: $onPrimary;
     min-height: 1.705rem;
 }
 
+.sidebar-chat-apiswitcher {
+    @include full-rounding;
+    @include group-padding;
+    background-color: $t_surface;
+}
+
+.sidebar-chat-apiswitcher-icon {
+    @include menu_decel;
+    @include full-rounding;
+    min-width:  2.182rem;
+    min-height: 2.182rem;
+    color: $onSurface;
+}
+
+.sidebar-chat-apiswitcher-icon-enabled {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
 .sidebar-chat-viewport {
     @include menu_decel;
-    margin: 0.682rem 0rem;
+    // margin: 0.682rem 0rem;
     padding: 0.682rem 0rem;
 }
 
@@ -645,7 +664,7 @@ $onChatgpt: $onPrimary;
     margin: 0rem 3.409rem;
 }
 
-.sidebar-chat-settings {
+.sidebar-chat-settings-toggles {
     margin: 0rem 5.455rem;
 }
 
@@ -688,3 +707,37 @@ $onChatgpt: $onPrimary;
     color: $sidebar_chat_textboxareaColor;
     border: 0.068rem solid $sidebar_chat_textboxareaColor;
 }
+
+.sidebar-pin {
+    @include small-rounding;
+    @include menu_decel;
+    min-height: 2.386rem;
+    min-width: 2.386rem;
+    color: $onSurface;
+}
+
+.sidebar-pin:hover,
+.sidebar-pin:focus {
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
+}
+
+.sidebar-pin:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
+}
+
+.sidebar-pin-enabled {
+    background-color: $primary;
+    label {
+        color: $onPrimary;
+    }
+}
+
+.sidebar-pin-enabled:hover,
+.sidebar-pin-enabled:focus {
+    background-color: mix($primary, $onPrimary, 90%);
+}
+
+.sidebar-pin-enabled:active {
+    background-color: mix($primary, $onPrimary, 80%);
+}
+

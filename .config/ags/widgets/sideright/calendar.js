@@ -65,12 +65,14 @@ const CalendarWidget = () => {
         }
     });
     const addCalendarChildren = (box, calendarJson) => {
+        const children = box.get_children();
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            child.destroy();
+        }
         box.children = calendarJson.map((row, i) => Widget.Box({
-            // homogeneous: true,
             className: 'spacing-h-5',
-            children: row.map((day, i) =>
-                CalendarDay(day.day, day.today)
-            )
+            children: row.map((day, i) => CalendarDay(day.day, day.today)),
         }))
     }
     function shiftCalendarXMonths(x) {

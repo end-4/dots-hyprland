@@ -69,6 +69,10 @@
     color: $onSecondaryContainer;
 }
 
+.txt-onSurfaceVariant {
+    color: $onSurfaceVariant;
+}
+
 .txt-shadow {
     text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
     margin: 10px;
@@ -214,6 +218,14 @@
     margin-right: 0rem;
 }
 
+.spacing-h-15>scrolledwindow>* {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15>scrolledwindow:last-child>* {
+    margin-right: 0rem;
+}
+
 .spacing-v-5>box {
     margin-bottom: 0.341rem;
 }
@@ -236,6 +248,22 @@
 
 .spacing-v-5-revealer>revealer:last-child>* {
     margin-bottom: 0rem;
+}
+
+.spacing-v-5-revealer>scrolledwindow>* {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5-revealer>scrolledwindow:last-child>* {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-4>* {
+    margin-right: 0.273rem;
+}
+
+.spacing-h-4>*:last-child {
+    margin-right: 0rem;
 }
 
 .spacing-h-5>* {
@@ -262,6 +290,14 @@
     margin-right: 0rem;
 }
 
+.spacing-h-5>scrolledwindow>* {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>scrolledwindow:last-child>* {
+    margin-right: 0rem;
+}
+
 .spacing-v-minus5>* {
     margin-bottom: -0.341rem;
 }
@@ -283,6 +319,14 @@
 }
 
 .spacing-h-10>revealer:last-child>* {
+    margin-right: 0rem;
+}
+
+.spacing-h-10>scrolledwindow>* {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>scrolledwindow:last-child>* {
     margin-right: 0rem;
 }
 
@@ -393,43 +437,43 @@
     margin-right: 0rem;
 }
 
-.spacing-v--5>box {
+.spacing-v--5>* {
     margin-bottom: -0.341rem;
 }
 
-.spacing-v--5>box:last-child {
+.spacing-v--5>*:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v--5>label {
-    margin-bottom: -0.341rem;
-}
-
-.spacing-v--5>label:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-v--10>box {
-    margin-bottom: -0.682rem;
-}
-
-.spacing-v--10>box:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-v--10>label {
-    margin-bottom: -0.682rem;
-}
-
-.spacing-v--10>label:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-h--20>box {
+.spacing-h--10>* {
     margin-left: -1.364rem;
 }
 
-.spacing-h--20>box:first-child {
+.spacing-h--10>*:first-child {
+    margin-left: 0rem;
+}
+
+.spacing-v--10>* {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>*:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v--10>* {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>*:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h--20>* {
+    margin-left: -1.364rem;
+}
+
+.spacing-h--20>*:first-child {
     margin-left: 0rem;
 }
 
@@ -439,4 +483,12 @@
 
 .menu-decel {
     @include menu_decel;
+}
+
+.element-show {
+    @include element_easeInOut;
+}
+
+.element-hide {
+    @include element_easeInOut;
 }
