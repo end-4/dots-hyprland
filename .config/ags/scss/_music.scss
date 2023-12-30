@@ -4,11 +4,11 @@
 @import './musicwal';
 @import './colors';
 @import './lib_mixins';
-$music_gradient1: mix($color1, $background, 30%);
+$music_gradient1: mix($color1, $background, 50%);
 
-@if $darkmode ==true {
-    $music_gradient1: mix($color1, $background, 30%);
-}
+// @if $darkmode ==true {
+//     $music_gradient1: mix($color1, $background, 30%);
+// }
 
 $music_gradient2: $color3;
 $music_gradient3: $color5;
@@ -17,6 +17,9 @@ $music_extra_transparentize: 0.15;
 
 $secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6, 80%), 0.5);
 $onSecondaryContainer: mix($color7, $color2, 90%);
+@if $darkmode ==false {
+    $onSecondaryContainer: mix($onSecondaryContainer, black, 50%);
+}
 
 .osd-music {
     @include menu_decel;

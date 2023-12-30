@@ -29,17 +29,15 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
 export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Bluetooth | Right-click to configure',
-    onClicked: () => { // Provided service doesn't work hmmm
+    onClicked: () => {
         const status = Bluetooth?.enabled;
-        if (status) {
+        if (status) 
             exec('rfkill block bluetooth');
-        }
-        else {
+        else 
             exec('rfkill unblock bluetooth');
-        }
     },
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center bluetooth', '&']);
+        execAsync(['bash', '-c', 'blueberry &']);
     },
     child: BluetoothIndicator(),
     connections: [
@@ -70,24 +68,28 @@ export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => W
     ...props,
 })
 
-export const ModuleNightLight = (props = {}) => Widget.Button({
+export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make this work
+    properties: [
+        ['enabled', false],
+        ['yellowlight', undefined],
+    ],
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Night Light',
-    onClicked: (button) => {
-        const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
-            button.toggleClassName('sidebar-button-active', false);
-        }
-        else {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
-            button.toggleClassName('sidebar-button-active', true);
-        }
+    onClicked: (self) => {
+        self._enabled = !self._enabled;
+        self.toggleClassName('sidebar-button-active', self._enabled);
+        // if (self._enabled) Utils.execAsync(['bash', '-c', 'wlsunset & disown'])
+        if (self._enabled) Utils.execAsync('wlsunset')
+        else Utils.execAsync('pkill wlsunset');
     },
     child: MaterialIcon('nightlight', 'norm'),
-    setup: setupCursorHover,
+    setup: (self) => {
+        setupCursorHover(self);
+        self._enabled = !!exec('pidof wlsunset');
+        self.toggleClassName('sidebar-button-active', self._enabled);
+    },
     ...props,
-})
+});
 
 export const ModuleInvertColors = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',

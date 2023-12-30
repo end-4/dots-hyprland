@@ -32,3 +32,9 @@
 .fadingRadial {
     transition: 50ms cubic-bezier(0.2, 0.0, 0, 1.0);
 }
+.sidebar-pinned {
+    margin: 0rem;
+    border-radius: 0rem;
+    border-bottom-right-radius: $rounding_large;
+    border: 0rem solid;
+}

@@ -4,7 +4,7 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverGrab } from "../../lib/cursorhover.js";
-import { DoubleRevealer } from "../../lib/doublerevealer.js";
+import { DoubleRevealer } from "../../lib/advancedrevealers.js";
 import { execAndClose, expandTilde, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
@@ -257,7 +257,7 @@ const workspace = index => {
             child: fixed,
         })],
     });
-    widget.update = clients => {
+    widget.update = (clients) => {
         clients = clients.filter(({ workspace: { id } }) => id === index);
 
         // this is for my monitor layout
@@ -269,9 +269,22 @@ const workspace = index => {
             return client;
         });
 
-        fixed.get_children().forEach(ch => ch.destroy());
+        const children = fixed.get_children();
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            child.destroy();
+        }
         fixed.put(WorkspaceNumber(index), 0, 0);
-        clients.forEach(c => c.mapped && fixed.put(client(c), c.at[0] * OVERVIEW_SCALE, c.at[1] * OVERVIEW_SCALE));
+
+        for (let i = 0; i < clients.length; i++) {
+            const c = clients[i];
+            if (c.mapped) {
+                fixed.put(client(c), c.at[0] * OVERVIEW_SCALE, c.at[1] * OVERVIEW_SCALE);
+            }
+        }
+
+
+
         fixed.show_all();
     };
     return widget;
@@ -290,7 +303,12 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     properties: [['update', box => {
         execAsync('hyprctl -j clients').then(clients => {
             const json = JSON.parse(clients);
-            box.get_children().forEach(ch => ch.update(json));
+            const children = box.get_children();
+            for (let i = 0; i < children.length; i++) {
+                const ch = children[i];
+                ch.update(json)
+            }
+
         }).catch(print);
     }]],
     setup: (box) => box._update(box),
@@ -312,7 +330,8 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
 export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
-    const clickOutsideToClose = Widget.EventBox({
+    const ClickToClose = ({ ...props }) => Widget.EventBox({
+        ...props,
         onPrimaryClick: () => App.closeWindow('overview'),
         onSecondaryClick: () => App.closeWindow('overview'),
         onMiddleClick: () => App.closeWindow('overview'),
@@ -375,7 +394,7 @@ export const SearchAndWindows = () => {
         hpack: 'center',
         onAccept: (self) => { // This is when you hit Enter
             const text = self.text;
-            if(text.length == 0) return;
+            if (text.length == 0) return;
             const isAction = text.startsWith('>');
             const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
 
@@ -423,7 +442,11 @@ export const SearchAndWindows = () => {
             ['notify::text', (entry) => { // This is when you type
                 const isAction = entry.text[0] == '>';
                 const isDir = (entry.text[0] == '/' || entry.text[0] == '~');
-                resultsBox.get_children().forEach(ch => ch.destroy());
+                const children = resultsBox.get_children();
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    child.destroy();
+                }
                 // check empty if so then dont do stuff
                 if (entry.text == '') {
                     resultsRevealer.set_reveal_child(false);
@@ -485,7 +508,11 @@ export const SearchAndWindows = () => {
     return Widget.Box({
         vertical: true,
         children: [
-            clickOutsideToClose,
+            ClickToClose({ // Top margin. Also works as a click-outside-to-close thing
+                child: Widget.Box({
+                    className: 'bar-height',
+                })
+            }),
             Widget.Box({
                 hpack: 'center',
                 children: [

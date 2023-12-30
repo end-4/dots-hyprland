@@ -21,7 +21,7 @@ export const CornerBottomleft = () => Widget.Window({
     name: 'cornerbl',
     layer: 'top',
     anchor: ['bottom', 'left'],
-    exclusivity: 'normal',
+    exclusivity: 'ignore',
     visible: true,
     child: RoundedCorner('bottomleft', { className: 'corner-black', }),
 });
@@ -29,7 +29,7 @@ export const CornerBottomright = () => Widget.Window({
     name: 'cornerbr',
     layer: 'top',
     anchor: ['bottom', 'right'],
-    exclusivity: 'normal',
+    exclusivity: 'ignore',
     visible: true,
     child: RoundedCorner('bottomright', { className: 'corner-black', }),
 });

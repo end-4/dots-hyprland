@@ -138,10 +138,12 @@ export default () => Box({
             }),
             onPrimaryClickRelease: () => {
                 const kids = resources.get_children();
-
-                kids.forEach((child, i) => {
-                    child.get_children()[0].revealChild = !child.get_children()[0].revealChild;
-                });
+                for (let i = 0; i < kids.length; i++) {
+                    const child = kids[i];
+                    const firstChild = child.get_children()[0];
+                    firstChild.revealChild = !firstChild.revealChild;
+                }
+                
             },
         })
     ],

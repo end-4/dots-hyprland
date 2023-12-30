@@ -10,7 +10,13 @@ const SysTrayItem = item => Button({
     className: 'bar-systray-item',
     child: Icon({
         hpack: 'center',
-        binds: [['icon', item, 'icon']]
+        binds: [['icon', item, 'icon']],
+        setup: (self) => Utils.timeout(1, () => {
+            const styleContext = self.get_parent().get_style_context();
+            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+            self.size = Math.max(width, height, 1); // im too lazy to add another box lol
+        }),
     }),
     binds: [['tooltipMarkup', item, 'tooltip-markup']],
     onClicked: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
@@ -19,8 +25,7 @@ const SysTrayItem = item => Button({
 
 export const Tray = (props = {}) => {
     const trayContent = Box({
-        vpack: 'center',
-        className: 'bar-systray bar-group',
+        className: 'bar-systray spacing-h-10',
         properties: [
             ['items', new Map()],
             ['onAdded', (box, id) => {
@@ -31,7 +36,7 @@ export const Tray = (props = {}) => {
                     return;
                 const widget = SysTrayItem(item);
                 box._items.set(id, widget);
-                box.pack_start(widget, false, false, 0);
+                box.add(widget);
                 box.show_all();
                 if (box._items.size === 1)
                     trayRevealer.revealChild = true;
@@ -46,10 +51,10 @@ export const Tray = (props = {}) => {
                     trayRevealer.revealChild = false;
             }],
         ],
-        connections: [
-            [SystemTray, (box, id) => box._onAdded(box, id), 'added'],
-            [SystemTray, (box, id) => box._onRemoved(box, id), 'removed'],
-        ],
+        setup: (self) => self
+            .hook(SystemTray, (box, id) => box._onAdded(box, id), 'added')
+            .hook(SystemTray, (box, id) => box._onRemoved(box, id), 'removed')
+        ,
     });
     const trayRevealer = Widget.Revealer({
         revealChild: false,
