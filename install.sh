@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
+export base="$(pwd)"
 
 function try { "$@" || sleep 0; }
 function v() {
@@ -58,18 +59,22 @@ sleep 1
 
 installags (){
   v git clone --recursive https://github.com/Aylur/ags.git|| \
-    if [ -d ags ];then printf "\e[36mSeems \"./ags\" already exists.\e[97m\n";else exit 1;fi
-  cd ags 
+    if [ -d ags ];then
+      printf "\e[36mSeems \"./ags\" already exists.\e[97m\n"
+      cd ags
+      v git pull
+    else exit 1
+    fi
   v npm install
   v meson setup build 
   v meson install -C build
+  cd $base
 }
 if command -v ags >/dev/null 2>&1
-  then echo "Command ags already exists."
+  then echo -e "\e[34mCommand \"ags\" already exists. Won't install ags.\e[0m"
   else installags
 fi
 
-cd "$(dirname "$0")"
 #####################################################################################
 printf '\e[36m3. Copying\e[97m\n'
 
