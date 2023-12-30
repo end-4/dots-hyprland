@@ -57,7 +57,7 @@ const NotificationIcon = (notifObject) => {
                         const styleContext = self.get_parent().get_style_context();
                         const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
                         const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                        self.size = Math.max(width * 0.9, height * 0.9, 1); // im too lazy to add another box lol
+                        self.size = Math.max(width * 0.7, height * 0.7, 1); // im too lazy to add another box lol
                     }),
                 })
                 :
@@ -185,7 +185,7 @@ export default ({
                 child: NotificationIcon(notifObject),
                 overlays: isPopup ? [AnimatedCircProg({
                     className: `notif-circprog-${notifObject.urgency}`,
-                    valign: Gtk.Align.CENTER,
+                    vpack: 'center', hpack: 'center',
                     initFrom: (isPopup ? 100 : 0),
                     initTo: 0,
                     initAnimTime: popupTimeout,
@@ -245,7 +245,7 @@ export default ({
                 notifTextPreview.revealChild = true;
                 notifTextExpanded.revealChild = false;
                 self.child.label = 'expand_more';
-                expanded = true;
+                expanded = false;
             }
         },
         child: MaterialIcon('expand_more', 'norm', {
@@ -338,7 +338,7 @@ export default ({
 
                 if (widget.window)
                     widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
-                
+
                 if (initDirVertical == 1 && offset_y > MOVE_THRESHOLD && !expanded) {
                     notifTextPreview.revealChild = false;
                     notifTextExpanded.revealChild = true;

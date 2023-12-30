@@ -1,27 +1,16 @@
 // Made to be pixel-perfect with 11pt font size
 // 1rem = 11pt = 14.6666666667px
 
-// Init
 $black: black;
 $white: white;
-$notchSecondaryContainer: $secondaryContainer;
-$notchOnSecondaryContainer: $onSecondaryContainer;
-$notchPrimary: $primary;
-$notchOnPrimary: $onPrimary;
+$bar_ws_width: 1.774rem;
 
-// Check dark mode. Set colors accordingly for the fake snotch that's always black
-@if $darkmode ==true {
-    $notchSecondaryContainer: $secondaryContainer;
-    $notchOnSecondaryContainer: $onSecondaryContainer;
-    $notchPrimary: $primary;
-    $notchOnPrimary: $onPrimary;
+@mixin bar-group-rounding {
+    @include small-rounding;
 }
 
-@else {
-    $notchSecondaryContainer: $onSecondaryContainer;
-    $notchOnSecondaryContainer: $secondaryContainer;
-    $notchPrimary: $primaryContainer;
-    $notchOnPrimary: $onPrimaryContainer;
+.bar-height {
+    min-height: 2.727rem;
 }
 
 .bar-bg {
@@ -34,31 +23,16 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-group-margin {
-    padding: 0.2rem;
+    padding: 0.273rem 0rem;
 }
 
 .bar-group {
-    // @include elevation-border;
-    background-color: $t_surface;
-}
-
-.bar-group-center {
-    border-bottom-left-radius: 1.364rem;
-    border-bottom-right-radius: 1.364rem;
-    padding: 0.2rem;
-    // background-color: $t_surface;
-    background-color: $black; // Hard code: fake notch
-}
-
-.corner-bar-group {
-    border-radius: 1.364rem; // Half of bar height
-    border-width: 0.068rem;
-    // background-color: $t_surface;
-    background-color: $black; // Hard code: fake notch
+    background-color: $l_l_t_surfaceVariant;
 }
 
 .bar-group-pad {
-    padding: 0rem 1.023rem;
+    // padding: 0rem 1.023rem;
+    padding: 0.205rem;
 }
 
 .bar-group-pad-less {
@@ -94,7 +68,7 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-group-standalone {
-    border-radius: 1.364rem;
+    @include bar-group-rounding;
     -gtk-outline-radius: 1.364rem;
 }
 
@@ -123,7 +97,28 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-ws-width {
-    min-width: 18.614rem;
+    min-width: 18.341rem;
+}
+
+.bar-ws {
+    min-width: $bar_ws_width;
+    color: mix($onBackground, $background, 40%);
+    @if $darkmode ==true {
+        color: mix($onBackground, $background, 45%);
+    }
+}
+
+.bar-ws-active {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-ws-occupied {
+    background-color: mix($surfaceVariant, $primary, 89%);
+    @if $darkmode ==true {
+        background-color: $surfaceVariant;
+    }
+    color: $onSurfaceVariant;
 }
 
 .bar-separator {
@@ -146,95 +141,12 @@ $notchOnPrimary: $onPrimary;
     color: $onBackground;
 }
 
-.bar-ws {
-    min-height: 1.636rem;
-    min-width: 1.772rem;
-    font-size: 1.091rem;
-    @include mainfont;
-    border-top: 0.068rem solid;
-    border-bottom: 0.068rem solid;
-    border-color: transparent;
-    color: $white;
-}
-
-.bar-ws-active-box {
-    transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-}
-
-.bar-ws-active {
-    min-height: 1.5rem;
-    min-width: 1.5rem;
-    font-size: 1.091rem;
-    @include mainfont;
-
-    background-color: $notchPrimary;
-    color: $notchOnPrimary;
-    border-radius: 999px;
-    margin: 0.068rem;
-    // background-color: red;
-}
-
-.bar-ws-active-middledecor {
-    min-width: 0.682rem;
-    min-height: 0.682rem;
-    border-radius: 9999px;
-    background-color: $black;
-    margin: 0rem 0.409rem;
-}
-
-.bar-ws-occupied {
-    background-color: $notchSecondaryContainer;
-    color: $notchOnSecondaryContainer;
-    min-width: 1.772rem;
-    border-top: 0.068rem solid $notchOnSecondaryContainer;
-    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
-}
-
-.bar-ws-occupied-left {
-    background-color: $notchSecondaryContainer;
-    color: $notchOnSecondaryContainer;
-    min-width: 1.704rem;
-    border-top-left-radius: 999px;
-    border-bottom-left-radius: 999px;
-
-    border-left: 0.068rem solid $notchOnSecondaryContainer;
-    border-top: 0.068rem solid $notchOnSecondaryContainer;
-    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
-    border-right: 0px solid transparent;
-}
-
-.bar-ws-occupied-right {
-    background-color: $notchSecondaryContainer;
-    color: $notchOnSecondaryContainer;
-    min-width: 1.704rem;
-    border-top-right-radius: 999px;
-    border-bottom-right-radius: 999px;
-
-    border-right: 0.068rem solid $notchOnSecondaryContainer;
-    border-top: 0.068rem solid $notchOnSecondaryContainer;
-    border-bottom: 0.068rem solid $notchOnSecondaryContainer;
-    border-left: 0px solid transparent;
-}
-
-.bar-ws-occupied-left-right {
-    @include full-rounding;
-    background-color: $notchSecondaryContainer;
-    color: $notchOnSecondaryContainer;
-    min-width: 1.636rem;
-    border: 0.068rem solid $notchOnSecondaryContainer;
-}
-
-.bar-ws-empty {
-    color: $onBackground;
-    border-color: transparent;
-}
-
 .bar-batt {
     @include full-rounding;
     padding: 0rem 0.341rem;
     background-color: $t_secondaryContainer;
     color: $t_onSecondaryContainer;
-    // border: 1px solid $onSecondaryContainer;
+    // border: 0.068rem solid $outline;
 }
 
 .bar-sidemodule {
@@ -262,8 +174,8 @@ $notchOnPrimary: $onPrimary;
 }
 
 .bar-music-playstate {
-    min-height: 1.770rem;
-    min-width: 1.770rem;
+    min-height: 1.77rem;
+    min-width: 1.77rem;
     border-radius: 10rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
@@ -272,15 +184,15 @@ $notchOnPrimary: $onPrimary;
 .bar-music-circprog {
     @include fluent_decel_long;
     min-width: 0.068rem; // line width
-    min-height: 1.770rem;
+    min-height: 1.636rem;
     padding: 0rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
 }
 
 .bar-music-playstate-playing {
-    min-height: 1.770rem;
-    min-width: 1.770rem;
+    min-height: 1.77rem;
+    min-width: 1.77rem;
     border-radius: 10rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
@@ -363,8 +275,8 @@ $notchOnPrimary: $onPrimary;
     }
 
     progress {
-        min-height: 0.680rem;
-        min-width: 0.680rem;
+        min-height: 0.68rem;
+        min-width: 0.68rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
         background-color: $t_onSecondaryContainer;
@@ -424,7 +336,7 @@ $notchOnPrimary: $onPrimary;
 }
 
 .corner-black {
-    background-color: $black; // Hard code because fake screen corner
+    background-color: $black; // Hard code: fake screen corner
     @include large-rounding;
 }
 
@@ -438,17 +350,17 @@ $notchOnPrimary: $onPrimary;
     padding: 0.341rem;
 }
 
-.bar-space-button>box:first-child {
+.bar-space-button > box:first-child {
     @include full-rounding;
     padding: 0rem 0.682rem;
 }
 
-.bar-space-button:hover>box:first-child,
-.bar-space-button:focus>box:first-child {
+.bar-space-button:hover > box:first-child,
+.bar-space-button:focus > box:first-child {
     background-color: $hovercolor;
 }
 
-.bar-space-button:active>box:first-child {
+.bar-space-button:active > box:first-child {
     background-color: $activecolor;
 }
 
@@ -458,7 +370,7 @@ $notchOnPrimary: $onPrimary;
     }
 }
 
-.bar-space-area-rightmost>box {
+.bar-space-area-rightmost > box {
     padding-right: 2.386rem;
 }
 
@@ -477,7 +389,7 @@ $notchOnPrimary: $onPrimary;
 .bar-statusicons {
     @include full-rounding;
     @include menu_decel;
-    margin: 0.2rem;
+    margin: 0.273rem;
     padding: 0rem 0.614rem;
 }
 

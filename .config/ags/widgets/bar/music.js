@@ -14,7 +14,7 @@ const TrackProgress = () => {
     }
     return AnimatedCircProg({
         className: 'bar-music-circprog',
-        vpack: 'center',
+        vpack: 'center', hpack: 'center',
         connections: [ // Update on change/once every 3 seconds
             [Mpris, _updateProgress],
             [3000, _updateProgress]
