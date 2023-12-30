@@ -4,6 +4,10 @@
 $black: black;
 $white: white;
 $bar_ws_width: 1.774rem;
+$bar_subgroup_bg: mix($surfaceVariant, $primary, 89%);
+@if $darkmode ==true {
+    $bar_subgroup_bg: $surfaceVariant;
+}
 
 @mixin bar-group-rounding {
     @include small-rounding;
@@ -33,6 +37,7 @@ $bar_ws_width: 1.774rem;
 .bar-group-pad {
     // padding: 0rem 1.023rem;
     padding: 0.205rem;
+    // padding-left: 0.341rem;
 }
 
 .bar-group-pad-less {
@@ -41,7 +46,7 @@ $bar_ws_width: 1.774rem;
 
 .bar-group-pad-system {
     padding-left: 1.023rem;
-    padding-right: 0.547rem;
+    padding-right: 0.341rem;
 }
 
 .bar-group-pad-music {
@@ -114,10 +119,7 @@ $bar_ws_width: 1.774rem;
 }
 
 .bar-ws-occupied {
-    background-color: mix($surfaceVariant, $primary, 89%);
-    @if $darkmode ==true {
-        background-color: $surfaceVariant;
-    }
+    background-color: $bar_subgroup_bg;
     color: $onSurfaceVariant;
 }
 
@@ -132,7 +134,6 @@ $bar_ws_width: 1.774rem;
 .bar-clock {
     @include titlefont;
     font-size: 1.2727rem;
-    color: $onBackground;
 }
 
 .bar-date {
@@ -143,10 +144,11 @@ $bar_ws_width: 1.774rem;
 
 .bar-batt {
     @include full-rounding;
-    padding: 0rem 0.341rem;
-    background-color: $t_secondaryContainer;
-    color: $t_onSecondaryContainer;
-    // border: 0.068rem solid $outline;
+    min-height: 1.77rem;
+    min-width: 1.77rem;
+    border-radius: 10rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
 }
 
 .bar-sidemodule {
@@ -163,12 +165,29 @@ $bar_ws_width: 1.774rem;
     color: $onSuccessContainer;
 }
 
-.bar-batt-prog-low {
+.bar-batt-circprog {
+    @include fluent_decel_long;
+    min-width: 0.068rem; // line width
+    min-height: 1.636rem;
+    padding: 0rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-batt-circprog-low {
+    @include fluent_decel_long;
+    min-width: 0.068rem; // line width
+    min-height: 1.636rem;
+    padding: 0rem;
     background-color: $error;
     color: $errorContainer;
 }
 
-.bar-batt-prog-full {
+.bar-batt-circprog-full {
+    @include fluent_decel_long;
+    min-width: 0.068rem; // line width
+    min-height: 1.636rem;
+    padding: 0rem;
     background-color: $successContainer;
     color: $onSuccessContainer;
 }
@@ -304,30 +323,14 @@ $bar_ws_width: 1.774rem;
     border-radius: 10rem;
     min-width: 0.681rem;
     min-height: 0.681rem;
-    background-color: $t_onSecondaryContainer;
-    color: $secondaryContainer;
+    background-color: $onSurfaceVariant;
 }
 
 .bar-batt-chargestate-charging-smaller {
     border-radius: 10rem;
     min-width: 0.409rem;
     min-height: 0.409rem;
-    background-color: $t_onSecondaryContainer;
-    color: $secondaryContainer;
-}
-
-.bar-batt-chargestate-low {
-    background-color: $errorContainer;
-}
-
-.bar-batt-chargestate-full {
-    background-color: $onSuccessContainer;
-}
-
-.bar-batt-percentage {
-    font-size: 1rem;
-    margin-top: -0.068rem;
-    font-weight: 500;
+    background-color: $onSurfaceVariant;
 }
 
 .corner {
@@ -399,4 +402,20 @@ $bar_ws_width: 1.774rem;
 
 .bar-statusicons-active {
     background-color: mix($t_background, $t_onBackground, 80%);
+}
+
+.bar-util-btn {
+    @include full-rounding;
+    min-height: 1.77rem;
+    min-width: 1.77rem;
+    background-color: $bar_subgroup_bg;
+}
+
+.bar-util-btn:hover,
+.bar-util-btn:focus {
+    background-color: mix($bar_subgroup_bg, $onSurfaceVariant, 90%);
+}
+
+.bar-util-btn:active {
+    background-color: mix($bar_subgroup_bg, $onSurfaceVariant, 80%);
 }

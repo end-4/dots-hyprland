@@ -69,6 +69,10 @@
     color: $onSecondaryContainer;
 }
 
+.txt-onSurfaceVariant {
+    color: $onSurfaceVariant;
+}
+
 .txt-shadow {
     text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
     margin: 10px;
@@ -433,43 +437,43 @@
     margin-right: 0rem;
 }
 
-.spacing-v--5>box {
+.spacing-v--5>* {
     margin-bottom: -0.341rem;
 }
 
-.spacing-v--5>box:last-child {
+.spacing-v--5>*:last-child {
     margin-bottom: 0rem;
 }
 
-.spacing-v--5>label {
-    margin-bottom: -0.341rem;
-}
-
-.spacing-v--5>label:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-v--10>box {
-    margin-bottom: -0.682rem;
-}
-
-.spacing-v--10>box:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-v--10>label {
-    margin-bottom: -0.682rem;
-}
-
-.spacing-v--10>label:last-child {
-    margin-bottom: 0rem;
-}
-
-.spacing-h--20>box {
+.spacing-h--10>* {
     margin-left: -1.364rem;
 }
 
-.spacing-h--20>box:first-child {
+.spacing-h--10>*:first-child {
+    margin-left: 0rem;
+}
+
+.spacing-v--10>* {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>*:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v--10>* {
+    margin-bottom: -0.682rem;
+}
+
+.spacing-v--10>*:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h--20>* {
+    margin-left: -1.364rem;
+}
+
+.spacing-h--20>*:first-child {
     margin-left: 0rem;
 }
 

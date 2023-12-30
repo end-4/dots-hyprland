@@ -70,6 +70,7 @@ export default () => MarginRevealer({
     child: Box({
         hpack: 'center',
         vertical: false,
+        className: 'spacing-h--10',
         children: [
             brightnessIndicator,
             volumeIndicator,
