@@ -3,8 +3,8 @@ cd "$(dirname "$0")"
 
 function try { "$@" || sleep 0; }
 function v() {
-  echo -e "[$0]: \e[32mNow executing:\e[0m"
-  echo -e "\e[34m$@\e[0m"
+  echo -e "[$0]: \e[34mNow executing:\e[0m"
+  echo -e "\e[32m$@\e[0m"
   execute=true
   if $ask;then
     while true;do
