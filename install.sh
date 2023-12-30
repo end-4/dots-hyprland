@@ -8,7 +8,7 @@ function v() {
   execute=true
   if $ask;then
     while true;do
-      echo "Do you want to execute this command? "
+      echo -e "\e[34mDo you want to execute this command? \e[0m"
       echo "  y = Yes"
       echo "  a = Abort this script"
       echo "  s = Skip this command; NOT recommended unless you really sure"
@@ -27,17 +27,8 @@ function v() {
   "$@"
   fi
 }
-
-checkexist() {
-	if command -v $1 >/dev/null 2>&1; then
-		echo "Command $1 found."
-	else
-		echo "Error: Command $1 not found, aborting..."
-		exit 1
-	fi
-}
-
-printf 'Hi there!\n'
+#####################################################################################
+printf "[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
 printf '            2. has not been fully tested, use at your own risk.\n'
 printf "\e[36m== PLEASE BACKUP \"$HOME/.config\" AND \"$HOME/.local\" BY YOURSELF IF NEEDED! ==\n\e[97m"
@@ -56,7 +47,7 @@ set -e
 #####################################################################################
 printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
-v yay -S --needed$c blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git hyprpicker-git
+v yay -S --needed$c blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git hyprpicker-git rsync
 
 v sudo usermod -aG video "$(whoami)"
 v sudo usermod -aG input "$(whoami)"
@@ -64,17 +55,19 @@ v sudo usermod -aG input "$(whoami)"
 #####################################################################################
 printf '\e[36m2. Installing AGS from git repo\e[97m\n'
 sleep 1
-  v git clone --recursive https://github.com/Aylur/ags.git|| \
-  if [ -d ags ];then printf "\e[36mSeems \"./ags\" already exists.\e[97m\n";else exit 1;fi
-sleep 1
 
 installags (){
-cd ags 
-v npm install
-v meson setup build 
-v meson install -C build
+  v git clone --recursive https://github.com/Aylur/ags.git|| \
+    if [ -d ags ];then printf "\e[36mSeems \"./ags\" already exists.\e[97m\n";else exit 1;fi
+  cd ags 
+  v npm install
+  v meson setup build 
+  v meson install -C build
 }
-checkexist ags || installags
+if command -v ags >/dev/null 2>&1
+  then echo "Command ags already exists."
+  else installags
+fi
 
 cd "$(dirname "$0")"
 #####################################################################################
@@ -83,17 +76,23 @@ printf '\e[36m3. Copying\e[97m\n'
 # In case ~/.local/bin does not exists
 v mkdir -p "$HOME/.local/bin"
 
-# --delete to make sure that
+# `--delete' for rsync to make sure that
 # original dot files and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-for i in .config/* .local/* 
+for i in .config/*
 do
+  echo "Found target: $i"
   if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
   fi
 done
+
+# .local/bin should be processed seperately to avoid `--delete' for rsync,
+# since the files here comes from different places, not only one program.
+v rsync -av ".local/bin/" "$HOME/.local/bin/"
+
 #####################################################################################
-printf '\e[36mFinished. See the "Import manually" folder and grab anything you need.\e[97m\n'
-printf '\e[36mPress Ctrl+Super+T to select a wallpaper\e[97m\n'
-printf '\e[36mPress Super+/ for a list of keybinds\e[97m\n'
+printf "[$0]: \e[36mFinished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
+printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
+printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[97m\n"
