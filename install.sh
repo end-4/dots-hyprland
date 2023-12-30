@@ -15,10 +15,10 @@ function v() {
       echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
       read -p "Enter here [y/a/s/yesforall]:" p
       case $p in
-        [yY]) echo -e "\e[32mOK, executing...\e[0m" ;break ;;
-        [aA]) echo -e "\e[32mAborting...\e[0m" ;exit ;break ;;
-        [sS]) echo -e "\e[32mAlright, skipping this one...\e[0m" ;export execute=false ;break ;;
-        "yesforall") echo -e "\e[32mAlright, won't ask again. Executing...\e[0m"; export ask=false ;break ;;
+        [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
+        [aA]) echo -e "\e[34mAborting...\e[0m" ;exit ;break ;;
+        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;export execute=false ;break ;;
+        "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; export ask=false ;break ;;
         *) echo -e "\e[31mPlease enter one of [y/a/s/yesforall].\e[0m";;
       esac
     done
