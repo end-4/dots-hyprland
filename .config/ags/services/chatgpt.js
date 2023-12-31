@@ -44,7 +44,7 @@ function expandTilde(path) {
 
 // We're using many models to not be restricted to 3 messages per minute.
 // The whole chat will be sent every request anyway.
-const KEY_FILE_LOCATION = `~/.cache/ags/user/openai_api_key.txt`;
+const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_key.txt`;
 const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
 const ONE_CYCLE_COUNT = 3;
 

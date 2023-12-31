@@ -63,7 +63,7 @@ class TodoService extends Service {
         super();
         this._todoPath = `${GLib.get_user_cache_dir()}/ags/user/todo.json`;
         if (!fileExists(this._todoPath)) { // No? create file with empty array
-            Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
+            Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/user'`);
             Utils.exec(`touch ${this._todoPath}`);
             Utils.writeFile("[]", this._todoPath).then(() => {
                 this._todoJson = JSON.parse(Utils.readFile(this._todoPath))

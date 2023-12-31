@@ -5,64 +5,20 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from './messages.js';
 
-class WaifuResponse extends Service {
-    static {
-        Service.register(this,
-            {
-                'delta': ['string'],
-            },
-            {
-                'content': ['string'],
-                'thinking': ['boolean'],
-                'done': ['boolean'],
-            });
-    }
-
-    _role = '';
-    _content = '';
-    _thinking = false;
-    _done = false;
-
-    constructor(role, content, thinking = false, done = false) {
-        super();
-        this._role = role;
-        this._content = content;
-        this._thinking = thinking;
-        this._done = done;
-    }
-
-    get done() { return this._done }
-    set done(isDone) { this._done = isDone; this.notify('done') }
-
-    get role() { return this._role }
-    set role(role) { this._role = role; this.emit('changed') }
-
-    get content() { return this._content }
-    set content(content) {
-        this._content = content;
-        this.notify('content')
-        this.emit('changed')
-    }
-
-    get label() { return this._parserState.parsed + this._parserState.stack.join('') }
-
-    get thinking() { return this._thinking }
-    set thinking(thinking) {
-        this._thinking = thinking;
-        this.notify('thinking')
-        this.emit('changed')
-    }
-
-    addDelta(delta) {
-        if (this.thinking) {
-            this.thinking = false;
-            this.content = delta;
-        }
-        else {
-            this.content += delta;
-        }
-        this.emit('delta', delta);
-    }
+function paramStringFromObj(params) {
+    return Object.entries(params)
+        .map(([key, value]) => {
+            if (Array.isArray(value)) { // If it's an array, repeat
+                if (value.length == 0) return '';
+                let thisKey = `${encodeURIComponent(key)}=${encodeURIComponent(value[0])}`
+                for (let i = 1; i < value.length; i++) {
+                    thisKey += `&${encodeURIComponent(key)}=${encodeURIComponent(value[i])}`;
+                }
+                return thisKey;
+            }
+            return `${key}=${value}`;
+        })
+        .join('&');
 }
 
 class WaifuService extends Service {
@@ -76,9 +32,10 @@ class WaifuService extends Service {
         'nekos': {},
         'pics': {},
     }
-    _url = 'https://api.waifu.im/search';
+    _baseUrl = 'https://api.waifu.im/search';
     _mode = 'im'; // Allowed: im
     _responses = [];
+    _queries = [];
     _nsfw = false;
     _minHeight = 600;
 
@@ -86,7 +43,8 @@ class WaifuService extends Service {
         Service.register(this, {
             'initialized': [],
             'clear': [],
-            'newResponse': ['string'],
+            'newResponse': ['int'],
+            'updateResponse': ['int'],
         });
     }
 
@@ -97,71 +55,68 @@ class WaifuService extends Service {
 
     clear() {
         this._responses = [];
+        this._queries = [];
         this.emit('clear');
     }
 
     get mode() { return this._mode }
     set mode(value) {
         this._mode = value;
-        this._url = this._endpoints[this._mode];
+        this._baseUrl = this._endpoints[this._mode];
     }
     get nsfw() { return this._nsfw }
     set nsfw(value) { this._nsfw = value }
+    get queries() { return this._queries }
     get responses() { return this._responses }
 
-    readResponseRecursive(stream, response) {
-        stream.read_line_async(
-            0, null,
-            (stream, res) => {
-                if (!stream) return;
-                const [bytes] = stream.read_line_finish(res);
-                const line = this._decoder.decode(bytes);
-                if (line && line != '') {
-                    let data = line.substr(6);
-                    if (data == '[DONE]') return;
-                    try {
-                        const result = JSON.parse(data);
-                        if (result.choices[0].finish_reason === 'stop') {
-                            response.done = true;
-                            return;
-                        }
-                        response.addDelta(result.choices[0].delta.content);
-                    }
-                    catch {
-                        response.addDelta(line + '\n');
-                    }
-                }
-                this.readResponseRecursive(stream, response);
-            });
-    }
-
     fetch(msg) {
+        const newMessageId = this._responses.length;
         const taglist = msg.split(' ');
-        this.emit('newResponse', msg);
-        this._responses.push(msg);
-
+        this._queries.push(taglist);
+        this.emit('newResponse', newMessageId);
+        // Construct body/headers
         const params = {
             'included_tags': taglist,
             'height': `>=${this._minHeight}`,
             'nsfw': this._nsfw,
         };
-
-        const session = new Soup.Session();
-        const message = new Soup.Message({
+        const paramString = paramStringFromObj(params);
+        console.log(paramString);
+        // Fetch
+        const options = {
             method: 'GET',
-            uri: GLib.Uri.parse(this._url, GLib.UriFlags.NONE),
-        });
-        session.send_message(message, (session, message) => {
-            if (message.status_code === 200) {
-                const responseBody = message.response_body.data;
-                const data = JSON.parse(responseBody);
-                // Process the response data as needed
-                console.log(data);
-                log(data);
-            } else {
-                logError('Request failed with status code: ' + message.status_code);
-            }
-        });
+            headers: this._headers[this._mode],
+        };
+        Utils.fetch(`${this._baseUrl}?${paramString}`, options)
+            .then(result => result.text()) // Parse
+            .then((dataString) => { // Store interesting stuff and emit
+                const parsedData = JSON.parse(dataString);
+                if (!parsedData.images) this._responses.push({
+                    signature: -1,
+                    url: '',
+                    source: '',
+                    dominant_color: '#383A40',
+                    is_nsfw: false,
+                    width: 0,
+                    height: 0,
+                    tags: [],
+                });
+                else {
+                    const imageData = parsedData.images[0];
+                    this._responses.push({
+                        signature: imageData?.signature || -1,
+                        url: imageData?.url || undefined,
+                        source: imageData?.source,
+                        dominant_color: imageData?.dominant_color || '#000000',
+                        is_nsfw: imageData?.is_nsfw || false,
+                        width: imageData?.width || 0,
+                        height: imageData?.height || 0,
+                        tags: imageData?.tags.map(obj => obj["name"]) || [],
+                    });
+                }
+                this.emit('updateResponse', newMessageId);
+            })
+            .catch(console.error)
 
     }
 }

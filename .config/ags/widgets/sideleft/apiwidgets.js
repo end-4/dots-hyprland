@@ -5,8 +5,8 @@ const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
-import { chatGPTView, chatGPTCommands, chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
-import { waifuView, waifuCommands, waifuCallAPI, waifuTabIcon } from './apis/waifu.js';
+import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 
 const APIS = [
     {
@@ -19,7 +19,7 @@ const APIS = [
     },
     {
         name: 'Waifus',
-        sendCommand: waifuCallAPI,
+        sendCommand: waifuSendMessage,
         contentWidget: waifuView,
         commandBar: waifuCommands,
         tabIcon: waifuTabIcon,
