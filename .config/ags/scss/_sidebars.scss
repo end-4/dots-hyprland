@@ -166,27 +166,27 @@ $onChatgpt: $onPrimary;
     padding: 0rem $rounding_medium;
 }
 
-.sidebar-navrail-btn>box>label {
+.sidebar-navrail-btn > box > label {
     @include full-rounding;
     @include menu_decel;
 }
 
-.sidebar-navrail-btn:hover>box>label:first-child,
-.sidebar-navrail-btn:focus>box>label:first-child {
+.sidebar-navrail-btn:hover > box > label:first-child,
+.sidebar-navrail-btn:focus > box > label:first-child {
     background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
-.sidebar-navrail-btn:active>box>label:first-child {
+.sidebar-navrail-btn:active > box > label:first-child {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
 }
 
-.sidebar-navrail-btn-active>box>label:first-child {
+.sidebar-navrail-btn-active > box > label:first-child {
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
 }
 
-.sidebar-navrail-btn-active:hover>box>label:first-child,
-.sidebar-navrail-btn-active:focus>box>label:first-child {
+.sidebar-navrail-btn-active:hover > box > label:first-child,
+.sidebar-navrail-btn-active:focus > box > label:first-child {
     background-color: mix($secondaryContainer, $hovercolor, 90%);
     color: mix($onSecondaryContainer, $hovercolor, 90%);
 }
@@ -346,7 +346,7 @@ $onChatgpt: $onPrimary;
     background-color: mix($surfaceVariant, $onSurfaceVariant, 75%);
 }
 
-.sidebar-selector-tab-active>box>label {
+.sidebar-selector-tab-active > box > label {
     color: $primary;
 }
 
@@ -509,7 +509,7 @@ $onChatgpt: $onPrimary;
 .sidebar-chat-apiswitcher-icon {
     @include menu_decel;
     @include full-rounding;
-    min-width:  2.182rem;
+    min-width: 2.182rem;
     min-height: 2.182rem;
     color: $onSurface;
 }
@@ -548,11 +548,19 @@ $onChatgpt: $onPrimary;
 
 .sidebar-chat-send:hover,
 .sidebar-chat-send:focus {
-    background-color: mix($sidebar_chat_textboxareaColor, $t_onSecondaryContainer, 97%);
+    background-color: mix(
+        $sidebar_chat_textboxareaColor,
+        $t_onSecondaryContainer,
+        97%
+    );
 }
 
 .sidebar-chat-send:active {
-    background-color: mix($sidebar_chat_textboxareaColor, $t_onSecondaryContainer, 80%);
+    background-color: mix(
+        $sidebar_chat_textboxareaColor,
+        $t_onSecondaryContainer,
+        80%
+    );
 }
 
 .sidebar-chat-send-available {
@@ -576,6 +584,7 @@ $onChatgpt: $onPrimary;
 .sidebar-chat-indicator {
     @include full-rounding;
     min-width: 0.136rem;
+    background-color: $onBackground;
 }
 
 .sidebar-chat-indicator-user {
@@ -594,7 +603,6 @@ $onChatgpt: $onPrimary;
     @include titlefont;
     padding: 0.341rem;
     margin-left: -0.136rem;
-    padding: 0.341rem;
     padding-left: 0.818rem;
 }
 
@@ -699,7 +707,11 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-chip-action:active {
-    background-color: mix($sidebar_chat_textboxareaColor, $onSurfaceVariant, 70%);
+    background-color: mix(
+        $sidebar_chat_textboxareaColor,
+        $onSurfaceVariant,
+        70%
+    );
     color: mix($sidebar_chat_textboxareaColor, $surfaceVariant, 70%);
 }
 
@@ -741,3 +753,26 @@ $onChatgpt: $onPrimary;
     background-color: mix($primary, $onPrimary, 80%);
 }
 
+.sidebar-waifu-heading {
+    @include titlefont;
+    padding: 0.341rem;
+    margin-left: -0.136rem;
+    padding-left: 0.818rem;
+}
+
+.sidebar-waifu-content {
+    margin-left: 0.682rem;
+}
+
+.sidebar-waifu-txt {
+    @include readingfont;
+    margin-left: 0.682rem;
+}
+
+.sidebar-waifu-image {
+    margin-left: 0.682rem;
+    @include normal-rounding;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

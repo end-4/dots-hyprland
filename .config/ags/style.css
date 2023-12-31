@@ -1839,7 +1839,8 @@ tooltip {
 .sidebar-chat-indicator {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  min-width: 0.136rem; }
+  min-width: 0.136rem;
+  background-color: #eae0e4; }
 
 .sidebar-chat-indicator-user {
   background-color: #eae0e4; }
@@ -1854,7 +1855,6 @@ tooltip {
   font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
   padding: 0.341rem;
   margin-left: -0.136rem;
-  padding: 0.341rem;
   padding-left: 0.818rem; }
 
 .sidebar-chat-txtblock {
@@ -1979,6 +1979,27 @@ tooltip {
 
 .sidebar-pin-enabled:active {
   background-color: #dda0d4; }
+
+.sidebar-waifu-heading {
+  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  padding: 0.341rem;
+  margin-left: -0.136rem;
+  padding-left: 0.818rem; }
+
+.sidebar-waifu-content {
+  margin-left: 0.682rem; }
+
+.sidebar-waifu-txt {
+  font-family: 'Lexend', 'Noto Sans', sans-serif;
+  margin-left: 0.682rem; }
+
+.sidebar-waifu-image {
+  margin-left: 0.682rem;
+  border-radius: 1.159rem;
+  -gtk-outline-radius: 1.159rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
 
 .session-bg {
   margin-top: -2.727rem;

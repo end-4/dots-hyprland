@@ -129,6 +129,7 @@ const Taskbar = () => Widget.Box({
             if (!address) return;
 
             const removedButton = box._map.get(address);
+            if (!removedButton) return;
             removedButton.revealChild = false;
 
             Utils.timeout(ANIMATION_TIME, () => {

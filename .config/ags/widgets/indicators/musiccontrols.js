@@ -17,7 +17,7 @@ function expandTilde(path) {
     }
 }
 
-const LIGHTDARK_FILE_LOCATION = '~/.cache/ags/user/colormode.txt'
+const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
 const lightDark = Utils.readFile(expandTilde(LIGHTDARK_FILE_LOCATION)).trim();
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 const PREFERRED_PLAYER = 'plasma-browser-integration';
@@ -165,7 +165,7 @@ const CoverArt = ({ player, ...rest }) => Box({
                                 `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
                                 .then(() => {
                                     exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
-                                    exec(`bash -c "cp ~/.cache/wal/colors.scss ${App.configDir}/scss/_musicwal.scss"`)
+                                    exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                                     exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
                                     self.css = `background-image: url('${coverPath}');`;
                                     App.applyCss(`${stylePath}`);

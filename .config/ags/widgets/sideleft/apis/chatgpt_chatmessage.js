@@ -3,7 +3,7 @@ import { App, Utils, Widget } from '../../../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
-import { convert } from "../../../lib/md2pango.js";
+import md2pango from "../../../lib/md2pango.js";
 import GtkSource from "gi://GtkSource?version=3.0";
 
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/data/sourceviewtheme.xml`;
@@ -168,7 +168,7 @@ const MessageContent = (content) => {
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
                         if (!inCode) {
-                            lastLabel.label = convert(blockContent);
+                            lastLabel.label = md2pango(blockContent);
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
@@ -185,7 +185,7 @@ const MessageContent = (content) => {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.label = convert(blockContent);
+                        lastLabel.label = md2pango(blockContent);
                         contentBox.add(Divider());
                         contentBox.add(TextBlock());
                         lastProcessed = index + 1;
@@ -196,7 +196,7 @@ const MessageContent = (content) => {
                     const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${convert(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
+                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
                     else
                         lastLabel._updateText(blockContent);
                 }
@@ -208,7 +208,7 @@ const MessageContent = (content) => {
                 //     xalign: 0,
                 //     wrap: true,
                 //     selectable: true,
-                //     label: '------------------------------\n' + convert(content),
+                //     label: '------------------------------\n' + md2pango(content),
                 // }))
                 contentBox.show_all();
             }]
