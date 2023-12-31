@@ -28,7 +28,7 @@ const BatBatteryProgress = () => {
 
 const BarClock = () => Widget.Box({
     vpack: 'center',
-    className: 'spacing-h-5 txt-onSurfaceVariant',
+    className: 'spacing-h-5 txt-onSurfaceVariant bar-clock-box',
     children: [
         Widget.Label({
             className: 'bar-clock',
@@ -59,30 +59,27 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
     label: `${icon}`,
 })
 
-const Utilities = () => Scrollable({
-    hexpand: true,
-    child: Box({
-        hpack: 'center',
-        className: 'spacing-h-5',
-        children: [
-            UtilButton({
-                name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
-                    Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
-                        .catch(print)
-                }
-            }),
-            UtilButton({
-                name: 'Color picker', icon: 'colorize', onClicked: () => {
-                    Utils.execAsync(['hyprpicker', '-a']).catch(print)
-                }
-            }),
-            UtilButton({
-                name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
-                    App.toggleWindow('osk');
-                }
-            }),
-        ]
-    })
+const Utilities = () => Box({
+    hpack: 'center',
+    className: 'spacing-h-5',
+    children: [
+        UtilButton({
+            name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
+                Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
+                    .catch(print)
+            }
+        }),
+        UtilButton({
+            name: 'Color picker', icon: 'colorize', onClicked: () => {
+                Utils.execAsync(['hyprpicker', '-a']).catch(print)
+            }
+        }),
+        UtilButton({
+            name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
+                App.toggleWindow('osk');
+            }
+        }),
+    ]
 })
 
 const BarBattery = () => Box({
@@ -117,17 +114,26 @@ const BarBattery = () => Box({
         //         revealer.revealChild = Battery.charging;
         //     }),
         // }),
-        Stack({
-            transition: 'slide_up_down',
-            items: [
-                ['discharging', Widget.Label({
-                    className: 'txt-norm txt',
-                    label: '•',
-                }),],
-                ['charging', MaterialIcon('bolt', 'norm')],
-            ],
+        // Stack({
+        //     transition: 'slide_up_down',
+        //     items: [
+        //         ['discharging', Widget.Label({
+        //             className: 'txt-norm txt',
+        //             label: '•',
+        //         }),],
+        //         ['charging', MaterialIcon('bolt', 'norm')],
+        //     ],
+        //     setup: (self) => self.hook(Battery, revealer => {
+        //         self.shown = Battery.charging ? 'charging' : 'discharging';
+        //     }),
+        // }),
+        Revealer({
+            transitionDuration: 150,
+            revealChild: false,
+            transition: 'slide_right',
+            child: MaterialIcon('bolt', 'norm'),
             setup: (self) => self.hook(Battery, revealer => {
-                self.shown = Battery.charging ? 'charging' : 'discharging';
+                self.revealChild = Battery.charging;
             }),
         }),
         Label({
@@ -156,21 +162,26 @@ const BarBattery = () => Box({
     ]
 });
 
+const BarGroup = ({ child }) => Widget.Box({
+    className: 'bar-group-margin bar-sides',
+    children: [
+        Widget.Box({
+            className: 'bar-group bar-group-standalone bar-group-pad-system',
+            children: [child],
+        }),
+    ]
+});
+
 export const ModuleSystem = () => Widget.EventBox({
     onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
     onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
-        className: 'bar-group-margin bar-sides',
+        className: 'spacing-h-5',
         children: [
-            Widget.Box({
-                className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-5',
-                children: [
-                    BarClock(),
-                    Utilities(),
-                    BarBattery(),
-                ],
-            }),
+            BarGroup({ child: BarClock() }),
+            BarGroup({ child: Utilities() }),
+            BarGroup({ child: BarBattery() }),
         ]
     })
 });
