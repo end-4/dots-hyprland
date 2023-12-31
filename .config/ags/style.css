@@ -549,8 +549,7 @@ tooltip {
   padding: 0rem 0.681rem; }
 
 .bar-group-pad-system {
-  padding-left: 1.023rem;
-  padding-right: 0.341rem; }
+  padding: 0rem 0.341rem; }
 
 .bar-group-pad-music {
   padding-right: 1.023rem;
@@ -618,6 +617,9 @@ tooltip {
   min-height: 0.341rem;
   background-color: rgba(53, 47, 51, 0.31);
   margin: 0rem 0.341rem; }
+
+.bar-clock-box {
+  margin: 0rem 0.682rem; }
 
 .bar-clock {
   font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;

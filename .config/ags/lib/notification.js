@@ -258,8 +258,13 @@ export default ({
         className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10`,
         children: [
             notifIcon,
-            notifText,
-            notifExpandButton,
+            Box({
+                className: 'spacing-h-5',
+                children: [
+                    notifText,
+                    notifExpandButton,
+                ]
+            })
         ]
     })
 

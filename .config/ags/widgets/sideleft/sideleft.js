@@ -175,9 +175,9 @@ export default () => Box({
                 else if (event.get_keyval()[1] === Gdk.KEY_Tab)
                     switchToTab((currentTabId + 1) % contents.length);
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Up)
-                    switchToTab(Math.max(currentTabId - 1), 0);
+                    switchToTab(Math.max(currentTabId - 1, 0));
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Down)
-                    switchToTab(Math.min(currentTabId + 1), contents.length);
+                    switchToTab(Math.min(currentTabId + 1, contents.length - 1));
             }
             if (contentStack.shown == 'apis') { // If api tab is focused
                 // Automatically focus entry when typing
