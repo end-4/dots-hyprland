@@ -1,9 +1,6 @@
+const { Gdk, Gio, GLib } = imports.gi;
 import { Utils, Widget } from '../imports.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
-import Gio from 'gi://Gio';
-import GLib from 'gi://GLib';
-import Soup from 'gi://Soup?version=3.0';
-import { fileExists } from './messages.js';
 
 // Usage from my python waifu fetcher, for reference
 // Usage: waifu-get.py [OPTION]... [TAG]...
@@ -127,7 +124,7 @@ class WaifuService extends Service {
                         signature: imageData?.signature || -1,
                         url: imageData?.url || undefined,
                         source: imageData?.source,
-                        dominant_color: imageData?.dominant_color || '#000000',
+                        dominant_color: imageData?.dominant_color || '#9392A6',
                         is_nsfw: imageData?.is_nsfw || false,
                         width: imageData?.width || 0,
                         height: imageData?.height || 0,
