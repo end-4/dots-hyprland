@@ -141,9 +141,9 @@ const WaifuImage = (taglist) => {
                 const showImage = () => {
                     downloadState.shown = 'done';
                     blockImage.css = `background-image:url('${imagePath}');`;
-                    blockImage.get_children()[0].revealChild = true;
+                    blockImageRevealer.revealChild = true;
                     Utils.timeout(blockImageRevealer.transitionDuration,
-                        () => blockImageRevealer.revealChild = true
+                        () => blockImage.get_children()[0].revealChild = true
                     );
                     downloadIndicator._hide(downloadIndicator);
                 }

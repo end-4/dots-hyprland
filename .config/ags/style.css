@@ -2247,9 +2247,9 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   min-width: 29.659rem;
-  background-color: #100d10;
+  background-color: #dae8ed;
   padding: 0rem 1.023rem;
-  background: linear-gradient(127deg, rgba(47, 41, 46, 0.7), rgba(47, 41, 46, 0.55) 70.71%), linear-gradient(217deg, rgba(78, 68, 75, 0.7), rgba(78, 68, 75, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #554050 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(85, 64, 80, 0.7), rgba(85, 64, 80, 0.55) 70.71%), linear-gradient(#100d10, #100d10); }
+  background: linear-gradient(127deg, rgba(131, 159, 170, 0.7), rgba(131, 159, 170, 0.55) 70.71%), linear-gradient(217deg, rgba(102, 105, 105, 0.7), rgba(102, 105, 105, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #86776E 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(144, 134, 123, 0.7), rgba(144, 134, 123, 0.55) 70.71%), linear-gradient(#dae8ed, #dae8ed); }
 
 .osd-music-cover-fallback {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2257,8 +2257,8 @@ tooltip {
   -gtk-outline-radius: 0.818rem;
   min-width: 7.5rem;
   min-height: 7.5rem;
-  background-color: rgba(33, 27, 31, 0.31);
-  color: #dad0d5; }
+  background-color: rgba(233, 241, 247, 0.3);
+  color: #0a0b0f; }
 
 .osd-music-cover {
   border-radius: 0.818rem;
@@ -2284,13 +2284,13 @@ tooltip {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
   font-size: 1.364rem;
-  color: #dad0d5; }
+  color: #0a0b0f; }
 
 .osd-music-artists {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
   font-size: 0.955rem;
-  color: rgba(205, 196, 201, 0.9); }
+  color: rgba(20, 22, 26, 0.9); }
 
 .osd-music-pill {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2299,8 +2299,8 @@ tooltip {
   font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
   min-width: 1.833rem;
   padding: 0.273rem 0.682rem;
-  background-color: rgba(55, 46, 53, 0.5);
-  color: #dad0d5; }
+  background-color: rgba(139, 149, 154, 0.5);
+  color: #0a0b0f; }
 
 .osd-music-controls {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2309,8 +2309,8 @@ tooltip {
   font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
   min-width: 1.833rem;
   padding: 0.205rem;
-  background-color: rgba(55, 46, 53, 0.5);
-  color: #dad0d5; }
+  background-color: rgba(139, 149, 154, 0.5);
+  color: #0a0b0f; }
 
 .osd-music-controlbtn {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2321,10 +2321,10 @@ tooltip {
 
 .osd-music-controlbtn:hover,
 .osd-music-controlbtn:focus {
-  background-color: rgba(96, 87, 93, 0.55); }
+  background-color: rgba(107, 115, 119, 0.55); }
 
 .osd-music-controlbtn:active {
-  background-color: rgba(111, 102, 108, 0.575); }
+  background-color: rgba(94, 101, 106, 0.575); }
 
 .osd-music-controlbtn-txt {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2338,15 +2338,15 @@ tooltip {
   min-width: 0.409rem;
   min-height: 3.068rem;
   padding: 0.273rem;
-  color: #dad0d5; }
+  color: #0a0b0f; }
 
 .osd-music-playstate {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   min-height: 3.068rem;
   min-width: 3.068rem;
   border-radius: 10rem;
-  background-color: rgba(55, 46, 53, 0.5);
-  color: #dad0d5; }
+  background-color: rgba(139, 149, 154, 0.5);
+  color: #0a0b0f; }
 
 .osd-music-playstate-btn > label {
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);
