@@ -5,6 +5,20 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from './messages.js';
 
+// Usage from my python waifu fetcher, for reference
+// Usage: waifu-get.py [OPTION]... [TAG]...
+// Options:
+//     --segs\tForce NSFW images
+//     --im\tUse waifu.im API. You can use many tags
+//     --pics\tUse waifu.pics API. Use 1 tag only.
+//     --nekos\tUse nekos.life (old) API. No tags.
+
+// Tags:
+//     waifu.im (type):
+//         maid waifu marin-kitagawa mori-calliope raiden-shogun oppai selfies uniform
+//     waifu.im (nsfw tags):
+//         ecchi hentai ero ass paizuri oral milf
+
 function paramStringFromObj(params) {
     return Object.entries(params)
         .map(([key, value]) => {
@@ -38,6 +52,7 @@ class WaifuService extends Service {
     _queries = [];
     _nsfw = false;
     _minHeight = 600;
+    _status = 0;
 
     static {
         Service.register(this, {
@@ -81,17 +96,21 @@ class WaifuService extends Service {
             'nsfw': this._nsfw,
         };
         const paramString = paramStringFromObj(params);
-        console.log(paramString);
         // Fetch
         const options = {
             method: 'GET',
             headers: this._headers[this._mode],
         };
+        var status = 0;
         Utils.fetch(`${this._baseUrl}?${paramString}`, options)
-            .then(result => result.text()) // Parse
+            .then(result => {
+                status = result.status;
+                return result.text();
+            })
             .then((dataString) => { // Store interesting stuff and emit
                 const parsedData = JSON.parse(dataString);
                 if (!parsedData.images) this._responses.push({
+                    status: status,
                     signature: -1,
                     url: '',
                     source: '',
@@ -104,6 +123,7 @@ class WaifuService extends Service {
                 else {
                     const imageData = parsedData.images[0];
                     this._responses.push({
+                        status: status,
                         signature: imageData?.signature || -1,
                         url: imageData?.url || undefined,
                         source: imageData?.source,

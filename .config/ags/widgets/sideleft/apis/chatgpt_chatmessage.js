@@ -10,7 +10,6 @@ const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/data/sourceviewtheme.xml
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
 const CHATGPT_CURSOR = '  (o) ';
-const MESSAGE_SCROLL_DELAY = 13; // In milliseconds, the time before an updated message scrolls to bottom
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -125,7 +124,11 @@ const CodeBlock = (content = '', lang = 'txt') => {
             Box({
                 className: 'sidebar-chat-codeblock-code',
                 homogeneous: true,
-                children: [sourceView,],
+                children: [Scrollable({
+                    vscroll: 'never',
+                    hscroll: 'automatic',
+                    child: sourceView,
+                })],
             })
         ]
     })
@@ -246,11 +249,6 @@ export const ChatMessage = (message, scrolledWindow) => {
                     }, 'notify::thinking'],
                     [message, (self) => { // Message update
                         messageContentBox._fullUpdate(messageContentBox, message.content, message.role != 'user');
-                        Utils.timeout(MESSAGE_SCROLL_DELAY, () => {
-                            if (!scrolledWindow) return;
-                            var adjustment = scrolledWindow.get_vadjustment();
-                            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-                        });
                     }, 'notify::content'],
                     [message, (label, isDone) => { // Remove the cursor
                         messageContentBox._fullUpdate(messageContentBox, message.content, false);
@@ -285,11 +283,6 @@ export const SystemMessage = (content, commandName, scrolledWindow) => {
                 ],
             })
         ],
-        setup: (self) => Utils.timeout(MESSAGE_SCROLL_DELAY, () => {
-            if (!scrolledWindow) return;
-            var adjustment = scrolledWindow.get_vadjustment();
-            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-        })
     });
     return thisMessage;
 }
