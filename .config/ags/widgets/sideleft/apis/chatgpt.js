@@ -201,6 +201,11 @@ export const chatGPTView = Scrollable({
             const viewport = scrolledWindow.child;
             viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
         })
+        // Always scroll to bottom with new content
+        const adjustment = scrolledWindow.get_vadjustment();
+        adjustment.connect("changed", () => {
+            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
+        })
     }
 });
 
