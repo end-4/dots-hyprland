@@ -18,7 +18,8 @@ export const MarginRevealer = ({
             ['transition', transition],
             ['show', () => {
                 if (widget._revealChild) return;
-                widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER);
+                widget.hscroll = 'never';
+                widget.vscroll = 'never';
                 child.toggleClassName(hideClass, false);
                 child.toggleClassName(showClass, true);
                 widget._revealChild = true;
@@ -46,8 +47,8 @@ export const MarginRevealer = ({
             ...extraProperties,
         ],
         child: child,
-        hscroll: (revealChild ? 'never' : 'always'),
-        vscroll: (revealChild ? 'never' : 'always'),
+        hscroll: `${revealChild ? 'never' : 'always'}`,
+        vscroll: `${revealChild ? 'never' : 'always'}`,
     });
     child.toggleClassName(`${revealChild ? showClass : hideClass}`, true);
     return widget;

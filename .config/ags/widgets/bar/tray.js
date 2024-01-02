@@ -25,7 +25,7 @@ const SysTrayItem = item => Button({
 
 export const Tray = (props = {}) => {
     const trayContent = Box({
-        className: 'bar-systray spacing-h-10',
+        className: 'margin-right-5 spacing-h-15',
         properties: [
             ['items', new Map()],
             ['onAdded', (box, id) => {

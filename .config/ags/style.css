@@ -130,13 +130,18 @@
 .icon-nerd {
   font-family: "SpaceMono NF", "SpaceMono Nerd Font", "JetBrains Mono NF", "JetBrains Mono Nerd Font", monospace; }
 
+.separator-line {
+  background-color: #9a8d95;
+  min-width: 0.068rem;
+  min-height: 0.068rem; }
+
 .separator-circle {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  background-color: #eae0e4;
+  background-color: #9a8d95;
   margin: 0rem 0.682rem;
-  min-width: 0.545rem;
-  min-height: 0.545rem; }
+  min-width: 0.273rem;
+  min-height: 0.273rem; }
 
 .spacing-h-3 > * {
   margin-right: 0.205rem; }
@@ -370,13 +375,13 @@
   transition: 300ms cubic-bezier(0.1, 1, 0, 1); }
 
 .element-show {
-  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
+  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
 
 .element-hide {
-  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
+  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
 
 .element-move {
-  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
+  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
 
 .element-decel {
   transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
@@ -388,7 +393,7 @@
   transition: 300ms cubic-bezier(0.55, 0, 1, 0.45); }
 
 .page-move {
-  transition: 2000ms cubic-bezier(0, 0.55, 0.45, 1); }
+  transition: 500ms cubic-bezier(0.85, 0, 0.15, 1); }
 
 * {
   caret-color: #ffc4f5; }
@@ -439,11 +444,6 @@ menu > menuitem {
 menu > menuitem:hover,
 menu > menuitem:focus {
   background-color: #4a4147; }
-
-.separator-line {
-  background-color: #9a8d95;
-  min-width: 0.068rem;
-  min-height: 0.068rem; }
 
 tooltip {
   border-radius: 1.159rem;
@@ -1858,6 +1858,7 @@ tooltip {
   margin: 0.682rem; }
 
 .sidebar-chat-indicator {
+  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 0.136rem;
