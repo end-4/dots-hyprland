@@ -5,10 +5,10 @@ import Service from 'resource:///com/github/Aylur/ags/service.js';
 // Usage from my python waifu fetcher, for reference
 // Usage: waifu-get.py [OPTION]... [TAG]...
 // Options:
-//     --segs\tForce NSFW images
 //     --im\tUse waifu.im API. You can use many tags
 //     --pics\tUse waifu.pics API. Use 1 tag only.
 //     --nekos\tUse nekos.life (old) API. No tags.
+//     --segs\tForce NSFW images
 
 // Tags:
 //     waifu.im (type):
@@ -82,11 +82,25 @@ class WaifuService extends Service {
     get responses() { return this._responses }
 
     fetch(msg) {
+        // Init
         const newMessageId = this._responses.length;
-        const taglist = msg.split(' ');
+        const userArgs = msg.split(' ');
+        let taglist = [];
+        this._nsfw = false;
+        // Construct body/headers
+        for (let i = 0; i < userArgs.length; i++) {
+            const thisArg = userArgs[i];
+            if (thisArg == '--im') this._mode = 'im';
+            else if (thisArg == '--nekos') this._mode = 'nekos';
+            else if (thisArg.includes('pics')) this._mode = 'pics';
+            else if (thisArg.includes('segs') || thisArg.includes('sex') || thisArg.includes('lewd')) this._nsfw = true;
+            else {
+                taglist.push(thisArg);
+                if(['ecchi', 'hentai', 'ero', 'ass', 'paizuri', 'oral', 'milf'].includes(thisArg)) this._nsfw = true;
+            }
+        }
         this._queries.push(taglist);
         this.emit('newResponse', newMessageId);
-        // Construct body/headers
         const params = {
             'included_tags': taglist,
             'height': `>=${this._minHeight}`,
@@ -94,12 +108,13 @@ class WaifuService extends Service {
         };
         const paramString = paramStringFromObj(params);
         // Fetch
-        const options = {
+        // Note: body isn't included since passing directly to url is more reliable
+        const options = { 
             method: 'GET',
             headers: this._headers[this._mode],
         };
         var status = 0;
-        Utils.fetch(`${this._baseUrl}?${paramString}`, options)
+        Utils.fetch(`${this._endpoints[this._mode]}?${paramString}`, options)
             .then(result => {
                 status = result.status;
                 return result.text();

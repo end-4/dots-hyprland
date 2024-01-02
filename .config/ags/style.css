@@ -24,18 +24,18 @@
   min-width: 3rem; }
 
 .txt-title {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 2.045rem; }
 
 .txt-title-small {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1.364rem; }
 
 .techfont {
-  font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace; }
+  font-family: "JetBrains Mono NF", "JetBrains Mono Nerd Font", "JetBrains Mono NL", "SpaceMono NF", "SpaceMono Nerd Font", monospace; }
 
 .txt-reading {
-  font-family: 'Lexend', 'Noto Sans', sans-serif; }
+  font-family: "Lexend", "Noto Sans", sans-serif; }
 
 .no-anim {
   transition: 0ms; }
@@ -57,47 +57,47 @@
   margin: 10px; }
 
 .txt-badonkers {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 3rem; }
 
 .txt-tiddies {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 2.7273rem; }
 
 .txt-hugerass {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 2.045rem; }
 
 .txt-hugeass {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1.8182rem; }
 
 .txt-larger {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1.6363rem; }
 
 .txt-large {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1.4545rem; }
 
 .txt-norm {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1.2727rem; }
 
 .txt-small {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1.0909rem; }
 
 .txt-smallie {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 1rem; }
 
 .txt-smaller {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 0.9091rem; }
 
 .txt-tiny {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 0.7273rem; }
 
 .txt-poof {
@@ -119,16 +119,16 @@
   font-style: italic; }
 
 .titlefont {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif; }
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif; }
 
 .mainfont {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif; }
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif; }
 
 .icon-material {
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp'; }
+  font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp"; }
 
 .icon-nerd {
-  font-family: 'SpaceMono NF', 'SpaceMono Nerd Font', 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', monospace; }
+  font-family: "SpaceMono NF", "SpaceMono Nerd Font", "JetBrains Mono NF", "JetBrains Mono Nerd Font", monospace; }
 
 .separator-circle {
   border-radius: 9999px;
@@ -370,16 +370,25 @@
   transition: 300ms cubic-bezier(0.1, 1, 0, 1); }
 
 .element-show {
-  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
 
 .element-hide {
-  transition: 300ms cubic-bezier(0.85, 0, 0.15, 1); }
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
+
+.element-move {
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
 
 .element-decel {
   transition: 300ms cubic-bezier(0, 0.55, 0.45, 1); }
 
+.element-bounceout {
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
 .element-accel {
   transition: 300ms cubic-bezier(0.55, 0, 1, 0.45); }
+
+.page-move {
+  transition: 2000ms cubic-bezier(0, 0.55, 0.45, 1); }
 
 * {
   caret-color: #ffc4f5; }
@@ -432,7 +441,7 @@ menu > menuitem:focus {
   background-color: #4a4147; }
 
 .separator-line {
-  background-color: #3b3338;
+  background-color: #9a8d95;
   min-width: 0.068rem;
   min-height: 0.068rem; }
 
@@ -634,11 +643,11 @@ tooltip {
   margin: 0rem 0.682rem; }
 
 .bar-clock {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1.2727rem; }
 
 .bar-date {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1rem;
   color: #eae0e4; }
 
@@ -710,7 +719,7 @@ tooltip {
 
 .bar-music-playstate-txt {
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp'; }
+  font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp"; }
 
 .bar-music-cover {
   background-position: center;
@@ -887,7 +896,7 @@ tooltip {
   padding: 1.364rem; }
 
 .cheatsheet-key {
-  font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
+  font-family: "JetBrains Mono NF", "JetBrains Mono Nerd Font", "JetBrains Mono NL", "SpaceMono NF", "SpaceMono Nerd Font", monospace;
   min-height: 1.364rem;
   min-width: 1.364rem;
   margin: 0.17rem;
@@ -920,7 +929,7 @@ tooltip {
   background-color: #685e64; }
 
 .cheatsheet-category-title {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1.705rem; }
 
 .bg-time-box {
@@ -961,11 +970,11 @@ tooltip {
   border: 0.682rem solid; }
 
 .bg-quicklaunch-title {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   color: #d1c2cb; }
 
 .bg-quicklaunch-btn {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   background-color: #3b3338;
@@ -1067,7 +1076,7 @@ tooltip {
   margin-top: 0.341rem; }
 
 .osd-value-txt {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1.688rem;
   font-weight: 500;
   color: #eae0e4; }
@@ -1209,7 +1218,7 @@ tooltip {
 
 .overview-search-results-txt-cmd {
   margin-right: 0.682rem;
-  font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
+  font-family: "JetBrains Mono NF", "JetBrains Mono Nerd Font", "JetBrains Mono NL", "SpaceMono NF", "SpaceMono Nerd Font", monospace;
   font-size: 1.227rem; }
 
 .overview-search-result-btn {
@@ -1247,7 +1256,7 @@ tooltip {
   background-color: rgba(54, 47, 51, 0.1147); }
 
 .overview-tasks-workspace-number {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   color: rgba(220, 210, 214, 0.31); }
 
 .overview-tasks-window {
@@ -1781,7 +1790,7 @@ tooltip {
 .sidebar-module-btn-arrow {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
+  font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp";
   background-color: rgba(59, 51, 56, 0.31);
   min-width: 1.705rem;
   min-height: 1.705rem; }
@@ -1864,7 +1873,7 @@ tooltip {
   background-color: #dbbed2; }
 
 .sidebar-chat-name {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   padding: 0.341rem;
   margin-left: -0.136rem;
   padding-left: 0.818rem; }
@@ -1875,7 +1884,7 @@ tooltip {
   padding-left: 0.818rem; }
 
 .sidebar-chat-txt {
-  font-family: 'Lexend', 'Noto Sans', sans-serif; }
+  font-family: "Lexend", "Noto Sans", sans-serif; }
 
 .sidebar-chat-codeblock {
   border-radius: 1.159rem;
@@ -1886,7 +1895,7 @@ tooltip {
   border: 0.068rem solid rgba(248, 218, 238, 0.07); }
 
 .sidebar-chat-codeblock-topbar {
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   margin: 0.273rem;
   margin-bottom: 0rem;
   background-color: #554050;
@@ -1915,7 +1924,7 @@ tooltip {
   background-color: #967e8f; }
 
 .sidebar-chat-codeblock-code {
-  font-family: 'JetBrains Mono NF', 'JetBrains Mono Nerd Font', 'JetBrains Mono NL', 'SpaceMono NF', 'SpaceMono Nerd Font', monospace;
+  font-family: "JetBrains Mono NF", "JetBrains Mono Nerd Font", "JetBrains Mono NL", "SpaceMono NF", "SpaceMono Nerd Font", monospace;
   padding: 0.682rem; }
 
 .sidebar-chat-divider {
@@ -1965,6 +1974,21 @@ tooltip {
   color: #776c73;
   border: 0.068rem solid #776c73; }
 
+.sidebar-chat-chip-toggle {
+  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
+  padding: 0.341rem 0.477rem;
+  background-color: #3b3338;
+  color: #d1c2cb; }
+
+.sidebar-chat-chip-toggle:focus,
+.sidebar-chat-chip-toggle:hover {
+  background-color: #554b51; }
+
+.sidebar-chat-chip-toggle:active {
+  background-color: #6d6269; }
+
 .sidebar-pin {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
@@ -1993,7 +2017,7 @@ tooltip {
   background-color: #dda0d4; }
 
 .sidebar-waifu-heading {
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   padding: 0.341rem;
   margin-left: -0.136rem;
   padding-left: 0.818rem; }
@@ -2002,7 +2026,7 @@ tooltip {
   margin-left: 0.682rem; }
 
 .sidebar-waifu-txt {
-  font-family: 'Lexend', 'Noto Sans', sans-serif;
+  font-family: "Lexend", "Noto Sans", sans-serif;
   margin-left: 0.682rem; }
 
 .sidebar-waifu-image {
@@ -2247,9 +2271,9 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   min-width: 29.659rem;
-  background-color: #dae8ed;
+  background-color: #100d10;
   padding: 0rem 1.023rem;
-  background: linear-gradient(127deg, rgba(131, 159, 170, 0.7), rgba(131, 159, 170, 0.55) 70.71%), linear-gradient(217deg, rgba(102, 105, 105, 0.7), rgba(102, 105, 105, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #86776E 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(144, 134, 123, 0.7), rgba(144, 134, 123, 0.55) 70.71%), linear-gradient(#dae8ed, #dae8ed); }
+  background: linear-gradient(127deg, rgba(47, 41, 46, 0.7), rgba(47, 41, 46, 0.55) 70.71%), linear-gradient(217deg, rgba(78, 68, 75, 0.7), rgba(78, 68, 75, 0.55) 70.71%), radial-gradient(circle at 0% 100%, #554050 13%, rgba(0, 0, 0, 0) 100%), linear-gradient(336deg, rgba(85, 64, 80, 0.7), rgba(85, 64, 80, 0.55) 70.71%), linear-gradient(#100d10, #100d10); }
 
 .osd-music-cover-fallback {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2257,8 +2281,8 @@ tooltip {
   -gtk-outline-radius: 0.818rem;
   min-width: 7.5rem;
   min-height: 7.5rem;
-  background-color: rgba(233, 241, 247, 0.3);
-  color: #0a0b0f; }
+  background-color: rgba(33, 27, 31, 0.31);
+  color: #dad0d5; }
 
 .osd-music-cover {
   border-radius: 0.818rem;
@@ -2282,35 +2306,35 @@ tooltip {
 
 .osd-music-title {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   font-size: 1.364rem;
-  color: #0a0b0f; }
+  color: #dad0d5; }
 
 .osd-music-artists {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  font-family: 'Rubik', 'Geist', 'AR One Sans', 'Reddit Sans', 'Inter', 'Roboto', 'Ubuntu', 'Noto Sans', sans-serif;
+  font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 0.955rem;
-  color: rgba(20, 22, 26, 0.9); }
+  color: rgba(205, 196, 201, 0.9); }
 
 .osd-music-pill {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   min-width: 1.833rem;
   padding: 0.273rem 0.682rem;
-  background-color: rgba(139, 149, 154, 0.5);
-  color: #0a0b0f; }
+  background-color: rgba(55, 46, 53, 0.5);
+  color: #dad0d5; }
 
 .osd-music-controls {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  font-family: 'Gabarito', 'Poppins', 'Lexend', sans-serif;
+  font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
   min-width: 1.833rem;
   padding: 0.205rem;
-  background-color: rgba(139, 149, 154, 0.5);
-  color: #0a0b0f; }
+  background-color: rgba(55, 46, 53, 0.5);
+  color: #dad0d5; }
 
 .osd-music-controlbtn {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -2321,15 +2345,15 @@ tooltip {
 
 .osd-music-controlbtn:hover,
 .osd-music-controlbtn:focus {
-  background-color: rgba(107, 115, 119, 0.55); }
+  background-color: rgba(96, 87, 93, 0.55); }
 
 .osd-music-controlbtn:active {
-  background-color: rgba(94, 101, 106, 0.575); }
+  background-color: rgba(111, 102, 108, 0.575); }
 
 .osd-music-controlbtn-txt {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
+  font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp";
   font-size: 1.364rem;
   margin: -0.1rem 0rem; }
 
@@ -2338,19 +2362,19 @@ tooltip {
   min-width: 0.409rem;
   min-height: 3.068rem;
   padding: 0.273rem;
-  color: #0a0b0f; }
+  color: #dad0d5; }
 
 .osd-music-playstate {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   min-height: 3.068rem;
   min-width: 3.068rem;
   border-radius: 10rem;
-  background-color: rgba(139, 149, 154, 0.5);
-  color: #0a0b0f; }
+  background-color: rgba(55, 46, 53, 0.5);
+  color: #dad0d5; }
 
 .osd-music-playstate-btn > label {
   transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);
-  font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Symbols Sharp';
+  font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp";
   font-size: 1.364rem;
   margin: -0.1rem 0rem; }
 

@@ -8,7 +8,7 @@ import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover
 import { SystemMessage, ChatMessage } from "./chatgpt_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../../lib/configwidgets.js';
 import { markdownTest } from '../../../lib/md2pango.js';
-import { MarginRevealer } from '../../../lib/advancedrevealers.js';
+import { MarginRevealer } from '../../../lib/advancedwidgets.js';
 
 export const chatGPTTabIcon = Box({
     hpack: 'center',
@@ -66,10 +66,10 @@ export const chatGPTSettings = MarginRevealer({
     revealChild: true,
     connections: [
         [ChatGPT, (self) => Utils.timeout(200, () => {
-            self._hide(self);
+            self._hide();
         }), 'newMsg'],
         [ChatGPT, (self) => Utils.timeout(200, () => {
-            self._show(self);
+            self._show();
         }), 'clear'],
     ],
     child: Box({

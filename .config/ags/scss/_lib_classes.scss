@@ -490,19 +490,24 @@
 .menu-decel {
     @include menu_decel;
 }
-
 .element-show {
     @include element_easeInOut;
 }
-
 .element-hide {
     @include element_easeInOut;
 }
-
+.element-move {
+    @include element_easeInOut;
+}
 .element-decel {
     @include element_decel;
 }
-
+.element-bounceout {
+    @include element_bounceOut;
+}
 .element-accel {
     @include element_accel;
+}
+.page-move {
+    @include page_move;
 }
