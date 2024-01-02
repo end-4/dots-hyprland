@@ -82,7 +82,7 @@ export const ModuleLeftSpace = () => Widget.EventBox({
                                                 xalign: 0,
                                                 className: 'txt txt-smallie',
                                                 setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
-                                                    label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : truncateTitle(Hyprland.active.client._title);
+                                                    label.label = Hyprland.active.client._title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : Hyprland.active.client._title;
                                                 }),
                                             })
                                         ]

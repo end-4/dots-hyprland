@@ -152,10 +152,10 @@ $elevation_margin: 0.476rem;
     transition: 300ms cubic-bezier(0.55, 0, 1, 0.45);
 }
 @mixin element_easeInOut {
-    transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
+    transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
 }
 @mixin page_move {
-    transition: 2000ms cubic-bezier(0, 0.55, 0.45, 1);
+    transition: 500ms cubic-bezier(0.85, 0, 0.15, 1);
 }
 
 @function tint($color, $percentage) {

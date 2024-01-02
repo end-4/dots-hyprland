@@ -81,9 +81,8 @@ class WaifuService extends Service {
     get queries() { return this._queries }
     get responses() { return this._responses }
 
-    fetch(msg) {
+    async fetch(msg) {
         // Init
-        const newMessageId = this._responses.length;
         const userArgs = msg.split(' ');
         let taglist = [];
         this._nsfw = false;
@@ -99,6 +98,7 @@ class WaifuService extends Service {
                 if(['ecchi', 'hentai', 'ero', 'ass', 'paizuri', 'oral', 'milf'].includes(thisArg)) this._nsfw = true;
             }
         }
+        const newMessageId = this._queries.length;
         this._queries.push(taglist);
         this.emit('newResponse', newMessageId);
         const params = {
@@ -125,6 +125,7 @@ class WaifuService extends Service {
                     status: status,
                     signature: -1,
                     url: '',
+                    extension: '',
                     source: '',
                     dominant_color: '#383A40',
                     is_nsfw: false,
@@ -138,6 +139,7 @@ class WaifuService extends Service {
                         status: status,
                         signature: imageData?.signature || -1,
                         url: imageData?.url || undefined,
+                        extension: imageData.extension,
                         source: imageData?.source,
                         dominant_color: imageData?.dominant_color || '#9392A6',
                         is_nsfw: imageData?.is_nsfw || false,

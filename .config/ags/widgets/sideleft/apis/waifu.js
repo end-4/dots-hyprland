@@ -13,6 +13,11 @@ const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/media/waifus'`);
 Utils.exec(`bash -c 'rm ${GLib.get_user_cache_dir()}/ags/media/waifus/*'`);
 
+export function fileExists(filePath) {
+    let file = Gio.File.new_for_path(filePath);
+    return file.query_exists(null);
+}
+
 const CommandButton = (command) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
     onClicked: () => sendMessage(command),
@@ -30,8 +35,6 @@ export const waifuTabIcon = Box({
 });
 
 const WaifuImage = (taglist) => {
-    var imagePath = '';
-    var blockImageData = {};
     const ImageState = (icon, name) => Box({
         className: 'spacing-h-5',
         children: [
@@ -87,17 +90,17 @@ const WaifuImage = (taglist) => {
             ImageAction({
                 name: 'Go to source',
                 icon: 'link',
-                action: () => execAsync(['xdg-open', `${blockImageData.source}`]).catch(print),
+                action: () => execAsync(['xdg-open', `${thisBlock._imageData.source}`]).catch(print),
             }),
             ImageAction({
                 name: 'Hoard',
                 icon: 'save',
-                action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/waifus && cp ${imagePath} ~/Pictures/waifus`]).catch(print),
+                action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/waifus && cp ${thisBlock._imagePath} ~/Pictures/waifus`]).catch(print),
             }),
             ImageAction({
                 name: 'Open externally',
                 icon: 'open_in_new',
-                action: () => execAsync(['xdg-open', `${imagePath}`]).catch(print),
+                action: () => execAsync(['xdg-open', `${thisBlock._imagePath}`]).catch(print),
             }),
         ]
     })
@@ -127,14 +130,16 @@ const WaifuImage = (taglist) => {
     const thisBlock = Box({
         className: 'sidebar-chat-message',
         properties: [
+            ['imagePath', ''],
+            ['imageData', ''],
             ['update', (imageData, force = false) => {
-                blockImageData = imageData;
-                const { status, signature, url, source, dominant_color, is_nsfw, width, height, tags } = blockImageData;
+                thisBlock._imageData = imageData;
+                const { status, signature, url, extension, source, dominant_color, is_nsfw, width, height, tags } = thisBlock._imageData;
                 if (status != 200) {
                     downloadState.shown = 'error';
                     return;
                 }
-                imagePath = `${GLib.get_user_cache_dir()}/ags/media/waifus/${signature}`;
+                thisBlock._imagePath = `${GLib.get_user_cache_dir()}/ags/media/waifus/${signature}${extension}`;
                 downloadState.shown = 'download';
                 // Width allocation
                 const widgetWidth = Math.min(Math.floor(waifuContent.get_allocated_width() * 0.75), width);
@@ -142,7 +147,8 @@ const WaifuImage = (taglist) => {
                 // Start download
                 const showImage = () => {
                     downloadState.shown = 'done';
-                    blockImage.css = `background-image:url('${imagePath}');`;
+                    // blockImage.css = `background-color: ${dominant_color};`;
+                    blockImage.css = `background-image:url('${thisBlock._imagePath}');`; // TODO: use proper image widget
                     Utils.timeout(IMAGE_REVEAL_DELAY, () => {
                         blockImageRevealer.revealChild = true;
                     })
@@ -151,8 +157,8 @@ const WaifuImage = (taglist) => {
                     );
                     downloadIndicator._hide();
                 }
-                if (!force && Gio.File.new_for_path(imagePath).query_exists(null)) showImage();
-                else Utils.execAsync(['bash', '-c', `wget -O '${imagePath}' '${url}'`])
+                if (!force && fileExists(thisBlock._imagePath)) showImage();
+                else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock._imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
                 colorIndicator.css = `background-color: ${dominant_color};`;
@@ -274,17 +280,19 @@ export const waifuCommands = Box({
     }
 });
 
+const clearChat = () => {
+    const kids = waifuContent.get_children();
+    for (let i = 0; i < kids.length; i++) {
+        const child = kids[i];
+        if (child) child.destroy();
+    }
+}
+
 export const sendMessage = (text) => {
     // Do something on send
     // Commands
     if (text.startsWith('/')) {
-        if (text.startsWith('/clear')) {
-            const kids = waifuContent.get_children();
-            for (let i = kids.length - 1; i >= 0; i--) {
-                const child = kids[i];
-                child.destroy();
-            }
-        }
+        if (text.startsWith('/clear')) clearChat();
         else if (text.startsWith('/test')) {
             const newImage = WaifuImage(['/test']);
             waifuContent.add(newImage);
@@ -292,6 +300,7 @@ export const sendMessage = (text) => {
                 // This is an image uploaded to my github repo
                 status: 200,
                 url: 'https://picsum.photos/400/600',
+                extension: '',
                 signature: 0,
                 source: 'https://picsum.photos/400/600',
                 dominant_color: '#9392A6',

@@ -582,6 +582,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-indicator {
+    @include menu_decel;
     @include full-rounding;
     min-width: 0.136rem;
     background-color: $onBackground;

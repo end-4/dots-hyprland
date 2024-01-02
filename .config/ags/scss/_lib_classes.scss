@@ -177,12 +177,18 @@
     @include icon-nerd;
 }
 
+.separator-line {
+    background-color: $outline;
+    min-width: 0.068rem;
+    min-height: 0.068rem;
+}
+
 .separator-circle {
     @include full-rounding;
-    background-color: $onSurface;
+    background-color: $outline;
     margin: 0rem 0.682rem;
-    min-width: 0.545rem;
-    min-height: 0.545rem;
+    min-width: 0.273rem;
+    min-height: 0.273rem;
 }
 
 .spacing-h-3 > * {
