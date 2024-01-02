@@ -3,9 +3,11 @@ import { App, Utils, Widget } from '../../../imports.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
-import { MarginRevealer } from '../../../lib/advancedrevealers.js';
+import { MarginRevealer } from '../../../lib/advancedwidgets.js';
 import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
 import WaifuService from '../../../services/waifus.js';
+
+const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 
 // Create cache folder and clear pics from previous session
 Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/media/waifus'`);
@@ -125,7 +127,7 @@ const WaifuImage = (taglist) => {
     const thisBlock = Box({
         className: 'sidebar-chat-message',
         properties: [
-            ['update', (imageData) => {
+            ['update', (imageData, force = false) => {
                 blockImageData = imageData;
                 const { status, signature, url, source, dominant_color, is_nsfw, width, height, tags } = blockImageData;
                 if (status != 200) {
@@ -141,13 +143,15 @@ const WaifuImage = (taglist) => {
                 const showImage = () => {
                     downloadState.shown = 'done';
                     blockImage.css = `background-image:url('${imagePath}');`;
-                    blockImageRevealer.revealChild = true;
-                    Utils.timeout(blockImageRevealer.transitionDuration,
+                    Utils.timeout(IMAGE_REVEAL_DELAY, () => {
+                        blockImageRevealer.revealChild = true;
+                    })
+                    Utils.timeout(IMAGE_REVEAL_DELAY + blockImageRevealer.transitionDuration,
                         () => blockImage.get_children()[0].revealChild = true
                     );
-                    downloadIndicator._hide(downloadIndicator);
+                    downloadIndicator._hide();
                 }
-                if (Gio.File.new_for_path(imagePath).query_exists(null)) showImage();
+                if (!force && Gio.File.new_for_path(imagePath).query_exists(null)) showImage();
                 else Utils.execAsync(['bash', '-c', `wget -O '${imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
@@ -224,27 +228,50 @@ export const waifuView = Scrollable({
     }
 });
 
-// const waifuTags = Box({
-//     className: 'spacing-h-5',
-//     children: [
-//         Box({ hexpand: true }),
-//         CommandButton('waifu'),
-//         CommandButton('maid'),
-//         CommandButton('uniform'),
-//         CommandButton('oppai'),
-//         CommandButton('selfies'),
-//         CommandButton('marin-kitagawa'),
-//         CommandButton('raiden-shogun'),
-//         CommandButton('mori-calliope'),
-//     ]
-// });
+const waifuTags = Revealer({
+    revealChild: false,
+    transition: 'crossfade',
+    transitionDuration: 150,
+    child: Box({
+        className: 'spacing-h-5',
+        children: [
+            Scrollable({
+                vscroll: 'never',
+                hscroll: 'automatic',
+                hexpand: true,
+                child: Box({
+                    className: 'spacing-h-5',
+                    children: [
+                        CommandButton('waifu'),
+                        CommandButton('maid'),
+                        CommandButton('uniform'),
+                        CommandButton('oppai'),
+                        CommandButton('selfies'),
+                        CommandButton('marin-kitagawa'),
+                        CommandButton('raiden-shogun'),
+                        CommandButton('mori-calliope'),
+                    ]
+                })
+            }),
+            Box({ className: 'separator-line' }),
+        ]
+    })
+});
 
 export const waifuCommands = Box({
     className: 'spacing-h-5',
-    children: [
-        Box({ hexpand: true }),
-        CommandButton('/clear'),
-    ]
+    setup: (self) => {
+        self.pack_end(CommandButton('/clear'), false, false, 0);
+        self.pack_start(Button({
+            className: 'sidebar-chat-chip-toggle',
+            setup: setupCursorHover,
+            label: 'Tags →',
+            onClicked: () => {
+                waifuTags.revealChild = !waifuTags.revealChild;
+            }
+        }), false, false, 0);
+        self.pack_start(waifuTags, true, true, 0);
+    }
 });
 
 export const sendMessage = (text) => {
@@ -253,7 +280,7 @@ export const sendMessage = (text) => {
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) {
             const kids = waifuContent.get_children();
-            for (let i = 0; i < kids.length; i++) {
+            for (let i = kids.length - 1; i >= 0; i--) {
                 const child = kids[i];
                 child.destroy();
             }
@@ -261,7 +288,7 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/test')) {
             const newImage = WaifuImage(['/test']);
             waifuContent.add(newImage);
-            Utils.timeout(13, () => newImage._update({ // Needs timeout or inits won't make it
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage._update({ // Needs timeout or inits won't make it
                 // This is an image uploaded to my github repo
                 status: 200,
                 url: 'https://picsum.photos/400/600',
@@ -272,7 +299,7 @@ export const sendMessage = (text) => {
                 width: 300,
                 height: 200,
                 tags: ['/test'],
-            }));
+            }, true));
         }
     }
     else WaifuService.fetch(text);

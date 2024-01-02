@@ -4,7 +4,7 @@ const { exec, execAsync } = Utils;
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 
 const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
-import { MarginRevealer } from '../../lib/advancedrevealers.js';
+import { MarginRevealer } from '../../lib/advancedwidgets.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { showMusicControls } from '../../variables.js';
@@ -74,6 +74,12 @@ function getTrackfont(player) {
     if (title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
     return DEFAULT_MUSIC_FONT;
 }
+function trimTrackTitle(title) {
+    // Removes stuff like【C93】 at beginning
+    var pattern = /【[^】]*】/;
+    var cleanedTitle = title.replace(pattern, '');
+    return cleanedTitle.trim();
+}
 
 const TrackProgress = ({ player, ...rest }) => {
     const _updateProgress = (circprog) => {
@@ -102,7 +108,7 @@ const TrackTitle = ({ player, ...rest }) => Label({
     className: 'osd-music-title',
     connections: [[player, (self) => {
         // Player name
-        self.label = player.trackTitle.length > 0 ? player.trackTitle : 'No media';
+        self.label = player.trackTitle.length > 0 ? trimTrackTitle(player.trackTitle) : 'No media';
         // Font based on track/artist
         const fontForThisTrack = getTrackfont(player);
         self.css = `font-family: ${fontForThisTrack}, ${DEFAULT_MUSIC_FONT};`;
@@ -374,8 +380,8 @@ export default () => MarginRevealer({
     }),
     connections: [
         [showMusicControls, (revealer) => {
-            if(showMusicControls.value) revealer._show(revealer);
-            else revealer._hide(revealer);
+            if(showMusicControls.value) revealer._show();
+            else revealer._hide();
         }],
     ],
 })

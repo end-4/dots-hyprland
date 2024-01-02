@@ -5,6 +5,13 @@ const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { showMusicControls } from '../../variables.js';
 
+function trimTrackTitle(title) {
+    // Removes stuff like【C93】 at beginning
+    var pattern = /【[^】]*】/;
+    var cleanedTitle = title.replace(pattern, '');
+    return cleanedTitle.trim();
+}
+
 const TrackProgress = () => {
     const _updateProgress = (circprog) => {
         const mpris = Mpris.getPlayer('');
@@ -69,7 +76,7 @@ export const ModuleMusic = () => Widget.EventBox({
                             connections: [[Mpris, label => {
                                 const mpris = Mpris.getPlayer('');
                                 if (mpris)
-                                    label.label = `${mpris.trackTitle} • ${mpris.trackArtists.join(', ')}`;
+                                    label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
                                 else
                                     label.label = 'No media';
                             }]],

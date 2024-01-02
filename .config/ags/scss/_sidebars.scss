@@ -720,6 +720,21 @@ $onChatgpt: $onPrimary;
     border: 0.068rem solid $sidebar_chat_textboxareaColor;
 }
 
+.sidebar-chat-chip-toggle {
+    @include menu_decel;
+    @include small-rounding;
+    padding: 0.341rem 0.477rem;
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+}
+.sidebar-chat-chip-toggle:focus,
+.sidebar-chat-chip-toggle:hover {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 83%);
+}
+.sidebar-chat-chip-toggle:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 67%);
+}
+
 .sidebar-pin {
     @include small-rounding;
     @include menu_decel;
@@ -779,9 +794,14 @@ $onChatgpt: $onPrimary;
 $waifu_image_overlay_transparency: 0.7;
 .sidebar-waifu-image-action {
     @include full-rounding;
-    min-width:  1.875rem;
+    min-width: 1.875rem;
     min-height: 1.875rem;
-    background-color: rgba(0, 0, 0, $waifu_image_overlay_transparency); // Fixed cuz on image
+    background-color: rgba(
+        0,
+        0,
+        0,
+        $waifu_image_overlay_transparency
+    ); // Fixed cuz on image
     color: rgba(255, 255, 255, $waifu_image_overlay_transparency);
 }
 .sidebar-waifu-image-action:hover,
