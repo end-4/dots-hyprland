@@ -4,23 +4,23 @@ export base="$(pwd)"
 
 function try { "$@" || sleep 0; }
 function v() {
-  echo -e "[$0]: \e[34mNow executing:\e[0m"
+  echo -e "\e[34m[$0]: Next command to be executed:\e[0m"
   echo -e "\e[32m$@\e[0m"
   execute=true
   if $ask;then
     while true;do
-      echo -e "\e[34mDo you want to execute this command? \e[0m"
+      echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
       echo "  y = Yes"
-      echo "  a = Abort this script"
+      echo "  e = Exit now"
       echo "  s = Skip this command; NOT recommended unless you really sure"
       echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
-      read -p "Enter here [y/a/s/yesforall]:" p
+      read -p "Enter here [y/e/s/yesforall]:" p
       case $p in
         [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
-        [aA]) echo -e "\e[34mAborting...\e[0m" ;exit ;break ;;
+        [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
         [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;export execute=false ;break ;;
         "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; export ask=false ;break ;;
-        *) echo -e "\e[31mPlease enter one of [y/a/s/yesforall].\e[0m";;
+        *) echo -e "\e[31mPlease enter one of [y/e/s/yesforall].\e[0m";;
       esac
     done
   fi
@@ -29,26 +29,49 @@ function v() {
   fi
 }
 #####################################################################################
-printf "[$0]: Hi there!\n"
+startask (){
+printf "\e[34m[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
 printf '            2. has not been fully tested, use at your own risk.\n'
-printf "\e[36m== PLEASE BACKUP \"$HOME/.config\" AND \"$HOME/.local\" BY YOURSELF IF NEEDED! ==\n\e[97m"
+printf '\n'
+printf "\e[31m"
+printf "=============\n"
+printf "PLEASE CONFIRM\n"
+printf "YOU HAVE\n"
+printf "  \"$HOME/.config\"\n"
+printf "  AND\n"
+printf "  \"$HOME/.local\"\n"
+printf "ALREADY BACKUPED\n"
+printf "BY YOURSELF!\n"
+printf "=============\n"
+printf "\n\e[97m"
+printf "Enter the capital \"YES\" to continue:"
+read -p " " p
+case $p in "YES")sleep 0;; *)exit;;esac
 printf '\n'
 printf 'Do you want to confirm everytime before a command executes?\n'
 printf '      y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
 printf '      n = No, just execute them automatically.\n'
-printf '      E = Exit this script. (DEFAULT)\n'
-read -p "Enter y/n/E: " p
+printf '      a = Abort. (DEFAULT)\n'
+read -p "Enter [y/n/A]: " p
 case $p in
   y)export ask=true;;
-  n)export ask=false; export c=" --noconfirm" ;;
+  n)export ask=false; export noconfirm=" --noconfirm" ;;
   *)exit;;
 esac
+}
+
+case $1 in
+  "-f")export ask=false; export noconfirm=" --noconfirm" ;;
+  *)startask ;;
+esac
+
 set -e
 #####################################################################################
 printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
-v yay -S --needed$c blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git hyprpicker-git rsync
+v yay -S --needed$noconfirm blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git hyprpicker-git rsync
+# NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
 
 v sudo usermod -aG video "$(whoami)"
 v sudo usermod -aG input "$(whoami)"
@@ -71,7 +94,7 @@ installags (){
   cd $base
 }
 if command -v ags >/dev/null 2>&1
-  then echo -e "\e[34mCommand \"ags\" already exists. Won't install ags.\e[0m"
+  then echo -e "\e[34mCommand \"ags\" already exists. Won\'t install ags.\e[0m"
   else installags
 fi
 
@@ -79,7 +102,7 @@ fi
 printf '\e[36m3. Copying\e[97m\n'
 
 # In case ~/.local/bin does not exists
-v mkdir -p "$HOME/.local/bin"
+v mkdir -p "$HOME/.local/bin" "$HOME/.local/share"
 
 # `--delete' for rsync to make sure that
 # original dot files and new ones in the SAME DIRECTORY
@@ -93,11 +116,11 @@ do
   fi
 done
 
-# .local/bin should be processed seperately to avoid `--delete' for rsync,
-# since the files here comes from different places, not only one program.
+# some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
+# since the files here come from different places, not only about one program.
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
 
 #####################################################################################
-printf "[$0]: \e[36mFinished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
+printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[97m\n"
