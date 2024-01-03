@@ -36,11 +36,11 @@ export const waifuTabIcon = Box({
 
 const WaifuImage = (taglist) => {
     const ImageState = (icon, name) => Box({
-        className: 'spacing-h-5',
+        className: 'spacing-h-5 txt',
         children: [
             Box({ hexpand: true }),
             Label({
-                className: 'sidebar-waifu-txt txt-smallie txt',
+                className: 'sidebar-waifu-txt txt-smallie',
                 xalign: 0,
                 label: name,
             }),
@@ -161,6 +161,9 @@ const WaifuImage = (taglist) => {
                 else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock._imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
+                blockHeading.get_children().forEach((child) => {
+                    child.setCss(`border-color: ${dominant_color};`);
+                }) 
                 colorIndicator.css = `background-color: ${dominant_color};`;
             }],
         ],
