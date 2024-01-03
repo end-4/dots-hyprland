@@ -1,10 +1,21 @@
+const { GLib } = imports.gi;
 import { Widget, Utils, Service } from '../../imports.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from "../../lib/statusicons.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
 import { MaterialIcon } from '../../lib/materialicon.js';
+
+function expandTilde(path) {
+    if (path.startsWith('~')) {
+        console.log(GLib.get_home_dir() + path.slice(1));
+        return GLib.get_home_dir() + path.slice(1);
+    } else {
+        return path;
+    }
+}
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
@@ -31,9 +42,9 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     tooltipText: 'Bluetooth | Right-click to configure',
     onClicked: () => {
         const status = Bluetooth?.enabled;
-        if (status) 
+        if (status)
             exec('rfkill block bluetooth');
-        else 
+        else
             exec('rfkill unblock bluetooth');
     },
     onSecondaryClickRelease: () => {
@@ -95,15 +106,22 @@ export const ModuleInvertColors = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Color inversion',
     onClicked: (button) => {
-        const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
-            button.toggleClassName('sidebar-button-active', false);
-        }
-        else {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/invert.frag`]).catch(print);
-            button.toggleClassName('sidebar-button-active', true);
-        }
+        // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
+        Hyprland.sendMessage('j/getoption decoration:screen_shader')
+            .then((output) => {
+                const shaderPath = JSON.parse(output)["str"].trim();
+                console.log(output)
+                console.log(shaderPath)
+                if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
+                    execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader '[[EMPTY]]'`]).catch(print);
+                    button.toggleClassName('sidebar-button-active', false);
+                }
+                else {
+                    Hyprland.sendMessage(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
+                        .catch(print);
+                    button.toggleClassName('sidebar-button-active', true);
+                }
+            })
     },
     child: MaterialIcon('invert_colors', 'norm'),
     setup: setupCursorHover,
