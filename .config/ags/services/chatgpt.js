@@ -45,6 +45,16 @@ function expandTilde(path) {
 // We're using many models to not be restricted to 3 messages per minute.
 // The whole chat will be sent every request anyway.
 const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_key.txt`;
+const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_dom.txt`;
+function replaceapidom(URL) {
+    //Utils.writeFile(URL, "/tmp/openai-url-old.log"); // For debugging
+    if (fileExists(expandTilde(APIDOM_FILE_LOCATION))) {
+        var contents = Utils.readFile(expandTilde(APIDOM_FILE_LOCATION)).trim();
+        var URL = URL.toString().replace("api.openai.com", contents);
+    }
+    //Utils.writeFile(URL, "/tmp/openai-url.log"); // For debugging
+    return URL;
+}
 const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
 const ONE_CYCLE_COUNT = 3;
 
@@ -126,7 +136,8 @@ class ChatGPTService extends Service {
     _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();
-    url = GLib.Uri.parse('https://api.openai.com/v1/chat/completions', GLib.UriFlags.NONE);
+
+    url = GLib.Uri.parse(replaceapidom('https://api.openai.com/v1/chat/completions'), GLib.UriFlags.NONE);
 
     constructor() {
         super();
