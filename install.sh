@@ -67,7 +67,6 @@ case $1 in
 esac
 
 set -e
-IFS_old=$IFS
 #####################################################################################
 printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
