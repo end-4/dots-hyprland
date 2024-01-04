@@ -83,7 +83,7 @@ const keyboardItself = (kbJson) => {
             children: row.map(key => {
                 return Button({
                     className: `osk-key osk-key-${key.shape}`,
-                    hexpand: (key.shape == "space" || key.shape == "expand"),
+                    hexpand: ["space", "expand"].includes(key.shape),
                     label: key.label,
                     setup: (button) => {
                         let pressed = false;

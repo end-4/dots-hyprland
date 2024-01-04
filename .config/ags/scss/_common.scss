@@ -66,6 +66,9 @@ menu>menuitem:hover,
 menu>menuitem:focus {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
+menu>menuitem:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
+}
 
 tooltip {
     @include normal-rounding;
@@ -148,8 +151,7 @@ tooltip {
 
 .segment-btn:focus,
 .segment-btn:hover {
-    background-color: $surfaceVariant;
-    color: $onSurfaceVariant;
+    background-color: $hovercolor;
 }
 
 .segment-btn-enabled {

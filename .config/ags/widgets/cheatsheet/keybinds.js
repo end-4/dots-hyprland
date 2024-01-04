@@ -38,7 +38,7 @@ export const Keybinds = () => Widget.Box({
                             children: category.binds.map((keybinds, i) => Widget.Box({ // Binds
                                 vertical: false,
                                 children: keybinds.keys.map((key, i) => Widget.Label({ // Specific keys
-                                    className: `${key == 'OR' || key == '+' ? 'cheatsheet-key-notkey' : 'cheatsheet-key'} txt-small`,
+                                    className: `${['OR', '+'].includes(key) ? 'cheatsheet-key-notkey' : 'cheatsheet-key'} txt-small`,
                                     label: key,
                                 }))
                             }))

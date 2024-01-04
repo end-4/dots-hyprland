@@ -50,16 +50,16 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-key:hover,
 .osk-key:focus {
-    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
+    background-color: $hovercolor;
 }
 
 .osk-key:active {
-    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+    background-color: $activecolor;
     font-size: $osk_key_fontsize;
 }
 
 .osk-key-active {
-    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+    background-color: $activecolor;
 }
 
 .osk-key-normal {
