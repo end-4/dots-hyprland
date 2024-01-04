@@ -126,10 +126,10 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
         hpack: 'center',
         vpack: 'center',
         onClicked: () => {
-            execAsync([`bash`, `-c`, `hyprctl dispatch focuswindow address:${address}`, `&`]).catch(print);
+            Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
             App.closeWindow('overview');
         },
-        onMiddleClickRelease: () => execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`]).catch(print),
+        onMiddleClickRelease: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
         onSecondaryClick: (button) => {
             button.toggleClassName('overview-tasks-window-selected', true);
             const menu = Widget.Menu({
@@ -140,10 +140,7 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
                             xalign: 0,
                             label: "Close (Middle-click)",
                         }),
-                        onActivate: () => {
-                            execAsync([`bash`, `-c`, `hyprctl dispatch closewindow address:${address}`, `&`])
-                                .catch(print);
-                        }
+                        onActivate: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
                     }),
                     ContextWorkspaceArray({
                         label: "Dump windows to workspace",
@@ -243,15 +240,15 @@ const workspace = index => {
         children: [Widget.EventBox({
             hexpand: true,
             vexpand: true,
-            onPrimaryClickRelease: () => {
-                execAsync([`bash`, `-c`, `hyprctl dispatch workspace ${index}`, `&`]).catch(print);
+            onPrimaryClick: () => {
+                Hyprland.sendMessage(`dispatch workspace ${index}`)
                 App.closeWindow('overview');
             },
-            setup: eventbox => {
+            setup: (eventbox) => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
                     overviewTick.value = !overviewTick.value;
-                    execAsync([`bash`, `-c`, `hyprctl dispatch movetoworkspacesilent ${index},address:${data.get_text()}`, `&`]).catch(print);
+                    Hyprland.sendMessage(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
                 });
             },
             child: fixed,
@@ -434,7 +431,7 @@ export const SearchAndWindows = () => {
 
             else {
                 App.closeWindow('overview');
-                execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} -site:quora.com' &`]).catch(print); // fuck quora
+                execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} -site:quora.com' &`]).catch(print); // quora is useless
             }
         },
         // Actually onChange but this is ta workaround for a bug

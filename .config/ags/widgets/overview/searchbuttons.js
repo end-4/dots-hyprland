@@ -167,6 +167,6 @@ export const SearchButton = ({ text = '' }) => searchItem({
     content: `${text}`,
     onActivate: () => {
         App.closeWindow('overview');
-        execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} -site:quora.com' &`]).catch(print); // fuck quora
+        execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} -site:quora.com' &`]).catch(print); // quora is useless
     },
 });
