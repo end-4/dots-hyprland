@@ -12,7 +12,7 @@ function v() {
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
       echo "  y = Yes"
       echo "  e = Exit now"
-      echo "  s = Skip this command; NOT recommended (may break functions needed by the dot files!)"
+      echo "  s = Skip this command; NOT recommended (may break functions needed by the dotfiles!)"
       echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
       read -p "Enter here [y/e/s/yesforall]:" p
       case $p in
@@ -33,19 +33,10 @@ startask (){
 printf "\e[34m[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
 printf '            2. has not been fully tested, use at your own risk.\n'
-printf '\n'
 printf "\e[31m"
-printf "=============\n"
-printf "PLEASE CONFIRM\n"
-printf "YOU HAVE\n"
-printf "  \"$HOME/.config\"\n"
-printf "  AND\n"
-printf "  \"$HOME/.local\"\n"
-printf "ALREADY BACKUPED\n"
-printf "BY YOURSELF!\n"
-printf "=============\n"
-printf "\n\e[97m"
-printf "Enter the capital \"YES\" to continue:"
+printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\"\n folders!\n"
+printf "\e[97m"
+printf "Enter the capital \"YES\" (without quotes) to continue: "
 read -p " " p
 case $p in "YES")sleep 0;; *)exit;;esac
 printf '\n'
@@ -114,7 +105,7 @@ printf '\e[36m3. Copying\e[97m\n'
 v mkdir -p "$HOME/.local/bin" "$HOME/.local/share"
 
 # `--delete' for rsync to make sure that
-# original dot files and new ones in the SAME DIRECTORY
+# original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
 for i in .config/*
