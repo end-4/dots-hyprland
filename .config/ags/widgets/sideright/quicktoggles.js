@@ -27,7 +27,7 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
     child: NetworkIndicator(),
     connections: [
         [Network, button => {
-            button.toggleClassName('sidebar-button-active', Network.wifi?.internet == 'connected' || Network.wired?.internet == 'connected')
+            button.toggleClassName('sidebar-button-active', [Network.wifi?.internet, Network.wired?.internet].includes('connected'))
         }],
         [Network, button => {
             button.tooltipText = (`${Network.wifi?.ssid} | Right-click to configure` || 'Unknown');

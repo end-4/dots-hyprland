@@ -37,22 +37,25 @@ export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...re
         ]
     });
     const interactionWrapper = Button({
+        properties: [
+            ['toggle', (newValue) => {
+                value = !value;
+                toggleIcon.toggleClassName('switch-fg-toggling-false', false);
+                if (!value) {
+                    toggleIcon.label = '';
+                    toggleIcon.toggleClassName('txt-poof', true);
+                }
+                toggleButtonIndicator.toggleClassName('switch-fg-true', value);
+                toggleButton.toggleClassName('switch-bg-true', value);
+                if (value) Utils.timeout(1, () => {
+                    toggleIcon.label = 'check';
+                    toggleIcon.toggleClassName('txt-poof', false);
+                })
+                onChange(interactionWrapper, value);
+            }]
+        ],
         child: widgetContent,
-        onClicked: () => { // mouse up/kb press
-            value = !value;
-            toggleIcon.toggleClassName('switch-fg-toggling-false', false);
-            if (!value) {
-                toggleIcon.label = '';
-                toggleIcon.toggleClassName('txt-poof', true);
-            }
-            toggleButtonIndicator.toggleClassName('switch-fg-true', value);
-            toggleButton.toggleClassName('switch-bg-true', value);
-            if(value) Utils.timeout(1, () => {
-                toggleIcon.label = 'check';
-                toggleIcon.toggleClassName('txt-poof', false);
-            })
-            onChange(interactionWrapper, value);
-        },
+        onClicked: (self) => self._toggle(self),
         setup: (button) => {
             setupCursorHover(button),
                 button.connect('pressed', () => { // mouse down

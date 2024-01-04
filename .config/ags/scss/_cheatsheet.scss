@@ -39,11 +39,11 @@
 
 .cheatsheet-closebtn:hover,
 .cheatsheet-closebtn:focus {
-    background-color: $surfaceVariant;
+    background-color: $hovercolor;
 }
 
 .cheatsheet-closebtn:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 70%);
+    background-color: $activecolor;
 }
 
 .cheatsheet-category-title {

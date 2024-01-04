@@ -99,7 +99,7 @@ const NetworkWiredIndicator = () => Widget.Stack({
             return;
 
         const { internet } = Network.wired;
-        if (internet === 'connected' || internet === 'connecting')
+        if (['connecting', 'connected'].includes(internet))
             stack.shown = internet;
         else if (Network.connectivity !== 'full')
             stack.shown = 'disconnected';
@@ -135,7 +135,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
         if (Network.wifi.internet == 'connected') {
             stack.shown = String(Math.ceil(Network.wifi.strength / 25));
         }
-        else if (Network.wifi.internet == 'disconnected' || Network.wifi.internet == 'connecting') {
+        else if (["disconnected", "connecting"].includes(Network.wifi.internet)) {
             stack.shown = Network.wifi.internet;
         }
     }),
@@ -154,7 +154,7 @@ export const NetworkIndicator = () => Widget.Stack({
             return;
         }
         const primary = Network.primary || 'fallback';
-        if (primary == 'wifi' || primary == 'wired')
+        if (['wifi', 'wired'].includes(primary))
             stack.shown = primary;
         else
             stack.shown = 'fallback';
