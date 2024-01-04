@@ -4,6 +4,7 @@ import { Service, Utils, Widget } from '../../imports.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -173,8 +174,8 @@ const BarGroup = ({ child }) => Widget.Box({
 });
 
 export const ModuleSystem = () => Widget.EventBox({
-    onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
-    onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
+    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
         className: 'spacing-h-5',
