@@ -12,7 +12,7 @@ function v() {
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
       echo "  y = Yes"
       echo "  e = Exit now"
-      echo "  s = Skip this command; NOT recommended unless you really sure"
+      echo "  s = Skip this command; NOT recommended (may break functions needed by the dot files!)"
       echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
       read -p "Enter here [y/e/s/yesforall]:" p
       case $p in
@@ -56,22 +56,29 @@ printf '      a = Abort. (DEFAULT)\n'
 read -p "Enter [y/n/A]: " p
 case $p in
   y)export ask=true;;
-  n)export ask=false; export noconfirm=" --noconfirm" ;;
+  n)export ask=false;;
   *)exit;;
 esac
 }
 
 case $1 in
-  "-f")export ask=false; export noconfirm=" --noconfirm" ;;
+  "-f")export ask=false;;
   *)startask ;;
 esac
 
 set -e
+IFS_old=$IFS
 #####################################################################################
 printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
-v yay -S --needed$noconfirm blueberry brightnessctl coreutils curl fish foot fuzzel gjs gnome-bluetooth-3.0 gnome-control-center gnome-keyring gobject-introspection grim gtk3 gtk-layer-shell libdbusmenu-gtk3 meson networkmanager npm plasma-browser-integration playerctl polkit-gnome python-pywal ripgrep sassc slurp starship swayidle typescript upower xorg-xrandr webp-pixbuf-loader wget wireplumber wl-clipboard tesseract yad ydotool adw-gtk3-git cava gojq gradience-git gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git python-material-color-utilities python-pywal python-poetry python-build python-pillow swaylock-effects-git swww ttf-material-symbols-variable-git ttf-space-mono-nerd ttf-jetbrains-mono-nerd wayland-idle-inhibitor-git wlogout wlsunset-git hyprpicker-git rsync
+readarray -t pkglist < dependencies.txt
 # NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
+
+if $ask;then
+  for i in "${pkglist[@]}";do v yay -S --needed $i;done
+else
+  v yay -S --needed --noconfirm "${pkglist[*]}"
+fi
 
 v sudo usermod -aG video "$(whoami)"
 v sudo usermod -aG input "$(whoami)"
