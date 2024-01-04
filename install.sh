@@ -36,7 +36,7 @@ printf '            2. has not been fully tested, use at your own risk.\n'
 printf "\e[31m"
 printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
 printf "\e[97m"
-printf "Enter the capital \"YES\" (without quotes) to continue: "
+printf "Enter capital \"YES\" (without quotes) to continue: "
 read -p " " p
 case $p in "YES")sleep 0;; *)exit;;esac
 printf '\n'
