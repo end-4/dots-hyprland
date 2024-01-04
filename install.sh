@@ -71,12 +71,15 @@ IFS_old=$IFS
 #####################################################################################
 printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
 
+# Each line as an element of the array $pkglist
 readarray -t pkglist < dependencies.txt
 # NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
 
 if $ask;then
+  # execute per element of the array $pkglist
   for i in "${pkglist[@]}";do v yay -S --needed $i;done
 else
+  # execute for all elements of the array $pkglist in one line
   v yay -S --needed --noconfirm "${pkglist[*]}"
 fi
 
