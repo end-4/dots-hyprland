@@ -35,10 +35,9 @@
 
 ### [illogical_impulse](https://github.com/end-4/dots-hyprland/tree/illogical-impulse)
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/abd05702-a248-4f53-ac82-500219aa19f1)
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/f3468aae-adcd-4697-959e-7d8aa52ed7e1)
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/d4c37041-9f3a-4a5f-a8c6-b1ac6edb808b)
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/24643c02-660a-4bed-8772-c98b08e62ac1)
-
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/9e7adedd-fae8-4cc8-9c81-d7ad489d7559)
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8)
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/98fe2c03-a128-45c0-8155-3a6080db3b84)
 
 > [!WARNING]
 > - Only the above is maintained
