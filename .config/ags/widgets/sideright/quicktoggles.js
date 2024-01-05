@@ -23,6 +23,7 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
     onClicked: Network.toggleWifi,
     onSecondaryClickRelease: () => {
         execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center wifi', '&']);
+        App.closeWindow('sideright');
     },
     child: NetworkIndicator(),
     connections: [
@@ -49,6 +50,7 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     },
     onSecondaryClickRelease: () => {
         execAsync(['bash', '-c', 'blueberry &']);
+        App.closeWindow('sideright');
     },
     child: BluetoothIndicator(),
     connections: [

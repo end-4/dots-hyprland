@@ -30,12 +30,12 @@ const TrackProgress = () => {
     })
 }
 
-export const ModuleMusic = () => Widget.EventBox({
+export const ModuleMusic = () => Widget.EventBox({ // TODO: use cairo to make button bounce smaller on click
     onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
     onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
     onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
     onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
-    onMiddleClickRelease: () => Mpris.getPlayer('')?.playPause(),
+    onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),
     child: Widget.Box({
         className: 'bar-group-margin bar-sides',
         children: [
