@@ -86,48 +86,6 @@ const Utilities = () => Box({
 const BarBattery = () => Box({
     className: 'spacing-h-4 txt-onSurfaceVariant',
     children: [
-        // Revealer({ // A dot for charging state
-        //     transitionDuration: 150,
-        //     revealChild: false,
-        //     transition: 'crossfade',
-        //     child: Widget.Box({
-        //         className: 'spacing-h-3',
-        //         children: [
-        //             Widget.Box({
-        //                 vpack: 'center',
-        //                 className: 'bar-batt-chargestate-charging-smaller',
-        //                 setup: (self) => self.hook(Battery, box => {
-        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-        //                 }),
-        //             }),
-        //             Widget.Box({
-        //                 vpack: 'center',
-        //                 className: 'bar-batt-chargestate-charging',
-        //                 setup: (self) => self.hook(Battery, box => {
-        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-        //                 }),
-        //             }),
-        //         ]
-        //     }),
-        //     setup: (self) => self.hook(Battery, revealer => {
-        //         revealer.revealChild = Battery.charging;
-        //     }),
-        // }),
-        // Stack({
-        //     transition: 'slide_up_down',
-        //     items: [
-        //         ['discharging', Widget.Label({
-        //             className: 'txt-norm txt',
-        //             label: '•',
-        //         }),],
-        //         ['charging', MaterialIcon('bolt', 'norm')],
-        //     ],
-        //     setup: (self) => self.hook(Battery, revealer => {
-        //         self.shown = Battery.charging ? 'charging' : 'discharging';
-        //     }),
-        // }),
         Revealer({
             transitionDuration: 150,
             revealChild: false,
@@ -163,6 +121,60 @@ const BarBattery = () => Box({
     ]
 });
 
+const BarResourceValue = (name, icon, command) => Widget.Box({
+    vpack: 'center',
+    className: 'bar-batt spacing-h-5',
+    children: [
+        MaterialIcon(icon, 'small'),
+        Widget.ProgressBar({ // Progress
+            vpack: 'center', hexpand: true,
+            className: 'bar-prog-batt',
+            setup: (self) => self.poll(5000, (progress) => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    progress.value = Number(output) / 100;
+                    progress.tooltipText = `${name}: ${Number(output)}%`
+                })
+                .catch(print)
+            ),
+        }),
+    ]
+});
+
+const BarResource = (name, icon, command) => {
+    const resourceLabel = Label({
+        className: 'txt-smallie txt-onSurfaceVariant',
+    });
+    const resourceCircProg = AnimatedCircProg({
+        className: 'bar-batt-circprog',
+        vpack: 'center', hpack: 'center',
+        connections: [[5000, (progress) => execAsync(['bash', '-c', command])
+            .then((output) => {
+                progress.css = `font-size: ${Number(output)}px;`;
+                resourceLabel.label = `${Math.round(Number(output))}%`;
+                widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+            }).catch(print)
+        ]],
+    });
+    const widget = Box({
+        className: 'spacing-h-4 txt-onSurfaceVariant',
+        children: [
+            resourceLabel,
+            Overlay({
+                child: Widget.Box({
+                    vpack: 'center',
+                    className: 'bar-batt',
+                    homogeneous: true,
+                    children: [
+                        MaterialIcon(icon, 'small'),
+                    ],
+                }),
+                overlays: [resourceCircProg]
+            }),
+        ]
+    });
+    return widget;
+}
+
 const BarGroup = ({ child }) => Widget.Box({
     className: 'bar-group-margin bar-sides',
     children: [
@@ -181,8 +193,28 @@ export const ModuleSystem = () => Widget.EventBox({
         className: 'spacing-h-5',
         children: [
             BarGroup({ child: BarClock() }),
-            BarGroup({ child: Utilities() }),
-            BarGroup({ child: BarBattery() }),
+            Stack({
+                transition: 'slide_up_down',
+                transitionDuration: 150,
+                items: [
+                    ['laptop', Box({
+                        className: 'spacing-h-5', children: [
+                            BarGroup({ child: Utilities() }),
+                            BarGroup({ child: BarBattery() }),
+                        ]
+                    })],
+                    ['desktop', Box({
+                        className: 'spacing-h-5', children: [
+                            BarGroup({ child: BarResource('RAM usage', 'memory', `free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
+                            BarGroup({ child: BarResource('Swap usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
+                        ]
+                    })],
+                ],
+                setup: (stack) => Utils.timeout(10, () => {
+                    if (!Battery.available) stack.shown = 'desktop';
+                    else stack.shown = 'laptop';
+                })
+            })
         ]
     })
 });
