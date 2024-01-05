@@ -13,17 +13,6 @@ import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../lib/con
 import Notification from "../../lib/notification.js";
 
 export default (props) => {
-    const dndToggle = ConfigToggle({
-        hpack: 'center',
-        icon: 'notifications_paused',
-        name: 'Do not disturb',
-        desc: "Don't pop up notifications",
-        initValue: Notifications.dnd,
-        onChange: (self, newValue) => {
-            Notifications.dnd = newValue;
-            silenceButton.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
-        },
-    });
     const notifEmptyContent = Box({
         homogeneous: true,
         children: [Box({
@@ -39,7 +28,6 @@ export default (props) => {
                         Label({ label: 'No notifications', className: 'txt-small' }),
                     ]
                 }),
-                dndToggle,
             ]
         })]
     });
@@ -71,7 +59,7 @@ export default (props) => {
                     box.show_all();
                 }
             }, 'notified'],
-    
+
             [Notifications, (box, id) => {
                 if (!id) return;
                 for (const ch of box.children) {
@@ -99,29 +87,25 @@ export default (props) => {
     });
     const silenceButton = ListActionButton('notifications_paused', 'Silence', (self) => {
         Notifications.dnd = !Notifications.dnd;
-        dndToggle._toggle(Notifications.dnd)
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
-    const clearButton = ListActionButton('clear_all', 'Clear', () => Notifications.clear());
-    const listTitle = Revealer({
-        revealChild: false,
-        connections: [[Notifications, (revealer) => {
-            revealer.revealChild = (Notifications.notifications.length > 0);
-        }]],
-        child: Box({
-            vpack: 'start',
-            className: 'sidebar-group-invisible txt spacing-h-5',
-            children: [
-                Label({
-                    hexpand: true,
-                    xalign: 0,
-                    className: 'txt-title-small',
-                    label: 'Notifications',
-                }),
-                silenceButton,
-                clearButton,
-            ]
-        })
+    const clearButton = ListActionButton('clear_all', 'Clear', () => {
+        notificationList.get_children().forEach(ch => ch.destroy());
+        Notifications.clear();
+    });
+    const listTitle = Box({
+        vpack: 'start',
+        className: 'sidebar-group-invisible txt spacing-h-5',
+        children: [
+            Label({
+                hexpand: true,
+                xalign: 0,
+                className: 'txt-title-small',
+                label: 'Notifications',
+            }),
+            silenceButton,
+            clearButton,
+        ]
     });
     const notifList = Scrollable({
         hexpand: true,
@@ -150,7 +134,7 @@ export default (props) => {
     });
     return Box({
         ...props,
-        className: 'sidebar-group-invisible spacing-v-5',
+        className: 'sidebar-group spacing-v-5',
         vertical: true,
         children: [
             listTitle,
