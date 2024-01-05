@@ -100,7 +100,9 @@ export default (props) => {
             Label({
                 hexpand: true,
                 xalign: 0,
-                className: 'txt-title-small',
+                className: 'txt-title-small margin-left-10', 
+                // ^ (extra margin on the left so that it looks similarly spaced
+                // when compared to borderless "Clear" button on the right)
                 label: 'Notifications',
             }),
             silenceButton,
