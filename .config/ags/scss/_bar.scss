@@ -4,10 +4,7 @@
 $black: black;
 $white: white;
 $bar_ws_width: 1.774rem;
-$bar_subgroup_bg: mix($surfaceVariant, $primary, 89%);
-@if $darkmode ==true {
-    $bar_subgroup_bg: $surfaceVariant;
-}
+$bar_subgroup_bg: $surfaceVariant;
 
 @mixin bar-group-rounding {
     @include small-rounding;
