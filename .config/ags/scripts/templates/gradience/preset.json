@@ -118,7 +118,12 @@
         "thumbnail_bg_color": "#1a1b26",
         "thumbnail_fg_color": "#AEE5FA",
         "shade_color": "rgba(0, 0, 0, 0.36)",
-        "scrollbar_outline_color": "rgba(0, 0, 0, 0.5)"
+        "scrollbar_outline_color": "rgba(0, 0, 0, 0.5)",
+        
+        "sidebar_bg_color": "@window_bg_color",
+        "sidebar_fg_color":"@window_fg_color",
+        "sidebar_border_color": "@sidebar_bg_color",
+        "sidebar_backdrop_color": "@sidebar_bg_color"
     },
     "palette": {
         "blue_": {},
@@ -132,8 +137,8 @@
         "dark_": {}
     },
     "custom_css": {
-        "gtk4": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; ",
-        "gtk3": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; "
+        "gtk4": "",
+        "gtk3": ""
     },
     "plugins": {}
 }
