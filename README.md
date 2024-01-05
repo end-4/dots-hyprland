@@ -78,8 +78,8 @@
 
 # 🌟 stonks
 - _thank you_
+[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?background=%230d1117&axis=%23e6edf3&line=%234759e7)](https://starchart.cc/end-4/dots-hyprland)
 
-[![Stars](https://starchart.cc/end-4/dots-hyprland.svg)](https://starchart.cc/end-4/dots-hyprland)
 
 # 💡 Some inspirations
  - osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
