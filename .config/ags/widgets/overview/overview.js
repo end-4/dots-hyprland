@@ -307,10 +307,10 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     }]],
     setup: (box) => {
         box
-            .hook(Hyprland, (box, name, data) => {
-                if (["changefloatingmode", "movewindow"].includes(name)) 
-                    box._update(box);
-            }, 'event')
+            // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
+            //     if (["changefloatingmode", "movewindow"].includes(name)) 
+            //         box._update(box);
+            // }, 'event')
             .hook(Hyprland, (box) => box._update(box), 'client-added')
             .hook(Hyprland, (box) => box._update(box), 'client-removed')
             .hook(App, (box, name, visible) => { // Update on open
