@@ -7,9 +7,9 @@ import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { showMusicControls } from '../../variables.js';
 
 function trimTrackTitle(title) {
-    // Removes stuff like【C93】 at beginning
-    var pattern = /【[^】]*】/;
-    var cleanedTitle = title.replace(pattern, '');
+    var cleanedTitle = title;
+    cleanedTitle = cleanedTitle.replace(/【[^】]*】/, '');          // Remove stuff like【C93】 at beginning
+    cleanedTitle = cleanedTitle.replace(/\[FREE DOWNLOAD\]/g, ''); // Remove F-777's [FREE DOWNLOAD]
     return cleanedTitle.trim();
 }
 

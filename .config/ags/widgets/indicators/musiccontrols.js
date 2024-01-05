@@ -75,9 +75,9 @@ function getTrackfont(player) {
     return DEFAULT_MUSIC_FONT;
 }
 function trimTrackTitle(title) {
-    // Removes stuff like【C93】 at beginning
-    var pattern = /【[^】]*】/;
-    var cleanedTitle = title.replace(pattern, '');
+    var cleanedTitle = title;
+    cleanedTitle = cleanedTitle.replace(/【[^】]*】/, '');          // Remove stuff like【C93】 at beginning
+    cleanedTitle = cleanedTitle.replace(/\[FREE DOWNLOAD\]/g, ''); // Remove F-777's [FREE DOWNLOAD]
     return cleanedTitle.trim();
 }
 
@@ -301,7 +301,7 @@ const PlayState = ({ player }) => {
             overlays: [
                 Widget.Button({
                     className: 'osd-music-playstate-btn',
-                    onClicked: () => { console.log('uwu'); execAsync('playerctl play-pause').catch(print) },
+                    onClicked: () => execAsync('playerctl play-pause').catch(print),
                     child: Widget.Label({
                         justification: 'center',
                         hpack: 'fill',
