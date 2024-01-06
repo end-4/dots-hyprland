@@ -8,6 +8,7 @@ function v() {
   echo -e "\e[32m$@\e[0m"
   execute=true
   hasfailed=false
+  cmdstatus=0 # 0=normal; 1=failed; 2=failed but ignored
   if $ask;then
     while true;do
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
@@ -15,7 +16,7 @@ function v() {
       echo "  e = Exit now"
       echo "  s = Skip this command; NOT recommended (may break functions needed by the dotfiles!)"
       echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
-      read -p "Enter here [y/e/s/yesforall]:" p
+      read -p "Enter here [y/e/s/yesforall]: " p
       case $p in
         [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
         [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
@@ -26,17 +27,28 @@ function v() {
     done
   fi
   if $execute;then
-    "$@" || hasfailed=true
+    "$@" || cmdstatus=1
   fi
-  if $hasfailed ;then
+  while [ $cmdstatus == 1 ] ;do
     echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. You may need to resolve the problem manually before proceeding.\e[0m"
-    read -p "Ignore the error and continue this script anyway (NOT Recommended)? [y/N]" p
+    echo -e "\e[31mWhich one would you like to do? \e[0m"
+    echo "  r = Repeat this command (DEFAULT)"
+    echo "  e = Exit now"
+    echo "  i = Ignore the error and continue this script anyway (may break functions needed by the dotfiles!)"
+    read -p "Enter here [R/e/i]: " p
     case $p in
-      [yY]) echo -e "\e[34mAlright, continue...\e[0m" ;;
-      *) echo -e "\e[34mOK, exiting...\e[0m" ;exit 1 ;;
+      [iI]) echo -e "\e[34mAlright, ignore and continue...\e[0m";cmdstatus=2;;
+      [eE]) echo -e "\e[34mAlright, will exit.\e[0m";break;;
+      *) echo -e "\e[34mOK, repeating...\e[0m"
+         "$@" && cmdstatus=0
+         ;;
     esac
-  else echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" done.\e[0m"
-  fi
+  done
+  case $cmdstatus in
+    0) echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" finished.\e[0m";;
+    1) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. Exiting...\e[0m";exit 1;;
+    2) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed but ignored by user.\e[0m";;
+  esac
 }
 function showfun() {
   echo -e "\e[34mThe definition of function \"$1\" is as follows:\e[0m"
