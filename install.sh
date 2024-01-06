@@ -38,6 +38,12 @@ function v() {
   else echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" done.\e[0m"
   fi
 }
+function showfun() {
+  echo -e "\e[34mThe definition of function \"$1\" is as follows:\e[0m"
+  printf "\e[32m"
+  type -a $1
+  printf "\e[97m"
+}
 #####################################################################################
 startask (){
 printf "\e[34m[$0]: Hi there!\n"
@@ -104,10 +110,10 @@ install-ags (){
 if command -v ags >/dev/null 2>&1;then
   echo -e "\e[34mCommand \"ags\" already exists, no need to install.\e[0m"
   echo -e "\e[34mYou can reinstall ags in order to update to the latest version anyway.\e[0m"
-  if $ask;then v install-ags;fi
-else v install-ags
+  askags=$ask
+else askags=true
 fi
-
+if $askags;then showfun install-ags;v install-ags;fi
 #####################################################################################
 printf '\e[36m3. Copying\e[97m\n'
 
