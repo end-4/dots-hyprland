@@ -8,7 +8,7 @@ function v() {
   echo -e "\e[32m$@\e[0m"
   execute=true
   hasfailed=false
-  cmdstatus=0 # 0=normal; 1=failed; 2=failed but ignored
+  cmdstatus=0 # 0=normal; 1=failed; 2=failed but ignored; 3=skipped
   if $ask;then
     while true;do
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
@@ -20,7 +20,7 @@ function v() {
       case $p in
         [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
         [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
-        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;export execute=false ;break ;;
+        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;export execute=false;cmdstatus=3 ;break ;;
         "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; export ask=false ;break ;;
         *) echo -e "\e[31mPlease enter one of [y/e/s/yesforall].\e[0m";;
       esac
@@ -48,6 +48,7 @@ function v() {
     0) echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" finished.\e[0m";;
     1) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. Exiting...\e[0m";exit 1;;
     2) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed but ignored by user.\e[0m";;
+    3) echo -e "\e[33m[$0]: Command \"\e[32m$@\e[33m\" has been skipped by user.\e[0m";;
   esac
 }
 function showfun() {
@@ -144,7 +145,10 @@ do
   fi
 done
 
-test -f ~/.config/hypr/colors.conf || cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf
+target="$HOME/.config/hypr/colors.conf"
+test -f $target || { \
+  echo -e "\e[34mFile \"$target\" not found.\e[0m" && \
+  v cp "$HOME/.config/hypr/colors_default.conf" $target ; }
 
 # some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
