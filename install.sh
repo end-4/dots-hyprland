@@ -7,6 +7,7 @@ function v() {
   echo -e "\e[34m[$0]: Next command to be executed:\e[0m"
   echo -e "\e[32m$@\e[0m"
   execute=true
+  hasfailed=false
   if $ask;then
     while true;do
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
@@ -25,7 +26,16 @@ function v() {
     done
   fi
   if $execute;then
-  "$@"
+    "$@" || hasfailed=true
+  fi
+  if $hasfailed ;then
+    echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. You may need to resolve the problem manually before proceeding.\e[0m"
+    read -p "Ignore the error and continue this script anyway (NOT Recommended)? [y/N]" p
+    case $p in
+      [yY]) echo -e "\e[34mAlright, continue...\e[0m" ;;
+      *) echo -e "\e[34mOK, exiting...\e[0m" ;exit 1 ;;
+    esac
+  else echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" done.\e[0m"
   fi
 }
 #####################################################################################
@@ -80,22 +90,22 @@ v sudo usermod -aG input "$(whoami)"
 printf '\e[36m2. Installing AGS from git repo\e[97m\n'
 sleep 1
 
-installags (){
-  v git clone --recursive https://github.com/Aylur/ags.git|| \
-    if [ -d ags ];then
-      printf "\e[36mSeems \"./ags\" already exists.\e[97m\n"
-      cd ags
-      v git pull
-    else exit 1
-    fi
-  v npm install
-  v meson setup build 
-  v meson install -C build
+install-ags (){
+  mkdir -p $base/ags
+  cd $base/ags
+  try git init -b main
+  try git remote add origin https://github.com/Aylur/ags.git
+  git pull origin main && git submodule update --init --recursive
+  npm install
+  meson setup build 
+  meson install -C build
   cd $base
 }
-if command -v ags >/dev/null 2>&1
-  then echo -e "\e[34mCommand \"ags\" already exists. Won\'t install ags.\e[0m"
-  else installags
+if command -v ags >/dev/null 2>&1;then
+  echo -e "\e[34mCommand \"ags\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall ags in order to update to the latest version anyway.\e[0m"
+  if $ask;then v install-ags;fi
+else v install-ags
 fi
 
 #####################################################################################
@@ -115,6 +125,8 @@ do
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
   fi
 done
+
+test -f ~/.config/hypr/colors.conf || cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf
 
 # some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
