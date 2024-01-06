@@ -29,8 +29,8 @@ function v() {
     "$@" || cmdstatus=1
   fi
   while [ $cmdstatus == 1 ] ;do
-    echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. You may need to resolve the problem manually before proceeding.\e[0m"
-    echo -e "\e[31mWhich one would you like to do? \e[0m"
+    echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed."
+    echo -e "You may need to resolve the problem manually BEFORE repeating this command.\e[0m"
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
     echo "  i = Ignore the error and continue this script anyway (may break functions needed by the dotfiles!)"
@@ -56,6 +56,13 @@ function showfun() {
   type -a $1
   printf "\e[97m"
 }
+#####################################################################################
+# For debugging
+# ask=false
+# mkdir -p /tmp/test1
+# v mkdir /tmp/test1
+# 
+# echo "debug part fin";exit
 #####################################################################################
 startask (){
 printf "\e[34m[$0]: Hi there!\n"
