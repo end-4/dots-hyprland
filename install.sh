@@ -7,7 +7,6 @@ function v() {
   echo -e "\e[34m[$0]: Next command to be executed:\e[0m"
   echo -e "\e[32m$@\e[0m"
   execute=true
-  hasfailed=false
   cmdstatus=0 # 0=normal; 1=failed; 2=failed but ignored; 3=skipped
   if $ask;then
     while true;do
