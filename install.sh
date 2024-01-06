@@ -112,7 +112,7 @@ v sudo usermod -aG video "$(whoami)"
 v sudo usermod -aG input "$(whoami)"
 
 #####################################################################################
-printf '\e[36m2. Installing AGS from git repo\e[97m\n'
+printf '\e[36m2. Installing AGS and rubik from git repo\e[97m\n'
 sleep 1
 
 install-ags (){
@@ -126,13 +126,35 @@ install-ags (){
   meson install -C build
   cd $base
 }
+install-rubik (){
+  mkdir -p $base/rubik
+  cd $base/rubik
+  try git init -b main
+  try git remote add origin https://github.com/googlefonts/rubik.git
+  git pull origin main && git submodule update --init --recursive
+	sudo mkdir -p /usr/local/share/fonts/TTF/
+	sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
+	sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
+	sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
+  fc-cache -fv
+  cd $base
+}
+
 if command -v ags >/dev/null 2>&1;then
   echo -e "\e[34mCommand \"ags\" already exists, no need to install.\e[0m"
   echo -e "\e[34mYou can reinstall ags in order to update to the latest version anyway.\e[0m"
-  askags=$ask
-else askags=true
+  ask_ags=$ask
+else ask_ags=true
 fi
-if $askags;then showfun install-ags;v install-ags;fi
+if $(fc-list|grep -q Rubik); then
+  echo -e "\e[34mFont \"Rubik\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall Rubik in order to update to the latest version anyway.\e[0m"
+  ask_rubik=$ask
+else ask_rubik=true
+fi
+
+if $ask_ags;then showfun install-ags;v install-ags;fi
+if $ask_rubik;then showfun install-rubik;v install-rubik;fi
 #####################################################################################
 printf '\e[36m3. Copying\e[97m\n'
 
