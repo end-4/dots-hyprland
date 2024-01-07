@@ -7,7 +7,6 @@ function v() {
   echo -e "\e[34m[$0]: Next command to be executed:\e[0m"
   echo -e "\e[32m$@\e[0m"
   execute=true
-  cmdstatus=0 # 0=normal; 1=failed; 2=failed but ignored; 3=skipped
   if $ask;then
     while true;do
       echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
@@ -19,27 +18,31 @@ function v() {
       case $p in
         [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
         [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
-        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;export execute=false;cmdstatus=3 ;break ;;
-        "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; export ask=false ;break ;;
+        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;execute=false ;break ;;
+        "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; ask=false ;break ;;
         *) echo -e "\e[31mPlease enter one of [y/e/s/yesforall].\e[0m";;
       esac
     done
   fi
-  if $execute;then
-    "$@" || cmdstatus=1
+  if $execute;then x "$@";else
+    echo -e "\e[33m[$0]: Command \"\e[32m$@\e[33m\" has been skipped by user.\e[0m"
   fi
+}
+# When use v() for a defined function, use x() INSIDE its definition to catch errors.
+function x() {
+  if "$@";then cmdstatus=0;else cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
   while [ $cmdstatus == 1 ] ;do
     echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed."
     echo -e "You may need to resolve the problem manually BEFORE repeating this command.\e[0m"
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
-    echo "  i = Ignore the error and continue this script anyway (may break functions needed by the dotfiles!)"
+    echo "  i = Ignore this error and continue (your setup might not work correctly)"
     read -p "Enter here [R/e/i]: " p
     case $p in
       [iI]) echo -e "\e[34mAlright, ignore and continue...\e[0m";cmdstatus=2;;
       [eE]) echo -e "\e[34mAlright, will exit.\e[0m";break;;
       *) echo -e "\e[34mOK, repeating...\e[0m"
-         "$@" && cmdstatus=0
+         if "$@";then cmdstatus=0;else cmdstatus=1;fi
          ;;
     esac
   done
@@ -47,11 +50,10 @@ function v() {
     0) echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" finished.\e[0m";;
     1) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. Exiting...\e[0m";exit 1;;
     2) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed but ignored by user.\e[0m";;
-    3) echo -e "\e[33m[$0]: Command \"\e[32m$@\e[33m\" has been skipped by user.\e[0m";;
   esac
 }
 function showfun() {
-  echo -e "\e[34mThe definition of function \"$1\" is as follows:\e[0m"
+  echo -e "\e[34m[$0]: The definition of function \"$1\" is as follows:\e[0m"
   printf "\e[32m"
   type -a $1
   printf "\e[97m"
@@ -64,6 +66,7 @@ function showfun() {
 # 
 # echo "debug part fin";exit
 #####################################################################################
+if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
 startask (){
 printf "\e[34m[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
@@ -71,34 +74,52 @@ printf '            2. has not been fully tested, use at your own risk.\n'
 printf "\e[31m"
 printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
 printf "\e[97m"
-printf "Enter capital \"YES\" (without quotes) to continue: "
+printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
 case $p in "YES")sleep 0;; *)exit;;esac
 printf '\n'
 printf 'Do you want to confirm everytime before a command executes?\n'
-printf '      y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
-printf '      n = No, just execute them automatically.\n'
-printf '      a = Abort. (DEFAULT)\n'
+printf '  y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
+printf '  n = No, just execute them automatically.\n'
+printf '  a = Abort. (DEFAULT)\n'
 read -p "Enter [y/n/A]: " p
 case $p in
-  y)export ask=true;;
-  n)export ask=false;;
+  y)ask=true;;
+  n)ask=false;;
   *)exit;;
 esac
 }
 
 case $1 in
-  "-f")export ask=false;;
+  "-f")ask=false;;
   *)startask ;;
 esac
 
 set -e
 #####################################################################################
-printf '\e[36m1. Get packages and add user to video/input groups\n\e[97m'
+printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[97m"
 
 # Each line as an element of the array $pkglist
 readarray -t pkglist < dependencies.txt
 # NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
+
+# yay will be installed as AUR package and upgrade there, no need to build here in cache/yay .
+install-yay() {
+  x sudo pacman -Sy --needed --noconfirm base-devel
+  try git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
+  cd /tmp/buildyay
+  x makepkg -o
+  x makepkg -se
+  x makepkg -i --noconfirm
+  cd $base
+  rm -rf /tmp/buildyay
+}
+
+if ! command -v yay >/dev/null 2>&1;then
+  echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
+  showfun install-yay
+  v install-yay
+fi
 
 if $ask;then
   # execute per element of the array $pkglist
@@ -112,51 +133,72 @@ v sudo usermod -aG video "$(whoami)"
 v sudo usermod -aG input "$(whoami)"
 
 #####################################################################################
-printf '\e[36m2. Installing AGS and rubik from git repo\e[97m\n'
+printf "\e[36m[$0]: 2. Installing AGS and fonts from git repo\e[97m\n"
 sleep 1
 
 install-ags (){
-  mkdir -p $base/ags
-  cd $base/ags
+  x mkdir -p $base/cache/ags
+  x cd $base/cache/ags
   try git init -b main
   try git remote add origin https://github.com/Aylur/ags.git
-  git pull origin main && git submodule update --init --recursive
-  npm install
-  meson setup build 
-  meson install -C build
-  cd $base
+  x git pull origin main && git submodule update --init --recursive
+  x npm install
+  x meson setup build
+  x meson install -C build
+  x cd $base
 }
-install-rubik (){
-  mkdir -p $base/rubik
-  cd $base/rubik
+install-Rubik (){
+  x mkdir -p $base/cache/Rubik
+  x cd $base/cache/Rubik
   try git init -b main
   try git remote add origin https://github.com/googlefonts/rubik.git
-  git pull origin main && git submodule update --init --recursive
-	sudo mkdir -p /usr/local/share/fonts/TTF/
-	sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
-	sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
-	sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
-  fc-cache -fv
-  cd $base
+  x git pull origin main && git submodule update --init --recursive
+	x sudo mkdir -p /usr/local/share/fonts/TTF/
+	x sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
+	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
+	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
+  x fc-cache -fv
+  x cd $base
+}
+install-Gabarito (){
+  x mkdir -p $base/cache/Gabarito
+  x cd $base/cache/Gabarito
+  try git init -b main
+  try git remote add origin https://github.com/naipefoundry/gabarito.git
+  x git pull origin main && git submodule update --init --recursive
+	x sudo mkdir -p /usr/local/share/fonts/TTF/
+	x sudo cp fonts/ttf/Gabarito*.ttf /usr/local/share/fonts/TTF/
+	x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
+	x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
+  x fc-cache -fv
+  x cd $base
 }
 
 if command -v ags >/dev/null 2>&1;then
-  echo -e "\e[34mCommand \"ags\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall ags in order to update to the latest version anyway.\e[0m"
+  echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
   ask_ags=$ask
 else ask_ags=true
 fi
-if $(fc-list|grep -q Rubik); then
-  echo -e "\e[34mFont \"Rubik\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall Rubik in order to update to the latest version anyway.\e[0m"
-  ask_rubik=$ask
-else ask_rubik=true
-fi
-
 if $ask_ags;then showfun install-ags;v install-ags;fi
-if $ask_rubik;then showfun install-rubik;v install-rubik;fi
+
+if $(fc-list|grep -q Rubik); then
+  echo -e "\e[33m[$0]: Font \"Rubik\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
+  ask_Rubik=$ask
+else ask_Rubik=true
+fi
+if $ask_Rubik;then showfun install-Rubik;v install-Rubik;fi
+
+if $(fc-list|grep -q Gabarito); then
+  echo -e "\e[33m[$0]: Font \"Gabarito\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
+  ask_Gabarito=$ask
+else ask_Gabarito=true
+fi
+if $ask_Gabarito;then showfun install-Gabarito;v install-Gabarito;fi
 #####################################################################################
-printf '\e[36m3. Copying\e[97m\n'
+printf "\e[36m[$0]: 3. Copying\e[97m\n"
 
 # In case ~/.local/bin does not exists
 v mkdir -p "$HOME/.local/bin" "$HOME/.local/share"
@@ -167,7 +209,7 @@ v mkdir -p "$HOME/.local/bin" "$HOME/.local/share"
 
 for i in .config/*
 do
-  echo "Found target: $i"
+  echo "[$0]: Found target: $i"
   if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
   fi
@@ -175,7 +217,7 @@ done
 
 target="$HOME/.config/hypr/colors.conf"
 test -f $target || { \
-  echo -e "\e[34mFile \"$target\" not found.\e[0m" && \
+  echo -e "\e[34m[$0]: File \"$target\" not found.\e[0m" && \
   v cp "$HOME/.config/hypr/colors_default.conf" $target ; }
 
 # some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
