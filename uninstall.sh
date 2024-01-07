@@ -20,7 +20,7 @@ set -e
 # Undo Step 3: Removing copied config and local folders
 printf '\e[36mRemoving copied config and local folders...\n\e[97m'
 
-for i in ags fish fontconfig foot fuzzel gtklock hypr mpv swaylock wlogout "starship.toml" rubyshot
+for i in ags fish fontconfig foot fuzzel hypr mpv swaylock wlogout "starship.toml" rubyshot
   do v rm -rf "$HOME/.config/$i"
 done
 
@@ -44,6 +44,6 @@ v sudo deluser "$user" input
 ##############################################################################################################################
 
 # Removing installed yay packages and dependencies
-v yay -Rns adw-gtk3-git brightnessctl cava foot fuzzel gjs gojq gradience-git grim gtk-layer-shell gtklock gtklock-playerctl-module gtklock-powerbar-module gtklock-userinfo-module hyprland-git lexend-fonts-git libdbusmenu-gtk3 plasma-browser-integration playerctl python-build python-material-color-utilities python-poetry python-pywal ripgrep sassc slurp starship swayidle swaylock swww tesseract ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd typescript webp-pixbuf-loader wl-clipboard wlogout yad ydotool
+v yay -Rns adw-gtk3-git brightnessctl cava foot fuzzel gjs gojq gradience-git grim gtk-layer-shell hyprland-git lexend-fonts-git libdbusmenu-gtk3 plasma-browser-integration playerctl python-build python-material-color-utilities python-poetry python-pywal ripgrep sassc slurp starship swayidle swaylock swww tesseract ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd typescript webp-pixbuf-loader wl-clipboard wlogout yad ydotool
 
 printf '\e[36mUninstall Complete.\n\e[97m'
