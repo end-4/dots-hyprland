@@ -106,12 +106,12 @@ readarray -t pkglist < dependencies.txt
 # yay will be installed as AUR package and upgrade there, no need to build here in cache/yay .
 install-yay() {
   x sudo pacman -Sy --needed --noconfirm base-devel
-  try git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
-  cd /tmp/buildyay
+  x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
+  x cd /tmp/buildyay
   x makepkg -o
   x makepkg -se
   x makepkg -i --noconfirm
-  cd $base
+  x cd $base
   rm -rf /tmp/buildyay
 }
 
