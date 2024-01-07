@@ -1,6 +1,6 @@
-const { Gdk, Gio, GLib, Gtk, Pango } = imports.gi;
+const { Gdk, GdkPixbuf, Gio, GLib, Gtk, Pango } = imports.gi;
 import { App, Utils, Widget } from '../../../imports.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, Entry, EventBox, Icon, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
@@ -83,49 +83,58 @@ const WaifuImage = (taglist) => {
             downloadIndicator,
         ]
     });
-    const blockImageActions = Box({
-        className: 'sidebar-waifu-image-actions spacing-h-3',
-        children: [
-            Box({ hexpand: true }),
-            ImageAction({
-                name: 'Go to source',
-                icon: 'link',
-                action: () => execAsync(['xdg-open', `${thisBlock._imageData.source}`]).catch(print),
-            }),
-            ImageAction({
-                name: 'Hoard',
-                icon: 'save',
-                action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/waifus && cp ${thisBlock._imagePath} ~/Pictures/waifus`]).catch(print),
-            }),
-            ImageAction({
-                name: 'Open externally',
-                icon: 'open_in_new',
-                action: () => execAsync(['xdg-open', `${thisBlock._imagePath}`]).catch(print),
-            }),
-        ]
-    })
-    const blockImage = Box({
-        className: 'test',
-        hpack: 'start',
-        vertical: true,
-        className: 'sidebar-waifu-image',
-        homogeneous: true,
-        children: [
-            Revealer({
-                transition: 'crossfade',
-                revealChild: false,
-                child: Box({
-                    vertical: true,
-                    children: [blockImageActions],
+    const blockImageActions = Revealer({
+        transition: 'crossfade',
+        revealChild: false,
+        child: Box({
+            vertical: true,
+            children: [
+                Box({
+                    className: 'sidebar-waifu-image-actions spacing-h-3',
+                    children: [
+                        Box({ hexpand: true }),
+                        ImageAction({
+                            name: 'Go to source',
+                            icon: 'link',
+                            action: () => execAsync(['xdg-open', `${thisBlock._imageData.source}`]).catch(print),
+                        }),
+                        ImageAction({
+                            name: 'Hoard',
+                            icon: 'save',
+                            action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/waifus && cp ${thisBlock._imagePath} ~/Pictures/waifus`]).catch(print),
+                        }),
+                        ImageAction({
+                            name: 'Open externally',
+                            icon: 'open_in_new',
+                            action: () => execAsync(['xdg-open', `${thisBlock._imagePath}`]).catch(print),
+                        }),
+                    ]
                 })
-            })
-        ]
+            ],
+        })
     })
+    const blockImage = Widget.DrawingArea({
+        className: 'sidebar-waifu-image',
+    });
+    // const blockImage = Box({});
+    // const blockImage = Image({
+    //     hpack: 'start',
+    //     vertical: true,
+    //     className: 'sidebar-waifu-image',
+    //     // homogeneous: true,
+    // })
     const blockImageRevealer = Revealer({
         transition: 'slide_down',
         transitionDuration: 150,
         revealChild: false,
-        child: blockImage,
+        child: Overlay({
+            child: Box({
+                homogeneous: true,
+                className: 'sidebar-waifu-image',
+                children: [blockImage],
+            }),
+            overlays: [blockImageActions],
+        }),
     });
     const thisBlock = Box({
         className: 'sidebar-chat-message',
@@ -141,29 +150,48 @@ const WaifuImage = (taglist) => {
                 }
                 thisBlock._imagePath = `${GLib.get_user_cache_dir()}/ags/media/waifus/${signature}${extension}`;
                 downloadState.shown = 'download';
-                // Width allocation
-                const widgetWidth = Math.min(Math.floor(waifuContent.get_allocated_width() * 0.75), width);
-                blockImage.set_size_request(widgetWidth, Math.ceil(widgetWidth * height / width));
-                // Start download
+                // Width/height
+                const widgetWidth = Math.min(Math.floor(waifuContent.get_allocated_width() * 0.85), width);
+                const widgetHeight = Math.ceil(widgetWidth * height / width);
+                blockImage.set_size_request(widgetWidth, widgetHeight);
                 const showImage = () => {
                     downloadState.shown = 'done';
-                    // blockImage.css = `background-color: ${dominant_color};`;
-                    blockImage.css = `background-image:url('${thisBlock._imagePath}');`; // TODO: use proper image widget
+                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock._imagePath, widgetWidth, widgetHeight, false);
+
+                    blockImage.set_size_request(widgetWidth, widgetHeight);
+                    blockImage.connect("draw", (widget, cr) => {
+                        const borderRadius = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
+
+                        // Draw a rounded rectangle
+                        cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
+                        cr.arc(widgetWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
+                        cr.arc(widgetWidth - borderRadius, widgetHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
+                        cr.arc(borderRadius, widgetHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
+                        cr.closePath();
+                        cr.clip();
+
+                        // Paint image as bg
+                        Gdk.cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
+                        cr.paint();
+                    });
+
+                    // Reveal stuff
                     Utils.timeout(IMAGE_REVEAL_DELAY, () => {
                         blockImageRevealer.revealChild = true;
                     })
                     Utils.timeout(IMAGE_REVEAL_DELAY + blockImageRevealer.transitionDuration,
-                        () => blockImage.get_children()[0].revealChild = true
+                        () => blockImageActions.revealChild = true
                     );
                     downloadIndicator._hide();
                 }
+                // Show
                 if (!force && fileExists(thisBlock._imagePath)) showImage();
                 else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock._imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
                 blockHeading.get_children().forEach((child) => {
                     child.setCss(`border-color: ${dominant_color};`);
-                }) 
+                })
                 colorIndicator.css = `background-color: ${dominant_color};`;
             }],
         ],
@@ -176,6 +204,7 @@ const WaifuImage = (taglist) => {
                     blockHeading,
                     Box({
                         vertical: true,
+                        hpack: 'start',
                         children: [blockImageRevealer],
                     })
                 ]
