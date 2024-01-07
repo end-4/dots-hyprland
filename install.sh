@@ -4,28 +4,29 @@ export base="$(pwd)"
 
 function try { "$@" || sleep 0; }
 function v() {
-  echo -e "\e[34m[$0]: Next command to be executed:\e[0m"
+  echo -e "####################################################"
+  echo -e "\e[34m[$0]: Next command:\e[0m"
   echo -e "\e[32m$@\e[0m"
   execute=true
   if $ask;then
     while true;do
-      echo -e "\e[34mDo you want to execute the command shown above? \e[0m"
+      echo -e "\e[34mExecute? \e[0m"
       echo "  y = Yes"
       echo "  e = Exit now"
-      echo "  s = Skip this command; NOT recommended (may break functions needed by the dotfiles!)"
-      echo "  yesforall = yes and don't ask again; NOT recommended unless you really sure"
-      read -p "Enter here [y/e/s/yesforall]: " p
+      echo "  s = Skip this command (NOT recommended - your setup might not work correctly)"
+      echo "  yesforall = Yes and don't ask again; NOT recommended unless you really sure"
+      read -p "====> " p
       case $p in
         [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
         [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
         [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;execute=false ;break ;;
         "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; ask=false ;break ;;
-        *) echo -e "\e[31mPlease enter one of [y/e/s/yesforall].\e[0m";;
+        *) echo -e "\e[31mPlease enter [y/e/s/yesforall].\e[0m";;
       esac
     done
   fi
   if $execute;then x "$@";else
-    echo -e "\e[33m[$0]: Command \"\e[32m$@\e[33m\" has been skipped by user.\e[0m"
+    echo -e "\e[33m[$0]: Skipped \"$@\"\e[0m"
   fi
 }
 # When use v() for a defined function, use x() INSIDE its definition to catch errors.
@@ -37,7 +38,7 @@ function x() {
     echo "  r = Repeat this command (DEFAULT)"
     echo "  e = Exit now"
     echo "  i = Ignore this error and continue (your setup might not work correctly)"
-    read -p "Enter here [R/e/i]: " p
+    read -p " [R/e/i]: " p
     case $p in
       [iI]) echo -e "\e[34mAlright, ignore and continue...\e[0m";cmdstatus=2;;
       [eE]) echo -e "\e[34mAlright, will exit.\e[0m";break;;
@@ -78,11 +79,11 @@ printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
 case $p in "YES")sleep 0;; *)exit;;esac
 printf '\n'
-printf 'Do you want to confirm everytime before a command executes?\n'
+printf 'Do you want to confirm every time before a command executes?\n'
 printf '  y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
 printf '  n = No, just execute them automatically.\n'
 printf '  a = Abort. (DEFAULT)\n'
-read -p "Enter [y/n/A]: " p
+read -p "====> " p
 case $p in
   y)ask=true;;
   n)ask=false;;
