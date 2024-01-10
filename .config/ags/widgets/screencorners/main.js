@@ -1,5 +1,9 @@
+import Cairo from 'gi://cairo?version=1.0';
 import { Widget } from '../../imports.js';
 import { RoundedCorner } from "../../lib/roundedcorner.js";
+
+const dummyRegion = new Cairo.Region();
+const enableClickthrough = (self) => self.input_shape_combine_region(dummyRegion);
 
 export const CornerTopleft = () => Widget.Window({
     name: 'cornertl',
@@ -8,6 +12,7 @@ export const CornerTopleft = () => Widget.Window({
     exclusivity: 'normal',
     visible: true,
     child: RoundedCorner('topleft', { className: 'corner', }),
+    setup: enableClickthrough,
 });
 export const CornerTopright = () => Widget.Window({
     name: 'cornertr',
@@ -16,6 +21,7 @@ export const CornerTopright = () => Widget.Window({
     exclusivity: 'normal',
     visible: true,
     child: RoundedCorner('topright', { className: 'corner', }),
+    setup: enableClickthrough,
 });
 export const CornerBottomleft = () => Widget.Window({
     name: 'cornerbl',
@@ -24,6 +30,7 @@ export const CornerBottomleft = () => Widget.Window({
     exclusivity: 'ignore',
     visible: true,
     child: RoundedCorner('bottomleft', { className: 'corner-black', }),
+    setup: enableClickthrough,
 });
 export const CornerBottomright = () => Widget.Window({
     name: 'cornerbr',
@@ -32,5 +39,5 @@ export const CornerBottomright = () => Widget.Window({
     exclusivity: 'ignore',
     visible: true,
     child: RoundedCorner('bottomright', { className: 'corner-black', }),
+    setup: enableClickthrough,
 });
-
