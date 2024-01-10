@@ -174,6 +174,18 @@ install-Gabarito (){
   x fc-cache -fv
   x cd $base
 }
+install-OneUI4-Icons (){
+  x mkdir -p $base/cache/OneUI4-Icons
+  x cd $base/cache/OneUI4-Icons
+  try git init -b main
+  try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
+  x git pull origin main && git submodule update --init --recursive
+  x sudo mkdir -p /usr/local/share/icons
+  x sudo cp -r OneUI /usr/local/share/icons
+  x sudo cp -r OneUI-dark /usr/local/share/icons
+  x sudo cp -r OneUI-light /usr/local/share/icons
+  x cd $base
+}
 
 if command -v ags >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
@@ -198,6 +210,8 @@ if $(fc-list|grep -q Gabarito); then
 else ask_Gabarito=true
 fi
 if $ask_Gabarito;then showfun install-Gabarito;v install-Gabarito;fi
+
+showfun install-OneUI4-Icons ;v install-OneUI4-Icons
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying\e[97m\n"
 
