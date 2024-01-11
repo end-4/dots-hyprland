@@ -1,6 +1,4 @@
-const { Gdk, Gtk } = imports.gi;
-
-const CLICK_BRIGHTEN_AMOUNT = 0.13;
+const { Gdk } = imports.gi;
 
 export function setupCursorHover(button) {
     const display = Gdk.Display.get_default();

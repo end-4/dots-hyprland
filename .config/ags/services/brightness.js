@@ -1,4 +1,5 @@
-import { Service, Utils } from '../imports.js';
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { exec, execAsync } = Utils;
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -41,7 +42,7 @@ class BrightnessService extends Service {
         this._screenValue = current / max;
     }
 
-    // overwriting connectWidget method, let's you
+    // overwriting connectWidget method, lets you
     // change the default event that widgets connect to
     connectWidget(widget, callback, event = 'screen-changed') {
         super.connectWidget(widget, callback, event);

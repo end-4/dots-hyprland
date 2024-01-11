@@ -1,6 +1,6 @@
-const { Gdk, Gtk } = imports.gi;
-import { App, SCREEN_WIDTH, SCREEN_HEIGHT, Service, Utils, Variable, Widget } from '../imports.js';
-const { Box, Button, EventBox, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+
+const { Revealer, Scrollable } = Widget;
 
 export const MarginRevealer = ({
     transition = 'slide_down',
@@ -8,47 +8,49 @@ export const MarginRevealer = ({
     revealChild,
     showClass = 'element-show', // These are for animation curve, they don't really hide
     hideClass = 'element-hide', // Don't put margins in these classes!
-    extraProperties = [],
+    extraSetup = () => { },
     ...rest
 }) => {
     const widget = Scrollable({
         ...rest,
-        properties: [
-            ['revealChild', true], // It'll be set to false after init if it's supposed to hide
-            ['transition', transition],
-            ['show', () => {
-                if (widget._revealChild) return;
+        attribute: {
+            'revealChild': true, // It'll be set to false after init if it's supposed to hide
+            'transition': transition,
+            'show': () => {
+                if (widget.attribute.revealChild) return;
                 widget.hscroll = 'never';
                 widget.vscroll = 'never';
                 child.toggleClassName(hideClass, false);
                 child.toggleClassName(showClass, true);
-                widget._revealChild = true;
+                widget.attribute.revealChild = true;
                 child.css = 'margin: 0px;';
-            }],
-            ['hide', () => {
-                if (!widget._revealChild) return;
+            },
+            'hide': () => {
+                if (!widget.attribute.revealChild) return;
                 child.toggleClassName(hideClass, true);
                 child.toggleClassName(showClass, false);
-                widget._revealChild = false;
-                if (widget._transition == 'slide_left')
+                widget.attribute.revealChild = false;
+                if (widget.attribute.transition == 'slide_left')
                     child.css = `margin-right: -${child.get_allocated_width()}px;`;
-                else if (widget._transition == 'slide_right')
+                else if (widget.attribute.transition == 'slide_right')
                     child.css = `margin-left: -${child.get_allocated_width()}px;`;
-                else if (widget._transition == 'slide_up')
+                else if (widget.attribute.transition == 'slide_up')
                     child.css = `margin-bottom: -${child.get_allocated_height()}px;`;
-                else if (widget._transition == 'slide_down')
+                else if (widget.attribute.transition == 'slide_down')
                     child.css = `margin-top: -${child.get_allocated_height()}px;`;
-            }],
-            ['toggle', () => {
+            },
+            'toggle': () => {
                 console.log('toggle');
-                if (widget._revealChild) widget._hide();
-                else widget._show();
-            }],
-            ...extraProperties,
-        ],
+                if (widget.attribute.revealChild) widget.attribute.hide();
+                else widget.attribute.show();
+            },
+        },
         child: child,
         hscroll: `${revealChild ? 'never' : 'always'}`,
         vscroll: `${revealChild ? 'never' : 'always'}`,
+        setup: (self) => {
+            extraSetup(self);
+        }
     });
     child.toggleClassName(`${revealChild ? showClass : hideClass}`, true);
     return widget;

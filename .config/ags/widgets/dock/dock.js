@@ -1,12 +1,14 @@
-const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
+const { Gtk } = imports.gi;
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { EventBox } = Widget;
+
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 const { execAsync, exec } = Utils;
-const { Box, EventBox, Label, Revealer, Overlay } = Widget;
-import { AnimatedCircProg } from '../../lib/animatedcircularprogress.js'
-import { MaterialIcon } from '../../lib/materialicon.js';
-import { setupCursorHover, setupCursorHoverAim } from "../../lib/cursorhover.js";
+const { Box, Revealer } = Widget;
+import { setupCursorHover } from "../../lib/cursorhover.js";
 
 const ANIMATION_TIME = 150;
 const pinnedApps = [
@@ -41,9 +43,9 @@ const DockSeparator = (props = {}) => Box({
 })
 
 const AppButton = ({ icon, ...rest }) => Widget.Revealer({
-    properties: [
-        ['workspace', 0],
-    ],
+    attribute: {
+        'workspace': 0
+    },
     revealChild: false,
     transition: 'slide_right',
     transitionDuration: ANIMATION_TIME,
@@ -80,12 +82,12 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
 
 const Taskbar = () => Widget.Box({
     className: 'dock-apps',
-    properties: [
-        ['map', new Map()],
-        ['clientSortFunc', (a, b) => {
-            return a._workspace > b._workspace;
-        }],
-        ['update', (box) => {
+    attribute: {
+        'map': new Map(),
+        'clientSortFunc': (a, b) => {
+            return a.attribute.workspace > b.attribute.workspace;
+        },
+        'update': (box) => {
             for (let i = 0; i < Hyprland.clients.length; i++) {
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
@@ -99,15 +101,15 @@ const Taskbar = () => Widget.Box({
                     tooltipText: `${client.title} (${appClass})`,
                     onClicked: () => focus(client),
                 });
-                newButton._workspace = client.workspace.id;
+                newButton.attribute.workspace = client.workspace.id;
                 newButton.revealChild = true;
-                box._map.set(client.address, newButton);
+                box.attribute.map.set(client.address, newButton);
             }
-            box.children = Array.from(box._map.values());
-        }],
-        ['add', (box, address) => {
+            box.children = Array.from(box.attribute.map.values());
+        },
+        'add': (box, address) => {
             if (!address) { // First active emit is undefined
-                box._update(box);
+                box.attribute.update(box);
                 return;
             }
             const newClient = Hyprland.clients.find(client => {
@@ -120,29 +122,29 @@ const Taskbar = () => Widget.Box({
                 tooltipText: `${newClient.title} (${appClass})`,
                 onClicked: () => focus(newClient),
             })
-            newButton._workspace = newClient.workspace.id;
-            box._map.set(address, newButton);
-            box.children = Array.from(box._map.values());
+            newButton.attribute.workspace = newClient.workspace.id;
+            box.attribute.map.set(address, newButton);
+            box.children = Array.from(box.attribute.map.values());
             newButton.revealChild = true;
-        }],
-        ['remove', (box, address) => {
+        },
+        'remove': (box, address) => {
             if (!address) return;
 
-            const removedButton = box._map.get(address);
+            const removedButton = box.attribute.map.get(address);
             if (!removedButton) return;
             removedButton.revealChild = false;
 
             Utils.timeout(ANIMATION_TIME, () => {
                 removedButton.destroy();
-                box._map.delete(address);
-                box.children = Array.from(box._map.values());
+                box.attribute.map.delete(address);
+                box.children = Array.from(box.attribute.map.values());
             })
-        }],
-    ],
+        },
+    },
     setup: (self) => {
-        self.hook(Hyprland, (box, address) => box._add(box, address), 'client-added')
-            .hook(Hyprland, (box, address) => box._remove(box, address), 'client-removed')
-        Utils.timeout(100, () => self._update(self));
+        self.hook(Hyprland, (box, address) => box.attribute.add(box, address), 'client-added')
+            .hook(Hyprland, (box, address) => box.attribute.remove(box, address), 'client-removed')
+        Utils.timeout(100, () => self.attribute.update(self));
     },
 });
 
@@ -192,8 +194,8 @@ export default () => {
         ]
     })
     const dockRevealer = Revealer({
-        properties: [
-            ['updateShow', self => { // I only use mouse to resize. I don't care about keyboard resize if that's a thing
+        attribute: {
+            'updateShow': self => { // I only use mouse to resize. I don't care about keyboard resize if that's a thing
                 const dockSize = [
                     dockContent.get_allocated_width(),
                     dockContent.get_allocated_height()
@@ -230,18 +232,18 @@ export default () => {
                     }
                 }
                 self.revealChild = true;
-            }]
-        ],
+            }
+        },
         revealChild: false,
         transition: 'slide_up',
         transitionDuration: 200,
         child: dockContent,
         // setup: (self) => self
-        //     .hook(Hyprland, (self) => self._updateShow(self))
-        //     .hook(Hyprland.active.workspace, (self) => self._updateShow(self))
-        //     .hook(Hyprland.active.client, (self) => self._updateShow(self))
-        //     .hook(Hyprland, (self) => self._updateShow(self), 'client-added')
-        //     .hook(Hyprland, (self) => self._updateShow(self), 'client-removed')
+        //     .hook(Hyprland, (self) => self.attribute.updateShow(self))
+        //     .hook(Hyprland.active.workspace, (self) => self.attribute.updateShow(self))
+        //     .hook(Hyprland.active.client, (self) => self.attribute.updateShow(self))
+        //     .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-added')
+        //     .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-removed')
         // ,
     })
     return EventBox({
@@ -249,7 +251,7 @@ export default () => {
             dockRevealer.revealChild = true;
         },
         onHoverLost: () => {
-            if (Hyprland.active.client._class.length === 0) return;
+            if (Hyprland.active.client.attribute.class.length === 0) return;
             dockRevealer.revealChild = false;
         },
         child: Box({

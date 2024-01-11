@@ -1,5 +1,5 @@
 import Cairo from 'gi://cairo?version=1.0';
-import { Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import { RoundedCorner } from "../../lib/roundedcorner.js";
 
 const dummyRegion = new Cairo.Region();

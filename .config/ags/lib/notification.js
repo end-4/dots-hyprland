@@ -1,7 +1,8 @@
 // This file is for the actual widget for each single notification
 
 const { GLib, Gdk, Gtk } = imports.gi;
-import { Utils, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 const { lookUpIcon, timeout } = Utils;
 const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./materialicon.js";
@@ -92,13 +93,13 @@ export default ({
     const widget = EventBox({
         onHover: (self) => {
             self.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
-            if (!wholeThing._hovered)
-                wholeThing._hovered = true;
+            if (!wholeThing.attribute.hovered)
+                wholeThing.attribute.hovered = true;
         },
         onHoverLost: (self) => {
             self.window.set_cursor(null);
-            if (wholeThing._hovered)
-                wholeThing._hovered = false;
+            if (wholeThing.attribute.hovered)
+                wholeThing.attribute.hovered = false;
             if (isPopup) {
                 command();
             }
@@ -108,13 +109,13 @@ export default ({
         }
     });
     const wholeThing = Revealer({
-        properties: [
-            ['id', notifObject.id],
-            ['close', undefined],
-            ['hovered', false],
-            ['dragging', false],
-            ['destroyWithAnims', () => destroyWithAnims]
-        ],
+        attribute: {
+            'id': notifObject.id,
+            'close': undefined,
+            'hovered': false,
+            'dragging': false,
+            'destroyWithAnims': () => destroyWithAnims,
+        },
         revealChild: false,
         transition: 'slide_down',
         transitionDuration: 200,
@@ -343,7 +344,7 @@ export default ({
                     }
                 }
 
-                wholeThing._dragging = Math.abs(offset_x) > 10;
+                wholeThing.attribute.dragging = Math.abs(offset_x) > 10;
 
                 if (widget.window)
                     widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
@@ -363,9 +364,9 @@ export default ({
 
             }, 'drag-update')
             .hook(gesture, self => {
-                if (!self._ready) {
+                if (!self.attribute.ready) {
                     wholeThing.revealChild = true;
-                    self._ready = true;
+                    self.attribute.ready = true;
                     return;
                 }
                 const offset_h = gesture.get_offset()[1];
@@ -396,7 +397,7 @@ export default ({
                     if (widget.window)
                         widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
 
-                    wholeThing._dragging = false;
+                    wholeThing.attribute.dragging = false;
                 }
                 initDirX = 0;
                 initDirVertical = -1;

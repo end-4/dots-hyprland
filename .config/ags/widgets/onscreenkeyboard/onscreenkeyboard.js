@@ -1,5 +1,9 @@
-const { GLib, Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+const { Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;

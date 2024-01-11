@@ -1,5 +1,4 @@
-const { Gdk, Gtk } = imports.gi;
-import { Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import SessionScreen from "./sessionscreen.js";
 
 export default () => Widget.Window({ // On-screen keyboard

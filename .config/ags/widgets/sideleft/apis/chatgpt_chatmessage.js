@@ -1,6 +1,8 @@
-const { Gdk, Gio, GLib, Gtk, Pango } = imports.gi;
-import { App, Utils, Widget } from '../../../imports.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Gdk, Gio, GLib, Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, Label, Scrollable } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import md2pango from "../../../lib/md2pango.js";
@@ -112,11 +114,11 @@ const CodeBlock = (content = '', lang = 'txt') => {
     const sourceView = HighlightedCode(content, lang);
 
     const codeBlock = Box({
-        properties: [
-            ['updateText', (text) => {
+        attribute: {
+            'updateText': (text) => {
                 sourceView.get_buffer().set_text(text, -1);
-            }]
-        ],
+            }
+        },
         className: 'sidebar-chat-codeblock',
         vertical: true,
         children: [
@@ -149,8 +151,8 @@ const Divider = () => Box({
 const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
-        properties: [
-            ['fullUpdate', (self, content, useCursor = false) => {
+        attribute: {
+            'fullUpdate': (self, content, useCursor = false) => {
                 // Clear and add first text widget
                 const children = contentBox.get_children();
                 for (let i = 0; i < children.length; i++) {
@@ -175,7 +177,7 @@ const MessageContent = (content) => {
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
-                            lastLabel._updateText(blockContent);
+                            lastLabel.attribute.updateText(blockContent);
                             contentBox.add(TextBlock());
                         }
 
@@ -201,7 +203,7 @@ const MessageContent = (content) => {
                     if (!inCode)
                         lastLabel.label = `${md2pango(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
                     else
-                        lastLabel._updateText(blockContent);
+                        lastLabel.attribute.updateText(blockContent);
                 }
                 // Debug: plain text
                 // contentBox.add(Label({
@@ -214,10 +216,10 @@ const MessageContent = (content) => {
                 //     label: '------------------------------\n' + md2pango(content),
                 // }))
                 contentBox.show_all();
-            }]
-        ]
+            }
+        }
     });
-    contentBox._fullUpdate(contentBox, content, false);
+    contentBox.attribute.fullUpdate(contentBox, content, false);
     return contentBox;
 }
 
@@ -243,17 +245,17 @@ export const ChatMessage = (message, scrolledWindow) => {
                     }),
                     messageContentBox,
                 ],
-                connections: [
-                    [message, (self, isThinking) => {
+                setup: (self) => self
+                    .hook(message, (self, isThinking) => {
                         messageContentBox.toggleClassName('thinking', message.thinking);
-                    }, 'notify::thinking'],
-                    [message, (self) => { // Message update
-                        messageContentBox._fullUpdate(messageContentBox, message.content, message.role != 'user');
-                    }, 'notify::content'],
-                    [message, (label, isDone) => { // Remove the cursor
-                        messageContentBox._fullUpdate(messageContentBox, message.content, false);
-                    }, 'notify::done'],
-                ]
+                    }, 'notify::thinking')
+                    .hook(message, (self) => { // Message update
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, message.role != 'user');
+                    }, 'notify::content')
+                    .hook(message, (label, isDone) => { // Remove the cursor
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, false);
+                    }, 'notify::done')
+                ,
             })
         ]
     });

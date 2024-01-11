@@ -1,15 +1,11 @@
-// This file is for the notification widget on the sidebar
+// This file is for the notification list on the sidebar
 // For the popup notifications, see onscreendisplay.js
 // The actual widget for each single notification is in lib/notification.js
-
-const { GLib, Gtk } = imports.gi;
-import { Service, Utils, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
-const { lookUpIcon, timeout } = Utils;
-const { Box, Button, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Scrollable, Stack } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
-import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../lib/configwidgets.js';
 import Notification from "../../lib/notification.js";
 
 export default (props) => {
@@ -35,8 +31,8 @@ export default (props) => {
         vertical: true,
         vpack: 'start',
         className: 'spacing-v-5-revealer',
-        connections: [
-            [Notifications, (box, id) => {
+        setup: (self) => self
+            .hook(Notifications, (box, id) => {
                 if (box.get_children().length == 0) { // On init there's no notif, or 1st notif
                     Notifications.notifications
                         .forEach(n => {
@@ -58,17 +54,16 @@ export default (props) => {
                     box.pack_end(NewNotif, false, false, 0);
                     box.show_all();
                 }
-            }, 'notified'],
-
-            [Notifications, (box, id) => {
+            }, 'notified')
+            .hook(Notifications, (box, id) => {
                 if (!id) return;
                 for (const ch of box.children) {
                     if (ch._id === id) {
-                        ch._destroyWithAnims();
+                        ch.attribute.destroyWithAnims();
                     }
                 }
-            }, 'closed'],
-        ],
+            }, 'closed')
+        ,
     });
     const ListActionButton = (icon, name, action) => Button({
         className: 'notif-listaction-btn',
@@ -100,7 +95,7 @@ export default (props) => {
             Label({
                 hexpand: true,
                 xalign: 0,
-                className: 'txt-title-small margin-left-10', 
+                className: 'txt-title-small margin-left-10',
                 // ^ (extra margin on the left so that it looks similarly spaced
                 // when compared to borderless "Clear" button on the right)
                 label: 'Notifications',
