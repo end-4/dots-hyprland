@@ -1,4 +1,4 @@
-import { App, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Dock from './dock.js';
 
 export default () => Widget.Window({

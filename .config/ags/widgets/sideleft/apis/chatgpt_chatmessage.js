@@ -1,16 +1,17 @@
-const { Gdk, Gio, GLib, Gtk, Pango } = imports.gi;
-import { App, Utils, Widget } from '../../../imports.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Gdk, Gio, GLib, Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, Label, Scrollable } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
-import { convert } from "../../../lib/md2pango.js";
+import md2pango from "../../../lib/md2pango.js";
 import GtkSource from "gi://GtkSource?version=3.0";
 
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/data/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
 const CHATGPT_CURSOR = '  (o) ';
-const MESSAGE_SCROLL_DELAY = 13; // In milliseconds, the time before an updated message scrolls to bottom
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -102,8 +103,8 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     ]
                 }),
                 onClicked: (self) => {
-                    const copyContent = sourceView.get_buffer().get_text(0, 0, 0); // TODO: fix this
-                    console.log(copyContent);
+                    const buffer = sourceView.get_buffer();
+                    const copyContent = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), false); // TODO: fix this
                     execAsync([`wl-copy`, `${copyContent}`]).catch(print);
                 },
             }),
@@ -113,11 +114,11 @@ const CodeBlock = (content = '', lang = 'txt') => {
     const sourceView = HighlightedCode(content, lang);
 
     const codeBlock = Box({
-        properties: [
-            ['updateText', (text) => {
+        attribute: {
+            'updateText': (text) => {
                 sourceView.get_buffer().set_text(text, -1);
-            }]
-        ],
+            }
+        },
         className: 'sidebar-chat-codeblock',
         vertical: true,
         children: [
@@ -125,7 +126,11 @@ const CodeBlock = (content = '', lang = 'txt') => {
             Box({
                 className: 'sidebar-chat-codeblock-code',
                 homogeneous: true,
-                children: [sourceView,],
+                children: [Scrollable({
+                    vscroll: 'never',
+                    hscroll: 'automatic',
+                    child: sourceView,
+                })],
             })
         ]
     })
@@ -146,8 +151,8 @@ const Divider = () => Box({
 const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
-        properties: [
-            ['fullUpdate', (self, content, useCursor = false) => {
+        attribute: {
+            'fullUpdate': (self, content, useCursor = false) => {
                 // Clear and add first text widget
                 const children = contentBox.get_children();
                 for (let i = 0; i < children.length; i++) {
@@ -164,16 +169,15 @@ const MessageContent = (content) => {
                     // Code blocks
                     const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
-                        // console.log(`code at line ${index}`);
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
                         if (!inCode) {
-                            lastLabel.label = convert(blockContent);
+                            lastLabel.label = md2pango(blockContent);
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
-                            lastLabel._updateText(blockContent);
+                            lastLabel.attribute.updateText(blockContent);
                             contentBox.add(TextBlock());
                         }
 
@@ -186,7 +190,7 @@ const MessageContent = (content) => {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.label = convert(blockContent);
+                        lastLabel.label = md2pango(blockContent);
                         contentBox.add(Divider());
                         contentBox.add(TextBlock());
                         lastProcessed = index + 1;
@@ -197,9 +201,9 @@ const MessageContent = (content) => {
                     const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${convert(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
+                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
                     else
-                        lastLabel._updateText(blockContent);
+                        lastLabel.attribute.updateText(blockContent);
                 }
                 // Debug: plain text
                 // contentBox.add(Label({
@@ -209,13 +213,13 @@ const MessageContent = (content) => {
                 //     xalign: 0,
                 //     wrap: true,
                 //     selectable: true,
-                //     label: '------------------------------\n' + convert(content),
+                //     label: '------------------------------\n' + md2pango(content),
                 // }))
                 contentBox.show_all();
-            }]
-        ]
+            }
+        }
     });
-    contentBox._fullUpdate(contentBox, content, false);
+    contentBox.attribute.fullUpdate(contentBox, content, false);
     return contentBox;
 }
 
@@ -241,22 +245,17 @@ export const ChatMessage = (message, scrolledWindow) => {
                     }),
                     messageContentBox,
                 ],
-                connections: [
-                    [message, (self, isThinking) => {
+                setup: (self) => self
+                    .hook(message, (self, isThinking) => {
                         messageContentBox.toggleClassName('thinking', message.thinking);
-                    }, 'notify::thinking'],
-                    [message, (self) => { // Message update
-                        messageContentBox._fullUpdate(messageContentBox, message.content, message.role != 'user');
-                        Utils.timeout(MESSAGE_SCROLL_DELAY, () => {
-                            if (!scrolledWindow) return;
-                            var adjustment = scrolledWindow.get_vadjustment();
-                            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-                        });
-                    }, 'notify::content'],
-                    [message, (label, isDone) => { // Remove the cursor
-                        messageContentBox._fullUpdate(messageContentBox, message.content, false);
-                    }, 'notify::done'],
-                ]
+                    }, 'notify::thinking')
+                    .hook(message, (self) => { // Message update
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, message.role != 'user');
+                    }, 'notify::content')
+                    .hook(message, (label, isDone) => { // Remove the cursor
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, false);
+                    }, 'notify::done')
+                ,
             })
         ]
     });
@@ -286,11 +285,6 @@ export const SystemMessage = (content, commandName, scrolledWindow) => {
                 ],
             })
         ],
-        setup: (self) => Utils.timeout(MESSAGE_SCROLL_DELAY, () => {
-            if (!scrolledWindow) return;
-            var adjustment = scrolledWindow.get_vadjustment();
-            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-        })
     });
     return thisMessage;
 }

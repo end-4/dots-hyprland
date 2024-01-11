@@ -1,7 +1,7 @@
-const { Gdk, Gtk } = imports.gi;
-const GObject = imports.gi.GObject;
+const { Gtk } = imports.gi;
 const Lang = imports.lang;
-import { Utils, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 
 // -- Styling --
 // min-height for diameter
@@ -17,6 +17,7 @@ export const AnimatedCircProg = ({
     initTo = 0,
     initAnimTime = 2900,
     initAnimPoints = 1,
+    extraSetup = () => {  },
     ...rest
 }) => Widget.DrawingArea({
     ...rest,
@@ -100,5 +101,6 @@ export const AnimatedCircProg = ({
             // }
         }
         else area.css = 'font-size: 0px;';
+        extraSetup(area);
     },
 })

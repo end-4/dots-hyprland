@@ -57,7 +57,7 @@ const pad = (lines, start = 1, end = 1) => {
     return lines.map((l) => l.padEnd(len + end, ' ').padStart(len + end + start, ' '))
 }
 
-export function convert(text) {
+export default (text) => {
     let lines = text.split('\n')
 
     // Indicates if the current line is within a code block
@@ -203,33 +203,6 @@ export function convert(text) {
     output = output.map(line => line.replace(/ +$/, ''))
 
     return output.join('\n')
-}
-
-const readFile = (f) => {
-    // node.js only and when running from the command line
-    const fs = require('fs')
-    return fs.readFileSync(f, 'utf8')
-}
-
-let __is_nodejs_main = false
-try {
-    // node.js specific checks and exports
-    __is_nodejs_main = (require.main === module)
-    exports.convert = convert
-} catch (e) { }
-
-if (__is_nodejs_main) {
-    // running in node.js called from the CLI
-    let args = process.argv.slice(2)
-    if (args.length == 0 || args.find((a) => a == '-h')) {
-        console.log(`Usage: ${process.argv[1]} FILE [FILE...]`)
-        process.exit(0)
-    }
-    for (let i = 0; i < args.length; i++) {
-        const f = args[i];
-        process.stdout.write(convert(readFile(f)));
-    }
-
 }
 
 export const markdownTest = `# Heading 1

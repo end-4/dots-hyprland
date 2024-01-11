@@ -1,7 +1,11 @@
 // This is for the cool memory indicator on the sidebar
 // For the right pill of the bar, see system.js
 const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 const { exec, execAsync } = Utils;
 
 const SessionButton = (name, icon, command, props = {}) => {
@@ -41,23 +45,24 @@ const SessionButton = (name, icon, command, props = {}) => {
             button.get_window().set_cursor(cursor);
             buttonDescription.revealChild = false;
         },
-        connections: [
-            ['focus-in-event', (self) => {
+        setup: (self) => self
+            .on('focus-in-event', (self) => {
                 buttonDescription.revealChild = true;
                 self.toggleClassName('session-button-focused', true);
-            }],
-            ['focus-out-event', (self) => {
+            })
+            .on('focus-out-event', (self) => {
                 buttonDescription.revealChild = false;
                 self.toggleClassName('session-button-focused', false);
-            }],
-        ],
+            })
+        ,
         ...props,
     });
 }
 
 export default () => {
     // lock, logout, sleep
-    const lockButton = SessionButton('Lock', 'lock', () => { App.closeWindow('session'); execAsync('gtklock') });
+    // const lockButton = SessionButton('Lock', 'lock', () => { App.closeWindow('session'); execAsync('gtklock') });
+    const lockButton = SessionButton('Lock', 'lock', () => { App.closeWindow('session'); execAsync('swaylock') });
     const logoutButton = SessionButton('Logout', 'logout', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'loginctl terminate-user $USER']) });
     const sleepButton = SessionButton('Sleep', 'sleep', () => { App.closeWindow('session'); execAsync('systemctl suspend') });
     // hibernate, shutdown, reboot
@@ -133,10 +138,10 @@ export default () => {
                 ]
             })
         ],
-        connections: [
-            [App, (_b, name, visible) => {
+        setup: (self) => self
+            .hook(App, (_b, name, visible) => {
                 if (visible) lockButton.grab_focus(); // Lock is the default option
-            }],
-        ],
+            })
+        ,
     });
 }

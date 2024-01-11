@@ -1,8 +1,8 @@
-const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Variable, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from './cursorhover.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Revealer } = Widget;
 
 export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...rest }) => {
     let value = initValue;
@@ -37,22 +37,25 @@ export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...re
         ]
     });
     const interactionWrapper = Button({
-        child: widgetContent,
-        onClicked: () => { // mouse up/kb press
-            value = !value;
-            toggleIcon.toggleClassName('switch-fg-toggling-false', false);
-            if (!value) {
-                toggleIcon.label = '';
-                toggleIcon.toggleClassName('txt-poof', true);
+        attribute: {
+            toggle: (newValue) => {
+                value = !value;
+                toggleIcon.toggleClassName('switch-fg-toggling-false', false);
+                if (!value) {
+                    toggleIcon.label = '';
+                    toggleIcon.toggleClassName('txt-poof', true);
+                }
+                toggleButtonIndicator.toggleClassName('switch-fg-true', value);
+                toggleButton.toggleClassName('switch-bg-true', value);
+                if (value) Utils.timeout(1, () => {
+                    toggleIcon.label = 'check';
+                    toggleIcon.toggleClassName('txt-poof', false);
+                })
+                onChange(interactionWrapper, value);
             }
-            toggleButtonIndicator.toggleClassName('switch-fg-true', value);
-            toggleButton.toggleClassName('switch-bg-true', value);
-            if(value) Utils.timeout(1, () => {
-                toggleIcon.label = 'check';
-                toggleIcon.toggleClassName('txt-poof', false);
-            })
-            onChange(interactionWrapper, value);
         },
+        child: widgetContent,
+        onClicked: (self) => self.attribute.toggle(self),
         setup: (button) => {
             setupCursorHover(button),
                 button.connect('pressed', () => { // mouse down

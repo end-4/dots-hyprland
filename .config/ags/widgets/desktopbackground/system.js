@@ -1,4 +1,5 @@
-import { App, Service, Utils, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 const { Box, EventBox, Label, Revealer, Overlay } = Widget;
 import { AnimatedCircProg } from '../../lib/animatedcircularprogress.js'
@@ -24,7 +25,9 @@ const ResourceValue = (name, icon, interval, valueUpdateCmd, displayFunc, props 
                     Label({
                         xalign: 1,
                         className: 'titlefont txt-norm txt-onSecondaryContainer',
-                        connections: [[interval, (label) => displayFunc(label)]]
+                        setup: (self) => self
+                            .poll(interval, (label) => displayFunc(label))
+                        ,
                     })
                 ]
             })
@@ -32,11 +35,13 @@ const ResourceValue = (name, icon, interval, valueUpdateCmd, displayFunc, props 
         Overlay({
             child: AnimatedCircProg({
                 className: 'bg-system-circprog',
-                connections: [[interval, (self) => {
-                    execAsync(['bash', '-c', `${valueUpdateCmd}`]).then((newValue) => {
-                        self.css = `font-size: ${Math.round(newValue)}px;`
-                    }).catch(print);
-                }]]
+                extraSetup: (self) => self
+                    .poll(interval, (self) => {
+                        execAsync(['bash', '-c', `${valueUpdateCmd}`]).then((newValue) => {
+                            self.css = `font-size: ${Math.round(newValue)}px;`
+                        }).catch(print);
+                    })
+                ,
             }),
             overlays: [
                 MaterialIcon(`${icon}`, 'hugeass'),
@@ -143,7 +148,7 @@ export default () => Box({
                     const firstChild = child.get_children()[0];
                     firstChild.revealChild = !firstChild.revealChild;
                 }
-                
+
             },
         })
     ],

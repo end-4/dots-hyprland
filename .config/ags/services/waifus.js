@@ -1,68 +1,35 @@
-import { Utils, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
-import Gio from 'gi://Gio';
-import GLib from 'gi://GLib';
-import Soup from 'gi://Soup?version=3.0';
-import { fileExists } from './messages.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
-class WaifuResponse extends Service {
-    static {
-        Service.register(this,
-            {
-                'delta': ['string'],
-            },
-            {
-                'content': ['string'],
-                'thinking': ['boolean'],
-                'done': ['boolean'],
-            });
-    }
+// Usage from my python waifu fetcher, for reference
+// Usage: waifu-get.py [OPTION]... [TAG]...
+// Options:
+//     --im\tUse waifu.im API. You can use many tags
+//     --pics\tUse waifu.pics API. Use 1 tag only.
+//     --nekos\tUse nekos.life (old) API. No tags.
+//     --segs\tForce NSFW images
 
-    _role = '';
-    _content = '';
-    _thinking = false;
-    _done = false;
+// Tags:
+//     waifu.im (type):
+//         maid waifu marin-kitagawa mori-calliope raiden-shogun oppai selfies uniform
+//     waifu.im (nsfw tags):
+//         ecchi hentai ero ass paizuri oral milf
 
-    constructor(role, content, thinking = false, done = false) {
-        super();
-        this._role = role;
-        this._content = content;
-        this._thinking = thinking;
-        this._done = done;
-    }
-
-    get done() { return this._done }
-    set done(isDone) { this._done = isDone; this.notify('done') }
-
-    get role() { return this._role }
-    set role(role) { this._role = role; this.emit('changed') }
-
-    get content() { return this._content }
-    set content(content) {
-        this._content = content;
-        this.notify('content')
-        this.emit('changed')
-    }
-
-    get label() { return this._parserState.parsed + this._parserState.stack.join('') }
-
-    get thinking() { return this._thinking }
-    set thinking(thinking) {
-        this._thinking = thinking;
-        this.notify('thinking')
-        this.emit('changed')
-    }
-
-    addDelta(delta) {
-        if (this.thinking) {
-            this.thinking = false;
-            this.content = delta;
-        }
-        else {
-            this.content += delta;
-        }
-        this.emit('delta', delta);
-    }
+function paramStringFromObj(params) {
+    return Object.entries(params)
+        .map(([key, value]) => {
+            if (Array.isArray(value)) { // If it's an array, repeat
+                if (value.length == 0) return '';
+                let thisKey = `${encodeURIComponent(key)}=${encodeURIComponent(value[0])}`
+                for (let i = 1; i < value.length; i++) {
+                    thisKey += `&${encodeURIComponent(key)}=${encodeURIComponent(value[i])}`;
+                }
+                return thisKey;
+            }
+            return `${key}=${value}`;
+        })
+        .join('&');
 }
 
 class WaifuService extends Service {
@@ -76,17 +43,20 @@ class WaifuService extends Service {
         'nekos': {},
         'pics': {},
     }
-    _url = 'https://api.waifu.im/search';
+    _baseUrl = 'https://api.waifu.im/search';
     _mode = 'im'; // Allowed: im
     _responses = [];
+    _queries = [];
     _nsfw = false;
     _minHeight = 600;
+    _status = 0;
 
     static {
         Service.register(this, {
             'initialized': [],
             'clear': [],
-            'newResponse': ['string'],
+            'newResponse': ['int'],
+            'updateResponse': ['int'],
         });
     }
 
@@ -97,71 +67,90 @@ class WaifuService extends Service {
 
     clear() {
         this._responses = [];
+        this._queries = [];
         this.emit('clear');
     }
 
     get mode() { return this._mode }
     set mode(value) {
         this._mode = value;
-        this._url = this._endpoints[this._mode];
+        this._baseUrl = this._endpoints[this._mode];
     }
     get nsfw() { return this._nsfw }
     set nsfw(value) { this._nsfw = value }
+    get queries() { return this._queries }
     get responses() { return this._responses }
 
-    readResponseRecursive(stream, response) {
-        stream.read_line_async(
-            0, null,
-            (stream, res) => {
-                if (!stream) return;
-                const [bytes] = stream.read_line_finish(res);
-                const line = this._decoder.decode(bytes);
-                if (line && line != '') {
-                    let data = line.substr(6);
-                    if (data == '[DONE]') return;
-                    try {
-                        const result = JSON.parse(data);
-                        if (result.choices[0].finish_reason === 'stop') {
-                            response.done = true;
-                            return;
-                        }
-                        response.addDelta(result.choices[0].delta.content);
-                    }
-                    catch {
-                        response.addDelta(line + '\n');
-                    }
-                }
-                this.readResponseRecursive(stream, response);
-            });
-    }
-
-    fetch(msg) {
-        const taglist = msg.split(' ');
-        this.emit('newResponse', msg);
-        this._responses.push(msg);
-
+    async fetch(msg) {
+        // Init
+        const userArgs = msg.split(' ');
+        let taglist = [];
+        this._nsfw = false;
+        // Construct body/headers
+        for (let i = 0; i < userArgs.length; i++) {
+            const thisArg = userArgs[i];
+            if (thisArg == '--im') this._mode = 'im';
+            else if (thisArg == '--nekos') this._mode = 'nekos';
+            else if (thisArg.includes('pics')) this._mode = 'pics';
+            else if (thisArg.includes('segs') || thisArg.includes('sex') || thisArg.includes('lewd')) this._nsfw = true;
+            else {
+                taglist.push(thisArg);
+                if(['ecchi', 'hentai', 'ero', 'ass', 'paizuri', 'oral', 'milf'].includes(thisArg)) this._nsfw = true;
+            }
+        }
+        const newMessageId = this._queries.length;
+        this._queries.push(taglist);
+        this.emit('newResponse', newMessageId);
         const params = {
             'included_tags': taglist,
             'height': `>=${this._minHeight}`,
             'nsfw': this._nsfw,
         };
-
-        const session = new Soup.Session();
-        const message = new Soup.Message({
+        const paramString = paramStringFromObj(params);
+        // Fetch
+        // Note: body isn't included since passing directly to url is more reliable
+        const options = { 
             method: 'GET',
-            uri: GLib.Uri.parse(this._url, GLib.UriFlags.NONE),
-        });
-        session.send_message(message, (session, message) => {
-            if (message.status_code === 200) {
-                const responseBody = message.response_body.data;
-                const data = JSON.parse(responseBody);
-                // Process the response data as needed
-                console.log(data);
-                log(data);
-            } else {
-                logError('Request failed with status code: ' + message.status_code);
-            }
-        });
+            headers: this._headers[this._mode],
+        };
+        var status = 0;
+        Utils.fetch(`${this._endpoints[this._mode]}?${paramString}`, options)
+            .then(result => {
+                status = result.status;
+                return result.text();
+            })
+            .then((dataString) => { // Store interesting stuff and emit
+                const parsedData = JSON.parse(dataString);
+                if (!parsedData.images) this._responses.push({
+                    status: status,
+                    signature: -1,
+                    url: '',
+                    extension: '',
+                    source: '',
+                    dominant_color: '#383A40',
+                    is_nsfw: false,
+                    width: 0,
+                    height: 0,
+                    tags: [],
+                });
+                else {
+                    const imageData = parsedData.images[0];
+                    this._responses.push({
+                        status: status,
+                        signature: imageData?.signature || -1,
+                        url: imageData?.url || undefined,
+                        extension: imageData.extension,
+                        source: imageData?.source,
+                        dominant_color: imageData?.dominant_color || '#9392A6',
+                        is_nsfw: imageData?.is_nsfw || false,
+                        width: imageData?.width || 0,
+                        height: imageData?.height || 0,
+                        tags: imageData?.tags.map(obj => obj["name"]) || [],
+                    });
+                }
+                this.emit('updateResponse', newMessageId);
+            })
+            .catch(console.error)
 
     }
 }

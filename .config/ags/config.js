@@ -1,10 +1,12 @@
-"strict mode";
+"use strict";
 // Import
-import { App, Utils } from './imports.js';
+const { GLib } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Widgets
 import Bar from './widgets/bar/main.js';
 import Cheatsheet from './widgets/cheatsheet/main.js';
-// import DesktopBackground from './widgets/desktopbackground/main.js';
+import DesktopBackground from './widgets/desktopbackground/main.js';
 // import Dock from './widgets/dock/main.js';
 import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './widgets/screencorners/main.js';
 import Indicator from './widgets/indicators/main.js';
@@ -16,8 +18,6 @@ import SideRight from './widgets/sideright/main.js';
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time (see styles) to make sure widgets animate fully
 
-// Init cache
-Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user/colorschemes'`);
 // SCSS compilation
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
@@ -43,8 +43,8 @@ export default {
         CornerTopright(),
         CornerBottomleft(),
         CornerBottomright(),
-        // DesktopBackground(),
-        // Dock(), // Buggy
+        DesktopBackground(),   // If you're going to uncomment these,
+        // Dock(), // Buggy       // uncomment the import statement too.
         Overview(),
         Indicator(),
         Cheatsheet(),

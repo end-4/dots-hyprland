@@ -1,5 +1,6 @@
-const { Gio, Gdk, GLib, Gtk } = imports.gi;
-import { Service, Utils } from '../imports.js';
+const { Gio, GLib } = imports.gi;
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { exec, execAsync } = Utils;
 
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -63,7 +64,7 @@ class TodoService extends Service {
         super();
         this._todoPath = `${GLib.get_user_cache_dir()}/ags/user/todo.json`;
         if (!fileExists(this._todoPath)) { // No? create file with empty array
-            Utils.exec(`bash -c 'mkdir -p ~/.cache/ags/user'`);
+            Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/user'`);
             Utils.exec(`touch ${this._todoPath}`);
             Utils.writeFile("[]", this._todoPath).then(() => {
                 this._todoJson = JSON.parse(Utils.readFile(this._todoPath))
