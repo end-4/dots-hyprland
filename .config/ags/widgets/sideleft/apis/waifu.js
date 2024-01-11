@@ -1,17 +1,28 @@
-const { Gdk, GdkPixbuf, Gio, GLib, Gtk, Pango } = imports.gi;
-import { App, Utils, Widget } from '../../../imports.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
+const { Gdk, GdkPixbuf, Gio, GLib, Gtk } = imports.gi;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
-import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
+import { setupCursorHover } from "../../../lib/cursorhover.js";
 import WaifuService from '../../../services/waifus.js';
 
+async function getImageViewerApp(preferredApp) {
+    Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
+        .then((output) => {
+            if (output != '') return preferredApp;
+            else return 'xdg-open';
+        });
+}
+
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
+const IMAGE_VIEWER_APP = getImageViewerApp('loupe'); // Gnome's image viewer cuz very comfortable zooming
+const USER_CACHE_DIR = GLib.get_user_cache_dir();
 
 // Create cache folder and clear pics from previous session
-Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/media/waifus'`);
-Utils.exec(`bash -c 'rm ${GLib.get_user_cache_dir()}/ags/media/waifus/*'`);
+Utils.exec(`bash -c 'mkdir -p ${USER_CACHE_DIR}/ags/media/waifus'`);
+Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 
 export function fileExists(filePath) {
     let file = Gio.File.new_for_path(filePath);
@@ -96,17 +107,17 @@ const WaifuImage = (taglist) => {
                         ImageAction({
                             name: 'Go to source',
                             icon: 'link',
-                            action: () => execAsync(['xdg-open', `${thisBlock._imageData.source}`]).catch(print),
+                            action: () => execAsync(['xdg-open', `${thisBlock.attribute.imageData.source}`]).catch(print),
                         }),
                         ImageAction({
                             name: 'Hoard',
                             icon: 'save',
-                            action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/waifus && cp ${thisBlock._imagePath} ~/Pictures/waifus`]).catch(print),
+                            action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️' : ''} && cp ${thisBlock.attribute.imagePath} ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️/' : ''}`]).catch(print),
                         }),
                         ImageAction({
                             name: 'Open externally',
                             icon: 'open_in_new',
-                            action: () => execAsync(['xdg-open', `${thisBlock._imagePath}`]).catch(print),
+                            action: () => execAsync([IMAGE_VIEWER_APP, `${thisBlock.attribute.imagePath}`]).catch(print),
                         }),
                     ]
                 })
@@ -116,13 +127,6 @@ const WaifuImage = (taglist) => {
     const blockImage = Widget.DrawingArea({
         className: 'sidebar-waifu-image',
     });
-    // const blockImage = Box({});
-    // const blockImage = Image({
-    //     hpack: 'start',
-    //     vertical: true,
-    //     className: 'sidebar-waifu-image',
-    //     // homogeneous: true,
-    // })
     const blockImageRevealer = Revealer({
         transition: 'slide_down',
         transitionDuration: 150,
@@ -138,17 +142,19 @@ const WaifuImage = (taglist) => {
     });
     const thisBlock = Box({
         className: 'sidebar-chat-message',
-        properties: [
-            ['imagePath', ''],
-            ['imageData', ''],
-            ['update', (imageData, force = false) => {
-                thisBlock._imageData = imageData;
-                const { status, signature, url, extension, source, dominant_color, is_nsfw, width, height, tags } = thisBlock._imageData;
+        attribute: {
+            'imagePath': '',
+            'isNsfw': false,
+            'imageData': '',
+            'update': (imageData, force = false) => {
+                thisBlock.attribute.imageData = imageData;
+                const { status, signature, url, extension, source, dominant_color, is_nsfw, width, height, tags } = thisBlock.attribute.imageData;
+                thisBlock.attribute.isNsfw = is_nsfw;
                 if (status != 200) {
                     downloadState.shown = 'error';
                     return;
                 }
-                thisBlock._imagePath = `${GLib.get_user_cache_dir()}/ags/media/waifus/${signature}${extension}`;
+                thisBlock.attribute.imagePath = `${USER_CACHE_DIR}/ags/media/waifus/${signature}${extension}`;
                 downloadState.shown = 'download';
                 // Width/height
                 const widgetWidth = Math.min(Math.floor(waifuContent.get_allocated_width() * 0.85), width);
@@ -156,7 +162,7 @@ const WaifuImage = (taglist) => {
                 blockImage.set_size_request(widgetWidth, widgetHeight);
                 const showImage = () => {
                     downloadState.shown = 'done';
-                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock._imagePath, widgetWidth, widgetHeight, false);
+                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock.attribute.imagePath, widgetWidth, widgetHeight, false);
 
                     blockImage.set_size_request(widgetWidth, widgetHeight);
                     blockImage.connect("draw", (widget, cr) => {
@@ -182,19 +188,19 @@ const WaifuImage = (taglist) => {
                     Utils.timeout(IMAGE_REVEAL_DELAY + blockImageRevealer.transitionDuration,
                         () => blockImageActions.revealChild = true
                     );
-                    downloadIndicator._hide();
+                    downloadIndicator.attribute.hide();
                 }
                 // Show
-                if (!force && fileExists(thisBlock._imagePath)) showImage();
-                else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock._imagePath}' '${url}'`])
+                if (!force && fileExists(thisBlock.attribute.imagePath)) showImage();
+                else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock.attribute.imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
                 blockHeading.get_children().forEach((child) => {
                     child.setCss(`border-color: ${dominant_color};`);
                 })
                 colorIndicator.css = `background-color: ${dominant_color};`;
-            }],
-        ],
+            },
+        },
         children: [
             colorIndicator,
             Box({
@@ -218,25 +224,25 @@ const waifuContent = Box({
     className: 'spacing-v-15',
     vertical: true,
     vexpand: true,
-    properties: [
-        ['map', new Map()],
-    ],
-    connections: [
-        [WaifuService, (box, id) => {
+    attribute: {
+        'map': new Map(),
+    },
+    setup: (self) => self
+        .hook(WaifuService, (box, id) => {
             if (id === undefined) return;
             const newImageBlock = WaifuImage(WaifuService.queries[id]);
             box.add(newImageBlock);
             box.show_all();
-            box._map.set(id, newImageBlock);
-        }, 'newResponse'],
-        [WaifuService, (box, id) => {
+            box.attribute.map.set(id, newImageBlock);
+        }, 'newResponse')
+        .hook(WaifuService, (box, id) => {
             if (id === undefined) return;
             const data = WaifuService.responses[id];
             if (!data) return;
-            const imageBlock = box._map.get(id);
-            imageBlock._update(data);
-        }, 'updateResponse'],
-    ]
+            const imageBlock = box.attribute.map.get(id);
+            imageBlock.attribute.update(data);
+        }, 'updateResponse')
+    ,
 });
 
 export const waifuView = Scrollable({
@@ -313,6 +319,7 @@ export const waifuCommands = Box({
 });
 
 const clearChat = () => {
+    waifuContent.attribute.map.clear();
     const kids = waifuContent.get_children();
     for (let i = 0; i < kids.length; i++) {
         const child = kids[i];
@@ -328,7 +335,7 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/test')) {
             const newImage = WaifuImage(['/test']);
             waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage._update({ // Needs timeout or inits won't make it
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update({ // Needs timeout or inits won't make it
                 // This is an image uploaded to my github repo
                 status: 200,
                 url: 'https://picsum.photos/400/600',

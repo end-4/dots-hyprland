@@ -1,4 +1,7 @@
-import { App, Service, Utils, Widget } from '../imports.js';
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 import { MaterialIcon } from './materialicon.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
@@ -44,23 +47,21 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
                 MaterialIcon('notifications', 'norm'),
                 Widget.Label({
                     className: 'txt-small titlefont',
-                    properties: [
-                        ['increment', (self) => self._unreadCount++],
-                        ['markread', (self) => self._unreadCount = 0],
-                        ['update', (self) => self.label = `${self._unreadCount}`],
-                        ['unreadCount', 0],
-                    ],
+                    attribute: {
+                        unreadCount: 0,
+                        update: (self) => self.label = `${self.attribute.unreadCount}`,
+                    },
                     setup: (self) => self
                         .hook(Notifications, (self, id) => {
                             if (!id || Notifications.dnd) return;
                             if (!Notifications.getNotification(id)) return;
-                            self._increment(self);
-                            self._update(self);
+                            self.attribute.unreadCount++;
+                            self.attribute.update(self);
                         }, 'notified')
                         .hook(App, (self, currentName, visible) => {
                             if (visible && currentName === notifCenterName) {
-                                self._markread(self);
-                                self._update(self);
+                                self.attribute.unreadCount = 0;
+                                self.attribute.update(self);
                             }
                         })
                     ,
@@ -74,8 +75,8 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
 export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     items: [
-        ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
         ['false', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' })],
+        ['true', Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' })],
     ],
     setup: (self) => self
         .hook(Bluetooth, stack => {
@@ -161,7 +162,7 @@ export const NetworkIndicator = () => Widget.Stack({
     }),
 });
 
-const KeyboardLayout = ({ useFlag } = {}) => {
+const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
     var initLangs = [];
     var languageStackArray = [];
     var currentKeyboard;
@@ -215,15 +216,24 @@ const KeyboardLayout = ({ useFlag } = {}) => {
     return widgetRevealer;
 }
 
+const OptionalKeyboardLayout = async () => {
+    try {
+        return await HyprlandXkbKeyboardLayout({ useFlag: false });
+    } catch {
+        return null;
+    }
+};
+const optionalKeyboardLayoutInstance = await OptionalKeyboardLayout();
+
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
-            KeyboardLayout({ useFlag: false }),
+            optionalKeyboardLayoutInstance,
             NotificationIndicator(),
-            BluetoothIndicator(),
             NetworkIndicator(),
+            BluetoothIndicator(),
         ]
     })
 });

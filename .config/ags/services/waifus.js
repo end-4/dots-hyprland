@@ -1,6 +1,6 @@
-const { Gdk, Gio, GLib } = imports.gi;
-import { Utils, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 // Usage from my python waifu fetcher, for reference
 // Usage: waifu-get.py [OPTION]... [TAG]...

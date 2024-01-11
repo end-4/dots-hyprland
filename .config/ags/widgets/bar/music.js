@@ -1,6 +1,6 @@
-import { Service, Utils, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -23,10 +23,10 @@ const TrackProgress = () => {
     return AnimatedCircProg({
         className: 'bar-music-circprog',
         vpack: 'center', hpack: 'center',
-        connections: [ // Update on change/once every 3 seconds
-            [Mpris, _updateProgress],
-            [3000, _updateProgress]
-        ]
+        extraSetup: (self) => self
+            .hook(Mpris, _updateProgress)
+            .poll(3000, _updateProgress)
+        ,
     })
 }
 
@@ -53,17 +53,17 @@ export const ModuleMusic = () => Widget.EventBox({ // TODO: use cairo to make bu
                                     vpack: 'center',
                                     className: 'bar-music-playstate-txt',
                                     justification: 'center',
-                                    connections: [[Mpris, label => {
+                                    setup: (self) => self.hook(Mpris, label => {
                                         const mpris = Mpris.getPlayer('');
                                         label.label = `${mpris !== null && mpris.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
-                                    }]],
+                                    }),
                                 })],
-                                connections: [[Mpris, label => {
+                                setup: (self) => self.hook(Mpris, label => {
                                     const mpris = Mpris.getPlayer('');
                                     if (!mpris) return;
                                     label.toggleClassName('bar-music-playstate-playing', mpris !== null && mpris.playBackStatus == 'Playing');
                                     label.toggleClassName('bar-music-playstate', mpris !== null || mpris.playBackStatus == 'Paused');
-                                }]],
+                                }),
                             }),
                             overlays: [
                                 TrackProgress(),
@@ -74,13 +74,13 @@ export const ModuleMusic = () => Widget.EventBox({ // TODO: use cairo to make bu
                         hexpand: true,
                         child: Widget.Label({
                             className: 'txt-smallie txt-onSurfaceVariant',
-                            connections: [[Mpris, label => {
+                            setup: (self) => self.hook(Mpris, label => {
                                 const mpris = Mpris.getPlayer('');
                                 if (mpris)
                                     label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
                                 else
                                     label.label = 'No media';
-                            }]],
+                            }),
                         })
                     })
                 ]

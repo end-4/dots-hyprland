@@ -1,7 +1,6 @@
-const { Gdk, Gtk } = imports.gi;
-const GObject = imports.gi.GObject;
+const { Gtk } = imports.gi;
 const Lang = imports.lang;
-import { Utils, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
 // min-height/min-width for height/width
 // background-color/color for background/indicator color

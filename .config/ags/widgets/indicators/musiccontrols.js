@@ -1,5 +1,7 @@
-const { Gio, GLib, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+const { Gio, GLib } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { exec, execAsync } = Utils;
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 
@@ -92,10 +94,10 @@ const TrackProgress = ({ player, ...rest }) => {
         ...rest,
         className: 'osd-music-circprog',
         vpack: 'center',
-        connections: [ // Update on change/once every 3 seconds
-            [Mpris, _updateProgress],
-            [3000, _updateProgress]
-        ],
+        extraSetup: (self) => self
+            .hook(Mpris, _updateProgress)
+            .poll(3000, _updateProgress)
+        ,
     })
 }
 
@@ -106,13 +108,13 @@ const TrackTitle = ({ player, ...rest }) => Label({
     truncate: 'end',
     // wrap: true,
     className: 'osd-music-title',
-    connections: [[player, (self) => {
+    setup: (self) => self.hook(player, (self) => {
         // Player name
         self.label = player.trackTitle.length > 0 ? trimTrackTitle(player.trackTitle) : 'No media';
         // Font based on track/artist
         const fontForThisTrack = getTrackfont(player);
         self.css = `font-family: ${fontForThisTrack}, ${DEFAULT_MUSIC_FONT};`;
-    }, 'notify::track-title']]
+    }, 'notify::track-title'),
 });
 
 const TrackArtists = ({ player, ...rest }) => Label({
@@ -120,9 +122,9 @@ const TrackArtists = ({ player, ...rest }) => Label({
     xalign: 0,
     className: 'osd-music-artists',
     truncate: 'end',
-    connections: [[player, (self) => {
+    setup: (self) => self.hook(player, (self) => {
         self.label = player.trackArtists.length > 0 ? player.trackArtists.join(', ') : '';
-    }, 'notify::track-artists']]
+    }, 'notify::track-artists'),
 })
 
 const CoverArt = ({ player, ...rest }) => Box({
@@ -140,8 +142,8 @@ const CoverArt = ({ player, ...rest }) => Box({
             }),
             overlays: [ // Real
                 Box({
-                    properties: [
-                        ['updateCover', (self) => {
+                    attribute: {
+                        'updateCover': (self) => {
                             const player = Mpris.getPlayer();
 
                             // Player closed
@@ -177,11 +179,11 @@ const CoverArt = ({ player, ...rest }) => Box({
                                     App.applyCss(`${stylePath}`);
                                 })
                                 .catch(print);
-                        }],
-                    ],
+                        },
+                    },
                     className: 'osd-music-cover-art',
-                    connections: [
-                        [player, (self) => self._updateCover(self), 'notify::cover-path']
+                    $: [
+                        [player, (self) => self.attribute.updateCover(self), 'notify::cover-path']
                     ],
                 })
             ]
@@ -218,13 +220,13 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
             }),
         ],
     }),
-    connections: [[Mpris, (self) => {
+    setup: (self) => szelf.hook(Mpris, (self) => {
         const player = Mpris.getPlayer();
         if (!player)
             self.revealChild = false;
         else
             self.revealChild = true;
-    }, 'notify::play-back-status']]
+    }, 'notify::play-back-status'),
 });
 
 const TrackSource = ({ player, ...rest }) => Widget.Revealer({
@@ -240,19 +242,19 @@ const TrackSource = ({ player, ...rest }) => Widget.Revealer({
                 hpack: 'fill',
                 justification: 'center',
                 className: 'icon-nerd',
-                connections: [[player, (self) => {
+                setup: (self) => self.hook(player, (self) => {
                     self.label = detectMediaSource(player.trackCoverUrl);
-                }, 'notify::cover-path']]
+                }, 'notify::cover-path'),
             }),
         ],
     }),
-    connections: [[Mpris, (self) => {
+    setup: (self) => self.hook(Mpris, (self) => {
         const mpris = Mpris.getPlayer('');
         if (!mpris)
             self.revealChild = false;
         else
             self.revealChild = true;
-    }]]
+    }),
 });
 
 const TrackTime = ({ player, ...rest }) => {
@@ -266,28 +268,26 @@ const TrackTime = ({ player, ...rest }) => {
             className: 'osd-music-pill spacing-h-5',
             children: [
                 Label({
-                    connections: [[1000, (self) => {
+                    setup: (self) => self.poll(1000, (self) => {
                         const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.position);
-                    }]]
+                    }),
                 }),
                 Label({ label: '/' }),
                 Label({
-                    connections: [[Mpris, (self) => {
+                    setup: (self) => self.hook(Mpris, (self) => {
                         const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.length);
-                    }]]
+                    }),
                 }),
             ],
         }),
-        connections: [[Mpris, (self) => {
-            if (!player)
-                self.revealChild = false;
-            else
-                self.revealChild = true;
-        }]]
+        setup: (self) => self.hook(Mpris, (self) => {
+            if (!player) self.revealChild = false;
+            else self.revealChild = true;
+        }),
     })
 }
 
@@ -306,15 +306,12 @@ const PlayState = ({ player }) => {
                         justification: 'center',
                         hpack: 'fill',
                         vpack: 'center',
-                        connections: [[player, (label) => {
+                        setup: (self) => self.hook(player, (label) => {
                             label.label = `${player.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
-                        }, 'notify::play-back-status']],
+                        }, 'notify::play-back-status'),
                     }),
                 }),
             ],
-            // setup: self => Utils.timeout(1, () => {
-            //     self.set_overlay_pass_through(self.get_children()[1], true);
-            // }),
             passThrough: true,
         })
     });
@@ -358,19 +355,17 @@ export default () => MarginRevealer({
     showClass: 'osd-show',
     hideClass: 'osd-hide',
     child: Box({
-        connections: [[Mpris, box => {
+        setup: (self) => self.hook(Mpris, box => {
             let foundPlayer = false;
 
             Mpris.players.forEach((player, i) => {
                 if (isRealPlayer(player)) {
                     foundPlayer = true;
-                    box._player = player;
                     box.children = [MusicControlsWidget(player)];
                 }
             });
 
             if (!foundPlayer) {
-                box._player = null;
                 const children = box.get_children();
                 for (let i = 0; i < children.length; i++) {
                     const child = children[i];
@@ -378,12 +373,10 @@ export default () => MarginRevealer({
                 }
                 return;
             }
-        }, 'notify::players']],
+        }, 'notify::players'),
     }),
-    connections: [
-        [showMusicControls, (revealer) => {
-            if (showMusicControls.value) revealer._show();
-            else revealer._hide();
-        }],
-    ],
+    setup: (self) => self.hook(showMusicControls, (revealer) => {
+        if (showMusicControls.value) revealer.attribute.show();
+        else revealer.attribute.hide();
+    }),
 })

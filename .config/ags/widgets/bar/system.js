@@ -1,6 +1,7 @@
 // This is for the right pill of the bar. 
 // For the cool memory indicator on the sidebar, see sysinfo.js
-import { Service, Utils, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
@@ -21,9 +22,9 @@ const BatBatteryProgress = () => {
     return AnimatedCircProg({
         className: 'bar-batt-circprog',
         vpack: 'center', hpack: 'center',
-        connections: [
-            [Battery, _updateProgress],
-        ],
+        extraSetup: (self) => self
+            .hook(Battery, _updateProgress)
+        ,
     })
 }
 
@@ -147,13 +148,6 @@ const BarResource = (name, icon, command) => {
     const resourceCircProg = AnimatedCircProg({
         className: 'bar-batt-circprog',
         vpack: 'center', hpack: 'center',
-        connections: [[5000, (progress) => execAsync(['bash', '-c', command])
-            .then((output) => {
-                progress.css = `font-size: ${Number(output)}px;`;
-                resourceLabel.label = `${Math.round(Number(output))}%`;
-                widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
-            }).catch(print)
-        ]],
     });
     const widget = Box({
         className: 'spacing-h-4 txt-onSurfaceVariant',
@@ -170,7 +164,15 @@ const BarResource = (name, icon, command) => {
                 }),
                 overlays: [resourceCircProg]
             }),
-        ]
+        ],
+        setup: (self) => self
+            .poll(5000, () => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
+                    resourceLabel.label = `${Math.round(Number(output))}%`;
+                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                }).catch(print))
+        ,
     });
     return widget;
 }

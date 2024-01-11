@@ -1,6 +1,4 @@
-const { Gio, GLib } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
-const { execAsync, exec } = Utils;
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
 function moveClientToWorkspace(address, workspace) {

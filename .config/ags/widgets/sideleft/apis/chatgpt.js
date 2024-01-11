@@ -1,5 +1,8 @@
-const { Gdk, GLib, Gtk, Pango } = imports.gi;
-import { App, Utils, Widget } from '../../../imports.js';
+const { Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import ChatGPT from '../../../services/chatgpt.js';
@@ -64,14 +67,14 @@ const chatGPTInfo = Box({
 export const chatGPTSettings = MarginRevealer({
     transition: 'slide_down',
     revealChild: true,
-    connections: [
-        [ChatGPT, (self) => Utils.timeout(200, () => {
-            self._hide();
-        }), 'newMsg'],
-        [ChatGPT, (self) => Utils.timeout(200, () => {
-            self._show();
-        }), 'clear'],
-    ],
+    extraSetup: (self) => self
+        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+            self.attribute.hide();
+        }), 'newMsg')
+        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+            self.attribute.show();
+        }), 'clear')
+    ,
     child: Box({
         vertical: true,
         className: 'sidebar-chat-settings',
@@ -126,9 +129,11 @@ export const openaiApiKeyInstructions = Box({
     children: [Revealer({
         transition: 'slide_down',
         transitionDuration: 150,
-        connections: [[ChatGPT, (self, hasKey) => {
-            self.revealChild = (ChatGPT.key.length == 0);
-        }, 'hasKey']],
+        setup: (self) => self
+            .hook(ChatGPT, (self, hasKey) => {
+                self.revealChild = (ChatGPT.key.length == 0);
+            }, 'hasKey')
+        ,
         child: Button({
             child: Label({
                 useMarkup: true,
@@ -163,13 +168,13 @@ export const chatGPTWelcome = Box({
 export const chatContent = Box({
     className: 'spacing-v-15',
     vertical: true,
-    connections: [
-        [ChatGPT, (box, id) => {
+    setup: (self) => self
+        .hook(ChatGPT, (box, id) => {
             const message = ChatGPT.messages[id];
             if (!message) return;
             box.add(ChatMessage(message, chatGPTView))
-        }, 'newMsg'],
-    ]
+        }, 'newMsg')
+    ,
 });
 
 const clearChat = () => {
@@ -197,7 +202,7 @@ export const chatGPTView = Scrollable({
         const vScrollbar = scrolledWindow.get_vscrollbar();
         vScrollbar.get_style_context().add_class('sidebar-scrollbar');
         // Avoid click-to-scroll-widget-to-view behavior
-        Utils.timeout(1, () => { 
+        Utils.timeout(1, () => {
             const viewport = scrolledWindow.child;
             viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
         })
