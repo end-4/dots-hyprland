@@ -1,6 +1,6 @@
-const { Gio, Gdk, GLib, Gtk } = imports.gi;
-import { App, Widget, Utils } from '../../imports.js';
-const { Box, Button, CenterBox, Label, Revealer } = Widget;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, Label, Revealer } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
 import Todo from "../../services/todo.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
@@ -73,33 +73,36 @@ const todoListItem = (task, id, isDone, isEven = false) => {
 }
 
 const todoItems = (isDone) => Widget.Scrollable({
+    hscroll: 'never',
+    vscroll: 'automatic',
     child: Widget.Box({
         vertical: true,
-        connections: [[Todo, (self) => {
-            self.children = Todo.todo_json.map((task, i) => {
-                if (task.done != isDone) return null;
-                return todoListItem(task, i, isDone);
-            })
-            if (self.children.length == 0) {
-                self.homogeneous = true;
-                self.children = [
-                    Widget.Box({
-                        hexpand: true,
-                        vertical: true,
-                        vpack: 'center',
-                        className: 'txt',
-                        children: [
-                            MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
-                            Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
-                        ]
-                    })
-                ]
-            }
-            else self.homogeneous = false;
-        }, 'updated']]
+        setup: (self) => self
+            .hook(Todo, (self) => {
+                self.children = Todo.todo_json.map((task, i) => {
+                    if (task.done != isDone) return null;
+                    return todoListItem(task, i, isDone);
+                })
+                if (self.children.length == 0) {
+                    self.homogeneous = true;
+                    self.children = [
+                        Widget.Box({
+                            hexpand: true,
+                            vertical: true,
+                            vpack: 'center',
+                            className: 'txt',
+                            children: [
+                                MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'badonkers'),
+                                Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
+                            ]
+                        })
+                    ]
+                }
+                else self.homogeneous = false;
+            }, 'updated')
+        ,
     }),
     setup: (listContents) => {
-        listContents.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
         const vScrollbar = listContents.get_vscrollbar();
         vScrollbar.get_style_context().add_class('sidebar-scrollbar');
     }

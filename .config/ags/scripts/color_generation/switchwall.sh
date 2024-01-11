@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# Switches sww wallpaper
+# Switches swww wallpaper
 # Requires: coreutils, xrandr, hyprland
 
 if [ "$1" == "--noswitch" ]; then

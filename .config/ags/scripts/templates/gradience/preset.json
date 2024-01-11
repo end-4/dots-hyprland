@@ -87,9 +87,9 @@
         "BLACK_500": "#393634",
         "BLACK_700": "#33302F",
         "BLACK_900": "#2B2928",
-        "accent_bg_color": "#ffabf1",
-        "accent_fg_color": "#551251",
-        "accent_color": "#ffabf1",
+        "accent_bg_color": "#51d7ef",
+        "accent_fg_color": "#00363f",
+        "accent_color": "#51d7ef",
         "destructive_bg_color": "#ffb4a9",
         "destructive_fg_color": "#680003",
         "destructive_color": "#ffb4a9",
@@ -99,26 +99,31 @@
         "warning_fg_color": "rgba(0, 0, 0, 0.87)",
         "error_bg_color": "#ffb4a9",
         "error_fg_color": "#680003",
-        "window_bg_color": "#120F11",
-        "window_fg_color": "#eae0e4",
-        "view_bg_color": "#1f1a1d",
-        "view_fg_color": "#eae0e4",
+        "window_bg_color": "#0F1011",
+        "window_fg_color": "#e1e3e4",
+        "view_bg_color": "#191c1d",
+        "view_fg_color": "#e1e3e4",
         "headerbar_bg_color": "mix(@dialog_bg_color, @window_bg_color, 0.5)",
-        "headerbar_fg_color": "#f8daee",
-        "headerbar_border_color": "#554050",
+        "headerbar_fg_color": "#cde7ed",
+        "headerbar_border_color": "#334a4f",
         "headerbar_backdrop_color": "@headerbar_bg_color",
         "headerbar_shade_color": "rgba(0, 0, 0, 0.09)",
-        "card_bg_color": "#120F11",
-        "card_fg_color": "#f8daee",
+        "card_bg_color": "#0F1011",
+        "card_fg_color": "#cde7ed",
         "card_shade_color": "rgba(0, 0, 0, 0.09)",
-        "dialog_bg_color": "#554050",
-        "dialog_fg_color": "#f8daee",
-        "popover_bg_color": "#554050",
-        "popover_fg_color": "#f8daee",
+        "dialog_bg_color": "#334a4f",
+        "dialog_fg_color": "#cde7ed",
+        "popover_bg_color": "#334a4f",
+        "popover_fg_color": "#cde7ed",
         "thumbnail_bg_color": "#1a1b26",
         "thumbnail_fg_color": "#AEE5FA",
         "shade_color": "rgba(0, 0, 0, 0.36)",
-        "scrollbar_outline_color": "rgba(0, 0, 0, 0.5)"
+        "scrollbar_outline_color": "rgba(0, 0, 0, 0.5)",
+        
+        "sidebar_bg_color": "@window_bg_color",
+        "sidebar_fg_color":"@window_fg_color",
+        "sidebar_border_color": "@sidebar_bg_color",
+        "sidebar_backdrop_color": "@sidebar_bg_color"
     },
     "palette": {
         "blue_": {},
@@ -132,8 +137,8 @@
         "dark_": {}
     },
     "custom_css": {
-        "gtk4": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; ",
-        "gtk3": "@define-color sidebar_bg_color @window_bg_color; @define-color sidebar_fg_color @window_fg_color; @define-color sidebar_border_color @window_bg_color; @define-color sidebar_backdrop_color @window_bg_color; "
+        "gtk4": "",
+        "gtk3": ""
     },
     "plugins": {}
 }

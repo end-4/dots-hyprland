@@ -3,7 +3,8 @@ const Lang = imports.lang;
 const Cairo = imports.cairo;
 const Pango = imports.gi.Pango;
 const PangoCairo = imports.gi.PangoCairo;
-import { App, Service, Utils, Widget } from '../../imports.js';
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Box, DrawingArea, EventBox } = Widget;
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
@@ -15,15 +16,12 @@ const dummyOccupiedWs = Box({ className: 'bar-ws bar-ws-occupied' }); // Not sho
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
     return DrawingArea({
-        properties: [
-            ['workspaceMask', 0],
-        ],
-        css: `transition: 500ms cubic-bezier(0.1, 1, 0, 1);`,
-        setup: (area) => area
-            .hook(Hyprland.active.workspace, (area) =>
-                area.setCss(`font-size: ${Hyprland.active.workspace.id}px;`)
-            )
-            .hook(Hyprland, (area) => {
+        css: `transition: 90ms cubic-bezier(0.1, 1, 0, 1);`,
+        attribute: {
+            initialized: false,
+            workspaceMask: 0,
+            updateMask: (self) => {
+                if (self.attribute.initialized) return; // We only need this to run once
                 const workspaces = Hyprland.workspaces;
                 let workspaceMask = 0;
                 for (let i = 0; i < workspaces.length; i++) {
@@ -34,8 +32,21 @@ const WorkspaceContents = (count = 10) => {
                         workspaceMask |= (1 << ws.id);
                     }
                 }
-                area._workspaceMask = workspaceMask;
-            }, 'notify::workspaces')
+                self.attribute.workspaceMask = workspaceMask;
+                self.attribute.initialized = true;
+            },
+            toggleMask: (self, occupied, name) => {
+                if (occupied) self.attribute.workspaceMask |= (1 << parseInt(name));
+                else self.attribute.workspaceMask &= ~(1 << parseInt(name));
+            },
+        },
+        setup: (area) => area
+            .hook(Hyprland.active.workspace, (area) =>
+                area.setCss(`font-size: ${Hyprland.active.workspace.id}px;`)
+            )
+            .hook(Hyprland, (self) => self.attribute.updateMask(self), 'notify::workspaces')
+            .hook(Hyprland, (self, name) => self.attribute.toggleMask(self, true, name), 'workspace-added')
+            .hook(Hyprland, (self, name) => self.attribute.toggleMask(self, false, name), 'workspace-removed')
             .on('draw', Lang.bind(area, (area, cr) => {
                 const allocation = area.get_allocation();
                 const { width, height } = allocation;
@@ -75,12 +86,12 @@ const WorkspaceContents = (count = 10) => {
 
                 // Draw workspace numbers
                 for (let i = 1; i <= count; i++) {
-                    if (area._workspaceMask & (1 << i)) {
+                    if (area.attribute.workspaceMask & (1 << i)) {
                         // Draw bg highlight
                         cr.setSourceRGBA(occupiedbg.red, occupiedbg.green, occupiedbg.blue, occupiedbg.alpha);
                         const wsCenterX = -(workspaceRadius) + (workspaceDiameter * i);
                         const wsCenterY = height / 2;
-                        if (!(area._workspaceMask & (1 << (i - 1)))) { // Left
+                        if (!(area.attribute.workspaceMask & (1 << (i - 1)))) { // Left
                             cr.arc(wsCenterX, wsCenterY, workspaceRadius, 0.5 * Math.PI, 1.5 * Math.PI);
                             cr.fill();
                         }
@@ -88,7 +99,7 @@ const WorkspaceContents = (count = 10) => {
                             cr.rectangle(wsCenterX - workspaceRadius, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
                             cr.fill();
                         }
-                        if (!(area._workspaceMask & (1 << (i + 1)))) { // Right
+                        if (!(area.attribute.workspaceMask & (1 << (i + 1)))) { // Right
                             cr.arc(wsCenterX, wsCenterY, workspaceRadius, -0.5 * Math.PI, 0.5 * Math.PI);
                             cr.fill();
                         }
@@ -131,9 +142,7 @@ export default () => EventBox({
     onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
     onMiddleClickRelease: () => App.toggleWindow('overview'),
     onSecondaryClickRelease: () => App.toggleWindow('osk'),
-    properties: [
-        ['clicked', false],
-    ],
+    attribute: { clicked: false },
     child: Box({
         homogeneous: true,
         className: 'bar-group-margin',
@@ -148,8 +157,7 @@ export default () => EventBox({
     setup: (self) => {
         self.add_events(Gdk.EventMask.POINTER_MOTION_MASK);
         self.on('motion-notify-event', (self, event) => {
-            if (!self._clicked) return;
-            console.log('switching move');
+            if (!self.attribute.clicked) return;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
             const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES / widgetWidth);
@@ -157,13 +165,12 @@ export default () => EventBox({
         })
         self.on('button-press-event', (self, event) => {
             if (!(event.get_button()[1] === 1)) return; // We're only interested in left-click here
-            console.log('switching');
-            self._clicked = true;
+            self.attribute.clicked = true;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
             const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES / widgetWidth);
             Hyprland.sendMessage(`dispatch workspace ${wsId}`);
         })
-        self.on('button-release-event', (self) => self._clicked = false);
+        self.on('button-release-event', (self) => self.attribute.clicked = false);
     }
 })

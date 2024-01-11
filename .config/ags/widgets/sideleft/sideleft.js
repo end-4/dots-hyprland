@@ -1,5 +1,7 @@
-const { Gdk, Gtk } = imports.gi;
-import { Utils, Widget } from '../../imports.js';
+const { Gdk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, EventBox, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../lib/materialicon.js";
@@ -93,20 +95,20 @@ const navBar = Box({
 });
 
 const pinButton = Button({
-    properties: [
-        ['enabled', false],
-        ['toggle', (self) => {
-            self._enabled = !self._enabled;
-            self.toggleClassName('sidebar-pin-enabled', self._enabled);
+    attribute: {
+        'enabled': false,
+        'toggle': (self) => {
+            self.attribute.enabled = !self.attribute.enabled;
+            self.toggleClassName('sidebar-pin-enabled', self.attribute.enabled);
 
             const sideleftWindow = App.getWindow('sideleft');
             const barWindow = App.getWindow('bar');
             const cornerTopLeftWindow = App.getWindow('cornertl');
             const sideleftContent = sideleftWindow.get_children()[0].get_children()[0].get_children()[1];
 
-            sideleftContent.toggleClassName('sidebar-pinned', self._enabled);
+            sideleftContent.toggleClassName('sidebar-pinned', self.attribute.enabled);
 
-            if (self._enabled) {
+            if (self.attribute.enabled) {
                 sideleftWindow.layer = 'bottom';
                 barWindow.layer = 'bottom';
                 cornerTopLeftWindow.layer = 'bottom';
@@ -118,19 +120,20 @@ const pinButton = Button({
                 cornerTopLeftWindow.layer = 'top';
                 sideleftWindow.exclusivity = 'normal';
             }
-        }],
-    ],
+        },
+    },
     vpack: 'start',
     className: 'sidebar-pin',
     child: MaterialIcon('push_pin', 'larger'),
     tooltipText: 'Pin sidebar',
-    onClicked: (self) => self._toggle(self),
+    onClicked: (self) => self.attribute.toggle(self),
     // QoL: Focus Pin button on open. Hit keybind -> space/enter = toggle pin state
-    connections: [[App, (self, currentName, visible) => {
-        if (currentName === 'sideleft' && visible) {
-            self.grab_focus();
-        }
-    }]]
+    setup: (self) => self
+        .hook(App, (self, currentName, visible) => {
+            if (currentName === 'sideleft' && visible)
+                self.grab_focus();
+        })
+    ,
 })
 
 export default () => Box({
@@ -158,26 +161,27 @@ export default () => Box({
                 }),
                 contentStack,
             ],
-            connections: [[App, (self, currentName, visible) => {
-                if (currentName === 'sideleft') {
-                    self.toggleClassName('sidebar-pinned', pinButton._enabled && visible);
-                }
-            }]]
+            setup: (self) => self
+                .hook(App, (self, currentName, visible) => {
+                    if (currentName === 'sideleft')
+                        self.toggleClassName('sidebar-pinned', pinButton.attribute.enabled && visible);
+                })
+            ,
         }),
     ],
-    connections: [
-        ['key-press-event', (widget, event) => { // Handle keybinds
+    setup: (self) => self
+        .on('key-press-event', (widget, event) => { // Handle keybinds
             if (event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) {
                 // Pin sidebar
                 if (event.get_keyval()[1] == Gdk.KEY_p)
-                    pinButton._toggle(pinButton);
+                    pinButton.attribute.toggle(pinButton);
                 // Switch sidebar tab
                 else if (event.get_keyval()[1] === Gdk.KEY_Tab)
                     switchToTab((currentTabId + 1) % contents.length);
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Up)
-                    switchToTab(Math.max(currentTabId - 1), 0);
+                    switchToTab(Math.max(currentTabId - 1, 0));
                 else if (event.get_keyval()[1] === Gdk.KEY_Page_Down)
-                    switchToTab(Math.min(currentTabId + 1), contents.length);
+                    switchToTab(Math.min(currentTabId + 1, contents.length - 1));
             }
             if (contentStack.shown == 'apis') { // If api tab is focused
                 // Automatically focus entry when typing
@@ -186,8 +190,8 @@ export default () => Box({
                     event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 &&
                     widget != chatEntry && event.get_keyval()[1] != Gdk.KEY_space)
                     ||
-                    ((event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) && 
-                    event.get_keyval()[1] === Gdk.KEY_v)
+                    ((event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
+                        event.get_keyval()[1] === Gdk.KEY_v)
                 ) {
                     chatEntry.grab_focus();
                     chatEntry.set_text(chatEntry.text + String.fromCharCode(event.get_keyval()[1]));
@@ -197,15 +201,15 @@ export default () => Box({
                 else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                     event.get_keyval()[1] === Gdk.KEY_Page_Down) {
                     const toSwitchTab = contentStack.get_visible_child();
-                    toSwitchTab._nextTab();
+                    toSwitchTab.attribute.nextTab();
                 }
                 else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                     event.get_keyval()[1] === Gdk.KEY_Page_Up) {
                     const toSwitchTab = contentStack.get_visible_child();
-                    toSwitchTab._prevTab();
+                    toSwitchTab.attribute.prevTab();
                 }
             }
 
-        }],
-    ],
+        })
+    ,
 });

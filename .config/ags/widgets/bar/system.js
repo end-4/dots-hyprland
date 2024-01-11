@@ -1,9 +1,11 @@
 // This is for the right pill of the bar. 
 // For the cool memory indicator on the sidebar, see sysinfo.js
-import { Service, Utils, Widget } from '../../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -20,15 +22,15 @@ const BatBatteryProgress = () => {
     return AnimatedCircProg({
         className: 'bar-batt-circprog',
         vpack: 'center', hpack: 'center',
-        connections: [
-            [Battery, _updateProgress],
-        ],
+        extraSetup: (self) => self
+            .hook(Battery, _updateProgress)
+        ,
     })
 }
 
 const BarClock = () => Widget.Box({
     vpack: 'center',
-    className: 'spacing-h-5 txt-onSurfaceVariant',
+    className: 'spacing-h-5 txt-onSurfaceVariant bar-clock-box',
     children: [
         Widget.Label({
             className: 'bar-clock',
@@ -59,75 +61,39 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
     label: `${icon}`,
 })
 
-const Utilities = () => Scrollable({
-    hexpand: true,
-    child: Box({
-        hpack: 'center',
-        className: 'spacing-h-5',
-        children: [
-            UtilButton({
-                name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
-                    Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
-                        .catch(print)
-                }
-            }),
-            UtilButton({
-                name: 'Color picker', icon: 'colorize', onClicked: () => {
-                    Utils.execAsync(['hyprpicker', '-a']).catch(print)
-                }
-            }),
-            UtilButton({
-                name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
-                    App.toggleWindow('osk');
-                }
-            }),
-        ]
-    })
+const Utilities = () => Box({
+    hpack: 'center',
+    className: 'spacing-h-5 txt-onSurfaceVariant',
+    children: [
+        UtilButton({
+            name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
+                Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
+                    .catch(print)
+            }
+        }),
+        UtilButton({
+            name: 'Color picker', icon: 'colorize', onClicked: () => {
+                Utils.execAsync(['hyprpicker', '-a']).catch(print)
+            }
+        }),
+        UtilButton({
+            name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
+                App.toggleWindow('osk');
+            }
+        }),
+    ]
 })
 
 const BarBattery = () => Box({
     className: 'spacing-h-4 txt-onSurfaceVariant',
     children: [
-        // Revealer({ // A dot for charging state
-        //     transitionDuration: 150,
-        //     revealChild: false,
-        //     transition: 'crossfade',
-        //     child: Widget.Box({
-        //         className: 'spacing-h-3',
-        //         children: [
-        //             Widget.Box({
-        //                 vpack: 'center',
-        //                 className: 'bar-batt-chargestate-charging-smaller',
-        //                 setup: (self) => self.hook(Battery, box => {
-        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-        //                 }),
-        //             }),
-        //             Widget.Box({
-        //                 vpack: 'center',
-        //                 className: 'bar-batt-chargestate-charging',
-        //                 setup: (self) => self.hook(Battery, box => {
-        //                     box.toggleClassName('bar-batt-chargestate-low', Battery.percent <= BATTERY_LOW);
-        //                     box.toggleClassName('bar-batt-chargestate-full', Battery.charged);
-        //                 }),
-        //             }),
-        //         ]
-        //     }),
-        //     setup: (self) => self.hook(Battery, revealer => {
-        //         revealer.revealChild = Battery.charging;
-        //     }),
-        // }),
-        Stack({
-            transition: 'slide_up_down',
-            items: [
-                ['discharging', Widget.Label({
-                    className: 'txt-norm txt',
-                    label: '•',
-                }),],
-                ['charging', MaterialIcon('bolt', 'norm')],
-            ],
+        Revealer({
+            transitionDuration: 150,
+            revealChild: false,
+            transition: 'slide_right',
+            child: MaterialIcon('bolt', 'norm'),
             setup: (self) => self.hook(Battery, revealer => {
-                self.shown = Battery.charging ? 'charging' : 'discharging';
+                self.revealChild = Battery.charging;
             }),
         }),
         Label({
@@ -156,21 +122,101 @@ const BarBattery = () => Box({
     ]
 });
 
+const BarResourceValue = (name, icon, command) => Widget.Box({
+    vpack: 'center',
+    className: 'bar-batt spacing-h-5',
+    children: [
+        MaterialIcon(icon, 'small'),
+        Widget.ProgressBar({ // Progress
+            vpack: 'center', hexpand: true,
+            className: 'bar-prog-batt',
+            setup: (self) => self.poll(5000, (progress) => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    progress.value = Number(output) / 100;
+                    progress.tooltipText = `${name}: ${Number(output)}%`
+                })
+                .catch(print)
+            ),
+        }),
+    ]
+});
+
+const BarResource = (name, icon, command) => {
+    const resourceLabel = Label({
+        className: 'txt-smallie txt-onSurfaceVariant',
+    });
+    const resourceCircProg = AnimatedCircProg({
+        className: 'bar-batt-circprog',
+        vpack: 'center', hpack: 'center',
+    });
+    const widget = Box({
+        className: 'spacing-h-4 txt-onSurfaceVariant',
+        children: [
+            resourceLabel,
+            Overlay({
+                child: Widget.Box({
+                    vpack: 'center',
+                    className: 'bar-batt',
+                    homogeneous: true,
+                    children: [
+                        MaterialIcon(icon, 'small'),
+                    ],
+                }),
+                overlays: [resourceCircProg]
+            }),
+        ],
+        setup: (self) => self
+            .poll(5000, () => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
+                    resourceLabel.label = `${Math.round(Number(output))}%`;
+                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                }).catch(print))
+        ,
+    });
+    return widget;
+}
+
+const BarGroup = ({ child }) => Widget.Box({
+    className: 'bar-group-margin bar-sides',
+    children: [
+        Widget.Box({
+            className: 'bar-group bar-group-standalone bar-group-pad-system',
+            children: [child],
+        }),
+    ]
+});
+
 export const ModuleSystem = () => Widget.EventBox({
-    onScrollUp: () => execAsync('hyprctl dispatch workspace -1'),
-    onScrollDown: () => execAsync('hyprctl dispatch workspace +1'),
+    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
+    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
-        className: 'bar-group-margin bar-sides',
+        className: 'spacing-h-5',
         children: [
-            Widget.Box({
-                className: 'bar-group bar-group-standalone bar-group-pad-system spacing-h-5',
-                children: [
-                    BarClock(),
-                    Utilities(),
-                    BarBattery(),
+            BarGroup({ child: BarClock() }),
+            Stack({
+                transition: 'slide_up_down',
+                transitionDuration: 150,
+                items: [
+                    ['laptop', Box({
+                        className: 'spacing-h-5', children: [
+                            BarGroup({ child: Utilities() }),
+                            BarGroup({ child: BarBattery() }),
+                        ]
+                    })],
+                    ['desktop', Box({
+                        className: 'spacing-h-5', children: [
+                            BarGroup({ child: BarResource('RAM usage', 'memory', `free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
+                            BarGroup({ child: BarResource('Swap usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
+                        ]
+                    })],
                 ],
-            }),
+                setup: (stack) => Utils.timeout(10, () => {
+                    if (!Battery.available) stack.shown = 'desktop';
+                    else stack.shown = 'laptop';
+                })
+            })
         ]
     })
 });

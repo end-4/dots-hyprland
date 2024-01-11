@@ -29,7 +29,7 @@ globalThis['Utils'] = Utils; ///////////////////////////
 // globalThis['Bluetooth'] = Bluetooth;
 // globalThis['Hyprland'] = Hyprland;
 globalThis['Mpris'] = Mpris;
-// globalThis['Network'] = Network;
+globalThis['Network'] = Network;
 globalThis['Notifications'] = Notifications;
 // globalThis['SystemTray'] = SystemTray;
 

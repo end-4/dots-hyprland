@@ -108,18 +108,32 @@ $notif_surface: $t_background;
     background: $activecolor;
 }
 
-.notif-closeall-btn {
+.notif-listaction-btn {
     @include notif-rounding;
-    padding: 0.341rem 0.341rem;
+    padding: 0.341rem 0.682rem;
 }
 
-.notif-closeall-btn:hover,
-.notif-closeall-btn:focus {
+.notif-listaction-btn:hover,
+.notif-listaction-btn:focus {
     background-color: $hovercolor;
 }
 
-.notif-closeall-btn:active {
+.notif-listaction-btn:active {
     background-color: $activecolor;
+}
+
+.notif-listaction-btn-enabled {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.notif-listaction-btn-enabled:hover,
+.notif-listaction-btn-enabled:focus {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+}
+
+.notif-listaction-btn-enabled:active {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 75%);
 }
 
 .osd-notif {
@@ -170,11 +184,11 @@ $notif_surface: $t_background;
 
 .notif-action-low:focus,
 .notif-action-low:hover {
-    background-color: mix($t_onSurfaceVariant, $t_surface, 18%);
+    background-color: $hovercolor;
 }
 
 .notif-action-low:active {
-    background-color: mix($t_onSurfaceVariant, $t_surface, 23%);
+    background-color: $activecolor;
 }
 
 .notif-action-normal {
@@ -184,11 +198,11 @@ $notif_surface: $t_background;
 
 .notif-action-normal:focus,
 .notif-action-normal:hover {
-    background-color: mix($t_onSurfaceVariant, $t_surface, 18%);
+    background-color: $hovercolor;
 }
 
 .notif-action-normal:active {
-    background-color: mix($t_onSurfaceVariant, $t_surface, 23%);
+    background-color: $activecolor;
 }
 
 .notif-action-critical {

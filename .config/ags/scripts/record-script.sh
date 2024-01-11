@@ -17,6 +17,6 @@ if [[ "$(pidof wf-recorder)" == "" ]]; then
         wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$(slurp)" & disown
     fi
 else
-    /usr/bin/kill --signal SIGINT wf-recorder
+    kill --signal SIGINT wf-recorder
     notify-send "Recording Stopped" "Stopped" -a 'record-script.sh'
 fi

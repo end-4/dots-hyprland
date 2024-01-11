@@ -1,12 +1,13 @@
-const { Gtk, Gdk } = imports.gi;
-import { App, Utils, Widget } from '../../imports.js';
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
-import { chatGPTView, chatGPTCommands, chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
-import { waifuView, waifuCommands, waifuCallAPI, waifuTabIcon } from './apis/waifu.js';
+import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 
 const APIS = [
     {
@@ -19,7 +20,7 @@ const APIS = [
     },
     {
         name: 'Waifus',
-        sendCommand: waifuCallAPI,
+        sendCommand: waifuSendMessage,
         contentWidget: waifuView,
         commandBar: waifuCommands,
         tabIcon: waifuTabIcon,
@@ -32,12 +33,12 @@ APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enable
 export const chatEntry = Entry({
     className: 'sidebar-chat-entry',
     hexpand: true,
-    connections: [
-        [ChatGPT, (self) => {
+    setup: (self) => self
+        .hook(ChatGPT, (self) => {
             if (APIS[currentApiId].name != 'ChatGPT') return;
             self.placeholderText = (ChatGPT.key.length > 0 ? 'Ask a question...' : 'Enter OpenAI API Key...');
-        }, 'hasKey']
-    ],
+        }, 'hasKey')
+    ,
     onChange: (entry) => {
         chatSendButton.toggleClassName('sidebar-chat-send-available', entry.text.length > 0);
     },
@@ -83,7 +84,7 @@ function switchToTab(id) {
     apiContentStack.shown = APIS[id].name;
     apiCommandStack.shown = APIS[id].name;
     chatEntry.placeholderText = APIS[id].placeholderText,
-    currentApiId = id;
+        currentApiId = id;
 }
 const apiSwitcher = Box({
     homogeneous: true,
@@ -104,10 +105,10 @@ const apiSwitcher = Box({
 })
 
 export default Widget.Box({
-    properties: [
-        ['nextTab', () => switchToTab(Math.min(currentApiId + 1, APIS.length - 1))],
-        ['prevTab', () => switchToTab(Math.max(0, currentApiId-1))],
-    ],
+    attribute: {
+        'nextTab': () => switchToTab(Math.min(currentApiId + 1, APIS.length - 1)),
+        'prevTab': () => switchToTab(Math.max(0, currentApiId - 1)),
+    },
     vertical: true,
     className: 'spacing-v-10',
     homogeneous: false,

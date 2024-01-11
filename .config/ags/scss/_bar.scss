@@ -4,10 +4,7 @@
 $black: black;
 $white: white;
 $bar_ws_width: 1.774rem;
-$bar_subgroup_bg: mix($surfaceVariant, $primary, 89%);
-@if $darkmode ==true {
-    $bar_subgroup_bg: $surfaceVariant;
-}
+$bar_subgroup_bg: $surfaceVariant;
 
 @mixin bar-group-rounding {
     @include small-rounding;
@@ -45,8 +42,7 @@ $bar_subgroup_bg: mix($surfaceVariant, $primary, 89%);
 }
 
 .bar-group-pad-system {
-    padding-left: 1.023rem;
-    padding-right: 0.341rem;
+    padding: 0rem 0.341rem;
 }
 
 .bar-group-pad-music {
@@ -129,6 +125,10 @@ $bar_subgroup_bg: mix($surfaceVariant, $primary, 89%);
     min-height: 0.341rem;
     background-color: mix($t_surface, $t_onSurface, 90%);
     margin: 0rem 0.341rem;
+}
+
+.bar-clock-box {
+    margin: 0rem 0.682rem;
 }
 
 .bar-clock {

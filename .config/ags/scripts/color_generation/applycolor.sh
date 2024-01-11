@@ -147,7 +147,6 @@ apply_ags() {
     ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');"
 }
 
-# apply_svgs
 apply_ags &
 apply_hyprland &
 apply_gtk &
