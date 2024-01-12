@@ -22,49 +22,52 @@ export const chatGPTTabIcon = Box({
     ],
 });
 
-const chatGPTInfo = Box({
-    vertical: true,
-    className: 'spacing-v-15',
-    children: [
-        Icon({
-            hpack: 'center',
-            className: 'sidebar-chat-welcome-logo',
-            icon: `${App.configDir}/assets/openai-logomark.svg`,
-            setup: (self) => Utils.timeout(1, () => {
-                const styleContext = self.get_style_context();
-                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
-            })
-        }),
-        Label({
-            className: 'txt txt-title-small sidebar-chat-welcome-txt',
-            wrap: true,
-            justify: Gtk.Justification.CENTER,
-            label: 'ChatGPT',
-        }),
-        Box({
-            className: 'spacing-h-5',
-            hpack: 'center',
-            children: [
-                Label({
-                    className: 'txt-smallie txt-subtext',
-                    wrap: true,
-                    justify: Gtk.Justification.CENTER,
-                    label: 'Powered by OpenAI',
-                }),
-                Button({
-                    className: 'txt-subtext txt-norm icon-material',
-                    label: 'info',
-                    tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.',
-                    setup: setupCursorHoverInfo,
-                }),
-            ]
-        }),
-    ]
-})
+const ChatGPTInfo = () => {
+    const openAiLogo = Icon({
+        hpack: 'center',
+        className: 'sidebar-chat-welcome-logo',
+        icon: `${App.configDir}/assets/openai-logomark.svg`,
+        setup: (self) => Utils.timeout(1, () => {
+            const styleContext = self.get_style_context();
+            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+            self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
+        })
+    });
+    return Box({
+        vertical: true,
+        className: 'spacing-v-15',
+        children: [
+            openAiLogo,
+            Label({
+                className: 'txt txt-title-small sidebar-chat-welcome-txt',
+                wrap: true,
+                justify: Gtk.Justification.CENTER,
+                label: 'ChatGPT',
+            }),
+            Box({
+                className: 'spacing-h-5',
+                hpack: 'center',
+                children: [
+                    Label({
+                        className: 'txt-smallie txt-subtext',
+                        wrap: true,
+                        justify: Gtk.Justification.CENTER,
+                        label: 'Powered by OpenAI',
+                    }),
+                    Button({
+                        className: 'txt-subtext txt-norm icon-material',
+                        label: 'info',
+                        tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.',
+                        setup: setupCursorHoverInfo,
+                    }),
+                ]
+            }),
+        ]
+    });
+}
 
-export const chatGPTSettings = MarginRevealer({
+export const ChatGPTSettings = () => MarginRevealer({
     transition: 'slide_down',
     revealChild: true,
     extraSetup: (self) => self
@@ -124,7 +127,7 @@ export const chatGPTSettings = MarginRevealer({
     })
 });
 
-export const openaiApiKeyInstructions = Box({
+export const OpenaiApiKeyInstructions = () => Box({
     homogeneous: true,
     children: [Revealer({
         transition: 'slide_down',
@@ -158,9 +161,9 @@ export const chatGPTWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            chatGPTInfo,
-            openaiApiKeyInstructions,
-            chatGPTSettings, ``
+            ChatGPTInfo(),
+            OpenaiApiKeyInstructions(),
+            ChatGPTSettings(),
         ]
     })
 });

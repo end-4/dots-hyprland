@@ -10,7 +10,7 @@ import GraphWidget from './graph.js'
 export default () => Widget.Window({
     name: 'desktopbackground',
     anchor: ['top', 'bottom', 'left', 'right'],
-    layer: 'background',
+    layer: 'bottom',
     exclusivity: 'normal',
     visible: true,
     child: Widget.Overlay({

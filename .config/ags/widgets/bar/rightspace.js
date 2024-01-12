@@ -32,8 +32,8 @@ export const ModuleRightSpace = () => {
             Audio.speaker.volume -= 0.03;
             Indicator.popup(1);
         },
-        // onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
-        // onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
+        onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
+        onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
         onPrimaryClick: () => App.toggleWindow('sideright'),
         onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
         onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),

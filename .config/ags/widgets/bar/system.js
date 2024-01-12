@@ -5,7 +5,6 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -14,7 +13,7 @@ const BATTERY_LOW = 20;
 
 const BatBatteryProgress = () => {
     const _updateProgress = (circprog) => { // Set circular progress value
-        circprog.css = `font-size: ${Battery.percent}px;`
+        circprog.css = `font-size: ${Math.abs(Battery.percent)}px;`
 
         circprog.toggleClassName('bar-batt-circprog-low', Battery.percent <= BATTERY_LOW);
         circprog.toggleClassName('bar-batt-circprog-full', Battery.charged);
@@ -187,9 +186,18 @@ const BarGroup = ({ child }) => Widget.Box({
     ]
 });
 
+const moveToRelativeWorkspace = async (self, num) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage(`dispatch workspace ${num > 0 ? '+' : ''}${num}`);
+    } catch {
+        console.log(`TODO: Sway workspace ${num > 0 ? '+' : ''}${num}`);
+    }
+}
+
 export const ModuleSystem = () => Widget.EventBox({
-    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
-    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
+    onScrollUp: (self) => moveToRelativeWorkspace(self, -1),
+    onScrollDown: (self) => moveToRelativeWorkspace(self, +1),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
         className: 'spacing-h-5',

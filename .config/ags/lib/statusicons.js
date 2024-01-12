@@ -6,7 +6,6 @@ import { MaterialIcon } from './materialicon.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import { languages } from '../data/languages.js';
 
 // A guessing func to try to support langs not listed in data/languages.js
@@ -163,57 +162,62 @@ export const NetworkIndicator = () => Widget.Stack({
 });
 
 const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
-    var initLangs = [];
-    var languageStackArray = [];
-    var currentKeyboard;
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        var initLangs = [];
+        var languageStackArray = [];
+        var currentKeyboard;
 
-    const updateCurrentKeyboards = () => {
-        currentKeyboard = JSON.parse(Utils.exec('hyprctl -j devices')).keyboards
-            .find(device => device.name === 'at-translated-set-2-keyboard');
-        if (currentKeyboard) {
-            initLangs = currentKeyboard.layout.split(',').map(lang => lang.trim());
-        }
-        languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
-            const lang = languages.find(lang => lang.layout == initLangs[i]);
-            if (!lang) return [
-                initLangs[i],
-                Widget.Label({ label: initLangs[i] })
-            ];
-            return [
-                lang.layout,
-                Widget.Label({ label: (useFlag ? lang.flag : lang.layout) })
-            ];
+        const updateCurrentKeyboards = () => {
+            currentKeyboard = JSON.parse(Utils.exec('hyprctl -j devices')).keyboards
+                .find(device => device.name === 'at-translated-set-2-keyboard');
+            if (currentKeyboard) {
+                initLangs = currentKeyboard.layout.split(',').map(lang => lang.trim());
+            }
+            languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
+                const lang = languages.find(lang => lang.layout == initLangs[i]);
+                if (!lang) return [
+                    initLangs[i],
+                    Widget.Label({ label: initLangs[i] })
+                ];
+                return [
+                    lang.layout,
+                    Widget.Label({ label: (useFlag ? lang.flag : lang.layout) })
+                ];
+            });
+        };
+        updateCurrentKeyboards();
+        const widgetRevealer = Widget.Revealer({
+            transition: 150,
+            transition: 'slide_left',
+            revealChild: languageStackArray.length > 1,
         });
-    };
-    updateCurrentKeyboards();
-    const widgetRevealer = Widget.Revealer({
-        transition: 150,
-        transition: 'slide_left',
-        revealChild: languageStackArray.length > 1,
-    });
-    const widgetContent = Widget.Stack({
-        transition: 'slide_up_down',
-        items: [
-            ...languageStackArray,
-            ['undef', Widget.Label({ label: '?' })]
-        ],
-        setup: (self) => self.hook(Hyprland, (stack, kbName, layoutName) => {
-            if (!kbName) {
-                return;
-            }
-            var lang = languages.find(lang => layoutName.includes(lang.name));
-            if (lang) {
-                widgetContent.shown = lang.layout;
-            }
-            else { // Attempt to support langs not listed
-                lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
-                if (!lang) stack.shown = 'undef';
-                else stack.shown = lang[0];
-            }
-        }, 'keyboard-layout'),
-    });
-    widgetRevealer.child = widgetContent;
-    return widgetRevealer;
+        const widgetContent = Widget.Stack({
+            transition: 'slide_up_down',
+            items: [
+                ...languageStackArray,
+                ['undef', Widget.Label({ label: '?' })]
+            ],
+            setup: (self) => self.hook(Hyprland, (stack, kbName, layoutName) => {
+                if (!kbName) {
+                    return;
+                }
+                var lang = languages.find(lang => layoutName.includes(lang.name));
+                if (lang) {
+                    widgetContent.shown = lang.layout;
+                }
+                else { // Attempt to support langs not listed
+                    lang = languageStackArray.find(lang => isLanguageMatch(lang[0], layoutName));
+                    if (!lang) stack.shown = 'undef';
+                    else stack.shown = lang[0];
+                }
+            }, 'keyboard-layout'),
+        });
+        widgetRevealer.child = widgetContent;
+        return widgetRevealer;
+    } catch {
+        return null;
+    }
 }
 
 const OptionalKeyboardLayout = async () => {

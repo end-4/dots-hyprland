@@ -1,7 +1,6 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { showMusicControls } from '../../variables.js';
@@ -30,9 +29,18 @@ const TrackProgress = () => {
     })
 }
 
+const moveToRelativeWorkspace = async (self, num) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage(`dispatch workspace ${num > 0 ? '+' : ''}${num}`);
+    } catch {
+        console.log(`TODO: Sway workspace ${num > 0 ? '+' : ''}${num}`);
+    }
+}
+
 export const ModuleMusic = () => Widget.EventBox({ // TODO: use cairo to make button bounce smaller on click
-    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
-    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
+    onScrollUp: (self) => moveToRelativeWorkspace(self, -1),
+    onScrollDown: (self) => moveToRelativeWorkspace(self, +1),
     onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
     onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
     onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),
