@@ -39,7 +39,7 @@ const OptionalOverview = async () => {
     try {
         return (await import('./overview_hyprland.js')).default();
     } catch {
-        return null;
+        return Widget.Box({});
         // return (await import('./overview_hyprland.js')).default();
     }
 };

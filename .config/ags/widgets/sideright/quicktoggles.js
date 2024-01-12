@@ -4,7 +4,6 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from "../../lib/statusicons.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
@@ -62,24 +61,30 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     ...props,
 });
 
-export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => Widget.Button({
-    className: 'txt-small sidebar-iconbutton',
-    tooltipText: `${name}`,
-    onClicked: (button) => {
-        // Set the value to 1 - value
-        Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
-            const currentOption = JSON.parse(result).int;
-            execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
-            button.toggleClassName('sidebar-button-active', currentOption == 0);
-        }).catch(print);
-    },
-    child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
-    setup: button => {
-        button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
-        setupCursorHover(button);
-    },
-    ...props,
-})
+export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}) => {
+    try {
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: `${name}`,
+            onClicked: (button) => {
+                // Set the value to 1 - value
+                Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
+                    const currentOption = JSON.parse(result).int;
+                    execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
+                    button.toggleClassName('sidebar-button-active', currentOption == 0);
+                }).catch(print);
+            },
+            child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
+            setup: button => {
+                button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
+                setupCursorHover(button);
+            },
+            ...props,
+        })
+    } catch {
+        return null;
+    }
+}
 
 export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make this work
     attribute: {
@@ -104,31 +109,38 @@ export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make th
     ...props,
 });
 
-export const ModuleInvertColors = (props = {}) => Widget.Button({
-    className: 'txt-small sidebar-iconbutton',
-    tooltipText: 'Color inversion',
-    onClicked: (button) => {
-        // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        Hyprland.sendMessage('j/getoption decoration:screen_shader')
-            .then((output) => {
-                const shaderPath = JSON.parse(output)["str"].trim();
-                console.log(output)
-                console.log(shaderPath)
-                if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-                    execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader '[[EMPTY]]'`]).catch(print);
-                    button.toggleClassName('sidebar-button-active', false);
-                }
-                else {
-                    Hyprland.sendMessage(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
-                        .catch(print);
-                    button.toggleClassName('sidebar-button-active', true);
-                }
-            })
-    },
-    child: MaterialIcon('invert_colors', 'norm'),
-    setup: setupCursorHover,
-    ...props,
-})
+export const ModuleInvertColors = async (props = {}) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: 'Color inversion',
+            onClicked: (button) => {
+                // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
+                Hyprland.sendMessage('j/getoption decoration:screen_shader')
+                    .then((output) => {
+                        const shaderPath = JSON.parse(output)["str"].trim();
+                        console.log(output)
+                        console.log(shaderPath)
+                        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
+                            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader '[[EMPTY]]'`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', false);
+                        }
+                        else {
+                            Hyprland.sendMessage(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
+                                .catch(print);
+                            button.toggleClassName('sidebar-button-active', true);
+                        }
+                    })
+            },
+            child: MaterialIcon('invert_colors', 'norm'),
+            setup: setupCursorHover,
+            ...props,
+        })
+    } catch {
+        return null;
+    };
+}
 
 export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
     attribute: {
@@ -173,9 +185,9 @@ export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this
 export const ModuleReloadIcon = (props = {}) => Widget.Button({
     ...props,
     className: 'txt-small sidebar-iconbutton',
-    tooltipText: 'Reload Hyprland',
+    tooltipText: 'Reload Environment config',
     onClicked: () => {
-        execAsync(['bash', '-c', 'hyprctl reload &']);
+        execAsync(['bash', '-c', 'hyprctl reload || swaymsg reload &']);
         App.toggleWindow('sideright');
     },
     child: MaterialIcon('refresh', 'norm'),

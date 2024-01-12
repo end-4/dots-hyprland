@@ -1,6 +1,5 @@
 "use strict";
 // Import
-const { GLib } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Widgets

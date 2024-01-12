@@ -1,42 +1,41 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import { RoundedCorner } from "../../lib/roundedcorner.js";
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
 
-const WindowTitle = async () => Widget.Scrollable({
-    hexpand: true, vexpand: true,
-    hscroll: 'automatic', vscroll: 'never',
-    child: Widget.Box({
-        vertical: true,
-        children: [
-            Widget.Label({
-                xalign: 0,
-                className: 'txt-smaller bar-topdesc txt',
-                setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
-                    label.label = Hyprland.active.client.class.length === 0 ? 'Desktop' : Hyprland.active.client.class;
-                }),
-            }),
-            Widget.Label({
-                xalign: 0,
-                className: 'txt txt-smallie',
-                setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
-                    label.label = Hyprland.active.client.title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : Hyprland.active.client.title;
-                }),
-            })
-        ]
-    })
-})
-
-const OptionalWindowTitle = async () => {
+const WindowTitle = async () => {
     try {
-        return await WindowTitle();
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        return Widget.Scrollable({
+            hexpand: true, vexpand: true,
+            hscroll: 'automatic', vscroll: 'never',
+            child: Widget.Box({
+                vertical: true,
+                children: [
+                    Widget.Label({
+                        xalign: 0,
+                        className: 'txt-smaller bar-topdesc txt',
+                        setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
+                            label.label = Hyprland.active.client.class.length === 0 ? 'Desktop' : Hyprland.active.client.class;
+                        }),
+                    }),
+                    Widget.Label({
+                        xalign: 0,
+                        className: 'txt txt-smallie',
+                        setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
+                            label.label = Hyprland.active.client.title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : Hyprland.active.client.title;
+                        }),
+                    })
+                ]
+            })
+        });
     } catch {
         return null;
     }
-};
-const OptionalWindowTitleInstance = await OptionalWindowTitle();
+}
+
+const OptionalWindowTitleInstance = await WindowTitle();
 
 export const ModuleLeftSpace = () => Widget.EventBox({
     onScrollUp: () => {

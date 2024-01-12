@@ -416,8 +416,8 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-todo-add {
-    @include full-rounding;
     @include menu_decel;
+    @include small-rounding;
     min-width: 1.705rem;
     min-height: 1.705rem;
     color: $onSecondaryContainer;
@@ -435,7 +435,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-todo-add-available {
     @include menu_decel;
-    @include full-rounding;
+    @include small-rounding;
     min-width: 1.705rem;
     min-height: 1.705rem;
     background-color: $primary;

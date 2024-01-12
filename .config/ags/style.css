@@ -1735,9 +1735,9 @@ tooltip {
   background-color: #52696f; }
 
 .sidebar-todo-add {
-  border-radius: 9999px;
-  -gtk-outline-radius: 9999px;
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
   min-width: 1.705rem;
   min-height: 1.705rem;
   color: #cde7ed;
@@ -1752,8 +1752,8 @@ tooltip {
 
 .sidebar-todo-add-available {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
-  border-radius: 9999px;
-  -gtk-outline-radius: 9999px;
+  border-radius: 0.818rem;
+  -gtk-outline-radius: 0.818rem;
   min-width: 1.705rem;
   min-height: 1.705rem;
   background-color: #85e3f4;

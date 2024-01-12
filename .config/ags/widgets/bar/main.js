@@ -2,29 +2,25 @@ const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
 import { ModuleLeftSpace } from "./leftspace.js";
-import { ModuleMusic } from "./music.js";
 import { ModuleRightSpace } from "./rightspace.js";
+import { ModuleMusic } from "./music.js";
 import { ModuleSystem } from "./system.js";
 const OptionalWorkspaces = async () => {
     try {
         return (await import('./workspaces_hyprland.js')).default();
     } catch {
         // return (await import('./workspaces_sway.js')).default();
-        return Box({});
+        return null;
     }
 };
 
 const left = Widget.Box({
     className: 'bar-sidemodule',
-    children: [
-        ModuleMusic()
-    ],
+    children: [ ModuleMusic()],
 });
 
 const center = Widget.Box({
-    children: [
-        await OptionalWorkspaces(),
-    ],
+    children: [await OptionalWorkspaces()],
 });
 
 const right = Widget.Box({
