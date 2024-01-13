@@ -6,34 +6,43 @@ import { MarginRevealer } from '../../lib/advancedwidgets.js';
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
 
-const OsdValue = (name, labelSetup, progressSetup, props = {}) => Box({ // Volume
-    ...props,
-    vertical: true,
-    className: 'osd-bg osd-value',
-    hexpand: true,
-    children: [
-        Box({
-            vexpand: true,
-            children: [
-                Label({
-                    xalign: 0, yalign: 0, hexpand: true,
-                    className: 'osd-label',
-                    label: `${name}`,
-                }),
-                Label({
-                    hexpand: false, className: 'osd-value-txt',
-                    setup: labelSetup,
-                }),
-            ]
-        }),
-        ProgressBar({
-            className: 'osd-progress',
-            hexpand: true,
-            vertical: false,
-            setup: progressSetup,
-        })
-    ],
-});
+const OsdValue = (name, labelSetup, progressSetup, props = {}) => {
+    const valueName = Label({
+        xalign: 0, yalign: 0, hexpand: true,
+        className: 'osd-label',
+        label: `${name}`,
+    });
+    const valueNumber =Label({
+        hexpand: false, className: 'osd-value-txt',
+        setup: labelSetup,
+    });
+    return Box({ // Volume
+        ...props,
+        vertical: true,
+        hexpand: true,
+        className: 'osd-bg osd-value',
+        attribute: {
+            'disable': () => {
+                valueNumber.label = '󰖭';
+            }
+        },
+        children: [
+            Box({
+                vexpand: true,
+                children: [
+                    valueName,
+                    valueNumber,
+                ]
+            }),
+            ProgressBar({
+                className: 'osd-progress',
+                hexpand: true,
+                vertical: false,
+                setup: progressSetup,
+            })
+        ],
+    });
+}
 
 const brightnessIndicator = OsdValue('Brightness',
     (self) => self
