@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-- **I have read the instructions** and I have a problem with branch: 
+- **I have read the instructions**
 ---
 ## The issue
 - (describe your problem here)
