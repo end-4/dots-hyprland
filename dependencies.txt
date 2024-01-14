@@ -1,4 +1,4 @@
-coreutils curl rsync wget ripgrep gojq npm meson typescript gjs sassc
+coreutils cliphist curl rsync wget ripgrep gojq npm meson typescript gjs sassc
 python-build python-material-color-utilities python-pillow python-poetry python-pywal hyprland-git xorg-xrandr
 cava pavucontrol wireplumber libdbusmenu-gtk3 plasma-browser-integration playerctl
 webp-pixbuf-loader gtk-layer-shell gtk3 gobject-introspection upower fuzzel yad ydotool
