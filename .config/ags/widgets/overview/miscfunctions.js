@@ -53,7 +53,7 @@ export function launchCustomCommand(command) {
         execAsync([`bash`, `-c`, `systemctl suspend`]).catch(print);
     }
     else if (args[0] == '>logout') { // Log out
-        execAsync([`bash`, `-c`, `loginctl terminate-user $USER`]).catch(print);
+        execAsync([`bash`, `-c`, `killall Hyprland`]).catch(print);
     }
 }
 
