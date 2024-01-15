@@ -5,3 +5,4 @@ webp-pixbuf-loader gtk-layer-shell gtk3 gobject-introspection upower fuzzel yad 
 polkit-gnome gnome-keyring gnome-control-center blueberry networkmanager brightnessctl wlsunset-git gnome-bluetooth-3.0
 wayland-idle-inhibitor-git swayidle swaylock-effects-git wlogout wl-clipboard hyprpicker-git grim tesseract slurp
 adw-gtk3-git gradience-git swww fontconfig lexend-fonts-git ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd fish foot starship
+flatpak discord 
