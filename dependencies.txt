@@ -2,6 +2,6 @@ coreutils cliphist curl rsync wget ripgrep gojq npm meson typescript gjs sassc
 python-build python-material-color-utilities python-pillow python-poetry python-pywal hyprland-git xorg-xrandr
 cava pavucontrol wireplumber libdbusmenu-gtk3 plasma-browser-integration playerctl
 webp-pixbuf-loader gtk-layer-shell gtk3 gobject-introspection upower fuzzel yad ydotool
-polkit-gnome gnome-keyring gnome-control-center blueberry networkmanager brightnessctl wlsunset-git gnome-bluetooth-3.0
+polkit-gnome gnome-keyring gnome-control-center blueberry networkmanager brightnessctl wlsunset gnome-bluetooth-3.0
 wayland-idle-inhibitor-git swayidle swaylock-effects-git wlogout wl-clipboard hyprpicker-git grim tesseract slurp
 adw-gtk3-git gradience-git swww fontconfig lexend-fonts-git ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd fish foot starship
