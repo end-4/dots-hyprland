@@ -1,6 +1,5 @@
 <div align="center">
     <h1>「 illogical_impulse 」</h1>
-    <h3> Next-level hype with AGS </h3>
 </div>
 
 ## Description
