@@ -6,7 +6,6 @@ function moveClientToWorkspace(address, workspace) {
 }
 
 export function dumpToWorkspace(from, to) {
-    console.log('dump', from, to);
     if (from == to) return;
     Hyprland.clients.forEach(client => {
         if (client.workspace.id == from) {

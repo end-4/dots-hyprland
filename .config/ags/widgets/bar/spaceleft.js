@@ -1,6 +1,5 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import { RoundedCorner } from "../../lib/roundedcorner.js";
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
 
@@ -37,7 +36,7 @@ const WindowTitle = async () => {
 
 const OptionalWindowTitleInstance = await WindowTitle();
 
-export const ModuleLeftSpace = () => Widget.EventBox({
+export default () => Widget.EventBox({
     onScrollUp: () => {
         Indicator.popup(1); // Since the brightness and speaker are both on the same window
         Brightness.screen_value += 0.05;
@@ -52,7 +51,7 @@ export const ModuleLeftSpace = () => Widget.EventBox({
     child: Widget.Box({
         homogeneous: false,
         children: [
-            RoundedCorner('topleft', { className: 'corner-black' }),
+            Widget.Box({ className: 'bar-corner-spacing' }),
             Widget.Overlay({
                 overlays: [
                     Widget.Box({ hexpand: true }),

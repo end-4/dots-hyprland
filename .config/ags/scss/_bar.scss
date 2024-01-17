@@ -331,6 +331,11 @@ $bar_subgroup_bg: $surfaceVariant;
     background-color: $onSurfaceVariant;
 }
 
+.bar-corner-spacing {
+    min-width: $rounding_large;
+    min-height: $rounding_large;
+}
+
 .corner {
     background-color: $t_background;
     @include large-rounding;

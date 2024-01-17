@@ -1,11 +1,7 @@
-const { Gdk, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { execAsync, exec } = Utils;
 
 import TimeAndLaunchesWidget from './timeandlaunches.js'
 import SystemWidget from './system.js'
-import GraphWidget from './graph.js'
 
 export default () => Widget.Window({
     name: 'desktopbackground',
@@ -19,7 +15,6 @@ export default () => Widget.Window({
             vexpand: true,
         }),
         overlays: [
-            // GraphWidget(),
             TimeAndLaunchesWidget(),
             SystemWidget(),
         ],

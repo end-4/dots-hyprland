@@ -11,7 +11,6 @@ import { MaterialIcon } from '../../lib/materialicon.js';
 
 function expandTilde(path) {
     if (path.startsWith('~')) {
-        console.log(GLib.get_home_dir() + path.slice(1));
         return GLib.get_home_dir() + path.slice(1);
     } else {
         return path;
@@ -120,8 +119,6 @@ export const ModuleInvertColors = async (props = {}) => {
                 Hyprland.sendMessage('j/getoption decoration:screen_shader')
                     .then((output) => {
                         const shaderPath = JSON.parse(output)["str"].trim();
-                        console.log(output)
-                        console.log(shaderPath)
                         if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
                             execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader '[[EMPTY]]'`]).catch(print);
                             button.toggleClassName('sidebar-button-active', false);

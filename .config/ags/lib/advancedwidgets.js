@@ -40,7 +40,6 @@ export const MarginRevealer = ({
                     child.css = `margin-top: -${child.get_allocated_height()}px;`;
             },
             'toggle': () => {
-                console.log('toggle');
                 if (widget.attribute.revealChild) widget.attribute.hide();
                 else widget.attribute.show();
             },

@@ -823,6 +823,10 @@ tooltip {
   min-height: 0.409rem;
   background-color: #bfc8ca; }
 
+.bar-corner-spacing {
+  min-width: 1.705rem;
+  min-height: 1.705rem; }
+
 .corner {
   background-color: #0b0f10;
   border-radius: 1.705rem;
@@ -2275,6 +2279,20 @@ tooltip {
 
 .notif-action-critical:active {
   background-color: #566e73; }
+
+@keyframes flyin-top {
+  from {
+    margin-top: -2.795rem; }
+  to {
+    margin-top: 0rem; } }
+
+@keyframes flyin-bottom {
+  from {
+    margin-top: 4.841rem;
+    margin-bottom: -4.841rem; }
+  to {
+    margin-bottom: 0rem;
+    margin-top: 0rem; } }
 
 .osd-music {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
