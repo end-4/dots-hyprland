@@ -211,7 +211,13 @@ else ask_Gabarito=true
 fi
 if $ask_Gabarito;then showfun install-Gabarito;v install-Gabarito;fi
 
-showfun install-OneUI4-Icons ;v install-OneUI4-Icons
+if $(test -d /usr/local/share/icons/OneUI); then
+  echo -e "\e[33m[$0]: Icon pack \"OneUI\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
+  ask_OneUI=$ask
+else ask_OneUI=true
+fi
+if $ask_OneUI;then showfun install-OneUI;v install-OneUI;fi
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying\e[97m\n"
 
