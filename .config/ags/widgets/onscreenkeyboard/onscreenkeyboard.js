@@ -18,7 +18,7 @@ execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
     execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)])
-        .then(console.log('Released all keys'))
+        .then(console.log('[OSK] Released all keys'))
         .catch(print);
 }
 var modsPressed = false;

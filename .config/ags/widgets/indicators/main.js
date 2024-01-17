@@ -5,7 +5,7 @@ import MusicControls from './musiccontrols.js';
 import ColorScheme from './colorscheme.js';
 import NotificationPopups from './notificationpopups.js';
 
-export default (monitor) => Widget.Window({
+export default (monitor = 0) => Widget.Window({
     name: `indicator${monitor}`,
     monitor,
     className: 'indicator',

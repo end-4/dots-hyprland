@@ -166,7 +166,7 @@ export const SearchAndWindows = () => {
             _appSearchResults = Applications.query(text);
 
             // Calculate
-            if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a small workaround.
+            if (startsWithNumber(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
                     const fullResult = eval(text);
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
