@@ -12,7 +12,8 @@ else
         exit 0
     fi
 
-    ags run-js "wallpaper.set('${imgpath}')"
+    ags run-js "wallpaper.set('')"
+    sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
 fi
 
 # Generate colors for ags n stuff
