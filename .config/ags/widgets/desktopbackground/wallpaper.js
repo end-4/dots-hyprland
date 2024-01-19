@@ -16,13 +16,17 @@ const MAX_WORKSPACES = 10;
 const WALLPAPER_OFFSCREEN_X = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_WIDTH;
 const WALLPAPER_OFFSCREEN_Y = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_HEIGHT;
 
+function clamp(x, min, max) {
+    return Math.min(Math.max(x, min), max);
+}
+
 export default (monitor = 0) => {
     const wallpaperImage = Widget.DrawingArea({
         attribute: {
             pixbuf: undefined,
         },
         css: `transition: 2000ms cubic-bezier(0.05, 0.7, 0.1, 1); font-size: 1px;`,
-        setup: (self) => {  
+        setup: (self) => {
             self.set_size_request(SCREEN_WIDTH, SCREEN_HEIGHT);
             self
                 .hook(Hyprland.active.workspace, (self) =>
@@ -33,7 +37,7 @@ export default (monitor = 0) => {
                     const styleContext = self.get_style_context();
                     const workspace = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
                     Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
-                        -(WALLPAPER_OFFSCREEN_X / (MAX_WORKSPACES - 1) * (workspace - 1)),
+                        -(WALLPAPER_OFFSCREEN_X / (MAX_WORKSPACES - 1) * (clamp(workspace, 1, MAX_WORKSPACES) - 1)),
                         -WALLPAPER_OFFSCREEN_Y / 2);
                     cr.paint();
                 })
