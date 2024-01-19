@@ -5,7 +5,7 @@ import TimeAndLaunchesWidget from './timeandlaunches.js'
 import SystemWidget from './system.js'
 
 export default (monitor) => Widget.Window({
-    name: 'desktopbackground',
+    name: `desktopbackground${monitor}`,
     // anchor: ['top', 'bottom', 'left', 'right'],
     layer: 'background',
     exclusivity: 'ignore',
