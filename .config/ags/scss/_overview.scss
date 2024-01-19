@@ -116,7 +116,7 @@
 .overview-tasks-window {
     @include normal-rounding;
     @include menu_decel;
-    background-color: $l_t_secondaryContainer;
+    background-color: $t_surfaceVariant;
     color: $onSecondaryContainer;
     border: 0.068rem solid $t_t_t_onSecondaryContainer;
 }

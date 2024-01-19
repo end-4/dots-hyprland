@@ -32,24 +32,26 @@ class TodoService extends Service {
         return this._todoJson;
     }
 
-    add(content) {
-        this._todoJson.push({ content, done: false });
+    _save() {
         Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
             .catch(print);
+    }
+
+    add(content) {
+        this._todoJson.push({ content, done: false });
+        this._save();
         this.emit('updated');
     }
 
     check(index) {
         this._todoJson[index].done = true;
-        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
-            .catch(print);
+        this._save();
         this.emit('updated');
     }
 
     uncheck(index) {
         this._todoJson[index].done = false;
-        Utils.writeFile(JSON.stringify(this._todoJson), this._todoPath)
-            .catch(print);
+        this._save();
         this.emit('updated');
     }
 

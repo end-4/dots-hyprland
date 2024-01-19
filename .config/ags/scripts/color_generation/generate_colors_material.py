@@ -34,7 +34,7 @@ elif len(sys.argv) > 1 and sys.argv[1] == '--color':
     newtheme = themeFromSourceColor(argbFromHex(colorstr))
 else:
     # try:
-    imagePath = subprocess.check_output("swww query | awk -F 'image: ' '{print $2}'", shell=True)
+    imagePath = subprocess.check_output("ags run-js 'wallpaper.get(0)'", shell=True)
     imagePath = imagePath[:-1].decode("utf-8") 
     img = Image.open(imagePath)
     basewidth = 64
