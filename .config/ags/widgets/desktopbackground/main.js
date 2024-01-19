@@ -1,23 +1,24 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
+import WallpaperImage from './wallpaper.js';
 import TimeAndLaunchesWidget from './timeandlaunches.js'
 import SystemWidget from './system.js'
 
-export default () => Widget.Window({
+export default (monitor) => Widget.Window({
     name: 'desktopbackground',
-    anchor: ['top', 'bottom', 'left', 'right'],
-    layer: 'bottom',
-    exclusivity: 'normal',
+    // anchor: ['top', 'bottom', 'left', 'right'],
+    layer: 'background',
+    exclusivity: 'ignore',
     visible: true,
+    // child: Wallpaper(monitor),
     child: Widget.Overlay({
-        child: Widget.Box({
-            hexpand: true,
-            vexpand: true,
-        }),
+        child: WallpaperImage(monitor),
         overlays: [
             TimeAndLaunchesWidget(),
             SystemWidget(),
         ],
-        setup: (self) => self.set_overlay_pass_through(self.get_children()[1], true),
+        setup: (self) => {
+            self.set_overlay_pass_through(self.get_children()[1], true);
+        },
     }),
 });

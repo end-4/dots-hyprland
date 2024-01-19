@@ -6,7 +6,7 @@ import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
 import { showMusicControls } from '../../variables.js';
 
 function trimTrackTitle(title) {
-    cleanRegexes = [
+    const cleanRegexes = [
         /【[^】]*】/,         // Touhou n weeb stuff
         /\[FREE DOWNLOAD\]/, // F-777
     ];

@@ -34,7 +34,7 @@ function applyStyle() {
 applyStyle();
 
 const Windows = () => [
-    DesktopBackground(),
+    forMonitors(DesktopBackground),
     // Dock(),
     Overview(),
     forMonitors(Indicator),

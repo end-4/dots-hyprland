@@ -139,6 +139,13 @@
     font-style: italic;
 }
 
+.btn-primary {
+    @include full-rounding;
+    background-color: $primary;
+    color: $onPrimary;
+    padding: 0.682rem 1.023rem;
+}
+
 .titlefont {
     @include titlefont;
 }
