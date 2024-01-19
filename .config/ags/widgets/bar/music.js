@@ -10,7 +10,7 @@ function trimTrackTitle(title) {
         /【[^】]*】/,         // Touhou n weeb stuff
         /\[FREE DOWNLOAD\]/, // F-777
     ];
-    cleanRegexes.forEach((expr) => cleanedTitle.replace(expr, ''));
+    cleanRegexes.forEach((expr) => title.replace(expr, ''));
     return title;
 }
 
