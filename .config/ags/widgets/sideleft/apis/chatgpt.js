@@ -27,13 +27,13 @@ const ChatGPTInfo = () => {
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
         icon: `${App.configDir}/assets/openai-logomark.svg`,
-        setup: (self) => Utils.timeout(1, () => {
+        setup: (self) => Utils.timeout(400, () => { // A long wait, but no one's going to open sidebar right on init anyway
             const styleContext = self.get_style_context();
             const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
             const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
             self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
         })
-    });
+    })
     return Box({
         vertical: true,
         className: 'spacing-v-15',
@@ -92,7 +92,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                     { value: 0.50, name: 'Balanced', },
                     { value: 1.00, name: 'Creative', },
                 ],
-                initIndex: 1,
+                initIndex: 2,
                 onChange: (value, name) => {
                     ChatGPT.temperature = value;
                 },
