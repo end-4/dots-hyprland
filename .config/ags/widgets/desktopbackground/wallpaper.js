@@ -10,7 +10,7 @@ import Wallpaper from '../../services/wallpaper.js';
 import { setupCursorHover } from '../../lib/cursorhover.js';
 
 const SWITCHWALL_SCRIPT_PATH = `${App.configDir}/scripts/color_generation/switchwall.sh`;
-const WALLPAPER_ZOOM_SCALE = 1.2; // For scrolling when we switch workspace
+const WALLPAPER_ZOOM_SCALE = 1.25; // For scrolling when we switch workspace
 const MAX_WORKSPACES = 10;
 
 const WALLPAPER_OFFSCREEN_X = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_WIDTH;
@@ -24,20 +24,33 @@ export default (monitor = 0) => {
     const wallpaperImage = Widget.DrawingArea({
         attribute: {
             pixbuf: undefined,
+            workspace: 1,
+            sideleft: 0,
+            sideright: 0,
+            updatePos: (self) => {
+                self.setCss(`font-size: ${self.attribute.workspace - self.attribute.sideleft + self.attribute.sideright}px;`)
+            },
         },
-        css: `transition: 2000ms cubic-bezier(0.05, 0.7, 0.1, 1); font-size: 1px;`,
+        className: 'bg-wallpaper-transition',
         setup: (self) => {
             self.set_size_request(SCREEN_WIDTH, SCREEN_HEIGHT);
             self
-                .hook(Hyprland.active.workspace, (self) =>
-                    self.setCss(`font-size: ${Hyprland.active.workspace.id}px;`)
-                )
+                .hook(Hyprland.active.workspace, (self) => {
+                    self.attribute.workspace = Hyprland.active.workspace.id
+                    self.attribute.updatePos(self);
+                })
+                // .hook(App, (box, name, visible) => { // Update on open
+                //     if (self.attribute[name] === undefined) return;
+                //     self.attribute[name] = (visible ? 1 : 0);
+                //     self.attribute.updatePos(self);
+                // })
                 .on('draw', (self, cr) => {
                     if (!self.attribute.pixbuf) return;
                     const styleContext = self.get_style_context();
                     const workspace = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
+                    // Draw
                     Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
-                        -(WALLPAPER_OFFSCREEN_X / (MAX_WORKSPACES - 1) * (clamp(workspace, 1, MAX_WORKSPACES) - 1)),
+                        -(WALLPAPER_OFFSCREEN_X / (MAX_WORKSPACES + 1) * (clamp(workspace, 0, MAX_WORKSPACES + 1))),
                         -WALLPAPER_OFFSCREEN_Y / 2);
                     cr.paint();
                 })
