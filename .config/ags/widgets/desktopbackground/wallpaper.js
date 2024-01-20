@@ -10,7 +10,7 @@ import Wallpaper from '../../services/wallpaper.js';
 import { setupCursorHover } from '../../lib/cursorhover.js';
 
 const SWITCHWALL_SCRIPT_PATH = `${App.configDir}/scripts/color_generation/switchwall.sh`;
-const WALLPAPER_ZOOM_SCALE = 1.1; // For scrolling when we switch workspace
+const WALLPAPER_ZOOM_SCALE = 1.2; // For scrolling when we switch workspace
 const MAX_WORKSPACES = 10;
 
 const WALLPAPER_OFFSCREEN_X = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_WIDTH;
@@ -69,8 +69,9 @@ export default (monitor = 0) => {
         children: [
             Label({
                 hpack: 'center',
+                justification: 'center',
                 className: 'txt-large',
-                label: `No wallpaper loaded`,
+                label: `No wallpaper loaded.\nAn image ≥ ${SCREEN_WIDTH * WALLPAPER_ZOOM_SCALE} × ${SCREEN_HEIGHT * WALLPAPER_ZOOM_SCALE} is recommended.`,
             }),
             Button({
                 hpack: 'center',
