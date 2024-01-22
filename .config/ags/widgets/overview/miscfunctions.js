@@ -66,9 +66,9 @@ export function execAndClose(command, terminal) {
         execAsync(command).catch(print);
 }
 
-export function startsWithNumber(str) {
-    var pattern = /^\d/;
-    return pattern.test(str);
+export function couldBeMath(str) {
+    const regex = /^[0-9.+*/-]/;
+    return regex.test(str);
 }
 
 export function expandTilde(path) {
