@@ -5,7 +5,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 const { execAsync, exec } = Utils;
-import { execAndClose, expandTilde, hasUnterminatedBackslash, startsWithNumber, launchCustomCommand, ls } from './miscfunctions.js';
+import { execAndClose, expandTilde, hasUnterminatedBackslash, couldBeMath, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
@@ -104,7 +104,7 @@ export const SearchAndWindows = () => {
             const isAction = text.startsWith('>');
             const isDir = (['/', '~'].includes(entry.text[0]));
 
-            if (startsWithNumber(text)) { // Eval on typing is dangerous, this is a workaround
+            if (couldBeMath(text)) { // Eval on typing is dangerous, this is a workaround
                 try {
                     const fullResult = eval(text);
                     // copy
@@ -166,7 +166,7 @@ export const SearchAndWindows = () => {
             _appSearchResults = Applications.query(text);
 
             // Calculate
-            if (startsWithNumber(text)) { // Eval on typing is dangerous; this is a small workaround.
+            if (couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
                     const fullResult = eval(text);
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
