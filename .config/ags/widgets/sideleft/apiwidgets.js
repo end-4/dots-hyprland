@@ -11,12 +11,12 @@ import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon
 
 const APIS = [
     {
-        name: 'ChatGPT',
+        name: 'Assistant',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
         tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message ChatGPT',
+        placeholderText: 'Message assistant',
     },
     {
         name: 'Waifus',

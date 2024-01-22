@@ -5,7 +5,7 @@ const { Box, Button, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
-import { setupCursorHover } from "../../../lib/cursorhover.js";
+import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
 import WaifuService from '../../../services/waifus.js';
 
 async function getImageViewerApp(preferredApp) {
@@ -220,10 +220,62 @@ const WaifuImage = (taglist) => {
     return thisBlock;
 }
 
+const WaifuInfo = () => {
+    const waifuLogo = Label({
+        hpack: 'center',
+        className: 'sidebar-chat-welcome-logo',
+        label: 'photo_library',
+    })
+    return Box({
+        vertical: true,
+        vexpand: true,
+        className: 'spacing-v-15',
+        children: [
+            waifuLogo,
+            Label({
+                className: 'txt txt-title-small sidebar-chat-welcome-txt',
+                wrap: true,
+                justify: Gtk.Justification.CENTER,
+                label: 'Waifus',
+            }),
+            Box({
+                className: 'spacing-h-5',
+                hpack: 'center',
+                children: [
+                    Label({
+                        className: 'txt-smallie txt-subtext',
+                        wrap: true,
+                        justify: Gtk.Justification.CENTER,
+                        label: 'Powered by waifu.im',
+                    }),
+                    Button({
+                        className: 'txt-subtext txt-norm icon-material',
+                        label: 'info',
+                        tooltipText: 'A free Waifu API. An alternative to waifu.pics.',
+                        setup: setupCursorHoverInfo,
+                    }),
+                ]
+            }),
+        ]
+    });
+}
+
+const waifuWelcome = Box({
+    vexpand: true,
+    homogeneous: true,
+    child: Box({
+        className: 'spacing-v-15',
+        vpack: 'center',
+        vertical: true,
+        children: [
+            WaifuInfo(),
+        ]
+    })
+});
+
 const waifuContent = Box({
     className: 'spacing-v-15',
     vertical: true,
-    vexpand: true,
     attribute: {
         'map': new Map(),
     },
@@ -251,6 +303,7 @@ export const waifuView = Scrollable({
     child: Box({
         vertical: true,
         children: [
+            waifuWelcome,
             waifuContent,
         ]
     }),
