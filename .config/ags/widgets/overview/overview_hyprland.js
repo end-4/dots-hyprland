@@ -278,6 +278,7 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     setup: (box) => {
         box
             // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
+            //     console.log(name)
             //     if (["changefloatingmode", "movewindow"].includes(name))
             //         box.attribute.update(box);
             // }, 'event')

@@ -35,10 +35,11 @@ export default (monitor = 0) => {
         setup: (self) => {
             self.set_size_request(SCREEN_WIDTH, SCREEN_HEIGHT);
             self
-                .hook(Hyprland.active.workspace, (self) => {
-                    self.attribute.workspace = Hyprland.active.workspace.id
-                    self.attribute.updatePos(self);
-                })
+                // TODO: reduced updates using timeouts to reduce lag
+                // .hook(Hyprland.active.workspace, (self) => {
+                //     self.attribute.workspace = Hyprland.active.workspace.id
+                //     self.attribute.updatePos(self);
+                // })
                 // .hook(App, (box, name, visible) => { // Update on open
                 //     if (self.attribute[name] === undefined) return;
                 //     self.attribute[name] = (visible ? 1 : 0);

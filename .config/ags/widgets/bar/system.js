@@ -90,7 +90,7 @@ const BarBattery = () => Box({
             transitionDuration: 150,
             revealChild: false,
             transition: 'slide_right',
-            child: MaterialIcon('bolt', 'norm'),
+            child: MaterialIcon('bolt', 'norm', {tooltipText: "Charging"}),
             setup: (self) => self.hook(Battery, revealer => {
                 self.revealChild = Battery.charging;
             }),
