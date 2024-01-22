@@ -115,7 +115,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                     ConfigToggle({
                         icon: 'description',
                         name: 'Assistant prompt',
-                        desc: 'Tells ChatGPT\n  1. It\'s a sidebar assistant on Linux\n  2. Be short and concise\n  3. Use markdown features extensively\nLeave this off for a vanilla ChatGPT experience.',
+                        desc: 'Tells ChatGPT to be brief,\nuse bullet points, and let\nit know it\'s a sidebar assistant',
                         initValue: ChatGPT.assistantPrompt,
                         onChange: (self, newValue) => {
                             ChatGPT.assistantPrompt = newValue;
