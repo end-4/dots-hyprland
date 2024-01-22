@@ -23,16 +23,10 @@ export const chatGPTTabIcon = Box({
 });
 
 const ChatGPTInfo = () => {
-    const openAiLogo = Icon({
+    const openAiLogo = Label({
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
-        icon: `${App.configDir}/assets/openai-logomark.svg`,
-        setup: (self) => Utils.timeout(400, () => { // A long wait, but no one's going to open sidebar right on init anyway
-            const styleContext = self.get_style_context();
-            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-            self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
-        })
+        label: 'forum',
     })
     return Box({
         vertical: true,
@@ -43,7 +37,7 @@ const ChatGPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'ChatGPT',
+                label: 'Assistant',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -153,7 +147,7 @@ export const OpenaiApiKeyInstructions = () => Box({
     })]
 });
 
-export const chatGPTWelcome = Box({
+const chatGPTWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
