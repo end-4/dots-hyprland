@@ -1,7 +1,7 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, CenterBox, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
@@ -86,22 +86,26 @@ function switchToTab(id) {
     chatEntry.placeholderText = APIS[id].placeholderText,
         currentApiId = id;
 }
-const apiSwitcher = Box({
-    homogeneous: true,
-    children: [
-        Box({
-            className: 'sidebar-chat-apiswitcher spacing-h-5',
-            hpack: 'center',
-            children: APIS.map((api, id) => Button({
-                child: api.tabIcon,
-                tooltipText: api.name,
-                setup: setupCursorHover,
-                onClicked: () => {
-                    switchToTab(id);
-                }
-            })),
-        }),
-    ]
+const apiSwitcher = CenterBox({
+    centerWidget: Box({
+        className: 'sidebar-chat-apiswitcher spacing-h-5',
+        hpack: 'center',
+        children: APIS.map((api, id) => Button({
+            child: api.tabIcon,
+            tooltipText: api.name,
+            setup: setupCursorHover,
+            onClicked: () => {
+                switchToTab(id);
+            }
+        })),
+    }),
+    endWidget: Button({
+        hpack: 'end',
+        className: 'txt-subtext txt-norm icon-material',
+        label: 'lightbulb',
+        tooltipText: 'Use PageUp/PageDown to switch between API pages',
+        setup: setupCursorHoverInfo,
+    }),
 })
 
 export default Widget.Box({
