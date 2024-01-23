@@ -6,15 +6,9 @@ import ModuleSpaceRight from "./spaceright.js";
 import { ModuleMusic } from "./music.js";
 import { ModuleSystem } from "./system.js";
 import { RoundedCorner, dummyRegion, enableClickthrough } from "../../lib/roundedcorner.js";
-const OptionalWorkspaces = async () => {
-    try {
-        return (await import('./workspaces_hyprland.js')).default();
-    } catch {
-        // return (await import('./workspaces_sway.js')).default();
-        return null;
-    }
-};
-const optionalWorkspacesInstance = await OptionalWorkspaces();
+import OptionalWorkspaces from "./workspaces_hyprland.js";
+//import OptionalWorkspaces from "./workspaces_sway.js";
+//importing as low level is required for some reason for multiple monitors to run
 
 export const Bar = (monitor = 0) => {
     const left = Widget.Box({
@@ -23,7 +17,7 @@ export const Bar = (monitor = 0) => {
     });
 
     const center = Widget.Box({
-        children: [optionalWorkspacesInstance],
+        children: [OptionalWorkspaces()],
     });
 
     const right = Widget.Box({
