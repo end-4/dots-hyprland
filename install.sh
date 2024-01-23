@@ -1,71 +1,9 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 export base="$(pwd)"
+source ./scriptdata/functions
+source ./scriptdata/installers
 
-function try { "$@" || sleep 0; }
-function v() {
-  echo -e "####################################################"
-  echo -e "\e[34m[$0]: Next command:\e[0m"
-  echo -e "\e[32m$@\e[0m"
-  execute=true
-  if $ask;then
-    while true;do
-      echo -e "\e[34mExecute? \e[0m"
-      echo "  y = Yes"
-      echo "  e = Exit now"
-      echo "  s = Skip this command (NOT recommended - your setup might not work correctly)"
-      echo "  yesforall = Yes and don't ask again; NOT recommended unless you really sure"
-      read -p "====> " p
-      case $p in
-        [yY]) echo -e "\e[34mOK, executing...\e[0m" ;break ;;
-        [eE]) echo -e "\e[34mExiting...\e[0m" ;exit ;break ;;
-        [sS]) echo -e "\e[34mAlright, skipping this one...\e[0m" ;execute=false ;break ;;
-        "yesforall") echo -e "\e[34mAlright, won't ask again. Executing...\e[0m"; ask=false ;break ;;
-        *) echo -e "\e[31mPlease enter [y/e/s/yesforall].\e[0m";;
-      esac
-    done
-  fi
-  if $execute;then x "$@";else
-    echo -e "\e[33m[$0]: Skipped \"$@\"\e[0m"
-  fi
-}
-# When use v() for a defined function, use x() INSIDE its definition to catch errors.
-function x() {
-  if "$@";then cmdstatus=0;else cmdstatus=1;fi # 0=normal; 1=failed; 2=failed but ignored
-  while [ $cmdstatus == 1 ] ;do
-    echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed."
-    echo -e "You may need to resolve the problem manually BEFORE repeating this command.\e[0m"
-    echo "  r = Repeat this command (DEFAULT)"
-    echo "  e = Exit now"
-    echo "  i = Ignore this error and continue (your setup might not work correctly)"
-    read -p " [R/e/i]: " p
-    case $p in
-      [iI]) echo -e "\e[34mAlright, ignore and continue...\e[0m";cmdstatus=2;;
-      [eE]) echo -e "\e[34mAlright, will exit.\e[0m";break;;
-      *) echo -e "\e[34mOK, repeating...\e[0m"
-         if "$@";then cmdstatus=0;else cmdstatus=1;fi
-         ;;
-    esac
-  done
-  case $cmdstatus in
-    0) echo -e "\e[34m[$0]: Command \"\e[32m$@\e[34m\" finished.\e[0m";;
-    1) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed. Exiting...\e[0m";exit 1;;
-    2) echo -e "\e[31m[$0]: Command \"\e[32m$@\e[31m\" has failed but ignored by user.\e[0m";;
-  esac
-}
-function showfun() {
-  echo -e "\e[34m[$0]: The definition of function \"$1\" is as follows:\e[0m"
-  printf "\e[32m"
-  type -a $1
-  printf "\e[97m"
-}
-#####################################################################################
-# For debugging
-# ask=false
-# mkdir -p /tmp/test1
-# v mkdir /tmp/test1
-# 
-# echo "debug part fin";exit
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
 startask (){
@@ -101,20 +39,8 @@ set -e
 printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[97m"
 
 # Each line as an element of the array $pkglist
-readarray -t pkglist < dependencies.txt
+readarray -t pkglist < ./scriptdata/dependencies.txt
 # NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
-
-# yay will be installed as AUR package and upgrade there, no need to build here in cache/yay .
-install-yay() {
-  x sudo pacman -Sy --needed --noconfirm base-devel
-  x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
-  x cd /tmp/buildyay
-  x makepkg -o
-  x makepkg -se
-  x makepkg -i --noconfirm
-  x cd $base
-  rm -rf /tmp/buildyay
-}
 
 if ! command -v yay >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
@@ -127,65 +53,14 @@ if $ask;then
   for i in "${pkglist[@]}";do v yay -S --needed $i;done
 else
   # execute for all elements of the array $pkglist in one line
-  v yay -S --needed --noconfirm "${pkglist[*]}"
+  v yay -S --needed --noconfirm ${pkglist[*]}
 fi
 
-v sudo usermod -aG video "$(whoami)"
-v sudo usermod -aG input "$(whoami)"
+v sudo usermod -aG video,input "$(whoami)"
 
 #####################################################################################
-printf "\e[36m[$0]: 2. Installing AGS and fonts from git repo\e[97m\n"
+printf "\e[36m[$0]: 2. Installing parts from source repo\e[97m\n"
 sleep 1
-
-install-ags (){
-  x mkdir -p $base/cache/ags
-  x cd $base/cache/ags
-  try git init -b main
-  try git remote add origin https://github.com/Aylur/ags.git
-  x git pull origin main && git submodule update --init --recursive
-  x npm install
-  x meson setup build
-  x meson install -C build
-  x cd $base
-}
-install-Rubik (){
-  x mkdir -p $base/cache/Rubik
-  x cd $base/cache/Rubik
-  try git init -b main
-  try git remote add origin https://github.com/googlefonts/rubik.git
-  x git pull origin main && git submodule update --init --recursive
-	x sudo mkdir -p /usr/local/share/fonts/TTF/
-	x sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
-	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
-	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
-  x fc-cache -fv
-  x cd $base
-}
-install-Gabarito (){
-  x mkdir -p $base/cache/Gabarito
-  x cd $base/cache/Gabarito
-  try git init -b main
-  try git remote add origin https://github.com/naipefoundry/gabarito.git
-  x git pull origin main && git submodule update --init --recursive
-	x sudo mkdir -p /usr/local/share/fonts/TTF/
-	x sudo cp fonts/ttf/Gabarito*.ttf /usr/local/share/fonts/TTF/
-	x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
-	x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
-  x fc-cache -fv
-  x cd $base
-}
-install-OneUI (){
-  x mkdir -p $base/cache/OneUI4-Icons
-  x cd $base/cache/OneUI4-Icons
-  try git init -b main
-  try git remote add origin https://github.com/end-4/OneUI4-Icons.git
-  x git pull origin main && git submodule update --init --recursive
-  x sudo mkdir -p /usr/local/share/icons
-  x sudo cp -r OneUI /usr/local/share/icons
-  x sudo cp -r OneUI-dark /usr/local/share/icons
-  x sudo cp -r OneUI-light /usr/local/share/icons
-  x cd $base
-}
 
 if command -v ags >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
@@ -245,6 +120,8 @@ test -f $target || { \
 # since the files here come from different places, not only about one program.
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
 
+# Prevent hyprland from not fully loaded
+sleep 2&&hyprctl reload
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
