@@ -6,17 +6,27 @@ const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
+import Gemini from '../../services/gemini.js';
+import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 
 const APIS = [
     {
-        name: 'Assistant',
+        name: 'Assistant (ChatGPT)',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
         tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message assistant',
+        placeholderText: 'Message ChatGPT...',
+    },
+    {
+        name: 'Assistant (Gemini)',
+        sendCommand: geminiSendMessage,
+        contentWidget: geminiView,
+        commandBar: geminiCommands,
+        tabIcon: geminiTabIcon,
+        placeholderText: 'Message Gemini...',
     },
     {
         name: 'Waifus',
@@ -35,8 +45,12 @@ export const chatEntry = Entry({
     hexpand: true,
     setup: (self) => self
         .hook(ChatGPT, (self) => {
-            if (APIS[currentApiId].name != 'ChatGPT') return;
-            self.placeholderText = (ChatGPT.key.length > 0 ? 'Ask a question...' : 'Enter OpenAI API Key...');
+            if (APIS[currentApiId].name != 'Assistant (ChatGPT)') return;
+            self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
+        }, 'hasKey')
+        .hook(Gemini, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (Gemini)') return;
+            self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
         }, 'hasKey')
     ,
     onChange: (entry) => {
