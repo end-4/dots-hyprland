@@ -162,7 +162,8 @@ const WaifuImage = (taglist) => {
                 blockImage.set_size_request(widgetWidth, widgetHeight);
                 const showImage = () => {
                     downloadState.shown = 'done';
-                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock.attribute.imagePath, widgetWidth, widgetHeight, false);
+                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(thisBlock.attribute.imagePath, widgetWidth, widgetHeight);
+                    // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock.attribute.imagePath, widgetWidth, widgetHeight, false);
 
                     blockImage.set_size_request(widgetWidth, widgetHeight);
                     blockImage.connect("draw", (widget, cr) => {
@@ -380,6 +381,21 @@ const clearChat = () => {
     }
 }
 
+const DummyTag = (width, height, url, color = '#9392A6') => {
+    return { // Needs timeout or inits won't make it
+        status: 200,
+        url: url,
+        extension: '',
+        signature: 0,
+        source: url,
+        dominant_color: color,
+        is_nsfw: false,
+        width: width,
+        height: height,
+        tags: ['/test'],
+    };
+}
+
 export const sendMessage = (text) => {
     // Do something on send
     // Commands
@@ -388,20 +404,20 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/test')) {
             const newImage = WaifuImage(['/test']);
             waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update({ // Needs timeout or inits won't make it
-                // This is an image uploaded to my github repo
-                status: 200,
-                url: 'https://picsum.photos/400/600',
-                extension: '',
-                signature: 0,
-                source: 'https://picsum.photos/400/600',
-                dominant_color: '#9392A6',
-                is_nsfw: false,
-                width: 300,
-                height: 200,
-                tags: ['/test'],
-            }, true));
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
+                DummyTag(300, 200, 'https://picsum.photos/600/400'),
+                true
+            ));
         }
+        else if (text.startsWith('/chino')) {
+            const newImage = WaifuImage(['/chino']);
+            waifuContent.add(newImage);
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
+                DummyTag(300, 400, 'https://chino.pages.dev/chino', '#B2AEF3'),
+                true
+            ));
+        }
+
     }
     else WaifuService.fetch(text);
 }
