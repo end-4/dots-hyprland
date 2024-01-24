@@ -41,7 +41,7 @@ const moveToRelativeWorkspace = async (self, num) => {
     }
 }
 
-export const ModuleMusic = () => {
+export default () => {
     // TODO: use cairo to make button bounce smaller on click, if that's possible
     const playingState = Widget.Box({ // Wrap a box cuz overlay can't have margins itself
         homogeneous: true,
