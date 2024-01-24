@@ -16,7 +16,7 @@ const ColorBox = ({
     ]
 })
 
-const colorschemeContent = Box({
+const ColorschemeContent = () => Box({
     className: 'osd-colorscheme spacing-v-5',
     vertical: true,
     hpack: 'center',
@@ -44,7 +44,7 @@ const colorschemeContent = Box({
 export default () => Widget.Revealer({
     transition: 'slide_down',
     transitionDuration: 200,
-    child: colorschemeContent,
+    child: ColorschemeContent(),
     setup: (self) => self.hook(showColorScheme, (revealer) => {
         revealer.revealChild = showColorScheme.value;
     }),
