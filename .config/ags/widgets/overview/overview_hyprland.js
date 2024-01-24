@@ -275,19 +275,18 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
             }).catch(print);
         }
     },
-    setup: (box) => {
-        box
-            // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
-            //     console.log(name)
-            //     if (["changefloatingmode", "movewindow"].includes(name))
-            //         box.attribute.update(box);
-            // }, 'event')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
-            .hook(App, (box, name, visible) => { // Update on open
-                if (name == 'overview' && visible) box.attribute.update(box);
-            })
-    },
+    setup: (box) => box
+        // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
+        //     console.log(name)
+        //     if (["changefloatingmode", "movewindow"].includes(name))
+        //         box.attribute.update(box);
+        // }, 'event')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
+        .hook(App, (box, name, visible) => { // Update on open
+            if (name == 'overview' && visible) box.attribute.update(box);
+        })
+    ,
 });
 
 

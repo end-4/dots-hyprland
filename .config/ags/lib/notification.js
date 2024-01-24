@@ -3,7 +3,6 @@
 const { GLib, Gdk, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
-const { lookUpIcon, timeout } = Utils;
 const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./materialicon.js";
 import { setupCursorHover } from "./cursorhover.js";
@@ -38,9 +37,9 @@ const NotificationIcon = (notifObject) => {
     }
 
     let icon = 'NO_ICON';
-    if (lookUpIcon(notifObject.appIcon))
+    if (Utils.lookUpIcon(notifObject.appIcon))
         icon = notifObject.appIcon;
-    if (lookUpIcon(notifObject.appEntry))
+    if (Utils.lookUpIcon(notifObject.appEntry))
         icon = notifObject.appEntry;
 
     return Box({
@@ -58,7 +57,7 @@ const NotificationIcon = (notifObject) => {
                         const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
                         const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
                         self.size = Math.max(width * 0.7, height * 0.7, 1); // im too lazy to add another box lol
-                    }),
+                    }, self),
                 })
                 :
                 MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
@@ -84,11 +83,11 @@ export default ({
         notificationBox.setCss(middleClickClose);
         Utils.timeout(200, () => {
             wholeThing.revealChild = false;
-        });
+        }, wholeThing);
         Utils.timeout(400, () => {
             command();
             wholeThing.destroy();
-        });
+        }, wholeThing);
     }
     const widget = EventBox({
         onHover: (self) => {
@@ -382,11 +381,11 @@ export default ({
                     }
                     Utils.timeout(200, () => {
                         wholeThing.revealChild = false
-                    });
+                    }, wholeThing);
                     Utils.timeout(400, () => {
                         command();
                         wholeThing.destroy();
-                    });
+                    }, wholeThing);
                 }
                 else {
                     self.setCss(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
