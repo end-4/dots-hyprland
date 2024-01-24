@@ -100,6 +100,7 @@ function switchToTab(id) {
     chatEntry.placeholderText = APIS[id].placeholderText,
         currentApiId = id;
 }
+
 const apiSwitcher = CenterBox({
     centerWidget: Box({
         className: 'sidebar-chat-apiswitcher spacing-h-5',
