@@ -1,11 +1,12 @@
 const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
-import ModuleSpaceLeft from "./spaceleft.js";
-import ModuleSpaceRight from "./spaceright.js";
-import { ModuleMusic } from "./music.js";
-import { ModuleSystem } from "./system.js";
-import { RoundedCorner, dummyRegion, enableClickthrough } from "../../lib/roundedcorner.js";
+import WindowTitle from "./spaceleft.js";
+import Indicators from "./spaceright.js";
+import Music from "./music.js";
+import System from "./system.js";
+import { RoundedCorner, enableClickthrough } from "../../lib/roundedcorner.js";
+
 const OptionalWorkspaces = async () => {
     try {
         return (await import('./workspaces_hyprland.js')).default();
@@ -14,21 +15,29 @@ const OptionalWorkspaces = async () => {
         return null;
     }
 };
-const optionalWorkspacesInstance = await OptionalWorkspaces();
 
-export const Bar = (monitor = 0) => {
-    const left = Widget.Box({
+export const Bar = async (monitor = 0) => {
+    const SideModule = (children) => Widget.Box({
         className: 'bar-sidemodule',
-        children: [ModuleMusic()],
+        children: children,
     });
-
-    const center = Widget.Box({
-        children: [optionalWorkspacesInstance],
-    });
-
-    const right = Widget.Box({
-        className: 'bar-sidemodule',
-        children: [ModuleSystem()],
+    const barContent = Widget.CenterBox({
+        className: 'bar-bg',
+        setup: (self) => {
+            const styleContext = self.get_style_context();
+            const minHeight = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+            // execAsync(['bash', '-c', `hyprctl keyword monitor ,addreserved,${minHeight},0,0,0`]).catch(print);
+        },
+        startWidget: WindowTitle(),
+        centerWidget: Widget.Box({
+            className: 'spacing-h-4',
+            children: [
+                SideModule([Music()]),
+                await OptionalWorkspaces(),
+                SideModule([System()]),
+            ]
+        }),
+        endWidget: Indicators(),
     });
     return Widget.Window({
         monitor,
@@ -36,24 +45,7 @@ export const Bar = (monitor = 0) => {
         anchor: ['top', 'left', 'right'],
         exclusivity: 'exclusive',
         visible: true,
-        child: Widget.CenterBox({
-            className: 'bar-bg',
-            startWidget: ModuleSpaceLeft(),
-            endWidget: ModuleSpaceRight(),
-            centerWidget: Widget.Box({
-                className: 'spacing-h-4',
-                children: [
-                    left,
-                    center,
-                    right,
-                ]
-            }),
-            setup: (self) => {
-                const styleContext = self.get_style_context();
-                const minHeight = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                // execAsync(['bash', '-c', `hyprctl keyword monitor ,addreserved,${minHeight},0,0,0`]).catch(print);
-            }
-        }),
+        child: barContent,
     });
 }
 

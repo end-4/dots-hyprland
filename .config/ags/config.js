@@ -43,9 +43,9 @@ const Windows = () => [
     SideRight(),
     Osk(),
     Session(),
-    Bar(),
-    BarCornerTopleft(),
-    BarCornerTopright(),
+    // forMonitors(Bar),
+    // forMonitors(BarCornerTopleft),
+    // forMonitors(BarCornerTopright),
     forMonitors((id) => Corner(id, 'top left')),
     forMonitors((id) => Corner(id, 'top right')),
     forMonitors((id) => Corner(id, 'bottom left')),
@@ -62,3 +62,8 @@ export default {
     },
     windows: Windows().flat(1),
 };
+
+// Stuff that don't need to be toggled. And they're async so ugh...
+forMonitors(Bar);
+forMonitors(BarCornerTopleft);
+forMonitors(BarCornerTopright);

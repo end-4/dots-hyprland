@@ -121,25 +121,6 @@ const BarBattery = () => Box({
     ]
 });
 
-const BarResourceValue = (name, icon, command) => Widget.Box({
-    vpack: 'center',
-    className: 'bar-batt spacing-h-5',
-    children: [
-        MaterialIcon(icon, 'small'),
-        Widget.ProgressBar({ // Progress
-            vpack: 'center', hexpand: true,
-            className: 'bar-prog-batt',
-            setup: (self) => self.poll(5000, (progress) => execAsync(['bash', '-c', command])
-                .then((output) => {
-                    progress.value = Number(output) / 100;
-                    progress.tooltipText = `${name}: ${Number(output)}%`
-                })
-                .catch(print)
-            ),
-        }),
-    ]
-});
-
 const BarResource = (name, icon, command) => {
     const resourceLabel = Label({
         className: 'txt-smallie txt-onSurfaceVariant',
@@ -195,7 +176,7 @@ const moveToRelativeWorkspace = async (self, num) => {
     }
 }
 
-export const ModuleSystem = () => Widget.EventBox({
+export default () => Widget.EventBox({
     onScrollUp: (self) => moveToRelativeWorkspace(self, -1),
     onScrollDown: (self) => moveToRelativeWorkspace(self, +1),
     onPrimaryClick: () => App.toggleWindow('sideright'),
