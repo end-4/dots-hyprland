@@ -241,6 +241,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         xalign: 0,
                         className: 'txt txt-bold sidebar-chat-name',
                         wrap: true,
+                        useMarkup: true,
                         label: (message.role == 'user' ? USERNAME : modelName),
                     }),
                     messageContentBox,
