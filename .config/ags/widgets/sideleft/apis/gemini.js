@@ -14,6 +14,7 @@ import { markdownTest } from '../../../lib/md2pango.js';
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets`);
+const MODEL_NAME = `Gemini`;
 
 export const geminiTabIcon = Icon({
     hpack: 'center',
@@ -171,7 +172,7 @@ export const chatContent = Box({
         .hook(Gemini, (box, id) => {
             const message = Gemini.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message, 'Gemini'))
+            box.add(ChatMessage(message, MODEL_NAME))
         }, 'newMsg')
     ,
 });
