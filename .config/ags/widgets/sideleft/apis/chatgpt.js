@@ -52,7 +52,7 @@ const ChatGPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (ChatGPT)',
+                label: 'Assistant (ChatGPT 3.5)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -123,8 +123,8 @@ export const ChatGPTSettings = () => MarginRevealer({
                     }),
                     ConfigToggle({
                         icon: 'description',
-                        name: 'Assistant prompt',
-                        desc: 'Tells ChatGPT to be brief,\nuse bullet points, and let\nit know it\'s a sidebar assistant',
+                        name: 'Enhancements',
+                        desc: 'Tells ChatGPT:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
                         initValue: ChatGPT.assistantPrompt,
                         onChange: (self, newValue) => {
                             ChatGPT.assistantPrompt = newValue;
