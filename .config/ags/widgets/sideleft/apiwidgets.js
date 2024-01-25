@@ -13,7 +13,7 @@ import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon
 
 const APIS = [
     {
-        name: 'Assistant (ChatGPT)',
+        name: 'Assistant (ChatGPT 3.5)',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
@@ -21,7 +21,7 @@ const APIS = [
         placeholderText: 'Message ChatGPT...',
     },
     {
-        name: 'Assistant (Gemini)',
+        name: 'Assistant (Gemini Pro)',
         sendCommand: geminiSendMessage,
         contentWidget: geminiView,
         commandBar: geminiCommands,
@@ -45,11 +45,11 @@ export const chatEntry = Entry({
     hexpand: true,
     setup: (self) => self
         .hook(ChatGPT, (self) => {
-            if (APIS[currentApiId].name != 'Assistant (ChatGPT)') return;
+            if (APIS[currentApiId].name != 'Assistant (ChatGPT 3.5)') return;
             self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
         }, 'hasKey')
         .hook(Gemini, (self) => {
-            if (APIS[currentApiId].name != 'Assistant (Gemini)') return;
+            if (APIS[currentApiId].name != 'Assistant (Gemini Pro)') return;
             self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
         }, 'hasKey')
     ,

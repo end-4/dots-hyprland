@@ -48,7 +48,7 @@ const GeminiInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (Gemini)',
+                label: 'Assistant (Gemini Pro)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -110,8 +110,8 @@ export const GeminiSettings = () => MarginRevealer({
                 children: [
                     ConfigToggle({
                         icon: 'description',
-                        name: 'Assistant prompt',
-                        desc: 'Tells Gemini to be brief,\nuse bullet points, and let\nit know it\'s a sidebar assistant',
+                        name: 'Enhancements',
+                        desc: 'Tells Gemini:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
                         initValue: Gemini.assistantPrompt,
                         onChange: (self, newValue) => {
                             Gemini.assistantPrompt = newValue;
