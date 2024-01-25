@@ -5,7 +5,6 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { AnimatedCircProg } from "../../lib/animatedcircularprogress.js";
@@ -14,7 +13,7 @@ const BATTERY_LOW = 20;
 
 const BatBatteryProgress = () => {
     const _updateProgress = (circprog) => { // Set circular progress value
-        circprog.css = `font-size: ${Battery.percent}px;`
+        circprog.css = `font-size: ${Math.abs(Battery.percent)}px;`
 
         circprog.toggleClassName('bar-batt-circprog-low', Battery.percent <= BATTERY_LOW);
         circprog.toggleClassName('bar-batt-circprog-full', Battery.charged);
@@ -91,7 +90,7 @@ const BarBattery = () => Box({
             transitionDuration: 150,
             revealChild: false,
             transition: 'slide_right',
-            child: MaterialIcon('bolt', 'norm'),
+            child: MaterialIcon('bolt', 'norm', {tooltipText: "Charging"}),
             setup: (self) => self.hook(Battery, revealer => {
                 self.revealChild = Battery.charging;
             }),
@@ -118,25 +117,6 @@ const BarBattery = () => Box({
             overlays: [
                 BatBatteryProgress(),
             ]
-        }),
-    ]
-});
-
-const BarResourceValue = (name, icon, command) => Widget.Box({
-    vpack: 'center',
-    className: 'bar-batt spacing-h-5',
-    children: [
-        MaterialIcon(icon, 'small'),
-        Widget.ProgressBar({ // Progress
-            vpack: 'center', hexpand: true,
-            className: 'bar-prog-batt',
-            setup: (self) => self.poll(5000, (progress) => execAsync(['bash', '-c', command])
-                .then((output) => {
-                    progress.value = Number(output) / 100;
-                    progress.tooltipText = `${name}: ${Number(output)}%`
-                })
-                .catch(print)
-            ),
         }),
     ]
 });
@@ -187,9 +167,18 @@ const BarGroup = ({ child }) => Widget.Box({
     ]
 });
 
-export const ModuleSystem = () => Widget.EventBox({
-    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
-    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
+const switchToRelativeWorkspace = async (self, num) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage(`dispatch workspace ${num > 0 ? '+' : ''}${num}`);
+    } catch {
+        execAsync([`${App.configDir}/scripts/sway/swayToRelativeWs.sh`, `${num}`]).catch(print);
+    }
+}
+
+export default () => Widget.EventBox({
+    onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
+    onScrollDown: (self) => switchToRelativeWorkspace(self, +1),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
         className: 'spacing-h-5',

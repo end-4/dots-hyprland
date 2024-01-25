@@ -86,7 +86,7 @@ export const AnimatedCircProg = ({
             // area.css = `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`;
             Utils.timeout(20, () => {
                 area.css = `font-size: ${initTo}px;`;
-            })
+            }, area)
             // const transitionDistance = initTo - initFrom;
             // const oneStep = initAnimTime / initAnimPoints;
             // area.css = `

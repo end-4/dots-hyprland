@@ -5,7 +5,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
-import ChatGPT from '../../../services/chatgpt.js';
+import Gemini from '../../../services/gemini.js';
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
 import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
@@ -14,45 +14,42 @@ import { markdownTest } from '../../../lib/md2pango.js';
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets`);
+const MODEL_NAME = `Gemini`;
 
-export const chatGPTTabIcon = Icon({
+export const geminiTabIcon = Icon({
     hpack: 'center',
     className: 'sidebar-chat-apiswitcher-icon',
-    icon: `openai-symbolic`,
+    icon: `google-gemini-symbolic`,
     setup: (self) => Utils.timeout(513, () => { // stupid condition race
         const styleContext = self.get_style_context();
         const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
         const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-        // console.log(Math.round(Math.max(width, height, 1)));
         self.size = Math.max(width, height, 1) * 116 / 180;
-        // ↑ Why such a specific proportion? See https://openai.com/brand#logos
     })
-});
+})
 
-const ChatGPTInfo = () => {
-    const openAiLogo = Icon({
+const GeminiInfo = () => {
+    const geminiLogo = Icon({
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
-        icon: `openai-symbolic`,
+        icon: `google-gemini-symbolic`,
         setup: (self) => Utils.timeout(513, () => { // stupid condition race
             const styleContext = self.get_style_context();
             const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
             const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-            // console.log(Math.round(Math.max(width, height, 1)));
             self.size = Math.max(width, height, 1) * 116 / 180;
-            // ↑ Why such a specific proportion? See https://openai.com/brand#logos
         })
     });
     return Box({
         vertical: true,
         className: 'spacing-v-15',
         children: [
-            openAiLogo,
+            geminiLogo,
             Label({
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (ChatGPT 3.5)',
+                label: 'Assistant (Gemini Pro)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -62,12 +59,12 @@ const ChatGPTInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by OpenAI',
+                        label: 'Powered by Google',
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.',
+                        tooltipText: 'Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.',
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -76,14 +73,14 @@ const ChatGPTInfo = () => {
     });
 }
 
-export const ChatGPTSettings = () => MarginRevealer({
+export const GeminiSettings = () => MarginRevealer({
     transition: 'slide_down',
     revealChild: true,
     extraSetup: (self) => self
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(Gemini, (self) => Utils.timeout(200, () => {
             self.attribute.hide();
         }), 'newMsg')
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(Gemini, (self) => Utils.timeout(200, () => {
             self.attribute.show();
         }), 'clear')
     ,
@@ -95,7 +92,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 hpack: 'center',
                 icon: 'casino',
                 name: 'Randomness',
-                desc: 'ChatGPT\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
+                desc: 'Gemini\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
                 options: [
                     { value: 0.00, name: 'Precise', },
                     { value: 0.50, name: 'Balanced', },
@@ -103,7 +100,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 ],
                 initIndex: 2,
                 onChange: (value, name) => {
-                    ChatGPT.temperature = value;
+                    Gemini.temperature = value;
                 },
             }),
             ConfigGap({ vertical: true, size: 10 }), // Note: size can only be 5, 10, or 15 
@@ -113,21 +110,12 @@ export const ChatGPTSettings = () => MarginRevealer({
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({
-                        icon: 'cycle',
-                        name: 'Cycle models',
-                        desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                        initValue: ChatGPT.cycleModels,
-                        onChange: (self, newValue) => {
-                            ChatGPT.cycleModels = newValue;
-                        },
-                    }),
-                    ConfigToggle({
                         icon: 'description',
                         name: 'Enhancements',
-                        desc: 'Tells ChatGPT:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
-                        initValue: ChatGPT.assistantPrompt,
+                        desc: 'Tells Gemini:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
+                        initValue: Gemini.assistantPrompt,
                         onChange: (self, newValue) => {
-                            ChatGPT.assistantPrompt = newValue;
+                            Gemini.assistantPrompt = newValue;
                         },
                     }),
                 ]
@@ -136,14 +124,14 @@ export const ChatGPTSettings = () => MarginRevealer({
     })
 });
 
-export const OpenaiApiKeyInstructions = () => Box({
+export const GoogleAiInstructions = () => Box({
     homogeneous: true,
     children: [Revealer({
         transition: 'slide_down',
         transitionDuration: 150,
         setup: (self) => self
-            .hook(ChatGPT, (self, hasKey) => {
-                self.revealChild = (ChatGPT.key.length == 0);
+            .hook(Gemini, (self, hasKey) => {
+                self.revealChild = (Gemini.key.length == 0);
             }, 'hasKey')
         ,
         child: Button({
@@ -152,17 +140,17 @@ export const OpenaiApiKeyInstructions = () => Box({
                 wrap: true,
                 className: 'txt sidebar-chat-welcome-txt',
                 justify: Gtk.Justification.CENTER,
-                label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
+                label: 'A Google AI API key is required\nYou can grab one <u>here</u>, then enter it below'
             }),
             setup: setupCursorHover,
             onClicked: () => {
-                Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+                Utils.execAsync(['bash', '-c', `xdg-open https://makersuite.google.com/app/apikey &`]);
             }
         })
     })]
 });
 
-const chatGPTWelcome = Box({
+const geminiWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
@@ -170,9 +158,9 @@ const chatGPTWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            ChatGPTInfo(),
-            OpenaiApiKeyInstructions(),
-            ChatGPTSettings(),
+            GeminiInfo(),
+            GoogleAiInstructions(),
+            GeminiSettings(),
         ]
     })
 });
@@ -181,16 +169,16 @@ export const chatContent = Box({
     className: 'spacing-v-15',
     vertical: true,
     setup: (self) => self
-        .hook(ChatGPT, (box, id) => {
-            const message = ChatGPT.messages[id];
+        .hook(Gemini, (box, id) => {
+            const message = Gemini.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message, 'ChatGPT'))
+            box.add(ChatMessage(message, MODEL_NAME))
         }, 'newMsg')
     ,
 });
 
 const clearChat = () => {
-    ChatGPT.clear();
+    Gemini.clear();
     const children = chatContent.get_children();
     for (let i = 0; i < children.length; i++) {
         const child = children[i];
@@ -198,13 +186,13 @@ const clearChat = () => {
     }
 }
 
-export const chatGPTView = Scrollable({
+export const geminiView = Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({
         vertical: true,
         children: [
-            chatGPTWelcome,
+            geminiWelcome,
             chatContent,
         ]
     }),
@@ -233,7 +221,7 @@ const CommandButton = (command) => Button({
     label: command,
 });
 
-export const chatGPTCommands = Box({
+export const geminiCommands = Box({
     className: 'spacing-h-5',
     children: [
         Box({ hexpand: true }),
@@ -246,43 +234,43 @@ export const chatGPTCommands = Box({
 export const sendMessage = (text) => {
     // Check if text or API key is empty
     if (text.length == 0) return;
-    if (ChatGPT.key.length == 0) {
-        ChatGPT.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key', chatGPTView));
+    if (Gemini.key.length == 0) {
+        Gemini.key = text;
+        chatContent.add(SystemMessage(`Key saved to\n\`${Gemini.keyPath}\``, 'API Key', geminiView));
         text = '';
         return;
     }
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${Gemini.modelName}\``, '/model', geminiView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
             if (firstSpaceIndex == -1 || prompt.length < 1) {
-                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', chatGPTView))
+                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', geminiView))
             }
             else {
-                ChatGPT.addMessage('user', prompt)
+                Gemini.addMessage('user', prompt)
             }
         }
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(
-                `Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                `Key stored in:\n\`${Gemini.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
                 '/key',
-                chatGPTView));
+                geminiView));
             else {
-                ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key', chatGPTView));
+                Gemini.key = parts[1];
+                chatContent.add(SystemMessage(`Updated API Key at\n\`${Gemini.keyPath}\``, '/key', geminiView));
             }
         }
         else if (text.startsWith('/test'))
-            chatContent.add(SystemMessage(markdownTest, `Markdown test`, chatGPTView));
+            chatContent.add(SystemMessage(markdownTest, `Markdown test`, geminiView));
         else
-            chatContent.add(SystemMessage(`Invalid command.`, 'Error', chatGPTView))
+            chatContent.add(SystemMessage(`Invalid command.`, 'Error', geminiView))
     }
     else {
-        ChatGPT.send(text);
+        Gemini.send(text);
     }
 }

@@ -1,6 +1,7 @@
 const { Gdk, Gtk } = imports.gi;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
+import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -13,6 +14,8 @@ const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const OVERVIEW_WS_NUM_SCALE = 0.09;
 const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
+
+const overviewTick = Variable(false);
 
 function truncateTitle(str) {
     let lastDash = -1;
@@ -213,6 +216,7 @@ const workspace = index => {
                 eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                 eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
                     Hyprland.sendMessage(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
+                    overviewTick.setValue(!overviewTick.value);
                 });
             },
             child: fixed,
@@ -275,18 +279,19 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
             }).catch(print);
         }
     },
-    setup: (box) => {
-        box
-            // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
-            //     if (["changefloatingmode", "movewindow"].includes(name))
-            //         box.attribute.update(box);
-            // }, 'event')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
-            .hook(App, (box, name, visible) => { // Update on open
-                if (name == 'overview' && visible) box.attribute.update(box);
-            })
-    },
+    setup: (box) => box
+        .hook(overviewTick, (box) => box.attribute.update(box))
+        // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
+        //     console.log(name)
+        //     if (["changefloatingmode", "movewindow"].includes(name))
+        //         box.attribute.update(box);
+        // }, 'event')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
+        .hook(App, (box, name, visible) => { // Update on open
+            if (name == 'overview' && visible) box.attribute.update(box);
+        })
+    ,
 });
 
 

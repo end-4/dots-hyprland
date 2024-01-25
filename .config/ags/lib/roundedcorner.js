@@ -1,6 +1,10 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Gtk } = imports.gi;
 const Lang = imports.lang;
+import Cairo from 'gi://cairo?version=1.0';
+
+export const dummyRegion = new Cairo.Region();
+export const enableClickthrough = (self) => self.input_shape_combine_region(dummyRegion);
 
 export const RoundedCorner = (place, props) => Widget.DrawingArea({
     ...props,

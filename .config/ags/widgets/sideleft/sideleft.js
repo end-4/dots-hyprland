@@ -102,22 +102,14 @@ const pinButton = Button({
             self.toggleClassName('sidebar-pin-enabled', self.attribute.enabled);
 
             const sideleftWindow = App.getWindow('sideleft');
-            const barWindow = App.getWindow('bar');
-            const cornerTopLeftWindow = App.getWindow('cornertl');
             const sideleftContent = sideleftWindow.get_children()[0].get_children()[0].get_children()[1];
 
             sideleftContent.toggleClassName('sidebar-pinned', self.attribute.enabled);
 
             if (self.attribute.enabled) {
-                sideleftWindow.layer = 'bottom';
-                barWindow.layer = 'bottom';
-                cornerTopLeftWindow.layer = 'bottom';
                 sideleftWindow.exclusivity = 'exclusive';
             }
             else {
-                sideleftWindow.layer = 'top';
-                barWindow.layer = 'top';
-                cornerTopLeftWindow.layer = 'top';
                 sideleftWindow.exclusivity = 'normal';
             }
         },

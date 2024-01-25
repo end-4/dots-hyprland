@@ -1,16 +1,15 @@
 #!/usr/bin/bash
-# Switches swww wallpaper
-# Requires: coreutils, xrandr, hyprland
 
 if [ "$1" == "--noswitch" ]; then
     imgpath=$(swww query | awk -F 'image: ' '{print $2}')
+    # imgpath=$(ags run-js 'wallpaper.get(0)')
 else
     # Select and set image (hyprland)
     cd "$HOME/Pictures"
     imgpath=$(yad --width 1200 --height 800 --file --title='Choose wallpaper')
     screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1)
-    cursorposx=$(hyprctl cursorpos -j | gojq '.x')
-    cursorposy=$(hyprctl cursorpos -j | gojq '.y')
+    cursorposx=$(hyprctl cursorpos -j | gojq '.x' 2>/dev/null) || cursorposx=960
+    cursorposy=$(hyprctl cursorpos -j | gojq '.y' 2>/dev/null) || cursorposy=540
     cursorposy_inverted=$(( screensizey - cursorposy ))
 
     if [ "$imgpath" == '' ]; then
@@ -18,8 +17,9 @@ else
         exit 0
     fi
 
-    echo Sending "$imgpath" to swww. Cursor pos: ["$cursorposx, $cursorposy_inverted"]
-    # Change swww wallpaper
+
+    # ags run-js "wallpaper.set('')"
+    # sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
     swww img "$imgpath" --transition-step 100 --transition-fps 60 \
     --transition-type grow --transition-angle 30 --transition-duration 1 \
     --transition-pos "$cursorposx, $cursorposy_inverted"

@@ -32,17 +32,13 @@ function isRealPlayer(player) {
     );
 }
 
-export const getPlayer = (name = PREFERRED_PLAYER) => {
-    return Mpris.getPlayer(name) || Mpris.players[0] || null;
-}
-
+export const getPlayer = (name = PREFERRED_PLAYER) => Mpris.getPlayer(name) || Mpris.players[0] || null;
 function lengthStr(length) {
     const min = Math.floor(length / 60);
     const sec = Math.floor(length % 60);
     const sec0 = sec < 10 ? '0' : '';
     return `${min}:${sec0}${sec}`;
 }
-
 function fileExists(filePath) {
     let file = Gio.File.new_for_path(filePath);
     return file.query_exists(null);
@@ -54,17 +50,11 @@ function detectMediaSource(link) {
             return '󰈹 Firefox'
         return "󰈣 File";
     }
-    // Remove protocol if present
     let url = link.replace(/(^\w+:|^)\/\//, '');
-    // Extract the domain name
     let domain = url.match(/(?:[a-z]+\.)?([a-z]+\.[a-z]+)/i)[1];
-
-    if (domain == 'ytimg.com')
-        return '󰗃 Youtube';
-    if (domain == 'discordapp.net')
-        return '󰙯 Discord';
-    if (domain == 'sndcdn.com')
-        return '󰓀 SoundCloud';
+    if (domain == 'ytimg.com') return '󰗃 Youtube';
+    if (domain == 'discordapp.net') return '󰙯 Discord';
+    if (domain == 'sndcdn.com') return '󰓀 SoundCloud';
     return domain;
 }
 
@@ -72,15 +62,20 @@ const DEFAULT_MUSIC_FONT = 'Gabarito, sans-serif';
 function getTrackfont(player) {
     const title = player.trackTitle;
     const artists = player.trackArtists.join(' ');
-    if (artists.includes('TANO*C') || artists.includes('USAO') || artists.includes('Kobaryo')) return 'Chakra Petch'; // Rigid square replacement
-    if (title.includes('東方')) return 'Crimson Text, serif'; // Serif for Touhou stuff
+    if (artists.includes('TANO*C') || artists.includes('USAO') || artists.includes('Kobaryo'))
+        return 'Chakra Petch'; // Rigid square replacement
+    if (title.includes('東方'))
+        return 'Crimson Text, serif'; // Serif for Touhou stuff
     return DEFAULT_MUSIC_FONT;
 }
 function trimTrackTitle(title) {
-    var cleanedTitle = title;
-    cleanedTitle = cleanedTitle.replace(/【[^】]*】/, '');          // Remove stuff like【C93】 at beginning
-    cleanedTitle = cleanedTitle.replace(/\[FREE DOWNLOAD\]/g, ''); // Remove F-777's [FREE DOWNLOAD]
-    return cleanedTitle.trim();
+    if(!title) return '';
+    const cleanRegexes = [
+        /【[^】]*】/,         // Touhou n weeb stuff
+        /\[FREE DOWNLOAD\]/, // F-777
+    ];
+    cleanRegexes.forEach((expr) => title.replace(expr, ''));
+    return title;
 }
 
 const TrackProgress = ({ player, ...rest }) => {

@@ -1,25 +1,3 @@
-@keyframes flyin-top {
-    from {
-        margin-top: -2.795rem;
-    }
-
-    to {
-        margin-top: 0rem;
-    }
-}
-
-@keyframes flyin-bottom {
-    from {
-        margin-top: 4.841rem;
-        margin-bottom: -4.841rem;
-    }
-
-    to {
-        margin-bottom: 0rem;
-        margin-top: 0rem;
-    }
-}
-
 .test {
     background-image: linear-gradient(
         45deg, #f4d609 0%, #f4d609 10%, #212121 10%, #212121 20%, #f4d609 20%, #f4d609 30%, #212121 30%, 
@@ -159,6 +137,13 @@
 
 .txt-italic {
     font-style: italic;
+}
+
+.btn-primary {
+    @include full-rounding;
+    background-color: $primary;
+    color: $onPrimary;
+    padding: 0.682rem 1.023rem;
 }
 
 .titlefont {
