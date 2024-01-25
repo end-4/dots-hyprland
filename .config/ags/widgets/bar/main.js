@@ -11,8 +11,11 @@ const OptionalWorkspaces = async () => {
     try {
         return (await import('./workspaces_hyprland.js')).default();
     } catch {
-        // return (await import('./workspaces_sway.js')).default();
-        return null;
+        try {
+            return (await import('./workspaces_sway.js')).default();
+        } catch {
+            return null;
+        }
     }
 };
 

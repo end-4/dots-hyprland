@@ -64,6 +64,7 @@ export default {
 };
 
 // Stuff that don't need to be toggled. And they're async so ugh...
+// Bar().catch(print);
 forMonitors(Bar);
 forMonitors(BarCornerTopleft);
 forMonitors(BarCornerTopright);
