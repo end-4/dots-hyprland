@@ -32,12 +32,12 @@ const TrackProgress = () => {
     })
 }
 
-const moveToRelativeWorkspace = async (self, num) => {
+const switchToRelativeWorkspace = async (self, num) => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
         Hyprland.sendMessage(`dispatch workspace ${num > 0 ? '+' : ''}${num}`);
     } catch {
-        console.log(`TODO: Sway workspace ${num > 0 ? '+' : ''}${num}`);
+        execAsync([`${App.configDir}/scripts/sway/swayToRelativeWs.sh`, `${num}`]).catch(print);
     }
 }
 
@@ -85,8 +85,8 @@ export default () => {
         })
     })
     return Widget.EventBox({
-        onScrollUp: (self) => moveToRelativeWorkspace(self, -1),
-        onScrollDown: (self) => moveToRelativeWorkspace(self, +1),
+        onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
+        onScrollDown: (self) => switchToRelativeWorkspace(self, +1),
         onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
         onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
         onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),
