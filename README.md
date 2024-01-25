@@ -25,7 +25,7 @@
   <summary>Instructions</summary>
     
    - Installation: see the [Wiki](https://github.com/end-4/dots-hyprland/wiki)
-   - If you'd like to suggest fixes or maybe a new widget, feel free to open an issue!
+   - If you'd like to suggest fixes or maybe a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)!
 </details>
 
 ### [illogical_impulse](https://github.com/end-4/dots-hyprland/tree/illogical-impulse)
