@@ -4,37 +4,7 @@ import Notifications from 'resource:///com/github/Aylur/ags/service/notification
 const { Box } = Widget;
 import Notification from '../../lib/notification.js';
 
-const PopupNotification = (notifObject) => Widget.Box({
-    homogeneous: true,
-    children: [
-        Widget.EventBox({
-            onHoverLost: () => {
-                notifObject.dismiss();
-            },
-            child: Widget.Revealer({
-                revealChild: true,
-                child: Widget.Box({
-                    children: [Notification({
-                        notifObject: notifObject,
-                        isPopup: true,
-                        props: { hpack: 'fill' },
-                    })],
-                }),
-            })
-        })
-    ]
-})
-
-const naiveNotifPopupList = Widget.Box({
-    vertical: true,
-    className: 'spacing-v-5',
-    setup: (self) => self.hook(Notifications, (box) => {
-        box.children = Notifications.popups.reverse()
-            .map(notifItem => PopupNotification(notifItem));
-    }),
-})
-
-const notifPopupList = Box({
+export default () => Box({
     vertical: true,
     className: 'osd-notifs spacing-v-5-revealer',
     attribute: {
@@ -72,5 +42,3 @@ const notifPopupList = Box({
         .hook(Notifications, (box, id) => box.attribute.dismiss(box, id, true), 'closed')
     ,
 });
-
-export default () => notifPopupList;

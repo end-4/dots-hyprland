@@ -1,28 +1,24 @@
-const { Gdk, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { execAsync, exec } = Utils;
 
+import WallpaperImage from './wallpaper.js';
 import TimeAndLaunchesWidget from './timeandlaunches.js'
 import SystemWidget from './system.js'
-import GraphWidget from './graph.js'
 
-export default () => Widget.Window({
-    name: 'desktopbackground',
-    anchor: ['top', 'bottom', 'left', 'right'],
+export default (monitor) => Widget.Window({
+    name: `desktopbackground${monitor}`,
+    // anchor: ['top', 'bottom', 'left', 'right'],
     layer: 'background',
-    exclusivity: 'normal',
+    exclusivity: 'ignore',
     visible: true,
+    // child: WallpaperImage(monitor),
     child: Widget.Overlay({
-        child: Widget.Box({
-            hexpand: true,
-            vexpand: true,
-        }),
+        child: WallpaperImage(monitor),
         overlays: [
-            // GraphWidget(),
             TimeAndLaunchesWidget(),
             SystemWidget(),
         ],
-        setup: (self) => self.set_overlay_pass_through(self.get_children()[1], true),
+        setup: (self) => {
+            self.set_overlay_pass_through(self.get_children()[1], true);
+        },
     }),
 });

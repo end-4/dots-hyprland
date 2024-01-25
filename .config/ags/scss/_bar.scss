@@ -32,9 +32,7 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .bar-group-pad {
-    // padding: 0rem 1.023rem;
     padding: 0.205rem;
-    // padding-left: 0.341rem;
 }
 
 .bar-group-pad-less {
@@ -331,6 +329,11 @@ $bar_subgroup_bg: $surfaceVariant;
     min-width: 0.409rem;
     min-height: 0.409rem;
     background-color: $onSurfaceVariant;
+}
+
+.bar-corner-spacing {
+    min-width: $rounding_large;
+    min-height: $rounding_large;
 }
 
 .corner {

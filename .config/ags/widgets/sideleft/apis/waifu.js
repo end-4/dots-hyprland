@@ -5,7 +5,7 @@ const { Box, Button, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import { MarginRevealer } from '../../../lib/advancedwidgets.js';
-import { setupCursorHover } from "../../../lib/cursorhover.js";
+import { setupCursorHover, setupCursorHoverInfo } from "../../../lib/cursorhover.js";
 import WaifuService from '../../../services/waifus.js';
 
 async function getImageViewerApp(preferredApp) {
@@ -162,7 +162,8 @@ const WaifuImage = (taglist) => {
                 blockImage.set_size_request(widgetWidth, widgetHeight);
                 const showImage = () => {
                     downloadState.shown = 'done';
-                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock.attribute.imagePath, widgetWidth, widgetHeight, false);
+                    const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(thisBlock.attribute.imagePath, widgetWidth, widgetHeight);
+                    // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(thisBlock.attribute.imagePath, widgetWidth, widgetHeight, false);
 
                     blockImage.set_size_request(widgetWidth, widgetHeight);
                     blockImage.connect("draw", (widget, cr) => {
@@ -220,10 +221,62 @@ const WaifuImage = (taglist) => {
     return thisBlock;
 }
 
+const WaifuInfo = () => {
+    const waifuLogo = Label({
+        hpack: 'center',
+        className: 'sidebar-chat-welcome-logo',
+        label: 'photo_library',
+    })
+    return Box({
+        vertical: true,
+        vexpand: true,
+        className: 'spacing-v-15',
+        children: [
+            waifuLogo,
+            Label({
+                className: 'txt txt-title-small sidebar-chat-welcome-txt',
+                wrap: true,
+                justify: Gtk.Justification.CENTER,
+                label: 'Waifus',
+            }),
+            Box({
+                className: 'spacing-h-5',
+                hpack: 'center',
+                children: [
+                    Label({
+                        className: 'txt-smallie txt-subtext',
+                        wrap: true,
+                        justify: Gtk.Justification.CENTER,
+                        label: 'Powered by waifu.im',
+                    }),
+                    Button({
+                        className: 'txt-subtext txt-norm icon-material',
+                        label: 'info',
+                        tooltipText: 'A free Waifu API. An alternative to waifu.pics.',
+                        setup: setupCursorHoverInfo,
+                    }),
+                ]
+            }),
+        ]
+    });
+}
+
+const waifuWelcome = Box({
+    vexpand: true,
+    homogeneous: true,
+    child: Box({
+        className: 'spacing-v-15',
+        vpack: 'center',
+        vertical: true,
+        children: [
+            WaifuInfo(),
+        ]
+    })
+});
+
 const waifuContent = Box({
     className: 'spacing-v-15',
     vertical: true,
-    vexpand: true,
     attribute: {
         'map': new Map(),
     },
@@ -251,6 +304,7 @@ export const waifuView = Scrollable({
     child: Box({
         vertical: true,
         children: [
+            waifuWelcome,
             waifuContent,
         ]
     }),
@@ -327,6 +381,21 @@ const clearChat = () => {
     }
 }
 
+const DummyTag = (width, height, url, color = '#9392A6') => {
+    return { // Needs timeout or inits won't make it
+        status: 200,
+        url: url,
+        extension: '',
+        signature: 0,
+        source: url,
+        dominant_color: color,
+        is_nsfw: false,
+        width: width,
+        height: height,
+        tags: ['/test'],
+    };
+}
+
 export const sendMessage = (text) => {
     // Do something on send
     // Commands
@@ -335,20 +404,20 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/test')) {
             const newImage = WaifuImage(['/test']);
             waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update({ // Needs timeout or inits won't make it
-                // This is an image uploaded to my github repo
-                status: 200,
-                url: 'https://picsum.photos/400/600',
-                extension: '',
-                signature: 0,
-                source: 'https://picsum.photos/400/600',
-                dominant_color: '#9392A6',
-                is_nsfw: false,
-                width: 300,
-                height: 200,
-                tags: ['/test'],
-            }, true));
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
+                DummyTag(300, 200, 'https://picsum.photos/600/400'),
+                true
+            ));
         }
+        else if (text.startsWith('/chino')) {
+            const newImage = WaifuImage(['/chino']);
+            waifuContent.add(newImage);
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
+                DummyTag(300, 400, 'https://chino.pages.dev/chino', '#B2AEF3'),
+                true
+            ));
+        }
+
     }
     else WaifuService.fetch(text);
 }

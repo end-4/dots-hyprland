@@ -223,7 +223,7 @@ const MessageContent = (content) => {
     return contentBox;
 }
 
-export const ChatMessage = (message, scrolledWindow) => {
+export const ChatMessage = (message, modelName = 'Model') => {
     const messageContentBox = MessageContent(message.content);
     const thisMessage = Box({
         className: 'sidebar-chat-message',
@@ -241,7 +241,8 @@ export const ChatMessage = (message, scrolledWindow) => {
                         xalign: 0,
                         className: 'txt txt-bold sidebar-chat-name',
                         wrap: true,
-                        label: (message.role == 'user' ? USERNAME : 'ChatGPT'),
+                        useMarkup: true,
+                        label: (message.role == 'user' ? USERNAME : modelName),
                     }),
                     messageContentBox,
                 ],

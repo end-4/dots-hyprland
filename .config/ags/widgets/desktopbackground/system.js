@@ -114,11 +114,14 @@ const distroAndVersion = Box({
                 Label({
                     className: 'bg-distro-name',
                     xalign: 0,
-                    label: '<version>',
+                    label: 'An environment idk',
                     setup: (label) => {
-                        execAsync([`bash`, `-c`, `hyprctl version | grep -oP "Tag: v\\K\\d+\\.\\d+\\.\\d+"`]).then(distro => {
-                            label.label = `Hyprland ${distro}`;
-                        }).catch(print);
+                        // hyprctl will return unsuccessfully if Hyprland isn't running
+                        execAsync([`bash`, `-c`, `hyprctl version | grep -oP "Tag: v\\K\\d+\\.\\d+\\.\\d+"`]).then(version => {
+                            label.label = `Hyprland ${version}`;
+                        }).catch(() => execAsync([`bash`, `-c`, `sway -v | cut -d'-' -f1 | sed 's/sway version /v/'`]).then(version => {
+                            label.label = `Sway ${version}`;
+                        }).catch(print));
                     },
                 }),
             ]

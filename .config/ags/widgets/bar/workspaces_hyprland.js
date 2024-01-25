@@ -26,7 +26,7 @@ const WorkspaceContents = (count = 10) => {
                 let workspaceMask = 0;
                 for (let i = 0; i < workspaces.length; i++) {
                     const ws = workspaces[i];
-                    if (ws.id < 0) continue; // Ignore scratchpads
+                    if (ws.id <= 0) continue; // Ignore scratchpads
                     if (ws.id > count) return; // Not rendered
                     if (workspaces[i].windows > 0) {
                         workspaceMask |= (1 << ws.id);

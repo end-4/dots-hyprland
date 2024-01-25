@@ -1,14 +1,14 @@
 "use strict";
 // Import
-const { GLib } = imports.gi;
+import Gdk from 'gi://Gdk';
 import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Widgets
-import Bar from './widgets/bar/main.js';
+import { Bar, BarCornerTopleft, BarCornerTopright } from './widgets/bar/main.js';
 import Cheatsheet from './widgets/cheatsheet/main.js';
-import DesktopBackground from './widgets/desktopbackground/main.js';
+// import DesktopBackground from './widgets/desktopbackground/main.js';
 // import Dock from './widgets/dock/main.js';
-import { CornerTopleft, CornerTopright, CornerBottomleft, CornerBottomright } from './widgets/screencorners/main.js';
+import Corner from './widgets/screencorners/main.js';
 import Indicator from './widgets/indicators/main.js';
 import Osk from './widgets/onscreenkeyboard/main.js';
 import Overview from './widgets/overview/main.js';
@@ -16,7 +16,11 @@ import Session from './widgets/session/main.js';
 import SideLeft from './widgets/sideleft/main.js';
 import SideRight from './widgets/sideright/main.js';
 
-const CLOSE_ANIM_TIME = 210; // Longer than actual anim time (see styles) to make sure widgets animate fully
+const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
+function forMonitors(widget) {
+    const n = Gdk.Display.get_default()?.get_n_monitors() || 1;
+    return range(n, 0).map(widget).flat(1);
+}
 
 // SCSS compilation
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
@@ -29,7 +33,25 @@ function applyStyle() {
 }
 applyStyle();
 
-// Config object
+const Windows = () => [
+    // forMonitors(DesktopBackground),
+    // Dock(),
+    Overview(),
+    forMonitors(Indicator),
+    Cheatsheet(),
+    SideLeft(),
+    SideRight(),
+    Osk(),
+    Session(),
+    // forMonitors(Bar),
+    // forMonitors(BarCornerTopleft),
+    // forMonitors(BarCornerTopright),
+    forMonitors((id) => Corner(id, 'top left')),
+    forMonitors((id) => Corner(id, 'top right')),
+    forMonitors((id) => Corner(id, 'bottom left')),
+    forMonitors((id) => Corner(id, 'bottom right')),
+];
+const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
 export default {
     css: `${App.configDir}/style.css`,
     stackTraceOnError: true,
@@ -38,20 +60,11 @@ export default {
         'sideleft': CLOSE_ANIM_TIME,
         'osk': CLOSE_ANIM_TIME,
     },
-    windows: [
-        CornerTopleft(),
-        CornerTopright(),
-        CornerBottomleft(),
-        CornerBottomright(),
-        DesktopBackground(),   // If you're going to uncomment these,
-        // Dock(), // Buggy       // uncomment the import statement too.
-        Overview(),
-        Indicator(),
-        Cheatsheet(),
-        SideLeft(),
-        SideRight(),
-        Osk(), // On-screen keyboard
-        Session(), // Power menu, if that's what you like to call it
-        Bar(),
-    ],
+    windows: Windows().flat(1),
 };
+
+// Stuff that don't need to be toggled. And they're async so ugh...
+// Bar().catch(print);
+forMonitors(Bar);
+forMonitors(BarCornerTopleft);
+forMonitors(BarCornerTopright);

@@ -1,22 +1,32 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, CenterBox, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
+import Gemini from '../../services/gemini.js';
+import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 
 const APIS = [
     {
-        name: 'ChatGPT',
+        name: 'Assistant (ChatGPT 3.5)',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
         tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message ChatGPT',
+        placeholderText: 'Message ChatGPT...',
+    },
+    {
+        name: 'Assistant (Gemini Pro)',
+        sendCommand: geminiSendMessage,
+        contentWidget: geminiView,
+        commandBar: geminiCommands,
+        tabIcon: geminiTabIcon,
+        placeholderText: 'Message Gemini...',
     },
     {
         name: 'Waifus',
@@ -35,8 +45,12 @@ export const chatEntry = Entry({
     hexpand: true,
     setup: (self) => self
         .hook(ChatGPT, (self) => {
-            if (APIS[currentApiId].name != 'ChatGPT') return;
-            self.placeholderText = (ChatGPT.key.length > 0 ? 'Ask a question...' : 'Enter OpenAI API Key...');
+            if (APIS[currentApiId].name != 'Assistant (ChatGPT 3.5)') return;
+            self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
+        }, 'hasKey')
+        .hook(Gemini, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (Gemini Pro)') return;
+            self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
         }, 'hasKey')
     ,
     onChange: (entry) => {
@@ -86,22 +100,27 @@ function switchToTab(id) {
     chatEntry.placeholderText = APIS[id].placeholderText,
         currentApiId = id;
 }
-const apiSwitcher = Box({
-    homogeneous: true,
-    children: [
-        Box({
-            className: 'sidebar-chat-apiswitcher spacing-h-5',
-            hpack: 'center',
-            children: APIS.map((api, id) => Button({
-                child: api.tabIcon,
-                tooltipText: api.name,
-                setup: setupCursorHover,
-                onClicked: () => {
-                    switchToTab(id);
-                }
-            })),
-        }),
-    ]
+
+const apiSwitcher = CenterBox({
+    centerWidget: Box({
+        className: 'sidebar-chat-apiswitcher spacing-h-5',
+        hpack: 'center',
+        children: APIS.map((api, id) => Button({
+            child: api.tabIcon,
+            tooltipText: api.name,
+            setup: setupCursorHover,
+            onClicked: () => {
+                switchToTab(id);
+            }
+        })),
+    }),
+    endWidget: Button({
+        hpack: 'end',
+        className: 'txt-subtext txt-norm icon-material',
+        label: 'lightbulb',
+        tooltipText: 'Use PageUp/PageDown to switch between API pages',
+        setup: setupCursorHoverInfo,
+    }),
 })
 
 export default Widget.Box({

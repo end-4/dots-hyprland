@@ -4,7 +4,6 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../lib/materialicon.js';
@@ -19,7 +18,7 @@ execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
     execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)])
-        .then(console.log('Released all keys'))
+        .then(console.log('[OSK] Released all keys'))
         .catch(print);
 }
 var modsPressed = false;
@@ -146,22 +145,32 @@ const keyboardWindow = Box({
 
 const gestureEvBox = EventBox({ child: keyboardWindow })
 const gesture = Gtk.GestureDrag.new(gestureEvBox);
-gesture.connect('drag-begin', () => {
-    Hyprland.sendMessage('j/cursorpos').then((out) => {
-        gesture.startY = JSON.parse(out).y;
-    }).catch(print);
+gesture.connect('drag-begin', async () => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage('j/cursorpos').then((out) => {
+            gesture.startY = JSON.parse(out).y;
+        }).catch(print);
+    } catch {
+        return;
+    }
 });
-gesture.connect('drag-update', () => {
-    Hyprland.sendMessage('j/cursorpos').then((out) => {
-        const currentY = JSON.parse(out).y;
-        const offset = gesture.startY - currentY;
+gesture.connect('drag-update', async () => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage('j/cursorpos').then((out) => {
+            const currentY = JSON.parse(out).y;
+            const offset = gesture.startY - currentY;
 
-        if (offset > 0) return;
+            if (offset > 0) return;
 
-        keyboardWindow.setCss(`
+            keyboardWindow.setCss(`
             margin-bottom: ${offset}px;
         `);
-    }).catch(print);
+        }).catch(print);
+    } catch {
+        return;
+    }
 });
 gesture.connect('drag-end', () => {
     var offset = gesture.get_offset()[2];

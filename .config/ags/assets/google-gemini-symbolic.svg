@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#000000"
+   width="800px"
+   height="800px"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="google-gemini-symbolic.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.77339804"
+     inkscape:cx="391.13107"
+     inkscape:cy="332.94628"
+     inkscape:window-width="1908"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <title
+     id="title1">ionicons-v5_logos</title>
+  <path
+     d="m 377.94638,279.52117 -1.75376,-7.44181 H 214.44368 v 68.45852 h 96.64274 c -10.03366,47.64625 -56.59351,72.7265 -94.62516,72.7265 -27.67207,0 -56.84182,-11.63997 -76.14863,-30.34928 a 108.70175,108.70175 0 0 1 -32.43671,-76.73064 c 0,-28.83607 12.95917,-57.67991 31.81591,-76.65304 18.85674,-18.97314 47.33585,-29.5888 75.652,-29.5888 32.42894,0 55.67007,17.21939 64.36125,25.07248 l 48.64728,-48.3912 C 314.08178,164.08378 274.87838,132.48516 213.77632,132.48516 v 0 c -47.14186,0 -92.34372,18.05745 -125.385701,50.9908 -32.607419,32.42893 -49.485367,79.32247 -49.485367,122.83266 0,43.51018 15.970029,88.06021 47.56865,120.74522 33.763658,34.85782 81.580638,53.07825 130.817688,53.07825 44.79835,0 87.26093,-17.55307 117.52483,-49.40001 29.75175,-31.3503 45.13979,-74.72857 45.13979,-120.20204 0,-19.14386 -1.92447,-30.51221 -2.00983,-31.00887 z"
+     id="path1"
+     style="stroke-width:0.775997" />
+  <path
+     d="m 396.33661,224.32725 v 0 0 c -8.3763,-55.27516 -51.76093,-98.65984 -107.03609,-107.0361 v 0 0 c 55.27516,-8.3763 98.65979,-51.760947 107.03609,-107.036116 v 0 0 c 8.37627,55.275169 51.76088,98.659816 107.0361,107.036116 v 0 0 c -55.27522,8.37626 -98.65983,51.76094 -107.0361,107.0361 z"
+     fill="#076eff"
+     id="path19"
+     style="fill:#000000;stroke-width:2.9422" />
+</svg>
