@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Get the current workspace number
 current=$(swaymsg -t get_workspaces | gojq '.[] | select(.focused==true) | .num')
@@ -16,4 +16,8 @@ if [[ $new_workspace -lt 1 ]]; then
 fi
 
 # Switch to the new workspace
-swaymsg workspace $new_workspace
+if [[ $2 == 'move' ]]; then
+  swaymsg move container to workspace $new_workspace
+else 
+  swaymsg workspace $new_workspace
+fi
