@@ -414,12 +414,6 @@
   to {
     opacity: 1; } }
 
-tooltip {
-  animation-name: appear;
-  animation-duration: 100ms;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 1; }
-
 menu {
   border-top: 1px solid rgba(60, 57, 61, 0.121);
   border-left: 1px solid rgba(60, 57, 61, 0.121);
@@ -470,6 +464,10 @@ radio:checked {
   border: 0.477rem solid #eccbff; }
 
 tooltip {
+  animation-name: appear;
+  animation-duration: 100ms;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   background-color: #38343a;
@@ -1837,7 +1835,8 @@ tooltip {
 .sidebar-chat-textarea {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
-  border: 0.068rem solid #746d75;
+  background-color: #242125;
+  color: #cdc3ce;
   padding: 0.682rem; }
 
 .sidebar-chat-entry {
@@ -1850,15 +1849,14 @@ tooltip {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   min-width: 1.705rem;
   min-height: 1.705rem;
-  border-radius: 0.478rem;
-  background-color: #746d75; }
+  border-radius: 0.478rem; }
 
 .sidebar-chat-send:hover,
 .sidebar-chat-send:focus {
-  background-color: #787079; }
+  background-color: #38343a; }
 
 .sidebar-chat-send:active {
-  background-color: #8c838f; }
+  background-color: #5b565c; }
 
 .sidebar-chat-send-available {
   background-color: #eccbff;
@@ -1979,7 +1977,8 @@ tooltip {
   padding: 0.341rem 0.477rem; }
 
 .sidebar-chat-chip-action {
-  border: 0.068rem solid #746d75; }
+  background-color: #242125;
+  color: #cdc3ce; }
 
 .sidebar-chat-chip-action:hover,
 .sidebar-chat-chip-action:focus {
@@ -1997,7 +1996,7 @@ tooltip {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   padding: 0.341rem 0.477rem;
-  background-color: rgba(56, 52, 58, 0.31);
+  background-color: #242125;
   color: #cdc3ce; }
 
 .sidebar-chat-chip-toggle:focus,
