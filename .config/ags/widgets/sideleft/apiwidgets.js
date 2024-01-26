@@ -119,7 +119,7 @@ chatEntry.get_buffer().connect("changed", (buffer) => {
 const chatEntryWrapper = Scrollable({
     className: 'sidebar-chat-wrapper',
     hscroll: 'never',
-    vscroll: 'never',
+    vscroll: 'always',
     child: chatEntry,
 });
 
