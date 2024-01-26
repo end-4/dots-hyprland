@@ -83,12 +83,14 @@ class WaifuService extends Service {
 
     async fetch(msg) {
         // Init
-        const userArgs = msg.split(' ');
+        const userArgs = msg.split(/\s+/);
+
         let taglist = [];
         this._nsfw = false;
         // Construct body/headers
         for (let i = 0; i < userArgs.length; i++) {
-            const thisArg = userArgs[i];
+            const thisArg = userArgs[i].trim();
+            if(thisArg.length == 0) continue;
             if (thisArg == '--im') this._mode = 'im';
             else if (thisArg == '--nekos') this._mode = 'nekos';
             else if (thisArg.includes('pics')) this._mode = 'pics';
