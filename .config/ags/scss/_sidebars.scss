@@ -1,4 +1,5 @@
 $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
+$textboxColor: mix($surface, $surfaceVariant, 80%);
 $system: $secondary;
 $onSystem: $onSecondary;
 $chatgpt: $primary;
@@ -510,7 +511,8 @@ $onChatgpt: $onPrimary;
 
 .sidebar-chat-textarea {
     @include normal-rounding;
-    border: 0.068rem solid $sidebar_chat_textboxareaColor;
+    background-color: $textboxColor;
+    color: $onSurfaceVariant;
     padding: 0.682rem;
 }
 
@@ -526,20 +528,15 @@ $onChatgpt: $onPrimary;
     min-width: 1.705rem;
     min-height: 1.705rem;
     border-radius: $rounding_medium - 0.681rem;
-    background-color: $sidebar_chat_textboxareaColor;
 }
 
 .sidebar-chat-send:hover,
 .sidebar-chat-send:focus {
-    background-color: mix($sidebar_chat_textboxareaColor,
-            $t_onSecondaryContainer,
-            97%);
+    background-color: $surfaceVariant;
 }
 
 .sidebar-chat-send:active {
-    background-color: mix($sidebar_chat_textboxareaColor,
-            $t_onSecondaryContainer,
-            80%);
+    background-color: mix($surfaceVariant, $onBackground, 80%);
 }
 
 .sidebar-chat-send-available {
@@ -679,7 +676,8 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-chip-action {
-    border: 0.068rem solid $sidebar_chat_textboxareaColor;
+    background-color: $textboxColor;
+    color: $onSurfaceVariant;
 }
 
 .sidebar-chat-chip-action:hover,
@@ -700,7 +698,7 @@ $onChatgpt: $onPrimary;
     @include menu_decel;
     @include small-rounding;
     padding: 0.341rem 0.477rem;
-    background-color: $t_surfaceVariant;
+    background-color: $textboxColor;
     color: $onSurfaceVariant;
 }
 

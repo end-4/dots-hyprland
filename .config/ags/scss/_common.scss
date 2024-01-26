@@ -26,13 +26,6 @@
     }
 }
 
-tooltip {
-    animation-name: appear;
-    animation-duration: 100ms;
-    animation-timing-function: ease-out;
-    animation-iteration-count: 1;
-}
-
 menu {
     @include elevation-border-softer;
     padding: 0.681rem;
@@ -90,6 +83,10 @@ radio:checked {
 }
 
 tooltip {
+    animation-name: appear;
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
     @include normal-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;

@@ -2,6 +2,7 @@
 * {
     all: unset;
 }
+// *:not(tooltip) { all: unset; }
 
 // Colors
 @import './material'; // Material colors
