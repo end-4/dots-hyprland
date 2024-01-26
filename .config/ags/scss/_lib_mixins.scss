@@ -139,12 +139,10 @@ $elevation_margin: 0.476rem;
 }
 
 @mixin fluent_decel {
-    // Used for small transitions, as this looks clear
     transition: 200ms cubic-bezier(0.1, 1, 0, 1);
 }
 
 @mixin fluent_decel_long {
-    // Used for small transitions, as this looks clear
     transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
 }
 

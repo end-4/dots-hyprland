@@ -61,11 +61,9 @@ function apiSendMessage(textView) {
     // Send
     APIS[currentApiId].sendCommand(text)
     // Reset
-    Utils.timeout(100, () => {
-        buffer.set_text("", -1);
-        chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
-        chatEntry.set_valign(Gtk.Align.CENTER);
-    });
+    buffer.set_text("", -1);
+    chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
+    chatEntry.set_valign(Gtk.Align.CENTER);
 }
 
 export const chatEntry = TextView({
