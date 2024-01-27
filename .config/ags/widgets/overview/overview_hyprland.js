@@ -13,6 +13,8 @@ import { dumpToWorkspace, swapWorkspace } from "./actions.js";
 const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
 const OVERVIEW_WS_NUM_SCALE = 0.09;
 const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
+const NUM_WS_GROUPS = 3;
+const NUM_OF_WORKSPACES_PER_GROUP = 10;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 const overviewTick = Variable(false);
@@ -76,7 +78,9 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
     setup: (menuItem) => {
         let submenu = new Gtk.Menu();
         submenu.className = 'menu';
-        for (let i = 1; i <= 10; i++) {
+        const startWorkspace = Math.floor((thisWorkspace-1)/NUM_OF_WORKSPACES_PER_GROUP)*NUM_OF_WORKSPACES_PER_GROUP + 1;
+        const endWorkspace = startWorkspace + NUM_OF_WORKSPACES_PER_GROUP-1;
+        for (let i = startWorkspace; i <= endWorkspace; i++) {
             let button = new Gtk.MenuItem({
                 label: `Workspace ${i}`
             });
@@ -303,11 +307,18 @@ export default () => {
         child: Widget.Box({
             vertical: true,
             className: 'overview-tasks',
-            children: [
-                OverviewRow({ startWorkspace: 1, workspaces: 5 }),
-                OverviewRow({ startWorkspace: 6, workspaces: 5 }),
-            ]
+            children: Array.from({ length: NUM_WS_GROUPS*2 }, (_, index) =>
+              OverviewRow({ startWorkspace: 1 + index * 5, workspaces: 5 })
+            )
         }),
+        setup: (self) => {
+          self.hook(Hyprland.active.workspace, (self) => {
+            const ws_group = Math.floor((Hyprland.active.workspace.id-1)/NUM_OF_WORKSPACES_PER_GROUP);
+            for (let i = 0; i < overviewRevealer.child.children.length; i++) {
+              self.child.children[i].set_visible(ws_group == Math.floor(i/2));
+            }
+          })
+        }
     });
     return overviewRevealer;
-}; 
+};
