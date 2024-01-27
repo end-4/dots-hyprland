@@ -523,6 +523,14 @@ $onChatgpt: $onPrimary;
     min-width: 0rem;
 }
 
+.sidebar-chat-wrapper {
+    transition: 400ms cubic-bezier(0.1, 1, 0, 1);
+}
+
+.sidebar-chat-wrapper-extended {
+    min-height: 7.500rem;
+}
+
 .sidebar-chat-send {
     @include menu_decel;
     min-width: 1.705rem;
