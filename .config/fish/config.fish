@@ -13,8 +13,9 @@ if status is-interactive
 end
 
 starship init fish | source
+cat ~/.cache/ags/user/colorschemes/sequences
 
 # function fish_prompt
-#   set_color cyan; echo (pwd) 
+#   set_color cyan; echo (pwd)
 #   set_color green; echo '> '
 # end

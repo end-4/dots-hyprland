@@ -10,14 +10,14 @@ fi
 lightdark=""
 if [ ! -f "$HOME/.cache/ags/user/colormode.txt" ]; then
     echo "" > "$HOME/.cache/ags/user/colormode.txt"
-else 
+else
     lightdark=$(cat "$HOME/.cache/ags/user/colormode.txt") # either "" or "-l"
 fi
 # check if the file ~/.cache/ags/user/colorbackend.txt exists. if not, create it. else, read it to $lightdark
 backend="material"
 if [ ! -f "$HOME/.cache/ags/user/colorbackend.txt" ]; then
     echo "material" > "$HOME/.cache/ags/user/colorbackend.txt"
-else 
+else
     backend=$(cat "$HOME/.cache/ags/user/colorbackend.txt") # either "" or "-l"
 fi
 
@@ -37,11 +37,11 @@ elif [ "$backend" = "material" ]; then
 elif [ "$backend" = "pywal" ]; then
     # clear and generate
     wal -c
-    echo wal -i "$1" -n -t -s -e "$lightdark" -q 
-    wal -i "$1" -n -t -s -e $lightdark -q 
+    #echo wal -i "$1" -n -t -s -e "$lightdark" -q
+    wal -i "$1" -n $lightdark -q
     # copy scss
     cp "$HOME/.cache/wal/colors.scss" $HOME/.cache/ags/user/generated_colors.txt
-    
+
     cat color_generation/pywal_to_material.scss >> $HOME/.cache/ags/user/generated_colors.txt
     if [ "$2" = "--apply" ]; then
         sassc $HOME/.cache/ags/user/generated_colors.txt $HOME/.cache/ags/user/generated_colors_classes.scss --style compact
