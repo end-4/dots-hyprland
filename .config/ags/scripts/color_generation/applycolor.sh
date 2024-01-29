@@ -105,8 +105,8 @@ apply_term() {
         echo "Template file not found for Terminal. Skipping that."
         return
     fi
-    if [ ! -d $HOME/.cache/ags/user/colorschemes ]; then
-        mkdir -p $HOME/.cache/ags/user/colorschemes
+    if [ ! -d "$HOME/.cache/ags/user/colorschemes" ]; then
+        mkdir -p "$HOME/.cache/ags/user/colorschemes"
     fi
     # Copy template
     cp "scripts/templates/terminal/sequences.material" "$HOME/.cache/ags/user/colorschemes/sequences"
@@ -117,7 +117,7 @@ apply_term() {
 
     for file in /dev/pts/*; do
       if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
-        cat "$HOME/.cache/ags/user/colorschemes/sequences" > $file
+        cat "$HOME/.cache/ags/user/colorschemes/sequences" > "$file"
       fi
     done
 }
@@ -175,4 +175,4 @@ apply_hyprland &
 apply_gtk &
 apply_gtklock &
 apply_fuzzel &
-apply_term
+apply_term &

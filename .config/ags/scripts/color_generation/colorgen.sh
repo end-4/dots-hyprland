@@ -23,38 +23,37 @@ fi
 
 cd "$HOME/.config/ags/scripts/" || exit
 if [[ "$1" = "#"* ]]; then # this is a color
-    color_generation/generate_colors_material.py --color "$1" "$lightdark" > $HOME/.cache/ags/user/generated_colors.txt
+    color_generation/generate_colors_material.py --color "$1" "$lightdark" > "$HOME/.cache/ags/user/generated_colors.txt"
     if [ "$2" = "--apply" ]; then
-        cp $HOME/.cache/ags/user/generated_colors.txt "$HOME/.config/ags/scss/_material.scss"
+        cp "$HOME/.cache/ags/user/generated_colors.txt" "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "material" ]; then
-    color_generation/generate_colors_material.py --path "$1" "$lightdark" > $HOME/.cache/ags/user/generated_colors.txt
+    color_generation/generate_colors_material.py --path "$1" "$lightdark" > "$HOME/.cache/ags/user/generated_colors.txt"
     if [ "$2" = "--apply" ]; then
-        cp $HOME/.cache/ags/user/generated_colors.txt "$HOME/.config/ags/scss/_material.scss"
+        cp "$HOME/.cache/ags/user/generated_colors.txt" "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "pywal" ]; then
     # clear and generate
     wal -c
-    #echo wal -i "$1" -n -t -s -e "$lightdark" -q
     wal -i "$1" -n $lightdark -q
     # copy scss
-    cp "$HOME/.cache/wal/colors.scss" $HOME/.cache/ags/user/generated_colors.txt
+    cp "$HOME/.cache/wal/colors.scss" "$HOME/.cache/ags/user/generated_colors.txt"
 
-    cat color_generation/pywal_to_material.scss >> $HOME/.cache/ags/user/generated_colors.txt
+    cat color_generation/pywal_to_material.scss >> "$HOME/.cache/ags/user/generated_colors.txt"
     if [ "$2" = "--apply" ]; then
-        sassc $HOME/.cache/ags/user/generated_colors.txt $HOME/.cache/ags/user/generated_colors_classes.scss --style compact
-        sed -i "s/ { color//g" $HOME/.cache/ags/user/generated_colors_classes.scss
-        sed -i "s/\./$/g" $HOME/.cache/ags/user/generated_colors_classes.scss
-        sed -i "s/}//g" $HOME/.cache/ags/user/generated_colors_classes.scss
+        sassc "$HOME/.cache/ags/user/generated_colors.txt" "$HOME/.cache/ags/user/generated_colors_classes.scss" --style compact
+        sed -i "s/ { color//g" "$HOME/.cache/ags/user/generated_colors_classes.scss"
+        sed -i "s/\./$/g" "$HOME/.cache/ags/user/generated_colors_classes.scss"
+        sed -i "s/}//g" "$HOME/.cache/ags/user/generated_colors_classes.scss"
         if [ "$lightdark" = "-l" ]; then
-            printf "\n"'$darkmode: false;'"\n" >> $HOME/.cache/ags/user/generated_colors_classes.scss
+            printf "\n""\$darkmode: false;""\n" >> "$HOME/.cache/ags/user/generated_colors_classes.scss"
         else
-            printf "\n"'$darkmode: true;'"\n" >> $HOME/.cache/ags/user/generated_colors_classes.scss
+            printf "\n""\$darkmode: true;""\n" >> "$HOME/.cache/ags/user/generated_colors_classes.scss"
         fi
 
-        cp $HOME/.cache/ags/user/generated_colors_classes.scss "$HOME/.config/ags/scss/_material.scss"
+        cp "$HOME/.cache/ags/user/generated_colors_classes.scss" "$HOME/.config/ags/scss/_material.scss"
 
         color_generation/applycolor.sh
     fi
