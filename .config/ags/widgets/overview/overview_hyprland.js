@@ -236,56 +236,51 @@ const arr = (s, n) => {
     return array;
 };
 
-const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => {
-    return Widget.Box({
-        children: arr(startWorkspace, workspaces).map(Workspace),
-        attribute: {
-            update: box => {
-                if (!App.getWindow(windowName).visible) return;
-                execAsync('hyprctl -j clients').then(clients => {
-                    const json = JSON.parse(clients);
-                    const children = box.get_children();
-                    for (let i = 0; i < children.length; i++) {
-                        const ch = children[i];
-                        ch.update(json)
-                    }
+const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
+    children: arr(startWorkspace, workspaces).map(Workspace),
+    attribute: {
+        update: box => {
+            if (!App.getWindow(windowName).visible) return;
+            execAsync('hyprctl -j clients').then(clients => {
+                const json = JSON.parse(clients);
+                const children = box.get_children();
+                for (let i = 0; i < children.length; i++) {
+                    const ch = children[i];
+                    ch.update(json)
+                }
 
-                }).catch(print);
-            }
-        },
-        setup: (box) => box
-            .hook(overviewTick, (box) => box.attribute.update(box))
-            // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
-            //     console.log(name)
-            //     if (["changefloatingmode", "movewindow"].includes(name))
-            //         box.attribute.update(box);
-            // }, 'event')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
-            .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
-            .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
-            .hook(App, (box, name, visible) => { // Update on open
-                if (name == 'overview' && visible) box.attribute.update(box);
+            }).catch(print);
+        }
+    },
+    setup: (box) => box
+        .hook(overviewTick, (box) => box.attribute.update(box))
+        // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
+        //     console.log(name)
+        //     if (["changefloatingmode", "movewindow"].includes(name))
+        //         box.attribute.update(box);
+        // }, 'event')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
+        .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
+        .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
+        .hook(App, (box, name, visible) => { // Update on open
+            if (name == 'overview' && visible) box.attribute.update(box);
+        })
+    ,
+});
+
+
+export default () => Widget.Revealer({
+    revealChild: true,
+    transition: 'slide_down',
+    transitionDuration: 200,
+    child: Widget.Box({
+        vertical: true,
+        className: 'overview-tasks',
+        children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
+            OverviewRow({
+                startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
+                workspaces: NUM_OF_WORKSPACE_COLS
             })
-        ,
-    });
-}
-
-
-export default () => {
-    const overviewRevealer = Widget.Revealer({
-        revealChild: true,
-        transition: 'slide_down',
-        transitionDuration: 200,
-        child: Widget.Box({
-            vertical: true,
-            className: 'overview-tasks',
-            children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
-                OverviewRow({
-                    startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
-                    workspaces: NUM_OF_WORKSPACE_COLS
-                })
-            )
-        }),
-    });
-    return overviewRevealer;
-};
+        )
+    }),
+});
