@@ -213,6 +213,8 @@ const Workspace = (index) => {
     });
     widget.clear = () => {
         fixed.get_children().forEach(ch => ch.destroy());
+        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+        fixed.put(WorkspaceNumber(offset + index), 0, 0);
     }
     widget.set = (clientJson) => {
         // if(clientMap.get(clientJson.address)) clientMap.get(clientJson.address).destroy();
