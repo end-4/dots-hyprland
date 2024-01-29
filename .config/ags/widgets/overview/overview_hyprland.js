@@ -217,7 +217,7 @@ const Workspace = (index) => {
     widget.set = (clientJson) => {
         // if(clientMap.get(clientJson.address)) clientMap.get(clientJson.address).destroy();
         const newWindow = Window(clientJson);
-        if(newWindow === null) return;
+        if (newWindow === null) return;
         // clientMap.set(clientJson.address, newWindow);
         fixed.put(newWindow,
             Math.max(0, clientJson.at[0] * OVERVIEW_SCALE),
@@ -256,7 +256,7 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
                 kids.forEach(kid => kid.clear());
                 for (let i = 0; i < allClients.length; i++) {
                     const client = allClients[i];
-                    if (offset + startWorkspace <= client.workspace.id && client.workspace.id <= offset + workspaces) {
+                    if (offset + startWorkspace <= client.workspace.id && client.workspace.id <= offset + startWorkspace + workspaces) {
                         kids[client.workspace.id - (offset + startWorkspace)]
                             .set(client);
                     }
@@ -299,7 +299,7 @@ export default () => Widget.Revealer({
         children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
             OverviewRow({
                 startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
-                workspaces: NUM_OF_WORKSPACE_COLS
+                workspaces: NUM_OF_WORKSPACE_COLS,
             })
         )
     }),
