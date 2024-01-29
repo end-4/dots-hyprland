@@ -270,18 +270,11 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     },
     setup: (box) => box
         .hook(overviewTick, (box) => box.attribute.update(box))
-        // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
-        //     console.log(name)
-        //     if (["changefloatingmode", "movewindow"].includes(name))
-        //         box.attribute.update(box);
-        // }, 'event')
         .hook(Hyprland, (box, clientAddress) => {
             box.attribute.update(box)
-            // console.log('close', clientAddress);
         }, 'client-removed')
         .hook(Hyprland, (box, clientAddress) => {
             box.attribute.update(box);
-            // console.log('open', clientAddress);
         }, 'client-added')
         .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
         .hook(App, (box, name, visible) => { // Update on open

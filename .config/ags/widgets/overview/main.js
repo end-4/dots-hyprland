@@ -4,7 +4,7 @@ import { SearchAndWindows } from "./windowcontent.js";
 export default () => Widget.Window({
     name: 'overview',
     exclusivity: 'ignore',
-    focusable: true,
+    keymode: 'exclusive',
     popup: true,
     visible: false,
     anchor: ['top'],

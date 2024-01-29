@@ -5,7 +5,7 @@ export default () => Widget.Window({ // On-screen keyboard
     name: 'session',
     popup: true,
     visible: false,
-    focusable: true,
+    keymode: 'exclusive',
     layer: 'overlay',
     exclusivity: 'ignore',
     // anchor: ['top', 'bottom', 'left', 'right'],
