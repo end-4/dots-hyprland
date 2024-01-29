@@ -22,7 +22,7 @@ install-ags (){
   try git init -b main
   try git remote add origin https://github.com/Aylur/ags.git
   x git pull origin main && git submodule update --init --recursive
-  x git checkout 1c95191a9ab7bdad6f24ba1971e1e398442f3e2b # "bump version to 1.7.1" - 2024-01-16
+  x git checkout 1becec0013b4c2dfebb079aaf593c0d9e7404828 # "feat(Window): keymode"
   x npm install
   x meson setup build
   x meson install -C build
