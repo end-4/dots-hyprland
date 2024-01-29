@@ -1,3 +1,7 @@
+// TODO
+// - Make client destroy/create not destroy and recreate the whole thing
+// - Active ws hook optimization: only update when moving to next group
+//
 const { Gdk, Gtk } = imports.gi;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
@@ -71,6 +75,7 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
 
 const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }) => {
     const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
+    if (c === '' && title === '') return null;
     if (w <= 0 || h <= 0) return null;
     if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
     if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
@@ -173,6 +178,7 @@ const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, cl
 
 const Workspace = (index) => {
     const fixed = Gtk.Fixed.new();
+    // const clientMap = new Map();
     const WorkspaceNumber = (index) => Widget.Label({
         className: 'overview-tasks-workspace-number',
         label: `${index}`,
@@ -205,26 +211,28 @@ const Workspace = (index) => {
             child: fixed,
         })],
     });
-    widget.update = (clients) => {
-        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-        clients = clients.filter(({ workspace: { id } }) => (id) === index + offset);
-
-        const children = fixed.get_children();
-        for (let i = 0; i < children.length; i++) {
-            const child = children[i];
-            child.destroy();
-        }
-        fixed.put(WorkspaceNumber(index + offset), 0, 0);
-
-        for (let i = 0; i < clients.length; i++) {
-            const c = clients[i];
-            if (c.mapped) {
-                fixed.put(Window(c), Math.max(0, c.at[0] * OVERVIEW_SCALE), Math.max(0, c.at[1] * OVERVIEW_SCALE));
-            }
-        }
-
-        fixed.show_all();
+    widget.clear = () => {
+        fixed.get_children().forEach(ch => ch.destroy());
+    }
+    widget.set = (clientJson) => {
+        // if(clientMap.get(clientJson.address)) clientMap.get(clientJson.address).destroy();
+        const newWindow = Window(clientJson);
+        if(newWindow === null) return;
+        // clientMap.set(clientJson.address, newWindow);
+        fixed.put(newWindow,
+            Math.max(0, clientJson.at[0] * OVERVIEW_SCALE),
+            Math.max(0, clientJson.at[1] * OVERVIEW_SCALE)
+        );
     };
+    // widget.unset = (clientAddress) => {
+    //     if(clientMap.get(clientAddress)) {
+    //         clientMap.get(clientAddress).destroy();
+    //         clientMap.delete(clientAddress);
+    //     }
+    // };
+    widget.show = () => {
+        fixed.show_all();
+    }
     return widget;
 };
 
@@ -239,15 +247,21 @@ const arr = (s, n) => {
 const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
     children: arr(startWorkspace, workspaces).map(Workspace),
     attribute: {
-        update: box => {
+        update: (box) => {
+            const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
             if (!App.getWindow(windowName).visible) return;
             execAsync('hyprctl -j clients').then(clients => {
-                const json = JSON.parse(clients);
-                const children = box.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const ch = children[i];
-                    ch.update(json)
+                const allClients = JSON.parse(clients);
+                const kids = box.get_children();
+                kids.forEach(kid => kid.clear());
+                for (let i = 0; i < allClients.length; i++) {
+                    const client = allClients[i];
+                    if (offset + startWorkspace <= client.workspace.id && client.workspace.id <= offset + workspaces) {
+                        kids[client.workspace.id - (offset + startWorkspace)]
+                            .set(client);
+                    }
                 }
+                kids.forEach(kid => kid.show());
 
             }).catch(print);
         }
@@ -259,8 +273,14 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
         //     if (["changefloatingmode", "movewindow"].includes(name))
         //         box.attribute.update(box);
         // }, 'event')
-        .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
-        .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
+        .hook(Hyprland, (box, clientAddress) => {
+            box.attribute.update(box)
+            // console.log('close', clientAddress);
+        }, 'client-removed')
+        .hook(Hyprland, (box, clientAddress) => {
+            box.attribute.update(box);
+            // console.log('open', clientAddress);
+        }, 'client-added')
         .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
         .hook(App, (box, name, visible) => { // Update on open
             if (name == 'overview' && visible) box.attribute.update(box);
