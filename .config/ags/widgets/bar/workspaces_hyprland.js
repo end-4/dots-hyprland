@@ -35,21 +35,19 @@ const WorkspaceContents = (count = 10) => {
                 // console.log('Mask:', workspaceMask.toString(2));
                 self.attribute.workspaceMask = workspaceMask;
                 // self.attribute.initialized = true;
+                self.queue_draw();
             },
             toggleMask: (self, occupied, name) => {
                 if (occupied) self.attribute.workspaceMask |= (1 << parseInt(name));
                 else self.attribute.workspaceMask &= ~(1 << parseInt(name));
+                self.queue_draw();
             },
         },
         setup: (area) => area
             .hook(Hyprland.active.workspace, (self) => {
                 self.setCss(`font-size: ${(Hyprland.active.workspace.id - 1) % count + 1}px;`);
-                self.attribute.updateMask(self);
-                self.queue_draw();
             })
             .hook(Hyprland, (self) => self.attribute.updateMask(self), 'notify::workspaces')
-            .hook(Hyprland, (self, name) => self.attribute.toggleMask(self, true, name), 'workspace-added')
-            .hook(Hyprland, (self, name) => self.attribute.toggleMask(self, false, name), 'workspace-removed')
             .on('draw', Lang.bind(area, (area, cr) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / count) * NUM_OF_WORKSPACES_SHOWN;
 
