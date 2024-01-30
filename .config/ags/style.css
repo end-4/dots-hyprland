@@ -334,6 +334,12 @@
 .margin-bottom-15 {
   margin-bottom: 1.023rem; }
 
+.width-10 {
+  min-width: 0.682rem; }
+
+.height-10 {
+  min-width: 0.682rem; }
+
 .invisible {
   opacity: 0;
   background-color: transparent;
@@ -482,7 +488,7 @@ tooltip {
   border: 0.136rem solid #6f6a6f; }
 
 .switch-bg {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   background-color: #171518;
@@ -597,20 +603,6 @@ tooltip {
   padding-right: 1.023rem;
   padding-left: 0.341rem; }
 
-.bar-group-pad-left {
-  padding-left: 1.364rem;
-  padding-right: 0.681rem; }
-
-.bar-group-pad-right {
-  padding-left: 0.681rem;
-  padding-right: 1.364rem; }
-
-.bar-group-pad-leftonly {
-  padding-left: 0.681rem; }
-
-.bar-group-pad-rightonly {
-  padding-right: 0.681rem; }
-
 .bar-group-standalone {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
@@ -675,6 +667,7 @@ tooltip {
 .bar-batt {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 1.77rem;
   min-width: 1.77rem;
   border-radius: 10rem;
@@ -701,22 +694,15 @@ tooltip {
   color: #eedcf5; }
 
 .bar-batt-circprog-low {
-  transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
-  min-width: 0.068rem;
-  min-height: 1.636rem;
-  padding: 0rem;
   background-color: #ffb4a9;
   color: #930006; }
 
 .bar-batt-circprog-full {
-  transition: 1000ms cubic-bezier(0.1, 1, 0, 1);
-  min-width: 0.068rem;
-  min-height: 1.636rem;
-  padding: 0rem;
   background-color: #374b3e;
   color: #d1e9d6; }
 
 .bar-music-playstate {
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 1.77rem;
   min-width: 1.77rem;
   border-radius: 10rem;
@@ -756,20 +742,6 @@ tooltip {
   border-radius: 1.364rem;
   background-color: rgba(30, 30, 30, 0.6); }
 
-.bar-music-bottom-bg {
-  border-radius: 1.364rem;
-  min-width: 34.091rem; }
-
-.bar-music-bottom-ctl-bg {
-  border-radius: 1.364rem;
-  background-color: rgba(30, 30, 30, 0.6); }
-
-.bar-music-extended-textbox {
-  margin: 1.023rem; }
-
-.bar-music-bottom-cover {
-  border-radius: 10rem; }
-
 .bar-music-hide-false {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   transition-duration: 100ms;
@@ -779,54 +751,6 @@ tooltip {
   transition: 160ms cubic-bezier(0.38, 0.04, 1, 0.07);
   transition-duration: 100ms;
   opacity: 0; }
-
-.bar-music-btn {
-  font-size: 1.364rem;
-  border-radius: 10rem;
-  min-height: 2.591rem;
-  min-width: 2.591rem; }
-
-.bar-music-btn:hover,
-.bar-music-btn:focus {
-  background-color: rgba(128, 128, 128, 0.3); }
-
-.bar-prog-batt {
-  min-height: 0.955rem;
-  min-width: 0.068rem;
-  padding: 0rem;
-  border-radius: 10rem; }
-  .bar-prog-batt trough {
-    min-height: 0.954rem;
-    min-width: 0.068rem;
-    border-radius: 10rem; }
-  .bar-prog-batt progress {
-    min-height: 0.68rem;
-    min-width: 0.68rem;
-    margin: 0rem 0.137rem;
-    border-radius: 10rem;
-    background-color: #eedcf5; }
-
-.bar-prog-batt-low progress {
-  background-color: #930006; }
-
-.bar-prog-batt-full progress {
-  background-color: #d1e9d6; }
-
-.bar-batt-chargestate {
-  border-radius: 10rem;
-  background-color: transparent; }
-
-.bar-batt-chargestate-charging {
-  border-radius: 10rem;
-  min-width: 0.681rem;
-  min-height: 0.681rem;
-  background-color: #cdc3ce; }
-
-.bar-batt-chargestate-charging-smaller {
-  border-radius: 10rem;
-  min-width: 0.409rem;
-  min-height: 0.409rem;
-  background-color: #cdc3ce; }
 
 .bar-corner-spacing {
   min-width: 1.705rem;
@@ -877,13 +801,14 @@ tooltip {
 .bar-systray-item {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 1.032rem;
   min-width: 1.032rem; }
 
 .bar-statusicons {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   margin: 0.273rem;
   padding: 0rem 0.614rem; }
 
@@ -896,6 +821,7 @@ tooltip {
 .bar-util-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 1.77rem;
   min-width: 1.77rem;
   background-color: #38343a; }
@@ -940,7 +866,7 @@ tooltip {
   color: #f4d9ff; }
 
 .cheatsheet-closebtn {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 2.386rem;
@@ -1184,7 +1110,7 @@ tooltip {
   margin-top: 2.727rem; }
 
 .overview-search-box {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   border-top: 1px solid rgba(167, 161, 166, 0.19);
@@ -1466,7 +1392,7 @@ tooltip {
 .sidebar-iconbutton {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   color: #e7e0e5;
   min-width: 2.727rem;
   min-height: 2.727rem; }
@@ -1479,13 +1405,8 @@ tooltip {
   background-color: rgba(128, 128, 128, 0.7); }
 
 .sidebar-button {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   padding: 0rem 0.818rem;
-  background-color: #4f4256;
-  color: #eedcf5; }
-
-.sidebar-button-nopad {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
   background-color: #4f4256;
   color: #eedcf5; }
 
@@ -1495,29 +1416,6 @@ tooltip {
 
 .sidebar-button:active {
   background-color: rgba(128, 128, 128, 0.7); }
-
-.sidebar-button-nopad:hover,
-.sidebar-button-nopad:focus {
-  background-color: rgba(128, 128, 128, 0.3); }
-
-.sidebar-button-nopad:active {
-  background-color: rgba(128, 128, 128, 0.7); }
-
-.sidebar-button-left {
-  border-top-left-radius: 0.818rem;
-  border-bottom-left-radius: 0.818rem; }
-
-.sidebar-button-right {
-  border-top-right-radius: 0.818rem;
-  border-bottom-right-radius: 0.955rem; }
-
-.sidebar-button-alone {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem; }
-
-.sidebar-button-alone-normal {
-  border-radius: 0.818rem;
-  -gtk-outline-radius: 0.818rem; }
 
 .sidebar-button-active {
   background-color: #eccbff;
@@ -1599,6 +1497,7 @@ tooltip {
 .sidebar-scrollbar slider {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-width: 0.273rem;
   min-height: 2.045rem;
   background-color: rgba(205, 195, 206, 0.31); }
@@ -1613,7 +1512,7 @@ tooltip {
 .sidebar-calendar-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 2.523rem;
   min-width: 2.523rem;
   color: #e7e0e5; }
@@ -1649,6 +1548,7 @@ tooltip {
 .sidebar-calendar-monthyear-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   padding: 0rem 0.682rem;
   background-color: rgba(56, 52, 58, 0.31);
   color: #cdc3ce; }
@@ -1665,6 +1565,7 @@ tooltip {
 .sidebar-calendar-monthshift-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-width: 2.045rem;
   min-height: 2.045rem;
   background-color: rgba(56, 52, 58, 0.31);
@@ -1681,7 +1582,7 @@ tooltip {
 .sidebar-selector-tab {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 2.5rem;
   color: #e7e0e5; }
 
@@ -1711,6 +1612,7 @@ tooltip {
   background-color: rgba(56, 52, 58, 0.1); }
 
 .sidebar-todo-item-action {
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 9999px;
   min-width: 1.705rem;
   min-height: 1.705rem; }
@@ -1735,12 +1637,13 @@ tooltip {
 .sidebar-todo-new {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   color: #eedcf5;
   margin: 0.341rem;
   padding: 0.205rem 0.545rem;
   border: 0.068rem solid #e7e0e5; }
 
-.sidebar-todo-newz,
+.sidebar-todo-new,
 .sidebar-todo-new:focus {
   background-color: #54475b; }
 
@@ -1748,7 +1651,7 @@ tooltip {
   background-color: #6f6176; }
 
 .sidebar-todo-add {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   min-width: 1.705rem;
@@ -1764,7 +1667,7 @@ tooltip {
   background-color: #6f6176; }
 
 .sidebar-todo-add-available {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   min-width: 1.705rem;
@@ -1781,7 +1684,7 @@ tooltip {
   background-color: #cba7e1; }
 
 .sidebar-todo-entry {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   background-color: #38343a;
@@ -1817,7 +1720,7 @@ tooltip {
   background-color: rgba(31, 28, 32, 0.31); }
 
 .sidebar-chat-apiswitcher-icon {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 2.182rem;
@@ -1829,7 +1732,7 @@ tooltip {
   color: #eedcf5; }
 
 .sidebar-chat-viewport {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   padding: 0.682rem 0rem; }
 
 .sidebar-chat-textarea {
@@ -1845,8 +1748,14 @@ tooltip {
   min-height: 1.773rem;
   min-width: 0rem; }
 
+.sidebar-chat-wrapper {
+  transition: 400ms cubic-bezier(0.1, 1, 0, 1); }
+
+.sidebar-chat-wrapper-extended {
+  min-height: 7.500rem; }
+
 .sidebar-chat-send {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-width: 1.705rem;
   min-height: 1.705rem;
   border-radius: 0.478rem; }
@@ -1873,7 +1782,7 @@ tooltip {
   margin: 0.682rem; }
 
 .sidebar-chat-indicator {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 0.136rem;
@@ -1930,6 +1839,7 @@ tooltip {
 .sidebar-chat-codeblock-topbar-btn {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   padding: 0.273rem 0.477rem; }
 
 .sidebar-chat-codeblock-topbar-btn:hover,
@@ -1962,7 +1872,7 @@ tooltip {
 .sidebar-chat-welcome-logo {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 4.773rem;
   min-width: 4.773rem;
   font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Symbols Sharp";
@@ -1971,12 +1881,13 @@ tooltip {
   color: #0f0e10; }
 
 .sidebar-chat-chip {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   padding: 0.341rem 0.477rem; }
 
 .sidebar-chat-chip-action {
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   background-color: #242125;
   color: #cdc3ce; }
 
@@ -1992,7 +1903,7 @@ tooltip {
   border: 0.068rem solid #746d75; }
 
 .sidebar-chat-chip-toggle {
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
   padding: 0.341rem 0.477rem;
@@ -2009,7 +1920,7 @@ tooltip {
 .sidebar-pin {
   border-radius: 0.818rem;
   -gtk-outline-radius: 0.818rem;
-  transition: 300ms cubic-bezier(0.1, 1, 0, 1);
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 2.386rem;
   min-width: 2.386rem;
   color: #e7e0e5; }
@@ -2055,6 +1966,7 @@ tooltip {
   background-position: center; }
 
 .sidebar-waifu-image-actions {
+  transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   padding: 0.313rem; }
 
 .sidebar-waifu-image-action {
