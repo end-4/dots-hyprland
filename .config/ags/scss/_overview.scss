@@ -3,7 +3,7 @@
 }
 
 .overview-search-box {
-    @include menu_decel;
+    @include element_decel;
     @include large-rounding;
     @include elevation-border;
     @include elevation2;

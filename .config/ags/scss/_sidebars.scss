@@ -78,7 +78,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-iconbutton {
     @include full-rounding;
-    @include menu_decel;
+    @include element_decel;
     color: $onSurface;
     min-width: 2.727rem;
     min-height: 2.727rem;
@@ -94,14 +94,8 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-button {
-    @include menu_decel;
+    @include element_decel;
     padding: 0rem $rounding_small;
-    background-color: $t_secondaryContainer;
-    color: $onSecondaryContainer;
-}
-
-.sidebar-button-nopad {
-    @include menu_decel;
     background-color: $t_secondaryContainer;
     color: $onSecondaryContainer;
 }
@@ -113,33 +107,6 @@ $onChatgpt: $onPrimary;
 
 .sidebar-button:active {
     background-color: $activecolor;
-}
-
-.sidebar-button-nopad:hover,
-.sidebar-button-nopad:focus {
-    background-color: $hovercolor;
-}
-
-.sidebar-button-nopad:active {
-    background-color: $activecolor;
-}
-
-.sidebar-button-left {
-    border-top-left-radius: $rounding_small;
-    border-bottom-left-radius: $rounding_small;
-}
-
-.sidebar-button-right {
-    border-top-right-radius: $rounding_small;
-    border-bottom-right-radius: $rounding_mediumsmall;
-}
-
-.sidebar-button-alone {
-    @include small-rounding;
-}
-
-.sidebar-button-alone-normal {
-    @include small-rounding;
 }
 
 .sidebar-button-active {
@@ -236,6 +203,7 @@ $onChatgpt: $onPrimary;
 
     slider {
         @include full-rounding;
+        @include element_decel;
         min-width: 0.273rem;
         min-height: 2.045rem;
         background-color: $t_onSurfaceVariant;
@@ -253,7 +221,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-calendar-btn {
     @include full-rounding;
-    @include menu_decel;
+    @include element_decel;
     min-height: 2.523rem;
     min-width: 2.523rem;
     color: $onSurface;
@@ -297,6 +265,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-calendar-monthyear-btn {
     @include full-rounding;
+    @include element_decel;
     padding: 0rem 0.682rem;
     background-color: $t_surfaceVariant;
     color: $onSurfaceVariant;
@@ -315,6 +284,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-calendar-monthshift-btn {
     @include full-rounding;
+    @include element_decel;
     min-width: 2.045rem;
     min-height: 2.045rem;
     background-color: $t_surfaceVariant;
@@ -333,7 +303,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-selector-tab {
     @include small-rounding;
-    @include menu_decel;
+    @include element_decel;
     min-height: 2.5rem;
     color: $onSurface;
 }
@@ -357,7 +327,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-selector-highlight {
-    transition: 180ms ease-in-out; // Doesn't look that good, but it syncs with GtkStack animation of the actual todo widget content
+    transition: 180ms ease-in-out; // Doesn't look that good, but it syncs with the GtkStack
     color: $primary;
     // padding: 0rem 2.045rem;
     min-height: 0.205rem;
@@ -372,6 +342,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-todo-item-action {
+    @include element_decel;
     border-radius: 9999px;
     min-width: 1.705rem;
     min-height: 1.705rem;
@@ -401,13 +372,14 @@ $onChatgpt: $onPrimary;
 
 .sidebar-todo-new {
     @include full-rounding;
+    @include element_decel;
     color: $onSecondaryContainer;
     margin: 0.341rem;
     padding: 0.205rem 0.545rem;
     border: 0.068rem solid $onSurface;
 }
 
-.sidebar-todo-newz,
+.sidebar-todo-new,
 .sidebar-todo-new:focus {
     background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
 }
@@ -417,7 +389,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-todo-add {
-    @include menu_decel;
+    @include element_decel;
     @include small-rounding;
     min-width: 1.705rem;
     min-height: 1.705rem;
@@ -435,7 +407,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-todo-add-available {
-    @include menu_decel;
+    @include element_decel;
     @include small-rounding;
     min-width: 1.705rem;
     min-height: 1.705rem;
@@ -454,7 +426,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-todo-entry {
-    @include menu_decel;
+    @include element_decel;
     @include small-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
@@ -491,7 +463,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-apiswitcher-icon {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     min-width: 2.182rem;
     min-height: 2.182rem;
@@ -504,7 +476,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-viewport {
-    @include menu_decel;
+    @include element_decel;
     // margin: 0.682rem 0rem;
     padding: 0.682rem 0rem;
 }
@@ -532,7 +504,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-send {
-    @include menu_decel;
+    @include element_decel;
     min-width: 1.705rem;
     min-height: 1.705rem;
     border-radius: $rounding_medium - 0.681rem;
@@ -566,7 +538,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-indicator {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     min-width: 0.136rem;
     background-color: $onBackground;
@@ -630,6 +602,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-chat-codeblock-topbar-btn {
     @include full-rounding;
+    @include element_decel;
     padding: 0.273rem 0.477rem;
 }
 
@@ -668,7 +641,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-chat-welcome-logo {
     @include full-rounding;
-    @include menu_decel;
+    @include element_decel;
     min-height: 4.773rem;
     min-width: 4.773rem;
     @include icon-material;
@@ -678,12 +651,13 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-chip {
-    @include menu_decel;
+    @include element_decel;
     @include small-rounding;
     padding: 0.341rem 0.477rem;
 }
 
 .sidebar-chat-chip-action {
+    @include element_decel;
     background-color: $textboxColor;
     color: $onSurfaceVariant;
 }
@@ -703,7 +677,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-chat-chip-toggle {
-    @include menu_decel;
+    @include element_decel;
     @include small-rounding;
     padding: 0.341rem 0.477rem;
     background-color: $textboxColor;
@@ -721,7 +695,7 @@ $onChatgpt: $onPrimary;
 
 .sidebar-pin {
     @include small-rounding;
-    @include menu_decel;
+    @include element_decel;
     min-height: 2.386rem;
     min-width: 2.386rem;
     color: $onSurface;
@@ -778,6 +752,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-waifu-image-actions {
+    @include element_decel;
     padding: 0.313rem;
 }
 

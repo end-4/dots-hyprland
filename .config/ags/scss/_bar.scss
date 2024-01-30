@@ -48,24 +48,6 @@ $bar_subgroup_bg: $surfaceVariant;
     padding-left: 0.341rem;
 }
 
-.bar-group-pad-left {
-    padding-left: 1.364rem;
-    padding-right: 0.681rem;
-}
-
-.bar-group-pad-right {
-    padding-left: 0.681rem;
-    padding-right: 1.364rem;
-}
-
-.bar-group-pad-leftonly {
-    padding-left: 0.681rem;
-}
-
-.bar-group-pad-rightonly {
-    padding-right: 0.681rem;
-}
-
 .bar-group-standalone {
     @include bar-group-rounding;
     -gtk-outline-radius: 1.364rem;
@@ -142,6 +124,7 @@ $bar_subgroup_bg: $surfaceVariant;
 
 .bar-batt {
     @include full-rounding;
+    @include element_decel;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
@@ -173,24 +156,17 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .bar-batt-circprog-low {
-    @include fluent_decel_long;
-    min-width: 0.068rem; // line width
-    min-height: 1.636rem;
-    padding: 0rem;
     background-color: $error;
     color: $errorContainer;
 }
 
 .bar-batt-circprog-full {
-    @include fluent_decel_long;
-    min-width: 0.068rem; // line width
-    min-height: 1.636rem;
-    padding: 0rem;
     background-color: $successContainer;
     color: $onSuccessContainer;
 }
 
 .bar-music-playstate {
+    @include element_decel;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
@@ -237,24 +213,6 @@ $bar_subgroup_bg: $surfaceVariant;
     background-color: rgba(30, 30, 30, 0.6);
 }
 
-.bar-music-bottom-bg {
-    border-radius: 1.364rem;
-    min-width: 34.091rem;
-}
-
-.bar-music-bottom-ctl-bg {
-    border-radius: 1.364rem;
-    background-color: rgba(30, 30, 30, 0.6);
-}
-
-.bar-music-extended-textbox {
-    margin: 1.023rem;
-}
-
-.bar-music-bottom-cover {
-    border-radius: 10rem;
-}
-
 .bar-music-hide-false {
     @include menu_decel;
     transition-duration: 100ms;
@@ -265,70 +223,6 @@ $bar_subgroup_bg: $surfaceVariant;
     @include menu_accel;
     transition-duration: 100ms;
     opacity: 0;
-}
-
-.bar-music-btn {
-    font-size: 1.364rem;
-    border-radius: 10rem;
-    min-height: 2.591rem;
-    min-width: 2.591rem;
-}
-
-.bar-music-btn:hover,
-.bar-music-btn:focus {
-    background-color: $hovercolor;
-}
-
-.bar-prog-batt {
-    min-height: 0.955rem;
-    min-width: 0.068rem;
-    padding: 0rem;
-    border-radius: 10rem;
-
-    trough {
-        min-height: 0.954rem;
-        min-width: 0.068rem;
-        border-radius: 10rem;
-    }
-
-    progress {
-        min-height: 0.68rem;
-        min-width: 0.68rem;
-        margin: 0rem 0.137rem;
-        border-radius: 10rem;
-        background-color: $t_onSecondaryContainer;
-    }
-}
-
-.bar-prog-batt-low {
-    progress {
-        background-color: $errorContainer;
-    }
-}
-
-.bar-prog-batt-full {
-    progress {
-        background-color: $onSuccessContainer;
-    }
-}
-
-.bar-batt-chargestate {
-    border-radius: 10rem;
-    background-color: transparent;
-}
-
-.bar-batt-chargestate-charging {
-    border-radius: 10rem;
-    min-width: 0.681rem;
-    min-height: 0.681rem;
-    background-color: $onSurfaceVariant;
-}
-
-.bar-batt-chargestate-charging-smaller {
-    border-radius: 10rem;
-    min-width: 0.409rem;
-    min-height: 0.409rem;
-    background-color: $onSurfaceVariant;
 }
 
 .bar-corner-spacing {
@@ -388,13 +282,14 @@ $bar_subgroup_bg: $surfaceVariant;
 
 .bar-systray-item {
     @include full-rounding;
+    @include element_decel;
     min-height: 1.032rem;
     min-width: 1.032rem;
 }
 
 .bar-statusicons {
     @include full-rounding;
-    @include menu_decel;
+    @include element_decel;
     margin: 0.273rem;
     padding: 0rem 0.614rem;
 }
@@ -409,6 +304,7 @@ $bar_subgroup_bg: $surfaceVariant;
 
 .bar-util-btn {
     @include full-rounding;
+    @include element_decel;
     min-height: 1.77rem;
     min-width: 1.77rem;
     background-color: $bar_subgroup_bg;
