@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
-cd "$(dirname "$0")"
-export base="$(pwd)"
+
+# The script that use this file should have two lines on its top as follows:
+# cd "$(dirname "$0")"
+# export base="$(pwd)"
 
 function try { "$@" || sleep 0; }
 function v() {
