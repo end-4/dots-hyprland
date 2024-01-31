@@ -119,13 +119,7 @@ const pinButton = Button({
     child: MaterialIcon('push_pin', 'larger'),
     tooltipText: 'Pin sidebar (Ctrl+P)',
     onClicked: (self) => self.attribute.toggle(self),
-    // Focus Pin button on open. Hit keybind -> space/enter = toggle pin state
-    setup: (self) => self
-        .hook(App, (self, currentName, visible) => {
-            if (currentName === 'sideleft' && visible)
-                self.grab_focus();
-        })
-    ,
+    setup: setupCursorHover,
 })
 
 export default () => Box({
