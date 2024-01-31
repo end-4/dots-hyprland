@@ -121,42 +121,6 @@ const BarBattery = () => Box({
     ]
 });
 
-const BarResource = (name, icon, command) => {
-    const resourceLabel = Label({
-        className: 'txt-smallie txt-onSurfaceVariant',
-    });
-    const resourceCircProg = AnimatedCircProg({
-        className: 'bar-batt-circprog',
-        vpack: 'center', hpack: 'center',
-    });
-    const widget = Box({
-        className: 'spacing-h-4 txt-onSurfaceVariant',
-        children: [
-            resourceLabel,
-            Overlay({
-                child: Widget.Box({
-                    vpack: 'center',
-                    className: 'bar-batt',
-                    homogeneous: true,
-                    children: [
-                        MaterialIcon(icon, 'small'),
-                    ],
-                }),
-                overlays: [resourceCircProg]
-            }),
-        ],
-        setup: (self) => self
-            .poll(5000, () => execAsync(['bash', '-c', command])
-                .then((output) => {
-                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
-                    resourceLabel.label = `${Math.round(Number(output))}%`;
-                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
-                }).catch(print))
-        ,
-    });
-    return widget;
-}
-
 const BarGroup = ({ child }) => Widget.Box({
     className: 'bar-group-margin bar-sides',
     children: [
@@ -195,9 +159,11 @@ export default () => Widget.EventBox({
                         ]
                     })],
                     ['desktop', Box({
-                        className: 'spacing-h-5', children: [
-                            BarGroup({ child: BarResource('RAM usage', 'memory', `free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
-                            BarGroup({ child: BarResource('Swap usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`), }),
+                        className: 'spacing-h-5',
+                        children: [
+                            Label({
+                                label: 'Weather',
+                            })
                         ]
                     })],
                 ],

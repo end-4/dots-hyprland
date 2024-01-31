@@ -264,6 +264,14 @@
     margin-right: 0rem;
 }
 
+.spacing-h-4 > overlay > *:first-child {
+    margin-right: 0.273rem;
+}
+
+.spacing-h-4 > overlay:last-child > * {
+    margin-right: 0rem;
+}
+
 .spacing-h-5 > * {
     margin-right: 0.341rem;
 }
