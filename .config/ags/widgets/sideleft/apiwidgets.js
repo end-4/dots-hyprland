@@ -72,6 +72,9 @@ export const chatEntry = TextView({
     acceptsTab: false,
     className: 'sidebar-chat-entry txt txt-smallie',
     setup: (self) => self
+        .hook(App, (self, currentName, visible) => {
+            if (currentName === 'sideleft' && visible) self.grab_focus();
+        })
         .hook(ChatGPT, (self) => {
             if (APIS[currentApiId].name != 'Assistant (ChatGPT 3.5)') return;
             self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
