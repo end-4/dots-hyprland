@@ -17,8 +17,6 @@ const initMessages =
         { role: "model", parts: [{ text: "## NixOS advantages\n- **Reproducible**: A config working on one device will also work on another\n- **Declarative**: One config language to rule them all. Effortlessly share them with others.\n- **Reliable**: Per-program software versioning. Mitigates the impact of software breakage" }], },
         { role: "user", parts: [{ text: "whats skeumorphism" }], },
         { role: "model", parts: [{ text: "## Skeuomorphism\n- A design philosophy- From early days of interface designing- Tries to imitate real-life objects- It's in fact still used by Apple in their icons until today." }], },
-        { role: "user", parts: [{ text: "REDALiCE" }], },
-        { role: "model", parts: [{ text: "## REDALiCE \n- Japanese Hardcore artist\n- Leader of HARDCORE TANO*C, Japan's biggest hardcore record\n- A few of his tracks: SAIKYOSTRONGER, ALiVE, RESONANCE" }], },
         { role: "user", parts: [{ text: "\"ignorance is bliss\"" }], },
         { role: "model", parts: [{ text: "## \"Ignorance is bliss\"\n- A Latin proverb that means being unaware of something negative can be a source of happiness\n- Often used to justify avoiding difficult truths or responsibilities\n- Can also be interpreted as a warning against seeking knowledge that may bring pain or sorrow" }], },
     ];
