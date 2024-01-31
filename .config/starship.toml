@@ -5,8 +5,12 @@ add_newline = false
 # Wedges 🭧🭒 🭣🭧🭓
 # Random noise 🬖🬥🬔🬗
 
+# format = """
+# $cmd_duration$username$hostname $directory $git_branch
+# $character
+# """
 format = """
-$cmd_duration$username$hostname $directory $git_branch
+$cmd_duration$directory $git_branch
 $character
 """
 
@@ -74,21 +78,22 @@ disabled = false
 show_always = true
 
 [directory]
-home_symbol = " "
-read_only = "  "
+home_symbol = "  "
+read_only = "  "
 style = "bg:blue fg:black"
-truncation_length = 2
-truncation_symbol = "./"
-format = '[](bold fg:blue)[$path]($style)[](bold fg:blue)'
+truncation_length = 30
+truncation_symbol = "••/"
+format = '[](bold fg:blue)[$path ]($style)[](bold fg:blue)'
 
 
 [directory.substitutions]
-"Documents" = " "
-"/" = "|"
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
+"Desktop" = "  "
+"Documents" = "  "
+"Downloads" = "  "
+"Music" = " 󰎈 "
+"Pictures" = "  "
+"Videos" = "  "
 
 [cmd_duration]
-min_time = 1
+min_time = 0
 format = '[](bold fg:yellow)[ $duration](bold bg:yellow fg:black)[](bold fg:yellow) •• '
