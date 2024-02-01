@@ -1,6 +1,6 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
-export const searchItem = ({ materialIconName, name, actionName, content, onActivate }) => {
+export const searchItem = ({ materialIconName, name, actionName, content, onActivate, extraClassName = '', ...rest }) => {
     const actionText = Widget.Revealer({
         revealChild: false,
         transition: "crossfade",
@@ -17,7 +17,7 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
         child: actionText,
     })
     return Widget.Button({
-        className: 'overview-search-result-btn',
+        className: `overview-search-result-btn txt ${extraClassName}`,
         onClicked: onActivate,
         child: Widget.Box({
             children: [
@@ -33,13 +33,13 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
                             children: [
                                 Widget.Label({
                                     hpack: 'start',
-                                    className: 'overview-search-results-txt txt txt-smallie txt-subtext',
+                                    className: 'overview-search-results-txt txt-smallie txt-subtext',
                                     label: `${name}`,
                                     truncate: "end",
                                 }),
                                 Widget.Label({
                                     hpack: 'start',
-                                    className: 'overview-search-results-txt txt txt-norm',
+                                    className: 'overview-search-results-txt txt-norm',
                                     label: `${content}`,
                                     truncate: "end",
                                 }),
