@@ -154,7 +154,7 @@ export default () => {
                     child: Box({
                         className: 'spacing-h-10',
                         children: [
-                            BarResource('Swap Usage', 'swap_horiz', `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
+                            BarResource('Swap Usage', 'swap_horiz', `free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`),
                             BarResource('CPU Usage', 'settings_motion_mode', `top -bn1 | grep Cpu | awk '{print $2}'`),
                         ]
                     }),
