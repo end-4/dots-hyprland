@@ -75,15 +75,20 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
 
 const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }) => {
     const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
-    if (c === '' && title === '') return null;
-    if (w <= 0 || h <= 0) return null;
-    if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
-    if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
-    if (x < 0) w = x + w; // We only have to handle w/h. Pos determined at put() 
-    if (y < 0) h = y + h; // We only have to handle w/h. Pos determined at put() 
+    if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
+    if (x + w <= 0) x += (Math.floor(x / SCREEN_WIDTH) * SCREEN_WIDTH);
+    else if (x < 0) { x = 0; w = x + w; }
+    if (y + h <= 0) x += (Math.floor(y / SCREEN_HEIGHT) * SCREEN_HEIGHT);
+    else if (y < 0) { y = 0; h = y + h; }
+
+    if (x >= SCREEN_WIDTH) x %= SCREEN_WIDTH;
+    else if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
+    if (y >= SCREEN_HEIGHT) y %= SCREEN_HEIGHT;
+    else if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
 
     // title = truncateTitle(title);
     return Widget.Button({
+        attribute: { x, y },
         className: 'overview-tasks-window',
         hpack: 'center',
         vpack: 'center',
@@ -222,8 +227,8 @@ const Workspace = (index) => {
         if (newWindow === null) return;
         // clientMap.set(clientJson.address, newWindow);
         fixed.put(newWindow,
-            Math.max(0, clientJson.at[0] * OVERVIEW_SCALE),
-            Math.max(0, clientJson.at[1] * OVERVIEW_SCALE)
+            Math.max(0, newWindow.attribute.x * OVERVIEW_SCALE),
+            Math.max(0, newWindow.attribute.y * OVERVIEW_SCALE)
         );
     };
     // widget.unset = (clientAddress) => {
