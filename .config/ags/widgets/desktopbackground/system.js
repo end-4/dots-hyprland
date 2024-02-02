@@ -63,9 +63,9 @@ const resources = Box({
                         label.label = `${output}`
                     }).catch(print);
             }, { hpack: 'end' }),
-        ResourceValue('Swap', 'swap_horiz', 10000, `free | awk '/^Swap/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+        ResourceValue('Swap', 'swap_horiz', 10000, `free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
             (label) => {
-                execAsync(['bash', '-c', `free -h | awk '/^Swap/ {print $3 " / " $2}' | sed 's/Gi/Gib/g'`])
+                execAsync(['bash', '-c', `free -h | awk '/^Swap/ {if ($2 != "0") print $3 " / " $2; else print "No swap"}' | sed 's/Gi/Gib/g'`])
                     .then((output) => {
                         label.label = `${output}`
                     }).catch(print);
