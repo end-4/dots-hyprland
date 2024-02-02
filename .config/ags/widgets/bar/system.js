@@ -1,5 +1,4 @@
-// This is for the right pill of the bar. 
-// For the cool memory indicator on the sidebar, see sysinfo.js
+// This is for the right pills of the bar. 
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
@@ -162,7 +161,6 @@ const BatteryModule = () => Stack({
                         })
                         .then((city) => execAsync(`curl https://wttr.in/${city}?format=j1`)
                             .then(output => {
-                                console.log(`curl https://wttr.in/${city}?format=j1`);
                                 const weather = JSON.parse(output);
                                 Utils.writeFile(JSON.stringify(weather), WEATHER_CACHE_PATH)
                                     .catch(print);
