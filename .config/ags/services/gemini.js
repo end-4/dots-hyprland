@@ -38,7 +38,7 @@ function replaceapidom(URL) {
     }
     return URL;
 }
-const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
+const CHAT_MODELS = ["gemini-pro"]
 const ONE_CYCLE_COUNT = 3;
 
 class GeminiMessage extends Service {
@@ -249,7 +249,7 @@ class GeminiService extends Service {
         const session = new Soup.Session();
         const message = new Soup.Message({
             method: 'POST',
-            uri: GLib.Uri.parse(replaceapidom(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:streamGenerateContent?key=${this._key}`), GLib.UriFlags.NONE),
+            uri: GLib.Uri.parse(replaceapidom(`https://generativelanguage.googleapis.com/v1/models/${this.modelName}:streamGenerateContent?key=${this._key}`), GLib.UriFlags.NONE),
         });
         message.request_headers.append('Content-Type', `application/json`);
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(JSON.stringify(body)));
