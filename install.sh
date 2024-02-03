@@ -39,10 +39,8 @@ set -e
 #####################################################################################
 printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[97m"
 
-# Each line as an element of the array $pkglist
 remove_bashcomments_emptylines ./scriptdata/dependencies.conf ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
-# NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
 
 if ! command -v yay >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
