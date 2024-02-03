@@ -273,10 +273,12 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
                 kids.forEach(kid => kid.clear());
                 for (let i = 0; i < allClients.length; i++) {
                     const client = allClients[i];
-                    if (offset + startWorkspace <= client.workspace.id && client.workspace.id <= offset + startWorkspace + workspaces) {
+                    if (offset + startWorkspace <= client.workspace.id &&
+                        client.workspace.id <= offset + startWorkspace + workspaces) {
                         const screenCoords = box.attribute.monitorMap[client.monitor];
                         kids[client.workspace.id - (offset + startWorkspace)]
-                            .set(client, screenCoords);
+                            ?.set(client, screenCoords);
+
                     }
                 }
                 kids.forEach(kid => kid.show());
