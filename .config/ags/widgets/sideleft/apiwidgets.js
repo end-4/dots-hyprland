@@ -13,13 +13,7 @@ import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
-class AgsTextView extends AgsWidget(Gtk.TextView, "AgsTextView") {
-    static { AgsWidget.register(this, {}); }
-    constructor(params) {
-        super(params);
-    }
-}
-const TextView = Widget.createCtor(AgsTextView);
+const TextView =  Widget.subclass(Gtk.TextView, "AgsTextView");
 
 
 const EXPAND_INPUT_THRESHOLD = 30;
