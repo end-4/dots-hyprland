@@ -9,8 +9,11 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 
 pkglistfile=$(mktemp)
-pkglistfile_orig=./scriptdata/dependencies.txt
-cat $pkglistfile_orig | sed "s_\ _\n_g" > $pkglistfile
+pkglistfile_orig=./scriptdata/dependencies.conf
+pkglistfile_orig_s=./cache/dependencies_stripped.conf
+remove_bashcomments_emptylines $pkglistfile_orig $pkglistfile_orig_s
+
+cat $pkglistfile_orig_s | sed "s_\ _\n_g" > $pkglistfile
 
 echo "The non-existent pkgs in $pkglistfile_orig are listed as follows."
 # Borrowed from https://bbs.archlinux.org/viewtopic.php?pid=1490795#p1490795
