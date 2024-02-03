@@ -365,6 +365,7 @@ export default () => MarginRevealer({
                 for (let i = 0; i < children.length; i++) {
                     const child = children[i];
                     child.destroy();
+                    child = null;
                 }
                 return;
             }

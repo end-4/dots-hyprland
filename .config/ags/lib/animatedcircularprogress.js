@@ -83,22 +83,22 @@ export const AnimatedCircProg = ({
 
         // Init animation
         if (initFrom != initTo) {
-            // area.css = `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`;
+            area.css = `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`;
             Utils.timeout(20, () => {
                 area.css = `font-size: ${initTo}px;`;
             }, area)
-            // const transitionDistance = initTo - initFrom;
-            // const oneStep = initAnimTime / initAnimPoints;
-            // area.css = `
-            //     font-size: ${initFrom}px;
-            //     transition: ${oneStep}ms linear;
-            // `;
-            // for (let i = 0; i < initAnimPoints; i++) {
-            //     Utils.timeout(Math.max(10, i * oneStep), () => {
-            //         if(!area) return;
-            //         area.css = `${initFrom != initTo ? 'font-size: ' + (initFrom + (transitionDistance / initAnimPoints * (i + 1))) + 'px;' : ''}`;
-            //     });
-            // }
+            const transitionDistance = initTo - initFrom;
+            const oneStep = initAnimTime / initAnimPoints;
+            area.css = `
+                font-size: ${initFrom}px;
+                transition: ${oneStep}ms linear;
+            `;
+            for (let i = 0; i < initAnimPoints; i++) {
+                Utils.timeout(Math.max(10, i * oneStep), () => {
+                    if(!area) return;
+                    area.css = `${initFrom != initTo ? 'font-size: ' + (initFrom + (transitionDistance / initAnimPoints * (i + 1))) + 'px;' : ''}`;
+                });
+            }
         }
         else area.css = 'font-size: 0px;';
         extraSetup(area);

@@ -24,7 +24,7 @@ install-ags (){
   try git init -b main
   try git remote add origin https://github.com/Aylur/ags.git
   x git pull origin main && git submodule update --init --recursive
-  x git checkout 8e94d3b465e76372056c76242e5c013950113be9 # "update changelog"
+  x git checkout 942f824c402631e4c1a9b67542a4db7a7f6d6359 # "export gobject utils in Utils"
   x npm install
   x meson setup build
   x meson install -C build

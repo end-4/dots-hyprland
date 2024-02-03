@@ -208,7 +208,6 @@ const switchToRelativeWorkspace = async (self, num) => {
     }
 }
 
-
 export default () => Widget.EventBox({
     onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
     onScrollDown: (self) => switchToRelativeWorkspace(self, +1),

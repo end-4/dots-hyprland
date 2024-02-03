@@ -6,6 +6,7 @@ source ./scriptdata/installers
 
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
+prevent_sudo_or_root
 startask (){
 printf "\e[34m[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
@@ -38,9 +39,8 @@ set -e
 #####################################################################################
 printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[97m"
 
-# Each line as an element of the array $pkglist
-readarray -t pkglist < ./scriptdata/dependencies.txt
-# NOTE: wayland-idle-inhibitor-git is for providing `wayland-idle-inhibitor.py' used by the `Keep system awake' button in `.config/ags/widgets/sideright/quicktoggles.js'.
+remove_bashcomments_emptylines ./scriptdata/dependencies.conf ./cache/dependencies_stripped.conf
+readarray -t pkglist < ./cache/dependencies_stripped.conf
 
 if ! command -v yay >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
@@ -111,10 +111,10 @@ do
   fi
 done
 
-target="$HOME/.config/hypr/colors.conf"
-test -f $target || { \
-  echo -e "\e[34m[$0]: File \"$target\" not found.\e[0m" && \
-  v cp "$HOME/.config/hypr/colors_default.conf" $target ; }
+# target="$HOME/.config/hypr/colors.conf"
+# test -f $target || { \
+#   echo -e "\e[34m[$0]: File \"$target\" not found.\e[0m" && \
+#   v cp "$HOME/.config/hypr/colors_default.conf" $target ; }
 
 # some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
