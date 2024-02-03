@@ -10,12 +10,14 @@ export default () => Box({
     attribute: {
         'map': new Map(),
         'dismiss': (box, id, force = false) => {
-            if (!id || !box.attribute.map.has(id) || box.attribute.map.get(id).attribute.hovered && !force)
+            if (!id || !box.attribute.map.has(id))
                 return;
+            const notifWidget = box.attribute.map.get(id);
+            if (notifWidget == null || notifWidget.attribute.hovered && !force)
+                return; // cuz already destroyed
 
-            const notif = box.attribute.map.get(id);
-            notif.revealChild = false;
-            notif.attribute.destroyWithAnims();
+            notifWidget.revealChild = false;
+            notifWidget.attribute.destroyWithAnims();
             box.attribute.map.delete(id);
         },
         'notify': (box, id) => {

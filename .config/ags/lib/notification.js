@@ -435,17 +435,17 @@ export default ({
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-    // if (isPopup) Utils.timeout(popupTimeout, () => {
-    //     if (wholeThing) {
-    //         wholeThing.revealChild = false;
-    //         Utils.timeout(200, () => {
-    //             if (wholeThing) {
-    //                 wholeThing.destroy();
-    //                 wholeThing = null;
-    //             }
-    //             command();
-    //         }, wholeThing);
-    //     }
-    // })
+    if (isPopup) Utils.timeout(popupTimeout, () => {
+        if (wholeThing) {
+            wholeThing.revealChild = false;
+            Utils.timeout(200, () => {
+                if (wholeThing) {
+                    wholeThing.destroy();
+                    wholeThing = null;
+                }
+                command();
+            }, wholeThing);
+        }
+    })
     return wholeThing;
 }
