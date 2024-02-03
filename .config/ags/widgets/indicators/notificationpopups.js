@@ -32,8 +32,6 @@ export default () => Box({
             box.attribute.map.set(id, newNotif);
             box.pack_end(box.attribute.map.get(id), false, false, 0);
             box.show_all();
-
-            // box.children = Array.from(box.attribute.map.values()).reverse();
         },
     },
     setup: (self) => self

@@ -20,6 +20,10 @@ function guessMessageType(summary) {
     return 'chat';
 }
 
+function exists(widget) {
+    return widget !== null;
+}
+
 const NotificationIcon = (notifObject) => {
     // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
@@ -71,9 +75,9 @@ const NotificationIcon = (notifObject) => {
 export default ({
     notifObject,
     isPopup = false,
-    popupTimeout = 3000,
     props = {},
 } = {}) => {
+    const popupTimeout = notifObject.urgency == 'critical' ? 8000 : 3000;
     const command = (isPopup ?
         () => notifObject.dismiss() :
         () => notifObject.close()
@@ -82,11 +86,14 @@ export default ({
         widget.sensitive = false;
         notificationBox.setCss(middleClickClose);
         Utils.timeout(200, () => {
-            wholeThing.revealChild = false;
+            if (wholeThing) wholeThing.revealChild = false;
         }, wholeThing);
         Utils.timeout(400, () => {
             command();
-            wholeThing.destroy();
+            if (wholeThing) {
+                wholeThing.destroy();
+                wholeThing = null;
+            }
         }, wholeThing);
     }
     const widget = EventBox({
@@ -111,7 +118,7 @@ export default ({
                 wholeThing.attribute.held = true;
                 notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, true);
                 Utils.timeout(800, () => {
-                    if (wholeThing.attribute.held) {
+                    if (wholeThing?.attribute.held) {
                         Utils.execAsync(['wl-copy', `${notifObject.body}`])
                         notifTextSummary.label = notifObject.summary + " (copied)";
                         Utils.timeout(3000, () => notifTextSummary.label = notifObject.summary)
@@ -123,10 +130,10 @@ export default ({
             })
         }
     });
-    const wholeThing = Revealer({
+    let wholeThing = Revealer({
         attribute: {
             'close': undefined,
-            'destroyWithAnims': () => destroyWithAnims,
+            'destroyWithAnims': destroyWithAnims,
             'dragging': false,
             'held': false,
             'hovered': false,
@@ -137,7 +144,7 @@ export default ({
         transitionDuration: 200,
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
-        })
+        }),
     });
 
     const display = Gdk.Display.get_default();
@@ -400,11 +407,14 @@ export default ({
                         widget.sensitive = false;
                     }
                     Utils.timeout(200, () => {
-                        wholeThing.revealChild = false
+                        if (wholeThing) wholeThing.revealChild = false;
                     }, wholeThing);
                     Utils.timeout(400, () => {
                         command();
-                        wholeThing.destroy();
+                        if (wholeThing) {
+                            wholeThing.destroy();
+                            wholeThing = null;
+                        }
                     }, wholeThing);
                 }
                 else {
@@ -425,6 +435,17 @@ export default ({
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-
+    if (isPopup) Utils.timeout(popupTimeout, () => {
+        if (wholeThing) {
+            wholeThing.revealChild = false;
+            Utils.timeout(200, () => {
+                if (wholeThing) {
+                    wholeThing.destroy();
+                    wholeThing = null;
+                }
+                command();
+            }, wholeThing);
+        }
+    })
     return wholeThing;
 }
