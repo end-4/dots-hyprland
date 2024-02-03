@@ -77,7 +77,7 @@ export default ({
     isPopup = false,
     props = {},
 } = {}) => {
-    const popupTimeout = notifObject.urgency == 'critical' ? 8000 : 3000;
+    const popupTimeout = notifObject.timeout || (notifObject.urgency == 'critical' ? 8000 : 3000);
     const command = (isPopup ?
         () => notifObject.dismiss() :
         () => notifObject.close()
@@ -435,17 +435,17 @@ export default ({
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-    if (isPopup) Utils.timeout(popupTimeout, () => {
-        if (wholeThing) {
-            wholeThing.revealChild = false;
-            Utils.timeout(200, () => {
-                if (wholeThing) {
-                    wholeThing.destroy();
-                    wholeThing = null;
-                }
-                command();
-            }, wholeThing);
-        }
-    })
+    // if (isPopup) Utils.timeout(popupTimeout, () => {
+    //     if (wholeThing) {
+    //         wholeThing.revealChild = false;
+    //         Utils.timeout(200, () => {
+    //             if (wholeThing) {
+    //                 wholeThing.destroy();
+    //                 wholeThing = null;
+    //             }
+    //             command();
+    //         }, wholeThing);
+    //     }
+    // })
     return wholeThing;
 }
