@@ -10,8 +10,10 @@ import { contentStack } from './sideleft.js';
 // APIs
 import ChatGPT from '../../services/chatgpt.js';
 import Gemini from '../../services/gemini.js';
+import Ollama from '../../services/ollama.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { ollamaView, ollamaCommands, sendMessage as ollamaSendMessage, ollamaTabIcon } from './apis/ollama.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 const TextView =  Widget.subclass(Gtk.TextView, "AgsTextView");
 
@@ -33,6 +35,14 @@ const APIS = [
         commandBar: geminiCommands,
         tabIcon: geminiTabIcon,
         placeholderText: 'Message Gemini...',
+    },
+    {
+        name: 'Assistant (Ollama)',
+        sendCommand: ollamaSendMessage,
+        contentWidget: ollamaView,
+        commandBar: ollamaCommands,
+        tabIcon: ollamaTabIcon,
+        placeholderText: 'Message Ollama...',
     },
     {
         name: 'Waifus',
@@ -74,6 +84,10 @@ export const chatEntry = TextView({
             if (APIS[currentApiId].name != 'Assistant (Gemini Pro)') return;
             self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
         }, 'hasKey')
+        .hook(Ollama, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (Ollama)') return;
+            self.placeholderText = (Ollama.model != '' ? 'Message '+Ollama.model+"..." : 'Enter Ollama Model Name...');
+        }, 'hasModel')
         .on("key-press-event", (widget, event) => {
             const keyval = event.get_keyval()[1];
             if (event.get_keyval()[1] === Gdk.KEY_Return && event.get_state()[1] == Gdk.ModifierType.MOD2_MASK) {
