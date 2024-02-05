@@ -110,7 +110,7 @@ export const GeminiSettings = () => MarginRevealer({
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({
-                        icon: 'description',
+                        icon: 'model_training',
                         name: 'Enhancements',
                         desc: 'Tells Gemini:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
                         initValue: Gemini.assistantPrompt,

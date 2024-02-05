@@ -10,12 +10,14 @@ export default () => Box({
     attribute: {
         'map': new Map(),
         'dismiss': (box, id, force = false) => {
-            if (!id || !box.attribute.map.has(id) || box.attribute.map.get(id).attribute.hovered && !force)
+            if (!id || !box.attribute.map.has(id))
                 return;
+            const notifWidget = box.attribute.map.get(id);
+            if (notifWidget == null || notifWidget.attribute.hovered && !force)
+                return; // cuz already destroyed
 
-            const notif = box.attribute.map.get(id);
-            notif.revealChild = false;
-            notif.attribute.destroyWithAnims();
+            notifWidget.revealChild = false;
+            notifWidget.attribute.destroyWithAnims();
             box.attribute.map.delete(id);
         },
         'notify': (box, id) => {
@@ -32,8 +34,6 @@ export default () => Box({
             box.attribute.map.set(id, newNotif);
             box.pack_end(box.attribute.map.get(id), false, false, 0);
             box.show_all();
-
-            // box.children = Array.from(box.attribute.map.values()).reverse();
         },
     },
     setup: (self) => self

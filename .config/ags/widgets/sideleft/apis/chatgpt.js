@@ -122,7 +122,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                         },
                     }),
                     ConfigToggle({
-                        icon: 'description',
+                        icon: 'model_training',
                         name: 'Enhancements',
                         desc: 'Tells ChatGPT:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
                         initValue: ChatGPT.assistantPrompt,

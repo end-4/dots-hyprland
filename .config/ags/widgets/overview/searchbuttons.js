@@ -149,6 +149,7 @@ export const ExecuteCommandButton = ({ command, terminal = false }) => searchIte
     actionName: `Execute ${terminal ? 'in terminal' : ''}`,
     content: `${command}`,
     onActivate: () => execAndClose(command, terminal),
+    extraClassName: 'techfont',
 })
 
 export const CustomCommandButton = ({ text = '' }) => searchItem({

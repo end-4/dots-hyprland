@@ -27,7 +27,7 @@ const contents = [
 ]
 let currentTabId = 0;
 
-const contentStack = Stack({
+export const contentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
     items: contents.map(item => [item.name, item.content]),
@@ -117,15 +117,14 @@ const pinButton = Button({
     vpack: 'start',
     className: 'sidebar-pin',
     child: MaterialIcon('push_pin', 'larger'),
-    tooltipText: 'Pin sidebar',
+    tooltipText: 'Pin sidebar (Ctrl+P)',
     onClicked: (self) => self.attribute.toggle(self),
-    // QoL: Focus Pin button on open. Hit keybind -> space/enter = toggle pin state
-    setup: (self) => self
-        .hook(App, (self, currentName, visible) => {
-            if (currentName === 'sideleft' && visible)
-                self.grab_focus();
+    setup: (self) => {
+        setupCursorHover(self);
+        self.hook(App, (self, currentName, visible) => {
+            if (currentName === 'sideleft' && visible) self.grab_focus();
         })
-    ,
+    },
 })
 
 export default () => Box({
@@ -163,7 +162,7 @@ export default () => Box({
     ],
     setup: (self) => self
         .on('key-press-event', (widget, event) => { // Handle keybinds
-            if (event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) {
+            if (event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) { // Ctrl held
                 // Pin sidebar
                 if (event.get_keyval()[1] == Gdk.KEY_p)
                     pinButton.attribute.toggle(pinButton);
@@ -176,7 +175,7 @@ export default () => Box({
                     switchToTab(Math.min(currentTabId + 1, contents.length - 1));
             }
             if (contentStack.shown == 'apis') { // If api tab is focused
-                // Automatically focus entry when typing
+                // Focus entry when typing
                 if ((
                     !(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                     event.get_keyval()[1] >= 32 && event.get_keyval()[1] <= 126 &&
@@ -186,8 +185,9 @@ export default () => Box({
                         event.get_keyval()[1] === Gdk.KEY_v)
                 ) {
                     chatEntry.grab_focus();
-                    chatEntry.set_text(chatEntry.text + String.fromCharCode(event.get_keyval()[1]));
-                    chatEntry.set_position(-1);
+                    const buffer = chatEntry.get_buffer();
+                    buffer.set_text(buffer.text + String.fromCharCode(event.get_keyval()[1]), -1);
+                    buffer.place_cursor(buffer.get_iter_at_offset(-1));
                 }
                 // Switch API type
                 else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&

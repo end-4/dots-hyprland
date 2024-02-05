@@ -31,7 +31,7 @@
 // .cheatsheet-action {}
 
 .cheatsheet-closebtn {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     min-width: 2.386rem;
     min-height: 2.386rem;
