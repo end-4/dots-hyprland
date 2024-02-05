@@ -77,15 +77,15 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
 const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }, screenCoords) => {
     const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
     if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
-
+    // Non-primary monitors
     if (screenCoords.x != 0) x -= screenCoords.x;
     if (screenCoords.y != 0) y -= screenCoords.y;
-
+    // Other offscreen adjustments
     if (x + w <= 0) x += (Math.floor(x / SCREEN_WIDTH) * SCREEN_WIDTH);
-    else if (x < 0) { w = x + w; x = 0;}
+    else if (x < 0) { w = x + w; x = 0; }
     if (y + h <= 0) x += (Math.floor(y / SCREEN_HEIGHT) * SCREEN_HEIGHT);
-    else if (y < 0) { h = y + h; y = 0;}
-
+    else if (y < 0) { h = y + h; y = 0; }
+    // Truncate if offscreen
     if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
     if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
 
@@ -260,12 +260,13 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
     children: arr(startWorkspace, workspaces).map(Workspace),
     attribute: {
         monitorMap: [],
-        getMonitorMap: (box) => {execAsync('hyprctl -j monitors').then(monitors => {
-            box.attribute.monitorMap = JSON.parse(monitors).reduce((acc, item) => {
-              acc[item.id] = { x: item.x, y: item.y };
-              return acc;
-            }, {});
-          });
+        getMonitorMap: (box) => {
+            execAsync('hyprctl -j monitors').then(monitors => {
+                box.attribute.monitorMap = JSON.parse(monitors).reduce((acc, item) => {
+                    acc[item.id] = { x: item.x, y: item.y };
+                    return acc;
+                }, {});
+            });
         },
         update: (box) => {
             const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
@@ -281,7 +282,6 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
                         const screenCoords = box.attribute.monitorMap[client.monitor];
                         kids[client.workspace.id - (offset + startWorkspace)]
                             ?.set(client, screenCoords);
-
                     }
                 }
                 kids.forEach(kid => kid.show());
@@ -290,19 +290,19 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
         }
     },
     setup: (box) => {
-      box.attribute.getMonitorMap(box)
-      box
-        .hook(overviewTick, (box) => box.attribute.update(box))
-        .hook(Hyprland, (box, clientAddress) => {
-            box.attribute.update(box)
-        }, 'client-removed')
-        .hook(Hyprland, (box, clientAddress) => {
-            box.attribute.update(box);
-        }, 'client-added')
-        .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
-        .hook(App, (box, name, visible) => { // Update on open
-            if (name == 'overview' && visible) box.attribute.update(box);
-        })
+        box.attribute.getMonitorMap(box);
+        box
+            .hook(overviewTick, (box) => box.attribute.update(box))
+            .hook(Hyprland, (box, clientAddress) => {
+                box.attribute.update(box)
+            }, 'client-removed')
+            .hook(Hyprland, (box, clientAddress) => {
+                box.attribute.update(box);
+            }, 'client-added')
+            .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
+            .hook(App, (box, name, visible) => { // Update on open
+                if (name == 'overview' && visible) box.attribute.update(box);
+            })
     },
 });
 
