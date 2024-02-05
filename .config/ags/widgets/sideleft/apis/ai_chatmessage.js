@@ -1,4 +1,5 @@
 const { Gdk, Gio, GLib, Gtk } = imports.gi;
+import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -6,12 +7,12 @@ const { Box, Button, Label, Scrollable } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from "../../../lib/materialicon.js";
 import md2pango from "../../../lib/md2pango.js";
-import GtkSource from "gi://GtkSource?version=3.0";
+
 
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/data/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
-const CHATGPT_CURSOR = '  (o) ';
+const CHATGPT_CURSOR = '  ...';
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
