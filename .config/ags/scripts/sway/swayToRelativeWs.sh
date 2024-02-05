@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Check if sway is running
+if ! pgrep -x sway > /dev/null; then
+  echo "Sway is not running"
+  exit 1
+fi
+
 
 # Get the current workspace number
 current=$(swaymsg -t get_workspaces | gojq '.[] | select(.focused==true) | .num')

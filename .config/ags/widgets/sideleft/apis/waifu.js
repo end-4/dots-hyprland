@@ -72,12 +72,12 @@ const WaifuImage = (taglist) => {
         homogeneous: false,
         transition: 'slide_up_down',
         transitionDuration: 150,
-        items: [
-            ['api', ImageState('api', 'Calling API')],
-            ['download', ImageState('downloading', 'Downloading image')],
-            ['done', ImageState('done', 'Finished!')],
-            ['error', ImageState('error', 'Error')],
-        ]
+        children: {
+            'api': ImageState('api', 'Calling API'),
+            'download': ImageState('downloading', 'Downloading image'),
+            'done': ImageState('done', 'Finished!'),
+            'error': ImageState('error', 'Error'),
+        },
     });
     const downloadIndicator = MarginRevealer({
         vpack: 'center',

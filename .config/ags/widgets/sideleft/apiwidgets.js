@@ -21,14 +21,6 @@ const TextView =  Widget.subclass(Gtk.TextView, "AgsTextView");
 const EXPAND_INPUT_THRESHOLD = 30;
 const APIS = [
     {
-        name: 'Assistant (ChatGPT 3.5)',
-        sendCommand: chatGPTSendMessage,
-        contentWidget: chatGPTView,
-        commandBar: chatGPTCommands,
-        tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message ChatGPT...',
-    },
-    {
         name: 'Assistant (Gemini Pro)',
         sendCommand: geminiSendMessage,
         contentWidget: geminiView,
@@ -43,6 +35,14 @@ const APIS = [
         commandBar: ollamaCommands,
         tabIcon: ollamaTabIcon,
         placeholderText: 'Message Ollama...',
+    },
+    {
+        name: 'Assistant (ChatGPT 3.5)',
+        sendCommand: chatGPTSendMessage,
+        contentWidget: chatGPTView,
+        commandBar: chatGPTCommands,
+        tabIcon: chatGPTTabIcon,
+        placeholderText: 'Message ChatGPT...',
     },
     {
         name: 'Waifus',
