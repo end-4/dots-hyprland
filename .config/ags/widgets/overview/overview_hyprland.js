@@ -3,6 +3,7 @@
 // - Active ws hook optimization: only update when moving to next group
 //
 const { Gdk, Gtk } = imports.gi;
+const { Gravity } = imports.gi.Gdk;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
@@ -127,7 +128,9 @@ const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, cl
             menu.connect("selection-done", () => {
                 button.toggleClassName('overview-tasks-window-selected', false);
             })
-            menu.popup_at_pointer(null); // Show the menu at the pointer's position
+            // menu.popup_at_pointer(null); // Show the menu at the pointer's position
+            menu.popup_at_widget(button.get_parent(), Gravity.SOUTH, Gravity.NORTH, null); // Show menu below the button
+            button.connect("destroy", () => menu.destroy());
         },
         child: Widget.Box({
             css: `
