@@ -1,3 +1,7 @@
+// TODO
+// - Make client destroy/create not destroy and recreate the whole thing
+// - Active ws hook optimization: only update when moving to next group
+//
 const { Gdk, Gtk } = imports.gi;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../imports.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
@@ -10,41 +14,15 @@ const { execAsync, exec } = Utils;
 import { setupCursorHoverGrab } from "../../lib/cursorhover.js";
 import { dumpToWorkspace, swapWorkspace } from "./actions.js";
 
-const OVERVIEW_SCALE = 0.18; // = overview workspace box / screen size
+const OVERVIEW_SCALE = 0.18;
+const NUM_OF_WORKSPACE_ROWS = 2;
+const NUM_OF_WORKSPACE_COLS = 5;
 const OVERVIEW_WS_NUM_SCALE = 0.09;
+const NUM_OF_WORKSPACES_SHOWN = NUM_OF_WORKSPACE_COLS * NUM_OF_WORKSPACE_ROWS;
 const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 const overviewTick = Variable(false);
-
-function truncateTitle(str) {
-    let lastDash = -1;
-    let found = -1; // 0: em dash, 1: en dash, 2: minus, 3: vertical bar, 4: middle dot
-    for (let i = str.length - 1; i >= 0; i--) {
-        if (str[i] === '—') {
-            found = 0;
-            lastDash = i;
-        }
-        else if (str[i] === '–' && found < 1) {
-            found = 1;
-            lastDash = i;
-        }
-        else if (str[i] === '-' && found < 2) {
-            found = 2;
-            lastDash = i;
-        }
-        else if (str[i] === '|' && found < 3) {
-            found = 3;
-            lastDash = i;
-        }
-        else if (str[i] === '·' && found < 4) {
-            found = 4;
-            lastDash = i;
-        }
-    }
-    if (lastDash === -1) return str;
-    return str.substring(0, lastDash);
-}
 
 function iconExists(iconName) {
     let iconTheme = Gtk.IconTheme.get_default();
@@ -76,7 +54,11 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
     setup: (menuItem) => {
         let submenu = new Gtk.Menu();
         submenu.className = 'menu';
-        for (let i = 1; i <= 10; i++) {
+
+        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+        const startWorkspace = offset + 1;
+        const endWorkspace = startWorkspace + NUM_OF_WORKSPACES_SHOWN - 1;
+        for (let i = startWorkspace; i <= endWorkspace; i++) {
             let button = new Gtk.MenuItem({
                 label: `Workspace ${i}`
             });
@@ -91,11 +73,22 @@ const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widg
     }
 })
 
-const client = ({ address, size: [w, h], workspace: { id, name }, class: c, title, xwayland }) => {
+const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }) => {
     const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
-    if (w <= 0 || h <= 0) return null;
+    if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
+    if (x + w <= 0) x += (Math.floor(x / SCREEN_WIDTH) * SCREEN_WIDTH);
+    else if (x < 0) { x = 0; w = x + w; }
+    if (y + h <= 0) x += (Math.floor(y / SCREEN_HEIGHT) * SCREEN_HEIGHT);
+    else if (y < 0) { y = 0; h = y + h; }
+
+    if (x >= SCREEN_WIDTH) x %= SCREEN_WIDTH;
+    else if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
+    if (y >= SCREEN_HEIGHT) y %= SCREEN_HEIGHT;
+    else if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
+
     // title = truncateTitle(title);
     return Widget.Button({
+        attribute: { x, y },
         className: 'overview-tasks-window',
         hpack: 'center',
         vpack: 'center',
@@ -188,8 +181,9 @@ const client = ({ address, size: [w, h], workspace: { id, name }, class: c, titl
     });
 }
 
-const workspace = index => {
+const Workspace = (index) => {
     const fixed = Gtk.Fixed.new();
+    // const clientMap = new Map();
     const WorkspaceNumber = (index) => Widget.Label({
         className: 'overview-tasks-workspace-number',
         label: `${index}`,
@@ -202,8 +196,8 @@ const workspace = index => {
         className: 'overview-tasks-workspace',
         vpack: 'center',
         css: `
-        min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
-        min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
+            min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
+            min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
         `,
         children: [Widget.EventBox({
             hexpand: true,
@@ -222,36 +216,30 @@ const workspace = index => {
             child: fixed,
         })],
     });
-    widget.update = (clients) => {
-        clients = clients.filter(({ workspace: { id } }) => id === index);
-
-        // this is for my monitor layout
-        // shifts clients back by SCREEN_WIDTHpx if necessary
-        clients = clients.map(client => {
-            const [x, y] = client.at;
-            if (x > SCREEN_WIDTH)
-                client.at = [x - SCREEN_WIDTH, y];
-            return client;
-        });
-
-        const children = fixed.get_children();
-        for (let i = 0; i < children.length; i++) {
-            const child = children[i];
-            child.destroy();
-        }
-        fixed.put(WorkspaceNumber(index), 0, 0);
-
-        for (let i = 0; i < clients.length; i++) {
-            const c = clients[i];
-            if (c.mapped) {
-                fixed.put(client(c), c.at[0] * OVERVIEW_SCALE, c.at[1] * OVERVIEW_SCALE);
-            }
-        }
-
-
-
-        fixed.show_all();
+    widget.clear = () => {
+        fixed.get_children().forEach(ch => ch.destroy());
+        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+        fixed.put(WorkspaceNumber(offset + index), 0, 0);
+    }
+    widget.set = (clientJson) => {
+        // if(clientMap.get(clientJson.address)) clientMap.get(clientJson.address).destroy();
+        const newWindow = Window(clientJson);
+        if (newWindow === null) return;
+        // clientMap.set(clientJson.address, newWindow);
+        fixed.put(newWindow,
+            Math.max(0, newWindow.attribute.x * OVERVIEW_SCALE),
+            Math.max(0, newWindow.attribute.y * OVERVIEW_SCALE)
+        );
     };
+    // widget.unset = (clientAddress) => {
+    //     if(clientMap.get(clientAddress)) {
+    //         clientMap.get(clientAddress).destroy();
+    //         clientMap.delete(clientAddress);
+    //     }
+    // };
+    widget.show = () => {
+        fixed.show_all();
+    }
     return widget;
 };
 
@@ -264,30 +252,37 @@ const arr = (s, n) => {
 };
 
 const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
-    children: arr(startWorkspace, workspaces).map(workspace),
+    children: arr(startWorkspace, workspaces).map(Workspace),
     attribute: {
-        'update': box => {
+        update: (box) => {
+            const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
             if (!App.getWindow(windowName).visible) return;
             execAsync('hyprctl -j clients').then(clients => {
-                const json = JSON.parse(clients);
-                const children = box.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const ch = children[i];
-                    ch.update(json)
+                const allClients = JSON.parse(clients);
+                const kids = box.get_children();
+                kids.forEach(kid => kid.clear());
+                for (let i = 0; i < allClients.length; i++) {
+                    const client = allClients[i];
+                    if (offset + startWorkspace <= client.workspace.id &&
+                        client.workspace.id <= offset + startWorkspace + workspaces) {
+                        kids[client.workspace.id - (offset + startWorkspace)]
+                            ?.set(client);
+                    }
                 }
+                kids.forEach(kid => kid.show());
 
             }).catch(print);
         }
     },
     setup: (box) => box
         .hook(overviewTick, (box) => box.attribute.update(box))
-        // .hook(Hyprland, (box, name, data) => { // idk, does this make it lag occasionally?
-        //     console.log(name)
-        //     if (["changefloatingmode", "movewindow"].includes(name))
-        //         box.attribute.update(box);
-        // }, 'event')
-        .hook(Hyprland, (box) => box.attribute.update(box), 'client-added')
-        .hook(Hyprland, (box) => box.attribute.update(box), 'client-removed')
+        .hook(Hyprland, (box, clientAddress) => {
+            box.attribute.update(box)
+        }, 'client-removed')
+        .hook(Hyprland, (box, clientAddress) => {
+            box.attribute.update(box);
+        }, 'client-added')
+        .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
         .hook(App, (box, name, visible) => { // Update on open
             if (name == 'overview' && visible) box.attribute.update(box);
         })
@@ -295,19 +290,18 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
 });
 
 
-export default () => {
-    const overviewRevealer = Widget.Revealer({
-        revealChild: true,
-        transition: 'slide_down',
-        transitionDuration: 200,
-        child: Widget.Box({
-            vertical: true,
-            className: 'overview-tasks',
-            children: [
-                OverviewRow({ startWorkspace: 1, workspaces: 5 }),
-                OverviewRow({ startWorkspace: 6, workspaces: 5 }),
-            ]
-        }),
-    });
-    return overviewRevealer;
-}; 
+export default () => Widget.Revealer({
+    revealChild: true,
+    transition: 'slide_down',
+    transitionDuration: 200,
+    child: Widget.Box({
+        vertical: true,
+        className: 'overview-tasks',
+        children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
+            OverviewRow({
+                startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
+                workspaces: NUM_OF_WORKSPACE_COLS,
+            })
+        )
+    }),
+});

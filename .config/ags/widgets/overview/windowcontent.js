@@ -106,7 +106,7 @@ export const SearchAndWindows = () => {
 
             if (couldBeMath(text)) { // Eval on typing is dangerous, this is a workaround
                 try {
-                    const fullResult = eval(text);
+                    const fullResult = eval(text.replace(/\^/g, "**"));
                     // copy
                     execAsync(['wl-copy', `${fullResult}`]).catch(print);
                     App.closeWindow('overview');
@@ -168,7 +168,7 @@ export const SearchAndWindows = () => {
             // Calculate
             if (couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
-                    const fullResult = eval(text);
+                    const fullResult = eval(text.replace(/\^/g, "**"));
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
                 } catch (e) {
                     // console.log(e);

@@ -28,6 +28,18 @@ $notif_surface: $t_background;
     padding-right: $rounding_small + 0.545rem;
 }
 
+.notif-clicked-low {
+    background-color: mix($l_l_t_surfaceVariant, $t_onSurfaceVariant, 85%);
+}
+
+.notif-clicked-normal {
+    background-color: mix($l_l_t_surfaceVariant, $t_onSurfaceVariant, 85%);
+}
+
+.notif-clicked-critical {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 95%);
+}
+
 .popup-notif-low {
     @include notif-rounding;
     min-width: 30.682rem;
@@ -53,6 +65,18 @@ $notif_surface: $t_background;
     color: $onSecondaryContainer;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
+}
+
+.popup-notif-clicked-low {
+    background-color: mix($notif_surface, $onBackground, 94%);
+}
+
+.popup-notif-clicked-normal {
+    background-color: mix($notif_surface, $onBackground, 94%);
+}
+
+.popup-notif-clicked-critical {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 96%);
 }
 
 .notif-body-low {
@@ -138,10 +162,8 @@ $notif_surface: $t_background;
 
 .osd-notif {
     @include notif-rounding;
-    background-color: transparentize(
-        $background,
-        $transparentize_surface_amount_subtract_surface
-    );
+    background-color: transparentize($background,
+            $transparentize_surface_amount_subtract_surface );
     min-width: 30.682rem;
 }
 

@@ -103,7 +103,7 @@ tooltip {
 }
 
 .switch-bg {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     background-color: mix($surface, $background, 50%);
     border: 0.136rem solid $onSurface;

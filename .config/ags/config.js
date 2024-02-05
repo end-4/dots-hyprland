@@ -1,4 +1,8 @@
 "use strict";
+const gi = imports.gi;
+const availableModules = Object.keys(gi);
+print("Available modules: " + availableModules.join(', '));
+
 // Import
 import Gdk from 'gi://Gdk';
 import App from 'resource:///com/github/Aylur/ags/app.js'
@@ -64,7 +68,7 @@ export default {
 };
 
 // Stuff that don't need to be toggled. And they're async so ugh...
-// Bar().catch(print);
+// Bar().catch(print); // Use this to debug the bar
 forMonitors(Bar);
 forMonitors(BarCornerTopleft);
 forMonitors(BarCornerTopright);

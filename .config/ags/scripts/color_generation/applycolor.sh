@@ -41,7 +41,7 @@ get_light_dark() {
     lightdark=""
     if [ ! -f ~/.cache/ags/user/colormode.txt ]; then
         echo "" > ~/.cache/ags/user/colormode.txt
-    else 
+    else
         lightdark=$(cat ~/.cache/ags/user/colormode.txt) # either "" or "-l"
     fi
     echo "$lightdark"
@@ -55,7 +55,7 @@ apply_gtklock() {
         sassc ~/.config/ags/scripts/templates/gtklock/main.scss ~/.config/gtklock/style.css
         return
     fi
-    
+
     # Check if scripts/templates/gtklock/style.css exists
     if [ ! -f "scripts/templates/gtklock/style.css" ]; then
         echo "Template file not found for Gtklock. Skipping that."
@@ -99,6 +99,29 @@ apply_foot() {
     cp "$HOME/.config/foot/foot_new.ini" "$HOME/.config/foot/foot.ini"
 }
 
+apply_term() {
+    # Check if scripts/templates/foot/foot.ini exists
+    if [ ! -f "scripts/templates/terminal/sequences.material" ]; then
+        echo "Template file not found for Terminal. Skipping that."
+        return
+    fi
+    if [ ! -d "$HOME/.cache/ags/user/colorschemes" ]; then
+        mkdir -p "$HOME/.cache/ags/user/colorschemes"
+    fi
+    # Copy template
+    cp "scripts/templates/terminal/sequences.material" "$HOME/.cache/ags/user/colorschemes/sequences"
+    # Apply colors
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME/.cache/ags/user/colorschemes/sequences"
+    done
+
+    for file in /dev/pts/*; do
+      if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
+        cat "$HOME/.cache/ags/user/colorschemes/sequences" > "$file"
+      fi
+    done
+}
+
 apply_hyprland() {
     # Check if scripts/templates/hypr/colors.conf exists
     if [ ! -f "scripts/templates/hypr/colors.conf" ]; then
@@ -111,14 +134,14 @@ apply_hyprland() {
     for i in "${!colorlist[@]}"; do
         sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME/.config/hypr/colors_new.conf"
     done
-    
+
     mv "$HOME/.config/hypr/colors_new.conf" "$HOME/.config/hypr/colors.conf"
 }
 
 apply_gtk() { # Using gradience-cli
     lightdark=$(get_light_dark)
-    
-    # Copy template 
+
+    # Copy template
     cp "scripts/templates/gradience/preset_template.json" "scripts/templates/gradience/preset.json"
 
     # Apply colors
@@ -129,8 +152,8 @@ apply_gtk() { # Using gradience-cli
     mkdir -p "$HOME/.config/presets" # create gradience presets folder
     gradience-cli apply -p scripts/templates/gradience/preset.json --gtk both
 
-    # Set light/dark preference 
-    # And set GTK theme manually as Gradience defaults to light adw-gtk3 
+    # Set light/dark preference
+    # And set GTK theme manually as Gradience defaults to light adw-gtk3
     # (which is unreadable when broken when you use dark mode)
     if [ "$lightdark" = "-l" ]; then
         gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
@@ -152,4 +175,4 @@ apply_hyprland &
 apply_gtk &
 apply_gtklock &
 apply_fuzzel &
-apply_foot
+apply_term &

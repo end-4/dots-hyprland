@@ -20,6 +20,10 @@ function guessMessageType(summary) {
     return 'chat';
 }
 
+function exists(widget) {
+    return widget !== null;
+}
+
 const NotificationIcon = (notifObject) => {
     // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
@@ -71,9 +75,9 @@ const NotificationIcon = (notifObject) => {
 export default ({
     notifObject,
     isPopup = false,
-    popupTimeout = 3000,
     props = {},
 } = {}) => {
+    const popupTimeout = notifObject.timeout || (notifObject.urgency == 'critical' ? 8000 : 3000);
     const command = (isPopup ?
         () => notifObject.dismiss() :
         () => notifObject.close()
@@ -82,11 +86,14 @@ export default ({
         widget.sensitive = false;
         notificationBox.setCss(middleClickClose);
         Utils.timeout(200, () => {
-            wholeThing.revealChild = false;
+            if (wholeThing) wholeThing.revealChild = false;
         }, wholeThing);
         Utils.timeout(400, () => {
             command();
-            wholeThing.destroy();
+            if (wholeThing) {
+                wholeThing.destroy();
+                wholeThing = null;
+            }
         }, wholeThing);
     }
     const widget = EventBox({
@@ -105,22 +112,39 @@ export default ({
         },
         onMiddleClick: (self) => {
             destroyWithAnims();
+        },
+        setup: (self) => {
+            self.on("button-press-event", () => {
+                wholeThing.attribute.held = true;
+                notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, true);
+                Utils.timeout(800, () => {
+                    if (wholeThing?.attribute.held) {
+                        Utils.execAsync(['wl-copy', `${notifObject.body}`])
+                        notifTextSummary.label = notifObject.summary + " (copied)";
+                        Utils.timeout(3000, () => notifTextSummary.label = notifObject.summary)
+                    }
+                })
+            }).on("button-release-event", () => {
+                wholeThing.attribute.held = false;
+                notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, false);
+            })
         }
     });
-    const wholeThing = Revealer({
+    let wholeThing = Revealer({
         attribute: {
-            'id': notifObject.id,
             'close': undefined,
-            'hovered': false,
+            'destroyWithAnims': destroyWithAnims,
             'dragging': false,
-            'destroyWithAnims': () => destroyWithAnims,
+            'held': false,
+            'hovered': false,
+            'id': notifObject.id,
         },
         revealChild: false,
         transition: 'slide_down',
         transitionDuration: 200,
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
-        })
+        }),
     });
 
     const display = Gdk.Display.get_default();
@@ -205,6 +229,23 @@ export default ({
         notifTime = 'Yesterday';
     else
         notifTime = messageTime.format('%d/%m');
+    const notifTextSummary = Label({
+        xalign: 0,
+        className: 'txt-small txt-semibold titlefont',
+        justify: Gtk.Justification.LEFT,
+        hexpand: true,
+        maxWidthChars: 24,
+        truncate: 'end',
+        ellipsize: 3,
+        useMarkup: notifObject.summary.startsWith('<'),
+        label: notifObject.summary,
+    });
+    const notifTextBody = Label({
+        vpack: 'center',
+        justification: 'right',
+        className: 'txt-smaller txt-semibold',
+        label: notifTime,
+    });
     const notifText = Box({
         valign: Gtk.Align.CENTER,
         vertical: true,
@@ -212,23 +253,8 @@ export default ({
         children: [
             Box({
                 children: [
-                    Label({
-                        xalign: 0,
-                        className: 'txt-small txt-semibold titlefont',
-                        justify: Gtk.Justification.LEFT,
-                        hexpand: true,
-                        maxWidthChars: 24,
-                        truncate: 'end',
-                        ellipsize: 3,
-                        useMarkup: notifObject.summary.startsWith('<'),
-                        label: notifObject.summary,
-                    }),
-                    Label({
-                        vpack: 'center',
-                        justification: 'right',
-                        className: 'txt-smaller txt-semibold',
-                        label: notifTime,
-                    }),
+                    notifTextSummary,
+                    notifTextBody,
                 ]
             }),
             notifTextPreview,
@@ -313,6 +339,7 @@ export default ({
             .hook(gesture, self => {
                 var offset_x = gesture.get_offset()[1];
                 var offset_y = gesture.get_offset()[2];
+                // Which dir?
                 if (initDirVertical == -1) {
                     if (Math.abs(offset_y) > MOVE_THRESHOLD)
                         initDirVertical = 1;
@@ -321,7 +348,7 @@ export default ({
                         initDirX = (offset_x > 0 ? 1 : -1);
                     }
                 }
-
+                // Horizontal drag
                 if (initDirVertical == 0 && offset_x > MOVE_THRESHOLD) {
                     if (initDirX < 0)
                         self.setCss(`margin-left: 0px; margin-right: 0px;`);
@@ -342,12 +369,12 @@ export default ({
                         `);
                     }
                 }
-
-                wholeThing.attribute.dragging = Math.abs(offset_x) > 10;
-
-                if (widget.window)
-                    widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
-
+                // Update dragging
+                wholeThing.attribute.dragging = Math.abs(offset_x) > MOVE_THRESHOLD;
+                if (Math.abs(offset_x) > MOVE_THRESHOLD ||
+                    Math.abs(offset_y) > MOVE_THRESHOLD) wholeThing.attribute.held = false;
+                widget.window?.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
+                // Vertical drag
                 if (initDirVertical == 1 && offset_y > MOVE_THRESHOLD && !expanded) {
                     notifTextPreview.revealChild = false;
                     notifTextExpanded.revealChild = true;
@@ -380,11 +407,14 @@ export default ({
                         widget.sensitive = false;
                     }
                     Utils.timeout(200, () => {
-                        wholeThing.revealChild = false
+                        if (wholeThing) wholeThing.revealChild = false;
                     }, wholeThing);
                     Utils.timeout(400, () => {
                         command();
-                        wholeThing.destroy();
+                        if (wholeThing) {
+                            wholeThing.destroy();
+                            wholeThing = null;
+                        }
                     }, wholeThing);
                 }
                 else {
@@ -405,6 +435,17 @@ export default ({
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-
+    if (isPopup) Utils.timeout(popupTimeout, () => {
+        if (wholeThing) {
+            wholeThing.revealChild = false;
+            Utils.timeout(200, () => {
+                if (wholeThing) {
+                    wholeThing.destroy();
+                    wholeThing = null;
+                }
+                command();
+            }, wholeThing);
+        }
+    })
     return wholeThing;
 }

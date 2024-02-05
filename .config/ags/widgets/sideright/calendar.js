@@ -146,11 +146,11 @@ const CalendarWidget = () => {
 const defaultShown = 'calendar';
 const contentStack = Widget.Stack({
     hexpand: true,
-    items: [
-        ['calendar', CalendarWidget()],
-        ['todo', TodoWidget()],
-        // ['stars', Widget.Label({ label: 'GitHub feed will be here' })],
-    ],
+    children: {
+        'calendar': CalendarWidget(),
+        'todo': TodoWidget(),
+        // 'stars': Widget.Label({ label: 'GitHub feed will be here' }),
+    },
     transition: 'slide_up_down',
     transitionDuration: 180,
     setup: (stack) => Utils.timeout(1, () => {
@@ -159,7 +159,7 @@ const contentStack = Widget.Stack({
 })
 
 const StackButton = (stackItemName, icon, name) => Widget.Button({
-    className: 'button-minsize sidebar-navrail-btn sidebar-button-alone txt-small spacing-h-5',
+    className: 'button-minsize sidebar-navrail-btn txt-small spacing-h-5',
     onClicked: (button) => {
         contentStack.shown = stackItemName;
         const kids = button.get_parent().get_children();
