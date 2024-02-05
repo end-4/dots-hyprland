@@ -202,10 +202,10 @@ const UndoneTodoList = () => {
 const todoItemsBox = Widget.Stack({
     vpack: 'fill',
     transition: 'slide_left_right',
-    items: [
-        ['undone', UndoneTodoList()],
-        ['done', todoItems(true)],
-    ],
+    children: {
+        'undone': UndoneTodoList(),
+        'done': todoItems(true),
+    },
 });
 
 export const TodoWidget = () => {

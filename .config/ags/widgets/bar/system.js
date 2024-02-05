@@ -135,14 +135,14 @@ const BarGroup = ({ child }) => Widget.Box({
 const BatteryModule = () => Stack({
     transition: 'slide_up_down',
     transitionDuration: 150,
-    items: [
-        ['laptop', Box({
+    children: {
+        'laptop': Box({
             className: 'spacing-h-5', children: [
                 BarGroup({ child: Utilities() }),
                 BarGroup({ child: BarBattery() }),
             ]
-        })],
-        ['desktop', BarGroup({
+        }),
+        'desktop': BarGroup({
             child: Box({
                 hexpand: true,
                 hpack: 'center',
@@ -191,8 +191,8 @@ const BatteryModule = () => Stack({
                             }));
                 }),
             })
-        })],
-    ],
+        }),
+    },
     setup: (stack) => Utils.timeout(10, () => {
         if (!Battery.available) stack.shown = 'desktop';
         else stack.shown = 'laptop';

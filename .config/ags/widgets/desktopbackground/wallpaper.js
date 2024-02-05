@@ -99,10 +99,10 @@ export default (monitor = 0) => {
     const stack = Stack({
         transition: 'crossfade',
         transitionDuration: 180,
-        items: [
-            ['image', wallpaperImage],
-            ['prompt', wallpaperPrompt],
-        ],
+        children: {
+            'image': wallpaperImage,
+            'prompt': wallpaperPrompt,
+        },
         setup: (self) => self
             .hook(Wallpaper, (self) => {
                 const wallPath = Wallpaper.get(monitor);
