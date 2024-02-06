@@ -10,6 +10,7 @@ import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
 } from './searchbuttons.js';
+import { enableClickthrough } from '../../lib/roundedcorner.js';
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
@@ -76,7 +77,7 @@ export const SearchAndWindows = () => {
         child: Widget.Label({
             className: 'overview-search-prompt txt-small txt',
             label: 'Type to search'
-        })
+        }),
     });
 
     const entryIconRevealer = Widget.Revealer({
@@ -217,7 +218,10 @@ export const SearchAndWindows = () => {
                     entry,
                     Widget.Box({
                         className: 'overview-search-icon-box',
-                        setup: box => box.pack_start(entryPromptRevealer, true, true, 0),
+                        setup: (box) => {
+                            box.pack_start(entryPromptRevealer, true, true, 0)
+                            // enableClickthrough(box);
+                        },
                     }),
                     entryIcon,
                 ]
