@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2021 Uwe Jugel
 // SPDX-License-Identifier: MIT
 // This file is part of md2pango (https://github.com/ubunatic/md2pango).
+// -- Modified btw --
 
 const monospaceFonts = 'JetBrains Mono NF, JetBrains Mono Nerd Font, JetBrains Mono NL, SpaceMono NF, SpaceMono Nerd Font, monospace'
 
@@ -17,8 +18,8 @@ const m2p_sections = [
     sub_h3 = { name: H3, re: /^(###\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='125%'>$2</span>" },
     sub_h4 = { name: H4, re: /^(####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='100%'>$2</span>" },
     sub_h5 = { name: H5, re: /^(#####\s+)(.*)(\s*)$/, sub: "<span font_weight='bold' size='90%'>$2</span>" },
-    { name: BULLET, re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: "$1• $3" },
-    { name: NUMBERING, re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: " $1$2" },
+    { name: BULLET, re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: "$1- $3" },
+    { name: NUMBERING, re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: " $1- $2" },
 ]
 
 // m2p_styles defines how to replace inline styled text
