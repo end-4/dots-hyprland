@@ -30,7 +30,10 @@ let currentTabId = 0;
 export const contentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
-    items: contents.map(item => [item.name, item.content]),
+    children: contents.reduce((acc, item) => {
+        acc[item.name] = item.content;
+        return acc;
+    }, {}),
 })
 
 function switchToTab(id) {
