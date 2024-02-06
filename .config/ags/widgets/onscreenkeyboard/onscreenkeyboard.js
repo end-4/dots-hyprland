@@ -4,7 +4,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const { Box, EventBox, Button, Revealer } = Widget;
-const { execAsync, exec } = Utils;
+const { execAsync } = Utils;
 import { MaterialIcon } from '../../lib/materialicon.js';
 import { separatorLine } from '../../lib/separator.js';
 import { defaultOskLayout, oskLayouts } from '../../data/keyboardlayouts.js';
