@@ -7,7 +7,7 @@ const monospaceFonts = 'JetBrains Mono NF, JetBrains Mono Nerd Font, JetBrains M
 const replacements = {
     'indents': [
         { name: 'BULLET', re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: ' $1- $3' },
-        { name: 'NUMBERING', re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: ' $1- $2' },
+        { name: 'NUMBERING', re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: ' $1 $2' },
     ],
     'escapes': [
         { name: 'COMMENT', re: /<!--.*-->/, sub: '' },
