@@ -28,7 +28,8 @@ var lastCoverPath = '';
 function isRealPlayer(player) {
     return (
         !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') && // Firefox mpris dbus is useless
-        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') // Doesn't have cover art
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') && // Doesn't have cover art
+        !player.busName.endsWith('.mpd') // Non-instance mpd bus
     );
 }
 
