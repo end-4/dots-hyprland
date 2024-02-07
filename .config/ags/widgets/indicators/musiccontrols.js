@@ -27,8 +27,8 @@ var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
-        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') &&
-        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld')
+        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') && // Firefox mpris dbus is useless
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') // Doesn't have cover art
     );
 }
 
@@ -69,7 +69,7 @@ function getTrackfont(player) {
     return DEFAULT_MUSIC_FONT;
 }
 function trimTrackTitle(title) {
-    if(!title) return '';
+    if (!title) return '';
     const cleanRegexes = [
         /【[^】]*】/,         // Touhou n weeb stuff
         /\[FREE DOWNLOAD\]/, // F-777
@@ -140,6 +140,7 @@ const CoverArt = ({ player, ...rest }) => Box({
                     attribute: {
                         'updateCover': (self) => {
                             const player = Mpris.getPlayer();
+                            console.log('cover!');
 
                             // Player closed
                             // Note that cover path still remains, so we're checking title
@@ -152,13 +153,13 @@ const CoverArt = ({ player, ...rest }) => Box({
                             const coverPath = player.coverPath;
                             const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
                             if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                                self.css = `background-image: url('${coverPath}');`;
+                                Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                             }
                             lastCoverPath = player.coverPath;
 
                             // If a colorscheme has already been generated, skip generation
                             if (fileExists(stylePath)) {
-                                self.css = `background-image: url('${coverPath}');`;
+                                Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                                 App.applyCss(stylePath);
                                 return;
                             }
@@ -177,9 +178,11 @@ const CoverArt = ({ player, ...rest }) => Box({
                         },
                     },
                     className: 'osd-music-cover-art',
-                    $: [
-                        [player, (self) => self.attribute.updateCover(self), 'notify::cover-path']
-                    ],
+                    setup: (self) => self
+                        .hook(player, (self) => {
+                            self.attribute.updateCover(self);
+                        }, 'notify::cover-path')
+                    ,
                 })
             ]
         })
@@ -215,7 +218,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
             }),
         ],
     }),
-    setup: (self) => szelf.hook(Mpris, (self) => {
+    setup: (self) => self.hook(Mpris, (self) => {
         const player = Mpris.getPlayer();
         if (!player)
             self.revealChild = false;
@@ -313,7 +316,7 @@ const PlayState = ({ player }) => {
 }
 
 const MusicControlsWidget = (player) => Box({
-    className: 'osd-music spacing-h-20',
+    className: 'osd-music spacing-h-20 test',
     children: [
         CoverArt({ player: player, vpack: 'center' }),
         Box({
@@ -344,23 +347,28 @@ const MusicControlsWidget = (player) => Box({
     ]
 })
 
-export default () => MarginRevealer({
+export default () => Revealer({
     transition: 'slide_down',
+    transitionDuration: 150,
     revealChild: false,
-    showClass: 'osd-show',
-    hideClass: 'osd-hide',
     child: Box({
         setup: (self) => self.hook(Mpris, box => {
             let foundPlayer = false;
-
             Mpris.players.forEach((player, i) => {
                 if (isRealPlayer(player)) {
+                    console.log('Found player', player);
                     foundPlayer = true;
-                    box.children = [MusicControlsWidget(player)];
+                    box.children.forEach(child => {
+                        child.destroy();
+                        child = null;
+                    });
+                    const newInstance = MusicControlsWidget(player);
+                    box.children = [newInstance];
                 }
             });
 
             if (!foundPlayer) {
+                console.log('No players found');
                 const children = box.get_children();
                 for (let i = 0; i < children.length; i++) {
                     const child = children[i];
@@ -372,7 +380,45 @@ export default () => MarginRevealer({
         }, 'notify::players'),
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
-        if (showMusicControls.value) revealer.attribute.show();
-        else revealer.attribute.hide();
+        revealer.revealChild = showMusicControls.value;
     }),
 })
+
+// export default () => MarginRevealer({
+//     transition: 'slide_down',
+//     revealChild: false,
+//     showClass: 'osd-show',
+//     hideClass: 'osd-hide',
+//     child: Box({
+//         setup: (self) => self.hook(Mpris, box => {
+//             let foundPlayer = false;
+//             Mpris.players.forEach((player, i) => {
+//                 if (isRealPlayer(player)) {
+//                     console.log('Found player', player);
+//                     foundPlayer = true;
+//                     box.children.forEach(child => {
+//                         child.destroy();
+//                         child = null;
+//                     });
+//                     const newInstance = MusicControlsWidget(player);
+//                     box.children = [newInstance];
+//                 }
+//             });
+
+//             if (!foundPlayer) {
+//                 console.log('No players found');
+//                 const children = box.get_children();
+//                 for (let i = 0; i < children.length; i++) {
+//                     const child = children[i];
+//                     child.destroy();
+//                     child = null;
+//                 }
+//                 return;
+//             }
+//         }, 'notify::players'),
+//     }),
+//     setup: (self) => self.hook(showMusicControls, (revealer) => {
+//         if (showMusicControls.value) revealer.attribute.show();
+//         else revealer.attribute.hide();
+//     }),
+// })
