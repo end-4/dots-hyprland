@@ -351,28 +351,16 @@ export default () => Revealer({
     revealChild: false,
     child: Box({
         setup: (self) => self.hook(Mpris, box => {
-            let foundPlayer = false;
+            box.children.forEach(child => {
+                child.destroy();
+                child = null;
+            });
             Mpris.players.forEach((player, i) => {
                 if (isRealPlayer(player)) {
-                    foundPlayer = true;
-                    box.children.forEach(child => {
-                        child.destroy();
-                        child = null;
-                    });
                     const newInstance = MusicControlsWidget(player);
-                    box.children = [newInstance];
+                    box.add(newInstance);
                 }
             });
-
-            if (!foundPlayer) {
-                const children = box.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    child.destroy();
-                    child = null;
-                }
-                return;
-            }
         }, 'notify::players'),
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
