@@ -20,7 +20,7 @@ export default (props) => {
                     vertical: true,
                     className: 'spacing-v-5',
                     children: [
-                        MaterialIcon('notifications_active', 'badonkers'),
+                        MaterialIcon('notifications_active', 'gigantic'),
                         Label({ label: 'No notifications', className: 'txt-small' }),
                     ]
                 }),

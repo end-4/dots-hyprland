@@ -294,7 +294,9 @@ const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) =>
         box
             .hook(overviewTick, (box) => box.attribute.update(box))
             .hook(Hyprland, (box, clientAddress) => {
-                box.attribute.update(box)
+                const client = Hyprland.getClient(clientAddress);
+                box.attribute.updateWorkspace(client.workspace.id);
+                // box.attribute.update(box)
             }, 'client-removed')
             .hook(Hyprland, (box, clientAddress) => {
                 box.attribute.update(box);
