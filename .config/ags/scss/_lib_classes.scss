@@ -55,12 +55,12 @@
     margin: 10px;
 }
 
-.txt-badonkers {
+.txt-gigantic {
     @include mainfont;
     font-size: 3rem;
 }
 
-.txt-tiddies {
+.txt-massive {
     @include mainfont;
     font-size: 2.7273rem;
 }
@@ -125,6 +125,10 @@
 
 .txt-action {
     @include actiontext;
+}
+
+.txt-thin {
+    font-weight: 300;
 }
 
 .txt-semibold {

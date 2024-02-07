@@ -12,8 +12,8 @@ import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../data/weath
 const BATTERY_LOW = 20;
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;
 Utils.exec(`mkdir -p ${WEATHER_CACHE_FOLDER}`);
+
 let WEATHER_CITY = '';
-// try to read envvar AGS_WEATHER_CITY
 try {
     WEATHER_CITY = GLib.getenv('AGS_WEATHER_CITY');
 } catch (e) {

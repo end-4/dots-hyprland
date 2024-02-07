@@ -132,7 +132,7 @@ const CoverArt = ({ player, ...rest }) => Box({
                 className: 'osd-music-cover-fallback',
                 homogeneous: true,
                 children: [Label({
-                    className: 'icon-material txt-hugeass',
+                    className: 'icon-material txt-gigantic txt-thin',
                     label: 'music_note',
                 })]
             }),
