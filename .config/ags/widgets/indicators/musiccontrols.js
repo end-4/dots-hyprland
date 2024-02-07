@@ -140,7 +140,6 @@ const CoverArt = ({ player, ...rest }) => Box({
                     attribute: {
                         'updateCover': (self) => {
                             const player = Mpris.getPlayer();
-                            console.log('cover!');
 
                             // Player closed
                             // Note that cover path still remains, so we're checking title
@@ -356,7 +355,6 @@ export default () => Revealer({
             let foundPlayer = false;
             Mpris.players.forEach((player, i) => {
                 if (isRealPlayer(player)) {
-                    console.log('Found player', player);
                     foundPlayer = true;
                     box.children.forEach(child => {
                         child.destroy();
@@ -368,7 +366,6 @@ export default () => Revealer({
             });
 
             if (!foundPlayer) {
-                console.log('No players found');
                 const children = box.get_children();
                 for (let i = 0; i < children.length; i++) {
                     const child = children[i];
@@ -394,7 +391,6 @@ export default () => Revealer({
 //             let foundPlayer = false;
 //             Mpris.players.forEach((player, i) => {
 //                 if (isRealPlayer(player)) {
-//                     console.log('Found player', player);
 //                     foundPlayer = true;
 //                     box.children.forEach(child => {
 //                         child.destroy();
@@ -406,7 +402,6 @@ export default () => Revealer({
 //             });
 
 //             if (!foundPlayer) {
-//                 console.log('No players found');
 //                 const children = box.get_children();
 //                 for (let i = 0; i < children.length; i++) {
 //                     const child = children[i];

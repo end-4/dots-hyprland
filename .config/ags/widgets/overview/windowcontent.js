@@ -10,7 +10,6 @@ import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
     DesktopEntryButton, ExecuteCommandButton, SearchButton
 } from './searchbuttons.js';
-import { enableClickthrough } from '../../lib/roundedcorner.js';
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
