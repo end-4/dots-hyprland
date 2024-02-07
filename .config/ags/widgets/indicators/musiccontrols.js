@@ -80,7 +80,7 @@ function trimTrackTitle(title) {
 
 const TrackProgress = ({ player, ...rest }) => {
     const _updateProgress = (circprog) => {
-        const player = Mpris.getPlayer();
+        // const player = Mpris.getPlayer();
         if (!player) return;
         // Set circular progress (see definition of AnimatedCircProg for explanation)
         circprog.css = `font-size: ${Math.max(player.position / player.length * 100, 0)}px;`
@@ -139,8 +139,7 @@ const CoverArt = ({ player, ...rest }) => Box({
                 Box({
                     attribute: {
                         'updateCover': (self) => {
-                            const player = Mpris.getPlayer();
-
+                            // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
                             // Player closed
                             // Note that cover path still remains, so we're checking title
                             if (!player || player.trackTitle == "") {
@@ -218,7 +217,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
         ],
     }),
     setup: (self) => self.hook(Mpris, (self) => {
-        const player = Mpris.getPlayer();
+        // const player = Mpris.getPlayer();
         if (!player)
             self.revealChild = false;
         else
@@ -266,7 +265,7 @@ const TrackTime = ({ player, ...rest }) => {
             children: [
                 Label({
                     setup: (self) => self.poll(1000, (self) => {
-                        const player = Mpris.getPlayer();
+                        // const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.position);
                     }),
@@ -274,7 +273,7 @@ const TrackTime = ({ player, ...rest }) => {
                 Label({ label: '/' }),
                 Label({
                     setup: (self) => self.hook(Mpris, (self) => {
-                        const player = Mpris.getPlayer();
+                        // const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.length);
                     }),
