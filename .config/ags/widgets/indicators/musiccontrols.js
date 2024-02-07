@@ -198,7 +198,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
         children: [
             Button({
                 className: 'osd-music-controlbtn',
-                onClicked: () => execAsync('playerctl previous').catch(print),
+                onClicked: () => player.previous(),
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_previous',
@@ -206,9 +206,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
             }),
             Button({
                 className: 'osd-music-controlbtn',
-                onClicked: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"`'])
-                    .catch(print)
-                ,
+                onClicked: () => player.next(),
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_next',
@@ -297,7 +295,7 @@ const PlayState = ({ player }) => {
             overlays: [
                 Widget.Button({
                     className: 'osd-music-playstate-btn',
-                    onClicked: () => execAsync('playerctl play-pause').catch(print),
+                    onClicked: () => player.playPause(),
                     child: Widget.Label({
                         justification: 'center',
                         hpack: 'fill',
