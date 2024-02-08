@@ -113,9 +113,8 @@ export default () => {
                 margin-bottom: -${Math.round((y + h) * OVERVIEW_SCALE)}px;
             `,
             onClicked: (self) => {
-                // Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
-                // App.closeWindow('overview');
-                console.log(x, y, w, h, '\n\n', self.css);
+                Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
+                App.closeWindow('overview');
             },
             onMiddleClickRelease: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
             onSecondaryClick: (button) => {
@@ -287,13 +286,11 @@ export default () => {
             let c = clientMap.get(clientJson.address);
             if (c) {
                 if (c.attribute?.ws !== clientJson.workspace.id) {
-                    console.log('set: del')
                     c.destroy();
                     c = null;
                     clientMap.delete(clientJson.address);
                 }
                 else if (c) {
-                    console.log('set: move')
                     c.attribute.w = clientJson.size[0];
                     c.attribute.h = clientJson.size[1];
                     c.attribute.updateIconSize(c);
@@ -318,7 +315,6 @@ export default () => {
             let c = clientMap.get(clientAddress);
             if (!c) return;
             if (c.attribute?.ws === offset + index) {
-                console.log('unset: del')
                 c.destroy();
                 c = null;
                 clientMap.delete(clientAddress);
