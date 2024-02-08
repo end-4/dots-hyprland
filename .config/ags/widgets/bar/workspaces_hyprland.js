@@ -21,6 +21,7 @@ const WorkspaceContents = (count = 10) => {
         attribute: {
             initialized: false,
             workspaceMask: 0,
+            workspaceGroup: 0,
             updateMask: (self) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / count) * NUM_OF_WORKSPACES_SHOWN;
                 // if (self.attribute.initialized) return; // We only need this to run once
@@ -46,6 +47,12 @@ const WorkspaceContents = (count = 10) => {
         setup: (area) => area
             .hook(Hyprland.active.workspace, (self) => {
                 self.setCss(`font-size: ${(Hyprland.active.workspace.id - 1) % count + 1}px;`);
+                const previousGroup = self.attribute.workspaceGroup;
+                const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / count);
+                if (currentGroup !== previousGroup) {
+                  self.attribute.updateMask(self);
+                  self.attribute.workspaceGroup = currentGroup;
+                }
             })
             .hook(Hyprland, (self) => self.attribute.updateMask(self), 'notify::workspaces')
             .on('draw', Lang.bind(area, (area, cr) => {
