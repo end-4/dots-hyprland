@@ -49,278 +49,324 @@ function substitute(str) {
     if (!iconExists(str)) str = str.toLowerCase().replace(/\s+/g, '-'); // Turn into kebab-case
     return str;
 }
+export default () => {
+    const clientMap = new Map();
+    const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
+        label: `${label}`,
+        setup: (menuItem) => {
+            let submenu = new Gtk.Menu();
+            submenu.className = 'menu';
 
-const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
-    label: `${label}`,
-    setup: (menuItem) => {
-        let submenu = new Gtk.Menu();
-        submenu.className = 'menu';
-
-        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-        const startWorkspace = offset + 1;
-        const endWorkspace = startWorkspace + NUM_OF_WORKSPACES_SHOWN - 1;
-        for (let i = startWorkspace; i <= endWorkspace; i++) {
-            let button = new Gtk.MenuItem({
-                label: `Workspace ${i}`
-            });
-            button.connect("activate", () => {
-                // execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
-                actionFunc(thisWorkspace, i);
-            });
-            submenu.append(button);
+            const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+            const startWorkspace = offset + 1;
+            const endWorkspace = startWorkspace + NUM_OF_WORKSPACES_SHOWN - 1;
+            for (let i = startWorkspace; i <= endWorkspace; i++) {
+                let button = new Gtk.MenuItem({
+                    label: `Workspace ${i}`
+                });
+                button.connect("activate", () => {
+                    // execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
+                    actionFunc(thisWorkspace, i);
+                });
+                submenu.append(button);
+            }
+            menuItem.set_reserve_indicator(true);
+            menuItem.set_submenu(submenu);
         }
-        menuItem.set_reserve_indicator(true);
-        menuItem.set_submenu(submenu);
-    }
-})
+    })
 
-const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }, screenCoords) => {
-    const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
-    if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
-    // Non-primary monitors
-    if (screenCoords.x != 0) x -= screenCoords.x;
-    if (screenCoords.y != 0) y -= screenCoords.y;
-    // Other offscreen adjustments
-    if (x + w <= 0) x += (Math.floor(x / SCREEN_WIDTH) * SCREEN_WIDTH);
-    else if (x < 0) { w = x + w; x = 0; }
-    if (y + h <= 0) x += (Math.floor(y / SCREEN_HEIGHT) * SCREEN_HEIGHT);
-    else if (y < 0) { h = y + h; y = 0; }
-    // Truncate if offscreen
-    if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
-    if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
+    const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }, screenCoords) => {
+        const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
+        if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
+        // Non-primary monitors
+        if (screenCoords.x != 0) x -= screenCoords.x;
+        if (screenCoords.y != 0) y -= screenCoords.y;
+        // Other offscreen adjustments
+        if (x + w <= 0) x += (Math.floor(x / SCREEN_WIDTH) * SCREEN_WIDTH);
+        else if (x < 0) { w = x + w; x = 0; }
+        if (y + h <= 0) x += (Math.floor(y / SCREEN_HEIGHT) * SCREEN_HEIGHT);
+        else if (y < 0) { h = y + h; y = 0; }
+        // Truncate if offscreen
+        if (x + w > SCREEN_WIDTH) w = SCREEN_WIDTH - x;
+        if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
 
-    // title = truncateTitle(title);
-    return Widget.Button({
-        attribute: { x, y },
-        className: 'overview-tasks-window',
-        hpack: 'center',
-        vpack: 'center',
-        onClicked: () => {
-            Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
-            App.closeWindow('overview');
-        },
-        onMiddleClickRelease: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
-        onSecondaryClick: (button) => {
-            button.toggleClassName('overview-tasks-window-selected', true);
-            const menu = Widget.Menu({
-                className: 'menu',
-                children: [
-                    Widget.MenuItem({
-                        child: Widget.Label({
-                            xalign: 0,
-                            label: "Close (Middle-click)",
+        // title = truncateTitle(title);
+        return Widget.Button({
+            attribute: { address, x, y, ws: id },
+            className: 'overview-tasks-window',
+            hpack: 'center',
+            vpack: 'center',
+            onClicked: () => {
+                Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
+                App.closeWindow('overview');
+            },
+            onMiddleClickRelease: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
+            onSecondaryClick: (button) => {
+                button.toggleClassName('overview-tasks-window-selected', true);
+                const menu = Widget.Menu({
+                    className: 'menu',
+                    children: [
+                        Widget.MenuItem({
+                            child: Widget.Label({
+                                xalign: 0,
+                                label: "Close (Middle-click)",
+                            }),
+                            onActivate: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
                         }),
-                        onActivate: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
-                    }),
-                    ContextMenuWorkspaceArray({
-                        label: "Dump windows to workspace",
-                        actionFunc: dumpToWorkspace,
-                        thisWorkspace: Number(id)
-                    }),
-                    ContextMenuWorkspaceArray({
-                        label: "Swap windows with workspace",
-                        actionFunc: swapWorkspace,
-                        thisWorkspace: Number(id)
-                    }),
-                ],
-            });
-            menu.connect("deactivate", () => {
-                button.toggleClassName('overview-tasks-window-selected', false);
-            })
-            menu.connect("selection-done", () => {
-                button.toggleClassName('overview-tasks-window-selected', false);
-            })
-            // menu.popup_at_pointer(null); // Show the menu at the pointer's position
-            menu.popup_at_widget(button.get_parent(), Gravity.SOUTH, Gravity.NORTH, null); // Show menu below the button
-            button.connect("destroy", () => menu.destroy());
-        },
-        child: Widget.Box({
-            css: `
+                        ContextMenuWorkspaceArray({
+                            label: "Dump windows to workspace",
+                            actionFunc: dumpToWorkspace,
+                            thisWorkspace: Number(id)
+                        }),
+                        ContextMenuWorkspaceArray({
+                            label: "Swap windows with workspace",
+                            actionFunc: swapWorkspace,
+                            thisWorkspace: Number(id)
+                        }),
+                    ],
+                });
+                menu.connect("deactivate", () => {
+                    button.toggleClassName('overview-tasks-window-selected', false);
+                })
+                menu.connect("selection-done", () => {
+                    button.toggleClassName('overview-tasks-window-selected', false);
+                })
+                // menu.popup_at_pointer(null); // Show the menu at the pointer's position
+                menu.popup_at_widget(button.get_parent(), Gravity.SOUTH, Gravity.NORTH, null); // Show menu below the button
+                button.connect("destroy", () => menu.destroy());
+            },
+            child: Widget.Box({
+                css: `
                 min-width: ${Math.max(w * OVERVIEW_SCALE - 4, 1)}px;
                 min-height: ${Math.max(h * OVERVIEW_SCALE - 4, 1)}px;
             `,
-            homogeneous: true,
-            child: Widget.Box({
-                vertical: true,
-                vpack: 'center',
-                className: 'spacing-v-5',
-                children: [
-                    Widget.Icon({
-                        icon: substitute(c),
-                        size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
-                    }),
-                    // TODO: Add xwayland tag instead of just having italics
-                    Widget.Revealer({
-                        transition: 'slide_down',
-                        revealChild: revealInfoCondition,
-                        child: Widget.Label({
-                            truncate: 'end',
-                            className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
-                            css: `
+                homogeneous: true,
+                child: Widget.Box({
+                    vertical: true,
+                    vpack: 'center',
+                    className: 'spacing-v-5',
+                    children: [
+                        Widget.Icon({
+                            icon: substitute(c),
+                            size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
+                        }),
+                        // TODO: Add xwayland tag instead of just having italics
+                        Widget.Revealer({
+                            transition: 'slide_down',
+                            revealChild: revealInfoCondition,
+                            child: Widget.Label({
+                                truncate: 'end',
+                                className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
+                                css: `
                                 font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
                                 margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
                             `,
-                            // If the title is too short, include the class
-                            label: (title.length <= 1 ? `${c}: ${title}` : title),
+                                // If the title is too short, include the class
+                                label: (title.length <= 1 ? `${c}: ${title}` : title),
+                            })
                         })
-                    })
-                ]
-            })
-        }),
-        tooltipText: `${c}: ${title}`,
-        setup: (button) => {
-            setupCursorHoverGrab(button);
+                    ]
+                })
+            }),
+            tooltipText: `${c}: ${title}`,
+            setup: (button) => {
+                setupCursorHoverGrab(button);
 
-            button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
-            button.drag_source_set_icon_name(substitute(c));
-            // button.drag_source_set_icon_gicon(icon);
+                button.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, TARGET, Gdk.DragAction.MOVE);
+                button.drag_source_set_icon_name(substitute(c));
+                // button.drag_source_set_icon_gicon(icon);
 
-            button.connect('drag-begin', (button) => {  // On drag start, add the dragging class
-                button.toggleClassName('overview-tasks-window-dragging', true);
-            });
-            button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
-                data.set_text(address, address.length);
-                button.toggleClassName('overview-tasks-window-dragging', false);
-            });
-        },
-    });
-}
+                button.connect('drag-begin', (button) => {  // On drag start, add the dragging class
+                    button.toggleClassName('overview-tasks-window-dragging', true);
+                });
+                button.connect('drag-data-get', (_w, _c, data) => { // On drag finish, give address
+                    data.set_text(address, address.length);
+                    button.toggleClassName('overview-tasks-window-dragging', false);
+                });
+            },
+        });
+    }
 
-const Workspace = (index) => {
-    const fixed = Gtk.Fixed.new();
-    // const clientMap = new Map();
-    const WorkspaceNumber = (index) => Widget.Label({
-        className: 'overview-tasks-workspace-number',
-        label: `${index}`,
-        css: `
+    const Workspace = (index) => {
+        const fixed = Gtk.Fixed.new();
+        const WorkspaceNumber = (index) => Widget.Label({
+            className: 'overview-tasks-workspace-number',
+            label: `${index}`,
+            css: `
             margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE * OVERVIEW_WS_NUM_MARGIN_SCALE}px;
             font-size: ${SCREEN_HEIGHT * OVERVIEW_SCALE * OVERVIEW_WS_NUM_SCALE}px;
         `,
-    })
-    const widget = Widget.Box({
-        className: 'overview-tasks-workspace',
-        vpack: 'center',
-        css: `
+        })
+        const widget = Widget.Box({
+            className: 'overview-tasks-workspace',
+            vpack: 'center',
+            css: `
             min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
             min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
         `,
-        children: [Widget.EventBox({
-            hexpand: true,
-            vexpand: true,
-            onPrimaryClick: () => {
-                Hyprland.sendMessage(`dispatch workspace ${index}`)
-                App.closeWindow('overview');
-            },
-            setup: (eventbox) => {
-                eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
-                eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
-                    Hyprland.sendMessage(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
-                    overviewTick.setValue(!overviewTick.value);
+            children: [Widget.EventBox({
+                hexpand: true,
+                vexpand: true,
+                onPrimaryClick: () => {
+                    Hyprland.sendMessage(`dispatch workspace ${index}`)
+                    App.closeWindow('overview');
+                },
+                setup: (eventbox) => {
+                    eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
+                    eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
+                        Hyprland.sendMessage(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
+                        overviewTick.setValue(!overviewTick.value);
+                    });
+                },
+                child: fixed,
+            })],
+        });
+        widget.clear = () => {
+            clientMap.forEach((client, address) => {
+                if (!client || client.ws !== index) return;
+                client.destroy();
+                client = null;
+                clientMap.delete(address);
+            });
+            const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+            fixed.put(WorkspaceNumber(offset + index), 0, 0);
+        }
+        widget.set = (clientJson, screenCoords) => {
+            let c = clientMap.get(clientJson.address);
+            if (c) {
+                if (c.ws !== clientJson.workspace.id) {
+                    c.destroy();
+                    c = null;
+                    clientMap.delete(clientJson.address);
+                }
+                else {
+                    fixed.move(c,
+                        Math.max(0, (c.attribute.x + clientJson.x) / 2 * OVERVIEW_SCALE),
+                        Math.max(0, (c.attribute.y + clientJson.y) / 2 * OVERVIEW_SCALE)
+                    );
+                    Utils.timeout(1000, () => fixed.move(c,
+                        Math.max(0, clientJson.x * OVERVIEW_SCALE),
+                        Math.max(0, clientJson.y * OVERVIEW_SCALE)
+                    ));
+                    return;
+                }
+            }
+            const newWindow = Window(clientJson, screenCoords);
+            if (newWindow === null) return;
+            // clientMap.set(clientJson.address, newWindow);
+            fixed.put(newWindow,
+                Math.max(0, newWindow.attribute.x * OVERVIEW_SCALE),
+                Math.max(0, newWindow.attribute.y * OVERVIEW_SCALE)
+            );
+            clientMap.set(clientJson.address, newWindow);
+        };
+        // widget.unset = (clientAddress) => {
+        //     if(clientMap.get(clientAddress)) {
+        //         clientMap.get(clientAddress).destroy();
+        //         clientMap.delete(clientAddress);
+        //     }
+        // };
+        widget.show = () => {
+            fixed.show_all();
+        }
+        return widget;
+    };
+
+    const arr = (s, n) => {
+        const array = [];
+        for (let i = 0; i < n; i++)
+            array.push(s + i);
+
+        return array;
+    };
+
+    const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
+        children: arr(startWorkspace, workspaces).map(Workspace),
+        attribute: {
+            monitorMap: [],
+            getMonitorMap: (box) => {
+                execAsync('hyprctl -j monitors').then(monitors => {
+                    box.attribute.monitorMap = JSON.parse(monitors).reduce((acc, item) => {
+                        acc[item.id] = { x: item.x, y: item.y };
+                        return acc;
+                    }, {});
                 });
             },
-            child: fixed,
-        })],
-    });
-    widget.clear = () => {
-        fixed.get_children().forEach(ch => ch.destroy());
-        const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-        fixed.put(WorkspaceNumber(offset + index), 0, 0);
-    }
-    widget.set = (clientJson, screenCoords) => {
-        // if(clientMap.get(clientJson.address)) clientMap.get(clientJson.address).destroy();
-        const newWindow = Window(clientJson, screenCoords);
-        if (newWindow === null) return;
-        // clientMap.set(clientJson.address, newWindow);
-        fixed.put(newWindow,
-            Math.max(0, newWindow.attribute.x * OVERVIEW_SCALE),
-            Math.max(0, newWindow.attribute.y * OVERVIEW_SCALE)
-        );
-    };
-    // widget.unset = (clientAddress) => {
-    //     if(clientMap.get(clientAddress)) {
-    //         clientMap.get(clientAddress).destroy();
-    //         clientMap.delete(clientAddress);
-    //     }
-    // };
-    widget.show = () => {
-        fixed.show_all();
-    }
-    return widget;
-};
-
-const arr = (s, n) => {
-    const array = [];
-    for (let i = 0; i < n; i++)
-        array.push(s + i);
-
-    return array;
-};
-
-const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
-    children: arr(startWorkspace, workspaces).map(Workspace),
-    attribute: {
-        monitorMap: [],
-        getMonitorMap: (box) => {
-            execAsync('hyprctl -j monitors').then(monitors => {
-                box.attribute.monitorMap = JSON.parse(monitors).reduce((acc, item) => {
-                    acc[item.id] = { x: item.x, y: item.y };
-                    return acc;
-                }, {});
-            });
-        },
-        update: (box) => {
-            const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-            if (!App.getWindow(windowName).visible) return;
-            execAsync('hyprctl -j clients').then(clients => {
-                const allClients = JSON.parse(clients);
-                const kids = box.get_children();
-                kids.forEach(kid => kid.clear());
-                for (let i = 0; i < allClients.length; i++) {
-                    const client = allClients[i];
-                    if (offset + startWorkspace <= client.workspace.id &&
-                        client.workspace.id <= offset + startWorkspace + workspaces) {
-                        const screenCoords = box.attribute.monitorMap[client.monitor];
-                        kids[client.workspace.id - (offset + startWorkspace)]
-                            ?.set(client, screenCoords);
+            update: (box) => {
+                const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+                if (!App.getWindow(windowName).visible) return;
+                Hyprland.sendMessage('j/clients').then(clients => {
+                    const allClients = JSON.parse(clients);
+                    const kids = box.get_children();
+                    kids.forEach(kid => kid.clear());
+                    for (let i = 0; i < allClients.length; i++) {
+                        const client = allClients[i];
+                        if (offset + startWorkspace <= client.workspace.id &&
+                            client.workspace.id <= offset + startWorkspace + workspaces) {
+                            const screenCoords = box.attribute.monitorMap[client.monitor];
+                            kids[client.workspace.id - (offset + startWorkspace)]
+                                ?.set(client, screenCoords);
+                        }
                     }
-                }
-                kids.forEach(kid => kid.show());
+                    kids.forEach(kid => kid.show());
 
-            }).catch(print);
-        }
-    },
-    setup: (box) => {
-        box.attribute.getMonitorMap(box);
-        box
-            .hook(overviewTick, (box) => box.attribute.update(box))
-            .hook(Hyprland, (box, clientAddress) => {
-                const client = Hyprland.getClient(clientAddress);
-                box.attribute.updateWorkspace(client.workspace.id);
-                // box.attribute.update(box)
-            }, 'client-removed')
-            .hook(Hyprland, (box, clientAddress) => {
-                box.attribute.update(box);
-            }, 'client-added')
-            .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
-            .hook(App, (box, name, visible) => { // Update on open
-                if (name == 'overview' && visible) box.attribute.update(box);
-            })
-    },
-});
+                }).catch(print);
+            },
+            updateWorkspace: (box, id) => {
+                const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+                if (!( // Not in range, ignore
+                    offset + startWorkspace <= id &&
+                    id <= offset + startWorkspace + workspaces
+                )) return;
+                if (!App.getWindow(windowName).visible) return;
+                Hyprland.sendMessage('j/clients').then(clients => {
+                    const allClients = JSON.parse(clients);
+                    const kids = box.get_children();
+                    for (let i = 0; i < allClients.length; i++) {
+                        const client = allClients[i];
+                        if (client.workspace.id != id) continue;
+                        const screenCoords = box.attribute.monitorMap[client.monitor];
+                        kids[id - (offset + startWorkspace)]?.set(client, screenCoords);
+                    }
+                    kids[id - (offset + startWorkspace)]?.show();
+                }).catch(print);
+            },
+        },
+        setup: (box) => {
+            box.attribute.getMonitorMap(box);
+            box
+                .hook(overviewTick, (box) => box.attribute.update(box))
+                .hook(Hyprland, (box, clientAddress) => {
+                    const client = Hyprland.getClient(clientAddress);
+                    if (!client) return;
+                    box.attribute.updateWorkspace(box, client.workspace.id);
+                    // box.attribute.update(box)
+                }, 'client-removed')
+                .hook(Hyprland, (box, clientAddress) => {
+                    const client = Hyprland.getClient(clientAddress);
+                    if (!client) return;
+                    box.attribute.updateWorkspace(box, client.workspace.id);
+                }, 'client-added')
+                .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
+                .hook(App, (box, name, visible) => { // Update on open
+                    if (name == 'overview' && visible) box.attribute.update(box);
+                })
+        },
+    });
 
-
-export default () => Widget.Revealer({
-    revealChild: true,
-    transition: 'slide_down',
-    transitionDuration: 200,
-    child: Widget.Box({
-        vertical: true,
-        className: 'overview-tasks',
-        children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
-            OverviewRow({
-                startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
-                workspaces: NUM_OF_WORKSPACE_COLS,
-            })
-        )
-    }),
-});
+    return Widget.Revealer({
+        revealChild: true,
+        transition: 'slide_down',
+        transitionDuration: 200,
+        child: Widget.Box({
+            vertical: true,
+            className: 'overview-tasks',
+            children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
+                OverviewRow({
+                    startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
+                    workspaces: NUM_OF_WORKSPACE_COLS,
+                })
+            )
+        }),
+    });
+}
