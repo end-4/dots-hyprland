@@ -24,7 +24,7 @@
 <details> 
   <summary>Instructions</summary>
     
-   - Installation: see the [Wiki](https://github.com/end-4/dots-hyprland/wiki)
+   - Installation: see the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en)
    - If you'd like to suggest fixes or maybe a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)!
 </details>
 
