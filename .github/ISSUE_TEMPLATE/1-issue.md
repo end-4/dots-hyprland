@@ -1,0 +1,25 @@
+---
+name: Issue
+about: for reporting any issue
+title: "[Issue]"
+labels: ''
+assignees: ''
+
+---
+
+- **I have read the [wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/03troubleshooting)**
+- Linux distro: 
+<!-- Tip: you may use `lsb_release -a` to get this info -->
+---
+## The issue
+<!-- Describe your problem here -->
+<!-- If it throws errors, **PLEASE**, attach logs and describe in detail if possible -->
+
+<details>
+<summary>Click to expand</summary>
+
+```plain
+Paste your log here
+```
+
+</details>
