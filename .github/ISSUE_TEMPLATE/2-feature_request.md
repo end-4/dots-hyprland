@@ -6,6 +6,7 @@ labels: ''
 assignees: ''
 
 ---
+<!-- NOTE: Please write in **English**. -->
 
 **What would you like to be added?**
 <!-- Can be a suggestion for an existing feature. You can suggest a widget, minor user interaction changes.. whatever -->
