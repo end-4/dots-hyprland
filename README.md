@@ -11,5 +11,4 @@
 
 
 ## Instructions
-- See the wiki for instructions > [illogical_impulse](https://github.com/end-4/dots-hyprland/wiki/illogical_impulse) 
-
+- See the wiki for instructions > [illogical_impulse](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup) 
