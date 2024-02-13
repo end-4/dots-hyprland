@@ -51,6 +51,7 @@ function substitute(str) {
 }
 export default () => {
     const clientMap = new Map();
+    let workspaceGroup = 0;
     const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
         label: `${label}`,
         setup: (menuItem) => {
@@ -102,8 +103,6 @@ export default () => {
                 },
             },
             className: 'overview-tasks-window',
-            // hpack: 'center',
-            // vpack: 'center',
             hpack: 'start',
             vpack: 'start',
             css: `
@@ -147,15 +146,10 @@ export default () => {
                 menu.connect("selection-done", () => {
                     button.toggleClassName('overview-tasks-window-selected', false);
                 })
-                // menu.popup_at_pointer(null); // Show the menu at the pointer's position
                 menu.popup_at_widget(button.get_parent(), Gravity.SOUTH, Gravity.NORTH, null); // Show menu below the button
                 button.connect("destroy", () => menu.destroy());
             },
             child: Widget.Box({
-                // css: `
-                //     min-width: ${Math.max(w * OVERVIEW_SCALE - 4, 1)}px;
-                //     min-height: ${Math.max(h * OVERVIEW_SCALE - 4, 1)}px;
-                // `,
                 homogeneous: true,
                 child: Widget.Box({
                     vertical: true,
@@ -314,11 +308,9 @@ export default () => {
             const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
             let c = clientMap.get(clientAddress);
             if (!c) return;
-            if (c.attribute?.ws === offset + index) {
-                c.destroy();
-                c = null;
-                clientMap.delete(clientAddress);
-            }
+            c.destroy();
+            c = null;
+            clientMap.delete(clientAddress);
         };
         widget.show = () => {
             fixed.show_all();
@@ -353,17 +345,32 @@ export default () => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
                     kids.forEach(kid => kid.clear());
+                    // console.log('----------------------------');
                     for (let i = 0; i < allClients.length; i++) {
                         const client = allClients[i];
+                        const childID = client.workspace.id - (offset + startWorkspace);
                         if (offset + startWorkspace <= client.workspace.id &&
                             client.workspace.id <= offset + startWorkspace + workspaces) {
                             const screenCoords = box.attribute.monitorMap[client.monitor];
-                            kids[client.workspace.id - (offset + startWorkspace)]
-                                ?.set(client, screenCoords);
+                            if (kids[childID]) {
+                                kids[childID].set(client, screenCoords);
+                            }
+                            continue;
                         }
+                        // const modID = client.workspace.id % NUM_OF_WORKSPACES_SHOWN;
+                        // console.log(`[${startWorkspace} -> ${startWorkspace + workspaces - 1}] ? (${client.workspace.id} == ${modID})`);
+                        // // console.log(`[${startWorkspace} -> ${startWorkspace + workspaces}] ? (${modID})`);
+                        // if (startWorkspace <= modID && modID < startWorkspace + workspaces) {
+                        //     console.log('i care');
+                        //     const clientWidget = clientMap.get(client.address);
+                        //     console.log(childID, kids[childID], clientWidget);
+                        //     if (kids[childID] && clientWidget) {
+                        //         console.log('hmm remove', clientWidget.attribute)
+                        //         kids[childID].remove(clientWidget);
+                        //     }
+                        // }
                     }
                     kids.forEach(kid => kid.show());
-
                 }).catch(print);
             },
             updateWorkspace: (box, id) => {
@@ -405,7 +412,15 @@ export default () => {
                     if (!client) return;
                     box.attribute.updateWorkspace(box, client.workspace.id);
                 }, 'client-added')
-                .hook(Hyprland.active.workspace, (box) => box.attribute.update(box))
+                .hook(Hyprland.active.workspace, (box) => {
+                    const previousGroup = box.attribute.workspaceGroup;
+                    const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN);
+                    if (currentGroup !== previousGroup) {
+                        box.attribute.update(box);
+                        workspaceGroup = currentGroup;
+                    }
+                    // box.attribute.update(box);
+                })
                 .hook(App, (box, name, visible) => { // Update on open
                     if (name == 'overview' && visible) box.attribute.update(box);
                 })
