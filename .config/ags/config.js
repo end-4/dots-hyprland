@@ -64,7 +64,7 @@ export default {
 };
 
 // Stuff that don't need to be toggled. And they're async so ugh...
-// Bar().catch(print); // Use this to debug the bar
+// Bar().catch(print); // Use this to debug the bar. Single monitor only.
 forMonitors(Bar);
 forMonitors(BarCornerTopleft);
 forMonitors(BarCornerTopright);
