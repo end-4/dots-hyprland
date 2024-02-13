@@ -1,4 +1,4 @@
-const { Gio, GLib } = imports.gi;
+const { Gdk, GdkPixbuf, Gio, GLib, Gtk } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -123,70 +123,123 @@ const TrackArtists = ({ player, ...rest }) => Label({
     }, 'notify::track-artists'),
 })
 
-const CoverArt = ({ player, ...rest }) => Box({
-    ...rest,
-    className: 'osd-music-cover',
-    children: [
-        Widget.Overlay({
-            child: Box({ // Fallback
-                className: 'osd-music-cover-fallback',
-                homogeneous: true,
-                children: [Label({
-                    className: 'icon-material txt-gigantic txt-thin',
-                    label: 'music_note',
-                })]
-            }),
-            overlays: [ // Real
-                Box({
-                    attribute: {
-                        'updateCover': (self) => {
-                            // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
-                            // Player closed
-                            // Note that cover path still remains, so we're checking title
-                            if (!player || player.trackTitle == "") {
-                                self.css = `background-image: none;`;
-                                App.applyCss(`${App.configDir}/style.css`);
-                                return;
-                            }
+const CoverArt = ({ player, ...rest }) => {
+    const fallbackCoverArt = Box({ // Fallback
+        className: 'osd-music-cover-fallback',
+        homogeneous: true,
+        children: [Label({
+            className: 'icon-material txt-gigantic txt-thin',
+            label: 'music_note',
+        })]
+    });
+    const coverArtDrawingArea = Widget.DrawingArea({ className: 'osd-music-cover-art' });
+    const coverArtDrawingAreaStyleContext = coverArtDrawingArea.get_style_context();
+    const realCoverArt = Box({
+        className: 'osd-music-cover-art',
+        homogeneous: true,
+        children: [coverArtDrawingArea],
+        attribute: {
+            'pixbuf': null,
+            'showImage': (self, imagePath) => {
+                const borderRadius = coverArtDrawingAreaStyleContext.get_property('border-radius', Gtk.StateFlags.NORMAL);
+                const frameHeight = coverArtDrawingAreaStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                const frameWidth = coverArtDrawingAreaStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                let imageHeight = frameHeight;
+                let imageWidth = frameWidth;
+                // Get image dimensions
+                execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
+                    .then((output) => {
+                        const imageDimensions = JSON.parse(output);
+                        const imageAspectRatio = imageDimensions.w / imageDimensions.h;
+                        const displayedAspectRatio = imageWidth / imageHeight;
+                        if (imageAspectRatio >= displayedAspectRatio) {
+                            imageWidth = imageHeight * imageAspectRatio;
+                        } else {
+                            imageHeight = imageWidth / imageAspectRatio;
+                        }
+                        // Real stuff
+                        // TODO: fix memory leak(?)
+                        // if (self.attribute.pixbuf) {
+                        //     self.attribute.pixbuf.unref();
+                        //     self.attribute.pixbuf = null;
+                        // }
+                        self.attribute.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, imageWidth, imageHeight);
 
-                            const coverPath = player.coverPath;
-                            const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
-                            if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                                Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
-                            }
-                            lastCoverPath = player.coverPath;
+                        coverArtDrawingArea.set_size_request(frameWidth, frameHeight);
+                        coverArtDrawingArea.connect("draw", (widget, cr) => {
+                            // Clip a rounded rectangle area
+                            cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
+                            cr.arc(frameWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
+                            cr.arc(frameWidth - borderRadius, frameHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
+                            cr.arc(borderRadius, frameHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
+                            cr.closePath();
+                            cr.clip();
+                            // Paint image as bg, centered
+                            Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
+                                frameWidth / 2 - imageWidth / 2,
+                                frameHeight / 2 - imageHeight / 2
+                            );
+                            cr.paint();
+                        });
+                    }).catch(print)
+            },
+            'updateCover': (self) => {
+                // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
+                // Player closed
+                // Note that cover path still remains, so we're checking title
+                if (!player || player.trackTitle == "") {
+                    self.css = `background-image: none;`;
+                    App.applyCss(`${App.configDir}/style.css`);
+                    return;
+                }
 
-                            // If a colorscheme has already been generated, skip generation
-                            if (fileExists(stylePath)) {
-                                Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
-                                App.applyCss(stylePath);
-                                return;
-                            }
+                const coverPath = player.coverPath;
+                const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
+                if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
+                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
+                    Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                }
+                lastCoverPath = player.coverPath;
 
-                            // Generate colors
-                            execAsync(['bash', '-c',
-                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
-                                .then(() => {
-                                    exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
-                                    exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
-                                    exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
-                                    self.css = `background-image: url('${coverPath}');`;
-                                    App.applyCss(`${stylePath}`);
-                                })
-                                .catch(print);
-                        },
-                    },
-                    className: 'osd-music-cover-art',
-                    setup: (self) => self
-                        .hook(player, (self) => {
-                            self.attribute.updateCover(self);
-                        }, 'notify::cover-path')
-                    ,
-                })
-            ]
-        })
-    ],
-})
+                // If a colorscheme has already been generated, skip generation
+                if (fileExists(stylePath)) {
+                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
+                    self.attribute.showImage(self, coverPath)
+                    App.applyCss(stylePath);
+                    return;
+                }
+
+                // Generate colors
+                execAsync(['bash', '-c',
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
+                    .then(() => {
+                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
+                        exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
+                        exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
+                        // self.css = `background-image: url('${coverPath}');`;
+                        Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                        App.applyCss(`${stylePath}`);
+                    })
+                    .catch(print);
+            },
+        },
+        setup: (self) => self
+            .hook(player, (self) => {
+                self.attribute.updateCover(self);
+            }, 'notify::cover-path')
+        ,
+    });
+    return Box({
+        ...rest,
+        className: 'osd-music-cover',
+        children: [
+            Widget.Overlay({
+                child: fallbackCoverArt,
+                overlays: [realCoverArt],
+            })
+        ],
+    })
+}
 
 const TrackControls = ({ player, ...rest }) => Widget.Revealer({
     revealChild: false,
