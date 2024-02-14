@@ -38,12 +38,6 @@ export const DirectoryButton = ({ parentPath, name, type, icon }) => {
                             homogeneous: true,
                             child: Widget.Icon({
                                 icon: icon,
-                                setup: (self) => Utils.timeout(1, () => {
-                                    const styleContext = self.get_parent().get_style_context();
-                                    const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                                    const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                                    self.size = Math.max(width, height, 1);
-                                })
                             }),
                         }),
                         Widget.Label({
@@ -112,12 +106,6 @@ export const DesktopEntryButton = (app) => {
                             homogeneous: true,
                             child: Widget.Icon({
                                 icon: app.iconName,
-                                setup: (self) => Utils.timeout(1, () => {
-                                    const styleContext = self.get_parent().get_style_context();
-                                    const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                                    const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                                    self.size = Math.max(width, height, 1);
-                                })
                             }),
                         }),
                         Widget.Label({

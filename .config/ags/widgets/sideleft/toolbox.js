@@ -10,7 +10,7 @@ export default Scrollable({
     child: Box({
         vertical: true,
         children: [
-            // QuickScripts(),
+            QuickScripts(),
         ]
     })
 });
