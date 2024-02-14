@@ -44,6 +44,7 @@ function copyToClipboard(text) {
 function substituteLang(str) {
     const subs = [
         { from: 'javascript', to: 'js' },
+        { from: 'bash', to: 'sh' },
     ];
 
     for (const { from, to } of subs) {
@@ -58,7 +59,7 @@ const HighlightedCode = (content, lang) => {
     const buffer = new GtkSource.Buffer();
     const sourceView = new GtkSource.View({
         buffer: buffer,
-        wrap_mode: Gtk.WrapMode.WORD
+        wrap_mode: Gtk.WrapMode.NONE
     });
     const langManager = GtkSource.LanguageManager.get_default();
     let displayLang = langManager.get_language(substituteLang(lang)); // Set your preferred language

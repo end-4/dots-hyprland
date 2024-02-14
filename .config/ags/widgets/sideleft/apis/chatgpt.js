@@ -19,14 +19,6 @@ export const chatGPTTabIcon = Icon({
     hpack: 'center',
     className: 'sidebar-chat-apiswitcher-icon',
     icon: `openai-symbolic`,
-    setup: (self) => Utils.timeout(513, () => { // stupid condition race
-        const styleContext = self.get_style_context();
-        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-        // console.log(Math.round(Math.max(width, height, 1)));
-        self.size = Math.max(width, height, 1) * 116 / 180;
-        // ↑ Why such a specific proportion? See https://openai.com/brand#logos
-    })
 });
 
 const ChatGPTInfo = () => {
@@ -34,14 +26,6 @@ const ChatGPTInfo = () => {
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
         icon: `openai-symbolic`,
-        setup: (self) => Utils.timeout(513, () => { // stupid condition race
-            const styleContext = self.get_style_context();
-            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-            // console.log(Math.round(Math.max(width, height, 1)));
-            self.size = Math.max(width, height, 1) * 116 / 180;
-            // ↑ Why such a specific proportion? See https://openai.com/brand#logos
-        })
     });
     return Box({
         vertical: true,

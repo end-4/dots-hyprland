@@ -243,11 +243,11 @@ export const SearchAndWindows = () => {
                         entry.set_position(Math.max(entry.get_position() - 1, 0));
                     else if (keyval == Gdk.KEY_f)
                         entry.set_position(Math.min(entry.get_position() + 1, entry.get_text().length));
-                    if (keyval == Gdk.KEY_n) { // simulate Down arrow
+                    else if (keyval == Gdk.KEY_n) { // simulate Down arrow
                         entry.get_root_window().simulate_key_press(Gdk.KEY_Down, Gdk.ModifierType.NONE);
                         // entry.get_root_window().simulate_key_release(Gdk.KEY_Down, Gdk.ModifierType.NONE);
                     }
-                    if (keyval == Gdk.KEY_k) { // Delete to end
+                    else if (keyval == Gdk.KEY_k) { // Delete to end
                         const text = entry.get_text();
                         const pos = entry.get_position();
                         const newText = text.slice(0, pos);
