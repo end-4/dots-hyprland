@@ -4,9 +4,9 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 const { Box, Button, EventBox, Icon, Label, Scrollable } = Widget;
-import { SidebarModule } from './module.js';
-import { MaterialIcon } from '../../lib/materialicon.js';
-import { setupCursorHover } from '../../lib/cursorhover.js';
+import SidebarModule from './module.js';
+import { MaterialIcon } from '../../../lib/materialicon.js';
+import { setupCursorHover } from '../../../lib/cursorhover.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets`);
 const distroID = exec(`bash -c 'cat /etc/os-release | grep "^ID=" | cut -d "=" -f 2'`).trim();
@@ -53,7 +53,7 @@ const scripts = [
     },
 ];
 
-export const QuickScripts = () => SidebarModule({
+export default () => SidebarModule({
     icon: MaterialIcon('code', 'norm'),
     name: 'Quick scripts',
     child: Box({

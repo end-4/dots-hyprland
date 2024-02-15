@@ -1,27 +1,28 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import { setupCursorHover } from '../../lib/cursorhover.js';
-import { MaterialIcon } from '../../lib/materialicon.js';
+import { setupCursorHover } from '../../../lib/cursorhover.js';
+import { MaterialIcon } from '../../../lib/materialicon.js';
 const { Box, Button, Icon, Label, Revealer } = Widget;
 
-export const SidebarModule = ({
+export default ({
     icon,
     name,
-    child
+    child,
+    revealChild = true,
 }) => {
-    const headerButtonIcon = MaterialIcon('expand_more', 'norm');
+    const headerButtonIcon = MaterialIcon(revealChild ? 'expand_less' : 'expand_more', 'norm');
     const header = Box({
-        className: 'spacing-h-10',
+        className: 'txt spacing-h-10',
         children: [
             icon,
             Label({
-                className: 'txt-norm txt',
+                className: 'txt-norm',
                 label: `${name}`,
             }),
             Box({
                 hexpand: true,
             }),
             Button({
-                className: 'sidebar-module-btn-arrow txt',
+                className: 'sidebar-module-btn-arrow',
                 child: headerButtonIcon,
                 onClicked: () => {
                     console.log('clicked');
@@ -33,7 +34,7 @@ export const SidebarModule = ({
         ]
     });
     const content = Revealer({
-        revealChild: true,
+        revealChild: revealChild,
         transition: 'slide_down',
         transitionDuration: 200,
         child: Box({
