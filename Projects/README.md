@@ -1,2 +1,0 @@
-- This folder is for programs that have a proper folder structure that should be compiled then copied to .config/eww/scripts, if you wish.
-- If you don't mind using prebuilt binaries, you can ignore this folder
