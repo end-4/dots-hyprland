@@ -455,6 +455,7 @@ $onChatgpt: $onPrimary;
     background-color: $l_l_t_surfaceVariant;
     min-width: 1.705rem;
     min-height: 1.705rem;
+
     &:hover {
         background-color: $hovercolor;
     }
@@ -466,9 +467,74 @@ $onChatgpt: $onPrimary;
     background-color: $l_l_t_surfaceVariant;
     min-width: 1.705rem;
     min-height: 1.705rem;
+
     &:hover {
         background-color: $hovercolor;
     }
+
+    &:active {
+        background-color: $activecolor;
+    }
+}
+
+$colorpicker_rounding: 0.341rem;
+
+.sidebar-module-colorpicker-wrapper {
+    padding: 0.341rem;
+}
+
+.sidebar-module-colorpicker-cursorwrapper {
+    padding: 0.341rem 0.136rem;
+}
+
+.sidebar-module-colorpicker-hue {
+    min-height: 13.636rem;
+    min-width: 1.091rem;
+    border-radius: $colorpicker_rounding;
+}
+
+.sidebar-module-colorpicker-hue-cursor {
+    background-color: $onBackground;
+    border: 0.136rem solid $onBackground;
+    min-height: 0.136rem;
+    margin-top: -0.136rem;
+    border-radius: $colorpicker_rounding;
+}
+
+.sidebar-module-colorpicker-saturationandlightness-wrapper {
+    padding: 0.341rem;
+}
+
+.sidebar-module-colorpicker-saturationandlightness {
+    min-height: 13.636rem;
+    min-width: 13.636rem;
+    border-radius: $colorpicker_rounding;
+}
+
+.sidebar-module-colorpicker-saturationandlightness-cursorwrapper {
+    padding: 0.341rem;
+    margin-top: -0.409rem;
+    margin-left: -0.409rem;
+}
+
+.sidebar-module-colorpicker-saturationandlightness-cursor {
+    @include full-rounding;
+    border: 0.136rem solid white;
+    min-width: 0.682rem;
+    min-height: 0.682rem;
+    margin-top: -0.409rem;
+    margin-left: -0.409rem;
+}
+
+.sidebar-module-colorpicker-result-area {
+    padding: 0.341rem;
+}
+
+.sidebar-module-colorpicker-result-box {
+    border-radius: $colorpicker_rounding;
+    min-width: 2.045rem;
+    min-height: 0.682rem;
+    padding: 0.341rem;
 }
 
 .sidebar-chat-apiswitcher {
@@ -778,9 +844,7 @@ $waifu_image_overlay_transparency: 0.7;
     @include full-rounding;
     min-width: 1.875rem;
     min-height: 1.875rem;
-    background-color: rgba(0,
-            0,
-            0,
+    background-color: rgba(0, 0, 0,
             $waifu_image_overlay_transparency ); // Fixed cuz on image
     color: rgba(255, 255, 255, $waifu_image_overlay_transparency);
 }
