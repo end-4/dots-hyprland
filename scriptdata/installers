@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# This script depends on `functions' .
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission.
+# NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
+
+# The script that use this file should have two lines on its top as follows:
+# cd "$(dirname "$0")"
+# export base="$(pwd)"
+
+install-yay() {
+  x sudo pacman -Sy --needed --noconfirm base-devel
+  x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
+  x cd /tmp/buildyay
+  x makepkg -o
+  x makepkg -se
+  x makepkg -i --noconfirm
+  x cd $base
+  rm -rf /tmp/buildyay
+}
+
+install-ags (){
+  x mkdir -p $base/cache/ags
+  x cd $base/cache/ags
+  try git init -b main
+  try git remote add origin https://github.com/Aylur/ags.git
+  x git pull origin main && git submodule update --init --recursive
+  x git checkout 109faf5d283d4d2ce90403e461b39048321b9041 # "add fallback generic Attribute type to widget functions"
+  x npm install
+  x meson setup build
+  x meson install -C build
+  x cd $base
+}
+
+install-Rubik (){
+  x mkdir -p $base/cache/Rubik
+  x cd $base/cache/Rubik
+  try git init -b main
+  try git remote add origin https://github.com/googlefonts/rubik.git
+  x git pull origin main && git submodule update --init --recursive
+	x sudo mkdir -p /usr/local/share/fonts/TTF/
+	x sudo cp fonts/variable/Rubik*.ttf /usr/local/share/fonts/TTF/
+	x sudo mkdir -p /usr/local/share/licenses/ttf-rubik/
+	x sudo cp OFL.txt /usr/local/share/licenses/ttf-rubik/LICENSE
+  x fc-cache -fv
+  x cd $base
+}
+
+install-Gabarito (){
+  x mkdir -p $base/cache/Gabarito
+  x cd $base/cache/Gabarito
+  try git init -b main
+  try git remote add origin https://github.com/naipefoundry/gabarito.git
+  x git pull origin main && git submodule update --init --recursive
+	x sudo mkdir -p /usr/local/share/fonts/TTF/
+	x sudo cp fonts/ttf/Gabarito*.ttf /usr/local/share/fonts/TTF/
+	x sudo mkdir -p /usr/local/share/licenses/ttf-gabarito/
+	x sudo cp OFL.txt /usr/local/share/licenses/ttf-gabarito/LICENSE
+  x fc-cache -fv
+  x cd $base
+}
+
+install-OneUI (){
+  x mkdir -p $base/cache/OneUI4-Icons
+  x cd $base/cache/OneUI4-Icons
+  try git init -b main
+  try git remote add origin https://github.com/end-4/OneUI4-Icons.git
+# try git remote add origin https://github.com/mjkim0727/OneUI4-Icons.git
+  x git pull origin main && git submodule update --init --recursive
+  x sudo mkdir -p /usr/local/share/icons
+  x sudo cp -r OneUI /usr/local/share/icons
+  x sudo cp -r OneUI-dark /usr/local/share/icons
+  x sudo cp -r OneUI-light /usr/local/share/icons
+  x cd $base
+}

@@ -1,6 +1,6 @@
 {
     "label" : "lock",
-    "action" : "gtklock",
+    "action" : "swaylock",
     "text" : "lock",
     "keybind" : "l"
 }
@@ -12,7 +12,7 @@
 }
 {
     "label" : "logout",
-    "action" : "loginctl terminate-user $USER",
+    "action" : "killall Hyprland",
     "text" : "logout",
     "keybind" : "e"
 }
