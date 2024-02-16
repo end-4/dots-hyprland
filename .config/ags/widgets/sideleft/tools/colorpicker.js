@@ -27,7 +27,7 @@ export default () => {
         className: 'sidebar-module-colorpicker-wrapper',
         children: [Box({
             className: 'sidebar-module-colorpicker-hue',
-            css: `background: linear-gradient(to bottom, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);`,
+            css: `background: linear-gradient(to bottom, #ff6666, #ffff66, #66dd66, #66ffff, #6666ff, #ff66ff, #ff6666);`,
         })],
     });
     const hueSlider = Box({
@@ -189,9 +189,7 @@ export default () => {
             .hook(selectedColor, self.attribute.update, 'assigned')
         ,
     });
-    const ResultBox = ({
-        colorSystemName, updateCallback, copyCallback
-    }) => Box({
+    const ResultBox = ({ colorSystemName, updateCallback, copyCallback }) => Box({
         children: [
             Box({
                 vertical: true,
