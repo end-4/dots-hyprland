@@ -10,28 +10,30 @@ export default ({
     revealChild = true,
 }) => {
     const headerButtonIcon = MaterialIcon(revealChild ? 'expand_less' : 'expand_more', 'norm');
-    const header = Box({
-        className: 'txt spacing-h-10',
-        children: [
-            icon,
-            Label({
-                className: 'txt-norm',
-                label: `${name}`,
-            }),
-            Box({
-                hexpand: true,
-            }),
-            Button({
-                className: 'sidebar-module-btn-arrow',
-                child: headerButtonIcon,
-                onClicked: () => {
-                    console.log('clicked');
-                    content.revealChild = !content.revealChild;
-                    headerButtonIcon.label = content.revealChild ? 'expand_less' : 'expand_more';
-                },
-                setup: setupCursorHover,
-            })
-        ]
+    const header = Button({
+        onClicked: () => {
+            content.revealChild = !content.revealChild;
+            headerButtonIcon.label = content.revealChild ? 'expand_less' : 'expand_more';
+        },
+        setup: setupCursorHover,
+        child: Box({
+            className: 'txt spacing-h-10',
+            children: [
+                icon,
+                Label({
+                    className: 'txt-norm',
+                    label: `${name}`,
+                }),
+                Box({
+                    hexpand: true,
+                }),
+                Box({
+                    className: 'sidebar-module-btn-arrow',
+                    homogeneous: true,
+                    children: [headerButtonIcon],
+                })
+            ]
+        })
     });
     const content = Revealer({
         revealChild: revealChild,
