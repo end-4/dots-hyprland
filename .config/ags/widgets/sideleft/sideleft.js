@@ -30,6 +30,7 @@ let currentTabId = 0;
 export const contentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
+    transitionDuration: 160,
     children: contents.reduce((acc, item) => {
         acc[item.name] = item.content;
         return acc;

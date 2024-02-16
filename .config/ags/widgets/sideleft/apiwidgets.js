@@ -161,6 +161,7 @@ const textboxArea = Box({ // Entry area
 const apiContentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
+    transitionDuration: 160,
     children: APIS.reduce((acc, api) => {
         acc[api.name] = api.contentWidget;
         return acc;
@@ -169,6 +170,7 @@ const apiContentStack = Stack({
 
 const apiCommandStack = Stack({
     transition: 'slide_up_down',
+    transitionDuration: 160,
     children: APIS.reduce((acc, api) => {
         acc[api.name] = api.commandBar;
         return acc;
