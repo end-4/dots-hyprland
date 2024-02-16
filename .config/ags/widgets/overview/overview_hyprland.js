@@ -68,6 +68,7 @@ export default () => {
                 button.connect("activate", () => {
                     // execAsync([`${onClickBinary}`, `${thisWorkspace}`, `${i}`]).catch(print);
                     actionFunc(thisWorkspace, i);
+                    overviewTick.setValue(!overviewTick.value);
                 });
                 submenu.append(button);
             }
