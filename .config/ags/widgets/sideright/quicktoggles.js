@@ -1,4 +1,5 @@
 const { GLib } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -151,7 +152,7 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
         if (self.attribute.enabled) {
             self.attribute.inhibitor = Utils.subprocess(
-                ['wayland-idle-inhibitor.py'],
+                [`${App.configDir}/scripts/wayland-idle-inhibitor.py`],
                 (output) => print(output),
                 (err) => logError(err),
                 self,

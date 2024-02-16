@@ -417,6 +417,14 @@ export const sendMessage = (text) => {
                 true
             ));
         }
+        else if (text.startsWith('/place')) {
+            const newImage = WaifuImage(['/place']);
+            waifuContent.add(newImage);
+            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
+                DummyTag(400, 600, 'https://placewaifu.com/image/400/600', '#F0A235'),
+                true
+            ));
+        }
 
     }
     else WaifuService.fetch(text);

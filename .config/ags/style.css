@@ -1,4 +1,4 @@
-* {
+*:not(popover) {
   all: unset; }
 
 @keyframes flyin-top {
@@ -56,11 +56,11 @@
   text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.69);
   margin: 10px; }
 
-.txt-badonkers {
+.txt-gigantic {
   font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 3rem; }
 
-.txt-tiddies {
+.txt-massive {
   font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter", "Roboto", "Ubuntu", "Noto Sans", sans-serif;
   font-size: 2.7273rem; }
 
@@ -108,6 +108,9 @@
 
 .txt-action {
   color: #cbc0c1; }
+
+.txt-thin {
+  font-weight: 300; }
 
 .txt-semibold {
   font-weight: 500; }
@@ -486,6 +489,21 @@ tooltip {
   color: #d6c1c4;
   border: 1px solid #d6c1c4; }
 
+popover {
+  border-top: 1px solid rgba(63, 56, 57, 0.121);
+  border-left: 1px solid rgba(63, 56, 57, 0.121);
+  border-right: 1px solid rgba(49, 42, 43, 0.1105);
+  border-bottom: 1px solid rgba(49, 42, 43, 0.1105);
+  padding: 0.681rem;
+  background: #3d3234;
+  color: #d6c1c4;
+  border-radius: 1.159rem;
+  -gtk-outline-radius: 1.159rem;
+  animation-name: appear;
+  animation-duration: 40ms;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1; }
+
 .configtoggle-box {
   padding: 0.205rem 0.341rem;
   border: 0.136rem solid transparent; }
@@ -809,7 +827,8 @@ tooltip {
   -gtk-outline-radius: 9999px;
   transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
   min-height: 1.032rem;
-  min-width: 1.032rem; }
+  min-width: 1.032rem;
+  font-size: 1.032rem; }
 
 .bar-statusicons {
   border-radius: 9999px;
@@ -986,7 +1005,8 @@ tooltip {
 
 .dock-app-icon {
   min-width: 3.409rem;
-  min-height: 3.409rem; }
+  min-height: 3.409rem;
+  font-size: 3.409rem; }
 
 .dock-separator {
   min-width: 0.068rem;
@@ -1331,6 +1351,11 @@ tooltip {
 .osk-control-button:active {
   background-color: rgba(107, 93, 95, 0.31);
   font-size: 1.091rem; }
+
+.osk-key-empty, .osk-key-empty:hover, .osk-key-empty:focus {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  background-color: transparent; }
 
 .sidebar-right {
   transition: 300ms cubic-bezier(0.1, 1, 0, 1);
@@ -1709,15 +1734,79 @@ tooltip {
   border-radius: 1.159rem;
   -gtk-outline-radius: 1.159rem;
   padding: 0.341rem;
-  background-color: rgba(34, 27, 28, 0.31); }
+  background-color: rgba(61, 50, 52, 0.45);
+  padding: 0.682rem; }
 
 .sidebar-module-btn-arrow {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   font-family: "Material Symbols Rounded", "MaterialSymbolsRounded", "Material Symbols Outlined", "Material Symbols Sharp";
-  background-color: rgba(61, 50, 52, 0.31);
+  background-color: rgba(61, 50, 52, 0.45);
   min-width: 1.705rem;
   min-height: 1.705rem; }
+  .sidebar-module-btn-arrow:hover {
+    background-color: rgba(128, 128, 128, 0.3); }
+
+.sidebar-module-scripts-button {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  font-family: "Material Symbols Rounded", "MaterialSymbolsRounded", "Material Symbols Outlined", "Material Symbols Sharp";
+  background-color: rgba(61, 50, 52, 0.45);
+  min-width: 1.705rem;
+  min-height: 1.705rem; }
+  .sidebar-module-scripts-button:hover {
+    background-color: rgba(128, 128, 128, 0.3); }
+  .sidebar-module-scripts-button:active {
+    background-color: rgba(128, 128, 128, 0.7); }
+
+.sidebar-module-colorpicker-wrapper {
+  padding: 0.341rem; }
+
+.sidebar-module-colorpicker-cursorwrapper {
+  padding: 0.341rem 0.136rem; }
+
+.sidebar-module-colorpicker-hue {
+  min-height: 13.636rem;
+  min-width: 1.091rem;
+  border-radius: 0.341rem; }
+
+.sidebar-module-colorpicker-hue-cursor {
+  background-color: #ecdfe0;
+  border: 0.136rem solid #ecdfe0;
+  min-height: 0.136rem;
+  margin-top: -0.136rem;
+  border-radius: 0.341rem; }
+
+.sidebar-module-colorpicker-saturationandlightness-wrapper {
+  padding: 0.341rem; }
+
+.sidebar-module-colorpicker-saturationandlightness {
+  min-height: 13.636rem;
+  min-width: 13.636rem;
+  border-radius: 0.341rem; }
+
+.sidebar-module-colorpicker-saturationandlightness-cursorwrapper {
+  padding: 0.341rem;
+  margin-top: -0.409rem;
+  margin-left: -0.409rem; }
+
+.sidebar-module-colorpicker-saturationandlightness-cursor {
+  border-radius: 9999px;
+  -gtk-outline-radius: 9999px;
+  border: 0.136rem solid white;
+  min-width: 0.682rem;
+  min-height: 0.682rem;
+  margin-top: -0.409rem;
+  margin-left: -0.409rem; }
+
+.sidebar-module-colorpicker-result-area {
+  padding: 0.341rem; }
+
+.sidebar-module-colorpicker-result-box {
+  border-radius: 0.341rem;
+  min-width: 2.045rem;
+  min-height: 0.682rem;
+  padding: 0.341rem; }
 
 .sidebar-chat-apiswitcher {
   border-radius: 9999px;
@@ -1731,6 +1820,7 @@ tooltip {
   -gtk-outline-radius: 9999px;
   min-width: 2.182rem;
   min-height: 2.182rem;
+  font-size: 1.406rem;
   color: #ecdfe0; }
 
 .sidebar-chat-apiswitcher-icon-enabled {
@@ -1879,10 +1969,10 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
+  font-family: "Material Symbols Rounded", "MaterialSymbolsRounded", "Material Symbols Outlined", "Material Symbols Sharp";
   min-height: 4.773rem;
   min-width: 4.773rem;
-  font-family: "Material Symbols Rounded", "MaterialSymbolsRounded", "Material Symbols Outlined", "Material Symbols Sharp";
-  font-size: 2.727rem;
+  font-size: 3.076rem;
   background-color: #ecdfe0;
   color: #110d0e; }
 
@@ -2106,7 +2196,8 @@ tooltip {
   border-radius: 9999px;
   -gtk-outline-radius: 9999px;
   min-width: 3.409rem;
-  min-height: 3.409rem; }
+  min-height: 3.409rem;
+  font-size: 3.409rem; }
 
 .notif-icon-material {
   background-color: #5c3f45;

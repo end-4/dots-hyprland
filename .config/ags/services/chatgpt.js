@@ -118,8 +118,8 @@ class ChatGPTService extends Service {
     _assistantPrompt = true;
     _messages = [];
     _cycleModels = true;
-    _temperature = 0.9;
     _requestCount = 0;
+    _temperature = 0.9;
     _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();

@@ -71,7 +71,9 @@ export const oskLayouts = {
                 { keytype: "normal", label: "\\", labelShift: "|", shape: "expand", keycode: 43 }
             ],
             [
-                { keytype: "normal", label: "Caps", shape: "caps", keycode: 58 },
+                //{ keytype: "normal", label: "Caps", shape: "caps", keycode: 58 }, // not needed as double-pressing shift does that
+                { keytype: "spacer", label: "", shape: "empty" },
+                { keytype: "spacer", label: "", shape: "empty" },
                 { keytype: "normal", label: "a", labelShift: "A", shape: "normal", keycode: 30 },
                 { keytype: "normal", label: "s", labelShift: "S", shape: "normal", keycode: 31 },
                 { keytype: "normal", label: "d", labelShift: "D", shape: "normal", keycode: 32 },
@@ -86,7 +88,7 @@ export const oskLayouts = {
                 { keytype: "normal", label: "Enter", shape: "expand", keycode: 28 }
             ],
             [
-                { keytype: "modkey", label: "Shift", shape: "shift", keycode: 42 },
+                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "shift", keycode: 42 },
                 { keytype: "normal", label: "z", labelShift: "Z", shape: "normal", keycode: 44 },
                 { keytype: "normal", label: "x", labelShift: "X", shape: "normal", keycode: 45 },
                 { keytype: "normal", label: "c", labelShift: "C", shape: "normal", keycode: 46 },
@@ -97,7 +99,7 @@ export const oskLayouts = {
                 { keytype: "normal", label: ",", labelShift: "<", shape: "normal", keycode: 51 },
                 { keytype: "normal", label: ".", labelShift: ">", shape: "normal", keycode: 52 },
                 { keytype: "normal", label: "/", labelShift: "?", shape: "normal", keycode: 53 },
-                { keytype: "modkey", label: "Shift", shape: "expand", keycode: 54 }
+                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "expand", keycode: 54 } // optional
             ],
             [
                 { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 29 },
@@ -108,6 +110,108 @@ export const oskLayouts = {
                 // { label: "Super", shape: "normal", keycode: 126 }, // dangerous
                 { keytype: "normal", label: "Menu", shape: "normal", keycode: 139 },
                 { keytype: "modkey", label: "Ctrl", shape: "control", keycode: 97 }
+            ]
+        ]
+    },
+    qwertz_full: {
+        name: "QWERTZ - Full",
+        name_short: "DE",
+        comment: "Keyboard layout commonly used in German-speaking countries",
+        keys: [
+            [
+                { keytype: "normal", label: "Esc", shape: "fn", keycode: 1 },
+                { keytype: "normal", label: "F1", shape: "fn", keycode: 59 },
+                { keytype: "normal", label: "F2", shape: "fn", keycode: 60 },
+                { keytype: "normal", label: "F3", shape: "fn", keycode: 61 },
+                { keytype: "normal", label: "F4", shape: "fn", keycode: 62 },
+                { keytype: "normal", label: "F5", shape: "fn", keycode: 63 },
+                { keytype: "normal", label: "F6", shape: "fn", keycode: 64 },
+                { keytype: "normal", label: "F7", shape: "fn", keycode: 65 },
+                { keytype: "normal", label: "F8", shape: "fn", keycode: 66 },
+                { keytype: "normal", label: "F9", shape: "fn", keycode: 67 },
+                { keytype: "normal", label: "F10", shape: "fn", keycode: 68 },
+                { keytype: "normal", label: "F11", shape: "fn", keycode: 87 },
+                { keytype: "normal", label: "F12", shape: "fn", keycode: 88 },
+                { keytype: "normal", label: "Druck", shape: "fn", keycode: 99 },
+                { keytype: "normal", label: "Entf", shape: "fn", keycode: 111 }
+            ],
+            [
+                { keytype: "normal", label: "^", labelShift: "°", labelAlt: "′", shape: "normal", keycode: 41 },
+                { keytype: "normal", label: "1", labelShift: "!", labelAlt: "¹", shape: "normal", keycode: 2 },
+                { keytype: "normal", label: "2", labelShift: "\"", labelAlt: "²", shape: "normal", keycode: 3 },
+                { keytype: "normal", label: "3", labelShift: "§", labelAlt: "³", shape: "normal", keycode: 4 },
+                { keytype: "normal", label: "4", labelShift: "$", labelAlt: "¼", shape: "normal", keycode: 5 },
+                { keytype: "normal", label: "5", labelShift: "%", labelAlt: "½", shape: "normal", keycode: 6 },
+                { keytype: "normal", label: "6", labelShift: "&", labelAlt: "¬", shape: "normal", keycode: 7 },
+                { keytype: "normal", label: "7", labelShift: "/", labelAlt: "{", shape: "normal", keycode: 8 },
+                { keytype: "normal", label: "8", labelShift: "(", labelAlt: "[", shape: "normal", keycode: 9 },
+                { keytype: "normal", label: "9", labelShift: ")", labelAlt: "]", shape: "normal", keycode: 10 },
+                { keytype: "normal", label: "0", labelShift: "=", labelAlt: "}", shape: "normal", keycode: 11 },
+                { keytype: "normal", label: "ß", labelShift: "?", labelAlt: "\\", shape: "normal", keycode: 12 },
+                { keytype: "normal", label: "´", labelShift: "`", labelAlt: "¸", shape: "normal", keycode: 13 },
+                { keytype: "normal", label: "⟵", shape: "expand", keycode: 14 }
+            ],
+            [
+                { keytype: "normal", label: "Tab ⇆", shape: "tab", keycode: 15 },
+                { keytype: "normal", label: "q", labelShift: "Q", labelAlt: "@", shape: "normal", keycode: 16 },
+                { keytype: "normal", label: "w", labelShift: "W", labelAlt: "ſ", shape: "normal", keycode: 17 },
+                { keytype: "normal", label: "e", labelShift: "E", labelAlt: "€", shape: "normal", keycode: 18 },
+                { keytype: "normal", label: "r", labelShift: "R", labelAlt: "¶", shape: "normal", keycode: 19 },
+                { keytype: "normal", label: "t", labelShift: "T", labelAlt: "ŧ", shape: "normal", keycode: 20 },
+                { keytype: "normal", label: "z", labelShift: "Z", labelAlt: "←", shape: "normal", keycode: 21 },
+                { keytype: "normal", label: "u", labelShift: "U", labelAlt: "↓", shape: "normal", keycode: 22 },
+                { keytype: "normal", label: "i", labelShift: "I", labelAlt: "→", shape: "normal", keycode: 23 },
+                { keytype: "normal", label: "o", labelShift: "O", labelAlt: "ø", shape: "normal", keycode: 24 },
+                { keytype: "normal", label: "p", labelShift: "P", labelAlt: "þ", shape: "normal", keycode: 25 },
+                { keytype: "normal", label: "ü", labelShift: "Ü", labelAlt: "¨", shape: "normal", keycode: 26 },
+                { keytype: "normal", label: "+", labelShift: "*", labelAlt: "~", shape: "normal", keycode: 27 },
+                { keytype: "normal", label: "↵", shape: "expand", keycode: 28 }
+            ],
+            [
+                //{ keytype: "normal", label: "Umschalt ⇩", shape: "caps", keycode: 58 },
+                { keytype: "spacer", label: "", shape: "empty" },
+                { keytype: "spacer", label: "", shape: "empty" },
+                { keytype: "normal", label: "a", labelShift: "A", labelAlt: "æ", shape: "normal", keycode: 30 },
+                { keytype: "normal", label: "s", labelShift: "S", labelAlt: "ſ", shape: "normal", keycode: 31 },
+                { keytype: "normal", label: "d", labelShift: "D", labelAlt: "ð", shape: "normal", keycode: 32 },
+                { keytype: "normal", label: "f", labelShift: "F", labelAlt: "đ", shape: "normal", keycode: 33 },
+                { keytype: "normal", label: "g", labelShift: "G", labelAlt: "ŋ", shape: "normal", keycode: 34 },
+                { keytype: "normal", label: "h", labelShift: "H", labelAlt: "ħ", shape: "normal", keycode: 35 },
+                { keytype: "normal", label: "j", labelShift: "J", labelAlt: "", shape: "normal", keycode: 36 },
+                { keytype: "normal", label: "k", labelShift: "K", labelAlt: "ĸ", shape: "normal", keycode: 37 },
+                { keytype: "normal", label: "l", labelShift: "L", labelAlt: "ł", shape: "normal", keycode: 38 },
+                { keytype: "normal", label: "ö", labelShift: "Ö", labelAlt: "˝", shape: "normal", keycode: 39 },
+                { keytype: "normal", label: "ä", labelShift: 'Ä', labelAlt: "^", shape: "normal", keycode: 40 },
+                { keytype: "normal", label: "#", labelShift: '\'', labelAlt: "’", shape: "normal", keycode: 43 },
+                { keytype: "spacer", label: "", shape: "empty" },
+                //{ keytype: "normal", label: "↵", shape: "expand", keycode: 28 }
+            ],
+            [
+                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "shift", keycode: 42 },
+                { keytype: "normal", label: "<", labelShift: ">", labelAlt: "|", shape: "normal", keycode: 86 },
+                { keytype: "normal", label: "y", labelShift: "Y", labelAlt: "»", shape: "normal", keycode: 44 },
+                { keytype: "normal", label: "x", labelShift: "X", labelAlt: "«", shape: "normal", keycode: 45 },
+                { keytype: "normal", label: "c", labelShift: "C", labelAlt: "¢", shape: "normal", keycode: 46 },
+                { keytype: "normal", label: "v", labelShift: "V", labelAlt: "„", shape: "normal", keycode: 47 },
+                { keytype: "normal", label: "b", labelShift: "B", labelAlt: "“", shape: "normal", keycode: 48 },
+                { keytype: "normal", label: "n", labelShift: "N", labelAlt: "”", shape: "normal", keycode: 49 },
+                { keytype: "normal", label: "m", labelShift: "M", labelAlt: "µ", shape: "normal", keycode: 50 },
+                { keytype: "normal", label: ",", labelShift: ";", labelAlt: "·", shape: "normal", keycode: 51 },
+                { keytype: "normal", label: ".", labelShift: ":", labelAlt: "…", shape: "normal", keycode: 52 },
+                { keytype: "normal", label: "-", labelShift: "_", labelAlt: "–", shape: "normal", keycode: 53 },
+                { keytype: "modkey", label: "Shift", labelShift: "Shift ⇧", labelCaps: "Locked ⇩", shape: "expand", keycode: 54 }, // optional
+            ],
+            [
+                { keytype: "modkey", label: "Strg", shape: "control", keycode: 29 },
+                //{ keytype: "normal", label: "", shape: "normal", keycode: 125 }, // dangerous
+                { keytype: "modkey", label: "Alt", shape: "normal", keycode: 56 },
+                { keytype: "normal", label: "Leertaste", shape: "space", keycode: 57 },
+                { keytype: "modkey", label: "Alt Gr", shape: "normal", keycode: 100 },
+                // { label: "Super", shape: "normal", keycode: 126 }, // dangerous
+                //{ keytype: "normal", label: "Menu", shape: "normal", keycode: 139 }, // doesn't work?
+                { keytype: "modkey", label: "Strg", shape: "control", keycode: 97 },
+                { keytype: "normal", label: "⇦", shape: "normal", keycode: 105 },
+                { keytype: "normal", label: "⇨", shape: "normal", keycode: 106 },
             ]
         ]
     }

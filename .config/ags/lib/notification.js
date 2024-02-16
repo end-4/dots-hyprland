@@ -56,12 +56,6 @@ const NotificationIcon = (notifObject) => {
                 Icon({
                     vpack: 'center',
                     icon: icon,
-                    setup: (self) => Utils.timeout(1, () => {
-                        const styleContext = self.get_parent().get_style_context();
-                        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                        self.size = Math.max(width * 0.7, height * 0.7, 1); // im too lazy to add another box lol
-                    }, self),
                 })
                 :
                 MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
