@@ -13,19 +13,12 @@ import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
-const TextView =  Widget.subclass(Gtk.TextView, "AgsTextView");
+import { enableClickthrough } from '../../lib/roundedcorner.js';
+const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
 
 const EXPAND_INPUT_THRESHOLD = 30;
 const APIS = [
-    {
-        name: 'Assistant (ChatGPT 3.5)',
-        sendCommand: chatGPTSendMessage,
-        contentWidget: chatGPTView,
-        commandBar: chatGPTCommands,
-        tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message ChatGPT...',
-    },
     {
         name: 'Assistant (Gemini Pro)',
         sendCommand: geminiSendMessage,
@@ -33,6 +26,14 @@ const APIS = [
         commandBar: geminiCommands,
         tabIcon: geminiTabIcon,
         placeholderText: 'Message Gemini...',
+    },
+    {
+        name: 'Assistant (ChatGPT 3.5)',
+        sendCommand: chatGPTSendMessage,
+        contentWidget: chatGPTView,
+        commandBar: chatGPTCommands,
+        tabIcon: chatGPTTabIcon,
+        placeholderText: 'Message ChatGPT...',
     },
     {
         name: 'Waifus',
@@ -141,6 +142,7 @@ const chatPlaceholderRevealer = Revealer({
     transition: 'crossfade',
     transitionDuration: 200,
     child: chatPlaceholder,
+    setup: enableClickthrough,
 });
 
 const textboxArea = Box({ // Entry area
@@ -159,12 +161,20 @@ const textboxArea = Box({ // Entry area
 const apiContentStack = Stack({
     vexpand: true,
     transition: 'slide_left_right',
-    items: APIS.map(api => [api.name, api.contentWidget]),
+    transitionDuration: 160,
+    children: APIS.reduce((acc, api) => {
+        acc[api.name] = api.contentWidget;
+        return acc;
+    }, {}),
 })
 
 const apiCommandStack = Stack({
     transition: 'slide_up_down',
-    items: APIS.map(api => [api.name, api.commandBar]),
+    transitionDuration: 160,
+    children: APIS.reduce((acc, api) => {
+        acc[api.name] = api.commandBar;
+        return acc;
+    }, {}),
 })
 
 function switchToTab(id) {

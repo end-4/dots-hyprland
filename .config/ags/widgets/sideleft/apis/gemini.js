@@ -20,12 +20,6 @@ export const geminiTabIcon = Icon({
     hpack: 'center',
     className: 'sidebar-chat-apiswitcher-icon',
     icon: `google-gemini-symbolic`,
-    setup: (self) => Utils.timeout(513, () => { // stupid condition race
-        const styleContext = self.get_style_context();
-        const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-        const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-        self.size = Math.max(width, height, 1) * 116 / 180;
-    })
 })
 
 const GeminiInfo = () => {
@@ -33,12 +27,6 @@ const GeminiInfo = () => {
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
         icon: `google-gemini-symbolic`,
-        setup: (self) => Utils.timeout(513, () => { // stupid condition race
-            const styleContext = self.get_style_context();
-            const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-            const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-            self.size = Math.max(width, height, 1) * 116 / 180;
-        })
     });
     return Box({
         vertical: true,

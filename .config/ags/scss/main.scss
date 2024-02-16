@@ -1,8 +1,8 @@
 // Reset
-* {
-    all: unset;
-}
-// *:not(tooltip) { all: unset; }
+// * {
+//     all: unset;
+// }
+*:not(popover) { all: unset; }
 
 // Colors
 @import './material'; // Material colors

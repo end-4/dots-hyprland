@@ -40,14 +40,14 @@ menu {
     animation-iteration-count: 1;
 }
 
-menubar > menuitem {
+menubar>menuitem {
     border-radius: 0.545rem;
     -gtk-outline-radius: 0.545rem;
     min-width: 13.636rem;
     min-height: 2.727rem;
 }
 
-menu > menuitem {
+menu>menuitem {
     padding: 0.4em 1.5rem;
     background: transparent;
     transition: 0.2s ease background;
@@ -55,11 +55,12 @@ menu > menuitem {
     -gtk-outline-radius: 0.545rem;
 }
 
-menu > menuitem:hover,
-menu > menuitem:focus {
+menu>menuitem:hover,
+menu>menuitem:focus {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
-menu > menuitem:active {
+
+menu>menuitem:active {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
 }
 
@@ -92,6 +93,33 @@ tooltip {
     color: $onSurfaceVariant;
     border: 1px solid $onSurfaceVariant;
 }
+
+/////////////////////////////////////////
+// Emoji Chooser structure
+// popover
+// ├── box.emoji-searchbar
+// │   ╰── entry.search
+// ╰── box.emoji-toolbar
+//     ├── button.image-button.emoji-section
+//     ├── ...
+//     ╰── button.image-button.emoji-section
+
+popover {
+    @include elevation-border-softer;
+    padding: 0.681rem;
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.159rem;
+    -gtk-outline-radius: 1.159rem;
+
+    animation-name: appear;
+    animation-duration: 40ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+}
+
+
+/////////////////////////////////////////
 
 .configtoggle-box {
     padding: 0.205rem 0.341rem;
@@ -145,17 +173,17 @@ tooltip {
     border: 0.068rem solid $outline;
 }
 
-.segment-container > *:first-child {
+.segment-container>*:first-child {
     border-top-left-radius: 9999px;
     border-bottom-left-radius: 9999px;
 }
 
-.segment-container > * {
+.segment-container>* {
     border-right: 0.068rem solid $outline;
     padding: 0.341rem 0.682rem;
 }
 
-.segment-container > *:last-child {
+.segment-container>*:last-child {
     border-right: 0rem solid transparent;
     border-top-right-radius: 9999px;
     border-bottom-right-radius: 9999px;

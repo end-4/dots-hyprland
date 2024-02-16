@@ -110,3 +110,9 @@ $osk_key_fontsize: 1.091rem;
     background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
     font-size: $osk_key_fontsize;
 }
+
+.osk-key-empty, .osk-key-empty:hover, .osk-key-empty:focus {
+    min-width: $osk_key_width;
+    min-height: $osk_key_height;
+    background-color: transparent;
+}

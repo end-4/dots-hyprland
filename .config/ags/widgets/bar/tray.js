@@ -10,15 +10,8 @@ const SysTrayItem = (item) => Button({
     className: 'bar-systray-item',
     child: Icon({
         hpack: 'center',
-        setup: (self) => {
-            self.hook(item, (self) => self.icon = item.icon);
-            Utils.timeout(1, () => {
-                const styleContext = self.get_parent().get_style_context();
-                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                self.size = Math.max(width, height, 1); // im too lazy to add another box lol
-            })
-        },
+        icon: item.icon,
+        setup: (self) => self.hook(item, (self) => self.icon = item.icon),
     }),
     setup: (self) => self
         .hook(item, (self) => self.tooltipMarkup = item['tooltip-markup'])

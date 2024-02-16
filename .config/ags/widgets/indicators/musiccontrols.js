@@ -1,4 +1,4 @@
-const { Gio, GLib } = imports.gi;
+const { Gdk, GdkPixbuf, Gio, GLib, Gtk } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -27,8 +27,9 @@ var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
-        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') &&
-        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld')
+        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') && // Firefox mpris dbus is useless
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') && // Doesn't have cover art
+        !player.busName.endsWith('.mpd') // Non-instance mpd bus
     );
 }
 
@@ -69,7 +70,7 @@ function getTrackfont(player) {
     return DEFAULT_MUSIC_FONT;
 }
 function trimTrackTitle(title) {
-    if(!title) return '';
+    if (!title) return '';
     const cleanRegexes = [
         /【[^】]*】/,         // Touhou n weeb stuff
         /\[FREE DOWNLOAD\]/, // F-777
@@ -80,7 +81,7 @@ function trimTrackTitle(title) {
 
 const TrackProgress = ({ player, ...rest }) => {
     const _updateProgress = (circprog) => {
-        const player = Mpris.getPlayer();
+        // const player = Mpris.getPlayer();
         if (!player) return;
         // Set circular progress (see definition of AnimatedCircProg for explanation)
         circprog.css = `font-size: ${Math.max(player.position / player.length * 100, 0)}px;`
@@ -122,69 +123,123 @@ const TrackArtists = ({ player, ...rest }) => Label({
     }, 'notify::track-artists'),
 })
 
-const CoverArt = ({ player, ...rest }) => Box({
-    ...rest,
-    className: 'osd-music-cover',
-    children: [
-        Widget.Overlay({
-            child: Box({ // Fallback
-                className: 'osd-music-cover-fallback',
-                homogeneous: true,
-                children: [Label({
-                    className: 'icon-material txt-hugeass',
-                    label: 'music_note',
-                })]
-            }),
-            overlays: [ // Real
-                Box({
-                    attribute: {
-                        'updateCover': (self) => {
-                            const player = Mpris.getPlayer();
+const CoverArt = ({ player, ...rest }) => {
+    const fallbackCoverArt = Box({ // Fallback
+        className: 'osd-music-cover-fallback',
+        homogeneous: true,
+        children: [Label({
+            className: 'icon-material txt-gigantic txt-thin',
+            label: 'music_note',
+        })]
+    });
+    const coverArtDrawingArea = Widget.DrawingArea({ className: 'osd-music-cover-art' });
+    const coverArtDrawingAreaStyleContext = coverArtDrawingArea.get_style_context();
+    const realCoverArt = Box({
+        className: 'osd-music-cover-art',
+        homogeneous: true,
+        children: [coverArtDrawingArea],
+        attribute: {
+            'pixbuf': null,
+            'showImage': (self, imagePath) => {
+                const borderRadius = coverArtDrawingAreaStyleContext.get_property('border-radius', Gtk.StateFlags.NORMAL);
+                const frameHeight = coverArtDrawingAreaStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                const frameWidth = coverArtDrawingAreaStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                let imageHeight = frameHeight;
+                let imageWidth = frameWidth;
+                // Get image dimensions
+                execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
+                    .then((output) => {
+                        const imageDimensions = JSON.parse(output);
+                        const imageAspectRatio = imageDimensions.w / imageDimensions.h;
+                        const displayedAspectRatio = imageWidth / imageHeight;
+                        if (imageAspectRatio >= displayedAspectRatio) {
+                            imageWidth = imageHeight * imageAspectRatio;
+                        } else {
+                            imageHeight = imageWidth / imageAspectRatio;
+                        }
+                        // Real stuff
+                        // TODO: fix memory leak(?)
+                        // if (self.attribute.pixbuf) {
+                        //     self.attribute.pixbuf.unref();
+                        //     self.attribute.pixbuf = null;
+                        // }
+                        self.attribute.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, imageWidth, imageHeight);
 
-                            // Player closed
-                            // Note that cover path still remains, so we're checking title
-                            if (!player || player.trackTitle == "") {
-                                self.css = `background-image: none;`;
-                                App.applyCss(`${App.configDir}/style.css`);
-                                return;
-                            }
+                        coverArtDrawingArea.set_size_request(frameWidth, frameHeight);
+                        coverArtDrawingArea.connect("draw", (widget, cr) => {
+                            // Clip a rounded rectangle area
+                            cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
+                            cr.arc(frameWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
+                            cr.arc(frameWidth - borderRadius, frameHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
+                            cr.arc(borderRadius, frameHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
+                            cr.closePath();
+                            cr.clip();
+                            // Paint image as bg, centered
+                            Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
+                                frameWidth / 2 - imageWidth / 2,
+                                frameHeight / 2 - imageHeight / 2
+                            );
+                            cr.paint();
+                        });
+                    }).catch(print)
+            },
+            'updateCover': (self) => {
+                // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
+                // Player closed
+                // Note that cover path still remains, so we're checking title
+                if (!player || player.trackTitle == "") {
+                    self.css = `background-image: none;`;
+                    App.applyCss(`${App.configDir}/style.css`);
+                    return;
+                }
 
-                            const coverPath = player.coverPath;
-                            const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
-                            if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                                self.css = `background-image: url('${coverPath}');`;
-                            }
-                            lastCoverPath = player.coverPath;
+                const coverPath = player.coverPath;
+                const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
+                if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
+                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
+                    Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                }
+                lastCoverPath = player.coverPath;
 
-                            // If a colorscheme has already been generated, skip generation
-                            if (fileExists(stylePath)) {
-                                self.css = `background-image: url('${coverPath}');`;
-                                App.applyCss(stylePath);
-                                return;
-                            }
+                // If a colorscheme has already been generated, skip generation
+                if (fileExists(stylePath)) {
+                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
+                    self.attribute.showImage(self, coverPath)
+                    App.applyCss(stylePath);
+                    return;
+                }
 
-                            // Generate colors
-                            execAsync(['bash', '-c',
-                                `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
-                                .then(() => {
-                                    exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
-                                    exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
-                                    exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
-                                    self.css = `background-image: url('${coverPath}');`;
-                                    App.applyCss(`${stylePath}`);
-                                })
-                                .catch(print);
-                        },
-                    },
-                    className: 'osd-music-cover-art',
-                    $: [
-                        [player, (self) => self.attribute.updateCover(self), 'notify::cover-path']
-                    ],
-                })
-            ]
-        })
-    ],
-})
+                // Generate colors
+                execAsync(['bash', '-c',
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
+                    .then(() => {
+                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
+                        exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
+                        exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
+                        // self.css = `background-image: url('${coverPath}');`;
+                        Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                        App.applyCss(`${stylePath}`);
+                    })
+                    .catch(print);
+            },
+        },
+        setup: (self) => self
+            .hook(player, (self) => {
+                self.attribute.updateCover(self);
+            }, 'notify::cover-path')
+        ,
+    });
+    return Box({
+        ...rest,
+        className: 'osd-music-cover',
+        children: [
+            Widget.Overlay({
+                child: fallbackCoverArt,
+                overlays: [realCoverArt],
+            })
+        ],
+    })
+}
 
 const TrackControls = ({ player, ...rest }) => Widget.Revealer({
     revealChild: false,
@@ -197,7 +252,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
         children: [
             Button({
                 className: 'osd-music-controlbtn',
-                onClicked: () => execAsync('playerctl previous').catch(print),
+                onClicked: () => player.previous(),
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_previous',
@@ -205,9 +260,7 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
             }),
             Button({
                 className: 'osd-music-controlbtn',
-                onClicked: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"`'])
-                    .catch(print)
-                ,
+                onClicked: () => player.next(),
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_next',
@@ -215,8 +268,8 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
             }),
         ],
     }),
-    setup: (self) => szelf.hook(Mpris, (self) => {
-        const player = Mpris.getPlayer();
+    setup: (self) => self.hook(Mpris, (self) => {
+        // const player = Mpris.getPlayer();
         if (!player)
             self.revealChild = false;
         else
@@ -264,7 +317,7 @@ const TrackTime = ({ player, ...rest }) => {
             children: [
                 Label({
                     setup: (self) => self.poll(1000, (self) => {
-                        const player = Mpris.getPlayer();
+                        // const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.position);
                     }),
@@ -272,7 +325,7 @@ const TrackTime = ({ player, ...rest }) => {
                 Label({ label: '/' }),
                 Label({
                     setup: (self) => self.hook(Mpris, (self) => {
-                        const player = Mpris.getPlayer();
+                        // const player = Mpris.getPlayer();
                         if (!player) return;
                         self.label = lengthStr(player.length);
                     }),
@@ -296,7 +349,7 @@ const PlayState = ({ player }) => {
             overlays: [
                 Widget.Button({
                     className: 'osd-music-playstate-btn',
-                    onClicked: () => execAsync('playerctl play-pause').catch(print),
+                    onClicked: () => player.playPause(),
                     child: Widget.Label({
                         justification: 'center',
                         hpack: 'fill',
@@ -313,7 +366,7 @@ const PlayState = ({ player }) => {
 }
 
 const MusicControlsWidget = (player) => Box({
-    className: 'osd-music spacing-h-20',
+    className: 'osd-music spacing-h-20 test',
     children: [
         CoverArt({ player: player, vpack: 'center' }),
         Box({
@@ -344,35 +397,62 @@ const MusicControlsWidget = (player) => Box({
     ]
 })
 
-export default () => MarginRevealer({
+export default () => Revealer({
     transition: 'slide_down',
+    transitionDuration: 150,
     revealChild: false,
-    showClass: 'osd-show',
-    hideClass: 'osd-hide',
     child: Box({
         setup: (self) => self.hook(Mpris, box => {
-            let foundPlayer = false;
-
+            box.children.forEach(child => {
+                child.destroy();
+                child = null;
+            });
             Mpris.players.forEach((player, i) => {
                 if (isRealPlayer(player)) {
-                    foundPlayer = true;
-                    box.children = [MusicControlsWidget(player)];
+                    const newInstance = MusicControlsWidget(player);
+                    box.add(newInstance);
                 }
             });
-
-            if (!foundPlayer) {
-                const children = box.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    child.destroy();
-                    child = null;
-                }
-                return;
-            }
         }, 'notify::players'),
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
-        if (showMusicControls.value) revealer.attribute.show();
-        else revealer.attribute.hide();
+        revealer.revealChild = showMusicControls.value;
     }),
 })
+
+// export default () => MarginRevealer({
+//     transition: 'slide_down',
+//     revealChild: false,
+//     showClass: 'osd-show',
+//     hideClass: 'osd-hide',
+//     child: Box({
+//         setup: (self) => self.hook(Mpris, box => {
+//             let foundPlayer = false;
+//             Mpris.players.forEach((player, i) => {
+//                 if (isRealPlayer(player)) {
+//                     foundPlayer = true;
+//                     box.children.forEach(child => {
+//                         child.destroy();
+//                         child = null;
+//                     });
+//                     const newInstance = MusicControlsWidget(player);
+//                     box.children = [newInstance];
+//                 }
+//             });
+
+//             if (!foundPlayer) {
+//                 const children = box.get_children();
+//                 for (let i = 0; i < children.length; i++) {
+//                     const child = children[i];
+//                     child.destroy();
+//                     child = null;
+//                 }
+//                 return;
+//             }
+//         }, 'notify::players'),
+//     }),
+//     setup: (self) => self.hook(showMusicControls, (revealer) => {
+//         if (showMusicControls.value) revealer.attribute.show();
+//         else revealer.attribute.hide();
+//     }),
+// })
