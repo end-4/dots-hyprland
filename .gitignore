@@ -4,3 +4,4 @@
 .config/ags/scss/_material.scss
 #.config/hypr/colors.conf
 /cache
+.config/ags/scripts/templates/gradience/preset.json
