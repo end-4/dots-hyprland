@@ -121,7 +121,8 @@ done
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
 
 # Prevent hyprland from not fully loaded
-sleep 2&&hyprctl reload
+sleep 2
+try hyprctl reload
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
