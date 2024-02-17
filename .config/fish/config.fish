@@ -17,7 +17,6 @@ if test -f ~/.cache/ags/user/colorschemes/sequences
     cat ~/.cache/ags/user/colorschemes/sequences
 end
 
-alias yay=paru
 alias pamcan=pacman
 
 # function fish_prompt
