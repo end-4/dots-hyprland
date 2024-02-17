@@ -29,8 +29,9 @@ function expandTilde(path) {
     }
 }
 
-const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/google_ai_api_key.txt`;
-const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/google_ai_api_dom.txt`;
+Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
+const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_key.txt`;
+const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_api_dom.txt`;
 function replaceapidom(URL) {
     if (fileExists(expandTilde(APIDOM_FILE_LOCATION))) {
         var contents = Utils.readFile(expandTilde(APIDOM_FILE_LOCATION)).trim();
