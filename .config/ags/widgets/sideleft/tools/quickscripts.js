@@ -11,7 +11,7 @@ import { setupCursorHover } from '../../../lib/cursorhover.js';
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets`);
 const distroID = exec(`bash -c 'cat /etc/os-release | grep "^ID=" | cut -d "=" -f 2'`).trim();
 const isDebianDistro = (distroID == 'linuxmint' || distroID == 'ubuntu' || distroID == 'debian' || distroID == 'zorin' || distroID == 'pop' || distroID == 'raspbian' || distroID == 'kali' || distroID == 'elementary');
-const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros');
+const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos');
 const hasFlatpak = !!exec(`bash -c 'command -v flatpak'`);
 
 const scripts = [
