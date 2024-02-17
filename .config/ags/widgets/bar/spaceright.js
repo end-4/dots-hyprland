@@ -11,11 +11,11 @@ import { Tray } from "./tray.js";
 
 export default () => {
     const barTray = Tray();
-    const notifCounter = Widget.Revealer({
+    const separatorDot = Widget.Revealer({
         transition: 'slide_left',
         revealChild: false,
         attribute: {
-            'count': 0,
+            'count': SystemTray.items.length,
             'update': (self, diff) => {
                 self.attribute.count += diff;
                 self.revealChild = (self.attribute.count > 0);
@@ -48,7 +48,7 @@ export default () => {
                 children: [
                     Widget.Box({ hexpand: true, }),
                     barTray,
-                    notifCounter,
+                    separatorDot,
                     barStatusIcons,
                 ],
             }),
