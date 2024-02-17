@@ -31,7 +31,8 @@ function expandTilde(path) {
 
 // We're using many models to not be restricted to 3 messages per minute.
 // The whole chat will be sent every request anyway.
-const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_key.txt`;
+Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
+const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/openai_key.txt`;
 const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_dom.txt`;
 function replaceapidom(URL) {
     //Utils.writeFile(URL, "/tmp/openai-url-old.log"); // For debugging

@@ -32,13 +32,19 @@ export function launchCustomCommand(command) {
             .catch(print);
     }
     else if (args[0] == '>badapple') { // Light mode
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/applycolor.sh --bad-apple`]).catch(print);
+        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/applycolor.sh --bad-apple`]).catch(print)
+            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
+            .catch(print);
     }
     else if (args[0] == '>material') { // Light mode
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "material" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "material" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print)
+            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
+            .catch(print);
     }
     else if (args[0] == '>pywal') { // Dark mode
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "pywal" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print);
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "pywal" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print)
+            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
+            .catch(print);
     }
     else if (args[0] == '>todo') { // Todo
         Todo.add(args.slice(1).join(' '));
