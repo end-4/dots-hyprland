@@ -16,7 +16,7 @@ printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"
 printf "\e[97m"
 printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
-case $p in "YES")sleep 0;; *)exit;;esac
+case $p in "YES")sleep 0;; *)exit 1;;esac
 printf '\n'
 printf 'Do you want to confirm every time before a command executes?\n'
 printf '  y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
@@ -152,3 +152,4 @@ try hyprctl reload
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[97m\n"
+echo "See https://end-4.github.io/dots-hyprland-wiki/en for more info."
