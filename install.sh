@@ -16,7 +16,7 @@ printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"
 printf "\e[97m"
 printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
-case $p in "YES")sleep 0;; *)exit 1;;esac
+case $p in "YES")sleep 0;; *)echo "Received \"$p\", aborting...";exit 1;;esac
 printf '\n'
 printf 'Do you want to confirm every time before a command executes?\n'
 printf '  y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
