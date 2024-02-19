@@ -97,8 +97,8 @@ export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make th
         self.attribute.enabled = !self.attribute.enabled;
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
         // if (self.attribute.enabled) Utils.execAsync(['bash', '-c', 'wlsunset & disown'])
-        if (self.attribute.enabled) Utils.execAsync('wlsunset')
-        else Utils.execAsync('pkill wlsunset');
+        if (self.attribute.enabled) Utils.execAsync('wlsunset').catch(print)
+        else Utils.execAsync('pkill wlsunset').catch(print);
     },
     child: MaterialIcon('nightlight', 'norm'),
     setup: (self) => {
@@ -117,7 +117,7 @@ export const ModuleInvertColors = async (props = {}) => {
             tooltipText: 'Color inversion',
             onClicked: (button) => {
                 // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-                Hyprland.sendMessage('j/getoption decoration:screen_shader')
+                Hyprland.messageAsync('j/getoption decoration:screen_shader')
                     .then((output) => {
                         const shaderPath = JSON.parse(output)["str"].trim();
                         if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
@@ -125,7 +125,7 @@ export const ModuleInvertColors = async (props = {}) => {
                             button.toggleClassName('sidebar-button-active', false);
                         }
                         else {
-                            Hyprland.sendMessage(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
+                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
                                 .catch(print);
                             button.toggleClassName('sidebar-button-active', true);
                         }

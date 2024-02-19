@@ -24,12 +24,12 @@ class ShiftMode {
     static Off = new ShiftMode('Off');
     static Normal = new ShiftMode('Normal');
     static Locked = new ShiftMode('Locked');
-  
+
     constructor(name) {
-      this.name = name;
+        this.name = name;
     }
     toString() {
-      return `ShiftMode.${this.name}`;
+        return `ShiftMode.${this.name}`;
     }
 }
 var modsPressed = false;
@@ -103,26 +103,26 @@ const keyboardItself = (kbJson) => {
                     className: `osk-key osk-key-${key.shape}`,
                     hexpand: ["space", "expand"].includes(key.shape),
                     label: key.label,
-                    attribute: 
-                        {key: key},
+                    attribute:
+                        { key: key },
                     setup: (button) => {
                         let pressed = false;
                         allButtons = allButtons.concat(button);
                         if (key.keytype == "normal") {
                             button.connect('pressed', () => { // mouse down
-                                execAsync(`ydotool key ${key.keycode}:1`);
+                                execAsync(`ydotool key ${key.keycode}:1`).catch(print);
                             });
                             button.connect('clicked', () => { // release
-                                execAsync(`ydotool key ${key.keycode}:0`);
+                                execAsync(`ydotool key ${key.keycode}:0`).catch(print);
 
                                 if (shiftMode == ShiftMode.Normal) {
                                     shiftMode = ShiftMode.Off;
                                     if (typeof shiftButton !== 'undefined') {
-                                        execAsync(`ydotool key 42:0`);
+                                        execAsync(`ydotool key 42:0`).catch(print);
                                         shiftButton.toggleClassName('osk-key-active', false);
                                     }
                                     if (typeof rightShiftButton !== 'undefined') {
-                                        execAsync(`ydotool key 54:0`);
+                                        execAsync(`ydotool key 54:0`).catch(print);
                                         rightShiftButton.toggleClassName('osk-key-active', false);
                                     }
                                     allButtons.forEach(button => {
@@ -134,7 +134,7 @@ const keyboardItself = (kbJson) => {
                         else if (key.keytype == "modkey") {
                             button.connect('pressed', () => { // release
                                 if (pressed) {
-                                    execAsync(`ydotool key ${key.keycode}:0`);
+                                    execAsync(`ydotool key ${key.keycode}:0`).catch(print);
                                     button.toggleClassName('osk-key-active', false);
                                     pressed = false;
                                     if (key.keycode == 100) { // Alt Gr button
@@ -142,7 +142,7 @@ const keyboardItself = (kbJson) => {
                                     }
                                 }
                                 else {
-                                    execAsync(`ydotool key ${key.keycode}:1`);
+                                    execAsync(`ydotool key ${key.keycode}:1`).catch(print);
                                     button.toggleClassName('osk-key-active', true);
                                     if (!(key.keycode == 42 || key.keycode == 54)) pressed = true;
                                     else switch (shiftMode.name) { // This toggles the shift button state
@@ -171,10 +171,11 @@ const keyboardItself = (kbJson) => {
                                                 rightShiftButton.label = key.label;
                                                 rightShiftButton.toggleClassName('osk-key-active', false);
                                             }
-                                            execAsync(`ydotool key ${key.keycode}:0`);
-                                            
+                                            execAsync(`ydotool key ${key.keycode}:0`).catch(print);
+
                                             allButtons.forEach(button => { if (typeof button.attribute.key.labelShift !== 'undefined') button.label = button.attribute.key.label; }
-                                        )};
+                                            )
+                                        };
                                     }
                                     if (key.keycode == 100) { // Alt Gr button
                                         allButtons.forEach(button => { if (typeof button.attribute.key.labelAlt !== 'undefined') button.label = button.attribute.key.labelAlt; });
@@ -220,7 +221,7 @@ const gesture = Gtk.GestureDrag.new(gestureEvBox);
 gesture.connect('drag-begin', async () => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        Hyprland.sendMessage('j/cursorpos').then((out) => {
+        Hyprland.messageAsync('j/cursorpos').then((out) => {
             gesture.startY = JSON.parse(out).y;
         }).catch(print);
     } catch {
@@ -230,15 +231,15 @@ gesture.connect('drag-begin', async () => {
 gesture.connect('drag-update', async () => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        Hyprland.sendMessage('j/cursorpos').then((out) => {
+        Hyprland.messageAsync('j/cursorpos').then((out) => {
             const currentY = JSON.parse(out).y;
             const offset = gesture.startY - currentY;
 
             if (offset > 0) return;
 
             keyboardWindow.setCss(`
-            margin-bottom: ${offset}px;
-        `);
+                margin-bottom: ${offset}px;
+            `);
         }).catch(print);
     } catch {
         return;

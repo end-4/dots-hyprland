@@ -35,7 +35,7 @@ function substitute(str) {
         { from: 'code-url-handler', to: 'visual-studio-code' },
         { from: 'Code', to: 'visual-studio-code' },
         { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
+        { from: 'wps', to: 'wps-office2019-kprometheus' },
         { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
         { from: 'Minecraft* 1.20.1', to: 'minecraft' },
         { from: '', to: 'image-missing' },
@@ -113,10 +113,10 @@ export default () => {
                 margin-bottom: -${Math.round((y + h) * OVERVIEW_SCALE)}px;
             `,
             onClicked: (self) => {
-                Hyprland.sendMessage(`dispatch focuswindow address:${address}`);
+                Hyprland.messageAsync(`dispatch focuswindow address:${address}`);
                 App.closeWindow('overview');
             },
-            onMiddleClickRelease: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
+            onMiddleClickRelease: () => Hyprland.messageAsync(`dispatch closewindow address:${address}`),
             onSecondaryClick: (button) => {
                 button.toggleClassName('overview-tasks-window-selected', true);
                 const menu = Widget.Menu({
@@ -127,7 +127,7 @@ export default () => {
                                 xalign: 0,
                                 label: "Close (Middle-click)",
                             }),
-                            onActivate: () => Hyprland.sendMessage(`dispatch closewindow address:${address}`),
+                            onActivate: () => Hyprland.messageAsync(`dispatch closewindow address:${address}`),
                         }),
                         ContextMenuWorkspaceArray({
                             label: "Dump windows to workspace",
@@ -253,13 +253,13 @@ export default () => {
                 hexpand: true,
                 vexpand: true,
                 onPrimaryClick: () => {
-                    Hyprland.sendMessage(`dispatch workspace ${index}`)
+                    Hyprland.messageAsync(`dispatch workspace ${index}`)
                     App.closeWindow('overview');
                 },
                 setup: (eventbox) => {
                     eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
                     eventbox.connect('drag-data-received', (_w, _c, _x, _y, data) => {
-                        Hyprland.sendMessage(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
+                        Hyprland.messageAsync(`dispatch movetoworkspacesilent ${index},address:${data.get_text()}`)
                         overviewTick.setValue(!overviewTick.value);
                     });
                 },
@@ -342,7 +342,7 @@ export default () => {
             update: (box) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
                 if (!App.getWindow(windowName).visible) return;
-                Hyprland.sendMessage('j/clients').then(clients => {
+                Hyprland.messageAsync('j/clients').then(clients => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
                     kids.forEach(kid => kid.clear());
@@ -381,7 +381,7 @@ export default () => {
                     id <= offset + startWorkspace + workspaces
                 )) return;
                 // if (!App.getWindow(windowName).visible) return;
-                Hyprland.sendMessage('j/clients').then(clients => {
+                Hyprland.messageAsync('j/clients').then(clients => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
                     for (let i = 0; i < allClients.length; i++) {

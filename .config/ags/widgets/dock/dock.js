@@ -21,7 +21,7 @@ function substitute(str) {
         { from: 'code-url-handler', to: 'visual-studio-code' },
         { from: 'Code', to: 'visual-studio-code' },
         { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wpsoffice', to: 'wps-office2019-kprometheus' },
+        { from: 'wps', to: 'wps-office2019-kprometheus' },
         { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
         { from: 'Minecraft* 1.20.1', to: 'minecraft' },
         { from: '', to: 'image-missing' },
@@ -35,7 +35,7 @@ function substitute(str) {
     return str;
 }
 
-const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow address:${address}`);
+const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
 
 const DockSeparator = (props = {}) => Box({
     ...props,

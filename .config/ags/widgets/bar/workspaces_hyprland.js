@@ -17,7 +17,7 @@ const dummyOccupiedWs = Box({ className: 'bar-ws bar-ws-occupied' }); // Not sho
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
     return DrawingArea({
-        // css: `transition: 90ms cubic-bezier(0.1, 1, 0, 1);`,
+        // css: `transition: 300ms cubic-bezier(0.1, 1, 0, 1);`,
         attribute: {
             initialized: false,
             workspaceMask: 0,
@@ -50,8 +50,8 @@ const WorkspaceContents = (count = 10) => {
                 const previousGroup = self.attribute.workspaceGroup;
                 const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / count);
                 if (currentGroup !== previousGroup) {
-                  self.attribute.updateMask(self);
-                  self.attribute.workspaceGroup = currentGroup;
+                    self.attribute.updateMask(self);
+                    self.attribute.workspaceGroup = currentGroup;
                 }
             })
             .hook(Hyprland, (self) => self.attribute.updateMask(self), 'notify::workspaces')
@@ -148,8 +148,8 @@ const WorkspaceContents = (count = 10) => {
 }
 
 export default () => EventBox({
-    onScrollUp: () => Hyprland.sendMessage(`dispatch workspace -1`),
-    onScrollDown: () => Hyprland.sendMessage(`dispatch workspace +1`),
+    onScrollUp: () => Hyprland.messageAsync(`dispatch workspace -1`).catch(print),
+    onScrollDown: () => Hyprland.messageAsync(`dispatch workspace +1`).catch(print),
     onMiddleClickRelease: () => App.toggleWindow('overview'),
     onSecondaryClickRelease: () => App.toggleWindow('osk'),
     attribute: {
@@ -172,7 +172,8 @@ export default () => EventBox({
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
             const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES_SHOWN / widgetWidth);
-            Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`]);
+            Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
+                .catch(print);
         })
         self.on('button-press-event', (self, event) => {
             if (!(event.get_button()[1] === 1)) return; // We're only interested in left-click here
@@ -180,9 +181,10 @@ export default () => EventBox({
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
             // const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES_PER_GROUP / widgetWidth) + self.attribute.ws_group * NUM_OF_WORKSPACES_PER_GROUP;
-            // Hyprland.sendMessage(`dispatch workspace ${wsId}`);
+            // Hyprland.messageAsync(`dispatch workspace ${wsId}`).catch(print);
             const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES_SHOWN / widgetWidth);
-            Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`]);
+            Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
+                .catch(print);
         })
         self.on('button-release-event', (self) => self.attribute.clicked = false);
     }
