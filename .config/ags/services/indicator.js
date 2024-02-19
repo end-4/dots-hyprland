@@ -1,8 +1,5 @@
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { exec, execAsync } = Utils;
-
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 class IndicatorService extends Service {
     static {
