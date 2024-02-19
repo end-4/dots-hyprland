@@ -26,7 +26,7 @@ read -p "====> " p
 case $p in
   y)ask=true;;
   n)ask=false;;
-  *)exit;;
+  *)exit 1;;
 esac
 }
 
@@ -146,7 +146,7 @@ done
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
 
 # Prevent hyprland from not fully loaded
-sleep 2
+sleep 1
 try hyprctl reload
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
