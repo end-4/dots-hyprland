@@ -1,3 +1,6 @@
+// TODO: execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
+// to detect img dimensions
+
 const { Gdk, GdkPixbuf, Gio, GLib, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -293,7 +296,7 @@ const waifuContent = Box({
             const data = WaifuService.responses[id];
             if (!data) return;
             const imageBlock = box.attribute.map.get(id);
-            imageBlock.attribute.update(data);
+            imageBlock?.attribute.update(data);
         }, 'updateResponse')
     ,
 });
@@ -372,28 +375,30 @@ export const waifuCommands = Box({
     }
 });
 
-const clearChat = () => {
-    waifuContent.attribute.map.clear();
-    const kids = waifuContent.get_children();
-    for (let i = 0; i < kids.length; i++) {
-        const child = kids[i];
-        if (child) child.destroy();
-    }
+const clearChat = () => { // destroy!!
+    waifuContent.attribute.map.forEach((value, key, map) => {
+        value.destroy();
+        value = null;
+    });
 }
 
-const DummyTag = (width, height, url, color = '#9392A6') => {
-    return { // Needs timeout or inits won't make it
+function newSimpleImageCall(name, url, width, height, dominantColor = '#9392A6') {
+    const timeSinceEpoch = Date.now();
+    const newImage = WaifuImage([`/${name}`]);
+    waifuContent.add(newImage);
+    waifuContent.attribute.map.set(timeSinceEpoch, newImage);
+    Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage?.attribute.update({
         status: 200,
         url: url,
         extension: '',
-        signature: 0,
+        signature: timeSinceEpoch,
         source: url,
-        dominant_color: color,
+        dominant_color: dominantColor,
         is_nsfw: false,
         width: width,
         height: height,
-        tags: ['/test'],
-    };
+        tags: [`/${name}`],
+    }, true));
 }
 
 export const sendMessage = (text) => {
@@ -401,30 +406,12 @@ export const sendMessage = (text) => {
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/test')) {
-            const newImage = WaifuImage(['/test']);
-            waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
-                DummyTag(300, 200, 'https://picsum.photos/600/400'),
-                true
-            ));
-        }
-        else if (text.startsWith('/chino')) {
-            const newImage = WaifuImage(['/chino']);
-            waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
-                DummyTag(300, 400, 'https://chino.pages.dev/chino', '#B2AEF3'),
-                true
-            ));
-        }
-        else if (text.startsWith('/place')) {
-            const newImage = WaifuImage(['/place']);
-            waifuContent.add(newImage);
-            Utils.timeout(IMAGE_REVEAL_DELAY, () => newImage.attribute.update(
-                DummyTag(400, 600, 'https://placewaifu.com/image/400/600', '#F0A235'),
-                true
-            ));
-        }
+        else if (text.startsWith('/test'))
+            newSimpleImageCall('test', 'https://picsum.photos/600/400', 300, 200);
+        else if (text.startsWith('/chino'))
+            newSimpleImageCall('chino', 'https://chino.pages.dev/chino', 300, 400, '#B2AEF3');
+        else if (text.startsWith('/place'))
+            newSimpleImageCall('place', 'https://placewaifu.com/image/400/600', 400, 600, '#F0A235');
 
     }
     else WaifuService.fetch(text);
