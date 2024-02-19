@@ -10,9 +10,9 @@ export default (monitor) => Widget.Window({
     layer: 'background',
     exclusivity: 'ignore',
     visible: true,
-    // child: WallpaperImage(monitor),
     child: Widget.Overlay({
         child: WallpaperImage(monitor),
+        // child: Widget.Box({}),
         overlays: [
             TimeAndLaunchesWidget(),
             SystemWidget(),
