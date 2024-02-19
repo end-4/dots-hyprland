@@ -14,15 +14,15 @@
 }
 
 .bg-time-clock {
+    @include titlefont;
     @include bg-textshadow;
-    font-family: 'Gabarito';
     font-size: 5.795rem;
     color: $onBackground;
 }
 
 .bg-time-date {
+    @include titlefont;
     @include bg-textshadow;
-    font-family: 'Gabarito';
     font-size: 2.591rem;
     color: $onBackground;
 }
@@ -34,15 +34,15 @@
 }
 
 .bg-distro-txt {
+    @include titlefont;
     @include bg-textshadow;
-    font-family: 'Gabarito';
     font-size: 1.432rem;
     color: $onBackground;
 }
 
 .bg-distro-name {
+    @include titlefont;
     @include bg-textshadow;
-    font-family: 'Gabarito';
     font-size: 1.432rem;
     color: $onSecondaryContainer;
 }
