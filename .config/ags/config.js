@@ -1,20 +1,21 @@
 "use strict";
 // Import
 import Gdk from 'gi://Gdk';
+import GLib from 'gi://GLib';
 import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Widgets
-import { Bar, BarCornerTopleft, BarCornerTopright } from './widgets/bar/main.js';
-import Cheatsheet from './widgets/cheatsheet/main.js';
-// import DesktopBackground from './widgets/desktopbackground/main.js';
-// import Dock from './widgets/dock/main.js';
-import Corner from './widgets/screencorners/main.js';
-import Indicator from './widgets/indicators/main.js';
-import Osk from './widgets/onscreenkeyboard/main.js';
-import Overview from './widgets/overview/main.js';
-import Session from './widgets/session/main.js';
-import SideLeft from './widgets/sideleft/main.js';
-import SideRight from './widgets/sideright/main.js';
+import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
+import Cheatsheet from './modules/cheatsheet/main.js';
+// import DesktopBackground from './modules/desktopbackground/main.js';
+// import Dock from './modules/dock/main.js';
+import Corner from './modules/screencorners/main.js';
+import Indicator from './modules/indicators/main.js';
+import Osk from './modules/onscreenkeyboard/main.js';
+import Overview from './modules/overview/main.js';
+import Session from './modules/session/main.js';
+import SideLeft from './modules/sideleft/main.js';
+import SideRight from './modules/sideright/main.js';
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 function forMonitors(widget) {
@@ -25,13 +26,15 @@ function forMonitors(widget) {
 // SCSS compilation
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
-function applyStyle() {
-    Utils.exec(`sassc ${App.configDir}/scss/main.scss ${App.configDir}/style.css`);
+async function applyStyle() {
+    const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
+    Utils.exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
+    Utils.exec(`sassc ${App.configDir}/scss/main.scss ${COMPILED_STYLE_DIR}/style.css`);
     App.resetCss();
-    App.applyCss(`${App.configDir}/style.css`);
+    App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
     console.log('[LOG] Styles loaded')
 }
-applyStyle();
+applyStyle().catch(print);
 
 const Windows = () => [
     // forMonitors(DesktopBackground),
@@ -65,6 +68,8 @@ export default {
 
 // Stuff that don't need to be toggled. And they're async so ugh...
 // Bar().catch(print); // Use this to debug the bar. Single monitor only.
+// BarCornerTopleft().catch(print); // Use this to debug the bar. Single monitor only.
+// BarCornerTopright().catch(print); // Use this to debug the bar. Single monitor only.
 forMonitors(Bar);
 forMonitors(BarCornerTopleft);
 forMonitors(BarCornerTopright);
