@@ -9,6 +9,8 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Wallpaper from '../../services/wallpaper.js';
 import { setupCursorHover } from '../../lib/cursorhover.js';
 
+const DISABLE_AGS_WALLPAPER = true;
+
 const SWITCHWALL_SCRIPT_PATH = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 const WALLPAPER_ZOOM_SCALE = 1.25; // For scrolling when we switch workspace
 const MAX_WORKSPACES = 10;
@@ -19,6 +21,7 @@ const WALLPAPER_OFFSCREEN_Y = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_HEIGHT;
 function clamp(x, min, max) {
     return Math.min(Math.max(x, min), max);
 }
+
 
 export default (monitor = 0) => {
     const wallpaperImage = Widget.DrawingArea({
@@ -56,6 +59,7 @@ export default (monitor = 0) => {
                     cr.paint();
                 })
                 .hook(Wallpaper, (self) => {
+                    if (DISABLE_AGS_WALLPAPER) return;
                     const wallPath = Wallpaper.get(monitor);
                     if (!wallPath || wallPath === "") return;
                     self.attribute.pixbuf = GdkPixbuf.Pixbuf.new_from_file(wallPath);
@@ -92,7 +96,7 @@ export default (monitor = 0) => {
                 className: 'btn-primary',
                 label: `Select one`,
                 setup: setupCursorHover,
-                onClicked: (self) => Utils.execAsync([SWITCHWALL_SCRIPT_PATH]),
+                onClicked: (self) => Utils.execAsync([SWITCHWALL_SCRIPT_PATH]).catch(print),
             }),
         ]
     });
@@ -100,11 +104,16 @@ export default (monitor = 0) => {
         transition: 'crossfade',
         transitionDuration: 180,
         children: {
+            'disabled': Box({}),
             'image': wallpaperImage,
             'prompt': wallpaperPrompt,
         },
         setup: (self) => self
             .hook(Wallpaper, (self) => {
+                if(DISABLE_AGS_WALLPAPER) {
+                    self.shown = 'disabled';
+                    return;
+                }
                 const wallPath = Wallpaper.get(monitor);
                 self.shown = ((wallPath && wallPath != "") ? 'image' : 'prompt');
             }, 'updated')
