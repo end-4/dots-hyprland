@@ -24,7 +24,7 @@ install-ags (){
   try git init -b main
   try git remote add origin https://github.com/Aylur/ags.git
   x git pull origin main && git submodule update --init --recursive
-  x git checkout 109faf5d283d4d2ce90403e461b39048321b9041 # "add fallback generic Attribute type to widget functions"
+  x git checkout 7ba2efd705ea255b87e4812b22bb656b60d291d4 # "add fallback generic Attribute type to widget functions"
   x npm install
   x meson setup build
   x meson install -C build
