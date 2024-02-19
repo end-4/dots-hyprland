@@ -152,7 +152,7 @@ class WaifuService extends Service {
                 }
                 this.emit('updateResponse', newMessageId);
             })
-            .catch(console.error)
+            .catch(print);
 
     }
 }

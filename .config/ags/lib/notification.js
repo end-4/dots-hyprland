@@ -113,7 +113,7 @@ export default ({
                 notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, true);
                 Utils.timeout(800, () => {
                     if (wholeThing?.attribute.held) {
-                        Utils.execAsync(['wl-copy', `${notifObject.body}`])
+                        Utils.execAsync(['wl-copy', `${notifObject.body}`]).catch(print);
                         notifTextSummary.label = notifObject.summary + " (copied)";
                         Utils.timeout(3000, () => notifTextSummary.label = notifObject.summary)
                     }

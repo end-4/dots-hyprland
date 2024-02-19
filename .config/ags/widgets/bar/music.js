@@ -9,11 +9,11 @@ import { showMusicControls } from '../../variables.js';
 
 function trimTrackTitle(title) {
     if (!title) return '';
-    const cleanRegexes = [
+    const cleanPatterns = [
         /【[^】]*】/,         // Touhou n weeb stuff
-        /\[FREE DOWNLOAD\]/, // F-777
+        " [FREE DOWNLOAD]", // F-777
     ];
-    cleanRegexes.forEach((expr) => title.replace(expr, ''));
+    cleanPatterns.forEach((expr) => title = title.replace(expr, ''));
     return title;
 }
 
@@ -85,7 +85,7 @@ const TrackProgress = () => {
 const switchToRelativeWorkspace = async (self, num) => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        Hyprland.sendMessage(`dispatch workspace ${num > 0 ? '+' : ''}${num}`);
+        Hyprland.messageAsync(`dispatch workspace ${num > 0 ? '+' : ''}${num}`).catch(print);
     } catch {
         execAsync([`${App.configDir}/scripts/sway/swayToRelativeWs.sh`, `${num}`]).catch(print);
     }
@@ -169,7 +169,7 @@ export default () => {
         onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
         onScrollDown: (self) => switchToRelativeWorkspace(self, +1),
         onPrimaryClickRelease: () => showMusicControls.setValue(!showMusicControls.value),
-        onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']),
+        onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
         onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),
         child: Box({
             className: 'spacing-h-5',
