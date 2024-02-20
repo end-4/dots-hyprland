@@ -4,8 +4,8 @@
    width="20"
    height="20"
    version="1.1"
-   viewBox="0 0 17.921002 17.921002"
-   sodipodi:docname="CachyOS_Logo.svg"
+   viewBox="0 0 17.921003 17.921002"
+   sodipodi:docname="cachyos-symbolic.svg"
    inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -21,10 +21,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="12.91837"
-     inkscape:cx="9.869666"
-     inkscape:cy="15.907579"
-     inkscape:window-width="1424"
+     inkscape:zoom="32"
+     inkscape:cx="10.671875"
+     inkscape:cy="11.234375"
+     inkscape:window-width="1687"
      inkscape:window-height="1028"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -38,7 +38,7 @@
        x2="237.07001"
        y1="296.20001"
        y2="304.07999"
-       gradientTransform="matrix(0.04476,0,0,0.044679,-8.5923,-4.6302)"
+       gradientTransform="matrix(0.04476,0,0,0.044679,-8.5042241,-4.351186)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient937" />
     <linearGradient
@@ -59,7 +59,7 @@
        x2="982.34003"
        y1="1533.3"
        y2="1556.8"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -80,7 +80,7 @@
        x2="1018.6"
        y1="1582.4"
        y2="1575.6"
-       gradientTransform="matrix(0.086381,0,0,0.081808,-79.192,-124.97)"
+       gradientTransform="matrix(0.086381,0,0,0.081808,-79.103924,-124.69099)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -89,7 +89,7 @@
        x2="930.59003"
        y1="1612.5"
        y2="1594.5"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -98,7 +98,7 @@
        x2="951.65997"
        y1="1571.4"
        y2="1571.3"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -107,7 +107,7 @@
        x2="961.37"
        y1="1655.9"
        y2="1655.8"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -116,7 +116,7 @@
        x2="350.92001"
        y1="427.32001"
        y2="419.64001"
-       gradientTransform="matrix(0.04476,0,0,0.044679,-10.921,-4.4349)"
+       gradientTransform="matrix(0.04476,0,0,0.044679,-10.832924,-4.155886)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient937" />
     <linearGradient
@@ -125,7 +125,7 @@
        x2="933.38"
        y1="1628.8"
        y2="1623"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -134,7 +134,7 @@
        x2="941.96997"
        y1="1618.6"
        y2="1645.8"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-76.242924,-126.39098)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -143,7 +143,7 @@
        x2="1015.7"
        y1="1681.3"
        y2="1668.4"
-       gradientTransform="matrix(0.084141,0,0,0.083989,-76.331,-126.67)"
+       gradientTransform="matrix(0.084141,0,0,0.083989,-77.884838,-124.43841)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient4353" />
     <linearGradient
@@ -191,180 +191,128 @@
        x2="361.20999"
        y1="194.78"
        y2="187.24001"
-       gradientTransform="matrix(0.04476,0,0,0.044679,-10.921,-4.4349)"
+       gradientTransform="matrix(0.04476,0,0,0.044679,-10.832924,-4.155886)"
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient937" />
   </defs>
   <circle
-     cx="64.510002"
-     cy="62.02"
+     cx="87.449997"
+     cy="87.449997"
      r="87.449997"
      opacity="0"
      stroke-width="0.27971"
      id="circle6" />
+  <path
+     d="m 4.0610759,2.168314 6.5887001,3.6879 2.1127,-3.6528 z"
+     fill="#00aa88"
+     id="path7"
+     style="fill:#000000" />
+  <path
+     d="m 6.1499759,12.423014 -1.9125,3.7456 h 8.5747001 l 2.1664,-3.7456 z"
+     fill="#00aa88"
+     id="path8"
+     style="fill:#7a7a7a;fill-opacity:0.68506807" />
+  <path
+     d="m 4.0610759,2.168314 6.5887001,3.6879 H 6.1237759 l -1.8859,3.2605 1.9121,3.306 -1.9125,3.7456 -4.13689997,-7.1525 3.96049997,-6.8475"
+     fill="#00ccff"
+     id="path9"
+     style="fill:#7a7a7a;fill-opacity:0.69262218" />
+  <path
+     d="m 6.0909759,5.821714 6.7111001,-3.7832 -2.169,3.5579 z"
+     fill="url(#linearGradient9102)"
+     id="path12"
+     style="fill:url(#linearGradient9102)" />
+  <path
+     d="m 6.1236759,5.856214 6.6388001,-3.6528 -2.1127,3.6528 z"
+     fill="#00aa88"
+     id="path13"
+     style="fill:#000000" />
+  <path
+     d="m 0.10057593,9.015814 6.02309997,-3.1596 -1.8859,3.2605 z"
+     fill="#00aa88"
+     id="path14"
+     style="fill:#1a1a1a" />
+  <path
+     d="m 6.1236759,5.856214 -2.0626,-3.6879 0.17673,6.9484 z"
+     fill="#00aa88"
+     id="path16"
+     style="fill:#1a1a1a" />
+  <path
+     d="m 4.2378759,9.116714 -3.1586,1.5811 3.1583,5.4705 z"
+     fill="#00aa88"
+     id="path19"
+     style="fill:#1a1a1a" />
+  <path
+     d="m 1.0792259,10.698014 5.0708,1.7248 -1.9121,-3.306 z"
+     fill="#00aa88"
+     id="path23"
+     style="fill:#1a1a1a" />
   <g
-     id="g31"
-     transform="translate(-0.01237617,0.135951)">
-    <path
-       d="m 4.3286,1.9244 h 8.3458 l -2.1127,3.6528 h -4.526 l -1.8859,3.2605 1.9121,3.306 h 8.8286 l -2.1664,3.7456 H 4.1494 L 0.0125,8.7368 3.973,1.8893 Z"
-       fill="#ffffff"
-       id="path6" />
-    <path
-       d="m 3.973,1.8893 6.5887,3.6879 2.1127,-3.6528 z"
-       fill="#0a8"
-       id="path7"
+     transform="matrix(0.14699,0,0,0.14672,-0.75949407,-0.14715599)"
+     id="g26"
+     style="fill:#1a1a1a">
+    <circle
+       cx="117.95"
+       cy="75.441002"
+       r="9.6893997"
+       fill="#00ccff"
+       id="circle25"
+       style="fill:#1a1a1a" />
+    <circle
+       cx="118.08"
+       cy="75.341003"
+       r="9.6893997"
+       fill="url(#linearGradient18175)"
+       id="circle26"
+       style="fill:#1a1a1a" />
+  </g>
+  <g
+     transform="matrix(0.14699,0,0,0.14672,-0.11248407,-0.47061599)"
+     id="g28"
+     style="fill:#1a1a1a">
+    <circle
+       cx="93.138"
+       cy="55.044998"
+       r="7.3558998"
+       fill="#00ccff"
+       id="circle27"
+       style="fill:#1a1a1a" />
+    <circle
+       cx="93.238998"
+       cy="54.969002"
+       r="7.3558998"
+       fill="url(#linearGradient18632)"
+       id="circle28"
+       style="fill:#1a1a1a" />
+  </g>
+  <g
+     transform="matrix(0.14699,0,0,0.14672,-0.08243407,-0.04714599)"
+     id="g30"
+     style="fill:#000000">
+    <circle
+       cx="103.06"
+       cy="26.657"
+       r="3.7876999"
+       fill="#00ccff"
+       id="circle29"
        style="fill:#000000" />
-    <path
-       d="m 6.0619,12.144 -1.9125,3.7456 h 8.5747 l 2.1664,-3.7456 z"
-       fill="#0a8"
-       id="path8"
-       style="fill:#000000" />
-    <path
-       d="m 3.973,1.8893 6.5887,3.6879 H 6.0357 L 4.1498,8.8377 6.0619,12.1437 4.1494,15.8893 0.0125,8.7368 3.973,1.8893"
-       fill="#0cf"
-       id="path9"
-       style="fill:#000000" />
-    <path
-       d="M 0.0125,8.7368 4.1498,8.83771 4.26548,9.03559 0.14248,8.952703 Z"
-       fill="url(#linearGradient939)"
-       id="path10"
-       style="fill:url(#linearGradient939)" />
-    <path
-       d="M 10.562,5.5772 3.9733,1.8893 3.47224,2.7914 8.46694,5.5562 Z"
-       fill="url(#linearGradient5185)"
-       id="path11"
-       style="fill:#000000" />
-    <path
-       d="M 6.0029,5.5427 12.714,1.7595 10.545,5.3174 Z"
-       fill="url(#linearGradient9102)"
-       id="path12"
-       style="fill:#000000" />
-    <path
-       d="M 6.0356,5.5772 12.6744,1.9244 10.5617,5.5772 Z"
-       fill="#0a8"
-       id="path13"
-       style="fill:#000000" />
-    <path
-       d="M 0.0125,8.7368 6.0356,5.5772 4.1497,8.8377 Z"
-       fill="#0a8"
-       id="path14"
-       style="fill:#000000" />
-    <path
-       d="M 0.0125,8.7368 6.0356,5.5772 5.6287,4.9418 0.4379,7.9454 Z"
-       fill="url(#linearGradient11890)"
-       id="path15"
-       style="fill:url(#linearGradient11890)" />
-    <path
-       d="M 6.0356,5.5772 3.973,1.8893 4.14973,8.8377 Z"
-       fill="#0a8"
-       id="path16"
-       style="fill:#000000" />
-    <path
-       d="m 6.0619,12.144 6.6622,3.7456 2.1664,-3.7456 z"
-       fill="#0cf"
-       id="path17"
-       style="fill:#000000" />
-    <path
-       d="M 3.973,1.8893 3.47194,2.7914 3.520006,8.8082 4.149736,8.837756 Z"
-       fill="url(#linearGradient11670)"
-       id="path18"
-       style="fill:#000000" />
-    <path
-       d="m 4.1498,8.8377 -3.1586,1.5811 3.1583,5.4705 z"
-       fill="#0a8"
-       id="path19"
-       style="fill:#000000" />
-    <path
-       d="m 4.1498,8.8377 v 7.0516 l 0.77392,-1.5077 0.059767,-4.1337 z"
-       fill="url(#linearGradient13770)"
-       id="path20"
-       style="fill:#000000" />
-    <path
-       d="m 4.1494,15.889 -0.29801,-0.53544 1.9191,-3.6995 0.29137,0.48935 z"
-       fill="url(#linearGradient2816)"
-       id="path21"
-       style="fill:#000000" />
-    <path
-       d="m 0.99115,10.419 3.1586,-1.5811 -0.62972,-0.029556 -2.7405,1.307 z"
-       fill="url(#linearGradient12421)"
-       id="path22"
-       style="fill:#000000" />
-    <path
-       d="m 0.99115,10.419 5.0708,1.7248 -1.9121,-3.306 z"
-       fill="#0a8"
-       id="path23"
-       style="fill:#000000" />
-    <path
-       d="m 6.0619,12.144 -5.0708,-1.7248 0.55061,0.94903 4.1672,1.5109 z"
-       fill="url(#linearGradient13391)"
-       id="path24"
-       style="fill:#000000" />
-    <path
-       d="m 6.0619,12.144 6.6622,3.7456 0.79849,-1.4187 -4.2878,-2.3635 z"
-       fill="url(#linearGradient13599)"
-       id="path25"
-       style="fill:#000000" />
-    <g
-       transform="matrix(0.14699,0,0,0.14672,-0.84757,-0.42617)"
-       id="g26"
-       style="fill:#000000">
-      <circle
-         cx="117.95"
-         cy="75.441002"
-         r="9.6893997"
-         fill="#0cf"
-         id="circle25"
-         style="fill:#000000" />
-      <circle
-         cx="118.08"
-         cy="75.341003"
-         r="9.6893997"
-         fill="url(#linearGradient18175)"
-         id="circle26"
-         style="fill:#000000" />
-    </g>
-    <g
-       transform="matrix(0.14699,0,0,0.14672,-0.20056,-0.74963)"
-       id="g28"
-       style="fill:#000000">
-      <circle
-         cx="93.138"
-         cy="55.044998"
-         r="7.3558998"
-         fill="#0cf"
-         id="circle27"
-         style="fill:#000000" />
-      <circle
-         cx="93.238998"
-         cy="54.969002"
-         r="7.3558998"
-         fill="url(#linearGradient18632)"
-         id="circle28"
-         style="fill:#000000" />
-    </g>
-    <g
-       transform="matrix(0.14699,0,0,0.14672,-0.17051,-0.32616)"
-       id="g30"
-       style="fill:#000000">
-      <circle
-         cx="103.06"
-         cy="26.657"
-         r="3.7876999"
-         fill="#0cf"
-         id="circle29"
-         style="fill:#000000" />
-      <circle
-         cx="103.11"
-         cy="26.618"
-         r="3.7876999"
-         fill="url(#linearGradient18659)"
-         id="circle30"
-         style="fill:#000000" />
-    </g>
-    <path
-       d="M 6.0356,5.5772 3.973,1.8893 4.49844,1.88188 l 1.9387,3.4465 z"
-       fill="url(#linearGradient3254)"
-       id="path30"
+    <circle
+       cx="103.11"
+       cy="26.618"
+       r="3.7876999"
+       fill="url(#linearGradient18659)"
+       id="circle30"
        style="fill:#000000" />
   </g>
+  <path
+     d="m 6.1236759,5.856214 -2.0626,-3.6879 0.52544,-0.0074 1.9387,3.4465 z"
+     fill="url(#linearGradient3254)"
+     id="path30"
+     style="fill:url(#linearGradient3254)" />
+  <path
+     d="M 12.808567,16.168211 6.1524738,12.428132 4.2457352,16.165572 Z"
+     fill="#00ccff"
+     id="path17"
+     style="fill:#1a1a1a;fill-opacity:1"
+     sodipodi:nodetypes="cccc" />
 </svg>

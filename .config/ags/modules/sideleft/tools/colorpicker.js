@@ -11,8 +11,7 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
 import { ColorPickerSelection, hslToHex, hslToRgbValues, hexToHSL } from './color.js';
-
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+import { clamp } from '../../.miscutils/mathfuncs.js';
 
 export default () => {
     const selectedColor = new ColorPickerSelection();
