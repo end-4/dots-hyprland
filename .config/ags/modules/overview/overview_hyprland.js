@@ -113,8 +113,8 @@ export default () => {
                 margin-bottom: -${Math.round((y + h) * OVERVIEW_SCALE)}px;
             `,
             onClicked: (self) => {
-                Hyprland.messageAsync(`dispatch focuswindow address:${address}`);
                 App.closeWindow('overview');
+                Utils.timeout(100, () => Hyprland.messageAsync(`dispatch focuswindow address:${address}`));
             },
             onMiddleClickRelease: () => Hyprland.messageAsync(`dispatch closewindow address:${address}`),
             onSecondaryClick: (button) => {
