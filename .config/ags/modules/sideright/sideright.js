@@ -32,7 +32,7 @@ const timeRow = Box({
                 .poll(5000, label => {
                     execAsync(['bash', '-c', `w | sed -n '1p' | cut -d, -f1 | cut -d' ' -f4-`])
                         .then(upTimeString => {
-                            label.label = `Uptime: ${upTimeString}`;
+                            label.label = `Uptime ${upTimeString}`;
                         }).catch(print);
                 })
             ,
