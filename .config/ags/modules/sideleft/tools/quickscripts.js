@@ -9,10 +9,8 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
-const distroID = exec(`bash -c 'cat /etc/os-release | grep "^ID=" | cut -d "=" -f 2'`).trim();
-const isDebianDistro = (distroID == 'linuxmint' || distroID == 'ubuntu' || distroID == 'debian' || distroID == 'zorin' || distroID == 'pop' || distroID == 'raspbian' || distroID == 'kali' || distroID == 'elementary');
-const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos');
-const hasFlatpak = !!exec(`bash -c 'command -v flatpak'`);
+import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscutils/system.js';
+
 
 const scripts = [
     {

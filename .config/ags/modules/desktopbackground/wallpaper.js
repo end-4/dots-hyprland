@@ -8,6 +8,7 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
 import Wallpaper from '../../services/wallpaper.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
+import { clamp } from '../.miscutils/mathfuncs.js';
 
 const DISABLE_AGS_WALLPAPER = true;
 
@@ -17,10 +18,6 @@ const MAX_WORKSPACES = 10;
 
 const WALLPAPER_OFFSCREEN_X = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_WIDTH;
 const WALLPAPER_OFFSCREEN_Y = (WALLPAPER_ZOOM_SCALE - 1) * SCREEN_HEIGHT;
-
-function clamp(x, min, max) {
-    return Math.min(Math.max(x, min), max);
-}
 
 
 export default (monitor = 0) => {
