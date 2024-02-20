@@ -120,20 +120,37 @@ apply_term() {
 }
 
 apply_hyprland() {
-    # Check if scripts/templates/hypr/colors.conf exists
-    if [ ! -f "scripts/templates/hypr/colors.conf" ]; then
+    # Check if scripts/templates/hypr/hyprland/colors.conf exists
+    if [ ! -f "scripts/templates/hypr/hyprland/colors.conf" ]; then
         echo "Template file not found for Hyprland colors. Skipping that."
         return
     fi
     # Copy template
-    mkdir -p "$HOME"/.cache/ags/user/generated/hypr
-    cp "scripts/templates/hypr/colors.conf" "$HOME"/.cache/ags/user/generated/hypr/colors.conf
+    mkdir -p "$HOME"/.cache/ags/user/generated/hypr/hyprland
+    cp "scripts/templates/hypr/hyprland/colors.conf" "$HOME"/.cache/ags/user/generated/hypr/hyprland/colors.conf
     # Apply colors
     for i in "${!colorlist[@]}"; do
-        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/hypr/colors.conf
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/hypr/hyprland/colors.conf
     done
 
-    cp "$HOME"/.cache/ags/user/generated/hypr/colors.conf "$HOME"/.config/hypr/colors.conf
+    cp "$HOME"/.cache/ags/user/generated/hypr/hyprland/colors.conf "$HOME"/.config/hypr/hyprland/colors.conf
+}
+
+apply_hyprlock() {
+    # Check if scripts/templates/hypr/hyprlock.conf exists
+    if [ ! -f "scripts/templates/hypr/hyprlock.conf" ]; then
+        echo "Template file not found for hyprlock. Skipping that."
+        return
+    fi
+    # Copy template
+    mkdir -p "$HOME"/.cache/ags/user/generated/hypr/
+    cp "scripts/templates/hypr/hyprlock.conf" "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf
+    # Apply colors
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf
+    done
+
+    cp "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf "$HOME"/.config/hypr/hyprlock.conf
 }
 
 apply_gtk() { # Using gradience-cli
@@ -171,6 +188,7 @@ apply_ags() {
 
 apply_ags &
 apply_hyprland &
+apply_hyprlock &
 apply_gtk &
 apply_foot &
 apply_gtklock &
