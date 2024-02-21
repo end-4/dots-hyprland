@@ -159,20 +159,21 @@ export default () => {
                     children: [
                         appIcon,
                         // TODO: Add xwayland tag instead of just having italics
-                        // Widget.Revealer({
-                        //     transition: 'slide_down',
-                        //     revealChild: revealInfoCondition,
-                        //     child: Widget.Label({
-                        //         truncate: 'end',
-                        //         className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
-                        //         css: `
-                        //         font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
-                        //         margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
-                        //     `,
-                        //         // If the title is too short, include the class
-                        //         label: (title.length <= 1 ? `${c}: ${title}` : title),
-                        //     })
-                        // })
+                        Widget.Revealer({
+                            transition: 'slide_down',
+                            revealChild: revealInfoCondition,
+                            child: Widget.Label({
+                                maxWidthChars: 10, // Doesn't matter what number
+                                truncate: 'end',
+                                className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
+                                css: `
+                                font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
+                                margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
+                            `,
+                                // If the title is too short, include the class
+                                label: (title.length <= 1 ? `${c}: ${title}` : title),
+                            })
+                        })
                     ]
                 })
             }),
