@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission.
+# NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
+
+# The script that use this file should have two lines on its top as follows:
+# cd "$(dirname "$0")"
+# export base="$(pwd)"
+
+showhelp(){
+echo -e "Syntax: $0 [Options]...
+
+Idempotent installation script for dotfiles.
+If no option is specified, run default install process.
+
+  -h, --help         Print this help message and exit
+  -f, --force        (Dangerous) Force mode without any confirm
+  -c, --clean        Clean the build cache first
+  -k, --kbset <set>  (Unavailable yet) Use a set of pre-defined keybindings
+"
+}
+
+cleancache(){
+  rm -rf "$base/cache"
+}
+
+# `man getopt` to see more
+para=$(getopt \
+       -o hfd:c \
+       -l help,force,distro:,clean \
+       -n "$0" -- "$@")
+[ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
+#####################################################################################
+## getopt Phase 1
+# ignore parameter's order, execute options below first
+eval set -- "$para"
+while true ; do
+  case "$1" in
+    -h|--help) showhelp;exit;;
+    -c|--clean) cleancache;shift;;
+    --) break ;;
+    *) shift ;;
+  esac
+done
+#####################################################################################
+## getopt Phase 2
+eval set -- "$para"
+while true ; do
+  case "$1" in
+    ## Already processed in phase 1, but not exited
+    -c|--clean) shift;;
+    ## Ones without parameter
+    -f|--force) ask=false;shift;;
+    ## Ones with parameter
+    
+    -k|--kbset)
+    case $2 in
+      "normal") kbname="Normal style";;
+      "vim") kbname="Vim-style";;
+      *) echo -e "Wrong argument for $1.";exit 1;;
+    esac;echo "The keyboardset is ${kbname}.";shift 2;;
+
+    ## Ending
+    --) break ;;
+    *) echo -e "$0: Wrong parameters.";exit 1;;
+  esac
+done

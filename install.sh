@@ -3,6 +3,7 @@ cd "$(dirname "$0")"
 export base="$(pwd)"
 source ./scriptdata/functions
 source ./scriptdata/installers
+source ./scriptdata/options
 
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
@@ -30,8 +31,8 @@ case $p in
 esac
 }
 
-case $1 in
-  "-f")ask=false;;
+case $ask in
+  false)sleep 0;;
   *)startask ;;
 esac
 
