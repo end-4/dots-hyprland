@@ -272,11 +272,15 @@ export default () => {
         fixed.attribute.put(WorkspaceNumber(offset + index), 0, 0);
         widget.clear = () => {
             const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
+            console.log('clearing ws with id', index, ' | shown:', offset + index)
             clientMap.forEach((client, address) => {
-                if (!client || client.ws !== offset + index) return;
-                client.destroy();
-                client = null;
-                clientMap.delete(address);
+                if (!client) return;
+                if ((client.attribute.ws <= offset || client.attribute.ws > offset + NUM_OF_WORKSPACES_SHOWN) ||
+                    (client.attribute.ws == offset + index)) {
+                    client.destroy();
+                    client = null;
+                    clientMap.delete(address);
+                }
             });
         }
         widget.set = (clientJson, screenCoords) => {
@@ -416,13 +420,13 @@ export default () => {
                     box.attribute.updateWorkspace(box, client.workspace.id);
                 }, 'client-added')
                 .hook(Hyprland.active.workspace, (box) => {
+                    // Full update when going to new ws group
                     const previousGroup = box.attribute.workspaceGroup;
                     const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN);
                     if (currentGroup !== previousGroup) {
                         box.attribute.update(box);
-                        workspaceGroup = currentGroup;
+                        box.attribute.workspaceGroup = currentGroup;
                     }
-                    // box.attribute.update(box);
                 })
                 .hook(App, (box, name, visible) => { // Update on open
                     if (name == 'overview' && visible) box.attribute.update(box);
