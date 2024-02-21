@@ -272,7 +272,6 @@ export default () => {
         fixed.attribute.put(WorkspaceNumber(offset + index), 0, 0);
         widget.clear = () => {
             const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-            console.log('clearing ws with id', index, ' | shown:', offset + index)
             clientMap.forEach((client, address) => {
                 if (!client) return;
                 if ((client.attribute.ws <= offset || client.attribute.ws > offset + NUM_OF_WORKSPACES_SHOWN) ||
@@ -352,7 +351,6 @@ export default () => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
                     kids.forEach(kid => kid.clear());
-                    // console.log('----------------------------');
                     for (let i = 0; i < allClients.length; i++) {
                         const client = allClients[i];
                         const childID = client.workspace.id - (offset + startWorkspace);
@@ -364,18 +362,6 @@ export default () => {
                             }
                             continue;
                         }
-                        // const modID = client.workspace.id % NUM_OF_WORKSPACES_SHOWN;
-                        // console.log(`[${startWorkspace} -> ${startWorkspace + workspaces - 1}] ? (${client.workspace.id} == ${modID})`);
-                        // // console.log(`[${startWorkspace} -> ${startWorkspace + workspaces}] ? (${modID})`);
-                        // if (startWorkspace <= modID && modID < startWorkspace + workspaces) {
-                        //     console.log('i care');
-                        //     const clientWidget = clientMap.get(client.address);
-                        //     console.log(childID, kids[childID], clientWidget);
-                        //     if (kids[childID] && clientWidget) {
-                        //         console.log('hmm remove', clientWidget.attribute)
-                        //         kids[childID].remove(clientWidget);
-                        //     }
-                        // }
                     }
                     kids.forEach(kid => kid.show());
                 }).catch(print);
