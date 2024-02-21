@@ -25,8 +25,8 @@ cleancache(){
 
 # `man getopt` to see more
 para=$(getopt \
-       -o hfd:c \
-       -l help,force,distro:,clean \
+       -o hfk:c \
+       -l help,force,kbset:,clean \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
