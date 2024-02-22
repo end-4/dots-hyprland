@@ -63,6 +63,7 @@ export const DoubleRevealer = ({
     duration2 = 150,
     child,
     revealChild,
+    ...rest
 }) => {
     return Revealer({
         transition: transition1,
@@ -73,6 +74,7 @@ export const DoubleRevealer = ({
             transitionDuration: duration2,
             revealChild: revealChild,
             child: child,
-        })
+        }),
+        ...rest,
     })
 }
