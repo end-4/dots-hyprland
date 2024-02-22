@@ -198,6 +198,6 @@ apply_hyprland &
 apply_hyprlock &
 apply_gtk &
 apply_foot &
-apply_gtklock &
+# apply_gtklock &
 apply_fuzzel &
 apply_term &
