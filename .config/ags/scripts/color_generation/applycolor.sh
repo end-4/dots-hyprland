@@ -11,6 +11,12 @@ colorstrings=''
 colorlist=()
 colorvalues=()
 
+# wallpath=$(swww query | awk -F 'image: ' '{print $2}')
+# wallpath_png="$HOME"'/.cache/ags/user/generated/hypr/lockscreen.png'
+# convert "$wallpath" "$wallpath_png"
+# wallpath_png=$(echo "$wallpath_png" | sed 's/\//\\\//g')
+# wallpath_png=$(sed 's/\//\\\\\//g' <<< "$wallpath_png")
+
 if [[ "$1" = "--bad-apple" ]]; then
     cp scripts/color_generation/specials/_material_badapple.scss scss/_material.scss
     colornames=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f1)
@@ -146,6 +152,7 @@ apply_hyprlock() {
     mkdir -p "$HOME"/.cache/ags/user/generated/hypr/
     cp "scripts/templates/hypr/hyprlock.conf" "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf
     # Apply colors
+    # sed -i "s/{{ SWWW_WALL }}/${wallpath_png}/g" "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf
     for i in "${!colorlist[@]}"; do
         sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/hypr/hyprlock.conf
     done
