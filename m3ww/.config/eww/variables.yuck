@@ -1,0 +1,160 @@
+; Const
+(defpoll RES_WIDTH :initial 1920 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1`)
+(defpoll RES_HEIGHT :initial 1080 :interval "69h" `xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2`)
+; (defvar RES_WIDTH 1920)
+; (defvar RES_HEIGHT 1080)
+(defvar BAR_USELESS_GAPS 3)
+(defvar BAR_HEIGHT_HIDDEN 0)
+(defvar BAR_HEIGHT_NORMAL 40)
+(defvar BAR_HEIGHT_EXTENDED 80)
+(defvar BAR_HEIGHT_BOTTOM_NORMAL 60)
+(defvar GAPS 0)
+(defvar BG_ROUNDING 22)
+(defpoll accent :initial "#16C1C8" :interval "69h" `cat css/_material.scss | grep 'onPrimaryContainer' | awk '{print $2}' | cut -d ";" -f1`)
+(defvar BATTERY_LOW 20)
+(defvar OVERVIEW_SCALE 0.18)
+(defvar OVERVIEW_INDICATOR_GAP 1)
+(defvar POWERMENU_COMMANDS `["gtklock &", "loginctl terminate-user $USER &", "systemctl suspend &", "systemctl hibernate &", "systemctl poweroff &", "systemctl reboot &", "# nothing", "# cancel"]`)
+(defvar POWERMENU_QUICKLAUNCHES `["hyprctl keyword debug:overlay $(( 1 - $(hyprctl getoption debug:overlay -j | gojq '.int') ))", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://discord.com/app' && xdg-open 'https://youtube.com/' && xdg-open 'https://github.com/' &", "hyprctl dispatch submap reset && eww close powermenu && code ~/.config/eww/ &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open ~/.config/hypr/hyprland.conf &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://wiki.hyprland.org/' &", "hyprctl dispatch submap reset && eww close powermenu && xdg-open 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' &"]`)
+(defvar SCROLL_MULTIPLIER_WAIFUTAGS 36) ; Number of pixels to scroll each mouse scroll
+(defvar SCROLL_TOSHOW_WAIFUTAGS 7) ; Edit scroll-waifu script too. I have to hard code or it'll be very slow
+(defvar VOLUME_ICONS `["", "", "", ""]`) ; Levels 0 1 2 3  ; Material icons
+(defvar WAIFU_TAG_ID `[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19, 20]`) ; Note: change $total and $shown in scripts/scroll-waifu too
+(defvar WAIFU_CATEGORIES_ICONS `["favorite", "mop", "school", "pets", "pets", "adjust", "🥵", "visibility_off", "visibility", "join", "photo_camera", "mode_fan", "explosion","checkroom", "💀", "hourglass_bottom", "relax",  "♨️",    "pets",  "🥵pets",    "voice_selection"]`)
+(defvar WAIFU_CATEGORIES       `["waifu", "maid", "uniform", "nekos.life", "nekos.moe",    "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "megumin",        "marin-kitagawa", "mori-calliope", "ass", ".pics:waifu",  ".pics:waifu segs",    ".pics:neko",  ".pics:neko segs",    "oral"]`)
+(defvar WAIFU_CATEGORIES_ARGS  `["waifu", "maid", "uniform", "--neko",     "--moe --segs", "oppai", "ero", "ecchi", "hentai", "paizuri", "selfies", "raiden-shogun", "--pics megumin", "marin-kitagawa", "mori-calliope", "ass", "--pics waifu", "--pics waifu --segs", "--pics neko", "--pics neko --segs", "oral"]`)
+(defvar weekdays '[{"day":"Mo","today":"0"},{"day":"Tu","today":"0"},{"day":"We","today":"0"},{"day":"Th","today":"0"},{"day":"Fr","today":"0"},{"day":"Sa","today":"0"},{"day":"Su","today":"0"}]')
+(defvar WIFI_ICONS `["", "", "", "", ""]`) ; Levels 0 1 2 3 4  ; Material icons
+(defvar WORKSPACE_SIDE_PAD 0.477) ; In rem!
+(defvar ws-icons '["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]')
+
+; Const: animation curves
+(defvar ANIM_NAMES `["Material","Fluent"]`)
+(defvar ANIM_ENTER `["transition: 200ms cubic-bezier(0.05,0.7,0.1,1);","transition: 250ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_EXIT `["transition: 150ms cubic-bezier(0.3,0,0.8,0.15);","transition: 180ms cubic-bezier(1,0,1,1);"]`)
+(defvar ANIM_VERYLONG `["transition: 600ms cubic-bezier(0.05,0.7,0.1,1);","transition: 600ms cubic-bezier(0,0,0,1);"]`)
+(defvar ANIM_INSTANT "transition: 0ms;")
+(defvar anim_set 0) ; Index of main animation set
+
+; Widget states
+(defvar flash_notif false)
+(defvar hover_leftspace false)
+(defvar hover_rightspace false)
+(defvar hover_music false)
+(defvar open_cheatsheet 0)
+(defvar open_notificationspopup false)
+(defvar open_powermenu false)
+(defvar open_powerview false)
+(defvar open_sideleft false)
+(defvar open_sideright false)
+(defvar open_visualizer false)
+(defvar osd_vol false)
+(defvar osd_bright false)
+(defvar rev_mixer false)
+(defvar rev_mixerbtn false)
+(defvar rev_waifustatus false)
+
+; Vars
+(defvar BAR_HEIGHT 40)
+(defvar BAR_HEIGHT_BOTTOM 0)
+(defvar calendartitle "")
+(defpoll langs :initial "[]" :interval "69h" `cat json/langs.json | gojq -c -M`)
+(defvar monthshift 0)
+(defvar notification_read 0)
+(defvar notification_cleared 0)
+(defvar notification_revcnt 0)
+(defvar overview_hover_name `{"class": "LMB: Focus | MMB: Close | RMB: Select/Move","title":"Powerview","workspace":{"id":0,"name":"0"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg", "size": [0,0], "at": [0,0]}`)
+(defvar overview_query "")
+(defvar overview_results "[]")
+(defvar powermenu_option 0)
+(defvar quote_index 0)
+(defvar scroll_offset_waifu 0)
+(defvar selected '')
+(defvar show_waifu false)
+(defvar waifu_status "")
+
+
+; Dummies
+(deflisten ICON_GET `scripts/get_open_icons`)
+
+; Listeners
+(deflisten awin "scripts/activewin")
+(deflisten activews :initial 1 "scripts/activews")
+(deflisten audiojson :initial "[]" "scripts/audiolevels")
+(deflisten battery :initial "{\"bgcolor\":\"transparent\",\"cirbgcolor\":\"transparent\",\"circolor\":\"#ffd9de\",\"color\":\"white\",\"icon\":\"\",\"percentage\":54,\"quickicon\":\"\",\"status\":\"00:06hleft\",\"wattage\":\"11.9W\"}" "scripts/battery 2>/dev/null")
+(deflisten bluetooth :initial `{"icon": "","batt_icon":"","text":"Bluetooth off"}` "scripts/bluetooth")
+(deflisten brightness :initial `{"level": 38.43,"icon": ""}` "scripts/brightness")
+(defpoll calendar :initial "[]" :interval "15m" `eww update monthshift=0 && eww update calendartitle="$(date '+%B %Y')" && scripts/calendarlayout`)
+(deflisten cheatsheet :initial "[]" "cat json/cheatsheet.json | gojq -c -M")
+(deflisten cavajson :initial "[[0,0]]" `scripts/cavajson`)
+(defpoll fontsize :initial 11 :interval "15m" `gsettings get org.gnome.desktop.interface font-name | cut -d ' ' -f 2 | sed 's/\'//g'`)
+(deflisten hyprjson :initial `{"rounding":15,"gaps_in":4,"gaps_out":4,"border_size":2,"force_no_accel":0,"input_sensitivity":0,"touchpad_disable_while_typing":1,"touchpad_clickfinger_behavior":1,"blur":1,"blur_size":7,"blur_passes":4,"blur_xray":1,"nightlight":false,"dummy":0}` "scripts/hyprsettings")
+(deflisten lang_ibus :initial "{\"name\":\"English (xkb)\",\"name_abbr\":\"ENG\",\"name_ibus\":\"xkb:us::eng\"}" `scripts/language`)
+(deflisten memory :initial `{ "total": "8G", "used": "4G", "free": "4G", "swaptotal": "8G", "swapused": "0M", "swappercentage": 0, "swapfree": "8G", "percentage": 50 }` "scripts/memory")
+(deflisten mname :initial "{\"artist\":\"\",\"title\":\"Music\"}" "scripts/music name 999") ; The number is the length limit of the title
+(deflisten mplay "playerctl -F metadata -f '{{status}}'")
+(deflisten music :initial `{"artist" :"","length":"00:00","position":"0","position_time":"00:00","status":"","title":"Music"}` "scripts/music")
+(deflisten mcover
+  :initial '{"image": "null", "color": {"alpha":"100","colors":{"color0":"null","color1":"null","color10":"null","color11":"null","color12":"null","color13":"null","color14":"null","color15":"null","color2":"null","color3":"null","color4":"null","color5":"null","color6":"null","color7":"null","color8":"null","color9":"null"},"special":{"background":"null","cursor":"null","foreground":"null"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󱛟"},"materialcolor":{"onPrimary":"null","onPrimaryContainer":"null","onSecondaryContainer":"null","primary":"null","primaryContainer":"null","secondaryContainer":"null"}}'
+  "scripts/music cover"
+)
+(deflisten net :initial `{ "essid": "lo", "icon": "", "level": "0" }` "scripts/net")
+(deflisten notifications :initial '[]' "scripts/notify-receive | gojq -c -M 'reverse'")
+(deflisten tasks "scripts/taskbarloop")
+(deflisten todolist :initial "[]" "cat json/todo.json | gojq -c -M")
+(deflisten volume :initial `{"icon":"","audio":"1","device":"Headphones","percent":"32","microphone":"100"}` "scripts/volume")
+(deflisten workspace :initial `[{"num":"1","haswins":"true"},{"num":"2","haswins":"true"},{"num":"3","haswins":"true"},{"num":"4","haswins":"true"},{"num":"5","haswins":"true"},{"num":"6","haswins":"true"},{"num":"7","haswins":"true"},{"num":"8","haswins":"true"},{"num":"9","haswins":"true"},{"num":"10","haswins":"true"}]` "scripts/workspaces")
+(deflisten wsjsona
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"1","workspace":{"id":1,"name":"1"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"2","workspace":{"id":2,"name":"2"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"3","workspace":{"id":3,"name":"3"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"4","workspace":{"id":4,"name":"4"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"5","workspace":{"id":5,"name":"5"}}]]`
+  "scripts/overview-wrapper1"
+)
+(deflisten wsjsonb
+  :initial `[[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"6","workspace":{"id":6,"name":"6"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"7","workspace":{"id":7,"name":"7"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"8","workspace":{"id":8,"name":"8"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"9","workspace":{"id":9,"name":"9"}}],[{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"10","workspace":{"id":10,"name":"10"}}]]`
+  "scripts/overview-wrapper2"
+)
+
+; Polls
+(defpoll cpuname :interval "69h" :initial "lincox" ` lscpu | grep 'Model name' | sed 's/Model name: *//' | sed 's/ with Radeon Graphics//g'`)
+(defpoll gpunames :interval "69h" :initial "lincox" `lspci | grep "VGA\\\|3D" | cut -d ':' -f3 | cut -d '[' -f2 | cut -d ']' -f1`)
+(defpoll diskfreepercent :initial "0" :interval "10m" `echo $(df --output=pcent / | tr -dc '0-9')`)
+(defpoll diskfree :interval "10m" `df -h --output=avail / | awk 'NR==2{print $1}'`)
+(defpoll diskused :interval "10m" `df -h --output=used / | awk 'NR==2{print $1}'`)
+(defpoll distro :initial "endeavouros" :interval "69h" "grep -w ID /etc/os-release | cut -d\\\" -f2")
+(defpoll hostname :interval "69h" :initial "distro" `uname -n`)
+(defpoll hyprland_version :interval "69h" :initial "v69420" "hyprctl version | head -2 | tail -1")
+(defpoll kernel :interval "69h" :initial "lincox kernel" `uname -r`)
+(defpoll realname :interval "69h" :initial "username" `awk -F':' -v uid=1000 '$3 == uid { print $5 }' /etc/passwd`)
+(defpoll time
+  :initial `{"date": "6/9", "hour": "0", "minute": "0", "monthname": "Month", "day": "Not monday", "year": "2077"}`
+  :interval "5s"
+  `date +'{"date": "%d/%m", "hour": "%H", "minute": "%M", "monthname": "%B", "day": "%A", "year": "%Y"}'`
+)
+(defpoll uptime :interval "5m" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
+(defpoll username :interval "69h" :initial "username" `whoami`)
+(defpoll waifu :initial `{"path": "eww_covers/waifu", "size": [1080, 1080]}` :interval "5m" `python3 scripts/waifu-get.py waifu`)
+
+; INSPIRING quotes
+(defvar quote_content `[
+  "every other compositor is like professional and shit\\\nand we are about to make porn of ours\\\nLMAO",
+  "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
+  "arch is like rick astley to me\\\nnever gonna let you down",
+  "you have any cool ones?\\\nI'm always open for new wallpapers\\\npreferably anime tiddies ofc but yknow",
+  "BRO FRANCE BANNED MS OFFICE AND GOOGLE DOCS IN SCHOOLS LMAO L L L L L L L L L L L L L L L L",
+  "doki doki waku waku",
+  "that was good enough I guess\\\nI have a penis",
+  "...so Nvidia, fuck you",
+  "you cant spell circumference without cum",
+  "sEX"
+]`)
+(defvar quote_author `[
+  "- vaxer",
+  "- vaxry",
+  "- vaxry-chan",
+  "- vaxry",
+  "- vaxry",
+  "- Hyprland community, 2023",
+  "- vaxry",
+  "- Linus Torvalds",
+  "- vaxer",
+  "- vaxer"
+]`)

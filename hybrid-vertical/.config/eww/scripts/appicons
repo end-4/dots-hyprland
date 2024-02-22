@@ -1,0 +1,64 @@
+#!/usr/bin/bash
+
+geticonlist() {
+    classes=$(hyprctl clients | grep -e 'class: ' | sed 's/\tclass: //')
+    addresses=$(hyprctl clients | grep -e ' -> ')
+    # echo "$classes"
+    IFS=$'\n'
+    classarr=($(echo "$classes"))
+    addressarr=($(echo "$addresses"))
+    iconarr=($(echo "$classes"))
+
+    for i in "${!classarr[@]}"; do
+        addressarr[i]=$(echo "0x${addressarr[i]% -> *}" | sed 's/Window //')
+        # echo "${addressarr[i]}"
+    done
+
+    for i in "${!classarr[@]}"; do
+        classarr[i]=$(echo ${classarr[i]})
+        if [ -f "scripts/cache/${classarr[i]}" ]; then
+            iconarr[i]=$(cat scripts/cache/${classarr[i]})
+            if [ ! -f "${iconarr[i]}" ]; then # Cache refresh if icon doesnt exist
+                iconarr[i]=$(scripts/get-icon.py "${classarr[i]}")
+                echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
+            fi
+        else
+            iconarr[i]=$(scripts/get-icon.py "${classarr[i]}")
+            echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
+        fi
+        if [[ ${iconarr[i]} = "not found" ]]; then
+          iconarr[i]=$(scripts/get-icon.py "$(echo "${classarr[i]##*.}" | tr '[:upper:]' '[:lower:]')")
+          if [[ ! ${iconarr[i]} = "not found" ]]; then
+            rm "scripts/cache/${classarr[i]}"
+            echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
+          else 
+            iconarr[i]="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
+            rm "scripts/cache/${classarr[i]}"
+            echo "${iconarr[i]}" > "scripts/cache/${classarr[i]}"
+          fi
+        fi
+    done
+
+    printf '['
+    for i in "${!classarr[@]}"; do
+        if [ $i -ne 0 ]; then
+          printf ', '
+        fi
+        # printf '{'
+        # printf "\"${addressarr[i]}\": \"${iconarr[i]}\""
+        # printf '}'
+        printf "\"${iconarr[i]}\""
+    done
+    printf ']\n'
+}
+
+geticonlist
+
+if [ "$1" == "--once" ]; then
+  exit 0
+else
+  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
+    geticonlist
+  done
+fi
+

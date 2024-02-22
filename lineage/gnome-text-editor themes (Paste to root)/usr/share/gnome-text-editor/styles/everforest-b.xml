@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Catppuccin Gedit theme based on Oblivion theme and Cappuccin for Visual Studio Code.
+-->
+
+<style-scheme id="everforest_b" _name="Everforest Dark B" version="1.0">
+
+  <author>sacerdos</author>
+  <_description>Everforest</_description>
+
+  <!-- Tango Palette -->
+  <color name="forestgreen" value="#a8b370"/>
+  <color name="forestyellow" value="#8e8370"/>
+  <color name="foresttext" value="#d3c6ab"/>
+  <color name="forestblack" value="#1e201f"/>
+  <color name="forestred" value="#e76c69"/>
+  <color name="forestpink" value="#d698b5"/>
+  <color name="forestorange" value="#e59576"/>
+  <color name="forestgray" value="#75817b"/>
+  <color name="forestgraylight" value="#495156"/>
+  <color name="forestgreendark" value="#7fba90"/>
+  
+  <color name="mocha_rosewater" value="#f5e0dc"/>
+  <color name="mocha_flamingo"  value="#f2cdcd"/>
+  <color name="mocha_pink"      value="#f5c2e7"/>
+  <color name="mocha_mauve"     value="#cba6f7"/>
+  <color name="mocha_red"       value="#f38ba8"/>
+  <color name="mocha_maroon"    value="#eba0ac"/>
+  <color name="mocha_peach"     value="#fab387"/>
+  <color name="mocha_yellow"    value="#f9e2af"/>
+  <color name="mocha_green"     value="#a6e3a1"/>
+  <color name="mocha_teal"      value="#94e2d5"/>
+  <color name="mocha_sky"       value="#89dceb"/>
+  <color name="mocha_sapphire"  value="#74c7ec"/>
+  <color name="mocha_blue"      value="#89b4fa"/>
+  <color name="mocha_lavender"  value="#b4befe"/>
+  <color name="mocha_text"      value="#cdd6f4"/>
+  <color name="mocha_subtext1"  value="#bac2de"/>
+  <color name="mocha_subtext0"  value="#a6adc8"/>
+  <color name="mocha_overlay2"  value="#9399b2"/>
+  <color name="mocha_overlay1"  value="#7f849c"/>
+  <color name="mocha_overlay0"  value="#6c7086"/>
+  <color name="mocha_surface2"  value="#585b70"/>
+  <color name="mocha_surface1"  value="#45475a"/>
+  <color name="mocha_surface0"  value="#313244"/>
+  <color name="mocha_base"      value="#1e1e2e"/>
+  <color name="mocha_mantle"    value="#181825"/>
+  <color name="mocha_crust"     value="#11111b"/>
+
+  <!-- Global Settings -->
+  <style name="text"                        foreground="foresttext" background = "forestblack"/>
+  <style name="selection"                   foreground="foresttext" background="forestgray"/>
+  <style name="cursor"                      foreground="forestpink"/>
+  <style name="secondary-cursor"            foreground="forestpink"/>
+  <style name="current-line"                background="forestblack"/>
+  <style name="line-numbers"                foreground="foresttext" background="forestblack"/>
+  <style name="draw-spaces"                 foreground="foresttext"/>
+  <style name="background-pattern"          background="forestblack"/>
+
+  <!-- Bracket Matching -->
+  <style name="bracket-match"               foreground="forestgraylight"/>
+  <style name="bracket-mismatch"            foreground="foresttext" background="forestorange"/>
+
+  <!-- Right Margin -->
+  <style name="right-margin"                foreground="foresttext" background="forestblack"/>
+
+  <!-- Search Matching -->
+  <style name="search-match"                foreground="foresttext" background="forestgreendark"/>
+
+  <!-- Comments -->
+  <style name="def:comment"                 foreground="forestgray"/>
+  <style name="def:shebang"                 foreground="forestgray" bold="true"/>
+  <style name="def:doc-comment-element"     italic="true"/>
+
+  <!-- Constants -->
+  <style name="def:constant"                foreground="forestgreen"/>
+  <style name="def:string"                  foreground="forestgreen"/>
+  <style name="def:special-char"            foreground="forestpink"/>
+  <style name="def:special-constant"        foreground="forestpink"/>
+  <style name="def:floating-point"          foreground="forestpink"/>
+
+  <!-- Identifiers -->
+  <style name="def:identifier"              foreground="forestgreendark"/>
+
+  <!-- Statements -->
+  <style name="def:statement"               foreground="forestorange" bold="true"/>
+
+  <!-- Types -->
+  <style name="def:type"                    foreground="forestred" bold="true"/>
+
+  <!-- Markup -->
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:strong-emphasis"         foreground="forestyellow" bold="true"/>
+  <style name="def:inline-code"             foreground="forestgreen"/>
+  <style name="def:insertion"               underline="single"/>
+  <style name="def:deletion"                strikethrough="true"/>
+  <style name="def:link-text"               foreground="foresttext"/>
+  <style name="def:link-symbol"             foreground="forestgreendark" bold="true"/>
+  <style name="def:link-destination"        foreground="forestgreendark" italic="true" underline="single"/>
+  <style name="def:heading"                 foreground="forest" bold="true"/>
+  <style name="def:thematic-break"          foreground="forestgreendark" bold="true"/>
+  <style name="def:preformatted-section"    foreground="forestgreen"/>
+  <style name="def:list-marker"             foreground="forestorange" bold="true"/>
+
+  <!-- Others -->
+  <style name="def:preprocessor"            foreground="forestred"/>
+  <style name="def:error"                   foreground="forestred" bold="true"/>
+  <style name="def:warning"                 foreground="forestorange"/>
+  <style name="def:note"                    foreground="forestgreendark" bold="true"/>
+  <style name="def:net-address"             italic="true" underline="single"/>
+</style-scheme>

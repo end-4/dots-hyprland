@@ -1,0 +1,89 @@
+#!/usr/bin/bash
+cd ~/.config/eww || exit
+
+OPACITY=0.75
+
+IMGPATH=$1
+coverurl=$2
+
+coverpath=$(echo "$IMGPATH" | sed 's/"//g')
+# Generate colors
+wal -c
+lightdark=$(cat scripts/workdir/__mode_light_dark.txt)
+wal -i "$IMGPATH" -n -t -s -e $lightdark -q
+
+themejson=$(cat ~/.cache/wal/colors.json | gojq -c -M)
+themejson="${themejson::-1}"
+themejson="$themejson"',"source":"'"$3"'"}'
+# echo "$themejson"
+
+maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
+generated_material=$(scripts/material_colors.py --color "$maincol" "$lightdark")
+echo "$generated_material" > scripts/cache/_material.colorpallete &
+cp scripts/cache/_material.colorpallete ~/.config/ags/scss/_material.scss
+onPrimaryContainer=$(echo "$generated_material" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
+primaryContainer=$(echo "$generated_material" | grep '$primaryContainer: ' | sed 's/$primaryContainer: //g' | sed 's/;//g')
+onSecondaryContainer=$(echo "$generated_material" | grep '$onSecondaryContainer: ' | sed 's/$onSecondaryContainer: //g' | sed 's/;//g')
+secondaryContainer=$(echo "$generated_material" | grep '$secondaryContainer: ' | sed 's/$secondaryContainer: //g' | sed 's/;//g')
+tertiary=$(echo "$generated_material" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
+onPrimary=$(echo "$generated_material" | grep '$onPrimary: ' | sed 's/$onPrimary: //g' | sed 's/;//g')
+primary=$(echo "$generated_material" | grep '$primary: ' | sed 's/$primary: //g' | sed 's/;//g')
+
+printf '{"image": "'$coverpath'", "color": '"$themejson"', "materialcolor": {"onPrimaryContainer": "'"$onPrimaryContainer"'", "primaryContainer": "'"$primaryContainer"'", "onPrimary": "'"$onPrimary"'", "primary": "'"$primary"'", "secondaryContainer": "'"$secondaryContainer"'", "onSecondaryContainer": "'"$onSecondaryContainer"'"}}\n'
+
+# Get color in rgb
+colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
+rgb_bg=$(echo $colorsreg | tr ' ' '\n' | grep 'Colour3')
+rgb_bg="${rgb_bg#*=}"
+rgb_bg="${rgb_bg#*\"}"
+rgb_bg="${rgb_bg::-1}"
+rgb_bg='rgba('"$rgb_bg"','"$OPACITY"')'
+# echo $rgb_bg
+
+# notify-send 'eww' 'i found a url!'
+
+# Write to scss
+echo '//Auto generated color theme for image at:' "$coverurl" > './scripts/cache/_colorscheme.colorpallete'
+printf '$colorbarbg: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.special.background' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$colorbg: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$rgb_bg"';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$colortext: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.special.foreground' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color0: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color1' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color1: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color2' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color2: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color3' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color3: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color4' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color4: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color5' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color5: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color6' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color6: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color7' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+printf '$color7: ' >> './scripts/cache/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color4' | tr '\n' ';' >> './scripts/cache/_colorscheme.colorpallete'
+echo '' >> './scripts/cache/_colorscheme.colorpallete'
+
+# Write hyprland color config
+echo '# Auto generated color theme for image at:' "$coverurl" > './scripts/cache/colors_generated.conf'
+echo 'general {' >> './scripts/cache/colors_generated.conf'
+echo '    col.active_border = rgba('"${primary#*#}FF"') 45deg' >> './scripts/cache/colors_generated.conf'
+echo '    col.inactive_border = rgba(555555AA)' >> './scripts/cache/colors_generated.conf'
+echo '}' >> './scripts/cache/colors_generated.conf'
+
+# Print json to stdout
+cp "$HOME/.cache/wal/colors.json" 'scripts/cache/_iconcolor.txt'

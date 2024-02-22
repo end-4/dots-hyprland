@@ -1,0 +1,468 @@
+$colorpanel: tint($colorbarbg, 10%);
+
+.osettings-window {
+    min-width: 529px;
+    padding-top: 20px;
+    background-color: $colorpanel;
+    color: $colortext;
+    font-family: 'JetBrainsMono Nerd Font';
+}
+
+.onotify-window {
+    min-width: 529px;
+    background-color: $colorpanel;
+    color: $colortext;
+    font-family: 'JetBrainsMono Nerd Font';
+}
+
+.osettings-separator {
+    background-color: shade($colorbarbg, 5%);
+    min-height: 6px;
+    margin-top: 27px;
+}
+
+.osettings-content {
+    // padding-top: 13px;
+    padding-bottom: 10px;
+    color: $colortext;
+    font-family: 'Rubik';
+}
+
+.osettings-heading {
+    padding-left: 28px;
+    padding-right: 28px;
+    color: $colortext;
+    font-family: 'Rubik';
+}
+
+.osettings-title {
+    padding-top: 28px;
+    color: $colortext;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 30pt;
+    font-weight: 300;
+}
+
+.osettings-subtitle {
+    color: $color5;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 14pt;
+    font-weight: 200;
+}
+
+.osettings-window-section {
+    margin-top: 33px;
+    border: 2px solid;
+}
+
+.osettings-window-quick {
+    border-color: $color5;
+}
+
+.osettings-window-session {
+    color: $color4;
+}
+
+.osettings-window-mouse {
+    color: $color3;
+}
+
+.osettings-window-appearance {
+    color: $color5;
+}
+
+.osettings-window-gaps {
+    color: $color4;
+}
+
+.osettings-window-hyperland {
+    color: $color3;
+}
+
+.osettings-window-hyprland {
+    color: $color3;
+}
+
+.osettings-window-calendar {
+    color: $color5;
+}
+
+.osettings-window-secret {
+    color: $color5;
+}
+
+.osettings-window-quick-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color5;
+}
+
+.osettings-window-session-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color4;
+}
+
+.osettings-window-mouse-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color3;
+}
+
+.osettings-window-appearance-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color5;
+}
+
+.osettings-window-gaps-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color4;
+}
+
+.osettings-window-hyperland-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color3;
+}
+
+.osettings-window-hyprland-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color3;
+}
+
+.osettings-window-calendar-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color5;
+}
+
+.osettings-window-secret-bottomright {
+    border-top: 30px solid transparent;
+    border-right: 30px solid $color5;
+}
+
+.osettings-window-bottomright-cut {
+    border-top: 27px solid transparent;
+    border-right: 27px solid $colorpanel;
+}
+
+.osettings-window-contents {
+    margin: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.osettings-section {
+    color: $colorbarbg;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 20pt;
+    padding-left: 10px;
+    padding-top: 4px;
+}
+
+.osettings-section-baronly {
+    color: $colorbarbg;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 20pt;
+}
+
+.osettings-section-textonly {
+    color: $colorbarbg;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-size: 20pt;
+    padding-left: 10px;
+    padding-top: 4px;
+}
+
+.osettings-section-quick {
+    background-color: $color5;
+}
+
+.osettings-section-session {
+    background-color: $color4;
+}
+
+.osettings-section-mouse {
+    background-color: $color3;
+}
+
+.osettings-section-appearance {
+    background-color: $color5;
+}
+
+.osettings-section-gaps {
+    background-color: $color4;
+}
+
+.osettings-section-hyperland {
+    background-color: $color3;
+}
+
+.osettings-section-hyprland {
+    background-color: $color3;
+}
+
+.osettings-section-calendar {
+    background-color: $color5;
+}
+
+.osettings-section-secret {
+    background-color: $color5;
+}
+
+.onotify-window-volume {
+    border-color: $color5;
+}
+
+.onotify-window-resources {
+    border-color: $color4;
+}
+
+.onotify-window-notif {
+    border-color: $color3;
+}
+
+.onotify-section-volume {
+    background-color: $color5;
+}
+
+.onotify-section-resources {
+    background-color: $color4;
+}
+
+.onotify-section-notif {
+    background-color: $color3;
+}
+
+.osettings-window-volume-bottomleft {
+    border-top: 30px solid transparent;
+    border-left: 30px solid $color5;
+}
+
+.osettings-window-resources-bottomleft {
+    border-top: 30px solid transparent;
+    border-left: 30px solid $color4;
+}
+
+.osettings-window-notif-bottomleft {
+    border-top: 30px solid transparent;
+    border-left: 30px solid $color3;
+}
+
+.osettings-window-bottomleft-cut {
+    border-top: 27px solid transparent;
+    border-left: 27px solid $colorpanel;
+}
+
+.osettings-text {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    // color: $colortext;
+    font-family: 'Rubik';
+    font-size: 14pt;
+}
+
+.osettings-btn-section {
+    color: $colorpanel;
+    font-size: 14pt;
+    min-width: 31px;
+}
+
+.osettings-btn-section:hover {
+    background-color: $overlay0;
+}
+
+.osettings-search {
+    margin-left: 28px;
+    margin-right: 28px;
+    margin-top: 35px;
+    background-color: $colorpanel;
+    border: 2px solid $colortext;
+    color: $colortext;
+    // border-radius: 10px;
+    font-size: 11pt;
+    min-height: 45px;
+    caret-color: $colortext;
+
+    selection {
+        background-color: rgba(154, 152, 152, 0.5);
+    }
+}
+
+.osettings-search-text {
+    color: $colortext;
+    padding: 10px;
+    font-size: 13pt;
+    min-width: 420px;
+    font-family: 'Rubik';
+}
+
+.osettings-search-icon {
+    background-color: $colortext;
+    color: $colorpanel;
+    padding: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 20pt;
+}
+
+.osettings-scroll-bg {
+    padding: 28px;
+    padding-top: 0px;
+}
+
+.osettings-btn {
+    // border-radius: 9999px;
+    min-height: 50px;
+    font-weight: normal;
+    font-size: 13pt;
+}
+
+.osettings-btn {
+    font-weight: bold;
+}
+
+.osettings-btn-destructive {
+    color: white;
+}
+
+.osettings-btn-neutral {
+    color: white;
+}
+
+.osettings-btn-informative {
+    color: white;
+}
+
+.osettings-btn-neutral:hover,
+.osettings-btn-neutral:focus {
+    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
+}
+
+.osettings-btn-destructive:hover,
+.osettings-btn-destructive:focus {
+    background-image: linear-gradient(to right, $color1 0%, $color3 50%);
+}
+
+.osettings-btn-informative:hover,
+.osettings-btn-informative:focus {
+    background-image: linear-gradient(to right, $color2 0%, $color4 50%);
+}
+
+.rounder {
+    // border-radius: 9999px;
+}
+
+.osettings-slider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: 6px;
+
+    trough {
+        min-height: 6px;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    slider {
+        min-height: 20px;
+        min-width: 20px;
+        margin: -8px;
+    }
+
+    slider:hover {
+        background-color: $color6;
+    }
+
+    // slider:focus {
+    //     background-color: $color4;
+    // }
+}
+
+.osettings-slider-3 {
+    background-image: linear-gradient(to right, $color3 8px, $surface0 8px);
+    highlight {
+        background-color: $color3;
+    }
+    slider {
+        background-color: $color3;
+    }
+}
+.osettings-slider-4 {
+    background-image: linear-gradient(to right, $color4 8px, $surface0 8px);
+    highlight {
+        background-color: $color4;
+    }
+    slider {
+        background-color: $color4;
+    }
+}
+.osettings-slider-5 {
+    background-image: linear-gradient(to right, $color5 8px, $surface0 8px);
+    highlight {
+        background-color: $color5;
+    }
+    slider {
+        background-color: $color5;
+    }
+}
+
+.osettings-slider-quick {
+    highlight {
+        background-color: $color5;
+    }
+
+    slider {
+        background-color: $color5;
+    }
+}
+
+.osettings-slider-mouse {
+    highlight {
+        background-color: $color3;
+    }
+
+    slider {
+        background-color: $color3;
+    }
+}
+
+.osettings-checkbox {
+    // border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: transparent;
+    color: transparent;
+    border: 3px solid $color0;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox-1 {
+    // border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: $color0;
+    color: transparent;
+    border: 3px solid;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox-0 {
+    // border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: transparent;
+    color: transparent;
+    border: 3px solid $color0;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox:checked {
+    // border-radius: 9999px;
+    background-color: $color0;
+    color: $color0;
+}

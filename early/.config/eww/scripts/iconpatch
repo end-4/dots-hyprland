@@ -1,0 +1,14 @@
+#!/usr/bin/bash
+
+appname=$1
+
+if [[ "$1" == "code-url-handler" ]];then
+  echo 'code'
+elif [[ "$1" == "gnome-tweaks" ]];then
+  echo 'org.gnome.tweaks'
+elif [[ "$1" == "org."* ]];then
+  appname="${appname#*.}"
+  appname="${appname#*.}"
+  echo $appname
+fi
+

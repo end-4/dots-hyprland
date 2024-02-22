@@ -1,0 +1,11 @@
+/* Removes a white flash after you open or close a tab. Affects all variants,
+ * but it's more visible on dark variants. */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Overrides: Change the flash color */
+#tabbrowser-tabpanels,
+#tabbrowser-tabpanels[pendingpaint],
+browser {
+	background-color: var(--gnome-browser-before-load-background) !important;
+}

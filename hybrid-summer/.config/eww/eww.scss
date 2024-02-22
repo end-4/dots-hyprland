@@ -1,0 +1,646 @@
+@import 'css/colors';
+@import 'css/colorscheme';
+@import 'css/material';
+@import 'images/svg/color.scss';
+
+@function tint($color, $percentage) {
+  @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix(rgb(0, 7, 18), $color, $percentage);
+}
+
+$battcolor: $color6;
+$memcolor: $color5;
+$cpucolor: $color4;
+$border: $color7;
+$surface0: tint($colorbg, 10%);
+$bg1: $surface0;
+
+//thanks flick0!
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+//also thanks to him
+@keyframes blink {
+  to {
+    background-color: #f9e2af;
+    color: #96804e;
+  }
+}
+
+@keyframes ripple {
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+
+@keyframes flyin-bottom {
+  from {
+    margin-bottom: -55px;
+    margin-top: 55px;
+  }
+
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+@keyframes flyin-top {
+  from {
+    margin-bottom: 55px;
+    margin-top: -55px;
+  }
+
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+@mixin rounding {
+  border-radius: 10px;
+}
+
+@mixin filter {
+  saturate {
+    filter: saturate(3);
+  }
+
+  grayscale {
+    filter: grayscale(100%);
+  }
+
+  contrast {
+    filter: contrast(160%);
+  }
+
+  brightness {
+    filter: brightness(0.25);
+  }
+
+  blur {
+    filter: blur(3px);
+  }
+
+  invert {
+    filter: invert(100%);
+  }
+
+  .sepia {
+    filter: sepia(100%);
+  }
+
+  huerotate {
+    filter: hue-rotate(180deg);
+  }
+
+  rss.opacity {
+    filter: opacity(50%);
+  }
+}
+
+@mixin window {
+  border: 3px solid $primary;
+  // box-shadow: 0 2px 3px $shadow;
+  margin: 5px 5px 10px;
+  @include rounding;
+}
+
+* {
+  all: unset;
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  // font-family: 'Rubik', 'Material Symbols Rounded';
+  background-repeat: no-repeat;
+}
+
+.scale slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.progress slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.music-ctl-revealer {
+  font-family: Material Symbols Rounded;
+}
+
+@import 'css/bottombar';
+@import 'css/bgdecor';
+@import 'css/calendar';
+@import 'css/dashboard';
+@import 'css/dashfs';
+@import 'css/editmode';
+@import 'css/music';
+@import 'css/notification';
+@import 'css/overview';
+@import 'css/osd';
+@import 'css/osettings';
+@import 'css/sidebar';
+@import 'css/system';
+@import 'css/themer';
+@import 'css/taskbar';
+@import 'css/volume';
+@import 'css/winctl';
+@import 'css/winstuff';
+
+.module-group {
+  // background-color: $colorbg;
+  min-height: 53px;
+  color: $fg;
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.bar-bg-only {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-right: -1911px;
+  margin-left: 8px;
+  border-radius: 26px;
+  background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+}
+
+.bar-bg-only-compact {
+  margin-right: -1920px;
+  background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  background-image: linear-gradient(135deg, shade($onTertiary, 47%) 18%, rgba(0, 0, 0, 0) 18%, rgba(0, 0, 0, 0) 37%, shade($onTertiary, 47%) 37%, shade($onTertiary, 47%) 63%, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 0) 85%, shade($onTertiary, 47%) 85%);
+}
+
+.bar-normal {
+  // margin: 8px;
+  // border-radius: 26px;
+  // background-color: shade($colorbg, 75%); //because dark background makes colors pop
+  min-height: 53px;
+  color: $fg;
+  border-bottom-right-radius: 26px;
+  border-bottom-left-radius: 26px;
+
+  // background-image: linear-gradient(to right,
+  //     rgba(0, 0, 0, 0) 0%,
+  //     rgba(0, 0, 0, 0) 4.322916667%,
+  //     shade($colorbg, 75%) 4.322916667%,
+  //     shade($colorbg, 75%) 96.82291667%,
+  //     rgba(0, 0, 0, 0) 96.82291667%,
+  //     rgba(0, 0, 0, 0) 100%,
+  //   );
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Rubik';
+  // animation-name: flyin-top;
+  // animation-duration: 350ms;
+  // animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+  // animation-iteration-count: 1;
+}
+
+.bar-compact {
+  background-color: shade($colorbg, 70%); //because dark background makes colors pop
+  border-bottom: 1px solid $primary;
+  min-height: 53px;
+  color: $fg;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Rubik';
+}
+
+tooltip {
+  background: $colorbarbg;
+  border: 1px solid rgba(60, 60, 60, 0.4);
+  border-radius: 8px;
+  color: white;
+
+  label {
+    font-family: 'Cantarell';
+    font-size: 13pt;
+  }
+}
+
+.music-module {
+  font-family: Material Symbols Rounded;
+}
+
+.icon {
+  font-family: Material Symbols Rounded;
+  // padding-left: 4px;
+  // padding-right: 4px;
+}
+
+.module {
+  font-family: Material Symbols Rounded;
+  min-height: 53px;
+}
+
+.module-timedate {
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.hour {
+  // font-weight: bold;
+  // padding-left: 13px;
+  color: $colorbar;
+  font-size: 20pt;
+}
+
+.clock {
+  color: $color2;
+  font-family: 'Rubik';
+  font-size: 19pt;
+}
+
+// .clock-module:hover {
+//   border-top: 2px solid $color5;
+// }
+
+.minute {
+  color: $color2;
+  font-family: 'Rubik', 'Material Symbols Rounded';
+}
+
+.timedate-time {
+  label {
+    font-size: 16pt;
+  }
+}
+
+.date {
+  font-family: 'Rubik', 'Material Symbols Rounded';
+  color: $color2;
+
+  // margin-top: -2px;
+  label {
+    font-size: 12pt;
+  }
+}
+
+.bright-icon {
+  color: $color2;
+  padding-right: 4px;
+  padding-top: 4px;
+}
+
+// .bright-icon:hover {
+//   border-top: 2px solid;
+// }
+
+.module-bt {
+  font-size: 1.2rem;
+}
+
+.workspaces {
+  // margin-left: 10px;
+  background-color: transparent;
+}
+
+.player-controls {
+  font-family: Material Symbols Rounded;
+}
+
+.volume-icon {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.net-icon {
+  color: $color7;
+  font-family: Material Symbols Rounded;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 4px;
+}
+
+// .net-icon:hover {
+//   border-top: 2px solid;
+// }
+
+.my-separator {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $onBackground;
+  min-height: 53px;
+}
+
+.ws {
+  font-size: 6rem;
+  transition: 75ms cubic-bezier(0.05, 0.9, 0.1, 1); //Hyprland, no overshot
+  // transition: 400ms cubic-bezier(0.2, 0.0, 0, 1.0); //Material 3
+}
+
+.ws-top {
+  // padding-top: 9px;
+}
+
+.ws-active-top {
+  
+}
+
+.ws-text {
+  font-size: 16pt;
+  font-family: Rubik;
+  border-radius: 9999px;
+  // padding-left: 3px;
+  // padding-right: 3px;
+  min-width: 27px;
+  min-height: 27px;
+  color: $colorbarbg;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.ws-text-top {
+  // font-size: 16pt;
+  // font-family: Rubik;
+  border-radius: 9999px;
+  // padding-left: 3px;
+  // padding-right: 3px;
+  min-width: 27px;
+  min-height: 5px;
+  color: $colorbarbg;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.ws-text-active {
+  background-color: $colorbar;
+}
+
+.ws:hover {
+  :first-child {
+    color: $tertiary;
+  }
+}
+
+.ws-active {
+  background-color: $onBackground;
+}
+
+.ws-inactive {
+  // background-color: tint($colorbg, 37%);
+  background-color: rgba(194, 192, 192, 0.7);
+}
+
+.ws-empty {
+  // background-color: tint($colorbg, 10%);
+  background-color: rgba(146, 145, 145, 0.3);
+}
+
+.activewin {
+  color: $colorbar;
+  // padding-left: 8px;
+  // padding-right: 8px;
+}
+
+// .themer-get {
+//   padding-top: 4px;
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   background-image: url("images/grayscale/Add.png");
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: 100%;
+// }
+
+// .themer-restore {
+//   padding-top: 7px;
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   padding-bottom: 16px;
+//   background-image: url("images/grayscale/Backup.png");
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: 100%;
+// }
+
+
+.icon,
+.icon,
+.icon-text,
+.vol-icon label {
+  font-family: "Material Symbols Rounded";
+}
+
+.username {
+  color: $onBackground;
+}
+
+.userpic {
+  margin: 5px;
+  min-height: 42px;
+  min-width: 42px;
+  background-size: 100%;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+}
+
+.osettings-toggle-button-false {
+  :first-child {
+    :first-child {
+      padding: 0px 11px;
+      min-width: 53px;
+      min-height: 53px;
+      background-color: transparent;
+      // background-image: url('images/svg/settings.svg');
+      background-size: 400% auto;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+      border-radius: 26px;
+
+      :active {
+        background-color: $overlay0;
+        background-position: 90% 50%;
+      }
+    }
+  }
+}
+
+.osettings-toggle-button-false:hover {
+  :first-child {
+    :first-child {
+      background-color: $overlay0;
+      background-position: 60% 50%;
+    }
+  }
+}
+
+.osettings-toggle-button-true {
+  :first-child {
+    :first-child {
+      padding: 0px 11px;
+      min-width: 53px;
+      min-height: 53px;
+      background-color: $overlay0;
+      background-position: 90% 50%;
+      background-repeat: no-repeat;
+      background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+      background-size: 400% auto;
+      border-radius: 26px;
+    }
+  }
+}
+
+.module-button-pad {
+  margin: 8px 0;
+  border-radius: 26px;
+  // background-color: shade($colorbg, 75%);
+}
+
+.module-button-pad-left {
+  margin: 8px 0;
+  margin-left: 8px;
+  // background-color: shade($colorbg, 75%);
+  border-top-left-radius: 26px;
+  border-bottom-left-radius: 26px;
+}
+
+.module-button-pad-center {
+  margin: 8px 0;
+  // background-color: shade($colorbg, 75%);
+}
+
+.module-button-pad-right {
+  margin: 8px 0;
+  margin-right: 8px;
+  // background-color: shade($colorbg, 75%);
+  border-bottom-right-radius: 26px;
+  border-top-right-radius: 26px;
+}
+
+.module-button-pad-right-nomargin {
+  // background-color: shade($colorbg, 75%);
+  border-bottom-right-radius: 26px;
+  border-top-right-radius: 26px;
+}
+
+.onotify-toggle-button-false {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+
+  :hover {
+    background-color: $overlay0;
+    // background-image: url('./images/lazer_icons/notifications_hover.png');
+  }
+
+  border-radius: 26px;
+}
+
+.onotify-toggle-button-true {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: $overlay0;
+  // background-image: url('./images/lazer_icons/notifications_hover.png');
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+}
+
+.real-onotify-toggle-button {
+  min-width: 53px;
+  min-height: 53px;
+  // background-image: url('./images/svg/forum.svg');
+  background-repeat: no-repeat;
+  background-size: auto 65%;
+  background-position: center;
+
+  :hover {
+    background-color: $overlay0;
+  }
+}
+
+.real-onotify-toggle-button-true {
+  min-width: 53px;
+  min-height: 53px;
+  background-color: $overlay0;
+  background-size: auto 65%;
+  background-position: center;
+  // background-image: url('./images/svg/forum.svg');
+  background-repeat: no-repeat;
+}
+
+.module-button {
+  transition: 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 26px;
+  padding: 0px 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 40% 50%;
+}
+
+.module-button-hover {
+  transition: 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 26px;
+  padding: 0px 5px;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-color: $overlay0;
+  background-position: 60% 50%;
+}
+
+.module-button:hover {
+  background-color: $overlay0;
+  background-position: 60% 50%;
+}
+
+.module-button:active {
+  background-color: $overlay0;
+  background-position: 100% 50%;
+}
+
+.module-button-true {
+  border-radius: 26px;
+  padding: 0px 5px;
+  background-color: $overlay0;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0) 60%, tint($overlay0, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 90% 50%;
+}
+
+.dynbg-image {
+  transition: 900ms cubic-bezier(0.05, 0.9, 0.1, 1); // Hyprland default bezier but no overshot
+}
+
+progressbar>trough {
+  min-width: 30px;
+}
+
+.box-that-is-there {
+  background-color: transparent;
+}
+
+.search-button {
+  min-height: 53px;
+  min-width: 65px;
+  color: $colortext;
+  font-family: Material Symbols Rounded;
+}
+
+.workspaces-top {
+  min-width: 306px;
+  min-height: 5px;
+} 

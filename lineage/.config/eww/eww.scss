@@ -1,0 +1,338 @@
+@import 'css/colors';
+@import 'css/colorscheme';
+
+$battcolor: $color4;
+$memcolor: $color2;
+$cpucolor: $color5;
+$border: $color7;
+
+//thanks flick0!
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+//also thanks to him
+@keyframes blink {
+  to {
+    background-color: #f9e2af;
+    color: #96804e;
+  }
+}
+
+@keyframes ripple {
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+
+@mixin rounding {
+  border-radius: 16px;
+}
+
+@mixin filter {
+  saturate {
+    filter: saturate(3);
+  }
+
+  grayscale {
+    filter: grayscale(100%);
+  }
+
+  contrast {
+    filter: contrast(160%);
+  }
+
+  brightness {
+    filter: brightness(0.25);
+  }
+
+  blur {
+    filter: blur(3px);
+  }
+
+  invert {
+    filter: invert(100%);
+  }
+
+  .sepia {
+    filter: sepia(100%);
+  }
+
+  huerotate {
+    filter: hue-rotate(180deg);
+  }
+
+  rss.opacity {
+    filter: opacity(50%);
+  }
+}
+
+@mixin window {
+  border: 3px solid $color7;
+  // box-shadow: 0 2px 3px $shadow;
+  margin: 5px 5px 10px;
+  @include rounding;
+}
+
+* {
+  all: unset;
+  transition: 200ms cubic-bezier(0.05, 0.9, 0.1, 1);
+  // font-family: 'Gabarito', 'Material Symbols Rounded';
+}
+
+.scale slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.progress slider {
+  transition: all 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.music-ctl-revealer {
+  font-family: Material Symbols Rounded;
+}
+
+.music-ctl-revealer:hover {
+  border-top: 2px solid;
+}
+
+@import 'css/bgdecor';
+@import 'css/calendar';
+@import 'css/music';
+@import 'css/notification';
+@import 'css/overview';
+@import 'css/osettings';
+@import 'css/sidebar';
+@import 'css/system';
+@import 'css/themer';
+@import 'css/volume';
+@import 'css/winctl';
+
+.barbg {
+  background-color: $colorbg;
+  // background-image: url("/home/end/.config/eww/images/topbar.png");
+  color: $colortext;
+  border-radius: 100px;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Gabarito';
+}
+
+.bar {
+  background-color: transparent;
+  min-height: 32px;
+  // background-image: url("/home/end/.config/eww/images/topbar.png");
+  color: $fg;
+  border-radius: 100px;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Gabarito';
+}
+
+tooltip {
+  background: $colorbg;
+  border: 1px solid $color7;
+  border-radius: 8px;
+
+  label {
+    font-family: Gabarito;
+    font-size: 13pt;
+  }
+}
+
+.music-module {
+  font-family: Material Symbols Rounded;
+}
+
+.icon {
+  font-family: Material Symbols Rounded;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.module {
+  font-family: Material Symbols Rounded;
+  min-height: 32px;
+}
+
+.module:hover {
+  border-top: 2px solid;
+}
+
+.hour {
+  // font-weight: bold;
+  margin-left: 15px;
+  color: $color5;
+}
+
+.clock {
+  color: $color5;
+  font-family: 'Gabarito', 'Material Symbols Rounded';
+}
+
+// .clock-module:hover {
+//   border-top: 2px solid $color5;
+// }
+
+.minute {
+  color: $color5;
+  font-family: 'Gabarito', 'Material Symbols Rounded';
+}
+
+.date {
+  font-family: 'Gabarito', 'Material Symbols Rounded';
+  background: $barbg;
+  color: $color5;
+  padding-left: 4px;
+
+  label {
+    font-size: 1.2rem;
+  }
+}
+
+.bright-icon {
+  color: $color3;
+  padding-right: 4px;
+  padding-top: 4px;
+}
+
+.bright-icon:hover {
+  border-top: 2px solid;
+}
+
+.module-bt {
+  font-size: 1.2rem;
+}
+
+.workspaces {
+  margin-left: 10px;
+}
+
+.notif-toggle {
+  padding: 0 5px;
+}
+
+.player-controls {
+  font-family: Material Symbols Rounded;
+}
+
+.volume-icon {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.net-icon {
+  color: $color7;
+  font-family: Material Symbols Rounded;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 4px;
+}
+
+.net-icon:hover {
+  border-top: 2px solid;
+}
+
+.my-separator {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $colortext;
+  min-height: 32px;
+}
+
+.ws {
+  font-size: 4rem;
+  padding: 3px;
+}
+
+.ws:hover {
+  color: $color5;
+}
+
+.ws-active {
+  color: $color1;
+}
+
+.ws-inactive {
+  color: $color6;
+}
+
+.ws-empty {
+  color: #313244;
+}
+
+.activewin {
+  color: $color3;
+  // padding-left: 8px;
+  // padding-right: 8px;
+}
+
+.themer-button {
+  // padding-top: 4px;
+  // padding-bottom: 4px;
+  // padding-left: 5px;
+  // padding-right: 5px;
+  min-height: 32px;
+  min-width: 32px;
+  color: $color6;
+  // background-color: $surface0;
+  border-radius: 7px;
+  font-family: Material Symbols Rounded;
+}
+
+.themer-button:hover {
+  background-color: $overlay0;
+}
+
+.themer-button:active {
+  background-color: $overlay0;
+}
+
+.themer-button:focus {
+  border: 2px solid $overlay0;
+}
+
+// .themer-get {
+//   padding-top: 4px;
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   background-image: url("images/grayscale/Add.png");
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: 100%;
+// }
+
+// .themer-restore {
+//   padding-top: 7px;
+//   padding-left: 10px;
+//   padding-right: 10px;
+//   padding-bottom: 16px;
+//   background-image: url("images/grayscale/Backup.png");
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-size: 100%;
+// }
+
+
+.icon,
+.icon,
+.vol-icon label {
+  font-family: "Material Symbols Rounded"; //AAAAAAAAAGGGHHH
+}
+

@@ -1,0 +1,39 @@
+@import "parts/toolbox.css";
+@import "parts/headerbar.css";
+@import "parts/headerbar-private-window.css";
+@import "parts/csd.css";
+@import "parts/urlbar.css";
+@import "parts/tabsbar.css";
+@import "parts/findbar.css";
+@import "parts/sidebar.css";
+@import "parts/lists.css";
+
+@import "parts/buttons.css";
+@import "parts/buttons-fixes.css";
+@import "parts/entries.css";
+@import "parts/controls.css";
+@import "parts/icons.css";
+
+@import "parts/popups.css";
+@import "parts/popups-contents.css";
+@import "parts/dialogs.css";
+
+@import "parts/remove-white-flash.css";
+
+/* Extensions support */
+@import "extensions/tab-center-reborn.css";
+
+@import "colors/light.css";
+@import "colors/dark.css";
+
+@import "system-icons.css";
+@import "symbolic-tab-icons.css";
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Set theme version text in customization panel */
+#customization-footer::before {
+	background: url(../icon.svg) no-repeat;
+	background-size: contain;
+	content: "Firefox GNOME theme v112";
+	padding: 9px 9px 9px 50px;
+}

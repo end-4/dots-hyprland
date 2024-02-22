@@ -1,0 +1,16 @@
+* {
+    all: unset;
+}
+// Include colors
+@import 'css/material';
+// Include lib
+@import 'css/lib';
+
+// Windows
+@import 'css/bar';
+@import 'css/cheatsheet';
+@import 'css/notificationspopup';
+@import 'css/powermenu';
+@import 'css/powerview';
+@import 'css/sidebar';
+@import 'css/visualizer';

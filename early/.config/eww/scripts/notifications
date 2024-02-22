@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+tmp=scripts/cache/dunst-history.json
+lock="scripts/cache/dunst-toggle.lock"
+lockinfo="scripts/cache/dunst-lock-info"
+cd ~/.config/eww
+
+touch $lockinfo
+
+declare ids
+export toggle_icon=""
+
+sanitize() {
+  retstr=$(echo $1 | sed 's/\\\\/\\\\\\\\/g' | sed 's/"/\\"/g')
+
+  # echo "original: $1"
+  echo "$retstr"
+  # echo 'sanitized'
+}
+
+get_ids() {
+  mapfile -t ids < <(dunstctl history | gojq -r ".data[] | .[] | select(.appname.data != \"Spotify\") | .id.data")
+}
+
+get_notif() {
+  echo -n '['
+
+  for id in "${ids[@]}"; do
+      mapfile -t n < <(gojq -r ".data[] | .[] | select(.id.data == $id) | .appname.data, .summary.data, .body.data" "$tmp" | sed -r '/^\s*$/d' | sed -e 's/\%/ percent/g')
+      ohkay=$(sanitize "${n[1]}")
+      # echo $ohkay
+      echo -n ''$([ $id -eq ${ids[0]} ] || echo ,)' { '
+      echo -n '"id": "'"$id"'", "appname": "'"${n[0]}"'", "summary": "'"$ohkay"'", "body": "'"${n[2]}"'"'
+      echo -n '}' 
+  done
+
+  echo ']'
+}
+
+toggle() {
+  dunstctl set-paused toggle
+
+  if [ ! -f "$lock" ]; then
+    export toggle_icon=""
+    touch "$lock"
+  else
+    export toggle_icon=""
+    rm "$lock"
+  fi
+
+  echo "icon_change" > $lockinfo
+}
+
+clear() {
+  dunstctl history-clear
+  echo "icon_change" > $lockinfo
+}
+
+get_icon() {
+  if [ ${#ids[@]} -eq 0 ]; then
+    echo ""
+  else
+    echo ""
+  fi
+}
+
+if [ "$1" == "--once" ]; then
+  dunstctl history > "$tmp"
+  get_ids
+  get_notif
+elif [ "$1" == "toggle" ]; then
+  toggle
+  dunstctl history > "$tmp"
+elif [ "$1" == "clear" ]; then
+  clear
+  dunstctl history > "$tmp"
+elif [ "$1" == "icons" ]; then
+  dunstctl history > "$tmp"
+  get_ids
+  is_paused=$(dunstctl is-paused)
+  echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
+  tail -f "$lockinfo" | while read -r; do
+    get_ids
+    is_paused=$(dunstctl is-paused)
+    echo '{"toggle_icon": "'"$toggle_icon"'", "paused": '"$is_paused"', "icon": "'"$(get_icon)"'"}'
+  done
+else
+  dunstctl history > "$tmp"
+  get_ids
+  get_notif
+  tail -f "$tmp" 2>/dev/null | rg --line-buffered "aa\{sv\}" | while read -r; do
+    get_ids
+    get_notif
+  done
+fi

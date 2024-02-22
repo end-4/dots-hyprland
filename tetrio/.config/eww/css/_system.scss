@@ -1,0 +1,184 @@
+.membar {
+  color: $colorbar;
+}
+
+.cpubar {
+  color: $cpucolor;
+}
+
+.batbar {
+  color: $battcolor;
+  padding-right: 4px;
+}
+
+.cpubar-circle {
+  color: $cpucolor;
+  background-color: $surface1;
+}
+.membar-circle {
+  color: $memcolor;
+  background-color: $surface1;
+}
+.batbar-circle {
+  color: $battcolor;
+  background-color: $surface1;
+}
+
+// .batbar-circle {
+//   color: $battcolor;
+//   padding-right: 4px;
+// }
+
+// .membar,
+// .cpubar,
+// .batbar {
+//   // background-color: transparent;
+//   padding: 0px;
+// }
+
+.membar:hover,
+.cpubar:hover,
+.batbar:hover {
+  border-top: 2px solid;
+}
+
+.batt-percentage {
+  color: $battcolor;
+  padding-right: 5px;
+  padding-left: 4px;
+}
+
+.sys-menu-charge {
+  padding-left: 2px;
+  color: $colorbar;
+}
+
+.iconmem {
+  color: $memcolor;
+}
+
+.iconcpu {
+  color: $cpucolor;
+}
+
+.icon-text {
+  font-size: 3rem;
+  padding: .7rem;
+}
+
+.sys-text-sub {
+  color: $colortext;
+}
+
+.sys-text-mem,
+.sys-text-cpu {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.sys-icon-mem,
+.sys-icon-cpu {
+  font-size: 1.5rem;
+  margin: 1.5rem;
+}
+
+.system-info-box {
+  @include rounding;
+  background-color: $surface0;
+  margin: .5rem 1rem;
+  // padding: .5rem;
+}
+
+.sys-mem,
+.sys-cpu {
+  background-color: $colorbg;
+}
+
+.sys-icon-mem,
+.sys-text-mem,
+.sys-mem {
+  color: $memcolor;
+}
+
+.sys-icon-cpu,
+.sys-text-cpu,
+.sys-cpu {
+  color: $cpucolor;
+}
+
+.sys-box {
+  margin: .3em;
+
+  box {
+    margin-left: 1rem;
+  }
+}
+
+.cpu-menu {
+  font-family: 'Rubik';
+  color: $cpucolor;
+  padding-left: 5px;
+}
+
+.mem-menu {
+  font-family: 'Rubik';
+  color: $memcolor;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mem-menu-left {
+  color: $memcolor;
+  padding-left: 5px;
+  padding-right: 0px;
+}
+
+.mem-menu-mid {
+  color: $memcolor;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.mem-menu-right {
+  color: $memcolor;
+  padding-left: 0px;
+  padding-right: 5px;
+}
+
+.sys-menu {
+  font-family: 'Rubik';
+  color: $battcolor;
+  margin: 0px;
+  padding: 0px;
+}
+
+.sys-menu-button {
+  color: $colorbar;
+  margin: 0px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background-image: url("images/LinageSettings.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+// .volume-bar, .brightness-slider, .slider {
+// background-color: #16161E;
+// border: 2px solid #7C9FF5;
+// border-radius: 99px;
+// }
+
+.sys-toggle {
+  font-size: 3pt;
+}
+
+.inside-circle {
+  min-height: 27px;
+  min-width: 27px;
+}
+
+.sys-circle-inner {
+  font-size: 15pt;
+  padding: 5px;
+}

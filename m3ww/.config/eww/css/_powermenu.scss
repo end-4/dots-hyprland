@@ -1,0 +1,130 @@
+.powermenu-bg {
+    background-color: mix($background, rgba(0, 0, 0, 0), 25%);
+}
+
+.powermenu-btn-area {
+    padding: 1.364rem 3.409rem;
+}
+
+.powermenu-btn {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 1.432rem;
+    padding: 0.682rem;
+    min-width: 11.591rem;
+}
+
+.powermenu-btn:hover {
+    background-color: tint($secondaryContainer, 10%);
+    color: tint($onSecondaryContainer, 10%);
+}
+
+.powermenu-btn:active {
+    background-color: tint($secondaryContainer, 15%);
+    color: tint($onSecondaryContainer, 15%);
+}
+
+.powermenu-btn-active {
+    background-color: $primary;
+    color: $onPrimary;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+    padding: 0.682rem;
+    min-width: 11.591rem;
+}
+
+.powermenu-btn-active:hover {
+    background-color: tint($primary, 8%);
+    color: tint($onPrimary, 8%);
+}
+
+.powermenu-btn-active:active {
+    background-color: tint($primary, 20%);
+    color: tint($onPrimary, 20%);
+
+}
+
+.powermenu-btn-forceheight {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+    min-width: 11.591rem;
+    min-height: 7.5rem;
+}
+
+.powermenu-btn-forceheight:hover {
+    background-color: tint($secondaryContainer, 10%);
+    color: tint($onSecondaryContainer, 10%);
+}
+
+.powermenu-btn-forceheight:active {
+    background-color: tint($secondaryContainer, 15%);
+    color: tint($onSecondaryContainer, 15%);
+}
+
+.powermenu-btn-forceheight-active {
+    background-color: $primary;
+    color: $onPrimary;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+    min-width: 11.591rem;
+    min-height: 7.5rem;
+}
+
+.powermenu-btn-forceheight-active:hover {
+    background-color: tint($primary, 8%);
+    color: tint($onPrimary, 8%);
+}
+
+.powermenu-btn-forceheight-active:active {
+    background-color: tint($primary, 20%);
+    color: tint($onPrimary, 20%);
+
+}
+
+.powermenu-time {
+    padding: 1.364rem 3.409rem;
+}
+
+.powermenu-keybind-min-width {
+    min-width: 6.818rem;
+}
+
+.powermenu-btn-bottom {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+    min-width: 11.591rem;
+    min-height: 4.773rem;
+}
+
+.powermenu-btn-bottom:hover {
+    background-color: tint($secondaryContainer, 10%);
+    color: tint($onSecondaryContainer, 10%);
+}
+
+.powermenu-btn-bottom:active {
+    background-color: tint($secondaryContainer, 15%);
+    color: tint($onSecondaryContainer, 15%);
+}
+
+.powermenu-btn-number {
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    margin: 0.477rem;
+    padding: 0.136rem 0.273rem;
+    border-radius: 0.955rem;
+    background-color: mix($secondaryContainer, $surface, 70%);
+}
+
+.powermenu-icon {
+    min-width: 6.25rem;
+    min-height: 6.25rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto 100%;
+    font-size: 6.375rem;
+    color: $onBackground;
+}

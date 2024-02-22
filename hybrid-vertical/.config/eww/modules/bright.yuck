@@ -1,0 +1,15 @@
+(defwidget bright []
+  (box
+    :class "module"
+    (eventbox
+      :class "bright-icon"
+      :onscroll "echo $(echo {} | sed -e 's/down/-U 5/g' -e 's/up/-A 5/g' | xargs light) && scripts/bright osd"
+      (label
+        :valign "start"
+        :text {brightness.icon}
+        :class "bright-icon icon"
+        :tooltip "brightness ${round(brightness.level, 0)}%"
+      )
+    )
+  )
+)

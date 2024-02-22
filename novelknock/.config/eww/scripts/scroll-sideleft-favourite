@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+
+if [ "$1" == "up" ]; then
+    eww update sideleft_favourite_page=1
+else
+    eww update sideleft_favourite_page=2
+fi

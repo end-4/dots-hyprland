@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+while true; do    
+  # human-readable
+  freeH=$(free -h --si | rg "Mem:")
+  swapfreeH=$(free -h --si | rg "Swap:")
+  # non-human-readable
+  freeN=$(free --mega | rg "Mem:")
+  swapfreeN=$(free --mega | rg "Swap:")
+
+  total="$(echo "$freeH" | awk '{ print $2 }')"
+  used="$(echo "$freeH" | awk '{ print $3 }')"
+  t="$(echo "$freeN" | awk '{ print $2 }')"
+  u="$(echo "$freeN" | awk '{ print $3 }')"
+
+  swaptotal="$(echo "$swapfreeH" | awk '{ print $2 }')"
+  swapused="$(echo "$swapfreeH" | awk '{ print $3 }')"
+  swapt="$(echo "$swapfreeN" | awk '{ print $2 }')"
+  swapu="$(echo "$swapfreeN" | awk '{ print $3 }')"
+
+  free=$(printf '%.1fG' "$(bc -l <<< "($t - $u) / 1000")")
+  perc=$(printf '%.1f' "$(free -m | rg Mem | awk '{print ($3/$2)*100}')")
+
+  swapfree=$(printf '%.1fG' "$(bc -l <<< "($swapt - $swapu) / 1000")")
+  swapperc=$(printf '%.1f' "$(free -m | rg Swap | awk '{print ($3/$2)*100}')")
+
+  echo '{ "total": "'"$total"'", "used": "'"$used"'", "free": "'"$free"'", "swaptotal": "'"$swaptotal"'", "swapused": "'"$swapused"'", "swappercentage": '"$swapperc"', "swapfree": "'"$swapfree"'", "percentage": '"$perc"' }'
+
+  sleep 3
+done

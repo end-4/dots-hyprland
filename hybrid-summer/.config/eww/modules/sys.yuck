@@ -1,0 +1,370 @@
+(defwidget sys []
+  (eventbox
+    :class "${popup == 'system-menu' ? 'system-menu-box' : 'sysbar'}"
+    ; :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    (box
+      :space-evenly false
+      :orientation "v"
+      (box
+        :class "module"
+        :space-evenly false
+        :spacing 5
+        :halign "end"
+        (syscpu)
+        (sysmem)
+        (sysbatt)
+        ; (settingscog)
+      )
+      (revealer
+        :reveal "${popup == 'system-menu'}"
+        :transition "slideright"
+        :duration "0ms"
+        (revealer
+          :reveal "${popup == 'system-menu'}"
+          :transition "crossfade"
+          :duration "0ms"
+          (revealer
+            :reveal "${popup == 'system-menu'}"
+            :transition "slidedown"
+            :duration "0ms"
+            (box
+              :space-evenly false
+              (box
+                ; :class "system-menu-box"
+                :space-evenly false
+                :orientation "v"
+                (box
+                  :class "top-row"
+                  :space-evenly false
+                  (label :class "time" :text "${time.hour}:${time.minute}")
+                  (box
+                    :class "date-box"
+                    :space-evenly false
+                    (label :class "date" :text "${time.day},")
+                    (label :class "date" :text "${time.date}")
+                  )
+                )
+                
+                (box
+                  :class "system-row"
+                  :space-evenly false
+                  (box
+                    :class "wifi-box"
+                    :space-evenly false
+                    :orientation "v"
+                    (box
+                      :class "element"
+                      :space-evenly false
+                      (button
+                        ; :class "wifi-button"
+                        :onclick "scripts/net toggle"
+                        :style "font-family: Material Symbols Rounded;"
+                        {net.icon}
+                      )
+                      (label :class "separator" :text "|")
+                      (button
+                        :class "wifi-arrow-btn"
+                        :style "font-family: Material Symbols Rounded;"
+                        :onclick "nm-connection-editor &"
+                        ""
+                      )
+                    )
+                    (label :style "font-size: 12pt;" :class "sys-toggle" :text {net.essid} :xalign 0.5 :limit-width 15)
+                  )
+                  
+                  (box
+                    :class "bluetooth-box"
+                    :space-evenly false
+                    :orientation "v"
+                    (box
+                      :class "element icon"
+                      :space-evenly false
+                      (button
+                        :class "bluetooth-button"
+                        :onclick "scripts/bluetooth toggle"
+                        :style "font-family: 'Material Symbols Rounded';"
+                        {bluetooth.icon}
+                      )
+                      (label :class "separator" :text "|")
+                      (button
+                        :class "bluetooth-arrow-btn"
+                        :onclick "blueberry"
+                        ""
+                      )
+                    )
+                    (label
+                      :style "font-size: 12pt;"
+                      :text {bluetooth.text}
+                      :xalign 0.5
+                      :class "sys-toggle"
+                      :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
+                      :limit-width 15
+                    )
+                  )
+                  
+                  (box
+                    :class "airplane-box"
+                    :space-evenly false
+                    :orientation "v"
+                    (box
+                      :class "element"
+                      (button
+                        :class "airplane-button"
+                        :onclick "scripts/airplane toggle"
+                        airplane
+                      )
+                    )
+                    (label :style "font-size: 12pt;" :text "Airplane Mode" :xalign 0.5 :limit-width 16)
+                  )
+                  
+                  (box
+                    :space-evenly false
+                    :orientation "v"
+                    (box
+                      :class "element"
+                      (button
+                        :halign "end"
+                        :onclick "wlogout -p layer-shell &"
+                        ""
+                      )
+                    )
+                    (label
+                      :style "font-size: 12pt;"
+                      :text "Power"
+                      :class "sys-toggle"
+                      :xalign 0.5
+                      :limit-width 16
+                    )
+                  )
+                )
+                (audiolevels)
+                (box
+                  :class "system-info-box"
+                  :style "margin-bottom: 17px;"
+                  ; cpu
+                  (box
+                    :class "sys-box"
+                    :space-evenly false
+                    :halign "start"
+                    (circular-progress
+                      :value "${EWW_CPU.avg}"
+                      :class "sys-cpu"
+                      :thickness 3
+                      (label
+                        :text ""
+                      :class "sys-icon-cpu icon")
+                    )
+                    (box
+                      :orientation "v"
+                      :vexpand false
+                      (label
+                        :text "CPU"
+                        :halign "start"
+                        :class "sys-text-cpu"
+                        :style "font-size: 12pt;"
+                      )
+                      (label
+                        :text "${round(EWW_CPU.avg,2)}%"
+                        :halign "start"
+                        :class "sys-text-sub"
+                        :style "font-size: 12pt;"
+                      )
+                      (label
+                        :text "${EWW_CPU.cores[0].freq} MHz"
+                        :halign "start"
+                        :class "sys-text-sub"
+                        :style "font-size: 12pt;"
+                      )
+                    )
+                  )
+                  
+                  ; memory
+                  (box
+                    :class "sys-box"
+                    :space-evenly false
+                    :halign "end"
+                    (circular-progress
+                      :value {memory.percentage}
+                      :class "sys-mem"
+                      :thickness 3
+                      (label
+                        :text ""
+                        :class "sys-icon-mem icon"
+                      )
+                    )
+                    (box
+                      :orientation "v"
+                      (label :style "font-size: 12pt;" :text "Memory" :halign "start" :class "sys-text-mem")
+                      (label :style "font-size: 12pt;" :text "${memory.used} / ${memory.total}" :halign "start" :class "sys-text-sub")
+                      (label :style "font-size: 12pt;" :text "Swap ${memory.swapused} / ${memory.swaptotal}" :halign "start" :class "sys-text-sub")
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget syscpu []
+  (revealer
+    :reveal "${((popup == 'system-menu' || EWW_CPU.avg>= 50) || force_sys_rev)}"
+    :transition "slideleft"
+    :duration "300ms"
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    (eventbox
+      :class "cpubar"
+      :space-evenly false
+      (box
+        :class "cpubar"
+        :space-evenly false
+        (circular-progress
+          :value "${EWW_CPU.avg}"
+          :class "cpubar-circle"
+          :thickness 4
+          :start-at 75
+          (box
+            :tooltip "CPU: ${round(EWW_CPU.avg,0)}%"
+            :class "inside-circle"
+            (label :class "icon-text" :text "")
+          )
+        )
+        (revealer
+          :transition "slideright"
+          :reveal "${sys_rev || popup == 'system-menu' || force_sys_rev  || EWW_CPU.avg>= 50}"
+          :duration "300ms"
+          :class "sys-menu"
+          :onclick "${EWW_CMD} update popup='system-menu'"
+          (cpumenu)
+        )
+      )
+    )
+  )
+)
+
+(defwidget sysmem []
+  (eventbox
+    :class "membar"
+    :space-evenly false
+    (box
+      :class "membar"
+      :space-evenly false
+      (circular-progress
+        :value {memory.percentage}
+        :class "membar-circle"
+        :thickness 4
+        :start-at 75
+        (box
+          :class "inside-circle"
+          :tooltip "RAM: ${round(memory.percentage,0)}%"
+          (label :class "icon-text" :text "")
+        )
+      )
+      (revealer
+        :transition "slideright"
+        :reveal "${sys_rev || force_sys_rev || memory.percentage + memory.swappercentage >= 120}"
+        :duration "300ms"
+        :class "sys-menu"
+        :onclick "${EWW_CMD} update popup='system-menu'"
+        (memmenu)
+      )
+    )
+  )
+)
+
+(defwidget sysbatt []
+  (eventbox
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :class "batbar"
+    :space-evenly false
+    (box
+      :class "batbar"
+      :space-evenly false
+      (circular-progress
+        :value "${EWW_BATTERY["BATT"].capacity}"
+        :class "batbar-circle"
+        :thickness 4
+        :start-at 75
+        :style "border-radius: 99px; color: ${battery.circolor};"
+        (box
+          :class "inside-circle"
+          :tooltip "Battery: ${EWW_BATTERY["BATT"].capacity}%"
+          :onclick "${EWW_CMD} update popup='system-menu'"
+          :style "border-radius: 99px; color: ${battery.color}; background-color: ${battery.bgcolor};"
+          (label :class "icon-text" :text "")
+        )
+      )
+      (revealer
+        :transition "slideright"
+        :reveal true
+        :duration "300ms"
+        :class "sys-menu"
+        (sysmenu)
+      )
+    )
+  )
+)
+
+(defwidget cpumenu[]
+  (eventbox
+    :class "cpu-menu"
+    (box
+      :orientation "h"
+      :space-evenly false
+      (label :class "cpu-menu icon" :text "")
+      (label :class "cpu-menu" :text "${round(EWW_CPU.avg,0)}%")
+    )
+  )
+)
+
+(defwidget memmenu[]
+  (eventbox
+    (box
+      :space-evenly false
+      (label :class "mem-menu-left" :text "")
+      (label :class "mem-menu-left" :text "${memory.used}")
+      (label :class "mem-menu-mid" :text "")
+      (label :class "mem-menu-right" :text "${memory.swapused}")
+    )
+  )
+)
+
+(defwidget sysmenu[]
+  (eventbox
+    :class "sys-menu"
+    :style "color: ${battery.color}"
+    (box
+      :space-evenly false
+      (label :class "sys-menu-charge" :text "${battery.quickicon}")
+      (label :class "batt-percentage" :text "${EWW_BATTERY["BATT"].capacity}%")
+      ; (revealer
+        ;   :reveal "${popup == 'system-menu' || force_sys_rev}"
+        ;   :transition "slideright"
+        ;   :duration "300ms"
+        ;   :class "sys-menu"
+        ;   (label :class "batt-percentage" :text " | ${battery.wattage} | ${battery.status}")
+      ; )
+    )
+  )
+)
+
+(defwidget settingscog[]
+  (eventbox
+    :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+    :class "settings-icon"
+    (revealer
+      :transition "slideright"
+      :reveal true
+      :duration "300ms"
+      :onclick "${EWW_CMD} update popup='system-menu'"
+      (button
+        :class "sys-menu-button"
+        :onclick "${EWW_CMD} update popup='system-menu'"
+        " "
+      )
+    )
+  )
+)

@@ -1,0 +1,17 @@
+(defwidget searchbutton []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :class "osettings-toggle-button-${open_overview}"
+    :onclick "scripts/toggle-overview.sh"
+    :onmiddleclick "scripts/toggle-overview.sh"
+    :onrightclick "scripts/toggle-overview.sh"
+    (box
+      :class "module-button-pad-center"
+      (image
+        :path "images/svg/search.svg"
+        :image-width 33
+        :image-height 33
+      )
+    )
+  )
+)

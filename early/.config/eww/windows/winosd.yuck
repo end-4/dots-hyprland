@@ -1,0 +1,77 @@
+(defwidget winosdwidget_vol []
+  (box
+    :class "winosd-var"
+    :orientation "h"
+    :space-evenly false
+    :style "
+    ${osd_vol ? '' : 'margin-bottom: -90px; margin-top: 90px;'}
+    ${osd_vol ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    "
+    (box
+      :orientation "h" :space-evenly false :spacing 5
+      :class "winactions-sliderrow"
+      (image :class "winicon" :path "images/svg/dark/vol${volume.audio == 1 ? round(volume.percent / 33, 0) : 'mute'}.svg")
+      (scale
+        :value {volume.percent}
+        :onchange "scripts/volume setvol SINK {} &"
+        :class "winslider-osd"
+      )
+      (label :class "winnotif-text" :text {volume.percent})
+    )
+  )
+)
+
+(defwidget winosdwidget_bright []
+  (box
+    :class "winosd-var"
+    :orientation "h"
+    :space-evenly false
+    :style "
+    ${osd_bright ? '' : 'margin-bottom: -90px; margin-top: 90px;'}
+    ${osd_bright ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    "
+    (box
+      :orientation "h" :space-evenly false :spacing 5
+      :class "winactions-sliderrow"
+      (image :class "winicon" :path "images/svg/dark/brightness.svg")
+      (scale
+        :value {round(brightness.level, 0)}
+        :onchange "light -S {} && scripts/brightness osd &"
+        :class "winslider-osd"
+      )
+      (label :class "winnotif-text" :text {round(brightness.level, 0)})
+    )
+  )
+)
+
+(defwindow winosd_vol
+  :stacking "overlay"
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "50px"
+    :width "100px"
+    :height "53px"
+    :anchor "bottom center"
+  )
+  :stacking "fg"
+  :exclusive false
+  (winosdwidget_vol)
+)
+
+(defwindow winosd_bright
+  :stacking "overlay"
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "50px"
+    :width "100px"
+    :height "53px"
+    :anchor "bottom center"
+  )
+  :stacking "fg"
+  :exclusive false
+  (winosdwidget_bright)
+)

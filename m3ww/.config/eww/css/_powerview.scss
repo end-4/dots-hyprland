@@ -1,0 +1,136 @@
+@keyframes flyin-top {
+  from {
+    margin-top: -3.409rem;
+    margin-bottom: 3.409rem;
+  }
+
+  to {
+    margin-bottom: 0rem;
+    margin-top: 0rem;
+  }
+}
+
+.powerview-search-box-size {
+  min-width: 20.455rem;
+  min-height: 4.091rem;
+}
+
+.powerview-search-list-size {
+  min-width: 34.227rem;
+  min-height: 61rem;
+}
+
+.powerview-search-field {
+  margin: 0.273rem;
+  padding: 0rem 1.364rem;
+  border-radius: 50rem;
+  @include elevation2;
+}
+
+.powerview-search-txt {
+  @include mainfont;
+  padding: 0rem 1.023rem;
+
+  selection {
+    background-color: $secondary;
+    color: $onSecondary;
+  }
+}
+
+.powerview-search-txt:focus {
+  background-color: mix($background, $primaryContainer, 85%);
+}
+
+.powerview-search-prompt-txt {
+  @include mainfont;
+  color: $onSurfaceVariant;
+}
+
+.powerview-bg {
+  border-radius: 17px;
+  @include elevation2;
+}
+
+.powerview-ws {
+  border-radius: 13px;
+  background-color: rgba(80, 80, 80, 0.1);
+  margin: 0.273rem;
+}
+
+.powerview-ws-true {
+  background-color: $primary;
+}
+
+.powerview-ws-false {
+  color: transparent;
+}
+
+.powerview-ws-window {
+  border-radius: 13px;
+  background-color: mix($onSecondary, rgba(80, 80, 80, 0.3), 30%);
+}
+
+.powerview-ws-window-selected {
+  border-radius: 13px;
+  background-color: mix($secondaryContainer, rgba(80, 80, 80, 0.3), 30%);
+}
+
+.powerview-search-result {
+  @include mainfont;
+  border-radius: 22px;
+  font-size: 1.364rem;
+  min-height: 3.205rem;
+  min-width: 27.273rem;
+  padding: 0.136rem 0.818rem;
+  padding-left: 3.886rem;
+  margin: 0rem 0.341rem;
+
+  background-color: $background;
+  color: $onBackground;
+  background-size: 400% auto;
+  background-position: 40% 50%;
+
+  caret-color: $onSecondaryContainer;
+
+  selection {
+    background-color: transparent;
+  }
+}
+
+.powerview-search-result:focus {
+  color: $onPrimaryContainer;
+  // background-position: 65% 50%;
+  background-color: mix($background, $primaryContainer, 90%);
+
+  selection {
+    color: $onPrimaryContainer;
+    background-color: transparent;
+  }
+}
+
+.powerview-search-result:active {
+  color: $onPrimaryContainer;
+  // background-color: $secondaryContainer;
+  // background-position: 100% 50%;
+  background-color: mix($background, $primaryContainer, 90%);
+
+  selection {
+    color: $onPrimaryContainer;
+    background-color: transparent;
+  }
+}
+
+.overview-search-result-icon {
+  // background-color: $secondaryContainer;
+  border-radius: 18px;
+  min-height: 3.477rem;
+  min-width: 3.477rem;
+  margin: 0rem 0.341rem;
+}
+
+.powerview-info {
+  padding: 1.023rem;
+  border-radius: 22px;
+  min-width: 75rem;
+  @include elevation2;
+}

@@ -1,0 +1,33 @@
+(defwidget visualizer_widget []
+  (box
+    :class "visualizer-bg visualizer-height ${open_visualizer ? '' : 'visualizer-hide'}"
+    (overlay
+      :hexpand true
+      (box
+        :class "visualizer-columns"
+        (for cavacol in cavajson
+          (box
+            :class "visualizer-cavacol"
+            :valign "end"
+            :style "
+            min-height: ${round(cavacol[0] / 10, 0)}px;
+            background-color: ${cavacol[0] == 0 ? 'transparent' : 'mix(${(mcover.color.colors.color3 == 'null' ? accent : mcover.color.colors.color3)}, rgba(220, 220, 220, 0.1), 0.2)'};
+            "
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow visualizer
+  :monitor 0
+  :stacking "bg"
+  :namespace "eww"
+  :exclusive true
+  :geometry (geometry
+    :anchor "bottom center"
+    :width "100%"
+  )
+  (visualizer_widget)
+)

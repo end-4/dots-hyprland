@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<style-scheme id="tokyo_night_storm" _name="Tokyo_Night_Storm" version="1.0">
+  <author>fkorpsvart</author>
+  <_description>Tokyo Night Storm theme for Gedit</_description>
+
+<!-- Colors -->
+
+  <color name="off_white" value="#c0caf5"/>
+  <color name="off_white2" value="#9aa5ce"/>
+  <color name="black_grey" value="#1a1b26"/>
+  <color name="tinted_grey" value="#24283b"/>
+  <color name="dark_grey" value="#414868"/>
+  <color name="med_grey" value="#565f89"/>
+  <color name="light_grey" value="#565a6e"/>
+  <color name="olive_green" value="#9ece6a"/>
+  <color name="washed_orange" value="#ff9e64"/>
+  <color name="faded_violet" value="#9d7cd8"/>
+  <color name="faded_cornwall" value="#ff007c"/>
+  <color name="pink_sandstone" value="#f7768e"/>
+  <color name="steelblue3" value="#7aa2f7"/>
+  <color name="light_brown" value="#bb9af7"/>
+  <color name="super_faded_orange" value="#e0af68"/>
+  <color name="dark_maroon" value="#41a6b5"/>
+  <color name="yellow" value="#f9ee98"/>
+
+<!-- Global Settings -->
+
+  <style name="text" foreground="off_white" background="tinted_grey"/>
+  <style name="cursor" foreground="off_white"/>
+  <style name="current-line" background="black_grey"/>
+  <style name="line-numbers" foreground="med_grey" background="tinted_grey" bold="true" />
+  <style name="selection" foreground="off_white2" background="black_grey" />
+  <style name="selection-unfocused" foreground="off_white2" background="black_grey" />
+
+<!-- Bracket Matching -->
+  <style name="bracket-match" background="steelblue3"/>
+  <style name="bracket-mismatch" background="dark_maroon" bold="true"/>
+  <style name="search-match" foreground="off_white" background="steelblue3"/>
+
+<!-- Comments -->
+  <style name="def:comment" foreground="light_grey" italic="true"/>
+  <style name="def:shebang" foreground="light_grey" italic="true"/>
+  <style name="def:doc-comment-element" foreground="dark_grey" bold="true"/>
+
+<!-- Constants and Variables-->
+  <style name="def:constant" foreground="faded_cornwall"/>
+  <style name="def:string" foreground="olive_green"/>
+  <style name="def:special-char" foreground="faded_cornwall"/>
+  <style name="def:special-constant" foreground="washed_orange" bold="true"/>
+  <style name="def:boolean" foreground="pink_sandstone"/>
+  <style name="def:number" foreground="pink_sandstone"/>
+  <style name="def:floating-point" foreground="pink_sandstone"/>
+  <style name="def:keyword" foreground="washed_orange" bold="true"/>
+  <style name="def:builtin" foreground="washed_orange" bold="true"/>
+  <style name="def:variable" foreground="faded_cornwall"/>
+
+<!-- Identifiers -->
+  <style name="def:identifier" foreground="faded_cornwall"/>
+
+<!-- Statements -->
+  <style name="def:statement" foreground="washed_orange"/>
+
+<!-- Types -->
+  <style name="def:type" foreground="faded_violet"/>
+
+<!-- Others -->
+  <style name="def:error" foreground="off_white" background="dark_maroon" bold="true"/>
+  <style name="def:note" foreground="yellow" bold="true"/>
+  <style name="def:net-address-in-comment" foreground="steelblue3" italic="false" underline="true"/>
+  <style name="def:preprocessor" foreground="light_grey"/>
+  <style name="def:function" foreground="off_white" underline="true"/>
+
+<!-- Unknown? -->
+  <style name="def:specials" background="faded_cornwall"/>
+
+<!-- C Styles -->
+  <style name="c:preprocessor" map-to="def:special-char"/>
+
+<!-- Diff Styles -->
+  <style name="diff:ignore" foreground="med_grey"/>
+
+<!-- Ruby Styles -->
+  <style name="ruby:module-handler" foreground="washed_orange"/>
+  <style name="ruby:symbol" foreground="pink_sandstone"/>
+  <style name="ruby:regex" foreground="super_faded_orange"/>
+
+<!-- SH Styles -->
+  <style name="sh:others" map-to="text"/>
+
+<!-- XML Styles -->
+  <style name="xml:attribute-name" foreground="light_brown"/>
+  <style name="xml:element-name" foreground="faded_cornwall"/>
+
+</style-scheme>

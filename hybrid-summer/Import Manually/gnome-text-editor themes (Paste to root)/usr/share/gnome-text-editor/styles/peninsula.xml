@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2021 Christian Hergert <chergert@redhat.com>
+                                                                      
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+                                                                      
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+                                                                      
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="peninsula" name="Peninsula" version="1.0">
+  <author>Christian Hergert</author>
+
+  <metadata>
+    <property name="variant">light</property>
+    <property name="dark-variant">peninsula-dark</property>
+    <property name="headerbar_bg_color">#f6f2f4</property>
+    <property name="headerbar_fg_color">#4c4c4c</property>
+  </metadata>
+
+  <color name="dark1"                       value="#232526"/>
+  <color name="dark2"                       value="#262626"/>
+  <color name="dark3"                       value="#4a4a4a"/>
+  <color name="dark4"                       value="#707f8c"/>
+  <color name="dark5"                       value="#9a9a9a"/>
+  <color name="dark6"                       value="#a6a6a6"/>
+
+  <color name="light1"                      value="#e3e3e3"/>
+  <color name="light2"                      value="#edf5ff"/>
+  <color name="light3"                      value="#eaeaea"/>
+
+  <color name="blue1"                       value="#007bff"/>
+  <color name="blue2"                       value="#1437ff"/>
+  <color name="brown"                       value="#78492a"/>
+  <color name="magenta"                     value="#ad3da4"/>
+  <color name="purple"                      value="#210460"/>
+  <color name="red"                         value="#d12f1b"/>
+  <color name="teal"                        value="#1180b2"/>
+  <color name="white"                       value="#ffffff"/>
+
+  <style name="text"                        foreground="dark2" background="white"/>
+  <style name="selection"                   background="blue1"/>
+  <style name="search-match"                foreground="white" background="blue1"/>
+  <style name="cursor"                      foreground="dark3"/>
+  <style name="current-line"                background="light2"/>
+  <style name="current-line-number"         background="light2" foreground="dark1" bold="false"/>
+  <style name="line-numbers"                foreground="dark6" background="white"/>
+  <style name="draw-spaces"                 foreground="light3"/>
+  <style name="background-pattern"          foreground="light1"/>
+  <style name="bracket-match"               bold="true"/>
+  <style name="bracket-mismatch"            underline="error" bold="true"/>
+  <style name="right-margin"                foreground="dark5" background="dark5"/>
+  <style name="map-overlay"                 background="dark5"/>
+  <style name="def:string"                  foreground="red"/>
+  <style name="def:type"                    foreground="magenta" bold="true"/>
+  <style name="def:comment"                 foreground="dark4"/>
+  <style name="def:list-marker"             foreground="brown" bold="true"/>
+  <style name="def:heading"                 bold="true"/>
+  <style name="def:identifier"              foreground="teal"/>
+  <style name="def:preprocessor"            foreground="brown"/>
+  <style name="def:keyword"                 foreground="magenta" bold="true"/>
+  <style name="def:variable"                foreground="blue1"/>
+  <style name="def:special-constant"        foreground="magenta" bold="true"/>
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:strong-emphasis"         italic="true" bold="true"/>
+  <style name="def:net-address"             foreground="blue2"/>
+  <style name="def:link-destination"        foreground="blue2"/>
+  <style name="def:link-text"               foreground="red"/>
+  <style name="def:floating-point"          foreground="blue1"/>
+  <style name="def:decimal"                 foreground="blue1"/>
+  <style name="def:boolean"                 foreground="magenta"/>
+  <style name="def:base-n-integer"          foreground="blue1"/>
+  <style name="gtk-doc:function-name"       foreground="teal"/>
+  <style name="gtk-doc:function"            foreground="teal"/>
+  <style name="gtk-doc:parameter"           bold="true"/>
+  <style name="gtk-doc:constant"            bold="true"/>
+  <style name="gtk-doc:type"                bold="true"/>
+  <style name="gtk-doc:since"               bold="true"/>
+  <style name="gtk-doc:return"              bold="true"/>
+  <style name="gtk-doc:deprecated"          bold="true"/>
+  <style name="gtk-doc:signal-name"         bold="true"/>
+  <style name="gtk-doc:property-name"       bold="true"/>
+
+</style-scheme>

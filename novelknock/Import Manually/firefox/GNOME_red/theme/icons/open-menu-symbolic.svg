@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+    <g fill="context-fill" stroke="context-stroke" fill-opacity="context-fill-opacity" stroke-opacity="context-stroke-opacity">
+        <path d="m 1 2 h 14 v 2 h -14 z m 0 0"/>
+        <path d="m 1 7 h 14 v 2 h -14 z m 0 0"/>
+        <path d="m 1 12 h 14 v 2 h -14 z m 0 0"/>
+    </g>
+</svg>

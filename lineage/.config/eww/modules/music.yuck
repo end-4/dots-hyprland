@@ -1,0 +1,177 @@
+(deflisten mcover
+  'scripts/music cover'
+)
+
+(defwidget music-module []
+  (eventbox
+    :class "${popup == 'music' ? 'music-window' : ''}"
+    :style "${popup == 'music' ? 'border-color: ${mcover.color.colors.color4}; background-color: ${mcover.color.colors.color0}' : ''}"
+    :onhoverlost "${EWW_CMD} update popup='none'"
+    (box
+      :valign "start"
+      :space-evenly false
+      :orientation "v"
+      (revealer
+        ; :reveal "${popup != 'music'}"
+        :reveal true
+        :transition "slidedown"
+        (eventbox
+          :class "music-ctl"
+          :onhover "${EWW_CMD} update music_reveal=true && ${EWW_CMD} update date_rev=true"
+          :onhoverlost "${EWW_CMD} update music_reveal=false && ${EWW_CMD} update date_rev=false"
+          :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+          ; :onclick "${EWW_CMD} open --toggle music"
+          :onclick "${EWW_CMD} update popup='music'"
+          :onmiddleclick "playerctl play-pause"
+          :onrightclick "playerctl next"
+          (box
+            :class "music-ctl"
+            :space-evenly false
+            (label :class "music-icon" :text "")
+            (revealer
+              :transition "slideright"
+              :reveal "${music_reveal || popup == 'music'}"
+              :duration "300ms"
+              :class "music-ctl-revealer"
+              ; :onclick "${EWW_CMD} open --toggle music"
+              :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+              :limit-width 20
+              (eventbox
+                :class "music-ctl-revealer"
+                ; :onclick "${EWW_CMD} open --toggle music"
+                :onscroll "echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%"
+                (label
+                  :class "music-title"
+                  :style "${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
+                  :limit-width 50
+                  :text "${music.title == '' ? 'Not playing' : music.title}"
+                )
+              )
+            )
+            (revealer
+              :transition "slideright"
+              :reveal music_reveal
+              :duration "300ms"
+              :class "music-ctl-revealer"
+              ; :onclick "${EWW_CMD} open --toggle music"
+              (box
+                :class "icon"
+                :style "font-family: SF Mono Nerd Font; ${popup == 'music' ? 'color: ${mcover.color.colors.color4}' : ''}"
+                ; (button
+                  ;   :class "song-button"
+                  
+                ;   {music.title} "" {music.status} "")
+                ; (button :class "song-button" :onclick "playerctl previous" {music.title})
+                (button
+                  :class "song-button"
+                  :style "font-family: 'Material Symbols Rounded'; "
+                  :onclick "playerctl previous" ""
+                )
+                (button
+                  :class "song-button"
+                  :onclick "playerctl play-pause"
+                  :style "font-family: 'Material Symbols Rounded'; "
+                  "${music.status != '' ? music.status : ''}"
+                )
+                (button
+                  :class "song-button"
+                  :style "font-family: 'Material Symbols Rounded'; "
+                  :onclick "playerctl next" 
+                  ""
+                )
+              )
+            )
+          )
+        )
+      )
+      (revealer
+        :reveal "${popup == 'music'}"
+        :transition "slideright"
+        :duration "0ms"
+        (revealer
+          :reveal "${popup == 'music'}"
+          :transition "crossfade"
+          :duration "0ms"
+          (revealer
+            :reveal "${popup == 'music'}"
+            :transition "slidedown"
+            :duration "0ms"
+            (box
+              ; :class "music-window"
+              :space-evenly false
+              :orientation "h"
+              ; :style "color: ${mcover.color.colors.color4};"
+              (box ; Cover art
+                :class "music-cover-art"
+                :style "background-image: url('${mcover.image}');"
+              )
+              (box ;
+                :orientation "v"
+                :class "music-box"
+                (label
+                  :class "music-title"
+                  :wrap true
+                  :text "${music.title == '' ? 'Not playing' : music.title}"
+                  :style "color: ${mcover.color.colors.color4}; font-weight: bold;"
+                  :limit-width 35
+                )
+                (label
+                  :class "music-artist"
+                  :wrap true
+                  :text "${music.artist}"
+                  :style "color: ${mcover.color.colors.color4};"
+                )
+                (centerbox
+                  :halign "center"
+                  :class "music-button-box icon"
+                  (button
+                    :class "song-button"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    :onclick "playerctl previous" ""
+                  )
+                  (button
+                    :class "song-button"
+                    :onclick "playerctl play-pause"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    "${music.status != '' ? music.status : ''}"
+                  )
+                  (button
+                    :class "song-button"
+                    :style "font-family: 'Material Symbols Rounded'; "
+                    :onclick "playerctl next" 
+                    ""
+                  )
+                )
+                (box
+                  (label
+                    :style "color: ${mcover.color.colors.color4};"
+                    :xalign 0
+                    :class "music-time"
+                    :text "${music.position_time}"
+                  )
+                  (label
+                    :style "color: ${mcover.color.colors.color4};"
+                    :xalign 1
+                    :class "music-time"
+                    :text "${music.length}"
+                  )
+                )
+                (box
+                  :class "music-bar"
+                  :style "color: ${mcover.color.colors.color4};"
+                  (scale
+                    ; :style "color: ${mcover.color.colors.color4};"
+                    :value {music.position}
+                    :class "track-scale"
+                    ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                    :style "highlight {background-color: ${mcover.color.colors.color4};}"
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

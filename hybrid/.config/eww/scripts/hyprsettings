@@ -1,0 +1,51 @@
+#!/usr/bin/bash
+getoptions(){
+  rounding=$(hyprctl getoption decoration:rounding -j | gojq -r -c '.int')
+  gaps_in=$(hyprctl getoption general:gaps_in -j | gojq -r -c '.int')
+  gaps_out=$(hyprctl getoption general:gaps_out -j | gojq -r -c '.int')
+  border_size=$(hyprctl getoption general:border_size -j | gojq -r -c '.int')
+  force_no_accel=$(hyprctl getoption input:force_no_accel -j | gojq -r -c '.int')
+  input_sensitivity=$(hyprctl getoption input:sensitivity -j | gojq -r -c '.float')
+  touchpad_disable_while_typing=$(hyprctl getoption input:touchpad:disable_while_typing -j | gojq -r -c '.int')
+  touchpad_clickfinger_behavior=$(hyprctl getoption input:touchpad:clickfinger_behavior -j | gojq -r -c '.int')
+  blur=$(hyprctl getoption decoration:blur -j | gojq -r -c '.int')
+  blur_size=$(hyprctl getoption decoration:blur_size -j | gojq -r -c '.int')
+  blur_passes=$(hyprctl getoption decoration:blur_passes -j | gojq -r -c '.int')
+  blur_xray=$(hyprctl getoption decoration:blur_xray -j | gojq -r -c '.int')
+  nightlight=$(hyprctl getoption decoration:screen_shader -j | gojq -r -c '.str')
+  if [[ "$nightlight" == *"nothing.frag" || "$nightlight" == "[[EMPTY]]" || "$nightlight" == "" ]]; then
+    nightlight='false'
+  else
+    nightlight='true'
+  fi
+
+  echo -n '{'
+  echo -n "\"rounding\":$rounding,"
+  echo -n "\"gaps_in\":$gaps_in,"
+  echo -n "\"gaps_out\":$gaps_out,"
+  echo -n "\"border_size\":$border_size,"
+  echo -n "\"force_no_accel\":$force_no_accel,"
+  echo -n "\"input_sensitivity\":$input_sensitivity,"
+  echo -n "\"touchpad_disable_while_typing\":$touchpad_disable_while_typing,"
+  echo -n "\"touchpad_clickfinger_behavior\":$touchpad_clickfinger_behavior,"
+  echo -n "\"blur\":$blur,"
+  echo -n "\"blur_size\":$blur_size,"
+  echo -n "\"blur_passes\":$blur_passes,"
+  echo -n "\"blur_xray\":$blur_xray,"
+  echo -n "\"nightlight\":$nightlight,"
+
+  echo '"dummy":0}'
+}
+
+getoptions
+
+if [ "$1" == "--once" ]; then
+  exit 0
+elif [ "$1" == "tickle" ]; then
+  hyprctl keyword input:force_no_accel $(hyprctl getoption input:force_no_accel -j | gojq -r -c '.int')
+else
+  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "activelayout>>" | while read -r line; do
+    # echo $line
+    getoptions
+  done
+fi

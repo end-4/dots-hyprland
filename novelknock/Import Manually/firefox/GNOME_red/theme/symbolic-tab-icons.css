@@ -1,0 +1,19 @@
+@namespace xul url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Icons light/dark fix coloring hack filters */
+:root {
+	--gnome-convert-icon-to-symbolic-hack-filter: invert(100%) sepia(100%) grayscale(100%) brightness(200%) brightness(85%) invert(100%);
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--gnome-convert-icon-to-symbolic-hack-filter: invert(100%) sepia(100%) grayscale(100%) brightness(200%) brightness(85%);
+	}
+}
+
+/* OPTIONAL: Make all tab icons look kinda like symbolic icons */
+@supports -moz-bool-pref("gnomeTheme.symbolicTabIcons") {	
+	tab .tab-icon-image {
+		filter: var(--gnome-convert-icon-to-symbolic-hack-filter);
+	}
+}
+

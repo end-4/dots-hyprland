@@ -1,0 +1,34 @@
+(defwidget clock_module []
+  (eventbox
+    :onmiddleclick "scripts/toggle-dashfs.sh &"
+    :onrightclick "scripts/toggle-dashfs.sh &"
+    :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
+    :onclick "scripts/toggle-onotify.sh &"
+    :onhover "${EWW_CMD} update calendar_hover=true"
+    :onhoverlost "${EWW_CMD} update calendar_hover=false"
+    (box
+      :class "module-button-pad-center"
+      ; Time and date
+      (box
+        :orientation "v" :space-evenly false
+        :valign "center"
+        :class "module-timedate module module-button${rev_calendar ? '-true' : (calendar_hover ? '-hover' : '')}"
+        :style "padding: 0 10px;"
+        (box
+          :space-evenly false :valign "end"
+          :orientation "v"
+          :class "timedate-time"
+          (label :text "${time.hour}" :class "clock hour")
+          (label :text "܅" :class "clock"
+            :style "
+              margin-top: -5px;
+              margin-bottom: -15px;
+            "
+          )
+          (label :text {time.minute} :class "clock minute")
+        )
+      )
+    )
+  )
+)
+

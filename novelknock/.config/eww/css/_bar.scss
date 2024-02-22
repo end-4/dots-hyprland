@@ -1,0 +1,364 @@
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 600% 0%;
+    }
+}
+
+.bar-bg {
+    background-color: $background;
+    @include bar-rounding;
+    @include window-shadow;
+}
+
+.bar-bg-noshadow {
+    background-color: $background;
+    @include bar-rounding;
+}
+
+.bar-bg-pad {
+    padding: 0 10px;
+}
+
+.bar-pad {
+    padding: 5px;
+}
+
+.bar-pad-left {
+    padding: 5px 0;
+    padding-left: 5px;
+}
+
+.bar-pad-right {
+    padding: 5px 0;
+    padding-right: 5px;
+}
+
+.bar-circle-pad {
+    padding: 10px;
+}
+
+.bar-txt {
+    @include mainfont;
+    font-size: 12pt;
+}
+
+.bar-txt-larger {
+    @include mainfont;
+    font-size: 14pt;
+}
+
+.bar-txt-hugeass {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.bar-txt-small {
+    @include mainfont;
+    font-size: 11pt;
+}
+
+.bar-txt-smaller {
+    @include mainfont;
+    font-size: 10pt;
+    // font-weight: 500; // A slightly higher font weight for small text
+}
+
+.bar-txt-tiny {
+    @include mainfont;
+    font-size: 9pt;
+    font-weight: 500; // A slightly higher font weight for small text
+}
+
+.bar-txt-norm {
+    color: $onBackground;
+}
+
+.bar-txt-sub {
+    color: shade($onBackground, 15%);
+}
+
+.bar-btn-icon {
+    color: $primary;
+    font-weight: 900;
+    font-size: 15pt;
+}
+
+.bar-icon-material {
+    @include icon-material;
+    font-size: 18pt;
+}
+
+.bar-icon-material-large {
+    @include icon-material;
+    font-size: 14pt;
+    margin-bottom: -1px;
+}
+
+.bar-icon-material-hugeass {
+    @include icon-material;
+    font-size: 17pt;
+    margin-bottom: -1px;
+}
+
+.bar-icon-segoe {
+    @include icon-segoe;
+    font-weight: 700;
+}
+
+.bar-resources-icon {
+    font-size: 12pt;
+}
+
+.bar-system-icon {
+    font-size: 16pt;
+}
+
+.bar-ws-txt {
+    @include mainfont;
+    border-radius: 99px;
+    margin: 2px;
+    font-size: 12pt;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.bar-ws-txt-active {
+    background-color: $primary;
+    color: black;
+    font-size: 0;
+    margin-bottom: 35px;
+    min-height: 4px;
+}
+
+.bar-batt-circle {
+    background-color: $surfaceVariant;
+}
+
+.inside-circle {
+    min-height: 27px;
+    min-width: 27px;
+}
+
+.bar-pad-horiz {
+    padding: 0 5px;
+}
+
+.bar-pad-horiz-moreleft {
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.bar-pad-horiz-moreright {
+    padding-left: 5px;
+    padding-right: 10px;
+}
+
+.bar-prog {
+    min-height: 5px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 5px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surfaceVariant;
+    }
+
+    progress {
+        min-height: 5px;
+        min-width: 4px;
+        border-radius: 99px;
+        border-radius: 99px;
+        background-color: $onPrimaryContainer;
+    }
+}
+
+.bar-music-cover {
+    min-height: 40px;
+    min-width: 40px;
+    margin: 5px 0;
+    border-radius: 10px;
+    background-size: auto 100%;
+    background-position: center;
+}
+
+.bar-music-status {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 99px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.bar-tasks-app-pad {
+    padding: 10px 10px;
+}
+
+.bar-tasks-app-highlight {
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-tasks-app-highlight-true {
+    background-color: $primary;
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-tasks-app-highlight-false {
+    background-color: transparent;
+    border-radius: 99px;
+    margin: 10px;
+    margin-top: 11px;
+    margin-bottom: 45px;
+}
+
+.bar-notif-count {
+    border-radius: 99px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 18pt;
+    margin-bottom: -1px;
+}
+
+.bar-notif-count-yes {
+    background-color: $primary;
+    color: $onPrimary;
+    font-weight: bold;
+    font-size: 10pt;
+    @include mainfont;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 5px;
+}
+
+.bar-clr {
+    border-radius: 99px;
+    margin: 5px;
+    @include mainfont;
+}
+
+.bar-clr-1 {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.bar-clr-2 {
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
+}
+
+.bar-clr-3 {
+    background-color: $secondary;
+    color: $onSecondary;
+}
+
+.bar-clr-4 {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-clr-5 {
+    background-color: $tertiary;
+    color: $onTertiary;
+}
+
+.bar-clr-6 {
+    background-color: $tertiaryContainer;
+    color: $onTertiaryContainer;
+}
+
+.bar-clr-7 {
+    background-color: $surface;
+    color: $onSurface;
+}
+
+.bar-clr-8 {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+}
+
+.bar-clr-9 {
+    background-color: $background;
+    color: $onBackground;
+}
+
+.bar-clr-10 {
+    background-color: $inversePrimary;
+    color: $onBackground;
+}
+
+.osd-pad {
+    padding: 8px;
+    transition: 1000ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.osd-circle {
+    color: $onBackground;
+}
+
+// .osd-active-right {
+//     background-image: linear-gradient(225deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 10%);
+// }
+
+// .osd-active-left {
+//     background-image: linear-gradient(135deg, mix($primary, rgba(0,0,0,0), 69%) 0%, rgba(0,0,0,0) 10%);
+// }
+
+.osd-bg {
+    @include window-shadow;
+    background-color: rgba(11, 7, 2, 0.7);
+    border-radius: 99px;
+    min-width: 150px;
+    padding: 0 7px;
+}
+
+.bar-music-btn {
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 13pt;
+    color: $onSurface;
+    margin: 2px;
+    border-radius: 8px;
+}
+
+.bar-music-btn:hover {
+    background-color: $overlay0;
+}
+
+.bar-music-btn:active {
+    background-color: tint($overlay0, 10%);
+}
+
+.bar-wall-btn {
+    border-radius: 13px;
+    min-height: 40px;
+    min-width: 40px;
+}
+
+.bar-wall-btn:hover {
+    background-color: $overlay0;
+}
+
+.bar-wall-btn:active {
+    background-color: tint($overlay0, 10%);
+}
+
+.bar-notif-flash {
+    background: linear-gradient(135deg,
+            $background 20%, tint($background, 11%) 20%,
+            tint($background, 11%) 40%, $background 40%,
+            $background 60%, tint($background, 11%) 60%,
+            tint($background, 11%) 80%, $background 80%,
+            $background 100%, tint($background, 11%) 100%);
+    background-size: 300% 300%;
+    animation: gradient 4.5s cubic-bezier(0.24, 0.61, 0.48, 0.9);
+    animation-iteration-count: 1;
+}

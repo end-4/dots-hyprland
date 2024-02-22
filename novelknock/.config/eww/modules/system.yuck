@@ -1,0 +1,120 @@
+(defwidget system_widget []
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
+    (box
+      :space-evenly false :spacing 5
+      :class "bar-bg bar-bg-pad"
+      (box ; Clock
+        :space-evenly false :orientation "v"
+        :valign "center"
+        :hexpand true
+        :class "bar-pad-horiz"
+        (label :xalign 0 :class "bar-txt-larger clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          :text "${time.hour}:${time.minute}"
+        )
+        (label :xalign 0 :class "bar-txt-smaller clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          :text "${time.day}, ${time.date}"
+        )
+      )
+      (box ; Icons
+        :space-evenly false :spacing 10
+        :orientation "h"
+        :class "bar-pad-horiz-moreright"
+        (box
+          :valign "center"
+          :orientation "v"
+          :space-evenly false :spacing -4
+          (label :class "bar-icon-material bar-system-icon bar-txt-norm"
+           :text "keyboard"  
+          )
+          (label :class "bar-txt-tiny bar-txt-norm" :text {lang_ibus.name_abbr})
+        )
+        (label
+          :valign "center"
+          :class "bar-icon-material bar-system-icon bar-txt-norm"
+          :text {WIFI_ICONS[net.level]}
+        )
+        (label
+          :valign "center"
+          :class "bar-icon-material bar-system-icon bar-txt-norm"
+          :text {bluetooth.icon}
+        )
+      )
+      (box ; Resources
+        :space-evenly false :spacing -6
+        :orientation "v"
+        :valign "center"
+        (box ; CPU
+          :space-evenly false :orientation "h" :spacing 5
+          (label
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
+            :text ""
+          )
+          (progress
+            :valign "center"
+            :class "bar-prog"
+            :value {EWW_CPU.avg}
+          )
+        )
+        (box ; RAM
+          :space-evenly false :orientation "h" :spacing 5
+          (label
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
+            :text "Memory"
+          )
+          (progress
+            :valign "center"
+            :class "bar-prog"
+            :value {memory.percentage}
+          )
+        )
+        (box ; Swap
+          :space-evenly false :orientation "h" :spacing 5
+          (label
+            :class "bar-icon-material bar-resources-icon bar-txt-norm"
+            :text ""
+          )
+          (progress
+            :valign "center"
+            :class "bar-prog"
+            :value {memory.swappercentage}
+          )
+        )
+      )
+      (box ; Battery
+        :class "bar-circle-pad"
+        (circular-progress
+          :value "${battery.percentage > 100 ? 100 : battery.percentage}"
+          :class "bar-batt-circle"
+          :thickness 3
+          :start-at 75
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          (box
+            :width 27 :height 27
+            :tooltip "Battery: ${battery.percentage}%"
+            :style "color: ${battery.color}; background-color: ${battery.bgcolor};"
+            (label
+              :halign "center" :valign "center"
+              :class "bar-txt-smaller bar-txt-norm"
+              :style "
+              font-size: 10pt;
+              ${battery.quickicon == '' ? '' : ('color: ' + coloraccent + ';')}
+              "
+              :text "${battery.percentage}"
+            )
+          )
+        )
+      )
+    )
+  )
+)

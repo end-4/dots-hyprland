@@ -1,0 +1,186 @@
+(defwidget themer_widget []
+  (box
+    :orientation "v"
+    :space-evenly false
+    :halign "fill"
+    :valign "fill"
+    (eventbox
+      :onclick "scripts/toggle-themer.sh --close &"
+      (box
+        :style "
+        ${rev_themer ? '' : 'margin-top: -600px;'}
+        ${anim_open_themer ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+        min-height: 1px;
+        "
+      )
+    )
+    (eventbox
+      ; :onhoverlost "${EWW_CMD} close themer && ${EWW_CMD} update themer_open=false"
+      (box
+        :space-evenly false
+        :orientation "h"
+        :class "themer-menu-box"
+        :style "
+        ${rev_themer ? '' : 'margin-top: -600px;'}
+        ${anim_open_themer ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+        "
+        (box
+          :space-evenly false :orientation "v"
+          (box
+            :style "padding-left: 10px; padding-right: 10px; padding-top: 10px; font-size: 15pt;"
+            :valign "start"
+            :space-evenly false
+            :spacing 4
+            (button
+              :class "themer-action-button themer-get"
+              :onclick "scripts/toggle-themer.sh --close && scripts/colormanage get &"
+              ""
+            )
+            (button
+              :class "themer-action-button themer-restore"
+              :onclick "scripts/toggle-themer.sh --close && scripts/colormanage default &"
+              ""
+            )
+            (button
+              :class "themer-action-button"
+              :onclick "scripts/toggle-themer.sh --close && scripts/togglelight light &"
+              :tooltip "Light mode (for generating new themes)"
+              ""
+            )
+            (button
+              :class "themer-action-button"
+              :onclick "scripts/toggle-themer.sh --close && scripts/togglelight dark &"
+              :tooltip "Dark mode (for generating new themes)"
+              ""
+            )
+          )
+          (label
+            :class "themer-title"
+            :text "Color profiles"
+            :xalign 0
+          )
+          (box
+            :space-evenly false
+            :orientation "h"
+            :halign "center"
+            (label
+              :hexpand true
+              :class "themer-prompt"
+              :text "Save "
+            )
+            (input
+              :class "themer-input"
+              :onaccept "scripts/colormanage save {}"
+            )
+          )
+          (box
+            :halign "center"
+            :space-evenly false
+            :orientation "h"
+            (label
+              :hexpand true
+              :class "themer-prompt"
+              :text "Load "
+            )
+            (input
+              :class "themer-input"
+              :onaccept "scripts/colormanage load {}"
+            )
+          )
+        )
+        ; colors
+        (box
+          :space-evenly false :orientation "v"
+          (label
+            :class "themer-title"
+            :text "Pywal Colors"
+            :xalign 0
+          )
+          (box
+            :spacing 3
+            :orientation "h"
+            :style "padding: 7px;"
+            (box :class "themer-color-preview preview-0" )
+            (box :class "themer-color-preview preview-1" )
+            (box :class "themer-color-preview preview-2" )
+            (box :class "themer-color-preview preview-3" )
+            (box :class "themer-color-preview preview-4" )
+            (box :class "themer-color-preview preview-5" )
+            (box :class "themer-color-preview preview-6" )
+            (box :class "themer-color-preview preview-7" )
+          )
+          (label
+            :class "themer-title"
+            :text "Primary, secondary"
+            :xalign 0
+          )
+          (box
+            :spacing 3
+            :orientation "h"
+            :style "padding: 7px;"
+            (box :class "themer-color-preview preview-primary" )
+            (box :class "themer-color-preview preview-onPrimary" )
+            (box :class "themer-color-preview preview-primaryContainer" )
+            (box :class "themer-color-preview preview-onPrimaryContainer" )
+            (box :class "themer-color-preview preview-secondary" )
+            (box :class "themer-color-preview preview-onSecondary" )
+            (box :class "themer-color-preview preview-secondaryContainer" )
+            (box :class "themer-color-preview preview-onSecondaryContainer" )
+          )
+          (label
+            :class "themer-title"
+            :text "Tertiary, bg, surface"
+            :xalign 0
+          )
+          (box
+            :spacing 3
+            :orientation "h"
+            :style "padding: 7px;"
+            (box :class "themer-color-preview preview-tertiary" )
+            (box :class "themer-color-preview preview-onTertiary" )
+            (box :class "themer-color-preview preview-tertiaryContainer" )
+            (box :class "themer-color-preview preview-onTertiaryContainer" )
+            (box :class "themer-color-preview preview-background" )
+            (box :class "themer-color-preview preview-onBackground" )
+            (box :class "themer-color-preview preview-surface" )
+            (box :class "themer-color-preview preview-onSurface" )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow themer
+  :wm-ignore true
+  :stacking "overlay"
+  :monitor 0
+  :geometry (geometry
+    :x "400px"
+    :y "61px"
+    :anchor "top right"
+    ; :width "0px"
+    ; :height "0px"
+  )
+  :focusable true
+  (themer_widget)
+)
+
+(defwidget themer []
+  (eventbox
+    :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"
+    :onhover "${EWW_CMD} update themer_hover=true"
+    :onhoverlost "${EWW_CMD} update themer_hover=false"
+    :class "osettings-toggle-button-${rev_themer}"
+    :onclick "scripts/toggle-themer.sh &"
+    (box
+      :class "module-button-pad-center"
+      :style "min-width: 53px;"
+      (image
+        :path "images/svg/beatmappacks.svg"
+        :image-width 33
+        :image-height 33
+      )
+    )
+  )
+)

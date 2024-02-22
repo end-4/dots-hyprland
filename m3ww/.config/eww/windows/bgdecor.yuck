@@ -1,0 +1,61 @@
+(defwidget bgdecor_widget []
+  (box
+    :vexpand true
+    :space-evenly false :orientation "v"
+    (box
+      :class "bar-bg ${BAR_HEIGHT >= 2 ? 'bar-height' : ''}"
+    )
+    (overlay
+      :vexpand true
+      (box
+        :vexpand true
+        :class "bgdecor-box"
+      )
+      (image
+        :path "images/svg/corner_topleft.svg"
+        :halign "start"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/svg/corner_topright.svg"
+        :halign "end"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/svg/corner_bottomleft.svg"
+        :halign "start"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/svg/corner_bottomright.svg"
+        :halign "end"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+    )
+    (box
+      :class "bar-bg ${BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'}"
+    )
+    (box
+      :class "bar-bg ${open_visualizer ? 'visualizer-height' : ''}"
+    )
+  )
+)
+
+(defwindow bgdecor
+  :monitor 0
+  :stacking "bg"
+  :namespace "noblur"
+  :geometry (geometry
+    :width "100%"
+    :height "100%"
+  )
+  (bgdecor_widget)
+)

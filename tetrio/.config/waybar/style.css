@@ -1,0 +1,391 @@
+/**
+ Paralellogram: transform: skew(20deg);
+
+
+
+**/
+* {
+  border-radius: 10px;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  font-family: "SF Mono Nerd Font";
+  /*font-family: "Ubuntu Nerd Font"; */
+	min-height: 25px;
+	font-size: 12pt;
+}
+
+#waybar {
+  margin-left: 0;
+  margin-right: 0;
+	background: transparent;
+}
+
+#waybar.hidden {
+	opacity: 0.2;
+}
+
+#custom-launcher {
+  margin-left: 0px;
+  background-color: #1e201f;
+  color: #d8caac;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  padding-left: 5px;
+  padding-right: 2px;
+  
+}
+
+#clock {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+}
+
+#cpu {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+  
+}
+
+#memory {
+	color: #d8caac;
+  background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+  
+}
+
+#idle_inhibitor {
+  color: #D8CAAC;
+  background-color: #1e201f;
+  border-radius: 12px;
+  /*border: 3px solid transparent;*/
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#window {
+  color: #d8caac;
+  background-color: #1e201f;
+  border-radius: 12px;
+  /*border: 3px solid transparent;*/
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#workspaces {
+  color: #d8caac;
+  /*background-color: rgba(30, 32, 31, 0.7);*/
+  background-color: transparent;
+  border-radius: 12px;
+  /*border: 3px solid #d8caac;*/
+  padding-left: 320px;
+  padding-right: 320px;
+    
+}
+
+#workspaces button {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #d8caac;
+    
+  
+}
+
+#workspaces button.active {
+  color: #161320;
+  background-color: #a8b370;
+}
+
+#workspaces button:hover {
+  color: #161320;
+  
+}
+
+#workspaces button.focused {
+  color: #161320;
+  
+}
+
+#workspaces button.urgent {
+  color: #161320;
+  
+}
+
+#tray {
+	margin-left: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 10px;
+	transition: none;
+	color: #d8caac;
+	background: #1E201F;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+	
+}
+#tray menu{
+  padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 10px;
+	color: #D8CAAC;
+	background-color: #1E201F;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+	
+}
+
+
+#pulseaudio {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+	
+	
+}
+
+#backlight {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 0px;
+	
+  
+}
+
+#network {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  /*margin-left: 3px;
+  margin-right: 4px;*/
+  padding-left: 5px;
+  padding-right: 4px;
+	
+  
+}
+
+#battery {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  margin-left: 3px;
+  margin-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+	
+  
+}
+
+#battery.charging, #battery.plugged {
+	  color: #A8B468;
+    background-color: #1e201f;
+}
+
+#battery.critical:not(.charging) {
+    background-color: #B5E8E0;
+    color: #161320;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/*
+#battery.good {
+	  color: #B1E0AD;
+    background-color: #D4B7F7;
+}
+*/
+
+#custom-power {
+	color: #d8caac;
+	background-color: #1e201f;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  padding-left: 1px;
+  padding-right: 5px;
+}
+
+@keyframes blink {
+    to {
+        background-color: #BF616A;
+        color: #B5E8E0;
+    }
+}
+
+
+#custom-ws{
+  
+  background-color: #f7cdec;
+  color: #161320;
+}
+
+/* Unused */
+
+#idle_inhibitor{
+	  color: #161320;
+}
+
+#custom-wallpaper {
+	  color: #161320;
+}
+
+#custom-updates {
+	  color: #161320;
+}
+
+#custom-media {
+	  color: #161320;
+}
+
+#battery.warning:not(.charging) {
+    background: #f53c3c;
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+
+
+
+
+/* Hover */
+#custom-launcher:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+}
+
+#clock:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+}
+
+#cpu:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#memory:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#window:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#workspaces button.active:hover {
+    color: #d8caac;
+    background-color: #e76c69;
+}
+
+#workspaces button:hover {
+  color: #3E5B32;
+  background-color: #e76c69;
+  
+}
+
+#tray:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#pulseaudio:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#backlight:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#network:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#battery:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}
+
+#battery.charging, #battery.plugged:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	  
+}
+
+#battery.critical:not(.charging):hover {
+  color: #d8caac;
+  background-color: #e76c69;
+    
+}
+
+/*
+#battery.good {
+	  color: #B1E0AD;
+    background-color: #D4B7F7;
+}
+*/
+
+#custom-power:hover {
+  color: #3E5B32;
+  background-color: #A8B468;
+	
+}

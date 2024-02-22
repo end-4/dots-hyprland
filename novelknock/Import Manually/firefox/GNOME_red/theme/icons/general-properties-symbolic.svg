@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:osb="http://www.openswatchbook.org/uri/2009/osb">
+    <title>Gnome Symbolic Icon Theme</title>
+    <g transform="translate(-639.98 -284)" fill="context-fill" stroke="context-stroke" fill-opacity="context-fill-opacity">
+        <path d="m643.16 294h10.688c0.64056 0 1.1562 0.51569 1.1562 1.1562v1.6875c0 0.64056-0.51569 1.1562-1.1562 1.1562h-10.688c-0.64056 0-1.1562-0.51569-1.1562-1.1562v-1.6875c0-0.64056 0.51569-1.1562 1.1562-1.1562z" style="paint-order:normal"/>
+        <path d="m649.16 289c-0.64056 0-1.1562 0.51569-1.1562 1.1562v1.6875c0 0.64056 0.51569 1.1562 1.1562 1.1562h4.6875c0.64056 0 1.1562-0.51569 1.1562-1.1562v-1.6875c0-0.64056-0.51569-1.1562-1.1562-1.1562zm-0.0469 1h4.7812c0.0606 0 0.10938 0.0488 0.10938 0.10938v1.7812c0 0.0606-0.0488 0.10938-0.10938 0.10938h-4.7812c-0.06057 0-0.10935-0.04878-0.10935-0.10938v-1.7812c0-0.0606 0.04878-0.10938 0.10938-0.10938z" style="paint-order:normal"/>
+        <path d="m647.51 285.88-3.502 3.502-1.5059-1.5293-0.9961 0.98046 2.4941 2.5352 4.498-4.5z" color="#000000" color-rendering="auto" dominant-baseline="auto" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;paint-order:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+    </g>
+</svg>

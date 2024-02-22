@@ -1,0 +1,95 @@
+#!/usr/bin/bash
+
+OPACITY=0.75
+
+IMGPATH=$1
+coverurl=$2
+
+coverpath="$IMGPATH"
+# Generate colors
+wal -c
+lightdark=$(cat scripts/workdir/__mode_light_dark.txt)
+wal -i "$IMGPATH" -n -t -s -e $lightdark -q
+
+themejson=$(cat ~/.cache/wal/colors.json | gojq -c -M)
+themejson="${themejson::-1}"
+themejson="$themejson"',"source":"'"$3"'"}'
+echo $themejson
+
+maincol="$(printf "$themejson" | gojq -c -M -r '.colors.color4')"
+# scripts/material_colors.py --path "$IMGPATH" $lightdark > tmp/_material.colorpallete
+scripts/material_colors.py --color "$maincol" "$lightdark" > tmp/_material.colorpallete &
+accent=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$onPrimaryContainer: ' | sed 's/$onPrimaryContainer: //g' | sed 's/;//g')
+tertiary=$(scripts/material_colors.py --color "$maincol" "$lightdark" | grep '$tertiary: ' | sed 's/$tertiary: //g' | sed 's/;//g')
+
+printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
+
+# Get color in rgb
+colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
+rgb_bg=$(echo $colorsreg | tr ' ' '\n' | grep 'Colour3')
+rgb_bg="${rgb_bg#*=}"
+rgb_bg="${rgb_bg#*\"}"
+rgb_bg="${rgb_bg::-1}"
+rgb_bg='rgba('"$rgb_bg"','"$OPACITY"')'
+# echo $rgb_bg
+
+# notify-send 'eww' 'i found a url!'
+
+# Write to scss
+echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
+printf '$colorbarbg: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.special.background' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
+printf "$rgb_bg"';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.special.foreground' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color1' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color2' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color3' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color4' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color5' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color6' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color7' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq -r '.colors.color4' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+
+
+gradient1=$(echo -n "$themejson" | gojq -r '.colors.color1')
+gradient2=$(echo -n "$themejson" | gojq -r '.colors.color2')
+gradient3=$(echo -n "$themejson" | gojq -r '.colors.color4')
+
+# Write hyprland color config
+echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
+echo 'general {' >> './tmp/colors_generated.conf'
+echo '    col.active_border = rgba('"${gradient1#*#}FF"') rgba('"${gradient2#*#}FF"') rgba('"${gradient3#*#}FF"') 45deg' >> './tmp/colors_generated.conf'
+echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_generated.conf'
+echo '}' >> './tmp/colors_generated.conf'
+
+# Print json to stdout
+echo "$accent" > 'tmp/_iconcolor.txt'
+echo "$tertiary" >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color2' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color4' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color5' >> 'tmp/_iconcolor.txt'
+printf "$themejson" | gojq -r '.colors.color5' >> 'tmp/_iconcolor.txt'
+
+# beatmappacks tertiary, forum color1, search color3, search color4, tournaments color4
+# 

@@ -1,0 +1,168 @@
+#!/usr/bin/env bash
+
+prevtitle=''
+prevartist=''
+
+get_status() {
+	s=$1
+	if [ "$s" = "Playing" ]; then
+		echo ""
+	else
+		echo ""
+	fi
+}
+
+get_length_sec() {
+	len=$1
+	if [ -z "$len" ]; then
+		echo 0
+	else
+		bc <<< "$len / 1000000"
+	fi
+}
+
+get_length_time() {
+	len=$1
+	if [ -n "$len" ]; then
+		len=$(bc <<< "$len / 1000000 + 1")
+		date -d@"$len" +%M:%S
+	else
+		echo ""
+	fi
+}
+
+get_position() {
+	pos=$1
+	len=$2
+	if [ -n "$pos" ]; then
+		bc -l <<< "$pos / $len * 100"
+	else
+		echo 0
+	fi
+}
+
+get_position_time() {
+	pos=$1
+	if [ -n "$pos" ]; then
+		date -d@"$(bc <<< "$pos / 1000000")" +%M:%S
+	else
+		echo ""
+	fi
+}
+
+get_cover() {
+	# COVER_URL=$1
+	mkdir -p "eww_covers"
+	cd "eww_covers" || exit
+
+	IMGPATH="cover_art"
+	echo '{"image": "eww_covers/cover_art_default", "color": {"alpha":"100","colors":{"color0":"#111215","color1":"#2B698F","color10":"#597591","color11":"#447CC0","color12":"#3A9FB7","color13":"#6192A6","color14":"#60ABCC","color15":"#c4c6ca","color2":"#597591","color3":"#447CC0","color4":"#3A9FB7","color5":"#6192A6","color6":"#60ABCC","color7":"#c4c6ca","color8":"#898a8d","color9":"#2B698F"},"special":{"background":"#111215","cursor":"#c4c6ca","foreground":"#c4c6ca"},"wallpaper":"~/.config/eww/eww_covers/cover_art","source":"󰗃"}}'
+
+	playerctl -F metadata mpris:artUrl 2>/dev/null | while read -r COVER_URL; do
+		music_source='󰐍'
+		if [[ "$COVER_URL" = https* ]]; then
+			music_source='󰖟'
+			coverurl="$(playerctl metadata mpris:artUrl)"
+			coverurl_highres_yt="$(echo $coverurl | sed 's/hqdefault/maxresdefault/g')"
+			coverurl_highres_soundcloud="$(echo $coverurl | sed 's/80x80/500x500/g')"
+
+			# SoundCloud
+			if [[ "$coverurl" == *"sndcdn"* ]]; then
+				music_source='󰓀'
+				curl --silent --output "$IMGPATH""_soundcloud" "$coverurl_highres_soundcloud" -q –read-timeout=0.1
+				cp "$IMGPATH""_soundcloud" "$IMGPATH"
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))	
+			# Youtube
+			elif [[ "$coverurl" == *"ytimg"* ]]; then
+				music_source='󰗃'
+				curl --silent --output "$IMGPATH""_yt" "$coverurl_highres_yt" -q –read-timeout=0.1
+				cp "$IMGPATH""_yt" "$IMGPATH"
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
+			# Likely YT Music
+			elif [[ "$coverurl" == *"googleusercontent"* ]]; then
+				music_source=''
+				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_other" "$IMGPATH"
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
+			# Any other
+			else
+				curl --silent --output "$IMGPATH""_other" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_other" "$IMGPATH"
+				imgsize=$(echo $(du -b ~/.config/eww/eww_covers/cover_art | tr '\t' '\n' | grep -v 'cover_art'))
+			fi
+			# Fallback
+			if [ "$imgsize" == "0" ] || [ ! "$(diff ~/.config/eww/eww_covers/cover_art ~/.config/eww/eww_covers/cover_art_error)" ]; then
+				curl --silent --output "$IMGPATH""_lowres" "$coverurl" -q –read-timeout=0.1
+				cp "$IMGPATH""_lowres" "$IMGPATH"
+			fi
+
+			#Generate colors
+			cd ..
+			scripts/colorgen 'eww_covers/'$IMGPATH $coverurl "$music_source"
+			cd "eww_covers"
+		elif [ "$COVER_URL" = "" ]; then
+		    echo '{"image": "", "color": "$bg"}'
+		else
+			COVER_URL="${COVER_URL:7}"
+			cp "$COVER_URL"  "$IMGPATH"
+			
+			cd ..
+			scripts/colorgen '"eww_covers/'$IMGPATH'"' $coverurl "$music_source"
+			cd "eww_covers"
+		fi
+	done
+}
+
+# SANITIZE FIX
+sanitize() {
+	echo "$1" | sed 's/"/\"/g'
+}
+
+if [ "$1" = "cover" ]; then
+	get_cover
+elif [ "$1" == "name" ]; then
+	lentolimit=41
+    if [ "$2" != "" ]; then
+		lentolimit=$2
+	fi
+	echo '{"artist": "", "title": ""}'
+	playerctl -F metadata -f '{{title}}\{{artist}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist; do
+	
+		if [[ "$title" == *" - YouTube"* && "$artist" == "" ]]; then
+			continue
+		elif [[ "$title" == *"YouTube Music" && "$artist" == "" ]]; then
+			continue
+		fi
+		title=$(scripts/limitlen.py "$title" "$lentolimit")
+		artist=$(scripts/limitlen.py "$artist" "$lentolimit")
+		
+		gojq --null-input -r -c \
+			--arg artist "$(sanitize "$artist")" \
+			--arg title "$(sanitize "$title")" \
+			'{"artist": $artist, "title": $title}'
+		
+	done
+else
+	echo '{"artist": "", "title": "", "status": "", "position": "", "position_time": "", "length": ""}'
+	playerctl -F metadata -f '{{title}}\{{artist}}\{{status}}\{{position}}\' 2>/dev/null | while IFS="$(printf '\\')" read -r title artist status position; do
+	
+		if [[ "$title" == *" - YouTube" && "$artist" == "" ]]; then
+			continue
+		elif [[ "$title" == *"YouTube Music" && "$artist" == "" ]]; then
+			continue
+		fi
+		len=$(playerctl metadata mpris:length)
+		title=$(scripts/limitlen.py "$title" 40)
+		artist=$(scripts/limitlen.py "$artist" 40)
+
+		gojq --null-input -r -c \
+			--arg artist "$(sanitize "$artist")" \
+			--arg title "$(sanitize "$title")" \
+			--arg status "$(get_status "$status")" \
+			--arg pos "$(get_position "$position" "$len")" \
+			--arg pos_time "$(get_position_time "$position")" \
+			--arg length "$(get_length_time "$len")" \
+			'{"artist": $artist, "title": $title, "status": $status, "position": $pos, "position_time": $pos_time, "length": $length}'
+		
+	done
+fi

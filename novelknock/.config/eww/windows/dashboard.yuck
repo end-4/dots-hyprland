@@ -1,0 +1,832 @@
+(defwidget switch [ value ]
+  (box
+    :halign "end"
+    :space-evenly false
+    :class "switch-bg-${value}"
+    :style "
+    min-width: 40px;
+    min-height: 20px;
+    "
+    (box
+      :valign "center"
+      :class "switch-fg-${value}"
+      :style "
+      ${ANIM_ENTER[1]}
+      ${(value == true || value > 0) ? 'margin-left: 20px;' : 'margin-left: 4px;'}
+      min-width: ${(value == true || value > 0) ? 20 : 12}px;
+      min-height: ${(value == true || value > 0) ? 20 : 12}px;
+      "
+      (label :class "switch-fg-icon bar-txt-norm" :text {(value == true || value > 0) ? 'check' : ''})
+    )
+  )
+)
+
+(defwidget settings_button [ text onclick ]
+  (button
+    :onclick {onclick}
+    :class "dashboard-settings-button"
+    (label :text {text})
+  )
+)
+
+(defwidget settings-title [ name ]
+  (box
+    :space-evenly false
+    :style "margin-bottom: 5px;"
+    (label :class "dashboard-settings-title-txt" :text {name})
+  )
+)
+
+(defwidget settings-title-small [ name ]
+  (box
+    :space-evenly false
+    :style "margin: 2px 0px;"
+    (label :class "dashboard-settings-title-txtsmall" :text {name})
+  )
+)
+
+(defwidget settings-option-binary [ name value ]
+  (box
+    :space-evenly false :hexpand true :valign "center"
+    (label :xalign 0 :hexpand true :class "dashboard-settings-txt" :text {name})
+    (switch :value value)
+  )
+)
+
+(defwidget settings_option_mousesens []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    :hexpand true
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:force_no_accel ${1 - hyprjson.force_no_accel} &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "arrow_selector_tool")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text {hyprjson.force_no_accel == 1 ? 'Raw input' : ('Accel: ' + hyprjson.input_sensitivity)})
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :value {hyprjson.input_sensitivity * 50 + 50}
+        :onchange "hyprctl keyword input:sensitivity $(echo - | awk '{print {} / 50 - 1}') && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_blursize []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "straighten")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Size")
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.blur_size}
+        :value {hyprjson.blur_size}
+        :onchange "hyprctl keyword decoration:blur:size {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_blurpasses []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :orientation "v"
+        :space-evenly false
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+        (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "control_point_duplicate")
+        (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Passes")
+      )
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.blur_passes}
+        :value {hyprjson.blur_passes}
+        :onchange "hyprctl keyword decoration:blur:passes {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_gapsin []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "fullscreen_exit")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Inner")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.gaps_in}
+        :value {hyprjson.gaps_in}
+        :onchange "hyprctl keyword general:gaps_in {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_gapsout []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "fullscreen")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Outer")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.gaps_out}
+        :value {hyprjson.gaps_out}
+        :onchange "hyprctl keyword general:gaps_out {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_bordersize []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "line_weight")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Thickness")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.border_size}
+        :value {hyprjson.border_size}
+        :onchange "hyprctl keyword general:border_size {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+(defwidget settings_option_rounding []
+  (box
+    :orientation "h"
+    :space-evenly false :spacing 3
+    (box
+      :orientation "v"
+      :space-evenly false
+      :class "dashboard-settings-option-group-left dashboard-settings-option-group-minsize"
+      (label :vexpand true  :class "dashboard-settings-option-toggle-icon" :text "rounded_corner")
+      (label :style "margin-bottom: 10px;" :class "dashboard-settings-option-toggle-txt" :text "Rounding")
+    )
+    (box
+      :hexpand true
+      :class "dashboard-settings-option-group-right"
+      (scale
+        :class "dashboard-settings-scale"
+        :tooltip {hyprjson.rounding}
+        :value {hyprjson.rounding}
+        :onchange "hyprctl keyword decoration:rounding {} && scripts/hyprsettings tickle &"
+      )
+    )
+  )
+)
+
+
+(defwidget settings_option_touchpad []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Disable while typing" :value {hyprjson.touchpad_disable_while_typing})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword input:touchpad:clickfinger_behavior ${1 - hyprjson.touchpad_clickfinger_behavior} &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Tap to click" :value {hyprjson.touchpad_clickfinger_behavior})
+      )
+    )
+  )
+)
+
+(defwidget settings_option_blurtoggles []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword decoration:blur:xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
+      )
+    )
+  )
+)
+
+(defwidget settings_option_language []
+  (box
+    :vexpand true
+    (scroll
+      :hscroll true :vscroll false :hexpand true
+      (box
+        :spacing 5
+        (for language in langs
+          (button
+            :class "dashboard-option-lang${language.name_ibus == lang_ibus.name_ibus ? '-true' : '-false'}"
+            :onclick "ibus engine ${language.name_ibus} && eww update lang_ibus='${language}' &"
+            (box
+              :space-evenly false :orientation "h" :spacing 5
+              (box
+                :valign "center"
+                :class "dashboard-lang-indicator-${language.name_ibus == lang_ibus.name_ibus}"
+              )
+              (box
+                :space-evenly false :orientation "v"
+                :valign "center"
+                (label :xalign 0
+                  :limit-width 24
+                  :text {language.name}
+                )
+                (label :xalign 0
+                  :limit-width 24
+                  :wrap true
+                  :text "${language.name_method}"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget settings_option_debuggingtoggles []
+  (box
+    :orientation "h"
+    :spacing 3
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword debug:damage_tracking ${2 - hyprjson.damage_tracking} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Damage tracking" :value {hyprjson.damage_tracking})
+      )
+    )
+    (eventbox
+      :cursor "pointer"
+      :onclick "hyprctl keyword debug:overlay ${1 - hyprjson.overlay} && scripts/hyprsettings tickle &"
+      (box
+        :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+        (settings-option-binary :name "Show FPS" :value {hyprjson.overlay})
+      )
+    )
+  )
+)
+
+(defwidget settings_mouse_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Devices")
+    (settings-title-small :name "Mouse")
+    (settings_option_mousesens)
+    (settings-title-small :name "Touchpad")
+    (settings_option_touchpad)
+    (settings-title-small :name "Keyboard")
+    (settings_option_language)
+  )
+)
+
+(defwidget settings_blur_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Blur")
+    (settings-title-small :name "Modes")
+    (settings_option_blurtoggles)
+    (settings-title-small :name "Strength")
+    (settings_option_blursize)
+    (settings_option_blurpasses)
+  )
+)
+
+(defwidget settings_gaps_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Window settings")
+    (settings-title-small :name "Gaps")
+    (box :spacing 5
+      (settings_option_gapsin)
+      (settings_option_gapsout)
+    )
+    (settings-title-small :name "Borders")
+    (box :spacing 5
+      (settings_option_bordersize)
+      (settings_option_rounding)
+    )
+  )
+)
+
+(defwidget settings_hyprland_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "dashboard-setting-section-pad"
+    (settings-title :name "Hyprland")
+    (settings_button :text "Reload config" :onclick "hyprctl reload &")
+    (settings-title-small :name "Debugging stuff")
+    (settings_option_debuggingtoggles)
+    (settings-title-small :name "Help & Support")
+    (box :spacing 5
+      (settings_button :text "Open Hyprland Wiki" :onclick "scripts/toggle-dashboard.sh --close && xdg-open https://wiki.hyprland.org/ &")
+      (settings_button :text "Hypr Dev. Discord server" :onclick "scripts/toggle-dashboard.sh --close && xdg-open https://discord.com/invite/hQ9XvMUjjr &")
+    )
+  )
+)
+
+(defwidget dashboard_widget []
+  (box
+    :space-evenly false :orientation "h"
+    (overlay
+      (box
+        :class "dashboard-bg"
+        :height RES_HEIGHT
+        :width RES_WIDTH
+      )
+      (box
+        :valign "end"
+        (revealer ; Audio visualizer (cava)
+          :reveal {open_dashboard >= 3}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h"
+            :spacing 17
+            (for colheight in cavajson
+              (box
+                :class "dashboard-cavacol"
+                :valign "end"
+                :style "
+                min-height: ${round(colheight[0] / 2.5, 0)}px;
+                "
+              )
+            )
+          )
+        )
+      )
+      (image
+        :path "images/menus/corner_topleft.svg"
+        :halign "start"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_topright.svg"
+        :halign "end"
+        :valign "start"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_bottomleft.svg"
+        :halign "start"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (image
+        :path "images/menus/corner_bottomright.svg"
+        :halign "end"
+        :valign "end"
+        :image-width BG_ROUNDING
+        :image-height BG_ROUNDING
+      )
+      (box
+        :halign "center" :valign "start"
+        :style "
+        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+        margin-top: ${open_dashboard >= 1 ? 40 : 90}px;
+        "
+        (revealer ; Time and date
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v"
+            :space-evenly false
+            (label
+              :class "dashboard-clock-time"
+              :text "${time.hour}:${time.minute}"
+            )
+            (label
+              :class "dashboard-clock-date"
+              :text "${time.day}, ${day_only} ${time.monthname} ${time.year}"
+            )
+          )
+        )
+      )
+      (box
+        :halign "start" :valign "start"
+        :style "
+        ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+        margin-top: ${open_dashboard >= 1 ? 50 : 100}px;
+        margin-left: 50px;
+        "
+        (revealer ; User
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h"
+            :space-evenly false
+            :spacing 15
+            (box
+              :halign "center" :valign "center"
+              :class "dashbaord-user-pic"
+              :style "background-image: url('/var/lib/AccountsService/icons/${username}');"
+            )
+            (box
+              :orientation "v"
+              :space-evenly false
+              (label :xalign 0
+                :class "dashboard-user-realname"
+                :text "${realname}"
+              )
+              (label :xalign 0
+                :class "dashboard-user-username"
+                :text "${username}"
+              )
+            )
+          )
+        )
+      )
+      (box
+        :halign "end" :valign "start"
+        (revealer ; Close button
+          :reveal {open_dashboard >= 1}
+          :duration "100ms"
+          :transition "crossfade"
+          (eventbox
+            :onclick "scripts/toggle-dashboard.sh --close &"
+            :cursor "pointer"
+            (box
+              :style "
+              ${open_dashboard >= 1 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+              ${open_dashboard >= 1 ? '' : 'margin-top: 100px;'}
+              padding: 50px;
+              "
+              (box
+                :orientation "v"
+                :space-evenly false
+                :spacing -5
+                (label
+                  :class "dashboard-close-btn-icon"
+                  :text "close"
+                )
+                (label
+                  :class "dashboard-close-btn-txt"
+                  :text "Close"
+                )
+              )
+            )
+          )
+        )
+      )
+      (box ; Session control
+        :halign "end" :valign "center"
+        (revealer
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 30
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (eventbox
+              :halign "end"
+              :cursor "pointer"
+              :onclick "gtklock &"
+              (box :space-evenly false :orientation "v"
+                :class "dashboard-session-btn"
+                (label :class "dashboard-session-btn-icon" :text "lock")
+                (label :class "dashboard-close-btn-txt" :text "Lock")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_1 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_1=${!rev_session_1} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "bedtime")
+                  (label :class "dashboard-close-btn-txt" :text "Sleep")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_1=false && systemctl suspend &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_2 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_2=${!rev_session_2} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "power_settings_new")
+                  (label :class "dashboard-close-btn-txt" :text "Shutdown")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_2=false && systemctl poweroff &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+            (box :orientation "h" :space-evenly false :spacing 10
+              :halign "end"
+              :style "
+              ${ANIM_ENTER[anim_set]}
+              ${rev_session_3 ? '' : 'margin-right: -210px;'}
+              "
+              (eventbox
+                :cursor "pointer"
+                :onclick "${EWW_CMD} update rev_session_3=${!rev_session_3} &"
+                (box :space-evenly false :orientation "v"
+                  :class "dashboard-session-btn"
+                  (label :class "dashboard-session-btn-icon" :text "restart_alt")
+                  (label :class "dashboard-close-btn-txt" :text "Restart")
+                )
+              )
+              (eventbox
+                :cursor "e-resize"
+                :onclick "${EWW_CMD} update rev_session_3=false && reboot &"
+                (label :width 200 :class "dashboard-session-btn-txt" :text "Click to confirm")
+              )
+            )
+          )
+        )
+      )
+      (box
+        :halign "start" :valign "center"
+        (revealer ; Settings sections
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "h" :space-evenly false
+            :width 700
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (eventbox
+              :onscroll "scripts/scroll-settings {} &"
+              (box
+                :class "dashboard-settings-highlight${scroll_offset_settings  == -1 ? '-hide' : ''}"
+                :halign "start" :valign "start"
+                :style "
+                ${ANIM_ENTER[1]}
+                margin-right: -4px; margin-top: ${20+117*scroll_offset_settings}px;
+                "
+              )
+            )
+            (eventbox
+              :onscroll "scripts/scroll-settings {} &"
+              (box
+                :orientation "v" :space-evenly false :spacing 30
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 0 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=0 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "keyboard_alt")
+                    (label :class "dashboard-close-btn-txt" :text "Devices")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 1 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=1 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "lens_blur")
+                    (label :class "dashboard-close-btn-txt" :text "Blur")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 2 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=2 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "wysiwyg")
+                    (label :class "dashboard-close-btn-txt" :text "Window")
+                  )
+                )
+                (eventbox
+                  :halign "start"
+                  :cursor "pointer"
+                  :onclick {scroll_offset_settings == 3 ? '${EWW_CMD} update scroll_offset_settings=-1 &' : '${EWW_CMD} update scroll_offset_settings=3 &'}
+                  (box :space-evenly false :orientation "v"
+                    :class "dashboard-session-btn"
+                    (label :class "dashboard-session-btn-icon" :text "water_drop")
+                    (label :class "dashboard-close-btn-txt" :text " Hyprland")
+                  )
+                )
+              )
+            )
+            (revealer
+              :reveal {scroll_offset_settings != -1}
+              :duration "100ms"
+              :transition "slideright"
+              (eventbox
+                :hexpand true
+                (scroll
+                  :hexpand true
+                  :hscroll false :vscroll true
+                  :class "dashboard-settings-panel"
+                  :width 560
+                  (box
+                    :orientation "v"
+                    :style "
+                    margin-top: -${scroll_offset_settings * SCROLL_MULTIPLIER_SETTINGS}px;
+                    ${ANIM_ENTER[1]}
+                    "
+                    ; :space-evenly false
+                    (settings_mouse_widget)
+                    (settings_blur_widget)
+                    (settings_gaps_widget)
+                    (settings_hyprland_widget)
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (box
+      :valign "center"
+      :style "
+      margin-left: -${RES_WIDTH / 2 + 200}px;
+      "
+      :orientation "h" :space-evenly false :spacing 70
+      (box
+        (revealer ; Directories
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 15
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (box
+              :orientation "h" :space-evenly false :spacing 15
+              (label :text "Directories" :class "dashboard-section-txt")
+            )
+            (box
+              :orientation "v" :spacing 5
+              (for dir in directories
+                (eventbox
+                  :cursor "pointer"
+                  :onclick "scripts/toggle-dashboard.sh --close && xdg-open ${dir.path} &"
+                  (box
+                    :orientation "h" :space-evenly false :spacing 15
+                    (label :text {dir.icon} :class "dashboard-section-icon")
+                    (label :text {dir.name} :class "dashboard-section-txt")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (box
+        (revealer ; Websites
+          :reveal {open_dashboard >= 2}
+          :duration "100ms"
+          :transition "crossfade"
+          (box
+            :orientation "v" :space-evenly false :spacing 15
+            :style "
+            ${open_dashboard >= 2 ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]};
+            ${open_dashboard >= 2 ? '' : 'margin-bottom: -100px;'}
+            "
+            (box
+              :orientation "h" :space-evenly false :spacing 15
+              (label :text "Websites" :class "dashboard-section-txt")
+            )
+            (box
+              :orientation "v" :spacing 5
+              (for site in websites
+                (eventbox
+                  :cursor "pointer"
+                  :onclick "scripts/toggle-dashboard.sh --close && xdg-open ${site.url} &"
+                  (box
+                    :orientation "h" :space-evenly false :spacing 15
+                    (label :text {site.icon} :class "dashboard-section-icon-nerd")
+                    (label :text {site.name} :class "dashboard-section-txt")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow dashboard
+  :stacking "overlay"
+  :focusable true
+  :monitor 0
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "center center"
+    :height "100%"
+    :width "100%"
+  )
+  (dashboard_widget)
+)
+

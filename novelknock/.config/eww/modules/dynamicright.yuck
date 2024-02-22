@@ -1,0 +1,67 @@
+(defwidget dynamicright_widget []
+  (eventbox
+    :onscroll "scripts/scroll-dynamicright-module {} && ${EWW_CMD} update notifications=\"$(scripts/notifget)\" &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "${open_sideright ?
+    (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
+    (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true && ' + EWW_CMD + ' update notifications=\"$(scripts/notifget)\" &')}"
+    
+    (box
+      :orientation "h" :space-evenly false
+      (revealer
+        :reveal {mousemode == 0}
+        :transition "slideright"
+        :duration "200ms"
+        (scroll
+          :width 420
+          (box
+            :space-evenly false
+            :orientation "v"
+            (box ; Module 1: System
+              (system_widget)
+            )
+            (box ; Module 2: Notifications
+              (notifications_widget)
+            )
+            (box ; Module 3: System info
+              (sysinfo_widget)
+            )
+          )
+        )
+      )
+      (revealer
+        :reveal {mousemode == 1}
+        :transition "slideleft"
+        :duration "200ms"
+        (box
+          :space-evenly false
+          :orientation "v"
+          (box ; Module 1: System
+            :style "
+            ${ANIM_ENTER[1]}
+            ${dynamicright_module_page > 1 ? 'margin-top: -70px;' : ''}
+            "
+            (system_widget)
+          )
+          (box ; Module 2: Notifications
+            :style "
+            ${ANIM_ENTER[1]}
+            ${dynamicright_module_page > 2 ? 'margin-top: -70px;' :
+            dynamicright_module_page < 2 ? 'margin-bottom: -70px;' : ''}
+            "
+            (notifications_widget)
+          )
+          (box ; Module 3: System info
+            :style "
+            ${ANIM_ENTER[1]}
+            ${dynamicright_module_page > 3 ? 'margin-top: -70px;' :
+            dynamicright_module_page < 3 ? 'margin-bottom: -70px;' : ''}
+            "
+            (sysinfo_widget)
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,0 +1,38 @@
+(defwidget osd_widget []
+  (eventbox
+    :onhover "${EWW_CMD} update osd_vol=false && ${EWW_CMD} update osd_bright=false"
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "scripts/toggle-powerview.sh &"
+    :onrightclick "scripts/toggle-powerview.sh &"
+    (box
+      :class "bar-ws-width bar-group-margin"
+      (box
+        :spacing 15
+        :class "bar-group bar-group-standalone bar-group-pad-less"
+        (box
+          :space-evenly false :spacing 5
+          (label :class "icon-material txt-norm txt"
+            :text "sunny"
+          )
+          (progress
+            :value {brightness.level}
+            :class "bar-prog-osd"
+            :hexpand true :valign "center"
+          )
+        )
+        (box
+          :space-evenly false :spacing 5
+          (progress
+            :flipped true
+            :value {volume.percent}
+            :class "bar-prog-osd"
+            :hexpand true :valign "center"
+          )
+          (label :class "icon-material txt-norm txt"
+            :text "volume_up"
+          )
+        )
+      )
+    )
+  )
+)

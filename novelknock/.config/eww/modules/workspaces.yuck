@@ -1,0 +1,56 @@
+(defwidget workspaces_widget []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "scripts/toggle-powerview.sh &"
+    :onrightclick "scripts/toggle-powerview.sh &"
+    (overlay
+      ; Only displays workspace state (has windows or not)
+      (box
+        :width {26*10 + WORKSPACE_SIDE_PAD*2}
+        :class "bar-pad"
+        (box
+          :class "bar-bg"
+          :style "padding: 0 15px;"
+        )
+      )
+      (box
+        :spacing 0
+        :space-evenly false
+        :halign "center"
+        (for i in workspace
+          (button
+            :onclick "hyprctl dispatch workspace ${i.num}"
+            :class "bar-ws-btn"
+            (label
+              :valign "center"
+              :class "bar-ws-txt bar-txt-norm"
+              :width 26 :height 26
+              :style "
+              background-color: ${i.clr};
+              "
+              :text "${ws-icons[i.num - 1]}"
+            )
+            ; "●"
+          )
+        )
+      )
+      ; Use a separate indicator for active workspace (animations, yay) (and more performant)
+      (button
+        :class "ws"
+        :style "
+        margin-left:  ${26 * (activews - 1) + WORKSPACE_SIDE_PAD}px;
+        margin-right: ${26 * (10 - activews) + WORKSPACE_SIDE_PAD}px;
+        "
+        (label
+          :valign "center"
+          :class "bar-ws-txt bar-ws-txt-active"
+          :style "
+          background-color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          :text "${activews}"
+        )
+        ; "●"
+      )
+    )
+  )
+)

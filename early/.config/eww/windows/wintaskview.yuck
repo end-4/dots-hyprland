@@ -1,0 +1,217 @@
+(defwidget winworkspacebox [wspace]
+  (box ; Note: height 100px width 356px
+    :space-evenly false :orientation "v" :spacing 3
+    :class "taskview-ws taskview-ws-${wspace[0].workspace.id == activews}"
+    (label
+      :class "wintaskview-text"
+      :xalign 0
+      :text "Desktop ${wspace[0].workspace.id}"
+    )
+    (box
+      :space-evenly false :orientation "h"
+      :style "
+      min-width: ${RES_WIDTH * TASKVIEW_SCALE}px;
+      min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
+      "
+      (overlay
+        (box ; image doesnt do rounding so use css background image
+          :class "wintaskview-workspace-bg"
+          ; :path "./images/wallpaper/wallpaper_small"
+          :style "
+          min-width: ${RES_WIDTH * TASKVIEW_SCALE}px;
+          min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
+          background-image: url('./images/wallpaper/wallpaper_small');
+          "
+          :width {round(RES_WIDTH * TASKVIEW_SCALE, 0)}
+          :height {round(RES_HEIGHT * TASKVIEW_SCALE, 0)}
+        )
+        (box
+          :space-evenly false :orientation "h"
+          (for ws-window in wspace
+            (box
+              :class "${ws-window.class == 'workspace' ? '' : 'taskview-ws-window'}"
+              :style "
+              ${ws-window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
+              ${ws-window.address == '_none' ? 'border: none' : ''};
+              margin-left: ${ws-window.at[0] * TASKVIEW_SCALE}px;
+              margin-top: ${ws-window.at[1] * TASKVIEW_SCALE}px;
+              margin-right: -${(ws-window.at[0] + ws-window.size[0]) * TASKVIEW_SCALE}px;
+              margin-bottom: ${RES_HEIGHT * TASKVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * TASKVIEW_SCALE)};
+              "
+              (eventbox
+                :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
+                :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
+                :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} scripts/toggle-wintaskview.sh --close &"
+                :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
+                (box
+                  :class "overview-background"
+                  ; Uncomment below to enable thumbnail previews (VERY SLOW)
+                  ; :style "
+                  ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
+                  ; "
+                  (image
+                    :class "overview-icon"
+                    :path {ws-window.icon}
+                    :image-width {round(ws-window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                    :image-height {round(ws-window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget wintaskview_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :class "thewholething"
+    (eventbox
+      :onclick "scripts/toggle-wintaskview.sh --close &"
+      (overlay
+        (box
+          :width RES_WIDTH :height {RES_HEIGHT - 50}
+          :class "wintaskview-bg"
+        )
+        (box
+          :orientation "h" :space-evenly false
+          :halign "fill" :valign "start" :height {RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM}
+          (for workspace in taskviewlayout
+            (revealer
+              :reveal {arraylength(workspace) != 0 && workspace[0][0]["workspace"]["id"] == activews}
+              :transition "slideright"
+              :duration "0ms"
+              (scroll
+                :hscroll false :vscroll true
+                :width {RES_WIDTH}
+                :height {RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM}
+                (box
+                  :space-evenly false :orientation "v" :spacing WINTASKVIEW_SPACING
+                  :style "padding: ${WINTASKVIEW_SPACING}"
+                  :valign "center"
+                  (for row in workspace
+                    (box
+                      :space-evenly false :spacing WINTASKVIEW_SPACING
+                      :halign "center"
+                      :valign "center"
+                      :height {
+                        (MIN_ROW_HEIGHT > (RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM - WINTASKVIEW_SPACING) / arraylength(workspace) - 51 - WINTASKVIEW_SPACING) ?
+                        MIN_ROW_HEIGHT :
+                        (RES_HEIGHT - WINTASKVIEW_RESERVED_BOTTOM - WINTASKVIEW_SPACING) / arraylength(workspace) - 51 - WINTASKVIEW_SPACING
+                      }
+                      (for window in row
+                        (box
+                          :class "${window.class == 'workspace' ? '' : 'taskview-thisws-window'}"
+                          :valign "center"
+                          :style `
+                          ${window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
+                          ${window.address == '_none' ? 'border: none' : ''};
+                          min-width: ${window["size"][0]}px;
+                          min-height: ${window["size"][1]}px;
+                          `
+                          (eventbox
+                            :onrightclick "scripts/selectwindow ${window.address} '${EWW_CMD}' ${window.workspace.id}"
+                            :onmiddleclick "hyprctl dispatch closewindow address:${window.address}"
+                            :onclick "scripts/focuswindow ${window.address} ${window.workspace.id} && hyprctl dispatch bringactivetotop && scripts/toggle-wintaskview.sh --close &"
+                            ; :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
+                            (box
+                              :orientation "v" :space-evenly false
+                              :class "overview-background"
+                              (box ;
+                                :height 49 :space-evenly false :spacing 10
+                                :orientation "h"
+                                :style "padding: 0 14px;"
+                                (image
+                                  :vexpand true
+                                  :class "overview-icon"
+                                  :path {window.icon}
+                                  :image-width 25
+                                  :image-height 25
+                                  ; :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                  ; :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                )
+                                (label
+                                  :hexpand true :xalign 0
+                                  :class "wintaskview-text"
+                                  :limit-width {round(window.size[0] / 9, 0)}
+                                  :text "${window.title}"
+                                )
+                                ; (button
+                                ;   (label
+                                ;     :class "wintaskview-thisws-window-close"
+                                ;     :text ""
+                                ;   ) 
+                                ; )
+                              )
+                              (image
+                                :vexpand true
+                                :path {window.icon}
+                                :class "taskview-thisws-window-thumbnail"
+                                :image-width {round(window.size[0] * 25 / 100, 0)}
+                                :image-height {round(window.size[1] * 25 / 100, 0)}
+                                ; :image-width {round(window.size[0] * TASKVIEW_SCALE * 45 / 100, 0)}
+                                ; :image-height {round(window.size[1] * TASKVIEW_SCALE * 45 / 100, 0)}
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (box
+          :valign "end"
+          :class "wintaskview-workspaces-bg"
+          :style "
+          ${anim_open_wintaskview ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+          ${rev_wintaskview ? '' : 'margin-bottom: -900px;'}
+          min-height: ${RES_HEIGHT * TASKVIEW_SCALE}px;
+          "
+          (scroll
+            :hscroll true
+            :vscroll false
+            (box
+              :orientation "h" :space-evenly false
+              :halign "center"
+              (box
+                :orientation "h" :space-evenly false
+                (for wspace in wsjsona
+                  (winworkspacebox
+                    :wspace {wspace}
+                  )
+                )
+              )
+              (box
+                :orientation "h" :space-evenly false
+                (for wspace in wsjsonb
+                  (winworkspacebox
+                    :wspace {wspace}
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow wintaskview
+  :stacking "overlay"
+  :wm-ignore true
+  :focusable true
+  :monitor 0
+  :geometry (geometry
+    :anchor "top center"
+  )
+  (wintaskview_widget)
+)

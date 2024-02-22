@@ -1,0 +1,163 @@
+(defwidget cavacol_musicwin [nth dir]
+  (box
+    :valign "${dir == 'up' ? 'end' : (
+      dir == 'down' ? 'start' : (
+        dir == 'virt' ? 'center' : 'fill'
+      )
+    )}"
+    :halign "${dir == 'right' ? 'start' : (
+      dir == 'left' ? 'end' : (
+        dir == 'hori' ? 'center' : 'fill'
+      )
+    )}"
+    :width 15
+    :class "music-cava-column"
+    :style "
+    background-color: ${mcover.color.colors.color4 == 'null' ? 'white' : mcover.color.colors.color4};
+    transition: 0ms;
+    min-${dir == 'up' || dir == 'down' ? 'height' : 'width'}: ${cavajson[nth] / 7}px;
+    "
+  )
+)
+
+(defwidget music []
+  (eventbox
+    :onhoverlost "scripts/toggle-music.sh --close &"
+    (box
+      :class "music-area"
+      :style "
+      ${music_open ? '' : 'margin-top: -233px; margin-bottom: 233px;'}
+      ${anim_open_music ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+      "
+      (overlay
+        (box ; Fallback
+          :class "music-cover-art"
+        )
+        (box ; Cover art
+          :class "music-cover-art"
+          :style "background-image: url('${mcover.image}');"
+        )
+        (box :space-evenly true :orientation "h"
+          (cavacol_musicwin :dir "up" :nth 0)
+          (cavacol_musicwin :dir "up" :nth 1)
+          (cavacol_musicwin :dir "up" :nth 2)
+          (cavacol_musicwin :dir "up" :nth 3)
+          (cavacol_musicwin :dir "up" :nth 4)
+          (cavacol_musicwin :dir "up" :nth 5)
+          (cavacol_musicwin :dir "up" :nth 6)
+          (cavacol_musicwin :dir "up" :nth 7)
+          (cavacol_musicwin :dir "up" :nth 8)
+          (cavacol_musicwin :dir "up" :nth 9)
+          (cavacol_musicwin :dir "up" :nth 10)
+          (cavacol_musicwin :dir "up" :nth 11)
+          (cavacol_musicwin :dir "up" :nth 12)
+          (cavacol_musicwin :dir "up" :nth 13)
+          (cavacol_musicwin :dir "up" :nth 14)
+          (cavacol_musicwin :dir "up" :nth 15)
+          (cavacol_musicwin :dir "up" :nth 16)
+          (cavacol_musicwin :dir "up" :nth 17)
+          (cavacol_musicwin :dir "up" :nth 18)
+          (cavacol_musicwin :dir "up" :nth 19)
+          (cavacol_musicwin :dir "up" :nth 20)
+          (cavacol_musicwin :dir "up" :nth 21)
+          (cavacol_musicwin :dir "up" :nth 22)
+          (cavacol_musicwin :dir "up" :nth 23)
+          (cavacol_musicwin :dir "up" :nth 24)
+          (cavacol_musicwin :dir "up" :nth 25)
+          (cavacol_musicwin :dir "up" :nth 26)
+          (cavacol_musicwin :dir "up" :nth 27)
+          (cavacol_musicwin :dir "up" :nth 28)
+          (cavacol_musicwin :dir "up" :nth 29)
+          (cavacol_musicwin :dir "up" :nth 30)
+          (cavacol_musicwin :dir "up" :nth 31)
+          (cavacol_musicwin :dir "up" :nth 32)
+          (cavacol_musicwin :dir "up" :nth 33)
+          (cavacol_musicwin :dir "up" :nth 34)
+        )
+        (box ;
+          :orientation "v"
+          :class "music-box"
+          :space-evenly false
+          (label
+            :class "music-title"
+            :wrap false
+            :text "${music.title == '' ? 'Not playing' : music.title}"
+            :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+            :limit-width 35
+          )
+          (label
+            :class "music-artist"
+            :wrap true
+            :text "${music.artist}"
+            :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+          )
+          (centerbox
+            (box
+              (label
+                :halign "center"  :valign "center"
+                :class "music-time-label"
+                :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+                :text {music.position_time}
+              )
+            )
+            (centerbox
+              :class "music-button-box"
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+                :onclick "playerctl previous" ""
+              )
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+                :onclick "playerctl play-pause"
+                "${music.status != '' ? music.status : ''}"
+              )
+              (button
+                :class "song-button"
+                :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                ""
+              )
+            )
+            (box
+              (label
+                :halign "center"  :valign "center"
+                :class "music-time-label"
+                :style "color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};"
+                :text {music.length}
+              )
+            )
+          )
+          (scale
+            :valign "end"
+            :class "track-scale"
+            :value {music.position}
+            :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+            :style "highlight {background-color: ${mcover.color.colors.color4};}"
+          )
+        )
+        (box
+          :class "music-media-source"
+          :halign "start"
+          :valign "start"
+          :orientation "h"
+          (label :class "music-source-icon" :text "${mcover.color.source}" :style "color: ${mcover.color.colors.color4};")
+        )
+      )
+    )
+  )
+)
+
+(defwindow music
+  :wm-ignore true
+  :stacking "overlay"
+  :monitor 0
+  :geometry (geometry
+    :x "15px"
+    :y "61px"
+    :width "558px"
+    :height "191px"
+  :anchor "top left")
+  (music)
+)

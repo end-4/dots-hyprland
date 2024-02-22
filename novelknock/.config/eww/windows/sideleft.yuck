@@ -1,0 +1,679 @@
+(defwidget togglehyprctl [value changecmd option-label option-icon icon-style]
+  (eventbox
+    :cursor "pointer"
+    :onclick "${changecmd}${1 - value} && scripts/hyprsettings tickle &"
+    (box
+      :orientation "v"
+      :space-evenly false :spacing -10
+      :height 100 :width 100
+      :class "sidebar-hyprtoggle"
+      (label
+        :class "sidebar-hyprtoggle-name bar-txt-norm"
+        :text option-label
+      )
+      (label
+        :vexpand true
+        :class "sidebar-hyprtoggle-icon${icon-style == 1 ? '-material' : ''} sidebar-hyprtoggle-icon-${value} bar-txt-norm"
+        :text option-icon
+      )
+      (box
+        :halign "center" :valign "end"
+        :class "sidebar-hyprtoggle-onoff sidebar-hyprtoggle-onoff-${value}"
+      )
+    )
+  )
+)
+
+(defwidget hyprtoggles_widget []
+  (box
+    :orientation "v"
+    :space-evenly false :spacing 10
+    :class "sidebar-hyprtoggle-scrollbg"
+    (box
+      :orientation "h" :space-evenly false :spacing 5
+      (settings_option_mousesens)
+      ; (togglehyprctl
+        ;   :value {mousemode}
+        ;   :changecmd "eww update mousemode="
+        ;   :option-label "Mouse"
+        ;   :option-icon "Mouse"
+        ;   :icon-style 0
+      ; )
+      (eventbox
+        :cursor "pointer"
+        :onclick "eww update mousemode=${1 - mousemode} &"
+        (box :space-evenly false :spacing 15
+          :class "dashboard-settings-option-group dashboard-settings-option-group-pad"
+          (label :xalign 0 :hexpand true :class "dashboard-settings-txt bar-txt-norm" :text "Scroll\\\naccessibility")
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "${mousemode == 1 ? 'mouse' : ''}")
+        )
+      )
+    )
+    (box
+      :orientation "h"
+      :spacing 5
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword decoration:blur:enabled ${1 - hyprjson.blur} && scripts/hyprsettings tickle &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "blur_on")
+          (settings-option-binary :name "Enable blur" :value {hyprjson.blur})
+        )
+      )
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword decoration:blur:xray ${1 - hyprjson.blur_xray} && scripts/hyprsettings tickle &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "preview")
+          (settings-option-binary :name "Blur xray" :value {hyprjson.blur_xray})
+        )
+      )
+    )
+    (box
+      :orientation "h"
+      :spacing 5
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword input:touchpad:disable_while_typing ${1 - hyprjson.touchpad_disable_while_typing} &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-left dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "keyboard")
+          (settings-option-binary :name "→ Disable touchpad" :value {hyprjson.touchpad_disable_while_typing})
+        )
+      )
+      (eventbox
+        :cursor "pointer"
+        :onclick "hyprctl keyword input:touchpad:clickfinger_behavior ${1 - hyprjson.touchpad_clickfinger_behavior} &"
+        (box :space-evenly false :spacing 10
+          :class "dashboard-settings-option-group-right dashboard-settings-option-group-pad"
+          (label :class "sidebar-optn-icon bar-txt-norm" :text "touch_app")
+          (settings-option-binary :name "Tap to click" :value {hyprjson.touchpad_clickfinger_behavior})
+        )
+      )
+    )
+    (button
+      :vexpand true
+      :onclick "hyprctl reload &"
+      :class "dashboard-settings-button"
+      (label :class "bar-txt bar-txt-norm" :text "Reload config")
+    )
+  )
+)
+
+(defwidget waifu_widget []
+  (box
+    :orientation "h"
+    :space-evenly false
+    :class "sidebar-waifu-scrollbg"
+    :spacing 13
+    (box
+      :space-evenly false :orientation "h"
+      (revealer
+        :reveal {mousemode == 1}
+        :transition "slideright"
+        :duration "200ms"
+        (eventbox
+          :onscroll "scripts/scroll-waifu {} &"
+          :width 100
+          (box
+            :orientation "v"
+            :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
+            (box
+              :orientation "v"
+              :spacing 6
+              :valign "start"
+              :style "
+              ${ANIM_ENTER[1]}
+              margin-top: -${(SCROLL_MULTIPLIER_WAIFUTAGS * scroll_offset_waifu)}px;
+              margin-bottom: -${(arraylength(WAIFU_TAG_ID) - SCROLL_TOSHOW_WAIFUTAGS - scroll_offset_waifu) * SCROLL_MULTIPLIER_WAIFUTAGS}px;
+              "
+              (for id in WAIFU_TAG_ID
+                (button
+                  :class "sidebar-waifu-tag bar-txt-norm"
+                  :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                  {WAIFU_CATEGORIES[id]}
+                )
+              )
+            )
+          )
+        )
+      )
+      (revealer
+        :reveal {mousemode == 0}
+        :transition "slideleft"
+        :duration "200ms"
+        (scroll
+          :vscroll true :hscroll false
+          :vexpand true
+          :width 100
+          (box
+            :orientation "v" :spacing 6
+            (for id in WAIFU_TAG_ID
+              (button
+                :class "sidebar-waifu-tag"
+                :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                {WAIFU_CATEGORIES[id]}
+              )
+            )
+          )
+        )
+      )
+    )
+    (eventbox
+      :onscroll "scripts/scroll-sideleft-favourite {} &"
+      :hexpand true
+      (scroll
+        :hexpand true
+        :hscroll true :vscroll false
+        (overlay
+          (box
+            :class "sidebar-waifu-pic-bg"
+          )
+          (box
+            :class "sidebar-waifu-pic"
+            :style "
+            ${ANIM_ENTER[0]}
+            background-image: url('${waifu.path}');
+            ${waifu['size'][0] / waifu['size'][1] > 395 / 530 ?
+            'background-size: auto 100%;' : 'background-size: 100% auto;'
+            }
+            "
+          )
+          (revealer
+            :valign "end"
+            :reveal {rev_waifustatus}
+            :duration "100ms"
+            :transition "slidedown"
+            (label
+              :valign "end"
+              :class "txt-smaller sidebar-waifu-status"
+              :text {waifu_status}
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget sideleft_widget []
+  (eventbox
+    :onhoverlost "${open_sideleft ?
+    (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideleft=false &') : ''}"
+    (box
+      :space-evenly false
+      :halign "end"
+      :style "
+      ${open_sideleft ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+      ${open_sideleft ? '' : 'margin-left: -594px;'}
+      "
+      ; ↑ PERFECTLY LEAVE 1 PIXEL ON THE RIGHT EDGE AWAAHAHAHAHAH
+      (box
+        :orientation "v"
+        :space-evenly false :spacing -5
+        :halign "start"
+        :style "
+        min-width: 595px;
+        "
+        (eventbox
+          :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd"
+          :onmiddleclick "playerctl play-pause"
+          :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+          :onclick "${open_sideleft ?
+          (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideleft=false &') :
+          (EWW_CMD + ' open sideleft && ' + EWW_CMD + ' update bar_offset=1 && ' + EWW_CMD + ' update open_sideright=false && ' + EWW_CMD + ' update open_sideleft=true &')}"
+          (box
+            :space-evenly false :orientation "h"
+            :class "window"
+            :halign "end"
+            (box
+              :space-evenly false :spacing 10
+              :height {BAR_HEIGHT} :width 390
+              :class "sidebar-bg sidebar-bg-pad window-shadow"
+              (label :xalign 0
+                :class "bar-icon-material-hugeass bar-txt-norm"
+                :text ""
+              )
+              (label :xalign 0
+                :hexpand true
+                :class "bar-txt-hugeass bar-txt-norm"
+                :text "Knock"
+              )
+              (label :xalign 1
+                :class "bar-txt-small bar-txt-norm"
+                :text "Unhover to close"
+              )
+            )
+          )
+        )
+        (box ; Body
+          :space-evenly false
+          :orientation "v"
+          :class "window"
+          :vexpand true
+          (box ; Media controls
+            :orientation "v" :space-evenly false
+            :vexpand true
+            :class "sidebar-bg"
+            (box
+              :class "sidebar-music-box"
+              :hexpand true
+              (overlay
+                :hexpand true
+                (box ; 1. The background
+                  :class "sidebar-music-thumbnail"
+                  :height 200
+                  :style "
+                  ${mcover.image == 'null' ? '' : ('background-image: url(\'' + mcover.image + '\'); background-size: 100% auto; background-position: center')}
+                  "
+                )
+                (box ; 2. Color tint
+                  :class "sidebar-music-vignette"
+                  :hexpand true
+                  :height 200
+                  :style "
+                  background: radial-gradient(mix(${mcover.materialcolor.primaryContainer == 'null' ? coloraccent : mcover.materialcolor.primaryContainer}, rgba(0, 0, 0, 0.4), 0.95) 50%, mix(${mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4}, rgba(0, 0, 0, 0.4), 0.95) 50%);
+                  "
+                )
+                (box ; 3. Text and controls
+                  :orientation "v"
+                  :space-evenly false :spacing -5
+                  (box ; Media source, output
+                    :space-evenly false
+                    :orientation "h"
+                    (label :xalign 0
+                      :hexpand true
+                      :class "sidebar-music-source"
+                      :text "${mcover.color.source}"
+                      :style "color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};"
+                    )
+                    (box
+                      :orientation "h" :space-evenly false :spacing 5
+                      :halign "end"
+                      :class "sidebar-music-output"
+                      :style "
+                      ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                      "
+                      (label
+                        :class "bar-icon-material sidebar-music-device"
+                        :text "${volume.device == 'Headphones' ? '' : ''}"
+                        :style "
+                        ${mcover.materialcolor.onPrimary == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimary + ';')};
+                        "
+                      )
+                      (label
+                        :text "${volume.device}"
+                        :style "
+                        ${mcover.materialcolor.onPrimary == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimary + ';')};
+                        "
+                      )
+                    )
+                  )
+                  (box ; Title, play button
+                    :space-evenly false
+                    :orientation "h"
+                    (scroll
+                      :hexpand true
+                      :height 50
+                      :hscroll true :vscroll false
+                      :style "margin: 15px;"
+                      (box
+                        :orientation "v"
+                        :space-evenly false
+                        :valign "center"
+                        (label :xalign 0
+                          :class "sidebar-music-title"
+                          :style "
+                          color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};
+                          "
+                          :text "${strlength(mname.title) == 0 ? 'Music' : mname.title}"
+                        )
+                        (label :xalign 0
+                          :class "sidebar-music-artist"
+                          :style "
+                          color: ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer};
+                          "
+                          :text "${mname.artist}"
+                        )
+                      )
+                    )
+                    (button
+                      :valign "center"
+                      :class "sidebar-music-playbtn"
+                      :style "
+                      ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                      ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                      "
+                      :onclick "playerctl play-pause"
+                      "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
+                    )
+                  )
+                  (box ; Slider and skip track buttons
+                    :space-evenly false
+                    :orientation "h"
+                    (button
+                      :class "sidebar-music-trackbtn"
+                      :style "
+                      ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                      "
+                      :onclick "playerctl previous"
+                      "skip_previous"
+                    )
+                    (overlay
+                      :hexpand true
+                      (box
+                        :hexpand true
+                        :valign "center"
+                        :class "sidebar-music-progress"
+                        :style "
+                        background-image:
+                        linear-gradient(to right,
+                          ${mcover.materialcolor.onPrimaryContainer == 'null' ? coloraccent : mcover.materialcolor.onPrimaryContainer} ${music.position}%,
+                          rgba(200, 200, 200, 0.6) ${music.position}%);
+                        "
+                      )
+                      (label
+                        :class "sidebar-music-progress-btn"
+                        :valign "center"
+                        :xalign {music.position == '' ? 0 : (music.position / 100)}
+                        :style "
+                        ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                        "
+                        :text "●"
+                      )
+                    )
+                    ; ; Below is the proper scale widget, but doesn't follow Material colors
+                    ; (scale
+                      ;     :hexpand true
+                      ;     :class "sidebar-music-slider"
+                      ;     :style "
+                      ;     highlight {
+                      ;     color: red;
+                      ;     }
+                      ;     "
+                      ;     :value {music.position}
+                      ;     ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                    ; )
+                    (button
+                      :class "sidebar-music-trackbtn"
+                      :style "
+                      color: ${mcover.materialcolor.onPrimaryContainer};
+                      "
+                      :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                      "skip_next"
+                    )
+                  )
+                )
+              )
+            )
+            (box ; Favourite settings >> Waifu
+              :orientation "v"
+              :space-evenly false :spacing -20
+              :vexpand true
+              (eventbox
+                :onscroll "scripts/scroll-sideleft-favourite {} &"
+                (box ; The text
+                  :orientation "h"
+                  :space-evenly false
+                  :valign "start"
+                  :height {BAR_HEIGHT}
+                  :class "sidebar-section-title"
+                  (label :xalign 0
+                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                    :text ""
+                  )
+                  (label :xalign 0
+                    :hexpand true
+                    :class "bar-txt-hugeass sidebar-section-title-text"
+                    :text "${SIDELEFT_FAVOURITE_TITLES[sideleft_favourite_page - 1]}"
+                  )
+                  (label :xalign 1
+                    :class "bar-txt-small sidebar-section-title-text"
+                    :text {sideleft_favourite_page == 1 ? '>>' : 'Uses waifu.im, nekos.life, and waifu.pics API'}
+                  )
+                )
+              )
+              (box
+                :class "sidebar-favourite-pad"
+                :orientation "h" :space-evenly false :spacing 0
+                :vexpand true
+                (eventbox
+                  :onscroll "scripts/scroll-sideleft-favourite {} &"
+                  (box ; 1: Quick toggles
+                    :style "
+                    ${ANIM_ENTER[1]}
+                    ${sideleft_favourite_page > 1 ? 'margin-left: -600px;' : ''}
+                    "
+                    (hyprtoggles_widget)
+                  )
+                )
+                (box ; 2: Waifu
+                  :style "
+                  ${ANIM_ENTER[1]}
+                  ${sideleft_favourite_page > 2 ? 'margin-left: -600px;' :
+                  sideleft_favourite_page < 2 ? 'margin-right: -600px;' : ''}
+                  "
+                  (waifu_widget)
+                )
+              )
+            )
+            (revealer
+              :reveal {sideleft_favourite_page == 1}
+              :transition "slideup"
+              :duration {sideleft_favourite_page == 1 ? '0ms' : '100ms'}
+              (eventbox
+                :onscroll "scripts/scroll-sideleft-favourite {} &"
+                :hexpand true
+                (box ; Resources
+                  :orientation "v"
+                  :space-evenly false
+                  (box ; The text
+                    :space-evenly false
+                    :height {BAR_HEIGHT}
+                    :class "sidebar-section-title"
+                    (label :xalign 0
+                      :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                      :text ""
+                    )
+                    (label :xalign 0
+                      :hexpand true
+                      :class "bar-txt-hugeass sidebar-section-title-text"
+                      :text "Resources"
+                    )
+                    ; (label :xalign 1
+                    ;     :class "bar-txt-small sidebar-section-title-text"
+                    ;     :text "no"
+                    ; )
+                  )
+                  (box ; Actual stuff
+                    :orientation "h"
+                    :space-evenly false :spacing 10
+                    :class "sidebar-resource-pad"
+                    (box
+                      :class "sidebar-resource-value"
+                      :width 140 :height 180
+                      (box
+                        :orientation "v" :space-evenly false :spacing 13
+                        :halign "center" :valign "center"
+                        (circular-progress
+                          :width 80 :height 80
+                          :start-at 75
+                          :class "sidebar-resource-circle"
+                          :value {EWW_CPU.avg > 100 ? 100 : EWW_CPU.avg}
+                          :thickness 5
+                          (label :class "sidebar-resource-icon-large-material" :text "")
+                        )
+                        (label
+                          :class "sidebar-resource-txt"
+                          :text "${round(EWW_CPU.avg, 0)}%"
+                        )
+                      )
+                    )
+                    (box
+                      :orientation "v" :space-evenly false :spacing 10
+                      :hexpand true
+                      (box
+                        :orientation "h" :space-evenly false :spacing 10
+                        (box
+                          :class "sidebar-resource-value"
+                          :width 120 :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {memory.percentage > 100 ? 100 : memory.percentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${memory.used}/${memory.total}"
+                            )
+                          )
+                        )
+                        (box
+                          :class "sidebar-resource-value"
+                          :width 120 :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {memory.swappercentage > 100 ? 100 : memory.swappercentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${memory.swapused}/${memory.swaptotal}"
+                            )
+                          )
+                        )
+                        (box
+                          :class "sidebar-resource-value"
+                          :hexpand true :height 120
+                          :valign "start"
+                          (box
+                            :orientation "v" :space-evenly false :spacing 13
+                            :halign "center" :valign "center"
+                            (circular-progress
+                              :width 55 :height 55
+                              :start-at 75
+                              :class "sidebar-resource-circle"
+                              :value {battery.percentage > 100 ? 100 : battery.percentage}
+                              :thickness 4
+                              (label :class "sidebar-resource-icon-small" :text "Bolt")
+                            )
+                            (label
+                              :class "sidebar-resource-txt-small"
+                              :text "${battery.percentage}%"
+                            )
+                          )
+                        )
+                      )
+                      (box
+                        :class "sidebar-resource-value"
+                        
+                        :valign "start"
+                        (box
+                          :orientation "h" :space-evenly false :spacing 15
+                          :valign "center"
+                          (label
+                            :valign "center"
+                            :class "sidebar-resource-icon-small"
+                            :text ""
+                          )
+                          (progress
+                            :valign "center"
+                            :hexpand true
+                            :class "sidebar-resource-prog"
+                            :value {diskfreepercent}
+                          )
+                          (label
+                            :valign "center"
+                            :class "sidebar-resource-txt-small"
+                            :text "${diskfree}/${disksize} free"
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (box ; Quote
+              :orientation "v"
+              :space-evenly false
+              :spacing -10
+              :valign "end"
+              (eventbox
+                :onscroll "scripts/scroll-quote {} &"
+                :onclick "${EWW_CMD} update quote_index=${(quote_index + 1 + arraylength(quote_content)) % arraylength(quote_content)} &"
+                (box
+                  :orientation "v"
+                  :space-evenly false :spacing -20
+                  (box ; The text
+                    :space-evenly false
+                    :height {BAR_HEIGHT}
+                    :class "sidebar-section-title"
+                    (label :xalign 0
+                      :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                      :text ""
+                    )
+                    (label :xalign 0
+                      :hexpand true
+                      :class "bar-txt-hugeass sidebar-section-title-text"
+                      :text "Quote!"
+                    )
+                    (label :xalign 1
+                      :class "bar-txt-small sidebar-section-title-text"
+                      :text "${quote_index+1}/${arraylength(quote_content)}"
+                    )
+                  )
+                  (box
+                    :class "sidebar-quote bar-txt-norm"
+                    :orientation "v" :space-evenly false :spacing 10
+                    :height 150
+                    (label :xalign 0 :yalign 0
+                      :vexpand true
+                      :text {quote_content[quote_index]}
+                      :wrap true
+                    )
+                    (label :xalign 1
+                      :text {quote_author[quote_index]}
+                      :wrap true
+                    )
+                  )
+                  (box
+                    :height 20
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow sideleft
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :height "100%"
+    :anchor "top left"
+  )
+  (sideleft_widget)
+)

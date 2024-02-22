@@ -1,0 +1,99 @@
+; Variables
+(include "./variables.yuck")
+; Library for commonly used stuff
+(include "./lib.yuck")
+; Bar modules
+(include "./modules/dynamiccenter.yuck")
+(include "./modules/dynamicright.yuck")
+(include "./modules/leftspace.yuck")
+(include "./modules/music.yuck")
+(include "./modules/notifications.yuck")
+(include "./modules/osd.yuck")
+(include "./modules/status.yuck")
+(include "./modules/system.yuck")
+(include "./modules/taskbar.yuck")
+(include "./modules/workspaces.yuck")
+; Other widgets
+(include "./windows/bgdecor.yuck")
+(include "./windows/cheatsheet.yuck")
+(include "./windows/notificationspopup.yuck")
+(include "./windows/powermenu.yuck")
+(include "./windows/powerview.yuck")
+(include "./windows/sideleft.yuck")
+(include "./windows/sideright.yuck")
+(include "./windows/visualizer.yuck")
+
+(defwidget bar_widget []
+  (centerbox
+    :class "bar-bg flyin-top bar-bg-top-decor"
+    :style "
+    ${ANIM_ENTER[0]}
+    "
+    (box
+      :hexpand true
+      (leftspace_widget)
+    )
+    (centerbox
+      (box
+        :orientation "h" :space-evenly false
+        (music_widget)
+      )
+      (box
+        :orientation "h"
+        (dynamiccenter_widget)
+      )
+      (box
+        :orientation "h" :space-evenly false
+        :halign "end"
+        (system_widget)
+      )
+    )
+    (box
+      :hexpand true
+      (dynamicright_widget)
+    )
+  )
+)
+
+(defwidget bar_bottom_widget []
+  (centerbox
+    :class "bar-bg flyin-bottom bar-bottom-height"
+    (box
+      :hexpand true
+      (music_bottom_widget)
+    )
+    (box
+      (taskbar_widget)
+    )
+    (box
+      :hexpand true
+      :orientation "h"
+      :space-evenly false
+      (box :hexpand true)
+      (system_bottom_widget)
+    )
+  )
+)
+
+(defwindow bar
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :width "100%"
+    :anchor "top center"
+  )
+  (bar_widget)
+)
+
+(defwindow barbottom
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :width "100%"
+    ; :height "60px"
+    :anchor "bottom center"
+  )
+  (bar_bottom_widget)
+)

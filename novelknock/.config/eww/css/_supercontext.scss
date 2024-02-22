@@ -1,0 +1,20 @@
+.supercontext-bg {
+    background-position: center center;
+}
+
+.supercontext-btn {
+    // border-radius: 99px;
+    // background: red;
+}
+
+.supercontext-btn-icon {
+    @include icon-material;
+    font-size: 25pt;
+    color: $onBackground;
+}
+
+.supercontext-btn-num {
+    @include mainfont;
+    font-size: 25pt;
+    color: $onBackground;
+}

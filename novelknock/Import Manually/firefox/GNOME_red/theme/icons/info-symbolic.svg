@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <filter id="a" x="0" y="0" width="1" height="1">
+        <feColorMatrix in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="l">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="m">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="n">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="o">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="p">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".3"/>
+        </g>
+    </mask>
+    <clipPath id="q">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="r">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="s">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="t">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".4"/>
+        </g>
+    </mask>
+    <clipPath id="u">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="v">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".4"/>
+        </g>
+    </mask>
+    <clipPath id="w">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="x">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="y">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="z">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="A">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <path d="m7.9062 1c-3.8281 0.050781-6.9062 3.1719-6.9062 7 0 3.8672 3.1328 7 7 7s7-3.1328 7-7-3.1328-7-7-7h-0.09375zm-0.40625 3h1c0.27734 0 0.5 0.22266 0.5 0.5v1c0 0.27734-0.22266 0.5-0.5 0.5h-1c-0.27734 0-0.5-0.22266-0.5-0.5v-1c0-0.27734 0.22266-0.5 0.5-0.5zm-0.5 3h2v5h-2z" color="#000000" fill="context-fill" stroke="context-stroke" fill-opacity="context-fill-opacity"/>
+</svg>

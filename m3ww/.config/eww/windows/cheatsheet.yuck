@@ -1,0 +1,115 @@
+(defwidget cheatsheet_widget []
+  (box
+    :class "cheatsheet-bg spacing-v-15"
+    :orientation "v"
+    :space-evenly false
+    (centerbox
+      (box)
+      (box
+        :valign "center"
+        :orientation "h"
+        :space-evenly false
+        :class "spacing-h-15"
+        (label
+          :class "txt txt-hugeass"
+          :text "Cheat sheet"
+        )
+        (box
+          :space-evenly false
+          (label
+            :valign "center"
+            :class "cheatsheet-key txt-small"
+            :text ""
+          )
+          (label
+            :valign "center"
+            :class "cheatsheet-key-notkey txt-small"
+            :text "+"
+          )
+          (label
+            :valign "center"
+            :class "cheatsheet-key txt-small"
+            :text "/"
+          )
+        )
+      )
+      (button
+        :halign "end" :valign "center"
+        :class "cheatsheet-closebtn icon-material txt txt-hugeass"
+        :onclick "hyprctl dispatch submap reset && scripts/toggle-cheatsheet.sh --close &"
+        (label
+          :text "close"
+        )
+      )
+    )
+    (box
+      :spacing 15 ; can't apply dynamic children spacing for for loops sadly
+      (for column in cheatsheet
+        (box
+          :orientation "v"
+          :space-evenly false
+          :spacing 15 ; can't apply dynamic children spacing for for loops sadly
+          (for category in column
+            (revealer
+              :transition "crossfade"
+              :duration "150ms"
+              :reveal {open_cheatsheet >= category.appeartick}
+              (box :space-evenly false :orientation "v"
+                :class "spacing-v-15"
+                (box
+                  :orientation "h"
+                  :space-evenly false
+                  :class "spacing-h-10"
+                  (label :xalign 0
+                    :class "icon-material txt txt-larger"
+                    :text {category.icon}
+                  )
+                  (label :xalign 0
+                    :class "txt txt-larger"
+                    :text {category.name}
+                  )
+                )
+                (box
+                  :space-evenly false :orientation "h"
+                  :class "spacing-h-10"
+                  (box
+                    :orientation "v"
+                    (for keybind in {category.binds}
+                      (box :space-evenly false :orientation "h"
+                        (for key in {keybind.keys}
+                          (label
+                            :class "${key == 'OR' || key == '+' ? 'cheatsheet-key-notkey' : 'cheatsheet-key'} txt-small"
+                            :text {key}
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (box
+                    :orientation "v"
+                    (for keybind in {category.binds}
+                      (label :xalign 0
+                        :class "txt chearsheet-action txt-small"
+                        :text {keybind.action}
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow cheatsheet
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "center center"
+  )
+  (cheatsheet_widget)
+)

@@ -1,0 +1,75 @@
+@namespace xul url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+/** Video player **/
+
+.progressBar::-moz-progress-bar {
+	background-color: #fff !important;
+}
+
+.scrubber:hover::-moz-range-thumb,
+.volumeControl:hover::-moz-range-thumb {
+	background-color: #ccc !important;
+}
+
+.scrubber:active::-moz-range-thumb,
+.volumeControl:active::-moz-range-thumb {
+	background-color: #bbb !important;
+}
+
+.controlBar {
+	border-radius: 5px;
+	margin: auto;
+	margin-bottom: 5px;
+	width: 98.5%;
+	max-width: 800px;
+	height: 30px !important;
+	background-color: rgba(20,20,20,0.8) !important;
+}
+
+.controlBar > .button:enabled:hover {
+	fill: #ccc !important;
+}
+  
+.controlBar > .button:enabled:hover:active {
+	fill: #bbb !important;
+}
+
+.scrubberStack {
+	margin: 0 10px;
+}
+
+.playButton {
+	scale: 0.8;
+}
+  
+
+
+/** Vertical Volume Bar **/
+/* I'm to stupid to get this working. Wasn't able to set proper position relative to mute button */
+
+/* .muteButton:hover ~ .volumeStack{
+	margin-bottom: 129px !important;
+  }
+	.volumeStack:hover {
+	margin-bottom: 129px !important;
+  }
+  
+  .volumeStack {
+	transform: rotate(270deg);
+	max-height: 33px !important;
+	min-width: 100px !important;
+  position:absolute !important;
+  margin-bottom: -150px !important;
+	background-color: rgba(20,20,20,0.8) !important;
+	border-bottom-right-radius: 5px !important;
+	border-top-right-radius: 5px !important;
+	transition-property: margin-bottom;
+	transition-duration: 0.13s;
+	transition-timing-function: linear;
+  }
+  
+  .volumeControl{
+	  width: 92% !important;
+	  margin-left: 5px !important;
+} */

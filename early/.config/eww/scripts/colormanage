@@ -1,0 +1,40 @@
+#!/usr/bin/bash
+
+cd ~/.config/eww/ || exit
+
+if [ $1 == "get" ]; then
+  hyprctl keyword misc:disable_autoreload true
+  cp './tmp/_iconcolor.txt' './css/_iconcolor.txt'
+  cp './tmp/_colorscheme.colorpallete' './css/_colorscheme.scss'
+  cp './tmp/_material.colorpallete' './css/_material.scss'
+  cp './tmp/colors_generated.conf' ~/.config/hypr/colors.conf
+  applycolor=$(cat './css/_iconcolor.txt' | head -1)
+  scripts/applycolor "$applycolor"
+elif [ $1 == "default" ]; then
+  hyprctl keyword misc:disable_autoreload true
+  cp './css/_iconcolor_default.txt' './css/_iconcolor.txt'
+  cp css/_colorscheme_default.scss css/_colorscheme.scss
+  cp css/_material_default.scss css/_material.scss
+  cp ~/.config/hypr/colors_default.conf ~/.config/hypr/colors.conf
+  applycolor=$(cat css/_iconcolor.txt | head -1)
+  scripts/applycolor "$applycolor"
+elif [ $1 == "save" ]; then
+  eww close themer 2>/dev/null
+  eww update themer_open=false 
+  cp "css/_iconcolor.txt" "css/savedcolors/_iconcolor_$2.txt" 
+  cp "css/_colorscheme.scss" "css/savedcolors/_colorscheme_$2.scss" 
+  cp "css/_material.scss" "css/savedcolors/_material_$2.scss" 
+  cp ~/.config/hypr/colors.conf ~/.config/hypr/savedcolors/colors_$2.conf
+elif [ $1 == "load" ]; then
+  hyprctl keyword misc:disable_autoreload true
+  eww close themer 2>/dev/null
+  eww update themer_open=false 
+  cp "css/savedcolors/_iconcolor_$2.txt" "css/_iconcolor.txt"
+  cp "css/savedcolors/_colorscheme_$2.scss"  "css/_colorscheme.scss"
+  cp "css/savedcolors/_material_$2.scss"  "css/_material.scss"
+  cp ~/.config/hypr/savedcolors/colors_$2.conf ~/.config/hypr/colors.conf
+  applycolor=$(cat css/_iconcolor.txt | head -1)
+  scripts/applycolor "$applycolor"
+fi
+
+hyprctl reload

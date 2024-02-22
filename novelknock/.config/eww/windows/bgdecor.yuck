@@ -1,0 +1,47 @@
+(defwidget bgdecor_widget []
+  (overlay
+    (box
+      :width RES_WIDTH
+      :height RES_HEIGHT
+    )
+    (image 
+      :path "images/menus/corner_topleft.svg"
+      :halign "start"
+      :valign "start"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image 
+      :path "images/menus/corner_topright.svg"
+      :halign "end"
+      :valign "start"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image 
+      :path "images/menus/corner_bottomleft.svg"
+      :halign "start"
+      :valign "end"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+    (image 
+      :path "images/menus/corner_bottomright.svg"
+      :halign "end"
+      :valign "end"
+      :image-width BG_ROUNDING
+      :image-height BG_ROUNDING
+    )
+  )
+)
+
+(defwindow bgdecor
+  :monitor 0
+  :stacking "bg"
+  :namespace "noblur"
+  :geometry (geometry
+    :width "100%"
+    :height "100%"
+  )
+  (bgdecor_widget)
+)

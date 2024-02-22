@@ -1,0 +1,86 @@
+(defwidget notificationspopup_widget []
+  (box
+    (box
+      :style "
+      ${open_notificationspopup ? '' : 'margin-top: -${RES_HEIGHT}px;'}
+      ${open_notificationspopup ? ANIM_ENTER[0] : ANIM_EXIT[0]}
+      "
+      (eventbox
+        :onhoverlost "scripts/toggle-notificationspopup.sh --close && ${EWW_CMD} update notification_read=${notifications[0]['id']} &"
+        (box
+          :orientation "v" :space-evenly false
+          (box
+            :orientation "v" :space-evenly false
+            (for notif in notifications
+              (revealer
+                :reveal {notif.id > notification_read && notif.id <= notification_revcnt}
+                :transition "slidedown"
+                :duration "100ms"
+                (box
+                  :class "popup-notif-common popup-notif${
+                  arraylength(notifications) - notification_read == 1 ? '' : (
+                    notif.id == arraylength(notifications) ? (
+                      notifications[1]['app_name'] == notif.app_name && notifications[1]['urgency'] == notif.urgency ? '-top' : ''
+                      ) : (
+                      notif.id == 1 ? (
+                        notifications[arraylength(notifications) - 2]['app_name'] == notif.app_name && notifications[arraylength(notifications) - 2]['urgency'] == notif.urgency ? '-bottom' : ''
+                        ) : (
+                        notifications[arraylength(notifications) - notif.id + 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id + 1]['urgency'] == notif.urgency && notif.id != notification_read + 1 ? (
+                          notifications[arraylength(notifications) - notif.id - 1]['app_name'] == notif.app_name && notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-middle' : '-top') : (
+                          notifications[arraylength(notifications) - notif.id - 1]['urgency'] == notif.urgency ? '-bottom' : ''
+                        )
+                      )
+                    )
+                  )
+                  } ${notif.urgency == 2 ? 'popup-notif-urgent' : 'popup-notif-normal'}"
+                  :orientation "h"
+                  (box :orientation "v" :space-evenly false
+                    (box :orientation "h" :space-evenly false
+                      (label :xalign 0
+                        :wrap true
+                        :class "txt-norm txt-bold"
+                        :text "${notif.summary}"
+                      )
+                      (box :hexpand true)
+                      (label :xalign 0
+                        :wrap true
+                        :class "txt-small"
+                        :text "${notif.app_name} • ${notif.time}"
+                        :text "${arraylength(notifications) == 1 ||
+                        notif.id == arraylength(notifications) ||
+                        notifications[arraylength(notifications) - notif.id - 1]['app_name'] != notif.app_name || notifications[arraylength(notifications) - notif.id - 1]['urgency'] != notif.urgency ?
+                        '${notif.app_name} • ${notif.time}' : notif.time
+                        }"
+                      )
+                    )
+                    (label :xalign 0
+                      :wrap true
+                      :class "txt-smaller"
+                      :text {notif.body}
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (label
+            :halign "center"
+            :class "txt-small txt popup-notif-hint"
+            :text "Press right Ctrl or unhover to dismiss"
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow notificationspopup
+  :monitor 0
+  :stacking "overlay"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "top center"
+    :y "4%"
+  )
+  (notificationspopup_widget)
+)

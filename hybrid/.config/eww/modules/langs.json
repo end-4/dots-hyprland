@@ -1,0 +1,14 @@
+[
+    {
+        "name": "English (United States)",
+        "name_method": "US",
+        "name_ibus": "xkb:us::eng",
+        "name_abbr": "ENG"
+    },
+    {
+        "name": "Vietnamese",
+        "name_method": "Vietnamese Telex (Bamboo Engine)",
+        "name_ibus": "Bamboo::Us",
+        "name_abbr": "VIE"
+    }
+]

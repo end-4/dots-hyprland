@@ -1,0 +1,92 @@
+(defwidget workspaces []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "scripts/toggle-overview.sh &"
+    :onrightclick "scripts/toggle-overview.sh &"
+    (overlay
+      ; Only displays workspace state (has windows or not)
+      (box
+        :class "module workspaces"
+        :spacing 0
+        :space-evenly false
+        (for i in workspace
+          (button
+            :onclick "hyprctl dispatch workspace ${i.num}"
+            :class "ws"
+            (label
+              :valign "center"
+              :class "ws-text"
+              :style "font-size: 13pt; background-color: ${i.clr};"
+              :text "${ws-icons[i.num - 1]}"
+            )
+            ; "●"
+          )
+        )
+      )
+      ; Use a separate indicator for active workspace (animations, yay) (and more performant)
+      (button
+        :class "ws"
+        :style "
+        margin-left:  ${31 * (activews - 1)}px;
+        margin-right: ${31 * (10 - activews)}px;
+        "
+        (label
+          :valign "center"
+          :class "ws-text ws-text-active"
+          :style "font-size: 13pt;"
+          :text "${activews}"
+        )
+        ; "●"
+      )
+    )
+  )
+)
+
+(defwidget workspaces_top []
+  (box
+    (eventbox
+      :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+      :onmiddleclick "scripts/toggle-overview.sh &"
+      :onrightclick "scripts/toggle-overview.sh &"
+      :halign "center"
+      (box
+        :space-evenly false
+        :orientation "v"
+        ; Only displays workspace state (has windows or not)
+        (box
+          :class "workspaces-top"
+          :spacing 0
+          :space-evenly false
+          (for i in workspace
+            (button
+              :onclick "hyprctl dispatch workspace ${i.num}"
+              :class "ws-top"
+              :valign "end"
+              (label
+                :valign "center"
+                :class "ws-text-top"
+                :style "font-size: 1pt; background-color: ${i.clr};"
+              )
+            )
+          )
+        )
+        ; Use a separate indicator for active workspace (animations, yay) (and more performant)
+        (button
+          :class "ws-active-top"
+          :style "
+          margin-left:  ${31 * (activews - 1)}px;
+          margin-right: ${31 * (10 - activews)}px;
+          margin-top: -5px;
+          "
+          (label
+            :valign "center"
+            :class "ws-text-top ws-text-active"
+            :style "font-size: 1pt;"
+          )
+        )
+      )
+    )
+  )
+)
+
+; ①②③④⑤⑥⑦⑧⑨⑩

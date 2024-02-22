@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+cp -r images/svg/dark/* images/svg/
+
+filelist=$(ls 'images/svg' -p | grep -v /)
+
+IFS=$'\n'
+filearr=($(echo "$filelist"))
+
+c0=$(cat css/_iconcolor.txt | head -1)
+c1=$(cat css/_iconcolor.txt | head -2 | tail -1)
+c2=$(cat css/_iconcolor.txt | head -3 | tail -1)
+c3=$(cat css/_iconcolor.txt | head -2 | tail -1)
+c4=$(cat css/_iconcolor.txt | head -5 | tail -1)
+c5=$(cat css/_iconcolor.txt | head -6 | tail -1)
+
+if [[ "$(cat scripts/workdir/__mode_colors.txt | head -1)" == "one" ]]; then
+    c1=$c0
+    c2=$c0
+    c3=$c0
+    c4=$c0
+    c5=$c0
+fi
+
+sed -i "s/white/$c1/gi" "images/svg/beatmappacks.svg"
+sed -i "s/white/$c2/gi" "images/svg/forum.svg"
+sed -i "s/white/$c3/gi" "images/svg/search.svg"
+sed -i "s/white/$c4/gi" "images/svg/settings.svg"
+sed -i "s/white/$c5/gi" "images/svg/tournaments.svg"
+
+for i in "${!filearr[@]}"; do
+    # echo "images/svg/${filearr[$i]}"
+    sed -i "s/white/$1/gi" "images/svg/${filearr[$i]}"
+done

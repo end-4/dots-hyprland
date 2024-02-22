@@ -1,0 +1,70 @@
+(defwidget music []
+  (eventbox
+    :onhoverlost "${EWW_CMD} close music"
+    (box
+      :class "music-window"
+      :space-evenly false
+      (box
+        :class "music-cover-art"
+        :style "background-image: url(\"${mcover}\");"
+      )
+      (box
+        :orientation "v"
+        :class "music-box"
+        (label
+          :class "music-title"
+          :wrap true
+          :text {music.title}
+          :limit-width 35;
+        )
+        (label
+          :class "music-artist"
+          :wrap true
+          :text {music.artist}
+        )
+        (centerbox
+          :halign "center"
+          :class "music-button-box icon"
+          (button :class "music-button" :onclick "playerctl previous" "")
+          (button :class "music-button" :onclick "playerctl play-pause" {music.status})
+          (button :class "music-button" :onclick "playerctl next" "")
+        )
+        (box
+          :orientation "v"
+          (box
+            (label
+              :xalign 0
+              :class "music-time"
+              :text {music.position_time}
+            )
+            (label
+              :xalign 1
+              :class "music-time"
+              :text {music.length}
+            )
+          )
+          (box
+            :class "music-bar"
+            (scale
+              :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+              :value {music.position}
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow music
+  :wm-ignore true
+  :focusable false
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "0%"
+    :height "0%"
+  :anchor "top left")
+  (music)
+)

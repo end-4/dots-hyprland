@@ -1,0 +1,476 @@
+(defwidget sideright_widget []
+  (eventbox
+    :onhoverlost "${open_sideright ?
+    (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') : ''}"
+    (box
+      :height RES_HEIGHT
+      :space-evenly false
+      :halign "end"
+      :style "
+      ${open_sideright ? ANIM_ENTER[anim_set] : ANIM_EXIT[anim_set]}
+      ${open_sideright ? '' : 'margin-right: -594px;'}
+      "
+      ; ↑ PERFECTLY LEAVE 1 PIXEL ON THE RIGHT EDGE AWAAHAHAHAHAH
+      (box
+        :orientation "v"
+        :space-evenly false :spacing -5
+        :halign "end"
+        :style "
+        min-width: 595px;
+        "
+        (eventbox
+          :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+          :onmiddleclick "playerctl play-pause"
+          :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+          :onclick "${open_sideright ?
+          (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
+          (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true &')}"
+          (box
+            :space-evenly false :orientation "h"
+            :class "window"
+            (box
+              :space-evenly false :spacing 10
+              :halign "start"
+              :height {BAR_HEIGHT} :width 390
+              :class "sidebar-bg sidebar-bg-pad"
+              (label :xalign 0
+                :class "bar-icon-material-hugeass"
+                :text "Settings"
+              )
+              (label :xalign 0
+                :hexpand true
+                :class "bar-txt-hugeass"
+                :text "System"
+              )
+              (label :xalign 1
+                :class "bar-txt-small"
+                :text "Unhover to close"
+              )
+            )
+          )
+        )
+        (box
+          :class "window"
+          :vexpand true
+          (box
+            :orientation "v" :space-evenly false :spacing -15
+            :vexpand true
+            :class "sidebar-bg"
+            (box ; Quick toggles
+              :orientation "h"
+              :space-evenly false :spacing 10
+              :class "sidebar-quicktoggle"
+              (box ; Wifi
+                :width 50 :height 50
+                :orientation "h"
+                :space-evenly false :spacing 3
+                (button
+                  :class "sidebar-quicktoggle-btn${net.essid == 'lo' ? '' : '-active'} sidebar-quicktoggle-btn-left"
+                  :onclick "scripts/net toggle &"
+                  :width 50 :height 50
+                  (label
+                    :class "bar-icon-material-hugeass"
+                    :text {WIFI_ICONS[net.level]}
+                  )
+                )
+                (button
+                  :class "sidebar-quicktoggle-btn${net.essid == 'lo' ? '' : '-active'} sidebar-quicktoggle-btn-right"
+                  :onclick "${EWW_CMD} update bar_offset=0 && ${EWW_CMD} update open_sideright=false && XDG_CURRENT_DESKTOP=GNOME gnome-control-center wifi &"
+                  :width 30 :height 50
+                  (label
+                    :class "bar-icon-material-hugeass"
+                    :text ""
+                  )
+                )
+              )
+              (box ; Bluetooth
+                :width 50 :height 50
+                :orientation "h"
+                :space-evenly false :spacing 3
+                (button
+                  :class "sidebar-quicktoggle-btn${bluetooth.text == 'Bluetooth off' ? '' : '-active'} sidebar-quicktoggle-btn-left"
+                  :onclick "scripts/bluetooth toggle &"
+                  :width 50 :height 50
+                  (label
+                    :class "bar-icon-material-hugeass"
+                    :text {bluetooth.icon}
+                  )
+                )
+                (button
+                  :class "sidebar-quicktoggle-btn${bluetooth.text == 'Bluetooth off' ? '' : '-active'} sidebar-quicktoggle-btn-right"
+                  :onclick "${EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &'}& blueberry &"
+                  :width 30 :height 50
+                  (label
+                    :class "bar-icon-material-hugeass"
+                    :text ""
+                  )
+                )
+              )
+              (box ; Night light + Brightness
+                :hexpand true
+                :width 50 :height 50
+                :orientation "h"
+                :space-evenly false
+                (button
+                  :class "sidebar-quicktoggle-btn${hyprjson.nightlight ? '-active' : ''} ${rev_power ? '' : 'sidebar-quicktoggle-btn-left'}"
+                  :onclick "scripts/toggle-nightlight.sh &"
+                  :width 50 :height 50
+                  (label
+                    :halign "center"
+                    :class "bar-icon-material-hugeass"
+                    :text {hyprjson.nightlight ? "Nightlight" : ""}
+                  )
+                )
+                (revealer
+                  :reveal {!rev_power}
+                  :transition "slideleft"
+                  :duration "100ms"
+                  :hexpand true
+                  (box
+                    :width 100
+                    :hexpand true
+                    :class "sidebar-quicktoggle-btn sidebar-quicktoggle-btn-right"
+                    :style "margin-left: 3px;"
+                    :tooltip "Scroll !"
+                    ; (eventbox
+                    ;   :hexpand true
+                    ;   :onscroll "echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light &"
+                    ;   (overlay
+                    ;     :hexpand true
+                    ;     (box
+                    ;       :hexpand true
+                    ;       :valign "center"
+                    ;       :class "sidebar-brightness-progress"
+                    ;       :style "
+                    ;       background-image:
+                    ;       linear-gradient(to right, ${coloraccent} ${brightness.level}%, rgba(200, 200, 200, 0.6) ${brightness.level}%);
+                    ;       "
+                    ;     )
+                    ;     (label
+                    ;       :class "sidebar-brightness-progress-btn"
+                    ;       :valign "center"
+                    ;       :xalign {brightness.level / 100}
+                    ;       :style "
+                    ;       color: ${coloraccent};
+                    ;       "
+                    ;       :text "●"
+                    ;     )
+                    ;   )
+                    ; )
+                    (scale
+                        :value "${brightness.level}"
+                        :onchange "light -S {}"
+                        :hexpand true
+                        :class "sidebar-quicktoggle-slider"
+                    )
+                    
+                  )
+                )
+              )
+              (box ; Power
+                :halign "end"
+                :width 50 :height 50
+                :orientation "h"
+                :space-evenly false
+                (revealer
+                  :reveal {rev_power}
+                  :transition "slideleft"
+                  :duration "100ms"
+                  (box
+                    :class "sidebar-quicktoggle-btn sidebar-quicktoggle-btn-left"
+                    :style "margin-right: 3px;"
+                    (eventbox
+                      :width 50 :height 50
+                      :cursor "pointer"
+                      :class "sidebar-quicktoggle-power-optn"
+                      :onclick "gtklock &"
+                      (label
+                        :halign "center"
+                        :class "sidebar-quicktoggle-power-icon"
+                        :text "Lock"
+                      )
+                    )
+                    (eventbox
+                      :width 50 :height 50
+                      :cursor "pointer"
+                      :class "sidebar-quicktoggle-power-optn"
+                      :onclick "scripts/dashactivate 'systemctl suspend' &"
+                      (label
+                        :halign "center"
+                        :class "sidebar-quicktoggle-power-icon"
+                        :text ""
+                      )
+                    )
+                    (eventbox
+                      :width 50 :height 50
+                      :cursor "pointer"
+                      :class "sidebar-quicktoggle-power-optn"
+                      :onclick "scripts/dashactivate 'loginctl terminate-user $USER' &"
+                      (label
+                        :halign "center"
+                        :class "sidebar-quicktoggle-power-icon"
+                        :text "Logout"
+                      )
+                    )
+                    (eventbox
+                      :width 50 :height 50
+                      :cursor "pointer"
+                      :class "sidebar-quicktoggle-power-optn"
+                      :onclick "scripts/dashactivate 'systemctl poweroff' &"
+                      (label
+                        :halign "center"
+                        :class "sidebar-quicktoggle-power-icon"
+                        :text ""
+                      )
+                    )
+                    (eventbox
+                      :width 50 :height 50
+                      :cursor "pointer"
+                      :class "sidebar-quicktoggle-power-optn"
+                      :onclick "scripts/dashactivate 'systemctl reboot' &"
+                      (label
+                        :halign "center"
+                        :class "sidebar-quicktoggle-power-icon"
+                        :text ""
+                      )
+                    )
+                  )
+                )
+                (button
+                  :class "sidebar-quicktoggle-btn${rev_power ? '-active ' : ''} ${rev_power ? 'sidebar-quicktoggle-btn-right' : ''}"
+                  :onclick "${EWW_CMD} update rev_power='${!rev_power}'"
+                  :width 50 :height 50
+                  (label
+                    :halign "center"
+                    :class "bar-icon-material-hugeass"
+                    :text {rev_power ? '' : 'Key'}
+                  )
+                )
+              )
+            )
+            (box ; Notifications
+              :space-evenly false :orientation "v"
+              :vexpand true
+              (box ; The text
+                :space-evenly false
+                :height {BAR_HEIGHT} :width 400
+                :class "sidebar-section-title"
+                (label :xalign 0
+                  :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                  :text "Notifications"
+                )
+                (label :xalign 0
+                  :hexpand true
+                  :class "bar-txt-hugeass sidebar-section-title-icon"
+                  :text "Notifications"
+                )
+              )
+              (scroll
+                :vexpand true
+                :style "margin: 0 15px;"
+                (box
+                  :space-evenly false :orientation "v" :spacing -10
+                  (box
+                    :space-evenly false
+                    :orientation "v"
+                    (for app in notifications
+                      (box
+                        :space-evenly false :orientation "v"
+                        :spacing 10
+                        :class "sidebar-notification"
+                        (box
+                          :valign "center"
+                          :space-evenly false :orientation "v"
+                          (box
+                            :space-evenly false :orientation "h"
+                            :spacing 5
+                            (label :xalign 0
+                              :hexpand true
+                              :class "bar-txt bar-txt-norm"
+                              :text {app['summary']}
+                              :limit-width 40
+                            )
+                            (label :xalign 1
+                              :class "bar-txt-smaller bar-txt-norm"
+                              :text "${app['app_name']}"
+                              :limit-width 20
+                            )
+                            (label :xalign 1
+                              :class "bar-txt-small bar-txt-norm"
+                              :text " • ${app['time']}"
+                              :limit-width 20
+                            )
+                          )
+                          (box
+                            (label :xalign 0 :hexpand true :wrap true
+                              :class "bar-txt-small bar-txt-sub"
+                              :text {app['body']}
+                              ; :limit-width 45
+                            )
+                          )
+                        )
+                        ; (label :xalign 0
+                          ;   :hexpand true
+                          ;   :width 175
+                          ;   :class "sidebar-notif-appname"
+                          ;   :text {app.name}
+                          ;   :wrap true
+                        ; )
+                        ; (box
+                          ;   :space-evenly false :orientation "h"
+                          ;   :spacing 10
+                          ;   (box
+                            ;     :class "sidebar-notif-decor-left"
+                            ;     :width 5
+                          ;   )
+                          ;   (box
+                            ;     :space-evenly false :orientation "v"
+                            ;     :spacing 10
+                            ;     (for message in {app.content}
+                              ;       (box
+                                ;         :space-evenly false :orientation "v"
+                                ;         (label :xalign 0
+                                  ;           :class "sidebar-notif-summary"
+                                  ;           :text {message[0]}
+                                  ;           ; :limit-width 60
+                                ;         )
+                                ;         (label :xalign 0
+                                  ;           :class "sidebar-notif-body"
+                                  ;           :text {message[1]}
+                                  ;           ; :limit-width 60
+                                ;         )
+                              ;       )
+                            ;     )
+                          ;   )
+                        ; )
+                      )
+                    )
+                  )
+                )
+              )
+              (box
+                :height 20
+              )
+            )
+            (box ; Calendar
+              :orientation "v"
+              :space-evenly false
+              :spacing -10
+              (eventbox
+                :onscroll "scripts/scrollmonth {} &"
+                :onclick "${EWW_CMD} update monthshift=0 &"
+                (box ; The text
+                  :space-evenly false
+                  :height {BAR_HEIGHT} :width 400
+                  :class "sidebar-section-title"
+                  (label :xalign 0
+                    :class "bar-icon-material-hugeass sidebar-section-title-icon"
+                    :text ""
+                  )
+                  (label :xalign 0
+                    :hexpand true
+                    :class "bar-txt-hugeass sidebar-section-title-text"
+                    :text "${calendartitle}"
+                  )
+                  (label :xalign 1
+                    :class "bar-txt-small sidebar-section-title-text"
+                    :text "Scroll to change month"
+                  )
+                )
+              )
+              (box
+                :class "sidebar-content"
+                :orientation "h" :space-evenly false :spacing 10
+                (eventbox
+                  :onscroll "scripts/scrollmonth {} &"
+                  (box
+                    :orientation "v"
+                    :space-evenly false
+                    (box
+                      (for day in weekdays
+                        (box
+                          :class "sidebar-calendar-btn day${day.today}"
+                          (label
+                            :class "sidebar-calendar-txt"
+                            :text "${day.day}"
+                          )
+                        )
+                      )
+                    )
+                    (for week in calendar
+                      (box
+                        (for day in week
+                          (button
+                            :class "sidebar-calendar-btn day${day.today}"
+                            (label
+                              :class "sidebar-calendar-txt"
+                              :text "${day.day}"
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (box
+                  :orientation "v"
+                  :space-evenly false
+                  :hexpand true
+                  :class "sidebar-todo-box"
+                  (label
+                    :class "bar-txt-hugeass sidebar-box-title"
+                    :text "Todo"
+                  )
+                  (scroll
+                    :hscroll false :vscroll true
+                    :vexpand true
+                    :style "margin: 5px 0;"
+                    (box
+                      :orientation "v"
+                      :space-evenly false :spacing 10
+                      (for task in todolist
+                        (box
+                          :orientation "h"
+                          :space-evenly false
+                          :class "sidebar-todo-item"
+                          :spacing 5
+                          (button
+                            :valign "center"
+                            :class "sidebar-todo-btn"
+                            :onclick "scripts/todo del '${task}' && ${EWW_CMD} update todolist=\"$(cat json/todo.json | gojq -c -M)\""
+                            (label
+                              :class "bar-icon-material-large"
+                              :text "Remove"
+                            )
+                          )
+                          (label :xalign 0
+                            :text {task}
+                            :wrap true
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              (box
+                :height 20
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow sideright
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    ; :height "100%"
+    :anchor "top right"
+  )
+  (sideright_widget)
+)

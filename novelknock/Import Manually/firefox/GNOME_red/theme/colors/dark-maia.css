@@ -1,0 +1,20 @@
+@namespace xul url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Variables that start with --gnome- are added by me and are assigned
+ * to elements somewhere in this code. The rest of the variables are
+ * built-in in Firefox, so you need to add an !important if you wanna
+ * override them. */
+@media (prefers-color-scheme: dark) {
+	:root {
+	  /* Accent */
+		--gnome-accent: #16A085;
+		
+		/* Buttons */
+		--gnome-button-suggested-action-background: linear-gradient(to top, rgb(36, 235, 195) 2px, #16A085);
+		--gnome-button-suggested-action-border-color: #16A085;
+		--gnome-button-suggested-action-border-accent-color: #004b3d;
+		--gnome-button-suggested-action-hover-background: linear-gradient(to top, rgb(36, 235, 195), #16A085 1px);
+		--gnome-button-suggested-action-active-background: rgb(16, 129, 107);
+		--gnome-button-suggested-action-active-border-color: rgb(13, 109, 90);
+	}
+}

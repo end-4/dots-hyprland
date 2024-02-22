@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2021 Christian Hergert <chergert@redhat.com>
+                                                                      
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+                                                                      
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+                                                                      
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="peninsula-dark" name="Peninsula Dark" version="1.0">
+  <author>Christian Hergert</author>
+
+  <metadata>
+    <property name="variant">dark</property>
+    <property name="dark-variant">peninsula-light</property>
+  </metadata>
+
+  <style name="text"                        foreground="#dfdfe0" background="#292a30"/>
+  <style name="selection"                   background="#3169b0"/>
+  <style name="search-match"                background="#3169b0"/>
+  <style name="cursor"                      foreground="#dfdfe0"/>
+  <style name="current-line"                background="#dfdfe011"/>
+  <style name="current-line-number"         background="#dfdfe011"/>
+  <style name="line-numbers"                foreground="#dfdfe0" background="#292a30"/>
+  <style name="draw-spaces"                 foreground="#4f535f"/>
+  <style name="background-pattern"          background="#2f2f2f"/>
+  <style name="bracket-match"               background="#585859" bold="true"/>
+  <style name="bracket-mismatch"            underline="error" bold="true"/>
+  <style name="right-margin"                foreground="#9a9a9a" background="#9a9a9a"/>
+  <style name="map-overlay"                 background="#9a9a9a"/>
+  <style name="def:string"                  foreground="#ff806c"/>
+  <style name="def:type"                    foreground="#ff78b2" bold="true"/>
+  <style name="def:comment"                 foreground="#7f8c99"/>
+  <style name="def:list-marker"             foreground="#d9c880" bold="true"/>
+  <style name="def:heading"                 bold="true"/>
+  <style name="def:identifier"              foreground="#75c2b3"/>
+  <style name="def:preprocessor"            foreground="#8d8e95"/>
+  <style name="def:keyword"                 foreground="#ff78b2" bold="true"/>
+  <style name="def:variable"                foreground="#75c2b3"/>
+  <style name="def:special-constant"        foreground="#ffa245" bold="true"/>
+  <style name="def:emphasis"                italic="true"/>
+  <style name="def:strong-emphasis"         italic="true" bold="true"/>
+  <style name="def:net-address"             foreground="#3e8ee3"/>
+  <style name="def:link-destination"        foreground="#3e8ee3"/>
+  <style name="def:link-text"               foreground="#3e8ee3"/>
+  <style name="def:floating-point"          foreground="#d7c781"/>
+  <style name="def:decimal"                 foreground="#d7c781"/>
+  <style name="def:base-n-integer"          foreground="#d7c781"/>
+  <style name="def:boolean"                 foreground="#ff78b2"/>
+  <style name="gtk-doc:function-name"       foreground="#75c2b3"/>
+  <style name="gtk-doc:function"            foreground="#75c2b3"/>
+  <style name="gtk-doc:parameter"           bold="true"/>
+  <style name="gtk-doc:constant"            bold="true"/>
+  <style name="gtk-doc:type"                bold="true"/>
+  <style name="gtk-doc:since"               bold="true"/>
+  <style name="gtk-doc:return"              bold="true"/>
+  <style name="gtk-doc:deprecated"          bold="true"/>
+  <style name="gtk-doc:signal-name"         bold="true"/>
+  <style name="gtk-doc:property-name"       bold="true"/>
+
+</style-scheme>

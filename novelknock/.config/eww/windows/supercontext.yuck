@@ -1,0 +1,178 @@
+(defwidget supercontext_widget []
+  (eventbox
+    :onclick "scripts/toggle-supercontext.sh --close &"
+    (box
+      :width RES_WIDTH
+      :height RES_HEIGHT
+      :space-evenly false
+      (box
+        :halign "start" :valign "start"
+        :style "
+        transition: 0ms;
+        margin-left: ${supercontext_pos_x - (SUPERCONTEXT_DIAMETER / 2)}px;
+        margin-top: ${supercontext_pos_y - (SUPERCONTEXT_DIAMETER / 2)}px;
+        min-width: ${SUPERCONTEXT_DIAMETER}px;
+        min-height: ${SUPERCONTEXT_DIAMETER}px;
+        "
+        (overlay
+          (overlay
+            ; (box
+              ;   :width SUPERCONTEXT_DIAMETER :height SUPERCONTEXT_DIAMETER
+            ; )
+            ; Button backgrounds (SVGs)
+            (revealer
+              :reveal {open_supercontext >= 1}
+              :duration "75ms"
+              :transition "crossfade"
+              (image
+                :class "supercontext-bg"
+                :path "images/menus/btn0.svg"
+                :image-width SUPERCONTEXT_DIAMETER :image-height SUPERCONTEXT_DIAMETER
+              )
+            )
+            (revealer
+              :reveal {open_supercontext >= 2}
+              :duration "75ms"
+              :transition "crossfade"
+              (image
+                :class "supercontext-bg"
+                :path "images/menus/btn1.svg"
+                :image-width SUPERCONTEXT_DIAMETER :image-height SUPERCONTEXT_DIAMETER
+              )
+            )
+            (revealer
+              :reveal {open_supercontext >= 3}
+              :duration "75ms"
+              :transition "crossfade"
+              (image
+                :class "supercontext-bg"
+                :path "images/menus/btn2.svg"
+                :image-width SUPERCONTEXT_DIAMETER :image-height SUPERCONTEXT_DIAMETER
+              )
+            )
+            (revealer
+              :reveal {open_supercontext >= 4}
+              :duration "75ms"
+              :transition "crossfade"
+              (image
+                :class "supercontext-bg"
+                :path "images/menus/btn3.svg"
+                :image-width SUPERCONTEXT_DIAMETER :image-height SUPERCONTEXT_DIAMETER
+              )
+            )
+            (revealer
+              :reveal {open_supercontext >= 5}
+              :duration "75ms"
+              :transition "crossfade"
+              (image
+                :class "supercontext-bg"
+                :path "images/menus/btn4.svg"
+                :image-width SUPERCONTEXT_DIAMETER :image-height SUPERCONTEXT_DIAMETER
+              )
+            )
+          )
+          (overlay ; Real button hitboxes
+            (box ; Button 0: Kill processes with the same process name as the focused window
+              :class "supercontext-btn"
+              :style "
+              opacity: ${open_supercontext >= 1 ? 1 : 0};
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[0])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[0])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              "
+              (eventbox
+                :onclick "pkill $(ps -p $(hyprctl activewindow -j | gojq -r '.pid') -o comm=) &"
+                :tooltip "Brutally kill this window"
+                :cursor "pointer"
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "Dangerous")
+              )
+            )
+            (box ; Button 1
+              :class "supercontext-btn"
+              :style "
+              opacity: ${open_supercontext >= 2 ? 1 : 0};
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[1])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[1])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              "
+              (eventbox
+                :class "supercontext-btn-num"
+                :tooltip "Swap workspace windows with workspace..."
+                :onscroll "eww update ws_to_swap=$(( ${ws_to_swap == 0 ? activews : ws_to_swap} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') )) &"
+                :onclick "scripts/swapws ${activews} ${ws_to_swap} &"
+                :cursor "col-resize"
+                (label :class "bar-txt-norm" :text {ws_to_swap == 0 ? '' : ws_to_swap})
+              )
+            )
+            (box
+              :class "supercontext-btn"
+              :style "
+              opacity: ${open_supercontext >= 3 ? 1 : 0};
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[2])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[2])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              "
+              (eventbox
+                :class "supercontext-btn-num"
+                :tooltip "Dump windows of this workspace to workspace..."
+                :onscroll "eww update ws_to_dump=$(( ${ws_to_dump == 0 ? activews : ws_to_dump} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') )) &"
+                :onclick "scripts/dumptows ${activews} ${ws_to_dump} &"
+                :cursor "col-resize"
+                (label :class "bar-txt-norm" :style {ws_to_dump == 0 ? 'font-family: Material Symbols Rounded' : ''} :text {ws_to_dump == 0 ? 'publish' : ws_to_dump})
+              )
+            )
+            (box
+              :class "supercontext-btn"
+              :style "
+              opacity: ${open_supercontext >= 4 ? 1 : 0};
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[3])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[3])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              "
+              (eventbox
+                :onclick "~/.local/bin/record-script-fullscreen.sh &"
+                :tooltip "Record"
+                :cursor "pointer"
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "radio_button_checked")
+              )
+            )
+            (box
+              :class "supercontext-btn"
+              :style "
+              opacity: ${open_supercontext >= 5 ? 1 : 0};
+              margin-left: ${SUPERCONTEXT_RADIUS + (sin(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-right: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS + (round(sin(degtorad(SUPERCONTEXT_ROTATIONS[4])), 5) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              margin-top: ${SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) - SUPERCONTEXT_BUTTON_RADIUS}px;
+              margin-bottom: ${SUPERCONTEXT_DIAMETER - (SUPERCONTEXT_RADIUS - (cos(degtorad(SUPERCONTEXT_ROTATIONS[4])) * SUPERCONTEXT_DIST_FROM_CENTER) + SUPERCONTEXT_BUTTON_RADIUS)}px;
+              "
+              (eventbox
+                :onclick "notify-send 'an extra button ;)'"
+                :tooltip "does nothing lol"
+                :cursor "pointer"
+                (label :class "supercontext-btn-icon bar-txt-norm" :text "-")
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow supercontext
+  :stacking "overlay"
+  :focusable true
+  :monitor 0
+  :namespace "supercontext"
+  :geometry (geometry
+    :anchor "center center"
+    :height "100%"
+    :width "100%"
+  )
+  (supercontext_widget)
+)
+

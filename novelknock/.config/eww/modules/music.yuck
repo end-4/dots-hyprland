@@ -1,0 +1,98 @@
+(defwidget music_widget []
+  (eventbox
+    :onhover "${EWW_CMD} update hover_music=true &"
+    :onhoverlost "${EWW_CMD} update hover_music=false &"
+    (box
+      :class "bar-pad"
+      :width 420
+      :height 60
+      (box
+        :space-evenly false
+        :orientation "h"
+        :class "bar-bg bar-bg-pad"
+        :spacing 5
+        (overlay
+          (box
+            :halign "center" :valign "center"
+            :class "bar-music-cover"
+            :style "background-image: url('${mcover.image}')"
+          )
+          (label
+            :class "bar-icon-material bar-music-status"
+            :halign "center" :valign "center"
+            :style "
+            font-size: 18pt;
+            margin-bottom: -1px;
+            color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+            "
+            :text "${mplay == 'Playing' ? '' : ''}"
+          )
+        )
+        (scroll
+          :hscroll true :vscroll false
+          :hexpand true
+          (box
+            :orientation "v"
+            :space-evenly false 
+            :spacing -2
+            :valign "center"
+            (label
+              :class "bar-txt-larger bar-txt-norm"
+              :xalign 0
+              :text {mname.title == '' ? 'Music' : mname.title}
+            )
+            (revealer
+              :transition "slidedown"
+              :reveal "${mname.artist != ''}"
+              :duration "20ms"
+              (label
+                :class "bar-txt-small bar-txt-norm"
+                :xalign 0
+                :text "${mname.artist}"
+              )
+            )
+          )
+        )
+        (revealer
+          :reveal {hover_music}
+          :transition "slideleft"
+          :duration "200ms"
+          (revealer
+            :reveal {hover_music}
+            :transition "crossfade"
+            :duration "200ms"
+            (box
+              :orientation "h"
+              :valign "center"
+              :spacing -2
+              (button
+                :class "bar-icon-material bar-music-btn"
+                :style "
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl previous"
+                "skip_previous"
+              )
+              (button
+                :class "bar-icon-material bar-music-btn"
+                :style "
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl play-pause"
+                "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
+              )
+              (button
+                :class "bar-icon-material bar-music-btn"
+                :style "
+                color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color4 == 'null' ? coloraccent : mcover.color.colors.color4)};
+                "
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                "skip_next"
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

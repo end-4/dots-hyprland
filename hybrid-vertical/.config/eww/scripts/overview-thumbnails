@@ -1,0 +1,94 @@
+#!/usr/bin/bash
+dummy='{"thumbnail": null}'
+
+getwins() {
+  overviewopen=$(scripts/isopen.sh overview)
+  if [ "$overviewopen" == "true" ]; then
+    return 
+  fi
+
+  focusedws=$(hyprctl -j monitors | gojq -r '.[] | select(.focused == true) | .activeWorkspace.id')
+  hyprctlclients=$(hyprctl clients -j \
+    | grep -v '"xwayland": ' \
+    | grep -v '"grouped": ' \
+    | grep -v '"pid": ' \
+    | grep -v '"fullscreenMode": ' \
+    | grep -v '"monitor": ' \
+    | grep -v '"floating": ' \
+    | grep -v '"fullscreen": ' \
+    | grep -v '"pinned":') # | grep -v ""name":")
+  # echo '-=-=-=- final output -=-=-=-'
+  # echo "$toprint"
+  # echo $(echo "$hyprctlclients")  # Print on one line only
+
+  workspace=('[' '[' '[' '[' '[' '[' '[' '[' '[' '[')
+  workspacecnt=(1 1 1 1 1 1 1 1 1 1)
+  outputstring='{'
+
+  wsid=0
+
+  # echo $hyprctlclients | gojq -c '.[]'
+
+  IFS=$'\n'
+  clientsarr=( $(echo $hyprctlclients | gojq -c -M '.[]') )
+
+  #For every window
+  for client in "${clientsarr[@]}"; do
+    wsid=$(echo $client | gojq -c -M '.workspace.id')
+    ((wsid-=1))
+    if [[ "$wsid" == "-100" ]]; then 
+      continue
+    fi
+    if [[ "${workspacecnt[wsid]}" != "0" ]]; then 
+      workspace[wsid]+=","
+    fi
+
+    clientclass=$(echo $client | gojq -r '.class')
+    iconpath=''
+    thumbnailpath=''
+
+    # Get thumbnail
+    clientaddress=$(echo $client | gojq -r '.address')
+    atx=$(echo $client | gojq -c '.at[0]')
+    aty=$(echo $client | gojq -c '.at[1]')
+    sizex=$(echo $client | gojq -c '.size[0]')
+    sizey=$(echo $client | gojq -c '.size[1]')
+    if [ "$(( wsid + 1 ))" == "$focusedws" ]; then
+      grim -g "$atx,$aty ""$sizex"'x'"$sizey" "scripts/cache/thumbnails/$clientaddress.png" -q 1 -t png -l 9
+    fi
+
+    # If thumbnail available
+    if [ -f "scripts/cache/thumbnails/$clientaddress.png" ]; then
+      thumbnailpath="scripts/cache/thumbnails/$clientaddress.png"
+    fi
+
+    client="\"$clientaddress\": \"$thumbnailpath\","
+    outputstring+="$client"
+
+    # echo -n "Window: $clientclass"
+    # echo '; icon path: '"$iconpath"
+    
+
+    # echo "Count: ${workspacecnt[wsid]}"
+    # echo 'ADDED TO: workspace '"$wsid"
+    # echo ' --> '"${workspace[wsid]}"
+    ((workspacecnt[wsid]+=1))
+  done
+
+  outputstring=${outputstring::-1}
+  outputstring+='}'
+
+  # echo $outputstring
+}
+
+# Do stuff here
+getwins
+
+if [ "$1" == "--once" ]; then
+  exit 0
+else
+  while true; do
+    getwins
+    sleep 0.8
+  done
+fi

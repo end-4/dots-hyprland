@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+offset=$(eww get quote_index)
+total=$(eww get quote_content | gojq 'length')
+
+# total=25
+# shown=7
+
+if [ "$1" == "up" ]; then
+    eww update quote_index=$(( ("$offset" + "$total" - 1) % "$total" ))
+else
+    eww update quote_index=$(( ("$offset" + 1) % "$total" ))
+fi

@@ -1,0 +1,46 @@
+/* Controls */
+/* Switchers, Checkboxes, etc. */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Switchers */
+.protections-popup-tp-switch-box {
+	padding: 0 !important;
+	-moz-box-pack: start !important;
+}
+#protections-popup-tp-switch:not([enabled])[showdotindicator]::after {
+	display: none !important;
+}
+#protections-popup-tp-switch {
+	background: var(--gnome-switch-background) !important;
+	border: 0 !important;
+	border-radius: 24px !important;
+	min-width: 48px !important;
+	width: 48px !important;
+	min-height: 26px !important;
+	padding: 0 !important;
+	position: relative !important;
+	display: block !important;
+	margin: 0 !important;
+}
+#protections-popup-tp-switch::before {
+	position: absolute !important;
+	top: 2px;
+	left: 2px;
+	background: var(--gnome-switch-slider-background) !important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+	border: 0 !important;
+	border-radius: 24px !important;
+	height: 22px !important;
+	width: 22px !important;
+	transition: left .2s ease;
+	outline: 0 !important;
+}
+#protections-popup-tp-switch[enabled] {
+	background: var(--gnome-switch-active-background) !important;
+	padding-inline-start: 24px !important;
+}
+#protections-popup-tp-switch[enabled]::before {
+	background: var(--gnome-switch-active-slider-background) !important;
+	left: 24px;
+}

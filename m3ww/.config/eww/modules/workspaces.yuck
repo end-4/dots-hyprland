@@ -1,0 +1,57 @@
+(defwidget workspaces_widget []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "scripts/toggle-powerview.sh &"
+    :onrightclick `hyprctl keyword bind ",mouse:273,exec,hyprctl keyword unbind ,mouse:273 && hyprctl dispatch submap editmode && notify-send 'Edit mode enabled' 'LMB to move, RMB to resize, Esc to exit' -a 'Edit mode' &" &`
+    :onhoverlost `hyprctl keyword unbind ",mouse:273" &`
+    (overlay
+      ; Only displays workspace state (has windows or not)
+      (box
+        :class "bar-ws-width bar-group-margin"
+        (box
+          :class "bar-group bar-group-standalone bar-group-pad"
+        )
+      )
+      (box
+        :class "bar-group-pad"
+        :halign "center"
+        (for i in workspace
+          (button
+            :onclick "hyprctl dispatch workspace ${i.num}"
+            (label
+              :valign "center"
+              ; NOTE: Array is 0-based but i.num values are 1-based
+              :class "bar-ws-txt txt-norm bar-ws-txt-${
+                i.haswins ? (
+                  i.num == 1 ? (workspace[(i.num)]['haswins'] ? 'left' : 'alone') : (
+                      i.num == 10 ? (workspace[(i.num - 2)]['haswins'] ? 'right' : 'alone') : (
+                      workspace[(i.num - 2)]['haswins'] && workspace[(i.num)]['haswins'] ? 'middle' : (
+                        workspace[(i.num - 2)]['haswins'] ? 'right' : (
+                        workspace[(i.num)]['haswins'] ? 'left' : 'alone'
+                        )
+                      )
+                    )
+                  )
+                ) : 'false'
+                }"
+              :text "${ws-icons[i.num - 1]}"
+            )
+          )
+        )
+      )
+      ; Use a separate indicator for active workspace (animations, yay) (and more performant)
+      (button
+        :class "ws"
+        :style "
+        margin-left:  ${1.79 * (activews - 1) + WORKSPACE_SIDE_PAD}rem;
+        margin-right: ${1.79 * (10 - activews) + WORKSPACE_SIDE_PAD}rem;
+        "
+        (label
+          :valign "center"
+          :class "bar-ws-txt bar-ws-txt-active"
+          :text "${activews}"
+        )
+      )
+    )
+  )
+)

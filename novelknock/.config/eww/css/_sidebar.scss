@@ -1,0 +1,669 @@
+$bgdetail: $onSecondary;
+$bgdetail2: $onTertiary;
+
+.sidebar-bg {
+    @include bar-rounding;
+    @include window-shadow;
+    background-color: $background;
+}
+
+.sidebar-bg-pad {
+    padding: 0 10px;
+}
+
+.sidebar-content {
+    @include mainfont;
+    margin: 10px 20px;
+}
+
+.sidebar-notification {
+    @include mainfont;
+    margin: 10px 15px;
+}
+
+.sidebar-notif-appname {
+    @include mainfont;
+    color: $primary;
+    font-size: 12pt;
+    text-shadow: 0px 0px 2px mix($primary, rgba(0, 0, 0, 0), 80%);
+}
+
+.sidebar-notif-decor-left {
+    margin-left: 5px;
+    min-width: 8px;
+    border-bottom-left-radius: 99px;
+    border-left: 2px solid $primary;
+    border-bottom: 2px solid $primary;
+}
+
+.sidebar-notif-summary {
+    @include mainfont;
+    color: $onBackground;
+    font-size: 12pt;
+}
+
+.sidebar-notif-body {
+    @include mainfont;
+    @include subtext;
+    font-size: 12pt;
+}
+
+.sidebar-section-title {
+    margin: 15px;
+    padding: 5px;
+    border-radius: 13px;
+    color: $onPrimaryContainer;
+    background-color: mix($background, rgba(0, 0, 0, 0), 50%);
+}
+
+.sidebar-section-title-icon {
+    margin: 0 5px;
+}
+
+.sidebar-section-title-text {
+    margin: 0 5px;
+}
+
+.sidebar-calendar-btn {
+    @include mainfont;
+    font-size: 12pt;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 1px;
+    border-radius: 13px;
+}
+
+.sidebar-calendar-txt {
+    border-radius: 99px;
+    font-size: 12pt;
+    @include mainfont;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 30px;
+    margin: 3px;
+    border-radius: 13px;
+}
+
+.day-1 {
+    @include greyed;
+    background-color: transparent;
+}
+
+.day0 {
+    background-color: transparent;
+    color: $onBackground;
+}
+
+.day-1:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day0:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day-1:active {
+    background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day0:active {
+    background-color: tint(rgba(75, 75, 75, 0.5), 10%);
+}
+
+.day1 {
+    background-color: $primary;
+    color: #000000;
+}
+
+.day1:hover {
+    background-color: tint($primary, 10%);
+}
+
+.day1:active {
+    background-color: tint($primary, 20%);
+}
+
+.sidebar-section-title-btn {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 8px;
+}
+
+.sidebar-section-title-btn:hover {
+    background-color: $onPrimary;
+}
+
+.sidebar-section-title-btn:active {
+    background-color: shade($onPrimary, 30%);
+}
+
+.sidebar-box {
+    border-radius: 15px;
+}
+
+.sidebar-box-title {
+    color: $onBackground;
+    margin: 5px;
+}
+
+.sidebar-todo-item {
+    margin: 0 5px;
+    color: $onBackground;
+}
+
+.sidebar-todo-btn {
+    min-width: 28px;
+    min-height: 28px;
+    border-radius: 8px;
+}
+
+.sidebar-todo-btn:hover {
+    background-color: $onPrimary;
+}
+
+.sidebar-todo-btn:active {
+    background-color: shade($onPrimary, 30%);
+}
+
+.sidebar-quicktoggle {
+    margin: 15px;
+    margin-bottom: 20px;
+}
+
+.sidebar-quicktoggle-btn {
+    border-radius: 13px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    color: $onSecondaryContainer;
+}
+
+.sidebar-quicktoggle-btn:hover {
+    background-color: tint($secondaryContainer, 10%);
+}
+
+.sidebar-quicktoggle-btn:active {
+    background-color: tint($secondaryContainer, 20%);
+}
+
+.sidebar-quicktoggle-btn-active {
+    border-radius: 13px;
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.sidebar-quicktoggle-btn-active:hover {
+    background-color: tint($primary, 10%);
+}
+
+.sidebar-quicktoggle-btn-active:active {
+    background-color: tint($primary, 20%);
+}
+
+.sidebar-quicktoggle-btn-left {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.sidebar-quicktoggle-btn-right {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.sidebar-quicktoggle-power-optn:hover {
+    :first-child {
+        background-color: tint($secondaryContainer, 10%);
+    }
+}
+
+.sidebar-quicktoggle-power-optn:active {
+    :first-child {
+        background-color: tint($secondaryContainer, 20%);
+    }
+}
+
+.sidebar-quicktoggle-power-icon {
+    border-radius: 13px;
+    min-width: 40px;
+    min-height: 40px;
+    margin-bottom: -1px;
+    margin: 5px;
+    @include icon-material;
+    font-size: 17pt;
+    color: $onBackground;
+}
+
+.sidebar-quicktoggle-slider {
+    border-radius: 99px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface;
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: $primary;
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -8px;
+        border-radius: 99px;
+        background-color: $primary;
+    }
+}
+
+.sidebar-music-box {
+    margin: 15px;
+    margin-bottom: 0px;
+}
+
+.sidebar-music-thumbnail {
+    border-radius: 13px;
+
+    background-color: shade($onSecondary, 50%);
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    ;
+    background-size:
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px,
+
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+        15px 30px, 15px 30px, 15px 30px, 15px 30px,
+
+        60px 60px, 120px 120px, 90px 90px,
+
+        20px 40px, 20px 40px, 40px 80px, 40px 80px,
+        40px 80px, 40px 80px,
+
+        100% 100%,
+    ;
+    background-position:
+        0px 100px, 15px 100px, 30px 100px, 45px 100px,
+        60px 100px, 75px 100px, 90px 100px, 105px 100px,
+        120px 100px, 135px 100px, 150px 100px,
+
+        550px 40px, 535px 40px, 520px 40px, 505px 40px,
+        490px 40px, 475px 40px, 460px 40px, 445px 40px,
+        430px 40px, 415px 40px, 400px 40px, 385px 40px,
+
+        300px 60px, 165px 135px, 180px 5px,
+
+        360px 190px, 380px 190px, 340px 170px, 380px 170px,
+        40px -10px, 80px -10px,
+
+        top,
+    ;
+}
+
+.sidebar-music-vignette {
+    border-radius: 13px;
+}
+
+.sidebar-music-source {
+    @include icon-nerd;
+    font-size: 25pt;
+    margin: 0 20px;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-output {
+    @include mainfont;
+    border-radius: 13px;
+    font-size: 12pt;
+    margin: 15px 15px;
+    padding: 5px 15px;
+    color: $onPrimary;
+    background-color: $primary;
+}
+
+.sidebar-music-title {
+    @include mainfont;
+    font-size: 15pt;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-artist {
+    @include mainfont;
+    font-size: 13pt;
+    color: $overlay0;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-playbtn {
+    min-width: 60px;
+    min-height: 60px;
+    margin: 15px;
+    @include icon-material;
+    border-radius: 20px;
+    font-size: 16pt;
+    color: $inverseOnSurface;
+    background-color: $primary;
+}
+
+.sidebar-music-trackbtn {
+    @include icon-material;
+    font-size: 18pt;
+    margin: 15px;
+    border-radius: 13px;
+    min-width: 35px;
+    min-height: 35px;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-trackbtn:hover {
+    background-color: tint($overlay0, 30%);
+}
+
+.sidebar-music-trackbtn:active {
+    background-color: tint($overlay0, 50%);
+}
+
+.sidebar-music-progress {
+    min-height: 3px;
+    min-width: 60px;
+    border-radius: 99px;
+    background-color: $surface;
+}
+
+.sidebar-music-progress-btn {
+    font-size: 16pt;
+    margin-top: -4px;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-slider {
+    border-radius: 9999px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface;
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: shade($onBackground, 20%);
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -8px;
+        border-radius: 99px;
+        background-color: shade($onBackground, 20%);
+    }
+}
+
+.sidebar-quote {
+    @include mainfont;
+    padding: 10px;
+    margin: 15px;
+    border-radius: 13px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+}
+
+.sidebar-brightness-progress {
+    min-height: 3px;
+    min-width: 60px;
+    border-radius: 99px;
+    background-color: $surface;
+    margin: 20px;
+}
+
+.sidebar-brightness-progress-btn {
+    font-size: 16pt;
+    margin-top: -4px;
+}
+
+.sidebar-resource-pad {
+    margin: 0 15px;
+}
+
+.sidebar-resource-value {
+    border-radius: 18px;
+    padding: 10px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+}
+
+.sidebar-resource-icon-large {
+    @include icon-material;
+    font-size: 23pt;
+}
+
+.sidebar-resource-icon-small {
+    @include icon-material;
+    font-size: 16pt;
+    color: $primary;
+}
+
+.sidebar-resource-icon-large-material {
+    @include icon-material;
+    font-size: 23pt;
+}
+
+.sidebar-resource-circle {
+    @include icon-material;
+    font-size: 20pt;
+    background-color: $surface;
+    color: $primary;
+}
+
+.sidebar-resource-txt {
+    padding: 0 5px;
+    @include techfont;
+    font-size: 14pt;
+    background-color: $secondary;
+    color: $onSecondary;
+    border-radius: 13px;
+}
+
+.sidebar-resource-txt-small {
+    padding: 0 5px;
+    @include techfont;
+    font-size: 11pt;
+    background-color: $secondary;
+    color: $onSecondary;
+    border-radius: 13px;
+}
+
+.sidebar-resource-prog {
+    min-height: 5px;
+    padding: 0px;
+    border-radius: 99px;
+
+    trough {
+        min-height: 5px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: $surface;
+    }
+
+    progress {
+        min-height: 5px;
+        min-width: 4px;
+        border-radius: 99px;
+        border-radius: 99px;
+        background-color: $primary;
+    }
+}
+
+.sidebar-favourite-pad {
+    @include mainfont;
+    margin: 15px -5px;
+    margin-bottom: 0px;
+}
+
+.sidebar-hyprtoggle-scrollbg {
+    margin: 5px 20px;
+    // margin-right: 0px;
+    min-width: 555px;
+}
+
+.sidebar-waifu-scrollbg {
+    margin: 5px 20px;
+    min-width: 555px;
+}
+
+.sidebar-hyprtoggle {
+    border-radius: 18px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 50%);
+}
+
+.sidebar-hyprtoggle-icon {
+    @include icon-material;
+    font-size: 35pt;
+    color: $onBackground;
+}
+
+.sidebar-hyprtoggle-icon-material {
+    @include icon-material;
+    font-size: 26pt;
+    margin-left: 2px;
+    margin-right: -2px;
+    color: $onBackground;
+}
+
+.sidebar-hyprtoggle-icon-0 {
+    color: tint($onPrimary, 40%);
+}
+
+.sidebar-hyprtoggle-icon-1 {
+    color: $primary;
+    text-shadow: 0px 0px 2px mix($primary, rgba(0, 0, 0, 0), 80%);
+}
+
+.sidebar-hyprtoggle-name {
+    @include mainfont;
+    color: $onPrimaryContainer;
+    margin: 10px;
+}
+
+.sidebar-hyprtoggle-onoff {
+    border-radius: 99px;
+    transition: 0ms linear;
+    padding: 2px 5px;
+    min-width: 35px;
+    margin: 15px;
+}
+
+.sidebar-hyprtoggle-onoff-0 {
+    background-color: transparent;
+}
+
+.sidebar-hyprtoggle-onoff-1 {
+    background-color: $primary;
+    box-shadow: 0px 0px 3px mix($primary, rgba(0, 0, 0, 0), 80%);
+}
+
+.sidebar-hyprtoggle-summary {
+    background-color: rgba(11, 11, 11, 0.5);
+    border-radius: 18px;
+}
+
+.sidebar-hyprtoggle-summary-txt {
+    @include techfont;
+    margin: 15px;
+    color: $onBackground;
+}
+
+.sidebar-waifu-tag {
+    @include mainfont;
+    font-size: 12pt;
+    border-radius: 13px;
+    padding: 5px 10px;
+    margin: 0px 2px;
+    min-height: 20px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+    box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.5);
+}
+
+.sidebar-waifu-tag:hover {
+    background-color: tint($secondaryContainer, 10%);
+}
+
+.sidebar-waifu-tag:active {
+    background-color: tint($secondaryContainer, 20%);
+}
+
+.sidebar-waifu-pic {
+    background-color: transparent;
+    border-radius: 18px;
+    background-position: top center;
+}
+
+.sidebar-waifu-pic-bg {
+    background-color: white;
+    border-radius: 19px;
+}
+
+.sidebar-waifu-status {
+    background-color: $onBackground;
+    color: $background;
+    border-bottom-left-radius: 20.72px;
+    border-bottom-right-radius: 20.72px;
+    border: 1px solid $background;
+    padding: 5.456px;
+    margin-top: 16.368px;
+}
+
+
+.sidebar-todo-box {
+    border-radius: 15px;
+    background-color: mix($secondaryContainer, rgba(0,0,0,0), 80%);
+}
+
+.sidebar-optn-icon {
+    @include icon-material;
+    font-size: 22pt;
+    margin: -10px 0px;
+}

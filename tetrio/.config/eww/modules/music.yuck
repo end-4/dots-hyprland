@@ -1,0 +1,37 @@
+(defwidget osu-music-module []
+  (eventbox
+    :class "dummy-${mcover}" ; Dummy class to keep the listener active
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+    :onclick "scripts/toggle-music.sh &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next"
+    :onhover "${EWW_CMD} update music_hover=true"
+    :onhoverlost "${EWW_CMD} update music_hover=false"
+    (box
+      :space-evenly false
+      :class "module module-music"
+      (box
+        :class "icon-music icon-square-${music_hover || music_open}"
+        (label :class "icon button-${music_hover || music_open}" :text "")
+      )
+      ; Song name
+      (revealer
+        :transition "slideright"
+        :reveal "${music_reveal || osd_vol}"
+        :duration "300ms"
+        :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+        :limit-width 20
+        (eventbox
+          :class "music-ctl-revealer music-ctl-revealer-${music_hover || music_open}"
+          :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+          (label
+            :class "music-title-bar"
+            :limit-width 50
+            ; :style "color: ${mcover.color.colors.color4};"
+            :text "${mname == '' ? 'Not playing' : mname}"
+          )
+        )
+      )
+    )
+  )
+)

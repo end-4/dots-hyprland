@@ -1,0 +1,93 @@
+(defwidget calendar-win []
+  (eventbox
+    :onclick "scripts/toggle-calendar.sh --close &"
+    (box
+      :class "calendar-win"
+      :style "
+      ${rev_calendar ? '' : 'margin-top: -900px; margin-bottom: 900px;'}
+      ${anim_open_calendar ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+      min-height: 1px;
+      "
+      ; (calendar)
+      ; Calendar
+      (box
+        :space-evenly false :orientation "v"
+        :halign "end" :valign "center"
+        (box
+          :space-evenly false :orientation "v"
+          (eventbox
+            :onscroll "scripts/scrollmonth {} &"
+            (box
+              :orientation "v"
+              :space-evenly false
+              (centerbox
+                :style "padding: 0 12px;"
+                (label :xalign 0 :class "calendarwin-title" :text "${calendartitle}")
+                (box)
+                (box
+                  :halign "end" :valign "center"
+                  (box
+                    :halign "end" :valign "center"
+                    (button
+                      :onclick "scripts/scrollmonth up &"
+                      :halign "end" :valign "center"
+                      :class "winicon dashfs-monthbutton"
+                      (image
+                        :valign "center"
+                        :path "images/svg/dark/caretup.svg"
+                      )
+                    )
+                    (button
+                      :onclick "scripts/scrollmonth down &"
+                      :halign "end" :valign "center"
+                      :class "winicon dashfs-monthbutton"
+                      (image
+                        :valign "center"
+                        :path "images/svg/dark/caretdown.svg"
+                      )
+                    )
+                  )
+                )
+              )
+              (box :space-evenly false :orientation "v"
+                ; :class "dashfs-section-nopad"
+                (box
+                  (for day in weekdays
+                    (box
+                      :class "calendarwin-button day${day.today}"
+                      (label :class "calendarwin-text" :text "${day.day}")
+                    )
+                  )
+                )
+                (for week in calendar
+                  (box
+                    (for day in week
+                      (button
+                        :class "calendarwin-button calendarwin-day${day.today}"
+                        (label :class "calendarwin-text" :text "${day.day}")
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow calendar
+  :wm-ignore true
+  :monitor 0
+  :focusable true
+  :geometry (geometry
+    :x "350px"
+    :y "61px"
+    :anchor "top right"
+    :width "0px"
+    :height "0px"
+  )
+  (calendar-win)
+)

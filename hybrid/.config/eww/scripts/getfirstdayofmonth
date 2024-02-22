@@ -1,0 +1,39 @@
+#!/bin/bash
+# Thanks Bing!
+
+# Check if the argument is a valid number
+if [[ ! $1 =~ ^-?[0-9]+$ ]]; then
+  echo "Invalid argument: $1"
+  echo "Usage: getfirstdayofmonth [NUMBER]"
+  exit 1
+fi
+
+# Get the current month and year
+current_month=$(date +%m)
+current_year=$(date +%Y)
+
+# Add the argument to the current month and adjust the year if needed
+if [[ $1 -gt 0 ]]; then
+  next_month=$((current_month + $1))
+  next_year=$((current_year + ((next_month-1) / 12)))
+  next_month=$((current_month + ($1 % 12)))
+else
+  next_month=$((current_month + $1))
+  next_year=$((current_year + ((next_month-12) / 12)))
+  next_month=$((current_month + ($1 % 12)))
+fi
+
+if ((next_month > 12)); then
+  next_month=$((next_month % 12))
+elif ((next_month == 0)); then
+  next_month=12
+  # next_year=$((next_year - 1))
+elif ((next_month < 1)); then
+  next_month=$(( (next_month + 12) % 12 ))
+fi
+
+# Get the weekday name (%A), day number (%d), month name (%B) and year (%Y) of the first day of the next month
+first_day=$(date -d "$next_year-$next_month-01" '+%u %d %m %Y')
+
+# Print the result
+echo $first_day

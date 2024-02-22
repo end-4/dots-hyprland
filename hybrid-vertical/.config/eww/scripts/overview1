@@ -1,0 +1,129 @@
+#!/usr/bin/bash
+dummy='{"address":"_none","at":[0,0],"class":"workspace","size":[1920,1080],"title":"<___overview_workspace>","workspace":{"id":<___overview_workspace>, "name": "<___overview_workspace>"}}'
+
+getwins() {
+  hyprctlclients=$(hyprctl clients -j \
+    | grep -v '"mapped": ' \
+    | grep -v '"hidden": ' \
+    | grep -v '"floating": ' \
+    | grep -v '"monitor": ' \
+    | grep -v '"pid": ' \
+    | grep -v '"xwayland": ' \
+    | grep -v '"pinned":' \
+    | grep -v '"fullscreen": ' \
+    | grep -v '"fullscreenMode": ' \
+    | grep -v '"fakeFullscreen": ' \
+    | grep -v '"grouped": ')
+
+  workspace=('[' '[' '[' '[' '[' '[' '[' '[' '[' '[')
+  workspacecnt=(1 1 1 1 1 1 1 1 1 1)
+
+  wsid=0
+  for i in 0 1 2 3 4; do
+    workspace[i]+=$(echo $dummy | sed "s/<___overview_workspace>/$((i+1))/g")
+  done
+
+  # echo $hyprctlclients | gojq -c '.[]'
+
+  IFS=$'\n'
+  clientsarr=( $(echo $hyprctlclients | gojq -c -M '.[]') )
+
+  #For every window
+  for client in "${clientsarr[@]}"; do
+    wsid=$(echo $client | gojq -c -M '.workspace.id')
+    if [[ $wsid -gt 5 ]]; then
+      continue
+    fi
+    ((wsid-=1))
+    iconpath=''
+    clientclass=$(echo "$client" | gojq -r '.class')
+    if [[ "$clientclass" == "" ]]; then 
+      continue
+    fi
+    if [[ "$wsid" == "-100" ]]; then 
+      continue
+    fi
+    if [[ "${workspacecnt[wsid]}" != "0" ]]; then 
+      workspace[wsid]+=","
+    fi
+
+    # If thumbnail available
+    # if [ -f "scripts/cache/thumbnails/$clientaddress.png" ]; then
+    #   thumbnailpath="scripts/cache/thumbnails/$clientaddress.png"
+    # fi
+    
+    # Get app icon
+    if [ -f "scripts/cache/$clientclass" ]; then
+        iconpath=$(cat scripts/cache/$clientclass)
+        if [ ! -f "${iconpath}" ]; then # Cache refresh if icon doesnt exist
+            iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$clientclass" | head -n 1)
+            echo "${iconpath}" > "scripts/cache/$clientclass"
+        fi
+    else
+        iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$clientclass" | head -n 1)
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+    fi
+    if [[ ${iconpath} == "" ]]; then
+      # Retry with lowercase if icon not found
+      iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") $(echo "$clientclass" | tr '[:upper:]' '[:lower:]' | sed 's/\ /-/g') | head -n 1)
+
+      if [[ ! ${iconpath} = "" ]]; then
+        rm "scripts/cache/$clientclass"
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+      else 
+        newname=$(scripts/iconpatch $clientclass)
+        iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "$newname" | head -n 1)
+        if [[ ! ${iconpath} = "" ]]; then
+          rm "scripts/cache/$clientclass"
+          echo "${iconpath}" > "scripts/cache/$clientclass"
+        else
+          # Fallback app icon, replace the path below to the fallback icon of your choice
+          # iconpath="/usr/share/icons/Win11-dark/mimes/48/application-x-executable.svg"
+          iconpath=$(geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "application-x-executable" | head -n 1)
+          rm "scripts/cache/$clientclass"
+          echo "${iconpath}" > "scripts/cache/$clientclass"
+        fi
+      fi
+    fi
+
+    client=${client::-1}
+    client+=",\"icon\": \"$iconpath\"}"
+    workspace[wsid]+="$client" # Add window to workspace JSON
+
+    # echo -n "Window: $clientclass"
+    # echo '; icon path: '"$iconpath"
+    
+
+    # echo "Count: ${workspacecnt[wsid]}"
+    # echo 'ADDED TO: workspace '"$wsid"
+    # echo ' --> '"${workspace[wsid]}"
+    ((workspacecnt[wsid]+=1))
+  done
+
+  for i in 0 1 2 3 4; do
+    workspace[i]+=']'
+  done
+
+  # echo '-=-=-=-=-=- Summary -=-=-=-=-=-'
+
+  # -=-=-=-=-=-=-=-=-=-=-=-=-=-=- PRINT STUFF HERE -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  echo -n '['
+  for i in 0 1 2 3 4; do
+    if [[ $i != 0 ]]; then
+      echo -n ','
+    fi
+    echo -n "${workspace[i]}"
+  done
+  echo ']'
+}
+
+# Do stuff here
+getwins
+
+if [ "$1" == "--once" ]; then
+  exit 0
+else
+  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | rg --line-buffered "window>>" | while read -r line; do
+    getwins
+  done
+fi

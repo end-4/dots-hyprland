@@ -1,0 +1,69 @@
+* {
+    color: #f3f9ff;
+    font-size: 11px;
+    font-family: Segoe-Fluent-Icons, Segoe-UI;
+    font-weight: 500;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+tooltip {
+    background: #141414;
+    border-radius: 4px;
+}
+
+#tray {
+    min-width: 20px;
+    min-height: 20px;
+    font-size: 20px;
+    font-weight: 200;
+    padding: 4px;
+    min-width: 100px;
+    min-height: 37px;
+    background: rgba(45, 46, 48, 1);
+    background-image: url('images/textures/acrylic.png');
+    border-radius: 9px;
+    border: 1px solid rgba(34, 35, 38, 0.5);
+    margin: 14px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.65);
+}
+
+#window,
+#pulseaudio,
+#network,
+#bluetooth {
+    font-size: 14px;
+    font-weight: 200;
+    padding: 4px;
+}
+
+#custom-weather {
+    padding-left: 12px;
+    font-size: 11px;
+}
+
+#custom-start {
+    background-image: url("./win.png");
+    background-size: 24px 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#taskbar {
+    border-radius: 6px;
+    min-width: 45px;
+    min-height: 45px;
+    /* border-top: 1px solid rgba(64, 64, 64, 0.8); */
+}
+
+#tray,
+#pulseaudio {
+    padding-right: 12px;
+}
+
+#clock {
+    padding-left: 3px;
+    padding-right: 18px;
+}

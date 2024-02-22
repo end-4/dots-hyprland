@@ -1,0 +1,60 @@
+(defwidget dynamicleft_widget []
+  (box
+    (eventbox
+      :onscroll "scripts/scroll-dynamicleft-module {} &"
+      :onmiddleclick "playerctl play-pause"
+      :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+      :onclick "${open_sideleft ?
+      (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideleft=false &') :
+      (dynamicleft_module_page == 2 ? '' :
+        (EWW_CMD + ' open sideleft && ' + EWW_CMD + ' update bar_offset=1 && ' + EWW_CMD + ' update open_sideright=false && ' + EWW_CMD + ' update open_sideleft=true &')
+      )}"
+      ; ↑ check module page 2 to not open sidebar when clicking taskbar
+      (box
+        :orientation "h" :space-evenly false
+        (revealer
+          :reveal {mousemode == 1}
+          :transition "slideright"
+          :duration "200ms"
+          (box
+            :space-evenly false
+            :orientation "v"
+            (box ; Module 1: Music
+              :style "
+              ${ANIM_ENTER[1]}
+              ${dynamicleft_module_page > 1 ? 'margin-top: -70px;' : ''}
+              "
+              (music_widget)
+            )
+            (box ; Module 2: Colors
+              :style "
+              ${ANIM_ENTER[1]}
+              ${dynamicleft_module_page > 2 ? 'margin-top: -70px;' :
+              dynamicleft_module_page < 2 ? 'margin-bottom: -70px;' : ''}
+              "
+              (colorscheme_widget)
+            )
+          )
+        )
+        (revealer
+          :reveal {mousemode == 0}
+          :transition "slideleft"
+          :duration "200ms"
+          (scroll
+            :width 420
+            (box
+              :space-evenly false
+              :orientation "v"
+              (box ; Module 1: Music
+                (music_widget)
+              )
+              (box ; Module 2: Colors
+                (colorscheme_widget)
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

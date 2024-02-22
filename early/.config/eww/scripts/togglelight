@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+if [ "$1" == "light" ]; then
+  echo -n '-l' > 'scripts/workdir/__mode_light_dark.txt'
+  cp css/savedcolors/_iconcolor_default.txt css/_iconcolor_default.txt
+else
+  echo -n '' > 'scripts/workdir/__mode_light_dark.txt'
+  cp css/savedcolors/_iconcolor_default.txt css/_iconcolor_default.txt
+fi

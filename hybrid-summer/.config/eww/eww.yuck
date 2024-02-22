@@ -1,0 +1,224 @@
+;##################### Modules #########################
+(include "./modules/activewindow.yuck")
+(include "./modules/audiolevels.yuck")
+(include "./modules/bluetooth.yuck")
+(include "./modules/bright.yuck")
+(include "./modules/clock.yuck")
+(include "./modules/editmode.yuck")
+(include "./modules/music.yuck")
+; (include "./modules/net.yuck")
+(include "./modules/searchbutton.yuck")
+(include "./modules/sys.yuck")
+(include "./modules/taskbar.yuck")
+(include "./modules/variables.yuck")
+(include "./modules/user.yuck")
+; (include "./modules/volume.yuck")
+(include "./modules/winstuff.yuck")
+(include "./modules/workspaces.yuck")
+
+;##################### Windows #########################
+(include "./windows/bottombar.yuck")
+(include "./windows/bg-decor.yuck")
+(include "./windows/dynamic-bg.yuck")
+(include "./windows/dashboard.yuck")
+(include "./windows/dashfs.yuck")
+(include "./windows/calendar.yuck")
+(include "./windows/music.yuck")
+(include "./windows/overview.yuck")
+(include "./windows/osd.yuck")
+(include "./windows/osettings.yuck")
+(include "./windows/onotify.yuck")
+; (include "./windows/system-menu.yuck")
+(include "./windows/themer.yuck")
+(include "./windows/winactions.yuck")
+(include "./windows/winosd.yuck")
+(include "./windows/winnews.yuck")
+(include "./windows/winnotif.yuck")
+(include "./windows/winpowermenu.yuck")
+(include "./windows/winstart.yuck")
+(include "./windows/winoverview.yuck")
+(include "./windows/wingamebar.yuck")
+
+(defwidget separator []
+  (box
+    :valign "start"
+    (label
+      :class "my-separator"
+      :text "|"
+    )
+  )
+)
+
+(defwidget left []
+  (eventbox
+    :onhover "${EWW_CMD} update music_reveal=true"
+    :onhoverlost "${EWW_CMD} update music_reveal=false"
+    (box
+      :space-evenly false :spacing 5
+      :valign "start" :halign "start"
+      (box :space-evenly false :class "module-group"
+        (osettings-button)
+        (osu-music-module)
+      )
+      ; (box :space-evenly false :class "module-group"
+        ;   (taskbar)
+      ; )
+      (revealer
+        :reveal false
+        :transition "slideright"
+        (label
+          :text "${volume.audio} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
+        )
+      )
+    )
+  )
+)
+
+(defwidget right []
+  (eventbox
+    :onhover "${EWW_CMD} update right_hover=true"
+    :onhoverlost "${EWW_CMD} update right_hover=false"
+    (box
+      :space-evenly false :spacing 5
+      :halign "end" :valign "start"
+      (box :space-evenly false :class "module-group"
+        ; (editmode)
+        (themer)
+      )
+      ; (user)
+      (box :space-evenly false :class "module-group"
+        (onotify-button)
+      )
+    )
+  )
+)
+
+(defwidget center []
+  (box
+    :space-evenly false :orientation "v"
+    ; (revealer
+    ;   :transition "slidedown"
+    ;   :duration "0ms"
+    ;   :reveal {!(rev_center_ws || awin.title == 'null')}
+    ;   ; :reveal true
+    ;   (workspaces_top)
+    ; )
+    (box
+      :valign "start"
+      :space-evenly false :spacing 5
+      :halign "center"
+      ; :style "${!(rev_center_ws || awin.title == 'null') ? 'margin-top: -15px; transition: 0px;' : 'transition: 0px;'}"
+      (box
+        :space-evenly false :space-evenly false
+        :spacing 5 :class "module-group" :style "padding-right: 10px;"
+        (searchbutton)
+        (revealer
+          :reveal {rev_center_ws || awin.title == 'null'}
+          ; :reveal false
+          :transition "slideright"
+          :duration "0ms"
+          (workspaces)
+        )
+        (revealer
+          :reveal {!(rev_center_ws || awin.title == 'null')}
+          ; :reveal true
+          :transition "slideright"
+          :duration "0ms"
+          (activewindow)
+        )
+      )
+    )
+  )
+)
+
+(defwidget bar [] ; Class .bar applies automatically
+  (box
+    :space-evenly false
+    :orientation "h"
+    (box
+      :class "bar-bg-only${compact ? '-compact' : ''}"
+      :style "
+      margin-right: -${RES_WIDTH - 9}px;
+      "
+    )
+    (centerbox
+      :class "bar-${compact ? 'compact' : 'normal'}"
+      :width {RES_WIDTH}
+      (left)
+      (center)
+      (right)
+    )
+  )
+)
+
+(defwidget winbar []
+  (centerbox
+    :class "winbar-bg"
+    (box
+      :space-evenly false
+      (winnews-button)
+      (eventbox
+        :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+        (box
+          :space-evenly false
+          :style "margin-left: ${RES_WIDTH / 2 - 75 - (25 * arraylength(tasks))}px;"
+          (winstarticon)
+          (wintaskbar)
+          (revealer
+            :reveal false
+            :transition "slideright"
+            (label
+              :text "${net.level} ${brightness.level} ${wsjsona[0][0].at} ${wsjsonb[0][0].at}" ; Dummy to keep listeners active
+            )
+          )
+        )
+      )
+    )
+    (box
+      
+    )
+    (box
+      :halign "end"
+      :space-evenly false
+      (winactions)
+      (windate)
+    )
+  )
+)
+
+(defwindow bar
+  :stacking "fg"
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "53px"
+    ; :width "53px"
+    ; :height "100%"
+    :anchor "top center"
+  )
+  ; :stacking "fg"
+  :exclusive false
+  (bar)
+)
+
+(defwindow winbar
+  :stacking "fg"
+  :monitor 0
+  :exclusive true
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    ; :height "53px"
+    ; :width "53px"
+    ; :height "100%"
+    :anchor "bottom center"
+  )
+  ; :stacking "fg"
+  :exclusive false
+  (winbar)
+)
+

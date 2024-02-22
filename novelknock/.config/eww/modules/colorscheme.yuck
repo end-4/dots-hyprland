@@ -1,0 +1,33 @@
+(defwidget colorscheme_widget []
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
+    (box
+      :class "bar-bg bar-bg-pad"
+      (box
+        :space-evenly false
+        :orientation "h"
+        :spacing 5
+        :halign "center"
+        (button
+          :valign "center"
+          :class "bar-wall-btn"
+          :onclick "scripts/switchwall &"
+          :tooltip "Change wallpaper"
+          (label :class "bar-icon-material-hugeass bar-txt-norm" :text "image")
+        )
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-1" :text "1")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-2" :text "1")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-3" :text "2")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-4" :text "2")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-5" :text "3")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-6" :text "3")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-7" :text "Sf")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-8" :text "Sf")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-9" :text "Bg")
+        (label :valign "center" :width 30 :height 30 :class "bar-clr bar-clr-10" :text "iP")
+      )
+    )
+  )
+)

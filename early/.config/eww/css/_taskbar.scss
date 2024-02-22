@@ -1,0 +1,87 @@
+.taskbaricon {
+  background-size: 60%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.taskbaricon-false {
+  background-size: 70%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.taskbaricon-true {
+  background-size: 70%;
+  background-position: center;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+
+.taskbar-indicator-true {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+  margin-bottom: 4px;
+  margin-top: 43px;
+  margin-left: 16px;
+  margin-right: 16px;
+  background-color: $primary;
+}
+
+.taskbar-indicator-false {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-top: 1px solid transparent;
+  margin-bottom: 4px;
+  margin-top: 43px;
+  margin-left: 22px;
+  margin-right: 22px;
+  background-color: #9C98A3;
+}
+
+.taskbar-button-only {
+  :first-child {
+    :first-child {
+      border-radius: 6px;
+      border: 1px solid transparent;
+      border-top: 1px solid transparent;
+    }
+  }
+}
+
+.taskbar-button-only:hover {
+  :first-child {
+    :first-child {
+      background-color: shade($overlay0, 2%);
+      border: 1px solid $overlayedge;
+      border-top: 1px solid tint($overlayedge, 5%);
+    }
+  }
+}
+
+.taskbar-button-only:active {
+  :first-child {
+    :first-child {
+      background-color: tint($overlay0, 8%);
+      border: 1px solid tint($overlayedge, 10%);
+      border-top: 1px solid tint($overlayedge, 15%);
+    }
+  }
+}
+
+.taskbar-button-pad {
+  padding: 3px;
+  // min-width: 42px;
+  min-height: 42px;
+}

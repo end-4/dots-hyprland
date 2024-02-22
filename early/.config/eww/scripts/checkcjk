@@ -1,0 +1,24 @@
+#!/bin/python3
+
+# Import the re module
+import re
+
+# Define a function that takes a string as an argument and returns True if it contains CJK characters, False otherwise
+def check_cjk(string):
+  # Use a regular expression that matches any of these Unicode ranges: U+3040 - U+30FF (hiragana and katakana), U+3400 - U+4DBF (CJK unified ideographs extension A), U+4E00 - U+9FFF (CJK unified ideographs), U+F900 - U+FAFF (CJK compatibility ideographs), U+FF66 - U+FF9F (half-width katakana)
+  pattern = r' [\\u3040-\\u30ff\\u3400-\\u4dbf\\u4e00-\\u9fff\\uf900-\\ufaff\\uff66-\\uff9f]'
+  # Search for the pattern in the string
+  match = re.search(pattern, string)
+  # Return True if there is a match, False otherwise
+  return bool(match)
+
+# Read a string from standard input
+input = input("Enter a string: ")
+
+# Call the function and print the result
+if check_cjk(input):
+  print("The string contains CJK characters.")
+else:
+  print("The string does not contain CJK characters.")
+
+  ・インザナイト

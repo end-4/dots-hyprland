@@ -1,0 +1,205 @@
+(defwidget winactions_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winactions ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winactions ? '' : 'margin-bottom: -700px;'}
+    "
+    (eventbox
+      :onclick "scripts/toggle-winactions.sh --close &"
+      :onmiddleclick "scripts/toggle-winactions.sh --close &"
+      :onrightclick "scripts/toggle-winactions.sh --close &"
+      (box
+        :class "box-that-is-there" :style "min-height: 1px;"
+      )
+    )
+    ; Media controls
+    (revealer
+      :reveal {mname_win.title != ''}
+      :transition "slideup"
+      :duration "200ms"
+      (box
+        :class "winwin winactions-media-pad"
+        :space-evenly false :orientation "v"
+        :style "margin-bottom: 0px;"
+        :spacing 29
+        (box
+          :halign "start" :space-evenly false :orientation "h" :spacing 8
+          (label :class "win-segoeicon" :text "")
+          (label :class "win-segoeicon" :text "Media")
+        )
+        (box
+          :space-evenly false :orientation "h" :spacing 8
+          :width 346
+          (box
+            :space-evenly false :orientation "v" :hexpand true
+            (label :xalign 0 :limit-width 36 :class "winactions-media-title" :text {mname_win.title})
+            (label :xalign 0 :limit-width 36 :class "winactions-media-artist" :text {mname_win.artist})
+          )
+          (box
+            :halign "end"
+            :class "winactions-media-cover"
+            :style "background-image: url('${mcover.image}')"
+          )
+        )
+        (box
+          :halign "center"
+          :class "music-button-box-bar"
+          :spacing 42
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl previous"
+            ""
+          )
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl play-pause"
+            "${music.status != '' ? (music.status == '' ? '' : '') : ''}"
+          )
+          (button
+            :class "winactions-media-button win-segoeicon"
+            :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+            ""
+          )
+        )
+      )
+    )
+    (box
+      :class "winwin-top"
+      :space-evenly false
+      :orientation "v"
+      ; Row 1: Network, Bluetooth, Airplane
+      (box
+        :class "winactions-togglerow"
+        :space-evenly false
+        (box :orientation "v" :space-evenly false
+          (box
+            :class "winactions-toggle winactions-toggle-${net.level != '0' && net.essid != 'lo'}"
+            :orientation "h"
+            (button
+              :onclick "scripts/net toggle"
+              :class "winactions-toggle-icon winactions-toggle-icon-left winwifi${net.level}${net.essid != 'lo' ? '-activated' : ''}"
+            )
+            (button
+              :onclick "gnome-control-center wifi &"
+              :class "winactions-toggle-icon winactions-toggle-arrow${(net.essid != 'lo') ? '-activated' : ''}"
+            )
+          )
+          (label :class "wintoggle-text" :text "${net.essid}")
+        )
+        (box :orientation "v" :space-evenly false
+          (box
+            :class "winactions-toggle winactions-toggle${bluetooth.text == 'Bluetooth off' ? '' : '-true'}"
+            :orientation "h"
+            (button
+              :onclick "scripts/bluetooth toggle &"
+              :class "winactions winactions-toggle-icon-left winbluetooth${bluetooth.text == 'Disconnected' ? '' : (bluetooth.text == 'Bluetooth off' ? '-false' : '-true')}"
+            )
+            (button
+              :onclick "blueberry &"
+              :class "winactions-toggle-icon-right winactions-toggle-arrow${bluetooth.text == 'Bluetooth off' ? '' : '-activated'}"
+            )
+          )
+          (label :class "wintoggle-text" :text "${bluetooth.text}")
+        )
+        (box :orientation "v" :space-evenly false
+          (box
+            :class "winactions-toggle winactions-toggle-center"
+            (button
+              :onclick "scripts/airplane toggle &"
+              :class "winactions-toggle-icon winactions-toggle-icon-center winactions-airplane"
+            )
+          )
+          (label :class "wintoggle-text" :text "Flight Mode")
+        )
+      )
+      ; Row 2: Night light
+      (box
+        :class "winactions-togglerow"
+        :space-evenly false
+        (box
+          :orientation "v" :space-evenly false
+          (box
+            :class "winactions-toggle winactions-toggle-center winactions-toggle-${hyprjson.nightlight}"
+            (button
+              :onclick "scripts/toggle-nightlight.sh &"
+              :class "winactions-toggle-icon winactions-toggle-icon-center winactions-nightlight${hyprjson.nightlight ? '-activated' : ''}"
+            )
+          )
+          (label :class "wintoggle-text" :text "Night Light")
+        )
+      )
+      (box :height 30)
+      ; Slider 1: brightness
+      (box
+        :space-evenly false
+        :orientation "h"
+        :class "winactions-sliderrow "
+        (box :class "winicon winbrightness winactions-element")
+        (scale
+          :value "${brightness.level}"
+          :onchange "light -S {}"
+          :class "winslider winslider-winactions"
+        )
+      )
+      ; Slider 1: Volume
+      (box
+        :space-evenly false
+        :orientation "h"
+        :class "winactions-sliderrow"
+        (button
+          :class "winicon winvol${volume.audio == 1 ? round(volume.percent / 33, 0) : 'mute'} winactions-element"
+          :onclick "scripts/volume mute SINK &"
+        )
+        (scale
+          :value "${volume.percent}"
+          :onchange "scripts/volume setvol SINK {}"
+          :class "winslider winslider-winactions"
+        )
+      )
+    )
+    (box
+      :class "winwin-bottom"
+      :space-evenly false
+      :orientation "v"
+      (centerbox
+        :space-evenly false
+        :orientation "h"
+        :class "winwin-bottom-pad"
+        (button
+          :class "winactions-bottom-button"
+          :halign "start"
+          :style "padding: 0 13px;"
+          :onclick "scripts/toggle-winactions.sh --close power &"
+          (box
+            :space-evenly false
+            :orientation "h"
+            (box :class "winicon winbat${round(battery.percentage / 10, 0)}")
+            (label :class "wintoggle winbartext" :text "${battery.percentage}%")
+          )
+        )
+        (box)
+        (box
+          (button
+            :halign "end"
+            :onclick "scripts/toggle-winactions.sh --close settings &"
+            :class "winactions-bottom-button wincog winicon"
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow winactions
+  :wm-ignore true
+  :monitor 0
+  :focusable true
+  :geometry (geometry
+    :x "0px"
+    :y "50px"
+    :anchor "bottom right"
+  )
+  (winactions_widget)
+)

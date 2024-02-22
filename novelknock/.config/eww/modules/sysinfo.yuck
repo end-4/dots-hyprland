@@ -1,0 +1,42 @@
+(defwidget sysinfo_widget []
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
+    (box
+      :space-evenly false
+      :orientation "h"
+      :class "bar-bg bar-bg-pad"
+      :spacing 10
+      (image
+        :class "bar-sysinfo-distro-logo"
+        :path "./images/icons/distros/${distro}"
+        :image-width "30"
+        :image-height "30"
+      )
+      (box
+        :hexpand true
+        :orientation "v"
+        :valign "center"
+        (label :xalign 0
+          :class "bar-txt clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          :text "${kernel}"
+        )
+        (label :xalign 0
+          :class "bar-txt-small clr-accent"
+          :style "
+          color: ${colormode == 'one' ? coloraccent : (mcover.color.colors.color7 == 'null' ? coloraccent : mcover.color.colors.color7)};
+          "
+          :text "${packages} packages"
+        )
+      )
+      (label
+        :class "bar-txt"
+        :text "${diskfree} free disk space"
+      )
+    )
+  )
+)

@@ -1,0 +1,19 @@
+[general]
+mode = normal
+framerate = 30
+autosens = 1
+bars = 70
+
+[output]
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+
+[smoothing]
+monstercat = 1
+gravity = 1000
+noise_reduction = 50
+
+[input]
+method = pipewire
+source = auto

@@ -1,0 +1,17 @@
+(defwidget status_widget []
+  (box
+    :space-evenly false
+    (box :hexpand true)
+    (systray :pack-direction "rtl" :icon-size 18)
+    (box :class "corner-width")
+    (label
+      :class "bar-width icon-material bar-system-icon txt-norm txt"
+      :text {WIFI_ICONS[net.level]}
+    )
+    (label
+      :class "bar-width icon-material bar-system-icon txt-norm txt"
+      :text {bluetooth.icon}
+    )
+    (box :class "corner-width")
+  )
+)

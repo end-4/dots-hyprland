@@ -1,0 +1,44 @@
+/* Private window headerbar */
+
+@namespace xul url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+:root[privatebrowsingmode="temporary"] {
+	--gnome-accent: var(--gnome-private-accent) !important;
+	--gnome-accent-fg: var(--gnome-private-accent) !important;
+	/* Toolbars */
+	--gnome-toolbar-background: var(--gnome-private-toolbar-background) !important;
+	--gnome-inactive-toolbar-background: var(--gnome-private-inactive-toolbar-background)  !important;
+	/* Menus */
+	--gnome-menu-background: var(--gnome-private-menu-background) !important;		
+	/* Change headerbar colors */
+	--gnome-headerbar-background: var(--gnome-private-headerbar-background) !important;
+	--gnome-inactive-headerbar-background: var(--gnome-private-inactive-headerbar-background) !important;
+	/* Tabs */
+	--gnome-tabbar-tab-hover-background: var(--gnome-private-tabbar-tab-hover-background);
+	--gnome-tabbar-tab-active-background: var(--gnome-private-tabbar-tab-active-background);
+	--gnome-tabbar-tab-active-background-contrast: var(--gnome-private-tabbar-tab-active-background-contrast);
+	--gnome-tabbar-tab-active-hover-background: var(--gnome-private-tabbar-tab-active-hover-background);
+	--gnome-inactive-tabbar-tab-hover-background: var(--gnome-private-inactive-tabbar-tab-hover-background);
+	--gnome-inactive-tabbar-tab-active-background: var(--gnome-private-inactive-tabbar-tab-active-background);
+}
+
+/* Add private window headerbar indicator */
+:root[privatebrowsingmode="temporary"] #nav-bar toolbarspring:first-of-type:before {
+	background: url("../icons/eye-not-looking-symbolic.svg") no-repeat;
+	background-size: 64px 64px;
+	content: "";
+	display: block;	
+	position: absolute;
+	width: 64px;
+	height: 46px;
+	top: 0;
+	transform: translate(15px, 0);
+	fill: var(--gnome-toolbar-color) !important;
+	fill-opacity: 0.2 !important;
+	-moz-context-properties: fill, fill-opacity;
+}
+
+/* Hide tabsbar default private browsing indicator */
+#private-browsing-indicator-with-label {
+	display: none !important;
+}

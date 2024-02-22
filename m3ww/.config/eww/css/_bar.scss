@@ -1,0 +1,543 @@
+.corner-width {
+    min-width: 1.5rem;
+}
+
+.corner-height {
+    min-height: 1.5rem;
+}
+
+.bar-bg {
+    background-color: $background;
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.bar-bg-top-decor {
+    // background-image: url('images/svg/drips.svg');
+}
+
+.bar-height {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    min-height: 2.727rem;
+}
+
+.bar-width {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    min-width: 2.727rem;
+}
+
+.bar-bottom-height {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    min-height: 4.091rem;
+}
+
+.bar-sides {
+    min-width: 27rem;
+}
+
+.bar-bottom-sides {
+    min-width: 34.091rem;
+}
+
+.bgdecor-box {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    border: 0.068rem solid $background;
+}
+
+.flyin-top {
+    animation-name: flyin-top;
+    animation-duration: 250ms;
+    animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+    animation-iteration-count: 1;
+}
+
+.flyin-bottom {
+    animation-name: flyin-bottom;
+    animation-duration: 250ms;
+    animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+    animation-iteration-count: 1;
+}
+
+.dynamic-module {
+    transition: 250ms cubic-bezier(0, 0, 0, 1);
+    min-height: 2.727rem;
+}
+
+.dynamic-module-hidetop {
+    margin-top: -2.728rem;
+}
+
+.dynamic-module-hidebottom {
+    margin-bottom: -2.728rem;
+}
+
+.bar-group-margin {
+    padding: 0.2rem;
+}
+
+.bar-group {
+    background-color: mix($surface, $onSurface, 90%);
+}
+
+.bar-group-pad {
+    padding: 0rem 1.023rem;
+}
+
+.bar-group-pad-less {
+    padding: 0rem 0.681rem;
+}
+
+.bar-group-pad-left {
+    padding-left: 1.364rem;
+    padding-right: 0.681rem;
+}
+
+.bar-group-pad-right {
+    padding-left: 0.681rem;
+    padding-right: 1.364rem;
+}
+
+.bar-group-pad-leftonly {
+    padding-left: 0.681rem;
+}
+
+.bar-group-pad-rightonly {
+    padding-right: 0.681rem;
+}
+
+.bar-group-standalone {
+    border-radius: 1.364rem;
+}
+
+.bar-group-round {
+    border-radius: 10rem;
+}
+
+.bar-group-middle {
+    border-radius: 0.477rem;
+}
+
+.bar-group-left {
+    border-radius: 0.477rem;
+    border-top-left-radius: 1.364rem;
+    border-bottom-left-radius: 1.364rem;
+}
+
+.bar-group-right {
+    border-radius: 0.477rem;
+    border-top-right-radius: 1.364rem;
+    border-bottom-right-radius: 1.364rem;
+}
+
+.bar-batt-circ {
+    color: $onSecondaryContainer;
+}
+
+.bar-batt-circ-inside {
+    min-height: 2.045rem;
+    min-width: 2.045rem;
+}
+
+.bar-batt-circ-low {
+    color: $errorContainer;
+    margin: 0.341rem;
+}
+
+.bar-batt-circ-layer2 {
+    color: $onSecondaryContainer;
+    margin: 0.341rem;
+}
+
+.bar-batt-circ-layer2-inside {
+    min-width: 1.364rem;
+    min-height: 1.364rem;
+}
+
+.bar-batt {
+    padding: 0rem 0.205rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    color: $primaryContainer;
+    background-color: $onPrimaryContainer;
+}
+
+.bar-batt-low {
+    padding: 0rem 0.205rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    color: $errorContainer;
+    background-color: $onErrorContainer;
+}
+
+.bar-batt-bottom {
+    padding: 0rem 0.205rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-batt-bottom-low {
+    padding: 0rem 0.205rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    color: $errorContainer;
+    background-color: $onErrorContainer;
+}
+
+.bar-batt-percentage {
+    font-size: 1rem;
+    margin-top: -0.068rem;
+    margin-left: 0.137rem;
+    font-weight: 500;
+}
+
+.bar-batt-percentage-bottom {
+    font-size: 1rem;
+    margin-top: -0.068rem;
+    margin-left: 0.409rem;
+    font-weight: 500;
+}
+
+.bar-batt-chargestate {
+    // min-width: 0.681rem;
+    // min-height: 0.681rem;
+    border-radius: 10rem;
+    background-color: transparent;
+}
+
+.bar-batt-chargestate-charging {
+    border-radius: 10rem;
+    min-width: 0.681rem;
+    min-height: 0.681rem;
+    background-color: $primaryContainer;
+}
+
+.bar-batt-chargestate-charging-low {
+    border-radius: 10rem;
+    min-width: 0.681rem;
+    min-height: 0.681rem;
+    background-color: $errorContainer;
+}
+
+.bar-batt-chargestate-bottom {
+    background-color: transparent;
+    border-radius: 10rem;
+    min-width: 0.681rem;
+    min-height: 0.681rem;
+    margin: 0.682rem;
+}
+
+.bar-batt-chargestate-bottom-charging {
+    border-radius: 10rem;
+    min-width: 0.681rem;
+    min-height: 0.681rem;
+    margin: 0.682rem;
+    background-color: $onSecondaryContainer;
+}
+
+.bar-batt-chargestate-bottom-charging-low {
+    border-radius: 10rem;
+    min-width: 0.681rem;
+    min-height: 0.681rem;
+    margin: 0.682rem;
+    background-color: $errorContainer;
+}
+
+.bar-ws-width {
+    min-width: 18.382rem;
+}
+
+.bar-ws-txt {
+    min-height: 1.772rem;
+    min-width: 1.772rem;
+    @include mainfont;
+    font-size: 1.0909rem;
+    // background: red;
+}
+
+.ws {
+    transition: 100ms cubic-bezier(0, 1, 0, 1);
+}
+
+.bar-ws-txt-active {
+    border-radius: 10rem;
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.bar-ws-txt-true {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-ws-txt-left {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-top-left-radius: 10rem;
+    border-bottom-left-radius: 10rem;
+}
+
+.bar-ws-txt-right {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-top-right-radius: 10rem;
+    border-bottom-right-radius: 10rem;
+}
+
+.bar-ws-txt-alone {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    border-radius: 10rem;
+}
+
+.bar-ws-txt-middle {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-ws-txt-false {
+    color: $onSurface;
+}
+
+.bar-music-playstate {
+    min-width: 1.773rem;
+    min-height: 1.773rem;
+    border-radius: 10rem;
+    margin: 0.273rem;
+    margin-left: 0.205rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.bar-music-playstate-playing {
+    min-width: 1.773rem;
+    min-height: 1.773rem;
+    border-radius: 10rem;
+    margin: 0.273rem;
+    margin-left: 0.205rem;
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
+}
+
+.bar-music-playstate-txt {
+    @include icon-material;
+    font-size: 1.4545rem;
+    margin-bottom: -0.137rem;
+    margin-left: 0rem;
+}
+
+.bar-music-cover {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    min-width: 11.932rem;
+}
+
+.bar-music-extended-bg {
+    border-radius: 1.364rem;
+    min-width: 34.091rem;
+}
+
+.bar-music-extended-ctl-bg {
+    border-radius: 1.364rem;
+    background-color: rgba(30, 30, 30, 0.6);
+}
+
+.bar-music-bottom-bg {
+    border-radius: 1.364rem;
+    min-width: 34.091rem;
+}
+
+.bar-music-bottom-ctl-bg {
+    border-radius: 1.364rem;
+    background-color: rgba(30, 30, 30, 0.6);
+}
+
+.bar-music-extended-textbox {
+    margin: 1.023rem;
+}
+
+.bar-music-bottom-cover {
+    border-radius: 10rem;
+}
+
+.bar-music-hide-false {
+    @include md3_decel;
+    transition-duration: 100ms;
+    opacity: 1;
+}
+
+.bar-music-hide-true {
+    @include md3_accel;
+    transition-duration: 100ms;
+    opacity: 0;
+}
+
+.bar-music-btn {
+    font-size: 1.364rem;
+    border-radius: 10rem;
+    min-height: 2.591rem;
+    min-width: 2.591rem;
+}
+
+.bar-music-btn:hover {
+    background-color: $hovercolor;
+}
+
+.bar-prog-batt {
+    min-height: 0.955rem;
+    min-width: 0.068rem;
+    padding: 0rem;
+    border-radius: 10rem;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $onPrimaryContainer;
+    }
+
+    progress {
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $primaryContainer;
+    }
+}
+
+.bar-prog-batt-low {
+    min-height: 0.954rem;
+    min-width: 0.068rem;
+    padding: 0rem;
+    border-radius: 10rem;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $onErrorContainer;
+    }
+
+    progress {
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $errorContainer;
+    }
+}
+
+.bar-prog-osd {
+    min-height: 0.954rem;
+    min-width: 0.068rem;
+    padding: 0rem;
+    border-radius: 10rem;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $onSurfaceVariant;
+    }
+
+    progress {
+        min-height: 0.681rem;
+        min-width: 0.681rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $surfaceVariant;
+    }
+}
+
+menu {
+    padding: 0.681rem;
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.159rem;
+}
+
+menubar>menuitem {
+    border-radius: 0.545rem;
+    min-width: 2.727rem;
+    min-height: 2.727rem;
+}
+
+menu>menuitem {
+    padding: 0.4em 1.5rem;
+    background: transparent;
+    transition: 0.2s ease background;
+    border-radius: 0.545rem;
+}
+
+menu>menuitem:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bar-btn {
+    border-radius: 10rem;
+    padding: 0.273rem;
+    min-height: 2.182rem;
+    min-width: 2.182rem;
+}
+
+.bar-btn:hover {
+    box {
+        background-color: $hovercolor;
+    }
+}
+
+.bar-btn:active {
+    box {
+        background-color: $activecolor;
+    }
+}
+
+.bar-btn-box {
+    margin: 0.273rem;
+    border-radius: 10rem;
+    min-width: 2.182rem;
+    min-height: 2.182rem;
+    padding: 0rem 0.681rem;
+}
+
+.bar-rev {
+    @include md3_decel;
+}
+
+.bar-rev-close {
+    @include md3_accel;
+}
+
+.taskbar-button {
+    margin: 0.341rem;
+    border-radius: 10rem;
+    min-width: 3.409rem;
+    min-height: 3.409rem;
+}
+
+.taskbar-button-active {
+    background-color: mix($primary, rgba(0, 0, 0, 0), 60%);
+}
+
+.taskbaricon {
+    min-width: 3.409rem;
+    min-height: 3.409rem;
+}
+
+.bar-notif-indicator {
+    border-radius: 10rem;
+    background-color: $primary;
+    color: $onPrimary;
+    padding: 0.137rem 0.477rem;
+}
+
+.bar-notif-icon {
+    margin-top: 0.068rem;
+    margin-bottom: -0.068rem;
+}
+
+.bar-circ-bottom-size {
+    min-height: 2.727rem;
+    min-width: 2.727rem;
+}

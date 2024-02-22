@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+geticons -t $(gsettings get org.gnome.desktop.interface icon-theme | sed "s/'//g") "firefox" | head -n 1
+
+socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
+  echo "$line"
+done
+
+
+

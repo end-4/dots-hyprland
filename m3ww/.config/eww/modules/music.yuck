@@ -1,0 +1,122 @@
+(defwidget music_widget []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "scripts/toggle-sideleft.sh &"
+    (box
+      :class "bar-group-margin bar-sides"
+      (box
+        :class "bar-group bar-group-standalone bar-group-pad-rightonly"
+        :orientation "h"
+        :space-evenly false
+        (box
+          :class "bar-music-playstate${mplay == 'Playing' ? '-playing' : ''}"
+          (label
+            :class "bar-music-playstate-txt"
+            :text {mplay == 'Playing' ? '' : ''}
+          )
+        )
+        (scroll :hscroll true :vscroll false :hexpand true
+          (box
+            :space-evenly false :spacing 5
+            :hexpand true
+            (label
+              :hexpand true
+              :xalign 1
+              :class "txt-smallie txt"
+              :text {mname.title != '' ? mname.title : 'Musik'}
+            )
+            (label :xalign 0 :class "txt-norm txt"
+              :text {mname.artist == '' ? '' : '•'}
+            )
+            (label
+              :hexpand true
+              :xalign 0
+              :class "txt-smallie txt"
+              :text {mname.artist}
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget music_bottom_widget []
+  (eventbox
+    :onhover "${EWW_CMD} update hover_music=true &"
+    :onhoverlost "${EWW_CMD} update hover_music=false &"
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "scripts/toggle-sideleft.sh &"
+    (box
+      :halign "start"
+      :space-evenly false
+      :class "bar-group-margin"
+      (box
+        :class "bar-bottom-sides bar-group bar-group-round bar-group-pad-less"
+        :space-evenly false :spacing 10
+        (box
+          :valign "center"
+          :class "bar-music-bottom-cover bar-music-cover"
+          :style "
+          background-image: url('${mcover.image == 'null' || mcover.image == '' ? 'eww_covers/cover_art_default' : mcover.image}');
+          "
+          (box
+            :class "bar-music-bottom-ctl-bg bar-music-hide-${!hover_music}"
+            (box
+              :halign "center" :valign "center"
+              :spacing 10
+              (button
+                :class "icon-material bar-music-btn"
+                :onclick "playerctl previous"
+                "skip_previous"
+              )
+              (button
+                :class "icon-material bar-music-btn"
+                :onclick "playerctl play-pause"
+                "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
+              )
+              (button
+                :class "icon-material bar-music-btn"
+                :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                "skip_next"
+              )
+            )
+          )
+        )
+        (box
+          :hexpand true
+          :orientation "h" :space-evenly false
+          :valign "center"
+          (scroll :hscroll true :vscroll false :hexpand true
+            (box
+              :orientation "v"
+              :space-evenly false
+              :class "bar-music-bottom-textbox"
+              :hexpand true
+              (label :xalign 0
+                :hexpand true
+                :class "txt-small txt"
+                :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                :text {mname.title != '' ? mname.title : 'Music...'}
+              )
+              (revealer
+                :reveal {mname.artist != ''}
+                :transition "slidedown"
+                (label :xalign 0
+                  :hexpand true
+                  :class "txt-small txt"
+                  :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                  :text {mname.artist}
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

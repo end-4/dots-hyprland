@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+
+icons=("" "" "" "" "" "" "" "")
+
+gettime() {
+	FULL=$(cat /sys/class/power_supply/BATT/charge_full)
+	NOW=$(cat /sys/class/power_supply/BATT/charge_now)
+
+	if [ "$RATE" -gt 0 ]; then
+		if [ "$STATE" = "Discharging" ]; then
+			EX="$NOW / $RATE"
+		else
+			EX="($FULL - $NOW) / $RATE"
+		fi
+		date -u -d@"$(bc -l <<< "$EX * 3600")" +%H:%M
+	fi
+}
+
+geticon() {
+	if [ "$STATE" = "Charging" ]; then
+    level=$(awk -v n="$CAPACITY" 'BEGIN{print int((n-1)/12)}')
+		echo "${icons[$level]}"
+	else
+    level=$(awk -v n="$CAPACITY" 'BEGIN{print int((n-1)/12)}')
+		echo "${icons[$level]}"
+	fi
+}
+
+status() {
+	if [ "$STATE" = "Charging" ]; then
+		echo -n "charging"
+
+		if [ "$RATE" -gt 0 ]; then
+			echo ", $(gettime) left"
+		else
+			echo ""
+		fi
+	elif [ "$STATE" = "Discharging" ]; then
+		echo "$(gettime)h left"
+	else
+		echo "fully charged"
+	fi
+}
+
+statch() {
+	if [ "$STATE" = "Discharging" ]; then #Not charging, below 20%
+		if [ "$CAPACITY" -le 5 ]; then
+			echo 'deadly'
+		elif [ "$CAPACITY" -le 10 ]; then
+			echo 'critical'
+		elif [ "$CAPACITY" -le 30 ]; then
+			echo 'low'
+		else 
+			echo 'normal'
+		fi
+	else 
+		echo 'charging'
+	fi
+}
+
+chargestatus() {
+	if [ "$STATE" = "Charging" ]; then
+		echo -n ""
+	elif [ "$STATE" = "Discharging" ]; then
+		echo -n ""
+	fi
+}
+
+circolor() {
+	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		cat images/svg/color.txt
+	else
+		cat images/svg/color.txt
+	fi
+}
+
+cirbgcolor() {
+	if [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		echo '#EF738A'
+	else
+		echo 'transparent'
+	fi
+}
+
+color() {
+	if [ "$CAPACITY" -le 20 ]; then
+		echo '#EF738A'
+	else
+		echo 'white'
+	fi
+}
+
+bgcolor() {
+	if [ "$CAPACITY" -le 20 ]; then
+		echo '#EF738A'
+	else
+		echo 'transparent'
+	fi
+}
+
+wattage() {
+	echo "$(bc -l <<< "scale=1; $RATE / 1000000") W"
+}
+
+warnedlow=0
+
+while true; do
+	RATE=$(cat /sys/class/power_supply/BATT/voltage_now)
+	CAPACITY=$(cat /sys/class/power_supply/BATT/capacity)
+	STATE=$(cat /sys/class/power_supply/BATT/status)
+
+	if [[ "$CAPACITY" -le 5 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'FREAKING PLUG IN THE CHARGER ALREADY' '!!111!!1!123!!!' -u critical -a 'eww'
+		fi
+	elif [[ "$CAPACITY" -le 10 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'Battery verrry low' 'Hello?' -u critical -a 'eww'
+		fi
+	elif [[ "$CAPACITY" -le 20 && "$STATE" = "Discharging" ]]; then
+		if [ $warnedlow == 0 ]; then 
+			warnedlow=1
+			notify-send 'Battery low' 'Plug in your charger pweeeeaaase :>' -u critical -a 'eww'
+		fi
+	else
+	    warnedlow=0
+	fi
+
+	echo '{"quickicon": "'"$(chargestatus)"'", "icon": "'"$(geticon)"'", "percentage": '"$CAPACITY"', "wattage": "'"$(wattage)"'", "status": "'"$(status)"'", "circolor": "'"$(circolor)"'", "cirbgcolor": "'"$(cirbgcolor)"'", "color": "'"$(color)"'", "bgcolor": "'"$(bgcolor)"'" }'
+	sleep 3
+done

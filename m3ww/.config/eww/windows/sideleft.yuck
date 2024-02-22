@@ -1,0 +1,578 @@
+(defwidget sideleft_widget []
+  (eventbox
+    :onhoverlost "scripts/toggle-sideleft.sh --close &"
+    (box
+      :orientation "v" :space-evenly false
+      (eventbox
+        :onclick "scripts/toggle-sideleft.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :class {BAR_HEIGHT >= 2 ? 'bar-height' : ''})
+      )
+      (box
+        :vexpand true
+        :class "sidebar-window ${open_sideleft ? 'anim-enter' : 'anim-exit'} ${open_sideleft ? '' : 'sidebar-hide-left'}"
+        (scroll
+          :hscroll false :vscroll false
+          :vexpand true
+          (box
+            :orientation "h"
+            :spacing 1
+            :style "
+            ${ANIM_ENTER[0]}
+            ${rev_mixer ? 'margin-left: -34.091rem' : 'margin-right: -34.091rem;'}
+            "
+            (scroll
+              :hscroll false :vscroll true
+              :vexpand true
+              (box
+                :vexpand true
+                :class "spacing-v-15"
+                :orientation "v" :space-evenly false
+                (box ; Resources
+                  :class "spacing-h-5"
+                  :orientation "h"
+                  :space-evenly false
+                  (box
+                    :class "sidebar-resource-value"
+                    :space-evenly false
+                    (label :class "icon-material txt-large"
+                      :valign "center"
+                      :text "data_saver_on"
+                    )
+                    (label :class "txt-smaller" :text "${round(EWW_CPU.avg, 0)}%")
+                    (progress
+                      :valign "center"
+                      :class "sidebar-prog-resource"
+                      :value {round(EWW_CPU.avg, 0)}
+                    )
+                  )
+                  (box
+                    :class "sidebar-resource-value"
+                    :space-evenly false
+                    (label :class "icon-material txt-larger"
+                      :valign "center"
+                      :text "memory"
+                    )
+                    (box :orientation "v"
+                      (label :xalign 0
+                        :class "txt-smaller"
+                        :text {memory.used}
+                      )
+                      (label :xalign 0
+                        :class "txt-smaller"
+                        :text "+${memory.swapused}"
+                      )
+                    )
+                    (box
+                      :valign "center"
+                      :orientation "v" :space-evenly false
+                      (progress
+                        :valign "center"
+                        :class "sidebar-prog-resource"
+                        :value {memory.percentage}
+                      )
+                      (progress
+                        :valign "center"
+                        :class "sidebar-prog-resource"
+                        :value {memory.swappercentage}
+                      )
+                    )
+                  )
+                  (box
+                    :class "sidebar-resource-value"
+                    :space-evenly false
+                    :hexpand true
+                    (label :class "icon-material txt-larger"
+                      :valign "center"
+                      :text "hard_drive"
+                    )
+                    (label :xalign 0
+                      :class "txt-smaller"
+                      :text {diskfree}
+                    )
+                    (progress
+                      :hexpand true
+                      :valign "center"
+                      :class "sidebar-prog-resource"
+                      :value {diskfreepercent}
+                    )
+                  )
+                )
+                (box ; Music
+                  (eventbox
+                    :onhover "${EWW_CMD} update rev_mixerbtn=true &"
+                    :onhoverlost "${EWW_CMD} update rev_mixerbtn=false &"
+                    (box
+                      :hexpand true
+                      (overlay
+                        :hexpand true
+                        (box ; 0. Fallback background
+                          :class "sidebar-music-thumbnail-fallback"
+                        )
+                        (box ; 1. The background
+                          :class "sidebar-music-thumbnail"
+                          :style "
+                          ${mcover.image == 'null' ? '' : ('background-image: url(\'' + mcover.image + '\'); background-size: 100% auto; background-position: center')}
+                          "
+                        )
+                        (box ; 2. Color tint
+                          :class "sidebar-music-vignette"
+                          :hexpand true
+                        )
+                        (box ; 3. Text and controls
+                          :class "spacing-v-minus5"
+                          :orientation "v"
+                          :space-evenly false
+                          (box ; Media source, output
+                            :class "sidebar-music-toprow"
+                            :space-evenly false
+                            :orientation "h"
+                            (label :xalign 0
+                              :hexpand true
+                              :class "sidebar-music-source txt-hugeass"
+                              :text "${mcover.color.source}"
+                              :style "color: ${mcover.materialcolor.onPrimaryContainer};"
+                              :style {mcover.materialcolor.onPrimaryContainer == "null" ? "" : "color: ${mcover.materialcolor.onPrimaryContainer};"}
+                            )
+                            (box
+                              :orientation "h" :space-evenly false :class "spacing-h-5"
+                              :halign "end"
+                              :class "sidebar-music-output txt-small"
+                              :style "
+                              ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                              ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                              "
+                              (label
+                                :class "icon-material sidebar-music-device"
+                                :text "${volume.device == 'Headphones' ? '' : ''} "
+                                :style {mcover.materialcolor.onPrimary == "null" ? "" : "color: ${mcover.materialcolor.onPrimary};"}
+                              )
+                              (label
+                                :text "${volume.device}"
+                                :style {mcover.materialcolor.onPrimary == "null" ? "" : "color: ${mcover.materialcolor.onPrimary};"}
+                              )
+                            )
+                            (button ; Open mixer
+                              :halign "end"
+                              :class "sidebar-music-output txt-small"
+                              :style "
+                              ${ANIM_ENTER[0]}
+                              ${rev_mixerbtn ? '' : 'margin-right: -10rem;'}
+                              "
+                              :onclick "${EWW_CMD} update rev_mixer=${!rev_mixer}"
+                              (box
+                                :orientation "h" :space-evenly false
+                                :class "spacing-h-5"
+                                (label
+                                  :class "icon-material sidebar-music-device"
+                                  :text "tune "
+                                )
+                                (label
+                                  :text "Mixer "
+                                )
+                                (label
+                                  :class "icon-material sidebar-music-device txt-norm"
+                                  :text "chevron_right"
+                                )
+                              )
+                            )
+                          )
+                          (box ; Title, play button
+                            :space-evenly false
+                            :orientation "h"
+                            (scroll
+                              :class "sidebar-music-title-scroll"
+                              :hexpand true
+                              :hscroll true :vscroll false
+                              (box
+                                :orientation "v"
+                                :space-evenly false
+                                :valign "center"
+                                (label :xalign 0
+                                  :class "sidebar-music-title txt-norm"
+                                  :style {mcover.materialcolor.onPrimaryContainer == "null" ? "" : "color: ${mcover.materialcolor.onPrimaryContainer};"}
+                                  :text "${strlength(mname.title) == 0 ? 'Music' : mname.title}"
+                                )
+                                (label :xalign 0
+                                  :class "sidebar-music-artist txt-small"
+                                  :style {mcover.materialcolor.onPrimaryContainer == "null" ? "" : "color: ${mcover.materialcolor.onPrimaryContainer};"}
+                                  :text "${mname.artist}"
+                                )
+                              )
+                            )
+                            (eventbox
+                              :valign "center"
+                              :class "txt-hugeass sidebar-music-playbtn"
+                              :onclick "playerctl play-pause"
+                              :cursor "pointer"
+                              (box
+                                :style "
+                                ${mcover.materialcolor.primary == 'null' ? '' : 'background-color: ${mcover.materialcolor.primary};'}
+                                ${mcover.materialcolor.onPrimary == 'null' ? '' : 'color: ${mcover.materialcolor.onPrimary};'}
+                                "
+                                "${mplay == 'Playing' ? 'pause' : 'play_arrow'}"
+                              )
+                            )
+                          )
+                          (box ; Slider and skip track buttons
+                            :space-evenly false
+                            :orientation "h"
+                            (eventbox
+                              :class "txt-larger sidebar-music-trackbtn"
+                              :onclick "playerctl previous"
+                              (box
+                                :style "
+                                ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                                "
+                                "skip_previous"
+                              )
+                            )
+                            (overlay
+                              :hexpand true
+                              (box
+                                :hexpand true
+                                :valign "center"
+                                :class "sidebar-music-progress"
+                                :style "
+                                background-image:
+                                linear-gradient(to right,
+                                  ${mcover.materialcolor.onPrimaryContainer} ${music.position}%,
+                                  rgba(200, 200, 200, 0.6) ${music.position}%);
+                                "
+                              )
+                              (label
+                                :class "sidebar-music-progress-btn txt-large"
+                                :valign "center"
+                                :xalign {music.position == '' ? 0 : (music.position / 100)}
+                                :style "
+                                ${mcover.materialcolor.onPrimaryContainer == 'null' ? '' : ('color: ' + mcover.materialcolor.onPrimaryContainer + ';')}
+                                "
+                                :text "●"
+                              )
+                            )
+                            ; ; Below is the proper scale widget, but doesn't follow Material colors
+                            ; (scale
+                              ;     :hexpand true
+                              ;     :class "sidebar-music-slider"
+                              ;     :style "
+                              ;     highlight {
+                              ;     color: red;
+                              ;     }
+                              ;     "
+                              ;     :value {music.position}
+                              ;     ; :onchange "playerctl position `bc <<< \"{} * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                            ; )
+                            (eventbox
+                              :class "txt-larger sidebar-music-trackbtn"
+                              :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                              :cursor "pointer"
+                              (box
+                                :style "
+                                color: ${mcover.materialcolor.onPrimaryContainer};
+                                "
+                                "skip_next"
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (box
+                  :vexpand true
+                  :orientation "h"
+                  :space-evenly false
+                  :class "sidebar-waifu-scrollbg spacing-h-15"
+                  (box
+                    :space-evenly false :orientation "h"
+                    (eventbox
+                      :onscroll "scripts/scroll-waifu {} &"
+                      (box
+                        :orientation "v"
+                        ; :height {SCROLL_MULTIPLIER_WAIFUTAGS * SCROLL_TOSHOW_WAIFUTAGS}
+                        (scroll :vscroll false :hscroll false
+                          (box
+                            :class "spacing-v-5"
+                            :orientation "v"
+                            :valign "start"
+                            :style "
+                            ${ANIM_ENTER[1]}
+                            margin-top: -${(SCROLL_MULTIPLIER_WAIFUTAGS * scroll_offset_waifu)}px;
+                            margin-bottom: -${(arraylength(WAIFU_TAG_ID) - SCROLL_TOSHOW_WAIFUTAGS - scroll_offset_waifu) * SCROLL_MULTIPLIER_WAIFUTAGS}px;
+                            "
+                            (for id in WAIFU_TAG_ID
+                              (button
+                                :class "sidebar-waifu-tag"
+                                :onclick "${EWW_CMD} update waifu=\"$(scripts/waifu-get.py --segs ${WAIFU_CATEGORIES_ARGS[id]})\" &"
+                                (box
+                                  :space-evenly false :orientation "h"
+                                  ; (label
+                                    ;   :class "icon-material txt-smallie"
+                                    ;   :text {WAIFU_CATEGORIES_ICONS[id]}
+                                  ; )
+                                  (label
+                                    :class "txt-smallie"
+                                    :text {WAIFU_CATEGORIES[id]}
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (scroll
+                    :hexpand true
+                    :hscroll true :vscroll false
+                    (box
+                      :class "spacing-v-15"
+                      :orientation "v" :space-evenly false
+                      (box :orientation "h" :class "spacing-h-5"
+                        (eventbox
+                          :class "sidebar-waifu-actionbtn"
+                          :cursor "pointer"
+                          :onclick `mkdir -p ~/Pictures/Waifus/ && cp ${waifu.path} ~/Pictures/Waifus/eww_"$(date '+%Y_%m_%_d..%H.%M.%S')"${waifu.ext} && notify-send 'Saved pic to ~/Pictures/Waifus' eww_"$(date '+%Y_%m_%_d..%H.%M.%S')"${waifu.ext} -a 'eww' &`
+                          (box
+                            (box
+                              :halign "center"
+                              :space-evenly false :class "spacing-h-5"
+                              (label
+                                :class "icon-material txt-large"
+                                :text "file_copy"
+                              )
+                              (label
+                                :class "txt-norm"
+                                :text "Hoard"
+                              )
+                            )
+                          )
+                        )
+                        (eventbox
+                          :class "sidebar-waifu-actionbtn"
+                          :cursor "pointer"
+                          :onclick `xdg-open ${waifu.sauce} &`
+                          (box
+                            (box
+                              :halign "center"
+                              :space-evenly false :class "spacing-h-5"
+                              (label
+                                :class "icon-material txt-large"
+                                :text "location_on"
+                              )
+                              (label
+                                :class "txt-norm"
+                                :text "Sauce"
+                              )
+                            )
+                          )
+                        )
+                      )
+                      (eventbox
+                        :vexpand true
+                        :onclick "${EWW_CMD} update show_waifu=${!show_waifu} &"
+                        (overlay
+                          :vexpand true
+                          (box
+                            :class "sidebar-waifu-pic-bg"
+                          )
+                          (box
+                            :class "sidebar-waifu-pic"
+                            :style "
+                            background-image: url('${waifu.path}');
+                            "
+                          )
+                          (revealer
+                            :reveal {!show_waifu}
+                            :duration "50ms"
+                            :transition "crossfade"
+                            (box
+                              :class "sidebar-waifu-pic-cover"
+                              (box
+                                :valign "center"
+                                :orientation "v"
+                                :space-evenly false
+                                (label :valign "center" :class "icon-material txt-badonkers" :text "visibility_off")
+                                (label :valign "center" :class "txt-norm" :text "Click to reveal")
+                              )
+                            )
+                          )
+                          (revealer
+                            :valign "end"
+                            :reveal {rev_waifustatus}
+                            :duration "100ms"
+                            :transition "slidedown"
+                            (label
+                              :valign "end"
+                              :class "txt-smaller sidebar-waifu-status"
+                              :text {waifu_status}
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (eventbox ; Quote
+                  ; :vexpand true
+                  :onscroll "scripts/scroll-quote {} &"
+                  :onclick "${EWW_CMD} update quote_index=${(quote_index + 1 + arraylength(quote_content)) % arraylength(quote_content)} &"
+                  (box
+                    ; :vexpand true
+                    :orientation "v" :space-evenly false
+                    :class "sidebar-quote"
+                    (box
+                      :space-evenly false
+                      (label  :xalign 0
+                        :hexpand true
+                        :angle 180
+                        :class "icon-material txt-hugeass"
+                        :text "format_quote"
+                      )
+                      (label :xalign 1
+                        :class "txt-small sidebar-section-title-text"
+                        :text "${quote_index+1}/${arraylength(quote_content)}"
+                      )
+                    )
+                    (label  :xalign 0 :yalign 1
+                      :vexpand true
+                      :class "txt-small"
+                      :wrap true
+                      :text {quote_content[quote_index]}
+                    )
+                    (label  :xalign 0.9 :yalign 0
+                      :vexpand true
+                      :class "txt-small"
+                      :wrap true
+                      :text {quote_author[quote_index]}
+                    )
+                  )
+                )
+              )
+            )
+            (box
+              :space-evenly false :orientation "v"
+              :class "spacing-v-15"
+              (box ; Volume mixer header
+                :class "sidebar-mixer-header spacing-h-10"
+                :space-evenly false
+                (box
+                  (eventbox
+                    :cursor "pointer"
+                    :class "sidebar-mixer-header-btn"
+                    :onclick "${EWW_CMD} update rev_mixer=${!rev_mixer} &"
+                    (box
+                      (label
+                        :class "icon-material txt-hugeass"
+                        :text "arrow_back"
+                      )
+                    )
+                  )
+                )
+                (label :xalign 0
+                  :hexpand true
+                  :class "txt-hugeass"
+                  :text "Volume mixer"
+                )
+                ; Instructions
+                (label :xalign 1
+                  :hexpand true
+                  :class "txt-smaller"
+                  :text "scroll to change volume"
+                )
+              )
+              (scroll ; Volume mixer
+                :hscroll false :vscroll true
+                :vexpand true
+                (box
+                  :valign "start"
+                  :orientation "V"
+                  :space-evenly false :spacing 10
+                  (for app in audiojson
+                    (box
+                      :class "sidebar-mixer-app spacing-h-10"
+                      :space-evenly false :orientation "h"
+                      (image
+                        :class "sidebar-mixer-app-icon"
+                        :valign "start"
+                        :path {app.icon}
+                        :image-width 30
+                        :image-height 30
+                        :tooltip {app.name}
+                      )
+                      (box
+                        :orientation "v"
+                        :hexpand true
+                        :spacing 10
+                        (for client in {app["clients"]}
+                          (eventbox
+                            :onscroll "pactl set-sink-input-volume ${client.serial} $(echo {} | sed -e \"s/up/+5/g\" -e \"s/down/-5/g\")%"
+                            :onrightclick "pactl set-sink-input-volume ${client.serial} 100%"
+                            :onclick "pactl set-sink-input-volume ${client.serial} 0%"
+                            (box
+                              :hexpand true
+                              :space-evenly false
+                              :orientation "h"
+                              :class "sidebar-mixer-app-serial"
+                              (box
+                                :hexpand true
+                                :orientation "v"
+                                ; :space-evenly false
+                                :class "sidebar-mixer-app-num spacing-v-5 txt-norm"
+                                (scroll :hscroll true :vscroll false
+                                  (label
+                                    :xalign 0 :hexpand true
+                                    :wrap true
+                                    :text "${client.title}"
+                                  )
+                                )
+                              )
+                              (box
+                                :style "margin: 0px 10px;"
+                                (circular-progress
+                                  :value {client.volume <= 100 ? client.volume : 100}
+                                  :start-at 75 :thickness 3
+                                  :width 37 :height 37
+                                  :class "sidebar-mixer-app-circle"
+                                  (label
+                                    :class "sidebar-mixer-app-incircle"
+                                    :text "${client.volume}"
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (eventbox
+        :onclick "scripts/toggle-sideleft.sh &"
+        :onscroll "echo $(echo {} | sed -e 's/down/-U 3/g' -e 's/up/-A 3/g' | xargs light) && scripts/brightness osd &"
+        :onmiddleclick "playerctl play-pause"
+        :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+        (box :class {BAR_HEIGHT >= 2 ? '' : 'bar-bottom-height'})
+      )
+    )
+  )
+)
+
+(defwindow sideleft
+  :monitor 0
+  :stacking "fg"
+  :namespace "eww"
+  :geometry (geometry
+    :anchor "top left"
+    :height "100%"
+  )
+  (sideleft_widget)
+)

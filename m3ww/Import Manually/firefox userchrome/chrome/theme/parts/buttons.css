@@ -1,0 +1,327 @@
+/* Buttons */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Hide buttons separator */
+#nav-bar .toolbaritem-combined-buttons separator {
+	display: none !important;
+}
+#appMenu-popup .toolbaritem-combined-buttons toolbarseparator {
+	border: 0 !important;
+}
+
+/* Buttons */
+menulist,
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton),
+.subviewbutton.panel-subview-footer,
+.panel-footer button,
+#downloadsPanel-mainView .download-state .downloadButton,
+#appMenu-popup .panel-banner-item,
+#appMenu-popup .toolbaritem-combined-buttons toolbarbutton:not(#appMenu-fxa-label),
+#context-navigation menuitem,
+.identity-popup-preferences-button:not(#hack),
+.findbar-container toolbarbutton,
+#sidebar-switcher-target,
+#viewButton,
+.close-icon:not(.tab-close-button),
+button.close,
+.menulist-label-box,
+.expander-down, .expander-up,
+.notification-button,
+#identity-popup-security-expander,
+#protections-popup-info-button,
+#PanelUI-panic-view-button,
+.tracking-protection-button,
+.dialog-button,
+.autocomplete-richlistitem[type="loginsFooter"],
+.dialog-button-box button,
+.searchbar-engine-one-off-item,
+.permission-popup-permission-remove-button,
+.button.connect-device,
+#item-choose button,
+#editBMPanel_newFolderButton,
+.unified-extensions-item-menu-button {
+	-moz-appearance: none !important;
+	background: var(--gnome-button-background) !important;
+	border-radius: 6px !important;
+	border: 0 !important;
+	padding: 0 1px !important;
+	height: 34px !important;
+	max-height: 34px !important;
+	min-height: 34px !important;
+	min-width: 34px !important;
+	color: var(--gnome-toolbar-color) !important;
+	outline: 0 !important;
+	font: menu !important;
+	-moz-box-align: center !important;
+	transition: background .3s;
+}
+.subviewbutton-iconic {
+	-moz-box-pack: center !important;
+}
+
+/* Flat Buttons */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton),
+.close-icon:not(.tab-close-button),
+button.close,
+#protections-popup-info-button,
+.permission-popup-permission-remove-button,
+.unified-extensions-item-menu-button {
+	background: transparent !important;
+	transition: background .3s;
+}
+
+/* Buttons with margins */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton),
+.notification-button,
+.subviewbutton.panel-subview-footer:not(:only-of-type),
+.panel-footer button:not(:only-of-type) {
+	margin: 0 3px !important;
+}
+.close-icon:not(.tab-close-button) {
+	margin-left: 6px !important;
+}
+
+/* Text buttons */
+menulist,
+.subviewbutton.panel-subview-footer,
+.panel-footer button,
+#appMenu-popup .panel-banner-item,
+#appMenu-popup #appMenu-zoomReset-button2:not(#hack),
+#tracking-protection-preferences-button:not(#hack),
+.findbar-container toolbarbutton.findbar-button,
+.notification-button,
+#PanelUI-panic-view-button,
+.tracking-protection-button,
+.dialog-button,
+.autocomplete-richlistitem[type="loginsFooter"],
+.dialog-button-box button,
+.toolbaritem-combined-buttons:is(:not([cui-areatype="toolbar"]), [overflowedItem="true"]) > #appMenu-fxa-label2:not(#hack),
+.button.connect-device,
+#item-choose button,
+#editBMPanel_newFolderButton {
+	padding: 2px 16px !important;
+}
+.subviewbutton.panel-subview-footer label,
+.panel-footer button,
+#appMenu-popup .panel-banner-item .toolbarbutton-text,
+#appMenu-popup #appMenu-zoomReset-button2:not(#hack),
+#tracking-protection-preferences-button:not(#hack),
+.findbar-container toolbarbutton.findbar-button,
+.notification-button,
+#PanelUI-panic-view-button,
+.tracking-protection-button,
+.dialog-button,
+.autocomplete-richlistitem[type="loginsFooter"],
+.dialog-button-box button,
+.button.connect-device,
+#item-choose button {
+	text-align: center !important;
+}
+
+/* Drop down buttons */
+#sidebar-switcher-target,
+#viewButton {
+	padding: 2px 16px !important;
+	position: relative;
+}
+#sidebar-switcher-arrow,
+#viewButton .button-menu-dropmarker { /* Arrow position, type b */
+	transform: translate(6px, 0)
+}
+.menulist-label-box {
+	padding: 2px 26px 2px 16px !important;
+	position: relative;
+}
+.menulist-label-box:after { /* Arrow position */
+	position: absolute !important;
+	right: 8px !important;
+	top: 8px !important;
+}
+.menulist-label-box:after { /* Create arrow if icon tag no exist */
+	content: "";
+}
+
+/* Hover buttons */
+menulist:hover,
+.subviewbutton.panel-subview-footer:hover,
+.panel-footer button:hover,
+#downloadsPanel-mainView .download-state .downloadButton:hover,
+#appMenu-popup .panel-banner-item:hover,
+#appMenu-popup .toolbaritem-combined-buttons toolbarbutton:not(#appMenu-fxa-label):not([disabled="true"]):hover,
+#context-navigation menuitem:not([disabled="true"]):hover,
+.identity-popup-preferences-button:not(#hack):hover,
+.findbar-container toolbarbutton:hover,
+.findbar-closebutton .toolbarbutton-icon:hover,
+#sidebar-switcher-target:hover,
+#viewButton:hover,
+menulist:hover .menulist-label-box,
+.expander-down:hover, .expander-up:hover,
+.notification-button:hover,
+#identity-popup-security-expander:hover,
+.tracking-protection-button:hover,
+.dialog-button:hover,
+.autocomplete-richlistitem[type="loginsFooter"]:hover,
+.dialog-button-box button:not([disabled="true"]):hover,
+.searchbar-engine-one-off-item:hover,
+.button.connect-device:hover,
+#editBMPanel_newFolderButton:hover {
+	outline: 0 !important;
+	background: var(--gnome-button-hover-background) !important;
+}
+
+/* Hover flat buttons */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton):not([open]):not([disabled="true"]):not([checked]):hover,
+.close-icon:not(.tab-close-button):hover,
+button.close:hover,
+#protections-popup-info-button:hover,
+.permission-popup-permission-remove-button:hover,
+#item-choose button:hover,
+.unified-extensions-item-menu-button:hover {
+	outline: 0 !important;
+	background: var(--gnome-button-flat-hover-background) !important;
+}
+
+/* Active buttons */
+menulist[open],
+.subviewbutton.panel-subview-footer:active,
+.panel-footer button:active,
+#downloadsPanel-mainView .download-state .downloadButton:active,
+#appMenu-popup .panel-banner-item:active,
+#appMenu-popup .toolbaritem-combined-buttons toolbarbutton:not([disabled="true"]):not(#appMenu-fxa-label):active,
+#context-navigation menuitem:active:not([disabled="true"]),
+.identity-popup-preferences-button:not(#hack):active,
+.findbar-container toolbarbutton[checked],
+.findbar-container toolbarbutton:active,
+#sidebar-switcher-target:active, #sidebar-switcher-target.active,
+#viewButton[open],
+menulist[open] .menulist-label-box,
+.expander-down:active, .expander-up:active,
+.notification-button:active,
+#identity-popup-security-expander:active,
+.tracking-protection-button:active,
+.dialog-button:active,
+.autocomplete-richlistitem[type="loginsFooter"]:active,
+.dialog-button-box button:not([disabled="true"]):active,
+.button.connect-device:active,
+#editBMPanel_newFolderButton:active {
+	background: var(--gnome-button-active-background) !important;
+}
+
+/* Active flat buttons */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton):not([disabled="true"]):not(#hack):active,
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton):not(.subviewbutton):not([disabled="true"])[open],
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton):not([disabled="true"])[checked],
+.close-icon:not(.tab-close-button):active,
+button.close:active,
+#protections-popup-info-button:not(#hack):active,
+#protections-popup-info-button:not(#hack)[checked],
+.permission-popup-permission-remove-button:active,
+#item-choose button:active,
+.unified-extensions-item-menu-button:active {
+	background: var(--gnome-button-flat-active-background) !important;
+}
+
+/* Disabled buttons */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button)[disabled="true"],
+#appMenu-popup .toolbaritem-combined-buttons toolbarbutton[disabled="true"],
+#context-navigation menuitem[disabled="true"],
+.dialog-button-box button[disabled="true"] {
+	opacity: .5 !important;
+}
+
+/* Inactive window buttons */
+#nav-bar toolbarbutton:not(#urlbar-zoom-button):not(.subviewbutton):-moz-window-inactive,
+.findbar-container toolbarbutton:-moz-window-inactive,
+#sidebar-switcher-target:-moz-window-inactive,
+#viewButton:-moz-window-inactive,
+.notification-button:-moz-window-inactive {
+	background: var(--gnome-inactive-button-background) !important;
+	box-shadow: var(--gnome-inactive-button-box-shadow) !important;
+	border-color: var(--gnome-inactive-button-border-color) !important;
+}
+
+/* Circle buttons */
+#downloadsPanel-mainView .download-state .downloadButton,
+.permission-popup-permission-remove-button:not(#hack) {
+	border-radius: 100% !important;
+}
+
+/* Combined buttons */
+#nav-bar .toolbaritem-combined-buttons:not(.unified-extensions-item) toolbarbutton:not(:last-of-type):not(#hack),
+#appMenu-popup .toolbaritem-combined-buttons:not(.unified-extensions-item) toolbarbutton:not(:last-of-type):not(#appMenu-zoomEnlarge-button),
+#context-navigation menuitem:not(:last-of-type),
+.findbar-container toolbarbutton.findbar-find-previous,
+.findbar-button:not(:last-of-type),
+.search-panel-one-offs .searchbar-engine-one-off-item:not(:last-child) {
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+	border-right-width: 0 !important;
+	margin-right: 0 !important;
+}
+
+#nav-bar .toolbaritem-combined-buttons:not(.unified-extensions-item) toolbarbutton:not(:first-of-type):not(#hack),
+#appMenu-popup .toolbaritem-combined-buttons:not(.unified-extensions-item) toolbarbutton:not(:first-of-type):not(#appMenu-fullscreen-button),
+#context-navigation menuitem:not(:first-of-type),
+.findbar-container toolbarbutton.findbar-find-previous,
+.findbar-container toolbarbutton.findbar-find-next,
+.findbar-button:not(:first-of-type),
+.search-panel-one-offs .searchbar-engine-one-off-item:not(:first-child) {
+	border-top-left-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+	margin-left: 0 !important;
+}
+
+#nav-bar .toolbaritem-combined-buttons:not(.unified-extensions-item) {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+/* Opaque buttons */
+#appMenu-popup .panel-banner-item[notificationid="update-restart"],
+button.popup-notification-primary-button,
+#editBookmarkPanelDoneButton,
+#tracking-action-block,
+.button.connect-device,
+#editBookmarkPanelRemoveButton,
+#PanelUI-panic-view-button {
+	color: white !important;
+	font-weight: bold !important;
+}
+
+/* Buttons with suggested action */
+#appMenu-popup .panel-banner-item[notificationid="update-restart"],
+button.popup-notification-primary-button:not(#hack),
+#editBookmarkPanelDoneButton,
+#tracking-action-block,
+.button.connect-device {
+	background-color: var(--gnome-button-suggested-action-background) !important;
+}
+
+/* Buttons with destructive action */
+#editBookmarkPanelRemoveButton,
+#PanelUI-panic-view-button {
+	background-color: var(--gnome-button-destructive-action-background) !important;
+}
+
+/* Opaque buttons hover */
+#appMenu-popup .panel-banner-item[notificationid="update-restart"]:hover,
+button.popup-notification-primary-button:hover,
+#editBookmarkPanelDoneButton:hover,
+#tracking-action-block:hover,
+.button.connect-device:hover,
+#editBookmarkPanelRemoveButton:hover,
+#PanelUI-panic-view-button:hover {
+	background-image: linear-gradient(rgba(255, 255, 255, .1), rgba(255, 255, 255, .1)) !important;
+}
+
+/* Opaque buttons active */
+#appMenu-popup .panel-banner-item[notificationid="update-restart"]:active,
+button.popup-notification-primary-button:active,
+#editBookmarkPanelDoneButton:active,
+#tracking-action-block:active,
+.button.connect-device:active,
+#editBookmarkPanelRemoveButton:active,
+#PanelUI-panic-view-button:active {
+	background-image: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)) !important;
+}

@@ -1,0 +1,160 @@
+/* Toolbox, a container for all toolbars (toolbox#navigator-toolbox):
+ * - menu bar (toolbar#toolbar-menubar)
+ * - tab bar (toolbar#TabsToolbar)
+ * - header bar (toolbar#nav-bar)
+ * - bookmark bar (toolbar#PersonalToolbar)
+ * - add-ons can add their own toolbars (toolbar) */
+
+@namespace xul "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+/* Toolbox colors */
+#navigator-toolbox {
+	border: 0 !important;
+	background: none !important;
+}
+
+#nav-bar, #PersonalToolbar, #toolbar-menubar, #TabsToolbar, findbar {
+	appearance: none !important;
+	border: 0 !important;
+	background: var(--gnome-toolbar-background) !important;
+}
+#nav-bar, #PersonalToolbar, #toolbar-menubar:not([inactive=true]), #TabsToolbar {
+	border-bottom: 1px solid var(--gnome-toolbar-border-color) !important;
+}
+findbar {
+	border-top: 1px solid var(--gnome-toolbar-border-color) !important;
+}
+#nav-bar:-moz-window-inactive,
+#PersonalToolbar:-moz-window-inactive, 
+#toolbar-menubar:-moz-window-inactive, 
+#TabsToolbar:-moz-window-inactive, 
+findbar:-moz-window-inactive,
+.container.infobar:-moz-window-inactive {
+	background: var(--gnome-inactive-toolbar-background) !important;
+	border-color: var(--gnome-inactive-toolbar-border-color) !important;
+}
+
+#navigator-toolbox:-moz-window-inactive label,
+#downloads-indicator-anchor:-moz-window-inactive,
+findbar:-moz-window-inactive image:not(#hack),
+findbar:-moz-window-inactive label,
+findbar:-moz-window-inactive description,
+#viewButton:-moz-window-inactive dropmarker,
+.container.infobar:-moz-window-inactive {
+	opacity: 0.7 !important;
+}
+
+#toolbar-menubar:not([inactive=true]) {
+	margin-bottom: 0 !important;
+}
+#PersonalToolbar {
+	padding: 2px !important;
+}
+
+/* Overrides: Remove border below the menu bar / above the header bar */
+#TabsToolbar:not([collapsed="true"]) + #nav-bar {
+	border-top-width: 0 !important;
+}
+#navigator-toolbox::after {
+	border-bottom-width: 0 !important;
+}
+
+/* Reorder toolbars */
+#navigator-toolbox #nav-bar {
+	-moz-box-ordinal-group: 0;
+}
+#navigator-toolbox #PersonalToolbar {
+	-moz-box-ordinal-group: 0;
+}
+#navigator-toolbox #titlebar {
+	-moz-box-ordinal-group: 1;
+}
+#navigator-toolbox toolbar {
+	-moz-box-ordinal-group: 10;
+}
+#navigator-toolbox #TabsToolbar {
+	-moz-box-ordinal-group: 100;
+}
+
+/* Overrides: Don't shift other toolbars on tab drag and drop */
+#TabsToolbar[movingtab] {
+	padding-bottom: 0 !important;
+}
+#TabsToolbar[movingtab] > .tabbrowser-tabs {
+	padding-bottom: 0 !important;
+	margin-bottom: 0 !important;
+}
+#TabsToolbar[movingtab] + #nav-bar {
+	margin-top: 0 !important;
+}
+
+/* Content notifications */
+.notificationbox-stack notification-message {
+	border: 0 !important;
+	font-size: 1em !important;
+	padding: 0 !important;
+	border-radius: 0 !important;
+	margin: 0 !important;
+}
+.notificationbox-stack notification-message[style*="margin-top"] {
+	margin-top: -48px !important;
+}
+
+.container.infobar {
+	background: var(--gnome-toolbar-background) !important;
+	box-shadow: none !important;
+	padding: 6px !important;
+	border-radius: 0 !important;
+}
+.container.infobar::before {
+	display: none !important;
+}
+
+.container.infobar .icon {
+	height: 16px !important;
+	width: 16px !important;
+}
+.notificationbox-stack notification-message[type="warning"] {
+	background: #ffe900 !important;	
+}
+.notificationbox-stack notification-message[type="critical"] {
+	background: #d70022 !important;
+}
+
+.notificationbox-stack[notificationside="top"] notification-message {
+	border-bottom: 1px solid var(--gnome-toolbar-border-color) !important;
+}
+.notificationbox-stack[notificationside="bottom"] notification-message {
+	border-top: 1px solid var(--gnome-toolbar-border-color) !important;
+}
+
+/* Bookmarks */
+#PlacesToolbar toolbarseparator {
+	border-top: 0 !important;
+}
+#PlacesToolbarItems > toolbarseparator::before {
+	border-image-source: none !important;
+	border-color: var(--gnome-tabbar-tab-separator-color) !important;
+}
+
+/* Text link */
+.text-link {
+	color: var(--gnome-accent) !important;
+}
+
+/* OPTIONAL: Hide WebRTC indicator */
+@supports -moz-bool-pref("gnomeTheme.hideWebrtcIndicator") {
+	#webrtcIndicator {
+		display: none;
+	}
+}
+
+/* OPTIONAL: Move Bookmarks toolbar under tabs */
+@supports -moz-bool-pref("gnomeTheme.bookmarksToolbarUnderTabs") {
+	#navigator-toolbox #titlebar {
+		-moz-box-ordinal-group: 1 !important;
+	}
+	#navigator-toolbox #PersonalToolbar {
+		-moz-box-ordinal-group: 2 !important;
+	}
+}

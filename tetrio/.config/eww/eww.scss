@@ -1,0 +1,283 @@
+@import 'css/colors';
+@import 'css/colorscheme';
+@import 'images/svg/color.scss';
+
+@function tint($color, $percentage) {
+  @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+  @return mix(rgb(0, 7, 18), $color, $percentage);
+}
+
+$battcolor: $color6;
+$memcolor: $color4;
+$cpucolor: $color3;
+$border: $color7;
+$surface0: tint($colorbg, 10%);
+$bg1: $surface0;
+
+$colormusic: $color4;
+$colorws: $color4;
+$coloredit: $color1;
+$colortime: $colortext;
+$colordate: shade($colortext, 25%);
+$colornotif: $color5;
+$colorthemer: $color3;
+
+//thanks flick0!
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+//also thanks to him
+@keyframes blink {
+  to {
+    background-color: #f9e2af;
+    color: #96804e;
+  }
+}
+
+@keyframes ripple {
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+
+@mixin rounding {
+  border-radius: 10px;
+}
+
+@mixin filter {
+  saturate {
+    filter: saturate(3);
+  }
+
+  grayscale {
+    filter: grayscale(100%);
+  }
+
+  contrast {
+    filter: contrast(160%);
+  }
+
+  brightness {
+    filter: brightness(0.25);
+  }
+
+  blur {
+    filter: blur(3px);
+  }
+
+  invert {
+    filter: invert(100%);
+  }
+
+  .sepia {
+    filter: sepia(100%);
+  }
+
+  huerotate {
+    filter: hue-rotate(180deg);
+  }
+
+  rss.opacity {
+    filter: opacity(50%);
+  }
+}
+
+@mixin window {
+  border: 3px solid $color7;
+  // box-shadow: 0 2px 3px $shadow;
+  margin: 5px 5px 10px;
+  @include rounding;
+}
+
+//////////////// Globals ///////////////
+
+* {
+  all: unset;
+  transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  background-repeat: no-repeat;
+}
+
+@import 'css/bgdecor';
+@import 'css/calendar';
+@import 'css/dashboard';
+@import 'css/music';
+@import 'css/notification';
+@import 'css/overview';
+@import 'css/osd';
+@import 'css/osettings';
+@import 'css/sidebar';
+@import 'css/system';
+@import 'css/themer';
+@import 'css/volume';
+@import 'css/winctl';
+
+.bar {
+  background-color: $colorbarbg;
+  // background-color: rgba(25, 25, 25, 0.5);
+  // background-color: transparent;
+  // background-image: url("/home/end/.config/eww/images/topbar.png");
+  color: $fg;
+
+  label {
+    font-size: 1.2rem;
+  }
+
+  font-family: 'Rubik';
+}
+
+tooltip {
+  background-color: $colorbarbg;
+  color: $colortext;
+  border: 1px solid $colortext;
+}
+
+.module {
+  
+}
+
+.icon {
+  font-family: Material Symbols Outlined;
+}
+
+.icon-square {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.button-true {
+  background-color: $light0;
+}
+
+.button-border-true {
+  border-color: $light0;
+}
+
+.icon-square-true {
+  background-color: $overlay0;
+}
+
+.window {
+  border: 2px solid;
+}
+
+.window-text {
+  font-family: 'JetBrainsMono Nerd Font';
+  padding-top: 5px;
+}
+
+//////////////// Other specific stuff ///////////////
+
+.osettings-toggle-button-false {
+  min-width: 32px;
+  min-height: 32px;
+  background-color: $color3;
+  color: $colorbarbg;
+}
+
+.osettings-toggle-button-true {
+  min-width: 32px;
+  min-height: 32px;
+  background-color: $color3;
+  color: $colorbarbg;
+}
+
+.module-music {
+  color: $colormusic
+}
+
+.icon-music {
+  min-width: 32px;
+  min-height: 32px;
+  background-color: $colormusic;
+  color: $colorbarbg;
+}
+
+.editmode {
+  color: $coloredit;
+  min-width: 32px;
+  min-height: 32px;
+  margin-left: -5px;
+}
+
+.edit-mode-checkbox {
+  color: transparent;
+}
+
+.edit-mode-checkbox-true {
+  background-color: $overlay0;
+}
+
+.timedate{
+  padding: 0px 5px;
+}
+
+.clock {
+  color: $colortime;
+  padding: 0px 5px;
+}
+
+.date {
+  color: $colordate;
+  padding: 0px 5px;
+}
+
+.ws {
+  min-height: 32px;
+  min-width: 32px;
+}
+
+.ws-text {
+  color: $colorbarbg;
+}
+
+.ws-active {
+  transition: 80ms cubic-bezier(0.05, 0.9, 0.1, 1);
+  color: $colorws;
+}
+
+.real-onotify-toggle-button {
+  min-width: 32px;
+  min-height: 32px;
+  color: $colorbarbg;
+  border-color: $colornotif;
+  background-color: $colornotif;
+}
+
+.window-music {
+  border-color: $colormusic;
+}
+
+.window-themer {
+  border-color: $colorthemer;
+  background-color: tint($colorbarbg, 12.5%);
+}
+
+.window-titlebar-music {
+  font-size: 1.2rem;
+  padding-left: 3px;
+  min-height: 16px;
+  background-color: $colormusic;
+  color: $colorbarbg;
+}
+
+.window-titlebar-themer {
+  font-size: 1.2rem;
+  padding-left: 3px;
+  min-height: 16px;
+  background-color: $colorthemer;
+  color: $colorbarbg;
+}

@@ -1,0 +1,14 @@
+//Auto generated color theme for image at: https://i.ytimg.com/vi/EKUUKRGwI2E/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD3WNrKtwyJgTeqLs1rF9cx4iOi3A
+@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }
+@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }
+$colorbarbg: #0B0B11;
+$colorbg: rgba(11,11,17,0.75);
+$colortext: #e5e8f5;
+$color0: #7889A9;
+$color1: #9294AF;
+$color2: #ACB1D3;
+$color3: #BBC3E5;
+$color4: #C9CADD;
+$color5: #CFD3F5;
+$color6: #e5e8f5;
+$color7: #BBC3E5;

@@ -1,0 +1,42 @@
+(defwidget volume_osd_widget []
+  (eventbox
+    :halign "end"
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "${open_sideright ?
+    (EWW_CMD + ' update bar_offset=0 && ' + EWW_CMD + ' update open_sideright=false &') :
+    (EWW_CMD + ' open sideright && ' + EWW_CMD + ' update bar_offset=-1 && ' + EWW_CMD + ' update open_sideleft=false && ' + EWW_CMD + ' update open_sideright=true && ' + EWW_CMD + ' update notifications=\"$(scripts/notifget)\" &')}"
+    (box
+      :class "osd-pad"
+      :width 390
+      (box
+        :space-evenly false
+        :halign "end"
+        :class "osd-bg"
+        :style "
+        ${osd_vol ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+        ${osd_vol ? '' : 'margin-left: 200px; margin-right: -200px;'}
+        "
+        (label :xalign 0 :hexpand true
+          :class "bar-txt bar-txt-norm"
+          :style "margin-left: 5px;"
+          :text "Volume"
+        )
+        (circular-progress
+          :value {volume.percent > 100 ? 100 : volume.percent}
+          :class "osd-circle"
+          :thickness 3
+          :start-at 75
+          :halign "start"
+          (button
+            :class "inside-circle"
+            (label :class "bar-txt-smaller bar-txt-norm"
+              :text {volume.percent > 100 ? 100 : volume.percent}
+            )
+          )
+        )
+      )
+    )
+  )
+)

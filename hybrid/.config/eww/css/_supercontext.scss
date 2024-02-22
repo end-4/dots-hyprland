@@ -1,0 +1,55 @@
+.supercontext-window {
+  transition: 0ms;
+}
+
+.supercontext-button {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 99px;
+  background-color: $primary;
+  color: $onPrimary;
+  font-family: 'Material Symbols Rounded';
+  font-size: 21pt;
+  background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%);
+}
+
+.supercontext-button-number {
+  transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  border-radius: 99px;
+  background-color: $primary;
+  color: $onPrimary;
+  font-family: 'Lexend';
+  font-size: 21pt;
+  background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%);
+}
+
+.supercontext-button-number-child {
+  :first-child {
+    transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    border-radius: 99px;
+    background-color: $primary;
+    color: $onPrimary;
+    font-family: 'Lexend';
+    font-size: 21pt;
+    background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%);
+  }
+}
+
+.supercontext-button-number-child:hover {
+  :first-child {
+    background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 15%, tint($primary, 26%) 15%, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, 0) 15%);
+  }
+}
+
+.supercontext-button-number-child:active {
+  :first-child {
+    background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 100%, tint($primary, 26%) 100%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
+.supercontext-button:hover {
+  background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 15%, tint($primary, 26%) 15%, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, 0) 15%);
+}
+
+.supercontext-button:active {
+  background-image: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 0%, tint($primary, 26%) 100%, tint($primary, 26%) 100%, rgba(0, 0, 0, 0) 100%, rgba(0, 0, 0, 0) 100%);
+}

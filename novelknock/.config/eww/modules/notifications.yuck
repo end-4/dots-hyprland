@@ -1,0 +1,62 @@
+(defwidget notifications_widget []
+  (box
+    :class "bar-pad"
+    :width 420
+    :height 60
+    (box
+      :space-evenly false
+      :orientation "h"
+      :class "bar-bg bar-bg-pad ${flash_notif ? 'bar-notif-flash' : ''}"
+      :spacing 5
+      (label
+        :class "bar-notif-count ${arraylength(notifications) > 0 ? 'bar-notif-count-yes' : 'bar-icon-material'} bar-txt-norm"
+        :halign "center" :valign "center"
+        :style "
+        ${arraylength(notifications) > 0 ? 'font-size: 11pt;' : ''}
+        "
+        :text "${arraylength(notifications) > 0 ? arraylength(notifications) : ''}"
+      )
+      (revealer
+        :reveal {arraylength(notifications) == 0}
+        :transition "slideright"
+        :duration "0ms"
+        (label :class "bar-txt bar-txt-norm" :text "No notifications")
+      )
+      (revealer
+        :reveal {arraylength(notifications) > 0}
+        :transition "slideright"
+        :duration "0ms"
+        :hexpand true
+        (box
+          :valign "center"
+          :space-evenly false :orientation "v"
+          (box
+            :space-evenly false :orientation "h"
+            :spacing 5
+            (label :xalign 0
+              :hexpand true
+              :class "bar-txt bar-txt-norm"
+              :text "${arraylength(notifications) > 0 ? notifications[0]['summary'] : ''}"
+              :limit-width 25
+            )
+            (label :xalign 1
+              :class "bar-txt-smaller bar-txt-norm"
+              :text "${arraylength(notifications) > 0 ? notifications[0]['app_name'] : ''}"
+              :limit-width 10
+            )
+            (label :xalign 1
+              :class "bar-txt-smaller bar-txt-norm"
+              :text {arraylength(notifications) > 0 ? " • ${notifications[0]['time']}" : ''}
+              :limit-width 8
+            )
+          )
+          (label :xalign 0
+            :class "bar-txt-small bar-txt-norm"
+            :text "${arraylength(notifications) > 0 ? notifications[0]['body'] : ''}"
+            :limit-width 45
+          )
+        )
+      )
+    )
+  )
+)

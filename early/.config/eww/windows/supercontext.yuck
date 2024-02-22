@@ -1,0 +1,86 @@
+; (defvar dash_curve_in "transition: 150ms cubic-bezier(0.05, 0.9, 0.1, 1.0);")
+; (defvar dash_curve_out "transition: 80ms cubic-bezier(0.3, 0, 0.8, 0.15);")
+
+(defwidget supercontext_widget []
+  (box :width RES_WIDTH :height RES_HEIGHT
+    (overlay
+      ; Fullscreen box
+      (box
+        :width RES_WIDTH :height RES_HEIGHT
+        (eventbox
+          :onclick "scripts/toggle-supercontext.sh --close &"
+          :onmiddleclick "scripts/toggle-supercontext.sh --close &"
+          :onrightclick "scripts/toggle-supercontext.sh --close &"
+        )
+      )
+      (button ; Brutally kill button
+        :class "supercontext-button"
+        :tooltip "Brutally kill the active window"
+        :style "
+        margin-left: ${rev_supercontext ? (supercontext_pos_x + SUPERCONTEXT_OFFSET_X[0] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[0] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[0] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[0] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        "
+        :onclick "scripts/toggle-supercontext.sh --close && pkill $(hyprctl activewindow -j | gojq -r '.class') &"
+        (label :text "Dangerous")
+      )
+      (box ; Workspace swap button
+        :style "
+        margin-left: ${rev_supercontext ? (supercontext_pos_x + SUPERCONTEXT_OFFSET_X[1] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[1] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[1] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[1] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+        "
+        (eventbox
+          :class "supercontext-button-number-child"
+          :tooltip "Swap workspace windows with..."
+          :onscroll "eww update ws_to_swap=$(( ${ws_to_swap == 0 ? activews : ws_to_swap} + $(echo {} | sed -e 's/down/-1/g' -e 's/up/+1/g') ))"
+          :onclick "scripts/toggle-supercontext.sh --close && scripts/swapws ${activews} ${ws_to_swap} &"
+          (label :text {ws_to_swap == 0 ? '' : ws_to_swap})
+        )
+      )
+      (button
+        :class "supercontext-button"
+        :style "
+        margin-left: ${rev_supercontext ? (supercontext_pos_x + SUPERCONTEXT_OFFSET_X[2] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[2] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[2] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[2] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        "
+      )
+      (button
+        :class "supercontext-button"
+        :style "
+        margin-left: ${rev_supercontext ? (supercontext_pos_x + SUPERCONTEXT_OFFSET_X[3] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[3] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[3] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[3] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        "
+      )
+      (button
+        :class "supercontext-button"
+        :style "
+        margin-left: ${rev_supercontext ? (supercontext_pos_x + SUPERCONTEXT_OFFSET_X[4] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-right: ${rev_supercontext ? (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_OFFSET_X[4] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_WIDTH - supercontext_pos_x - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-top: ${rev_supercontext ? (supercontext_pos_y + SUPERCONTEXT_OFFSET_Y[4] - SUPERCONTEXT_BUTTON_RADIUS) : (supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        margin-bottom: ${rev_supercontext ? (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_OFFSET_Y[4] - SUPERCONTEXT_BUTTON_RADIUS) : (RES_HEIGHT - supercontext_pos_y - SUPERCONTEXT_BUTTON_RADIUS)}px;
+        "
+      )
+    )
+  )
+)
+
+(defwindow supercontext
+  :focusable true
+  :geometry (geometry
+    :x 0
+    :y 0
+    :width "100%"
+    :height "100%"
+    :anchor "center center"
+  )
+  :monitor 0
+  (supercontext_widget)
+)

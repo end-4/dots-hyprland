@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+~/.config/eww/scripts/toggle-overview.sh --close &
+~/.config/eww/scripts/toggle-winstart.sh --close &
+
+if [[ "$1" == ">"* ]]; then
+    args=( $1 )
+    if [[ "${args[0]}" == ">music" ]]; then
+        scripts/colormanage get
+    elif [[ "${args[0]}" == ">load" ]]; then
+        scripts/colormanage load "${args[1]}"
+    elif [[ "${args[0]}" == ">save" ]]; then
+        scripts/colormanage save "${args[1]}"
+    elif [[ "${args[0]}" == ">light" ]]; then
+        scripts/togglelight light
+    elif [[ "${args[0]}" == ">dark" ]]; then
+        scripts/togglelight dark
+    elif [[ "${args[0]}" == ">multi" ]]; then
+        echo -n 'multi' > 'scripts/workdir/__mode_colors.txt'
+    elif [[ "${args[0]}" == ">one" ]]; then
+        echo -n 'one' > 'scripts/workdir/__mode_colors.txt'
+    elif [[ "${args[0]}" == ">wall" ]]; then
+        scripts/colorgen 'images/wallpaper/wallpaper' '[Local wallpaper]' ''
+        scripts/colormanage get
+    elif [[ "${args[0]}" == ">segs" ]]; then
+        python3 scripts/waifupics.py --segs
+    elif [[ "${args[0]}" == ">uwu" ]]; then
+        python3 scripts/waifupics.py
+    elif [[ "${args[0]}" == ">r" ]]; then
+        pkill eww && eww daemon && eww open bar && eww open bottomline
+    else
+        # notify-send 'eww' 'Invalid command!'
+        false
+    fi
+else 
+    cd ~
+    app=$1
+    eval "${app%\%*}" &
+    pkill launchapp
+fi
+
+

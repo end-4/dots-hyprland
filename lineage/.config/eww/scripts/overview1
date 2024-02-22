@@ -1,0 +1,105 @@
+#!/usr/bin/bash
+dummy='{"address":"_none","at":[0,0],"class":"workspace","size":[0,0],"title":"<___overview_workspace>","workspace":{"id":<___overview_workspace>, "name": "<___overview_workspace>"}}'
+
+getwins() {
+  hyprctlclients=$(hyprctl clients -j \
+    | grep -v '"xwayland": ' \
+    | grep -v '"grouped": ' \
+    | grep -v '"pid": ' \
+    | grep -v '"fullscreenMode": ' \
+    | grep -v '"monitor": ' \
+    | grep -v '"floating": ' \
+    | grep -v '"fullscreen": ' \
+    | grep -v '"pinned":') # | grep -v ""name":")
+  # echo '-=-=-=- final output -=-=-=-'
+  # echo "$toprint"
+  # echo $(echo "$hyprctlclients")  # Print on one line only
+
+  workspace=('[' '[' '[' '[' '[' '[' '[' '[' '[' '[')
+  workspacecnt=(0 0 0 0 0 0 0 0 0 0)
+
+  wsid=0
+
+  # echo $hyprctlclients | gojq -c '.[]'
+
+  IFS=$'\n'
+  clientsarr=( $(echo $hyprctlclients | gojq -c '.[]') )
+  for client in "${clientsarr[@]}"; do
+    wsid=$(echo $client | gojq -c '.workspace.id')
+    ((wsid-=1))
+    if [[ "${workspacecnt[wsid]}" != "0" ]]; then 
+      workspace[wsid]+=","
+    fi
+
+    clientclass=$(echo $client | gojq '.class' | sed 's/"//g')
+    iconpath=''
+
+    if [ -f "scripts/cache/$clientclass" ]; then
+        iconpath=$(cat scripts/cache/$clientclass)
+        if [ ! -f "${iconpath}" ]; then # Cache refresh if icon doesnt exist
+            iconpath=$(scripts/get-icon.py "$clientclass")
+            echo "${iconpath}" > "scripts/cache/$clientclass"
+        fi
+    else
+        iconpath=$(scripts/get-icon.py "$clientclass")
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+    fi
+    if [[ ${iconpath} = "not found" ]]; then
+      iconpath=$(scripts/get-icon.py "$(echo "${classarr[i]##*.}" | tr '[:upper:]' '[:lower:]')")
+      if [[ ! ${iconpath} = "not found" ]]; then
+        rm "scripts/cache/$clientclass"
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+      else 
+        iconpath="/home/$USER/.local/share/icons/candy-icons/mimetypes/scalable/application-x-theme.svg"
+        rm "scripts/cache/$clientclass"
+        echo "${iconpath}" > "scripts/cache/$clientclass"
+      fi
+    fi
+
+    client=${client::-1}
+    client+=",\"icon\": \"$iconpath\"}"
+    workspace[wsid]+="$client" # Add window to workspace JSON
+
+    # echo -n "Window: $clientclass"
+    # echo '; icon path: '"$iconpath"
+    
+
+    # echo "Count: ${workspacecnt[wsid]}"
+    # echo 'ADDED TO: workspace '"$wsid"
+    # echo ' --> '"${workspace[wsid]}"
+    ((workspacecnt[wsid]+=1))
+  done
+  
+  for i in 0 1 2 3 4; do
+    if [[ ${workspace[i]} == "[" ]]; then 
+      workspace[i]+=$(echo $dummy | sed "s/<___overview_workspace>/$((i+1))/g")
+    fi
+  done
+
+  for i in 0 1 2 3 4; do
+    workspace[i]+=']'
+  done
+
+  # echo '-=-=-=-=-=- Summary -=-=-=-=-=-'
+
+  # -=-=-=-=-=-=-=-=-=-=-=-=-=-=- PRINT STUFF HERE -=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  echo -n '['
+  for i in 0 1 2 3 4; do
+    if [[ $i != 0 ]]; then
+      echo -n ','
+    fi
+    echo -n "${workspace[i]}"
+  done
+  echo ']'
+}
+
+# Do stuff here
+getwins
+
+if [ "$1" == "--once" ]; then
+  exit 0
+else
+  socat -u UNIX-CONNECT:/tmp/hypr/"$HYPRLAND_INSTANCE_SIGNATURE"/.socket2.sock - | while read -r line; do
+    getwins
+  done
+fi

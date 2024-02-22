@@ -1,0 +1,469 @@
+(defwidget winnotif_shadows_widget []
+  (centerbox
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winnotif ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winnotif ? '' : 'margin-right: -700px;'}
+    min-height: 1033px;
+    "
+    (box
+      :space-evenly false
+      :orientation "v"
+      :halign "start"
+      (eventbox
+        :valign "start"
+        :onclick "scripts/toggle-winnotif.sh --close &"
+        :onmiddleclick "scripts/toggle-winnotif.sh --close &"
+        :onrightclick "scripts/toggle-winnotif.sh --close &"
+        (box
+          :class "box-that-is-there" :style "min-height: 1px;"
+        )
+      )
+      (box
+        :class "winwin-shadow"
+        :space-evenly false
+        :orientation "v"
+        :style "margin-bottom:6px;"
+        (centerbox
+          (box)
+          (box)
+          (box
+            :class "icon"
+            :halign "end"
+            :space-evenly false
+            :style "margin: 19px; min-height: 21px;"
+          )
+        )
+        (box
+          :width 400
+          :valign "start"
+          :style "
+          min-height: ${rev_wincalendar ? 357 : 811}px;
+          transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);
+          "
+          (box
+            :space-evenly false
+            :orientation "v"
+          )
+        )
+      )
+    )
+    (box :valign "center")
+    ; Calendar
+    (box
+      :space-evenly false
+      :orientation "v"
+      :valign "end"
+      :height {rev_wincalendar ? 601 : 149}
+      :class "winwin-shadow"
+      :style "margin-bottom: 12px;"
+    )
+  )
+)
+
+(defwidget winnews_shadows_widget []
+  (box
+    :orientation "v" :space-evenly false
+    :style "
+    ${anim_open_winnews ? 'transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winnews ? '' : 'margin-left: -960px;'}
+    "
+    (box :space-evenly false :orientation "v"
+      :width {RES_WIDTH / 2}
+      :height {RES_HEIGHT - 51}
+      :class "winwin-shadow"
+    )
+  )
+)
+
+(defwidget winstart_shadows_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winstart ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winstart ? '' : 'margin-bottom: -900px;'}
+    "
+    (box
+      :space-evenly false
+      :orientation "v"
+      :class "winwin-top-shadow"
+      :height 113
+      :width 676
+      :style "
+      ${winsearch != '' ? 'min-width: 811px;' : 'min-width: 676px;'}
+      "
+      (box
+        :valign "end"
+        :space-evenly false
+        :class "winstart-search-prompt"
+        (box
+          :halign "start"
+          :class "winsearch-icon winstart-search-searchbox-icon"
+        )
+      )
+    )
+    (revealer
+      :reveal {winsearch != ''}
+      :transition "slidedown"
+      :duration "0ms"
+      (box
+        :space-evenly false
+        :orientation "v"
+        :class "winwin-bottom-light-shadow"
+        :height 682
+        :width 676
+        :style "
+        ${winsearch != '' ? 'min-width: 811px;' : 'min-width: 676px;'}
+        "
+        ; Tag strip
+        (box
+          :class "winsearch-tag-strip"
+          :space-evenly false
+        )
+        (box
+          :height 627
+          :space-evenly false
+          :orientation "h"
+          :class "winsearch-pad"
+          :spacing 11
+          ; Search results list
+          (scroll
+            :width 404
+            (box
+              :width 404
+              :space-evenly false
+              :orientation "v"
+              :class "winsearch-result-list"
+            )
+          )
+          ; More options
+          (revealer
+            :reveal {winsearch != ''}
+            :transition "slideleft"
+            :duration "50ms"
+            ; Entry actions panel
+            (box
+              :orientation "v"
+              :space-evenly false
+              :width 404
+            )
+          )
+        )
+      )
+    )
+    (revealer
+      :reveal {winsearch == ''}
+      :transition "slidedown"
+      :duration "0ms"
+      (box
+        :space-evenly false
+        :orientation "v"
+        (box
+          :space-evenly false
+          :orientation "v"
+          :class "winwin-center-noseparator-shadow"
+          :height 600
+          :style "
+          ${winsearch != '' ? 'min-width: 811px;' : 'min-width: 676px;'}
+          "
+          (box
+            :space-evenly false
+            :orientation "h"
+            (revealer
+              :reveal {!winstart_allapps}
+              :transition "slideright"
+              :duration "250ms"
+              (revealer
+                :reveal {!winstart_allapps}
+                :transition "crossfade"
+                :duration "200ms"
+                (box
+                  :space-evenly false
+                  :orientation "v"
+                  :width 674
+                  (centerbox
+                    :orientation "h"
+                    :class "winsearch-section-box"
+                    (label
+                      :halign "start"
+                      :class "winstart-section"
+                      :text "Pinned"
+                    )
+                    (box)
+                    (button
+                      :halign "end"
+                      :class "wintoggle-text winstart-button-allapps"
+                      :onclick "scripts/toggle-allapps.sh --open &"
+                      (box
+                        :space-evenly false
+                        :spacing 6
+                        (label :text "All apps" :style "padding: 0 2px;")
+                        (label :class "winstart-allapps-icon" :text "")
+                        ; (box
+                          ;   :class "winstart-allapps-arrow"
+                        ; )
+                      )
+                    )
+                  )
+                  (box
+                    :class "winstart-pinnedapps"
+                    :height 293
+                    :orientation "v"
+                    :space-evenly false
+                  )
+                  (centerbox
+                    :orientation "h"
+                    :class "winsearch-section-box"
+                    (label
+                      :halign "start"
+                      :class "winstart-section"
+                      :text "Recommended"
+                    )
+                    (box)
+                    (box)
+                  )
+                  (box
+                    :class "winstart-recommended"
+                    :height 222
+                    :orientation "v"
+                    :space-evenly false
+                    :valign "start"
+                  )
+                )
+              )
+            )
+            (revealer
+              :reveal {winstart_allapps}
+              :transition "slideleft"
+              :duration "250ms"
+              (revealer
+                :reveal {winstart_allapps}
+                :transition "crossfade"
+                :duration "200ms"
+                (box
+                  :space-evenly false
+                  :orientation "v"
+                  :width 674
+                  (centerbox
+                    :orientation "h"
+                    :class "winsearch-section-box"
+                    (label
+                      :halign "start"
+                      :class "winstart-section"
+                      :text "All apps"
+                    )
+                    (box)
+                    (button
+                      :halign "end"
+                      :class "wintoggle-text winstart-button-allapps"
+                      :onclick "scripts/toggle-allapps.sh --close"
+                      (box
+                        :space-evenly false
+                        :spacing 6
+                        (label :class "winstart-allapps-icon" :text "")
+                        (label :text "Back" :style "padding: 0 2px;")
+                        ; (box
+                          ;   :class "winstart-allapps-arrow"
+                        ; )
+                      )
+                    )
+                  )
+                  (scroll
+                    :height 549
+                    (box
+                      :space-evenly false
+                      :orientation "v"
+                      :class "winstart-allapps-box"
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (box
+          :space-evenly false
+          :orientation "h"
+          :class "winwin-bottom-shadow winstart-bottom-pad"
+          :height 67
+          (box
+            :halign "start"
+            :space-evenly false
+            :class "winstart-user"
+            (box
+              :space-evenly false
+              :orientation "h"
+              :spacing 16
+              (box
+                :class "winstart-user-icon"
+              )
+              (label :class "wintoggle-text" :text "${username}")
+            )
+          )
+          (box)
+          (box
+            :halign "end"
+            :class "winstart-power-icon winstart-power-icon-${rev_winpowermenu}"
+            (image
+              :path "images/svg/dark/power.svg"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget winactions_shadows_widget []
+  (box
+    :space-evenly false :spacing -12
+    :orientation "v"
+    :style "
+    ${anim_open_winactions ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winactions ? '' : 'margin-bottom: -700px;'}
+    "
+    ; Media controls
+    (revealer
+      :reveal {mname_win.title != ''}
+      :transition "slideup"
+      :duration "200ms"
+      (box
+        :space-evenly false :orientation "v"
+        :height 207
+        :class "winwin-shadow"
+        :style "
+        min-height: 207px;
+        "
+      )
+    )
+    (box
+      :space-evenly false :orientation "v"
+      :class "winwin-shadow"
+      :style "
+      min-height: 433px;
+      min-width: 398px;
+      "
+    )
+  )
+)
+
+(defwidget winlang_shadows_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :style "
+    ${anim_open_winlang ? 'transition: 150ms cubic-bezier(0.05, 0.7, 0.1, 1);' : 'transition: 100ms cubic-bezier(0.3, 0, 0.8, 0.15);'}
+    ${rev_winlang ? '' : 'margin-bottom: -700px;'}
+    "
+    (eventbox
+      :onclick "scripts/toggle-winlang.sh --close &"
+      :onmiddleclick "scripts/toggle-winlang.sh --close &"
+      :onrightclick "scripts/toggle-winlang.sh --close &"
+      (box
+        :class "box-that-is-there" :style "min-height: 1px;"
+      )
+    )
+    (box
+      :space-evenly false :orientation "v"
+      :class "winwin-shadow"
+      :width 420
+      (box
+        :space-evenly false :spacing 10
+        :style "padding: 15px;"
+        (label
+          :class "winlang-text"
+        )
+      )
+      (box
+        :space-evenly false :orientation "v"
+        (for language in langs
+          (box
+            :class "winlang-lang-false"
+            :height 84
+          )
+        )
+      )
+      (box
+        :class "winwin-bottom-pad"
+        (box
+          :class "winlang-bottom-button"
+          (label
+            :class "winlang-text"
+            :style "padding: 0 5px;"
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow winnotif_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "51px"
+    :height 1029
+    :anchor "bottom right"
+  )
+  (winnotif_shadows_widget)
+)
+
+(defwindow winnews_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "51px"
+    :height 1029
+    :anchor "bottom left"
+  )
+  (winnews_shadows_widget)
+)
+
+(defwindow winstart_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "51px"
+    ; :height 788
+    :width 673
+    :anchor "bottom center"
+  )
+  (winstart_shadows_widget)
+)
+
+(defwindow winactions_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "50px"
+    :anchor "bottom right"
+  )
+  (winactions_shadows_widget)
+)
+
+(defwindow winlang_shadows
+  :wm-ignore true
+  :monitor 0
+  :focusable false
+  :namespace "noblur"
+  :geometry (geometry
+    :x "0px"
+    :y "50px"
+    :anchor "bottom right"
+  )
+  (winlang_shadows_widget)
+)

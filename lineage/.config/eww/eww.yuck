@@ -1,0 +1,163 @@
+(include "./modules/activewindow.yuck")
+(include "./modules/audiolevels.yuck")
+(include "./modules/bluetooth.yuck")
+(include "./modules/bright.yuck")
+(include "./modules/clock.yuck")
+(include "./modules/music.yuck")
+(include "./modules/net.yuck")
+(include "./modules/sys.yuck")
+(include "./modules/variables.yuck")
+(include "./modules/volume.yuck")
+(include "./modules/winctl.yuck")
+(include "./modules/workspaces.yuck")
+
+(include "./windows/bg-decor.yuck")
+(include "./windows/calendar.yuck")
+(include "./windows/music.yuck")
+(include "./windows/notifications.yuck")
+(include "./windows/overview.yuck")
+(include "./windows/osettings.yuck")
+(include "./windows/system-menu.yuck")
+(include "./windows/win-workspace.yuck")
+(include "./windows/themer.yuck")
+(defvar popup "none")
+
+(defwidget themer []
+  (eventbox
+    (box
+      :style "padding-right: 5px;"
+      :valign "start"
+      :space-evenly false
+      :spacing 4
+      (button
+        :class "themer-button"
+        :onclick "eww open --toggle themer"
+        :style "font-family: 'Material Symbols Rounded';"
+        ''
+      )
+    )
+  )
+)
+
+(defwidget notif-toggle []
+  (button
+    :class "notif-toggle module"
+    :onclick "${EWW_CMD} open --toggle notifications";
+    {notif_icons.icon}
+  )
+)
+
+(defwidget separator []
+  (box
+    :valign "start"
+    (label
+      :class "my-separator"
+      :text "|"
+    )
+  )
+)
+
+
+; clipboard 󰅌 󰅍 󰄷
+
+(defwidget left []
+  (box
+    :space-evenly false
+    :valign "start"
+    :halign "start"
+    :class "bar"
+    (music-module)
+    (clock_module)
+    ; (activewindow)
+    ; (notif-toggle)
+  )
+)
+
+(defwidget right []
+  (box
+    :space-evenly false
+    :halign "end"
+    :valign "start"
+    :class "bar"
+    (themer)
+    (winctl)
+    (separator)
+    (volume-module)
+    (bright)
+    ; (bluetooth)
+    (net)
+    (separator)
+    
+    ; (syscpu)
+    ; (cpumenu)
+    ; (sysmem)
+    ; (memmenu)
+    ; (sysbatt)
+    (sys)
+  )
+)
+
+(defwidget center []
+  (box
+    :valign "start"
+    :space-evenly false
+    :halign "center"
+    :class "bar"
+    (workspaces)
+  )
+)
+
+(defwidget bar []
+  ; (box
+    ;   :space-evenly false
+    ;   :orientation "v"
+    (eventbox
+      :onhoverlost "${EWW_CMD} update popup='none'"
+      :onhover "${EWW_CMD} update popup='none'"
+      (centerbox
+        :class "bar"
+        (left)
+        (center)
+        (right)
+      )
+    )
+  ; )
+)
+
+(defwidget barbg []
+  (box
+    :class "barbg"
+  )
+)
+
+(defwindow bar
+  :wm-ignore true
+  :windowtype dock
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px"
+    :anchor "top center"
+  )
+  ; :stacking "fg"
+  :exclusive false
+  (bar)
+)
+
+(defwindow barbg
+  :wm-ignore true
+  :windowtype dock
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px"
+    :anchor "top center"
+  )
+  :stacking "bg"
+  :exclusive false
+  (barbg)
+)

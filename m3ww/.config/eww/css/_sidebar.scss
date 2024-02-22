@@ -1,0 +1,634 @@
+.sidebar-window {
+    @include elevation2;
+    background-color: $background;
+    border-radius: 17px;
+    min-width: 34.091rem;
+    margin: 0.205rem;
+    padding: 1.023rem;
+}
+
+.sidebar-height {
+    min-height: 70.909rem;
+}
+
+.sidebar-bottom-height {
+    min-height: 69.545rem;
+}
+
+.sidebar-hide-left {
+    margin-left: -40rem;
+}
+
+.sidebar-hide-right {
+    margin-right: -40rem;
+}
+
+.sidebar-section-heading {
+    @include mainfont;
+    color: $onSurfaceVariant;
+}
+
+.sidebar-section {
+    background-color: mix($surface, $onSurface, 90%);
+    border-radius: 15px;
+    padding: 1.023rem;
+}
+
+.sidebar-notif-common {
+    transition: 100ms;
+    padding: 1.023rem;
+}
+
+.sidebar-notif {
+    border-radius: 1.432rem;
+    // padding: 1.023rem;
+    margin-bottom: 0.682rem;
+}
+
+.sidebar-notif-top {
+    border-top-left-radius: 1.432rem;
+    border-top-right-radius: 1.432rem;
+    // padding: 1.023rem;
+}
+
+.sidebar-notif-middle {
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
+}
+
+.sidebar-notif-bottom {
+    border-bottom-left-radius: 1.432rem;
+    border-bottom-right-radius: 1.432rem;
+    // padding: 0rem 1.023rem 1.023rem 1.023rem;
+    margin-bottom: 0.682rem;
+}
+
+.sidebar-notif-urgent {
+    background-color: $error;
+    color: $onError;
+}
+
+.sidebar-notif-normal {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-notif-normal>box>label {
+    color: mix($onSecondaryContainer, $secondaryContainer, 80%);
+}
+
+.sidebar-notif-heading {
+    color: $onSurface;
+    padding: 0.205rem 1.023rem;
+}
+
+.sidebar-notif-action {
+    box {
+        border-radius: 50rem;
+        color: $onSurface;
+        padding: 0.205rem 1.023rem;
+    }
+}
+
+.sidebar-notif-action:hover {
+    box {
+        background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
+    }
+}
+
+.sidebar-notif-action:active {
+    box {
+        background-color: mix($surfaceVariant, $onSurfaceVariant, 50%);
+    }
+}
+
+.sidebar-calendar-btn {
+    @include mainfont;
+    font-weight: 500;
+    min-height: 1.977rem;
+    min-width: 1.977rem;
+    margin: 0.068rem;
+    border-radius: 50rem;
+}
+
+.sidebar-calendar-txt {
+    @include mainfont;
+    border-radius: 50rem;
+    font-weight: 500;
+    min-height: 1.977rem;
+    min-width: 1.977rem;
+    margin: 0.205rem;
+}
+
+.day-1 {
+    background-color: transparent;
+    color: mix($onSurfaceVariant, $surfaceVariant, 38%);
+}
+
+.day0 {
+    background-color: transparent;
+    color: $onSurfaceVariant;
+}
+
+.day-1:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day0:hover {
+    background-color: rgba(75, 75, 75, 0.5);
+}
+
+.day-1:active {
+    background-color: rgba(125, 125, 125, 0.5);
+}
+
+.day0:active {
+    background-color: rgba(125, 125, 125, 0.5);
+}
+
+.day1 {
+    background-color: $primary;
+    color: $onPrimary;
+}
+
+.day1:hover {
+    background-color: mix($primary, $onBackground, 70%);
+}
+
+.day1:active {
+    background-color: mix($primary, $onBackground, 50%);
+}
+
+.sidebar-todo-item {
+    margin: 0.341rem 0.341rem;
+    color: $onSurfaceVariant;
+}
+
+.sidebar-todo-btn {
+    min-width: 1.909rem;
+    min-height: 1.909rem;
+    border-radius: 50rem;
+}
+
+.sidebar-todo-btn:hover {
+    color: $onSurface;
+    background-color: $surface;
+}
+
+.sidebar-todo-btn:active {
+    color: $onPrimary;
+    background-color: $primary;
+}
+
+.sidebar-toggle {
+    box {
+        background-color: $surfaceVariant;
+        color: $onSurfaceVariant;
+        border-radius: 1.432rem;
+        padding: 1.159rem;
+    }
+}
+
+.sidebar-toggle:hover {
+    box {
+        background-color: tint($surfaceVariant, 10%);
+        color: tint($onSurfaceVariant, 10%);
+    }
+}
+
+.sidebar-toggle:active {
+    sidebar {
+        background-color: tint($surfaceVariant, 15%);
+        color: tint($onSurfaceVariant, 15%);
+    }
+}
+
+.sidebar-toggle-active {
+    box {
+        background-color: $primary;
+        color: $onPrimary;
+        border-radius: 1.432rem;
+        padding: 1.159rem;
+    }
+}
+
+.sidebar-toggle-active:hover {
+    box {
+        background-color: tint($primary, 8%);
+        color: tint($onPrimary, 8%);
+    }
+}
+
+.sidebar-toggle-active:active {
+    box {
+        background-color: tint($primary, 20%);
+        color: tint($onPrimary, 20%);
+    }
+}
+
+.sidebar-action {
+    background-color: $background;
+    color: $onBackground;
+    border-radius: 1.432rem;
+    padding: 0.341rem;
+}
+
+.sidebar-action:hover {
+    background-color: tint($background, 10%);
+    color: tint($onBackground, 10%);
+}
+
+.sidebar-action:active {
+    background-color: tint($background, 15%);
+    color: tint($onBackground, 15%);
+}
+
+$bgdetail: $onSecondary;
+$bgdetail2: $onTertiary;
+
+.sidebar-music-thumbnail {
+    min-height: 13.636rem;
+    border-radius: 1.432rem;
+    background-color: transparent;
+}
+
+.sidebar-music-thumbnail-fallback {
+    min-height: 13.636rem;
+    border-radius: 1.432rem;
+    background-repeat: no-repeat;
+
+    background-color: shade($onSecondary, 50%);
+    background-image:
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 24%, $bgdetail 24%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 26%, $bgdetail 26%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 24%, rgba(0, 0, 0, 0) 24%, $bgdetail 25%, $bgdetail 25%, $bgdetail 27%, $bgdetail 27%, rgba(0, 0, 0, 0) 27%, rgba(0, 0, 0, 0) 27%),
+
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 35%, $bgdetail 35%, $bgdetail 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(-135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+        linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 38%, $bgdetail 38%, $bgdetail 44%, rgba(0, 0, 0, 0) 44%),
+
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    ;
+    background-size:
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+        0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem, 0.9rem 2.045rem,
+
+        4.091rem 4.091rem, 8.182rem 8.182rem, 6.136rem 6.136rem,
+
+        1.364rem 2.727rem, 1.364rem 2.727rem, 2.727rem 5.455rem, 2.727rem 5.455rem,
+        2.727rem 5.455rem, 2.727rem 5.455rem,
+
+        100% 100%,
+    ;
+    background-position:
+        0rem 6.818rem, 0.9rem 6.818rem, 2.045rem 6.818rem, 3.068rem 6.818rem,
+        4.091rem 6.818rem, 5.114rem 6.818rem, 6.136rem 6.818rem, 7.159rem 6.818rem,
+        8.182rem 6.818rem, 9.205rem 6.818rem, 10.227rem 6.818rem,
+
+        37.5rem 2.727rem, 36.477rem 2.727rem, 35.455rem 2.727rem, 34.432rem 2.727rem,
+        33.409rem 2.727rem, 32.386rem 2.727rem, 31.364rem 2.727rem, 30.341rem 2.727rem,
+        29.318rem 2.727rem, 28.295rem 2.727rem, 27.273rem 2.727rem, 26.25rem 2.727rem,
+
+        20.455rem 4.091rem, 11.25rem 9.205rem, 12.273rem 0.341rem,
+
+        24.545rem 12.955rem, 25.909rem 12.955rem, 23.182rem 11.591rem, 25.909rem 11.591rem,
+        2.727rem -0.682rem, 5.455rem -0.682rem,
+
+        top,
+    ;
+}
+
+.sidebar-music-vignette {
+    min-height: 13.636rem;
+    border-radius: 1.432rem;
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
+}
+
+.sidebar-music-toprow {
+    padding: 0rem 0.5115rem;
+}
+
+.sidebar-music-source {
+    @include icon-nerd;
+    margin: 0rem 1.3rem;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-output {
+    @include mainfont;
+    border-radius: 1.432rem;
+    margin: 1.023rem 0.5115rem;
+    padding: 0.341rem 1.023rem;
+    color: $onSurfaceVariant;
+    background-color: $surfaceVariant;
+}
+
+.sidebar-music-output:hover {
+    background-color: mix($surfaceVariant, $onBackground, 70%);
+    color: mix($onSurfaceVariant, $onBackground, 70%);
+}
+
+.sidebar-music-output:active {
+    background-color: mix($surfaceVariant, $onBackground, 50%);
+    color: mix($onSurfaceVariant, $onBackground, 50%);
+}
+
+.sidebar-music-title-scroll {
+    margin: 0.9rem;
+}
+
+.sidebar-music-title {
+    @include mainfont;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-artist {
+    @include mainfont;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-playbtn {
+    box {
+        min-width: 4.091rem;
+        min-height: 4.091rem;
+        margin: 1.023rem;
+        @include icon-material;
+        border-radius: 1.3rem;
+        color: $inverseOnSurface;
+        background-color: $primary;
+    }
+}
+
+.sidebar-music-trackbtn {
+    box {
+        @include icon-material;
+        margin: 1.023rem;
+        border-radius: 1.432rem;
+        min-width: 2.386rem;
+        min-height: 2.386rem;
+        color: $onPrimaryContainer;
+    }
+}
+
+.sidebar-music-trackbtn:hover {
+    box {
+        background-color: $overlay1;
+    }
+}
+
+.sidebar-music-trackbtn:active {
+    box {
+        background-color: $overlay2;
+    }
+}
+
+.sidebar-music-progress {
+    min-height: 0.19rem;
+    min-width: 4.091rem;
+    border-radius: 50rem;
+    background-color: $surface;
+}
+
+.sidebar-music-progress-btn {
+    margin-top: -0.3rem;
+    color: $onPrimaryContainer;
+}
+
+.sidebar-music-slider {
+    border-radius: 50rem;
+    margin: 1.3rem;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 0.19rem;
+        min-width: 4.091rem;
+        border-radius: 50rem;
+        background-color: $surface;
+    }
+
+    highlight {
+        min-width: 0.19rem;
+        border-radius: 50rem;
+        background-color: shade($onBackground, 20%);
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 0.341rem;
+        margin: -0.5rem;
+        border-radius: 50rem;
+        background-color: shade($onBackground, 20%);
+    }
+}
+
+.sidebar-divider {
+    background-color: $onSurfaceVariant;
+}
+
+.sidebar-waifu-scrollbg {
+    min-height: 37.5rem;
+}
+
+.sidebar-waifu-tag {
+    @include mainfont;
+    border-radius: 0.682rem;
+    padding: 0.273rem 0.477rem;
+    margin: 0rem 0.136rem;
+    min-height: 1.364rem;
+    background-color: $secondaryContainer;
+}
+
+.sidebar-waifu-tag:hover {
+    background-color: mix($secondaryContainer, $onSurface, 90%);
+}
+
+.sidebar-waifu-tag:active {
+    background-color: mix($secondaryContainer, $onSurface, 80%);
+}
+
+.sidebar-waifu-pic {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    background-color: transparent;
+    border-radius: 1.432rem;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.sidebar-waifu-pic-bg {
+    background-color: white;
+    border-radius: 1.5rem;
+}
+
+.sidebar-waifu-pic-cover {
+    background-color: $background;
+    border-radius: 1.364rem;
+    border: 1px solid $onBackground;
+}
+
+.sidebar-waifu-actionbtn {
+    box {
+        border-radius: 50rem;
+        background-color: $primary;
+        color: $onPrimary;
+        padding: 0.341rem 1.023rem;
+    }
+}
+
+.sidebar-waifu-actionbtn:hover {
+    box {
+        background-color: mix($primary, $onSurface, 80%);
+    }
+}
+
+.sidebar-waifu-actionbtn:active {
+    box {
+        background-color: mix($primary, $onSurface, 50%);
+    }
+}
+
+.sidebar-waifu-status {
+    background-color: $onBackground;
+    color: $background;
+    border-bottom-left-radius: 1.295rem;
+    border-bottom-right-radius: 1.295rem;
+    border: 1px solid $background;
+    padding: 0.341rem;
+    margin-top: 1.023rem;
+}
+
+.sidebar-quote {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 1.432rem;
+    padding: 1.023rem;
+}
+
+.sidebar-prog-resource {
+    min-height: 0.955rem;
+    min-width: 5rem;
+    border-radius: 10rem;
+
+    trough {
+        min-height: 0.954rem;
+        min-width: 0.068rem;
+        border-radius: 10rem;
+        background-color: $surfaceVariant;
+    }
+
+    progress {
+        min-height: 0.680rem;
+        min-width: 0.680rem;
+        margin: 0rem 0.137rem;
+        border-radius: 10rem;
+        background-color: $onSurfaceVariant;
+    }
+}
+
+.sidebar-resource-value {
+    padding: 0rem 0.545rem;
+    min-height: 0.954rem;
+    border-radius: 10rem;
+    color: $onSurfaceVariant;
+    background-color: $surfaceVariant;
+}
+
+.sidebar-resource-value>label:first-child {
+    margin-right: 0.341rem;
+}
+
+.sidebar-resource-value>progressbar:last-child {
+    margin-left: 0.341rem;
+}
+
+.sidebar-resource-value>box:last-child {
+    margin-left: 0.341rem;
+}
+
+.sidebar-mixer-header {
+    // padding: 1.023rem;
+}
+
+.sidebar-mixer-header-btn {
+    box {
+        border-radius: 1.432rem;
+        min-width: 2.386rem;
+        min-height: 2.386rem;
+    }
+}
+
+.sidebar-mixer-header-btn:hover {
+    box {
+        background-color: mix($surfaceVariant, $onSurface, 80%);
+    }
+}
+
+.sidebar-mixer-app {
+    background-color: $secondaryContainer;
+    border-radius: 1.432rem;
+    padding: 1.023rem;
+    margin-bottom: 0rem;
+    padding-bottom: 0.341rem;
+}
+
+.sidebar-mixer-app-icon {
+    background-color: $secondaryContainer;
+    border-radius: 0.886rem;
+    min-height: 3.409rem;
+    min-width: 3.409rem;
+}
+
+.sidebar-mixer-app-serial {
+    background-color: $secondaryContainer;
+    border-radius: 0.886rem;
+    min-height: 3.409rem;
+    margin-bottom: 1.023rem;
+}
+
+.sidebar-mixer-app-num {
+    margin: 0rem 0.682rem;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-mixer-app-incircle {
+    font-size: 11pt;
+    margin: 0px 5px;
+    color: $onSecondaryContainer;
+}
+
+.sidebar-mixer-app-circle {
+    color: $onSecondaryContainer;
+    background-color: $secondaryContainer;
+}

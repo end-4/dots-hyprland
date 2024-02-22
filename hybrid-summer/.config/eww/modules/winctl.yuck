@@ -1,0 +1,99 @@
+(defwidget win-ws[]
+  (eventbox
+    ; :onhoverlost "${EWW_CMD} close win-workspace"
+    (box
+      :space-evenly false
+      :orientation "v"
+      :class "system-menu-box"
+      ; :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem; background-color: ${awin == winjson[i].title ? '#7AA2F7' : '$bg'};"
+      :style "background-color: $bg; color: #A9B1D6; padding-bottom: .6rem; background-color: $bg};"
+      ; (label :text "${winjson}" ) ; DEBUG
+      (label
+        :class "winws-title"
+        :text "Activities"
+        :xalign 0.5
+      )
+      (for i in winnums
+        (eventbox
+          :class "winws-evbox"
+          :onscroll "hyprctl dispatch movetoworkspacesilent $((${winjson[i].workspace.id}$(echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\"))),address:${winjson[i].address}"
+          :onclick "hyprctl dispatch focuswindow address:${winjson[i].address} && ${EWW_CMD} close win-workspace"
+          :onmiddleclick "hyprctl dispatch closewindow address:${winjson[i].address}"
+          (centerbox ;App icon & info
+            :class "winws"
+            :space-evenly false
+            :orientation "h"
+            (box
+              :space-evenly false
+              :orientation "h"
+              (label
+                :class "appicon"
+                :style "background-image: url(\"${winicons[i]}\");"
+                :text ""
+              )
+              (box
+                :space-evenly false
+                :orientation "v"
+                (label
+                  :halign "start"
+                  :class "wintext"
+                  :text "${winjson[i].title}"
+                  :limit-width 44
+                  :xalign 0
+                )
+                (label
+                  :halign "start"
+                  :class "winsubtext"
+                  :text "${winjson[i].class}"
+                  :limit-width 35
+                  :xalign 0
+                )
+              )
+            )
+            (label
+              :class "wintext"
+              :text ""
+              :limit-width 1
+              :xalign 0
+            )
+            (box ; Workspace number
+              :space-evenly false
+              :orientation "h"
+              :halign "end"
+              :style "padding-left: 30px;"
+              (label
+                :halign "end"
+                :class "wintext"
+                ; :text "[ ${winjson[i].workspace.id} ]"
+                :xalign 1
+              )
+              (for w in wsloop
+                (button
+                  :onclick "hyprctl dispatch movetoworkspacesilent ${w+1},address:${winjson[i].address}"
+                  :class "wschoose"
+                  :style "font-size: 16pt; color: ${(winjson[i].workspace.id == w+1) ? mcover.color.colors.color7 : 'rgba(108, 112, 134, 0.5)'};"
+                  ; "hyprctl dispatch movetoworkspacesilent ${w},address:${winjson[i].address}"
+                  "${ws-icons[w]}"
+                  ; "●"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget winctl []
+  (box
+    :space-evenly false
+    :orientation "h"
+    (eventbox
+      :valign "start"
+      ; :class "winctl module"
+      :onscroll "hyprctl dispatch splitratio $(echo {} | sed -e \"s/up/-0.1/g\" -e \"s/down/+0.1/g\")"
+      (label :class "winctl" :text "[ Split ]")
+    )
+  )
+)

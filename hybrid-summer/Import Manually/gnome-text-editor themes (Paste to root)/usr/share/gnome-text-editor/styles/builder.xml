@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright 2022 Christian Hergert
+
+  GtkSourceView is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  GtkSourceView is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="builder" _name="Builder" version="1.0">
+  <author>Christian Hergert</author>
+  <_description>The default color scheme for Builder</_description>
+
+  <metadata>
+    <property name="variant">light</property>
+    <property name="dark-variant">builder-dark</property>
+    <property name="accent_bg_color">#0077aa</property>
+    <property name="accent_fg_color">#eeeeec</property>
+    <property name="window_fg_color">#2a2a2a</property>
+  </metadata>
+
+  <!-- Named Colors -->
+  <color name="aluminium1"                value="#EEEEEC"/>
+  <color name="aluminium2"                value="#D3D7CF"/>
+  <color name="aluminium3"                value="#BABDB6"/>
+  <color name="aluminium4"                value="#888A85"/>
+  <color name="aluminium5"                value="#555753"/>
+  <color name="aluminium6"                value="#2E3436"/>
+  <color name="bg1"                       value="#EDEBE9"/>
+  <color name="bg2"                       value="#DBD7D3"/>
+  <color name="blue1"                     value="#708090"/>
+  <color name="blue2"                     value="#0077AA"/>
+  <color name="brown1"                    value="#A67F59"/>
+  <color name="butter1"                   value="#FCE94F"/>
+  <color name="butter2"                   value="#EDD400"/>
+  <color name="butter3"                   value="#C4A000"/>
+  <color name="chameleon1"                value="#8AE234"/>
+  <color name="chameleon2"                value="#73D216"/>
+  <color name="chameleon3"                value="#4E9A06"/>
+  <color name="chocolate1"                value="#E9B96E"/>
+  <color name="chocolate2"                value="#C17D11"/>
+  <color name="chocolate3"                value="#8F5902"/>
+  <color name="gr1"                       value="#709831"/>
+  <color name="green1"                    value="#669900"/>
+  <color name="line1"                     value="#A2A3A3"/>
+  <color name="og1"                       value="#D75D1B"/>
+  <color name="orange1"                   value="#FCAF3E"/>
+  <color name="orange2"                   value="#F57900"/>
+  <color name="orange3"                   value="#CE5C00"/>
+  <color name="pink1"                     value="#DD4A68"/>
+  <color name="pink2"                     value="#EBCAD2"/>
+  <color name="plum1"                     value="#AD7FA8"/>
+  <color name="plum2"                     value="#75507B"/>
+  <color name="plum3"                     value="#5C3566"/>
+  <color name="purple1"                   value="#990055"/>
+  <color name="red1"                      value="#FF0000"/>
+  <color name="scarletred1"               value="#EF2929"/>
+  <color name="scarletred2"               value="#CC0000"/>
+  <color name="scarletred3"               value="#A40000"/>
+  <color name="selection1"                value="#B3D4FC"/>
+  <color name="skyblue1"                  value="#729FCF"/>
+  <color name="skyblue2"                  value="#3465A4"/>
+  <color name="skyblue3"                  value="#204A87"/>
+  <color name="text1"                     value="#4D4E53"/>
+  <color name="white"                     value="#FFFFFF"/>
+  <color name="black"                     value="#000000"/>
+  <color name="yellow1"                   value="#FFF9E5"/>
+
+  <!-- Global Styles -->
+  <style name="background-pattern"        background="#F3F3F3"/>
+  <style name="bracket-match"             background="aluminium3" foreground="text1" bold="true"/>
+  <style name="bracket-mismatch"          background="scarletred3" foreground="aluminium1" bold="true"/>
+  <style name="current-line"              background="aluminium1"/>
+  <style name="current-line-number"       background="aluminium1" foreground="aluminium4" bold="true"/>
+  <style name="cursor"                    foreground="aluminium4"/>
+  <style name="draw-spaces"               foreground="aluminium3"/>
+  <style name="line-numbers"              background="#FAFAFA" foreground="aluminium3"/>
+  <style name="map-overlay"               background="#rgba(193,203,210,0.55)"/>
+  <style name="misspelled-match"          background="selection1" foreground="aluminium5"/>
+  <style name="quick-highlight"           background="#rgba(221,74,104,0.15)"/>
+  <style name="quick-highlight-match"     background="#rgba(221,74,104,0.15)"/>
+  <style name="right-margin"              background="bg2" foreground="aluminium3"/>
+  <style name="search-match"              background="pink1" foreground="white"/>
+  <style name="search-shadow"             background="#rgba(0,0,0,0.2)"/>
+  <style name="selection"                 background="selection1" foreground="aluminium5"/>
+  <style name="snippet-focus"             background="orange1" foreground="text1"/>
+  <style name="text"                      background="#FAFAFA" foreground="text1"/>
+
+  <!-- Builder Overrides -->
+  <style name="-Builder:added-line"       foreground="chameleon1"/>
+  <style name="-Builder:changed-line"     foreground="orange1"/>
+  <style name="-Builder:removed-line"     foreground="scarletred1"/>
+  <style name="-Builder:current-breakpoint" line-background="#f5c211" foreground="black"/>
+  <style name="-Builder:breakpoint"         line-background="#4A90D9" foreground="white"/>
+  <style name="-Builder:deprecated"       underline="error" underline-color="aluminium3"/>
+  <style name="-Builder:error"            underline="error" underline-color="red1"/>
+  <style name="-Builder:note"             underline="error" underline-color="blue1"/>
+  <style name="-Builder:unused"           underline="error" underline-color="chocolate3"/>
+  <style name="-Builder:warning"          underline="error" underline-color="orange1"/>
+  <style name="-Builder:hover-definition" background="#D2E0E8" underline="single"/>
+  <style name="-Builder:area"             background="#rgba(32,74,135,0.1)"/>
+  <style name="-Builder:attribute"        background="#F0E68C" foreground="#000000"/>
+  <style name="-Builder:class"            background="#FFEF98" foreground="#000000"/>
+  <style name="-Builder:id"               background="#D9E7BD" foreground="#000000"/>
+  <style name="-Builder:label"            background="#D5E7FC" foreground="#000000"/>
+  <style name="-Builder:parent"           background="#DEBECF" foreground="#000000"/>
+  <style name="-Builder:style-class"      background="#DFCD9B" foreground="#000000"/>
+  <style name="-Builder:type"             background="#F4DAC3" foreground="#000000"/>
+
+  <!-- Defaults -->
+  <style name="def:base-n-integer"        foreground="blue2"/>
+  <style name="def:boolean"               foreground="pink1"/>
+  <style name="def:comment"               foreground="blue1"/>
+  <style name="def:constant"              foreground="pink1"/>
+  <style name="def:decimal"               foreground="purple1"/>
+  <style name="def:deletion"              strikethrough="true"/>
+  <style name="def:doc-comment-element"   italic="true"/>
+  <style name="def:emphasis"              italic="true"/>
+  <style name="def:error"                 line-background="#rgba(235,202,210,0.4)"/>
+  <style name="def:floating-point"        foreground="blue2"/>
+  <style name="def:function"              foreground="#4186A8"/>
+  <style name="def:heading"               foreground="gr1" bold="true"/>
+  <style name="def:identifier"            foreground="purple1"/>
+  <style name="def:inline-code"           foreground="purple1"/>
+  <style name="def:insertion"             underline="single"/>
+  <style name="def:keyword"               foreground="gr1" bold="true"/>
+  <style name="def:link-destination"      italic="true" underline="single"/>
+  <style name="def:link-symbol"           foreground="blue1" bold="true"/>
+  <style name="def:link-text"             foreground="blue1"/>
+  <style name="def:list-marker"           foreground="green1" bold="true"/>
+  <style name="def:net-address"           italic="true" underline="single"/>
+  <style name="def:note"                  background="orange1" bold="true"/>
+  <style name="def:operator"              foreground="brown1"/>
+  <style name="def:preformatted-section"  foreground="purple1"/>
+  <style name="def:preprocessor"          foreground="pink1"/>
+  <style name="def:shebang"               foreground="blue1" bold="true"/>
+  <style name="def:special-char"          foreground="pink1"/>
+  <style name="def:special-constant"      foreground="purple1"/>
+  <style name="def:statement"             foreground="green1" bold="true"/>
+  <style name="def:string"                foreground="blue2"/>
+  <style name="def:strong-emphasis"       foreground="green1" bold="true"/>
+  <style name="def:thematic-break"        foreground="gr1" bold="true"/>
+  <style name="def:type"                  foreground="gr1" bold="true"/>
+  <style name="def:warning"               background="yellow1"/>
+
+  <!-- C -->
+  <style name="c:boolean"                 foreground="blue2"/>
+  <style name="c:comment"                 foreground="#8B9EAB"/>
+  <style name="c:enum-name"               foreground="pink1" bold="false"/>
+  <style name="c:included-file"           foreground="orange3"/>
+  <style name="c:keyword"                 foreground="blue2" bold="true"/>
+  <style name="c:macro-name"              foreground="#677685" bold="false"/>
+  <style name="c:preprocessor"            foreground="#8194A6" bold="false"/>
+  <style name="c:storage-class"           foreground="orange3" bold="true"/>
+  <style name="c:string"                  foreground="green1"/>
+  <style name="c:type"                    foreground="green1" bold="true"/>
+
+  <!-- Diff -->
+  <style name="diff:added-line"           foreground="chameleon3"/>
+  <style name="diff:changed-line"         foreground="orange3"/>
+  <style name="diff:diff-file"            bold="true"/>
+  <style name="diff:location"             use-style="def:statement"/>
+  <style name="diff:removed-line"         foreground="pink1"/>
+  <style name="diff:special-case"         use-style="def:constant"/>
+
+  <!-- gtk-doc -->
+  <style name="gtk-doc:constant"          bold="true"/>
+  <style name="gtk-doc:deprecated"        bold="true"/>
+  <style name="gtk-doc:function"          bold="true"/>
+  <style name="gtk-doc:function-name"     bold="true"/>
+  <style name="gtk-doc:parameter"         bold="true"/>
+  <style name="gtk-doc:property-name"     bold="true"/>
+  <style name="gtk-doc:return"            bold="true"/>
+  <style name="gtk-doc:signal-name"       bold="true"/>
+  <style name="gtk-doc:since"             bold="true"/>
+  <style name="gtk-doc:type"              bold="true"/>
+
+  <!-- JavaScript -->
+  <style name="js:built-in-constructor"   foreground="pink1"/>
+  <style name="js:built-in-function"      foreground="pink1"/>
+  <style name="js:built-in-method"        foreground="pink1"/>
+  <style name="js:keyword"                foreground="blue2"/>
+  <style name="js:string"                 foreground="green1"/>
+  <style name="js:template-literal"       foreground="green1"/>
+
+  <!-- LaTeX -->
+  <style name="latex:command"             foreground="chameleon3" bold="true"/>
+  <style name="latex:display-math"        foreground="plum3"/>
+  <style name="latex:include"             use-style="def:preprocessor"/>
+  <style name="latex:special-char"        use-style="def:constant"/>
+
+  <!-- Python 2 -->
+  <style name="python:builtin-object"     foreground="og1"/>
+  <style name="python:function-name"      foreground="pink1"/>
+  <style name="python:keyword"            foreground="green1" bold="false"/>
+  <style name="python:module-handler"     foreground="purple1" bold="false"/>
+
+  <!-- sh -->
+  <style name="sh:variable"               foreground="plum3"/>
+  <style name="sh:variable-definition"    foreground="chameleon3"/>
+
+  <!-- XML -->
+  <style name="xml:namespace"             bold="true"/>
+  <style name="xml:tag-match"             background="#rgba(153,0,85,0.07)"/>
+  <style name="xml:tags"                  foreground="chameleon3"/>
+
+</style-scheme>

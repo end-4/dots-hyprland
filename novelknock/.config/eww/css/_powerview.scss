@@ -1,0 +1,114 @@
+@keyframes flyin-top {
+  from {
+    margin-top: -60px;
+    margin-bottom: 60px;
+  }
+
+  to {
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+}
+
+.powerview-search-box {
+  animation-name: flyin-top;
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+  animation-iteration-count: 1;
+}
+
+.powerview-search-txt {
+  @include mainfont;
+  font-size: 12pt;
+  padding: 0 15px;
+  selection {
+    background-color: $secondary;
+    color: $onSecondary;
+  }
+}
+
+.powerview-search-txt:focus {
+  background-color: mix($background, $primaryContainer, 85%);
+}
+
+.powerview-search-prompt-txt {
+  @include mainfont;
+  font-size: 12pt;
+  @include subtext;
+}
+
+.powerview-ws {
+  border-radius: 13px;
+  background-color: rgba(80, 80, 80, 0.1);
+  margin: 4px;
+}
+
+.powerview-ws-true {
+  background-color: $primary;
+}
+
+.powerview-ws-false {
+  color: transparent;
+}
+
+.powerview-ws-window {
+  border-radius: 13px;
+  background-color: mix($primaryContainer, rgba(80,80,80,0.3), 7%);
+}
+
+.powerview-search-result {
+  @include mainfont;
+  border-radius: 18px;
+  background-color: $onSecondary;
+  color: $onBackground;
+  font-size: 15pt;
+  min-height: 47px;
+  min-width: 400px;
+  padding: 2px 12px;
+  padding-left: 57px;
+  margin: 0px 5px;
+
+  background-color: rgba(11, 11, 11, 0.8);
+  background-image: linear-gradient(135deg, rgba(0, 0, 0, 0) 60%, tint($secondaryContainer, 10%) 60%);
+  background-size: 400% auto;
+  background-position: 40% 50%;
+
+  caret-color: $onBackground;
+
+  selection {
+    background-color: transparent;
+  }
+}
+
+.powerview-search-result:focus {
+  color: $onPrimaryContainer;
+  // background-position: 65% 50%;
+  background-color: mix($background, $primaryContainer, 90%);
+  selection {
+    color: $onPrimaryContainer;
+    background-color: transparent;
+  }
+}
+
+.powerview-search-result:active {
+  color: $onPrimaryContainer;
+  // background-color: $secondaryContainer;
+  // background-position: 100% 50%;
+  background-color: mix($background, $primaryContainer, 90%);
+  selection {
+    color: $onPrimaryContainer;
+    background-color: transparent;
+  }
+}
+
+.overview-search-result-icon {
+  // background-color: $secondaryContainer;
+  border-radius: 18px;
+  min-height: 51px;
+  min-width: 51px;
+  margin: 0px 5px;
+}
+
+.powerview-info {
+  padding: 15px;
+}

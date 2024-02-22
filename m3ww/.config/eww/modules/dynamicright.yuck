@@ -1,0 +1,19 @@
+(defwidget dynamicright_widget []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    :onclick "scripts/toggle-sideright.sh &"
+    (box
+      :orientation "v" :space-evenly false
+      (box ; Module 1: Volume, Brightness
+        :class "dynamic-module${flash_notif ? '' : '-hidetop'}"
+        (notifications_widget)
+      )
+      (box ; Module 2: Workspaces
+        :class "dynamic-module${flash_notif ? '-hidebottom' : ''}"
+        (status_widget)
+      )
+    )
+  )
+)

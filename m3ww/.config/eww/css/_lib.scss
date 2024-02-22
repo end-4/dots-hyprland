@@ -1,0 +1,357 @@
+// Common colors
+$hovercolor: rgba(128, 128, 128, 0.4);
+$activecolor: rgba(128, 128, 128, 0.7);
+
+// Common rules
+@mixin mainfont {
+    font-family: 'Lexend', 'Bahnschrift', 'Inter';
+    // font-weight: 500;
+}
+
+@mixin icon-material {
+    font-family: 'Material Symbols Rounded';
+}
+
+@mixin icon-nerd {
+    font-family: 'JetBrainsMono Nerd Font';
+}
+
+@mixin techfont {
+    font-family: 'JetBrains Mono Nerd Font';
+}
+
+@mixin subtext {
+    color: rgb(160, 160, 160);
+}
+
+@mixin elevation-safe {
+    background: $surface;
+    color: $onSurface;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.69);
+    margin: 7px;
+}
+
+@mixin elevation2 {
+    background: $surface;
+    color: $onSurface;
+    box-shadow: 0px 2px 3px $shadow;
+    margin: 7px;
+}
+
+@mixin elevation3 {
+    background: $surfaceVariant;
+    color: $onSurfaceVariant;
+    // box-shadow: 0px 2px 5px mix($shadow, rgba(0,0,0,0), 40%);
+    box-shadow: 0px 2px 5px $shadow;
+    margin: 7px;
+}
+
+@mixin md3_decel {
+    transition: 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@mixin md3_accel {
+    transition: 180ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+@mixin noanim {
+    transition: 0ms;
+}
+
+@mixin anim-enter {
+    transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+@mixin anim-exit {
+    transition: 150ms cubic-bezier(0.3, 0, 0.8, 0.15);
+}
+
+@mixin m3-button {
+    border-radius: 50rem;
+}
+
+@keyframes flyin-top {
+    from {
+        margin-top: -2.795rem;
+    }
+
+    to {
+        margin-top: 0rem;
+    }
+}
+
+@keyframes flyin-bottom {
+    from {
+        margin-top: 4.841rem;
+        margin-bottom: -4.841rem;
+    }
+
+    to {
+        margin-bottom: 0rem;
+        margin-top: 0rem;
+    }
+}
+
+@function tint($color, $percentage) {
+    @return mix(rgb(245, 250, 255), $color, $percentage);
+}
+
+@function shade($color, $percentage) {
+    @return mix(rgb(0, 0, 0), $color, $percentage);
+}
+
+.no-anim {
+    @include noanim;
+}
+
+.txt {
+    color: $onBackground;
+}
+
+.txt-shadow {
+    text-shadow: 1px 2px 8px rgba(0,0,0,0.69);
+    margin: 10px;
+}
+
+.txt-badonkers {
+    @include mainfont;
+    font-size: 3rem;
+}
+
+.txt-tiddies {
+    @include mainfont;
+    font-size: 2.7273rem;
+}
+
+.txt-hugeass {
+    @include mainfont;
+    font-size: 1.8182rem;
+}
+
+.txt-larger {
+    @include mainfont;
+    font-size: 1.6363rem;
+}
+
+.txt-large {
+    //16pt
+    @include mainfont;
+    font-size: 1.4545rem;
+}
+
+.txt-norm {
+    //14pt
+    @include mainfont;
+    font-size: 1.2727rem;
+}
+
+.txt-small {
+    //12pt
+    @include mainfont;
+    font-size: 1.0909rem;
+}
+
+.txt-smallie {
+    //11pt
+    @include mainfont;
+    font-size: 1rem;
+}
+
+.txt-smaller {
+    //10pt
+    @include mainfont;
+    font-size: 0.9091rem;
+}
+
+.txt-smaller-offset {
+    margin-top: -0.136rem;
+}
+
+.txt-tiny {
+    @include mainfont;
+    font-size: 0.7273rem;
+}
+
+.txt-subtxt {
+    color: mix($onBackground, $background, 80%);
+}
+
+.txt-bold {
+    font-weight: 500;
+}
+
+.icon-material {
+    @include icon-material;
+}
+
+.separator {
+    border-radius: 50rem;
+    background-color: $onSurface;
+    margin: 0rem 0.682rem;
+    min-width: 0.545rem;
+    min-height: 0.545rem;
+}
+
+tooltip {
+    background-color: $surfaceVariant;
+    color: $onSurfaceVariant;
+    border-radius: 50rem;
+    border: 1px solid $onSurfaceVariant;
+}
+
+
+$overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
+$overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
+
+
+.spacing-v-15>box {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15>box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-15>scrolledwindow {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15>scrolledwindow:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-15>revealer {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15>revealer:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-15>label {
+    margin-bottom: 1.023rem;
+}
+
+.spacing-v-15>label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-15>box {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15>box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-15>label {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15>label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-15>button {
+    margin-right: 1.023rem;
+}
+
+.spacing-h-15>button:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-v-5>box {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5>box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-5>label {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5>label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-5>button {
+    margin-bottom: 0.341rem;
+}
+
+.spacing-v-5>button:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-5>box {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-5>label {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-5>widget>box {
+    margin-right: 0.341rem;
+}
+
+.spacing-h-5>widget:last-child>box {
+    margin-right: 0rem;
+}
+
+.spacing-v-minus5>box {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v-minus5>box:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-v-minus5>label {
+    margin-bottom: -0.341rem;
+}
+
+.spacing-v-minus5>label:last-child {
+    margin-bottom: 0rem;
+}
+
+.spacing-h-10>box {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>box:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-10>label {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>label:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-h-10>widget {
+    margin-right: 0.682rem;
+}
+
+.spacing-h-10>widget:last-child {
+    margin-right: 0rem;
+}
+
+.anim-enter {
+    @include anim-enter;
+}
+
+.anim-exit {
+    @include anim-exit;
+}

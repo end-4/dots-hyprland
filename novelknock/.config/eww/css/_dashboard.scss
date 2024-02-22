@@ -1,0 +1,326 @@
+.dashboard-bg {
+    background-color: rgba(0, 0, 0, 0.67);
+}
+
+@mixin dashboard-panel-bg {
+    background-color: rgba(30, 30, 30, 1);
+}
+
+.dashboard-clock-time {
+    @include mainfont;
+    font-size: 55pt;
+    color: $onBackground;
+}
+
+.dashboard-clock-date {
+    @include mainfont;
+    font-size: 20pt;
+    color: $onBackground;
+}
+
+.dashbaord-user-pic {
+    min-width: 60px;
+    min-height: 60px;
+    border-radius: 99px;
+    background-position: center center;
+    background-size: auto 100%;
+}
+
+.dashboard-user-realname {
+    @include mainfont;
+    font-size: 22pt;
+    color: $onBackground;
+}
+
+.dashboard-user-username {
+    @include mainfont;
+    font-size: 16pt;
+    color: $onBackground;
+}
+
+.dashboard-close-btn-icon {
+    @include icon-material;
+    font-size: 30pt;
+    color: $onBackground;
+}
+
+.dashboard-close-btn-txt {
+    @include mainfont;
+    font-size: 11pt;
+    color: $onBackground;
+}
+
+.dashboard-cavacol {
+    border-top-left-radius: 99px;
+    border-top-right-radius: 99px;
+    background-color: rgba(200, 200, 200, 0.2);
+}
+
+.dashboard-gallery-txt {
+    @include mainfont;
+    font-size: 16pt;
+}
+
+.dashboard-carousel-image {
+    border-radius: 13px;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    background-position: center;
+}
+
+.dashboard-session-btn {
+    padding: 10px 0px;
+    color: $onBackground;
+}
+
+.dashboard-session-btn-icon {
+    @include icon-material;
+    font-size: 30pt;
+    padding: 0 50px;
+    color: $onBackground;
+}
+
+.dashboard-settings-panel {
+    @include dashboard-panel-bg;
+    border-radius: 15px;
+}
+
+.dashboard-setting-section-pad {
+    padding: 15px;
+}
+
+.dashboard-settings-title-icon {
+    @include icon-material;
+    font-size: 18pt;
+    color: $onBackground;
+}
+
+.dashboard-settings-title-txt {
+    @include mainfont;
+    font-size: 20pt;
+    color: $onBackground;
+}
+
+.dashboard-settings-title-txtsmall {
+    @include mainfont;
+    font-size: 16pt;
+    color: $onBackground;
+}
+
+.dashboard-settings-option-group {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 13px;
+    color: $onBackground;
+}
+
+.dashboard-settings-option-group-middle {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    color: $onBackground;
+}
+
+.dashboard-settings-option-group-left {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 2px;
+    border-top-left-radius: 13px;
+    border-bottom-left-radius: 13px;
+    color: $onBackground;
+}
+
+.dashboard-settings-option-group-right {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 2px;
+    border-top-right-radius: 13px;
+    border-bottom-right-radius: 13px;
+    color: $onBackground;
+}
+
+.dashboard-settings-option-toggle-icon {
+    @include icon-material;
+    font-size: 28pt;
+}
+
+.dashboard-settings-option-toggle-txt {
+    @include mainfont;
+    font-size: 10pt;
+}
+
+.dashboard-settings-option-group-pad {
+    padding: 15px;
+}
+
+.dashboard-settings-option-group-minsize {
+    min-width: 80px;
+    min-height: 80px;
+}
+
+.dashboard-settings-scale {
+    border-radius: 99px;
+    margin: 20px;
+    transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    trough {
+        min-height: 3px;
+        min-width: 60px;
+        border-radius: 99px;
+        background-color: mix($surface, rgba(0, 0, 0, 0), 30%);
+    }
+
+    highlight {
+        min-width: 3px;
+        border-radius: 99px;
+        background-color: $primary;
+        transition: 0ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+
+    slider {
+        min-width: 5px;
+        margin: -9px;
+        border-radius: 99px;
+        background-color: $primary;
+    }
+}
+
+.dashboard-settings-txt {
+    @include mainfont;
+    font-size: 12pt;
+    color: $onBackground;
+}
+
+.switch-bg-2 {
+    border-radius: 99px;
+    background-color: $primary;
+    border: 2px solid $primary;
+}
+
+.switch-bg-1 {
+    border-radius: 99px;
+    background-color: $primary;
+    border: 2px solid $primary;
+}
+
+.switch-bg-0 {
+    border-radius: 99px;
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
+    border: 2px solid $onSurface;
+}
+
+.switch-bg-true {
+    border-radius: 99px;
+    background-color: $primary;
+    border: 2px solid $primary;
+}
+
+.switch-bg-false {
+    border-radius: 99px;
+    background-color: mix($surface, rgba(0, 0, 0, 0), 50%);
+    border: 3px solid $onSurface;
+}
+
+.switch-fg-2 {
+    border-radius: 99px;
+    background-color: $onPrimary;
+    color: $primary;
+}
+
+.switch-fg-1 {
+    border-radius: 99px;
+    background-color: $onPrimary;
+    color: $primary;
+}
+
+.switch-fg-0 {
+    border-radius: 99px;
+    background-color: $onSurface;
+}
+
+.switch-fg-true {
+    border-radius: 99px;
+    background-color: $onPrimary;
+    color: $primary;
+}
+
+.switch-fg-false {
+    border-radius: 99px;
+    background-color: $onSurface;
+}
+
+.switch-fg-icon {
+    @include icon-material;
+    font-size: 9pt;
+    font-weight: bolder;
+    margin: -2px;
+}
+
+.dashboard-option-lang-true {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 13px;
+    padding: 15px;
+    color: $onBackground;
+}
+
+.dashboard-option-lang-false {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 13px;
+    padding: 15px;
+    color: $onBackground;
+}
+
+.dashboard-lang-indicator-true {
+    background-color: $primary;
+    border-radius: 99px;
+    min-width: 4px;
+    min-height: 30px;
+}
+
+.dashboard-lang-indicator-false {
+    background-color: transparent;
+    border-radius: 99px;
+    min-width: 4px;
+    min-height: 30px;
+}
+
+.dashboard-settings-highlight {
+    background: $primary;
+    border-radius: 99px;
+    min-height: 50px;
+    min-width: 5px;
+}
+
+.dashboard-settings-highlight-hide {
+    background: transparent;
+    border-radius: 99px;
+    min-height: 50px;
+    min-width: 5px;
+}
+
+.dashboard-settings-button {
+    background-color: mix($secondaryContainer, rgba(0, 0, 0, 0), 50%);
+    border-radius: 13px;
+    padding: 15px;
+}
+
+.dashboard-settings-button:hover {
+    background-color: tint(mix($secondaryContainer, rgba(0, 0, 0, 0), 50%), 5%);
+}
+
+.dashboard-settings-button:active {
+    background-color: tint(mix($secondaryContainer, rgba(0, 0, 0, 0), 50%), 10%);
+}
+
+.dashboard-section-icon {
+    @include icon-material;
+    font-size: 18pt;
+    color: $onBackground;
+}
+
+.dashboard-section-icon-nerd {
+    @include icon-nerd;
+    font-size: 18pt;
+    color: $onBackground;
+}
+
+.dashboard-section-txt {
+    @include mainfont;
+    font-size: 18pt;
+    color: $onBackground;
+}

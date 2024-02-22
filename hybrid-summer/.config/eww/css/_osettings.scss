@@ -1,0 +1,439 @@
+.osettings-window {
+    min-width: 501px;
+    padding-top: 20px;
+    background-color: shade($colorbarbg, 4%);
+    color: $onBackground;
+    font-family: Rubik;
+    margin: 7px;
+    margin-left: 0px;
+    border-top-right-radius: 53px;
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('images/pictures/beach_smoothie.jpg');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.onotify-window {
+    min-width: 529px;
+    background-color: shade($colorbarbg, 5%);
+    color: $onBackground;
+    font-family: Rubik;
+    margin: 7px;
+    margin-right: 0px;
+    border-top-left-radius: 53px;
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('images/pictures/beach_drinks.jpeg');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+}
+
+.osettings-separator {
+    background-color: shade($colorbarbg, 5%);
+    min-height: 6px;
+    margin-top: 27px;
+}
+
+.osettings-content {
+    // padding-top: 13px;
+    margin-top: 27px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    font-family: Rubik;
+    color: $onBackground;
+    background-color: shade($colorbarbg, 5%);
+    border-top-right-radius: 53px;
+}
+
+.onotify-content {
+    // padding-top: 13px;
+    margin-top: 27px;
+    padding-top: 8px;
+    padding-bottom: 16px;
+    font-family: Rubik;
+    color: $onBackground;
+    background-color: shade($colorbarbg, 5%);
+    border-top-left-radius: 53px;
+}
+
+.osettings-heading {
+    padding-left: 28px;
+    padding-right: 28px;
+    color: $onBackground;
+    font-family: Rubik;
+}
+
+.osettings-title {
+    color: $onBackground;
+    font-family: Rubik;
+    font-size: 30pt;
+}
+
+.osettings-subtitle {
+    color: $onSecondaryContainer;
+    font-family: Rubik;
+    font-size: 14pt;
+}
+
+.osettings-section-icon {
+    margin-top: 33px;
+    margin-bottom: 9px;
+    color: $onSecondaryContainer;
+    font-family: 'Material Symbols Rounded';
+    font-size: 20pt;
+    min-width: 50px;
+    min-height: 50px;
+    background-color: $secondaryContainer;
+    border-radius: 16px;
+}
+
+.osettings-section {
+    margin-top: 33px;
+    margin-bottom: 9px;
+    color: $onSecondaryContainer;
+    font-family: Rubik;
+    font-size: 20pt;
+}
+
+.osettings-text {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: $onBackground;
+    font-family: Rubik;
+    font-size: 14pt;
+}
+
+.osettings-text-icon {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: $onBackground;
+    font-family: 'Material Symbols Rounded';
+    font-size: 14pt;
+    min-width: 50px;
+}
+
+.osettings-search {
+    margin-left: 28px;
+    margin-right: 28px;
+    margin-top: 35px;
+    background-color: tint($colorbarbg, 4%);
+    border: 2px solid $onSurfaceVariant;
+    color: $onBackground;
+    border-radius: 10px;
+    font-size: 11pt;
+    min-height: 45px;
+    caret-color: $onBackground;
+
+    selection {
+        background-color: rgba(154, 152, 152, 0.5);
+    }
+}
+
+.osettings-search-text {
+    color: $onSurfaceVariant;
+    padding: 10px;
+    font-size: 13pt;
+    min-width: 420px;
+}
+
+.osettings-search-icon {
+    color: $onSurfaceVariant;
+    padding: 6px;
+    padding-left: 0px;
+    font-size: 20pt;
+}
+
+.osettings-scroll-bg {
+    padding-left: 28px;
+    padding-right: 28px;
+}
+
+.osettings-scroll-bg-colored {
+    padding-left: 28px;
+    padding-right: 28px;
+    background-color: shade($colorbarbg, 5%);
+}
+
+.osettings-btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 9999px;
+    min-height: 50px;
+    font-weight: normal;
+    font-size: 13pt;
+}
+
+.osettings-btn {
+    font-weight: bold;
+}
+
+.osettings-btn-destructive {
+    color: $onTertiary;
+    background-color: $tertiary;
+    background-image: linear-gradient(45deg, shade($color4, 5%) 58%, tint($color4, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
+}
+
+.osettings-btn-neutral {
+    color: $onPrimary;
+    background-color: $primary;
+    background-image: linear-gradient(45deg, shade($color1, 5%) 58%, tint($color1, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
+}
+
+.osettings-btn-informative {
+    color: $onSecondary;
+    background-color: $secondary;
+    background-image: linear-gradient(45deg, shade($color5, 5%) 58%, tint($color5, 10%) 58%);
+    background-size: 300% 300%;
+    background-position: 50% 50%;
+}
+
+.osettings-btn-neutral:hover,
+.osettings-btn-neutral:focus {
+    background-color: tint($primary, 10%);
+    // background-image: linear-gradient(135deg, $color3 75%, $color3 75%);
+    background-position: 70% 0%;
+}
+
+.osettings-btn-destructive:hover,
+.osettings-btn-destructive:focus {
+    background-color: tint($tertiary, 10%);
+    // background-image: linear-gradient(135deg, tint($color4, 10%) 75%, tint($color4, 10%) 75%);
+    background-position: 70% 0%;
+}
+
+.osettings-btn-informative:hover,
+.osettings-btn-informative:focus {
+    background-color: tint($secondary, 10%);
+    // background-image: linear-gradient(135deg, tint($color5, 10%) 75%, tint($color5, 10%) 75%);
+    background-position: 70% 0%;
+}
+
+.osettings-btn-neutral:active {
+    background-color: tint($primary, 10%);
+    // background-image: linear-gradient(135deg, $color3 75%, $color3 75%);
+    background-position: 100% 50%;
+}
+
+.osettings-btn-destructive:active {
+    background-color: tint($tertiary, 10%);
+    // background-image: linear-gradient(135deg, tint($color4, 10%) 75%, tint($color4, 10%) 75%);
+    background-position: 100% 50%;
+}
+
+.osettings-btn-informative:active {
+    background-color: tint($secondary, 10%);
+    // background-image: linear-gradient(135deg, tint($color5, 10%) 75%, tint($color5, 10%) 75%);
+    background-position: 100% 50%;
+}
+
+.rounder {
+    border-radius: 9999px;
+}
+
+.osettings-slider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: 6px;
+    border-radius: 9999px;
+    background-image: linear-gradient(45deg, $primary 50%, tint($colorbarbg, 15%) 50%);
+    padding: 0px;
+
+    trough {
+        border-radius: 9999px;
+        background-color: tint($colorbarbg, 15%);
+        min-height: 6px;
+        margin-left: 32px;
+        margin-right: 32px;
+        // min-width: 70px;
+    }
+
+    highlight {
+        border-radius: 9999px;
+        background-color: $primary;
+        background-image: linear-gradient(45deg, $primary 0%, $primary 100%);
+    }
+
+    slider {
+        border-radius: 9999px;
+        min-height: 20px;
+        min-width: 65px;
+        background-color: $primary;
+        margin: -8px;
+    }
+
+    slider:hover {
+        background-color: $primary;
+    }
+}
+
+.osettings-checkbox {
+    border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: transparent;
+    color: transparent;
+    border: 3px solid $primary;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox-1 {
+    border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: $primary;
+    color: transparent;
+    border: 3px solid $primary;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox-0 {
+    border-radius: 9999px;
+    // min-height: 20px;
+    // min-height: 6px;
+    min-width: 60px;
+    background-color: transparent;
+    color: transparent;
+    border: 3px solid $primary;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.osettings-checkbox:checked {
+    border-radius: 9999px;
+    background-color: $primary;
+    color: $primary;
+}
+
+.osettings-waifu {
+    margin-top: 30px;
+    min-width: 350px;
+    min-height: 350px;
+    border-radius: 20px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+.onotify-app-icon {
+    margin: 9px 5px;
+
+    color: $onSecondaryContainer;
+    font-family: 'Material Symbols Rounded';
+    font-size: 20pt;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: $secondaryContainer;
+    border-radius: 14px;
+}
+
+.onotify-app-name {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: $onSecondaryContainer;
+    font-family: Rubik;
+    font-size: 15pt;
+}
+
+.onotify-app-text {
+    color: $onSecondaryContainer;
+    font-family: Rubik;
+    font-size: 13pt;
+}
+
+.onotify-app-ser {
+    color: $onSecondaryContainer;
+    font-family: Rubik;
+    font-size: 13pt;
+}
+
+.onotify-app-vol-circle {
+    background-color: #5c5b5b;
+    color: $primary;
+}
+
+.onotify-app-volbox {
+    margin: 9px 5px;
+    padding: 5px;
+
+    color: $onSecondaryContainer;
+    font-family: 'Material Symbols Rounded';
+    font-size: 20pt;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: $secondaryContainer;
+    border-radius: 14px;
+}
+
+.osettings-tag {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'Rubik';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    min-width: 50px;
+    margin-top: 25px;
+}
+
+.osettings-tag:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag:active {
+    background-color: tint($tertiary, 40%);
+}
+
+.osettings-tag-nerd {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'JetBrainsMono Nerd Font';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    min-width: 50px;
+    margin-top: 25px;
+}
+
+.osettings-tag-nerd:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag-nerd:active {
+    background-color: tint($tertiary, 40%);
+}
+
+.osettings-tag-material {
+    color: $onTertiary;
+    background-color: $tertiary;
+    font-size: 13pt;
+    font-family: 'Material Symbols Rounded';
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    // min-width: 25px;
+    margin-top: 25px;
+}
+
+.osettings-tag-material:hover {
+    background-color: tint($tertiary, 20%);
+}
+
+.osettings-tag-material:active {
+    background-color: tint($tertiary, 40%);
+}

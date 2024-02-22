@@ -1,0 +1,33 @@
+(defwidget notifications_widget []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    (box
+      :class "bar-group-margin bar-group-pad-leftonly"
+      :space-evenly false :spacing 10
+      (scroll :hexpand true
+        :class "bar-group-pad-leftonly"
+        (label
+          :halign "end"
+          :class "txt-small txt"
+          :text {arraylength(notifications) > 0 ? (notifications[0]['summary']) : ''}
+        )
+      )
+      (box
+        :valign "center"
+        :class "bar-notif-indicator"
+        :space-evenly false :spacing 5
+        (label
+          :class "icon-material bar-system-icon txt-small bar-notif-icon"
+          :text "notifications"
+        )
+        (label
+          :class "txt-small"
+          :text "${arraylength(notifications)} "
+        )
+      )
+      (box :class "corner-width")
+    )
+  )
+)

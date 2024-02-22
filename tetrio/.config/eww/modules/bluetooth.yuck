@@ -1,0 +1,13 @@
+(defwidget bluetooth []
+  (eventbox
+    :onrightclick "gnome-control-center bluetooth"
+    (button
+      :class "module-bt module icon"
+      :onclick "blueberry"
+      :onrightclick "gnome-control-center bluetooth"
+      :tooltip "${bluetooth.text} ${bluetooth.batt_icon}"
+      :style "color: ${bluetooth.color};"
+      {bluetooth.icon}
+    )
+  )
+)

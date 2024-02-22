@@ -1,0 +1,62 @@
+.notifications-box {
+  @include window;
+  background: $bg;
+  padding: 1rem;
+  font-family: 'Gabarito';
+}
+
+.notification {
+  font-family: 'Gabarito';
+  background-color: $surface0;
+  border-bottom: 3px solid $bg;
+  padding: .5rem;
+
+  box { margin-bottom: .5rem; }
+
+  label { font-size: 1rem; }
+
+  &:hover {
+    border: 3px solid $color7;
+  }
+
+  .appname {
+    color: $color0;
+    font-weight: bold;
+  }
+
+  .summary {
+    color: $colortext;
+    font-weight: bold;
+  }
+
+  .body { color: $colortext; }
+}
+
+.container {
+  &:first-child { border-radius: 8px 8px 0 0; };
+  &:last-child { border-radius: 0 0 8px 8px; };
+}
+
+.notification-header {
+  margin-bottom: 1rem;
+}
+
+.notification-label {
+  color: $color6;
+  font-size: 1.5rem;
+}
+
+.notification-action {
+  border-radius: 50%;
+  margin-bottom: .2rem;
+  padding: 0 .3rem;
+
+  label {
+    color: $colortext;
+    font-size: 1.2rem;
+  }
+
+  &:hover {
+    background: $surface0;
+  }
+}

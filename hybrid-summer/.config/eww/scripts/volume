@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+cd ~/.config/eww
+
+volicons=("" "" "")
+XDG_CACHE_HOME="$HOME/.cache"
+date="$XDG_CACHE_HOME/eww/osd_vol.date"
+lock=0
+
+showhide() {
+  # get dates
+  rundate=$(cat "$date")
+  currentdate=$(date +%s)
+
+  # handle showing
+  if [ "$rundate" = "$currentdate" ] && [ "$lock" -eq 0 ]; then
+    scripts/toggle-osd-vol.sh --open
+    lock=1
+  elif [ $((currentdate - rundate)) -ge 2 ] && [ "$lock" -eq 1 ]; then
+    scripts/toggle-osd-vol.sh --close > /dev/null
+    lock=0
+  fi
+}
+
+osd() {
+  if [ ! -f "$date" ]; then
+    mkdir -p "$XDG_CACHE_HOME/eww"
+  fi
+  date +%s > "$date"
+  showhide
+}
+
+osd_handler() {
+  lock=0
+  rundate=0
+  if [ ! -f "$date" ]; then
+    mkdir -p "$XDG_CACHE_HOME/eww"
+    echo 0 > "$date"
+  fi
+
+  while true; do
+    showhide
+    sleep 0.1
+  done
+}
+
+vol() {
+  wpctl get-volume @DEFAULT_AUDIO_$1@ | awk '{print int($2*100)}'
+}
+ismuted() {
+  wpctl get-volume @DEFAULT_AUDIO_"$1"@ | rg -i muted
+  echo $?
+}
+setvol() {
+  wpctl set-volume @DEFAULT_AUDIO_"$1"@ "$(awk -v n="$2" 'BEGIN{print (n / 100)}')"
+}
+setmute() {
+  wpctl set-mute @DEFAULT_AUDIO_"$1"@ toggle
+}
+
+if [ "$1" = "--once" ]; then
+  lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
+    ismuted=$(ismuted "SINK")
+
+    if [ "$ismuted" = 1 ]; then
+    	icon="${volicons[$lvl]}"
+    else
+      icon=""
+    fi
+    audio=1
+    if [ "$(wpctl status | grep 'MUTED')" == "" ]; then
+      audio=1
+    else 
+      audio=0
+    fi
+
+    echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
+    exit 0
+fi
+
+if [ "$1" = "mute" ]; then
+  if [ "$2" != "SOURCE" ] && [ "$2" != "SINK" ]; then
+    echo "Can only mute SINK or SOURCE"; exit 1
+  fi
+  setmute "$2"
+elif [ "$1" = "setvol" ]; then
+  if [ "$2" != "SOURCE" ] && [ "$2" != "SINK" ]; then
+    echo "Can only set volume for SINK or SOURCE"; exit 1
+  elif [ "$3" -lt 1 ] || [ "$3" -gt 100 ]; then
+    echo "Volume must be between 1 and 100"; exit 1
+  fi
+  setvol "$2" "$3"
+elif [ "$1" = "osd" ]; then
+  osd
+else
+  # initial values
+  lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
+  ismuted=$(ismuted "SINK")
+
+  if [ "$ismuted" = 1 ]; then
+  	icon="${volicons[$lvl]}"
+  else
+    icon=""
+  fi
+  audio=1
+  if [ "$(wpctl status | grep 'MUTED')" == "" ]; then
+    audio=1
+  else 
+    audio=0
+  fi
+
+  echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
+
+  osd_handler &
+  # event loop
+  pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
+    lvl=$(awk -v n="$(vol "SINK")" 'BEGIN{print int(n/34)}')
+    ismuted=$(ismuted "SINK")
+
+    if [ "$ismuted" = 1 ]; then
+    	icon="${volicons[$lvl]}"
+    else
+      icon=""
+    fi
+    audio=1
+    if [ "$(wpctl status | grep 'MUTED')" == "" ]; then
+      audio=1
+    else 
+      audio=0
+    fi
+
+    echo '{"icon":"'"$icon"'","audio":"'"$audio"'","percent":"'"$(vol "SINK")"'","microphone":"'"$(vol "SOURCE")"'"}'
+  done
+fi

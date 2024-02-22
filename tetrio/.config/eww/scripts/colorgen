@@ -1,0 +1,82 @@
+#!/usr/bin/bash
+
+OPACITY=0.7
+
+IMGPATH=$1
+coverurl=$2
+
+coverpath="$IMGPATH"
+wal -c
+lightdark=$(cat scripts/workdir/__mode_light_dark.txt)
+wal -i "$IMGPATH" -n -t -s -e $lightdark -q
+themejson=$(cat ~/.cache/wal/colors.json | gojq -c)
+themejson="${themejson::-1}"
+themejson="$themejson"',"source":"'"$3"'"}'
+echo $themejson
+
+printf '{"image": "'"$coverpath"'", "color": '"$themejson"'}\n'
+
+# Get color in rgb
+colorsreg=$(cat ~/.cache/wal/colors-putty.reg)
+rgb_bg=$(echo $colorsreg | tr ' ' '\n' | grep 'Colour3')
+rgb_bg="${rgb_bg#*=}"
+rgb_bg="${rgb_bg#*\"}"
+rgb_bg="${rgb_bg::-1}"
+rgb_bg='rgba('"$rgb_bg"','"$OPACITY"')'
+# echo $rgb_bg
+
+# notify-send 'eww' 'i found a url!'
+
+# Write to scss
+echo '//Auto generated color theme for image at:' "$coverurl" > './tmp/_colorscheme.colorpallete'
+echo '@function bluetint($color, $percentage) {  @return mix(#CDDFED, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
+echo '@function blueshade($color, $percentage) { @return mix(#152E50, $color, $percentage); }' >> './tmp/_colorscheme.colorpallete'
+printf '$colorbarbg: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.special.background' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$colorbg: ' >> './tmp/_colorscheme.colorpallete'
+printf "$rgb_bg"';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$colortext: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.special.foreground' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color0: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color1' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color1: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color2' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color2: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color3' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color3: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color4: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color5' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color5: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color6' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color6: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color7' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+printf '$color7: ' >> './tmp/_colorscheme.colorpallete'
+printf "$themejson" | gojq '.colors.color4' | sed 's/"//g' | tr '\n' ';' >> './tmp/_colorscheme.colorpallete'
+echo '' >> './tmp/_colorscheme.colorpallete'
+
+
+gradient1=$(echo -n "$themejson" | gojq '.colors.color1' | sed 's/"//g')
+gradient2=$(echo -n "$themejson" | gojq '.colors.color2' | sed 's/"//g')
+gradient3=$(echo -n "$themejson" | gojq '.colors.color4' | sed 's/"//g')
+
+# Write hyprland color config
+echo '# Auto generated color theme for image at:' "$coverurl" > './tmp/colors_generated.conf'
+echo 'general {' >> './tmp/colors_generated.conf'
+echo '    col.active_border = rgba('"${gradient1#*#}FF"') rgba('"${gradient2#*#}FF"') rgba('"${gradient3#*#}FF"') 45deg' >> './tmp/colors_generated.conf'
+echo '    col.inactive_border = rgba('"${gradient1#*#}66"')' >> './tmp/colors_generated.conf'
+echo '}' >> './tmp/colors_generated.conf'
+
+# Print json to stdout
+printf "$themejson" | gojq '.special.foreground' | sed 's/"//g' > 'tmp/_iconcolor.txt'
+

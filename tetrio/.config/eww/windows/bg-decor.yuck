@@ -1,0 +1,46 @@
+(defwidget bgdecors []
+  (box
+    :space-evenly false
+    :spacing 5
+    :orientation "v"
+    (label
+      :xalign 0
+      :class "bg-decor-dow" ; Hyperland maybe?
+      :text "${time.day}"
+    )
+    (label
+      :xalign 0
+      :class "bg-decor-date"
+      :text "${time.date}"
+    )
+    ; I don't like focus being moved to this on reload
+    ; (box
+    ;   :spacing 0
+    ;   :space-evenly false
+    ;   (input
+    ;     :class "bg-decor-input-left"
+    ;     :onaccept "firefox https://www.google.com/search?q={}"
+    ;   )
+    ;   (button
+    ;     :class "bg-decor-input-right"
+    ;     ""
+    ;   )
+    ; )
+  )
+)
+
+(defwindow bg-decor
+  :focusable false
+  :stacking "bottom"
+  :windowtype "normal"
+  :wm-ignore true
+  :geometry (geometry
+    :x 80
+    :y 0
+    :width "100%"
+    :height "100%"
+    :anchor "left center"
+  )
+  :monitor 0
+  (bgdecors)
+)

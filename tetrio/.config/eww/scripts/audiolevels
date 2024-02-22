@@ -1,0 +1,70 @@
+#!/usr/bin/bash
+dostuff(){
+  sinks=$(pactl list sink-inputs  \
+          | grep -e "Sink Input" \
+          | sed 's/Sink Input #//')
+  names=$(pactl list sink-inputs \
+          | sed 's/"//g' \
+          | sed 's/application-name://'  \
+          | grep -e "application.name" \
+          | sed 's/application.name = //' \
+          | sed 's/\t\t//' )
+  vols=$(pactl list sink-inputs  \
+          | grep -e "Volume:" \
+          | sed 's/Volume: front-left: //' \
+          | sed 's/front-right: //' \
+          | sed 's/front-right: //' \
+          | tr " " "\n" \
+          | grep -e % \
+          | sed 's/%//g')
+  icons=$(pactl list sink-inputs \
+          | grep -e 'application.icon_name' \
+          | sed 's/\t//g' \
+          | sed 's/application.icon_name = //g')
+  
+  # echo "-=-=-=-=-=-=-=-=- Debug: Raw value -=-=-=-=-=-=-=-=-"
+  # echo "$sinks"
+  # echo "$names"
+  # echo "$vols"
+  
+  IFS=$'\n'
+  sinkarr=($(echo "$sinks"))
+  namearr=($(echo "$names"))
+  volarr=($(echo "$vols"))
+  
+  # Functions
+  sanitize() {
+      echo "$1" | sed 's/"/\"/g'
+  }
+  
+  geticon() {
+  #     notify-send "${volarr[$((i*2))]}"
+      if ["${volarr[$(($1*2))]}" -eq "0"]; then
+          echo ""
+      else 
+          echo ""
+      fi
+  }
+  
+  # Print final JSON
+  printf '['
+  for i in "${!sinkarr[@]}"; do
+      if [ $i -ne 0 ]; then
+          printf ', '
+      fi
+  #     echo -n '{''"sink": "'"${sinkarr[$i]}"'", "name": "'"${namearr[$i]}"', "icon": "'"$(geticon $i)"'", "volume": "'"${volarr[$((i*2))]}"'"}'
+      echo -n '{''"sink": "'"${sinkarr[$i]}"'", "name": "'"${namearr[$i]}"'", "volume": "'"${volarr[$((i*2))]}"'"}'
+  #     printf "\n"
+  done
+  printf ']\n'
+  
+  # echo "$sinks"
+  # echo "$names"
+  # echo "$vols"
+}
+
+dostuff
+
+pactl subscribe | rg --line-buffered "on sink" | while read -r _; do
+    dostuff
+done

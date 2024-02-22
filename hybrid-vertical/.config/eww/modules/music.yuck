@@ -1,0 +1,140 @@
+(defwidget osu-music-module []
+  (eventbox
+    :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+    
+    :onclick "scripts/toggle-music.sh &"
+    :onmiddleclick "playerctl play-pause"
+    :onrightclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+    
+    :onhover "${EWW_CMD} update music_hover=true"
+    :onhoverlost "${EWW_CMD} update music_hover=false"
+    
+    (box
+      :space-evenly false :orientation "v"
+      :class "module-button-pad-center"
+      (box
+        :space-evenly false :orientation "v"
+        :class "module-button${music_open ? '-true' : (music_hover ? '-hover' : '')}"
+        (revealer ; dummy keep alive
+          :reveal false
+          :duration "0ms"
+          :transition "slidedown"
+          ; (label :text "${mcover.image} ${cavajson[0]}")
+          (label :angle 270 :text "${mcover.image}")
+        )
+        (box
+          :space-evenly false
+          :valign "start" :orientation "v"
+          :class "osu-music-box"
+          (overlay
+            (box
+              :halign "center" :valign "center"
+              :class "bar-music-cover"
+              :style "background-image: url('eww_covers/cover_art_default')"
+            )
+            (box
+              :halign "center" :valign "center"
+              :class "bar-music-cover"
+              :style "background-image: url('${mcover.image}')"
+            )
+            (label
+              :class "bar-music-state"
+              :halign "center" :valign "center"
+              ; :angle 270
+              :style "
+              font-size: 18pt;
+              margin-bottom: -1px;
+              color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+              "
+              :text "${mplay == 'Playing' ? '' : ''}"
+            )
+          )
+        )
+        (revealer
+          :transition "slidedown"
+          ; :reveal "${(music_reveal || osd_vol || (mname.title != '')) && !focus}"
+          :reveal true
+          :duration "300ms"
+          :class "music-ctl-revealer"
+          :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+          (eventbox
+            :onscroll "echo $(echo {} | sed -e 's/down/-/g' -e 's/up/+/g' | xargs -I% wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.03%) && scripts/volume osd"
+            (box
+              :space-evenly false :orientation "v"
+              ; (box
+              ;   :space-evenly false :orientation "h"
+              ;   :halign "center"
+              ;   :class "music-ctl-revealer"
+              ;   :vexpand true
+              ;   (label
+              ;     :class "music-title-bar"
+              ;     :limit-width 50 :yalign 0
+              ;     :angle 270
+              ;     :style "
+              ;     color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+              ;     "
+              ;     :text "${mname.title == '' ? 'Not playing' : mname.title}"
+              ;   )
+              ;   (revealer
+              ;     :transition "slidedown"
+              ;     :reveal "${mname.artist != ''}"
+              ;     :duration "20ms"
+              ;     (label
+              ;       :class "music-artist-bar"
+              ;       :limit-width 50
+              ;       :yalign 0
+              ;       :angle 270
+              ;       :style "font-size: 11pt; font-family: 'Rubik';
+              ;       color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+              ;       "
+              ;       :text "${mname.artist}"
+              ;     )
+              ;   )
+              ; )
+              (revealer
+                :reveal {music_hover}
+                :transition "slideup"
+                :duration "400ms"
+                (revealer
+                  :reveal {music_hover}
+                  :transition "crossfade"
+                  :duration "400ms"
+                  (centerbox
+                    :class "music-button-box-bar"
+                    :orientation "v"
+                    (button
+                      :class "song-button-bar"
+                      :style "
+                      font-size: 30pt;
+                      color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+                      "
+                      :onclick "playerctl previous" ""
+                    )
+                    (button
+                      :class "song-button-bar"
+                      :style "
+                      font-size: 30pt;
+                      color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+                      "
+                      :onclick "playerctl play-pause"
+                      "${music.status != '' ? music.status : ''}"
+                    )
+                    (button
+                      :class "song-button-bar"
+                      :style "
+                      font-size: 30pt;
+                      color: ${mcover.color.colors.color7 == 'null' ? 'white' : mcover.color.colors.color7};
+                      "
+                      :onclick "playerctl next || playerctl position `bc <<< \"100 * $(playerctl metadata mpris:length) / 1000000 / 100\"`"
+                      ""
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

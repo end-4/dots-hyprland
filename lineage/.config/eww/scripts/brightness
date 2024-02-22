@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+icons=("" "" "")
+
+# initial
+icon=${icons[$(awk -v n="$(light)" 'BEGIN{print int(n/34)}')]}
+echo '{ "level": '"$(light)"', "icon": "'"$icon"'" }'
+
+udevadm monitor | rg --line-buffered "backlight" | while read -r _; do
+  icon="${icons[$(awk -v n="$(light)" 'BEGIN{print int(n/34)}')]}"
+
+  echo '{ "level": '"$(light)"', "icon": "'"$icon"'" }'
+done

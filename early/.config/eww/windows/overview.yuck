@@ -1,0 +1,246 @@
+(defwidget workspacebox [wspace]
+  (box ; Note: height 100px width 356px
+    :class "overview-ws overview-ws-${wspace[0].workspace.id == activews}"
+    (box
+      :space-evenly false
+      :orientation "h"
+      :style "
+      min-width: ${RES_WIDTH * OVERVIEW_SCALE}px;
+      min-height: ${RES_HEIGHT * OVERVIEW_SCALE}px;
+      "
+      (for ws-window in wspace
+        (box
+          :class "${ws-window.class == 'workspace' ? '' : 'overview-ws-window'}"
+          :style "
+          ${ws-window.address == selected ? 'border: 1px solid #FFFFFF' : ''};
+          ${ws-window.address == '_none' ? 'border: none' : ''};
+          margin-left: ${ws-window.at[0] * OVERVIEW_SCALE}px;
+          margin-top: ${ws-window.at[1] * OVERVIEW_SCALE}px;
+          margin-right: -${(ws-window.at[0] + ws-window.size[0]) * OVERVIEW_SCALE}px;
+          margin-bottom: ${RES_HEIGHT * OVERVIEW_SCALE - ((ws-window.at[1] + ws-window.size[1]) * OVERVIEW_SCALE)};
+          "
+          (eventbox
+            :onrightclick "scripts/selectwindow ${ws-window.address} '${EWW_CMD}' ${ws-window.workspace.id}"
+            :onmiddleclick "hyprctl dispatch closewindow address:${ws-window.address}"
+            :onclick "scripts/focuswindow ${ws-window.address} ${ws-window.workspace.id} && scripts/toggle-overview.sh --close &"
+            :onhover "${ws-window.class == 'workspace' ? '' : (EWW_CMD + ' update overview_hover_name=\'' + ws-window + '\'')}"
+            (box
+              :class "overview-background"
+              ; Uncomment below to enable thumbnail previews (VERY SLOW)
+              ; :style "
+              ; background-image: url('scripts/cache/thumbnails/${ws-window.address }.png');
+              ; "
+              (image
+                :class "overview-icon"
+                :path {ws-window.icon}
+                ; :image-width {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * OVERVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * OVERVIEW_SCALE))}
+                ; :image-height {round(ws-window.size[0] > ws-window.size[1] ? (ws-window.size[1] * 45 / 100 * OVERVIEW_SCALE) : (ws-window.size[0] * 45 / 100 * OVERVIEW_SCALE))}
+                :image-width {round(ws-window.size[0] * OVERVIEW_SCALE * 45 / 100, 0)}
+                :image-height {round(ws-window.size[1] * OVERVIEW_SCALE * 45 / 100, 0)}
+                
+                ; :style "
+                ; background-size: ${ws-window.size[0] > ws-window.size[1] ? 'auto 45%' : '45% auto'};
+                ; background-image: url('${ws-window.icon}')
+                ; ;
+                ; "
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget overview []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :class "thewholething"
+    (eventbox
+      :onclick "scripts/toggle-overview.sh --close &"
+      :onmiddleclick "scripts/toggle-overview.sh --close &"
+      :onrightclick "scripts/toggle-overview.sh --close &"
+      :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    )
+    ; Search bar
+    (overlay
+      (box
+        :class "overview-search-area"
+        :space-evenly false
+        :halign "center"
+        :orientation "v"
+        (input
+          :class "overview-search-box"
+          :onchange "${EWW_CMD} update overview_query=\"{}\" && ${EWW_CMD} update overview_results=\"$(scripts/appsearch '{}')\" &"
+          :onaccept "scripts/launchapp '${overview_results == '[]' ? {} : overview_results[0].exec}' &"
+          :style "
+          border-radius: ${overview_query == '' ? 99 : 20}px;
+          min-width: ${overview_query == '' ? 130 : 445}px;
+          "
+        )
+        (revealer
+          :reveal false
+          :transition "slidedown"
+          (label
+            :text {ICON_GET} ; Dummy to keep listeners active
+          )
+        )
+      )
+      (box
+        :class "overview-search-typetosearch-pad"
+        :space-evenly false
+        :halign "center"
+        :orientation "v"
+        (revealer
+          :reveal "${overview_query == ''}"
+          :duration "100ms"
+          (label
+            :class "overview-search-typetosearch-text"
+            :xalign 0
+            :text "Type to search"
+          )
+        )
+      )
+    )
+    ; The overview
+    (eventbox
+      :onhoverlost `eww update overview_hover_name='{"class":"LMB: Focus | MMB: Close | RMB: Select/Move","title":"Activities Overview","workspace":{"id":5,"name":"5"},"icon": "/usr/share/icons/breeze-dark/actions/16/window.svg"}' &`
+      :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+      (revealer
+        :reveal "${overview_query == ''}"
+        :transition "slidedown"
+        :duration "${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'}"
+        :style "
+        transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+        "
+        (revealer
+          :reveal "${overview_query == ''}"
+          :transition "crossfade"
+          :duration "${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'}"
+          :style "
+          transition: ${overview_query == '' ? '200ms cubic-bezier(0.05, 0.7, 0.1, 1)' : '100ms cubic-bezier(0.3, 0, 0.8, 0.15)'};
+          "
+          (box
+            :space-evenly false
+            :orientation "v"
+            :class "overview-window"
+            ; :space-evenly false
+            ; (label :text "${wsjsona}")
+            ; (label :text "${selected}")
+            (centerbox
+              :class "overview-window-title"
+              (label :halign "start" :style "margin: 5px;" :text "${overview_hover_name.class}")
+              (box
+                :space-evenly false
+                :orientation "h"
+                (image
+                  :class "overview-topbar-icon overview-icon"
+                  :path {overview_hover_name.icon}
+                  :image-height 30
+                  :image-width 30
+                  ; :style "
+                  ; background-image: url('${overview_hover_name.icon}');
+                  ; "
+                )
+                (label :text "${overview_hover_name.title}")
+              )
+              (button
+                :halign "end"
+                :class "overview-topbar-button"
+                :onclick "scripts/toggle-overview.sh --close"
+                (label :text "")
+              )
+            )
+            (box
+              :orientation "h"
+              (for wspace in wsjsona
+                (workspacebox
+                  :wspace {wspace}
+                )
+              )
+            )
+            (box
+              :orientation "h"
+              (for wspace in wsjsonb
+                (workspacebox
+                  :wspace {wspace}
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    ; Search Results
+    (box
+      :class "overview-search-area"
+      :space-evenly false
+      :halign "center"
+      :orientation "v"
+      (revealer
+        :reveal "${overview_query != ''}"
+        :transition "slidedown"
+        :duration "${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'}"
+        :style "
+        transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+        "
+        (revealer
+          :reveal "${overview_query != ''}"
+          :transition "crossfade"
+          :duration "${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'}"
+          :style "
+          transition: ${overview_query == '' ? '100ms cubic-bezier(0.3, 0, 0.8, 0.15)' : '200ms cubic-bezier(0.05, 0.7, 0.1, 1)'};
+          "
+          (scroll
+            :width 502
+            :height 547
+            (box
+              :halign "center"
+              :orientation "v"
+              :class "overview-results"
+              :spacing 2
+              :space-evenly false
+              (for entry in overview_results
+                (overlay
+                  :orientation "h"
+                  :space-evenly false
+                  (input
+                    :value "${entry.name}"
+                    :class "overview-search-result"
+                    :onaccept "scripts/launchapp '${entry.exec}' &"
+                  )
+                  (image
+                    :halign "start"
+                    :class "overview-search-result-icon"
+                    :path {(entry.icon != '_letter' && entry.icon != '') ? entry.icon : 'images/svg/dark/app.svg'}
+                    :image-width 33
+                    :image-height 33
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow overview
+  :stacking "overlay"
+  :focusable true
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry
+    ; :height 1080
+    ; :width 1920
+    :y "153px"
+    :anchor "top center"
+    ; :y "0px"
+    ; :anchor "center center"
+  )
+  ; (testing)
+  (overview)
+)
+

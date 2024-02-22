@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright 2022 Christian Hergert
+
+  GtkSourceView is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  GtkSourceView is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="printing" _name="Printing" version="1.0">
+  <author>Christian Hergert</author>
+  <_description>A style scheme focused on print-quality</_description>
+
+  <metadata>
+    <property name="variant">light</property>
+  </metadata>
+
+  <!-- Named Colors -->
+  <color name="black"                    value="#000000"/>
+  <color name="gray-01"                  value="#101010"/>
+  <color name="gray-02"                  value="#202020"/>
+  <color name="gray-03"                  value="#303030"/>
+  <color name="gray-04"                  value="#404040"/>
+  <color name="gray-05"                  value="#505050"/>
+  <color name="gray-06"                  value="#606060"/>
+  <color name="gray-07"                  value="#707070"/>
+  <color name="gray-08"                  value="#808080"/>
+  <color name="gray-09"                  value="#909090"/>
+  <color name="gray-10"                  value="#a0a0a0"/>
+  <color name="gray-11"                  value="#b0b0b0"/>
+  <color name="gray-12"                  value="#c0c0c0"/>
+  <color name="gray-13"                  value="#d0d0d0"/>
+  <color name="gray-14"                  value="#e0e0e0"/>
+  <color name="gray-15"                  value="#f0f0f0"/>
+  <color name="gray-16"                  value="#f6f6f6"/>
+  <color name="white"                    value="#ffffff"/>
+
+  <!-- Global Styles -->
+  <style name="background-pattern"       background="gray-16"/>
+  <style name="current-line"             background="gray-16"/>
+  <style name="current-line-number"      background="gray-16" foreground="gray-04" bold="false"/>
+  <style name="draw-spaces"              foreground="gray-14"/>
+  <style name="line-numbers"             foreground="gray-13"/>
+  <style name="map-overlay"              background="gray-03"/>
+  <style name="right-margin"             background="gray-04" foreground="gray-02"/>
+  <style name="text"                     background="white" foreground="gray-03"/>
+
+  <!-- Defaults -->
+  <style name="def:base-n-integer"       foreground="black"/>
+  <style name="def:boolean"              foreground="gray-02"/>
+  <style name="def:comment"              foreground="gray-09"/>
+  <style name="def:decimal"              foreground="black"/>
+  <style name="def:doc-comment"          foreground="gray-07"/>
+  <style name="def:doc-comment-element"  foreground="gray-04" bold="false" italic="false"/>
+  <style name="def:floating-point"       foreground="black" italic="false"/>
+  <style name="def:heading"              bold="true"/>
+  <style name="def:keyword"              bold="true"/>
+  <style name="def:link-destination"     underline="low"/>
+  <style name="def:link-text"            bold="true"/>
+  <style name="def:net-address"          underline="low"/>
+  <style name="def:note"                 foreground="gray-05" bold="true"/>
+  <style name="def:preformatted-section" foreground="gray-06"/>
+  <style name="def:preprocessor"         foreground="gray-07"/>
+  <style name="def:shebang"              foreground="gray-06" bold="true"/>
+  <style name="def:special-char"         foreground="gray-01" bold="true"/>
+  <style name="def:special-constant"     foreground="black" bold="false"/>
+  <style name="def:string"               foreground="gray-07" bold="false"/>
+  <style name="def:type"                 bold="true"/>
+  <style name="def:warning"              underline="error" underline-color="gray-10"/>
+
+</style-scheme>

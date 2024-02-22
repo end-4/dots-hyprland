@@ -1,0 +1,21 @@
+[ 
+    [
+        {"name": "File Explorer", "exec": "gtk-launch org.gnome.Nautilus.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/nautilus.svg"},
+        {"name": "Firefox", "exec": "gtk-launch firefox &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/firefox.svg"},
+        {"name": "Terminal", "exec": "gtk-launch org.codeberg.dnkl.foot.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/foot.svg"},
+        {"name": "Paint", "exec": "gtk-launch org.kde.kolourpaint.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/kolourpaint.svg"},
+        {"name": "Settings", "exec": "gtk-launch org.gnome.Settings.desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/gnome-control-center.svg"},
+        {"name": "Notepad", "exec": "gtk-launch org.gnome.TextEditor &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/org.gnome.TextEditor.svg"}
+    ],
+    [
+        {"name": "Clock", "exec": "gtk-launch org.gnome.clocks &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/gnome-clocks.svg"},
+        {"name": "Edge", "exec": "/usr/bin/microsoft-edge-stable --password-store=gnome --enable-features=UseOzonePlatform --ozone-platform=wayland --gtk-version=4 &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/microsoft-edge.svg"},
+        {"name": "Visual Studio Code", "exec": "code --password-store=gnome --enable-features=UseOzonePlatform --ozone-platform=wayland &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/code.svg"},
+        {"name": "Calculator", "exec": "gtk-launch org.gnome.Calculator &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/org.gnome.Calculator.svg"},
+        {"name": "GitHub Desktop", "exec": "gtk-launch github-desktop &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/github-desktop.svg"},
+        {"name": "Photos", "exec": "gtk-launch org.gnome.eog &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/eog.svg"}
+    ],
+    [
+        {"name": "VLC Media Player", "exec": "gtk-launch vlc &", "icon": "/usr/share/icons/Win11-dark/apps/scalable/vlc.svg"}
+    ]
+]

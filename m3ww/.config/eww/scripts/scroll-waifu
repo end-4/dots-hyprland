@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+offset=$(eww get scroll_offset_waifu)
+# total=$(eww get WAIFU_TAG_ID | gojq 'length')
+# shown=$(eww get SCROLL_TOSHOW_WAIFUTAGS)
+total=20
+shown=13
+# I'm sorry but I have to hard code or it'll be slow asf
+
+if [ "$1" == "up" ]; then
+    if [ "$offset" -gt 0 ]; then
+        eww update scroll_offset_waifu=$(( "$offset" - 2 ))
+    fi
+else
+    if [ "$offset" -lt $(( "$total" - "$shown" - 1 )) ]; then
+        eww update scroll_offset_waifu=$(( "$offset" + 2 ))
+    fi
+fi

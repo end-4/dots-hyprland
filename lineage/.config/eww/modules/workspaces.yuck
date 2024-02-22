@@ -1,0 +1,27 @@
+(defvar ws-icons '["❶", "❷", "❸", "❹", "❺", "❻", "❼", "❽", "❾", "❿"]')
+
+
+(defwidget workspaces []
+  (eventbox
+    :onscroll "echo {} | sed -e \"s/up/-1/g\" -e \"s/down/+1/g\" | xargs hyprctl dispatch workspace"
+    :onmiddleclick "${EWW_CMD} open --toggle overview"
+    :onrightclick "${EWW_CMD} open --toggle overview"
+    (box
+      :class "module workspaces"
+      :spacing 0
+      :space-evenly false
+      (for i in workspace
+        (button
+          :onclick "hyprctl dispatch workspace ${i.num}"
+          :class "ws"
+          :style "color: ${i.clr};"
+          "${ws-icons[i.num - 1]}"
+          ; "●"
+        )
+      )
+    )
+  )
+)
+
+
+; ①②③④⑤⑥⑦⑧⑨⑩

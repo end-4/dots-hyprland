@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <filter id="a" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="l">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="m">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="n">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".05"/>
+        </g>
+    </mask>
+    <clipPath id="o">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="p">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".3"/>
+        </g>
+    </mask>
+    <clipPath id="q">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="r">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="s">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="t">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".4"/>
+        </g>
+    </mask>
+    <clipPath id="u">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="v">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".4"/>
+        </g>
+    </mask>
+    <clipPath id="w">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="x">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="y">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <mask id="z">
+        <g filter="url(#a)">
+            <path d="m0 0h16v16h-16z" fill-opacity=".5"/>
+        </g>
+    </mask>
+    <clipPath id="A">
+        <path d="m0 0h1024v800h-1024z"/>
+    </clipPath>
+    <path d="m3.9922 3s-0.70703-0.011719-1.4453 0.35547c-0.73828 0.37109-1.5547 1.3125-1.5547 2.6445v7h-1l-0.0039063 2h0.0039063l3 0.011719v-0.011719h13v-2h0.011718v-7.3086c0-1.4297-1.1719-2.6328-2.625-2.6484l-2.3789-0.019531s1 0.82422 1 1.9648l1.0469 0.042969c0.53906 0.023438 0.94141 0.49609 0.94141 0.97656v6.9922h-2.9883v-7s0.011719-0.71094-0.35547-1.4492c-0.37109-0.73828-1.3125-1.5508-2.6445-1.5508z" fill="context-fill" stroke="context-stroke" fill-opacity="context-fill-opacity"/>
+    <g transform="translate(-660 -684)" clip-path="url(#c)" mask="url(#b)">
+        <path d="m562.46 212.06h10.449c-1.1836 0.49219-1.2969 2.4609 0 3h-10.449z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#e)" mask="url(#d)">
+        <path d="m16 632h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#g)" mask="url(#f)">
+        <path d="m17 631h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#i)" mask="url(#h)">
+        <path d="m18 634h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#k)" mask="url(#j)">
+        <path d="m16 634h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#m)" mask="url(#l)">
+        <path d="m17 635h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#o)" mask="url(#n)">
+        <path d="m19 635h1v1h-1z" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#q)" mask="url(#p)">
+        <path d="m136 660v7h7v-7z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#s)" mask="url(#r)">
+        <path d="m199 642h3v12h-3z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#u)" mask="url(#t)">
+        <path d="m209.5 144.16c0.27734 0 0.5 0.22266 0.5 0.5v1c0 0.27734-0.22266 0.5-0.5 0.5s-0.5-0.22266-0.5-0.5v-1c0-0.27734 0.22266-0.5 0.5-0.5z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#w)" mask="url(#v)">
+        <path d="m206.5 144.16c0.27734 0 0.5 0.22266 0.5 0.5v1c0 0.27734-0.22266 0.5-0.5 0.5s-0.5-0.22266-0.5-0.5v-1c0-0.27734 0.22266-0.5 0.5-0.5z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#y)" mask="url(#x)">
+        <path d="m229.5 143.16c-0.54688 0-1 0.45703-1 1 0 0.54688 0.45312 1 1 1s1-0.45312 1-1c0-0.54297-0.45312-1-1-1z" fill="#2e3436"/>
+    </g>
+    <g transform="translate(-660 -684)" clip-path="url(#A)" mask="url(#z)">
+        <path d="m226.45 143.16c-0.51953 0-0.95312 0.43359-0.95312 0.95312v0.09375c0 0.51953 0.43359 0.95312 0.95312 0.95312h0.09375c0.51953 0 0.95312-0.43359 0.95312-0.95312v-0.09375c0-0.51953-0.43359-0.95312-0.95312-0.95312z" fill="#2e3436"/>
+    </g>
+</svg>

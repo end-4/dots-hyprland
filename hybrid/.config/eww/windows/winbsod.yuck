@@ -1,0 +1,78 @@
+(defwidget winbsod_widget []
+  (box
+    :space-evenly false
+    :orientation "v"
+    :class "thewholething"
+    :height 1080
+    :width 1920
+    (box
+      :height 1080
+      :width 1920
+      :class "winbsod-background"
+      (box
+        :orientation "v"
+        :space-evenly false :spacing 10
+        :halign "start" :valign "start"
+        :style "
+        margin-left: 200px;
+        margin-top: 115px;
+        "
+        (label :xalign 0
+          :class "winbsod-text winbsod-face"
+          :text ":(" ;) <-- closing bracket so that the formatter wont mess up lmao
+        )
+        (label :xalign 0
+          :class "winbsod-text winbsod-desc"
+          :halign "start" :valign "start"
+          :text "Your PC ran into a problem and needs to restart. We're \\\njust collecting some error info, and then we'll restart for \\\nyou." ;) <-- closing bracket so that the formatter wont mess up lmao
+        )
+        (label :xalign 0
+          :class "winbsod-text winbsod-desc"
+          :style "margin-top: 35px;"
+          :text "69% complete"
+        )
+        (box
+          :orientation "h"
+          :space-evenly false :spacing 20
+          :style "margin-top: 35px;"
+          (image
+            :path "images/pictures/qr_aur.png"
+            :image-width 115
+            :image-height 115
+          )
+          (box
+            :orientation "v"
+            :space-evenly false
+            (label :xalign 0 :yalign 0 :valign "start"
+              :class "winbsod-text winbsod-technicalinfo"
+              :text "Thanks for watching guys, stay safe"
+            )
+            (label :xalign 0 :yalign 0 :valign "start"
+              :class "winbsod-text winbsod-technicalinfo"
+              :style "margin-top: 35px;"
+              :text "If you're wondering, this QR code takes you to AUR homepage."
+            )
+            (label :xalign 0 :yalign 0 :valign "start"
+              :class "winbsod-text winbsod-technicalinfo"
+              :text "Stop code: ERRRRMMM" 
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwindow winbsod
+  :stacking "fg"
+  :focusable true
+  :wm-ignore true
+  :monitor 0
+  :namespace "gamebar"
+  :geometry (geometry
+    :height "100%"
+    :width "100%"
+    :anchor "center center"
+  )
+  (winbsod_widget)
+)

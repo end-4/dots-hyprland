@@ -1,0 +1,9 @@
+[
+    {"name": "Documents", "path": "~/Documents", "icon": "description"},
+    {"name": "Downloads", "path": "~/Downloads", "icon": "download"},
+    {"name": "Music", "path": "~/Music", "icon": "music_note"},
+    {"name": "Pictures", "path": "~/Pictures", "icon": "image"},
+    {"name": "Videos", "path": "~/Videos", "icon": "movie"},
+    {"name": "eww", "path": "~/.config/eww", "icon": "widgets"},
+    {"name": "hypr", "path": "~/.config/hypr", "icon": "water_drop"}
+]

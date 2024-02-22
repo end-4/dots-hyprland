@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+cp -r images/svg/dark/* images/svg/
+
+filelist=$(ls 'images/svg' -p | grep -v /)
+
+IFS=$'\n'
+filearr=($(echo "$filelist"))
+
+for i in "${!filearr[@]}"; do
+    # echo "images/svg/${filearr[$i]}"
+    sed -i "s/white/$1/gi" "images/svg/${filearr[$i]}"
+done

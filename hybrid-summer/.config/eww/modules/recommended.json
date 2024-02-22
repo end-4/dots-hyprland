@@ -1,0 +1,9 @@
+[ 
+    [
+        {"name": "This is NOT Windows 11", "subtext": "Check out my configs", "exec": "xdg-open 'https://github.com/end-4/dots-hyprland/tree/main' &", "icon": "images/icons/github.svg"},
+        {"name": "Get Hyprland help", "subtext": "+ chance to be called a retard", "exec": "xdg-open 'https://discord.com/invite/hQ9XvMUjjr' &", "icon": "images/icons/discord.png"}
+    ],
+    [
+        {"name": "r/unixporn", "subtext": "The best kinda porn", "exec": "xdg-open 'https://www.reddit.com/r/unixporn/' &", "icon": "images/icons/reddit.svg"}
+    ]
+]

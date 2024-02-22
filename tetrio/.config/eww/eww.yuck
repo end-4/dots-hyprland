@@ -1,0 +1,120 @@
+;##################### Modules #########################
+(include "./modules/activewindow.yuck")
+(include "./modules/audiolevels.yuck")
+(include "./modules/bluetooth.yuck")
+(include "./modules/bright.yuck")
+(include "./modules/clock.yuck")
+(include "./modules/editmode.yuck")
+(include "./modules/music.yuck")
+; (include "./modules/net.yuck")
+(include "./modules/sys.yuck")
+(include "./modules/variables.yuck")
+(include "./modules/user.yuck")
+; (include "./modules/volume.yuck")
+(include "./modules/workspaces.yuck")
+
+;##################### Windows #########################
+(include "./windows/bg-decor.yuck")
+(include "./windows/dynamic-bg.yuck")
+(include "./windows/dashboard.yuck")
+; (include "./windows/calendar.yuck")
+(include "./windows/music.yuck")
+(include "./windows/overview.yuck")
+(include "./windows/osd.yuck")
+(include "./windows/osettings.yuck")
+(include "./windows/onotify.yuck")
+; (include "./windows/system-menu.yuck")
+(include "./windows/themer.yuck")
+
+(defwidget separator []
+  (box
+    :valign "start"
+    (label
+      :class "my-separator"
+      :text "|"
+    )
+  )
+)
+
+(defwidget left []
+  (eventbox
+    :class "dummy-${brightness.icon} dummy-${net.icon} dummy-${wsjsona[0][0].at}-${wsjsonb[0][0].at} dummy-${activews}" ; Dummy class to keep some isteners active
+    :onhover "${EWW_CMD} update music_reveal=true"
+    :onhoverlost "${EWW_CMD} update music_reveal=false"
+    (box
+      :space-evenly false
+      :valign "start"
+      :halign "start"
+      :class "bar"
+      (osettings-button)
+      (osu-music-module)
+    )
+  )
+)
+
+(defwidget right []
+  (eventbox
+    :onhover "${EWW_CMD} update right_hover=true"
+    :onhoverlost "${EWW_CMD} update right_hover=false"
+    (box
+      :space-evenly false
+      :halign "end"
+      :valign "start"
+      :class "bar"
+      (editmode)
+      ; (themer)
+      ; (user)
+      (onotify-button)
+    )
+  )
+)
+
+(defwidget center []
+  (box
+    :valign "start"
+    :space-evenly false
+    :halign "center"
+    :class "bar"
+    (workspaces)
+  )
+)
+
+(defwidget bar []
+  ; (box
+    ;   :space-evenly false
+    ;   :orientation "v"
+    (eventbox
+      :onhoverlost "${EWW_CMD} update popup='none'"
+      :onhover "${EWW_CMD} update popup='none'"
+      (centerbox
+        :class "bar"
+        (left)
+        (center)
+        (right)
+      )
+    )
+  ; )
+)
+
+(defwidget barbg []
+  (box
+    :class "barbg"
+    :stacking "overlay"
+  )
+)
+
+(defwindow bar
+  :stacking "fg"
+  :wm-ignore true
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "32px"
+    :anchor "top center"
+  )
+  ; :stacking "fg"
+  :exclusive false
+  (bar)
+)
