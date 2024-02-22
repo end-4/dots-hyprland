@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+term_alpha=80 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
 if [ ! -d "$HOME"/.cache/ags/user/generated ]; then
     mkdir -p "$HOME"/.cache/ags/user/generated
@@ -86,25 +87,25 @@ apply_fuzzel() {
     cp  "$HOME"/.cache/ags/user/generated/fuzzel/fuzzel.ini "$HOME"/.config/fuzzel/fuzzel.ini
 }
 
-apply_foot() {
-    if [ ! -f "scripts/templates/foot/foot.ini" ]; then
-        echo "Template file not found for Foot. Skipping that."
-        return
-    fi
-    # Copy template
-    mkdir -p "$HOME"/.cache/ags/user/generated/foot
-    cp "scripts/templates/foot/foot.ini" "$HOME"/.cache/ags/user/generated/foot/foot.ini
-    # Apply colors
-    for i in "${!colorlist[@]}"; do
-        # sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/foot/foot.ini
-        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/foot/foot.ini
-    done
-
-    cp "$HOME"/.cache/ags/user/generated/foot/foot.ini "$HOME/.config/foot/foot.ini"
-}
+#apply_foot() {
+#    if [ ! -f "scripts/templates/foot/foot.ini" ]; then
+#        echo "Template file not found for Foot. Skipping that."
+#        return
+#    fi
+#    # Copy template
+#    mkdir -p "$HOME"/.cache/ags/user/generated/foot
+#    cp "scripts/templates/foot/foot.ini" "$HOME"/.cache/ags/user/generated/foot/foot.ini
+#    # Apply colors
+#    for i in "${!colorlist[@]}"; do
+#        # sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/foot/foot.ini
+#        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/foot/foot.ini
+#    done
+#
+#    cp "$HOME"/.cache/ags/user/generated/foot/foot.ini "$HOME/.config/foot/foot.ini"
+#}
 
 apply_term() {
-    # Check if scripts/templates/foot/foot.ini exists
+    # Check if terminal escape sequence template exists
     if [ ! -f "scripts/templates/terminal/sequences.txt" ]; then
         echo "Template file not found for Terminal. Skipping that."
         return
@@ -117,6 +118,12 @@ apply_term() {
         sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/terminal/sequences.txt
     done
     cp "$HOME"/.cache/ags/user/generated/terminal/sequences.txt "$HOME"/.config/fish/sequences.txt
+
+    if [$term_alpha == 100]; then
+      sed -i "s/\[\$alpha\]//g" "$HOME/.cache/ags/user/generated/terminal/sequences.txt"
+    else
+      sed -i "s/\$alpha/$term_alpha/g" "$HOME/.cache/ags/user/generated/terminal/sequences.txt"
+    fi
 
     for file in /dev/pts/*; do
       if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
@@ -197,7 +204,7 @@ apply_ags &
 apply_hyprland &
 apply_hyprlock &
 apply_gtk &
-apply_foot &
+# apply_foot &
 # apply_gtklock &
 apply_fuzzel &
 apply_term &
