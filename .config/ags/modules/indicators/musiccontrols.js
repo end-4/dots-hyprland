@@ -213,7 +213,7 @@ const CoverArt = ({ player, ...rest }) => {
                     .then(() => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
-                        exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
+                        exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
                         // self.css = `background-image: url('${coverPath}');`;
                         Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
                         App.applyCss(`${stylePath}`);

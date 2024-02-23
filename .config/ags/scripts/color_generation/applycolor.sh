@@ -65,7 +65,7 @@ apply_gtklock() {
 
     # Copy template
     mkdir -p "$HOME"/.cache/ags/user/generated/gtklock
-    sassc "scripts/templates/gtklock/main.scss" "$HOME"/.cache/ags/user/generated/gtklock/style.css
+    sass "scripts/templates/gtklock/main.scss" "$HOME"/.cache/ags/user/generated/gtklock/style.css
     cp "$HOME"/.cache/ags/user/generated/gtklock/style.css "$HOME"/.config/gtklock/style.css
 }
 
@@ -188,7 +188,7 @@ apply_gtk() { # Using gradience-cli
 }
 
 apply_ags() {
-    sassc "$HOME"/.config/ags/scss/main.scss "$HOME"/.config/ags/style.css
+    sass "$HOME"/.config/ags/scss/main.scss "$HOME"/.config/ags/style.css
     ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
     ags run-js "App.resetCss(); App.applyCss('${HOME}/.config/ags/style.css');"
 }
