@@ -29,7 +29,8 @@
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
    - Manual installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/).
+     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
+     - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
    - If you'd like to suggest fixes or maybe a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)!
 </details>
 
