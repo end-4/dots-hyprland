@@ -9,6 +9,8 @@ const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
 
+const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
+
 function expandTilde(path) {
     if (path.startsWith('~')) {
         return GLib.get_home_dir() + path.slice(1);
@@ -187,7 +189,7 @@ const CoverArt = ({ player, ...rest }) => {
                 // Note that cover path still remains, so we're checking title
                 if (!player || player.trackTitle == "") {
                     self.css = `background-image: none;`;
-                    App.applyCss(`${App.configDir}/style.css`);
+                    App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
                 }
 
