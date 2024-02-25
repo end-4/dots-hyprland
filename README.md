@@ -31,7 +31,13 @@
    - Manual installation, other distros and more:
      - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
      - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
-   - If you'd like to suggest fixes or maybe a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)!
+</details>
+
+<details> 
+  <summary>Help improve these dotfiles!</summary>
+    
+   - Join the [discussions](https://github.com/end-4/dots-hyprland/discussions)
+   - If you'd like to suggest fixes or a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)
 </details>
 
 ### [illogical_impulse](https://github.com/end-4/dots-hyprland/tree/illogical-impulse)
