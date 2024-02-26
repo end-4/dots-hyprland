@@ -655,6 +655,15 @@ $colorpicker_rounding: 0.341rem;
     @include readingfont;
 }
 
+.sidebar-chat-latex {
+    margin: 0rem 0.682rem;
+    @if $darkmode ==true {
+        background-color: white;
+    }
+    color: $onBackground;
+    // background-color: $termbg;
+}
+
 .sidebar-chat-codeblock {
     @include normal-rounding;
     // @include elevation2;
