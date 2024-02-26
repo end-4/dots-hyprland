@@ -656,7 +656,9 @@ $colorpicker_rounding: 0.341rem;
 }
 
 .sidebar-chat-latex {
+    @include small-rounding;
     margin: 0rem 0.682rem;
+    padding: 0.682rem;
     @if $darkmode ==true {
         background-color: white;
     }
