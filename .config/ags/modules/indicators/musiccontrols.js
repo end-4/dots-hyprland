@@ -188,7 +188,6 @@ const CoverArt = ({ player, ...rest }) => {
                 // Player closed
                 // Note that cover path still remains, so we're checking title
                 if (!player || player.trackTitle == "") {
-                    self.css = `background-image: none;`;
                     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
                 }
@@ -196,14 +195,12 @@ const CoverArt = ({ player, ...rest }) => {
                 const coverPath = player.coverPath;
                 const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                     Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
                 }
                 lastCoverPath = player.coverPath;
 
                 // If a colorscheme has already been generated, skip generation
                 if (fileExists(stylePath)) {
-                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                     self.attribute.showImage(self, coverPath)
                     App.applyCss(stylePath);
                     return;
@@ -216,7 +213,6 @@ const CoverArt = ({ player, ...rest }) => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                         exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
-                        // self.css = `background-image: url('${coverPath}');`;
                         Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
                         App.applyCss(`${stylePath}`);
                     })
