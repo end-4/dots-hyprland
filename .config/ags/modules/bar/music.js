@@ -11,6 +11,8 @@ import { showMusicControls } from '../../variables.js';
 const CUSTOM_MODULE_CONTENT_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-poll.sh`;
 const CUSTOM_MODULE_LEFTCLICK_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-leftclick.sh`;
 const CUSTOM_MODULE_RIGHTCLICK_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-rightclick.sh`;
+const CUSTOM_MODULE_SCROLLUP_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-scrollup.sh`;
+const CUSTOM_MODULE_SCROLLDOWN_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-scrolldown.sh`;
 
 function trimTrackTitle(title) {
     if (!title) return '';
@@ -165,6 +167,8 @@ export default () => {
                     }),
                     onPrimaryClickRelease: () => execAsync(CUSTOM_MODULE_LEFTCLICK_SCRIPT).catch(print),
                     onSecondaryClickRelease: () => execAsync(CUSTOM_MODULE_RIGHTCLICK_SCRIPT).catch(print),
+                    onScrollUp: () => execAsync(CUSTOM_MODULE_SCROLLUP_SCRIPT).catch(print),
+                    onScrollDown: () => execAsync(CUSTOM_MODULE_SCROLLDOWN_SCRIPT).catch(print),
                 })
             });
         } else {
