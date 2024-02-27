@@ -87,9 +87,9 @@ install-bibata (){
   x cd $base
 }
 
-install-MicroTex (){
-  x mkdir -p $base/cache/MicroTex
-  x cd $base/cache/MicroTex
+install-MicroTeX (){
+  x mkdir -p $base/cache/MicroTeX
+  x cd $base/cache/MicroTeX
   try git init -b master
   try git remote add origin https://github.com/NanoMichael/MicroTeX.git
   x git pull origin master && git submodule update --init --recursive

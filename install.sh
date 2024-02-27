@@ -128,13 +128,13 @@ else ask_bibata=true
 fi
 if $ask_bibata;then showfun install-bibata;v install-bibata;fi
 
-if $(test -d /usr/local/bin/LaTex); then
-  echo -e "\e[33m[$0]: Program \"MicroTex\" already exists, no need to install.\e[0m"
+if command -v LaTeX >/dev/null 2>&1;then
+  echo -e "\e[33m[$0]: Program \"MicroTeX\" already exists, no need to install.\e[0m"
   echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_MicroTex=$ask
-else ask_MicroTex=true
+  ask_MicroTeX=$ask
+else ask_MicroTeX=true
 fi
-if $ask_MicroTex;then showfun install-MicroTex;v install-MicroTex;fi
+if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying\e[97m\n"
