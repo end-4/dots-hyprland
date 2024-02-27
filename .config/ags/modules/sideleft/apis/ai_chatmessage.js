@@ -84,7 +84,7 @@ const TextBlock = (content = '') => Label({
 
 Utils.execAsync(['bash', '-c', `rm ${LATEX_DIR}/*`])
     .then(() => Utils.execAsync(['bash', '-c', `mkdir -p ${LATEX_DIR}`]))
-    .catch(print);
+    .catch(() => {});
 const Latex = (content = '') => {
     const latexViewArea = Box({
         // vscroll: 'never',
