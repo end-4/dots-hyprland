@@ -172,34 +172,6 @@ const clearChat = () => {
     }
 }
 
-export const geminiView = Scrollable({
-    className: 'sidebar-chat-viewport',
-    vexpand: true,
-    child: Box({
-        vertical: true,
-        children: [
-            geminiWelcome,
-            chatContent,
-        ]
-    }),
-    setup: (scrolledWindow) => {
-        // Show scrollbar
-        scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        const vScrollbar = scrolledWindow.get_vscrollbar();
-        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-        // Avoid click-to-scroll-widget-to-view behavior
-        Utils.timeout(1, () => {
-            const viewport = scrolledWindow.child;
-            viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
-        })
-        // Always scroll to bottom with new content
-        const adjustment = scrolledWindow.get_vadjustment();
-        adjustment.connect("changed", () => {
-            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-        })
-    }
-});
-
 const CommandButton = (command) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
     onClicked: () => sendMessage(command),
@@ -260,3 +232,34 @@ export const sendMessage = (text) => {
         Gemini.send(text);
     }
 }
+
+export const geminiView = Box({
+    homogeneous: true,
+    children: [Scrollable({
+        className: 'sidebar-chat-viewport',
+        vexpand: true,
+        child: Box({
+            vertical: true,
+            children: [
+                geminiWelcome,
+                chatContent,
+            ]
+        }),
+        setup: (scrolledWindow) => {
+            // Show scrollbar
+            scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+            const vScrollbar = scrolledWindow.get_vscrollbar();
+            vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+            // Avoid click-to-scroll-widget-to-view behavior
+            Utils.timeout(1, () => {
+                const viewport = scrolledWindow.child;
+                viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
+            })
+            // Always scroll to bottom with new content
+            const adjustment = scrolledWindow.get_vadjustment();
+            adjustment.connect("changed", () => {
+                adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
+            })
+        }
+    })]
+});

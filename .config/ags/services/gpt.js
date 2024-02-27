@@ -6,6 +6,41 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from './messages.js';
 
+const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-stuff/
+    'openai': {
+        'name': 'OpenAI',
+        'logo_name': 'openai-symbolic',
+        'description': 'Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.',
+        'base_url': 'https://api.openai.com/v1/chat/completions',
+        'key_get_url': 'https://platform.openai.com/api-keys',
+        'key_file': 'openai_key.txt',
+    },
+    'oxygen': {
+        'name': 'Oxygen',
+        'logo_name': 'ai-oxygen-symbolic',
+        'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
+        'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
+        'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
+        'key_file': 'oxygen_key.txt',
+    },
+    'zukijourney': {
+        'name': 'zukijourney',
+        'logo_name': 'ai-zukijourney',
+        'description': 'An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it\'s buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key',
+        'base_url': 'https://zukijourney.xyzbot.net/v1/chat/completions',
+        'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
+        'key_file': 'zuki_key.txt',
+    },
+    'zukijourney_roleplay': {
+        'name': 'zukijourney (roleplay)',
+        'logo_name': 'ai-zukijourney',
+        'description': 'An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it\'s buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key',
+        'base_url': 'https://zukijourney.xyzbot.net/unf/chat/completions',
+        'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
+        'key_file': 'zuki_key.txt',
+    },
+}
+
 // Custom prompt
 const initMessages =
     [
@@ -21,28 +56,9 @@ const initMessages =
         { role: "assistant", content: "## Skeuomorphism\n- A design philosophy- From early days of interface designing- Tries to imitate real-life objects- It's in fact still used by Apple in their icons until today.", },
     ];
 
-function expandTilde(path) {
-    if (path.startsWith('~')) {
-        return GLib.get_home_dir() + path.slice(1);
-    } else {
-        return path;
-    }
-}
-
 // We're using many models to not be restricted to 3 messages per minute.
 // The whole chat will be sent every request anyway.
 Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
-const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/openai_key.txt`;
-const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/openai_api_dom.txt`;
-function replaceapidom(URL) {
-    //Utils.writeFile(URL, "/tmp/openai-url-old.log"); // For debugging
-    if (fileExists(expandTilde(APIDOM_FILE_LOCATION))) {
-        var contents = Utils.readFile(expandTilde(APIDOM_FILE_LOCATION)).trim();
-        var URL = URL.toString().replace("api.openai.com", contents);
-    }
-    //Utils.writeFile(URL, "/tmp/openai-url.log"); // For debugging
-    return URL;
-}
 const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
 const ONE_CYCLE_COUNT = 3;
 
@@ -113,25 +129,33 @@ class ChatGPTService extends Service {
             'clear': [],
             'newMsg': ['int'],
             'hasKey': ['boolean'],
+            'providerChanged': [],
         });
     }
 
     _assistantPrompt = true;
-    _messages = [];
-    _cycleModels = true;
+    _currentProvider = 'openai';
+    _cycleModels = false;
     _requestCount = 0;
     _temperature = 0.9;
+    _messages = [];
     _modelIndex = 0;
     _key = '';
+    _key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+    _url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
+    
     _decoder = new TextDecoder();
 
-    url = GLib.Uri.parse(replaceapidom('https://api.openai.com/v1/chat/completions'), GLib.UriFlags.NONE);
+    _initChecks() {
+        this._key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+        if (fileExists(this._key_file_location)) this._key = Utils.readFile(this._key_file_location).trim();
+        else this.emit('hasKey', false);
+        this._url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
+    }
 
     constructor() {
         super();
-
-        if (fileExists(expandTilde(KEY_FILE_LOCATION))) this._key = Utils.readFile(expandTilde(KEY_FILE_LOCATION)).trim();
-        else this.emit('hasKey', false);
+        this._initChecks();
 
         if (this._assistantPrompt) this._messages = [...initMessages];
         else this._messages = [];
@@ -140,12 +164,20 @@ class ChatGPTService extends Service {
     }
 
     get modelName() { return CHAT_MODELS[this._modelIndex] }
+    get getKeyUrl() { return PROVIDERS[this._currentProvider]['key_get_url'] }
+    get providerID() { return this._currentProvider }
+    set providerID(value) {
+        this._currentProvider = value;
+        this.emit('providerChanged');
+        this._initChecks();
+    }
+    get providers() { return PROVIDERS }
 
-    get keyPath() { return KEY_FILE_LOCATION }
+    get keyPath() { return this._key_file_location }
     get key() { return this._key }
     set key(keyValue) {
         this._key = keyValue;
-        Utils.writeFile(this._key, expandTilde(KEY_FILE_LOCATION))
+        Utils.writeFile(this._key, this._key_file_location)
             .then(this.emit('hasKey', true))
             .catch(err => print(err));
     }
@@ -197,6 +229,7 @@ class ChatGPTService extends Service {
                             return;
                         }
                         aiResponse.addDelta(result.choices[0].delta.content);
+                        // print(result.choices[0])
                     }
                     catch {
                         aiResponse.addDelta(line + '\n');
@@ -229,7 +262,7 @@ class ChatGPTService extends Service {
         const session = new Soup.Session();
         const message = new Soup.Message({
             method: 'POST',
-            uri: this.url,
+            uri: this._url,
         });
         message.request_headers.append('Authorization', `Bearer ${this._key}`);
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(JSON.stringify(body)));
