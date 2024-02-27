@@ -8,6 +8,7 @@ import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { showMusicControls } from '../../variables.js';
 
+const CUSTOM_MODULE_CONTENT_INTERVAL_FILE = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-interval.txt`;
 const CUSTOM_MODULE_CONTENT_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-poll.sh`;
 const CUSTOM_MODULE_LEFTCLICK_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-leftclick.sh`;
 const CUSTOM_MODULE_RIGHTCLICK_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/scripts/custom-module-rightclick.sh`;
@@ -153,6 +154,7 @@ export default () => {
     const SystemResourcesOrCustomModule = () => {
         // Check if ~/.cache/ags/user/scripts/custom-module-poll.sh exists
         if (GLib.file_test(CUSTOM_MODULE_CONTENT_SCRIPT, GLib.FileTest.EXISTS)) {
+            const interval = Number(Utils.readFile(CUSTOM_MODULE_CONTENT_INTERVAL_FILE)) || 5000;
             return BarGroup({
                 child: Button({
                     child: Label({
@@ -160,7 +162,7 @@ export default () => {
                         useMarkup: true,
                         setup: (self) => Utils.timeout(1, () => {
                             self.label = exec(CUSTOM_MODULE_CONTENT_SCRIPT);
-                            self.poll(5000, (self) => {
+                            self.poll(interval, (self) => {
                                 const content = exec(CUSTOM_MODULE_CONTENT_SCRIPT);
                                 self.label = content;
                             })
