@@ -6,7 +6,7 @@ const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from '../.widgetutils/cursorhover.js';
 import { contentStack } from './sideleft.js';
 // APIs
-import ChatGPT from '../../services/chatgpt.js';
+import ChatGPT from '../../services/gpt.js';
 import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
@@ -26,12 +26,12 @@ const APIS = [
         placeholderText: 'Message Gemini...',
     },
     {
-        name: 'Assistant (ChatGPT 3.5)',
+        name: 'Assistant (GPTs)',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
         commandBar: chatGPTCommands,
         tabIcon: chatGPTTabIcon,
-        placeholderText: 'Message ChatGPT...',
+        placeholderText: 'Message the model...',
     },
     {
         name: 'Waifus',

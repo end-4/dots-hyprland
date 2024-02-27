@@ -557,6 +557,17 @@ $colorpicker_rounding: 0.341rem;
     color: $onSecondaryContainer;
 }
 
+.sidebar-chat-providerswitcher {
+    @include small-rounding;
+    padding: 0.477rem 0.682rem;
+    background-color: $textboxColor;
+    color: $onSurfaceVariant;
+}
+
+// .sidebar-chat-providerswitcher-list {
+//     margin: 0.341rem 0rem;
+// }
+
 .sidebar-chat-viewport {
     @include element_decel;
     // margin: 0.682rem 0rem;

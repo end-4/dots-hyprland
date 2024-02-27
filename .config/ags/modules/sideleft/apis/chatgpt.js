@@ -4,12 +4,13 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const { Box, Button, Icon, Label, Revealer, Scrollable } = Widget;
-import ChatGPT from '../../../services/chatgpt.js';
+import ChatGPT from '../../../services/gpt.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
+import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
@@ -18,6 +19,94 @@ export const chatGPTTabIcon = Icon({
     className: 'sidebar-chat-apiswitcher-icon',
     icon: `openai-symbolic`,
 });
+
+const ProviderSwitcher = () => {
+    const ProviderChoice = (id, provider) => {
+        const providerSelected = MaterialIcon('check', 'norm', {
+            setup: (self) => self.hook(ChatGPT, (self) => {
+                self.toggleClassName('invisible', ChatGPT.providerID !== id);
+            }, 'providerChanged')
+        });
+        return Button({
+            tooltipText: provider.description,
+            onClicked: () => {
+                ChatGPT.providerID = id;
+                providerList.revealChild = false;
+                indicatorChevron.label = 'expand_more';
+            },
+            child: Box({
+                className: 'spacing-h-10 txt',
+                children: [
+                    Icon({
+                        icon: provider['logo_name'],
+                        className: 'txt-large'
+                    }),
+                    Label({
+                        hexpand: true,
+                        xalign: 0,
+                        className: 'txt-small',
+                        label: provider.name,
+                    }),
+                    providerSelected
+                ],
+            }),
+            setup: setupCursorHover,
+        });
+    }
+    const indicatorChevron = MaterialIcon('expand_more', 'norm');
+    const indicatorButton = Button({
+        tooltipText: 'Select ChatGPT-compatible API provider',
+        child: Box({
+            className: 'spacing-h-10 txt',
+            children: [
+                MaterialIcon('cloud', 'norm'),
+                Label({
+                    hexpand: true,
+                    xalign: 0,
+                    className: 'txt-small',
+                    label: ChatGPT.providerID,
+                    setup: (self) => self.hook(ChatGPT, (self) => {
+                        self.label = `${ChatGPT.providers[ChatGPT.providerID]['name']}`;
+                    }, 'providerChanged')
+                }),
+                indicatorChevron,
+            ]
+        }),
+        onClicked: () => {
+            providerList.revealChild = !providerList.revealChild;
+            indicatorChevron.label = (providerList.revealChild ? 'expand_less' : 'expand_more');
+        },
+        setup: setupCursorHover,
+    });
+    const providerList = Revealer({
+        revealChild: false,
+        transition: 'slide_down',
+        transitionDuration: 180,
+        child: Box({
+            vertical: true, className: 'spacing-v-5 sidebar-chat-providerswitcher-list',
+            children: [
+                Box({ className: 'separator-line margin-top-5 margin-bottom-5' }),
+                Box({
+                    className: 'spacing-v-5',
+                    vertical: true,
+                    setup: (self) => self.hook(ChatGPT, (self) => {
+                        self.children = Object.entries(ChatGPT.providers)
+                            .map(([id, provider]) => ProviderChoice(id, provider));
+                    }, 'initialized'),
+                })
+            ]
+        })
+    })
+    return Box({
+        hpack: 'center',
+        vertical: true,
+        className: 'sidebar-chat-providerswitcher',
+        children: [
+            indicatorButton,
+            providerList,
+        ]
+    })
+}
 
 const ChatGPTInfo = () => {
     const openAiLogo = Icon({
@@ -34,7 +123,7 @@ const ChatGPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (ChatGPT 3.5)',
+                label: 'Assistant (GPTs)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -134,11 +223,11 @@ export const OpenaiApiKeyInstructions = () => Box({
                 wrap: true,
                 className: 'txt sidebar-chat-welcome-txt',
                 justify: Gtk.Justification.CENTER,
-                label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
+                label: 'An API key is required\nYou can grab one <u>here</u>, then enter it below'
             }),
             setup: setupCursorHover,
             onClicked: () => {
-                Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+                Utils.execAsync(['bash', '-c', `xdg-open ${ChatGPT.getKeyUrl}`]);
             }
         })
     })]
@@ -179,34 +268,6 @@ const clearChat = () => {
         child.destroy();
     }
 }
-
-export const chatGPTView = Scrollable({
-    className: 'sidebar-chat-viewport',
-    vexpand: true,
-    child: Box({
-        vertical: true,
-        children: [
-            chatGPTWelcome,
-            chatContent,
-        ]
-    }),
-    setup: (scrolledWindow) => {
-        // Show scrollbar
-        scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        const vScrollbar = scrolledWindow.get_vscrollbar();
-        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-        // Avoid click-to-scroll-widget-to-view behavior
-        Utils.timeout(1, () => {
-            const viewport = scrolledWindow.child;
-            viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
-        })
-        // Always scroll to bottom with new content
-        const adjustment = scrolledWindow.get_vadjustment();
-        adjustment.connect("changed", () => {
-            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-        })
-    }
-});
 
 const CommandButton = (command) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
@@ -268,3 +329,37 @@ export const sendMessage = (text) => {
         ChatGPT.send(text);
     }
 }
+
+export const chatGPTView = Box({
+    vertical: true,
+    children: [
+        ProviderSwitcher(),
+        Scrollable({
+            className: 'sidebar-chat-viewport',
+            vexpand: true,
+            child: Box({
+                vertical: true,
+                children: [
+                    chatGPTWelcome,
+                    chatContent,
+                ]
+            }),
+            setup: (scrolledWindow) => {
+                // Show scrollbar
+                scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+                const vScrollbar = scrolledWindow.get_vscrollbar();
+                vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+                // Avoid click-to-scroll-widget-to-view behavior
+                Utils.timeout(1, () => {
+                    const viewport = scrolledWindow.child;
+                    viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
+                })
+                // Always scroll to bottom with new content
+                const adjustment = scrolledWindow.get_vadjustment();
+                adjustment.connect("changed", () => {
+                    adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
+                })
+            }
+        })
+    ]
+});
