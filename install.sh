@@ -139,8 +139,8 @@ if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying\e[97m\n"
 
-# In case ~/.local/bin does not exists
-v mkdir -p "$HOME/.local/bin" "$HOME/.local/share"
+# In case some folders does not exists
+v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 
 # `--delete' for rsync to make sure that
 # original dotfiles and new ones in the SAME DIRECTORY
