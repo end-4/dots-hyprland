@@ -6,7 +6,7 @@ const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from '../.widgetutils/cursorhover.js';
 import { contentStack } from './sideleft.js';
 // APIs
-import ChatGPT from '../../services/gpt.js';
+import GPTService from '../../services/gpt.js';
 import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
@@ -65,9 +65,9 @@ export const chatEntry = TextView({
     acceptsTab: false,
     className: 'sidebar-chat-entry txt txt-smallie',
     setup: (self) => self
-        .hook(ChatGPT, (self) => {
-            if (APIS[currentApiId].name != 'Assistant (ChatGPT 3.5)') return;
-            self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
+        .hook(GPTService, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (GPTs)') return;
+            self.placeholderText = (GPTService.key.length > 0 ? 'Message the model...' : 'Enter API Key...');
         }, 'hasKey')
         .hook(Gemini, (self) => {
             if (APIS[currentApiId].name != 'Assistant (Gemini Pro)') return;

@@ -4,7 +4,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const { Box, Button, Icon, Label, Revealer, Scrollable } = Widget;
-import ChatGPT from '../../../services/gpt.js';
+import GPTService from '../../../services/gpt.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
@@ -23,14 +23,14 @@ export const chatGPTTabIcon = Icon({
 const ProviderSwitcher = () => {
     const ProviderChoice = (id, provider) => {
         const providerSelected = MaterialIcon('check', 'norm', {
-            setup: (self) => self.hook(ChatGPT, (self) => {
-                self.toggleClassName('invisible', ChatGPT.providerID !== id);
+            setup: (self) => self.hook(GPTService, (self) => {
+                self.toggleClassName('invisible', GPTService.providerID !== id);
             }, 'providerChanged')
         });
         return Button({
             tooltipText: provider.description,
             onClicked: () => {
-                ChatGPT.providerID = id;
+                GPTService.providerID = id;
                 providerList.revealChild = false;
                 indicatorChevron.label = 'expand_more';
             },
@@ -64,9 +64,9 @@ const ProviderSwitcher = () => {
                     hexpand: true,
                     xalign: 0,
                     className: 'txt-small',
-                    label: ChatGPT.providerID,
-                    setup: (self) => self.hook(ChatGPT, (self) => {
-                        self.label = `${ChatGPT.providers[ChatGPT.providerID]['name']}`;
+                    label: GPTService.providerID,
+                    setup: (self) => self.hook(GPTService, (self) => {
+                        self.label = `${GPTService.providers[GPTService.providerID]['name']}`;
                     }, 'providerChanged')
                 }),
                 indicatorChevron,
@@ -89,8 +89,8 @@ const ProviderSwitcher = () => {
                 Box({
                     className: 'spacing-v-5',
                     vertical: true,
-                    setup: (self) => self.hook(ChatGPT, (self) => {
-                        self.children = Object.entries(ChatGPT.providers)
+                    setup: (self) => self.hook(GPTService, (self) => {
+                        self.children = Object.entries(GPTService.providers)
                             .map(([id, provider]) => ProviderChoice(id, provider));
                     }, 'initialized'),
                 })
@@ -108,7 +108,7 @@ const ProviderSwitcher = () => {
     })
 }
 
-const ChatGPTInfo = () => {
+const GPTInfo = () => {
     const openAiLogo = Icon({
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
@@ -147,14 +147,14 @@ const ChatGPTInfo = () => {
     });
 }
 
-export const ChatGPTSettings = () => MarginRevealer({
+const GPTSettings = () => MarginRevealer({
     transition: 'slide_down',
     revealChild: true,
     extraSetup: (self) => self
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(GPTService, (self) => Utils.timeout(200, () => {
             self.attribute.hide();
         }), 'newMsg')
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(GPTService, (self) => Utils.timeout(200, () => {
             self.attribute.show();
         }), 'clear')
     ,
@@ -166,7 +166,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 hpack: 'center',
                 icon: 'casino',
                 name: 'Randomness',
-                desc: 'ChatGPT\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
+                desc: 'The model\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
                 options: [
                     { value: 0.00, name: 'Precise', },
                     { value: 0.50, name: 'Balanced', },
@@ -174,7 +174,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 ],
                 initIndex: 2,
                 onChange: (value, name) => {
-                    ChatGPT.temperature = value;
+                    GPTService.temperature = value;
                 },
             }),
             ConfigGap({ vertical: true, size: 10 }), // Note: size can only be 5, 10, or 15 
@@ -187,18 +187,18 @@ export const ChatGPTSettings = () => MarginRevealer({
                         icon: 'cycle',
                         name: 'Cycle models',
                         desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                        initValue: ChatGPT.cycleModels,
+                        initValue: GPTService.cycleModels,
                         onChange: (self, newValue) => {
-                            ChatGPT.cycleModels = newValue;
+                            GPTService.cycleModels = newValue;
                         },
                     }),
                     ConfigToggle({
                         icon: 'model_training',
                         name: 'Enhancements',
-                        desc: 'Tells ChatGPT:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
-                        initValue: ChatGPT.assistantPrompt,
+                        desc: 'Tells the model:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
+                        initValue: GPTService.assistantPrompt,
                         onChange: (self, newValue) => {
-                            ChatGPT.assistantPrompt = newValue;
+                            GPTService.assistantPrompt = newValue;
                         },
                     }),
                 ]
@@ -213,8 +213,8 @@ export const OpenaiApiKeyInstructions = () => Box({
         transition: 'slide_down',
         transitionDuration: 150,
         setup: (self) => self
-            .hook(ChatGPT, (self, hasKey) => {
-                self.revealChild = (ChatGPT.key.length == 0);
+            .hook(GPTService, (self, hasKey) => {
+                self.revealChild = (GPTService.key.length == 0);
             }, 'hasKey')
         ,
         child: Button({
@@ -227,13 +227,13 @@ export const OpenaiApiKeyInstructions = () => Box({
             }),
             setup: setupCursorHover,
             onClicked: () => {
-                Utils.execAsync(['bash', '-c', `xdg-open ${ChatGPT.getKeyUrl}`]);
+                Utils.execAsync(['bash', '-c', `xdg-open ${GPTService.getKeyUrl}`]);
             }
         })
     })]
 });
 
-const chatGPTWelcome = Box({
+const GPTWelcome = () => Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
@@ -241,9 +241,9 @@ const chatGPTWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            ChatGPTInfo(),
+            GPTInfo(),
             OpenaiApiKeyInstructions(),
-            ChatGPTSettings(),
+            GPTSettings(),
         ]
     })
 });
@@ -252,16 +252,16 @@ export const chatContent = Box({
     className: 'spacing-v-15',
     vertical: true,
     setup: (self) => self
-        .hook(ChatGPT, (box, id) => {
-            const message = ChatGPT.messages[id];
+        .hook(GPTService, (box, id) => {
+            const message = GPTService.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message, 'ChatGPT'))
+            box.add(ChatMessage(message, `Model (${GPTService.providers[GPTService.providerID]['name']})`))
         }, 'newMsg')
     ,
 });
 
 const clearChat = () => {
-    ChatGPT.clear();
+    GPTService.clear();
     const children = chatContent.get_children();
     for (let i = 0; i < children.length; i++) {
         const child = children[i];
@@ -289,16 +289,16 @@ export const chatGPTCommands = Box({
 export const sendMessage = (text) => {
     // Check if text or API key is empty
     if (text.length == 0) return;
-    if (ChatGPT.key.length == 0) {
-        ChatGPT.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key', chatGPTView));
+    if (GPTService.key.length == 0) {
+        GPTService.key = text;
+        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', chatGPTView));
         text = '';
         return;
     }
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${GPTService.modelName}\``, '/model', chatGPTView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
@@ -306,18 +306,18 @@ export const sendMessage = (text) => {
                 chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', chatGPTView))
             }
             else {
-                ChatGPT.addMessage('user', prompt)
+                GPTService.addMessage('user', prompt)
             }
         }
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(
-                `Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                `Key stored in:\n\`${GPTService.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
                 '/key',
                 chatGPTView));
             else {
-                ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key', chatGPTView));
+                GPTService.key = parts[1];
+                chatContent.add(SystemMessage(`Updated API Key at\n\`${GPTService.keyPath}\``, '/key', chatGPTView));
             }
         }
         else if (text.startsWith('/test'))
@@ -326,7 +326,7 @@ export const sendMessage = (text) => {
             chatContent.add(SystemMessage(`Invalid command.`, 'Error', chatGPTView))
     }
     else {
-        ChatGPT.send(text);
+        GPTService.send(text);
     }
 }
 
@@ -340,7 +340,7 @@ export const chatGPTView = Box({
             child: Box({
                 vertical: true,
                 children: [
-                    chatGPTWelcome,
+                    GPTWelcome(),
                     chatContent,
                 ]
             }),
