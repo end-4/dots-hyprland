@@ -9,6 +9,8 @@ const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
 
+const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
+
 function expandTilde(path) {
     if (path.startsWith('~')) {
         return GLib.get_home_dir() + path.slice(1);
@@ -186,22 +188,19 @@ const CoverArt = ({ player, ...rest }) => {
                 // Player closed
                 // Note that cover path still remains, so we're checking title
                 if (!player || player.trackTitle == "") {
-                    self.css = `background-image: none;`;
-                    App.applyCss(`${App.configDir}/style.css`);
+                    App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
                 }
 
                 const coverPath = player.coverPath;
                 const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                     Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
                 }
                 lastCoverPath = player.coverPath;
 
                 // If a colorscheme has already been generated, skip generation
                 if (fileExists(stylePath)) {
-                    // Utils.timeout(200, () => { self.css = `background-image: url('${coverPath}');`; });
                     self.attribute.showImage(self, coverPath)
                     App.applyCss(stylePath);
                     return;
@@ -213,8 +212,7 @@ const CoverArt = ({ player, ...rest }) => {
                     .then(() => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
-                        exec(`sassc ${App.configDir}/scss/_music.scss ${stylePath}`);
-                        // self.css = `background-image: url('${coverPath}');`;
+                        exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
                         Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
                         App.applyCss(`${stylePath}`);
                     })

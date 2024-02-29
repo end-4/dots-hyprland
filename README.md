@@ -29,12 +29,19 @@
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
    - Manual installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/).
-   - If you'd like to suggest fixes or maybe a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)!
+     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
+     - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
+</details>
+
+<details> 
+  <summary>Help improve these dotfiles!</summary>
+    
+   - Join the [discussions](https://github.com/end-4/dots-hyprland/discussions)
+   - If you'd like to suggest fixes or a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)
 </details>
 
 ### [illogical_impulse](https://github.com/end-4/dots-hyprland/tree/illogical-impulse)
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/abd05702-a248-4f53-ac82-500219aa19f1)
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/90c13b64-cde3-4363-9716-718d35845d95)
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/9e7adedd-fae8-4cc8-9c81-d7ad489d7559)
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8)
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/98fe2c03-a128-45c0-8155-3a6080db3b84)
