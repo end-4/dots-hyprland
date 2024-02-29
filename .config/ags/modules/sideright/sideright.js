@@ -30,7 +30,7 @@ const timeRow = Box({
             className: 'txt-small txt',
             setup: (self) => self
                 .poll(5000, label => {
-                    execAsync(['bash', '-c', `w | sed -n '1p' | cut -d, -f1 | cut -d' ' -f4-`])
+                    execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`])
                         .then(upTimeString => {
                             label.label = `Uptime ${upTimeString}`;
                         }).catch(print);
