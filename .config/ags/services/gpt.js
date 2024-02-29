@@ -62,7 +62,7 @@ Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
 const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
 const ONE_CYCLE_COUNT = 3;
 
-class ChatGPTMessage extends Service {
+class GPTMessage extends Service {
     static {
         Service.register(this,
             {
@@ -122,7 +122,7 @@ class ChatGPTMessage extends Service {
     }
 }
 
-class ChatGPTService extends Service {
+class GPTService extends Service {
     static {
         Service.register(this, {
             'initialized': [],
@@ -240,14 +240,14 @@ class ChatGPTService extends Service {
     }
 
     addMessage(role, message) {
-        this._messages.push(new ChatGPTMessage(role, message));
+        this._messages.push(new GPTMessage(role, message));
         this.emit('newMsg', this._messages.length - 1);
     }
 
     send(msg) {
-        this._messages.push(new ChatGPTMessage('user', msg));
+        this._messages.push(new GPTMessage('user', msg));
         this.emit('newMsg', this._messages.length - 1);
-        const aiResponse = new ChatGPTMessage('assistant', 'thinking...', true, false)
+        const aiResponse = new GPTMessage('assistant', 'thinking...', true, false)
         this._messages.push(aiResponse);
         this.emit('newMsg', this._messages.length - 1);
 
@@ -283,7 +283,7 @@ class ChatGPTService extends Service {
     }
 }
 
-export default new ChatGPTService();
+export default new GPTService();
 
 
 

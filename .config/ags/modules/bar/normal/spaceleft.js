@@ -1,7 +1,7 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import Brightness from '../../services/brightness.js';
-import Indicator from '../../services/indicator.js';
+import Brightness from '../../../services/brightness.js';
+import Indicator from '../../../services/indicator.js';
 
 const WindowTitle = async () => {
     try {

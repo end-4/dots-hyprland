@@ -5,8 +5,8 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import SystemTray from 'resource:///com/github/Aylur/ags/service/systemtray.js';
 const { execAsync } = Utils;
-import Indicator from '../../services/indicator.js';
-import { StatusIcons } from '../.commonwidgets/statusicons.js';
+import Indicator from '../../../services/indicator.js';
+import { StatusIcons } from '../../.commonwidgets/statusicons.js';
 import { Tray } from "./tray.js";
 
 export default () => {

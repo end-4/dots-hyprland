@@ -4,7 +4,7 @@ const Cairo = imports.cairo;
 const Pango = imports.gi.Pango;
 const PangoCairo = imports.gi.PangoCairo;
 import Widget from "resource:///com/github/Aylur/ags/widget.js";
-import Sway from "../../services/sway.js";
+import Sway from "../../../services/sway.js";
 import * as Utils from "resource:///com/github/Aylur/ags/utils.js";
 const { execAsync, exec } = Utils;
 const { Box, DrawingArea, EventBox } = Widget;
