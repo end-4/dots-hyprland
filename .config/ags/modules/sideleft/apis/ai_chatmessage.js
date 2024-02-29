@@ -12,7 +12,7 @@ const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
-const CHATGPT_CURSOR = '  ...';
+const AI_MESSAGE_CURSOR = '  ...';
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -33,13 +33,6 @@ function loadCustomColorScheme(filePath) {
 loadCustomColorScheme(CUSTOM_SOURCEVIEW_SCHEME_PATH);
 
 //////////////////////////////////////////////////////////////////////////////
-
-function copyToClipboard(text) {
-    const clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD);
-    const textVariant = new GLib.Variant('s', text);
-    clipboard.set_text(textVariant, -1);
-    clipboard.store();
-}
 
 function substituteLang(str) {
     const subs = [
@@ -265,7 +258,7 @@ const MessageContent = (content) => {
                     const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? CHATGPT_CURSOR : ''}`;
+                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? AI_MESSAGE_CURSOR : ''}`;
                     else
                         lastLabel.attribute.updateText(blockContent);
                 }
