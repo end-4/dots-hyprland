@@ -17,6 +17,7 @@ import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
 
+const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 function forMonitors(widget) {
     const n = Gdk.Display.get_default()?.get_n_monitors() || 1;
@@ -27,9 +28,8 @@ function forMonitors(widget) {
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
 Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
 async function applyStyle() {
-    const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
     Utils.exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
-    Utils.exec(`sassc ${App.configDir}/scss/main.scss ${COMPILED_STYLE_DIR}/style.css`);
+    Utils.exec(`sass ${App.configDir}/scss/main.scss ${COMPILED_STYLE_DIR}/style.css`);
     App.resetCss();
     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
     console.log('[LOG] Styles loaded')
@@ -56,7 +56,7 @@ const Windows = () => [
 ];
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
 export default {
-    css: `${App.configDir}/style.css`,
+    css: `${COMPILED_STYLE_DIR}/style.css`,
     stackTraceOnError: true,
     closeWindowDelay: { // For animations
         'sideright': CLOSE_ANIM_TIME,

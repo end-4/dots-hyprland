@@ -167,7 +167,7 @@
 }
 
 .separator-line {
-    background-color: $outline;
+    background-color: mix($subtext, $surface, 50%);
     min-width: 0.068rem;
     min-height: 0.068rem;
 }

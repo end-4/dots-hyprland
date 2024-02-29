@@ -69,7 +69,8 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-key-fn {
     min-width: $osk_key_width * 1.005;
-    min-height: $osk_key_height / 2;
+    min-height: calc($osk_key_height / 2); // dart-sass
+    // min-height: $osk_key_height / 2; // sassc
 }
 
 .osk-key-tab {

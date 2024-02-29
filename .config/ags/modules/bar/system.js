@@ -75,7 +75,7 @@ const Utilities = () => Box({
     children: [
         UtilButton({
             name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
-                Utils.execAsync(['bash', '-c', `grim -g "$(slurp -d -c e2e2e2BB -b 31313122 -s 00000000)" - | wl-copy &`])
+                Utils.execAsync(`${App.configDir}/scripts/grimblast.sh`)
                     .catch(print)
             }
         }),

@@ -4,12 +4,13 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const { Box, Button, Icon, Label, Revealer, Scrollable } = Widget;
-import ChatGPT from '../../../services/chatgpt.js';
+import GPTService from '../../../services/gpt.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
+import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
@@ -19,7 +20,95 @@ export const chatGPTTabIcon = Icon({
     icon: `openai-symbolic`,
 });
 
-const ChatGPTInfo = () => {
+const ProviderSwitcher = () => {
+    const ProviderChoice = (id, provider) => {
+        const providerSelected = MaterialIcon('check', 'norm', {
+            setup: (self) => self.hook(GPTService, (self) => {
+                self.toggleClassName('invisible', GPTService.providerID !== id);
+            }, 'providerChanged')
+        });
+        return Button({
+            tooltipText: provider.description,
+            onClicked: () => {
+                GPTService.providerID = id;
+                providerList.revealChild = false;
+                indicatorChevron.label = 'expand_more';
+            },
+            child: Box({
+                className: 'spacing-h-10 txt',
+                children: [
+                    Icon({
+                        icon: provider['logo_name'],
+                        className: 'txt-large'
+                    }),
+                    Label({
+                        hexpand: true,
+                        xalign: 0,
+                        className: 'txt-small',
+                        label: provider.name,
+                    }),
+                    providerSelected
+                ],
+            }),
+            setup: setupCursorHover,
+        });
+    }
+    const indicatorChevron = MaterialIcon('expand_more', 'norm');
+    const indicatorButton = Button({
+        tooltipText: 'Select ChatGPT-compatible API provider',
+        child: Box({
+            className: 'spacing-h-10 txt',
+            children: [
+                MaterialIcon('cloud', 'norm'),
+                Label({
+                    hexpand: true,
+                    xalign: 0,
+                    className: 'txt-small',
+                    label: GPTService.providerID,
+                    setup: (self) => self.hook(GPTService, (self) => {
+                        self.label = `${GPTService.providers[GPTService.providerID]['name']}`;
+                    }, 'providerChanged')
+                }),
+                indicatorChevron,
+            ]
+        }),
+        onClicked: () => {
+            providerList.revealChild = !providerList.revealChild;
+            indicatorChevron.label = (providerList.revealChild ? 'expand_less' : 'expand_more');
+        },
+        setup: setupCursorHover,
+    });
+    const providerList = Revealer({
+        revealChild: false,
+        transition: 'slide_down',
+        transitionDuration: 180,
+        child: Box({
+            vertical: true, className: 'spacing-v-5 sidebar-chat-providerswitcher-list',
+            children: [
+                Box({ className: 'separator-line margin-top-5 margin-bottom-5' }),
+                Box({
+                    className: 'spacing-v-5',
+                    vertical: true,
+                    setup: (self) => self.hook(GPTService, (self) => {
+                        self.children = Object.entries(GPTService.providers)
+                            .map(([id, provider]) => ProviderChoice(id, provider));
+                    }, 'initialized'),
+                })
+            ]
+        })
+    })
+    return Box({
+        hpack: 'center',
+        vertical: true,
+        className: 'sidebar-chat-providerswitcher',
+        children: [
+            indicatorButton,
+            providerList,
+        ]
+    })
+}
+
+const GPTInfo = () => {
     const openAiLogo = Icon({
         hpack: 'center',
         className: 'sidebar-chat-welcome-logo',
@@ -34,7 +123,7 @@ const ChatGPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (ChatGPT 3.5)',
+                label: 'Assistant (GPTs)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -49,7 +138,7 @@ const ChatGPTInfo = () => {
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.',
+                        tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data when you use their API.',
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -58,14 +147,14 @@ const ChatGPTInfo = () => {
     });
 }
 
-export const ChatGPTSettings = () => MarginRevealer({
+const GPTSettings = () => MarginRevealer({
     transition: 'slide_down',
     revealChild: true,
     extraSetup: (self) => self
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(GPTService, (self) => Utils.timeout(200, () => {
             self.attribute.hide();
         }), 'newMsg')
-        .hook(ChatGPT, (self) => Utils.timeout(200, () => {
+        .hook(GPTService, (self) => Utils.timeout(200, () => {
             self.attribute.show();
         }), 'clear')
     ,
@@ -77,7 +166,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 hpack: 'center',
                 icon: 'casino',
                 name: 'Randomness',
-                desc: 'ChatGPT\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
+                desc: 'The model\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
                 options: [
                     { value: 0.00, name: 'Precise', },
                     { value: 0.50, name: 'Balanced', },
@@ -85,7 +174,7 @@ export const ChatGPTSettings = () => MarginRevealer({
                 ],
                 initIndex: 2,
                 onChange: (value, name) => {
-                    ChatGPT.temperature = value;
+                    GPTService.temperature = value;
                 },
             }),
             ConfigGap({ vertical: true, size: 10 }), // Note: size can only be 5, 10, or 15 
@@ -98,18 +187,18 @@ export const ChatGPTSettings = () => MarginRevealer({
                         icon: 'cycle',
                         name: 'Cycle models',
                         desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                        initValue: ChatGPT.cycleModels,
+                        initValue: GPTService.cycleModels,
                         onChange: (self, newValue) => {
-                            ChatGPT.cycleModels = newValue;
+                            GPTService.cycleModels = newValue;
                         },
                     }),
                     ConfigToggle({
                         icon: 'model_training',
                         name: 'Enhancements',
-                        desc: 'Tells ChatGPT:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
-                        initValue: ChatGPT.assistantPrompt,
+                        desc: 'Tells the model:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
+                        initValue: GPTService.assistantPrompt,
                         onChange: (self, newValue) => {
-                            ChatGPT.assistantPrompt = newValue;
+                            GPTService.assistantPrompt = newValue;
                         },
                     }),
                 ]
@@ -124,8 +213,8 @@ export const OpenaiApiKeyInstructions = () => Box({
         transition: 'slide_down',
         transitionDuration: 150,
         setup: (self) => self
-            .hook(ChatGPT, (self, hasKey) => {
-                self.revealChild = (ChatGPT.key.length == 0);
+            .hook(GPTService, (self, hasKey) => {
+                self.revealChild = (GPTService.key.length == 0);
             }, 'hasKey')
         ,
         child: Button({
@@ -134,17 +223,17 @@ export const OpenaiApiKeyInstructions = () => Box({
                 wrap: true,
                 className: 'txt sidebar-chat-welcome-txt',
                 justify: Gtk.Justification.CENTER,
-                label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
+                label: 'An API key is required\nYou can grab one <u>here</u>, then enter it below'
             }),
             setup: setupCursorHover,
             onClicked: () => {
-                Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+                Utils.execAsync(['bash', '-c', `xdg-open ${GPTService.getKeyUrl}`]);
             }
         })
     })]
 });
 
-const chatGPTWelcome = Box({
+const GPTWelcome = () => Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
@@ -152,9 +241,9 @@ const chatGPTWelcome = Box({
         vpack: 'center',
         vertical: true,
         children: [
-            ChatGPTInfo(),
+            GPTInfo(),
             OpenaiApiKeyInstructions(),
-            ChatGPTSettings(),
+            GPTSettings(),
         ]
     })
 });
@@ -163,50 +252,22 @@ export const chatContent = Box({
     className: 'spacing-v-15',
     vertical: true,
     setup: (self) => self
-        .hook(ChatGPT, (box, id) => {
-            const message = ChatGPT.messages[id];
+        .hook(GPTService, (box, id) => {
+            const message = GPTService.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message, 'ChatGPT'))
+            box.add(ChatMessage(message, `Model (${GPTService.providers[GPTService.providerID]['name']})`))
         }, 'newMsg')
     ,
 });
 
 const clearChat = () => {
-    ChatGPT.clear();
+    GPTService.clear();
     const children = chatContent.get_children();
     for (let i = 0; i < children.length; i++) {
         const child = children[i];
         child.destroy();
     }
 }
-
-export const chatGPTView = Scrollable({
-    className: 'sidebar-chat-viewport',
-    vexpand: true,
-    child: Box({
-        vertical: true,
-        children: [
-            chatGPTWelcome,
-            chatContent,
-        ]
-    }),
-    setup: (scrolledWindow) => {
-        // Show scrollbar
-        scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        const vScrollbar = scrolledWindow.get_vscrollbar();
-        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-        // Avoid click-to-scroll-widget-to-view behavior
-        Utils.timeout(1, () => {
-            const viewport = scrolledWindow.child;
-            viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
-        })
-        // Always scroll to bottom with new content
-        const adjustment = scrolledWindow.get_vadjustment();
-        adjustment.connect("changed", () => {
-            adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
-        })
-    }
-});
 
 const CommandButton = (command) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
@@ -228,16 +289,16 @@ export const chatGPTCommands = Box({
 export const sendMessage = (text) => {
     // Check if text or API key is empty
     if (text.length == 0) return;
-    if (ChatGPT.key.length == 0) {
-        ChatGPT.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key', chatGPTView));
+    if (GPTService.key.length == 0) {
+        GPTService.key = text;
+        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', chatGPTView));
         text = '';
         return;
     }
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${GPTService.modelName}\``, '/model', chatGPTView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
@@ -245,18 +306,18 @@ export const sendMessage = (text) => {
                 chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', chatGPTView))
             }
             else {
-                ChatGPT.addMessage('user', prompt)
+                GPTService.addMessage('user', prompt)
             }
         }
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(
-                `Key stored in:\n\`${ChatGPT.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                `Key stored in:\n\`${GPTService.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
                 '/key',
                 chatGPTView));
             else {
-                ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key', chatGPTView));
+                GPTService.key = parts[1];
+                chatContent.add(SystemMessage(`Updated API Key at\n\`${GPTService.keyPath}\``, '/key', chatGPTView));
             }
         }
         else if (text.startsWith('/test'))
@@ -265,6 +326,40 @@ export const sendMessage = (text) => {
             chatContent.add(SystemMessage(`Invalid command.`, 'Error', chatGPTView))
     }
     else {
-        ChatGPT.send(text);
+        GPTService.send(text);
     }
 }
+
+export const chatGPTView = Box({
+    vertical: true,
+    children: [
+        ProviderSwitcher(),
+        Scrollable({
+            className: 'sidebar-chat-viewport',
+            vexpand: true,
+            child: Box({
+                vertical: true,
+                children: [
+                    GPTWelcome(),
+                    chatContent,
+                ]
+            }),
+            setup: (scrolledWindow) => {
+                // Show scrollbar
+                scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+                const vScrollbar = scrolledWindow.get_vscrollbar();
+                vScrollbar.get_style_context().add_class('sidebar-scrollbar');
+                // Avoid click-to-scroll-widget-to-view behavior
+                Utils.timeout(1, () => {
+                    const viewport = scrolledWindow.child;
+                    viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
+                })
+                // Always scroll to bottom with new content
+                const adjustment = scrolledWindow.get_vadjustment();
+                adjustment.connect("changed", () => {
+                    adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
+                })
+            }
+        })
+    ]
+});
