@@ -19,9 +19,10 @@ const WS_TAKEN_WIDTH_MULTIPLIER = 1.4;
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
     return DrawingArea({
-        className: 'menu-decel',
+        className: 'element-decel',
         // css: `transition: 300ms cubic-bezier(0.1, 1, 0, 1);`,
         attribute: {
+            lastImmediateActiveWs: 0,
             immediateActiveWs: 0,
             initialized: false,
             workspaceMask: 0,
@@ -52,6 +53,7 @@ const WorkspaceContents = (count = 10) => {
             .hook(Hyprland.active.workspace, (self) => {
                 const newActiveWs = (Hyprland.active.workspace.id - 1) % count + 1;
                 self.setCss(`font-size: ${newActiveWs}px;`);
+                self.attribute.lastImmediateActiveWs = self.attribute.immediateActiveWs;
                 self.attribute.immediateActiveWs = newActiveWs;
                 const previousGroup = self.attribute.workspaceGroup;
                 const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / count);
@@ -82,16 +84,29 @@ const WorkspaceContents = (count = 10) => {
 
                 const widgetStyleContext = area.get_style_context();
                 const activeWs = widgetStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
+                const lastImmediateActiveWs = area.attribute.lastImmediateActiveWs;
                 const immediateActiveWs = area.attribute.immediateActiveWs;
 
                 // Draw
                 area.set_size_request(workspaceDiameter * WS_TAKEN_WIDTH_MULTIPLIER * (count - 1) + activeWorkspaceWidth, -1);
                 for (let i = 1; i <= count; i++) {
                     if (i == immediateActiveWs) continue;
-                    if (area.attribute.workspaceMask & (1 << i))
-                        cr.setSourceRGBA(occupiedbg.red, occupiedbg.green, occupiedbg.blue, occupiedbg.alpha);
-                    else
-                        cr.setSourceRGBA(wsbg.red, wsbg.green, wsbg.blue, wsbg.alpha);
+                    let colors = {};
+                    if (area.attribute.workspaceMask & (1 << i)) colors = occupiedbg;
+                    else colors = wsbg;
+
+                    // if ((i == immediateActiveWs + 1 && immediateActiveWs < activeWs) ||
+                    //     (i == immediateActiveWs + 1 && immediateActiveWs < activeWs)) {
+                    //     const widthPercentage = (i == immediateActiveWs - 1) ?
+                    //         1 - (immediateActiveWs - activeWs) :
+                    //         activeWs - immediateActiveWs;
+                    //     cr.setSourceRGBA(colors.red * widthPercentage + activebg.red * (1 - widthPercentage),
+                    //         colors.green * widthPercentage + activebg.green * (1 - widthPercentage),
+                    //         colors.blue * widthPercentage + activebg.blue * (1 - widthPercentage),
+                    //         colors.alpha);
+                    // }
+                    // else
+                        cr.setSourceRGBA(colors.red, colors.green, colors.blue, colors.alpha)
 
                     const centerX = (i <= activeWs) ?
                         (-workspaceRadius + (workspaceDiameter * WS_TAKEN_WIDTH_MULTIPLIER * i))
@@ -115,7 +130,7 @@ const WorkspaceContents = (count = 10) => {
                         const leftX = rightX - wsWidth;
                         cr.rectangle(leftX, height / 2 - workspaceRadius, wsWidth, workspaceDiameter);
                         cr.fill();
-                        cr.arc(rightX, height / 2, workspaceRadius, 0, Math.PI * 2);
+                        cr.arc(leftX, height / 2, workspaceRadius, 0, Math.PI * 2);
                         cr.fill();
                     }
                 }
