@@ -100,17 +100,12 @@ apply_term() {
     for i in "${!colorlist[@]}"; do
         sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$HOME"/.cache/ags/user/generated/terminal/sequences.txt
     done
-    cp "$HOME"/.cache/ags/user/generated/terminal/sequences.txt "$HOME"/.config/fish/sequences.txt
 
-    if [$term_alpha == 100]; then
-      sed -i "s/\[\$alpha\]//g" "$HOME/.cache/ags/user/generated/terminal/sequences.txt"
-    else
-      sed -i "s/\$alpha/$term_alpha/g" "$HOME/.cache/ags/user/generated/terminal/sequences.txt"
-    fi
+    sed -i "s/\$alpha/$term_alpha/g" "$HOME/.cache/ags/user/generated/terminal/sequences.txt"
 
     for file in /dev/pts/*; do
       if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
-        cat "$HOME"/.config/fish/sequences.txt > "$file"
+        cat "$HOME"/.cache/ags/user/generated/terminal/sequences.txt > "$file"
       fi
     done
 }
