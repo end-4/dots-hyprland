@@ -5,9 +5,9 @@ const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = W
 const { exec, execAsync } = Utils;
 const { GLib } = imports.gi;
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
-import { MaterialIcon } from '../.commonwidgets/materialicon.js';
-import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
-import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../.commondata/weather.js';
+import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
+import { AnimatedCircProg } from "../../.commonwidgets/cairo_circularprogress.js";
+import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../.commondata/weather.js';
 
 const BATTERY_LOW = 20;
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;

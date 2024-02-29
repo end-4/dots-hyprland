@@ -4,6 +4,8 @@
 $black: black;
 $white: white;
 $bar_ws_width: 1.774rem;
+$bar_ws_width_focus: 0.614rem;
+$bar_ws_width_focus_active: 2.045rem;
 $bar_subgroup_bg: $surfaceVariant;
 
 @mixin bar-group-rounding {
@@ -17,6 +19,15 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-bg {
     background-color: $t_background;
     min-height: 2.727rem;
+}
+
+.bar-bg-focus {
+    background-color: $t_background;
+    min-height: 1.364rem;
+}
+
+.bar-bg-focus-batterylow {
+    background-color: mix($background, $errorContainer, 80%);
 }
 
 .bar-sidespace {
@@ -84,6 +95,7 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-ws {
     min-width: $bar_ws_width;
     color: mix($onBackground, $background, 40%);
+
     @if $darkmode ==true {
         color: mix($onBackground, $background, 45%);
     }
@@ -97,6 +109,26 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-ws-occupied {
     background-color: $bar_subgroup_bg;
     color: $onSurfaceVariant;
+}
+
+// Focus is the bar mode name, not the workspace state!
+
+.bar-ws-focus {
+    background-color: $bar_subgroup_bg;
+    min-width: $bar_ws_width_focus;
+}
+
+.bar-ws-focus-active {
+    min-width: $bar_ws_width_focus_active;
+    background-color: $onBackground;
+}
+
+.bar-ws-focus-occupied {
+    background-color: mix($onBackground, $background, 40%);
+
+    @if $darkmode ==true {
+        background-color: mix($onBackground, $background, 45%);
+    }
 }
 
 .bar-separator {
@@ -250,17 +282,17 @@ $bar_subgroup_bg: $surfaceVariant;
     padding: 0.341rem;
 }
 
-.bar-space-button > box:first-child {
+.bar-space-button>box:first-child {
     @include full-rounding;
     padding: 0rem 0.682rem;
 }
 
-.bar-space-button:hover > box:first-child,
-.bar-space-button:focus > box:first-child {
+.bar-space-button:hover>box:first-child,
+.bar-space-button:focus>box:first-child {
     background-color: $hovercolor;
 }
 
-.bar-space-button:active > box:first-child {
+.bar-space-button:active>box:first-child {
     background-color: $activecolor;
 }
 
@@ -270,7 +302,7 @@ $bar_subgroup_bg: $surfaceVariant;
     }
 }
 
-.bar-space-area-rightmost > box {
+.bar-space-area-rightmost>box {
     padding-right: 2.386rem;
 }
 
