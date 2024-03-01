@@ -15,6 +15,8 @@ const dummyActiveWs = Box({ className: 'bar-ws-focus bar-ws-focus-active' }); //
 const dummyOccupiedWs = Box({ className: 'bar-ws-focus bar-ws-focus-occupied' }); // Not shown. Only for getting size props
 
 const WS_TAKEN_WIDTH_MULTIPLIER = 1.4;
+const floor = Math.floor;
+const ceil = Math.ceil;
 
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
@@ -114,8 +116,8 @@ const WorkspaceContents = (count = 10) => {
                     cr.arc(centerX, height / 2, workspaceRadius, 0, 2 * Math.PI);
                     cr.fill();
                     // What if shrinking
-                    if (i == immediateActiveWs - 1 && immediateActiveWs > activeWs) { // To right
-                        const widthPercentage = 1 - (immediateActiveWs - activeWs);
+                    if (i == floor(activeWs) && immediateActiveWs > activeWs) { // To right
+                        const widthPercentage = 1 - (ceil(activeWs) - activeWs);
                         const leftX = centerX;
                         const wsWidth = (activeWorkspaceWidth - (workspaceDiameter * 1.5)) * (1 - widthPercentage);
                         cr.rectangle(leftX, height / 2 - workspaceRadius, wsWidth, workspaceDiameter);
@@ -123,8 +125,8 @@ const WorkspaceContents = (count = 10) => {
                         cr.arc(leftX + wsWidth, height / 2, workspaceRadius, 0, Math.PI * 2);
                         cr.fill();
                     }
-                    else if (i == immediateActiveWs + 1 && immediateActiveWs < activeWs) { // To left
-                        const widthPercentage = activeWs - immediateActiveWs;
+                    else if (i == ceil(activeWs) && immediateActiveWs < activeWs) { // To left
+                        const widthPercentage = activeWs - floor(activeWs);
                         const rightX = centerX;
                         const wsWidth = (activeWorkspaceWidth - (workspaceDiameter * 1.5)) * widthPercentage;
                         const leftX = rightX - wsWidth;
@@ -138,6 +140,7 @@ const WorkspaceContents = (count = 10) => {
                 let widthPercentage, leftX, rightX, activeWsWidth;
                 cr.setSourceRGBA(activebg.red, activebg.green, activebg.blue, activebg.alpha);
                 if (immediateActiveWs > activeWs) { // To right
+                    const immediateActiveWs = ceil(activeWs);
                     widthPercentage = immediateActiveWs - activeWs;
                     rightX = -workspaceRadius + workspaceDiameter * WS_TAKEN_WIDTH_MULTIPLIER * (count - 1) + activeWorkspaceWidth - ((count - immediateActiveWs) * workspaceDiameter * WS_TAKEN_WIDTH_MULTIPLIER);
                     activeWsWidth = (activeWorkspaceWidth - (workspaceDiameter * 1.5)) * (1 - widthPercentage);
@@ -151,6 +154,7 @@ const WorkspaceContents = (count = 10) => {
                     cr.fill();
                 }
                 else { // To left
+                    const immediateActiveWs = floor(activeWs);
                     widthPercentage = 1 - (activeWs - immediateActiveWs);
                     leftX = -workspaceRadius + (workspaceDiameter * WS_TAKEN_WIDTH_MULTIPLIER * immediateActiveWs);
                     activeWsWidth = (activeWorkspaceWidth - (workspaceDiameter * 1.5)) * widthPercentage
