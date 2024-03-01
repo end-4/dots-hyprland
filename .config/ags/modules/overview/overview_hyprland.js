@@ -14,41 +14,13 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 import { dumpToWorkspace, swapWorkspace } from "./actions.js";
+import { substitute } from "../.miscutils/icons.js";
 
-const OVERVIEW_SCALE = 0.18;
-const NUM_OF_WORKSPACE_ROWS = 2;
-const NUM_OF_WORKSPACE_COLS = 5;
-const OVERVIEW_WS_NUM_SCALE = 0.09;
-const NUM_OF_WORKSPACES_SHOWN = NUM_OF_WORKSPACE_COLS * NUM_OF_WORKSPACE_ROWS;
-const OVERVIEW_WS_NUM_MARGIN_SCALE = 0.07;
+const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 const overviewTick = Variable(false);
 
-function iconExists(iconName) {
-    let iconTheme = Gtk.IconTheme.get_default();
-    return iconTheme.has_icon(iconName);
-}
-
-function substitute(str) {
-    const subs = [
-        { from: 'code-url-handler', to: 'visual-studio-code' },
-        { from: 'Code', to: 'visual-studio-code' },
-        { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wps', to: 'wps-office2019-kprometheus' },
-        { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
-        { from: 'Minecraft* 1.20.1', to: 'minecraft' },
-        { from: '', to: 'image-missing' },
-    ];
-
-    for (const { from, to } of subs) {
-        if (from === str)
-            return to;
-    }
-
-    if (!iconExists(str)) str = str.toLowerCase().replace(/\s+/g, '-'); // Turn into kebab-case
-    return str;
-}
 export default () => {
     const clientMap = new Map();
     let workspaceGroup = 0;
@@ -78,7 +50,7 @@ export default () => {
     })
 
     const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, title, xwayland }, screenCoords) => {
-        const revealInfoCondition = (Math.min(w, h) * OVERVIEW_SCALE > 70);
+        const revealInfoCondition = (Math.min(w, h) * userOptions.overview.scale > 70);
         if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
         // Non-primary monitors
         if (screenCoords.x != 0) x -= screenCoords.x;
@@ -94,23 +66,23 @@ export default () => {
 
         const appIcon = Widget.Icon({
             icon: substitute(c),
-            size: Math.min(w, h) * OVERVIEW_SCALE / 2.5,
+            size: Math.min(w, h) * userOptions.overview.scale / 2.5,
         });
         return Widget.Button({
             attribute: {
                 address, x, y, w, h, ws: id,
                 updateIconSize: (self) => {
-                    appIcon.size = Math.min(self.attribute.w, self.attribute.h) * OVERVIEW_SCALE / 2.5;
+                    appIcon.size = Math.min(self.attribute.w, self.attribute.h) * userOptions.overview.scale / 2.5;
                 },
             },
             className: 'overview-tasks-window',
             hpack: 'start',
             vpack: 'start',
             css: `
-                margin-left: ${Math.round(x * OVERVIEW_SCALE)}px;
-                margin-top: ${Math.round(y * OVERVIEW_SCALE)}px;
-                margin-right: -${Math.round((x + w) * OVERVIEW_SCALE)}px;
-                margin-bottom: -${Math.round((y + h) * OVERVIEW_SCALE)}px;
+                margin-left: ${Math.round(x * userOptions.overview.scale)}px;
+                margin-top: ${Math.round(y * userOptions.overview.scale)}px;
+                margin-right: -${Math.round((x + w) * userOptions.overview.scale)}px;
+                margin-bottom: -${Math.round((y + h) * userOptions.overview.scale)}px;
             `,
             onClicked: (self) => {
                 App.closeWindow('overview');
@@ -167,8 +139,8 @@ export default () => {
                                 truncate: 'end',
                                 className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
                                 css: `
-                                font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 14.6}px;
-                                margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE / 10}px;
+                                font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale / 14.6}px;
+                                margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale / 10}px;
                             `,
                                 // If the title is too short, include the class
                                 label: (title.length <= 1 ? `${c}: ${title}` : title),
@@ -211,12 +183,12 @@ export default () => {
             attribute: {
                 put: (widget, x, y) => {
                     if (!widget.attribute) return;
-                    // Note: x and y are already multiplied by OVERVIEW_SCALE
+                    // Note: x and y are already multiplied by userOptions.overview.scale
                     const newCss = `
                         margin-left: ${Math.round(x)}px;
                         margin-top: ${Math.round(y)}px;
-                        margin-right: -${Math.round(x + (widget.attribute.w * OVERVIEW_SCALE))}px;
-                        margin-bottom: -${Math.round(y + (widget.attribute.h * OVERVIEW_SCALE))}px;
+                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.overview.scale))}px;
+                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.overview.scale))}px;
                     `;
                     widget.css = newCss;
                     fixed.pack_start(widget, false, false, 0);
@@ -224,12 +196,12 @@ export default () => {
                 move: (widget, x, y) => {
                     if (!widget) return;
                     if (!widget.attribute) return;
-                    // Note: x and y are already multiplied by OVERVIEW_SCALE
+                    // Note: x and y are already multiplied by userOptions.overview.scale
                     const newCss = `
                         margin-left: ${Math.round(x)}px;
                         margin-top: ${Math.round(y)}px;
-                        margin-right: -${Math.round(x + (widget.attribute.w * OVERVIEW_SCALE))}px;
-                        margin-bottom: -${Math.round(y + (widget.attribute.h * OVERVIEW_SCALE))}px;
+                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.overview.scale))}px;
+                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.overview.scale))}px;
                     `;
                     widget.css = newCss;
                 },
@@ -239,16 +211,16 @@ export default () => {
             className: 'overview-tasks-workspace-number',
             label: `${index}`,
             css: `
-                margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * OVERVIEW_SCALE * OVERVIEW_WS_NUM_MARGIN_SCALE}px;
-                font-size: ${SCREEN_HEIGHT * OVERVIEW_SCALE * OVERVIEW_WS_NUM_SCALE}px;
+                margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale * userOptions.overview.wsNumMarginScale}px;
+                font-size: ${SCREEN_HEIGHT * userOptions.overview.scale * userOptions.overview.wsNumScale}px;
             `,
         })
         const widget = Widget.Box({
             className: 'overview-tasks-workspace',
             vpack: 'center',
             css: `
-                min-width: ${SCREEN_WIDTH * OVERVIEW_SCALE}px;
-                min-height: ${SCREEN_HEIGHT * OVERVIEW_SCALE}px;
+                min-width: ${SCREEN_WIDTH * userOptions.overview.scale}px;
+                min-height: ${SCREEN_HEIGHT * userOptions.overview.scale}px;
             `,
             children: [Widget.EventBox({
                 hexpand: true,
@@ -295,8 +267,8 @@ export default () => {
                     c.attribute.h = clientJson.size[1];
                     c.attribute.updateIconSize(c);
                     fixed.attribute.move(c,
-                        Math.max(0, clientJson.at[0] * OVERVIEW_SCALE),
-                        Math.max(0, clientJson.at[1] * OVERVIEW_SCALE)
+                        Math.max(0, clientJson.at[0] * userOptions.overview.scale),
+                        Math.max(0, clientJson.at[1] * userOptions.overview.scale)
                     );
                     return;
                 }
@@ -305,8 +277,8 @@ export default () => {
             if (newWindow === null) return;
             // clientMap.set(clientJson.address, newWindow);
             fixed.attribute.put(newWindow,
-                Math.max(0, newWindow.attribute.x * OVERVIEW_SCALE),
-                Math.max(0, newWindow.attribute.y * OVERVIEW_SCALE)
+                Math.max(0, newWindow.attribute.x * userOptions.overview.scale),
+                Math.max(0, newWindow.attribute.y * userOptions.overview.scale)
             );
             clientMap.set(clientJson.address, newWindow);
         };
@@ -427,10 +399,10 @@ export default () => {
         child: Widget.Box({
             vertical: true,
             className: 'overview-tasks',
-            children: Array.from({ length: NUM_OF_WORKSPACE_ROWS }, (_, index) =>
+            children: Array.from({ length: userOptions.overview.numOfRows }, (_, index) =>
                 OverviewRow({
-                    startWorkspace: 1 + index * NUM_OF_WORKSPACE_COLS,
-                    workspaces: NUM_OF_WORKSPACE_COLS,
+                    startWorkspace: 1 + index * userOptions.overview.numOfCols,
+                    workspaces: userOptions.overview.numOfCols,
                 })
             )
         }),

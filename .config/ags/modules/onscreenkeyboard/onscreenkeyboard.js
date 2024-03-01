@@ -6,10 +6,10 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync } = Utils;
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
-import { defaultOskLayout, oskLayouts } from './data_keyboardlayouts.js';
+import { DEFAULT_OSK_LAYOUT, oskLayouts } from './data_keyboardlayouts.js';
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 
-const keyboardLayout = defaultOskLayout;
+const keyboardLayout = oskLayouts[userOptions.onScreenKeyboard.layout] ? userOptions.onScreenKeyboard.layout : DEFAULT_OSK_LAYOUT;
 const keyboardJson = oskLayouts[keyboardLayout];
 execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 

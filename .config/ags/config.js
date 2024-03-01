@@ -4,6 +4,8 @@ import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
+// Stuff
+import userOptions from './user_options.js';
 // Widgets
 import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
 import Cheatsheet from './modules/cheatsheet/main.js';

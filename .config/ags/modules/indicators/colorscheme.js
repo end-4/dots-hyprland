@@ -1,6 +1,6 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 
-const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
+const { Box, Label } = Widget;
 import { showColorScheme } from '../../variables.js';
 
 const ColorBox = ({
