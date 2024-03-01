@@ -4,7 +4,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
-import { fileExists } from './messages.js';
+import { fileExists } from '../modules/.miscutils/files.js';
 
 const initMessages =
     [
@@ -25,20 +25,12 @@ const initMessages =
         { role: "model", parts: [{ text: "## Double angle formulas\n```latex\n\\[\n\\sin(2\theta) = 2\\sin(\\theta)\\cos(\\theta)\n\\]\n\\\\\n\\[\n\\cos(2\\theta) = \\cos^2(\\theta) - \\sin^2(\\theta)\n\\]\n\\\\\n\\[\n\\tan(2\theta) = \\frac{2\\tan(\\theta)}{1 - \\tan^2(\\theta)}\n\\]\n```" }], },
     ];
 
-function expandTilde(path) {
-    if (path.startsWith('~')) {
-        return GLib.get_home_dir() + path.slice(1);
-    } else {
-        return path;
-    }
-}
-
 Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
 const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_key.txt`;
 const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_api_dom.txt`;
 function replaceapidom(URL) {
-    if (fileExists(expandTilde(APIDOM_FILE_LOCATION))) {
-        var contents = Utils.readFile(expandTilde(APIDOM_FILE_LOCATION)).trim();
+    if (fileExists(APIDOM_FILE_LOCATION)) {
+        var contents = Utils.readFile(APIDOM_FILE_LOCATION).trim();
         var URL = URL.toString().replace("generativelanguage.googleapis.com", contents);
     }
     return URL;
@@ -141,7 +133,7 @@ class GeminiService extends Service {
     _messages = [];
     _cycleModels = true;
     _requestCount = 0;
-    _temperature = 0.9;
+    _temperature = userOptions.ai.defaultTemperature;
     _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();
@@ -149,7 +141,7 @@ class GeminiService extends Service {
     constructor() {
         super();
 
-        if (fileExists(expandTilde(KEY_FILE_LOCATION))) this._key = Utils.readFile(expandTilde(KEY_FILE_LOCATION)).trim();
+        if (fileExists(KEY_FILE_LOCATION)) this._key = Utils.readFile(KEY_FILE_LOCATION).trim();
         else this.emit('hasKey', false);
 
         if (this._assistantPrompt) this._messages = [...initMessages];
@@ -164,7 +156,7 @@ class GeminiService extends Service {
     get key() { return this._key }
     set key(keyValue) {
         this._key = keyValue;
-        Utils.writeFile(this._key, expandTilde(KEY_FILE_LOCATION))
+        Utils.writeFile(this._key, KEY_FILE_LOCATION)
             .then(this.emit('hasKey', true))
             .catch(err => print(err));
     }

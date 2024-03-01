@@ -11,11 +11,6 @@ import { getCalendarLayout } from "./calendar_layout.js";
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
 
-function fileExists(filePath) {
-    let file = Gio.File.new_for_path(filePath);
-    return file.query_exists(null);
-}
-
 function getDateInXMonthsTime(x) {
     var currentDate = new Date(); // Get the current date
     var targetMonth = currentDate.getMonth() + x; // Calculate the target month

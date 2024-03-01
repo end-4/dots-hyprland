@@ -1,5 +1,13 @@
 
 let userConfigOptions = {
+    'ai': {
+        'defaultGPTProvider': 'openai',
+        'defaultTemperature': 0.9,
+        'writingCursor': '  ...', // Warning: Using weird characters can mess up Markdown rendering
+    },
+    'apps': {
+        'imageViewer': 'loupe',
+    },
     'battery': {
         'low': 20,
         'critical': 10,
@@ -18,7 +26,7 @@ let userConfigOptions = {
         'wsNumMarginScale': 0.07,
     },
     'search': {
-        'excludedSites': ['quora.com'], // Exclude bullshit
+        'excludedSites': ['quora.com'],
     },
     'weather': {
         'city': '',

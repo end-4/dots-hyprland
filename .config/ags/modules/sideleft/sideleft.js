@@ -9,7 +9,7 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { NavigationIndicator } from '../.commonwidgets/cairo_navigationindicator.js';
 import toolBox from './toolbox.js';
 import apiWidgets from './apiwidgets.js';
-import apiwidgets, { chatEntry } from './apiwidgets.js';
+import { chatEntry } from './apiwidgets.js';
 
 const contents = [
     {

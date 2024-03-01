@@ -4,7 +4,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
-import { fileExists } from './messages.js';
+import { fileExists } from '../modules/.miscutils/files.js';
 
 const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-stuff/
     'openai': {
@@ -134,10 +134,10 @@ class GPTService extends Service {
     }
 
     _assistantPrompt = true;
-    _currentProvider = 'openai';
+    _currentProvider = userOptions.ai.defaultGPTProvider;
     _cycleModels = false;
     _requestCount = 0;
-    _temperature = 0.9;
+    _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
     _modelIndex = 0;
     _key = '';
