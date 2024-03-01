@@ -1,7 +1,7 @@
 // We're going to use ydotool
 // See /usr/include/linux/input-event-codes.h for keycodes
 
-export const defaultOskLayout = "qwerty_full"
+export const DEFAULT_OSK_LAYOUT = "qwerty_full"
 export const oskLayouts = {
     qwerty_full: {
         name: "QWERTY - Full",

@@ -11,18 +11,9 @@ import { showMusicControls } from '../../variables.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 
-function expandTilde(path) {
-    if (path.startsWith('~')) {
-        return GLib.get_home_dir() + path.slice(1);
-    } else {
-        return path;
-    }
-}
-
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const lightDark = Utils.readFile(expandTilde(LIGHTDARK_FILE_LOCATION)).trim();
+const lightDark = Utils.readFile(LIGHTDARK_FILE_LOCATION).trim();
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
-const PREFERRED_PLAYER = 'plasma-browser-integration';
 var lastCoverPath = '';
 
 function isRealPlayer(player) {
@@ -33,7 +24,7 @@ function isRealPlayer(player) {
     );
 }
 
-export const getPlayer = (name = PREFERRED_PLAYER) => Mpris.getPlayer(name) || Mpris.players[0] || null;
+export const getPlayer = (name = userOptions.music.preferredPlayer) => Mpris.getPlayer(name) || Mpris.players[0] || null;
 function lengthStr(length) {
     const min = Math.floor(length / 60);
     const sec = Math.floor(length % 60);

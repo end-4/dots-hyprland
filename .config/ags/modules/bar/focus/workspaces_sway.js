@@ -9,7 +9,6 @@ import * as Utils from "resource:///com/github/Aylur/ags/utils.js";
 const { execAsync, exec } = Utils;
 const { Box, DrawingArea, EventBox } = Widget;
 
-const NUM_OF_WORKSPACES = 10;
 const dummyWs = Box({ className: 'bar-ws' }); // Not shown. Only for getting size props
 const dummyActiveWs = Box({ className: 'bar-ws bar-ws-active' }); // Not shown. Only for getting size props
 const dummyOccupiedWs = Box({ className: 'bar-ws bar-ws-occupied' }); // Not shown. Only for getting size props
@@ -168,7 +167,7 @@ export default () => EventBox({
             if (!self.attribute.clicked) return;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
-            const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES / widgetWidth);
+            const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
             switchToWorkspace(wsId);
         })
         self.on('button-press-event', (self, event) => {
@@ -176,7 +175,7 @@ export default () => EventBox({
             self.attribute.clicked = true;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
-            const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES / widgetWidth);
+            const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
             switchToWorkspace(wsId);
         })
         self.on('button-release-event', (self) => self.attribute.clicked = false);

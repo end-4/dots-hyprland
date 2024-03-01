@@ -70,6 +70,32 @@ export default () => {
     const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { App.closeWindow('session'); execAsync('systemctl poweroff') });
     const rebootButton = SessionButton('Reboot', 'restart_alt', () => { App.closeWindow('session'); execAsync('systemctl reboot') });
     const cancelButton = SessionButton('Cancel', 'close', () => App.closeWindow('session'), { className: 'session-button-cancel' });
+
+    const sessionDescription = Widget.Box({
+        vertical: true,
+        css: 'margin-bottom: 0.682rem;',
+        children: [
+            Widget.Label({
+                className: 'txt-title txt',
+                label: 'Session',
+            }),
+            Widget.Label({
+                justify: Gtk.Justification.CENTER,
+                className: 'txt-small txt',
+                label: 'Use arrow keys to navigate.\nEnter to select, Esc to cancel.'
+            }),
+        ]
+    });
+    const SessionButtonRow = (children) => Widget.Box({
+        hpack: 'center',
+        className: 'spacing-h-15',
+        children: children,
+    });
+    const sessionButtonRows = [
+        SessionButtonRow([lockButton, logoutButton, sleepButton]),
+        SessionButtonRow([hibernateButton, shutdownButton, rebootButton]),
+        SessionButtonRow([cancelButton]),
+    ]
     return Widget.Box({
         className: 'session-bg',
         css: `
@@ -93,46 +119,8 @@ export default () => {
                         vertical: true,
                         className: 'spacing-v-15',
                         children: [
-                            Widget.Box({
-                                vertical: true,
-                                css: 'margin-bottom: 0.682rem;',
-                                children: [
-                                    Widget.Label({
-                                        className: 'txt-title txt',
-                                        label: 'Session',
-                                    }),
-                                    Widget.Label({
-                                        justify: Gtk.Justification.CENTER,
-                                        className: 'txt-small txt',
-                                        label: 'Use arrow keys to navigate.\nEnter to select, Esc to cancel.'
-                                    }),
-                                ]
-                            }),
-                            Widget.Box({
-                                hpack: 'center',
-                                className: 'spacing-h-15',
-                                children: [ // lock, logout, sleep
-                                    lockButton,
-                                    logoutButton,
-                                    sleepButton,
-                                ]
-                            }),
-                            Widget.Box({
-                                hpack: 'center',
-                                className: 'spacing-h-15',
-                                children: [ // hibernate, shutdown, reboot
-                                    hibernateButton,
-                                    shutdownButton,
-                                    rebootButton,
-                                ]
-                            }),
-                            Widget.Box({
-                                hpack: 'center',
-                                className: 'spacing-h-15',
-                                children: [ // hibernate, shutdown, reboot
-                                    cancelButton,
-                                ]
-                            }),
+                            sessionDescription,
+                            ...sessionButtonRows,
                         ]
                     })
                 ]
