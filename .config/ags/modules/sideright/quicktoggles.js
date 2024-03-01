@@ -10,14 +10,6 @@ import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusic
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-function expandTilde(path) {
-    if (path.startsWith('~')) {
-        return GLib.get_home_dir() + path.slice(1);
-    } else {
-        return path;
-    }
-}
-
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Wifi | Right-click to configure',
@@ -123,7 +115,7 @@ export const ModuleInvertColors = async (props = {}) => {
                             button.toggleClassName('sidebar-button-active', false);
                         }
                         else {
-                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${expandTilde('~/.config/hypr/shaders/invert.frag')}`)
+                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${GLib.get_home_dir()}/.config/hypr/shaders/invert.frag`)
                                 .catch(print);
                             button.toggleClassName('sidebar-button-active', true);
                         }

@@ -2,7 +2,6 @@ const { Notify, GLib, Gio } = imports.gi;
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 
-
 export function fileExists(filePath) {
     let file = Gio.File.new_for_path(filePath);
     return file.query_exists(null);

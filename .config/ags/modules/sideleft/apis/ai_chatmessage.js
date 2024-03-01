@@ -12,7 +12,6 @@ const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
-const AI_MESSAGE_CURSOR = '  ...';
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -258,7 +257,7 @@ const MessageContent = (content) => {
                     const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? AI_MESSAGE_CURSOR : ''}`;
+                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`;
                     else
                         lastLabel.attribute.updateText(blockContent);
                 }

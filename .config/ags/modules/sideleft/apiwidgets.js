@@ -14,7 +14,6 @@ import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
-
 const EXPAND_INPUT_THRESHOLD = 30;
 const APIS = [
     {
