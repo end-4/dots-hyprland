@@ -159,6 +159,7 @@ v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/a
 t="$HOME/.config/ags/user_options.js"
 if [ -f $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+  v cp -f .config/ags/user_options.js $t.new
 else
   echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
   v cp .config/ags/user_options.js $t
@@ -169,6 +170,7 @@ v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr
 t="$HOME/.config/hypr/hyprland.conf"
 if [ -f $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+  v cp -f .config/hypr/hyprland.conf $t.new
   if [ ! -d "$HOME"/.config/hypr/custom ];then
     echo -e "\e[33m[$0]: But it seems that you are not using a \"custom\" folder.\e[0m"
     v cp .config/hypr/hyprland.conf $t
