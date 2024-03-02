@@ -26,6 +26,7 @@ let userConfigOptions = {
         'wsNumMarginScale': 0.07,
     },
     'search': {
+        'engineBaseUrl': 'https://www.google.com/search?q=',
         'excludedSites': ['quora.com'],
     },
     'weather': {
