@@ -140,7 +140,7 @@ export const SearchAndWindows = () => {
 
             else {
                 App.closeWindow('overview');
-                execAsync(['bash', '-c', `xdg-open 'https://www.google.com/search?q=${text} ${['', ...userOptions.search.excludedSites].join(' -site:')}' &`]).catch(print);
+                execAsync(['bash', '-c', `xdg-open '${userOptions.search.engineBaseUrl}${text} ${['', ...userOptions.search.excludedSites].join(' -site:')}' &`]).catch(print);
             }
         },
         onChange: (entry) => { // this is when you type
