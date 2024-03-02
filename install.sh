@@ -171,13 +171,18 @@ t="$HOME/.config/hypr/hyprland.conf"
 if [ -f $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
   v cp -f .config/hypr/hyprland.conf $t.new
-  if [ ! -d "$HOME"/.config/hypr/custom ];then
-    echo -e "\e[33m[$0]: But it seems that you are not using a \"custom\" folder.\e[0m"
-    v cp .config/hypr/hyprland.conf $t
-  fi
+fi
 else
   echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
   v cp .config/hypr/hyprland.conf $t
+fi
+t="$HOME/.config/hypr/custom"
+if [ -d $t ];then
+  echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
+fi
+else
+  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+  v rsync -av --delete .config/hypr/custom/ $t/
 fi
 
 
