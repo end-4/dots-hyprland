@@ -12,6 +12,7 @@ const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
+Gtk.IconTheme.get_default().append_search_path(LATEX_DIR);
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -108,7 +109,6 @@ LaTeX -headless -input="$text" -output=${outFilePath} -textsize=${fontSize * 1.1
                 Utils.exec(`chmod a+x ${scriptFilePath}`)
                 Utils.timeout(100, () => {
                     Utils.exec(`bash ${scriptFilePath}`);
-                    Gtk.IconTheme.get_default().append_search_path(LATEX_DIR);
                     self.child?.destroy();
                     self.child = Gtk.Image.new_from_file(outFilePath);
                 })

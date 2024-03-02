@@ -8,7 +8,6 @@ import SidebarModule from './module.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
-Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscutils/system.js';
 
 const scripts = [

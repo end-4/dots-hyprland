@@ -12,8 +12,6 @@ import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 
-Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
-
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
     className: 'sidebar-chat-apiswitcher-icon',
