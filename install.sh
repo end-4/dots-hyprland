@@ -171,7 +171,6 @@ t="$HOME/.config/hypr/hyprland.conf"
 if [ -f $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
   v cp -f .config/hypr/hyprland.conf $t.new
-fi
 else
   echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
   v cp .config/hypr/hyprland.conf $t
@@ -179,7 +178,6 @@ fi
 t="$HOME/.config/hypr/custom"
 if [ -d $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
-fi
 else
   echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
   v rsync -av --delete .config/hypr/custom/ $t/
