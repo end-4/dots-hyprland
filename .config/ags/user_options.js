@@ -42,6 +42,7 @@ let userConfigOptions = {
             'GitHub Desktop': 'github-desktop',
             'Minecraft* 1.20.1': 'minecraft',
             'gnome-tweaks': 'org.gnome.tweaks',
+            'pavucontrol-qt': 'pavucontrol',
             'wps': 'wps-office2019-kprometheus',
             'wpsoffice': 'wps-office2019-kprometheus',
             '': 'image-missing',
