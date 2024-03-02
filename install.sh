@@ -146,13 +146,23 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-for i in .config/*
-do
+# For .config/* but not AGS
+for file in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' -exec basename {} \;); do
   echo "[$0]: Found target: $i"
   if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
   fi
 done
+
+# For AGS
+v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/ags/
+t="$HOME/.config/ags/user_options.js"
+if [ -f $t ];then
+  echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+else
+  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+  v cp .config/ags/user_options.js $t
+fi
 
 # target="$HOME/.config/hypr/colors.conf"
 # test -f $target || { \
