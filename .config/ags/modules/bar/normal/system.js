@@ -30,7 +30,7 @@ const BatBatteryProgress = () => {
 
 const BarClock = () => Widget.Box({
     vpack: 'center',
-    className: 'spacing-h-5 txt-onSurfaceVariant bar-clock-box',
+    className: 'spacing-h-4 txt-onSurfaceVariant bar-clock-box',
     children: [
         Widget.Label({
             className: 'bar-clock',
@@ -63,7 +63,7 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
 
 const Utilities = () => Box({
     hpack: 'center',
-    className: 'spacing-h-5 txt-onSurfaceVariant',
+    className: 'spacing-h-4 txt-onSurfaceVariant',
     children: [
         UtilButton({
             name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
@@ -136,7 +136,7 @@ const BatteryModule = () => Stack({
     transitionDuration: 150,
     children: {
         'laptop': Box({
-            className: 'spacing-h-5', children: [
+            className: 'spacing-h-4', children: [
                 BarGroup({ child: Utilities() }),
                 BarGroup({ child: BarBattery() }),
             ]
@@ -145,7 +145,7 @@ const BatteryModule = () => Stack({
             child: Box({
                 hexpand: true,
                 hpack: 'center',
-                className: 'spacing-h-5',
+                className: 'spacing-h-4',
                 children: [
                     MaterialIcon('device_thermostat', 'small'),
                     Label({
@@ -219,7 +219,7 @@ export default () => Widget.EventBox({
     onScrollDown: (self) => switchToRelativeWorkspace(self, +1),
     onPrimaryClick: () => App.toggleWindow('sideright'),
     child: Widget.Box({
-        className: 'spacing-h-5',
+        className: 'spacing-h-4',
         children: [
             BarGroup({ child: BarClock() }),
             BatteryModule(),
