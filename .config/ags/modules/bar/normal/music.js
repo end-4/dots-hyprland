@@ -211,7 +211,7 @@ export default () => {
         onSecondaryClickRelease: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
         onMiddleClickRelease: () => execAsync('playerctl play-pause').catch(print),
         child: Box({
-            className: 'spacing-h-5',
+            className: 'spacing-h-4',
             children: [
                 SystemResourcesOrCustomModule(),
                 BarGroup({ child: musicStuff }),
