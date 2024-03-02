@@ -146,8 +146,8 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# For .config/* but not AGS
-for file in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' -exec basename {} \;); do
+# For .config/* but not AGS, not Hyprland
+for file in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
   echo "[$0]: Found target: $i"
   if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
@@ -164,10 +164,20 @@ else
   v cp .config/ags/user_options.js $t
 fi
 
-# target="$HOME/.config/hypr/colors.conf"
-# test -f $target || { \
-#   echo -e "\e[34m[$0]: File \"$target\" not found.\e[0m" && \
-#   v cp "$HOME/.config/hypr/colors_default.conf" $target ; }
+# For Hyprland
+v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$HOME"/.config/hypr/
+t="$HOME/.config/hypr/hyprland.conf"
+if [ -f $t ];then
+  echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+  if [ ! -d "$HOME"/.config/hypr/custom ];then
+    echo -e "\e[33m[$0]: But it seems that you are not using a \"custom\" folder.\e[0m"
+    v cp .config/hypr/hyprland.conf $t
+  fi
+else
+  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+  v cp .config/hypr/hyprland.conf $t
+fi
+
 
 # some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
