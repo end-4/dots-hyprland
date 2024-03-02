@@ -18,6 +18,7 @@ import { substitute } from "../.miscutils/icons.js";
 
 const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
+const POPUP_CLOSE_TIME = 100; // ms
 
 const overviewTick = Variable(false);
 
@@ -86,7 +87,7 @@ export default () => {
             `,
             onClicked: (self) => {
                 App.closeWindow('overview');
-                Utils.timeout(100, () => Hyprland.messageAsync(`dispatch focuswindow address:${address}`));
+                Utils.timeout(POPUP_CLOSE_TIME, () => Hyprland.messageAsync(`dispatch focuswindow address:${address}`));
             },
             onMiddleClickRelease: () => Hyprland.messageAsync(`dispatch closewindow address:${address}`),
             onSecondaryClick: (button) => {
@@ -226,8 +227,8 @@ export default () => {
                 hexpand: true,
                 vexpand: true,
                 onPrimaryClick: () => {
-                    Hyprland.messageAsync(`dispatch workspace ${index}`)
                     App.closeWindow('overview');
+                    Utils.timeout(POPUP_CLOSE_TIME, () => Hyprland.messageAsync(`dispatch workspace ${index}`));
                 },
                 setup: (eventbox) => {
                     eventbox.drag_dest_set(Gtk.DestDefaults.ALL, TARGET, Gdk.DragAction.COPY);
