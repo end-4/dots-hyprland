@@ -4,7 +4,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, CenterBox, Entry, EventBox, Icon, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from '../.widgetutils/cursorhover.js';
-import { contentStack } from './sideleft.js';
+import { widgetContent } from './sideleft.js';
 // APIs
 import GPTService from '../../services/gpt.js';
 import Gemini from '../../services/gemini.js';
@@ -81,13 +81,11 @@ export const chatEntry = TextView({
             // Global keybinds
             if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                 event.get_keyval()[1] === Gdk.KEY_Page_Down) {
-                const toSwitchTab = contentStack.get_visible_child();
-                toSwitchTab.attribute.nextTab();
+                widgetContent.nextTab();
             }
             else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                 event.get_keyval()[1] === Gdk.KEY_Page_Up) {
-                const toSwitchTab = contentStack.get_visible_child();
-                toSwitchTab.attribute.prevTab();
+                    widgetContent.prevTab();
             }
         })
     ,

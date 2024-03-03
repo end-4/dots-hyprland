@@ -200,3 +200,4 @@ export const ModuleCalendar = () => Box({
         box.pack_end(contentStack, false, false, 0);
     }
 })
+

@@ -301,38 +301,6 @@ $onChatgpt: $onPrimary;
     color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
-.sidebar-selector-tab {
-    @include small-rounding;
-    @include element_decel;
-    min-height: 2.5rem;
-    color: $onSurface;
-}
-
-.sidebar-selector-tab:hover,
-.sidebar-selector-tab:focus {
-    background-color: $hovercolor;
-}
-
-.sidebar-selector-tab:active {
-    background-color: $activecolor;
-}
-
-.sidebar-selector-tab-active>box>label {
-    color: $primary;
-}
-
-.sidebar-selector-highlight-offset {
-    margin-top: -0.205rem;
-    margin-bottom: 0.205rem;
-}
-
-.sidebar-selector-highlight {
-    transition: 180ms ease-in-out; // Doesn't look that good, but it syncs with the GtkStack
-    color: $primary;
-    // padding: 0rem 2.045rem;
-    min-height: 0.205rem;
-}
-
 .sidebar-todo-item {
     padding-right: 0.545rem;
 }
@@ -373,10 +341,10 @@ $onChatgpt: $onPrimary;
 .sidebar-todo-new {
     @include full-rounding;
     @include element_decel;
-    color: $onSecondaryContainer;
+    background-color: $textboxColor;
+    color: $onSurfaceVariant;
     margin: 0.341rem;
     padding: 0.205rem 0.545rem;
-    border: 0.068rem solid $onSurface;
 }
 
 .sidebar-todo-new,
