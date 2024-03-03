@@ -57,19 +57,6 @@ get_light_dark() {
     echo "$lightdark"
 }
 
-apply_gtklock() {
-    # Check if scripts/templates/gtklock/main.scss exists
-    if [ ! -f "scripts/templates/gtklock/main.scss" ]; then
-        echo "SCSS not found for Gtklock. Skipping that."
-        return
-    fi
-
-    # Copy template
-    mkdir -p "$HOME"/.cache/ags/user/generated/gtklock
-    sass "scripts/templates/gtklock/main.scss" "$HOME"/.cache/ags/user/generated/gtklock/style.css
-    cp "$HOME"/.cache/ags/user/generated/gtklock/style.css "$HOME"/.config/gtklock/style.css
-}
-
 apply_fuzzel() {
     # Check if scripts/templates/fuzzel/fuzzel.ini exists
     if [ ! -f "scripts/templates/fuzzel/fuzzel.ini" ]; then
@@ -182,6 +169,5 @@ apply_ags &
 apply_hyprland &
 apply_hyprlock &
 apply_gtk &
-# apply_gtklock &
 apply_fuzzel &
 apply_term &
