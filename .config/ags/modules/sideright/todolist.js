@@ -2,6 +2,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Label, Revealer } = Widget;
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { TabContainer } from '../.commonwidgets/tabcontainer.js';
 import Todo from "../../services/todo.js";
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { NavigationIndicator } from '../.commonwidgets/cairo_navigationindicator.js';
@@ -199,81 +200,11 @@ const UndoneTodoList = () => {
     });
 }
 
-const todoItemsBox = Widget.Stack({
-    vpack: 'fill',
-    transition: 'slide_left_right',
-    children: {
-        'undone': UndoneTodoList(),
-        'done': todoItems(true),
-    },
-});
-
-export const TodoWidget = () => {
-    const TodoTabButton = (isDone, navIndex) => Widget.Button({
-        hexpand: true,
-        className: 'sidebar-selector-tab',
-        onClicked: (button) => {
-            todoItemsBox.shown = `${isDone ? 'done' : 'undone'}`;
-            const kids = button.get_parent().get_children();
-            for (let i = 0; i < kids.length; i++) {
-                if (kids[i] != button) kids[i].toggleClassName('sidebar-selector-tab-active', false);
-                else button.toggleClassName('sidebar-selector-tab-active', true);
-            }
-            // Fancy highlighter line width
-            const buttonWidth = button.get_allocated_width();
-            const highlightWidth = button.get_children()[0].get_allocated_width();
-            navIndicator.css = `
-                font-size: ${navIndex}px; 
-                padding: 0px ${(buttonWidth - highlightWidth) / 2}px;
-            `;
-        },
-        child: Box({
-            hpack: 'center',
-            className: 'spacing-h-5',
-            children: [
-                MaterialIcon(`${isDone ? 'task_alt' : 'format_list_bulleted'}`, 'larger'),
-                Label({
-                    className: 'txt txt-smallie',
-                    label: `${isDone ? 'Done' : 'Unfinished'}`,
-                })
-            ]
-        }),
-        setup: (button) => Utils.timeout(1, () => {
-            setupCursorHover(button);
-            button.toggleClassName('sidebar-selector-tab-active', defaultTodoSelected === `${isDone ? 'done' : 'undone'}`);
-        }),
-    });
-    const undoneButton = TodoTabButton(false, 0);
-    const doneButton = TodoTabButton(true, 1);
-    const navIndicator = NavigationIndicator(2, false, { // The line thing
-        className: 'sidebar-selector-highlight',
-        css: 'font-size: 0px; padding: 0rem 1.636rem;', // Shush
-    })
-    return Widget.Box({
-        hexpand: true,
-        vertical: true,
-        className: 'spacing-v-10',
-        setup: (box) => {     // undone/done selector rail
-            box.pack_start(Widget.Box({
-                vertical: true,
-                children: [
-                    Widget.Box({
-                        className: 'sidebar-selectors spacing-h-5',
-                        homogeneous: true,
-                        setup: (box) => {
-                            box.pack_start(undoneButton, false, true, 0);
-                            box.pack_start(doneButton, false, true, 0);
-                        }
-                    }),
-                    Widget.Box({
-                        className: 'sidebar-selector-highlight-offset',
-                        homogeneous: true,
-                        children: [navIndicator]
-                    })
-                ]
-            }), false, false, 0);
-            box.pack_end(todoItemsBox, true, true, 0);
-        },
-    });
-};
-
+export const TodoWidget = () => TabContainer({
+    icons: ['format_list_bulleted', 'task_alt'],
+    names: ['Unfinished', 'Done'],
+    children: [
+        UndoneTodoList(),
+        todoItems(true),
+    ]
+})

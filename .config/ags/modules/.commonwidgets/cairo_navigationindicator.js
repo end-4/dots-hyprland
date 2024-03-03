@@ -6,7 +6,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 // background-color/color for background/indicator color
 // padding for pad of indicator
 // font-size for selected index (0-based)
-export const NavigationIndicator = (count, vertical, props) => Widget.DrawingArea({
+export const NavigationIndicator = ({count, vertical, ...props}) => Widget.DrawingArea({
     ...props,
     setup: (area) => {
         const styleContext = area.get_style_context();
