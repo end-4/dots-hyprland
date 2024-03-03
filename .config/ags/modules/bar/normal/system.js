@@ -145,7 +145,7 @@ const BatteryModule = () => Stack({
             child: Box({
                 hexpand: true,
                 hpack: 'center',
-                className: 'spacing-h-4',
+                className: 'spacing-h-4 txt-onSurfaceVariant',
                 children: [
                     MaterialIcon('device_thermostat', 'small'),
                     Label({
