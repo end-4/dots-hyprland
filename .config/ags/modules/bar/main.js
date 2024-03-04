@@ -103,8 +103,9 @@ export const Bar = async (monitor = 0) => {
     });
 }
 
-export const BarCornerTopleft = (id = '') => Widget.Window({
-    name: `barcornertl${id}`,
+export const BarCornerTopleft = (monitor = 0) => Widget.Window({
+    monitor,
+    name: `barcornertl${monitor}`,
     layer: 'top',
     anchor: ['top', 'left'],
     exclusivity: 'normal',
@@ -112,8 +113,9 @@ export const BarCornerTopleft = (id = '') => Widget.Window({
     child: RoundedCorner('topleft', { className: 'corner', }),
     setup: enableClickthrough,
 });
-export const BarCornerTopright = (id = '') => Widget.Window({
-    name: `barcornertr${id}`,
+export const BarCornerTopright = (monitor = 0) => Wmonitorget.Window({
+    monitor,
+    name: `barcornertr${monitor}`,
     layer: 'top',
     anchor: ['top', 'right'],
     exclusivity: 'normal',
