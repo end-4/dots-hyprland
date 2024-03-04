@@ -121,7 +121,7 @@ export default (props) => {
     });
     const listContents = Stack({
         transition: 'crossfade',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         children: {
             'empty': notifEmptyContent,
             'list': notifList,

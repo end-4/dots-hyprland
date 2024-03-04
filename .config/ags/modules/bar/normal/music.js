@@ -186,7 +186,7 @@ export default () => {
                         Revealer({
                             revealChild: true,
                             transition: 'slide_left',
-                            transitionDuration: 200,
+                            transitionDuration: userOptions.animations.durationLarge,
                             child: Box({
                                 className: 'spacing-h-10 margin-left-10',
                                 children: [

@@ -10,7 +10,6 @@ const { execAsync, exec } = Utils;
 const { Box, Revealer } = Widget;
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 
-const ANIMATION_TIME = 150;
 const pinnedApps = [
     'firefox',
     'org.gnome.Nautilus',
@@ -48,7 +47,7 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     },
     revealChild: false,
     transition: 'slide_right',
-    transitionDuration: ANIMATION_TIME,
+    transitionDuration: userOptions.animations.durationLarge,
     child: Widget.Button({
         ...rest,
         className: 'dock-app-btn',
@@ -128,7 +127,7 @@ const Taskbar = () => Widget.Box({
             if (!removedButton) return;
             removedButton.revealChild = false;
 
-            Utils.timeout(ANIMATION_TIME, () => {
+            Utils.timeout(userOptions.animations.durationLarge, () => {
                 removedButton.destroy();
                 box.attribute.map.delete(address);
                 box.children = Array.from(box.attribute.map.values());
@@ -230,7 +229,7 @@ export default () => {
         },
         revealChild: false,
         transition: 'slide_up',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         child: dockContent,
         // setup: (self) => self
         //     .hook(Hyprland, (self) => self.attribute.updateShow(self))

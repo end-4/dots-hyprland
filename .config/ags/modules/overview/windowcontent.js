@@ -61,7 +61,7 @@ export const SearchAndWindows = () => {
         vexpand: true,
     });
     const resultsRevealer = Widget.Revealer({
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         transition: 'slide_down',
         // duration: 200,
@@ -70,7 +70,7 @@ export const SearchAndWindows = () => {
     });
     const entryPromptRevealer = Widget.Revealer({
         transition: 'crossfade',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: true,
         hpack: 'center',
         child: Widget.Label({
@@ -81,7 +81,7 @@ export const SearchAndWindows = () => {
 
     const entryIconRevealer = Widget.Revealer({
         transition: 'crossfade',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         hpack: 'end',
         child: Widget.Label({

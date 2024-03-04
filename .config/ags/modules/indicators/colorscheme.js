@@ -43,7 +43,7 @@ const ColorschemeContent = () => Box({
 
 export default () => Widget.Revealer({
     transition: 'slide_down',
-    transitionDuration: 200,
+    transitionDuration: userOptions.animations.durationLarge,
     child: ColorschemeContent(),
     setup: (self) => self.hook(showColorScheme, (revealer) => {
         revealer.revealChild = showColorScheme.value;

@@ -70,7 +70,7 @@ const WaifuImage = (taglist) => {
     const downloadState = Stack({
         homogeneous: false,
         transition: 'slide_up_down',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationSmall,
         children: {
             'api': ImageState('api', 'Calling API'),
             'download': ImageState('downloading', 'Downloading image'),
@@ -128,7 +128,7 @@ const WaifuImage = (taglist) => {
     });
     const blockImageRevealer = Revealer({
         transition: 'slide_down',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         child: Overlay({
             child: Box({
@@ -328,7 +328,7 @@ export const waifuView = Scrollable({
 const waifuTags = Revealer({
     revealChild: false,
     transition: 'crossfade',
-    transitionDuration: 150,
+    transitionDuration: userOptions.animations.durationLarge,
     child: Box({
         className: 'spacing-h-5',
         children: [

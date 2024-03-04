@@ -91,7 +91,7 @@ export const Bar = async (monitor = 0) => {
         child: Widget.Stack({
             homogeneous: false,
             transition: 'slide_up_down',
-            transitionDuration: 200,
+            transitionDuration: userOptions.animations.durationLarge,
             children: {
                 'normal': normalBarContent,
                 'focus': focusedBarContent,

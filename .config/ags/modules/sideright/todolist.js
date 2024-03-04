@@ -67,7 +67,7 @@ const todoListItem = (task, id, isDone, isEven = false) => {
     const widgetRevealer = Widget.Revealer({
         revealChild: true,
         transition: 'slide_down',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         child: todoContent,
     })
     return widgetRevealer;
@@ -112,7 +112,7 @@ const todoItems = (isDone) => Widget.Scrollable({
 const UndoneTodoList = () => {
     const newTaskButton = Revealer({
         transition: 'slide_left',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: true,
         child: Button({
             className: 'txt-small sidebar-todo-new',
@@ -131,7 +131,7 @@ const UndoneTodoList = () => {
     });
     const cancelAddTask = Revealer({
         transition: 'slide_right',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',
@@ -162,13 +162,13 @@ const UndoneTodoList = () => {
     });
     const newTaskEntryRevealer = Revealer({
         transition: 'slide_right',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         child: newTaskEntry,
     });
     const confirmAddTask = Revealer({
         transition: 'slide_right',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',

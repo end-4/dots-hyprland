@@ -79,10 +79,10 @@ export default ({
     const destroyWithAnims = () => {
         widget.sensitive = false;
         notificationBox.setCss(middleClickClose);
-        Utils.timeout(200, () => {
+        Utils.timeout(userOptions.animations.durationSmall, () => {
             if (wholeThing) wholeThing.revealChild = false;
         }, wholeThing);
-        Utils.timeout(400, () => {
+        Utils.timeout(userOptions.animations.durationSmall * 2, () => {
             command();
             if (wholeThing) {
                 wholeThing.destroy();
@@ -135,7 +135,7 @@ export default ({
         },
         revealChild: false,
         transition: 'slide_down',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
         }),
@@ -144,7 +144,7 @@ export default ({
     const display = Gdk.Display.get_default();
     const notifTextPreview = Revealer({
         transition: 'slide_down',
-        transitionDuration: 120,
+        transitionDuration: userOptions.animations.durationSmall,
         revealChild: true,
         child: Label({
             xalign: 0,
@@ -159,7 +159,7 @@ export default ({
     });
     const notifTextExpanded = Revealer({
         transition: 'slide_up',
-        transitionDuration: 120,
+        transitionDuration: userOptions.animations.durationSmall,
         revealChild: false,
         child: Box({
             vertical: true,
@@ -305,17 +305,17 @@ export default ({
     const maxOffset = 10.227;
     const endMargin = 20.455;
     const disappearHeight = 6.818;
-    const leftAnim1 = `transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    const leftAnim1 = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                        margin-left: -${Number(maxOffset + endMargin)}rem;
                        margin-right: ${Number(maxOffset + endMargin)}rem;
                        opacity: 0;`;
 
-    const rightAnim1 = `transition: 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    const rightAnim1 = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                         margin-left:   ${Number(maxOffset + endMargin)}rem;
                         margin-right: -${Number(maxOffset + endMargin)}rem;
                         opacity: 0;`;
 
-    const middleClickClose = `transition: 200ms cubic-bezier(0.85, 0, 0.15, 1);
+    const middleClickClose = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.85, 0, 0.15, 1);
                               margin-left:   ${Number(maxOffset + endMargin)}rem;
                               margin-right: -${Number(maxOffset + endMargin)}rem;
                               opacity: 0;`;
@@ -400,10 +400,10 @@ export default ({
                         self.setCss(leftAnim1);
                         widget.sensitive = false;
                     }
-                    Utils.timeout(200, () => {
+                    Utils.timeout(userOptions.animations.durationSmall, () => {
                         if (wholeThing) wholeThing.revealChild = false;
                     }, wholeThing);
-                    Utils.timeout(400, () => {
+                    Utils.timeout(userOptions.animations.durationSmall * 2, () => {
                         command();
                         if (wholeThing) {
                             wholeThing.destroy();
@@ -432,7 +432,7 @@ export default ({
     if (isPopup) Utils.timeout(popupTimeout, () => {
         if (wholeThing) {
             wholeThing.revealChild = false;
-            Utils.timeout(200, () => {
+            Utils.timeout(userOptions.animations.durationSmall, () => {
                 if (wholeThing) {
                     wholeThing.destroy();
                     wholeThing = null;

@@ -396,7 +396,7 @@ export default () => {
     return Widget.Revealer({
         revealChild: true,
         transition: 'slide_down',
-        transitionDuration: 200,
+        transitionDuration: userOptions.animations.durationLarge,
         child: Widget.Box({
             vertical: true,
             className: 'overview-tasks',
