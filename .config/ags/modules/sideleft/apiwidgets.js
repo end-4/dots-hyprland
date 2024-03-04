@@ -4,7 +4,6 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, CenterBox, Entry, EventBox, Icon, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { setupCursorHover, setupCursorHoverInfo } from '../.widgetutils/cursorhover.js';
-import { widgetContent } from './sideleft.js';
 // APIs
 import GPTService from '../../services/gpt.js';
 import Gemini from '../../services/gemini.js';
@@ -81,11 +80,13 @@ export const chatEntry = TextView({
             // Global keybinds
             if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                 event.get_keyval()[1] === Gdk.KEY_Page_Down) {
-                widgetContent.nextTab();
+                apiWidgets.attribute.nextTab();
+                return true;
             }
             else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
                 event.get_keyval()[1] === Gdk.KEY_Page_Up) {
-                    widgetContent.prevTab();
+                apiWidgets.attribute.prevTab();
+                return true;
             }
         })
     ,
@@ -203,7 +204,7 @@ const apiSwitcher = CenterBox({
     }),
 })
 
-export default Widget.Box({
+const apiWidgets = Widget.Box({
     attribute: {
         'nextTab': () => switchToTab(Math.min(currentApiId + 1, APIS.length - 1)),
         'prevTab': () => switchToTab(Math.max(0, currentApiId - 1)),
@@ -218,3 +219,5 @@ export default Widget.Box({
         textboxArea,
     ],
 });
+
+export default apiWidgets;
