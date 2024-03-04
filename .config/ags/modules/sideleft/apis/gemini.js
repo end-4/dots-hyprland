@@ -113,7 +113,7 @@ export const GoogleAiInstructions = () => Box({
     homogeneous: true,
     children: [Revealer({
         transition: 'slide_down',
-        transitionDuration: 150,
+        transitionDuration: userOptions.animations.durationLarge,
         setup: (self) => self
             .hook(GeminiService, (self, hasKey) => {
                 self.revealChild = (GeminiService.key.length == 0);

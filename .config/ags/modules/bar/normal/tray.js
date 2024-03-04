@@ -3,8 +3,6 @@ import SystemTray from 'resource:///com/github/Aylur/ags/service/systemtray.js';
 const { Box, Icon, Button, Revealer } = Widget;
 const { Gravity } = imports.gi.Gdk;
 
-const revealerDuration = 200;
-
 const SysTrayItem = (item) => Button({
     className: 'bar-systray-item',
     child: Icon({
@@ -32,7 +30,7 @@ export const Tray = (props = {}) => {
     const trayRevealer = Widget.Revealer({
         revealChild: true,
         transition: 'slide_left',
-        transitionDuration: revealerDuration,
+        transitionDuration: userOptions.animations.durationLarge,
         child: trayContent,
     });
     return Box({
