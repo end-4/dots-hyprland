@@ -185,7 +185,7 @@ const BatteryModule = () => Stack({
                             }
                         });
                     if (userOptions.weather.city != '' && userOptions.weather.city != null) {
-                        updateWeatherForCity(userOptions.weather.city);
+                        updateWeatherForCity(userOptions.weather.city.replace(/ /g, '%20'));
                     }
                     else {
                         Utils.execAsync('curl ipinfo.io')
