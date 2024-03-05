@@ -12,6 +12,7 @@ import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGP
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
 import { booruView, booruCommands, sendMessage as booruSendMessage, booruTabIcon } from './apis/booru.js';
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
+import { checkKeybind } from '../.widgetutils/keybind.js';
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
 import { widgetContent } from './sideleft.js';
@@ -83,31 +84,25 @@ export const chatEntry = TextView({
             self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
         }, 'hasKey')
         .on("key-press-event", (widget, event) => {
-            const keyval = event.get_keyval()[1];
+            // Don't send when Shift+Enter
             if (event.get_keyval()[1] === Gdk.KEY_Return && event.get_state()[1] == Gdk.ModifierType.MOD2_MASK) {
                 apiSendMessage(widget);
                 return true;
             }
             // Keybinds
-            if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK)) {
-                if (event.get_keyval()[1] === Gdk.KEY_Page_Down) {
-                    apiWidgets.attribute.nextTab();
-                    return true;
-                }
-                else if (event.get_keyval()[1] === Gdk.KEY_Page_Up) {
-                    apiWidgets.attribute.prevTab();
-                    return true;
-                }
+            if (checkKeybind(event, userOptions.keybinds.sidebar.cycleTab))
+                widgetContent.cycleTab();
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.nextTab))
+                widgetContent.nextTab();
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.prevTab))
+                widgetContent.prevTab();
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.apis.nextTab)) {
+                apiWidgets.attribute.nextTab();
+                return true;
             }
-            else if (event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) {
-                if (event.get_keyval()[1] === Gdk.KEY_Page_Down) {
-                    widgetContent.nextTab();
-                    return true;
-                }
-                else if (event.get_keyval()[1] === Gdk.KEY_Page_Up) {
-                    widgetContent.prevTab();
-                    return true;
-                }
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.apis.prevTab)) {
+                apiWidgets.attribute.prevTab();
+                return true;
             }
         })
     ,

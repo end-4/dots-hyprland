@@ -1,5 +1,6 @@
 
 let userConfigOptions = {
+    // General stuff
     'ai': {
         'defaultGPTProvider': 'openai',
         'defaultTemperature': 0.9,
@@ -43,7 +44,8 @@ let userConfigOptions = {
     'workspaces': {
         'shown': 10,
     },
-    icons: {
+    // Longer stuff
+    'icons': {
         substitutions: {
             'code-url-handler': 'visual-studio-code',
             'Code': 'visual-studio-code',
@@ -55,7 +57,27 @@ let userConfigOptions = {
             'wpsoffice': 'wps-office2019-kprometheus',
             '': 'image-missing',
         }
-    }
+    },
+    'keybinds': { 
+        // Format: Mod1+Mod2+key. CaSe SeNsItIvE!
+        // Modifiers: Shift Ctrl Alt Hyper Meta NoMod
+        // See https://docs.gtk.org/gdk3/index.html#constants for the other keys
+        'overview': {
+            'altMoveLeft': 'Ctrl+b',
+            'altMoveRight': 'Ctrl+f',
+            'deleteToEnd': 'Ctrl+k',
+        },
+        'sidebar': {
+            'apis': {
+                'nextTab': 'Page_Down',
+                'prevTab': 'Page_Up',
+            },
+            'pin': 'Ctrl+p',
+            'cycleTab': 'Ctrl+Tab',
+            'nextTab': 'Ctrl+Page_Down',
+            'prevTab': 'Ctrl+Page_Up',
+        },
+    },
 }
 
 globalThis['userOptions'] = userConfigOptions;
