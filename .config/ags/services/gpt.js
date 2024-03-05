@@ -248,8 +248,6 @@ class GPTService extends Service {
         this._messages.push(new GPTMessage('user', msg));
         this.emit('newMsg', this._messages.length - 1);
         const aiResponse = new GPTMessage('assistant', 'thinking...', true, false)
-        this._messages.push(aiResponse);
-        this.emit('newMsg', this._messages.length - 1);
 
         const body = {
             model: CHAT_MODELS[this._modelIndex],
@@ -274,6 +272,8 @@ class GPTService extends Service {
                 base_stream: stream
             }), aiResponse);
         });
+        this._messages.push(aiResponse);
+        this.emit('newMsg', this._messages.length - 1);
 
         if (this._cycleModels) {
             this._requestCount++;
