@@ -1,7 +1,6 @@
 const { Gdk } = imports.gi;
 
 const MODS = {
-    'NoMod': Gdk.ModifierType.NO_MODIFIER_MASK,
     'Shift': Gdk.ModifierType.SHIFT_MASK,
     'Ctrl': Gdk.ModifierType.CONTROL_MASK,
     'Alt': Gdk.ModifierType.ALT_MASK,
