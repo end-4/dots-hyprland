@@ -67,7 +67,7 @@ const Utilities = () => Box({
     children: [
         UtilButton({
             name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
-                Utils.execAsync(`${App.configDir}/scripts/grimblast.sh`)
+                Utils.execAsync(`${App.configDir}/scripts/grimblast.sh copy area`)
                     .catch(print)
             }
         }),
