@@ -11,6 +11,7 @@ let userConfigOptions = {
     },
     'apps': {
         'imageViewer': 'loupe',
+        'terminal': 'foot', // This is only for shell actions
     },
     'battery': {
         'low': 20,
