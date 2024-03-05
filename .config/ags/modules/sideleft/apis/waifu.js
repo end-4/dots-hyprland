@@ -40,8 +40,61 @@ export const waifuTabIcon = Box({
     className: 'sidebar-chat-apiswitcher-icon',
     homogeneous: true,
     children: [
-        MaterialIcon('photo_library', 'norm'),
+        MaterialIcon('photo', 'norm'),
     ]
+});
+
+const WaifuInfo = () => {
+    const waifuLogo = Label({
+        hpack: 'center',
+        className: 'sidebar-chat-welcome-logo',
+        label: 'photo',
+    })
+    return Box({
+        vertical: true,
+        vexpand: true,
+        className: 'spacing-v-15',
+        children: [
+            waifuLogo,
+            Label({
+                className: 'txt txt-title-small sidebar-chat-welcome-txt',
+                wrap: true,
+                justify: Gtk.Justification.CENTER,
+                label: 'Waifus',
+            }),
+            Box({
+                className: 'spacing-h-5',
+                hpack: 'center',
+                children: [
+                    Label({
+                        className: 'txt-smallie txt-subtext',
+                        wrap: true,
+                        justify: Gtk.Justification.CENTER,
+                        label: 'Powered by waifu.im + other APIs',
+                    }),
+                    Button({
+                        className: 'txt-subtext txt-norm icon-material',
+                        label: 'info',
+                        tooltipText: 'Type tags for a random pic.\nNSFW content will not be returned unless\nyou explicitly request such a tag.\n\nDisclaimer: Not affiliated with the providers\nnor responsible for any of their content.',
+                        setup: setupCursorHoverInfo,
+                    }),
+                ]
+            }),
+        ]
+    });
+}
+
+const waifuWelcome = Box({
+    vexpand: true,
+    homogeneous: true,
+    child: Box({
+        className: 'spacing-v-15',
+        vpack: 'center',
+        vertical: true,
+        children: [
+            WaifuInfo(),
+        ]
+    })
 });
 
 const WaifuImage = (taglist) => {
@@ -220,59 +273,6 @@ const WaifuImage = (taglist) => {
     return thisBlock;
 }
 
-const WaifuInfo = () => {
-    const waifuLogo = Label({
-        hpack: 'center',
-        className: 'sidebar-chat-welcome-logo',
-        label: 'photo_library',
-    })
-    return Box({
-        vertical: true,
-        vexpand: true,
-        className: 'spacing-v-15',
-        children: [
-            waifuLogo,
-            Label({
-                className: 'txt txt-title-small sidebar-chat-welcome-txt',
-                wrap: true,
-                justify: Gtk.Justification.CENTER,
-                label: 'Waifus',
-            }),
-            Box({
-                className: 'spacing-h-5',
-                hpack: 'center',
-                children: [
-                    Label({
-                        className: 'txt-smallie txt-subtext',
-                        wrap: true,
-                        justify: Gtk.Justification.CENTER,
-                        label: 'Powered by waifu.im',
-                    }),
-                    Button({
-                        className: 'txt-subtext txt-norm icon-material',
-                        label: 'info',
-                        tooltipText: 'A free Waifu API. An alternative to waifu.pics.',
-                        setup: setupCursorHoverInfo,
-                    }),
-                ]
-            }),
-        ]
-    });
-}
-
-const waifuWelcome = Box({
-    vexpand: true,
-    homogeneous: true,
-    child: Box({
-        className: 'spacing-v-15',
-        vpack: 'center',
-        vertical: true,
-        children: [
-            WaifuInfo(),
-        ]
-    })
-});
-
 const waifuContent = Box({
     className: 'spacing-v-15',
     vertical: true,
@@ -398,7 +398,6 @@ function newSimpleImageCall(name, url, width, height, dominantColor = '#9392A6')
 }
 
 export const sendMessage = (text) => {
-    // Do something on send
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();

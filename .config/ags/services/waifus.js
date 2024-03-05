@@ -1,20 +1,21 @@
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
-// Usage from my python waifu fetcher, for reference
-// Usage: waifu-get.py [OPTION]... [TAG]...
-// Options:
-//     --im\tUse waifu.im API. You can use many tags
-//     --pics\tUse waifu.pics API. Use 1 tag only.
-//     --nekos\tUse nekos.life (old) API. No tags.
-//     --segs\tForce NSFW images
-
-// Tags:
-//     waifu.im (type):
-//         maid waifu marin-kitagawa mori-calliope raiden-shogun oppai selfies uniform
-//     waifu.im (nsfw tags):
-//         ecchi hentai ero ass paizuri oral milf
+// Note: this service is made mainly for waifu.im. Others might work but not as properly
+const APISERVICES = {
+    'im': {
+        'endpoint': 'https://api.waifu.im/search',
+        'headers': { 'Accept-Version': 'v5' },
+    },
+    'nekos': {
+        'endpoint': 'https://nekos.life/api/neko',
+        'headers': {},
+    },
+    'pics': {
+        'endpoint': 'https://api.waifu.pics/sfw/',
+        'headers': {},
+    },
+};
 
 function paramStringFromObj(params) {
     return Object.entries(params)
@@ -33,23 +34,12 @@ function paramStringFromObj(params) {
 }
 
 class WaifuService extends Service {
-    _endpoints = {
-        'im': 'https://api.waifu.im/search',
-        'nekos': 'https://nekos.life/api/neko',
-        'pics': 'https://api.waifu.pics/sfw/',
-    }
-    _headers = {
-        'im': { 'Accept-Version': 'v5' },
-        'nekos': {},
-        'pics': {},
-    }
     _baseUrl = 'https://api.waifu.im/search';
     _mode = 'im'; // Allowed: im
     _responses = [];
     _queries = [];
     _nsfw = false;
     _minHeight = 600;
-    _status = 0;
 
     static {
         Service.register(this, {
@@ -74,7 +64,7 @@ class WaifuService extends Service {
     get mode() { return this._mode }
     set mode(value) {
         this._mode = value;
-        this._baseUrl = this._endpoints[this._mode];
+        this._baseUrl = APISERVICES[this._mode].endpoint;
     }
     get nsfw() { return this._nsfw }
     set nsfw(value) { this._nsfw = value }
@@ -90,14 +80,14 @@ class WaifuService extends Service {
         // Construct body/headers
         for (let i = 0; i < userArgs.length; i++) {
             const thisArg = userArgs[i].trim();
-            if(thisArg.length == 0) continue;
+            if (thisArg.length == 0) continue;
             if (thisArg == '--im') this._mode = 'im';
             else if (thisArg == '--nekos') this._mode = 'nekos';
             else if (thisArg.includes('pics')) this._mode = 'pics';
             else if (thisArg.includes('segs') || thisArg.includes('sex') || thisArg.includes('lewd')) this._nsfw = true;
             else {
                 taglist.push(thisArg);
-                if(['ecchi', 'hentai', 'ero', 'ass', 'paizuri', 'oral', 'milf'].includes(thisArg)) this._nsfw = true;
+                if (['ecchi', 'hentai', 'ero', 'ass', 'paizuri', 'oral', 'milf'].includes(thisArg)) this._nsfw = true;
             }
         }
         const newMessageId = this._queries.length;
@@ -111,19 +101,19 @@ class WaifuService extends Service {
         const paramString = paramStringFromObj(params);
         // Fetch
         // Note: body isn't included since passing directly to url is more reliable
-        const options = { 
+        const options = {
             method: 'GET',
-            headers: this._headers[this._mode],
+            headers: APISERVICES[this._mode].headers,
         };
-        var status = 0;
-        Utils.fetch(`${this._endpoints[this._mode]}?${paramString}`, options)
+        let status = 0;
+        Utils.fetch(`${APISERVICES[this._mode].endpoint}?${paramString}`, options)
             .then(result => {
                 status = result.status;
                 return result.text();
             })
             .then((dataString) => { // Store interesting stuff and emit
                 const parsedData = JSON.parse(dataString);
-                if (!parsedData.images) this._responses.push({
+                if (!parsedData.images) this._responses.push({ // Failed
                     status: status,
                     signature: -1,
                     url: '',
@@ -153,7 +143,6 @@ class WaifuService extends Service {
                 this.emit('updateResponse', newMessageId);
             })
             .catch(print);
-
     }
 }
 
