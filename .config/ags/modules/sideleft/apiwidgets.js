@@ -10,8 +10,11 @@ import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
+import { booruView, booruCommands, sendMessage as booruSendMessage, booruTabIcon } from './apis/booru.js';
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
+
+import { widgetContent } from './sideleft.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
 const APIS = [
@@ -37,6 +40,14 @@ const APIS = [
         contentWidget: waifuView,
         commandBar: waifuCommands,
         tabIcon: waifuTabIcon,
+        placeholderText: 'Enter tags',
+    },
+    {
+        name: 'Booru',
+        sendCommand: booruSendMessage,
+        contentWidget: booruView,
+        commandBar: booruCommands,
+        tabIcon: booruTabIcon,
         placeholderText: 'Enter tags',
     },
 ];
@@ -77,16 +88,26 @@ export const chatEntry = TextView({
                 apiSendMessage(widget);
                 return true;
             }
-            // Global keybinds
-            if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
-                event.get_keyval()[1] === Gdk.KEY_Page_Down) {
-                apiWidgets.attribute.nextTab();
-                return true;
+            // Keybinds
+            if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK)) {
+                if (event.get_keyval()[1] === Gdk.KEY_Page_Down) {
+                    apiWidgets.attribute.nextTab();
+                    return true;
+                }
+                else if (event.get_keyval()[1] === Gdk.KEY_Page_Up) {
+                    apiWidgets.attribute.prevTab();
+                    return true;
+                }
             }
-            else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
-                event.get_keyval()[1] === Gdk.KEY_Page_Up) {
-                apiWidgets.attribute.prevTab();
-                return true;
+            else if (event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) {
+                if (event.get_keyval()[1] === Gdk.KEY_Page_Down) {
+                    widgetContent.nextTab();
+                    return true;
+                }
+                else if (event.get_keyval()[1] === Gdk.KEY_Page_Up) {
+                    widgetContent.prevTab();
+                    return true;
+                }
             }
         })
     ,
