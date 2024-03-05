@@ -29,6 +29,9 @@ let userConfigOptions = {
         'wsNumScale': 0.09,
         'wsNumMarginScale': 0.07,
     },
+    'sidebar': {
+        'imageColumns': 3,
+    },
     'search': {
         'engineBaseUrl': 'https://www.google.com/search?q=',
         'excludedSites': ['quora.com'],

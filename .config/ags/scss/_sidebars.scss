@@ -847,3 +847,11 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-waifu-image-action:active {
     background-color: rgba(60, 60, 60, $waifu_image_overlay_transparency);
 }
+
+.sidebar-booru-image {
+    min-width: 8.523rem;
+    min-height: 8.523rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
