@@ -61,7 +61,7 @@ let userConfigOptions = {
     'keybinds': { 
         // Format: Mod1+Mod2+key. CaSe SeNsItIvE!
         // Modifiers: Shift Ctrl Alt Hyper Meta NoMod
-        // See https://docs.gtk.org/gdk3/index.html#constants for the other keys
+        // See https://docs.gtk.org/gdk3/index.html#constants for the other keys (they are listed as KEY_key)
         'overview': {
             'altMoveLeft': 'Ctrl+b',
             'altMoveRight': 'Ctrl+f',
