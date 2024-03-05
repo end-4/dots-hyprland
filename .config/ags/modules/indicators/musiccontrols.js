@@ -119,62 +119,63 @@ const CoverArt = ({ player, ...rest }) => {
             label: 'music_note',
         })]
     });
-    const coverArtDrawingArea = Widget.DrawingArea({ className: 'osd-music-cover-art' });
-    const coverArtDrawingAreaStyleContext = coverArtDrawingArea.get_style_context();
+    // const coverArtDrawingArea = Widget.DrawingArea({ className: 'osd-music-cover-art' });
+    // const coverArtDrawingAreaStyleContext = coverArtDrawingArea.get_style_context();
     const realCoverArt = Box({
         className: 'osd-music-cover-art',
         homogeneous: true,
-        children: [coverArtDrawingArea],
+        // children: [coverArtDrawingArea],
         attribute: {
             'pixbuf': null,
-            'showImage': (self, imagePath) => {
-                const borderRadius = coverArtDrawingAreaStyleContext.get_property('border-radius', Gtk.StateFlags.NORMAL);
-                const frameHeight = coverArtDrawingAreaStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                const frameWidth = coverArtDrawingAreaStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                let imageHeight = frameHeight;
-                let imageWidth = frameWidth;
-                // Get image dimensions
-                execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
-                    .then((output) => {
-                        const imageDimensions = JSON.parse(output);
-                        const imageAspectRatio = imageDimensions.w / imageDimensions.h;
-                        const displayedAspectRatio = imageWidth / imageHeight;
-                        if (imageAspectRatio >= displayedAspectRatio) {
-                            imageWidth = imageHeight * imageAspectRatio;
-                        } else {
-                            imageHeight = imageWidth / imageAspectRatio;
-                        }
-                        // Real stuff
-                        // TODO: fix memory leak(?)
-                        // if (self.attribute.pixbuf) {
-                        //     self.attribute.pixbuf.unref();
-                        //     self.attribute.pixbuf = null;
-                        // }
-                        self.attribute.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, imageWidth, imageHeight);
+            // 'showImage': (self, imagePath) => {
+            //     const borderRadius = coverArtDrawingAreaStyleContext.get_property('border-radius', Gtk.StateFlags.NORMAL);
+            //     const frameHeight = coverArtDrawingAreaStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+            //     const frameWidth = coverArtDrawingAreaStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+            //     let imageHeight = frameHeight;
+            //     let imageWidth = frameWidth;
+            //     // Get image dimensions
+            //     execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
+            //         .then((output) => {
+            //             const imageDimensions = JSON.parse(output);
+            //             const imageAspectRatio = imageDimensions.w / imageDimensions.h;
+            //             const displayedAspectRatio = imageWidth / imageHeight;
+            //             if (imageAspectRatio >= displayedAspectRatio) {
+            //                 imageWidth = imageHeight * imageAspectRatio;
+            //             } else {
+            //                 imageHeight = imageWidth / imageAspectRatio;
+            //             }
+            //             // Real stuff
+            //             // TODO: fix memory leak(?)
+            //             // if (self.attribute.pixbuf) {
+            //             //     self.attribute.pixbuf.unref();
+            //             //     self.attribute.pixbuf = null;
+            //             // }
+            //             self.attribute.pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, imageWidth, imageHeight);
 
-                        coverArtDrawingArea.set_size_request(frameWidth, frameHeight);
-                        coverArtDrawingArea.connect("draw", (widget, cr) => {
-                            // Clip a rounded rectangle area
-                            cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
-                            cr.arc(frameWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
-                            cr.arc(frameWidth - borderRadius, frameHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
-                            cr.arc(borderRadius, frameHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
-                            cr.closePath();
-                            cr.clip();
-                            // Paint image as bg, centered
-                            Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
-                                frameWidth / 2 - imageWidth / 2,
-                                frameHeight / 2 - imageHeight / 2
-                            );
-                            cr.paint();
-                        });
-                    }).catch(print)
-            },
+            //             coverArtDrawingArea.set_size_request(frameWidth, frameHeight);
+            //             coverArtDrawingArea.connect("draw", (widget, cr) => {
+            //                 // Clip a rounded rectangle area
+            //                 cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
+            //                 cr.arc(frameWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
+            //                 cr.arc(frameWidth - borderRadius, frameHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
+            //                 cr.arc(borderRadius, frameHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
+            //                 cr.closePath();
+            //                 cr.clip();
+            //                 // Paint image as bg, centered
+            //                 Gdk.cairo_set_source_pixbuf(cr, self.attribute.pixbuf,
+            //                     frameWidth / 2 - imageWidth / 2,
+            //                     frameHeight / 2 - imageHeight / 2
+            //                 );
+            //                 cr.paint();
+            //             });
+            //         }).catch(print)
+            // },
             'updateCover': (self) => {
                 // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
                 // Player closed
                 // Note that cover path still remains, so we're checking title
                 if (!player || player.trackTitle == "") {
+                    self.css = `background-image: none;`; // CSS image
                     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
                 }
@@ -182,13 +183,17 @@ const CoverArt = ({ player, ...rest }) => {
                 const coverPath = player.coverPath;
                 const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
-                    Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                    Utils.timeout(200, () => {
+                        // self.attribute.showImage(self, coverPath);
+                        self.css = `background-image: url('${coverPath}');`; // CSS image
+                    });
                 }
                 lastCoverPath = player.coverPath;
 
                 // If a colorscheme has already been generated, skip generation
                 if (fileExists(stylePath)) {
-                    self.attribute.showImage(self, coverPath)
+                    // self.attribute.showImage(self, coverPath)
+                    self.css = `background-image: url('${coverPath}');`; // CSS image
                     App.applyCss(stylePath);
                     return;
                 }
@@ -200,7 +205,10 @@ const CoverArt = ({ player, ...rest }) => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                         exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
-                        Utils.timeout(200, () => self.attribute.showImage(self, coverPath));
+                        Utils.timeout(200, () => {
+                            // self.attribute.showImage(self, coverPath)
+                            self.css = `background-image: url('${coverPath}');`; // CSS image
+                        });
                         App.applyCss(`${stylePath}`);
                     })
                     .catch(print);
