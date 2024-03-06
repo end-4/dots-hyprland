@@ -34,9 +34,9 @@ const BarClock = () => Widget.Box({
     children: [
         Widget.Label({
             className: 'bar-clock',
-            label: GLib.DateTime.new_now_local().format("%H:%M"),
-            setup: (self) => self.poll(5000, label => {
-                label.label = GLib.DateTime.new_now_local().format("%H:%M");
+            label: GLib.DateTime.new_now_local().format(userOptions.time.format),
+            setup: (self) => self.poll(userOptions.time.interval, label => {
+                label.label = GLib.DateTime.new_now_local().format(userOptions.time.format);
             }),
         }),
         Widget.Label({
