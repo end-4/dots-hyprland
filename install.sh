@@ -147,7 +147,7 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 # (eg. in ~/.config/hypr) won't be mixed together
 
 # For .config/* but not AGS, not Hyprland
-for file in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
+for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
   echo "[$0]: Found target: $i"
   if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
   elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
