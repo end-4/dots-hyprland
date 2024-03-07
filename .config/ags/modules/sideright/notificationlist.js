@@ -85,9 +85,8 @@ export default (props) => {
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
     const clearButton = ListActionButton('clear_all', 'Clear', () => {
-        // Manual destruction is not necessary 
-        // since Notifications.clear() sends destroy signals to every notif
         Notifications.clear();
+        notificationList.get_children().forEach(ch => ch.attribute.destroyWithAnims())
     });
     const listTitle = Box({
         vpack: 'start',
