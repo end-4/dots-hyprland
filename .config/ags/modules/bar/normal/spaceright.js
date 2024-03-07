@@ -58,12 +58,14 @@ export default () => {
     return Widget.EventBox({
         onScrollUp: () => {
             if (!Audio.speaker) return;
-            Audio.speaker.volume += 0.03;
+            if(Audio.speaker.volume <= 0.09) Audio.speaker.volume += 0.01;
+            else Audio.speaker.volume += 0.03;
             Indicator.popup(1);
         },
         onScrollDown: () => {
             if (!Audio.speaker) return;
-            Audio.speaker.volume -= 0.03;
+            if(Audio.speaker.volume <= 0.09) Audio.speaker.volume -= 0.01;
+            else Audio.speaker.volume -= 0.03;
             Indicator.popup(1);
         },
         onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
