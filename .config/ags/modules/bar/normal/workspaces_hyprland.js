@@ -175,15 +175,17 @@ export default () => EventBox({
                 .catch(print);
         })
         self.on('button-press-event', (self, event) => {
-            if (!(event.get_button()[1] === 1)) return; // We're only interested in left-click here
-            self.attribute.clicked = true;
-            const [_, cursorX, cursorY] = event.get_coords();
-            const widgetWidth = self.get_allocation().width;
-            // const wsId = Math.ceil(cursorX * NUM_OF_WORKSPACES_PER_GROUP / widgetWidth) + self.attribute.ws_group * NUM_OF_WORKSPACES_PER_GROUP;
-            // Hyprland.messageAsync(`dispatch workspace ${wsId}`).catch(print);
-            const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
-            Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
-                .catch(print);
+            if (event.get_button()[1] === 1) {
+                self.attribute.clicked = true;
+                const [_, cursorX, cursorY] = event.get_coords();
+                const widgetWidth = self.get_allocation().width;
+                const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
+                Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
+                    .catch(print);
+            }
+            else if (event.get_button()[1] === 8) {
+                Hyprland.messageAsync(`dispatch togglespecialworkspace`).catch(print);
+            }
         })
         self.on('button-release-event', (self) => self.attribute.clicked = false);
     }
