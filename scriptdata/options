@@ -3,10 +3,7 @@
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
 # The script that use this file should have two lines on its top as follows:
-# cd "$(dirname "$0")"
-# export base="$(pwd)"
-
-showhelp(){
+# cd "$(dirname "$0")" export base="$(pwd)" showhelp(){
 echo -e "Syntax: $0 [Options]...
 
 Idempotent installation script for dotfiles.

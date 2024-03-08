@@ -12,6 +12,7 @@ startask (){
 printf "\e[34m[$0]: Hi there!\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
 printf '            2. has not been fully tested, use at your own risk.\n'
+printf '            3. does not provide GPU things and you must have set it up yourself.\n'
 printf "\e[31m"
 printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
 printf "\e[97m"
