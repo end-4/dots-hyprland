@@ -84,6 +84,31 @@ export const BluetoothIndicator = () => Widget.Stack({
     ,
 });
 
+const BluetoothDevices = () => Widget.Box({
+    className: 'spacing-h-10',
+    setup: self => self.hook(Bluetooth, self => {
+        self.children = Bluetooth.connected_devices.map((device) => {
+            return Widget.Box({
+                className: 'bar-bluetooth-device spacing-h-5',
+                vpack: 'center',
+                tooltipText: device.name,
+                children: [
+                    Widget.Icon(`${device.iconName}-symbolic`),
+                    (device.batteryPercentage ? Widget.Label({
+                        className: 'txt-smallie',
+                        label: `${device.batteryPercentage}`,
+                        setup: (self) => {
+                            self.hook(device, (self) => {
+                                self.label = `${device.batteryPercentage}`;
+                            }, 'notify::batteryPercentage')
+                        }
+                    }) : null),
+                ]
+            });
+        });
+        self.visible = Bluetooth.connected_devices.length > 0;
+    }, 'notify::connected-devices'),
+})
 
 const NetworkWiredIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
@@ -247,7 +272,10 @@ export const StatusIcons = (props = {}) => Widget.Box({
             optionalKeyboardLayoutInstance,
             NotificationIndicator(),
             NetworkIndicator(),
-            BluetoothIndicator(),
+            Widget.Box({
+                className: 'spacing-h-5',
+                children: [BluetoothIndicator(), BluetoothDevices()]
+            })
         ]
     })
 });
