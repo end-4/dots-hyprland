@@ -1,5 +1,5 @@
 $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
-$textboxColor: mix($surface, $surfaceVariant, 80%);
+$textboxColor: $surfaceContainerHigh;
 $system: $secondary;
 $onSystem: $onSecondary;
 $chatgpt: $primary;
@@ -16,7 +16,7 @@ $onChatgpt: $onPrimary;
     border-radius: $rounding_large - $elevation_margin + 0.068rem;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
-    background-color: $t_background;
+    background-color: $background;
     padding: 1.023rem;
 }
 
@@ -37,7 +37,7 @@ $onChatgpt: $onPrimary;
     border-radius: $rounding_large - $elevation_margin + 0.068rem;
     min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
     // min-height: 29.591rem;
-    background-color: $t_background;
+    background-color: $background;
     padding: 1.023rem;
 }
 
@@ -54,12 +54,12 @@ $onChatgpt: $onPrimary;
 .sidebar-group {
     @include normal-rounding;
     @include group-padding;
-    background-color: $t_surface;
+    background-color: $surfaceContainer;
 }
 
 .sidebar-group-nopad {
     @include normal-rounding;
-    background-color: $t_surface;
+    background-color: $surfaceContainer;
 }
 
 .sidebar-group-invisible {
@@ -73,7 +73,7 @@ $onChatgpt: $onPrimary;
 .sidebar-togglesbox {
     @include full-rounding;
     @include group-padding;
-    background-color: $t_surface;
+    background-color: $surfaceContainer;
 }
 
 .sidebar-iconbutton {
@@ -96,8 +96,6 @@ $onChatgpt: $onPrimary;
 .sidebar-button {
     @include element_decel;
     padding: 0rem $rounding_small;
-    background-color: $t_secondaryContainer;
-    color: $onSecondaryContainer;
 }
 
 .sidebar-button:hover,
@@ -206,16 +204,16 @@ $onChatgpt: $onPrimary;
         @include element_decel;
         min-width: 0.273rem;
         min-height: 2.045rem;
-        background-color: $t_onSurfaceVariant;
+        background-color: transparentize($onSurfaceVariant, 0.7);
     }
 
     slider:hover,
     slider:focus {
-        background-color: mix($t_onSurfaceVariant, $onSurfaceVariant, 80%);
+        background-color: transparentize($onSurfaceVariant, 0.6);
     }
 
     slider:active {
-        background-color: mix($onSurfaceVariant, $surfaceVariant, 50%);
+        background-color: transparentize($onSurface, 0.5);
     }
 }
 
@@ -256,7 +254,7 @@ $onChatgpt: $onPrimary;
 }
 
 .sidebar-calendar-btn-othermonth {
-    color: mix($onSurface, $surface, 50%);
+    color: $outline;
 }
 
 .sidebar-calendar-header {
@@ -267,19 +265,17 @@ $onChatgpt: $onPrimary;
     @include full-rounding;
     @include element_decel;
     padding: 0rem 0.682rem;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
+    background-color: $surfaceContainer;
+    color: $outline;
 }
 
 .sidebar-calendar-monthyear-btn:hover,
 .sidebar-calendar-monthyear-btn:focus {
     background-color: $hovercolor;
-    color: mix($onSurfaceVariant, $surfaceVariant, 95%);
 }
 
 .sidebar-calendar-monthyear-btn:active {
     background-color: $activecolor;
-    color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
 .sidebar-calendar-monthshift-btn {
@@ -287,18 +283,16 @@ $onChatgpt: $onPrimary;
     @include element_decel;
     min-width: 2.045rem;
     min-height: 2.045rem;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
+    background-color: $surfaceContainer;
+    color: $outline;
 }
 
 .sidebar-calendar-monthshift-btn:hover {
     background-color: $hovercolor;
-    color: mix($onSurfaceVariant, $surfaceVariant, 95%);
 }
 
 .sidebar-calendar-monthshift-btn:active {
     background-color: $activecolor;
-    color: mix($onSurfaceVariant, $surfaceVariant, 85%);
 }
 
 .sidebar-selector-tab {
@@ -337,10 +331,6 @@ $onChatgpt: $onPrimary;
     padding-right: 0.545rem;
 }
 
-.sidebar-todo-item-even {
-    background-color: $t_t_surfaceVariant;
-}
-
 .sidebar-todo-item-action {
     @include element_decel;
     border-radius: 9999px;
@@ -373,7 +363,6 @@ $onChatgpt: $onPrimary;
 .sidebar-todo-new {
     @include full-rounding;
     @include element_decel;
-    color: $onSecondaryContainer;
     margin: 0.341rem;
     padding: 0.205rem 0.545rem;
     border: 0.068rem solid $onSurface;
@@ -381,11 +370,13 @@ $onChatgpt: $onPrimary;
 
 .sidebar-todo-new,
 .sidebar-todo-new:focus {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
+    color: $onSecondaryContainer;
+    background-color: $secondaryContainer;
 }
 
 .sidebar-todo-new:active {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+    color: $onPrimaryContainer;
+    background-color: $primaryContainer;
 }
 
 .sidebar-todo-add {
@@ -399,11 +390,11 @@ $onChatgpt: $onPrimary;
 
 .sidebar-todo-add:hover,
 .sidebar-todo-add:focus {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 97%);
+    background-color: $surfaceContainerHigh;
 }
 
 .sidebar-todo-add:active {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+    background-color: $surfaceContainerHighest;
 }
 
 .sidebar-todo-add-available {
@@ -418,11 +409,11 @@ $onChatgpt: $onPrimary;
 
 .sidebar-todo-add-available:hover,
 .sidebar-todo-add-available:focus {
-    background-color: mix($primary, $onPrimary, 97%);
+    background-color: mix($primary, $hovercolor, 70%);
 }
 
 .sidebar-todo-add-available:active {
-    background-color: mix($primary, $onPrimary, 80%);
+    background-color: mix($primary, $hovercolor, 40%);
 }
 
 .sidebar-todo-entry {
@@ -435,24 +426,24 @@ $onChatgpt: $onPrimary;
     min-height: 1.773rem;
     min-width: 0rem;
     padding: 0.205rem 0.682rem;
-    border: 0.068rem solid mix($onSurfaceVariant, $surfaceVariant, 50%);
+    border: 0.068rem solid $outline;
 }
 
 .sidebar-todo-entry:focus {
-    border: 0.068rem solid mix($onSurfaceVariant, $surfaceVariant, 90%);
+    border: 0.068rem solid $onSurfaceVariant;
 }
 
 .sidebar-module {
     @include normal-rounding;
     @include group-padding;
-    background-color: $l_l_t_surfaceVariant;
+    background-color: $surfaceContainer;
     padding: 0.682rem;
 }
 
 .sidebar-module-btn-arrow {
     @include full-rounding;
     @include icon-material;
-    background-color: $l_l_t_surfaceVariant;
+    background-color: $surfaceContainerHigh;
     min-width: 1.705rem;
     min-height: 1.705rem;
 
@@ -464,7 +455,7 @@ $onChatgpt: $onPrimary;
 .sidebar-module-scripts-button {
     @include full-rounding;
     @include icon-material;
-    background-color: $l_l_t_surfaceVariant;
+    background-color: $surfaceContainer;
     min-width: 1.705rem;
     min-height: 1.705rem;
 
@@ -540,7 +531,7 @@ $colorpicker_rounding: 0.341rem;
 .sidebar-chat-apiswitcher {
     @include full-rounding;
     @include group-padding;
-    background-color: $t_surface;
+    background-color: $surfaceContainer;
 }
 
 .sidebar-chat-apiswitcher-icon {
@@ -605,11 +596,11 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-send:hover,
 .sidebar-chat-send:focus {
-    background-color: $surfaceVariant;
+    background-color: $surfaceBright;
 }
 
 .sidebar-chat-send:active {
-    background-color: mix($surfaceVariant, $onBackground, 80%);
+    background-color: $surfaceVariant;
 }
 
 .sidebar-chat-send-available {
@@ -619,11 +610,11 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-send-available:hover,
 .sidebar-chat-send-available:focus {
-    background-color: mix($primary, $onPrimary, 97%);
+    background-color: mix($primary, $hovercolor, 70%);
 }
 
 .sidebar-chat-send-available:active {
-    background-color: mix($primary, $onPrimary, 80%);
+    background-color: mix($primary, $hovercolor, 40%);
 }
 
 .sidebar-chat-message {
@@ -683,17 +674,17 @@ $colorpicker_rounding: 0.341rem;
     background-color: $termbg;
     color: $termfg;
     margin: 0rem 0.682rem;
-    border: 0.068rem solid $t_t_t_onSecondaryContainer;
+    border: 0.068rem solid $outlineVariant;
 }
 
 .sidebar-chat-codeblock-topbar {
     @include mainfont;
     margin: 0.273rem;
     margin-bottom: 0rem;
-    background-color: mix($t_secondaryContainer, $t_onSurfaceVariant, 30%);
+    background-color: $secondaryContainer;
     color: $onSecondaryContainer;
     border-radius: $rounding_medium - 0.273rem;
-    border: 0.068rem solid mix($secondaryContainer, $onSecondaryContainer, 90%);
+    border: 0.068rem solid $outlineVariant;
     border-top-left-radius: $rounding_small + 0.068rem;
     border-top-right-radius: $rounding_small + 0.068rem;
     padding: 0.341rem 0.477rem;
@@ -712,11 +703,11 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-codeblock-topbar-btn:hover,
 .sidebar-chat-codeblock-topbar-btn:focus {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 80%);
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
 }
 
 .sidebar-chat-codeblock-topbar-btn:active {
-    background-color: mix($t_secondaryContainer, $t_onSecondaryContainer, 60%);
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
 }
 
 .sidebar-chat-codeblock-code {
@@ -824,11 +815,11 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-pin-enabled:hover,
 .sidebar-pin-enabled:focus {
-    background-color: mix($primary, $onPrimary, 90%);
+    background-color: mix($primary, $hovercolor, 70%);
 }
 
 .sidebar-pin-enabled:active {
-    background-color: mix($primary, $onPrimary, 80%);
+    background-color: mix($primary, $hovercolor, 40%);
 }
 
 .sidebar-waifu-heading {

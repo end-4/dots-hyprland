@@ -11,7 +11,7 @@
     min-height: 3.409rem;
     padding: 0rem 1.364rem;
     padding-right: 2.864rem;
-    background-color: $t_background;
+    background-color: $background;
     color: $onBackground;
 
     selection {
@@ -53,8 +53,8 @@
     @include elevation2;
     min-width: 28.773rem;
     padding: 0.682rem;
-    background-color: $t_background;
-    color: $onBackground;
+    background-color: $surfaceContainerLow;
+    color: $onSurface;
 }
 
 .overview-search-results-icon {
@@ -97,7 +97,7 @@
     @include elevation-border;
     @include elevation2;
     padding: 0.341rem;
-    background-color: $t_background;
+    background-color: $background;
     color: $onBackground;
 }
 
@@ -105,33 +105,35 @@
     @include normal-rounding;
     // @include elevation-border;
     margin: 0.341rem;
-    background-color: mix($t_t_surface, $t_onSurface, 93%);
+    background-color: $surfaceContainerLow;
 }
 
 .overview-tasks-workspace-number {
     @include mainfont;
-    color: mix($t_onSurface, $t_surface, 93%);
+    color: $onSurfaceVariant;
 }
 
 .overview-tasks-window {
     @include normal-rounding;
     @include menu_decel;
-    background-color: $t_surfaceVariant;
-    color: $onSecondaryContainer;
-    border: 0.068rem solid $t_t_t_onSecondaryContainer;
+    background-color: $surfaceContainerHigh;
+    color: $onSurface;
+    border: 0.068rem solid $outlineVariant;
 }
 
 .overview-tasks-window:hover,
 .overview-tasks-window:focus {
-    background-color: mix($l_t_secondaryContainer, $primary, 95%);
+    background-color: $secondaryContainer;
 }
 
 .overview-tasks-window:active {
-    background-color: mix($l_t_secondaryContainer, $primary, 90%);
+    background-color: $tertiaryContainer;
+    background-color: mix($secondaryContainer, $hovercolor, 70%);
 }
 
 .overview-tasks-window-selected {
-    background-color: mix($l_t_secondaryContainer, $primary, 90%);
+    background-color: $tertiaryContainer;
+    background-color: mix($secondaryContainer, $hovercolor, 70%);
 }
 
 .overview-tasks-window-dragging {
