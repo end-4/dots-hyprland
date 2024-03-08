@@ -208,13 +208,19 @@ export default () => {
                 },
             }
         })
-        const WorkspaceNumber = (index) => Widget.Label({
+        const WorkspaceNumber = ({ index, ...rest }) => Widget.Label({
             className: 'overview-tasks-workspace-number',
             label: `${index}`,
             css: `
                 margin: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale * userOptions.overview.wsNumMarginScale}px;
                 font-size: ${SCREEN_HEIGHT * userOptions.overview.scale * userOptions.overview.wsNumScale}px;
             `,
+            setup: (self) => self.hook(Hyprland.active.workspace, (self) => {
+                // Update when going to new ws group
+                const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN);
+                self.label = `${currentGroup * NUM_OF_WORKSPACES_SHOWN + index}`;
+            }),
+            ...rest,
         })
         const widget = Widget.Box({
             className: 'overview-tasks-workspace',
@@ -238,7 +244,13 @@ export default () => {
                         overviewTick.setValue(!overviewTick.value);
                     });
                 },
-                child: fixed,
+                child: Widget.Overlay({
+                    child: Widget.Box({}),
+                    overlays: [
+                        WorkspaceNumber({ index: index, hpack: 'start', vpack: 'start' }),
+                        fixed
+                    ]
+                }),
             })],
         });
         const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
