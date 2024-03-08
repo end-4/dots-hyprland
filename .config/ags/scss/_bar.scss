@@ -351,3 +351,14 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-util-btn:active {
     background-color: mix($bar_subgroup_bg, $onSurfaceVariant, 80%);
 }
+
+.bar-bluetooth-device {
+    @include full-rounding;
+    @include element_decel;
+    min-height: 1.032rem;
+    min-width: 1.032rem;
+    font-size: 1.032rem;
+    background-color: $surface;
+    color: $onSurface;
+    padding: 0.205rem 0.341rem;
+}
