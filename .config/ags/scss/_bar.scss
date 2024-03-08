@@ -15,7 +15,7 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .bar-bg {
-    background-color: $t_background;
+    background-color: $background;
     min-height: 2.727rem;
 }
 
@@ -28,7 +28,7 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .bar-group {
-    background-color: $l_l_t_surfaceVariant;
+    background-color: $surfaceContainer;
 }
 
 .bar-group-pad {
@@ -83,27 +83,23 @@ $bar_subgroup_bg: $surfaceVariant;
 
 .bar-ws {
     min-width: $bar_ws_width;
-    color: mix($onBackground, $background, 40%);
-    @if $darkmode ==true {
-        color: mix($onBackground, $background, 45%);
-    }
+    color: $outlineVariant;
 }
 
 .bar-ws-active {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $primary;
+    color: $onPrimary;
 }
 
 .bar-ws-occupied {
-    background-color: $bar_subgroup_bg;
-    color: $onSurfaceVariant;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
 }
 
 .bar-separator {
     @include full-rounding;
     min-width: 0.341rem;
     min-height: 0.341rem;
-    background-color: mix($t_surface, $t_onSurface, 90%);
     margin: 0rem 0.341rem;
 }
 
@@ -119,7 +115,7 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-date {
     @include titlefont;
     font-size: 1rem;
-    color: $onBackground;
+    //color: #AA0000;//$outlineVariant;
 }
 
 .bar-batt {
@@ -187,8 +183,8 @@ $bar_subgroup_bg: $surfaceVariant;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $primaryContainer;
+    color: $onPrimaryContainer;
 }
 
 .bar-music-playstate-txt {
@@ -231,7 +227,7 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .corner {
-    background-color: $t_background;
+    background-color: $background;
     @include large-rounding;
 }
 
@@ -243,7 +239,7 @@ $bar_subgroup_bg: $surfaceVariant;
 .bar-topdesc {
     margin-top: -0.136rem;
     margin-bottom: -0.341rem;
-    color: $subtext;
+    color: $outline;
 }
 
 .bar-space-button {
@@ -296,11 +292,12 @@ $bar_subgroup_bg: $surfaceVariant;
 }
 
 .bar-statusicons-hover {
-    background-color: mix($t_background, $t_onBackground, 90%);
+    background-color: $surfaceContainerHighest;
 }
 
 .bar-statusicons-active {
-    background-color: mix($t_background, $t_onBackground, 80%);
+    background-color: $primary;
+    color: $onPrimary;
 }
 
 .bar-util-btn {
@@ -308,14 +305,16 @@ $bar_subgroup_bg: $surfaceVariant;
     @include element_decel;
     min-height: 1.77rem;
     min-width: 1.77rem;
-    background-color: $bar_subgroup_bg;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
 }
 
 .bar-util-btn:hover,
 .bar-util-btn:focus {
-    background-color: mix($bar_subgroup_bg, $onSurfaceVariant, 90%);
+    background-color: $primaryContainer;
 }
 
 .bar-util-btn:active {
-    background-color: mix($bar_subgroup_bg, $onSurfaceVariant, 80%);
+    background-color: $primary;
+    color: $onPrimary;
 }

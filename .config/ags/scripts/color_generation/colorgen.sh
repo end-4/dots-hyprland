@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ${HOME}/virtualenvs/my_project_venv/bin/activate
+
 # check if no arguments
 if [ $# -eq 0 ]; then
     echo "Usage: colorgen.sh /path/to/image (--apply)"

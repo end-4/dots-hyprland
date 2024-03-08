@@ -4,6 +4,21 @@ from pathlib import Path
 import sys
 import subprocess
 
+# Color in hue, chroma, tone form
+from materialyoucolor.hct import Hct
+from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
+# There are 9 different variants of scheme.
+from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
+#from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
+#from materialyoucolor.scheme.scheme_expressive import SchemeExpressive as Scheme
+#from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
+#from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
+#from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
+#from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
+#from materialyoucolor.scheme.scheme_fidelity import SchemeFidelity as Scheme
+#from materialyoucolor.scheme.scheme_content import SchemeContent as Scheme
+# Others you can import: SchemeExpressive, SchemeFruitSalad, SchemeMonochrome, SchemeRainbow, SchemeVibrant, SchemeNeutral, SchemeFidelity and SchemeContent
+
 def darken(hex_color, factor=0.7):
     if not (hex_color.startswith('#') and len(hex_color) in (4, 7)):
         raise ValueError("Invalid hex color format")
@@ -23,6 +38,10 @@ if len(sys.argv) > 1 and sys.argv[1] == '--path':
     hsize = int((float(img.size[1])*float(wpercent)))
     img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
     newtheme = themeFromImage(img)
+    argb = sourceColorFromImage(img)
+
+    scheme = Scheme(Hct.from_int(argb), True, 0.0)
+
     # except FileNotFoundError:
     #     print('[generate_colors_material.py] File not found', file=sys.stderr);
     #     exit()
@@ -36,7 +55,7 @@ else:
     # try:
     # imagePath = subprocess.check_output("ags run-js 'wallpaper.get(0)'", shell=True)
     imagePath = subprocess.check_output("swww query | awk -F 'image: ' '{print $2}'", shell=True)
-    imagePath = imagePath[:-1].decode("utf-8") 
+    imagePath = imagePath[:-1].decode("utf-8")
     img = Image.open(imagePath)
     basewidth = 64
     wpercent = (basewidth/float(img.size[0]))
@@ -60,63 +79,90 @@ else:
     colorscheme = newtheme.get('schemes').get('dark')
     print('$darkmode: true;')
 
-primary = hexFromArgb(colorscheme.get_primary())
-onPrimary = hexFromArgb(colorscheme.get_onPrimary())
-primaryContainer = hexFromArgb(colorscheme.get_primaryContainer())
-onPrimaryContainer = hexFromArgb(colorscheme.get_onPrimaryContainer())
-secondary = hexFromArgb(colorscheme.get_secondary())
-onSecondary = hexFromArgb(colorscheme.get_onSecondary())
-secondaryContainer = hexFromArgb(colorscheme.get_secondaryContainer())
-onSecondaryContainer = hexFromArgb(colorscheme.get_onSecondaryContainer())
-tertiary = hexFromArgb(colorscheme.get_tertiary())
-onTertiary = hexFromArgb(colorscheme.get_onTertiary())
-tertiaryContainer = hexFromArgb(colorscheme.get_tertiaryContainer())
-onTertiaryContainer = hexFromArgb(colorscheme.get_onTertiaryContainer())
-error = hexFromArgb(colorscheme.get_error())
-onError = hexFromArgb(colorscheme.get_onError())
-errorContainer = hexFromArgb(colorscheme.get_errorContainer())
-onErrorContainer = hexFromArgb(colorscheme.get_onErrorContainer())
-background = hexFromArgb(colorscheme.get_background())
-onBackground = hexFromArgb(colorscheme.get_onBackground())
-surface = hexFromArgb(colorscheme.get_surface())
-onSurface = hexFromArgb(colorscheme.get_onSurface())
-surfaceVariant = hexFromArgb(colorscheme.get_surfaceVariant())
-onSurfaceVariant = hexFromArgb(colorscheme.get_onSurfaceVariant())
-outline = hexFromArgb(colorscheme.get_outline())
-shadow = hexFromArgb(colorscheme.get_shadow())
-inverseSurface = hexFromArgb(colorscheme.get_inverseSurface())
-inverseOnSurface = hexFromArgb(colorscheme.get_inverseOnSurface())
-inversePrimary = hexFromArgb(colorscheme.get_inversePrimary())
+#primary = hexFromArgb(colorscheme.get_primary())
+#onPrimary = hexFromArgb(colorscheme.get_onPrimary())
+#primaryContainer = hexFromArgb(colorscheme.get_primaryContainer())
+#onPrimaryContainer = hexFromArgb(colorscheme.get_onPrimaryContainer())
+#secondary = hexFromArgb(colorscheme.get_secondary())
+#onSecondary = hexFromArgb(colorscheme.get_onSecondary())
+#secondaryContainer = hexFromArgb(colorscheme.get_secondaryContainer())
+#onSecondaryContainer = hexFromArgb(colorscheme.get_onSecondaryContainer())
+#tertiary = hexFromArgb(colorscheme.get_tertiary())
+#onTertiary = hexFromArgb(colorscheme.get_onTertiary())
+#tertiaryContainer = hexFromArgb(colorscheme.get_tertiaryContainer())
+#onTertiaryContainer = hexFromArgb(colorscheme.get_onTertiaryContainer())
+#error = hexFromArgb(colorscheme.get_error())
+#onError = hexFromArgb(colorscheme.get_onError())
+#errorContainer = hexFromArgb(colorscheme.get_errorContainer())
+#onErrorContainer = hexFromArgb(colorscheme.get_onErrorContainer())
+#background = hexFromArgb(colorscheme.get_background())
+#onBackground = hexFromArgb(colorscheme.get_onBackground())
+#surface = hexFromArgb(colorscheme.get_surface())
+#onSurface = hexFromArgb(colorscheme.get_onSurface())
+#surfaceVariant = hexFromArgb(colorscheme.get_surfaceVariant())
+#onSurfaceVariant = hexFromArgb(colorscheme.get_onSurfaceVariant())
+#outline = hexFromArgb(colorscheme.get_outline())
+#shadow = hexFromArgb(colorscheme.get_shadow())
+#inverseSurface = hexFromArgb(colorscheme.get_inverseSurface())
+#inverseOnSurface = hexFromArgb(colorscheme.get_inverseOnSurface())
+#inversePrimary = hexFromArgb(colorscheme.get_inversePrimary())
+
 
 # make material less boring
-if darkmode:
-    background = darken(background, 0.6)
+#if darkmode:
+#    background = darken(background, 0.6)
 
-print('$primary: ' + primary + ';')
-print('$onPrimary: ' + onPrimary + ';')
-print('$primaryContainer: ' + primaryContainer + ';')
-print('$onPrimaryContainer: ' + onPrimaryContainer + ';')
-print('$secondary: ' + secondary + ';')
-print('$onSecondary: ' + onSecondary + ';')
-print('$secondaryContainer: ' + secondaryContainer + ';')
-print('$onSecondaryContainer: ' + onSecondaryContainer + ';')
-print('$tertiary: ' + tertiary + ';')
-print('$onTertiary: ' + onTertiary + ';')
-print('$tertiaryContainer: ' + tertiaryContainer + ';')
-print('$onTertiaryContainer: ' + onTertiaryContainer + ';')
-print('$error: ' + error + ';')
-print('$onError: ' + onError + ';')
-print('$errorContainer: ' + errorContainer + ';')
-print('$onErrorContainer: ' + onErrorContainer + ';')
-print('$colorbarbg: ' + background + ';')
-print('$background: ' + background + ';')
-print('$onBackground: ' + onBackground + ';')
-print('$surface: ' + surface + ';')
-print('$onSurface: ' + onSurface + ';')
-print('$surfaceVariant: ' + surfaceVariant + ';')
-print('$onSurfaceVariant: ' + onSurfaceVariant + ';')
-print('$outline: ' + outline + ';')
-print('$shadow: ' + shadow + ';')
-print('$inverseSurface: ' + inverseSurface + ';')
-print('$inverseOnSurface: ' + inverseOnSurface + ';')
-print('$inversePrimary: ' + inversePrimary + ';')
+#print('$primary: ' + primary + ';')
+#print('$onPrimary: ' + onPrimary + ';')
+#print('$primaryContainer: ' + primaryContainer + ';')
+#print('$onPrimaryContainer: ' + onPrimaryContainer + ';')
+#print('$secondary: ' + secondary + ';')
+#print('$onSecondary: ' + onSecondary + ';')
+#print('$secondaryContainer: ' + secondaryContainer + ';')
+#print('$onSecondaryContainer: ' + onSecondaryContainer + ';')
+#print('$tertiary: ' + tertiary + ';')
+#print('$onTertiary: ' + onTertiary + ';')
+#print('$tertiaryContainer: ' + tertiaryContainer + ';')
+#print('$onTertiaryContainer: ' + onTertiaryContainer + ';')
+#print('$error: ' + error + ';')
+#print('$onError: ' + onError + ';')
+#print('$errorContainer: ' + errorContainer + ';')
+#print('$onErrorContainer: ' + onErrorContainer + ';')
+#print('$colorbarbg: ' + background + ';')
+#print('$background: ' + background + ';')
+#print('$onBackground: ' + onBackground + ';')
+#print('$surface: ' + surface + ';')
+#print('$onSurface: ' + onSurface + ';')
+#print('$surfaceVariant: ' + surfaceVariant + ';')
+#print('$onSurfaceVariant: ' + onSurfaceVariant + ';')
+#print('$outline: ' + outline + ';')
+#print('$shadow: ' + shadow + ';')
+#print('$inverseSurface: ' + inverseSurface + ';')
+#print('$inverseOnSurface: ' + inverseOnSurface + ';')
+#print('$inversePrimary: ' + inversePrimary + ';')
+#print('$indsddsdversePrimary: ' + inversePrimary + ';')
+
+
+
+if len(sys.argv) > 4:
+    if sys.argv[4] == '--debug':
+        for color in vars(MaterialDynamicColors).keys():
+            color_name = getattr(MaterialDynamicColors, color)
+            if hasattr(color_name, "get_hct"):
+                rgba = color_name.get_hct(scheme).to_rgba()
+                r, g, b, a = rgba
+                hex_color = f"#{r:02X}{g:02X}{b:02X}"
+                print(color.ljust(32), "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m"), hex_color)
+
+        print('\nHey :\n')
+
+
+for color in vars(MaterialDynamicColors).keys():
+    color_name = getattr(MaterialDynamicColors, color)
+    if hasattr(color_name, "get_hct"):
+        rgba = color_name.get_hct(scheme).to_rgba()
+        r, g, b, a = rgba
+        hex_color = f"#{r:02X}{g:02X}{b:02X}"
+        print('$' + color + ': ' + hex_color + ';')
+
+print('$colorbarbg: ' + '#000000' + ';')
