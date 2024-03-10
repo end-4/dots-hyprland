@@ -23,7 +23,15 @@ const WindowTitle = async () => {
                         xalign: 0,
                         className: 'txt txt-smallie',
                         setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
-                            label.label = Hyprland.active.client.title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : Hyprland.active.client.title;
+                            if (Hyprland.active.client.title.length === 0) {
+                                label.label = `Workspace ${Hyprland.active.workspace.id}`;
+                                return;
+                            };
+                            if (Hyprland.active.client.title.length > 20){
+                                label.label = Hyprland.active.client.title.substring(0,20) + "...";
+                                return;
+                            };
+                            label.label = Hyprland.active.client.title;
                         }),
                     })
                 ]
