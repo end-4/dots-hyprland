@@ -133,18 +133,18 @@ export default () => {
             ]
         })]
     });
-    const trackTitle = Scrollable({
+    const trackTitle = Label({
         hexpand: true,
-        child: Label({
-            className: 'txt-smallie txt-onSurfaceVariant',
-            setup: (self) => self.hook(Mpris, label => {
-                const mpris = Mpris.getPlayer('');
-                if (mpris)
-                    label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
-                else
-                    label.label = 'No media';
-            }),
-        })
+        className: 'txt-smallie txt-onSurfaceVariant',
+        truncate: 'end', 
+        maxWidthChars: 10, // Doesn't matter, just needs to be non negative
+        setup: (self) => self.hook(Mpris, label => {
+            const mpris = Mpris.getPlayer('');
+            if (mpris)
+                label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
+            else
+                label.label = 'No media';
+        }),
     })
     const musicStuff = Box({
         className: 'spacing-h-10',
