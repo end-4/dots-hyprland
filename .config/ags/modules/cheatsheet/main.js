@@ -3,6 +3,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import { Keybinds } from "./keybinds.js";
 import { setupCursorHover } from "../.widgetutils/cursorhover.js";
+import PopupWindow from '../.widgethacks/popupwindow.js';
 
 const cheatsheetHeader = () => Widget.CenterBox({
     vertical: false,
@@ -68,11 +69,10 @@ const clickOutsideToClose = Widget.EventBox({
     onMiddleClick: () => App.closeWindow('cheatsheet'),
 });
 
-export default () => Widget.Window({
+export default () => PopupWindow({
     name: 'cheatsheet',
     exclusivity: 'ignore',
     keymode: 'exclusive',
-    popup: true,
     visible: false,
     child: Widget.Box({
         vertical: true,
