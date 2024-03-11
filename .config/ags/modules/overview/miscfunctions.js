@@ -13,7 +13,16 @@ export function hasUnterminatedBackslash(inputString) {
 export function launchCustomCommand(command) {
     const args = command.split(' ');
     if (args[0] == '>raw') { // Mouse raw input
-        execAsync([`bash`, `-c`, `hyprctl keyword input:force_no_accel $(( 1 - $(hyprctl getoption input:force_no_accel -j | gojq ".int") ))`, `&`]).catch(print);
+        Utils.execAsync('hyprctl -j getoption input:accel_profile')
+            .then((output) => {
+                const value = JSON.parse(output)["str"].trim();
+                if (value != "[[EMPTY]]" && value != "") {
+                    execAsync(['bash', '-c', `hyprctl keyword input:accel_profile '[[EMPTY]]'`]).catch(print);
+                }
+                else {
+                    execAsync(['bash', '-c', `hyprctl keyword input:accel_profile flat`]).catch(print);
+                }
+            })
     }
     else if (args[0] == '>img') { // Change wallpaper
         execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh`, `&`]).catch(print);
