@@ -12,7 +12,8 @@ import {
     ModuleEditIcon,
     ModuleReloadIcon,
     ModuleSettingsIcon,
-    ModulePowerIcon
+    ModulePowerIcon,
+    ModuleRawInput
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./notificationlist.js";
 import { ModuleCalendar } from "./calendar.js";
@@ -51,7 +52,7 @@ const togglesBox = Widget.Box({
     children: [
         ToggleIconWifi(),
         ToggleIconBluetooth(),
-        await HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', {}),
+        await ModuleRawInput(),
         await HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         ModuleNightLight(),
         await ModuleInvertColors(),

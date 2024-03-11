@@ -130,6 +130,36 @@ export const ModuleInvertColors = async (props = {}) => {
     };
 }
 
+export const ModuleRawInput = async (props = {}) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: 'Raw input',
+            onClicked: (button) => {
+                Hyprland.messageAsync('j/getoption input:accel_profile')
+                    .then((output) => {
+                        const value = JSON.parse(output)["str"].trim();
+                        if (value != "[[EMPTY]]" && value != "") {
+                            execAsync(['bash', '-c', `hyprctl keyword input:accel_profile '[[EMPTY]]'`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', false);
+                        }
+                        else {
+                            Hyprland.messageAsync(`j/keyword input:accel_profile flat`)
+                                .catch(print);
+                            button.toggleClassName('sidebar-button-active', true);
+                        }
+                    })
+            },
+            child: MaterialIcon('mouse', 'norm'),
+            setup: setupCursorHover,
+            ...props,
+        })
+    } catch {
+        return null;
+    };
+}
+
 export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
     attribute: {
         enabled: false,
