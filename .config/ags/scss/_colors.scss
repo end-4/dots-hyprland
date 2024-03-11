@@ -10,13 +10,11 @@ $transparency_enabled: false;
         $background: mix(mix($background, $primary, 94%), #000000, 50%);
         $surface: mix($surface, $primaryContainer, 98%);
         $surfaceVariant: mix($surfaceVariant, #000000, 75%);
-        // $secondaryContainer: mix($secondaryContainer, $primaryContainer, 90%);
     }
 
     @if $darkmode ==false {
-        $background: mix($background, $primary, 85%);
-        $surface: mix($surface, $primary, 90%);
-        $surfaceVariant: mix($surfaceVariant, #ffffff, 50%);
+        $primaryContainer: mix($primaryContainer, white, 90%);
+        $surface: mix($surface, $primaryContainer, 98%);
     }
 }
 
