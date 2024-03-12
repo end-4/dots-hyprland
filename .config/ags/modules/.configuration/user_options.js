@@ -72,7 +72,7 @@ let configOptions = {
             '': "image-missing",
         }
     },
-    'keybinds': { 
+    'keybinds': {
         // Format: Mod1+Mod2+key. CaSe SeNsItIvE!
         // Modifiers: Shift Ctrl Alt Hyper Meta
         // See https://docs.gtk.org/gdk3/index.html#constants for the other keys (they are listed as KEY_key)
@@ -94,11 +94,17 @@ let configOptions = {
     },
 }
 
-// Load user's options
-Object.entries(userOverrides).forEach((override) => {
-    const [key, value] = override;
-    configOptions[key] = value;
-});
+// Override defaults with user's options
+function overrideConfigRecursive(userOverrides, configOptions = {}) {
+    for (const [key, value] of Object.entries(userOverrides)) {
+        if (typeof value === 'object') {
+            overrideConfigRecursive(value, configOptions[key]);
+        } else {
+            configOptions[key] = value;
+        }
+    }
+}
+overrideConfigRecursive(userOverrides, configOptions);
 
 globalThis['userOptions'] = configOptions;
 export default configOptions;

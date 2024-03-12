@@ -5,12 +5,7 @@ const userConfigOptions = {
     // Here's an example
     'keybinds': { 
         'sidebar': {
-            'apis': {
-                'nextTab': "Page_Down",
-                'prevTab': "Page_Up",
-            },
             'pin': "Ctrl+p",
-            'cycleTab': "Ctrl+Tab",
             'nextTab': "Ctrl+Page_Down",
             'prevTab': "Ctrl+Page_Up",
         },
