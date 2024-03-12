@@ -160,7 +160,7 @@ v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/a
 t="$HOME/.config/ags/user_options.js"
 if [ -f $t ];then
   echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-  v cp -f .config/ags/user_options.js $t.new
+# v cp -f .config/ags/user_options.js $t.new
   existed_ags_opt=y
 else
   echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
@@ -203,7 +203,7 @@ printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[97
 echo "See https://end-4.github.io/dots-hyprland-wiki/en for more info."
 case $existed_ags_opt in
   y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[97m\n"
-     printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[97m\n"
+#    printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[97m\n"
 ;;esac
 case $existed_hypr_conf in
   y) printf "\n\e[33m[$0]: Warning: \"~/.config/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[97m\n"
