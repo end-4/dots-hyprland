@@ -102,7 +102,6 @@ const BooruPage = (taglist) => {
     const PageState = (icon, name) => Box({
         className: 'spacing-h-5 txt',
         children: [
-            Box({ hexpand: true }),
             Label({
                 className: 'sidebar-waifu-txt txt-smallie',
                 xalign: 0,
@@ -119,15 +118,35 @@ const BooruPage = (taglist) => {
         setup: setupCursorHover,
     })
     const PreviewImage = (data) => {
-        return Box({
-            className: 'sidebar-booru-image',
-            // css: 'border: 2px solid white;',
-            css: `background-image: url('${data.preview_url}');`,
-            // setup: (self) => {
+        return Overlay({
+            child: Box({
+                className: 'sidebar-booru-image',
+                css: `background-image: url('${data.preview_url}');`,
+                // setup: (self) => {
                 // Utils.timeout(1000, () => {
                 //     self.css = `background-image: url('${data.preview_url}');`;
                 // })
-            // }
+                // }
+            }),
+            overlays: [
+                Box({
+                    vpack: 'start',
+                    className: 'sidebar-booru-image-actions spacing-h-3',
+                    children: [
+                        Box({ hexpand: true }),
+                        ImageAction({
+                            name: 'Go to file url',
+                            icon: 'file_open',
+                            action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
+                        }),
+                        ImageAction({
+                            name: 'Go to source',
+                            icon: 'open_in_new',
+                            action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
+                        }),
+                    ]
+                })
+            ]
         })
     }
     const colorIndicator = Box({
@@ -151,11 +170,21 @@ const BooruPage = (taglist) => {
         child: downloadState,
     });
     const pageHeading = Box({
-        hpack: 'fill',
-        className: 'sidebar-waifu-content spacing-h-5',
+        homogeneous: false,
         children: [
-            ...taglist.map((tag) => CommandButton(tag)),
-            Box({ hexpand: true }),
+            Scrollable({
+                hexpand: true,
+                vscroll: 'never',
+                hscroll: 'automatic',
+                child: Box({
+                    hpack: 'fill',
+                    className: 'sidebar-waifu-content spacing-h-5',
+                    children: [
+                        ...taglist.map((tag) => CommandButton(tag)),
+                        Box({ hexpand: true }),
+                    ]
+                })
+            }),
             downloadIndicator,
         ]
     });
@@ -219,7 +248,7 @@ const BooruPage = (taglist) => {
                 // Add stuff
                 for (let i = 0; i < imageRows; i++) {
                     for (let j = 0; j < imageColumns; j++) {
-                        if (i * imageColumns + j >= 8) break;
+                        if (i * imageColumns + j >= userOptions.sidebar.imageBooruCount) break;
                         // if (i * imageColumns + j >= data.length) break;
                         pageImageGrid.attach(PreviewImage(data[i * imageColumns + j]), j, i, 1, 1);
                     }

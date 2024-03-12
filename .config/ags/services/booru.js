@@ -82,7 +82,6 @@ class BooruService extends Service {
             'tags': taglist.join('+'),
         };
         const paramString = paramStringFromObj(params);
-        console.log('==========PARAMS LIST\n', params, '\n============\nSTR\n', paramString)
         // Fetch
         // Note: body isn't included since passing directly to url is more reliable
         const options = {
@@ -97,8 +96,11 @@ class BooruService extends Service {
             })
             .then((dataString) => { // Store interesting stuff and emit
                 const parsedData = JSON.parse(dataString);
+                // console.log(parsedData)
                 this._responses.push(parsedData.map(obj => {
                     return {
+                        id: obj.id,
+                        tags: obj.tags,
                         md5: obj.md5,
                         preview_url: obj.preview_url,
                         preview_width: obj.preview_width,
@@ -106,6 +108,10 @@ class BooruService extends Service {
                         sample_url: obj.sample_url,
                         sample_width: obj.sample_width,
                         sample_height: obj.sample_height,
+                        file_url: obj.file_url,
+                        file_ext: obj.file_ext,
+                        file_width: obj.file_width,
+                        file_height: obj.file_height,
                         source: getWorkingImageSauce(obj.source),
                     }
                 }));
