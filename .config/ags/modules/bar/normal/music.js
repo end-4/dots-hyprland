@@ -36,9 +36,9 @@ const BarGroup = ({ child }) => Box({
     ]
 });
 
-const BarResource = (name, icon, command) => {
+const BarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog', textClassName = 'txt-onSurfaceVariant', iconClassName = 'bar-batt') => {
     const resourceCircProg = AnimatedCircProg({
-        className: 'bar-batt-circprog',
+        className: `${circprogClassName}`,
         vpack: 'center',
         hpack: 'center',
     });
@@ -47,7 +47,7 @@ const BarResource = (name, icon, command) => {
         children: [Overlay({
             child: Box({
                 vpack: 'center',
-                className: 'bar-batt',
+                className: `${iconClassName}`,
                 homogeneous: true,
                 children: [
                     MaterialIcon(icon, 'small'),
@@ -57,10 +57,10 @@ const BarResource = (name, icon, command) => {
         })]
     });
     const resourceLabel = Label({
-        className: 'txt-smallie txt-onSurfaceVariant',
+        className: `txt-smallie ${textClassName}`,
     });
     const widget = Box({
-        className: 'spacing-h-4 txt-onSurfaceVariant',
+        className: `spacing-h-4 ${textClassName}`,
         children: [
             resourceProgress,
             resourceLabel,
@@ -135,8 +135,8 @@ export default () => {
     });
     const trackTitle = Label({
         hexpand: true,
-        className: 'txt-smallie txt-onSurfaceVariant',
-        truncate: 'end', 
+        className: 'txt-smallie bar-music-txt',
+        truncate: 'end',
         maxWidthChars: 10, // Doesn't matter, just needs to be non negative
         setup: (self) => self.hook(Mpris, label => {
             const mpris = Mpris.getPlayer('');
@@ -178,31 +178,32 @@ export default () => {
                     onScrollDown: () => execAsync(CUSTOM_MODULE_SCROLLDOWN_SCRIPT).catch(print),
                 })
             });
-        } else {
-            return BarGroup({
-                child: Box({
-                    children: [
-                        BarResource('RAM Usage', 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`),
-                        Revealer({
-                            revealChild: true,
-                            transition: 'slide_left',
-                            transitionDuration: userOptions.animations.durationLarge,
-                            child: Box({
-                                className: 'spacing-h-10 margin-left-10',
-                                children: [
-                                    BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`),
-                                    BarResource('CPU Usage', 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`),
-                                ]
-                            }),
-                            setup: (self) => self.hook(Mpris, label => {
-                                const mpris = Mpris.getPlayer('');
-                                self.revealChild = (!mpris);
-                            }),
-                        })
-                    ],
-                })
-            });
-        }
+        } else return BarGroup({
+            child: Box({
+                children: [
+                    BarResource('RAM Usage', 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+                        'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon'),
+                    Revealer({
+                        revealChild: true,
+                        transition: 'slide_left',
+                        transitionDuration: userOptions.animations.durationLarge,
+                        child: Box({
+                            className: 'spacing-h-10 margin-left-10',
+                            children: [
+                                BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
+                                    'bar-swap-circprog', 'bar-swap-txt', 'bar-swap-icon'),
+                                BarResource('CPU Usage', 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                                    'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
+                            ]
+                        }),
+                        setup: (self) => self.hook(Mpris, label => {
+                            const mpris = Mpris.getPlayer('');
+                            self.revealChild = (!mpris);
+                        }),
+                    })
+                ],
+            })
+        });
     }
     return EventBox({
         onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
