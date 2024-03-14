@@ -13,8 +13,8 @@ const SysTrayItem = (item) => Button({
     setup: (self) => self
         .hook(item, (self) => self.tooltipMarkup = item['tooltip-markup'])
     ,
-    onClicked: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
-    onSecondaryClick: btn => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
+    onPrimaryClick: (_, event) => item.activate(event),
+    onSecondaryClick: (btn, event) => item.menu.popup_at_widget(btn, Gravity.SOUTH, Gravity.NORTH, null),
 });
 
 export const Tray = (props = {}) => {
