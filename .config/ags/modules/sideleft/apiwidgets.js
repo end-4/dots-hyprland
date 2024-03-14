@@ -198,27 +198,31 @@ function switchToTab(id) {
     currentApiId = id;
 }
 
-const apiSwitcher = CenterBox({
-    centerWidget: Box({
-        className: 'sidebar-chat-apiswitcher spacing-h-5',
-        hpack: 'center',
-        children: APIS.map((api, id) => Button({
-            child: api.tabIcon,
-            tooltipText: api.name,
-            setup: setupCursorHover,
-            onClicked: () => {
-                switchToTab(id);
-            }
-        })),
-    }),
-    endWidget: Button({
-        hpack: 'end',
-        className: 'txt-subtext txt-norm icon-material',
-        label: 'lightbulb',
-        tooltipText: 'Use PageUp/PageDown to switch between API pages',
-        setup: setupCursorHoverInfo,
-    }),
-})
+const apiSwitcher = EventBox({
+    onScrollUp: () => apiWidgets.attribute.prevTab(),
+    onScrollDown: () => apiWidgets.attribute.nextTab(),
+    child: CenterBox({
+        centerWidget: Box({
+            className: 'sidebar-chat-apiswitcher spacing-h-5',
+            hpack: 'center',
+            children: APIS.map((api, id) => Button({
+                child: api.tabIcon,
+                tooltipText: api.name,
+                setup: setupCursorHover,
+                onClicked: () => {
+                    switchToTab(id);
+                }
+            })),
+        }),
+        endWidget: Button({
+            hpack: 'end',
+            className: 'txt-subtext txt-norm icon-material',
+            label: 'lightbulb',
+            tooltipText: 'Use PageUp/PageDown to switch between API pages',
+            setup: setupCursorHoverInfo,
+        }),
+    })
+});
 
 const apiWidgets = Widget.Box({
     attribute: {
