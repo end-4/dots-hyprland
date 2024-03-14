@@ -18,23 +18,6 @@ colorvalues=()
 # wallpath_png=$(echo "$wallpath_png" | sed 's/\//\\\//g')
 # wallpath_png=$(sed 's/\//\\\\\//g' <<< "$wallpath_png")
 
-if [[ "$1" = "--bad-apple" ]]; then
-    cp scripts/color_generation/specials/_material_badapple.scss scss/_material.scss
-    colornames=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f1)
-    colorstrings=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-else
-    colornames=$(cat scss/_material.scss | cut -d: -f1)
-    colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-fi
-
 transparentize() {
   local hex="$1"
   local alpha="$2"
@@ -164,6 +147,24 @@ apply_ags() {
     ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
     ags run-js "App.resetCss(); App.applyCss('${HOME}/.cache/ags/user/generated/style.css');"
 }
+
+if [[ "$1" = "--bad-apple" ]]; then
+    lightdark=$(get_light_dark)
+    cp scripts/color_generation/specials/_material_badapple"${lightdark}".scss scss/_material.scss
+    colornames=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f1)
+    colorstrings=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    IFS=$'\n'
+    # filearr=( $filelist ) # Get colors
+    colorlist=( $colornames ) # Array of color names
+    colorvalues=( $colorstrings ) # Array of color values
+else
+    colornames=$(cat scss/_material.scss | cut -d: -f1)
+    colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    IFS=$'\n'
+    # filearr=( $filelist ) # Get colors
+    colorlist=( $colornames ) # Array of color names
+    colorvalues=( $colorstrings ) # Array of color values
+fi
 
 apply_ags &
 apply_hyprland &
