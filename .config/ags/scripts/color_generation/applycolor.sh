@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-term_alpha=100 #Set this to < 100 make all your terminals transparent
-# sleep 0 # idk i wanted some delay or colors dont get applied properly
+term_alpha=100 # Set this to < 100 make all your terminals transparent
 if [ ! -d "$HOME"/.cache/ags/user/generated ]; then
     mkdir -p "$HOME"/.cache/ags/user/generated
 fi
@@ -154,14 +153,12 @@ if [[ "$1" = "--bad-apple" ]]; then
     colornames=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f1)
     colorstrings=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
     IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
     colorlist=( $colornames ) # Array of color names
     colorvalues=( $colorstrings ) # Array of color values
 else
     colornames=$(cat scss/_material.scss | cut -d: -f1)
     colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
     IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
     colorlist=( $colornames ) # Array of color names
     colorvalues=( $colorstrings ) # Array of color values
 fi
