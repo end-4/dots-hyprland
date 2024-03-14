@@ -116,6 +116,8 @@ $hovercolor: mix($t_surface, $t_onSurface, 50%);
 $activecolor: mix($t_surface, $t_onSurface, 30%);
 $subtext: mix($onBackground, $background, 70%);
 $actiontext: mix($onBackground, $background, 85%);
+$black: black;
+$white: white;
 
 // Terminal colors
 $termbg: mix($t_surfaceVariant, $t_onSurfaceVariant, 80%);
@@ -128,3 +130,39 @@ $term4: $onPrimaryContainer;
 $term5: $onSecondaryContainer;
 $term6: $primary;
 $term7: $onSurfaceVariant;
+
+/// Color mappings for more chaotic, dynamic colors like the average rice ///
+// General
+$layer0: $t_background;
+$onLayer0: $onBackground;
+$layer0Active: mix($t_background, $t_onBackground, 80%);
+$layer1: $surface;
+$onLayer1Inactive: mix($onBackground, $background, 45%);
+$onLayer1: $onSurfaceVariant;
+$layer2: $surfaceVariant;
+$onLayer2: $onSurfaceVariant;
+$layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
+$layer2Active: mix($layer2, $onSurfaceVariant, 80%);
+// Elements
+// For now they just use Material colors. I'll make a proper theme later
+$windowtitleOnLayer1Inactive: $onLayer1;
+$timeOnLayer1: $onLayer1;
+$dateOnLayer1: $onLayer1;
+$ramOnLayer1: $onLayer1;
+$ramSecondaryContainer: $secondaryContainer;
+$ramOnSecondaryContainer: $onSecondaryContainer;
+$swapOnLayer1: $onLayer1;
+$swapSecondaryContainer: $secondaryContainer;
+$swapOnSecondaryContainer: $onSecondaryContainer;
+$cpuOnLayer1: $onLayer1;
+$cpuSecondaryContainer: $secondaryContainer;
+$cpuOnSecondaryContainer: $onSecondaryContainer;
+$musicOnLayer1: $onLayer1;
+$musicSecondaryContainer: $secondaryContainer;
+$musicOnSecondaryContainer: $onSecondaryContainer;
+
+$workspaceOnLayer1Inactive: $onLayer1Inactive;
+$workspaceSecondaryContainer: $secondaryContainer;
+$workspaceOnSecondaryContainer: $onSecondaryContainer;
+$workspaceOnSurfaceVariant: $onSurfaceVariant;
+
