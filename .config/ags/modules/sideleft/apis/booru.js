@@ -117,36 +117,91 @@ const BooruPage = (taglist) => {
         onClicked: action,
         setup: setupCursorHover,
     })
-    const PreviewImage = (data) => {
-        return Overlay({
-            child: Box({
-                className: 'sidebar-booru-image',
-                css: `background-image: url('${data.preview_url}');`,
-                // setup: (self) => {
-                // Utils.timeout(1000, () => {
-                //     self.css = `background-image: url('${data.preview_url}');`;
-                // })
-                // }
-            }),
-            overlays: [
-                Box({
-                    vpack: 'start',
-                    className: 'sidebar-booru-image-actions spacing-h-3',
-                    children: [
-                        Box({ hexpand: true }),
-                        ImageAction({
-                            name: 'Go to file url',
-                            icon: 'file_open',
-                            action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
-                        }),
-                        ImageAction({
-                            name: 'Go to source',
-                            icon: 'open_in_new',
-                            action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
-                        }),
-                    ]
-                })
+    const PreviewImage = (data, delay = 0) => {
+        const imageArea = Widget.DrawingArea({
+            className: 'sidebar-booru-image-drawingarea',
+        });
+        const imageBox = Box({
+            className: 'sidebar-booru-image',
+            // css: `background-image: url('${data.preview_url}');`,
+            attribute: {
+                'update': (self, data, force = false) => {
+                    const imagePath = `${USER_CACHE_DIR}/ags/media/waifus/${data.md5}.${data.file_ext}`;
+                    const widgetStyleContext = imageArea.get_style_context();
+                    const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                    const widgetHeight = widgetStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                    imageArea.set_size_request(widgetWidth, widgetHeight);
+                    const showImage = () => {
+                        const imageDimensionsStr = exec(`identify -format {\\"w\\":%w,\\"h\\":%h} '${imagePath}'`)
+                        const imageDimensionsJson = JSON.parse(imageDimensionsStr);
+                        let imageWidth = imageDimensionsJson.w;
+                        let imageHeight = imageDimensionsJson.h;
+
+                        // Fill
+                        const scale = imageWidth / imageHeight;
+                        if (imageWidth > imageHeight) {
+                            imageWidth = widgetHeight * scale;
+                            imageHeight = widgetHeight;
+                        } else {
+                            imageHeight = widgetWidth / scale;
+                            imageWidth = widgetWidth;
+                        }
+
+                        // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, widgetWidth, widgetHeight);
+                        const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(imagePath, imageWidth, imageHeight, false);
+                        imageArea.connect("draw", (widget, cr) => {
+                            const borderRadius = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
+
+                            // Draw a rounded rectangle
+                            cr.arc(borderRadius, borderRadius, borderRadius, Math.PI, 1.5 * Math.PI);
+                            cr.arc(widgetWidth - borderRadius, borderRadius, borderRadius, 1.5 * Math.PI, 2 * Math.PI);
+                            cr.arc(widgetWidth - borderRadius, widgetHeight - borderRadius, borderRadius, 0, 0.5 * Math.PI);
+                            cr.arc(borderRadius, widgetHeight - borderRadius, borderRadius, 0.5 * Math.PI, Math.PI);
+                            cr.closePath();
+                            cr.clip();
+
+                            // Paint image as bg
+                            Gdk.cairo_set_source_pixbuf(cr, pixbuf, (widgetWidth - imageWidth) / 2, (widgetHeight - imageHeight) / 2);
+                            cr.paint();
+                        });
+                        self.queue_draw();
+                    }
+                    // Show
+                    // const downloadCommand = `wget -O '${imagePath}' '${data.preview_url}'`;
+                    const downloadCommand = `curl -L -o '${imagePath}' '${data.preview_url}'`;
+                    // console.log(downloadCommand)
+                    if (!force && fileExists(imagePath)) showImage();
+                    else Utils.timeout(delay, () => Utils.execAsync(['bash', '-c', downloadCommand])
+                        .then(showImage)
+                        .catch(print)
+                    );
+                },
+            },
+            child: imageArea,
+            setup: (self) => {
+                Utils.timeout(1000, () => self.attribute.update(self, data));
+            }
+        });
+        const imageActions = Box({
+            vpack: 'start',
+            className: 'sidebar-booru-image-actions spacing-h-3',
+            children: [
+                Box({ hexpand: true }),
+                ImageAction({
+                    name: 'Go to file url',
+                    icon: 'file_open',
+                    action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
+                }),
+                ImageAction({
+                    name: 'Go to source',
+                    icon: 'open_in_new',
+                    action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
+                }),
             ]
+        });
+        return Overlay({
+            child: imageBox,
+            overlays: [imageActions]
         })
     }
     const colorIndicator = Box({
@@ -188,39 +243,9 @@ const BooruPage = (taglist) => {
             downloadIndicator,
         ]
     });
-    const pageActions = Revealer({
-        transition: 'crossfade',
-        revealChild: false,
-        child: Box({
-            vertical: true,
-            children: [
-                Box({
-                    className: 'sidebar-waifu-image-actions spacing-h-3',
-                    children: [
-                        Box({ hexpand: true }),
-                        ImageAction({
-                            name: 'Go to source',
-                            icon: 'link',
-                            action: () => execAsync(['xdg-open', `${thisPage.attribute.imageData.source}`]).catch(print),
-                        }),
-                        ImageAction({
-                            name: 'Hoard',
-                            icon: 'save',
-                            action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/homework${thisPage.attribute.isNsfw ? '/🌶️' : ''} && cp ${thisPage.attribute.imagePath} ~/Pictures/homework${thisPage.attribute.isNsfw ? '/🌶️/' : ''}`]).catch(print),
-                        }),
-                        ImageAction({
-                            name: 'Open externally',
-                            icon: 'open_in_new',
-                            action: () => execAsync([IMAGE_VIEWER_APP, `${thisPage.attribute.imagePath}`]).catch(print),
-                        }),
-                    ]
-                })
-            ],
-        })
-    })
     const pageImageGrid = Grid({
-        columnHomogeneous: true,
-        rowHomogeneous: true,
+        // columnHomogeneous: true,
+        // rowHomogeneous: true,
         className: 'sidebar-waifu-image',
         // css: 'min-height: 90px;'
     });
@@ -248,9 +273,11 @@ const BooruPage = (taglist) => {
                 // Add stuff
                 for (let i = 0; i < imageRows; i++) {
                     for (let j = 0; j < imageColumns; j++) {
-                        if (i * imageColumns + j >= userOptions.sidebar.imageBooruCount) break;
-                        // if (i * imageColumns + j >= data.length) break;
-                        pageImageGrid.attach(PreviewImage(data[i * imageColumns + j]), j, i, 1, 1);
+                        if (i * imageColumns + j >= Math.min(userOptions.sidebar.imageBooruCount, data.length)) break;
+                        pageImageGrid.attach(
+                            PreviewImage(data[i * imageColumns + j]),
+                            j, i, 1, 1
+                        );
                     }
                 }
                 pageImageGrid.show_all();
@@ -258,9 +285,6 @@ const BooruPage = (taglist) => {
                 // Reveal stuff
                 Utils.timeout(IMAGE_REVEAL_DELAY,
                     () => pageImageRevealer.revealChild = true
-                );
-                Utils.timeout(IMAGE_REVEAL_DELAY + pageImageRevealer.transitionDuration,
-                    () => pageActions.revealChild = true
                 );
                 downloadIndicator.attribute.hide();
             },
