@@ -1,11 +1,11 @@
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-const { Box, Button, Label, Overlay, Stack } = Widget;
+const { Box, Button, EventBox, Label, Overlay, Stack } = Widget;
 import { MaterialIcon } from './materialicon.js';
 import { NavigationIndicator } from './cairo_navigationindicator.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 
-export const TabContainer = ({ icons, names, children, className = '', setup = () => {}, ...rest }) => {
+export const TabContainer = ({ icons, names, children, className = '', setup = () => { }, ...rest }) => {
     const shownIndex = Variable(0);
     let previousShownIndex = 0;
     const count = Math.min(icons.length, names.length, children.length);
@@ -47,12 +47,19 @@ export const TabContainer = ({ icons, names, children, className = '', setup = (
         })],
     });
     const tabSection = Box({
-        vertical: true,
-        hexpand: true,
-        children: [
-            tabs,
-            tabIndicatorLine
-        ]
+        homogeneous: true,
+        children: [EventBox({
+            onScrollUp: () => mainBox.prevTab(),
+            onScrollDown: () => mainBox.nextTab(),
+            child: Box({
+                vertical: true,
+                hexpand: true,
+                children: [
+                    tabs,
+                    tabIndicatorLine
+                ]
+            })
+        })]
     });
     const contentStack = Stack({
         transition: 'slide_left_right',
