@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "$1" == "--noswitch" ]; then
-    imgpath=$(swww query | awk -F 'image: ' '{print $2}')
+    imgpath=$(swww query | awk -F 'image: ' '{print $2}'| head -n 1)
     # imgpath=$(ags run-js 'wallpaper.get(0)')
 else
     # Select and set image (hyprland)
