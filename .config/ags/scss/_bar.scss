@@ -98,13 +98,13 @@ $bar_ws_width_focus_active: 2.045rem;
 }
 
 .bar-ws-active {
-    background-color: $workspaceSecondaryContainer;
-    color: $workspaceOnSecondaryContainer;
+    background-color: $workspaceLayer3;
+    color: $workspaceOnLayer3;
 }
 
 .bar-ws-occupied {
     background-color: $layer2;
-    color: $workspaceOnSurfaceVariant;
+    color: $workspaceOnLayer2;
 }
 
 // Focus is the bar mode name, not the workspace state!
@@ -143,8 +143,11 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    color: $battOnLayer2;
+}
+
+.bar-batt-txt {
+    color: $battOnLayer1;
 }
 
 .bar-batt-circprog {
@@ -152,8 +155,8 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 0.068rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
+    background-color: $battLayer2;
+    color: $battOnLayer2;
 }
 
 .bar-batt-circprog-low {
@@ -173,8 +176,7 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $ramSecondaryContainer;
-    color: $ramOnSecondaryContainer;
+    color: $ramOnLayer2;
 }
 
 .bar-ram-circprog {
@@ -182,8 +184,8 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 0.068rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
-    background-color: $ramSecondaryContainer;
-    color: $ramOnSecondaryContainer;
+    background-color: $ramLayer2;
+    color: $ramOnLayer2;
 }
 
 .bar-ram-txt {
@@ -196,8 +198,7 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $swapSecondaryContainer;
-    color: $swapOnSecondaryContainer;
+    color: $swapOnLayer2;
 }
 
 .bar-swap-circprog {
@@ -205,8 +206,8 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 0.068rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
-    background-color: $swapSecondaryContainer;
-    color: $swapOnSecondaryContainer;
+    background-color: $swapLayer2;
+    color: $swapOnLayer2;
 }
 
 .bar-swap-txt {
@@ -219,8 +220,7 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $cpuSecondaryContainer;
-    color: $cpuOnSecondaryContainer;
+    color: $cpuOnLayer2;
 }
 
 .bar-cpu-circprog {
@@ -228,8 +228,8 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 0.068rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
-    background-color: $cpuSecondaryContainer;
-    color: $cpuOnSecondaryContainer;
+    background-color: $cpuLayer2;
+    color: $cpuOnLayer2;
 }
 
 .bar-cpu-txt {
@@ -241,8 +241,7 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $musicSecondaryContainer;
-    color: $musicOnSecondaryContainer;
+    color: $musicOnLayer2;
 }
 
 .bar-music-circprog {
@@ -250,16 +249,15 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 0.068rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
-    background-color: $musicSecondaryContainer;
-    color: $musicOnSecondaryContainer;
+    background-color: $musicLayer2;
+    color: $musicOnLayer2;
 }
 
 .bar-music-playstate-playing {
     min-height: 1.77rem;
     min-width: 1.77rem;
     border-radius: 10rem;
-    background-color: $musicSecondaryContainer;
-    color: $musicOnSecondaryContainer;
+    color: $musicOnLayer2;
 }
 
 .bar-music-playstate-txt {
