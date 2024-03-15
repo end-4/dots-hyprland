@@ -144,25 +144,63 @@ $onLayer2: $onSurfaceVariant;
 $layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
 $layer2Active: mix($layer2, $onSurfaceVariant, 80%);
 // Elements
-// For now they just use Material colors. I'll make a proper theme later
 $windowtitleOnLayer1Inactive: $onLayer1;
 $timeOnLayer1: $onLayer1;
 $dateOnLayer1: $onLayer1;
 $ramOnLayer1: $onLayer1;
-$ramSecondaryContainer: $secondaryContainer;
-$ramOnSecondaryContainer: $onSecondaryContainer;
+$ramLayer2: $secondaryContainer;
+$ramOnLayer2: $onSecondaryContainer;
 $swapOnLayer1: $onLayer1;
-$swapSecondaryContainer: $secondaryContainer;
-$swapOnSecondaryContainer: $onSecondaryContainer;
+$swapLayer2: $secondaryContainer;
+$swapOnLayer2: $onSecondaryContainer;
 $cpuOnLayer1: $onLayer1;
-$cpuSecondaryContainer: $secondaryContainer;
-$cpuOnSecondaryContainer: $onSecondaryContainer;
+$cpuLayer2: $secondaryContainer;
+$cpuOnLayer2: $onSecondaryContainer;
 $musicOnLayer1: $onLayer1;
-$musicSecondaryContainer: $secondaryContainer;
-$musicOnSecondaryContainer: $onSecondaryContainer;
+$musicLayer2: $secondaryContainer;
+$musicOnLayer2: $onSecondaryContainer;
+$battOnLayer1: $onLayer1;
+$battLayer2: $secondaryContainer;
+$battOnLayer2: $onSecondaryContainer;
 
 $workspaceOnLayer1Inactive: $onLayer1Inactive;
-$workspaceSecondaryContainer: $secondaryContainer;
-$workspaceOnSecondaryContainer: $onSecondaryContainer;
-$workspaceOnSurfaceVariant: $onSurfaceVariant;
+$workspaceLayer3: $secondaryContainer;
+$workspaceOnLayer3: $onSecondaryContainer;
+$workspaceOnLayer2: $onSurfaceVariant;
+
+///////////////////// test theme: amarena (kind of) /////////////////////////
+// $layer0: #0e1116;
+// $onLayer0: #FFFFFF;
+// $layer0Active: mix($t_background, $t_onBackground, 80%);
+// $layer1: #171c22;
+// $onLayer1Inactive: mix($onBackground, $background, 45%);
+// $onLayer1: $onSurfaceVariant;
+// $layer2: #252c35;
+// $onLayer2: $onSurfaceVariant;
+// $layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
+// $layer2Active: mix($layer2, $onSurfaceVariant, 80%);
+// $layer3: #1C232A;
+// $windowtitleOnLayer1Inactive: $onLayer1;
+// $timeOnLayer1: #cc7691;
+// $dateOnLayer1: #cc7691;
+// $ramOnLayer1: #61adc0;
+// $ramLayer2: $layer2;
+// $ramOnLayer2: #61adc0;
+// $swapOnLayer1: #b371ad;
+// $swapLayer2: $layer2;
+// $swapOnLayer2: #b371ad;
+// $cpuOnLayer1: #7db17d;
+// $cpuLayer2: $layer2;
+// $cpuOnLayer2: #7db17d;
+// $musicOnLayer1: #b64a6e;
+// $musicLayer2: $layer2;
+// $musicOnLayer2: #b64a6e;
+// $battOnLayer1: #7db17d;
+// $battLayer2: $layer2;
+// $battOnLayer2: #7db17d;
+
+// $workspaceOnLayer1Inactive: $onLayer1Inactive;
+// $workspaceLayer3: #33554f;
+// $workspaceOnLayer3: #84EFDB;
+// $workspaceOnLayer2: #84EFDB;
 

@@ -97,7 +97,7 @@ const BarBattery = () => Box({
             }),
         }),
         Label({
-            className: 'txt-smallie txt-onSurfaceVariant',
+            className: 'txt-smallie bar-batt-txt',
             setup: (self) => self.hook(Battery, label => {
                 label.label = `${Battery.percent}%`;
             }),
