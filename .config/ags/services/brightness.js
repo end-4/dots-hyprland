@@ -20,10 +20,10 @@ class BrightnessService extends Service {
 
     // the setter has to be in snake_case too
     set screen_value(percent) {
-        percent = clamp(percent, 0, 1);
+        percent = clamp(percent, this._minValue, 1);
         this._screenValue = percent;
 
-        Utils.execAsync(`brightnessctl s ${percent * 100}% -q`)
+        Utils.execAsync(`${this._brightnessctlCmd} s ${percent * 100}% -q`)
             .then(() => {
                 // signals has to be explicity emitted
                 this.emit('screen-changed', percent);
@@ -37,8 +37,12 @@ class BrightnessService extends Service {
 
     constructor() {
         super();
-        const current = Number(exec('brightnessctl g'));
-        const max = Number(exec('brightnessctl m'));
+        const device = userOptions.brightness.device;
+        this._brightnessctlCmd = `brightnessctl ${device ? `-d ${device}` : ''}`
+        this._minValue = clamp((userOptions.brightness.minPercent || 0)/100, 0, 1);
+
+        const current = Number(exec(`${this._brightnessctlCmd} g`));
+        const max = Number(exec(`${this._brightnessctlCmd} m`));
         this._screenValue = current / max;
     }
 
