@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-source ${HOME}/virtualenvs/my_project_venv/bin/activate
 
 # check if no arguments
 if [ $# -eq 0 ]; then
@@ -9,11 +8,15 @@ if [ $# -eq 0 ]; then
 fi
 
 # check if the file ~/.cache/ags/user/colormode.txt exists. if not, create it. else, read it to $lightdark
-lightdark=""
+lightdark="dark"
+transparency="opaque"
+materialscheme="tonalspot"
 if [ ! -f "$HOME/.cache/ags/user/colormode.txt" ]; then
-    echo "" > "$HOME/.cache/ags/user/colormode.txt"
+    echo "dark\nopaque\ntonalspot" > "$HOME/.cache/ags/user/colormode.txt"
 else
-    lightdark=$(cat "$HOME/.cache/ags/user/colormode.txt") # either "" or "-l"
+    lightdark=$(sed -n '1p' "$HOME/.cache/ags/user/colormode.txt")
+    transparency=$(sed -n '2p' "$HOME/.cache/ags/user/colormode.txt")
+    materialscheme=$(sed -n '3p' "$HOME/.cache/ags/user/colormode.txt")
 fi
 backend="material" # color generator backend
 if [ ! -f "$HOME/.cache/ags/user/colorbackend.txt" ]; then
@@ -24,13 +27,17 @@ fi
 
 cd "$HOME/.config/ags/scripts/" || exit
 if [[ "$1" = "#"* ]]; then # this is a color
-    color_generation/generate_colors_material.py --color "$1" "$lightdark" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    source ${HOME}/virtualenvs/my_project_venv/bin/activate
+    color_generation/generate_colors_material.py --color "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "material" ]; then
-    color_generation/generate_colors_material.py --path "$1" "$lightdark" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    source ${HOME}/virtualenvs/my_project_venv/bin/activate
+    color_generation/generate_colors_material.py --path "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
