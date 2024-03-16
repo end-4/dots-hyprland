@@ -36,7 +36,7 @@ let configOptions = {
     },
     'sidebar': {
         'imageColumns': 2,
-        'imageBooruCount': 6,
+        'imageBooruCount': 20,
     },
     'search': {
         'engineBaseUrl': "https://www.google.com/search?q=",
