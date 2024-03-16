@@ -11,7 +11,7 @@ colorstrings=''
 colorlist=()
 colorvalues=()
 
-# wallpath=$(swww query | awk -F 'image: ' '{print $2}')
+# wallpath=$(swww query | head -1 | awk -F 'image: ' '{print $2}')
 # wallpath_png="$HOME"'/.cache/ags/user/generated/hypr/lockscreen.png'
 # convert "$wallpath" "$wallpath_png"
 # wallpath_png=$(echo "$wallpath_png" | sed 's/\//\\\//g')
