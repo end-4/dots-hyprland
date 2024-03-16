@@ -1,6 +1,6 @@
 // Common colors
-$hovercolor: rgba(128, 128, 128, 0.3);
-$activecolor: rgba(128, 128, 128, 0.7);
+$hovercolor: $surfaceContainerHigh;
+$activecolor: $surfaceContainerHighest;
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
 $rounding_medium: 1.159rem;
