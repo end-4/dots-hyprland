@@ -14,12 +14,12 @@ const cheatsheetHeader = () => Widget.CenterBox({
         children: [
             Widget.Box({
                 hpack: 'center',
-                className: 'spacing-h-5',
+                className: 'spacing-h-5 cheatsheet-title',
                 children: [
                     Widget.Label({
                         hpack: 'center',
                         css: 'margin-right: 0.682rem;',
-                        className: 'txt-title txt',
+                        className: 'txt-title',
                         label: 'Cheat sheet',
                     }),
                     Widget.Label({

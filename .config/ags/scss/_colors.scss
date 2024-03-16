@@ -135,10 +135,12 @@ $term7: $onSurfaceVariant;
 // General
 $layer0: $t_background;
 $onLayer0: $onBackground;
-$onLayer0Inactive: mix($onBackground, $background, 70%);
-$layer0Active: mix($t_background, $t_onBackground, 80%);
+$layer0Hover: mix($layer0, $onLayer0, 85%);
+$layer0Active: mix($layer0, $onLayer0, 70%);
+$onLayer0Inactive: mix($onLayer0, $layer0, 70%);
 $layer1: $surface;
-$onLayer1Inactive: mix($onBackground, $background, 45%);
+$onLayer1: $onSurface;
+$onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
 $layer2: $surfaceVariant;
 $onLayer2: $onSurfaceVariant;
@@ -172,19 +174,32 @@ $workspaceLayer3: $secondaryContainer;
 $workspaceOnLayer3: $onSecondaryContainer;
 $workspaceOnLayer2: $onSurfaceVariant;
 $trayOnLayer0: $onLayer0;
+$cheatsheetTitle: $onSecondaryContainer;
+$cheatsheetColors: (
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer,
+    $onSecondaryContainer
+);
 
 ///////////////////// test theme: amarena (kind of) /////////////////////////
 // $layer0: #0e1116;
 // $onLayer0: #FFFFFF;
-// $layer0Active: mix($t_background, $t_onBackground, 80%);
+// $layer0Hover: mix($layer0, $onLayer0, 85%);
+// $layer0Active: mix($layer0, $onLayer0, 70%);
 // $layer1: #171c22;
-// $onLayer1Inactive: mix($onBackground, $background, 45%);
+// $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 // $onLayer1: $onSurfaceVariant;
 // $layer2: #252c35;
 // $onLayer2: $onSurfaceVariant;
 // $layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
 // $layer2Active: mix($layer2, $onSurfaceVariant, 80%);
 // $layer3: #1C232A;
+// // Bar
 // $windowtitleOnLayer0Inactive: #70afa4;
 // $windowtitleOnLayer0: #7FE3D1;
 // $barspacerightOnLayer0: #7FE3D1;
@@ -212,4 +227,15 @@ $trayOnLayer0: $onLayer0;
 // $workspaceOnLayer3: #7FE3D1;
 // $workspaceOnLayer2: #7FE3D1;
 // $trayOnLayer0: #6DC0D5;
-
+// // Cheatsheet
+// $cheatsheetTitle: #6DC0D4;
+// $cheatsheetColors: (
+//     #F692B2,
+//     #6EC1D6,
+//     #CD84C8,
+//     #7FE4D2,
+//     #94CF95,
+//     #CD84C8,
+//     #FB6396,
+//     #6EC1D6
+// );
