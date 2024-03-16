@@ -198,7 +198,8 @@ v rsync -av ".local/bin/" "$HOME/.local/bin/"
 sleep 1
 try hyprctl reload
 
-grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' .zshrc || existed_zsh_conf=n
+existed_zsh_conf=n
+grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
