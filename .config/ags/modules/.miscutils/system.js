@@ -1,3 +1,4 @@
+const { GLib } = imports.gi;
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 
@@ -5,6 +6,9 @@ export const distroID = exec(`bash -c 'cat /etc/os-release | grep "^ID=" | cut -
 export const isDebianDistro = (distroID == 'linuxmint' || distroID == 'ubuntu' || distroID == 'debian' || distroID == 'zorin' || distroID == 'popos' || distroID == 'raspbian' || distroID == 'kali');
 export const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos');
 export const hasFlatpak = !!exec(`bash -c 'command -v flatpak'`);
+
+const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
+export let darkMode = !(Utils.readFile(LIGHTDARK_FILE_LOCATION).trim() == '-l');
 
 export const getDistroIcon = () => {
     // Arches

@@ -2,8 +2,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 $textboxColor: mix($surface, $surfaceVariant, 80%);
 $system: $secondary;
 $onSystem: $onSecondary;
-$chatgpt: $primary;
-$onChatgpt: $onPrimary;
 
 @mixin group-padding {
     padding: 0.341rem;
@@ -596,32 +594,47 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-message {
     margin: 0.682rem;
+    @include normal-rounding;
+    @include group-padding;
+    background-color: $layer1;
 }
 
 .sidebar-chat-indicator {
     @include element_decel;
     @include full-rounding;
     min-width: 0.136rem;
+}
+
+.sidebar-chat-indicator-waifu {
+    @include element_decel;
+    @include full-rounding;
+    min-width: 0.136rem;
     background-color: $onBackground;
-}
-
-.sidebar-chat-indicator-user {
-    background-color: $onBackground;
-}
-
-.sidebar-chat-indicator-bot {
-    background-color: $chatgpt;
-}
-
-.sidebar-chat-indicator-System {
-    background-color: $system;
 }
 
 .sidebar-chat-name {
     @include titlefont;
-    padding: 0.341rem;
-    margin-left: -0.136rem;
-    padding-left: 0.818rem;
+    @include small-rounding;
+    padding: 0.341rem 0.818rem;
+    margin: 0.341rem;
+    // margin-left: 0rem;
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-chat-name-user {
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-chat-name-bot {
+    background-color: $secondary;
+    color: $onSecondary;
+}
+
+.sidebar-chat-name-system {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
 }
 
 .sidebar-chat-txtblock {
@@ -808,17 +821,11 @@ $colorpicker_rounding: 0.341rem;
     padding-left: 0.818rem;
 }
 
-.sidebar-waifu-content {
-    margin-left: 0.682rem;
-}
-
 .sidebar-waifu-txt {
     @include readingfont;
-    margin-left: 0.682rem;
 }
 
 .sidebar-waifu-image {
-    margin-left: 0.682rem;
     @include normal-rounding;
     background-size: cover;
     background-repeat: no-repeat;
@@ -848,6 +855,10 @@ $waifu_image_overlay_transparency: 0.7;
 
 .sidebar-waifu-image-action:active {
     background-color: rgba(60, 60, 60, $waifu_image_overlay_transparency);
+}
+
+.sidebar-booru-imagegrid {
+    @include normal-rounding;
 }
 
 .sidebar-booru-image {
