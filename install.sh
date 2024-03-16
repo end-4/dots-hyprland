@@ -197,6 +197,9 @@ v rsync -av ".local/bin/" "$HOME/.local/bin/"
 # Prevent hyprland from not fully loaded
 sleep 1
 try hyprctl reload
+
+grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' .zshrc || existed_zsh_conf=n
+
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
@@ -210,4 +213,10 @@ case $existed_hypr_conf in
   y) printf "\n\e[33m[$0]: Warning: \"~/.config/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[97m\n"
      printf "\e[33mPlease use \"~/.config/hypr/hyprland.conf.new\" as a reference for a proper format.\e[97m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[97m\n"
+;;esac
+
+case $existed_zsh_conf in
+  n) printf "\n\e[36m[$0]: \"~/.zshrc\" seems not sourcing \"~/.config/zshrc.d/dots-hyprland.zsh\".\e[97m\n"
+     printf "\e[36mIt is optional, but you may put this line into your \"~/.zshrc\" to support colorscheme for ZSH:\e[97m\n"
+     printf "\e[36m    source ~/.config/zshrc.d/dots-hyprland.zsh\e[97m\n"
 ;;esac
