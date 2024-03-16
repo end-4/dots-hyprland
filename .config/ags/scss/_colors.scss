@@ -1,7 +1,7 @@
 ///////////// COLOR MODIFICATIONS /////////////
 // Material colors provide excellent readability, but can be uninteresting.
 // This is an attempt to improve that.
-$transparency_enabled: false;
+//$transparency_enabled: false;
 
 //@if $transparency_enabled ==false {
 //    @if $darkmode ==true {
@@ -35,6 +35,7 @@ $transparency_enabled: false;
 //}
 //
 //// Amounts
+$transparency: 0.7;
 $transparentize_amount: 0.3;
 $transparentize_surface_amount_less: 0.6;
 $transparentize_surface_amount_less_less: 0.55;
@@ -62,12 +63,28 @@ $onSuccess: #ffffff;
 $successContainer: #d1e8d5;
 $onSuccessContainer: #0c1f13;
 
-@if $darkmode ==true {
+@if $darkmode == True {
     // Dark variant
     $success: #b5ccba;
     $onSuccess: #213528;
     $successContainer: #374b3e;
     $onSuccessContainer: #d1e9d6;
+}
+
+@if $transparent == True {
+
+  $background: transparentize($background, $transparency);
+  $surface: transparentize($surface, $transparency);
+  $surfaceDim: transparentize($surfaceDim, $transparency);
+  $surfaceBright: transparentize($surfaceBright, $transparency);
+  $surfaceContainerLowest: transparentize($surfaceContainerLowest, $transparency);
+  $surfaceContainerLow: transparentize($surfaceContainerLow, $transparency);
+  $surfaceContainer: transparentize($surfaceContainer, $transparency);
+  $surfaceContainerHigh: transparentize($surfaceContainerHigh, $transparency);
+  $surfaceContainerHighest: transparentize($surfaceContainerHighest, $transparency);
+  $surfaceVariant: transparentize($surfaceVariant, $transparency);
+  $inverseSurface: transparentize($inverseSurface, $transparency);
+  $surfaceTint: transparentize($surfaceTint, $transparency);
 }
 
 // Transparent versions
@@ -89,7 +106,6 @@ $t_error: transparentize($error, $transparentize_amount);
 $t_onError: transparentize($onError, $transparentize_amount);
 $t_errorContainer: transparentize($errorContainer, $transparentize_amount);
 $t_onErrorContainer: transparentize($onErrorContainer, $transparentize_amount);
-$t_colorbarbg: transparentize($colorbarbg, $transparentize_amount);
 $t_background: transparentize($background, $transparentize_amount);
 $t_t_background: transparentize($background, $transparentize_surface_amount_more);
 $t_onBackground: transparentize($onBackground, $transparentize_amount);
