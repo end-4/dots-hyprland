@@ -73,11 +73,12 @@ const clickOutsideToClose = Widget.EventBox({
 export default () => {
     // values from ags inspector
     const cheatsheetWidth = 1588;
+    const targetWidth = SCREEN_REAL_WIDTH * 0.85;
     const defaultDPI = 96;
 
     let scale_factor = 1;
-    if (cheatsheetWidth > SCREEN_REAL_WIDTH) {
-        scale_factor = SCREEN_REAL_WIDTH / cheatsheetWidth;
+    if (cheatsheetWidth > targetWidth) {
+        scale_factor = targetWidth / cheatsheetWidth;
     }
     return PopupWindow({
         name: 'cheatsheet',
