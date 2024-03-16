@@ -16,7 +16,7 @@ const WindowTitle = async () => {
                         xalign: 0,
                         truncate: 'end',
                         maxWidthChars: 10, // Doesn't matter, just needs to be non negative
-                        className: 'txt-smaller bar-topdesc txt',
+                        className: 'txt-smaller bar-wintitle-topdesc txt',
                         setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
                             label.label = Hyprland.active.client.class.length === 0 ? 'Desktop' : Hyprland.active.client.class;
                         }),
@@ -25,7 +25,7 @@ const WindowTitle = async () => {
                         xalign: 0,
                         truncate: 'end',
                         maxWidthChars: 10, // Doesn't matter, just needs to be non negative
-                        className: 'txt txt-smallie',
+                        className: 'txt-smallie bar-wintitle-txt',
                         setup: (self) => self.hook(Hyprland.active.client, label => { // Hyprland.active.client
                             label.label = Hyprland.active.client.title.length === 0 ? `Workspace ${Hyprland.active.workspace.id}` : Hyprland.active.client.title;
                         }),
