@@ -283,19 +283,15 @@ export const ChatMessage = (message, modelName = 'Model') => {
     const messageContentBox = MessageContent(message.content);
     const thisMessage = Box({
         className: 'sidebar-chat-message',
+        homogeneous: true,
         children: [
             Box({
-                className: `sidebar-chat-indicator ${message.role == 'user' ? 'sidebar-chat-indicator-user' : 'sidebar-chat-indicator-bot'}`,
-            }),
-            Box({
                 vertical: true,
-                hpack: 'fill',
-                hexpand: true,
                 children: [
                     Label({
-                        hpack: 'fill',
+                        hpack: 'start',
                         xalign: 0,
-                        className: 'txt txt-bold sidebar-chat-name',
+                        className: `txt txt-bold sidebar-chat-name sidebar-chat-name-${message.role == 'user' ? 'user' : 'bot'}`,
                         wrap: true,
                         useMarkup: true,
                         label: (message.role == 'user' ? USERNAME : modelName),
@@ -325,16 +321,12 @@ export const SystemMessage = (content, commandName, scrolledWindow) => {
         className: 'sidebar-chat-message',
         children: [
             Box({
-                className: `sidebar-chat-indicator sidebar-chat-indicator-System`,
-            }),
-            Box({
                 vertical: true,
-                hpack: 'fill',
-                hexpand: true,
                 children: [
                     Label({
                         xalign: 0,
-                        className: 'txt txt-bold sidebar-chat-name',
+                        hpack: 'start',
+                        className: 'txt txt-bold sidebar-chat-name sidebar-chat-name-system',
                         wrap: true,
                         label: `System  •  ${commandName}`,
                     }),

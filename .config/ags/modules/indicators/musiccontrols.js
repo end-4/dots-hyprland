@@ -1,4 +1,4 @@
-const { Gdk, GdkPixbuf, GLib, Gtk } = imports.gi;
+const { GLib } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -9,10 +9,9 @@ const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { fileExists } from '../.miscutils/files.js';
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
+import { darkMode } from '../.miscutils/system.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
-const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const lightDark = Utils.readFile(LIGHTDARK_FILE_LOCATION).trim();
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';
 
@@ -181,7 +180,7 @@ const CoverArt = ({ player, ...rest }) => {
                 }
 
                 const coverPath = player.coverPath;
-                const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
+                const stylePath = `${player.coverPath}${darkMode ? '' : '-l'}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
                     Utils.timeout(200, () => {
                         // self.attribute.showImage(self, coverPath);
@@ -200,9 +199,9 @@ const CoverArt = ({ player, ...rest }) => {
 
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${darkMode ? '' : '-l'}`])
                     .then(() => {
-                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
+                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode ? '' : '-l'}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                         exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
                         Utils.timeout(200, () => {
