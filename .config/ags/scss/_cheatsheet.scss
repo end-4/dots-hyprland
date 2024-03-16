@@ -3,8 +3,12 @@
     @include elevation-border;
     @include elevation2;
     margin-bottom: 0.682rem;
-    background-color: $t_background;
+    background-color: $layer0;
     padding: 1.364rem;
+}
+
+.cheatsheet-title {
+    color: $cheatsheetTitle;
 }
 
 .cheatsheet-key {
@@ -13,19 +17,26 @@
     min-width: 1.364rem;
     margin: 0.17rem;
     padding: 0.136rem 0.205rem;
-    border-radius: 0.409rem;
     -gtk-outline-radius: 0.409rem;
-    color: $primary;
-    border: 0.068rem solid $primary;
-    box-shadow: 0rem 0.136rem 0rem $primary;
-    font-weight: 500;
+    color: $cheatsheetTitle;
+    border-radius: 0.409rem;
+    border: 0.068rem solid $cheatsheetTitle;
+    box-shadow: 0rem 0.136rem 0rem $cheatsheetTitle;
 }
 
 .cheatsheet-key-notkey {
     min-height: 1.364rem;
     padding: 0.136rem 0.205rem;
     margin: 0.17rem;
-    color: $onPrimaryContainer;
+    color: $onLayer0;
+}
+
+@for $i from 1 through 8 {
+    .cheatsheet-color-#{$i} {
+        color: nth($cheatsheetColors, $i);
+        border-color: nth($cheatsheetColors, $i);
+        box-shadow: 0rem 0.136rem 0rem nth($cheatsheetColors, $i);
+    }
 }
 
 // .cheatsheet-action {}
@@ -39,11 +50,11 @@
 
 .cheatsheet-closebtn:hover,
 .cheatsheet-closebtn:focus {
-    background-color: $hovercolor;
+    background-color: $layer0Hover;
 }
 
 .cheatsheet-closebtn:active {
-    background-color: $activecolor;
+    background-color: $layer0Active;
 }
 
 .cheatsheet-category-title {

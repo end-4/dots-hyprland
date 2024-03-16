@@ -23,7 +23,7 @@ $bar_ws_width_focus_active: 2.045rem;
 }
 
 .bar-bg-focus-batterylow {
-    background-color: mix($background, $errorContainer, 80%);
+    background-color: mix($layer0, $errorContainer, 80%);
 }
 
 .bar-sidespace {
