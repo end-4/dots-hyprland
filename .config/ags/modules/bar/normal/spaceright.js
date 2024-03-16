@@ -62,7 +62,7 @@ export default () => {
         }),
         child: child,
     });
-    const emptyArea = SpaceRightDefaultClicks(Widget.Box({ hexpand: true, })),
+    const emptyArea = SpaceRightDefaultClicks(Widget.Box({ hexpand: true, }));
     const indicatorArea = SpaceRightDefaultClicks(Widget.Box({
         children: [
             separatorDot,
