@@ -71,18 +71,12 @@ export default () => {
     }));
     const actualContent = Widget.Box({
         hexpand: true,
-        className: 'spacing-h-5 txt',
+        className: 'spacing-h-5 bar-spaceright',
         children: [
-            Widget.Box({
-                hexpand: true,
-                className: 'spacing-h-5 txt',
-                children: [
-                    emptyArea,
-                    barTray,
-                    indicatorArea
-                ],
-            }),
-        ]
+            emptyArea,
+            barTray,
+            indicatorArea
+        ],
     });
 
     return Widget.Box({
