@@ -4,6 +4,7 @@ import Service from 'resource:///com/github/Aylur/ags/service.js';
 import { Keybinds } from "./keybinds.js";
 import { setupCursorHover } from "../.widgetutils/cursorhover.js";
 import PopupWindow from '../.widgethacks/popupwindow.js';
+import { SCREEN_REAL_WIDTH } from '../../variables.js';
 
 const cheatsheetHeader = () => Widget.CenterBox({
     vertical: false,
@@ -69,23 +70,34 @@ const clickOutsideToClose = Widget.EventBox({
     onMiddleClick: () => App.closeWindow('cheatsheet'),
 });
 
-export default () => PopupWindow({
-    name: 'cheatsheet',
-    exclusivity: 'ignore',
-    keymode: 'exclusive',
-    visible: false,
-    child: Widget.Box({
-        vertical: true,
-        children: [
-            clickOutsideToClose,
-            Widget.Box({
-                vertical: true,
-                className: "cheatsheet-bg spacing-v-15",
-                children: [
-                    cheatsheetHeader(),
-                    Keybinds(),
-                ]
-            }),
-        ],
-    })
-});
+export default () => {
+    // values from ags inspector
+    const cheatsheetWidth = 1588;
+    const defaultDPI = 96;
+
+    let scale_factor = 1;
+    if (cheatsheetWidth > SCREEN_REAL_WIDTH) {
+        scale_factor = SCREEN_REAL_WIDTH / cheatsheetWidth;
+    }
+    return PopupWindow({
+        name: 'cheatsheet',
+        exclusivity: 'ignore',
+        keymode: 'exclusive',
+        visible: false,
+        child: Widget.Box({
+            vertical: true,
+            children: [
+                clickOutsideToClose,
+                Widget.Box({
+                    vertical: true,
+                    className: "cheatsheet-bg spacing-v-15",
+                    css: `${scale_factor < 1 ? `-gtk-dpi: ${defaultDPI * scale_factor}` : ''}`,
+                    children: [
+                        cheatsheetHeader(),
+                        Keybinds(),
+                    ]
+                }),
+            ],
+        })
+    });
+}
