@@ -11,6 +11,7 @@ import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.common
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
+import { chatEntry } from '../apiwidgets.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
@@ -355,6 +356,7 @@ export const chatGPTView = Box({
                 // Always scroll to bottom with new content
                 const adjustment = scrolledWindow.get_vadjustment();
                 adjustment.connect("changed", () => {
+                    if(!chatEntry.hasFocus) return;
                     adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
                 })
             }
