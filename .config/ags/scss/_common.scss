@@ -13,7 +13,7 @@
         color: $onSecondary;
     }
 
-    caret-color: $primary;
+    caret-color: $onLayer2;
 }
 
 @keyframes appear {
@@ -50,18 +50,18 @@ menubar>menuitem {
 menu>menuitem {
     padding: 0.4em 1.5rem;
     background: transparent;
-    transition: 0.2s ease background;
+    transition: 0.2s ease background-color;
     border-radius: 0.545rem;
     -gtk-outline-radius: 0.545rem;
 }
 
 menu>menuitem:hover,
 menu>menuitem:focus {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
+    background-color: $layer2Hover;
 }
 
 menu>menuitem:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
+    background-color: $layer2Active;
 }
 
 radio {

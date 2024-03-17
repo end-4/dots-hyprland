@@ -10,7 +10,7 @@
 .osd-value {
     @include elevation-border;
     @include elevation2;
-    background-color: $t_background;
+    background-color: $layer0;
     border-radius: 1.023rem;
     padding: 0.625rem 1.023rem;
     padding-top: 0.313rem;
@@ -27,7 +27,7 @@
         min-height: 0.954rem;
         min-width: 0.068rem;
         border-radius: 10rem;
-        background-color: $secondaryContainer;
+        background-color: $layer2;
         // border: 0.068rem solid $onSecondaryContainer;
     }
 
@@ -37,18 +37,13 @@
         min-width: 0.680rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
-        background-color: $onSecondaryContainer;
+        background-color: $onLayer2;
     }
-}
-
-.osd-icon {
-    color: $onPrimaryContainer;
 }
 
 .osd-label {
     font-size: 1.023rem;
     font-weight: 500;
-    color: $onBackground;
     margin-top: 0.341rem;
 }
 
@@ -56,7 +51,24 @@
     @include titlefont;
     font-size: 1.688rem;
     font-weight: 500;
-    color: $onBackground;
+    color: $onLayer0;
+}
+
+.osd-brightness {
+    color: $brightnessOnLayer0;
+}
+.osd-brightness-progress {
+    progress {
+        background-color: $brightnessOnLayer0;
+    }
+}
+.osd-volume {
+    color: $volumeOnLayer0;
+}
+.osd-volume-progress {
+    progress {
+        background-color: $volumeOnLayer0;
+    }
 }
 
 .osd-notifs {
@@ -65,7 +77,7 @@
 
 .osd-colorscheme {
     border-radius: 1.023rem;
-    background-color: $t_background;
+    background-color: $layer0;
     padding: 1.023rem;
     @include elevation2;
 }
@@ -108,15 +120,15 @@
     color: $onSurfaceVariant;
     box { background-color: $onSurfaceVariant; }
 }
-.osd-color-surface {
-    background-color: $surface;
-    color: $onSurface;
-    box { background-color: $onSurface; }
+.osd-color-L1 {
+    background-color: $layer1;
+    color: $onLayer1;
+    box { background-color: $onLayer1; }
 }
-.osd-color-background {
-    background-color: $background;
-    color: $onBackground;
-    box { background-color: $onBackground; }
+.osd-color-layer0 {
+    background-color: $layer0;
+    color: $onLayer0;
+    box { background-color: $onLayer0; }
 }
 
 .osd-show {
