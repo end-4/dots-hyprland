@@ -1,7 +1,7 @@
 $osk_key_height: 2.5rem;
 $osk_key_width: 2.5rem;
 $osk_key_padding: 0.188rem;
-$osk_key_rounding: 0.682rem;
+$osk_key_rounding: 0.545rem;
 $osk_key_fontsize: 1.091rem;
 
 .osk-window {
@@ -11,12 +11,12 @@ $osk_key_fontsize: 1.091rem;
     @include elevation2;
     // min-height: 29.591rem;
     // min-width: 50rem;
-    background-color: $t_background;
+    background-color: $layer0;
 }
 
 .osk-body {
     padding: 1.023rem;
-    padding-top: 0px;
+    padding-top: 0rem;
 }
 
 .osk-show {
@@ -32,7 +32,7 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-dragline {
     @include full-rounding;
-    background-color: $surfaceVariant;
+    background-color: $onLayer0Inactive;
     min-height: 0.273rem;
     min-width: 10.227rem;
     margin-top: 0.545rem;
@@ -41,8 +41,8 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-key {
     border-radius: $osk_key_rounding;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
+    background-color: $layer1;
+    color: $onLayer1;
     padding: $osk_key_padding;
     font-weight: 500;
     font-size: $osk_key_fontsize;
@@ -50,16 +50,16 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-key:hover,
 .osk-key:focus {
-    background-color: $hovercolor;
+    background-color: $layer1Hover;
 }
 
 .osk-key:active {
-    background-color: $activecolor;
+    background-color: $layer1Active;
     font-size: $osk_key_fontsize;
 }
 
 .osk-key-active {
-    background-color: $activecolor;
+    background-color: $layer1Active;
 }
 
 .osk-key-normal {
@@ -95,8 +95,8 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-control-button {
     border-radius: $osk_key_rounding;
-    background-color: $t_surfaceVariant;
-    color: $onSurfaceVariant;
+    background-color: $layer1;
+    color: $onLayer1;
     font-weight: 500;
     font-size: $osk_key_fontsize;
     padding: 0.682rem;
@@ -104,11 +104,11 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-control-button:hover,
 .osk-control-button:focus {
-    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
+    background-color: $layer1Hover;
 }
 
 .osk-control-button:active {
-    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 70%);
+    background-color: $layer1Active;
     font-size: $osk_key_fontsize;
 }
 

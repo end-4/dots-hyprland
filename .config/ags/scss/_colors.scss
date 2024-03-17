@@ -68,8 +68,10 @@ $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
 $layer2: $secondaryContainer;
 $onLayer2: $onSecondaryContainer;
-$layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
-$layer2Active: mix($layer2, $onSurfaceVariant, 80%);
+$layer1Hover: mix($layer1, $onLayer1, 85%);
+$layer1Active: mix($layer1, $onLayer1, 70%);
+$layer2Hover: mix($layer2, $onLayer2, 90%);
+$layer2Active: mix($layer2, $onLayer2, 80%);
 // Elements
 $windowtitleOnLayer0Inactive: $onLayer0Inactive;
 $windowtitleOnLayer0: $onLayer0;
@@ -109,4 +111,16 @@ $cheatsheetColors: (
     $onSecondaryContainer,
     $onSecondaryContainer
 );
+
+$sessionColors: (
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1
+);
+$brightnessOnLayer0: $onLayer0;
+$volumeOnLayer0: $onLayer0;
 
