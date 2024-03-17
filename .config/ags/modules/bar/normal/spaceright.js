@@ -39,18 +39,6 @@ export default () => {
         }),
     });
     const SpaceRightDefaultClicks = (child) => Widget.EventBox({
-        onScrollUp: () => {
-            if (!Audio.speaker) return;
-            if (Audio.speaker.volume <= 0.09) Audio.speaker.volume += 0.01;
-            else Audio.speaker.volume += 0.03;
-            Indicator.popup(1);
-        },
-        onScrollDown: () => {
-            if (!Audio.speaker) return;
-            if (Audio.speaker.volume <= 0.09) Audio.speaker.volume -= 0.01;
-            else Audio.speaker.volume -= 0.03;
-            Indicator.popup(1);
-        },
         onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
         onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
         onPrimaryClick: () => App.toggleWindow('sideright'),
@@ -79,10 +67,24 @@ export default () => {
         ],
     });
 
-    return Widget.Box({
-        children: [
-            actualContent,
-            Widget.Box({ className: 'bar-corner-spacing' }),
-        ]
+    return Widget.EventBox({
+        onScrollUp: () => {
+            if (!Audio.speaker) return;
+            if (Audio.speaker.volume <= 0.09) Audio.speaker.volume += 0.01;
+            else Audio.speaker.volume += 0.03;
+            Indicator.popup(1);
+        },
+        onScrollDown: () => {
+            if (!Audio.speaker) return;
+            if (Audio.speaker.volume <= 0.09) Audio.speaker.volume -= 0.01;
+            else Audio.speaker.volume -= 0.03;
+            Indicator.popup(1);
+        },
+        child: Widget.Box({
+            children: [
+                actualContent,
+                SpaceRightDefaultClicks(Widget.Box({ className: 'bar-corner-spacing' })),
+            ]
+        })
     });
 }
