@@ -6,7 +6,11 @@ import { MarginRevealer } from '../.widgethacks/advancedrevealers.js';
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
 
-const OsdValue = ({ name, nameSetup = undefined, labelSetup, progressSetup, ...rest }) => {
+const OsdValue = ({
+    name, nameSetup = undefined, labelSetup, progressSetup,
+    extraClassName = '', extraProgressClassName = '',
+    ...rest
+}) => {
     const valueName = Label({
         xalign: 0, yalign: 0, hexpand: true,
         className: 'osd-label',
@@ -20,7 +24,7 @@ const OsdValue = ({ name, nameSetup = undefined, labelSetup, progressSetup, ...r
     return Box({ // Volume
         vertical: true,
         hexpand: true,
-        className: 'osd-bg osd-value',
+        className: `osd-bg osd-value ${extraClassName}`,
         attribute: {
             'disable': () => {
                 valueNumber.label = '󰖭';
@@ -35,7 +39,7 @@ const OsdValue = ({ name, nameSetup = undefined, labelSetup, progressSetup, ...r
                 ]
             }),
             ProgressBar({
-                className: 'osd-progress',
+                className: `osd-progress ${extraProgressClassName}`,
                 hexpand: true,
                 vertical: false,
                 setup: progressSetup,
@@ -48,6 +52,8 @@ const OsdValue = ({ name, nameSetup = undefined, labelSetup, progressSetup, ...r
 export default () => {
     const brightnessIndicator = OsdValue({
         name: 'Brightness',
+        extraClassName: 'osd-brightness',
+        extraProgressClassName: 'osd-brightness-progress',
         labelSetup: (self) => self.hook(Brightness, self => {
             self.label = `${Math.round(Brightness.screen_value * 100)}`;
         }, 'notify::screen-value'),
@@ -59,9 +65,9 @@ export default () => {
 
     const volumeIndicator = OsdValue({
         name: 'Volume',
-        attribute: {
-            headphones: undefined,
-        },
+        extraClassName: 'osd-volume',
+        extraProgressClassName: 'osd-volume-progress',
+        attribute: { headphones: undefined },
         nameSetup: (self) => Utils.timeout(1, () => {
             const updateAudioDevice = (self) => {
                 const usingHeadphones = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headphone');

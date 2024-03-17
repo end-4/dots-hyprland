@@ -151,7 +151,7 @@ const geminiWelcome = Box({
 });
 
 export const chatContent = Box({
-    className: 'spacing-v-15',
+    className: 'spacing-v-5',
     vertical: true,
     setup: (self) => self
         .hook(GeminiService, (box, id) => {

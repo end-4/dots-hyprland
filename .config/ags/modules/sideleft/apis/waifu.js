@@ -11,6 +11,7 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import WaifuService from '../../../services/waifus.js';
+import { darkMode } from '../../.miscutils/system.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
@@ -117,9 +118,6 @@ const WaifuImage = (taglist) => {
         onClicked: action,
         setup: setupCursorHover,
     })
-    const colorIndicator = Box({
-        className: `sidebar-chat-indicator`,
-    });
     const downloadState = Stack({
         homogeneous: false,
         transition: 'slide_up_down',
@@ -139,7 +137,7 @@ const WaifuImage = (taglist) => {
     });
     const blockHeading = Box({
         hpack: 'fill',
-        className: 'sidebar-waifu-content spacing-h-5',
+        className: 'spacing-h-5',
         children: [
             ...taglist.map((tag) => CommandButton(tag)),
             Box({ hexpand: true }),
@@ -248,14 +246,10 @@ const WaifuImage = (taglist) => {
                 else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock.attribute.imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
-                blockHeading.get_children().forEach((child) => {
-                    child.setCss(`border-color: ${dominant_color};`);
-                })
-                colorIndicator.css = `background-color: ${dominant_color};`;
+                thisBlock.css = `background-color: mix(${darkMode ? 'black' : 'white'}, ${dominant_color}, 0.9);`;
             },
         },
         children: [
-            colorIndicator,
             Box({
                 vertical: true,
                 className: 'spacing-v-5',

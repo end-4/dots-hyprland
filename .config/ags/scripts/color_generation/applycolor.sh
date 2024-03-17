@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-term_alpha=80 #Set this to < 100 make all your terminals transparent
+term_alpha=100 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
 if [ ! -d "$HOME"/.cache/ags/user/generated ]; then
     mkdir -p "$HOME"/.cache/ags/user/generated
