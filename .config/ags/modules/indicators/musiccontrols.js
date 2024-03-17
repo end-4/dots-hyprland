@@ -199,11 +199,9 @@ const CoverArt = ({ player, ...rest }) => {
                     return;
                 }
 
-                console.log(`${lightDark}`);
-                console.log(`${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}`);
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `source /home/avi/virtualenvs/my_project_venv/bin/activate; ${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode '${colorMode}' > ${App.configDir}/scss/_musicmaterial.scss`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode '${colorMode}' > ${App.configDir}/scss/_musicmaterial.scss`])
                     .then(() => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);

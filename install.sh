@@ -137,6 +137,13 @@ else ask_MicroTeX=true
 fi
 if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 
+if $(test -d /opt/materialyoucolor); then
+  echo -e "\e[33m[$0]: Program \"MatertialYouColor-python\" already exists, no need to install.\e[0m"
+  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
+  ask_MaterialYouColor=$ask
+else ask_MaterialYouColor=true
+fi
+showfun install-materialyoucolors;v install-materialyoucolors;
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying\e[97m\n"
 
