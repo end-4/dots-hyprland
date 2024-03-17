@@ -12,11 +12,11 @@
 
 .dock-app-btn:hover,
 .dock-app-btn:focus {
-    background-color: mix($t_surface, $t_onSurface, 95%);
+    background-color: mix($t_surface, $onSurface, 95%);
 }
 
 .dock-app-btn:active {
-    background-color: mix($t_surface, $t_onSurface, 85%);
+    background-color: mix($t_surface, $onSurface, 85%);
 }
 
 .dock-app-icon {

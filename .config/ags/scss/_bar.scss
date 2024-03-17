@@ -361,6 +361,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-statusicons-active {
     background-color: $layer0Active;
+    color: $onLayer0Active;
 }
 
 .bar-util-btn {
@@ -391,6 +392,6 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 1.032rem;
     min-width: 1.032rem;
     font-size: 1.032rem;
-    color: $barspacerightOnLayer0;
+    //color: $barspacerightOnLayer0;
     padding: 0.205rem 0.341rem;
 }
