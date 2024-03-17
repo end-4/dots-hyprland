@@ -34,8 +34,8 @@ const ColorschemeContent = () => Box({
                 ColorBox({ name: 'S', className: 'osd-color osd-color-secondary' }),
                 ColorBox({ name: 'S-c', className: 'osd-color osd-color-secondaryContainer' }),
                 ColorBox({ name: 'Sf-v', className: 'osd-color osd-color-surfaceVariant' }),
-                ColorBox({ name: 'Sf', className: 'osd-color osd-color-surface' }),
-                ColorBox({ name: 'Bg', className: 'osd-color osd-color-background' }),
+                ColorBox({ name: 'L1', className: 'osd-color osd-color-layer1' }),
+                ColorBox({ name: 'L0', className: 'osd-color osd-color-layer0' }),
             ]
         })
     ]

@@ -142,10 +142,12 @@ $layer1: $surface;
 $onLayer1: $onSurface;
 $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
+$layer1Hover: mix($layer1, $onLayer1, 85%);
+$layer1Active: mix($layer1, $onLayer1, 70%);
 $layer2: $surfaceVariant;
 $onLayer2: $onSurfaceVariant;
-$layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
-$layer2Active: mix($layer2, $onSurfaceVariant, 80%);
+$layer2Hover: mix($layer2, $onLayer2, 90%);
+$layer2Active: mix($layer2, $onLayer2, 80%);
 // Elements
 $windowtitleOnLayer0Inactive: $onLayer0Inactive;
 $windowtitleOnLayer0: $onLayer0;
@@ -185,6 +187,17 @@ $cheatsheetColors: (
     $onSecondaryContainer,
     $onSecondaryContainer
 );
+$sessionColors: (
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1,
+    $onLayer1
+);
+$brightnessOnLayer0: $onLayer0;
+$volumeOnLayer0: $onLayer0;
 
 ///////////////////// test theme: amarena (kind of) /////////////////////////
 // $layer0: #0e1116;
@@ -194,10 +207,12 @@ $cheatsheetColors: (
 // $layer1: #171c22;
 // $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 // $onLayer1: $onSurfaceVariant;
+// $layer1Hover: mix($layer1, $onLayer1, 85%);
+// $layer1Active: mix($layer1, $onLayer1, 70%);
 // $layer2: #252c35;
 // $onLayer2: $onSurfaceVariant;
-// $layer2Hover: mix($layer2, $onSurfaceVariant, 90%);
-// $layer2Active: mix($layer2, $onSurfaceVariant, 80%);
+// $layer2Hover: mix($layer2, $onLayer2, 90%);
+// $layer2Active: mix($layer2, $onLayer2, 80%);
 // $layer3: #1C232A;
 // // Bar
 // $windowtitleOnLayer0Inactive: #70afa4;
@@ -239,3 +254,16 @@ $cheatsheetColors: (
 //     #FB6396,
 //     #6EC1D6
 // );
+// $sessionColors: (
+//     #F692B2,
+//     #6EC1D6,
+//     #CD84C8,
+//     #7FE4D2,
+//     #94CF95,
+//     #CD84C8,
+//     #FB6396
+// );
+// // Osd
+// $brightnessOnLayer0: #F692B2;
+// $volumeOnLayer0: #94CF95;
+
