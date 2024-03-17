@@ -12,6 +12,7 @@ import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
+import { chatEntry } from '../apiwidgets.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
@@ -162,7 +163,11 @@ const WaifuImage = (taglist) => {
                         ImageAction({
                             name: 'Hoard',
                             icon: 'save',
-                            action: () => execAsync(['bash', '-c', `mkdir -p ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️' : ''} && cp ${thisBlock.attribute.imagePath} ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️/' : ''}`]).catch(print),
+                            action: (self) => {
+                                execAsync(['bash', '-c', `mkdir -p ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️' : ''} && cp ${thisBlock.attribute.imagePath} ~/Pictures/homework${thisBlock.attribute.isNsfw ? '/🌶️/' : ''}`])
+                                    .then(() => self.label = 'done')
+                                    .catch(print);
+                            },
                         }),
                         ImageAction({
                             name: 'Open externally',
@@ -314,6 +319,7 @@ export const waifuView = Scrollable({
         // Always scroll to bottom with new content
         const adjustment = scrolledWindow.get_vadjustment();
         adjustment.connect("changed", () => {
+            if(!chatEntry.hasFocus) return;
             adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
         })
     }
