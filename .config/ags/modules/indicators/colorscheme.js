@@ -65,7 +65,9 @@ const ColorSchemeSettingsRevealer = () => {
     });
 }
 
-function calculateSchemeInitIndex(optionsArr, searchValue = 'monochrome') {
+function calculateSchemeInitIndex(optionsArr, searchValue = 'tonalspot') {
+  if (searchValue == '')
+    searchValue = 'tonalspot';
   const flatArray = optionsArr.flatMap(subArray => subArray);
   const result = flatArray.findIndex(element => element.value === searchValue);
   const rowIndex = Math.floor(result / optionsArr[0].length);

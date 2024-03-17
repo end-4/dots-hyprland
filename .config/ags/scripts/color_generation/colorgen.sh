@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # check if no arguments
 if [ $# -eq 0 ]; then
     echo "Usage: colorgen.sh /path/to/image (--apply)"
@@ -8,15 +7,22 @@ if [ $# -eq 0 ]; then
 fi
 
 # check if the file ~/.cache/ags/user/colormode.txt exists. if not, create it. else, read it to $lightdark
+colormodefile="$HOME/.cache/ags/user/colormode.txt"
 lightdark="dark"
 transparency="opaque"
 materialscheme="tonalspot"
-if [ ! -f "$HOME/.cache/ags/user/colormode.txt" ]; then
-    echo "dark\nopaque\ntonalspot" > "$HOME/.cache/ags/user/colormode.txt"
+if [ ! -f $colormodefile ]; then
+    echo "dark" > $colormodefile
+    echo "opaque" >> $colormodefile
+    echo "tonalspot" >> $colormodefile
+elif [[ $(wc -l < $colormodefile) -ne 3 || $(wc -w < $colormodefile) -ne 3 ]]; then
+    echo "dark" > $colormodefile
+    echo "opaque" >> $colormodefile
+    echo "tonalspot" >> $colormodefile
 else
-    lightdark=$(sed -n '1p' "$HOME/.cache/ags/user/colormode.txt")
-    transparency=$(sed -n '2p' "$HOME/.cache/ags/user/colormode.txt")
-    materialscheme=$(sed -n '3p' "$HOME/.cache/ags/user/colormode.txt")
+    lightdark=$(sed -n '1p' $colormodefile)
+    transparency=$(sed -n '2p' $colormodefile)
+    materialscheme=$(sed -n '3p' $colormodefile)
 fi
 backend="material" # color generator backend
 if [ ! -f "$HOME/.cache/ags/user/colorbackend.txt" ]; then
