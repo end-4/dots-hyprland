@@ -169,6 +169,7 @@
     @include icon-material;
     min-width: 1.705rem;
     min-height: 1.705rem;
+    color: $onSurface;
 
     &:hover {
         background-color: $surfaceContainerHigh;

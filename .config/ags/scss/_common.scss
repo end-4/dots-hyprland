@@ -216,11 +216,13 @@ popover {
     @include small-rounding;
     padding: 0rem 0.341rem;
     border: 0.034rem solid $outlineVariant;
+    color: $onSurface;
 }
 
 .multipleselection-btn:focus,
 .multipleselection-btn:hover {
     background-color: $hovercolor;
+    color: $onSurface;
 }
 
 .multipleselection-btn-enabled {

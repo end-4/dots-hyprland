@@ -135,7 +135,6 @@ export const ConfigMulipleSelection = ({
     const widget = Box({
         tooltipText: desc,
         className: 'multipleselection-container spacing-v-3',
-        //homogeneous: true,
         vertical: true,
         children: optionsArr.map((options, grp) => {
           return Box({

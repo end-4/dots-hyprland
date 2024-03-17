@@ -104,11 +104,11 @@ $osk_key_fontsize: 1.091rem;
 
 .osk-control-button:hover,
 .osk-control-button:focus {
-    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 90%);
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 90%);
 }
 
 .osk-control-button:active {
-    background-color: mix($t_surfaceVariant, $t_onSurfaceVariant, 70%);
+    background-color: mix($t_surfaceVariant, $onSurfaceVariant, 70%);
     font-size: $osk_key_fontsize;
 }
 
