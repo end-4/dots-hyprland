@@ -95,8 +95,8 @@ const schemeOptionsArr = [
 
 const initColorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
 const initColorVal = (initColorMode == "dark") ? 1 : 0;
-const initTransperancy = Utils.exec('bash -c "sed -n \'2p\' $HOME/.cache/ags/user/colormode.txt"');
-const initTransperancyVal = (initTransperancy == "transparent") ? 1 : 0;
+const initTransparency = Utils.exec('bash -c "sed -n \'2p\' $HOME/.cache/ags/user/colormode.txt"');
+const initTransparencyVal = (initTransparency == "transparent") ? 1 : 0;
 const initScheme = Utils.exec('bash -c "sed -n \'3p\' $HOME/.cache/ags/user/colormode.txt"');
 const initSchemeIndex = calculateSchemeInitIndex(schemeOptionsArr, initScheme);
 
@@ -118,11 +118,11 @@ const ColorSchemeSettings = () => Widget.Box({
                 },
             }),
             ConfigToggle({
-                name: 'Transperancy',
-                initValue: initTransperancyVal,
+                name: 'Transparency',
+                initValue: initTransparencyVal,
                 onChange: (self, newValue) => {
-                    let transperancy = newValue == 0 ? "opaque" : "transparent";
-                    execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "2s/.*/${transperancy}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+                    let transparency = newValue == 0 ? "opaque" : "transparent";
+                    execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "2s/.*/${transparency}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
                         .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
                         .catch(print);
                 },
