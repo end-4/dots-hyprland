@@ -27,17 +27,13 @@ fi
 
 cd "$HOME/.config/ags/scripts/" || exit
 if [[ "$1" = "#"* ]]; then # this is a color
-    source ${HOME}/virtualenvs/my_project_venv/bin/activate
     color_generation/generate_colors_material.py --color "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
-    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "material" ]; then
-    source ${HOME}/virtualenvs/my_project_venv/bin/activate
     color_generation/generate_colors_material.py --path "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
-    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
