@@ -251,7 +251,7 @@ const WaifuImage = (taglist) => {
                 else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock.attribute.imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
-                thisBlock.css = `background-color: mix(${darkMode ? 'black' : 'white'}, ${dominant_color}, 0.9);`;
+                thisBlock.css = `background-color: mix(${darkMode ? 'black' : 'white'}, ${dominant_color}, 0.97);`;
             },
         },
         children: [
@@ -319,7 +319,7 @@ export const waifuView = Scrollable({
         // Always scroll to bottom with new content
         const adjustment = scrolledWindow.get_vadjustment();
         adjustment.connect("changed", () => {
-            if(!chatEntry.hasFocus) return;
+            if (!chatEntry.hasFocus) return;
             adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
         })
     }
