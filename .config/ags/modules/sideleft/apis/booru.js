@@ -369,6 +369,7 @@ const booruTags = Revealer({
                 child: Box({
                     className: 'spacing-h-5',
                     children: [
+                        CommandButton('*'),
                         CommandButton('hololive'),
                     ]
                 })
