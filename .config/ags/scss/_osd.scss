@@ -78,19 +78,26 @@
 .osd-colorscheme {
     border-radius: 1.023rem;
     background-color: $layer0;
-    padding: 1.023rem;
+    padding: 0.313rem 0.626rem;
     @include elevation2;
 }
 
+.osd-colorscheme-settings {
+    background-color: $background;
+    padding: 0.313rem 0.626rem;
+    @include small-rounding;
+}
+
 .osd-color {
-    @include full-rounding;
+    border-radius: 0.650rem;
+    -gtk-outline-radius: 0.650rem;
     min-width: 2.727rem;
     min-height: 1.705rem;
     padding: 0rem 0.341rem;
     font-weight: bold;
 
     box {
-        @include full-rounding;
+        @include small-rounding;
         margin: 0.409rem;
     }
 }
@@ -115,6 +122,48 @@
     color: $onSecondaryContainer;
     box { background-color: $onSecondaryContainer; }
 }
+
+.osd-color-tertiary {
+    background-color: $tertiary;
+    color: $onTertiary;
+    box { background-color: $onTertiary; }
+}
+.osd-color-tertiaryContainer {
+    background-color: $tertiaryContainer;
+    color: $onTertiaryContainer;
+    box { background-color: $onTertiaryContainer; }
+}
+
+.osd-color-error {
+    background-color: $error;
+    color: $onError;
+    box { background-color: $onError; }
+}
+.osd-color-errorContainer {
+    background-color: $errorContainer;
+    color: $onErrorContainer;
+    box { background-color: $onErrorContainer; }
+}
+
+.osd-color-surface {
+    background-color: $surface;
+    color: $onSurface;
+    border: 0.068rem solid $outlineVariant;
+    box { background-color: $onSurface; }
+}
+
+.osd-color-surfaceContainer {
+    background-color: $surfaceContainer;
+    color: $onSurface;
+    box { background-color: $onSurface; }
+}
+
+.osd-color-inverseSurface {
+    background-color: $inverseSurface;
+    color: $inverseOnSurface;
+    box { background-color: $onSurfaceVariant; }
+}
+
 .osd-color-surfaceVariant {
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
@@ -125,10 +174,26 @@
     color: $onLayer1;
     box { background-color: $onLayer1; }
 }
+
 .osd-color-layer0 {
     background-color: $layer0;
     color: $onLayer0;
     box { background-color: $onLayer0; }
+}
+
+.osd-settings-btn-arrow {
+    @include full-rounding;
+    @include icon-material;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    color: $onSurface;
+
+    &:hover {
+        background-color: $surfaceContainerHigh;
+    }
+    &:active {
+        background-color: $surfaceContainerHighest;
+    }
 }
 
 .osd-show {

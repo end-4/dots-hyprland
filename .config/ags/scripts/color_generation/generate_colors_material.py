@@ -3,120 +3,96 @@ from material_color_utilities_python import *
 from pathlib import Path
 import sys
 import subprocess
+import argparse
+import os
 
-def darken(hex_color, factor=0.7):
-    if not (hex_color.startswith('#') and len(hex_color) in (4, 7)):
-        raise ValueError("Invalid hex color format")
-    hex_color = hex_color.lstrip('#')
-    rgb = tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
-    darkened_rgb = tuple(int(max(0, val * factor)) for val in rgb)
-    darkened_hex = "#{:02X}{:02X}{:02X}".format(*darkened_rgb)
-    return darkened_hex
+from materialyoucolor.hct import Hct
+from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
 
-img = 0
-newtheme=0
-if len(sys.argv) > 1 and sys.argv[1] == '--path':
-    # try:
-    img = Image.open(sys.argv[2])
+parser = argparse.ArgumentParser(description='Color generation script')
+parser.add_argument('--path', type=str, default=None, help='generate colorscheme from image')
+parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
+parser.add_argument('--mode', type=str , choices=['dark', 'light'], default='dark', help='dark or light mode')
+parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
+parser.add_argument('--transparency', type=str , choices=['opaque', 'transparent'], default='opaque', help='enable transparency')
+parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
+args = parser.parse_args()
+
+export_color_file=os.environ['HOME']+"/.cache/ags/user/color.txt"
+
+# Default scheme -> Tonal Spot (Android Default)
+from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
+if args.scheme is not None:
+    if args.scheme == 'fruitsalad':
+        from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
+    elif args.scheme == 'expressive':
+        from materialyoucolor.scheme.scheme_expressive import SchemeExpressive as Scheme
+    elif args.scheme == 'monochrome':
+        from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
+    elif args.scheme == 'rainbow':
+        from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
+    elif args.scheme == 'vibrant':
+        from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
+    elif args.scheme == 'neutral':
+        from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
+    elif args.scheme == 'fidelity':
+        from materialyoucolor.scheme.scheme_fidelity import SchemeFidelity as Scheme
+    elif args.scheme == 'content':
+        from materialyoucolor.scheme.scheme_content import SchemeContent as Scheme
+
+def hex_to_argb(hex_color):
+  color = hex_color.lstrip('#')
+  if len(color) != 6:
+    raise ValueError("Invalid color code!")
+  r = int(color[:2], 16)
+  g = int(color[2:4], 16)
+  b = int(color[4:], 16)
+  a = 255
+  argb = (a << 24) | (r << 16) | (g << 8) | b
+  return argb
+
+def argb_to_hex(argb_value):
+  r = (argb_value >> 16) & 0xff
+  g = (argb_value >> 8) & 0xff
+  b = argb_value & 0xff
+  hex_r = format(r, '02x')
+  hex_g = format(g, '02x')
+  hex_b = format(b, '02x')
+  hex_color = f"#{hex_r}{hex_g}{hex_b}"
+  return hex_color
+
+darkmode = (args.mode == 'dark')
+transparent = (args.transparency == 'transparent')
+print(f"$darkmode: {darkmode};")
+print(f"$transparent: {transparent};")
+
+if args.path is not None:
+    img = Image.open(args.path)
     basewidth = 64
     wpercent = (basewidth/float(img.size[0]))
     hsize = int((float(img.size[1])*float(wpercent)))
     img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
-    newtheme = themeFromImage(img)
-    # except FileNotFoundError:
-    #     print('[generate_colors_material.py] File not found', file=sys.stderr);
-    #     exit()
-    # except:
-    #     print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
-    #     exit()
-elif len(sys.argv) > 1 and sys.argv[1] == '--color':
-    colorstr = sys.argv[2]
-    newtheme = themeFromSourceColor(argbFromHex(colorstr))
-else:
-    # try:
-    # imagePath = subprocess.check_output("ags run-js 'wallpaper.get(0)'", shell=True)
-    imagePath = subprocess.check_output("swww query | head -1 | awk -F 'image: ' '{print $2}'", shell=True)
-    imagePath = imagePath[:-1].decode("utf-8")
-    img = Image.open(imagePath)
-    basewidth = 64
-    wpercent = (basewidth/float(img.size[0]))
-    hsize = int((float(img.size[1])*float(wpercent)))
-    img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
-    newtheme = themeFromImage(img)
-    # except FileNotFoundError:
-    #     print('[generate_colors_material.py] File not found', file=sys.stderr)
-    #     exit()
-    # except:
-    #     print('[generate_colors_material.py] Something went wrong', file=sys.stderr);
-    #     exit()
+    argb = sourceColorFromImage(img)
+    with open(export_color_file, 'w') as file:
+        file.write(argb_to_hex(argb))
+elif args.color is not None:
+    argb = hex_to_argb(args.color)
 
-colorscheme=0
-darkmode = True
-if("-l" in sys.argv):
-    darkmode = False
-    colorscheme = newtheme.get('schemes').get('light')
-    print('$darkmode: false;')
-else:
-    colorscheme = newtheme.get('schemes').get('dark')
-    print('$darkmode: true;')
+scheme = Scheme(Hct.from_int(argb), darkmode, 0.0)
 
-primary = hexFromArgb(colorscheme.get_primary())
-onPrimary = hexFromArgb(colorscheme.get_onPrimary())
-primaryContainer = hexFromArgb(colorscheme.get_primaryContainer())
-onPrimaryContainer = hexFromArgb(colorscheme.get_onPrimaryContainer())
-secondary = hexFromArgb(colorscheme.get_secondary())
-onSecondary = hexFromArgb(colorscheme.get_onSecondary())
-secondaryContainer = hexFromArgb(colorscheme.get_secondaryContainer())
-onSecondaryContainer = hexFromArgb(colorscheme.get_onSecondaryContainer())
-tertiary = hexFromArgb(colorscheme.get_tertiary())
-onTertiary = hexFromArgb(colorscheme.get_onTertiary())
-tertiaryContainer = hexFromArgb(colorscheme.get_tertiaryContainer())
-onTertiaryContainer = hexFromArgb(colorscheme.get_onTertiaryContainer())
-error = hexFromArgb(colorscheme.get_error())
-onError = hexFromArgb(colorscheme.get_onError())
-errorContainer = hexFromArgb(colorscheme.get_errorContainer())
-onErrorContainer = hexFromArgb(colorscheme.get_onErrorContainer())
-background = hexFromArgb(colorscheme.get_background())
-onBackground = hexFromArgb(colorscheme.get_onBackground())
-surface = hexFromArgb(colorscheme.get_surface())
-onSurface = hexFromArgb(colorscheme.get_onSurface())
-surfaceVariant = hexFromArgb(colorscheme.get_surfaceVariant())
-onSurfaceVariant = hexFromArgb(colorscheme.get_onSurfaceVariant())
-outline = hexFromArgb(colorscheme.get_outline())
-shadow = hexFromArgb(colorscheme.get_shadow())
-inverseSurface = hexFromArgb(colorscheme.get_inverseSurface())
-inverseOnSurface = hexFromArgb(colorscheme.get_inverseOnSurface())
-inversePrimary = hexFromArgb(colorscheme.get_inversePrimary())
+for color in vars(MaterialDynamicColors).keys():
+    color_name = getattr(MaterialDynamicColors, color)
+    if hasattr(color_name, "get_hct"):
+        rgba = color_name.get_hct(scheme).to_rgba()
+        r, g, b, a = rgba
+        hex_color = f"#{r:02X}{g:02X}{b:02X}"
+        print('$' + color + ': ' + hex_color + ';')
 
-# make material less boring
-if darkmode:
-    background = darken(background, 0.6)
-
-print('$primary: ' + primary + ';')
-print('$onPrimary: ' + onPrimary + ';')
-print('$primaryContainer: ' + primaryContainer + ';')
-print('$onPrimaryContainer: ' + onPrimaryContainer + ';')
-print('$secondary: ' + secondary + ';')
-print('$onSecondary: ' + onSecondary + ';')
-print('$secondaryContainer: ' + secondaryContainer + ';')
-print('$onSecondaryContainer: ' + onSecondaryContainer + ';')
-print('$tertiary: ' + tertiary + ';')
-print('$onTertiary: ' + onTertiary + ';')
-print('$tertiaryContainer: ' + tertiaryContainer + ';')
-print('$onTertiaryContainer: ' + onTertiaryContainer + ';')
-print('$error: ' + error + ';')
-print('$onError: ' + onError + ';')
-print('$errorContainer: ' + errorContainer + ';')
-print('$onErrorContainer: ' + onErrorContainer + ';')
-print('$colorbarbg: ' + background + ';')
-print('$background: ' + background + ';')
-print('$onBackground: ' + onBackground + ';')
-print('$surface: ' + surface + ';')
-print('$onSurface: ' + onSurface + ';')
-print('$surfaceVariant: ' + surfaceVariant + ';')
-print('$onSurfaceVariant: ' + onSurfaceVariant + ';')
-print('$outline: ' + outline + ';')
-print('$shadow: ' + shadow + ';')
-print('$inverseSurface: ' + inverseSurface + ';')
-print('$inverseOnSurface: ' + inverseOnSurface + ';')
-print('$inversePrimary: ' + inversePrimary + ';')
+if args.debug == True:
+    for color in vars(MaterialDynamicColors).keys():
+        color_name = getattr(MaterialDynamicColors, color)
+        if hasattr(color_name, "get_hct"):
+            rgba = color_name.get_hct(scheme).to_rgba()
+            r, g, b, a = rgba
+            hex_color = f"#{r:02X}{g:02X}{b:02X}"
+            print(color.ljust(32), "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m"), hex_color)
