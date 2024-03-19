@@ -65,9 +65,9 @@ const ColorSchemeSettingsRevealer = () => {
     });
 }
 
-function calculateSchemeInitIndex(optionsArr, searchValue = 'tonalspot') {
+function calculateSchemeInitIndex(optionsArr, searchValue = 'vibrant') {
   if (searchValue == '')
-    searchValue = 'tonalspot';
+    searchValue = 'vibrant';
   const flatArray = optionsArr.flatMap(subArray => subArray);
   const result = flatArray.findIndex(element => element.value === searchValue);
   const rowIndex = Math.floor(result / optionsArr[0].length);
