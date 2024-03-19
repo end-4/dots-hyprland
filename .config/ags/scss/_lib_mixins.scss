@@ -1,6 +1,6 @@
 // Common colors
-$hovercolor: rgba(128, 128, 128, 0.3);
-$activecolor: rgba(128, 128, 128, 0.7);
+$hovercolor: $surfaceContainerHigh;
+$activecolor: $surfaceContainerHighest;
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
 $rounding_medium: 1.159rem;
@@ -190,24 +190,24 @@ $overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
 $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 @mixin elevation-border-softer {
-    border-top: 1px solid mix($t_t_surface, $t_onSurface, 90%);
-    border-left: 1px solid mix($t_t_surface, $t_onSurface, 90%);
-    border-right: 1px solid mix($t_t_surface, $t_onSurface, 95%);
-    border-bottom: 1px solid mix($t_t_surface, $t_onSurface, 95%);
+    border-top: 1px solid mix($t_surface, $onSurface, 90%);
+    border-left: 1px solid mix($t_surface, $onSurface, 90%);
+    border-right: 1px solid mix($t_surface, $onSurface, 95%);
+    border-bottom: 1px solid mix($t_surface, $onSurface, 95%);
 }
 
 @mixin elevation-border {
-    border-top: 1px solid mix($t_t_surface, $onSurface, 90%);
-    border-left: 1px solid mix($t_t_surface, $onSurface, 90%);
-    border-right: 1px solid mix($t_t_surface, $onSurface, 95%);
-    border-bottom: 1px solid mix($t_t_surface, $onSurface, 95%);
+    border-top: 1px solid mix($t_surface, $onSurface, 80%);
+    border-left: 1px solid mix($t_surface, $onSurface, 80%);
+    border-right: 1px solid mix($t_surface, $onSurface, 85%);
+    border-bottom: 1px solid mix($t_surface, $onSurface, 85%);
 }
 
 @mixin elevation-border-heavier {
-    border-top: 1px solid mix($t_t_surface, $onSurface, 80%);
-    border-left: 1px solid mix($t_t_surface, $onSurface, 80%);
-    border-right: 1px solid mix($t_t_surface, $onSurface, 85%);
-    border-bottom: 1px solid mix($t_t_surface, $onSurface, 85%);
+    border-top: 1px solid mix($t_surface, $onSurface, 70%);
+    border-left: 1px solid mix($t_surface, $onSurface, 70%);
+    border-right: 1px solid mix($t_surface, $onSurface, 75%);
+    border-bottom: 1px solid mix($t_surface, $onSurface, 75%);
 }
 
 @mixin elevation-border-transparent {

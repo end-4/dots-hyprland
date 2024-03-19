@@ -7,11 +7,22 @@ if [ $# -eq 0 ]; then
 fi
 
 # check if the file ~/.cache/ags/user/colormode.txt exists. if not, create it. else, read it to $lightdark
-lightdark=""
-if [ ! -f "$HOME/.cache/ags/user/colormode.txt" ]; then
-    echo "" > "$HOME/.cache/ags/user/colormode.txt"
+colormodefile="$HOME/.cache/ags/user/colormode.txt"
+lightdark="dark"
+transparency="opaque"
+materialscheme="tonalspot"
+if [ ! -f $colormodefile ]; then
+    echo "dark" > $colormodefile
+    echo "opaque" >> $colormodefile
+    echo "tonalspot" >> $colormodefile
+elif [[ $(wc -l < $colormodefile) -ne 3 || $(wc -w < $colormodefile) -ne 3 ]]; then
+    echo "dark" > $colormodefile
+    echo "opaque" >> $colormodefile
+    echo "tonalspot" >> $colormodefile
 else
-    lightdark=$(cat "$HOME/.cache/ags/user/colormode.txt") # either "" or "-l"
+    lightdark=$(sed -n '1p' $colormodefile)
+    transparency=$(sed -n '2p' $colormodefile)
+    materialscheme=$(sed -n '3p' $colormodefile)
 fi
 backend="material" # color generator backend
 if [ ! -f "$HOME/.cache/ags/user/colorbackend.txt" ]; then
@@ -22,13 +33,13 @@ fi
 
 cd "$HOME/.config/ags/scripts/" || exit
 if [[ "$1" = "#"* ]]; then # this is a color
-    color_generation/generate_colors_material.py --color "$1" "$lightdark" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    color_generation/generate_colors_material.py --color "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh
     fi
 elif [ "$backend" = "material" ]; then
-    color_generation/generate_colors_material.py --path "$1" "$lightdark" > "$HOME"/.cache/ags/user/generated/material_colors.scss
+    color_generation/generate_colors_material.py --path "$1" --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" > "$HOME"/.cache/ags/user/generated/material_colors.scss
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"
         color_generation/applycolor.sh

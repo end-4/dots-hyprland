@@ -1,58 +1,6 @@
-///////////// COLOR MODIFICATIONS /////////////
-// Material colors provide excellent readability, but can be uninteresting.
-// This is an attempt to improve that.
-$transparency_enabled: false;
-
-@if $transparency_enabled ==false {
-    @if $darkmode ==true {
-        $primary: mix($primary, white, 70%);
-        $primaryContainer: mix($primaryContainer, white, 90%);
-        $background: mix(mix($background, $primary, 94%), #000000, 50%);
-        $surface: mix($surface, $primaryContainer, 98%);
-        $surfaceVariant: mix($surfaceVariant, #000000, 75%);
-    }
-
-    @if $darkmode ==false {
-        $primaryContainer: mix($primaryContainer, white, 90%);
-        $surface: mix($surface, $primaryContainer, 98%);
-    }
-}
-
-@if $transparency_enabled ==true {
-    @if $darkmode ==true {
-        $background: mix(mix($background, $primary, 94%), #000000, 50%);
-        $surface: mix($surface, $primaryContainer, 98%);
-        $surfaceVariant: mix($surfaceVariant, #000000, 55%);
-    }
-
-    @if $darkmode ==false {
-        $background: mix($background, $primary, 94%);
-        $surface: mix($surface, $primary, 93%);
-        $surfaceVariant: mix($surfaceVariant, #ffffff, 55%);
-    }
-}
-
-// Amounts
+$transparency: 0.5;
 $transparentize_amount: 0.3;
-$transparentize_surface_amount_less: 0.6;
-$transparentize_surface_amount_less_less: 0.55;
 $transparentize_surface_amount: 0.7;
-$transparentize_surface_amount_more: 0.8;
-$transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
-
-@if $darkmode ==true {
-    // Less transparency
-    $transparentize_amount: 0.15;
-    $transparentize_surface_amount_less: 0.5;
-    $transparentize_surface_amount_less_less: 0.55;
-    $transparentize_surface_amount: 0.69;
-    $transparentize_surface_amount_more: 0.9;
-    $transparentize_surface_amount_subtract_surface: $transparentize_surface_amount - $transparentize_amount;
-}
-
-@if $transparency_enabled ==false {
-    $transparentize_amount: 0;
-}
 
 // Extended material
 $success: #4f6354;
@@ -60,7 +8,7 @@ $onSuccess: #ffffff;
 $successContainer: #d1e8d5;
 $onSuccessContainer: #0c1f13;
 
-@if $darkmode ==true {
+@if $darkmode == True {
     // Dark variant
     $success: #b5ccba;
     $onSuccess: #213528;
@@ -69,60 +17,35 @@ $onSuccessContainer: #0c1f13;
 }
 
 // Transparent versions
-$t_primary: transparentize($primary, $transparentize_amount);
-$t_onPrimary: transparentize($onPrimary, $transparentize_amount);
-$t_primaryContainer: transparentize($primaryContainer, $transparentize_amount);
-$t_onPrimaryContainer: transparentize($onPrimaryContainer, $transparentize_amount);
-$t_secondary: transparentize($secondary, $transparentize_amount);
-$t_onSecondary: transparentize($onSecondary, $transparentize_amount);
-$t_secondaryContainer: transparentize($secondaryContainer, $transparentize_amount);
-$l_t_secondaryContainer: transparentize($secondaryContainer, $transparentize_surface_amount_less);
-$t_onSecondaryContainer: transparentize($onSecondaryContainer, $transparentize_amount);
-$t_t_t_onSecondaryContainer: transparentize($onSecondaryContainer, 0.93);
-$t_tertiary: transparentize($tertiary, $transparentize_amount);
-$t_onTertiary: transparentize($onTertiary, $transparentize_amount);
-$t_tertiaryContainer: transparentize($tertiaryContainer, $transparentize_amount);
-$t_onTertiaryContainer: transparentize($onTertiaryContainer, $transparentize_amount);
-$t_error: transparentize($error, $transparentize_amount);
-$t_onError: transparentize($onError, $transparentize_amount);
-$t_errorContainer: transparentize($errorContainer, $transparentize_amount);
-$t_onErrorContainer: transparentize($onErrorContainer, $transparentize_amount);
-$t_colorbarbg: transparentize($colorbarbg, $transparentize_amount);
 $t_background: transparentize($background, $transparentize_amount);
-$t_t_background: transparentize($background, $transparentize_surface_amount_more);
-$t_onBackground: transparentize($onBackground, $transparentize_amount);
 $t_surface: transparentize($surface, $transparentize_surface_amount);
-$t_t_surface: transparentize($surface, $transparentize_surface_amount_more);
-$t_onSurface: transparentize($onSurface, $transparentize_surface_amount);
 $t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount);
-$t_onSurfaceVariant: transparentize($onSurfaceVariant, $transparentize_surface_amount);
-$t_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_more);
-$l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less);
-$l_l_t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount_less_less);
-$t_outline: transparentize($outline, $transparentize_amount);
-$t_shadow: transparentize($shadow, $transparentize_amount);
-$t_inverseSurface: transparentize($inverseSurface, $transparentize_amount);
-$t_inverseOnSurface: transparentize($inverseOnSurface, $transparentize_amount);
-$t_inversePrimary: transparentize($inversePrimary, $transparentize_amount);
-// Transparent material (extended)
-$t_success: transparentize($error, $transparentize_amount);
-$t_onSuccess: transparentize($onError, $transparentize_amount);
-$t_successContainer: transparentize($errorContainer, $transparentize_amount);
-$t_onSuccessContainer: transparentize($onErrorContainer,
-        $transparentize_amount);
+
+@if $transparent == True {
+  $background: transparentize($background, $transparency);
+  $surface: transparentize($surface, $transparency);
+  $surfaceDim: transparentize($surfaceDim, $transparency);
+  $surfaceBright: transparentize($surfaceBright, $transparency);
+  $surfaceContainerLowest: transparentize($surfaceContainerLowest, $transparency);
+  $surfaceContainerLow: transparentize($surfaceContainerLow, $transparency);
+  $surfaceContainer: transparentize($surfaceContainer, $transparency);
+  $surfaceContainerHigh: transparentize($surfaceContainerHigh, $transparency);
+  $surfaceContainerHighest: transparentize($surfaceContainerHighest, $transparency);
+  $surfaceVariant: transparentize($surfaceVariant, $transparency);
+  $inverseSurface: transparentize($inverseSurface, $transparency);
+  $surfaceTint: transparentize($surfaceTint, $transparency);
+}
 
 // Others
-$hovercolor: mix($t_surface, $t_onSurface, 50%);
-$activecolor: mix($t_surface, $t_onSurface, 30%);
-$subtext: mix($onBackground, $background, 70%);
+$subtext: $outline;
 $actiontext: mix($onBackground, $background, 85%);
 $black: black;
 $white: white;
 
 // Terminal colors
-$termbg: mix($t_surfaceVariant, $t_onSurfaceVariant, 80%);
+$termbg: $surfaceContainerHigh;
 $termfg: $onSurfaceVariant;
-$term0: $t_background;
+$term0: $background;
 $term1: $error;
 $term2: $inversePrimary;
 $term3: $onPrimaryContainer;
@@ -133,19 +56,20 @@ $term7: $onSurfaceVariant;
 
 /// Color mappings for more chaotic, dynamic colors like the average rice ///
 // General
-$layer0: $t_background;
+$layer0: $background;
 $onLayer0: $onBackground;
 $layer0Hover: mix($layer0, $onLayer0, 85%);
-$layer0Active: mix($layer0, $onLayer0, 70%);
+$layer0Active: $primary;
+$onLayer0Active: $onPrimary;
 $onLayer0Inactive: mix($onLayer0, $layer0, 70%);
-$layer1: $surface;
+$layer1: $surfaceContainer;
 $onLayer1: $onSurface;
 $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
+$layer2: $secondaryContainer;
+$onLayer2: $onSecondaryContainer;
 $layer1Hover: mix($layer1, $onLayer1, 85%);
 $layer1Active: mix($layer1, $onLayer1, 70%);
-$layer2: $surfaceVariant;
-$onLayer2: $onSurfaceVariant;
 $layer2Hover: mix($layer2, $onLayer2, 90%);
 $layer2Active: mix($layer2, $onLayer2, 80%);
 // Elements
@@ -172,9 +96,9 @@ $battOnLayer1: $onLayer1;
 $battLayer2: $secondaryContainer;
 $battOnLayer2: $onSecondaryContainer;
 $workspaceOnLayer1Inactive: $onLayer1Inactive;
-$workspaceLayer3: $secondaryContainer;
-$workspaceOnLayer3: $onSecondaryContainer;
-$workspaceOnLayer2: $onSurfaceVariant;
+$workspaceLayer3: $primary;
+$workspaceOnLayer3: $onPrimary;
+$workspaceOnLayer2: $onSecondaryContainer;
 $trayOnLayer0: $onLayer0;
 $cheatsheetTitle: $onSecondaryContainer;
 $cheatsheetColors: (
@@ -187,6 +111,7 @@ $cheatsheetColors: (
     $onSecondaryContainer,
     $onSecondaryContainer
 );
+
 $sessionColors: (
     $onLayer1,
     $onLayer1,
@@ -198,72 +123,4 @@ $sessionColors: (
 );
 $brightnessOnLayer0: $onLayer0;
 $volumeOnLayer0: $onLayer0;
-
-///////////////////// test theme: amarena (kind of) /////////////////////////
-// $layer0: #0e1116;
-// $onLayer0: #FFFFFF;
-// $layer0Hover: mix($layer0, $onLayer0, 85%);
-// $layer0Active: mix($layer0, $onLayer0, 70%);
-// $layer1: #171c22;
-// $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
-// $onLayer1: $onSurfaceVariant;
-// $layer1Hover: mix($layer1, $onLayer1, 85%);
-// $layer1Active: mix($layer1, $onLayer1, 70%);
-// $layer2: #252c35;
-// $onLayer2: $onSurfaceVariant;
-// $layer2Hover: mix($layer2, $onLayer2, 90%);
-// $layer2Active: mix($layer2, $onLayer2, 80%);
-// $layer3: #1C232A;
-// // Bar
-// $windowtitleOnLayer0Inactive: #70afa4;
-// $windowtitleOnLayer0: #7FE3D1;
-// $barspacerightOnLayer0: #7FE3D1;
-// $timeOnLayer1: #cc7691;
-// $dateOnLayer1: #cc7691;
-// $ramOnLayer1: #6DC0D5;
-// $ramLayer2: $layer2;
-// $ramOnLayer2: #6DC0D5;
-// $swapOnLayer1: #CC83C7;
-// $swapLayer2: $layer2;
-// $swapOnLayer2: #CC83C7;
-// $cpuOnLayer1: #FA6295;
-// $cpuLayer2: $layer2;
-// $cpuOnLayer2: #FA6295;
-// $musicOnLayer1: #94CF95;
-// $musicLayer2: $layer2;
-// $musicOnLayer2: #94CF95;
-// $utilsLayer2: $layer2;
-// $utilsOnLayer2: #CC83C7;
-// $battOnLayer1: #94CF95;
-// $battLayer2: $layer2;
-// $battOnLayer2: #94CF95;
-// $workspaceOnLayer1Inactive: $onLayer1Inactive;
-// $workspaceLayer3: #33554f;
-// $workspaceOnLayer3: #7FE3D1;
-// $workspaceOnLayer2: #7FE3D1;
-// $trayOnLayer0: #6DC0D5;
-// // Cheatsheet
-// $cheatsheetTitle: #6DC0D4;
-// $cheatsheetColors: (
-//     #F692B2,
-//     #6EC1D6,
-//     #CD84C8,
-//     #7FE4D2,
-//     #94CF95,
-//     #CD84C8,
-//     #FB6396,
-//     #6EC1D6
-// );
-// $sessionColors: (
-//     #F692B2,
-//     #6EC1D6,
-//     #CD84C8,
-//     #7FE4D2,
-//     #94CF95,
-//     #CD84C8,
-//     #FB6396
-// );
-// // Osd
-// $brightnessOnLayer0: #F692B2;
-// $volumeOnLayer0: #94CF95;
 

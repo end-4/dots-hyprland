@@ -120,6 +120,51 @@ export const ConfigSegmentedSelection = ({
 
 }
 
+export const ConfigMulipleSelection = ({
+    icon, name, desc = '',
+    optionsArr = [
+      [ { name: 'Option 1', value: 0 }, { name: 'Option 2', value: 1 } ],
+      [ { name: 'Option 3', value: 0 }, { name: 'Option 4', value: 1 } ],
+    ],
+    initIndex = [0, 0],
+    onChange,
+    ...rest
+}) => {
+    let lastSelected = initIndex;
+    let value = optionsArr[initIndex[0]][initIndex[1]].value;
+    const widget = Box({
+        tooltipText: desc,
+        className: 'multipleselection-container spacing-v-3',
+        vertical: true,
+        children: optionsArr.map((options, grp) => {
+          return Box({
+            className: 'spacing-h-5',
+            hpack: 'center',
+            children: options.map((option, id) => {
+                return Button({
+                    setup: setupCursorHover,
+                    className: `multipleselection-btn ${id == initIndex[1] && grp == initIndex[0] ? 'multipleselection-btn-enabled' : ''}`,
+                    label: option.name,
+                    onClicked: (self) => {
+                        const kidsg = widget.get_children();
+                        const kids = kidsg.flatMap(widget => widget.get_children());
+                        kids.forEach(kid => {
+                          kid.toggleClassName('multipleselection-btn-enabled', false);
+                        });
+                        lastSelected = id;
+                        self.toggleClassName('multipleselection-btn-enabled', true);
+                        onChange(option.value, option.name);
+                    }
+                })
+            }),
+          })
+        }),
+        ...rest,
+    });
+    return widget;
+
+}
+
 export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
     className: `gap-${vertical ? 'v' : 'h'}-${size}`,
     ...rest,
