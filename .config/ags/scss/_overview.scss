@@ -53,8 +53,8 @@
     @include elevation2;
     min-width: 28.773rem;
     padding: 0.682rem;
-    background-color: $surfaceContainerLow;
-    color: $onSurface;
+    background-color: $layer0;
+    color: $onLayer0;
 }
 
 .overview-search-results-icon {
@@ -105,7 +105,7 @@
     @include normal-rounding;
     // @include elevation-border;
     margin: 0.341rem;
-    background-color: $surfaceContainerLow;
+    background-color: $layer1;
 }
 
 .overview-tasks-workspace-number {
