@@ -6,31 +6,31 @@
 }
 {
     "label" : "hibernate",
-    "action" : "systemctl hibernate",
+    "action" : "systemctl hibernate || loginctl hibernate",
     "text" : "save",
     "keybind" : "h"
 }
 {
     "label" : "logout",
-    "action" : "killall Hyprland",
+    "action" : "pkill Hyprland || pkill sway || pkill niri || loginctl terminate-user $USER",
     "text" : "logout",
     "keybind" : "e"
 }
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "systemctl poweroff || loginctl poweroff",
     "text" : "power_settings_new",
     "keybind" : "s"
 }
 {
     "label" : "suspend",
-    "action" : "systemctl suspend",
+    "action" : "systemctl suspend || loginctl suspend",
     "text" : "bedtime",
     "keybind" : "u"
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "systemctl reboot || loginctl reboot",
     "text" : "restart_alt",
     "keybind" : "r"
 }
