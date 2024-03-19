@@ -21,7 +21,7 @@ args = parser.parse_args()
 export_color_file=os.environ['HOME']+"/.cache/ags/user/color.txt"
 
 # Default scheme -> Tonal Spot (Android Default)
-from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
+from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
 if args.scheme is not None:
     if args.scheme == 'fruitsalad':
         from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
@@ -31,8 +31,8 @@ if args.scheme is not None:
         from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
     elif args.scheme == 'rainbow':
         from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
-    elif args.scheme == 'vibrant':
-        from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
+    elif args.scheme == 'tonalspot':
+        from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
     elif args.scheme == 'neutral':
         from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
     elif args.scheme == 'fidelity':

@@ -10,7 +10,7 @@ fi
 colormodefile="$HOME/.cache/ags/user/colormode.txt"
 lightdark="dark"
 transparency="opaque"
-materialscheme="tonalspot"
+materialscheme="vibrant"
 if [ ! -f $colormodefile ]; then
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
