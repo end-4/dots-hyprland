@@ -197,10 +197,10 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 }
 
 @mixin elevation-border {
-    border-top: 1px solid mix($t_surface, $onSurface, 80%);
-    border-left: 1px solid mix($t_surface, $onSurface, 80%);
-    border-right: 1px solid mix($t_surface, $onSurface, 85%);
-    border-bottom: 1px solid mix($t_surface, $onSurface, 85%);
+    border-top: 1px solid $surfaceContainer;
+    border-left: 1px solid $surfaceContainer;
+    border-right: 1px solid $surfaceContainer;
+    border-bottom: 1px solid $surfaceContainer;
 }
 
 @mixin elevation-border-heavier {
