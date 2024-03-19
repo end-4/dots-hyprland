@@ -1,4 +1,4 @@
-#!/opt/materialyoucolor/bin/python3
+#!/usr/bin/env python3
 from material_color_utilities_python import *
 from pathlib import Path
 import sys
