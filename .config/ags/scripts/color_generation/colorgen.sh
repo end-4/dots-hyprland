@@ -14,11 +14,11 @@ materialscheme="tonalspot"
 if [ ! -f $colormodefile ]; then
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
-    echo "tonalspot" >> $colormodefile
+    echo "vibrant" >> $colormodefile
 elif [[ $(wc -l < $colormodefile) -ne 3 || $(wc -w < $colormodefile) -ne 3 ]]; then
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
-    echo "tonalspot" >> $colormodefile
+    echo "vibrant" >> $colormodefile
 else
     lightdark=$(sed -n '1p' $colormodefile)
     transparency=$(sed -n '2p' $colormodefile)
