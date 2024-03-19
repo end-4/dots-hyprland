@@ -101,10 +101,3 @@ install-MicroTeX (){
   x sudo cp ./LaTeX /usr/local/bin/
   x cd $base
 }
-
-install-materialyoucolors () {
-  x sudo python -m venv /opt/materialyoucolor
-  x source /opt/materialyoucolor/bin/activate
-  x sudo pip install material-color-utilities-python materialyoucolor
-  x deactivate
-}
