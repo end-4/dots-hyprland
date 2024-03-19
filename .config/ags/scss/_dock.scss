@@ -1,7 +1,7 @@
 .dock-bg {
     @include large-rounding;
     @include elevation2;
-    background-color: $t_background;
+    background-color: $layer0;
     padding: 0.682rem;
 }
 
@@ -12,11 +12,11 @@
 
 .dock-app-btn:hover,
 .dock-app-btn:focus {
-    background-color: mix($t_surface, $onSurface, 95%);
+    background-color: mix($surface, $onSurface, 90%);
 }
 
 .dock-app-btn:active {
-    background-color: mix($t_surface, $onSurface, 85%);
+    background-color: mix($surface, $onSurface, 85%);
 }
 
 .dock-app-icon {

@@ -17,9 +17,7 @@ $onSuccessContainer: #0c1f13;
 }
 
 // Transparent versions
-$t_background: transparentize($background, $transparentize_amount);
 $t_surface: transparentize($surface, $transparentize_surface_amount);
-$t_surfaceVariant: transparentize($surfaceVariant, $transparentize_surface_amount);
 
 @if $transparent == True {
   $background: transparentize($background, $transparency);
@@ -42,18 +40,6 @@ $actiontext: mix($onBackground, $background, 85%);
 $black: black;
 $white: white;
 
-// Terminal colors
-$termbg: $surfaceContainerHigh;
-$termfg: $onSurfaceVariant;
-$term0: $background;
-$term1: $error;
-$term2: $inversePrimary;
-$term3: $onPrimaryContainer;
-$term4: $onPrimaryContainer;
-$term5: $onSecondaryContainer;
-$term6: $primary;
-$term7: $onSurfaceVariant;
-
 /// Color mappings for more chaotic, dynamic colors like the average rice ///
 // General
 $layer0: $background;
@@ -62,12 +48,14 @@ $layer0Hover: mix($layer0, $onLayer0, 85%);
 $layer0Active: $primary;
 $onLayer0Active: $onPrimary;
 $onLayer0Inactive: mix($onLayer0, $layer0, 70%);
-$layer1: $surfaceContainer;
+$layer1: $surfaceContainerLow;
 $onLayer1: $onSurface;
 $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
-$layer2: $secondaryContainer;
-$onLayer2: $onSecondaryContainer;
+$layer2: mix($surfaceContainer, $surfaceContainerHigh, 55%);
+$onLayer2: $onSurface;
+$layer3: $surfaceContainerHigh;
+$onLayer3: $onSurface;
 $layer1Hover: mix($layer1, $onLayer1, 85%);
 $layer1Active: mix($layer1, $onLayer1, 70%);
 $layer2Hover: mix($layer2, $onLayer2, 90%);

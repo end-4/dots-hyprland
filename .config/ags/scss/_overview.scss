@@ -118,7 +118,7 @@
     @include menu_decel;
     background-color: $surfaceContainerHigh;
     color: $onSurface;
-    border: 0.068rem solid $outlineVariant;
+    border: 0.068rem solid $surfaceContainerHighest;
 }
 
 .overview-tasks-window:hover,

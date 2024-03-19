@@ -6,7 +6,7 @@
 @import './lib_mixins';
 $music_gradient1: mix($color1, $background, 50%);
 
-// @if $darkmode ==true {
+// @if $darkmode == True {
 //     $music_gradient1: mix($color1, $background, 30%);
 // }
 
@@ -17,7 +17,7 @@ $music_extra_transparentize: 0.15;
 
 $secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6, 80%), 0.5);
 $onSecondaryContainer: mix($color7, $color2, 90%);
-@if $darkmode ==false {
+@if $darkmode == False {
     $onSecondaryContainer: mix($onSecondaryContainer, black, 50%);
 }
 
@@ -28,7 +28,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     @include normal-rounding;
     // min-height: 7.159rem;
     min-width: 29.659rem;
-    background-color: $t_background;
+    background-color: $layer0;
     padding: 0rem 1.023rem;
     background: // Inspired by Amberol
         linear-gradient(127deg, transparentize($music_gradient1, $music_colorstart_transparentize), transparentize($music_gradient1, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
@@ -46,7 +46,7 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     // margin: 1.023rem;
     min-width: 7.5rem;
     min-height: 7.5rem;
-    background-color: $t_surface;
+    background-color: $layer1;
     color: $onSecondaryContainer;
 }
 

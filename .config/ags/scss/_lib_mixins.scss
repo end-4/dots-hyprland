@@ -174,26 +174,12 @@ $elevation_margin: 0.476rem;
 @mixin element_easeInOut {
     transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
 }
-@mixin page_move {
-    transition: 500ms cubic-bezier(0.85, 0, 0.15, 1);
-}
-
-@function tint($color, $percentage) {
-    @return mix(rgb(245, 250, 255), $color, $percentage);
-}
-
-@function shade($color, $percentage) {
-    @return mix(rgb(0, 0, 0), $color, $percentage);
-}
-
-$overlay1: mix($onSurface, rgba(0, 0, 0, 0), 25%);
-$overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
 
 @mixin elevation-border-softer {
-    border-top: 1px solid mix($t_surface, $onSurface, 90%);
-    border-left: 1px solid mix($t_surface, $onSurface, 90%);
-    border-right: 1px solid mix($t_surface, $onSurface, 95%);
-    border-bottom: 1px solid mix($t_surface, $onSurface, 95%);
+    border-top: 1px solid mix($surface, $onSurface, 86%);
+    border-left: 1px solid mix($surface, $onSurface, 86%);
+    border-right: 1px solid mix($surface, $onSurface, 90%);
+    border-bottom: 1px solid mix($surface, $onSurface, 90%);
 }
 
 @mixin elevation-border {
@@ -201,17 +187,6 @@ $overlay2: mix($onSurface, rgba(0, 0, 0, 0), 40%);
     border-left: 1px solid $surfaceContainer;
     border-right: 1px solid $surfaceContainer;
     border-bottom: 1px solid $surfaceContainer;
-}
-
-@mixin elevation-border-heavier {
-    border-top: 1px solid mix($t_surface, $onSurface, 70%);
-    border-left: 1px solid mix($t_surface, $onSurface, 70%);
-    border-right: 1px solid mix($t_surface, $onSurface, 75%);
-    border-bottom: 1px solid mix($t_surface, $onSurface, 75%);
-}
-
-@mixin elevation-border-transparent {
-    border-top: 1px solid transparent;
 }
 
 @mixin button-minsize {
