@@ -1,7 +1,4 @@
 $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
-$textboxColor: $surfaceContainerHigh;
-$system: $secondary;
-$onSystem: $onSecondary;
 
 @mixin group-padding {
     padding: 0.341rem;
@@ -52,12 +49,12 @@ $onSystem: $onSecondary;
 .sidebar-group {
     @include normal-rounding;
     @include group-padding;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
 }
 
 .sidebar-group-nopad {
     @include normal-rounding;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
 }
 
 .sidebar-group-invisible {
@@ -71,7 +68,7 @@ $onSystem: $onSecondary;
 .sidebar-togglesbox {
     @include full-rounding;
     @include group-padding;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
 }
 
 .sidebar-iconbutton {
@@ -263,8 +260,8 @@ $onSystem: $onSecondary;
     @include full-rounding;
     @include element_decel;
     padding: 0rem 0.682rem;
-    background-color: $surfaceContainer;
-    color: $outline;
+    background-color: $surfaceContainerHigh;
+    color: $onSurface;
 }
 
 .sidebar-calendar-monthyear-btn:hover,
@@ -281,7 +278,7 @@ $onSystem: $onSecondary;
     @include element_decel;
     min-width: 2.045rem;
     min-height: 2.045rem;
-    background-color: $surfaceContainer;
+    background-color: $surfaceContainerHigh;
     color: $outline;
 }
 
@@ -329,7 +326,7 @@ $onSystem: $onSecondary;
 .sidebar-todo-new {
     @include full-rounding;
     @include element_decel;
-    background-color: $textboxColor;
+    background-color: $surfaceContainerHigh;
     color: $onSurfaceVariant;
     margin: 0.341rem;
     padding: 0.205rem 0.545rem;
@@ -403,7 +400,7 @@ $onSystem: $onSecondary;
 .sidebar-module {
     @include normal-rounding;
     @include group-padding;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
     padding: 0.682rem;
 }
 
@@ -422,7 +419,7 @@ $onSystem: $onSecondary;
 .sidebar-module-scripts-button {
     @include full-rounding;
     @include icon-material;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
     min-width: 1.705rem;
     min-height: 1.705rem;
 
@@ -498,7 +495,7 @@ $colorpicker_rounding: 0.341rem;
 .sidebar-chat-apiswitcher {
     @include full-rounding;
     @include group-padding;
-    background-color: $surfaceContainer;
+    background-color: $layer1;
 }
 
 .sidebar-chat-apiswitcher-icon {
@@ -518,7 +515,7 @@ $colorpicker_rounding: 0.341rem;
 .sidebar-chat-providerswitcher {
     @include small-rounding;
     padding: 0.477rem 0.682rem;
-    background-color: $textboxColor;
+    background-color: $surfaceContainerHigh;
     color: $onSurfaceVariant;
 }
 
@@ -534,7 +531,7 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-textarea {
     @include normal-rounding;
-    background-color: $textboxColor;
+    background-color: $surfaceContainerHigh;
     color: $onSurfaceVariant;
     padding: 0.682rem;
 }
@@ -644,33 +641,26 @@ $colorpicker_rounding: 0.341rem;
     margin: 0rem 0.682rem;
     padding: 0.682rem;
 
-    @if $darkmode ==true {
-        background-color: white;
+    @if $darkmode == True {
+        background-color: #e6e6e6;
     }
-
     color: $onBackground;
-    // background-color: $termbg;
 }
 
 .sidebar-chat-codeblock {
     @include normal-rounding;
     // @include elevation2;
-    background-color: $termbg;
-    color: $termfg;
+    background-color: $layer2;
+    color: $onLayer2;
     margin: 0rem 0.682rem;
-    border: 0.068rem solid $outlineVariant;
 }
 
 .sidebar-chat-codeblock-topbar {
     @include mainfont;
-    margin: 0.273rem;
-    margin-bottom: 0rem;
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
-    border-radius: $rounding_medium - 0.273rem;
-    border: 0.068rem solid $outlineVariant;
-    border-top-left-radius: $rounding_small + 0.068rem;
-    border-top-right-radius: $rounding_small + 0.068rem;
+    background-color: $layer3;
+    color: $onLayer3;
+    border-top-left-radius: $rounding_small;
+    border-top-right-radius: $rounding_small;
     padding: 0.341rem 0.477rem;
 }
 
@@ -687,11 +677,11 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-codeblock-topbar-btn:hover,
 .sidebar-chat-codeblock-topbar-btn:focus {
-    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+    background-color: $surfaceBright;
 }
 
 .sidebar-chat-codeblock-topbar-btn:active {
-    background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
+    background-color: $surfaceVariant;
 }
 
 .sidebar-chat-codeblock-code {
@@ -737,7 +727,7 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-chip-action {
     @include element_decel;
-    background-color: $textboxColor;
+    background-color: $surfaceContainerHigh;
     color: $onSurfaceVariant;
 }
 
@@ -759,7 +749,7 @@ $colorpicker_rounding: 0.341rem;
     @include element_decel;
     @include small-rounding;
     padding: 0.341rem 0.477rem;
-    background-color: $textboxColor;
+    background-color: $surfaceContainerHigh;
     color: $onSurfaceVariant;
 }
 

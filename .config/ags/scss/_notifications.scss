@@ -1,12 +1,10 @@
-$notif_surface: $surfaceContainer;
-
 @mixin notif-rounding {
     @include normal-rounding;
 }
 
 .notif-low {
     @include notif-rounding;
-    background-color: $surfaceContainerHigh;
+    background-color: $layer2;
     color: $onSurfaceVariant;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
@@ -14,7 +12,7 @@ $notif_surface: $surfaceContainer;
 
 .notif-normal {
     @include notif-rounding;
-    background-color: $surfaceContainerHigh;
+    background-color: $layer2;
     color: $onSurfaceVariant;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
@@ -44,7 +42,7 @@ $notif_surface: $surfaceContainer;
 .popup-notif-low {
     @include notif-rounding;
     min-width: 30.682rem;
-    background-color: $notif_surface;
+    background-color: $layer2;
     border: 0.034rem solid $outlineVariant;
     color: $onSurfaceVariant;
     padding: $rounding_small;
@@ -54,7 +52,7 @@ $notif_surface: $surfaceContainer;
 .popup-notif-normal {
     @include notif-rounding;
     min-width: 30.682rem;
-    background-color: $notif_surface;
+    background-color: $layer2;
     border: 0.034rem solid $outlineVariant;
     color: $onSurfaceVariant;
     padding: $rounding_small;
