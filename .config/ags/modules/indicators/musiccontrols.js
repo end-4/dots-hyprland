@@ -395,57 +395,9 @@ export default () => Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     revealChild: false,
     child: Box({
-        setup: (self) => self.hook(Mpris, box => {
-            box.children.forEach(child => {
-                child.destroy();
-                child = null;
-            });
-            Mpris.players.forEach((player, i) => {
-                if (isRealPlayer(player)) {
-                    const newInstance = MusicControlsWidget(player);
-                    box.add(newInstance);
-                }
-            });
-        }, 'notify::players'),
+        children: Mpris.bind("players").as(p => p.map(MusicControlsWidget))
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
         revealer.revealChild = showMusicControls.value;
     }),
 })
-
-// export default () => MarginRevealer({
-//     transition: 'slide_down',
-//     revealChild: false,
-//     showClass: 'osd-show',
-//     hideClass: 'osd-hide',
-//     child: Box({
-//         setup: (self) => self.hook(Mpris, box => {
-//             let foundPlayer = false;
-//             Mpris.players.forEach((player, i) => {
-//                 if (isRealPlayer(player)) {
-//                     foundPlayer = true;
-//                     box.children.forEach(child => {
-//                         child.destroy();
-//                         child = null;
-//                     });
-//                     const newInstance = MusicControlsWidget(player);
-//                     box.children = [newInstance];
-//                 }
-//             });
-
-//             if (!foundPlayer) {
-//                 const children = box.get_children();
-//                 for (let i = 0; i < children.length; i++) {
-//                     const child = children[i];
-//                     child.destroy();
-//                     child = null;
-//                 }
-//                 return;
-//             }
-//         }, 'notify::players'),
-//     }),
-//     setup: (self) => self.hook(showMusicControls, (revealer) => {
-//         if (showMusicControls.value) revealer.attribute.show();
-//         else revealer.attribute.hide();
-//     }),
-// })
