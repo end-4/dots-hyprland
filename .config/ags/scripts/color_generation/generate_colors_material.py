@@ -12,13 +12,12 @@ from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynami
 parser = argparse.ArgumentParser(description='Color generation script')
 parser.add_argument('--path', type=str, default=None, help='generate colorscheme from image')
 parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
-parser.add_argument('--mode', type=str , choices=['dark', 'light'], default='dark', help='dark or light mode')
+parser.add_argument('--mode', type=str, choices=['dark', 'light'], default='dark', help='dark or light mode')
 parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
-parser.add_argument('--transparency', type=str , choices=['opaque', 'transparent'], default='opaque', help='enable transparency')
+parser.add_argument('--transparency', type=str, choices=['opaque', 'transparent'], default='opaque', help='enable transparency')
+parser.add_argument('--cache', type=str, default=None, help='file path (relative to home) to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
 args = parser.parse_args()
-
-export_color_file=os.environ['HOME']+"/.cache/ags/user/color.txt"
 
 # Default scheme -> Tonal Spot (Android Default)
 from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
@@ -73,8 +72,10 @@ if args.path is not None:
     hsize = int((float(img.size[1])*float(wpercent)))
     img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
     argb = sourceColorFromImage(img)
-    with open(export_color_file, 'w') as file:
-        file.write(argb_to_hex(argb))
+    if args.cache is not None:
+        export_color_file=os.environ['HOME'] + "/" + args.cache
+        with open(export_color_file, 'w') as file:
+            file.write(argb_to_hex(argb))
 elif args.color is not None:
     argb = hex_to_argb(args.color)
 
