@@ -20,9 +20,13 @@ var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
-        (hasPlasmaIntegration && !player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) && // Firefox mpris dbus is useless
-        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') && // Doesn't have cover art
-        !player.busName.endsWith('.mpd') // Non-instance mpd bus
+        // Remove unecessary native buses from browsers if there's plasma integration
+        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
+        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
+        // playerctld just copies other buses and we don't need duplicates
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') &&
+        // Non-instance mpd bus
+        !player.busName.endsWith('.mpd')
     );
 }
 
@@ -381,7 +385,7 @@ const MusicControlsWidget = (player) => Box({
                     setup: (box) => {
                         box.pack_start(TrackControls({ player: player }), false, false, 0);
                         box.pack_end(PlayState({ player: player }), false, false, 0);
-                        box.pack_end(TrackTime({ player: player }), false, false, 0)
+                        if(hasPlasmaIntegration || player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) box.pack_end(TrackTime({ player: player }), false, false, 0)
                         // box.pack_end(TrackSource({ vpack: 'center', player: player }), false, false, 0);
                     }
                 })
