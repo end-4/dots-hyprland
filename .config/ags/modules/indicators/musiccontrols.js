@@ -9,7 +9,7 @@ const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { fileExists } from '../.miscutils/files.js';
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
-import { darkMode } from '../.miscutils/system.js';
+import { darkMode, hasPlasmaIntegration } from '../.miscutils/system.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
@@ -20,6 +20,7 @@ var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
+        (hasPlasmaIntegration && !player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) && // Firefox mpris dbus is useless
         !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') && // Doesn't have cover art
         !player.busName.endsWith('.mpd') // Non-instance mpd bus
     );
