@@ -116,7 +116,7 @@
 .overview-tasks-window {
     @include normal-rounding;
     @include menu_decel;
-    background-color: $surfaceContainerHigh;
+    background-color: $layer2;
     color: $onSurface;
     border: 0.068rem solid $surfaceContainerHighest;
 }
