@@ -7,12 +7,12 @@ const { Box, Button, Label, Icon, Scrollable } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import md2pango from '../../.miscutils/md2pango.js';
+import { darkMode } from "../../.miscutils/system.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme.xml`;
 const CUSTOM_SCHEME_ID = 'custom';
 const USERNAME = GLib.get_user_name();
-Gtk.IconTheme.get_default().append_search_path(LATEX_DIR);
 
 /////////////////////// Custom source view colorscheme /////////////////////////
 
@@ -77,11 +77,12 @@ const TextBlock = (content = '') => Label({
 
 Utils.execAsync(['bash', '-c', `rm ${LATEX_DIR}/*`])
     .then(() => Utils.execAsync(['bash', '-c', `mkdir -p ${LATEX_DIR}`]))
-    .catch(() => {});
+    .catch(() => {  });
 const Latex = (content = '') => {
     const latexViewArea = Box({
         // vscroll: 'never',
         // hscroll: 'automatic',
+        homogeneous: true,
         attribute: {
             render: async (self, text) => {
                 if (text.length == 0) return;
@@ -91,6 +92,7 @@ const Latex = (content = '') => {
                 const timeSinceEpoch = Date.now();
                 const fileName = `${timeSinceEpoch}.tex`;
                 const outFileName = `${timeSinceEpoch}-symbolic.svg`;
+                const outIconName = `${timeSinceEpoch}-symbolic`;
                 const scriptFileName = `${timeSinceEpoch}-render.sh`;
                 const filePath = `${LATEX_DIR}/${fileName}`;
                 const outFilePath = `${LATEX_DIR}/${outFileName}`;
@@ -104,13 +106,17 @@ const Latex = (content = '') => {
                 const renderScript = `#!/usr/bin/env bash
 text=$(cat ${filePath} | sed 's/$/ \\\\\\\\/g' | sed 's/&=/=/g')
 LaTeX -headless -input="$text" -output=${outFilePath} -textsize=${fontSize * 1.1} -padding=0 -maxwidth=${latexViewArea.get_allocated_width() * 0.85}
+sed -i 's/fill="rgb(0%, 0%, 0%)"/style="fill:#000000"/g' ${outFilePath}
+sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode ? '#ffffff' : '#000000'}"/g' ${outFilePath}
 `;
                 Utils.writeFile(renderScript, scriptFilePath).catch(print);
                 Utils.exec(`chmod a+x ${scriptFilePath}`)
                 Utils.timeout(100, () => {
                     Utils.exec(`bash ${scriptFilePath}`);
+                    Gtk.IconTheme.get_default().append_search_path(LATEX_DIR);
+
                     self.child?.destroy();
-                    self.child = Gtk.Image.new_from_file(outFilePath);
+                    self.child = Gtk.Image.new_from_icon_name(outIconName, 0);
                 })
             }
         },
