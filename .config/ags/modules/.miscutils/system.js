@@ -9,7 +9,7 @@ export const hasFlatpak = !!exec(`bash -c 'command -v flatpak'`);
 
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
 const colorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
-export let darkMode = !(Utils.readFile(LIGHTDARK_FILE_LOCATION).trim() == 'light');
+export let darkMode = !(Utils.readFile(LIGHTDARK_FILE_LOCATION).split('\n')[0].trim() == 'light');
 export const hasPlasmaIntegration = !!Utils.exec('bash -c "command -v plasma-browser-integration-host"');
 
 export const getDistroIcon = () => {

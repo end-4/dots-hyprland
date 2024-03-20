@@ -84,6 +84,6 @@ console.log('uwu');
 - Random instruction thing
   - To update arch lincox, run \`sudo pacman -Syu\`
 \`\`\`tex
-\\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} hmmmmmm \\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2}
+\\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} \\\\ \\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2}
 \`\`\`
 `;

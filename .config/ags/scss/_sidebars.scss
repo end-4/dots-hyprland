@@ -641,9 +641,6 @@ $colorpicker_rounding: 0.341rem;
     margin: 0rem 0.682rem;
     padding: 0.682rem;
 
-    @if $darkmode == True {
-        background-color: #e6e6e6;
-    }
     color: $onBackground;
 }
 
