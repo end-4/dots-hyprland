@@ -20,7 +20,6 @@ var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
-        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') && // Firefox mpris dbus is useless
         !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') && // Doesn't have cover art
         !player.busName.endsWith('.mpd') // Non-instance mpd bus
     );
@@ -395,7 +394,8 @@ export default () => Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     revealChild: false,
     child: Box({
-        children: Mpris.bind("players").as(p => p.map(MusicControlsWidget))
+        children: Mpris.bind("players")
+            .as(players => players.map((player) => (isRealPlayer(player) ? MusicControlsWidget(player) : null)))
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
         revealer.revealChild = showMusicControls.value;
