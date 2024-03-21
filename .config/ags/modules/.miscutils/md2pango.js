@@ -59,31 +59,20 @@ export default (text) => {
     return output.join('\n');
 }
 
-export const markdownTest = `# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-1. yes
-2. no
-127. well
-- Bulletpoint starting with minus
-* Bulletpoint starting with asterisk
----
-- __Underline__ __ No underline __
-- **Bold** ** No bold **
-- _Italics1_ *Italics2* _ No Italics _
-- A color: #D6BAFF
-- nvidia green: #7ABB08
-  - sub-item
-\`\`\`javascript
-// A code block!
-myArray = [23, 123, 43, 54, '6969'];
-console.log('uwu');
+export const markdownTest = `## Inline formatting
+- **Bold** *Italics* __Underline__
+- \`Monospace text\` 🤓
+- Colors
+  - Nvidia green #7ABB08
+  - Soundcloud orange #FF5500
+## Code block
+\`\`\`cpp
+#include <bits/stdc++.h>
+const std::string GREETING="UwU";
+int main() { std::cout << GREETING; }
 \`\`\`
-- Random instruction thing
-  - To update arch lincox, run \`sudo pacman -Syu\`
-\`\`\`tex
-\\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} \\\\ \\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2}
+## LaTeX
+\`\`\`latex
+\\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} \\\\ → \\\\ cos(2x) = 2cos^2(x) - 1 = 1 - 2sin^2(x) = cos^2(x) - sin^2(x)
 \`\`\`
 `;
