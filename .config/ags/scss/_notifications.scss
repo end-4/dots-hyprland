@@ -5,7 +5,7 @@
 .notif-low {
     @include notif-rounding;
     background-color: $layer2;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
 }
@@ -13,7 +13,7 @@
 .notif-normal {
     @include notif-rounding;
     background-color: $layer2;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
 }
@@ -44,7 +44,7 @@
     min-width: 30.682rem;
     background-color: $layer2;
     border: 0.034rem solid $outlineVariant;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
 }
@@ -54,7 +54,7 @@
     min-width: 30.682rem;
     background-color: $layer2;
     border: 0.034rem solid $outlineVariant;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
     padding: $rounding_small;
     padding-right: $rounding_small + 0.545rem;
 }
@@ -129,11 +129,11 @@
 
 .notif-expand-btn:hover,
 .notif-expand-btn:focus {
-    background: $hovercolor;
+    background: $layer2Hover;
 }
 
 .notif-expand-btn:active {
-    background: $activecolor;
+    background: $layer2Active;
 }
 
 .notif-listaction-btn {
@@ -143,11 +143,11 @@
 
 .notif-listaction-btn:hover,
 .notif-listaction-btn:focus {
-    background-color: $hovercolor;
+    background-color: $layer2Hover;
 }
 
 .notif-listaction-btn:active {
-    background-color: $activecolor;
+    background-color: $layer2Active;
 }
 
 .notif-listaction-btn-enabled {
@@ -166,7 +166,7 @@
 
 .osd-notif {
     @include notif-rounding;
-    background-color: $background;
+    background-color: $layer0;
     min-width: 30.682rem;
 }
 
@@ -204,7 +204,7 @@
 
 .notif-action-low {
     background-color: $surfaceContainerHighest;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
 }
 
 .notif-action-low:focus,
@@ -218,7 +218,7 @@
 
 .notif-action-normal {
     background-color: $surfaceContainerHighest;
-    color: $onSurfaceVariant;
+    color: $onSurface;
 }
 
 .notif-action-normal:focus,

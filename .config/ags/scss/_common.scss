@@ -2,11 +2,6 @@
 //     border: 1px solid $onSurfaceVariant; // Debugging
 // }
 
-// *:focus {
-//     outline: 1px solid mix($onSurface, $surface, 40%);
-//     -gtk-outline-radius: $rounding_small;
-// }
-
 * {
     selection {
         background-color: $secondary;
@@ -89,9 +84,8 @@ tooltip {
     animation-timing-function: ease-out;
     animation-iteration-count: 1;
     @include normal-rounding;
-    background-color: $surfaceVariant;
-    color: $onSurfaceVariant;
-    border: 1px solid $onSurfaceVariant;
+    background-color: $inverseSurface;
+    color: $inverseOnSurface;
 }
 
 /////////////////////////////////////////
@@ -107,8 +101,8 @@ tooltip {
 popover {
     @include elevation-border-softer;
     padding: 0.681rem;
-    background: $surfaceVariant;
-    color: $onSurfaceVariant;
+    background: $surfaceContainerHigh;
+    color: $onSurface;
     border-radius: 1.159rem;
     -gtk-outline-radius: 1.159rem;
 
@@ -123,17 +117,11 @@ popover {
 
 .configtoggle-box {
     padding: 0.205rem 0.341rem;
-    border: 0.136rem solid transparent;
-}
-
-.configtoggle-box:focus {
-    border: 0.136rem solid mix($onSurface, $surface, 40%);
 }
 
 .switch-bg {
     @include element_decel;
     @include full-rounding;
-    background-color: mix($surface, $background, 50%);
     border: 0.136rem solid $onSurface;
     min-width: 2.864rem;
     min-height: 1.637rem;
@@ -148,7 +136,7 @@ popover {
     @include full-rounding;
     @include menu_decel;
     background-color: $onSurface;
-    color: $surface;
+    color: $layer1;
     min-width: 0.819rem;
     min-height: 0.819rem;
     margin-left: 0.477rem;
@@ -195,7 +183,7 @@ popover {
 
 .segment-btn:focus,
 .segment-btn:hover {
-    background-color: $hovercolor;
+    background-color: $layer0Hover;
 }
 
 .segment-btn-enabled {
@@ -215,13 +203,13 @@ popover {
 .multipleselection-btn {
     @include small-rounding;
     padding: 0rem 0.341rem;
-    border: 0.034rem solid $outlineVariant;
+    border: 0.034rem solid $outline;
     color: $onSurface;
 }
 
 .multipleselection-btn:focus,
 .multipleselection-btn:hover {
-    background-color: $hovercolor;
+    background-color: $layer0Hover;
     color: $onSurface;
 }
 
@@ -264,12 +252,15 @@ popover {
     @include small-rounding;
     @include element_decel;
     min-height: 2.5rem;
-    color: $onSurface;
+    color: $onLayer0;
 }
 
-.tab-btn:hover,
+.tab-btn:hover {
+    background-color: $layer0Hover;
+}
+
 .tab-btn:focus {
-    background-color: $hovercolor;
+    background-color: $surfaceContainerLow;
 }
 
 .tab-btn-active>box>label {
