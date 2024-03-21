@@ -17,14 +17,14 @@
     @include titlefont;
     @include bg-textshadow;
     font-size: 5.795rem;
-    color: $onBackground;
+    color: $onLayer0;
 }
 
 .bg-time-date {
     @include titlefont;
     @include bg-textshadow;
     font-size: 2.591rem;
-    color: $onBackground;
+    color: $onLayer0;
 }
 
 .bg-distro-box {
@@ -37,7 +37,7 @@
     @include titlefont;
     @include bg-textshadow;
     font-size: 1.432rem;
-    color: $onBackground;
+    color: $onLayer0;
 }
 
 .bg-distro-name {
@@ -61,9 +61,8 @@
 .bg-quicklaunch-btn {
     @include mainfont;
     @include full-rounding;
-    background-color: $surfaceVariant;
-    color: $onSurfaceVariant;
-    border: 0.068rem solid $subtext;
+    background-color: $layer2;
+    color: $onLayer2;
     min-width: 4.432rem;
     min-height: 2.045rem;
     padding: 0.273rem 0.682rem;
@@ -71,11 +70,11 @@
 
 .bg-quicklaunch-btn:hover,
 .bg-quicklaunch-btn:focus {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 95%);
+    background-color: $layer2Hover;
 }
 
 .bg-quicklaunch-btn:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
+    background-color: $layer2Active;
 }
 
 .bg-system-bg {
@@ -85,10 +84,9 @@
 
 .bg-system-circprog {
     @include fluent_decel_long;
-    // margin-left: 0.273rem;
     min-width: 0.205rem; // Trough stroke width
     min-height: 4.091rem; // Diameter
     font-size: 0px;
     padding: 0rem;
-    background-color: $surfaceVariant;
+    background-color: $layer2;
 }
