@@ -82,7 +82,7 @@ const Latex = (content = '') => {
     const latexViewArea = Box({
         // vscroll: 'never',
         // hscroll: 'automatic',
-        homogeneous: true,
+        // homogeneous: true,
         attribute: {
             render: async (self, text) => {
                 if (text.length == 0) return;
