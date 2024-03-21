@@ -11,7 +11,7 @@ export function hasUnterminatedBackslash(inputString) {
 }
 
 export function launchCustomCommand(command) {
-    const args = command.split(' ');
+    const args = command.toLowerCase().split(' ');
     if (args[0] == '>raw') { // Mouse raw input
         Utils.execAsync('hyprctl -j getoption input:accel_profile')
             .then((output) => {
