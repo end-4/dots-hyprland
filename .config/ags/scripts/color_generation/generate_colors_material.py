@@ -14,30 +14,11 @@ parser.add_argument('--path', type=str, default=None, help='generate colorscheme
 parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
 parser.add_argument('--mode', type=str, choices=['dark', 'light'], default='dark', help='dark or light mode')
 parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
+parser.add_argument('--smart', type=str, default=False, help='decide scheme type based on image color')
 parser.add_argument('--transparency', type=str, choices=['opaque', 'transparent'], default='opaque', help='enable transparency')
 parser.add_argument('--cache', type=str, default=None, help='file path (relative to home) to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
 args = parser.parse_args()
-
-# Default scheme -> Tonal Spot (Android Default)
-from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
-if args.scheme is not None:
-    if args.scheme == 'fruitsalad':
-        from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
-    elif args.scheme == 'expressive':
-        from materialyoucolor.scheme.scheme_expressive import SchemeExpressive as Scheme
-    elif args.scheme == 'monochrome':
-        from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
-    elif args.scheme == 'rainbow':
-        from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
-    elif args.scheme == 'tonalspot':
-        from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
-    elif args.scheme == 'neutral':
-        from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
-    elif args.scheme == 'fidelity':
-        from materialyoucolor.scheme.scheme_fidelity import SchemeFidelity as Scheme
-    elif args.scheme == 'content':
-        from materialyoucolor.scheme.scheme_content import SchemeContent as Scheme
 
 def hex_to_argb(hex_color):
   color = hex_color.lstrip('#')
@@ -70,16 +51,44 @@ if args.path is not None:
     basewidth = 64
     wpercent = (basewidth/float(img.size[0]))
     hsize = int((float(img.size[1])*float(wpercent)))
-    img = img.resize((basewidth,hsize),Image.Resampling.LANCZOS)
+    img = img.resize((basewidth,hsize),Image.Resampling.BICUBIC)
     argb = sourceColorFromImage(img)
     if args.cache is not None:
         export_color_file=os.environ['HOME'] + "/" + args.cache
         with open(export_color_file, 'w') as file:
             file.write(argb_to_hex(argb))
+    hct = Hct.from_int(argb)
+    if(args.smart):
+        if(hct.chroma < 20):
+            args.scheme = 'neutral'
+        if(hct.tone > 60):
+            darkmode = False
 elif args.color is not None:
     argb = hex_to_argb(args.color)
+    hct = Hct.from_int(argb)
 
-scheme = Scheme(Hct.from_int(argb), darkmode, 0.0)
+# Default scheme -> Tonal Spot (Android Default)
+from materialyoucolor.scheme.scheme_vibrant import SchemeVibrant as Scheme
+if args.scheme is not None:
+    if args.scheme == 'fruitsalad':
+        from materialyoucolor.scheme.scheme_fruit_salad import SchemeFruitSalad as Scheme
+    elif args.scheme == 'expressive':
+        from materialyoucolor.scheme.scheme_expressive import SchemeExpressive as Scheme
+    elif args.scheme == 'monochrome':
+        from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome as Scheme
+    elif args.scheme == 'rainbow':
+        from materialyoucolor.scheme.scheme_rainbow import SchemeRainbow as Scheme
+    elif args.scheme == 'tonalspot':
+        from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot as Scheme
+    elif args.scheme == 'neutral':
+        from materialyoucolor.scheme.scheme_neutral import SchemeNeutral as Scheme
+    elif args.scheme == 'fidelity':
+        from materialyoucolor.scheme.scheme_fidelity import SchemeFidelity as Scheme
+    elif args.scheme == 'content':
+        from materialyoucolor.scheme.scheme_content import SchemeContent as Scheme
+
+# Generate
+scheme = Scheme(hct, darkmode, 0.0)
 
 for color in vars(MaterialDynamicColors).keys():
     color_name = getattr(MaterialDynamicColors, color)
@@ -90,6 +99,13 @@ for color in vars(MaterialDynamicColors).keys():
         print('$' + color + ': ' + hex_color + ';')
 
 if args.debug == True:
+    print('---------------------')
+    print('Hue', hct.hue)
+    print('Chroma', hct.chroma)
+    print('Tone', hct.tone)
+    print('Dark mode?', darkmode)
+    print('Scheme', args.scheme)
+    print('---------------------')
     for color in vars(MaterialDynamicColors).keys():
         color_name = getattr(MaterialDynamicColors, color)
         if hasattr(color_name, "get_hct"):
