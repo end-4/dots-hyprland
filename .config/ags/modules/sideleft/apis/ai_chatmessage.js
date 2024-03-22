@@ -10,8 +10,8 @@ import md2pango from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
-const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode ? '' : '-light'}.xml`;
-const CUSTOM_SCHEME_ID = `custom${darkMode ? '' : '-light'}`;
+const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode.value ? '' : '-light'}.xml`;
+const CUSTOM_SCHEME_ID = `custom${darkMode.value ? '' : '-light'}`;
 const USERNAME = GLib.get_user_name();
 
 /////////////////////// Custom source view colorscheme /////////////////////////
@@ -107,7 +107,7 @@ const Latex = (content = '') => {
 text=$(cat ${filePath} | sed 's/$/ \\\\\\\\/g' | sed 's/&=/=/g')
 LaTeX -headless -input="$text" -output=${outFilePath} -textsize=${fontSize * 1.1} -padding=0 -maxwidth=${latexViewArea.get_allocated_width() * 0.85}
 sed -i 's/fill="rgb(0%, 0%, 0%)"/style="fill:#000000"/g' ${outFilePath}
-sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode ? '#ffffff' : '#000000'}"/g' ${outFilePath}
+sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#000000'}"/g' ${outFilePath}
 `;
                 Utils.writeFile(renderScript, scriptFilePath).catch(print);
                 Utils.exec(`chmod a+x ${scriptFilePath}`)

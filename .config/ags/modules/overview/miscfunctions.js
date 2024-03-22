@@ -3,6 +3,7 @@ import App from 'resource:///com/github/Aylur/ags/app.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 import Todo from "../../services/todo.js";
+import { darkMode } from '../.miscutils/system.js';
 
 export function hasUnterminatedBackslash(inputString) {
     // Use a regular expression to match a trailing odd number of backslashes
@@ -31,11 +32,13 @@ export function launchCustomCommand(command) {
         execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh --pick`, `&`]).catch(print);
     }
     else if (args[0] == '>light') { // Light mode
+        darkMode.value = false;
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/light/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
             .catch(print);
     }
     else if (args[0] == '>dark') { // Dark mode
+        darkMode.value = true;
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/dark/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
             .catch(print);

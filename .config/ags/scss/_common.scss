@@ -22,11 +22,11 @@
 }
 
 menu {
-    @include elevation-border-softer;
+    @include small-rounding;
+    border: 1px solid mix($surfaceContainer, $onBackground, 80%); // I hate this
     padding: 0.681rem;
-    background: $layer2;
-    color: $onLayer2;
-    border-radius: 1.159rem;
+    background: $surfaceContainer;
+    color: $onSurface;
     -gtk-outline-radius: 1.159rem;
 
     animation-name: appear;
