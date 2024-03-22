@@ -44,7 +44,9 @@ export function launchCustomCommand(command) {
             .catch(print);
     }
     else if (args[0] == '>badapple') { // Black and white
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/applycolor.sh --bad-apple`]).catch(print)
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "3s/.*/monochrome/" ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+                .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
+                .catch(print);
     }
     else if (args[0] == '>material') { // Use material colors
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "material" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print)
