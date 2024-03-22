@@ -1,5 +1,4 @@
 // This file is for the actual widget for each single notification
-
 const { GLib, Gdk, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
@@ -9,14 +8,16 @@ import { setupCursorHover } from "../.widgetutils/cursorhover.js";
 import { AnimatedCircProg } from "./cairo_circularprogress.js";
 
 function guessMessageType(summary) {
-    if (summary.includes('recording')) return 'screen_record';
-    if (summary.includes('battery') || summary.includes('power')) return 'power';
-    if (summary.includes('screenshot')) return 'screenshot_monitor';
-    if (summary.includes('welcome')) return 'waving_hand';
-    if (summary.includes('time')) return 'scheduleb';
-    if (summary.includes('installed')) return 'download';
-    if (summary.includes('update')) return 'update';
-    if (summary.startsWith('file')) return 'folder_copy';
+    const str = summary.toLowerCase();
+    if (str.includes('reboot')) return 'restart_alt';
+    if (str.includes('recording')) return 'screen_record';
+    if (str.includes('battery') || summary.includes('power')) return 'power';
+    if (str.includes('screenshot')) return 'screenshot_monitor';
+    if (str.includes('welcome')) return 'waving_hand';
+    if (str.includes('time')) return 'scheduleb';
+    if (str.includes('installed')) return 'download';
+    if (str.includes('update')) return 'update';
+    if (str.startsWith('file')) return 'folder_copy';
     return 'chat';
 }
 
