@@ -110,17 +110,17 @@ $bar_ws_width_focus_active: 2.045rem;
 // Focus is the bar mode name, not the workspace state!
 
 .bar-ws-focus {
-    background-color: $layer2;
+    background-color: $surfaceVariant;
     min-width: $bar_ws_width_focus;
 }
 
 .bar-ws-focus-active {
     min-width: $bar_ws_width_focus_active;
-    background-color: $layer2;
+    background-color: $onLayer0;
 }
 
 .bar-ws-focus-occupied {
-    background-color: $layer2;
+    background-color: $secondaryContainer;
 }
 
 .bar-clock-box {
