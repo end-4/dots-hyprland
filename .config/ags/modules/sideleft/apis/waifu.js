@@ -39,8 +39,6 @@ const CommandButton = (command) => Button({
 
 export const waifuTabIcon = Box({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
-    homogeneous: true,
     children: [
         MaterialIcon('photo', 'norm'),
     ]

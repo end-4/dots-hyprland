@@ -16,7 +16,6 @@ const MODEL_NAME = `Gemini`;
 
 export const geminiTabIcon = Icon({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
     icon: `google-gemini-symbolic`,
 })
 

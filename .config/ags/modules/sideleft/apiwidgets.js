@@ -16,6 +16,7 @@ import { checkKeybind } from '../.widgetutils/keybind.js';
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
 import { widgetContent } from './sideleft.js';
+import { IconTabContainer } from '../.commonwidgets/tabcontainer.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
 const APIS = [
@@ -53,7 +54,6 @@ const APIS = [
     },
 ];
 let currentApiId = 0;
-APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
 
 function apiSendMessage(textView) {
     // Get text
@@ -170,16 +170,6 @@ const textboxArea = Box({ // Entry area
     ]
 });
 
-const apiContentStack = Stack({
-    vexpand: true,
-    transition: 'slide_left_right',
-    transitionDuration: userOptions.animations.durationLarge,
-    children: APIS.reduce((acc, api) => {
-        acc[api.name] = api.contentWidget;
-        return acc;
-    }, {}),
-})
-
 const apiCommandStack = Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationLarge,
@@ -189,40 +179,19 @@ const apiCommandStack = Stack({
     }, {}),
 })
 
+export const apiContentStack = IconTabContainer({
+    className: 'margin-top-5',
+    iconWidgets: APIS.map((api, id) => api.tabIcon),
+    names: APIS.map((api) => api.name),
+    children: APIS.map((api) => api.contentWidget),
+});
+
 function switchToTab(id) {
-    APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', false);
-    APIS[id].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
-    apiContentStack.shown = APIS[id].name;
+    apiContentStack.shown.value = id;
     apiCommandStack.shown = APIS[id].name;
     chatPlaceholder.label = APIS[id].placeholderText;
     currentApiId = id;
 }
-
-const apiSwitcher = EventBox({
-    onScrollUp: () => apiWidgets.attribute.prevTab(),
-    onScrollDown: () => apiWidgets.attribute.nextTab(),
-    child: CenterBox({
-        centerWidget: Box({
-            className: 'sidebar-chat-apiswitcher spacing-h-5',
-            hpack: 'center',
-            children: APIS.map((api, id) => Button({
-                child: api.tabIcon,
-                tooltipText: api.name,
-                setup: setupCursorHover,
-                onClicked: () => {
-                    switchToTab(id);
-                }
-            })),
-        }),
-        endWidget: Button({
-            hpack: 'end',
-            className: 'txt-subtext txt-norm icon-material',
-            label: 'lightbulb',
-            tooltipText: 'Use PageUp/PageDown to switch between API pages',
-            setup: setupCursorHoverInfo,
-        }),
-    })
-});
 
 const apiWidgets = Widget.Box({
     attribute: {
@@ -233,7 +202,6 @@ const apiWidgets = Widget.Box({
     className: 'spacing-v-10',
     homogeneous: false,
     children: [
-        apiSwitcher,
         apiContentStack,
         apiCommandStack,
         textboxArea,
