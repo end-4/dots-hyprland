@@ -39,7 +39,6 @@ const CommandButton = (command) => Button({
 
 export const booruTabIcon = Box({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
     homogeneous: true,
     children: [
         MaterialIcon('gallery_thumbnail', 'norm'),

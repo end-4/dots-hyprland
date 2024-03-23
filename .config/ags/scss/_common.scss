@@ -274,6 +274,20 @@ popover {
     color: $primary;
 }
 
+.tab-icon {
+    @include element_decel;
+    @include full-rounding;
+    min-width: 2.182rem;
+    min-height: 2.182rem;
+    font-size: 1.406rem;
+    color: $onSurface;
+}
+
+.tab-icon-active {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
 widget {
     @include small-rounding;
 }

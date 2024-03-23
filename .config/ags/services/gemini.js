@@ -202,7 +202,7 @@ class GeminiService extends Service {
                 try {
                     const [bytes] = stream.read_line_finish(res);
                     const line = this._decoder.decode(bytes);
-                    console.log(line);
+                    // console.log(line);
                     if (line == '[{') { // beginning of response
                         aiResponse._rawData += '{';
                         this.thinking = false;
