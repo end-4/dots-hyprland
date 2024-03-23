@@ -180,6 +180,7 @@ const apiCommandStack = Stack({
 })
 
 export const apiContentStack = IconTabContainer({
+    tabSwitcherClassName: 'sidebar-chat-apiswitcher',
     className: 'margin-top-5',
     iconWidgets: APIS.map((api) => api.tabIcon),
     names: APIS.map((api) => api.name),

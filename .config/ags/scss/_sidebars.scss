@@ -492,6 +492,12 @@ $colorpicker_rounding: 0.341rem;
     padding: 0.341rem;
 }
 
+.sidebar-chat-apiswitcher {
+    @include full-rounding;
+    @include group-padding;
+    background-color: $layer1;
+}
+
 .sidebar-chat-providerswitcher {
     @include small-rounding;
     padding: 0.477rem 0.682rem;
@@ -780,7 +786,7 @@ $colorpicker_rounding: 0.341rem;
 }
 
 .sidebar-waifu-txt {
-    @include readingfont;
+    @include mainfont;
 }
 
 .sidebar-waifu-image {
