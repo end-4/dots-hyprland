@@ -97,7 +97,7 @@ export const TabContainer = ({ icons, names, children, className = '', setup = (
 export const IconTabContainer = ({
     iconWidgets, names, children, className = '',
     setup = () => { }, onChange = () => { },
-    tabsHpack = 'center',
+    tabsHpack = 'center', tabSwitcherClassName = '',
     ...rest
 }) => {
     const shownIndex = Variable(0);
@@ -106,7 +106,7 @@ export const IconTabContainer = ({
     const tabs = Box({
         homogeneous: true,
         hpack: tabsHpack,
-        className: 'spacing-h-5',
+        className: `spacing-h-5 ${tabSwitcherClassName}`,
         children: iconWidgets.map((icon, i) => Button({
             className: 'tab-icon',
             tooltipText: names[i],
