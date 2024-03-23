@@ -181,16 +181,18 @@ const apiCommandStack = Stack({
 
 export const apiContentStack = IconTabContainer({
     className: 'margin-top-5',
-    iconWidgets: APIS.map((api, id) => api.tabIcon),
+    iconWidgets: APIS.map((api) => api.tabIcon),
     names: APIS.map((api) => api.name),
     children: APIS.map((api) => api.contentWidget),
+    onChange: (self, id) => {
+        apiCommandStack.shown = APIS[id].name;
+        chatPlaceholder.label = APIS[id].placeholderText;
+        currentApiId = id;
+    }
 });
 
 function switchToTab(id) {
     apiContentStack.shown.value = id;
-    apiCommandStack.shown = APIS[id].name;
-    chatPlaceholder.label = APIS[id].placeholderText;
-    currentApiId = id;
 }
 
 const apiWidgets = Widget.Box({
