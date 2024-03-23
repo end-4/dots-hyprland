@@ -25,7 +25,7 @@ menu {
     @include small-rounding;
     border: 1px solid mix($surfaceContainer, $onBackground, 80%); // I hate this
     padding: 0.681rem;
-    background: $surfaceContainer;
+    background: opacify($surfaceContainer, 1);
     color: $onSurface;
     -gtk-outline-radius: 1.159rem;
 
@@ -84,7 +84,7 @@ tooltip {
     animation-timing-function: ease-out;
     animation-iteration-count: 1;
     @include normal-rounding;
-    background-color: $inverseSurface;
+    background-color: opacify($color: $inverseSurface, $amount: 1);
     color: $inverseOnSurface;
 }
 
