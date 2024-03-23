@@ -30,7 +30,7 @@ $rounding_large: 1.705rem;
 
 @mixin titlefont {
     // Geometric sans-serif
-    font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
+    font-family: "Gabarito", "Poppins", "Readex Pro", "Lexend", sans-serif;
 }
 
 @mixin mainfont {
@@ -61,7 +61,7 @@ $rounding_large: 1.705rem;
 @mixin readingfont {
     // The most readable fonts, for a comfortable reading experience
     // in stuff like AI chat on sidebar
-    font-family: "Lexend", "Noto Sans", sans-serif;
+    font-family: "Readex Pro", "Lexend", "Noto Sans", sans-serif;
     // font-weight: 500;
 }
 
