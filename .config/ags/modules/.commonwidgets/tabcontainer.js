@@ -94,7 +94,12 @@ export const TabContainer = ({ icons, names, children, className = '', setup = (
 }
 
 
-export const IconTabContainer = ({ iconWidgets, names, children, className = '', setup = () => { }, tabsHpack = 'center', ...rest }) => {
+export const IconTabContainer = ({
+    iconWidgets, names, children, className = '',
+    setup = () => { }, onChange = () => { },
+    tabsHpack = 'center',
+    ...rest
+}) => {
     const shownIndex = Variable(0);
     let previousShownIndex = 0;
     const count = Math.min(iconWidgets.length, names.length, children.length);
@@ -104,6 +109,7 @@ export const IconTabContainer = ({ iconWidgets, names, children, className = '',
         className: 'spacing-h-5',
         children: iconWidgets.map((icon, i) => Button({
             className: 'tab-icon',
+            tooltipText: names[i],
             child: icon,
             setup: setupCursorHover,
             onClicked: () => shownIndex.value = i,
@@ -150,6 +156,7 @@ export const IconTabContainer = ({ iconWidgets, names, children, className = '',
             self.pack_start(tabSection, false, false, 0);
             self.pack_end(contentStack, true, true, 0);
             setup(self);
+            self.hook(shownIndex, (self) => onChange(self, shownIndex.value));
         },
         ...rest,
     });
