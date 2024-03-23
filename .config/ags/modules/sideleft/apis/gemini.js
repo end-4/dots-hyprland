@@ -104,6 +104,15 @@ export const GeminiSettings = () => MarginRevealer({
                             GeminiService.assistantPrompt = newValue;
                         },
                     }),
+                    ConfigToggle({
+                        icon: 'shield',
+                        name: 'Safety',
+                        desc: 'When turned off, tells the API not to block harmful/explicit content',
+                        initValue: GeminiService.safe,
+                        onChange: (self, newValue) => {
+                            GeminiService.safe = newValue;
+                        },
+                    }),
                 ]
             })
         ]
