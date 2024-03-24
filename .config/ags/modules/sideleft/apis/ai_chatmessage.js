@@ -222,7 +222,7 @@ const MessageContent = (content) => {
                     child.destroy();
                 }
                 contentBox.add(TextBlock())
-                // Loop lines. Put normal text in markdown parser 
+                // Loop lines. Put normal text in markdown parser
                 // and put code into code highlighter (TODO)
                 let lines = content.split('\n');
                 let lastProcessed = 0;
