@@ -8,7 +8,7 @@ const APISERVICES = {
 }
 
 const getWorkingImageSauce = (url) => {
-    if(url.includes('pximg.net')) {
+    if (url.includes('pximg.net')) {
         return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/')).replace(/_p\d+\.png$/, '')}`;
     }
     return url;
@@ -33,6 +33,7 @@ function paramStringFromObj(params) {
 class BooruService extends Service {
     _baseUrl = 'https://yande.re/post.json';
     _mode = 'yandere';
+    _nsfw = userOptions.sidebar.imageAllowNsfw;
     _responses = [];
     _queries = [];
 
@@ -56,6 +57,9 @@ class BooruService extends Service {
         this.emit('clear');
     }
 
+    get nsfw() { return this._nsfw }
+    set nsfw(value) { this._nsfw = value; }
+
     get mode() { return this._mode }
     set mode(value) {
         this._mode = value;
@@ -66,7 +70,7 @@ class BooruService extends Service {
 
     async fetch(msg) {
         // Init
-        const userArgs = msg.split(/\s+/);
+        const userArgs = `${msg}${this._nsfw ? '' : ' rating:safe'}`.split(/\s+/);
 
         let taglist = [];
         // Construct body/headers
