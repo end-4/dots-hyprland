@@ -15,7 +15,6 @@ import { chatEntry } from '../apiwidgets.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
     icon: `openai-symbolic`,
 });
 

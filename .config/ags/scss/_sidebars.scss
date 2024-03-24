@@ -498,20 +498,6 @@ $colorpicker_rounding: 0.341rem;
     background-color: $layer1;
 }
 
-.sidebar-chat-apiswitcher-icon {
-    @include element_decel;
-    @include full-rounding;
-    min-width: 2.182rem;
-    min-height: 2.182rem;
-    font-size: 1.406rem;
-    color: $onSurface;
-}
-
-.sidebar-chat-apiswitcher-icon-enabled {
-    background-color: $secondaryContainer;
-    color: $onSecondaryContainer;
-}
-
 .sidebar-chat-providerswitcher {
     @include small-rounding;
     padding: 0.477rem 0.682rem;
@@ -800,7 +786,7 @@ $colorpicker_rounding: 0.341rem;
 }
 
 .sidebar-waifu-txt {
-    @include readingfont;
+    @include mainfont;
 }
 
 .sidebar-waifu-image {

@@ -39,7 +39,6 @@ const CommandButton = (command) => Button({
 
 export const booruTabIcon = Box({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
     homogeneous: true,
     children: [
         MaterialIcon('gallery_thumbnail', 'norm'),
@@ -349,7 +348,7 @@ export const booruView = Scrollable({
         // Always scroll to bottom with new content
         const adjustment = scrolledWindow.get_vadjustment();
         adjustment.connect("changed", () => {
-            if(!chatEntry.hasFocus) return;
+            if (!chatEntry.hasFocus) return;
             adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
         })
     }
