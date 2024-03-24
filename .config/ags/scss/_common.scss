@@ -1,7 +1,3 @@
-// * {
-//     border: 1px solid $onSurfaceVariant; // Debugging
-// }
-
 * {
     selection {
         background-color: $secondary;
@@ -197,8 +193,7 @@ popover {
     color: $onSecondaryContainer;
 }
 
-.multipleselection-container {
-}
+.multipleselection-container {}
 
 .multipleselection-btn {
     @include small-rounding;
@@ -277,8 +272,8 @@ popover {
 .tab-icon {
     @include element_decel;
     @include full-rounding;
-    min-width: 2.182rem;
-    min-height: 2.182rem;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
     font-size: 1.406rem;
     color: $onSurface;
 }
@@ -286,6 +281,23 @@ popover {
 .tab-icon-active {
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
+}
+
+.tab-icon-expandable {
+    transition: 0ms;
+    @include full-rounding;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    font-size: 1.406rem;
+    color: $onSurface;
+    padding: 0rem;
+}
+
+.tab-icon-expandable-active {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    padding: 0rem 0.545rem;
+    min-width: 9.545rem;
 }
 
 widget {

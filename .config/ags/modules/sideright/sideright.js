@@ -15,9 +15,26 @@ import {
     ModulePowerIcon,
     ModuleRawInput
 } from "./quicktoggles.js";
-import ModuleNotificationList from "./notificationlist.js";
+import ModuleNotificationList from "./centermodules/notificationlist.js";
+import ModuleVolumeMixer from "./centermodules/volumemixer.js";
 import { ModuleCalendar } from "./calendar.js";
 import { getDistroIcon } from '../.miscutils/system.js';
+import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
+import { checkKeybind } from '../.widgetutils/keybind.js';
+
+const centerWidgets = [
+    {
+        name: 'Notifications',
+        materialIcon: 'notifications',
+        contentWidget: ModuleNotificationList(),
+    },
+    {
+        name: 'Volume mixer',
+        materialIcon: 'volume_up',
+        contentWidget: ModuleVolumeMixer(),
+    },
+];
 
 const timeRow = Box({
     className: 'spacing-h-10 sidebar-group-invisible-morehorizpad',
@@ -60,6 +77,17 @@ const togglesBox = Widget.Box({
     ]
 })
 
+export const sidebarOptionsStack = ExpandingIconTabContainer({
+    tabsHpack: 'center',
+    tabSwitcherClassName: 'sidebar-icontabswitcher',
+    icons: centerWidgets.map((api) => api.materialIcon),
+    names: centerWidgets.map((api) => api.name),
+    children: centerWidgets.map((api) => api.contentWidget),
+    onChange: (self, id) => {
+        self.shown = centerWidgets[id].name;
+    }
+});
+
 export default () => Box({
     vexpand: true,
     hexpand: true,
@@ -84,9 +112,24 @@ export default () => Box({
                         togglesBox,
                     ]
                 }),
-                ModuleNotificationList({ vexpand: true, }),
+                Box({
+                    className: 'sidebar-group',
+                    children: [
+                        sidebarOptionsStack,
+                    ],
+                }),
                 ModuleCalendar(),
             ]
         }),
-    ]
+    ],
+    setup: (self) => self
+        .on('key-press-event', (widget, event) => { // Handle keybinds
+            if (checkKeybind(event, userOptions.keybinds.sidebar.options.nextTab)) {
+                sidebarOptionsStack.nextTab();
+            }
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
+                sidebarOptionsStack.prevTab();
+            }
+        })
+    ,
 });

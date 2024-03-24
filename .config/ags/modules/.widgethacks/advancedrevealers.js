@@ -65,16 +65,22 @@ export const DoubleRevealer = ({
     revealChild,
     ...rest
 }) => {
-    return Revealer({
+    const r2 = Revealer({
+        transition: transition2,
+        transitionDuration: duration2,
+        revealChild: revealChild,
+        child: child,
+    });
+    const r1 = Revealer({
         transition: transition1,
         transitionDuration: duration1,
         revealChild: revealChild,
-        child: Revealer({
-            transition: transition2,
-            transitionDuration: duration2,
-            revealChild: revealChild,
-            child: child,
-        }),
+        child: r2,
         ...rest,
     })
+    r1.toggleRevealChild = (value) => {
+        r1.revealChild = value;
+        r2.revealChild = value;
+    }
+    return r1;
 }
