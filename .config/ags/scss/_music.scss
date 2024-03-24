@@ -4,6 +4,7 @@
 @import './musicwal';
 @import './colors';
 @import './lib_mixins';
+$music_transparentize_amount: 0.3;
 $music_gradient1: mix($color1, $background, 50%);
 
 // @if $darkmode == True {
@@ -31,10 +32,10 @@ $onSecondaryContainer: mix($color7, $color2, 90%);
     background-color: $layer0;
     padding: 0rem 1.023rem;
     background: // Inspired by Amberol
-        linear-gradient(127deg, transparentize($music_gradient1, $music_colorstart_transparentize), transparentize($music_gradient1, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
-        linear-gradient(217deg, transparentize($music_gradient2, $music_colorstart_transparentize), transparentize($music_gradient2, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient(127deg, transparentize($music_gradient1, $music_colorstart_transparentize), transparentize($music_gradient1, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient(217deg, transparentize($music_gradient2, $music_colorstart_transparentize), transparentize($music_gradient2, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
         radial-gradient(circle at 0% 100%, $color4 13%, rgba(0, 0, 0, 0) 100%),
-        linear-gradient(336deg, transparentize($music_gradient3, $music_colorstart_transparentize), transparentize($music_gradient3, $music_colorstart_transparentize - $transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient(336deg, transparentize($music_gradient3, $music_colorstart_transparentize), transparentize($music_gradient3, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
         linear-gradient($background, $background), // We don't want wallpaper tint, so here's a fully opaque surface
     ;
 }

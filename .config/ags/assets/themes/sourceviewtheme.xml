@@ -1,106 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2014 Leo Iannacone <info@leoiannacone.com>
+
+ This file was generated from a textmate theme named Monokai Extended
+ with tm2gtksw2 tool. (Alexandre da Silva)
+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
+
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, write to the
+ Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA 02111-1307, USA.
+-->
+
+<!-- MODIFIED -->
+
 <style-scheme id="custom" _name="Custom" version="1.0">
-  <author>end_4</author>
-  <_description>Monokai port but very random</_description>
+  <author>Leo Iannacone</author>
+  <_description>Based on SublimeText Monokai Extended - Generated with tm2gtksw2</_description>
 
-  <!-- The scheme tries to look like the default GVim scheme,
-       since it is also what the hardwired GtkSourceView 1 color
-       scheme did -->
+  <style name="bracket-match"  background="#333333" bold="true"/>
+  <style name="bracket-mismatch"  background="#333333" underline="true"/>
+  <style name="c:preprocessor" foreground="#be84ff"/>
+  <style name="css:at-rules" foreground="#f92672"/>
+  <style name="css:color" foreground="#be84ff"/>
+  <style name="css:keyword" foreground="#66d9ef"/>
+  <style name="current-line"  background="#333333"/>
+  <style name="cursor" foreground="#f8f8f0"/>
+  <style name="def:base-n-integer" foreground="#be84ff"/>
+  <style name="def:boolean" foreground="#be84ff"/>
+  <style name="def:builtin" foreground="#be84ff"/>
+  <style name="def:character" foreground="#be84ff"/>
+  <style name="def:comment" foreground="#75715e"/>
+  <style name="def:complex" foreground="#be84ff"/>
+  <style name="def:decimal" foreground="#be84ff"/>
+  <style name="def:doc-comment" foreground="#75715e"/>
+  <style name="def:doc-comment-element" foreground="#75715e"/>
+  <style name="def:error" foreground="#f8f8f0" background="#f92672"/>
+  <style name="def:floating-point" foreground="#be84ff"/>
+  <style name="def:function" foreground="#a6e22e"/>
+  <style name="def:identifier" foreground="#ffffff"/>
+  <style name="def:keyword" foreground="#f92672"/>
+  <style name="def:note" foreground="#75715e"/>
+  <style name="def:number" foreground="#be84ff"/>
+  <style name="def:operator" foreground="#f92672"/>
+  <style name="def:preprocessor" foreground="#66d9ef"/>
+  <style name="def:reserved" foreground="#f92672"/>
+  <style name="def:shebang" foreground="#75715e"/>
+  <style name="def:special-char" foreground="#66d9ef"/>
+  <style name="def:special-constant" foreground="#be84ff"/>
+  <style name="def:statement" foreground="#f92672"/>
+  <style name="def:string" foreground="#e6db74"/>
+  <style name="def:type" foreground="#66d9ef" italic="true"/>
+  <style name="diff:added-line" foreground="#a6e22e"/>
+  <style name="diff:changed-line" foreground="#e6db74"/>
+  <style name="diff:location" foreground="#75715e"/>
+  <style name="diff:removed-line" foreground="#f92672"/>
+  <style name="draw-spaces" foreground="#3b3a32"/>
+  <style name="html:dtd" foreground="#e6db74"/>
+  <style name="html:tag" foreground="#f92672"/>
+  <style name="js:function" foreground="#66d9ef"/>
+  <style name="line-numbers" foreground="#bebeba" background="#333333"/>
+  <style name="perl:builtin" foreground="#a6e22e"/>
+  <style name="perl:include-statement" foreground="#f92672"/>
+  <style name="perl:special-variable" foreground="#be84ff"/>
+  <style name="perl:variable" foreground="#ffffff"/>
+  <style name="php:string" foreground="#e6db74"/>
+  <style name="python:builtin-constant" foreground="#f92672"/>
+  <style name="python:builtin-function" foreground="#a6e22e"/>
+  <style name="python:module-handler" foreground="#f92672"/>
+  <style name="python:special-variable" foreground="#f92672"/>
+  <style name="ruby:attribute-definition" foreground="#f92672"/>
+  <style name="ruby:builtin" foreground="#ffffff"/>
+  <style name="ruby:class-variable" foreground="#ffffff"/>
+  <style name="ruby:constant" foreground="#ffffff"/>
+  <style name="ruby:global-variable" foreground="#a6e22e"/>
+  <style name="ruby:instance-variable" foreground="#ffffff"/>
+  <style name="ruby:module-handler" foreground="#f92672"/>
+  <style name="ruby:predefined-variable" foreground="#be84ff"/>
+  <style name="ruby:regex" foreground="#f6aa11"/>
+  <style name="ruby:special-variable" foreground="#f92672"/>
+  <style name="ruby:symbol" foreground="#be84ff"/>
+  <style name="rubyonrails:attribute-definition" foreground="#f92672"/>
+  <style name="rubyonrails:block-parameter" foreground="#fd971f" italic="true"/>
+  <style name="rubyonrails:builtin" foreground="#ffffff"/>
+  <style name="rubyonrails:class-inherit" foreground="#a6e22e" underline="true" italic="true"/>
+  <style name="rubyonrails:class-name" foreground="#66d9ef"/>
+  <style name="rubyonrails:class-variable" foreground="#ffffff"/>
+  <style name="rubyonrails:complex-interpolation" foreground="#be84ff"/>
+  <style name="rubyonrails:constant" foreground="#ffffff"/>
+  <style name="rubyonrails:global-variable" foreground="#a6e22e"/>
+  <style name="rubyonrails:instance-variable" foreground="#ffffff"/>
+  <style name="rubyonrails:module-handler" foreground="#f92672"/>
+  <style name="rubyonrails:module-name" foreground="#66d9ef"/>
+  <style name="rubyonrails:predefined-variable" foreground="#be84ff"/>
+  <style name="rubyonrails:rails" foreground="#ffffff"/>
+  <style name="rubyonrails:regex" foreground="#f6aa11"/>
+  <style name="rubyonrails:simple-interpolation" foreground="#be84ff"/>
+  <style name="rubyonrails:special-variable" foreground="#f92672"/>
+  <style name="rubyonrails:symbol" foreground="#be84ff"/>
+  <style name="search-match"  background="#333333" bold="true" underline="true"/>
+  <style name="selection" foreground="#f8f8f2" background="#444444"/>
+  <style name="text" foreground="#f8f8f2" background="#222222"/>
+  <style name="xml:attribute-name" foreground="#a6e22e"/>
+  <style name="xml:element-name" foreground="#f92672"/>
+  <style name="xml:entity" foreground="#c8cecc"/>
+  <style name="xml:namespace" foreground="#f92672"/>
+  <style name="xml:tag" foreground="#f92672"/>
 
-  <!-- Palette -->
-  <color name="white"      value="#F8F8F2"/>
-  <color name="blue"       value="#179FFF"/>
-  <color name="magenta"    value="#DA70D6"/>
-  <color name="violet"     value="#AA7FF9"/>
-  <color name="cyan"       value="#66D9EF"/>
-  <color name="grey"       value="#817D69"/>
-  <color name="green"      value="#A0D82E"/>
-  <color name="bordeaux"   value="#B22757"/>
-  <color name="red"        value="#F92672"/>
-  <color name="yellow"     value="#E4D973"/>
-  <color name="purple"     value="#A47AEE"/>
-
-  <color name="onSuccess"  value="#D1E8D5"/>
-  <color name="success"    value="#213528"/>
-  <color name="onError"    value="#ffb4a9"/>
-  <color name="error"      value="#680003"/>
-
-  <!-- Global Settings -->
-  <style name="current-line"                background="#3E3D32"/>
-  <style name="current-line-number"         background="#eeeeec"/>
-  <style name="draw-spaces"                 foreground="#babdb6"/>
-  <style name="background-pattern"          background="#000000"/>
-
-  <!-- Bracket Matching -->
-  <!-- <style name="bracket-match"               foreground="white" background="grey"/> -->
-  <!-- <style name="bracket-mismatch"            foreground="white" background="red"/> -->
-
-  <!-- Right Margin -->
-  <style name="right-margin"                foreground="#000000" background="#000000"/>
-
-  <!-- Search Matching -->
-  <style name="search-match"                background="yellow"/>
-
-  <!-- Comments -->
-  <style name="def:comment"                 foreground="grey" italic="true"/>
-  <style name="def:shebang"                 foreground="grey" bold="true"/>
-  <style name="def:doc-comment-element"     italic="true"/>
-
-  <!-- Constants -->
-  <style name="def:constant"                foreground="white"/>
-  <style name="def:special-char"            foreground="yellow"/>
-
-  <!-- Identifiers -->
-  <style name="def:identifier"              foreground="green"/>
-
-  <!-- Statements -->
-  <style name="def:statement"               foreground="cyan" bold="true"/>
-
-  <!-- Types -->
-  <style name="def:type"                    foreground="cyan" bold="true"/>
-
-  <!-- Others -->
-  <style name="def:preprocessor"            foreground="purple"/>
-  <style name="def:error"                   background="red" bold="true"/>
-  <style name="def:warning"                 background="yellow"/>
-  <style name="def:note"                    foreground="bordeaux" bold="true"/>
-  <style name="def:underlined"              italic="true" underline="single"/>
-
-  <!-- Heading styles, uncomment to enable -->
-  <!--
-  <style name="def:heading0"                scale="5.0"/>
-  <style name="def:heading1"                scale="2.5"/>
-  <style name="def:heading2"                scale="2.0"/>
-  <style name="def:heading3"                scale="1.7"/>
-  <style name="def:heading4"                scale="1.5"/>
-  <style name="def:heading5"                scale="1.3"/>
-  <style name="def:heading6"                scale="1.2"/>
-  -->
-
-  <!-- Language specific styles -->
-  <style name="diff:added-line"             background="success" foreground="onSuccess"/>
-  <style name="diff:removed-line"           background="error" foreground="onError"/>
-  <style name="diff:changed-line"           use-style="def:preprocessor"/>
-  <style name="diff:special-case"           use-style="def:constant"/>
-  <style name="diff:location"               use-style="def:statement"/>
-  <style name="diff:diff-file"              use-style="def:type"/>
-
-  <style name="xml:tags"                    foreground="red"/>
-  <style name="xml:attribute-name"          foreground="green"/>
-  <style name="xml:namespace"               foreground="cyan" bold="true"/>
-
-  <style name="js:object"                   foreground="cyan" bold="true"/>
-  <style name="js:constructors"             foreground="cyan"/>
-
-  <style name="latex:display-math"          foreground="purple"/>
-  <style name="latex:command"               foreground="green" bold="true"/>
-  <style name="latex:include"               use-style="def:preprocessor"/>
-
-  <style name="sh:variable"                 foreground="purple"/>
-
-  <!-- legacy styles for old lang files -->
-  <style name="Others"                      foreground="cyan" bold="true"/>
-  <style name="Others 2"                    foreground="cyan"/>
-  <style name="Others 3"                    foreground="purple"/>
 
 </style-scheme>
+

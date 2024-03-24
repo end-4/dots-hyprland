@@ -39,8 +39,6 @@ const CommandButton = (command) => Button({
 
 export const waifuTabIcon = Box({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
-    homogeneous: true,
     children: [
         MaterialIcon('photo', 'norm'),
     ]
@@ -251,7 +249,7 @@ const WaifuImage = (taglist) => {
                 else Utils.execAsync(['bash', '-c', `wget -O '${thisBlock.attribute.imagePath}' '${url}'`])
                     .then(showImage)
                     .catch(print);
-                thisBlock.css = `background-color: mix(${darkMode ? 'black' : 'white'}, ${dominant_color}, 0.97);`;
+                thisBlock.css = `background-color: mix(${darkMode.value ? 'black' : 'white'}, ${dominant_color}, 0.97);`;
             },
         },
         children: [
