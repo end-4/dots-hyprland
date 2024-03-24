@@ -115,7 +115,7 @@ export const GeminiSettings = () => MarginRevealer({
                     ConfigToggle({
                         icon: 'history',
                         name: 'History',
-                        desc: 'Saves chat history',
+                        desc: 'Saves chat history\nMessages in previous chats won\'t show automatically, but they are there',
                         initValue: GeminiService.useHistory,
                         onChange: (self, newValue) => {
                             GeminiService.useHistory = newValue;
