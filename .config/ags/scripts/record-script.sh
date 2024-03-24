@@ -26,4 +26,3 @@ else
         wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$(slurp)" & disown
     fi
 fi
-
