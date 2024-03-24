@@ -42,7 +42,7 @@ const appVolume = (stream) => {
                         className: 'sidebar-volmixer-stream-slider',
                         value: stream.volume,
                         min: 0, max: 1,
-                        onChange: ({value}) => {
+                        onChange: ({ value }) => {
                             stream.volume = value;
                         },
                         setup: (self) => {
@@ -83,12 +83,33 @@ export default (props) => {
             ,
         })
     })
+    const status = Box({
+        className: 'sidebar-volmixer-status spacing-h-5',
+        children: [
+            Label({
+                className: 'txt-small margin-top-5 margin-bottom-8',
+                attribute: { headphones: undefined },
+                setup: (self) => {
+                    const updateAudioDevice = (self) => {
+                        const usingHeadphones = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headphone');
+                        if (self.attribute.headphones === undefined ||
+                            self.attribute.headphones !== usingHeadphones) {
+                            self.attribute.headphones = usingHeadphones;
+                            self.label = `Output: ${usingHeadphones ? 'Headphones' : 'Speakers'}`;
+                        }
+                    }
+                    self.hook(Audio, updateAudioDevice);
+                }
+            })
+        ]
+    });
     return Box({
         ...props,
         className: 'spacing-v-5',
         vertical: true,
         children: [
             appList,
+            status,
         ]
     });
 }
