@@ -89,6 +89,10 @@ let configOptions = {
                 'nextTab': "Page_Down",
                 'prevTab': "Page_Up",
             },
+            'options': { // Right sidebar
+                'nextTab': "Page_Down",
+                'prevTab': "Page_Up",
+            },
             'pin': "Ctrl+p",
             'cycleTab': "Ctrl+Tab",
             'nextTab': "Ctrl+Page_Down",
