@@ -1,6 +1,7 @@
 const { Gtk } = imports.gi;
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { exec, execAsync } = Utils;
 
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
