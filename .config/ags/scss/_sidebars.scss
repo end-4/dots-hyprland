@@ -852,6 +852,7 @@ $waifu_image_overlay_transparency: 0.7;
     // color: $onLayer2;
     border-bottom: 0.068rem solid $outlineVariant;
     padding: 0.682rem;
+    color: $onSurface;
 }
 
 .sidebar-volmixer-stream-appicon {
@@ -878,4 +879,9 @@ $waifu_image_overlay_transparency: 0.7;
         min-height: 1.364rem;
         min-width: 1.364rem;
     }
+}
+
+.sidebar-volmixer-status {
+    color: $onSurface;
+    margin: 0rem 0.682rem;
 }

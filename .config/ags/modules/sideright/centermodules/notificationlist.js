@@ -108,7 +108,7 @@ export default (props) => {
     });
     const listTitle = Box({
         vpack: 'start',
-        className: 'sidebar-group-invisible txt spacing-h-5',
+        className: 'txt spacing-h-5',
         children: [
             notifCount,
             silenceButton,
