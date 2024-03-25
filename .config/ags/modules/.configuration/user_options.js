@@ -12,6 +12,7 @@ let configOptions = {
         'writingCursor': " ...", // Warning: Using weird characters can mess up Markdown rendering
     },
     'animations': {
+        'choreographyDelay': 35,
         'durationSmall': 110,
         'durationLarge': 180,
     },
