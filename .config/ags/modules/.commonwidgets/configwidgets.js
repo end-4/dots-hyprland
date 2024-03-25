@@ -4,7 +4,7 @@ import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 const { Box, Button, Label, Revealer } = Widget;
 
-export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...rest }) => {
+export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, expandWidget = true, ...rest }) => {
     let value = initValue;
     const toggleIcon = Label({
         className: `icon-material txt-bold ${value ? '' : 'txt-poof'}`,
@@ -32,7 +32,7 @@ export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...re
                 className: 'txt txt-small',
                 label: name,
             }),
-            Box({ hexpand: true }),
+            expandWidget ? Box({ hexpand: true }) : null,
             toggleButton,
         ]
     });
