@@ -202,6 +202,7 @@ class GeminiService extends Service {
     get lastMessage() { return this._messages[this._messages.length - 1] }
 
     saveHistory() {
+        Utils.exec(`bash -c 'mkdir -p ${HISTORY_DIR} && touch ${HISTORY_PATH}'`);
         Utils.writeFile(JSON.stringify(this._messages.map(msg => {
             let m = { role: msg.role, parts: msg.parts }; return m;
         })), HISTORY_PATH);
@@ -228,7 +229,6 @@ class GeminiService extends Service {
         }
         else {
             this._messages = this._assistantPrompt ? [...initMessages] : []
-            Utils.exec(`bash -c 'mkdir -p ${HISTORY_DIR} && touch ${HISTORY_PATH}'`)
         }
     }
 
