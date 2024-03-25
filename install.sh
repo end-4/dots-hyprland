@@ -15,7 +15,7 @@ printf '            2. has not been fully tested, use at your own risk.\n'
 printf '            3. does not provide GPU things and you must have set it up yourself.\n'
 printf "\e[31m"
 printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
-printf "\e[97m"
+printf "\e[0m"
 printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
 case $p in "YES")sleep 0;; *)echo "Received \"$p\", aborting...";exit 1;;esac
