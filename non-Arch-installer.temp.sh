@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# This script is for install/update the "packages" w/o system package managers.
-# Convenient for non-Arch users.
+# This script is for install/update some "packages" which are not installed by system package managers.
+# It's function is contained in `install.sh` already, this file is mainly for convenience for non-Arch users.
 #
 # Though this is not elegant at all. I may improve the method some day in future.
 #
