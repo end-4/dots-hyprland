@@ -49,7 +49,7 @@ const GeminiInfo = () => {
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Google collects data for training by default.\nIf you mind, turn off Gemini Apps Activity in your account.',
+                        tooltipText: 'Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren\'t linked to your account,\n    but will be read by human reviewers to improve the model.',
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -143,7 +143,8 @@ export const GoogleAiInstructions = () => Box({
                 wrap: true,
                 className: 'txt sidebar-chat-welcome-txt',
                 justify: Gtk.Justification.CENTER,
-                label: 'A Google AI API key is required\nYou can grab one <u>here</u>, then enter it below'
+                label: 'A Google AI API key is required\nYou can grab one <u>here</u>, then enter it below',
+                // setup: self => self.set_markup("This is a <a href=\"https://www.github.com\">test link</a>")
             }),
             setup: setupCursorHover,
             onClicked: () => {
