@@ -9,14 +9,19 @@ import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { AnimatedSlider } from '../../.commonwidgets/cairo_slider.js';
 
 const appVolume = (stream) => {
-    console.log(stream)
+    // console.log(stream)
     return Box({
         className: 'sidebar-volmixer-stream spacing-h-10',
         children: [
             Icon({
                 className: 'sidebar-volmixer-stream-appicon',
                 vpack: 'center',
-                icon: stream.stream.name.toLowerCase(),
+                tooltipText: stream.stream.name,
+                setup: (self) => {
+                    self.hook(stream, (self) => {
+                        self.icon = stream.stream.name.toLowerCase();
+                    })
+                },
             }),
             Box({
                 hexpand: true,
