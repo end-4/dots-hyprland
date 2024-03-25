@@ -39,7 +39,7 @@ esac
 
 set -e
 #####################################################################################
-printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[97m"
+printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[0m"
 
 remove_bashcomments_emptylines ./scriptdata/dependencies.conf ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
@@ -86,7 +86,7 @@ fi
 v sudo usermod -aG video,input "$(whoami)"
 
 #####################################################################################
-printf "\e[36m[$0]: 2. Installing parts from source repo\e[97m\n"
+printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
 
 if command -v ags >/dev/null 2>&1;then
@@ -138,7 +138,7 @@ fi
 if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 
 #####################################################################################
-printf "\e[36m[$0]: 3. Copying\e[97m\n"
+printf "\e[36m[$0]: 3. Copying\e[0m\n"
 
 # In case some folders does not exists
 v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
@@ -202,22 +202,22 @@ existed_zsh_conf=n
 grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
 #####################################################################################
-printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[97m\n"
-printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[97m\n"
-printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[97m\n"
+printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
+printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[0m\n"
+printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
 echo "See https://end-4.github.io/dots-hyprland-wiki/en for more info."
 case $existed_ags_opt in
-  y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[97m\n"
-#    printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[97m\n"
+  y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
+#    printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[0m\n"
 ;;esac
 case $existed_hypr_conf in
-  y) printf "\n\e[33m[$0]: Warning: \"~/.config/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[97m\n"
-     printf "\e[33mPlease use \"~/.config/hypr/hyprland.conf.new\" as a reference for a proper format.\e[97m\n"
-     printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[97m\n"
+  y) printf "\n\e[33m[$0]: Warning: \"~/.config/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
+     printf "\e[33mPlease use \"~/.config/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
+     printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
 
 case $existed_zsh_conf in
-  n) printf "\n\e[36m[$0]: \"~/.zshrc\" seems not sourcing \"~/.config/zshrc.d/dots-hyprland.zsh\".\e[97m\n"
-     printf "\e[36mIt is optional, but you may put this line into your \"~/.zshrc\" to support colorscheme for ZSH:\e[97m\n"
-     printf "\e[36m    source ~/.config/zshrc.d/dots-hyprland.zsh\e[97m\n"
+  n) printf "\n\e[36m[$0]: \"~/.zshrc\" seems not sourcing \"~/.config/zshrc.d/dots-hyprland.zsh\".\e[0m\n"
+     printf "\e[36mIt is optional, but you may put this line into your \"~/.zshrc\" to support colorscheme for ZSH:\e[0m\n"
+     printf "\e[36m    source ~/.config/zshrc.d/dots-hyprland.zsh\e[0m\n"
 ;;esac
