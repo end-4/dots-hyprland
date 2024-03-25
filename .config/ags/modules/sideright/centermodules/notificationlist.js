@@ -102,7 +102,11 @@ export default (props) => {
         }),
         child: ListActionButton('clear_all', 'Clear', () => {
             Notifications.clear();
-            notificationList.get_children().forEach(ch => ch.attribute.destroyWithAnims())
+            const kids = notificationList.get_children();
+            for (let i = 0; i < kids.length; i++) {
+                const kid = kids[i];
+                Utils.timeout(userOptions.animations.choreographyDelay * i, () => kid.attribute.destroyWithAnims());
+            }
         })
     })
     const notifCount = Label({
