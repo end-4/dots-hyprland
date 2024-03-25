@@ -101,7 +101,10 @@ export const BooruSettings = () => MarginRevealer({
                     ConfigToggle({
                         icon: 'menstrual_health',
                         name: 'Lewds',
-                        desc: 'Shows naughty stuff when enabled',
+                        desc: `Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:
+'sidebar': {
+  'imageAllowNsfw': true,
+},`,
                         initValue: BooruService.nsfw,
                         onChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
