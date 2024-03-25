@@ -3,10 +3,11 @@
 // The actual widget for each single notification is in ags/modules/.commonwidgets/notification.js
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
-const { Box, Button, Label, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Revealer, Scrollable, Stack } = Widget;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import Notification from '../../.commonwidgets/notification.js';
+import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 
 export default (props) => {
     const notifEmptyContent = Box({
@@ -84,10 +85,26 @@ export default (props) => {
         Notifications.dnd = !Notifications.dnd;
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
-    const clearButton = ListActionButton('clear_all', 'Clear', () => {
-        Notifications.clear();
-        notificationList.get_children().forEach(ch => ch.attribute.destroyWithAnims())
-    });
+    // const silenceToggle = ConfigToggle({
+    //     expandWidget: false,
+    //     icon: 'do_not_disturb_on',
+    //     name: 'Do Not Disturb',
+    //     initValue: false,
+    //     onChange: (self, newValue) => {
+    //         Notifications.dnd = newValue;
+    //     },
+    // })
+    const clearButton = Revealer({
+        transition: 'slide_right',
+        transitionDuration: userOptions.animations.durationSmall,
+        setup: (self) => self.hook(Notifications, (self) => {
+            self.revealChild = Notifications.notifications.length > 0;
+        }),
+        child: ListActionButton('clear_all', 'Clear', () => {
+            Notifications.clear();
+            notificationList.get_children().forEach(ch => ch.attribute.destroyWithAnims())
+        })
+    })
     const notifCount = Label({
         attribute: {
             updateCount: (self) => {
@@ -112,6 +129,8 @@ export default (props) => {
         children: [
             notifCount,
             silenceButton,
+            // silenceToggle,
+            // Box({ hexpand: true }),
             clearButton,
         ]
     });
