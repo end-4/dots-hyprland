@@ -41,6 +41,9 @@ set -e
 #####################################################################################
 printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[0m"
 
+# Issue #363
+v sudo pacman -Syu
+
 remove_bashcomments_emptylines ./scriptdata/dependencies.conf ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
 
