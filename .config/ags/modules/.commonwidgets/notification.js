@@ -183,17 +183,19 @@ export default ({
                             hexpand: true,
                             className: `notif-action notif-action-${notifObject.urgency}`,
                             onClicked: () => destroyWithAnims(),
+                            setup: setupCursorHover,
                             child: Label({
                                 label: 'Close',
-                            })
+                            }),
                         }),
                         ...notifObject.actions.map(action => Widget.Button({
                             hexpand: true,
                             className: `notif-action notif-action-${notifObject.urgency}`,
                             onClicked: () => notifObject.invoke(action.id),
+                            setup: setupCursorHover,
                             child: Label({
                                 label: action.label,
-                            })
+                            }),
                         }))
                     ],
                 })
