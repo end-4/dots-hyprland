@@ -12,7 +12,7 @@ hex_to_argb = lambda hex_code: argb_from_rgb(int(hex_code[1:3], 16), int(hex_cod
 
 parser = argparse.ArgumentParser(description='Color generation script')
 parser.add_argument('--path', type=str, default=None, help='generate colorscheme from image')
-parser.add_argument('--quality', type=int , default=1 , help='pixels to skip in image, setting 1 means skip no pixels')
+parser.add_argument('--basewidth', type=int , default=128 , help='resize the image to the specified width for faster color generation')
 parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
 parser.add_argument('--mode', type=str, choices=['dark', 'light'], default='dark', help='dark or light mode')
 parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
@@ -29,15 +29,14 @@ print(f"$transparent: {transparent};")
 
 if args.path is not None:
     image = Image.open(args.path)
-    pixel_len = image.width * image.height
-    image_data = image.getdata()
-    pixel_array = [image_data[_] for _ in range(0, pixel_len, args.quality)]
-    colors = QuantizeCelebi(pixel_array, 128)
+    wpercent = (args.basewidth/float(image.size[0]))
+    hsize = int((float(image.size[1])*float(wpercent)))
+    image = image.resize((args.basewidth, hsize), Image.Resampling.BICUBIC)
+    colors = QuantizeCelebi(image.getdata(), 128)
     argb = Score.score(colors)[0]
 
     if args.cache is not None:
-        export_color_file=args.cache
-        with open(export_color_file, 'w') as file:
+        with open(args.cache, 'w') as file:
             file.write(argb_to_hex(argb))
     hct = Hct.from_int(argb)
     if(args.smart):
@@ -85,7 +84,6 @@ if args.debug == True:
     print('Hue:', hct.hue)
     print('Chroma:', hct.chroma)
     print('Tone:', hct.tone)
-    print(argb)
     r, g, b, a = rgba_from_argb(argb)
     hex_code = argb_to_hex(argb)
     print('Selected Color:', "\x1B[38;2;{};{};{}m{}\x1B[0m".format(r, g, b, "\x1b[7m   \x1b[7m"), hex_code)
