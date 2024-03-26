@@ -8,7 +8,7 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { AnimatedSlider } from '../../.commonwidgets/cairo_slider.js';
 
-const appVolume = (stream) => {
+const AppVolume = (stream) => {
     // console.log(stream)
     return Box({
         className: 'sidebar-volmixer-stream spacing-h-10',
@@ -71,13 +71,31 @@ const appVolume = (stream) => {
 }
 
 export default (props) => {
+    const emptyContent = Box({
+        homogeneous: true,
+        children: [Box({
+            vertical: true,
+            vpack: 'center',
+            className: 'txt spacing-v-10',
+            children: [
+                Box({
+                    vertical: true,
+                    className: 'spacing-v-5 txt-subtext',
+                    children: [
+                        MaterialIcon('brand_awareness', 'gigantic'),
+                        Label({ label: 'No audio source', className: 'txt-small' }),
+                    ]
+                }),
+            ]
+        })]
+    });
     const appList = Scrollable({
         vexpand: true,
         child: Box({
             attribute: {
                 'updateStreams': (self) => {
                     const streams = Audio.apps;
-                    self.children = streams.map(stream => appVolume(stream));
+                    self.children = streams.map(stream => AppVolume(stream));
                 },
             },
             vertical: true,
@@ -108,12 +126,21 @@ export default (props) => {
             })
         ]
     });
+    const mainContent = Stack({
+        children: {
+            'empty': emptyContent,
+            'list': appList,
+        },
+        setup: (self) => self.hook(Audio, (self) => {
+            self.shown = (Audio.apps.length > 0 ? 'list' : 'empty')
+        }),
+    })
     return Box({
         ...props,
         className: 'spacing-v-5',
         vertical: true,
         children: [
-            appList,
+            mainContent,
             status,
         ]
     });

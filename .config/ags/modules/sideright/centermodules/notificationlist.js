@@ -159,9 +159,9 @@ export default (props) => {
             'empty': notifEmptyContent,
             'list': notifList,
         },
-        setup: (self) => self
-            .hook(Notifications, (self) => self.shown = (Notifications.notifications.length > 0 ? 'list' : 'empty'))
-        ,
+        setup: (self) => self.hook(Notifications, (self) => {
+            self.shown = (Notifications.notifications.length > 0 ? 'list' : 'empty')
+        }),
     });
     return Box({
         ...props,
