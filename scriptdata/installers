@@ -8,7 +8,7 @@
 # export base="$(pwd)"
 
 install-yay() {
-  x sudo pacman -Sy --needed --noconfirm base-devel
+  x sudo pacman -S --needed --noconfirm base-devel
   x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
   x cd /tmp/buildyay
   x makepkg -o
