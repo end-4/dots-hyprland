@@ -847,9 +847,6 @@ $waifu_image_overlay_transparency: 0.7;
 }
 
 .sidebar-volmixer-stream {
-    // @include normal-rounding;
-    // background-color: $layer2;
-    // color: $onLayer2;
     border-bottom: 0.068rem solid $outlineVariant;
     padding: 0.682rem;
     color: $onSurface;
@@ -884,4 +881,30 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-volmixer-status {
     color: $onSurface;
     margin: 0rem 0.682rem;
+}
+
+.sidebar-bluetooth-device {
+    padding: 0.682rem;
+    @include normal-rounding;
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-bluetooth-appicon {
+    font-size: 3.273rem;
+}
+
+.sidebar-bluetooth-device-remove {
+    @include full-rounding;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+    // background-color: $layer3;
+    padding: 0.341rem;
+}
+
+.sidebar-bluetooth-device-remove:hover,
+.sidebar-bluetooth-device-remove:focus {
+    @include full-rounding;
+    background-color: $layer2Hover;
+    padding: 0.341rem;
 }

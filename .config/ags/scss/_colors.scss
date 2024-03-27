@@ -57,6 +57,8 @@ $layer1Hover: mix($layer1, $onLayer1, 85%);
 $layer1Active: mix($layer1, $onLayer1, 70%);
 $layer2Hover: mix($layer2, $onLayer2, 90%);
 $layer2Active: mix($layer2, $onLayer2, 80%);
+$layer3Hover: mix($layer3, $onLayer3, 90%);
+$layer3Active: mix($layer3, $onLayer3, 80%);
 // Elements
 $windowtitleOnLayer0Inactive: $onLayer0Inactive;
 $windowtitleOnLayer0: $onLayer0;
