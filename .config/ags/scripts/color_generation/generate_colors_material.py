@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import math
 from PIL import Image
 from materialyoucolor.quantize import QuantizeCelebi
 from materialyoucolor.score.score import Score
@@ -12,7 +13,7 @@ hex_to_argb = lambda hex_code: argb_from_rgb(int(hex_code[1:3], 16), int(hex_cod
 
 parser = argparse.ArgumentParser(description='Color generation script')
 parser.add_argument('--path', type=str, default=None, help='generate colorscheme from image')
-parser.add_argument('--basewidth', type=int , default=128 , help='resize the image to the specified width for faster color generation')
+parser.add_argument('--size', type=int , default=128 , help='bitmap image size')
 parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
 parser.add_argument('--mode', type=str, choices=['dark', 'light'], default='dark', help='dark or light mode')
 parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
@@ -27,11 +28,24 @@ transparent = (args.transparency == 'transparent')
 print(f"$darkmode: {darkmode};")
 print(f"$transparent: {transparent};")
 
+def calculate_optimal_size (width, height, bitmap_size):
+    image_area = width * height;
+    bitmap_area = bitmap_size ** 2
+    scale = math.sqrt(bitmap_area/image_area) if image_area > bitmap_area else 1
+    new_width = round(width * scale)
+    new_height = round(height * scale)
+    if new_width == 0:
+        new_width = 1
+    if new_height == 0:
+        new_height = 1
+    return new_width, new_height
+
 if args.path is not None:
     image = Image.open(args.path)
-    wpercent = (args.basewidth/float(image.size[0]))
-    hsize = int((float(image.size[1])*float(wpercent)))
-    image = image.resize((args.basewidth, hsize), Image.Resampling.BICUBIC)
+    wsize, hsize = image.size
+    wsize_new, hsize_new = calculate_optimal_size(wsize, hsize, args.size)
+    if wsize_new < wsize or hsize_new < hsize:
+        image = image.resize((wsize_new, hsize_new), Image.Resampling.BICUBIC)
     colors = QuantizeCelebi(image.getdata(), 128)
     argb = Score.score(colors)[0]
 
@@ -81,6 +95,9 @@ for color in vars(MaterialDynamicColors).keys():
 
 if args.debug == True:
     print('---------------------')
+    if args.path is not None:
+        print('Image size: {} x {}'.format(wsize, hsize))
+        print('Resized image: {} x {}'.format(wsize_new, hsize_new))
     print('Hue:', hct.hue)
     print('Chroma:', hct.chroma)
     print('Tone:', hct.tone)
