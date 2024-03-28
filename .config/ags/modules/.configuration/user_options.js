@@ -27,6 +27,10 @@ let configOptions = {
         'low': 20,
         'critical': 10,
     },
+    'brightness': {
+      'device': '', // `-d` param passes to brightnessctl, leave it empty to use brightnessctl default
+      'minPercent': 0, // Lowest brightness (0-100)
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },
