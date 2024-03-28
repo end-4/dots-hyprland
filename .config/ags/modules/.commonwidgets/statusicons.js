@@ -273,7 +273,7 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
 
 const OptionalKeyboardLayout = async () => {
     try {
-        return await HyprlandXkbKeyboardLayout({ useFlag: userOptions.layout.useFlag });
+        return await HyprlandXkbKeyboardLayout({ useFlag: userOptions.appearance.keyboardUseFlag });
     } catch {
         return null;
     }
