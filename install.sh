@@ -193,7 +193,7 @@ else
 fi
 
 
-# some foldes (eg. .local/bin) should be processed seperately to avoid `--delete' for rsync,
+# some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
 
