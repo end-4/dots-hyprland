@@ -46,7 +46,7 @@ elif [ "$backend" = "material" ]; then
         smartflag='--smart True'
     fi
     color_generation/generate_colors_material.py --path "$1" \
-    --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" --cache '.cache/ags/user/color.txt' $smartflag \
+    --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" --cache "$HOME/.cache/ags/user/color.txt" $smartflag \
     > "$HOME"/.cache/ags/user/generated/material_colors.scss
     if [ "$2" = "--apply" ]; then
         cp "$HOME"/.cache/ags/user/generated/material_colors.scss "$HOME/.config/ags/scss/_material.scss"

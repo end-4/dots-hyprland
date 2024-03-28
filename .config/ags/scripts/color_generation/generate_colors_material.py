@@ -1,61 +1,56 @@
 #!/usr/bin/env python3
-from material_color_utilities_python import *
-from pathlib import Path
-import sys
-import subprocess
 import argparse
-import os
-
+import math
+from PIL import Image
+from materialyoucolor.quantize import QuantizeCelebi
+from materialyoucolor.score.score import Score
 from materialyoucolor.hct import Hct
 from materialyoucolor.dynamiccolor.material_dynamic_colors import MaterialDynamicColors
+from materialyoucolor.utils.color_utils import rgba_from_argb, argb_from_rgb
+
+argb_to_hex = lambda argb: "#{:02X}{:02X}{:02X}".format(*map(round, rgba_from_argb(argb)))
+hex_to_argb = lambda hex_code: argb_from_rgb(int(hex_code[1:3], 16), int(hex_code[3:5], 16), int(hex_code[5:], 16))
 
 parser = argparse.ArgumentParser(description='Color generation script')
 parser.add_argument('--path', type=str, default=None, help='generate colorscheme from image')
+parser.add_argument('--size', type=int , default=128 , help='bitmap image size')
 parser.add_argument('--color', type=str, default=None, help='generate colorscheme from color')
 parser.add_argument('--mode', type=str, choices=['dark', 'light'], default='dark', help='dark or light mode')
 parser.add_argument('--scheme', type=str, default=None, help='material scheme to use')
 parser.add_argument('--smart', type=str, default=False, help='decide scheme type based on image color')
 parser.add_argument('--transparency', type=str, choices=['opaque', 'transparent'], default='opaque', help='enable transparency')
-parser.add_argument('--cache', type=str, default=None, help='file path (relative to home) to store the generated color')
+parser.add_argument('--cache', type=str, default=None, help='file path to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
 args = parser.parse_args()
-
-def hex_to_argb(hex_color):
-  color = hex_color.lstrip('#')
-  if len(color) != 6:
-    raise ValueError("Invalid color code!")
-  r = int(color[:2], 16)
-  g = int(color[2:4], 16)
-  b = int(color[4:], 16)
-  a = 255
-  argb = (a << 24) | (r << 16) | (g << 8) | b
-  return argb
-
-def argb_to_hex(argb_value):
-  r = (argb_value >> 16) & 0xff
-  g = (argb_value >> 8) & 0xff
-  b = argb_value & 0xff
-  hex_r = format(r, '02x')
-  hex_g = format(g, '02x')
-  hex_b = format(b, '02x')
-  hex_color = f"#{hex_r}{hex_g}{hex_b}"
-  return hex_color
 
 darkmode = (args.mode == 'dark')
 transparent = (args.transparency == 'transparent')
 print(f"$darkmode: {darkmode};")
 print(f"$transparent: {transparent};")
 
+def calculate_optimal_size (width, height, bitmap_size):
+    image_area = width * height;
+    bitmap_area = bitmap_size ** 2
+    scale = math.sqrt(bitmap_area/image_area) if image_area > bitmap_area else 1
+    new_width = round(width * scale)
+    new_height = round(height * scale)
+    if new_width == 0:
+        new_width = 1
+    if new_height == 0:
+        new_height = 1
+    return new_width, new_height
+
 if args.path is not None:
-    img = Image.open(args.path)
-    basewidth = 64
-    wpercent = (basewidth/float(img.size[0]))
-    hsize = int((float(img.size[1])*float(wpercent)))
-    img = img.resize((basewidth,hsize),Image.Resampling.BICUBIC)
-    argb = sourceColorFromImage(img)
+    image = Image.open(args.path)
+    wsize, hsize = image.size
+    wsize_new, hsize_new = calculate_optimal_size(wsize, hsize, args.size)
+    if wsize_new < wsize or hsize_new < hsize:
+        image = image.resize((wsize_new, hsize_new), Image.Resampling.BICUBIC)
+    colors = QuantizeCelebi(image.getdata(), 128)
+    argb = Score.score(colors)[0]
+
     if args.cache is not None:
-        export_color_file=os.environ['HOME'] + "/" + args.cache
-        with open(export_color_file, 'w') as file:
+        with open(args.cache, 'w') as file:
             file.write(argb_to_hex(argb))
     hct = Hct.from_int(argb)
     if(args.smart):
@@ -95,21 +90,27 @@ for color in vars(MaterialDynamicColors).keys():
     if hasattr(color_name, "get_hct"):
         rgba = color_name.get_hct(scheme).to_rgba()
         r, g, b, a = rgba
-        hex_color = f"#{r:02X}{g:02X}{b:02X}"
-        print('$' + color + ': ' + hex_color + ';')
+        hex_code = f"#{r:02X}{g:02X}{b:02X}"
+        print('$' + color + ': ' + hex_code + ';')
 
 if args.debug == True:
     print('---------------------')
-    print('Hue', hct.hue)
-    print('Chroma', hct.chroma)
-    print('Tone', hct.tone)
-    print('Dark mode?', darkmode)
-    print('Scheme', args.scheme)
+    if args.path is not None:
+        print('Image size: {} x {}'.format(wsize, hsize))
+        print('Resized image: {} x {}'.format(wsize_new, hsize_new))
+    print('Hue:', hct.hue)
+    print('Chroma:', hct.chroma)
+    print('Tone:', hct.tone)
+    r, g, b, a = rgba_from_argb(argb)
+    hex_code = argb_to_hex(argb)
+    print('Selected Color:', "\x1B[38;2;{};{};{}m{}\x1B[0m".format(r, g, b, "\x1b[7m   \x1b[7m"), hex_code)
+    print('Dark mode:', darkmode)
+    print('Scheme:', args.scheme)
     print('---------------------')
     for color in vars(MaterialDynamicColors).keys():
         color_name = getattr(MaterialDynamicColors, color)
         if hasattr(color_name, "get_hct"):
             rgba = color_name.get_hct(scheme).to_rgba()
             r, g, b, a = rgba
-            hex_color = f"#{r:02X}{g:02X}{b:02X}"
-            print(color.ljust(32), "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m"), hex_color)
+            hex_code = f"#{r:02X}{g:02X}{b:02X}"
+            print(color.ljust(32), "\x1B[38;2;{};{};{}m{}\x1B[0m".format(rgba[0], rgba[1], rgba[2], "\x1b[7m   \x1b[7m"), hex_code)
