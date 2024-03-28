@@ -12,7 +12,7 @@ import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 
 // can't connect: sync_problem
 
-const USE_SYMBOLIC_ICONS = false;
+const USE_SYMBOLIC_ICONS = true;
 
 const BluetoothDevice = (device) => {
     // console.log(device);
@@ -54,6 +54,7 @@ const BluetoothDevice = (device) => {
     const deviceConnectButton = ConfigToggle({
         vpack: 'center',
         expandWidget: false,
+        desc: 'Toggle connection',
         initValue: device.connected,
         onChange: (self, newValue) => {
             device.setConnection(newValue);
@@ -66,6 +67,7 @@ const BluetoothDevice = (device) => {
         vpack: 'center',
         className: 'sidebar-bluetooth-device-remove',
         child: MaterialIcon('delete', 'norm'),
+        tooltipText: 'Remove device',
         setup: setupCursorHover,
         onClicked: () => execAsync(['bluetoothctl', 'remove', device.address]).catch(print),
     });
