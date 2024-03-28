@@ -891,7 +891,8 @@ $waifu_image_overlay_transparency: 0.7;
 }
 
 .sidebar-bluetooth-appicon {
-    font-size: 2.273rem;
+    @include symbolic-icon;
+    font-size: 2.045rem;
 }
 
 .sidebar-bluetooth-device-remove {
