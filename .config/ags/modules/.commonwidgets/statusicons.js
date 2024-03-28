@@ -1,4 +1,5 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
+import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -24,10 +25,20 @@ function isLanguageMatch(abbreviation, word) {
     return false;
 }
 
+export const MicMuteIndicator = () => Widget.Revealer({
+    transition: 'slide_left',
+    transitionDuration: userOptions.animations.durationSmall,
+    revealChild: false,
+    setup: (self) => self.hook(Audio, (self) => {
+        self.revealChild = Audio.microphone.isMuted;
+    }),
+    child: MaterialIcon('mic_off', 'norm'),
+});
+
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
-        transition: 150,
         transition: 'slide_left',
+        transitionDuration: userOptions.animations.durationSmall,
         revealChild: false,
         setup: (self) => self
             .hook(Notifications, (self, id) => {
@@ -73,6 +84,7 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
 
 export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
+    transitionDuration: userOptions.animations.durationSmall,
     children: {
         'false': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
         'true': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
@@ -112,6 +124,7 @@ const BluetoothDevices = () => Widget.Box({
 
 const NetworkWiredIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
+    transitionDuration: userOptions.animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
         'unknown': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
@@ -143,6 +156,7 @@ const SimpleNetworkIndicator = () => Widget.Icon({
 
 const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
+    transitionDuration: userOptions.animations.durationSmall,
     children: {
         'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
         'disconnected': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
@@ -168,6 +182,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
 
 export const NetworkIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
+    transitionDuration: userOptions.animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
         'wifi': NetworkWifiIndicator(),
@@ -220,8 +235,8 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
         };
         updateCurrentKeyboards();
         const widgetRevealer = Widget.Revealer({
-            transition: 150,
             transition: 'slide_left',
+            transitionDuration: userOptions.animations.durationSmall,
             revealChild: languageStackArray.length > 1,
         });
         const widgetKids = {
@@ -232,6 +247,7 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
         }
         const widgetContent = Widget.Stack({
             transition: 'slide_up_down',
+            transitionDuration: userOptions.animations.durationSmall,
             children: widgetKids,
             setup: (self) => self.hook(Hyprland, (stack, kbName, layoutName) => {
                 if (!kbName) {
@@ -269,6 +285,7 @@ export const StatusIcons = (props = {}) => Widget.Box({
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
+            MicMuteIndicator(),
             optionalKeyboardLayoutInstance,
             NotificationIndicator(),
             NetworkIndicator(),
