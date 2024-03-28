@@ -16,6 +16,9 @@ let configOptions = {
         'durationSmall': 110,
         'durationLarge': 180,
     },
+    'appearance': {
+        'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
+    },
     'apps': {
         'imageViewer': "loupe",
         'terminal': "foot", // This is only for shell actions
