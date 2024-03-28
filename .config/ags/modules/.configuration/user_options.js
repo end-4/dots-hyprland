@@ -100,6 +100,10 @@ let configOptions = {
             'prevTab': "Ctrl+Page_Up",
         },
     },
+    'layout': {
+        // Use or not country flags instead of text in default hyprland kb_layout option
+        'useFlag': false
+    }
 }
 
 // Override defaults with user's options
