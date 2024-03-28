@@ -8,55 +8,78 @@ const { Box, Button, Icon, Label, Scrollable, Slider, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
+import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
+
+// can't connect: sync_problem
 
 const USE_SYMBOLIC_ICONS = false;
 
 const BluetoothDevice = (device) => {
-    console.log(device);
+    // console.log(device);
+    const deviceIcon = Icon({
+        className: 'sidebar-bluetooth-appicon',
+        vpack: 'center',
+        tooltipText: device.name,
+        setup: (self) => self.hook(device, (self) => {
+            self.icon = `${device.iconName}${USE_SYMBOLIC_ICONS ? '-symbolic' : ''}`;
+        }),
+    });
+    const deviceStatus = Box({
+        hexpand: true,
+        vpack: 'center',
+        vertical: true,
+        children: [
+            Label({
+                xalign: 0,
+                maxWidthChars: 10,
+                truncate: 'end',
+                label: device.name,
+                className: 'txt-small',
+                setup: (self) => self.hook(device, (self) => {
+                    self.label = device.name;
+                }),
+            }),
+            Label({
+                xalign: 0,
+                maxWidthChars: 10,
+                truncate: 'end',
+                label: device.connected ? 'Connected' : (device.paired ? 'Paired' : ''),
+                className: 'txt-subtext',
+                setup: (self) => self.hook(device, (self) => {
+                    self.label = device.connected ? 'Connected' : (device.paired ? 'Paired' : '');
+                }),
+            }),
+        ]
+    });
+    const deviceConnectButton = ConfigToggle({
+        vpack: 'center',
+        expandWidget: false,
+        initValue: device.connected,
+        onChange: (self, newValue) => {
+            device.setConnection(newValue);
+        },
+        extraSetup: (self) => self.hook(device, (self) => {
+            Utils.timeout(200, () => self.enabled.value = device.connected);
+        }),
+    })
+    const deviceRemoveButton = Button({
+        vpack: 'center',
+        className: 'sidebar-bluetooth-device-remove',
+        child: MaterialIcon('delete', 'norm'),
+        setup: setupCursorHover,
+        onClicked: () => execAsync(['bluetoothctl', 'remove', device.address]).catch(print),
+    });
     return Box({
         className: 'sidebar-bluetooth-device spacing-h-10',
         children: [
-            Icon({
-                className: 'sidebar-bluetooth-appicon',
-                vpack: 'center',
-                tooltipText: device.name,
-                setup: (self) => self.hook(device, (self) => {
-                    self.icon = `${device.iconName}${USE_SYMBOLIC_ICONS ? '-symbolic' : ''}`;
-                }),
-            }),
+            deviceIcon,
+            deviceStatus,
             Box({
-                hexpand: true,
-                vpack: 'center',
-                vertical: true,
+                className: 'spacing-h-5',
                 children: [
-                    Label({
-                        xalign: 0,
-                        maxWidthChars: 10,
-                        truncate: 'end',
-                        label: device.name,
-                        className: 'txt-small',
-                        setup: (self) => self.hook(device, (self) => {
-                            self.label = device.name;
-                        }),
-                    }),
-                    Label({
-                        xalign: 0,
-                        maxWidthChars: 10,
-                        truncate: 'end',
-                        label: device.connected ? 'Connected' : (device.paired ? 'Paired' : ''),
-                        className: 'txt-subtext',
-                        setup: (self) => self.hook(device, (self) => {
-                            self.label = device.connected ? 'Connected' : (device.paired ? 'Paired' : '');
-                        }),
-                    }),
+                    deviceConnectButton,
+                    deviceRemoveButton,
                 ]
-            }),
-            Button({
-                vpack: 'center',
-                className: 'sidebar-bluetooth-device-remove',
-                child: MaterialIcon('delete', 'norm'),
-                setup: setupCursorHover,
-                onClicked: () => execAsync(['bluetoothctl', 'remove', device.address]).catch(print),
             })
         ]
     })
