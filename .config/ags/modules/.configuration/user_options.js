@@ -16,6 +16,9 @@ let configOptions = {
         'durationSmall': 110,
         'durationLarge': 180,
     },
+    'appearance': {
+        'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
+    },
     'apps': {
         'imageViewer': "loupe",
         'terminal': "foot", // This is only for shell actions
@@ -100,10 +103,6 @@ let configOptions = {
             'prevTab': "Ctrl+Page_Up",
         },
     },
-    'layout': {
-        // Use or not country flags instead of text in default hyprland kb_layout option
-        'useFlag': false
-    }
 }
 
 // Override defaults with user's options
