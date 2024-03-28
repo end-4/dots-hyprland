@@ -69,9 +69,9 @@ App.config({
 });
 
 // Stuff that don't need to be toggled. And they're async so ugh...
-// Bar().catch(print); // Use this to debug the bar. Single monitor only.
+Bar().catch(print); // Use this to debug the bar. Single monitor only.
 // BarCornerTopleft().catch(print); // Use this to debug the bar. Single monitor only.
 // BarCornerTopright().catch(print); // Use this to debug the bar. Single monitor only.
-forMonitors(Bar);
+// forMonitors(Bar);
 forMonitors(BarCornerTopleft);
 forMonitors(BarCornerTopright);
