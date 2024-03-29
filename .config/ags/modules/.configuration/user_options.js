@@ -26,6 +26,9 @@ let configOptions = {
     'battery': {
         'low': 20,
         'critical': 10,
+        'warnLevels': [20, 15, 5],
+        'warnTitles': ["Low battery", "Very low battery", 'Critical Battery'],
+        'warnMessages': ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY'],
     },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
