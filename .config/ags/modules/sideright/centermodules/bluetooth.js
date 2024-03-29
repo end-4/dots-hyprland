@@ -88,6 +88,24 @@ const BluetoothDevice = (device) => {
 }
 
 export default (props) => {
+    const emptyContent = Box({
+        homogeneous: true,
+        children: [Box({
+            vertical: true,
+            vpack: 'center',
+            className: 'txt spacing-v-10',
+            children: [
+                Box({
+                    vertical: true,
+                    className: 'spacing-v-5 txt-subtext',
+                    children: [
+                        MaterialIcon('bluetooth_disabled', 'gigantic'),
+                        Label({ label: 'No Bluetooth devices', className: 'txt-small' }),
+                    ]
+                }),
+            ]
+        })]
+    });
     const deviceList = Scrollable({
         vexpand: true,
         child: Box({
@@ -104,14 +122,22 @@ export default (props) => {
                 .hook(Bluetooth, self.attribute.updateDevices, 'device-removed')
             ,
         })
+    });
+    const mainContent = Stack({
+        children: {
+            'empty': emptyContent,
+            'list': deviceList,
+        },
+        setup: (self) => self.hook(Bluetooth, (self) => {
+            self.shown = (Bluetooth.devices.length > 0 ? 'list' : 'empty')
+        }),
     })
     return Box({
         ...props,
         className: 'spacing-v-5',
         vertical: true,
         children: [
-            deviceList,
-            // mainContent,
+            mainContent,
             // status,
         ]
     });
