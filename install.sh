@@ -158,17 +158,24 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# MISC (For .config/* but not AGS, not Hyprland)
+# MISC (For .config/* but not AGS, not Fish, not Hyprland)
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
+    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
       i=".config/$i"
       echo "[$0]: Found target: $i"
       if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
       elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
       fi
     done
+    ;;
+esac
+
+case $SKIP_FISH in
+  true) sleep 0;;
+  *)
+    v rsync -av --delete .config/fish/ "$HOME"/.config/fish/
     ;;
 esac
 
@@ -191,24 +198,29 @@ case $SKIP_AGS in
 esac
 
 # For Hyprland
-v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$HOME"/.config/hypr/
-t="$HOME/.config/hypr/hyprland.conf"
-if [ -f $t ];then
-  echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-  v cp -f .config/hypr/hyprland.conf $t.new
-  existed_hypr_conf=y
-else
-  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-  v cp .config/hypr/hyprland.conf $t
-  existed_hypr_conf=n
-fi
-t="$HOME/.config/hypr/custom"
-if [ -d $t ];then
-  echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
-else
-  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-  v rsync -av --delete .config/hypr/custom/ $t/
-fi
+case $SKIP_HYPRLAND in
+  true) sleep 0;;
+  *)
+    v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$HOME"/.config/hypr/
+    t="$HOME/.config/hypr/hyprland.conf"
+    if [ -f $t ];then
+      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+      v cp -f .config/hypr/hyprland.conf $t.new
+      existed_hypr_conf=y
+    else
+      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+      v cp .config/hypr/hyprland.conf $t
+      existed_hypr_conf=n
+    fi
+    t="$HOME/.config/hypr/custom"
+    if [ -d $t ];then
+      echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
+    else
+      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+      v rsync -av --delete .config/hypr/custom/ $t/
+    fi
+    ;;
+esac
 
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
