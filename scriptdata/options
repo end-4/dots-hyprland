@@ -15,7 +15,9 @@ If no option is specified, run default install process.
   -c, --clean             Clean the build cache first
   -s, --skip-sysupdate    Skip \"sudo pacman -Syu\"
       --skip-ags          Skip installing ags and its config
-      --skip-miscconf     Skip copying the dirs and files to \".configs\" except for AGS and Hyprland
+      --skip-hyprland     Skip installing the config for Hyprland
+      --skip-fish         Skip installing the config for Fish
+      --skip-miscconf     Skip copying the dirs and files to \".configs\" except for AGS, Fish and Hyprland
       --deplistfile <path>  Specify a dependency list file. By default \"./scriptdata/dependencies.conf\"
       --fontset <set>     (Unavailable yet) Use a set of pre-defined font and config
 "
@@ -28,7 +30,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-miscconf \
+       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-fish,skip-hyprland,skip-miscconf \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -56,6 +58,8 @@ while true ; do
     -f|--force) ask=false;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-ags) SKIP_AGS=true;shift;;
+    --skip-hyprland) SKIP_HYPRLAND=true;shift;;
+    --skip-fish) SKIP_FISH=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
     ## Ones with parameter
     
