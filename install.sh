@@ -236,9 +236,15 @@ grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_con
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
+echo "If you are new to Hyprland, please read"
+echo "https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation"
+echo "for hints on launching Hyprland."
+echo "\n"
+echo "If you are already running Hyprland,"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
-echo "See https://end-4.github.io/dots-hyprland-wiki/en for more info."
+echo "\n"
+
 case $existed_ags_opt in
   y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
 #    printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[0m\n"
