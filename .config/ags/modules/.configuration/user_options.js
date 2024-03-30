@@ -20,7 +20,11 @@ let configOptions = {
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
     },
     'apps': {
+        'bluetooth': "blueberry",
         'imageViewer': "loupe",
+        'network': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
+        'settings': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
+        'taskManager': "gnome-system-monitor",
         'terminal': "foot", // This is only for shell actions
     },
     'battery': {
