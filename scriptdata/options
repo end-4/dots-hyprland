@@ -10,10 +10,14 @@ echo -e "Syntax: $0 [Options]...
 Idempotent installation script for dotfiles.
 If no option is specified, run default install process.
 
-  -h, --help         Print this help message and exit
-  -f, --force        (Dangerous) Force mode without any confirm
-  -c, --clean        Clean the build cache first
-  -k, --kbset <set>  (Unavailable yet) Use a set of pre-defined keybindings
+  -h, --help              Print this help message and exit
+  -f, --force             (Dangerous) Force mode without any confirm
+  -c, --clean             Clean the build cache first
+  -s, --skip-sysupdate    Skip \"sudo pacman -Syu\"
+      --skip-ags          Skip installing ags and its config
+      --skip-miscconf     Skip copying the dirs and files to \".configs\" except for AGS and Hyprland
+      --deplistfile <path>  Specify a dependency list file. By default \"./scriptdata/dependencies.conf\"
+      --fontset <set>     (Unavailable yet) Use a set of pre-defined font and config
 "
 }
 
@@ -23,8 +27,8 @@ cleancache(){
 
 # `man getopt` to see more
 para=$(getopt \
-       -o hfk:c \
-       -l help,force,kbset:,clean \
+       -o hfk:cs \
+       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-miscconf \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -41,6 +45,8 @@ while true ; do
 done
 #####################################################################################
 ## getopt Phase 2
+DEPLISTFILE=./scriptdata/dependencies.conf
+
 eval set -- "$para"
 while true ; do
   case "$1" in
@@ -48,14 +54,24 @@ while true ; do
     -c|--clean) shift;;
     ## Ones without parameter
     -f|--force) ask=false;shift;;
+    -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
+    --skip-ags) SKIP_AGS=true;shift;;
+    --skip-miscconf) SKIP_MISCCONF=true;shift;;
     ## Ones with parameter
     
-    -k|--kbset)
+    --deplistfile)
+    if [ -f "$2" ];then
+      DEPLISTFILE="$2"
+    else
+      echo -e "Deplist file \"$2\" does not exist.";exit 1
+    fi
+    shift 2 ;;
+
+    --fontset)
     case $2 in
-      "normal") kbname="Normal style";;
-      "vim") kbname="Vim-style";;
+      "default"|"zh-CN"|"vi") fontset="$2";;
       *) echo -e "Wrong argument for $1.";exit 1;;
-    esac;echo "The keyboardset is ${kbname}.";shift 2;;
+    esac;echo "The fontset is ${fontset}.";shift 2;;
 
     ## Ending
     --) break ;;
