@@ -42,9 +42,12 @@ set -e
 printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[0m"
 
 # Issue #363
-v sudo pacman -Syu
+case $SKIP_SYSUPDATE in
+  true) sleep 0;;
+  *) v sudo pacman -Syu;;
+esac
 
-remove_bashcomments_emptylines ./scriptdata/dependencies.conf ./cache/dependencies_stripped.conf
+remove_bashcomments_emptylines ${DEPLISTFILE} ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
 
 if ! command -v yay >/dev/null 2>&1;then
@@ -92,13 +95,18 @@ v sudo usermod -aG video,input "$(whoami)"
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
 
-if command -v ags >/dev/null 2>&1;then
-  echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_ags=$ask
-else ask_ags=true
-fi
-if $ask_ags;then showfun install-ags;v install-ags;fi
+case $SKIP_AGS in
+  true) sleep 0;;
+  *)
+    if command -v ags >/dev/null 2>&1;then
+      echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
+      echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
+      ask_ags=$ask
+    else ask_ags=true
+    fi
+    if $ask_ags;then showfun install-ags;v install-ags;fi
+    ;;
+esac
 
 if $(fc-list|grep -q Rubik); then
   echo -e "\e[33m[$0]: Font \"Rubik\" already exists, no need to install.\e[0m"
@@ -150,27 +158,37 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# For .config/* but not AGS, not Hyprland
-for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
-  i=".config/$i"
-  echo "[$0]: Found target: $i"
-  if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
-  elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
-  fi
-done
+# MISC (For .config/* but not AGS, not Hyprland)
+case $SKIP_MISCCONF in
+  true) sleep 0;;
+  *)
+    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'hypr' -exec basename {} \;); do
+      i=".config/$i"
+      echo "[$0]: Found target: $i"
+      if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
+      elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
+      fi
+    done
+    ;;
+esac
 
 # For AGS
-v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/ags/
-t="$HOME/.config/ags/user_options.js"
-if [ -f $t ];then
-  echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-# v cp -f .config/ags/user_options.js $t.new
-  existed_ags_opt=y
-else
-  echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-  v cp .config/ags/user_options.js $t
-  existed_ags_opt=n
-fi
+case $SKIP_AGS in
+  true) sleep 0;;
+  *)
+    v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/ags/
+    t="$HOME/.config/ags/user_options.js"
+    if [ -f $t ];then
+      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+      # v cp -f .config/ags/user_options.js $t.new
+      existed_ags_opt=y
+    else
+      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+      v cp .config/ags/user_options.js $t
+      existed_ags_opt=n
+    fi
+    ;;
+esac
 
 # For Hyprland
 v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$HOME"/.config/hypr/
