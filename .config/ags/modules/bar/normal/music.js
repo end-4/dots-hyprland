@@ -59,20 +59,23 @@ const BarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog
     const resourceLabel = Label({
         className: `txt-smallie ${textClassName}`,
     });
-    const widget = Box({
-        className: `spacing-h-4 ${textClassName}`,
-        children: [
-            resourceProgress,
-            resourceLabel,
-        ],
-        setup: (self) => self
-            .poll(5000, () => execAsync(['bash', '-c', command])
-                .then((output) => {
-                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
-                    resourceLabel.label = `${Math.round(Number(output))}%`;
-                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
-                }).catch(print))
-        ,
+    const widget = Button({
+        onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.apps.taskManager}`]).catch(print),
+        child: Box({
+            className: `spacing-h-4 ${textClassName}`,
+            children: [
+                resourceProgress,
+                resourceLabel,
+            ],
+            setup: (self) => self
+                .poll(5000, () => execAsync(['bash', '-c', command])
+                    .then((output) => {
+                        resourceCircProg.css = `font-size: ${Number(output)}px;`;
+                        resourceLabel.label = `${Math.round(Number(output))}%`;
+                        widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                    }).catch(print))
+            ,
+        })
     });
     return widget;
 }

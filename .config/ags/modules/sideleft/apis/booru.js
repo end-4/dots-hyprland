@@ -24,7 +24,6 @@ async function getImageViewerApp(preferredApp) {
 }
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
-const IMAGE_VIEWER_APP = getImageViewerApp(userOptions.apps.imageViewer); // Gnome's image viewer cuz very comfortable zooming
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
 
 // Create cache folder and clear pics from previous session
