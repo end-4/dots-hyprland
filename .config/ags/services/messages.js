@@ -40,7 +40,7 @@ async function batteryMessage() {
         if (perc <= userOptions.battery.warnLevels[i] && !charging && !batteryWarned) {
             batteryWarned = true;
             Utils.execAsync(['bash', '-c',
-                `notify-send "${userOptions.battery.warnTitles[i]}" "${userOptions.battery.warnMessages[i]}" -u critical -a '${APP_NAME}' &`
+                `notify-send "${userOptions.battery.warnTitles[i]}" "${userOptions.battery.warnMessages[i]}" -u critical -a '${APP_NAME}' -t 69420 &`
             ]).catch(print);
             break;
         }
