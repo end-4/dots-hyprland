@@ -9,10 +9,9 @@ source ./scriptdata/options
 if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
 prevent_sudo_or_root
 startask (){
-printf "\e[34m[$0]: Hi there!\n"
+printf "\e[34m[$0]: Hi there! Before we start:\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
-printf '            2. has not been fully tested, use at your own risk.\n'
-printf '            3. does not provide GPU things and you must have set it up yourself.\n'
+printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
 printf "\e[31m"
 printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
 printf "\e[0m"
