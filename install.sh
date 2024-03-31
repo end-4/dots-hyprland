@@ -236,14 +236,15 @@ grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_con
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
-echo "If you are new to Hyprland, please read"
-echo "https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation"
-echo "for hints on launching Hyprland."
-echo "\n"
-echo "If you are already running Hyprland,"
+printf "\n"
+printf "\e[36mIf you are new to Hyprland, please read\n"
+printf "https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation\n"
+printf "for hints on launching Hyprland.\e[0m\n"
+printf "\n"
+printf "\e[36mIf you are already running Hyprland,\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\e[0m\n"
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
-echo "\n"
+printf "\n"
 
 case $existed_ags_opt in
   y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
@@ -255,8 +256,3 @@ case $existed_hypr_conf in
      printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
 
-case $existed_zsh_conf in
-  n) printf "\n\e[36m[$0]: \"~/.zshrc\" seems not sourcing \"~/.config/zshrc.d/dots-hyprland.zsh\".\e[0m\n"
-     printf "\e[36mIt is optional, but you may put this line into your \"~/.zshrc\" to support colorscheme for ZSH:\e[0m\n"
-     printf "\e[36m    source ~/.config/zshrc.d/dots-hyprland.zsh\e[0m\n"
-;;esac
