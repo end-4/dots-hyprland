@@ -21,14 +21,14 @@ read -p " " p
 case $p in "YES")sleep 0;; *)echo "Received \"$p\", aborting...";exit 1;;esac
 printf '\n'
 printf 'Do you want to confirm every time before a command executes?\n'
-printf '  y = Yes, ask me before executing each of them. (RECOMMENDED)\n'
+printf '  y = Yes, ask me before executing each of them. (DEFAULT)\n'
 printf '  n = No, just execute them automatically.\n'
-printf '  a = Abort. (DEFAULT)\n'
+printf '  a = Abort.\n'
 read -p "====> " p
 case $p in
-  y)ask=true;;
   n)ask=false;;
-  *)exit 1;;
+  a)exit 1;;
+  *)ask=true;;
 esac
 }
 
@@ -88,6 +88,25 @@ else
   # execute for all elements of the array $pkglist in one line
   v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
 fi
+
+## Optional dependencies
+case $SKIP_PLASMAINTG in
+  true) sleep 0;;
+  *)
+    if $ask;then
+      echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 250 MiB.\e[0m"
+      echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
+      echo -e "\e[33mInstall it? [y/N]\e[0m"
+      read -p "====> " p
+    else
+      p=y
+    fi
+    case $p in
+      y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
+      *) echo "Ok, not install it."
+    esac
+    ;;
+esac
 
 v sudo usermod -aG video,input "$(whoami)"
 
