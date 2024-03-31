@@ -90,6 +90,7 @@ else
 fi
 
 ## Optional dependencies
+if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
 case $SKIP_PLASMAINTG in
   true) sleep 0;;
   *)
