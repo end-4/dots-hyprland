@@ -104,7 +104,7 @@ case $SKIP_PLASMAINTG in
     fi
     case $p in
       y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
-      *) echo "Ok, not install it."
+      *) echo "Ok, won't install"
     esac
     ;;
 esac
