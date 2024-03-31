@@ -73,17 +73,21 @@ class BooruService extends Service {
         const userArgs = `${msg}${this._nsfw ? '' : ' rating:safe'}`.split(/\s+/);
 
         let taglist = [];
+        let page = 1;
         // Construct body/headers
         for (let i = 0; i < userArgs.length; i++) {
             const thisArg = userArgs[i].trim();
             if (thisArg.length == 0 || thisArg == '.' || thisArg == '*') continue;
+            else if(!isNaN(thisArg)) page = parseInt(thisArg);
             else taglist.push(thisArg);
         }
         const newMessageId = this._queries.length;
-        this._queries.push(taglist.length == 0 ? ['*'] : taglist);
+        this._queries.push(taglist.length == 0 ? ['*', `${page}`] : [...taglist, `${page}`]);
         this.emit('newResponse', newMessageId);
         const params = {
             'tags': taglist.join('+'),
+            'page': `${page}`,
+            'limit': `${userOptions.sidebar.imageBooruCount}`,
         };
         const paramString = paramStringFromObj(params);
         // Fetch
