@@ -17,7 +17,7 @@ import {
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleVolumeMixer from "./centermodules/volumemixer.js";
-// import ModuleNetworks from "./centermodules/networks.js";
+import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
 import ModuleBluetooth from "./centermodules/bluetooth.js";
 import { ModuleCalendar } from "./calendar.js";
 import { getDistroIcon } from '../.miscutils/system.js';
@@ -36,15 +36,15 @@ const centerWidgets = [
         materialIcon: 'volume_up',
         contentWidget: ModuleVolumeMixer(),
     },
-    // {
-    //     name: 'Networks',
-    //     materialIcon: 'lan',
-    //     contentWidget: ModuleNetworks(),
-    // },
     {
         name: 'Bluetooth',
         materialIcon: 'bluetooth',
         contentWidget: ModuleBluetooth(),
+    },
+    {
+        name: 'Wifi networks',
+        materialIcon: 'wifi',
+        contentWidget: ModuleWifiNetworks(),
     },
 ];
 
