@@ -24,7 +24,7 @@
 <details> 
   <summary>Instructions</summary>
     
-   - Automated installation for Arch(-based) Linux:
+   - Automatic, but guided and transparent, installation for Arch(-based) Linux:
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
