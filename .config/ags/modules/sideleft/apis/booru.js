@@ -160,26 +160,11 @@ const BooruPage = (taglist) => {
                     const imagePath = `${USER_CACHE_DIR}/ags/media/waifus/${data.md5}.${data.file_ext}`;
                     const widgetStyleContext = imageArea.get_style_context();
                     const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                    const widgetHeight = widgetStyleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
+                    const widgetHeight = widgetWidth / data.aspect_ratio;
                     imageArea.set_size_request(widgetWidth, widgetHeight);
                     const showImage = () => {
-                        const imageDimensionsStr = exec(`identify -format {\\"w\\":%w,\\"h\\":%h} '${imagePath}'`)
-                        const imageDimensionsJson = JSON.parse(imageDimensionsStr);
-                        let imageWidth = imageDimensionsJson.w;
-                        let imageHeight = imageDimensionsJson.h;
-
-                        // Fill
-                        const scale = imageWidth / imageHeight;
-                        if (imageWidth > imageHeight) {
-                            imageWidth = widgetHeight * scale;
-                            imageHeight = widgetHeight;
-                        } else {
-                            imageHeight = widgetWidth / scale;
-                            imageWidth = widgetWidth;
-                        }
-
                         // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, widgetWidth, widgetHeight);
-                        const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(imagePath, imageWidth, imageHeight, false);
+                        const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(imagePath, widgetWidth, widgetHeight, false);
                         imageArea.connect("draw", (widget, cr) => {
                             const borderRadius = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
 
@@ -192,7 +177,7 @@ const BooruPage = (taglist) => {
                             cr.clip();
 
                             // Paint image as bg
-                            Gdk.cairo_set_source_pixbuf(cr, pixbuf, (widgetWidth - imageWidth) / 2, (widgetHeight - imageHeight) / 2);
+                            Gdk.cairo_set_source_pixbuf(cr, pixbuf, (widgetWidth - widgetWidth) / 2, (widgetHeight - widgetHeight) / 2);
                             cr.paint();
                         });
                         self.queue_draw();
@@ -271,16 +256,15 @@ const BooruPage = (taglist) => {
             downloadIndicator,
         ]
     });
-    const pageImageGrid = Grid({
-        // columnHomogeneous: true,
-        // rowHomogeneous: true,
+    const pageImages = Box({
+        homogeneous: true,
         className: 'sidebar-booru-imagegrid',
-    });
+    })
     const pageImageRevealer = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
-        child: pageImageGrid,
+        child: pageImages,
     });
     const thisPage = Box({
         homogeneous: true,
@@ -288,27 +272,62 @@ const BooruPage = (taglist) => {
         attribute: {
             'imagePath': '',
             'isNsfw': false,
-            'imageData': '',
-            'update': (data, force = false) => {
-                const imageData = data;
-                thisPage.attribute.imageData = imageData;
+            'update': (data, force = false) => { // TODO: Use columns. Sort min to max h/w ratio then greedily put em in...
+                // Sort by .aspect_ratio
+                data = data.sort(
+                    (a, b) => a.aspect_ratio - b.aspect_ratio
+                );
                 if (data.length == 0) {
                     downloadState.shown = 'error';
                     return;
                 }
                 const imageColumns = userOptions.sidebar.imageColumns;
                 const imageRows = data.length / imageColumns;
-                // Add stuff
-                for (let i = 0; i < imageRows; i++) {
+
+                // Init cols
+                pageImages.children = Array.from(
+                    { length: imageColumns },
+                    (_, i) => Box({
+                        attribute: { height: 0 },
+                        vertical: true,
+                    })
+                );
+                // Greedy add O(n^2) 😭
+                for (let i = 0; i < data.length; i++) {
+                    // Find column with lowest length
+                    let minHeight = Infinity;
+                    let minIndex = -1;
                     for (let j = 0; j < imageColumns; j++) {
-                        if (i * imageColumns + j >= Math.min(userOptions.sidebar.imageBooruCount, data.length)) break;
-                        pageImageGrid.attach(
-                            PreviewImage(data[i * imageColumns + j]),
-                            j, i, 1, 1
-                        );
+                        const height = pageImages.children[j].attribute.height;
+                        if (height < minHeight) {
+                            minHeight = height;
+                            minIndex = j;
+                        }
                     }
+                    // Add image to it
+                    pageImages.children[minIndex].pack_start(PreviewImage(data[i], minIndex), false, false, 0)
+                    pageImages.children[minIndex].attribute.height += 1 / data[i].aspect_ratio; // we want height/width
                 }
-                pageImageGrid.show_all();
+                // Show all
+                // for(let i = 0; i < imageColumns; i++) {
+                //     pageImages.children[i].show_all();
+                // }
+                pageImages.show_all();
+
+
+                // each image: PreviewImage(data[i * imageColumns + j])
+
+                // Add stuff
+                // for (let i = 0; i < imageRows; i++) {
+                //     for (let j = 0; j < imageColumns; j++) {
+                //         if (i * imageColumns + j >= Math.min(userOptions.sidebar.imageBooruCount, data.length)) break;
+                //         pageImages.attach(
+                //             PreviewImage(data[i * imageColumns + j]),
+                //             j, i, 1, 1
+                //         );
+                //     }
+                // }
+                pageImages.show_all();
 
                 // Reveal stuff
                 Utils.timeout(IMAGE_REVEAL_DELAY,
@@ -348,10 +367,8 @@ const booruContent = Box({
         }, 'newResponse')
         .hook(BooruService, (box, id) => {
             if (id === undefined) return;
-            const data = BooruService.responses[id];
-            if (!data) return;
-            const page = box.attribute.map.get(id);
-            page?.attribute.update(data);
+            if (!BooruService.responses[id]) return;
+            box.attribute.map.get(id)?.attribute.update(BooruService.responses[id]);
         }, 'updateResponse')
     ,
 });
@@ -376,7 +393,7 @@ export const booruView = Scrollable({
             const viewport = scrolledWindow.child;
             viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
         })
-        // Always scroll to bottom with new content
+        // Scroll to bottom with new content if chat entry not focused
         const adjustment = scrolledWindow.get_vadjustment();
         adjustment.connect("changed", () => {
             if (!chatEntry.hasFocus) return;
