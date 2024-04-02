@@ -9,14 +9,14 @@ const { execAsync, exec } = Utils;
 import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusicons.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { sidebarOptionsStack } from './sideright.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Wifi | Right-click to configure',
     onClicked: () => Network.toggleWifi(),
-    onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', `${userOptions.apps.network}`, '&']);
-        App.closeWindow('sideright');
+    onSecondaryClick: () => {
+        sidebarOptionsStack.focusName('Wifi networks')
     },
     child: NetworkIndicator(),
     setup: (self) => {
