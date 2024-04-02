@@ -60,7 +60,6 @@ const initMessages =
 // The whole chat will be sent every request anyway.
 Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
 const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
-const ONE_CYCLE_COUNT = 3;
 
 class GPTMessage extends Service {
     static {
@@ -135,7 +134,6 @@ class GPTService extends Service {
 
     _assistantPrompt = true;
     _currentProvider = userOptions.ai.defaultGPTProvider;
-    _cycleModels = false;
     _requestCount = 0;
     _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
@@ -143,7 +141,7 @@ class GPTService extends Service {
     _key = '';
     _key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
     _url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
-    
+
     _decoder = new TextDecoder();
 
     _initChecks() {
@@ -180,15 +178,6 @@ class GPTService extends Service {
         Utils.writeFile(this._key, this._key_file_location)
             .then(this.emit('hasKey', true))
             .catch(err => print(err));
-    }
-
-    get cycleModels() { return this._cycleModels }
-    set cycleModels(value) {
-        this._cycleModels = value;
-        if (!value) this._modelIndex = 0;
-        else {
-            this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
-        }
     }
 
     get temperature() { return this._temperature }
@@ -274,12 +263,6 @@ class GPTService extends Service {
         });
         this._messages.push(aiResponse);
         this.emit('newMsg', this._messages.length - 1);
-
-        if (this._cycleModels) {
-            this._requestCount++;
-            if (this._cycleModels)
-                this._modelIndex = (this._requestCount - (this._requestCount % ONE_CYCLE_COUNT)) % CHAT_MODELS.length;
-        }
     }
 }
 

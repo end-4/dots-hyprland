@@ -182,15 +182,6 @@ const GPTSettings = () => MarginRevealer({
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({
-                        icon: 'cycle',
-                        name: 'Cycle models',
-                        desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                        initValue: GPTService.cycleModels,
-                        onChange: (self, newValue) => {
-                            GPTService.cycleModels = newValue;
-                        },
-                    }),
-                    ConfigToggle({
                         icon: 'model_training',
                         name: 'Enhancements',
                         desc: 'Tells the model:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
