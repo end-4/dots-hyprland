@@ -37,13 +37,15 @@ const WifiNetwork = (accessPoint) => {
         ]
     });
     return Button({
-        onClicked: accessPoint.active ? () => { } : () => execAsync(`nmcli device wifi connect ${accessPoint.bssid}`).catch(e => {
-            Utils.notify({
-                summary: "Network",
-                body: e,
-                actions: { "Open network manager": () => execAsync("nm-connection-editor").catch(print) }
-            });
-        }).catch(e => console.error(e)),
+        onClicked: accessPoint.active ? () => { } : () => execAsync(`nmcli device wifi connect ${accessPoint.bssid}`)
+            // .catch(e => {
+            //     Utils.notify({
+            //         summary: "Network",
+            //         body: e,
+            //         actions: { "Open network manager": () => execAsync("nm-connection-editor").catch(print) }
+            //     });
+            // })
+            .catch(print),
         child: Box({
             className: 'sidebar-wifinetworks-network spacing-h-10',
             children: [
