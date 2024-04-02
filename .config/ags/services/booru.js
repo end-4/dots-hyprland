@@ -107,6 +107,7 @@ class BooruService extends Service {
                 // console.log(parsedData)
                 this._responses.push(parsedData.map(obj => {
                     return {
+                        aspect_ratio: obj.width / obj.height,
                         id: obj.id,
                         tags: obj.tags,
                         md5: obj.md5,
