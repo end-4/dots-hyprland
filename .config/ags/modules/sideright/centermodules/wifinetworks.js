@@ -4,7 +4,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Network from "resource:///com/github/Aylur/ags/service/network.js";
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
+const { Box, Button, Entry, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
@@ -18,57 +18,172 @@ const MATERIAL_SYMBOL_SIGNAL_STRENGTH = {
     'network-wireless-signal-none-symbolic': "signal_wifi_0_bar",
 }
 
+let connectAttempt = '';
+
 const WifiNetwork = (accessPoint) => {
-    console.log(accessPoint)
     const networkStrength = MaterialIcon(MATERIAL_SYMBOL_SIGNAL_STRENGTH[accessPoint.iconName], 'hugerass')
-    const connectedCheckmark = Revealer({
-        transition: 'slide_left',
-        transitionDuration: userOptions.animations.durationSmall,
-        revealChild: accessPoint.active,
-        child: MaterialIcon('check', 'large'),
-    })
+    const networkName = Box({
+        vertical: true,
+        children: [
+            Label({
+                hpack: 'start',
+                label: accessPoint.ssid
+            }),
+            accessPoint.active ? Label({
+                hpack: 'start',
+                className: 'txt-smaller txt-subtext',
+                label: "Selected",
+            }) : null,
+        ]
+    });
     return Button({
-        onClicked: () => execAsync(`nmcli device wifi connect ${accessPoint.bssid}`).catch(e => {
+        onClicked: accessPoint.active ? () => { } : () => execAsync(`nmcli device wifi connect ${accessPoint.bssid}`).catch(e => {
             Utils.notify({
                 summary: "Network",
                 body: e,
-                actions: {
-                    "Open network manager": () => execAsync("nm-connection-editor").catch(print)
-                }
+                actions: { "Open network manager": () => execAsync("nm-connection-editor").catch(print) }
             });
         }).catch(e => console.error(e)),
         child: Box({
             className: 'sidebar-wifinetworks-network spacing-h-10',
             children: [
                 networkStrength,
-                Label({ label: accessPoint.ssid }),
+                networkName,
                 Box({ hexpand: true }),
-                connectedCheckmark,
+                accessPoint.active ? MaterialIcon('check', 'large') : null,
             ],
         }),
-        setup: setupCursorHover,
+        setup: accessPoint.active ? () => { } : setupCursorHover,
+    })
+}
+
+const CurrentNetwork = () => {
+    let authLock = false;
+    // console.log(Network.wifi);
+    const bottomSeparator = Box({
+        className: 'separator-line',
+    });
+    const networkName = Box({
+        vertical: true,
+        hexpand: true,
+        children: [
+            Label({
+                hpack: 'start',
+                className: 'txt-smaller txt-subtext',
+                label: "Current network",
+            }),
+            Label({
+                hpack: 'start',
+                label: Network.wifi?.ssid,
+                setup: (self) => self.hook(Network, (self) => {
+                    if (authLock) return;
+                    self.label = Network.wifi?.ssid;
+                }),
+            }),
+        ]
+    });
+    const networkStatus = Box({
+        children: [Label({
+            vpack: 'center',
+            className: 'txt-subtext',
+            setup: (self) => self.hook(Network, (self) => {
+                if (authLock) return;
+                self.label = Network.wifi.state;
+            }),
+        })]
+    })
+    const networkAuth = Revealer({
+        transition: 'slide_down',
+        transitionDuration: userOptions.animations.durationLarge,
+        child: Box({
+            className: 'margin-top-10 spacing-v-5',
+            vertical: true,
+            children: [
+                Label({
+                    className: 'margin-left-5',
+                    hpack: 'start',
+                    label: "Authentication",
+                }),
+                Entry({
+                    className: 'sidebar-wifinetworks-auth-entry',
+                    visibility: false, // Password dots
+                    onAccept: (self) => {
+                        authLock = false;
+                        networkAuth.revealChild = false;
+                        execAsync(`nmcli device wifi connect '${connectAttempt}' password '${self.text}'`)
+                            .catch(print);
+                    }
+                })
+            ]
+        }),
+        setup: (self) => self.hook(Network, (self) => {
+            if (Network.wifi.state == 'failed' || Network.wifi.state == 'need_auth') {
+                authLock = true;
+                connectAttempt = Network.wifi.ssid;
+                self.revealChild = true;
+            }
+        }),
+    });
+    const actualContent = Box({
+        vertical: true,
+        className: 'spacing-v-10',
+        children: [
+            Box({
+                className: 'sidebar-wifinetworks-network',
+                vertical: true,
+                children: [
+                    Box({
+                        className: 'spacing-h-10',
+                        children: [
+                            MaterialIcon('language', 'hugerass'),
+                            networkName,
+                            networkStatus,
+
+                        ]
+                    }),
+                    networkAuth,
+                ]
+            }),
+            bottomSeparator,
+        ]
+    });
+    return Box({
+        vertical: true,
+        children: [Revealer({
+            transition: 'slide_down',
+            transitionDuration: userOptions.animations.durationLarge,
+            revealChild: Network.wifi,
+            child: actualContent,
+        })]
     })
 }
 
 export default (props) => {
-    const networkList = Scrollable({
-        vexpand: true,
-        child: Box({
-            attribute: {
-                'updateNetworks': (self) => {
-                    self.children = Network.wifi?.access_points?.map(n => WifiNetwork(n));
-                },
-            },
-            vertical: true,
-            className: 'spacing-v-5',
-            setup: (self) => self.hook(Network, self.attribute.updateNetworks),
-        })
+    const networkList = Box({
+        vertical: true,
+        className: 'spacing-v-10',
+        children: [
+            Scrollable({
+                vexpand: true,
+                child: Box({
+                    attribute: {
+                        'updateNetworks': (self) => {
+                            self.children = Network.wifi?.access_points?.map(n => WifiNetwork(n));
+                        },
+                    },
+                    vertical: true,
+                    className: 'spacing-v-5',
+                    setup: (self) => self.hook(Network, self.attribute.updateNetworks),
+                })
+            })
+        ]
     })
     return Box({
         ...props,
-        className: 'spacing-v-5',
+        className: 'spacing-v-10',
         vertical: true,
         children: [
+            CurrentNetwork(),
             networkList,
             // mainContent,
             // status,

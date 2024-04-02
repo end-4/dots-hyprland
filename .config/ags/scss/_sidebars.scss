@@ -327,7 +327,7 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     @include full-rounding;
     @include element_decel;
     background-color: $layer2;
-    color: $onSurfaceVariant;
+    color: $onLayer2;
     margin: 0.341rem;
     padding: 0.205rem 0.545rem;
 }
@@ -518,7 +518,7 @@ $colorpicker_rounding: 0.341rem;
 .sidebar-chat-textarea {
     @include normal-rounding;
     background-color: $layer1;
-    color: $onSurfaceVariant;
+    color: $onLayer1;
     padding: 0.682rem;
 }
 
@@ -917,7 +917,23 @@ $waifu_image_overlay_transparency: 0.7;
     color: $onLayer2;
 }
 
+.sidebar-wifinetworks-network:hover,
+.sidebar-wifinetworks-network:focus {
+    background-color: $layer2Hover;
+}
+
+.sidebar-wifinetworks-network:active {
+    background-color: $layer2Active;
+}
+
 .sidebar-wifinetworks-signal {
     @include symbolic-icon;
     font-size: 2.045rem;
+}
+
+.sidebar-wifinetworks-auth-entry {
+    @include small-rounding;
+    background-color: $layer1;
+    color: $onLayer1;
+    padding: 0.682rem;
 }
