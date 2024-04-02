@@ -45,6 +45,7 @@ const centerWidgets = [
         name: 'Wifi networks',
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks(),
+        onFocus: () => execAsync('nmcli dev wifi list').catch(print),
     },
 ];
 
@@ -97,6 +98,7 @@ export const sidebarOptionsStack = ExpandingIconTabContainer({
     children: centerWidgets.map((api) => api.contentWidget),
     onChange: (self, id) => {
         self.shown = centerWidgets[id].name;
+        if (centerWidgets[id].onFocus) centerWidgets[id].onFocus();
     }
 });
 
