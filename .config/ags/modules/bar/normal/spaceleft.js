@@ -38,39 +38,41 @@ const WindowTitle = async () => {
     }
 }
 
-const OptionalWindowTitleInstance = await WindowTitle();
 
-export default () => Widget.EventBox({
-    onScrollUp: () => {
-        Indicator.popup(1); // Since the brightness and speaker are both on the same window
-        Brightness.screen_value += 0.05;
-    },
-    onScrollDown: () => {
-        Indicator.popup(1); // Since the brightness and speaker are both on the same window
-        Brightness.screen_value -= 0.05;
-    },
-    onPrimaryClick: () => {
-        App.toggleWindow('sideleft');
-    },
-    child: Widget.Box({
-        homogeneous: false,
-        children: [
-            Widget.Box({ className: 'bar-corner-spacing' }),
-            Widget.Overlay({
-                overlays: [
-                    Widget.Box({ hexpand: true }),
-                    Widget.Box({
-                        className: 'bar-sidemodule', hexpand: true,
-                        children: [Widget.Box({
-                            vertical: true,
-                            className: 'bar-space-button',
-                            children: [
-                                OptionalWindowTitleInstance,
-                            ]
-                        })]
-                    }),
-                ]
-            })
-        ]
-    })
-});
+export default async () => {
+    const optionalWindowTitleInstance = await WindowTitle();
+    return Widget.EventBox({
+        onScrollUp: () => {
+            Indicator.popup(1); // Since the brightness and speaker are both on the same window
+            Brightness.screen_value += 0.05;
+        },
+        onScrollDown: () => {
+            Indicator.popup(1); // Since the brightness and speaker are both on the same window
+            Brightness.screen_value -= 0.05;
+        },
+        onPrimaryClick: () => {
+            App.toggleWindow('sideleft');
+        },
+        child: Widget.Box({
+            homogeneous: false,
+            children: [
+                Widget.Box({ className: 'bar-corner-spacing' }),
+                Widget.Overlay({
+                    overlays: [
+                        Widget.Box({ hexpand: true }),
+                        Widget.Box({
+                            className: 'bar-sidemodule', hexpand: true,
+                            children: [Widget.Box({
+                                vertical: true,
+                                className: 'bar-space-button',
+                                children: [
+                                    optionalWindowTitleInstance,
+                                ]
+                            })]
+                        }),
+                    ]
+                })
+            ]
+        })
+    });
+}
