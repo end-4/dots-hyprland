@@ -22,7 +22,8 @@ export default ({
                     if (currentName === name) {
                         self.toggleClassName(hideClassName, !visible);
                     }
-                }).keybind("Escape", () => App.closeWindow(name))
+                }).keybind("Escape", () => closeEverything());
+
                 if (showClassName !== "" && hideClassName !== "")
                     self.className = `${showClassName} ${hideClassName}`;
             },
