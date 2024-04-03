@@ -157,7 +157,7 @@ export default () => {
         ]
     })
     const SystemResourcesOrCustomModule = () => {
-        // Check if ~/.cache/ags/user/scripts/custom-module-poll.sh exists
+        // Check if $XDG_CACHE_HOME/ags/user/scripts/custom-module-poll.sh exists
         if (GLib.file_test(CUSTOM_MODULE_CONTENT_SCRIPT, GLib.FileTest.EXISTS)) {
             const interval = Number(Utils.readFile(CUSTOM_MODULE_CONTENT_INTERVAL_FILE)) || 5000;
             return BarGroup({

@@ -157,7 +157,7 @@ export const ModuleInvertColors = async (props = {}) => {
                             button.toggleClassName('sidebar-button-active', false);
                         }
                         else {
-                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${GLib.get_home_dir()}/.config/hypr/shaders/invert.frag`)
+                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${GLib.get_user_config_dir()}/hypr/shaders/invert.frag`)
                                 .catch(print);
                             button.toggleClassName('sidebar-button-active', true);
                         }
