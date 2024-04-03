@@ -174,7 +174,7 @@ class GeminiService extends Service {
         this._key = keyValue;
         Utils.writeFile(this._key, KEY_FILE_LOCATION)
             .then(this.emit('hasKey', true))
-            .catch(err => print(err));
+            .catch(print);
     }
 
     get cycleModels() { return this._cycleModels }
