@@ -1,11 +1,10 @@
-const { Gdk, Gtk } = imports.gi;
+const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import Service from 'resource:///com/github/Aylur/ags/service.js';
-import { Keybinds } from "./keybinds.js";
 import { setupCursorHover } from "../.widgetutils/cursorhover.js";
 import PopupWindow from '../.widgethacks/popupwindow.js';
+import Keybinds from "./keybinds.js";
 
-const cheatsheetHeader = () => Widget.CenterBox({
+const CheatsheetHeader = () => Widget.CenterBox({
     vertical: false,
     startWidget: Widget.Box({}),
     centerWidget: Widget.Box({
@@ -63,26 +62,26 @@ const cheatsheetHeader = () => Widget.CenterBox({
     }),
 });
 
-const clickOutsideToClose = Widget.EventBox({
+const ClickOutsideToClose = () => Widget.EventBox({
     onPrimaryClick: () => App.closeWindow('cheatsheet'),
     onSecondaryClick: () => App.closeWindow('cheatsheet'),
     onMiddleClick: () => App.closeWindow('cheatsheet'),
 });
 
-export default () => PopupWindow({
-    name: 'cheatsheet',
+export default (id) => PopupWindow({
+    name: `cheatsheet${id}`,
     exclusivity: 'ignore',
     keymode: 'exclusive',
     visible: false,
     child: Widget.Box({
         vertical: true,
         children: [
-            clickOutsideToClose,
+            ClickOutsideToClose(),
             Widget.Box({
                 vertical: true,
                 className: "cheatsheet-bg spacing-v-15",
                 children: [
-                    cheatsheetHeader(),
+                    CheatsheetHeader(),
                     Keybinds(),
                 ]
             }),

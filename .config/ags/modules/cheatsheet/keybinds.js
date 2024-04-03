@@ -1,7 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import { keybindList } from "./data_keybinds.js";
 
-export const Keybinds = () => Widget.Box({
+export default () => Widget.Box({
     vertical: false,
     className: "spacing-h-15",
     homogeneous: true,
