@@ -128,23 +128,26 @@ export default () => {
                 child: Widget.Box({
                     vertical: true,
                     vpack: 'center',
-                    className: 'spacing-v-5',
                     children: [
                         appIcon,
                         // TODO: Add xwayland tag instead of just having italics
                         Widget.Revealer({
-                            transition: 'slide_down',
+                            transition: 'slide_right',
                             revealChild: revealInfoCondition,
-                            child: Widget.Label({
-                                maxWidthChars: 10, // Doesn't matter what number
-                                truncate: 'end',
-                                className: `${xwayland ? 'txt txt-italic' : 'txt'}`,
-                                css: `
+                            child: Widget.Revealer({
+                                transition: 'slide_down',
+                                revealChild: revealInfoCondition,
+                                child: Widget.Label({
+                                    maxWidthChars: 10, // Doesn't matter what number
+                                    truncate: 'end',
+                                    className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
+                                    css: `
                                 font-size: ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale / 14.6}px;
                                 margin: 0px ${Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * userOptions.overview.scale / 10}px;
                             `,
-                                // If the title is too short, include the class
-                                label: (title.length <= 1 ? `${c}: ${title}` : title),
+                                    // If the title is too short, include the class
+                                    label: (title.length <= 1 ? `${c}: ${title}` : title),
+                                })
                             })
                         })
                     ]
