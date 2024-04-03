@@ -2,8 +2,10 @@
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 CACHE_DIR="$XDG_CACHE_HOME/ags"
+STATE_DIR="$XDG_STATE_HOME/ags"
 
 term_alpha=100 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
@@ -148,22 +150,22 @@ apply_gtk() { # Using gradience-cli
 }
 
 apply_ags() {
-    sass "$CONFIG_DIR"/scss/main.scss "$CACHE_DIR"/user/generated/style.css
+    sass -I "$STATE_DIR/scss" -I "$CONFIG_DIR/scss/fallback" "$CONFIG_DIR"/scss/main.scss "$CACHE_DIR"/user/generated/style.css
     ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
     ags run-js "App.resetCss(); App.applyCss('${CACHE_DIR}/user/generated/style.css');"
 }
 
 if [[ "$1" = "--bad-apple" ]]; then
     lightdark=$(get_light_dark)
-    cp scripts/color_generation/specials/_material_badapple"${lightdark}".scss scss/_material.scss
+    cp scripts/color_generation/specials/_material_badapple"${lightdark}".scss $STATE_DIR/scss/_material.scss
     colornames=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f1)
     colorstrings=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
     IFS=$'\n'
     colorlist=( $colornames ) # Array of color names
     colorvalues=( $colorstrings ) # Array of color values
 else
-    colornames=$(cat scss/_material.scss | cut -d: -f1)
-    colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
+    colorstrings=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
     IFS=$'\n'
     colorlist=( $colornames ) # Array of color names
     colorvalues=( $colorstrings ) # Array of color values
