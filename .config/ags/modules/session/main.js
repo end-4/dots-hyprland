@@ -8,6 +8,6 @@ export default () => PopupWindow({ // On-screen keyboard
     keymode: 'exclusive',
     layer: 'overlay',
     exclusivity: 'ignore',
-    // anchor: ['top', 'bottom', 'left', 'right'],
+    anchor: ['top', 'bottom', 'left', 'right'],
     child: SessionScreen(),
 })
