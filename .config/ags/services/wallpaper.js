@@ -2,7 +2,7 @@ const { Gdk, GLib } = imports.gi;
 import Service from 'resource:///com/github/Aylur/ags/service.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
-const WALLPAPER_CONFIG_PATH = `${GLib.get_user_cache_dir()}/ags/user/wallpaper.json`;
+const WALLPAPER_CONFIG_PATH = `${GLib.get_user_state_dir()}/ags/user/wallpaper.json`;
 
 class WallpaperService extends Service {
     static {

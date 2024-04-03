@@ -39,10 +39,10 @@ transparentize() {
 
 get_light_dark() {
     lightdark=""
-    if [ ! -f "$CACHE_DIR"/user/colormode.txt ]; then
-        echo "" > "$CACHE_DIR"/user/colormode.txt
+    if [ ! -f "$STATE_DIR/user/colormode.txt" ]; then
+        echo "" > "$STATE_DIR/user/colormode.txt"
     else
-        lightdark=$(sed -n '1p' "$CACHE_DIR/user/colormode.txt")
+        lightdark=$(sed -n '1p' "$STATE_DIR/user/colormode.txt")
     fi
     echo "$lightdark"
 }
