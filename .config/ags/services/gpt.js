@@ -177,7 +177,7 @@ class GPTService extends Service {
         this._key = keyValue;
         Utils.writeFile(this._key, this._key_file_location)
             .then(this.emit('hasKey', true))
-            .catch(err => print(err));
+            .catch(print);
     }
 
     get temperature() { return this._temperature }
