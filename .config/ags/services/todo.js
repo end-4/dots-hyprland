@@ -58,7 +58,7 @@ class TodoService extends Service {
 
     constructor() {
         super();
-        this._todoPath = `${GLib.get_user_cache_dir()}/ags/user/todo.json`;
+        this._todoPath = `${GLib.get_user_state_dir()}/ags/user/todo.json`;
         try {
             const fileContents = Utils.readFile(this._todoPath);
             this._todoJson = JSON.parse(fileContents);

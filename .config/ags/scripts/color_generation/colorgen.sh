@@ -13,8 +13,8 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# check if the file $CACHE_DIR/user/colormode.txt exists. if not, create it. else, read it to $lightdark
-colormodefile="$CACHE_DIR/user/colormode.txt"
+# check if the file $STATE_DIR/user/colormode.txt exists. if not, create it. else, read it to $lightdark
+colormodefile="$STATE_DIR/user/colormode.txt"
 lightdark="dark"
 transparency="opaque"
 materialscheme="vibrant"
@@ -37,10 +37,10 @@ else
     fi
 fi
 backend="material" # color generator backend
-if [ ! -f "$CACHE_DIR/user/colorbackend.txt" ]; then
-    echo "material" > "$CACHE_DIR/user/colorbackend.txt"
+if [ ! -f "$STATE_DIR/user/colorbackend.txt" ]; then
+    echo "material" > "$STATE_DIR/user/colorbackend.txt"
 else
-    backend=$(cat "$CACHE_DIR/user/colorbackend.txt") # either "" or "-l"
+    backend=$(cat "$STATE_DIR/user/colorbackend.txt") # either "" or "-l"
 fi
 
 cd "$CONFIG_DIR/scripts/" || exit
@@ -61,7 +61,7 @@ elif [ "$backend" = "material" ]; then
     color_generation/generate_colors_material.py --path "$1" \
     --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" \
     --termscheme $terminalscheme --blend_bg_fg \
-    --cache "$CACHE_DIR/user/color.txt" $smartflag \
+    --cache "$STATE_DIR/user/color.txt" $smartflag \
     > "$CACHE_DIR"/user/generated/material_colors.scss
     if [ "$2" = "--apply" ]; then
         cp "$CACHE_DIR"/user/generated/material_colors.scss "$STATE_DIR/scss/_material.scss"

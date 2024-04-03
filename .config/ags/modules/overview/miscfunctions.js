@@ -33,28 +33,28 @@ export function launchCustomCommand(command) {
     }
     else if (args[0] == '>light') { // Light mode
         darkMode.value = false;
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/light/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "1s/.*/light/"  ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
             .catch(print);
     }
     else if (args[0] == '>dark') { // Dark mode
         darkMode.value = true;
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/dark/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "1s/.*/dark/"  ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
             .catch(print);
     }
     else if (args[0] == '>badapple') { // Black and white
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "3s/.*/monochrome/" ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "3s/.*/monochrome/" ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
                 .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
                 .catch(print);
     }
     else if (args[0] == '>material') { // Use material colors
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "material" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print)
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && echo "material" > ${GLib.get_user_state_dir()}/ags/user/colorbackend.txt`]).catch(print)
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
             .catch(print);
     }
     else if (args[0] == '>pywal') { // Use Pywal (ik it looks shit but I'm not removing)
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && echo "pywal" > ${GLib.get_user_cache_dir()}/ags/user/colorbackend.txt`]).catch(print)
+        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && echo "pywal" > ${GLib.get_user_state_dir()}/ags/user/colorbackend.txt`]).catch(print)
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
             .catch(print);
     }
