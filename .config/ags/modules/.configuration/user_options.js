@@ -18,6 +18,7 @@ let configOptions = {
     },
     'appearance': {
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
+        'layerSmoke': true,
     },
     'apps': {
         'bluetooth': "blueberry",
