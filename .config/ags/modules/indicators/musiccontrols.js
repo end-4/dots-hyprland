@@ -13,7 +13,7 @@ import { darkMode, hasPlasmaIntegration } from '../.miscutils/system.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const colorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
+const colorMode = Utils.exec(`bash -c "sed -n \'1p\' '${LIGHTDARK_FILE_LOCATION}'"`);
 const lightDark = (colorMode == "light") ? '-l' : '';
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';

@@ -96,11 +96,12 @@ const schemeOptionsArr = [
     //]
 ];
 
-const initColorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
+const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
+const initColorMode = Utils.exec(`bash -c "sed -n \'1p\' ${LIGHTDARK_FILE_LOCATION}"`);
 const initColorVal = (initColorMode == "dark") ? 1 : 0;
-const initTransparency = Utils.exec('bash -c "sed -n \'2p\' $HOME/.cache/ags/user/colormode.txt"');
+const initTransparency = Utils.exec(`bash -c "sed -n \'2p\' ${LIGHTDARK_FILE_LOCATION}"`);
 const initTransparencyVal = (initTransparency == "transparent") ? 1 : 0;
-const initScheme = Utils.exec('bash -c "sed -n \'3p\' $HOME/.cache/ags/user/colormode.txt"');
+const initScheme = Utils.exec(`bash -c "sed -n \'3p\' ${LIGHTDARK_FILE_LOCATION}"`);
 const initSchemeIndex = calculateSchemeInitIndex(schemeOptionsArr, initScheme);
 
 const ColorSchemeSettings = () => Widget.Box({
