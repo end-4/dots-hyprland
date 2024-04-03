@@ -9,27 +9,28 @@ import Indicator from '../../../services/indicator.js';
 import { StatusIcons } from '../../.commonwidgets/statusicons.js';
 import { Tray } from "./tray.js";
 
+const SeparatorDot = () => Widget.Revealer({
+    transition: 'slide_left',
+    revealChild: false,
+    attribute: {
+        'count': SystemTray.items.length,
+        'update': (self, diff) => {
+            self.attribute.count += diff;
+            self.revealChild = (self.attribute.count > 0);
+        }
+    },
+    child: Widget.Box({
+        vpack: 'center',
+        className: 'separator-circle',
+    }),
+    setup: (self) => self
+        .hook(SystemTray, (self) => self.attribute.update(self, 1), 'added')
+        .hook(SystemTray, (self) => self.attribute.update(self, -1), 'removed')
+    ,
+});
+
 export default () => {
     const barTray = Tray();
-    const separatorDot = Widget.Revealer({
-        transition: 'slide_left',
-        revealChild: false,
-        attribute: {
-            'count': SystemTray.items.length,
-            'update': (self, diff) => {
-                self.attribute.count += diff;
-                self.revealChild = (self.attribute.count > 0);
-            }
-        },
-        child: Widget.Box({
-            vpack: 'center',
-            className: 'separator-circle',
-        }),
-        setup: (self) => self
-            .hook(SystemTray, (self) => self.attribute.update(self, 1), 'added')
-            .hook(SystemTray, (self) => self.attribute.update(self, -1), 'removed')
-        ,
-    });
     const barStatusIcons = StatusIcons({
         className: 'bar-statusicons',
         setup: (self) => self.hook(App, (self, currentName, visible) => {
@@ -53,7 +54,7 @@ export default () => {
     const emptyArea = SpaceRightDefaultClicks(Widget.Box({ hexpand: true, }));
     const indicatorArea = SpaceRightDefaultClicks(Widget.Box({
         children: [
-            separatorDot,
+            SeparatorDot(),
             barStatusIcons
         ],
     }));
