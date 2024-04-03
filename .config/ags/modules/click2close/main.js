@@ -35,6 +35,8 @@ export default (monitor = 0) => PopupWindow({
         onSecondaryClick: () => closeEverything(),
         onMiddleClick: () => closeEverything(),
         setup: (self) => self.hook(App, (self, currentName, visible) => {
+            if(currentName == 'click2close0') console.log(visible);
+
             if(!self.attribute.checkWindowRelevance(currentName)) return;
             range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
                 if(visible) App.openWindow(`click2close${id}`);
@@ -43,7 +45,7 @@ export default (monitor = 0) => PopupWindow({
         }),
         child: Widget.Box({
             css: `
-                ${userOptions.appearance.layerSmoke ? 'background-color: rgba(1,1,1,0.18);' : ''}
+                ${userOptions.appearance.layerSmoke ? 'background-color: rgba(0,0,0,' + String(userOptions.appearance.layerSmokeStrength) + ');' : ''}
                 min-height: ${SCREEN_HEIGHT}px;
                 min-width: ${SCREEN_WIDTH}px;
             `
