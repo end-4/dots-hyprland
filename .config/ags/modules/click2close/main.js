@@ -21,9 +21,8 @@ export default (monitor = 0) => PopupWindow({
                 let relevant = false;
                 // use regex to check if name matches one of windows need click2close with a *
                 for (let i = 0; i < WINDOWS_NEED_CLICK2CLOSE.length; i++) {
-                    // const testRegex = RegExp(`^${WINDOWS_NEED_CLICK2CLOSE[i]}\\d+$`);
-                    const testRegex = /${WINDOWS_NEED_CLICK2CLOSE[i]}\\d+$/;
-                    if (testRegex.test(currentName) || WINDOWS_NEED_CLICK2CLOSE[i] == currentName) {
+                    const testRegex = RegExp(`^${WINDOWS_NEED_CLICK2CLOSE[i]}\\d*$`);
+                    if (testRegex.test(currentName)) {
                         relevant = true;
                         break;
                     }
@@ -35,8 +34,6 @@ export default (monitor = 0) => PopupWindow({
         onSecondaryClick: () => closeEverything(),
         onMiddleClick: () => closeEverything(),
         setup: (self) => self.hook(App, (self, currentName, visible) => {
-            if(currentName == 'click2close0') console.log(visible);
-
             if(!self.attribute.checkWindowRelevance(currentName)) return;
             range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
                 if(visible) App.openWindow(`click2close${id}`);
