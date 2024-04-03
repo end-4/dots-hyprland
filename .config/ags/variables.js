@@ -1,4 +1,6 @@
+
 const { Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js'
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -11,7 +13,6 @@ export const showMusicControls = Variable(false, {})
 export const showColorScheme = Variable(false, {})
 globalThis['openMusicControls'] = showMusicControls;
 globalThis['openColorScheme'] = showColorScheme;
-
 globalThis['mpris'] = Mpris;
 
 // Screen size

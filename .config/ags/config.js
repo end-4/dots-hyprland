@@ -44,14 +44,12 @@ const Windows = () => [
     // Dock(),
     Overview(),
     forMonitors(Indicator),
-    Cheatsheet(),
+    forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
-    Osk(),
+    forMonitors(Osk),
     Session(),
     // forMonitors(Bar),
-    // forMonitors(BarCornerTopleft),
-    // forMonitors(BarCornerTopright),
     forMonitors((id) => Corner(id, 'top left')),
     forMonitors((id) => Corner(id, 'top right')),
     forMonitors((id) => Corner(id, 'bottom left')),
@@ -59,15 +57,20 @@ const Windows = () => [
     forMonitors(BarCornerTopleft),
     forMonitors(BarCornerTopright),
 ];
+
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
+const closeWindowDelays = { // For animations
+    'sideright': CLOSE_ANIM_TIME,
+    'sideleft': CLOSE_ANIM_TIME,
+};
+for(let i = 0; i < (Gdk.Display.get_default()?.get_n_monitors() || 1); i++) {
+    closeWindowDelays[`osk${i}`] = CLOSE_ANIM_TIME;
+}
+
 App.config({
     css: `${COMPILED_STYLE_DIR}/style.css`,
     stackTraceOnError: true,
-    closeWindowDelay: { // For animations
-        'sideright': CLOSE_ANIM_TIME,
-        'sideleft': CLOSE_ANIM_TIME,
-        'osk': CLOSE_ANIM_TIME,
-    },
+    closeWindowDelay: closeWindowDelays,
     windows: Windows().flat(1),
 });
 
