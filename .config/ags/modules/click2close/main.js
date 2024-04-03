@@ -23,9 +23,7 @@ export default (monitor = 0) => PopupWindow({
                 for (let i = 0; i < WINDOWS_NEED_CLICK2CLOSE.length; i++) {
                     // const testRegex = RegExp(`^${WINDOWS_NEED_CLICK2CLOSE[i]}\\d+$`);
                     const testRegex = /${WINDOWS_NEED_CLICK2CLOSE[i]}\\d+$/;
-                    console.log(testRegex, testRegex.test(currentName));
                     if (testRegex.test(currentName) || WINDOWS_NEED_CLICK2CLOSE[i] == currentName) {
-                        console.log(WINDOWS_NEED_CLICK2CLOSE[i]);
                         relevant = true;
                         break;
                     }
@@ -45,7 +43,7 @@ export default (monitor = 0) => PopupWindow({
         }),
         child: Widget.Box({
             css: `
-                background-color: rgba(1,1,1,0.18);
+                ${userOptions.appearance.layerSmoke ? 'background-color: rgba(1,1,1,0.18);' : ''}
                 min-height: ${SCREEN_HEIGHT}px;
                 min-width: ${SCREEN_WIDTH}px;
             `
