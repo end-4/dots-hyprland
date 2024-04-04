@@ -3,8 +3,13 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const APISERVICES = {
     'yandere': {
+        name: 'yande.re',
         endpoint: 'https://yande.re/post.json',
-    }
+    },
+    'konachan': {
+        name: 'Konachan',
+        endpoint: 'https://konachan.net/post.json',
+    },
 }
 
 const getWorkingImageSauce = (url) => {
@@ -43,6 +48,8 @@ class BooruService extends Service {
             'clear': [],
             'newResponse': ['int'],
             'updateResponse': ['int'],
+        }, {
+            'nsfw': ['boolean'],
         });
     }
 
@@ -58,7 +65,7 @@ class BooruService extends Service {
     }
 
     get nsfw() { return this._nsfw }
-    set nsfw(value) { this._nsfw = value; }
+    set nsfw(value) { this._nsfw = value; this.notify('nsfw'); }
 
     get mode() { return this._mode }
     set mode(value) {
@@ -82,7 +89,10 @@ class BooruService extends Service {
             else taglist.push(thisArg);
         }
         const newMessageId = this._queries.length;
-        this._queries.push(taglist.length == 0 ? ['*', `${page}`] : [...taglist, `${page}`]);
+        this._queries.push({
+            providerName: APISERVICES[this._mode].name,
+            taglist: taglist.length == 0 ? ['*', `${page}`] : [...taglist, `${page}`],
+        });
         this.emit('newResponse', newMessageId);
         const params = {
             'tags': taglist.join('+'),
@@ -97,12 +107,14 @@ class BooruService extends Service {
             headers: APISERVICES[this._mode].headers,
         };
         let status = 0;
+        // console.log(`${APISERVICES[this._mode].endpoint}?${paramString}`);
         Utils.fetch(`${APISERVICES[this._mode].endpoint}?${paramString}`, options)
             .then(result => {
                 status = result.status;
                 return result.text();
             })
             .then((dataString) => { // Store interesting stuff and emit
+                // console.log(dataString);
                 const parsedData = JSON.parse(dataString);
                 // console.log(parsedData)
                 this._responses.push(parsedData.map(obj => {

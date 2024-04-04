@@ -61,6 +61,7 @@ export const ConfigToggle = ({
     });
     const interactionWrapper = Button({
         attribute: {
+            enabled: enabled,
             toggle: (newValue) => {
                 enabled.value = !enabled.value;
                 onChange(interactionWrapper, enabled.value);
