@@ -18,14 +18,17 @@ export default ({
 
         child: Box({
             setup: (self) => {
-                self.hook(App, (self, currentName, visible) => {
-                    if (currentName === name) {
-                        self.toggleClassName(hideClassName, !visible);
-                    }
-                }).keybind("Escape", () => closeEverything());
+                self.keybind("Escape", () => closeEverything());
+                if (showClassName != "" && hideClassName !== "") {
+                    self.hook(App, (self, currentName, visible) => {
+                        if (currentName === name) {
+                            self.toggleClassName(hideClassName, !visible);
+                        }
+                    });
 
-                if (showClassName !== "" && hideClassName !== "")
-                    self.className = `${showClassName} ${hideClassName}`;
+                    if (showClassName !== "" && hideClassName !== "")
+                        self.className = `${showClassName} ${hideClassName}`;
+                }
             },
             child: child,
         }),
