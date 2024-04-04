@@ -14,16 +14,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     padding: 1.023rem;
 }
 
-.sideright-show {
-    @include menu_decel;
-}
-
-.sideright-hide {
-    @include menu_accel;
-    margin-right: -30.682rem;
-    // opacity: 0;
-}
-
 .sidebar-left {
     @include menu_decel;
     @include elevation-border;
@@ -32,16 +22,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     min-width: 27.818rem;
     background-color: $background;
     padding: 1.023rem;
-}
-
-.sideleft-show {
-    @include menu_decel;
-}
-
-.sideleft-hide {
-    margin-left: -30.682rem;
-    // opacity: 0;
-    @include menu_accel;
 }
 
 .sidebar-group {
