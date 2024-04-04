@@ -9,8 +9,7 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     @include elevation-border;
     @include elevation2;
     border-radius: $rounding_large - $elevation_margin + 0.068rem;
-    min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
-    // min-height: 29.591rem;
+    min-width: 27.818rem;
     background-color: $background;
     padding: 1.023rem;
 }
@@ -30,8 +29,7 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     @include elevation-border;
     @include elevation2;
     border-radius: $rounding_large - $elevation_margin + 0.068rem;
-    min-width: 27.818rem; // COMMENT THIS LATER IF TEXT WRAP IS USED
-    // min-height: 29.591rem;
+    min-width: 27.818rem;
     background-color: $background;
     padding: 1.023rem;
 }
@@ -123,7 +121,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 }
 
 .sidebar-navrail {
-    // background-color: $surface;
     padding: 0rem $rounding_medium;
 }
 
@@ -505,13 +502,8 @@ $colorpicker_rounding: 0.341rem;
     color: $onSurfaceVariant;
 }
 
-// .sidebar-chat-providerswitcher-list {
-//     margin: 0.341rem 0rem;
-// }
-
 .sidebar-chat-viewport {
     @include element_decel;
-    // margin: 0.682rem 0rem;
     padding: 0.682rem 0rem;
 }
 
@@ -592,7 +584,6 @@ $colorpicker_rounding: 0.341rem;
     @include small-rounding;
     padding: 0.341rem 0.818rem;
     margin: 0.341rem;
-    // margin-left: 0rem;
     background-color: $layer2;
     color: $onLayer2;
 }
@@ -631,7 +622,6 @@ $colorpicker_rounding: 0.341rem;
 
 .sidebar-chat-codeblock {
     @include normal-rounding;
-    // @include elevation2;
     background-color: $layer2;
     color: $onLayer2;
     margin: 0rem 0.682rem;
@@ -807,8 +797,7 @@ $waifu_image_overlay_transparency: 0.7;
     @include full-rounding;
     min-width: 1.875rem;
     min-height: 1.875rem;
-    background-color: rgba(0, 0, 0,
-            $waifu_image_overlay_transparency ); // Fixed cuz on image
+    background-color: rgba(0, 0, 0, $waifu_image_overlay_transparency ); // Fixed cuz on image
     color: rgba(255, 255, 255, $waifu_image_overlay_transparency);
 }
 
@@ -819,6 +808,16 @@ $waifu_image_overlay_transparency: 0.7;
 
 .sidebar-waifu-image-action:active {
     background-color: rgba(60, 60, 60, $waifu_image_overlay_transparency);
+}
+
+.sidebar-booru-provider {
+    @include titlefont;
+    @include small-rounding;
+    padding: 0.341rem 0.818rem;
+    margin: 0.341rem;
+    font-weight: bold;
+    background-color: $primary;
+    color: $onPrimary;
 }
 
 .sidebar-booru-imagegrid {

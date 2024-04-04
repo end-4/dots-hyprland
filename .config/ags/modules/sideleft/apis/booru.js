@@ -1,10 +1,7 @@
-// TODO: execAsync(['identify', '-format', '{"w":%w,"h":%h}', imagePath])
-// to detect img dimensions
-
 const { Gdk, GdkPixbuf, Gio, GLib, Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, EventBox, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { fileExists } from '../../.miscutils/files.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
@@ -13,15 +10,6 @@ import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/curso
 import BooruService from '../../../services/booru.js';
 import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
-const Grid = Widget.subclass(Gtk.Grid, "AgsGrid");
-
-async function getImageViewerApp(preferredApp) {
-    Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
-        .then((output) => {
-            if (output != '') return preferredApp;
-            else return 'xdg-open';
-        });
-}
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -71,7 +59,7 @@ const BooruInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by yande.re',
+                        label: 'Powered by yande.re and konachan',
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
@@ -108,6 +96,9 @@ export const BooruSettings = () => MarginRevealer({
                         onChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
                         },
+                        extraSetup: (self) => self.hook(BooruService, (self) => {
+                            self.attribute.enabled.value = BooruService.nsfw;
+                        }, 'notify::nsfw')
                     }),
                 ]
             })
@@ -129,7 +120,7 @@ const booruWelcome = Box({
     })
 });
 
-const BooruPage = (taglist) => {
+const BooruPage = (taglist, serviceName = 'Booru') => {
     const PageState = (icon, name) => Box({
         className: 'spacing-h-5 txt',
         children: [
@@ -181,6 +172,7 @@ const BooruPage = (taglist) => {
                             cr.paint();
                         });
                         self.queue_draw();
+                        imageRevealer.revealChild = true;
                     }
                     // Show
                     // const downloadCommand = `wget -O '${imagePath}' '${data.preview_url}'`;
@@ -198,27 +190,42 @@ const BooruPage = (taglist) => {
                 Utils.timeout(1000, () => self.attribute.update(self, data));
             }
         });
-        const imageActions = Box({
-            vpack: 'start',
-            className: 'sidebar-booru-image-actions spacing-h-3',
-            children: [
-                Box({ hexpand: true }),
-                ImageAction({
-                    name: 'Go to file url',
-                    icon: 'file_open',
-                    action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
-                }),
-                ImageAction({
-                    name: 'Go to source',
-                    icon: 'open_in_new',
-                    action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
-                }),
-            ]
+        const imageActions = Revealer({
+            transition: 'crossfade',
+            transitionDuration: userOptions.animations.durationLarge,
+            child: Box({
+                vpack: 'start',
+                className: 'sidebar-booru-image-actions spacing-h-3',
+                children: [
+                    Box({ hexpand: true }),
+                    ImageAction({
+                        name: 'Go to file url',
+                        icon: 'file_open',
+                        action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
+                    }),
+                    ImageAction({
+                        name: 'Go to source',
+                        icon: 'open_in_new',
+                        action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
+                    }),
+                ]
+            })
         });
-        return Overlay({
+        const imageOverlay = Overlay({
+            passThrough: true,
             child: imageBox,
             overlays: [imageActions]
+        });
+        const imageRevealer = Revealer({
+            transition: 'slide_down',
+            transitionDuration: userOptions.animations.durationLarge,
+            child: EventBox({
+                onHover: () => { imageActions.revealChild = true },
+                onHoverLost: () => { imageActions.revealChild = false },
+                child: imageOverlay,
+            })
         })
+        return imageRevealer;
     }
     const downloadState = Stack({
         homogeneous: false,
@@ -238,22 +245,31 @@ const BooruPage = (taglist) => {
         child: downloadState,
     });
     const pageHeading = Box({
-        homogeneous: false,
+        vertical: true,
         children: [
-            Scrollable({
-                hexpand: true,
-                vscroll: 'never',
-                hscroll: 'automatic',
-                child: Box({
-                    hpack: 'fill',
-                    className: 'spacing-h-5',
-                    children: [
-                        ...taglist.map((tag) => CommandButton(tag)),
-                        Box({ hexpand: true }),
-                    ]
-                })
+            Label({
+                hpack: 'start',
+                className: `sidebar-booru-provider`,
+                label: `${serviceName}`,
             }),
-            downloadIndicator,
+            Box({
+                children: [
+                    Scrollable({
+                        hexpand: true,
+                        vscroll: 'never',
+                        hscroll: 'automatic',
+                        child: Box({
+                            hpack: 'fill',
+                            className: 'spacing-h-5',
+                            children: [
+                                ...taglist.map((tag) => CommandButton(tag)),
+                                Box({ hexpand: true }),
+                            ]
+                        })
+                    }),
+                    downloadIndicator,
+                ]
+            })
         ]
     });
     const pageImages = Box({
@@ -308,25 +324,6 @@ const BooruPage = (taglist) => {
                     pageImages.children[minIndex].pack_start(PreviewImage(data[i], minIndex), false, false, 0)
                     pageImages.children[minIndex].attribute.height += 1 / data[i].aspect_ratio; // we want height/width
                 }
-                // Show all
-                // for(let i = 0; i < imageColumns; i++) {
-                //     pageImages.children[i].show_all();
-                // }
-                pageImages.show_all();
-
-
-                // each image: PreviewImage(data[i * imageColumns + j])
-
-                // Add stuff
-                // for (let i = 0; i < imageRows; i++) {
-                //     for (let j = 0; j < imageColumns; j++) {
-                //         if (i * imageColumns + j >= Math.min(userOptions.sidebar.imageBooruCount, data.length)) break;
-                //         pageImages.attach(
-                //             PreviewImage(data[i * imageColumns + j]),
-                //             j, i, 1, 1
-                //         );
-                //     }
-                // }
                 pageImages.show_all();
 
                 // Reveal stuff
@@ -360,7 +357,7 @@ const booruContent = Box({
     setup: (self) => self
         .hook(BooruService, (box, id) => {
             if (id === undefined) return;
-            const newPage = BooruPage(BooruService.queries[id]);
+            const newPage = BooruPage(BooruService.queries[id].taglist, BooruService.queries[id].providerName);
             box.add(newPage);
             box.show_all();
             box.attribute.map.set(id, newPage);
@@ -453,6 +450,12 @@ export const sendMessage = (text) => {
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
+        else if (text.startsWith('/safe')) BooruService.nsfw = false;
+        else if (text.startsWith('/lewd')) BooruService.nsfw = true;
+        else if (text.startsWith('/mode')) {
+            const firstSpaceIndex = text.indexOf(' ');
+            BooruService.mode = text.slice(firstSpaceIndex + 1);
+        }
     }
     else BooruService.fetch(text);
 }
