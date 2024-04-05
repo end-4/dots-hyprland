@@ -6,5 +6,5 @@ export default (id) => PopupWindow({
     name: `osk${id}`,
     showClassName: 'osk-show',
     hideClassName: 'osk-hide',
-    child: OnScreenKeyboard(),
+    child: OnScreenKeyboard({ id: id }),
 });
