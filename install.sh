@@ -88,6 +88,20 @@ else
   v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
 fi
 
+
+# https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
+case $SKIP_HYPR_AUR in
+  true) sleep 0;;
+  *)
+    if $ask;then
+      v $AUR_HELPER -S --answerclean=a hyprland-git
+    else
+      v $AUR_HELPER -S --answerclean=a --noconfirm hyprland-git
+    fi
+    ;;
+esac
+
+
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
 case $SKIP_PLASMAINTG in

@@ -16,6 +16,7 @@ If no option is specified, run default install process.
   -s, --skip-sysupdate    Skip \"sudo pacman -Syu\"
       --skip-ags          Skip installing ags and its config
       --skip-hyprland     Skip installing the config for Hyprland
+      --skip-hypr-aur     Skip installing hyprland-git
       --skip-fish         Skip installing the config for Fish
       --skip-plasmaintg   Skip installing plasma-browser-integration
       --skip-miscconf     Skip copying the dirs and files to \".configs\" except for AGS, Fish and Hyprland
@@ -31,7 +32,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf \
+       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-fish,skip-hyprland,skip-hypr-aur,skip-plasmaintg,skip-miscconf \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -60,6 +61,7 @@ while true ; do
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-ags) SKIP_AGS=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
+    --skip-hypr-aur) SKIP_HYPR_AUR=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
     --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
