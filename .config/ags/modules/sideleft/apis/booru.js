@@ -10,6 +10,7 @@ import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/curso
 import BooruService from '../../../services/booru.js';
 import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
+import { SystemMessage } from './ai_chatmessage.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -247,10 +248,18 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
     const pageHeading = Box({
         vertical: true,
         children: [
-            Label({
-                hpack: 'start',
-                className: `sidebar-booru-provider`,
-                label: `${serviceName}`,
+            Box({
+                children: [
+                    Label({
+                        hpack: 'start',
+                        className: `sidebar-booru-provider`,
+                        label: `${serviceName}`,
+                        truncate: 'end',
+                        maxWidthChars: 20,
+                    }),
+                    Box({ hexpand: true }),
+                    downloadIndicator,
+                ]
             }),
             Box({
                 children: [
@@ -267,7 +276,6 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                             ]
                         })
                     }),
-                    downloadIndicator,
                 ]
             })
         ]
@@ -450,11 +458,27 @@ export const sendMessage = (text) => {
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/safe')) BooruService.nsfw = false;
-        else if (text.startsWith('/lewd')) BooruService.nsfw = true;
+        else if (text.startsWith('/safe')) {
+            BooruService.nsfw = false;
+            const message = SystemMessage(`Switched to safe mode`, '/safe', booruView)
+            booruContent.add(message);
+            booruContent.show_all();
+            booruContent.attribute.map.set(Date.now(), message);
+        }
+        else if (text.startsWith('/lewd')) {
+            BooruService.nsfw = true;
+            const message = SystemMessage(`Tiddies enabled`, '/lewd', booruView)
+            booruContent.add(message);
+            booruContent.show_all();
+            booruContent.attribute.map.set(Date.now(), message);
+        }
         else if (text.startsWith('/mode')) {
-            const firstSpaceIndex = text.indexOf(' ');
-            BooruService.mode = text.slice(firstSpaceIndex + 1);
+            const mode = text.slice(text.indexOf(' ') + 1);
+            BooruService.mode = mode;
+            const message = SystemMessage(`Changed provider to ${BooruService.providerName}`, '/mode', booruView)
+            booruContent.add(message);
+            booruContent.show_all();
+            booruContent.attribute.map.set(Date.now(), message);
         }
     }
     else BooruService.fetch(text);

@@ -72,6 +72,9 @@ class BooruService extends Service {
         this._mode = value;
         this._baseUrl = APISERVICES[this._mode].endpoint;
     }
+    get providerName () {
+        return APISERVICES[this._mode].name;
+    }
     get queries() { return this._queries }
     get responses() { return this._responses }
 
