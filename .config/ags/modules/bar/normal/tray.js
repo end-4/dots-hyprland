@@ -7,7 +7,7 @@ const SysTrayItem = (item) => Button({
     className: 'bar-systray-item',
     child: Icon({
         hpack: 'center',
-        icon: item.icon,
+        icon: `${item.icon}`,
         setup: (self) => self.hook(item, (self) => self.icon = item.icon),
     }),
     setup: (self) => self

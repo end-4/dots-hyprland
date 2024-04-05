@@ -62,12 +62,6 @@ const CheatsheetHeader = () => Widget.CenterBox({
     }),
 });
 
-const ClickOutsideToClose = () => Widget.EventBox({
-    onPrimaryClick: () => App.closeWindow('cheatsheet'),
-    onSecondaryClick: () => App.closeWindow('cheatsheet'),
-    onMiddleClick: () => App.closeWindow('cheatsheet'),
-});
-
 export default (id) => PopupWindow({
     name: `cheatsheet${id}`,
     layer: 'overlay',
@@ -76,7 +70,6 @@ export default (id) => PopupWindow({
     child: Widget.Box({
         vertical: true,
         children: [
-            ClickOutsideToClose(),
             Widget.Box({
                 vertical: true,
                 className: "cheatsheet-bg spacing-v-15",

@@ -77,11 +77,6 @@ export default () => Box({
     hexpand: true,
     css: 'min-width: 2px;',
     children: [
-        EventBox({
-            onPrimaryClick: () => App.closeWindow('sideleft'),
-            onSecondaryClick: () => App.closeWindow('sideleft'),
-            onMiddleClick: () => App.closeWindow('sideleft'),
-        }),
         widgetContent,
     ],
     setup: (self) => self

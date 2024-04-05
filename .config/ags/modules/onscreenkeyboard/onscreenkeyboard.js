@@ -215,7 +215,7 @@ const KeyboardWindow = () => Box({
     }),
 });
 
-export default () => {
+export default ({ id }) => {
     const kbWindow = KeyboardWindow();
     const gestureEvBox = EventBox({ child: kbWindow })
     const gesture = Gtk.GestureDrag.new(gestureEvBox);
@@ -249,7 +249,7 @@ export default () => {
     gesture.connect('drag-end', () => {
         var offset = gesture.get_offset()[2];
         if (offset > 50) {
-            App.closeWindow('osk');
+            App.closeWindow(`osk${id}`);
         }
         else {
             kbWindow.setCss(`
