@@ -29,7 +29,7 @@ function forMonitors(widget) {
 }
 function forMonitorsAsync(widget) {
     const n = Gdk.Display.get_default()?.get_n_monitors() || 1;
-    return range(n, 0).forEach((n) => widget().catch(print))
+    return range(n, 0).forEach((n) => widget(n).catch(print))
 }
 
 // SCSS compilation
