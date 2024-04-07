@@ -1,3 +1,12 @@
+// Want only the overview from my config? this is what you're looking for!
+// Remember to install the `dart-sass` for styles to load properly (and AGS of course)
+// To launch this, run the following
+//     ags -c ~/.config/ags/config_overviewOnly.js
+// To toggle the overview, run:
+//     ags -t overview
+// You might wanna add that as a keybind (in hyprland.conf)
+//     bind = Super, Tab, exec, ags -t overview
+
 // Import
 import GLib from 'gi://GLib';
 import App from 'resource:///com/github/Aylur/ags/app.js'
@@ -20,6 +29,8 @@ applyStyle().catch(print);
 App.config({
     css: `${COMPILED_STYLE_DIR}/style.css`,
     stackTraceOnError: true,
-    windows: [Overview()],
+    windows: [
+        Overview(),
+    ],
 });
 
