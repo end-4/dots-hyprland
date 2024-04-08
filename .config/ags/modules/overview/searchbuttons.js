@@ -5,6 +5,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 import { searchItem } from './searchitem.js';
 import { execAndClose, couldBeMath, launchCustomCommand } from './miscfunctions.js';
+import GeminiService from '../../services/gemini.js';
 
 export const DirectoryButton = ({ parentPath, name, type, icon }) => {
     const actionText = Widget.Revealer({
@@ -159,5 +160,17 @@ export const SearchButton = ({ text = '' }) => searchItem({
     onActivate: () => {
         App.closeWindow('overview');
         execAsync(['bash', '-c', `xdg-open '${userOptions.search.engineBaseUrl}${text} ${['', ...userOptions.search.excludedSites].join(' -site:')}' &`]).catch(print);
+    },
+});
+
+export const AiButton = ({ text }) => searchItem({
+    materialIconName: 'chat_paste_go',
+    name: 'Ask Gemini',
+    actionName: 'Ask',
+    content: `${text}`,
+    onActivate: () => {
+        GeminiService.send(text);
+        App.closeWindow('overview');
+        App.openWindow('sideleft');
     },
 });
