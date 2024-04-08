@@ -33,25 +33,19 @@ globalThis['cycleMode'] = () => {
 // // Window controls
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 globalThis['toggleWindowOnAllMonitors'] = (name) => {
-    function forMonitors(widget) {
-        range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
-            App.toggleWindow(`${name}${id}`);
-        });
-    }
+    range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
+        App.toggleWindow(`${name}${id}`);
+    });
 }
 globalThis['closeWindowOnAllMonitors'] = (name) => {
-    function forMonitors(widget) {
-        range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
-            App.closeWindow(`${name}${id}`);
-        });
-    }
+    range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
+        App.closeWindow(`${name}${id}`);
+    });
 }
 globalThis['openWindowOnAllMonitors'] = (name) => {
-    function forMonitors(widget) {
-        range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
-            App.openWindow(`${name}${id}`);
-        });
-    }
+    range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
+        App.openWindow(`${name}${id}`);
+    });
 }
 
 globalThis['closeEverything'] = () => {

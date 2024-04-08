@@ -172,8 +172,8 @@ const WorkspaceContents = (count = 10) => {
 export default () => EventBox({
     onScrollUp: () => Hyprland.messageAsync(`dispatch workspace -1`).catch(print),
     onScrollDown: () => Hyprland.messageAsync(`dispatch workspace +1`).catch(print),
-    onMiddleClickRelease: () => App.toggleWindow('overview'),
-    onSecondaryClickRelease: () => App.toggleWindow('osk'),
+    onMiddleClick: () => toggleWindowOnAllMonitors('osk'),
+    onSecondaryClick: () => App.toggleWindow('overview'),
     attribute: {
         clicked: false,
         ws_group: 0,

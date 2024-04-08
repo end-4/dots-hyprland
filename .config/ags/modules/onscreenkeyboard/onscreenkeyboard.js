@@ -209,7 +209,8 @@ const KeyboardWindow = () => Box({
         })
     ],
     setup: (self) => self.hook(App, (self, name, visible) => { // Update on open
-        if (name == 'osk' && visible) {
+        if(!name) return;
+        if (name.startsWith('osk') && visible) {
             self.setCss(`margin-bottom: -0px;`);
         }
     }),
