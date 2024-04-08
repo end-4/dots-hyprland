@@ -8,9 +8,10 @@ const { execAsync, exec } = Utils;
 import { execAndClose, expandTilde, hasUnterminatedBackslash, couldBeMath, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
-    DesktopEntryButton, ExecuteCommandButton, SearchButton
+    DesktopEntryButton, ExecuteCommandButton, SearchButton, AiButton
 } from './searchbuttons.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
+import GeminiService from '../../services/gemini.js';
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
@@ -140,8 +141,9 @@ export const SearchAndWindows = () => {
             }
 
             else {
+                GeminiService.send(text);
                 App.closeWindow('overview');
-                execAsync(['bash', '-c', `xdg-open '${userOptions.search.engineBaseUrl}${text} ${['', ...userOptions.search.excludedSites].join(' -site:')}' &`]).catch(print);
+                App.openWindow('sideleft');
             }
         },
         onChange: (entry) => { // this is when you type
@@ -200,6 +202,7 @@ export const SearchAndWindows = () => {
             }
 
             // Add fallback: search
+            resultsBox.add(AiButton({ text: entry.text }));
             resultsBox.add(SearchButton({ text: entry.text }));
             resultsBox.show_all();
         },
