@@ -51,12 +51,6 @@ const overviewContent = await OptionalOverview();
 export const SearchAndWindows = () => {
     var _appSearchResults = [];
 
-    const ClickToClose = ({ ...props }) => Widget.EventBox({
-        ...props,
-        onPrimaryClick: () => App.closeWindow('overview'),
-        onSecondaryClick: () => App.closeWindow('overview'),
-        onMiddleClick: () => App.closeWindow('overview'),
-    });
     const resultsBox = Widget.Box({
         className: 'overview-search-results',
         vertical: true,
@@ -210,11 +204,6 @@ export const SearchAndWindows = () => {
     return Widget.Box({
         vertical: true,
         children: [
-            ClickToClose({ // Top margin. Also works as a click-outside-to-close thing
-                child: Widget.Box({
-                    className: 'bar-height',
-                })
-            }),
             Widget.Box({
                 hpack: 'center',
                 children: [
@@ -262,4 +251,4 @@ export const SearchAndWindows = () => {
             })
         ,
     });
-}; 
+};
