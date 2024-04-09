@@ -53,9 +53,9 @@ def harmonize (design_color: int, source_color: int, threshold: float = 35, harm
     )
     return Hct.from_hct(output_hue, from_hct.chroma, from_hct.tone).to_int()
 
-def force_chroma_tone (argb: int, chroma: float = 0, tone: float = 0) -> int:
+def boost_chroma_tone (argb: int, chroma: float = 1, tone: float = 1) -> int:
     hct = Hct.from_int(argb)
-    return Hct.from_hct(hct.hue, chroma, tone).to_int()
+    return Hct.from_hct(hct.hue, hct.chroma * chroma, hct.tone * tone).to_int()
 
 darkmode = (args.mode == 'dark')
 transparent = (args.transparency == 'transparent')
@@ -131,15 +131,14 @@ if args.termscheme is not None:
         json_termscheme = f.read()
     term_source_colors = json.loads(json_termscheme)['dark' if darkmode else 'light']
 
+    primary_color_argb = hex_to_argb(material_colors['primary_paletteKeyColor'])
     for color, val in term_source_colors.items():
-        if args.blend_bg_fg:
-            tone_ovr = 10 if darkmode else 90
         if args.blend_bg_fg and color == "term0":
-            harmonized = force_chroma_tone(argb, 10, tone_ovr)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainer']), 1.5, 0.95)
         elif args.blend_bg_fg and color == "term15":
-            harmonized = force_chroma_tone(argb, 10, 100 - tone_ovr)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['onSurface']), 3, 1)
         else:
-            harmonized = harmonize(hex_to_argb(val), argb, args.harmonize_threshold, args.harmony)
+            harmonized = harmonize(hex_to_argb(val), primary_color_argb, args.harmonize_threshold, args.harmony)
         term_colors[color] = argb_to_hex(harmonized)
 
 if args.debug == False:
