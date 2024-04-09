@@ -11,7 +11,6 @@ import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 
 const keyboardLayout = oskLayouts[userOptions.onScreenKeyboard.layout] ? userOptions.onScreenKeyboard.layout : DEFAULT_OSK_LAYOUT;
 const keyboardJson = oskLayouts[keyboardLayout];
-execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
