@@ -38,7 +38,7 @@ esac
 
 set -e
 #####################################################################################
-printf "\e[36m[$0]: 1. Get packages and add user to video/input groups\n\e[0m"
+printf "\e[36m[$0]: 1. Get packages and setup user groups/services\n\e[0m"
 
 # Issue #363
 case $SKIP_SYSUPDATE in
@@ -123,6 +123,7 @@ case $SKIP_PLASMAINTG in
 esac
 
 v sudo usermod -aG video,input "$(whoami)"
+v systemctl --user enable ydotool --now
 
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
