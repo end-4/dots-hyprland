@@ -12,6 +12,11 @@ import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 const keyboardLayout = oskLayouts[userOptions.onScreenKeyboard.layout] ? userOptions.onScreenKeyboard.layout : DEFAULT_OSK_LAYOUT;
 const keyboardJson = oskLayouts[keyboardLayout];
 
+async function startYdotoolIfNeeded() {
+    const running = exec('pidof ydotool')
+    if(!running) execAsync(['ydotoold']).catch(print);
+}
+
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
     execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)])
