@@ -26,7 +26,7 @@ install-ags (){
   x git pull origin main && git submodule update --init --recursive
   x git checkout f905abfd2210701929ffaa3db13faa783b782765 # "update examples"
   x npm install
-  x meson setup build
+  x meson setup build --reconfigure
   x meson install -C build
   x cd $base
 }
