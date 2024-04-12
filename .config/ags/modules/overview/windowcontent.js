@@ -54,7 +54,6 @@ export const SearchAndWindows = () => {
     const resultsBox = Widget.Box({
         className: 'overview-search-results',
         vertical: true,
-        vexpand: true,
     });
     const resultsRevealer = Widget.Revealer({
         transitionDuration: userOptions.animations.durationLarge,
