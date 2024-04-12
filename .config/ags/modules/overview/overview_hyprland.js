@@ -234,7 +234,6 @@ export default () => {
             `,
             children: [Widget.EventBox({
                 hexpand: true,
-                vexpand: true,
                 onPrimaryClick: () => {
                     App.closeWindow('overview');
                     Utils.timeout(POPUP_CLOSE_TIME, () => Hyprland.messageAsync(`dispatch workspace ${index}`));
