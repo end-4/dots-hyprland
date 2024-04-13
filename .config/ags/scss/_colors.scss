@@ -1,20 +1,6 @@
 $rootTransparency: 0.31; // Transparency = 1 - opacity
 $transparency: 0.8;
 
-// Extended material
-$success: #4f6354;
-$onSuccess: #ffffff;
-$successContainer: #d1e8d5;
-$onSuccessContainer: #0c1f13;
-
-@if $darkmode == True {
-    // Dark variant
-    $success: #b5ccba;
-    $onSuccess: #213528;
-    $successContainer: #374b3e;
-    $onSuccessContainer: #d1e9d6;
-}
-
 // Transparent versions
 @if $transparent == True {
   $background: transparentize($background, $rootTransparency);
