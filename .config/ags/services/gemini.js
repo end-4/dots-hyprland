@@ -298,7 +298,6 @@ class GeminiService extends Service {
             // "key": this._key,
             // "apiKey": this._key,
         };
-
         const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({

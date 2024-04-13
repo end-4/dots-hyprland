@@ -21,6 +21,7 @@ parser.add_argument('--transparency', type=str, choices=['opaque', 'transparent'
 parser.add_argument('--termscheme', type=str, default=None, help='JSON file containg the terminal scheme for generating term colors')
 parser.add_argument('--harmony', type=float , default=0.8, help='(0-1) Color hue shift towards accent')
 parser.add_argument('--harmonize_threshold', type=float , default=100, help='(0-180) Max threshold angle to limit color hue shift')
+parser.add_argument('--term_fg_boost', type=float , default=0.25, help='Make terminal foreground more different from the background')
 parser.add_argument('--blend_bg_fg', action='store_true', default=False, help='Shift terminal background or foreground towards accent')
 parser.add_argument('--cache', type=str, default=None, help='file path to store the generated color')
 parser.add_argument('--debug', action='store_true', default=False, help='debug mode')
@@ -134,11 +135,12 @@ if args.termscheme is not None:
     primary_color_argb = hex_to_argb(material_colors['primary_paletteKeyColor'])
     for color, val in term_source_colors.items():
         if args.blend_bg_fg and color == "term0":
-            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainer']), 1.5, 0.95)
+            harmonized = boost_chroma_tone(hex_to_argb(material_colors['surfaceContainerLow']), 1.2, 0.95)
         elif args.blend_bg_fg and color == "term15":
             harmonized = boost_chroma_tone(hex_to_argb(material_colors['onSurface']), 3, 1)
         else:
             harmonized = harmonize(hex_to_argb(val), primary_color_argb, args.harmonize_threshold, args.harmony)
+            harmonized = boost_chroma_tone(harmonized, 1, 1 + (args.term_fg_boost * (1 if darkmode else -1)))
         term_colors[color] = argb_to_hex(harmonized)
 
 if args.debug == False:
