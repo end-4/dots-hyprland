@@ -47,7 +47,7 @@ if [[ "$1" = "#"* ]]; then # this is a color
 elif [ "$backend" = "material" ]; then
     smartflag=''
     if [ "$3" = "--smart" ]; then
-        smartflag='--smart True'
+        smartflag='--smart'
     fi
     color_generation/generate_colors_material.py --path "$1" \
     --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" \
