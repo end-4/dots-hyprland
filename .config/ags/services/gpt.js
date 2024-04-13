@@ -246,7 +246,8 @@ class GPTService extends Service {
             stream: true,
         };
 
-        const session = new Soup.Session();
+        const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
+        const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({
             method: 'POST',
             uri: this._url,
