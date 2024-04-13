@@ -16,7 +16,7 @@ $character
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[• ](bold fg:blue) "
+success_symbol = "[• ](bold fg:green) "
 error_symbol = "[• 󰅙](bold fg:red) "
 
 # Disable the package module, hiding it from the prompt completely
@@ -46,7 +46,7 @@ diverged = " 😵 "
 untracked = " 🤷 ‍"
 stashed = " 📦 "
 modified = " 📝 "
-staged = '[++\($count\)](blue)'
+staged = '[++\($count\)](green)'
 renamed = " ✍️ "
 deleted = " 🗑 "
 
@@ -63,7 +63,7 @@ disabled = false
 disabled = true
 threshold = -1
 symbol = " "
-style = "bold dimmed blue"
+style = "bold dimmed green"
 
 [time]
 disabled = true
@@ -80,10 +80,10 @@ show_always = true
 [directory]
 home_symbol = "  "
 read_only = "  "
-style = "bg:blue fg:black"
+style = "bg:green fg:black"
 truncation_length = 6
 truncation_symbol = "••/"
-format = '[](bold fg:blue)[$path ]($style)[](bold fg:blue)'
+format = '[](bold fg:green)[$path ]($style)[](bold fg:green)'
 
 
 [directory.substitutions]
