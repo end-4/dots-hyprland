@@ -55,18 +55,20 @@ const Windows = () => [
     forMonitors(Osk),
     Session(),
     // forMonitors(Bar),
-    forMonitors((id) => Corner(id, 'top left')),
-    forMonitors((id) => Corner(id, 'top right')),
-    forMonitors((id) => Corner(id, 'bottom left')),
-    forMonitors((id) => Corner(id, 'bottom right')),
-    forMonitors(BarCornerTopleft),
-    forMonitors(BarCornerTopright),
+    ...(userOptions.appearance.fakeScreenRounding ? [
+        forMonitors((id) => Corner(id, 'top left')),
+        forMonitors((id) => Corner(id, 'top right')),
+        forMonitors((id) => Corner(id, 'bottom left')),
+        forMonitors((id) => Corner(id, 'bottom right')),
+        forMonitors(BarCornerTopleft),
+        forMonitors(BarCornerTopright),
+    ] : []),
     forMonitors(Click2Close),
 ];
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
 const closeWindowDelays = {}; // For animations
-for(let i = 0; i < (Gdk.Display.get_default()?.get_n_monitors() || 1); i++) {
+for (let i = 0; i < (Gdk.Display.get_default()?.get_n_monitors() || 1); i++) {
     closeWindowDelays[`osk${i}`] = CLOSE_ANIM_TIME;
 }
 
