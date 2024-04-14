@@ -539,11 +539,57 @@ $colorpicker_rounding: 0.341rem;
     background-color: mix($primary, $hovercolor, 40%);
 }
 
+.sidebar-chat-messagearea {
+    margin: 0.341rem;
+}
+
 .sidebar-chat-message {
-    margin: 0.682rem;
     @include normal-rounding;
     @include group-padding;
     background-color: $layer1;
+}
+
+$skeleton-accent: mix($secondary, $onSecondary, 50%);
+
+@keyframes sidebar-chat-message-skeletonline-anim {
+    0% {
+        background-position: 175% 0%;
+    }
+
+    100% {
+        background-position: 50% 0%;
+    }
+}
+
+.sidebar-chat-message-skeletonline {
+    border-radius: $rounding_verysmall;
+    min-height: 1.364rem;
+    background-color: $layer2;
+}
+
+.sidebar-chat-message-skeletonline-offset0 {
+    background-repeat: no-repeat;
+    background: linear-gradient(to right, $layer3 0%, $skeleton-accent 25%, $layer3 50%, $layer3 100%);
+    background-size: 500% 500%;
+    animation: sidebar-chat-message-skeletonline-anim 3s linear;
+    animation-iteration-count: infinite;
+}
+
+.sidebar-chat-message-skeletonline-offset1 {
+    background-repeat: no-repeat;
+    background: linear-gradient(to right, $layer3 0%, $layer3 50%, $skeleton-accent 75%, $layer3 100%);
+    background-size: 500% 500%;
+    animation: sidebar-chat-message-skeletonline-anim 3s linear;
+    animation-iteration-count: infinite;
+}
+
+.sidebar-chat-message-skeletonline-offset2 {
+    margin-right: 5.795rem;
+    background-repeat: no-repeat;
+    background: linear-gradient(to right, $layer3 0%, $layer3 25%, $skeleton-accent 50%, $layer3 75%, $layer3 100%);
+    background-size: 500% 500%;
+    animation: sidebar-chat-message-skeletonline-anim 3s linear;
+    animation-iteration-count: infinite;
 }
 
 .sidebar-chat-indicator {

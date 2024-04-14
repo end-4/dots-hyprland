@@ -98,28 +98,6 @@ $elevation_margin: 0.476rem;
     margin: $elevation_margin;
 }
 
-@keyframes flyin-top {
-    from {
-        margin-top: -2.795rem;
-    }
-
-    to {
-        margin-top: 0rem;
-    }
-}
-
-@keyframes flyin-bottom {
-    from {
-        margin-top: 4.841rem;
-        margin-bottom: -4.841rem;
-    }
-
-    to {
-        margin-bottom: 0rem;
-        margin-top: 0rem;
-    }
-}
-
 @mixin menu_decel {
     transition: 300ms cubic-bezier(0.1, 1, 0, 1);
 }
@@ -163,12 +141,15 @@ $elevation_margin: 0.476rem;
 @mixin element_decel {
     transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
 }
+
 @mixin element_bounceOut {
     transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 @mixin element_accel {
     transition: 300ms cubic-bezier(0.55, 0, 1, 0.45);
 }
+
 @mixin element_easeInOut {
     transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
 }

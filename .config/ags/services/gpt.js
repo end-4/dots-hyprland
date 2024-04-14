@@ -76,10 +76,10 @@ class GPTMessage extends Service {
 
     _role = '';
     _content = '';
-    _thinking = false;
+    _thinking;
     _done = false;
 
-    constructor(role, content, thinking = false, done = false) {
+    constructor(role, content, thinking = true, done = false) {
         super();
         this._role = role;
         this._content = content;
@@ -103,8 +103,8 @@ class GPTMessage extends Service {
     get label() { return this._parserState.parsed + this._parserState.stack.join('') }
 
     get thinking() { return this._thinking }
-    set thinking(thinking) {
-        this._thinking = thinking;
+    set thinking(value) {
+        this._thinking = value;
         this.notify('thinking')
         this.emit('changed')
     }
@@ -202,6 +202,7 @@ class GPTService extends Service {
     }
 
     readResponse(stream, aiResponse) {
+        aiResponse.thinking = false;
         stream.read_line_async(
             0, null,
             (stream, res) => {
@@ -234,7 +235,7 @@ class GPTService extends Service {
     }
 
     send(msg) {
-        this._messages.push(new GPTMessage('user', msg));
+        this._messages.push(new GPTMessage('user', msg, false, true));
         this.emit('newMsg', this._messages.length - 1);
         const aiResponse = new GPTMessage('assistant', 'thinking...', true, false)
 
