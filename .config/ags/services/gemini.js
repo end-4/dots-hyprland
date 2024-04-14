@@ -62,11 +62,11 @@ class GeminiMessage extends Service {
 
     _role = '';
     _parts = [{ text: '' }];
-    _thinking = false;
+    _thinking;
     _done = false;
     _rawData = '';
 
-    constructor(role, content, thinking = false, done = false) {
+    constructor(role, content, thinking = true, done = false) {
         super();
         this._role = role;
         this._parts = [{ text: content }];
@@ -97,8 +97,8 @@ class GeminiMessage extends Service {
     get label() { return this._parserState.parsed + this._parserState.stack.join('') }
 
     get thinking() { return this._thinking }
-    set thinking(thinking) {
-        this._thinking = thinking;
+    set thinking(value) {
+        this._thinking = value;
         this.notify('thinking')
         this.emit('changed')
     }
@@ -116,7 +116,7 @@ class GeminiMessage extends Service {
 
     parseSection() {
         if (this._thinking) {
-            this._thinking = false;
+            this.thinking = false;
             this._parts[0].text = '';
         }
         const parsedData = JSON.parse(this._rawData);
@@ -273,12 +273,12 @@ class GeminiService extends Service {
     }
 
     addMessage(role, message) {
-        this._messages.push(new GeminiMessage(role, message));
+        this._messages.push(new GeminiMessage(role, message, false));
         this.emit('newMsg', this._messages.length - 1);
     }
 
     send(msg) {
-        this._messages.push(new GeminiMessage('user', msg));
+        this._messages.push(new GeminiMessage('user', msg, false));
         this.emit('newMsg', this._messages.length - 1);
         const aiResponse = new GeminiMessage('model', 'thinking...', true, false)
 
