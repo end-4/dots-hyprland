@@ -1,0 +1,38 @@
+{
+  "dark": {
+    "term0": "#080808",
+    "term1": "#FFB8B8",
+    "term2": "#B7FADA",
+    "term3": "#FFFAA7",
+    "term4": "#C9C9FC",
+    "term5": "#FFB8FF",
+    "term6": "#B8B8FF",
+    "term7": "#FFFFFF",
+    "term8": "#404040",
+    "term9": "#FFB8B8",
+    "term10": "#B7FADA",
+    "term11": "#FFFAA7",
+    "term12": "#C9C9FC",
+    "term13": "#FFB8FF",
+    "term14": "#B8B8FF",
+    "term15": "#FFFFFF"
+  },
+  "light": {
+    "term0": "#FFFFFF",
+    "term1": "#AD0000",
+    "term2": "#2A3F35",
+    "term3": "#C2B608",
+    "term4": "#281C6D",
+    "term5": "#700070",
+    "term6": "#8CEBE3",
+    "term7": "#070707",
+    "term8": "#aaaaaa",
+    "term9": "#AD0000",
+    "term10": "#2A3F35",
+    "term11": "#C2B608",
+    "term12": "#281C6D",
+    "term13": "#700070",
+    "term14": "#8CEBE3",
+    "term15": "#070707"
+  }
+}

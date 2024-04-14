@@ -26,6 +26,9 @@ else
     lightdark=$(sed -n '1p' $colormodefile)
     transparency=$(sed -n '2p' $colormodefile)
     materialscheme=$(sed -n '3p' $colormodefile)
+    if [ "$materialscheme" = "monochrome" ]; then
+      terminalscheme="$HOME/.config/ags/scripts/templates/terminal/scheme-monochrome.json"
+    fi
 fi
 backend="material" # color generator backend
 if [ ! -f "$HOME/.cache/ags/user/colorbackend.txt" ]; then
