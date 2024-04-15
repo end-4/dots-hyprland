@@ -183,7 +183,7 @@ fi
 if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 
 #####################################################################################
-printf "\e[36m[$0]: 3. Copying\e[0m\n"
+printf "\e[36m[$0]: 3. Copying + Configuring\e[0m\n"
 
 # In case some folders does not exists
 v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
@@ -260,6 +260,9 @@ esac
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
 v rsync -av ".local/bin/" "$HOME/.local/bin/"
+
+# Dark mode by default
+v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Prevent hyprland from not fully loaded
 sleep 1
