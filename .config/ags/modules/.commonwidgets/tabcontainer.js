@@ -173,6 +173,7 @@ export const ExpandingIconTabContainer = ({
     icons, names, children, className = '',
     setup = () => { }, onChange = () => { },
     tabsHpack = 'center', tabSwitcherClassName = '',
+    transitionDuration = userOptions.animations.durationLarge,
     ...rest
 }) => {
     const shownIndex = Variable(0);
@@ -241,6 +242,7 @@ export const ExpandingIconTabContainer = ({
     });
     const contentStack = Stack({
         transition: 'slide_left_right',
+        transitionDuration: transitionDuration,
         children: children.reduce((acc, currentValue, index) => {
             acc[index] = currentValue;
             return acc;

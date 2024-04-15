@@ -61,3 +61,17 @@
     @include titlefont;
     font-size: 1.705rem;
 }
+
+.cheatsheet-periodictable-element {
+    min-width: 5.455rem;
+    min-height: 5.455rem;
+    @include small-rounding;
+    background-color: $layer1;
+    color: $onLayer1;
+}
+
+.cheatsheet-periodictable-empty {
+    min-width: 5.455rem;
+    min-height: 5.455rem;
+    @include small-rounding;
+}
