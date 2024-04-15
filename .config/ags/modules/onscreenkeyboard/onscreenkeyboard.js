@@ -72,7 +72,7 @@ const KeyboardControls = () => Box({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => {
                 releaseAllKeys();
-                App.toggleWindow('osk');
+                App.toggleWindowOnAllMonitors('osk');
             },
             label: 'keyboard_hide',
         }),

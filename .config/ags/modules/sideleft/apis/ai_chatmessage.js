@@ -39,12 +39,9 @@ function substituteLang(str) {
         { from: 'javascript', to: 'js' },
         { from: 'bash', to: 'sh' },
     ];
-
     for (const { from, to } of subs) {
-        if (from === str)
-            return to;
+        if (from === str) return to;
     }
-
     return str;
 }
 
