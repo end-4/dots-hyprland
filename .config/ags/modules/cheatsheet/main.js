@@ -52,7 +52,7 @@ const CheatsheetHeader = () => Widget.CenterBox({
         hpack: 'end',
         className: "cheatsheet-closebtn icon-material txt txt-hugeass",
         onClicked: () => {
-            App.toggleWindow('cheatsheet');
+            closeWindowOnAllMonitors('cheatsheet');
         },
         child: Widget.Label({
             className: 'icon-material txt txt-hugeass',
