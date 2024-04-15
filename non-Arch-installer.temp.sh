@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 #
-# This script is for install/update some "packages" which are not installed by system package managers.
-# It's function is contained in `install.sh` already, this file is mainly for convenience for non-Arch users.
+# This script is for installing/updating some "packages" which are not installed by system package managers.
+# Its functions are contained in `install.sh` already, and this just makes it more convenient for non-Arch users.
 #
-# Though this is not elegant at all. I may improve the method some day in future.
+# Though this is not elegant at all. I may improve the method some day in the future.
 #
+
 cd "$(dirname "$0")"
 export base="$(pwd)"
 source ./scriptdata/functions
