@@ -391,6 +391,9 @@
         .margin-#{$dir}-#{$spacing} {
             margin-#{$dir}: 0.068rem * $spacing;
         }
+        .padding-#{$dir}-#{$spacing} {
+            padding-#{$dir}: 0.068rem * $spacing;
+        }
     }
     .padding-#{$spacing} {
         padding: 0.068rem * $spacing;
