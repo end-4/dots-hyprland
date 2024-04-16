@@ -48,7 +48,7 @@ export default () => {
             }),
             Label({
                 label: `${niceTypes[type]}`,
-                className: "txt-small",
+                className: "txt txt-small",
             })
         ]
     })
@@ -72,7 +72,7 @@ export default () => {
     });
     const legend = Box({
         hpack: 'center',
-        className: 'spacing-h-10',
+        className: 'spacing-h-20',
         children: [
             BoardColor('metal'),
             BoardColor('nonmetal'),
