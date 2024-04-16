@@ -89,7 +89,8 @@
 ---
 
 ## Thank you
- - [@clsty](https://github.com/clsty) for major improvements to the install script and their other contributions
+ - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
+ - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
