@@ -1,6 +1,6 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import { periodicTable, series } from "./data_periodictable.js";
-const { Box, Button, Label, Revealer } = Widget;
+const { Box, Button, Icon, Label, Revealer } = Widget;
 
 export default () => {
     const ElementTile = (element) => {
@@ -22,7 +22,10 @@ export default () => {
                         })
                     ]
                 }),
-                Label({
+                element.icon ? Icon({
+                    icon: element.icon,
+                    className: "txt-hugerass txt-bold",
+                }) : Label({
                     label: `${element.symbol}`,
                     className: "txt-hugeass txt-bold",
                 }),
