@@ -12,9 +12,6 @@ const userConfigOptions = {
             'prevTab': "Ctrl+Page_Up",
         },
     },
-    'sidebar': {
-        'imageAllowNsfw': true,
-    }
 }
 
 export default userConfigOptions;
