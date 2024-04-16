@@ -27,7 +27,7 @@ export default () => {
                     className: "txt-hugerass txt-bold",
                 }) : Label({
                     label: `${element.symbol}`,
-                    className: "txt-hugeass txt-bold",
+                    className: "cheatsheet-periodictable-elementsymbol",
                 }),
                 Label({
                     label: `${element.name}`,

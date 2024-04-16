@@ -70,6 +70,12 @@
     color: $onLayer1;
 }
 
+.cheatsheet-periodictable-elementsymbol {
+    @include readingfont;
+    font-size: 1.6363rem;
+    font-weight: bold;
+}
+
 .cheatsheet-periodictable-element {
     @include cheatsheet-periodictable-element;
 }
