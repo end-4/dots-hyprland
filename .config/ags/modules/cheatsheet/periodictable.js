@@ -6,25 +6,29 @@ export default () => {
     const ElementTile = (element) => {
         return Box({
             vertical: true,
-            className: (element.name == '' ? 'cheatsheet-periodictable-empty' : 'cheatsheet-periodictable-element'),
+            className: `cheatsheet-periodictable-${element.type}`,
             children: element.name == '' ? null : [
                 Box({
                     className: 'padding-8',
                     children: [
                         Label({
                             label: `${element.number}`,
-                            className: "txt txt-tiny",
+                            className: "txt-tiny",
                         }),
                         Box({ hexpand: true }),
                         Label({
                             label: `${element.weight}`,
-                            className: "txt txt-smaller",
+                            className: "txt-smaller",
                         })
                     ]
                 }),
                 Label({
                     label: `${element.symbol}`,
-                    className: "txt txt-large txt-bold",
+                    className: "txt-hugeass txt-bold",
+                }),
+                Label({
+                    label: `${element.name}`,
+                    className: "txt-tiny",
                 })
             ]
         })
