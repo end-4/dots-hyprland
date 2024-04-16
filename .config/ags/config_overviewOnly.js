@@ -1,5 +1,5 @@
 // Want only the overview from my config? this is what you're looking for!
-// Remember to install the `dart-sass` for styles to load properly (and AGS of course)
+// Remember to install: `dart-sass`, `ags`, `material-symbols`, and `xorg-xrandr`
 // To launch this, run the following
 //     ags -c ~/.config/ags/config_overviewOnly.js
 // To toggle the overview, run:
@@ -16,6 +16,8 @@ import userOptions from './modules/.configuration/user_options.js';
 // Widgets
 import Overview from './modules/overview/main.js';
 
+Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
+Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 async function applyStyle() {
     Utils.exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
