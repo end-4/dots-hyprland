@@ -56,13 +56,13 @@ const Windows = () => [
     Session(),
     // forMonitors(Bar),
     ...(userOptions.appearance.fakeScreenRounding ? [
-        forMonitors((id) => Corner(id, 'top left')),
-        forMonitors((id) => Corner(id, 'top right')),
-        forMonitors((id) => Corner(id, 'bottom left')),
-        forMonitors((id) => Corner(id, 'bottom right')),
-        forMonitors(BarCornerTopleft),
-        forMonitors(BarCornerTopright),
+        forMonitors((id) => Corner(id, 'top left', true)),
+        forMonitors((id) => Corner(id, 'top right', true)),
     ] : []),
+    forMonitors((id) => Corner(id, 'bottom left', userOptions.appearance.fakeScreenRounding)),
+    forMonitors((id) => Corner(id, 'bottom right', userOptions.appearance.fakeScreenRounding)),
+    forMonitors(BarCornerTopleft),
+    forMonitors(BarCornerTopright),
     forMonitors(Click2Close),
 ];
 
