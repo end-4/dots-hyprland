@@ -296,9 +296,9 @@ export default (monitor = 0) => {
         transitionDuration: userOptions.animations.durationLarge,
         child: dockContent,
         setup: (self) => self
-            .hook(Hyprland, (self) => self.attribute.updateShow(self))
+            // .hook(Hyprland, (self) => self.attribute.updateShow(self))
             .hook(Hyprland.active.workspace, (self) => self.attribute.updateShow(self))
-            .hook(Hyprland.active.client, (self) => self.attribute.updateShow(self))
+            // .hook(Hyprland.active.client, (self) => self.attribute.updateShow(self))
             .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-added')
             .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-removed')
         ,
