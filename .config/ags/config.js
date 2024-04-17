@@ -11,7 +11,7 @@ import { firstRunWelcome } from './services/messages.js';
 import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
 import Cheatsheet from './modules/cheatsheet/main.js';
 // import DesktopBackground from './modules/desktopbackground/main.js';
-// import Dock from './modules/dock/main.js';
+import Dock from './modules/dock/main.js';
 import Corner from './modules/screencorners/main.js';
 import Indicator from './modules/indicators/main.js';
 import Osk from './modules/onscreenkeyboard/main.js';
@@ -50,6 +50,7 @@ const Windows = () => [
     Overview(),
     forMonitors(Indicator),
     forMonitors(Cheatsheet),
+    forMonitors(Dock),
     SideLeft(),
     SideRight(),
     forMonitors(Osk),
