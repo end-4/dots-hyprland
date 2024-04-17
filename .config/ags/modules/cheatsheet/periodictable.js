@@ -6,6 +6,7 @@ export default () => {
     const ElementTile = (element) => {
         return Box({
             vertical: true,
+            tooltipText: element.electronConfig ? `${element.electronConfig}` : null,
             className: `cheatsheet-periodictable-${element.type}`,
             children: element.name == '' ? null : [
                 Box({

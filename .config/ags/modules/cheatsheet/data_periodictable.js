@@ -1,6 +1,6 @@
 export const periodicTable = [
     [
-        { name: 'Hydrogen', symbol: 'H', number: 1, weight: 1.008, type: 'nonmetal' },
+        { name: 'Hydrogen', symbol: 'H', number: 1, weight: 1.01, type: 'nonmetal' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
@@ -17,11 +17,11 @@ export const periodicTable = [
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
-        { name: 'Helium', symbol: 'He', number: 2, weight: 4.003, type: 'noblegas' },
+        { name: 'Helium', symbol: 'He', number: 2, weight: 4.00, type: 'noblegas' },
     ],
     [
-        { name: 'Lithium', symbol: 'Li', number: 3, weight: 6.941, type: 'metal' },
-        { name: 'Beryllium', symbol: 'Be', number: 4, weight: 9.012, type: 'metal' },
+        { name: 'Lithium', symbol: 'Li', number: 3, weight: 6.94, type: 'metal' },
+        { name: 'Beryllium', symbol: 'Be', number: 4, weight: 9.01, type: 'metal' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
