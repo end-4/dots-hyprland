@@ -117,15 +117,14 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     })
 });
 
-const Taskbar = (monitor) => Widget.Box({
+const Taskbar = () => Widget.Box({
     className: 'dock-apps',
     attribute: {
-        monitor: monitor,
         'map': new Map(),
         'clientSortFunc': (a, b) => {
             return a.attribute.workspace > b.attribute.workspace;
         },
-        'update': (box, monitor) => {
+        'update': (box) => {
             for (let i = 0; i < Hyprland.clients.length; i++) {
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
@@ -152,7 +151,7 @@ const Taskbar = (monitor) => Widget.Box({
             }
             box.children = Array.from(box.attribute.map.values());
         },
-        'add': (box, address, monitor) => {
+        'add': (box, address) => {
             if (!address) { // First active emit is undefined
                 box.attribute.update(box);
                 return;
@@ -194,7 +193,7 @@ const Taskbar = (monitor) => Widget.Box({
         },
     },
     setup: (self) => {
-        self.hook(Hyprland, (box, address) => box.attribute.add(box, address, self.monitor), 'client-added')
+        self.hook(Hyprland, (box, address) => box.attribute.add(box, address), 'client-added')
             .hook(Hyprland, (box, address) => box.attribute.remove(box, address, self.monitor), 'client-removed')
         Utils.timeout(100, () => self.attribute.update(self));
     },
@@ -243,7 +242,7 @@ export default (monitor = 0) => {
         children: [
             PinnedApps(),
             DockSeparator(),
-            Taskbar(monitor),
+            Taskbar(),
             PinButton(),
         ]
     })
