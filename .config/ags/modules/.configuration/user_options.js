@@ -77,24 +77,21 @@ let configOptions = {
         'shown': 10,
     },
     'dock': {
-        'enabled': false,
+        'enabled': true,
         // Threshold for hover to trigger dock display
         'hoverMinHeight': 5,
         'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
-        // top or bottom
         'layer': 'top',
-        // Dock will move to other monitor along with focus if enabled
-        'monitorExclusivity': true,
+        'monitorExclusivity': true, // Dock will move to other monitor along with focus if enabled
         // It's useful to keep the icons consistent, which is useful if you're OCD :)
         'searchPinnedAppIcons': false,
         // available: client_added, client_move, workspace_active, client_active
-        'trigger': ['client-added', 'client-removed',
-            'workspace-active'],
+        'trigger': ['client-added', 'client-removed'],
         // Automatically hide dock after a period of time
         // after a trigger has been triggered.
         // Time in milliseconds. empty if always displays.
         // { 'trigger': 'client-added', interval: 1000, }
-        'autoHidden': [
+        'autoHide': [
             {
                 'trigger': 'client-added',
                 'interval': 2000,
