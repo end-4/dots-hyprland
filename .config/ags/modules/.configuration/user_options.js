@@ -82,14 +82,9 @@ let configOptions = {
         'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
         'layer': 'top',
         'monitorExclusivity': true, // Dock will move to other monitor along with focus if enabled
-        // It's useful to keep the icons consistent, which is useful if you're OCD :)
-        'searchPinnedAppIcons': false,
-        // available: client_added, client_move, workspace_active, client_active
-        'trigger': ['client-added', 'client-removed'],
-        // Automatically hide dock after a period of time
-        // after a trigger has been triggered.
-        // Time in milliseconds. empty if always displays.
-        // { 'trigger': 'client-added', interval: 1000, }
+        'searchPinnedAppIcons': false, // Try to search for the correct icon if the app class isn't an icon name
+        'trigger': ['client-added', 'client-removed'], // client_added, client_move, workspace_active, client_active
+        // Automatically hide dock after `interval` ms since trigger
         'autoHide': [
             {
                 'trigger': 'client-added',
@@ -104,10 +99,9 @@ let configOptions = {
     // Longer stuff
     'icons': {
         // Find the window's icon by its class with levenshteinDistance
-        // All file paths are preprocessed and stored at ags startup, so if there
-        // are so many files under the path it will affect performance
-        // Maybe you need a comprehensive icon theme
-        // Example: ['/usr/share/icons/Tela-nord/scalable/apps', 'others...']
+        // The file names are processed at startup, so if there
+        // are too many files in the search path it'll affect performance
+        // Example: ['/usr/share/icons/Tela-nord/scalable/apps']
         'searchPaths': [''],
 
         substitutions: {
