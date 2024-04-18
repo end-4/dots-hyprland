@@ -12,7 +12,7 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-const icon_files = userOptions.icon.searchPaths.map(e => getAllFiles(e)).flat(1)
+const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1)
 
 let isPinned = false
 let cachePath = new Map()
