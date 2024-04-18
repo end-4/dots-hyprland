@@ -77,7 +77,7 @@ const PinButton = () => {
             child: Widget.Box({
                 homogeneous: true,
                 className: 'dock-app-icon',
-                child: MaterialIcon('Lock', 'larger')
+                child: MaterialIcon('push_pin', 'hugeass')
             }),
             overlays: [Widget.Box({
                 class_name: 'indicator',
