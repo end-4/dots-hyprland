@@ -46,7 +46,6 @@ applyStyle().catch(print);
 
 const Windows = () => [
     // forMonitors(DesktopBackground),
-    // Dock(),
     Overview(),
     forMonitors(Indicator),
     forMonitors(Cheatsheet),

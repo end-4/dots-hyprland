@@ -88,11 +88,11 @@ let configOptions = {
         'autoHide': [
             {
                 'trigger': 'client-added',
-                'interval': 1000,
+                'interval': 500,
             },
             {
                 'trigger': 'client-removed',
-                'interval': 1000,
+                'interval': 500,
             },
         ],
     },
