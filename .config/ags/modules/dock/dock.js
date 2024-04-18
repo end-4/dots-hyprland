@@ -12,12 +12,7 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-const icon_files = userOptions.dock.iconSearchPaths.map(e => getAllFiles(e)).flat(1)
-
-const pinnedApps = [
-    'firefox',
-    'org.gnome.Nautilus',
-];
+const icon_files = userOptions.icon.searchPaths.map(e => getAllFiles(e)).flat(1)
 
 let isPinned = false
 let cachePath = new Map()
@@ -147,10 +142,10 @@ const Taskbar = (monitor) => Widget.Box({
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
-                for (const appName of pinnedApps) {
-                    if (appClass.includes(appName.toLowerCase()))
-                        return null;
-                }
+                // for (const appName of userOptions.dock.pinnedApps) {
+                //     if (appClass.includes(appName.toLowerCase()))
+                //         return null;
+                // }
                 let appClassLower = appClass.toLowerCase()
                 let path = ''
                 if (cachePath[appClassLower]) { path = cachePath[appClassLower] }
@@ -222,14 +217,14 @@ const Taskbar = (monitor) => Widget.Box({
 const PinnedApps = () => Widget.Box({
     class_name: 'dock-apps',
     homogeneous: true,
-    children: pinnedApps
+    children: userOptions.dock.pinnedApps
         .map(term => ({ app: Applications.query(term)?.[0], term }))
         .filter(({ app }) => app)
         .map(({ app, term = true }) => {
             const newButton = AppButton({
                 // different icon, emm...
                 icon: userOptions.dock.searchPinnedAppIcons ?
-                    searchIcons(app.icon_name, icon_files) :
+                    searchIcons(app.name, icon_files) :
                     app.icon_name,
                 onClicked: () => {
                     for (const client of Hyprland.clients) {
@@ -367,8 +362,6 @@ export default (monitor = 0) => {
         setup: self => self.on("leave-notify-event", () => {
             if (!isPinned) dockRevealer.revealChild = false;
             clearTimes()
-        }).on('key-press-event', (self, event) => {
-            console.log(self, event)
         })
     })
 }

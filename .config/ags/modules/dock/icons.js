@@ -1,6 +1,4 @@
 const { Gio, GLib } = imports.gi
-import { lookUpIcon, timeout } from 'resource:///com/github/Aylur/ags/utils.js';
-import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 
 const exists = (path) => Gio.File.new_for_path(path).query_exists(null);
 
@@ -45,13 +43,15 @@ export const getAllFiles = (dir, files = []) => {
 }
 
 export const searchIcons = (appClass, files) => {
+    appClass = appClass.toLowerCase()
+
     if (!files.length) { return "" }
 
     let appro = 0x3f3f3f3f
     let path = ""
 
     for (const item of files) {
-        let score = levenshteinDistance(item.split("/").pop(), appClass)
+        let score = levenshteinDistance(item.split("/").pop().toLowerCase().split(".")[0], appClass)
 
         if (score < appro) {
             appro = score
