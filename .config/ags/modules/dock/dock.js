@@ -63,33 +63,27 @@ const DockSeparator = (props = {}) => Box({
     className: 'dock-separator',
 })
 
-const PinButton = () => {
-    let botton = Widget.Button({
-        className: 'dock-app-btn dock-app-btn-animate',
-        tooltipText: 'Pin Dock',
-        child: Widget.Overlay({
-            child: Widget.Box({
-                homogeneous: true,
-                className: 'dock-app-icon',
-                child: MaterialIcon('push_pin', 'hugeass')
-            }),
-            overlays: [Widget.Box({
-                class_name: 'indicator',
-                vpack: 'end',
-                hpack: 'center',
-            })],
+const PinButton = () => Widget.Button({
+    className: 'dock-app-btn dock-app-btn-animate',
+    tooltipText: 'Pin Dock',
+    child: Widget.Overlay({
+        child: Widget.Box({
+            homogeneous: true,
+            className: 'dock-app-icon',
+            child: MaterialIcon('push_pin', 'hugeass')
         }),
-        onClicked: () => {
-            isPinned = !isPinned
-            botton.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`
-        },
-        setup: (button) => {
-            setupCursorHover(button);
-        }
-    })
-
-    return botton
-}
+        overlays: [Widget.Box({
+            class_name: 'indicator',
+            vpack: 'end',
+            hpack: 'center',
+        })],
+    }),
+    onClicked: (self) => {
+        isPinned = !isPinned
+        self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`
+    },
+    setup: setupCursorHover,
+})
 
 const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     attribute: {
@@ -299,11 +293,10 @@ export default (monitor = 0) => {
                 // self.revealChild = true;
                 // // }
 
-                if (userOptions.dock.monitorExclusivity) {
-                    self.revealChild = Hyprland.active.monitor.id === monitor
-                } else {
+                if (userOptions.dock.monitorExclusivity)
+                    self.revealChild = Hyprland.active.monitor.id === monitor;
+                else
                     self.revealChild = true;
-                }
 
                 return self.revealChild
             }
@@ -317,11 +310,9 @@ export default (monitor = 0) => {
                 if (!userOptions.dock.trigger.includes(trigger)) return
                 const flag = self.attribute.updateShow(self)
 
-                if (flag) { clearTimes() }
+                if (flag) clearTimes();
 
-                const hidden = userOptions
-                    .dock
-                    .autoHide.find(e => e["trigger"] === trigger)
+                const hidden = userOptions.dock.autoHide.find(e => e["trigger"] === trigger)
 
                 if (hidden) {
                     let id = Utils.timeout(hidden.interval, () => {
@@ -338,8 +329,7 @@ export default (monitor = 0) => {
                 .hook(Hyprland.active.client, self => callback(self, "client-active"))
                 .hook(Hyprland, self => callback(self, "client-added"), "client-added")
                 .hook(Hyprland, self => callback(self, "client-removed"), "client-removed")
-            }
-        ,
+        },
     })
     return EventBox({
         onHover: () => {
@@ -349,9 +339,7 @@ export default (monitor = 0) => {
         child: Box({
             homogeneous: true,
             css: `min-height: ${userOptions.dock.hiddenThickness}px;`,
-            children: [
-                dockRevealer,
-            ]
+            children: [dockRevealer],
         }),
         setup: self => self.on("leave-notify-event", () => {
             if (!isPinned) dockRevealer.revealChild = false;
