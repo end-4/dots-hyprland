@@ -71,10 +71,45 @@ let configOptions = {
         'dateFormat': "%d/%m", // On notif time
     },
     'weather': {
-        'city': "",
+        'city': "Chengdu",
     },
     'workspaces': {
         'shown': 10,
+    },
+    'dock': {
+        'enabled': false,
+        // Threshold for hover to trigger dock display
+        'hoverMinHeight': 5,
+        'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
+        // top or bottom
+        'layer': 'top',
+        // Find the window's icon by its class with levenshteinDistance
+        // All file paths are preprocessed and stored at ags startup, so if there
+        // are so many files under the path it will affect performance
+        // Maybe you need a comprehensive icon theme
+        // Example: ['/usr/share/icons/Tela-nord-dark/scalable/apps', 'others...']
+        'iconSearchPaths': [''],
+        // Dock will move to other monitor along with focus if enabled
+        'monitorExclusivity': true,
+        // It's useful to keep the icons consistent, which is useful if you're OCD :)
+        'searchPinnedAppIcons': false,
+        // available: client_added, client_move, workspace_active, client_active
+        'trigger': ['client-added', 'client-removed',
+            'workspace-active'],
+        // Automatically hide dock after a period of time
+        // after a trigger has been triggered.
+        // Time in milliseconds. empty if always displays.
+        // { 'trigger': 'client-added', interval: 1000, }
+        'autoHidden': [
+            {
+                'trigger': 'client-added',
+                'interval': 2000,
+            },
+            {
+                'trigger': 'client-removed',
+                'interval': 2000,
+            },
+        ],
     },
     // Longer stuff
     'icons': {

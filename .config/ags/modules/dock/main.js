@@ -4,7 +4,7 @@ import Dock from './dock.js';
 export default (monitor = 0) => Widget.Window({
     monitor,
     name: `dock${monitor}`,
-    layer: 'top',
+    layer: userOptions.dock.layer,
     anchor: ['bottom'],
     exclusivity: 'normal',
     visible: true,
