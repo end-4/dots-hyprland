@@ -348,7 +348,7 @@ export default (monitor = 0) => {
         },
         child: Box({
             homogeneous: true,
-            css: `min-height: ${userOptions.dock.hoverMinHeight}px;`,
+            css: `min-height: ${userOptions.dock.hiddenThickness}px;`,
             children: [
                 dockRevealer,
             ]
