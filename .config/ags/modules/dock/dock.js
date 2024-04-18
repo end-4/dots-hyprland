@@ -58,12 +58,6 @@ function ExclusiveWindow(client) {
 
 const focus = ({ address }) => Utils.execAsync(`hyprctl dispatch focuswindow address:${address}`).catch(print);
 
-const activeMonitorId = () => {
-    let monitors = JSON.parse(exec('hyprctl monitors -j'))
-    let activeMonitor = monitors.find((e) => e["focused"] === true)
-    return activeMonitor["id"]
-}
-
 const DockSeparator = (props = {}) => Box({
     ...props,
     className: 'dock-separator',
@@ -306,7 +300,7 @@ export default (monitor = 0) => {
                 // // }
 
                 if (userOptions.dock.monitorExclusivity) {
-                    self.revealChild = activeMonitorId() === monitor
+                    self.revealChild = Hyprland.active.monitor.id === monitor
                 } else {
                     self.revealChild = true;
                 }
