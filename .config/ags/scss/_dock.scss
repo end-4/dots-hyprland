@@ -5,9 +5,20 @@
     padding: 0.682rem;
 }
 
+.dock-app-btn-animate {
+    transition-property: background-color;
+    transition-duration: 0.5s;
+}
+
 .dock-app-btn {
     @include normal-rounding;
     padding: 0.273rem;
+}
+
+.pinned-dock-app-btn {
+    @include normal-rounding;
+    padding: 0.273rem;
+    background-color: $layer0Hover;
 }
 
 .dock-app-btn:hover,
