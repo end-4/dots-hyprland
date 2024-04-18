@@ -50,11 +50,11 @@ const Windows = () => [
     Overview(),
     forMonitors(Indicator),
     forMonitors(Cheatsheet),
-    forMonitors(Dock),
     SideLeft(),
     SideRight(),
     forMonitors(Osk),
     Session(),
+    ...(userOptions.dock.enabled ? [forMonitors(Dock)] : []),
     // forMonitors(Bar),
     ...(userOptions.appearance.fakeScreenRounding ? [
         forMonitors((id) => Corner(id, 'top left', true)),
@@ -83,4 +83,3 @@ App.config({
 // Stuff that don't need to be toggled. And they're async so ugh...
 forMonitorsAsync(Bar);
 // Bar().catch(print); // Use this to debug the bar. Single monitor only.
-

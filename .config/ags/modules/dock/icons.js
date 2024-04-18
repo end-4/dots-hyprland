@@ -28,6 +28,7 @@ export const levenshteinDistance = (a, b) => {
 }
 
 export const getAllFiles = (dir, files = []) => {
+    if (!exists(dir)) { return [] }
     const file = Gio.File.new_for_path(dir);
     const enumerator = file.enumerate_children('standard::name,standard::type',
         Gio.FileQueryInfoFlags.NONE, null);
@@ -44,6 +45,8 @@ export const getAllFiles = (dir, files = []) => {
 }
 
 export const searchIcons = (appClass, files) => {
+    if (!files.length) { return "" }
+
     let appro = 0x3f3f3f3f
     let path = ""
 

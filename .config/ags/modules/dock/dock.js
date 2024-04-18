@@ -1,4 +1,4 @@
-const { Gtk } = imports.gi;
+const { Gtk, GLib } = imports.gi;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../variables.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -12,7 +12,7 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-const icon_files = getAllFiles("/usr/share/icons/Tela-nord-dark/scalable/apps")
+const icon_files = userOptions.dock.iconSearchPaths.map(e => getAllFiles(e)).flat(1)
 
 const pinnedApps = [
     'firefox',
@@ -21,6 +21,13 @@ const pinnedApps = [
 
 let isPinned = false
 let cachePath = new Map()
+
+let timers = []
+
+function clearTimes() {
+    timers.forEach(e => GLib.source_remove(e))
+    timers = []
+}
 
 function substitute(str) {
     const subs = [
@@ -67,23 +74,33 @@ const DockSeparator = (props = {}) => Box({
     className: 'dock-separator',
 })
 
-const PinButton = () => Widget.Button({
-    className: 'dock-app-btn',
-    tooltipText: 'Pin Dock',
-    child: Widget.Overlay({
-        child: Widget.Box({
-            homogeneous: true,
-            className: 'dock-app-icon',
-            child: MaterialIcon('Lock', 'larger')
+const PinButton = () => {
+    let botton = Widget.Button({
+        className: 'dock-app-btn dock-app-btn-animate',
+        tooltipText: 'Pin Dock',
+        child: Widget.Overlay({
+            child: Widget.Box({
+                homogeneous: true,
+                className: 'dock-app-icon',
+                child: MaterialIcon('Lock', 'larger')
+            }),
+            overlays: [Widget.Box({
+                class_name: 'indicator',
+                vpack: 'end',
+                hpack: 'center',
+            })],
         }),
-        overlays: [Widget.Box({
-            class_name: 'indicator',
-            vpack: 'end',
-            hpack: 'center',
-        })],
-    }),
-    onClicked: () => isPinned = !isPinned
-})
+        onClicked: () => {
+            isPinned = !isPinned
+            botton.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`
+        },
+        setup: (button) => {
+            setupCursorHover(button);
+        }
+    })
+
+    return botton
+}
 
 const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     attribute: {
@@ -94,7 +111,7 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     child: Widget.Button({
         ...rest,
-        className: 'dock-app-btn',
+        className: 'dock-app-btn dock-app-btn-animate',
         child: Widget.Box({
             child: Widget.Overlay({
                 child: Widget.Box({
@@ -117,14 +134,15 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     })
 });
 
-const Taskbar = () => Widget.Box({
+const Taskbar = (monitor) => Widget.Box({
     className: 'dock-apps',
     attribute: {
+        monitor: monitor,
         'map': new Map(),
         'clientSortFunc': (a, b) => {
             return a.attribute.workspace > b.attribute.workspace;
         },
-        'update': (box) => {
+        'update': (box, monitor) => {
             for (let i = 0; i < Hyprland.clients.length; i++) {
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
@@ -151,7 +169,7 @@ const Taskbar = () => Widget.Box({
             }
             box.children = Array.from(box.attribute.map.values());
         },
-        'add': (box, address) => {
+        'add': (box, address, monitor) => {
             if (!address) { // First active emit is undefined
                 box.attribute.update(box);
                 return;
@@ -193,7 +211,7 @@ const Taskbar = () => Widget.Box({
         },
     },
     setup: (self) => {
-        self.hook(Hyprland, (box, address) => box.attribute.add(box, address), 'client-added')
+        self.hook(Hyprland, (box, address) => box.attribute.add(box, address, self.monitor), 'client-added')
             .hook(Hyprland, (box, address) => box.attribute.remove(box, address, self.monitor), 'client-removed')
         Utils.timeout(100, () => self.attribute.update(self));
     },
@@ -208,7 +226,9 @@ const PinnedApps = () => Widget.Box({
         .map(({ app, term = true }) => {
             const newButton = AppButton({
                 // different icon, emm...
-                icon: app.icon_name,
+                icon: userOptions.dock.searchPinnedAppIcons ?
+                    searchIcons(app.icon_name, icon_files) :
+                    app.icon_name,
                 onClicked: () => {
                     for (const client of Hyprland.clients) {
                         if (client.class.toLowerCase().includes(term))
@@ -287,36 +307,66 @@ export default (monitor = 0) => {
                 // // if (currentWorkspace === client.workspace.id) {
                 // self.revealChild = true;
                 // // }
-                self.revealChild = activeMonitorId() === monitor
+
+                if (userOptions.dock.monitorExclusivity) {
+                    self.revealChild = activeMonitorId() === monitor
+                } else {
+                    self.revealChild = true;
+                }
+
+                return self.revealChild
             }
         },
         revealChild: false,
         transition: 'slide_up',
         transitionDuration: userOptions.animations.durationLarge,
         child: dockContent,
-        setup: (self) => self
-            // .hook(Hyprland, (self) => self.attribute.updateShow(self))
-            .hook(Hyprland.active.workspace, (self) => self.attribute.updateShow(self))
-            // .hook(Hyprland.active.client, (self) => self.attribute.updateShow(self))
-            .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-added')
-            .hook(Hyprland, (self) => self.attribute.updateShow(self), 'client-removed')
+        setup: (self) => {
+            const callback = (self, trigger) => {
+                if (!userOptions.dock.trigger.includes(trigger)) return
+                const flag = self.attribute.updateShow(self)
+
+                if (flag) { clearTimes() }
+
+                const hidden = userOptions
+                    .dock
+                    .autoHidden.find(e => e["trigger"] === trigger)
+
+                if (hidden) {
+                    let id = Utils.timeout(hidden.interval, () => {
+                        if (!isPinned) { self.revealChild = false }
+                        timers = timers.filter(e => e !== id)
+                    })
+                    timers.push(id)
+                }
+            }
+
+            self
+                // .hook(Hyprland, (self) => self.attribute.updateShow(self))
+                .hook(Hyprland.active.workspace, self => callback(self, "workspace-active"))
+                .hook(Hyprland.active.client, self => callback(self, "client-active"))
+                .hook(Hyprland, self => callback(self, "client-added"), "client-added")
+                .hook(Hyprland, self => callback(self, "client-removed"), "client-removed")
+            }
         ,
     })
     return EventBox({
         onHover: () => {
             dockRevealer.revealChild = true;
+            clearTimes()
         },
-        // onHoverLost: () => {
-        //     if (Hyprland.active.client.attribute.class.length === 0) { return }
-        //     dockRevealer.revealChild = false;
-        // },
         child: Box({
             homogeneous: true,
-            css: 'min-height: 20px;',
+            css: `min-height: ${userOptions.dock.hoverMinHeight}px;`,
             children: [
                 dockRevealer,
             ]
         }),
-        setup: self => self.on("leave-notify-event", () => { if (!isPinned) dockRevealer.revealChild = false })
+        setup: self => self.on("leave-notify-event", () => {
+            if (!isPinned) dockRevealer.revealChild = false;
+            clearTimes()
+        }).on('key-press-event', (self, event) => {
+            console.log(self, event)
+        })
     })
 }
