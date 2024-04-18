@@ -327,7 +327,7 @@ export default (monitor = 0) => {
 
                 const hidden = userOptions
                     .dock
-                    .autoHidden.find(e => e["trigger"] === trigger)
+                    .autoHide.find(e => e["trigger"] === trigger)
 
                 if (hidden) {
                     let id = Utils.timeout(hidden.interval, () => {
