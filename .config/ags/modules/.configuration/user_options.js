@@ -78,8 +78,7 @@ let configOptions = {
     },
     'dock': {
         'enabled': true,
-        // Threshold for hover to trigger dock display
-        'hoverMinHeight': 5,
+        'hiddenThickness': 5,
         'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
         'layer': 'top',
         'monitorExclusivity': true, // Dock will move to other monitor along with focus if enabled
