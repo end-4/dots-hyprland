@@ -158,7 +158,7 @@ const Taskbar = (monitor) => Widget.Box({
                     path = searchIcons(appClass.toLowerCase(), icon_files)
                     cachePath[appClassLower] = path
                 }
-                if (path === '') { path = appClass }
+                if (path === '') { path = substitute(appClass) }
                 const newButton = AppButton({
                     icon: path,
                     tooltipText: `${client.title} (${appClass})`,
@@ -187,7 +187,7 @@ const Taskbar = (monitor) => Widget.Box({
                 path = searchIcons(appClassLower, icon_files)
                 cachePath[appClassLower] = path
             }
-            if (path === '') { path = substitute(appClassLower) }
+            if (path === '') { path = substitute(appClass) }
             const newButton = AppButton({
                 icon: path,
                 tooltipText: `${newClient.title} (${appClass})`,
