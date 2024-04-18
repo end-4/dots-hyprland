@@ -71,7 +71,7 @@ let configOptions = {
         'dateFormat': "%d/%m", // On notif time
     },
     'weather': {
-        'city': "Chengdu",
+        'city': "",
     },
     'workspaces': {
         'shown': 10,
@@ -83,12 +83,6 @@ let configOptions = {
         'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
         // top or bottom
         'layer': 'top',
-        // Find the window's icon by its class with levenshteinDistance
-        // All file paths are preprocessed and stored at ags startup, so if there
-        // are so many files under the path it will affect performance
-        // Maybe you need a comprehensive icon theme
-        // Example: ['/usr/share/icons/Tela-nord-dark/scalable/apps', 'others...']
-        'iconSearchPaths': [''],
         // Dock will move to other monitor along with focus if enabled
         'monitorExclusivity': true,
         // It's useful to keep the icons consistent, which is useful if you're OCD :)
@@ -113,6 +107,13 @@ let configOptions = {
     },
     // Longer stuff
     'icons': {
+        // Find the window's icon by its class with levenshteinDistance
+        // All file paths are preprocessed and stored at ags startup, so if there
+        // are so many files under the path it will affect performance
+        // Maybe you need a comprehensive icon theme
+        // Example: ['/usr/share/icons/Tela-nord/scalable/apps', 'others...']
+        'searchPaths': [''],
+
         substitutions: {
             'code-url-handler': "visual-studio-code",
             'Code': "visual-studio-code",
