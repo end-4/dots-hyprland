@@ -9,14 +9,10 @@ import Applications from 'resource:///com/github/Aylur/ags/service/applications.
 const { execAsync, exec } = Utils;
 const { Box, Revealer } = Widget;
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-import { getAllFiles, searchIcons } from './icons.js'
+import { searchIcons } from '../.miscutils/icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1)
-
 let isPinned = false
-let cachePath = new Map()
-
 let timers = []
 
 function clearTimes() {
@@ -134,16 +130,8 @@ const Taskbar = (monitor) => Widget.Box({
                 //     if (appClass.includes(appName.toLowerCase()))
                 //         return null;
                 // }
-                let appClassLower = appClass.toLowerCase()
-                let path = ''
-                if (cachePath[appClassLower]) { path = cachePath[appClassLower] }
-                else {
-                    path = searchIcons(appClass.toLowerCase(), icon_files)
-                    cachePath[appClassLower] = path
-                }
-                if (path === '') { path = substitute(appClass) }
                 const newButton = AppButton({
-                    icon: path,
+                    icon: searchIcons(appClass),
                     tooltipText: `${client.title} (${appClass})`,
                     onClicked: () => focus(client),
                 });
@@ -162,17 +150,9 @@ const Taskbar = (monitor) => Widget.Box({
                 return client.address == address;
             });
             if (ExclusiveWindow(newClient)) { return }
-            let appClass = newClient.class
-            let appClassLower = appClass.toLowerCase()
-            let path = ''
-            if (cachePath[appClassLower]) { path = cachePath[appClassLower] }
-            else {
-                path = searchIcons(appClassLower, icon_files)
-                cachePath[appClassLower] = path
-            }
-            if (path === '') { path = substitute(appClass) }
+            let appClass = substitute(newClient.class)
             const newButton = AppButton({
-                icon: path,
+                icon: searchIcons(appClass),
                 tooltipText: `${newClient.title} (${appClass})`,
                 onClicked: () => focus(newClient),
             })

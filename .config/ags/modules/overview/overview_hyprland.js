@@ -14,7 +14,7 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 import { dumpToWorkspace, swapWorkspace } from "./actions.js";
-import { substitute } from "../.miscutils/icons.js";
+import { substitute, searchIcons } from "../.miscutils/icons.js";
 
 const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
@@ -65,7 +65,7 @@ export default () => {
         if (y + h > SCREEN_HEIGHT) h = SCREEN_HEIGHT - y;
 
         const appIcon = Widget.Icon({
-            icon: substitute(c),
+            icon: searchIcons(substitute(c)),
             size: Math.min(w, h) * userOptions.overview.scale / 2.5,
         });
         return Widget.Button({
