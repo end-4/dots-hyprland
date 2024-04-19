@@ -384,12 +384,17 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 .sidebar-module-btn-arrow {
     @include full-rounding;
     @include icon-material;
-    background-color: $surfaceContainerHigh;
+    background-color: $layer2;
     min-width: 1.705rem;
     min-height: 1.705rem;
 
-    &:hover {
-        background-color: $hovercolor;
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
     }
 }
 
@@ -400,12 +405,13 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     min-width: 1.705rem;
     min-height: 1.705rem;
 
-    &:hover {
-        background-color: $hovercolor;
+    &:hover,
+    &:focus {
+        background-color: $layer1Hover;
     }
 
     &:active {
-        background-color: $activecolor;
+        background-color: $layer1Active;
     }
 }
 
