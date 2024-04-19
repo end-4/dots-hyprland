@@ -1,7 +1,8 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-const { Box, Scrollable } = Widget;
+const { Box, Label, Scrollable } = Widget;
 import QuickScripts from './tools/quickscripts.js';
 import ColorPicker from './tools/colorpicker.js';
+import Name from './tools/name.js';
 
 export default Scrollable({
     hscroll: "never",
@@ -12,6 +13,8 @@ export default Scrollable({
         children: [
             QuickScripts(),
             ColorPicker(),
+            Box({ vexpand: true }),
+            Name(),
         ]
     })
 });
