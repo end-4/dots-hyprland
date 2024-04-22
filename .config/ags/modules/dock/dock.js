@@ -190,10 +190,7 @@ const PinnedApps = () => Widget.Box({
         .filter(({ app }) => app)
         .map(({ app, term = true }) => {
             const newButton = AppButton({
-                // different icon, emm...
-                icon: userOptions.dock.searchPinnedAppIcons ?
-                    searchIcons(app.name, icon_files) :
-                    app.icon_name,
+                icon: searchIcons(app.name),
                 onClicked: () => {
                     for (const client of Hyprland.clients) {
                         if (client.class.toLowerCase().includes(term))

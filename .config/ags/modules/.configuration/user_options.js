@@ -82,7 +82,6 @@ let configOptions = {
         'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
         'layer': 'top',
         'monitorExclusivity': true, // Dock will move to other monitor along with focus if enabled
-        'searchPinnedAppIcons': false, // Try to search for the correct icon if the app class isn't an icon name
         'trigger': ['client-added', 'client-removed'], // client_added, client_move, workspace_active, client_active
         // Automatically hide dock after `interval` ms since trigger
         'autoHide': [
