@@ -1,5 +1,6 @@
 const { Gtk, GLib } = imports.gi;
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../variables.js';
+import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { EventBox, Button } = Widget;
@@ -66,21 +67,28 @@ const DockSeparator = (props = {}) => Box({
 const PinButton = () => Widget.Button({
     className: 'dock-app-btn dock-app-btn-animate',
     tooltipText: 'Pin Dock',
-    child: Widget.Overlay({
-        child: Widget.Box({
-            homogeneous: true,
-            className: 'dock-app-icon txt',
-            child: MaterialIcon('push_pin', 'hugeass')
-        }),
-        overlays: [Widget.Box({
-            class_name: 'indicator',
-            vpack: 'end',
-            hpack: 'center',
-        })],
+    child: Widget.Box({
+        homogeneous: true,
+        className: 'dock-app-icon txt',
+        child: MaterialIcon('push_pin', 'hugeass')
     }),
     onClicked: (self) => {
         isPinned = !isPinned
         self.className = `${isPinned ? "pinned-dock-app-btn" : "dock-app-btn animate"} dock-app-btn-animate`
+    },
+    setup: setupCursorHover,
+})
+
+const LauncherButton = () => Widget.Button({
+    className: 'dock-app-btn dock-app-btn-animate',
+    tooltipText: 'Open launcher',
+    child: Widget.Box({
+        homogeneous: true,
+        className: 'dock-app-icon txt',
+        child: MaterialIcon('apps', 'hugerass')
+    }),
+    onClicked: (self) => {
+        App.toggleWindow('overview');
     },
     setup: setupCursorHover,
 })
@@ -245,10 +253,11 @@ export default (monitor = 0) => {
     const dockContent = Box({
         className: 'dock-bg spacing-h-5',
         children: [
+            PinButton(),
             PinnedApps(),
             DockSeparator(),
             Taskbar(),
-            PinButton(),
+            LauncherButton(),
         ]
     })
     const dockRevealer = Revealer({
