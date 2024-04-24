@@ -16,8 +16,21 @@ globalThis['openColorScheme'] = showColorScheme;
 globalThis['mpris'] = Mpris;
 
 // Screen size
-export const SCREEN_WIDTH = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1 | head -1" | awk '{print $1}'`));
-export const SCREEN_HEIGHT = Number(exec(`bash -c "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1" | awk '{print $1}'`));
+const getMonitorGeometry = () => {
+    const display = Gdk.Display.get_default();
+    const monitor = display.get_monitor(0);
+    const monitorGeometry = monitor.get_geometry();
+
+    return {
+        width: monitorGeometry.width,
+        height: monitorGeometry.height,
+    }
+}
+
+const monitorGeometry = getMonitorGeometry();
+
+export const SCREEN_WIDTH = monitorGeometry.width;
+export const SCREEN_HEIGHT = monitorGeometry.height;
 
 // Mode switching
 export const currentShellMode = Variable('normal', {}) // normal, focus
