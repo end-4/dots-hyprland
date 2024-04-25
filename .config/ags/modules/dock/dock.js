@@ -1,5 +1,4 @@
 const { Gtk, GLib } = imports.gi;
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../variables.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -263,45 +262,6 @@ export default (monitor = 0) => {
     const dockRevealer = Revealer({
         attribute: {
             'updateShow': self => { // I only use mouse to resize. I don't care about keyboard resize if that's a thing
-                // const dockSize = [
-                //     dockContent.get_allocated_width(),
-                //     dockContent.get_allocated_height()
-                // ]
-                // const dockAt = [
-                //     SCREEN_WIDTH / 2 - dockSize[0] / 2,
-                //     SCREEN_HEIGHT - dockSize[1],
-                // ];
-                // const dockLeft = dockAt[0];
-                // const dockRight = dockAt[0] + dockSize[0];
-                // const dockTop = dockAt[1];
-                // const dockBottom = dockAt[1] + dockSize[1];
-                //
-                // const currentWorkspace = Hyprland.active.workspace.id;
-                // var toReveal = true;
-                // const hyprlandClients = JSON.parse(exec('hyprctl clients -j'));
-                // for (const index in hyprlandClients) {
-                //     const client = hyprlandClients[index];
-                //     const clientLeft = client.at[0];
-                //     const clientRight = client.at[0] + client.size[0];
-                //     const clientTop = client.at[1];
-                //     const clientBottom = client.at[1] + client.size[1];
-                //
-                //     if (client.workspace.id == currentWorkspace) {
-                //         if (
-                //             // clientLeft < dockRight &&
-                //             // clientRight > dockLeft &&
-                //             // clientTop < dockBottom &&
-                //             // clientBottom > dockTop
-                //         ) {
-                //             self.revealChild = false;
-                //             return;
-                //         }
-                //     }
-                // }
-                // // if (currentWorkspace === client.workspace.id) {
-                // self.revealChild = true;
-                // // }
-
                 if (userOptions.dock.monitorExclusivity)
                     self.revealChild = Hyprland.active.monitor.id === monitor;
                 else
