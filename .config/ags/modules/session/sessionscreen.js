@@ -1,10 +1,10 @@
 // This is for the cool memory indicator on the sidebar
 // For the right pill of the bar, see system.js
 const { Gdk, Gtk } = imports.gi;
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../variables.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+import { monitors } from '../.miscutils/hyprlanddata.js';
 
 const { exec, execAsync } = Utils;
 
@@ -98,8 +98,8 @@ export default ({ id = '' }) => {
     return Widget.Box({
         className: 'session-bg',
         css: `
-        min-width: ${SCREEN_WIDTH}px;
-        min-height: ${SCREEN_HEIGHT}px;
+        min-width: ${monitors[(id == '' ? 0 : id)].width}px;
+        min-height: ${monitors[(id == '' ? 0 : id)].height}px;
         `, // idk why but height = screen height doesn't fill
         vertical: true,
         children: [
