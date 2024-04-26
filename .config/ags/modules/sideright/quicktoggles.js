@@ -228,7 +228,7 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
     tooltipText: 'Session',
     onClicked: () => {
         closeEverything();
-        Utils.timeout(1, () => App.openWindow('session'));
+        Utils.timeout(1, () => openWindowOnAllMonitors('session'));
     },
     child: MaterialIcon('power_settings_new', 'norm'),
     setup: button => {
