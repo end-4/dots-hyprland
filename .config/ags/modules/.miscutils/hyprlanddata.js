@@ -1,17 +1,19 @@
-const { GLib } = imports.gi;
-import Variable from 'resource:///com/github/Aylur/ags/variable.js';
+const { Gdk } = imports.gi;
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 
 export let monitors;
 
-// ughh condition race theoretically but overview won't be open at init so i guess it's okay
+// Mixes with Gdk monitor size cuz it reports monitor size scaled
 async function updateStuff() {
     monitors = JSON.parse(exec('hyprctl monitors -j'))
-    monitors.forEach(monitor => {
-        monitor.width /= monitor.scale;
-        monitor.height /= monitor.scale;
+    const display = Gdk.Display.get_default();
+    monitors.forEach((monitor, i) => {
+        const gdkMonitor = display.get_monitor(i);
+        monitor.width = gdkMonitor.get_geometry().width;
+        monitor.height = gdkMonitor.get_geometry().height;
     });
 }
 
-updateStuff();
+updateStuff().catch(print);
+
