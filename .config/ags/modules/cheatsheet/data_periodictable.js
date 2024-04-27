@@ -62,7 +62,7 @@ export const periodicTable = [
         { name: 'Argon', symbol: 'Ar', number: 18, weight: 39.95, type: 'noblegas' },
     ],
     [
-        { name: 'Potassium', symbol: 'K', number: 19, weight: 39.098, type: 'metal' },
+        { name: 'Kalium', symbol: 'K', number: 19, weight: 39.098, type: 'metal' },
         { name: 'Calcium', symbol: 'Ca', number: 20, weight: 40.078, type: 'metal' },
         { name: 'Scandium', symbol: 'Sc', number: 21, weight: 44.956, type: 'metal' },
         { name: 'Titanium', symbol: 'Ti', number: 22, weight: 47.87, type: 'metal' },
