@@ -101,6 +101,18 @@ case $SKIP_HYPR_AUR in
     ;;
 esac
 
+# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081690658
+case $SKIP_PYMYC_AUR in
+  true) sleep 0;;
+  *)
+    if $ask;then
+      v $AUR_HELPER -S --answerclean=a python-materialyoucolor-git
+    else
+      v $AUR_HELPER -S --answerclean=a --noconfirm python-materialyoucolor-git
+    fi
+    ;;
+esac
+
 
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
