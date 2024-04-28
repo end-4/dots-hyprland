@@ -40,11 +40,11 @@ const ColorSchemeSettingsRevealer = () => {
         child: ColorSchemeSettings(),
         setup: (self) => self.hook(isHoveredColorschemeSettings, (revealer) => {
             if (isHoveredColorschemeSettings.value == false) {
-              setTimeout(() => {
-                  if (isHoveredColorschemeSettings.value == false)
-                    revealer.revealChild = false;
+                setTimeout(() => {
+                    if (isHoveredColorschemeSettings.value == false)
+                        revealer.revealChild = false;
                     headerButtonIcon.label = 'expand_more';
-              }, 1500);
+                }, 1500);
             }
         }),
     });
@@ -56,41 +56,41 @@ const ColorSchemeSettingsRevealer = () => {
             isHoveredColorschemeSettings.setValue(false);
         },
         child: Widget.Box({
-          vertical: true,
-          children: [
-              header,
-              content,
-          ]
+            vertical: true,
+            children: [
+                header,
+                content,
+            ]
         }),
     });
 }
 
 function calculateSchemeInitIndex(optionsArr, searchValue = 'vibrant') {
-  if (searchValue == '')
-    searchValue = 'vibrant';
-  const flatArray = optionsArr.flatMap(subArray => subArray);
-  const result = flatArray.findIndex(element => element.value === searchValue);
-  const rowIndex = Math.floor(result / optionsArr[0].length);
-  const columnIndex = result % optionsArr[0].length;
-  return [rowIndex, columnIndex];
+    if (searchValue == '')
+        searchValue = 'vibrant';
+    const flatArray = optionsArr.flatMap(subArray => subArray);
+    const result = flatArray.findIndex(element => element.value === searchValue);
+    const rowIndex = Math.floor(result / optionsArr[0].length);
+    const columnIndex = result % optionsArr[0].length;
+    return [rowIndex, columnIndex];
 }
 
 const schemeOptionsArr = [
-  [
-    { name: 'Tonal Spot', value: 'tonalspot' },
-    { name: 'Fruit Salad', value: 'fruitsalad' },
-    { name: 'Fidelity', value: 'fidelity' },
-    { name: 'Rainbow', value: 'rainbow' },
-  ],
-  [
-    { name: 'Neutral', value: 'neutral' },
-    { name: 'Monochrome', value: 'monochrome' },
-    { name: 'Expressive',  value: 'expressive' },
-    { name: 'Vibrant', value: 'vibrant' },
-  ],
-  //[
-  //  { name: 'Content', value: 'content' },
-  //]
+    [
+        { name: 'Tonal Spot', value: 'tonalspot' },
+        { name: 'Fruit Salad', value: 'fruitsalad' },
+        { name: 'Fidelity', value: 'fidelity' },
+        { name: 'Rainbow', value: 'rainbow' },
+    ],
+    [
+        { name: 'Neutral', value: 'neutral' },
+        { name: 'Monochrome', value: 'monochrome' },
+        { name: 'Expressive', value: 'expressive' },
+        { name: 'Vibrant', value: 'vibrant' },
+    ],
+    //[
+    //  { name: 'Content', value: 'content' },
+    //]
 ];
 
 const initColorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
@@ -101,46 +101,71 @@ const initScheme = Utils.exec('bash -c "sed -n \'3p\' $HOME/.cache/ags/user/colo
 const initSchemeIndex = calculateSchemeInitIndex(schemeOptionsArr, initScheme);
 
 const ColorSchemeSettings = () => Widget.Box({
-  className: 'osd-colorscheme-settings spacing-v-5',
-  vertical: true,
-  vpack: 'center',
-  children: [
-    Widget.Box({
-        children: [
-            ConfigToggle({
-                name: 'Dark Mode',
-                initValue: initColorVal,
-                onChange: (self, newValue) => {
-                    let lightdark = newValue == 0 ? "light" : "dark";
-                    execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/${lightdark}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
-                        .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                        .catch(print);
-                },
-            }),
-            ConfigToggle({
-                name: 'Transparency',
-                initValue: initTransparencyVal,
-                onChange: (self, newValue) => {
-                    let transparency = newValue == 0 ? "opaque" : "transparent";
-                    execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "2s/.*/${transparency}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
-                        .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                        .catch(print);
-                },
-            }),
-        ]
-    }),
-    ConfigMulipleSelection({
-        hpack: 'center',
-        vpack: 'center',
-        optionsArr: schemeOptionsArr,
-        initIndex: initSchemeIndex,
-        onChange: (value, name) => {
-            execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "3s/.*/${value}/" ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
-                .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                .catch(print);
-        },
-    }),
-  ]
+    className: 'osd-colorscheme-settings spacing-v-5',
+    vertical: true,
+    vpack: 'center',
+    children: [
+        Widget.Box({
+            vertical: true,
+            children: [
+                Widget.Label({
+                    xalign: 0,
+                    className: 'txt-norm titlefont txt',
+                    label: 'Options',
+                    hpack: 'center',
+                }),
+                //////////////////
+                ConfigToggle({
+                    icon: 'dark_mode',
+                    name: 'Dark Mode',
+                    desc: 'Ya should go to sleep!',
+                    initValue: initColorVal,
+                    onChange: (self, newValue) => {
+                        let lightdark = newValue == 0 ? "light" : "dark";
+                        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "1s/.*/${lightdark}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+                            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
+                            .catch(print);
+                    },
+                }),
+                ConfigToggle({
+                    icon: 'border_clear',
+                    name: 'Transparency',
+                    desc: 'Make shell elements transparent',
+                    initValue: initTransparencyVal,
+                    onChange: (self, newValue) => {
+                        let transparency = newValue == 0 ? "opaque" : "transparent";
+                        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "2s/.*/${transparency}/"  ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+                            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
+                            .catch(print);
+                    },
+                }),
+            ]
+        }),
+        Widget.Box({
+            vertical: true,
+            className: 'spacing-v-5',
+            children: [
+                Widget.Label({
+                    xalign: 0,
+                    className: 'txt-norm titlefont txt margin-top-5',
+                    label: 'Scheme styles',
+                    hpack: 'center',
+                }),
+                //////////////////
+                ConfigMulipleSelection({
+                    hpack: 'center',
+                    vpack: 'center',
+                    optionsArr: schemeOptionsArr,
+                    initIndex: initSchemeIndex,
+                    onChange: (value, name) => {
+                        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_cache_dir()}/ags/user && sed -i "3s/.*/${value}/" ${GLib.get_user_cache_dir()}/ags/user/colormode.txt`])
+                            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
+                            .catch(print);
+                    },
+                }),
+            ]
+        })
+    ]
 });
 
 const ColorschemeContent = () => Widget.Box({
@@ -151,7 +176,7 @@ const ColorschemeContent = () => Widget.Box({
         Widget.Label({
             xalign: 0,
             className: 'txt-norm titlefont txt',
-            label: 'Colorscheme',
+            label: 'Color scheme',
             hpack: 'center',
         }),
         Widget.Box({
@@ -189,20 +214,20 @@ export default () => Widget.Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     child: ColorschemeContent(),
     setup: (self) => {
-      self
-        .hook(showColorScheme, (revealer) => {
-            if (showColorScheme.value == true)
-              revealer.revealChild = true;
-            else
-              revealer.revealChild = isHoveredColorschemeSettings.value;
-        })
-        .hook(isHoveredColorschemeSettings, (revealer) => {
-            if (isHoveredColorschemeSettings.value == false) {
-              setTimeout(() => {
-                  if (isHoveredColorschemeSettings.value == false)
-                    revealer.revealChild = showColorScheme.value;
-              }, 2000);
-            }
-        })
+        self
+            .hook(showColorScheme, (revealer) => {
+                if (showColorScheme.value == true)
+                    revealer.revealChild = true;
+                else
+                    revealer.revealChild = isHoveredColorschemeSettings.value;
+            })
+            .hook(isHoveredColorschemeSettings, (revealer) => {
+                if (isHoveredColorschemeSettings.value == false) {
+                    setTimeout(() => {
+                        if (isHoveredColorschemeSettings.value == false)
+                            revealer.revealChild = showColorScheme.value;
+                    }, 2000);
+                }
+            })
     },
 })

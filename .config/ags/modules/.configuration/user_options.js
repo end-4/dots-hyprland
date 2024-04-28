@@ -1,7 +1,7 @@
-
 import userOverrides from '../../user_options.js';
 
-// Defaults
+// Default options.
+// Add overrides in ~/.config/ags/user_options.js
 let configOptions = {
     // General stuff
     'ai': {

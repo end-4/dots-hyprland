@@ -151,29 +151,25 @@ export const ConfigMulipleSelection = ({
         tooltipText: desc,
         className: 'multipleselection-container spacing-v-3',
         vertical: true,
-        children: optionsArr.map((options, grp) => {
-            return Box({
-                className: 'spacing-h-5',
-                hpack: 'center',
-                children: options.map((option, id) => {
-                    return Button({
-                        setup: setupCursorHover,
-                        className: `multipleselection-btn ${id == initIndex[1] && grp == initIndex[0] ? 'multipleselection-btn-enabled' : ''}`,
-                        label: option.name,
-                        onClicked: (self) => {
-                            const kidsg = widget.get_children();
-                            const kids = kidsg.flatMap(widget => widget.get_children());
-                            kids.forEach(kid => {
-                                kid.toggleClassName('multipleselection-btn-enabled', false);
-                            });
-                            lastSelected = id;
-                            self.toggleClassName('multipleselection-btn-enabled', true);
-                            onChange(option.value, option.name);
-                        }
-                    })
-                }),
-            })
-        }),
+        children: optionsArr.map((options, grp) => Box({
+            className: 'spacing-h-5',
+            hpack: 'center',
+            children: options.map((option, id) => Button({
+                setup: setupCursorHover,
+                className: `multipleselection-btn ${id == initIndex[1] && grp == initIndex[0] ? 'multipleselection-btn-enabled' : ''}`,
+                label: option.name,
+                onClicked: (self) => {
+                    const kidsg = widget.get_children();
+                    const kids = kidsg.flatMap(widget => widget.get_children());
+                    kids.forEach(kid => {
+                        kid.toggleClassName('multipleselection-btn-enabled', false);
+                    });
+                    lastSelected = id;
+                    self.toggleClassName('multipleselection-btn-enabled', true);
+                    onChange(option.value, option.name);
+                }
+            })),
+        })),
         ...rest,
     });
     return widget;
