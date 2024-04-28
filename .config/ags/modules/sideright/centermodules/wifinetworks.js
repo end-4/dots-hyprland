@@ -1,6 +1,3 @@
-// This file is for the notification list on the sidebar
-// For the popup notifications, see onscreendisplay.js
-// The actual widget for each single notification is in ags/modules/.commonwidgets/notification.js
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Network from "resource:///com/github/Aylur/ags/service/network.js";
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
