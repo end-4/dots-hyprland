@@ -113,6 +113,18 @@ case $SKIP_PYMYC_AUR in
     ;;
 esac
 
+# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081701482
+case $SKIP_GRADIENCE_AUR in
+  true) sleep 0;;
+  *)
+    if $ask;then
+      v $AUR_HELPER -S --answerclean=a gradience-git
+    else
+      v $AUR_HELPER -S --answerclean=a --noconfirm gradience-git
+    fi
+    ;;
+esac
+
 
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
