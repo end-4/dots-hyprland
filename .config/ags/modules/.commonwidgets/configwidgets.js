@@ -50,12 +50,12 @@ export const ConfigToggle = ({
         tooltipText: desc,
         className: 'txt spacing-h-5 configtoggle-box',
         children: [
-            (icon !== undefined ? MaterialIcon(icon, 'norm') : null),
-            (name !== undefined ? Label({
+            ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
+            ...(name !== undefined ? [Label({
                 className: 'txt txt-small',
                 label: name,
-            }) : null),
-            expandWidget ? Box({ hexpand: true }) : null,
+            })] : []),
+            ...(expandWidget ? [Box({ hexpand: true })] : []),
             toggleButton,
         ]
     });
@@ -203,12 +203,12 @@ export const ConfigSpinButton = ({
         tooltipText: desc,
         className: 'txt spacing-h-5 configtoggle-box',
         children: [
-            (icon !== undefined ? MaterialIcon(icon, 'norm') : null),
-            (name !== undefined ? Label({
+            ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
+            ...(name !== undefined ? [Label({
                 className: 'txt txt-small',
                 label: name,
-            }) : null),
-            expandWidget ? Box({ hexpand: true }) : null,
+            })] : []),
+            ...(expandWidget ? [Box({ hexpand: true })] : []),
             spinButton,
         ],
         setup: (self) => {
