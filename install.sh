@@ -102,23 +102,25 @@ case $SKIP_HYPR_AUR in
 esac
 
 # https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081690658
+# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081701482
+# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081707099
+pymyc=(python-materialyoucolor-git gradience-git python-libsass python-material-color-utilities)
 case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
     if $ask;then
-      v $AUR_HELPER -S --answerclean=a python-materialyoucolor-git
+      v $AUR_HELPER -S --answerclean=a ${pymyc[@]}
     else
-      v $AUR_HELPER -S --answerclean=a --noconfirm python-materialyoucolor-git
+      v $AUR_HELPER -S --answerclean=a --noconfirm ${pymyc[@]}
     fi
     ;;
 esac
 
-# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081701482
 case $SKIP_GRADIENCE_AUR in
   true) sleep 0;;
   *)
     if $ask;then
-      v $AUR_HELPER -S --answerclean=a gradience-git
+      v $AUR_HELPER -S --answerclean=a
     else
       v $AUR_HELPER -S --answerclean=a --noconfirm gradience-git
     fi
