@@ -116,18 +116,6 @@ case $SKIP_PYMYC_AUR in
     ;;
 esac
 
-case $SKIP_GRADIENCE_AUR in
-  true) sleep 0;;
-  *)
-    if $ask;then
-      v $AUR_HELPER -S --answerclean=a
-    else
-      v $AUR_HELPER -S --answerclean=a --noconfirm gradience-git
-    fi
-    ;;
-esac
-
-
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
 case $SKIP_PLASMAINTG in
