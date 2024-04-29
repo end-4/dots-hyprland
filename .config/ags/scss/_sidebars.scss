@@ -967,3 +967,21 @@ $waifu_image_overlay_transparency: 0.7;
     color: $onLayer1;
     padding: 0.682rem;
 }
+
+.sidebar-centermodules-bottombar-button {
+    @include full-rounding;
+    @include element_decel;
+    min-width: 6.818rem;
+    min-height: 2.25rem;
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-centermodules-bottombar-button:hover,
+.sidebar-centermodules-bottombar-button:focus {
+    background-color: $layer2Hover;
+}
+
+.sidebar-centermodules-bottombar-button:active {
+    background-color: $layer2Active;
+}
