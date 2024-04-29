@@ -213,7 +213,8 @@ export const ConfigSpinButton = ({
         ],
         setup: (self) => {
             extraSetup(self);
-        }
+        },
+        ...rest,
     });
     return widgetContent;
 }
