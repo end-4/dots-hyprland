@@ -6,7 +6,7 @@ const { Box, Button, Icon, Label, Scrollable, Slider, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
-import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
+import { ConfigSpinButton, ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 
 const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disableValue = 0 }) => ConfigToggle({
     icon: icon,
@@ -17,6 +17,23 @@ const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disa
         execAsync(['hyprctl', 'keyword', option, `${newValue ? enableValue : disableValue}`]).catch(print);
     }
 });
+
+const HyprlandSpinButton = ({ icon, name, desc = null, option, ...rest }) => ConfigSpinButton({
+    icon: icon,
+    name: name,
+    desc: desc,
+    initValue: Number(JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"]),
+    onChange: (self, newValue) => {
+        execAsync(['hyprctl', 'keyword', option, `${newValue}`]).catch(print);
+    },
+    ...rest,
+});
+
+const Subcategory = (children) => Box({
+    className: 'margin-left-15',
+    vertical: true,
+    children: children,
+})
 
 export default (props) => {
     const ConfigSection = ({ name, children }) => Box({
@@ -57,6 +74,10 @@ export default (props) => {
                             },
                         }),
                         HyprlandToggle({ icon: 'blur_on', name: 'Blur', desc: "Enable blur on transparent elements\nDoesn't affect performance/power consumption unless you have transparent windows.", option: "decoration:blur:enabled" }),
+                        Subcategory([
+                            HyprlandSpinButton({ icon: 'target', name: 'Size', desc: 'Adjust the blur radius. Generally doesn\'t affect performance\nHigher = more color spread', option: 'decoration:blur:size', minValue: 1, maxValue: 1000 }),
+                            HyprlandSpinButton({ icon: 'repeat', name: 'Passes', desc: 'Adjust the number of runs of the blur algorithm\nMore passes = more spread and power consumption\n4 is recommended\n2- would look weird and 6+ would look lame.', option: 'decoration:blur:passes', minValue: 1, maxValue: 10 }),
+                        ]),
                     ]
                 }),
                 ConfigSection({
@@ -74,7 +95,7 @@ export default (props) => {
         children: [Label({
             hpack: 'center',
             className: 'txt txt-italic txt-subtext margin-5',
-            label: 'Not all changes are saved.',
+            label: 'Not all changes are saved',
         })]
     })
     return Box({

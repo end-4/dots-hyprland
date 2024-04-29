@@ -303,3 +303,17 @@ popover {
 widget {
     @include small-rounding;
 }
+
+.spinbutton {
+    @include small-rounding;
+    background-color: $layer2;
+    padding: 0.341rem;
+    entry {
+        color: $onLayer2;
+        margin: 0.136rem 0.273rem;
+    }
+    button {
+        margin-left: 0.205rem;
+        padding: 0.136rem;
+    }
+}
