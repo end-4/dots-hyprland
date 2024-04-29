@@ -3,7 +3,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-const { Box, Button, Label, Revealer } = Widget;
+const { Box, Button, Label, Revealer, SpinButton } = Widget;
 
 export const ConfigToggle = ({
     icon, name, desc = '', initValue,
@@ -180,3 +180,40 @@ export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
     className: `gap-${vertical ? 'v' : 'h'}-${size}`,
     ...rest,
 })
+
+export const ConfigSpinButton = ({
+    icon, name, desc = '', initValue,
+    minValue = 0, maxValue = 100, step = 1,
+    expandWidget = true,
+    onChange = () => { }, extraSetup = () => { },
+    ...rest
+}) => {
+    const value = Variable(initValue);
+    const spinButton = SpinButton({
+        className: 'spinbutton',
+        range: [minValue, maxValue],
+        increments: [step, step],
+        onValueChanged: ({ value: newValue }) => {
+            value.value = newValue;
+            onChange(spinButton, newValue);
+        },
+    });
+    spinButton.value = value.value;
+    const widgetContent = Box({
+        tooltipText: desc,
+        className: 'txt spacing-h-5 configtoggle-box',
+        children: [
+            (icon !== undefined ? MaterialIcon(icon, 'norm') : null),
+            (name !== undefined ? Label({
+                className: 'txt txt-small',
+                label: name,
+            }) : null),
+            expandWidget ? Box({ hexpand: true }) : null,
+            spinButton,
+        ],
+        setup: (self) => {
+            extraSetup(self);
+        }
+    });
+    return widgetContent;
+}
