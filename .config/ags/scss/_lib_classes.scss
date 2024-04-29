@@ -386,7 +386,7 @@
     @include button-minsize;
 }
 
-@each $spacing in (5, 8, 10, 15) {
+@each $spacing in (5, 8, 10, 15, 20) {
     @each $dir in ("top", "bottom", "left", "right") {
         .margin-#{$dir}-#{$spacing} {
             margin-#{$dir}: 0.068rem * $spacing;
