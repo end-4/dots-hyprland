@@ -67,9 +67,10 @@ export default (props) => {
         ,
     });
     const ListActionButton = (icon, name, action) => Button({
-        className: 'notif-listaction-btn',
+        className: 'sidebar-centermodules-bottombar-button',
         onClicked: action,
         child: Box({
+            hpack: 'center',
             className: 'spacing-h-5',
             children: [
                 MaterialIcon(icon, 'norm'),
