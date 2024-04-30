@@ -1,0 +1,36 @@
+{
+  "dark": {
+    "term0": "#000000",
+    "term1": "#FFFFFF",
+    "term2": "#CCCCCC",
+    "term3": "#8f8f8f",
+    "term4": "#FFFFFF",
+    "term5": "#111111",
+    "term6": "#CCCCCC",
+    "term7": "#FFFFFF",
+    "term8": "#404040",
+    "term9": "#CCCCCC",
+    "term10": "#FFFFFF",
+    "term11": "#909090",
+    "term12": "#CCCCCC",
+    "term13": "#808080",
+    "term14": "#CCCCCC",
+    "term15": "#FFFFFF"
+  },
+  "light": {
+    "term0": "#EAE9EA",
+    "term1": "#777777",
+    "term2": "#000000",
+    "term3": "#000000",
+    "term4": "#000000",
+    "term5": "#000000",
+    "term6": "#000000",
+    "term7": "#202020",
+    "term8": "#000000",
+    "term9": "#000000",
+    "term10": "#CCCCCC",
+    "term11": "#808080",
+    "term12": "#CCCCCC",
+    "term13": "#FFFFFF"
+  }
+}
