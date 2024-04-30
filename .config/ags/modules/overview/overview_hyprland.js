@@ -331,7 +331,7 @@ export default (overviewMonitor = 0) => {
             },
             update: (box) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-                if (!App.getWindow(windowName).visible) return;
+                if (!App.getWindow(windowName)?.visible) return;
                 Hyprland.messageAsync('j/clients').then(clients => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
@@ -357,7 +357,7 @@ export default (overviewMonitor = 0) => {
                     offset + startWorkspace <= id &&
                     id <= offset + startWorkspace + workspaces
                 )) return;
-                // if (!App.getWindow(windowName).visible) return;
+                // if (!App.getWindow(windowName)?.visible) return;
                 Hyprland.messageAsync('j/clients').then(clients => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
