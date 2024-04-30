@@ -19,7 +19,8 @@ async function getImageViewerApp(preferredApp) {
         .then((output) => {
             if (output != '') return preferredApp;
             else return 'xdg-open';
-        });
+        })
+        .catch(print);
 }
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
