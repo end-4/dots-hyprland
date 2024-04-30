@@ -141,9 +141,6 @@ export default (props) => {
             label: 'More',
             setup: setupCursorHover,
         })],
-        setup: (self) => {
-            console.log('AAAAAAAAAAAAAAAAAAa')
-        },
     })
     return Box({
         ...props,
