@@ -7,7 +7,7 @@ export default (id = '') => PopupWindow({
     // exclusivity: 'ignore',
     keymode: 'exclusive',
     visible: false,
-    anchor: ['top', 'bottom'],
+    anchor: ['top'],
     layer: 'overlay',
     child: Widget.Box({
         vertical: true,
