@@ -71,6 +71,7 @@ export const keybindList = [[
         "name": "Utilities",
         "binds": [
             { "keys": ["PrtSc"], "action": "Screenshot  >>  clipboard" },
+            { "keys": ["Ctrl", "PrtSc"], "action": "Screenshot  >>  file + clipboard" },
             { "keys": ["󰖳", "Shift", "+", "S"], "action": "Screen snip  >>  clipboard" },
             { "keys": ["󰖳", "Shift", "+", "T"], "action": "Image to text  >>  clipboard" },
             { "keys": ["󰖳", "Shift", "+", "C"], "action": "Color picker" },
