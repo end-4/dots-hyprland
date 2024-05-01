@@ -38,6 +38,9 @@ let configOptions = {
         'warnTitles': ["Low battery", "Very low battery", 'Critical Battery'],
         'warnMessages': ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY'],
     },
+    'brightness': {
+        'controller': "brightnessctl",
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },
