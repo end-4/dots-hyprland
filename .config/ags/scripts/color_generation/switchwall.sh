@@ -5,9 +5,11 @@ CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 
 switch() {
 	imgpath=$1
-	screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1)
+	read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
 	cursorposx=$(hyprctl cursorpos -j | gojq '.x' 2>/dev/null) || cursorposx=960
+	cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
 	cursorposy=$(hyprctl cursorpos -j | gojq '.y' 2>/dev/null) || cursorposy=540
+	cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
 	cursorposy_inverted=$((screensizey - cursorposy))
 
 	if [ "$imgpath" == '' ]; then
@@ -29,7 +31,7 @@ elif [[ "$1" ]]; then
 	switch $1
 else
 	# Select and set image (hyprland)
-	
+
     cd "$(xdg-user-dir PICTURES)" || return 1
 	switch $(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')
 fi
