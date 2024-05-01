@@ -14,7 +14,7 @@ const keyboardJson = oskLayouts[keyboardLayout];
 
 async function startYdotoolIfNeeded() {
     const running = exec('pidof ydotool')
-    if(!running) execAsync(['ydotoold']).catch(print);
+    if (!running) execAsync(['ydotoold']).catch(print);
 }
 
 function releaseAllKeys() {
@@ -72,7 +72,7 @@ const KeyboardControls = () => Box({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => {
                 releaseAllKeys();
-                App.toggleWindowOnAllMonitors('osk');
+                toggleWindowOnAllMonitors('osk');
             },
             label: 'keyboard_hide',
         }),
@@ -213,7 +213,7 @@ const KeyboardWindow = () => Box({
         })
     ],
     setup: (self) => self.hook(App, (self, name, visible) => { // Update on open
-        if(!name) return;
+        if (!name) return;
         if (name.startsWith('osk') && visible) {
             self.setCss(`margin-bottom: -0px;`);
         }
