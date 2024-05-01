@@ -39,7 +39,7 @@ let configOptions = {
         'warnMessages': ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY'],
     },
     'brightness': {
-        'controller': "brightnessctl",
+        'controller': "brightnessctl", // "brightnessctl" or "ddcutil"
     },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
