@@ -136,7 +136,8 @@ case $SKIP_PLASMAINTG in
     ;;
 esac
 
-v sudo usermod -aG video,input "$(whoami)"
+v sudo usermod -aG video,i2c,input "$(whoami)"
+v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
 v systemctl --user enable ydotool --now
 
 #####################################################################################
@@ -306,4 +307,3 @@ case $existed_hypr_conf in
      printf "\e[33mPlease use \"~/.config/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
-
