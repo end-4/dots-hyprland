@@ -11,8 +11,6 @@ lightdark="dark"
 transparency="opaque"
 materialscheme="vibrant"
 terminalscheme="$HOME/.config/ags/scripts/templates/terminal/scheme-base.json"
-# terminalscheme="$HOME/.config/ags/scripts/templates/terminal/scheme-catppuccin.json"
-# terminalscheme="$HOME/.config/ags/scripts/templates/terminal/scheme-vscode.json"
 
 if [ ! -f $colormodefile ]; then
     echo "dark" > $colormodefile
