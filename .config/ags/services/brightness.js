@@ -89,20 +89,33 @@ class BrightnessDdcService extends BrightnessServiceBase {
     }
 }
 
-// the singleton instance
+// Service instance
 const numMonitors = Hyprland.monitors.length;
 const service = Array(numMonitors);
-switch (userOptions.brightness.controller) {
-    case "brightnessctl":
-        service.fill(new BrightnessCtlService());
-        break;
-    case "ddcutil":
-        for (let i = 0; i < numMonitors; i++) {
-            service[i] = new BrightnessDdcService(i);
+for (let i = 0; i < service.length; i++) {
+    const monitorName = Hyprland.monitors[i].name;
+    const preferredController = userOptions.brightness.controllers[monitorName]
+        || userOptions.brightness.controllers.default || "auto";
+    if (preferredController) {
+        switch (preferredController) {
+            case "brightnessctl":
+                service[i] = new BrightnessCtlService();
+                break;
+            case "ddcutil":
+                service[i] = new BrightnessDdcService(i);
+                break;
+            case "auto":
+                if (monitorName.startsWith("eDP-"))
+                    service[i] = new BrightnessCtlService();
+                else if (monitorName.startsWith("DP-"))
+                    service[i] = new BrightnessDdcService(i);
+                else
+                    service[i] = new BrightnessCtlService();
+                break;
+            default:
+                throw new Error(`Unknown brightness controller ${preferredController}`);
         }
-        break;
-    default:
-        throw new Error(`Unknown brightness controller ${userOptions.brightness.controller}`);
+    }
 }
 
 // make it global for easy use with cli
