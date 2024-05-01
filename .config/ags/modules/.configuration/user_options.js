@@ -39,7 +39,14 @@ let configOptions = {
         'warnMessages': ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY'],
     },
     'brightness': {
-        'controller': "brightnessctl", // "brightnessctl" or "ddcutil"
+        // Object of controller names for each monitor, either "brightnessctl" or "ddcutil" or "auto"
+        // "default" will be used if unspecified
+        // Examples
+        // 'eDP-1': "brightnessctl",
+        // 'DP-1': "ddcutil",
+        'controllers': {
+            'default': "auto",
+        },
     },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
