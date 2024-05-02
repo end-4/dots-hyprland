@@ -180,7 +180,7 @@ const CoverArt = ({ player, ...rest }) => {
                 // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
                 // Player closed
                 // Note that cover path still remains, so we're checking title
-                if (!player || player.trackTitle == "") {
+                if (!player || player.trackTitle == "" || !player.coverPath) {
                     self.css = `background-image: none;`; // CSS image
                     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
