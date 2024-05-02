@@ -40,7 +40,7 @@ const pinButton = Button({
             sideleftContent.toggleClassName('sidebar-pinned', self.attribute.enabled);
 
             if (self.attribute.enabled) {
-                sideleftWindow.exclusivity = 'exclusive';
+                sideleftWindow.exclusivity = 'on-demad';
             }
             else {
                 sideleftWindow.exclusivity = 'normal';
