@@ -89,11 +89,32 @@ class BrightnessDdcService extends BrightnessServiceBase {
     }
 }
 
+async function listDdcMonitorsSn() {
+    let ddcSn = [];
+    try {
+        const out = await Utils.execAsync('ddcutil detect --brief');
+        const displays = out.split('\n\n');
+        displays.forEach(display => {
+            const reg = /^Display \d+/;
+            if (!reg.test(display))
+                return;
+            const lines = display.split('\n');
+            const sn = lines[3].split(':')[3];
+            ddcSn.push(sn);
+        });
+    } catch (err) {
+        print(err);
+    }
+    return ddcSn;
+}
+
 // Service instance
 const numMonitors = Hyprland.monitors.length;
 const service = Array(numMonitors);
+const ddcSn = await listDdcMonitorsSn();
 for (let i = 0; i < service.length; i++) {
     const monitorName = Hyprland.monitors[i].name;
+    const monitorSn = Hyprland.monitors[i].serial;
     const preferredController = userOptions.brightness.controllers[monitorName]
         || userOptions.brightness.controllers.default || "auto";
     if (preferredController) {
@@ -105,9 +126,7 @@ for (let i = 0; i < service.length; i++) {
                 service[i] = new BrightnessDdcService(i);
                 break;
             case "auto":
-                if (monitorName.startsWith("eDP-"))
-                    service[i] = new BrightnessCtlService();
-                else if (monitorName.startsWith("DP-"))
+                if (ddcSn.includes(monitorSn))
                     service[i] = new BrightnessDdcService(i);
                 else
                     service[i] = new BrightnessCtlService();
