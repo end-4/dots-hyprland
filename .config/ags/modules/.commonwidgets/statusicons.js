@@ -204,16 +204,15 @@ export const NetworkIndicator = () => Widget.Stack({
 const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        var initLangs = [];
         var languageStackArray = [];
-        var currentKeyboard;
 
         const updateCurrentKeyboards = () => {
-            currentKeyboard = JSON.parse(Utils.exec('hyprctl -j devices')).keyboards
-                .find(device => device.name === 'at-translated-set-2-keyboard');
-            if (currentKeyboard) {
-                initLangs = currentKeyboard.layout.split(',').map(lang => lang.trim());
-            }
+            var initLangs = [];
+            JSON.parse(Utils.exec('hyprctl -j devices')).keyboards
+                .forEach(keyboard => {
+                    initLangs.push(...keyboard.layout.split(',').map(lang => lang.trim()));
+                });
+            initLangs = [...new Set(initLangs)];
             languageStackArray = Array.from({ length: initLangs.length }, (_, i) => {
                 const lang = languages.find(lang => lang.layout == initLangs[i]);
                 // if (!lang) return [
