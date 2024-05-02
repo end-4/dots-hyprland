@@ -86,7 +86,7 @@ export const sheetContent = ExpandingIconTabContainer({
 export default (id) => PopupWindow({
     name: `cheatsheet${id}`,
     layer: 'overlay',
-    keymode: 'exclusive',
+    keymode: 'on-demand',
     visible: false,
     child: Widget.Box({
         vertical: true,
