@@ -65,12 +65,10 @@ class BrightnessDdcService extends BrightnessServiceBase {
         Service.register(this);
     }
 
-    constructor(monitor = 0) {
+    constructor(busNum) {
         super();
-        // don't use Hyprland.getMonitor(id), Hyprland monitor id isn't consistent
-        // with Gdk, but the Array ordering is (magically)
-        this._sn = Hyprland.monitors[monitor].serial;
-        Utils.execAsync(`ddcutil --sn ${this._sn} getvcp 10 --brief`)
+        this._busNum = busNum;
+        Utils.execAsync(`ddcutil -b ${this._busNum} getvcp 10 --brief`)
             .then((out) => {
                 // only the last line is useful
                 out = out.split('\n');
@@ -85,12 +83,12 @@ class BrightnessDdcService extends BrightnessServiceBase {
     }
 
     setBrightnessCmd(percent) {
-        return `ddcutil --sn ${this._sn} setvcp 10 ${Math.round(percent * 100)}`;
+        return `ddcutil -b ${this._busNum} setvcp 10 ${Math.round(percent * 100)}`;
     }
 }
 
-async function listDdcMonitorsSn() {
-    let ddcSn = [];
+async function listDdcMonitorsSnBus() {
+    let ddcSnBus = {};
     try {
         const out = await Utils.execAsync('ddcutil detect --brief');
         const displays = out.split('\n\n');
@@ -100,18 +98,19 @@ async function listDdcMonitorsSn() {
                 return;
             const lines = display.split('\n');
             const sn = lines[3].split(':')[3];
-            ddcSn.push(sn);
+            const busNum = lines[1].split('/dev/i2c-')[1];
+            ddcSnBus[sn] = busNum;
         });
     } catch (err) {
         print(err);
     }
-    return ddcSn;
+    return ddcSnBus;
 }
 
 // Service instance
 const numMonitors = Hyprland.monitors.length;
 const service = Array(numMonitors);
-const ddcSn = await listDdcMonitorsSn();
+const ddcSnBus = await listDdcMonitorsSnBus();
 for (let i = 0; i < service.length; i++) {
     const monitorName = Hyprland.monitors[i].name;
     const monitorSn = Hyprland.monitors[i].serial;
@@ -123,11 +122,11 @@ for (let i = 0; i < service.length; i++) {
                 service[i] = new BrightnessCtlService();
                 break;
             case "ddcutil":
-                service[i] = new BrightnessDdcService(i);
+                service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
                 break;
             case "auto":
-                if (ddcSn.includes(monitorSn))
-                    service[i] = new BrightnessDdcService(i);
+                if (monitorSn in ddcSnBus)
+                    service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
                 else
                     service[i] = new BrightnessCtlService();
                 break;
