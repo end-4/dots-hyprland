@@ -49,16 +49,16 @@ const OsdValue = ({
     });
 }
 
-export default () => {
+export default (monitor = 0) => {
     const brightnessIndicator = OsdValue({
         name: 'Brightness',
         extraClassName: 'osd-brightness',
         extraProgressClassName: 'osd-brightness-progress',
-        labelSetup: (self) => self.hook(Brightness, self => {
-            self.label = `${Math.round(Brightness.screen_value * 100)}`;
+        labelSetup: (self) => self.hook(Brightness[monitor], self => {
+            self.label = `${Math.round(Brightness[monitor].screen_value * 100)}`;
         }, 'notify::screen-value'),
-        progressSetup: (self) => self.hook(Brightness, (progress) => {
-            const updateValue = Brightness.screen_value;
+        progressSetup: (self) => self.hook(Brightness[monitor], (progress) => {
+            const updateValue = Brightness[monitor].screen_value;
             progress.value = updateValue;
         }, 'notify::screen-value'),
     });

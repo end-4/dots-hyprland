@@ -39,16 +39,16 @@ const WindowTitle = async () => {
 }
 
 
-export default async () => {
+export default async (monitor = 0) => {
     const optionalWindowTitleInstance = await WindowTitle();
     return Widget.EventBox({
         onScrollUp: () => {
             Indicator.popup(1); // Since the brightness and speaker are both on the same window
-            Brightness.screen_value += 0.05;
+            Brightness[monitor].screen_value += 0.05;
         },
         onScrollDown: () => {
             Indicator.popup(1); // Since the brightness and speaker are both on the same window
-            Brightness.screen_value -= 0.05;
+            Brightness[monitor].screen_value -= 0.05;
         },
         onPrimaryClick: () => {
             App.toggleWindow('sideleft');
