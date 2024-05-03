@@ -89,18 +89,3 @@ for folder in "${folders[@]}"; do
     done
 done
 
-# Add the new files, because maybe the update added new files
-for folder in "${folders[@]}"; do
-    # Find all files (including those in subdirectories) and copy them
-    find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
-        if [[ ! -f "$HOME/$file" ]] && ! file_in_exclude_folders "$file"; then
-            echo "Adding new file: $file"
-            # Construct the destination path
-            destination="$HOME/$file"
-            # Copy the file
-            cp -rf "$base/$file" "$destination"
-        fi
-    done
-done
-
-
