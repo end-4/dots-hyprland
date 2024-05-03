@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 getdate() {
-    date '+%Y%m%d_%H-%M-%S'
+    date '+%Y-%m-%d_%H.%M.%S'
 }
 getaudiooutput() {
     pactl list sources | grep 'Name' | grep 'monitor' | cut -d ' ' -f2

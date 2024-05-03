@@ -5,11 +5,7 @@ const { Gravity } = imports.gi.Gdk;
 
 const SysTrayItem = (item) => Button({
     className: 'bar-systray-item',
-    child: Icon({
-        hpack: 'center',
-        icon: `${item.icon}`,
-        setup: (self) => self.hook(item, (self) => self.icon = item.icon),
-    }),
+    child: Icon({hpack: 'center'}).bind('icon', item, 'icon'),
     setup: (self) => self
         .hook(item, (self) => self.tooltipMarkup = item['tooltip-markup'])
     ,
