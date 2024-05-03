@@ -237,7 +237,7 @@ class GPTService extends Service {
     send(msg) {
         this._messages.push(new GPTMessage('user', msg, false, true));
         this.emit('newMsg', this._messages.length - 1);
-        const aiResponse = new GPTMessage('assistant', 'thinking...', true, false)
+        const aiResponse = new GPTMessage('assistant', '', true, false)
 
         const body = {
             model: CHAT_MODELS[this._modelIndex],
