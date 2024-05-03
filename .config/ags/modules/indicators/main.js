@@ -22,7 +22,7 @@ export default (monitor = 0) => Widget.Window({
             className: 'osd-window',
             css: 'min-height: 2px;',
             children: [
-                IndicatorValues(),
+                IndicatorValues(monitor),
                 MusicControls(),
                 NotificationPopups(),
                 ColorScheme(),
@@ -30,4 +30,3 @@ export default (monitor = 0) => Widget.Window({
         })
     }),
 });
-

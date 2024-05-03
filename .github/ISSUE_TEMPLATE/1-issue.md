@@ -7,8 +7,7 @@ assignees: ''
 
 ---
 
-- **(For usage) I have read the [wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage)**
-- **(For troubleshooting) I have read the [wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/03troubleshooting)**
+- **I have read the [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage) and the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/03troubleshooting) pages of the wiki**
 - **I have made sure that both my config and system packages are up to date**
 - Linux distro: 
 <!-- Tip: you may use `lsb_release -a` to get this info -->

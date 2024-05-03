@@ -46,7 +46,7 @@ export const Bar = async (monitor = 0) => {
             const minHeight = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
             // execAsync(['bash', '-c', `hyprctl keyword monitor ,addreserved,${minHeight},0,0,0`]).catch(print);
         },
-        startWidget: (await WindowTitle()),
+        startWidget: (await WindowTitle(monitor)),
         centerWidget: Widget.Box({
             className: 'spacing-h-4',
             children: [

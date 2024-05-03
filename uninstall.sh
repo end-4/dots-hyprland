@@ -35,16 +35,18 @@ v rm -rf "$HOME/.local/bin/fuzzel-emoji"
 
 ##############################################################################################################################
 
-# Undo Step 1: Remove added user from video and input groups and remove yay packages
-printf '\e[36mRemoving user from video and input groups and removing packages...\n\e[97m'
+# Undo Step 1: Remove added user from video, i2c, and input groups and remove yay packages
+printf '\e[36mRemoving user from video, i2c, and input groups and removing packages...\n\e[97m'
 user=$(whoami)
 v sudo deluser "$user" video
+v sudo deluser "$user" i2c
 v sudo deluser "$user" input
+v sudo rm /etc/modules-load.d/i2c-dev.conf
 
 ##############################################################################################################################
 read -p "Do you want to uninstall packages used by the dotfiles?\nCtrl+C to exit, or press Enter to proceed"
 
 # Removing installed yay packages and dependencies
-v yay -Rns adw-gtk3-git brightnessctl cava foot fuzzel gjs gojq gradience-git grim gtk-layer-shell hyprland-git lexend-fonts-git libdbusmenu-gtk3 plasma-browser-integration playerctl python-build python-material-color-utilities python-poetry python-pywal ripgrep sassc swww slurp starship swayidle hyprlock-git tesseract ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd typescript webp-pixbuf-loader wl-clipboard wlogout yad ydotool
+v yay -Rns adw-gtk3-git brightnessctl cava ddcutil foot fuzzel gjs gojq gradience-git grim gtk-layer-shell hyprland-git lexend-fonts-git libdbusmenu-gtk3 plasma-browser-integration playerctl python-build python-material-color-utilities python-poetry python-pywal ripgrep sassc swww slurp starship swayidle hyprlock-git tesseract ttf-jetbrains-mono-nerd ttf-material-symbols-variable-git ttf-space-mono-nerd typescript webp-pixbuf-loader wl-clipboard wlogout yad ydotool
 
 printf '\e[36mUninstall Complete.\n\e[97m'
