@@ -5,15 +5,28 @@
 cd "$(dirname "$0")"
 export base="$(pwd)"
 
+
+# Define the folders to update
+folders=(".config" ".local")
+exclude_folders=(".config/hypr/custom")
+
 function get_checksum() {
   # Get the checksum of a specific file
   md5sum "$1" | awk '{print $1}'
 }
 
+function file_in_exclude_folders() {
+  # Check if a file is in the exclude_folders
+  for exclude_folder in "${exclude_folders[@]}"; do
+    if [[ $1 == $exclude_folder* ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
 
-# Define the folders to update
-folders=(".config" ".local")
-# exclude_folders=(".config/hypr/custom") TODO: Implement exclude folders
+
+
 
 # Then check which files have been modified since the last update
 modified_files=()
@@ -65,7 +78,7 @@ git pull
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
     find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
-        if [[ -f "$file" ]]; then
+        if [[ -f "$file" ]] && ! file_in_exclude_folders "$file";  then
             if [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 # Construct the destination path
                 destination="$HOME/$file"
@@ -80,7 +93,7 @@ done
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
     find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
-        if [[ ! -f "$HOME/$file" ]]; then
+        if [[ ! -f "$HOME/$file" ]] && ! file_in_exclude_folders "$file"; then
             echo "Adding new file: $file"
             # Construct the destination path
             destination="$HOME/$file"
