@@ -13,7 +13,7 @@ function get_checksum() {
 
 # Define the folders to update
 folders=(".config" ".local")
-# exclude_folders=("/home/janik/.config/hypr/custom") TODO: Implement exclude folders
+# exclude_folders=(".config/hypr/custom") TODO: Implement exclude folders
 
 # Then check which files have been modified since the last update
 modified_files=()
