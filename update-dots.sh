@@ -10,14 +10,20 @@ function get_checksum() {
   md5sum "$1" | awk '{print $1}'
 }
 
-
 # Define the folders to update
 folders=(".config" ".local")
+exclude_folders=("/home/janik/.config/hypr/custom")
+
+# Build the exclude string for find command
+exclude_string=""
+for folder in "${exclude_folders[@]}"; do
+    exclude_string+="! -path $folder -prune -o "
+done
 
 # Then check which files have been modified since the last update
 modified_files=()
 
-# Find all files in the specified folders and their subfolders
+# Find all files in the specified folders and their subfolders, excluding specified folders
 while IFS= read -r -d '' file; do
     # Calculate checksums
     base_checksum=$(get_checksum "$base/$file")
@@ -26,8 +32,7 @@ while IFS= read -r -d '' file; do
     if [[ $base_checksum != $home_checksum ]]; then
         modified_files+=("$file")
     fi
-done < <(find "${folders[@]}" -type f -print0)
-
+done < <(eval find "${folders[@]}" -type f $exclude_string -print0)
 
 echo "Modified files: ${modified_files[@]}"
 
@@ -38,7 +43,12 @@ if [[ ${#modified_files[@]} -gt 0 ]]; then
         echo "$file"
     done
 else
-    echo "No files have been modified since the last update. All files will be replaced."
+    echo "No files found that have been modified since the last installation/update. All files will be replaced. Are you sure you want to continue? [y/N] "
+    read -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
 fi
 
 # Ask if the user wants to keep them
@@ -57,14 +67,12 @@ git pull
 # Now only replace the files that are not modified by the user
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
-    find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
-        if [[ -f "$file" ]]; then
-            if [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
-                # Construct the destination path
-                destination="$HOME/$file"
-                # Copy the file
-                cp -rf "$base/$file" "$destination"
-            fi
+    find "$folder" -type f $exclude_string -print0 | while IFS= read -r -d '' file; do
+        if [[ -f "$file" && ! " ${modified_files[@]} " =~ " ${file} " ]]; then
+            # Construct the destination path
+            destination="$HOME/$file"
+            # Copy the file
+            cp -rf "$base/$file" "$destination"
         fi
     done
 done
@@ -72,7 +80,7 @@ done
 # Add the new files, because maybe the update added new files
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
-    find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
+    find "$folder" -type f $exclude_string -print0 | while IFS= read -r -d '' file; do
         if [[ ! -f "$HOME/$file" ]]; then
             echo "Adding new file: $file"
             # Construct the destination path
@@ -82,5 +90,3 @@ for folder in "${folders[@]}"; do
         fi
     done
 done
-
-
