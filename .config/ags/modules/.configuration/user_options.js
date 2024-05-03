@@ -38,6 +38,16 @@ let configOptions = {
         'warnTitles': ["Low battery", "Very low battery", 'Critical Battery'],
         'warnMessages': ["Plug in the charger", "You there?", 'PLUG THE CHARGER ALREADY'],
     },
+    'brightness': {
+        // Object of controller names for each monitor, either "brightnessctl" or "ddcutil" or "auto"
+        // 'default' one will be used if unspecified
+        // Examples
+        // 'eDP-1': "brightnessctl",
+        // 'DP-1': "ddcutil",
+        'controllers': {
+            'default': "auto",
+        },
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },
