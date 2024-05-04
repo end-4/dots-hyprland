@@ -26,17 +26,21 @@ function file_in_excludes() {
   return 1
 }
 
-
-
-
 # Then check which files have been modified by the user since the last update to preserve user configurations
 modified_files=()
 
 # Find all files in the specified folders and their subfolders
 while IFS= read -r -d '' file; do
+    # If the file is not in the home directory, skip it
+    if [[ ! -f "$HOME/$file" ]]; then
+        continue
+    fi
+
     # Calculate checksums
     base_checksum=$(get_checksum "$base/$file")
     home_checksum=$(get_checksum "$HOME/$file")
+
+
     # Compare checksums and add to modified_files if necessary
     if [[ $base_checksum != $home_checksum ]]; then
         modified_files+=("$file")
@@ -45,6 +49,7 @@ done < <(find "${folders[@]}" -type f -print0)
 
 
 echo "Modified files: ${modified_files[@]}"
+echo "Excluded files and folders: ${excludes[@]}"
 
 # Output all modified files
 if [[ ${#modified_files[@]} -gt 0 ]]; then
@@ -54,7 +59,7 @@ if [[ ${#modified_files[@]} -gt 0 ]]; then
     done
 else
     echo "No files found that have been modified since the last update. All files will be replaced. Are you sure you want to continue? [Y/n] "
-    read -n 1 -r
+    read -r
     echo
     if [[ ! $REPLY =~ ^[Nn]$ ]]; then
         echo "Exiting."
@@ -67,12 +72,14 @@ echo "[y] Yes, keep them."
 echo "[n] No, replace them."
 echo "[i] Check the files individually." 
 # Ask if the user wants to keep them
-read -p "Answer: " -n 1 -r
+read -p "Answer: " -r
 echo
 if [[ $REPLY =~ ^[Nn]$ ]]; then
     echo "Replacing all files."
     modified_files=()
 elif [[ $REPLY =~ ^[Ii]$ ]]; then
+    new_modified_files=()
+    replaced_files=()
     for file in "${modified_files[@]}"; do
         echo "Do you want to keep $file untouched?"
         echo "[y] Yes, keep it."
@@ -81,10 +88,33 @@ elif [[ $REPLY =~ ^[Ii]$ ]]; then
         echo
         if [[ ! $REPLY =~ ^[Nn]$ ]]; then
             echo "Keeping $file."
+            new_modified_files+=("$file")
         else
-            modified_files=("${modified_files[@]/$file}")
+            replaced_files+=("$file")
         fi
     done
+    modified_files=("${new_modified_files[@]}")
+    # verify the files that will be kept
+    echo "_____________________________________________________"
+    echo "These User configured/modifed files will be kept:"
+    for file in "${modified_files[@]}"; do
+        echo "$file"
+    done
+    echo "_____________________________________________________"
+    echo "These User configured/modifed files will be replaced:"
+    for file in "${replaced_files[@]}"; do
+        echo "$file"
+    done
+    echo "_____________________________________________________"
+    echo "Do you want to continue?"
+    echo "[y] Yes, continue."
+    echo "[n] No, exit."
+    read -p "Answer: " -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Exiting..."
+        exit 0
+    fi
 else
     echo "Keeping every modified file"
 fi
@@ -93,16 +123,18 @@ fi
 if git pull; then
     echo "Git pull successful."
 else
+    # If the pull failed, clone the repository to a temporary folder and copy the files from there
     echo "Git pull failed. Consider recloning the project or resolving conflicts manually."
-    echo "Should I clone the repository to a temporary folder in chache and copy the files from there? [Y/n] "
-    read -n 1 -r
+    echo "Should I clone the repository to a temporary folder in cache and copy the files from there? [y/N] "
+    read -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         echo "Exiting..."
         exit 1
     fi
 
-    temp_folder=$(mktemp -d -p /cache)
+    mkdir -p ./cache
+    temp_folder=$(mktemp -d -p ./cache)
     git clone https://github.com/end-4/dots-hyprland/ "$temp_folder"
     # Replace the existing dotfiles with the new ones
     for folder in "${folders[@]}"; do
@@ -126,7 +158,12 @@ fi
 # Now only replace the files that are not modified by the user
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
-    find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
+    find "$folder" -print0 | while IFS= read -r -d '' file; do
+        # if the file is a directory, ensure it exists in the home directory
+        if [[ -d "$file" ]]; then
+            mkdir -p "$HOME/$file"
+        fi
+        # Check if the file is a regular file and not in the exclude_folders
         if [[ -f "$file" ]] && ! file_in_excludes "$file";  then
             if [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 # Construct the destination path
