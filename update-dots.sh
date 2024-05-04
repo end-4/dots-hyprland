@@ -209,7 +209,7 @@ for folder in "${folders[@]}"; do
         if [[ -f "$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]];  then
             # Construct the destination path
             destination="$HOME/$file"
-            echo "$destination"
+            echo "Replacing \"$destination\" ..."
             # Copy the file
             # Create the destination folder if it doesn't exist
             mkdir -p "$(dirname "$destination")"
