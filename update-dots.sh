@@ -58,7 +58,7 @@ if ! git fetch; then
 fi
 
 # Check if there are any changes
-if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 && 1 != 1 ]]; then
+if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
     echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
@@ -85,8 +85,8 @@ while IFS= read -r -d '' file; do
 done < <(find "${folders[@]}" -type f -print0)
 
 
-echo "Modified files: ${modified_files[@]}"
 echo "Excluded files and folders: ${excludes[@]}"
+echo 
 
 # Output all modified files
 if [[ ${#modified_files[@]} -gt 0 ]]; then
@@ -157,7 +157,7 @@ else
 fi
 
 # Then update the repository
-if ! git pull; then
+if git pull; then
     echo "Git pull successful."
 else
     # If the pull failed, clone the repository to a temporary folder and copy the files from there
