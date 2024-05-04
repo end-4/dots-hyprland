@@ -1,6 +1,7 @@
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Audio from 'resource:///com/github/Aylur/ags/service/audio.js';
-const { Box, Button, Icon, Label, Scrollable, Slider, Stack } = Widget;
+import Variable from 'resource:///com/github/Aylur/ags/variable.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
@@ -59,6 +60,96 @@ const AppVolume = (stream) => Box({
     ]
 });
 
+const AudioDevices = (input = false) => {
+    const dropdownShown = Variable(false);
+    const DeviceStream = (stream) => Button({
+        child: Box({
+            className: 'txt spacing-h-10',
+            children: [
+                Icon({
+                    className: 'txt-norm symbolic-icon',
+                    icon: stream.iconName,
+                }),
+                Label({
+                    hexpand: true,
+                    xalign: 0,
+                    className: 'txt-small',
+                    truncate: 'end',
+                    maxWidthChars: 10,
+                    label: stream.description,
+                }),
+            ],
+        }),
+        onClicked: (self) => {
+            if (input) Audio.microphone = stream;
+            else Audio.speaker = stream;
+            dropdownShown.value = false;
+        },
+        setup: setupCursorHover,
+    })
+    const activeDevice = Button({
+        onClicked: () => { dropdownShown.value = !dropdownShown.value; },
+        child: Box({
+            className: 'txt spacing-h-10',
+            children: [
+                MaterialIcon(input ? 'mic_external_on' : 'media_output', 'norm'),
+                Label({
+                    hexpand: true,
+                    xalign: 0,
+                    className: 'txt-small',
+                    truncate: 'end',
+                    maxWidthChars: 10,
+                    label: `${input ? '[In]' : '[Out]'}`,
+                    setup: (self) => self.hook(Audio, (self) => {
+                        self.label = `${input ? '[In]' : '[Out]'} ${input ? Audio.microphone.description :  Audio.speaker.description}`;
+                    })
+                }),
+                Label({
+                    className: `icon-material txt-norm`,
+                    setup: (self) => self.hook(dropdownShown, (self) => {
+                        self.label = dropdownShown.value ? 'expand_less' : 'expand_more';
+                    })
+                })
+            ],
+        }),
+        setup: setupCursorHover,
+    });
+    const deviceSelector = Revealer({
+        transition: 'slide_down',
+        revealChild: dropdownShown.bind("value"),
+        transitionDuration: userOptions.animations.durationSmall,
+        child: Box({
+            vertical: true,
+            children: [
+                Box({ className: 'separator-line margin-top-5 margin-bottom-5' }),
+                Box({
+                    vertical: true,
+                    className: 'spacing-v-5 margin-top-5',
+                    attribute: {
+                        'updateStreams': (self) => {
+                            const streams = input ? Audio.microphones : Audio.speakers;
+                            self.children = streams.map(stream => DeviceStream(stream));
+                        },
+                    },
+                    setup: (self) => self
+                        .hook(Audio, self.attribute.updateStreams, 'stream-added')
+                        .hook(Audio, self.attribute.updateStreams, 'stream-removed')
+                    ,
+                }),
+            ]
+        })
+    })
+    return Box({
+        hpack: 'fill',
+        className: 'sidebar-volmixer-deviceselector',
+        vertical: true,
+        children: [
+            activeDevice,
+            deviceSelector,
+        ]
+    })
+}
+
 export default (props) => {
     const emptyContent = Box({
         homogeneous: true,
@@ -95,26 +186,14 @@ export default (props) => {
             ,
         })
     })
-    const status = Box({
-        className: 'sidebar-volmixer-status spacing-h-5',
+    const devices = Box({
+        vertical: true,
+        className: 'spacing-v-5',
         children: [
-            Label({
-                className: 'txt-small margin-top-5 margin-bottom-8',
-                attribute: { headphones: undefined },
-                setup: (self) => {
-                    const updateAudioDevice = (self) => {
-                        const usingHeadphones = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headphone');
-                        if (self.attribute.headphones === undefined ||
-                            self.attribute.headphones !== usingHeadphones) {
-                            self.attribute.headphones = usingHeadphones;
-                            self.label = `Output: ${usingHeadphones ? 'Headphones' : 'Speakers'}`;
-                        }
-                    }
-                    self.hook(Audio, updateAudioDevice);
-                }
-            })
+            AudioDevices(false),
+            AudioDevices(true),
         ]
-    });
+    })
     const mainContent = Stack({
         children: {
             'empty': emptyContent,
@@ -130,7 +209,7 @@ export default (props) => {
         vertical: true,
         children: [
             mainContent,
-            status,
+            devices,
         ]
     });
 }
