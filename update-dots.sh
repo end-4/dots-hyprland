@@ -36,7 +36,7 @@ fi
 
 # Check if there are any changes
 if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
-    echo "No changes found. Exiting."
+    echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
 
