@@ -68,7 +68,7 @@ else
 fi
 
 echo "Do you want to keep these files untouched?"
-echo "[y] Yes, keep them."
+echo "[Y] Yes, keep them."
 echo "[n] No, replace them."
 echo "[i] Check the files individually." 
 # Ask if the user wants to keep them
