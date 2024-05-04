@@ -31,7 +31,7 @@ const AppVolume = (stream) => Box({
                     label: stream.description,
                     className: 'txt-small',
                     setup: (self) => self.hook(stream, (self) => {
-                        self.label = `${stream.description}`
+                        self.label = `${stream.stream.name} • ${stream.description}`
                     })
                 }),
                 Slider({
