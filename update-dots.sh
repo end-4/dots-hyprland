@@ -26,6 +26,19 @@ function file_in_excludes() {
   return 1
 }
 
+
+# fetch the latest version of the repository
+if ! git fetch; then
+    echo "Failed to fetch the latest version of the repository. Exiting."
+    exit 1
+fi
+
+# Check if there are any changes
+if [[ $(git rev-list HEAD...origin/main --count) -eq 0 ]]; then
+    echo "No changes found. Exiting."
+    exit 0
+fi
+
 # Then check which files have been modified by the user since the last update to preserve user configurations
 modified_files=()
 
