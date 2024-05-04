@@ -26,6 +26,7 @@ function file_in_excludes() {
   return 1
 }
 
+current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # fetch the latest version of the repository
 if ! git fetch; then
@@ -34,7 +35,7 @@ if ! git fetch; then
 fi
 
 # Check if there are any changes
-if [[ $(git rev-list HEAD...origin/main --count) -eq 0 ]]; then
+if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
     echo "No changes found. Exiting."
     exit 0
 fi
@@ -189,4 +190,3 @@ for folder in "${folders[@]}"; do
         fi
     done
 done
-
