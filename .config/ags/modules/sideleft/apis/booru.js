@@ -282,7 +282,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
     });
     const pageImages = Box({
         homogeneous: true,
-        className: 'sidebar-booru-imagegrid',
+        className: 'sidebar-booru-imagegrid margin-top-5',
     })
     const pageImageRevealer = Revealer({
         transition: 'slide_down',
@@ -343,7 +343,6 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         },
         children: [Box({
             vertical: true,
-            className: 'spacing-v-5',
             children: [
                 pageHeading,
                 Box({
