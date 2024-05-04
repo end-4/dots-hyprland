@@ -78,7 +78,7 @@ export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}
     }
 }
 
-export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make this work
+export const ModuleNightLight = (props = {}) => Widget.Button({
     attribute: {
         enabled: false,
     },
@@ -87,13 +87,25 @@ export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make th
     onClicked: (self) => {
         self.attribute.enabled = !self.attribute.enabled;
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
-        if (self.attribute.enabled) Utils.execAsync(['wlsunset', '-t', '4500']).catch(print)
-        else Utils.execAsync('pkill wlsunset').catch(print);
+        if (self.attribute.enabled) Utils.execAsync('gammastep').catch(print)
+        else Utils.execAsync('pkill gammastep')
+            .then(() => {
+                // disable the button until fully terminated to avoid race
+                self.sensitive = false;
+                const source = setInterval(() => {
+                    Utils.execAsync('pkill -0 gammastep')
+                        .catch(() => {
+                            self.sensitive = true;
+                            source.destroy();
+                        });
+                }, 500);
+            })
+            .catch(print);
     },
     child: MaterialIcon('nightlight', 'norm'),
     setup: (self) => {
         setupCursorHover(self);
-        self.attribute.enabled = !!exec('pidof wlsunset');
+        self.attribute.enabled = !!exec('pidof gammastep');
         self.toggleClassName('sidebar-button-active', self.attribute.enabled);
     },
     ...props,
@@ -235,6 +247,3 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
         setupCursorHover(button);
     }
 })
-
-
-
