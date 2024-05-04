@@ -176,18 +176,22 @@ else
     # Replace the existing dotfiles with the new ones
     for folder in "${folders[@]}"; do
         # Find all files (including those in subdirectories) and copy them
-        find "$temp_folder/$folder" -type f -print0 | while IFS= read -r -d '' file; do
+        find "$temp_folder/$folder" -print0 | while IFS= read -r -d '' file; do
             file="${file/$temp_folder<\//}"
+            if [[ -d "$temp_folder/$file" ]]; then
+                mkdir -p "$HOME/$file"
+            fi
             if [[ -f "$temp_folder/$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 
                 # Construct the destination path
                 # Remove the temporary folder path
                 destination="$HOME/$file"
-                echo "$destination"
+                echo "Replacing $destination ..."
                 # Create the destination folder if it doesn't exist
                 mkdir -p "$(dirname "$destination")"
                 # Copy the file
-                cp -f "$file" "$destination"
+                
+                cp -f "$temp_folder/$file" "$destination"
             fi
         done
     done
