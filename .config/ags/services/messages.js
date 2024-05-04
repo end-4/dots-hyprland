@@ -12,7 +12,7 @@ const FIRST_RUN_PATH = GLib.build_filenamev([GLib.get_user_cache_dir(), "ags", "
 const FIRST_RUN_FILE_CONTENT = "Just a file to confirm that you have been greeted ;)";
 const APP_NAME = "illogical-impulse";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
-const FIRST_RUN_NOTIF_BODY = `Looks like this is your first run. For a list of keybinds, hit <span foreground="#c06af1" font_weight="bold">Super + /</span>.`;
+const FIRST_RUN_NOTIF_BODY = `First run? 👀 <span foreground="#FF0202" font_weight="bold">CTRL+SUPER+T</span> to pick a wallpaper (or styles will break!)\nFor a list of keybinds, hit <span foreground="#c06af1" font_weight="bold">Super + /</span>.`;
 
 export async function firstRunWelcome() {
     if (!fileExists(FIRST_RUN_PATH)) {
