@@ -2,23 +2,24 @@
 # This script updates the dotfiles by fetching the latest version from the Git repository and then replacing files
 # that have not been modified by the user to preserve changes. The remaining files will be replaced with the new ones.
 
+set -e
 cd "$(dirname "$0")"
 export base="$(pwd)"
 
 
-# Define the folders to update
+# Define paths to update
 folders=(".config" ".local")
-exclude_folders=(".config/hypr/custom")
+excludes=(".config/hypr/custom", ".config/ags/user_options.js", ".config/hypr/hyprland.conf")
 
 function get_checksum() {
   # Get the checksum of a specific file
   md5sum "$1" | awk '{print $1}'
 }
 
-function file_in_exclude_folders() {
+function file_in_excludes() {
   # Check if a file is in the exclude_folders
-  for exclude_folder in "${exclude_folders[@]}"; do
-    if [[ $1 == $exclude_folder* ]]; then
+  for exc in "${excludes[@]}"; do
+    if [[ $1 == $exc* ]]; then
       return 0
     fi
   done
@@ -28,7 +29,7 @@ function file_in_exclude_folders() {
 
 
 
-# Then check which files have been modified since the last update
+# Then check which files have been modified by the user since the last update to preserve user configurations
 modified_files=()
 
 # Find all files in the specified folders and their subfolders
@@ -61,29 +62,79 @@ else
     fi
 fi
 
+echo "Do you want to keep these files untouched?"
+echo "[y] Yes, keep them."
+echo "[n] No, replace them."
+echo "[i] Check the files individually." 
 # Ask if the user wants to keep them
-read -p "Do you want to keep these files untouched? [Y/n] " -n 1 -r
+read -p "Answer: " -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-    echo "Keeping modified files."
-else
+if [[ $REPLY =~ ^[Nn]$ ]]; then
     echo "Replacing all files."
     modified_files=()
+elif [[ $REPLY =~ ^[Ii]$ ]]; then
+    for file in "${modified_files[@]}"; do
+        echo "Do you want to keep $file untouched?"
+        echo "[y] Yes, keep it."
+        echo "[n] No, replace it."
+        read -p "Answer: " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            echo "Keeping $file."
+        else
+            modified_files=("${modified_files[@]/$file}")
+        fi
+    done
+else
+    echo "Keeping every modified file"
 fi
 
 # Then update the repository
-git pull
+if git pull; then
+    echo "Git pull successful."
+else
+    echo "Git pull failed. Consider recloning the project or resolving conflicts manually."
+    echo "Should I clone the repository to a temporary folder in chache and copy the files from there? [Y/n] "
+    read -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Exiting..."
+        exit 1
+    fi
+
+    temp_folder=$(mktemp -d)
+    git clone https://github.com/end-4/dots-hyprland/ "$temp_folder"
+    # Replace the existing dotfiles with the new ones
+    for folder in "${folders[@]}"; do
+        # Find all files (including those in subdirectories) and copy them
+        find "$temp_folder/$folder" -type f -print0 | while IFS= read -r -d '' file; do
+            if [[ -f "$file" ]] && ! file_in_excludes "$file";  then
+                # Construct the destination path
+                destination="$HOME/$file"
+                # Create the destination folder if it doesn't exist
+                mkdir -p "$(dirname "$destination")"
+                # Copy the file
+                cp -f "$file" "$destination"
+            fi
+        done
+    done
+    echo "New dotfiles have been copied. Cleaning up temporary folder."
+    rm -rf "$temp_folder"
+fi
+
 
 # Now only replace the files that are not modified by the user
 for folder in "${folders[@]}"; do
     # Find all files (including those in subdirectories) and copy them
     find "$folder" -type f -print0 | while IFS= read -r -d '' file; do
-        if [[ -f "$file" ]] && ! file_in_exclude_folders "$file";  then
+        if [[ -f "$file" ]] && ! file_in_excludes "$file";  then
             if [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 # Construct the destination path
                 destination="$HOME/$file"
                 # Copy the file
-                cp -rf "$base/$file" "$destination"
+                # Create the destination folder if it doesn't exist
+                mkdir -p "$(dirname "$destination")"
+                cp -f "$base/$file" "$destination"
             fi
         fi
     done
