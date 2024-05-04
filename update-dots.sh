@@ -82,7 +82,7 @@ elif [[ $REPLY =~ ^[Ii]$ ]]; then
     replaced_files=()
     for file in "${modified_files[@]}"; do
         echo "Do you want to keep $file untouched?"
-        echo "[y] Yes, keep it."
+        echo "[Y] Yes, keep it."
         echo "[n] No, replace it."
         read -p "Answer: " -n 1 -r
         echo
@@ -108,7 +108,7 @@ elif [[ $REPLY =~ ^[Ii]$ ]]; then
     echo "_____________________________________________________"
     echo "Do you want to continue?"
     echo "[y] Yes, continue."
-    echo "[n] No, exit."
+    echo "[N] No, exit."
     read -p "Answer: " -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
