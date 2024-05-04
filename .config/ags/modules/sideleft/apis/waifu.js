@@ -189,7 +189,7 @@ const WaifuImage = (taglist) => {
         child: Overlay({
             child: Box({
                 homogeneous: true,
-                className: 'sidebar-waifu-image',
+                className: 'sidebar-waifu-image margin-top-5',
                 children: [blockImage],
             }),
             overlays: [blockImageActions],
@@ -261,7 +261,6 @@ const WaifuImage = (taglist) => {
         children: [
             Box({
                 vertical: true,
-                className: 'spacing-v-5',
                 children: [
                     blockHeading,
                     Box({
