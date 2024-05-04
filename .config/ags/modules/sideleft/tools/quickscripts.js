@@ -42,6 +42,12 @@ const scripts = [
         enabled: isArchDistro,
     },
     {
+        icon: 'arch-symbolic',
+        name: 'Remove orphan packages',
+        command: `sudo pacman -R $(pacman -Qdtq)`,
+        enabled: isArchDistro,
+    },
+    {
         icon: 'flatpak-symbolic',
         name: 'Uninstall unused flatpak packages',
         command: `flatpak uninstall --unused`,
