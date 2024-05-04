@@ -26,6 +26,29 @@ function file_in_excludes() {
   return 1
 }
 
+
+# Greetings! 
+echo "###################################################################################################"
+echo "|                                                                                                 |"
+echo "|  Welcome to the dotfiles updater script!                                                        |"
+echo "|                                                                                                 |"
+echo "|  This script will update your dotfiles (.config, .local, etc) by retrieving the latest version  |"
+echo "|  from the Git repository and then replacing files that have not been modified                   |" 
+echo "|  by you to preserve changes.                                                                    |"
+echo "|                                                                                                 |"
+echo "###################################################################################################"
+
+echo "Do you want to continue? [Y/n] "
+read -r
+echo
+if [[ $REPLY =~ ^[Nn]$ ]]; then
+    echo "Exiting."
+    exit 0
+fi
+
+# End of Greetings
+
+
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # fetch the latest version of the repository
