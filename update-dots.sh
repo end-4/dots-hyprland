@@ -35,7 +35,7 @@ if ! git fetch; then
 fi
 
 # Check if there are any changes
-if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
+if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 && 1 != 1 ]]; then
     echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
@@ -134,7 +134,7 @@ else
 fi
 
 # Then update the repository
-if git pull; then
+if ! git pull; then
     echo "Git pull successful."
 else
     # If the pull failed, clone the repository to a temporary folder and copy the files from there
@@ -149,14 +149,18 @@ else
 
     mkdir -p ./cache
     temp_folder=$(mktemp -d -p ./cache)
-    git clone https://github.com/end-4/dots-hyprland/ "$temp_folder"
+    git clone https://github.com/end-4/dots-hyprland/ --depth=1 "$temp_folder"
     # Replace the existing dotfiles with the new ones
     for folder in "${folders[@]}"; do
         # Find all files (including those in subdirectories) and copy them
         find "$temp_folder/$folder" -type f -print0 | while IFS= read -r -d '' file; do
-            if [[ -f "$file" ]] && ! file_in_excludes "$file";  then
+            file="${file/$temp_folder<\//}"
+            if [[ -f "$temp_folder/$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]]; then
+                
                 # Construct the destination path
+                # Remove the temporary folder path
                 destination="$HOME/$file"
+                echo "$destination"
                 # Create the destination folder if it doesn't exist
                 mkdir -p "$(dirname "$destination")"
                 # Copy the file
@@ -166,6 +170,7 @@ else
     done
     echo "New dotfiles have been copied. Cleaning up temporary folder."
     rm -rf "$temp_folder"
+    exit 0
 fi
 
 
@@ -178,15 +183,14 @@ for folder in "${folders[@]}"; do
             mkdir -p "$HOME/$file"
         fi
         # Check if the file is a regular file and not in the exclude_folders
-        if [[ -f "$file" ]] && ! file_in_excludes "$file";  then
-            if [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
-                # Construct the destination path
-                destination="$HOME/$file"
-                # Copy the file
-                # Create the destination folder if it doesn't exist
-                mkdir -p "$(dirname "$destination")"
-                cp -f "$base/$file" "$destination"
-            fi
+        if [[ -f "$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]];  then
+            # Construct the destination path
+            destination="$HOME/$file"
+            echo "$destination"
+            # Copy the file
+            # Create the destination folder if it doesn't exist
+            mkdir -p "$(dirname "$destination")"
+            cp -f "$base/$file" "$destination"
         fi
     done
 done
