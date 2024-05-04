@@ -102,7 +102,7 @@ else
         exit 1
     fi
 
-    temp_folder=$(mktemp -d)
+    temp_folder=$(mktemp -d -p /cache)
     git clone https://github.com/end-4/dots-hyprland/ "$temp_folder"
     # Replace the existing dotfiles with the new ones
     for folder in "${folders[@]}"; do
