@@ -913,6 +913,13 @@ $waifu_image_overlay_transparency: 0.7;
     margin: 0rem 0.682rem;
 }
 
+.sidebar-volmixer-deviceselector {
+    @include small-rounding;
+    padding: 0.477rem 0.682rem;
+    background-color: $surfaceContainerHigh;
+    color: $onSurfaceVariant;
+}
+
 .sidebar-bluetooth-device {
     padding: 0.682rem;
     @include normal-rounding;
