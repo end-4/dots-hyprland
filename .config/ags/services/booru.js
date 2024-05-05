@@ -80,14 +80,14 @@ class BooruService extends Service {
 
     async fetch(msg) {
         // Init
-        const userArgs = `${msg}${this._nsfw ? '' : ' rating:safe'}`.split(/\s+/);
+        const userArgs = `${msg}${this._nsfw || !msg.includes('safe') ? '' : ' rating:safe'}`.split(/\s+/);
 
         let taglist = [];
         let page = 1;
         // Construct body/headers
         for (let i = 0; i < userArgs.length; i++) {
             const thisArg = userArgs[i].trim();
-            if (thisArg.length == 0 || thisArg == '.' || thisArg == '*') continue;
+            if (thisArg.length == 0 || thisArg == '.' || thisArg.includes('*')) continue;
             else if(!isNaN(thisArg)) page = parseInt(thisArg);
             else taglist.push(thisArg);
         }
@@ -95,6 +95,8 @@ class BooruService extends Service {
         this._queries.push({
             providerName: APISERVICES[this._mode].name,
             taglist: taglist.length == 0 ? ['*', `${page}`] : [...taglist, `${page}`],
+            realTagList: taglist,
+            page: page,
         });
         this.emit('newResponse', newMessageId);
         const params = {
