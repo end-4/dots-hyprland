@@ -75,7 +75,7 @@ export default (monitor = 0) => {
                     volumeIndicator.attribute.headphones !== usingHeadphones) {
                     volumeIndicator.attribute.headphones = usingHeadphones;
                     self.label = usingHeadphones ? 'Headphones' : 'Speakers';
-                    Indicator.popup(1);
+                    // Indicator.popup(1);
                 }
             }
             self.hook(Audio, updateAudioDevice);
