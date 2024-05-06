@@ -211,7 +211,7 @@ for folder in "${folders[@]}"; do
             mkdir -p "$HOME/$file"
         fi
         # Check if the file is a regular file and not in the exclude_folders
-        if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[! " ${modified_files[@]} " =~ " ${file} " ]]; then
+        if [[ -f "$file" ]] && ! file_in_excludes "$file" && [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
             # Construct the destination path
             destination="$HOME/$file"
             echo "Replacing \"$destination\" ..."
