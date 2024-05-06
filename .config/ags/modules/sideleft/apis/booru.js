@@ -45,6 +45,13 @@ const TagButton = (command) => {
     });
 }
 
+const CommandButton = (command, displayName = command) => Button({
+    className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
+    onClicked: () => sendMessage(command),
+    setup: setupCursorHover,
+    label: displayName,
+});
+
 export const booruTabIcon = Box({
     hpack: 'center',
     homogeneous: true,
@@ -452,7 +459,8 @@ const booruTags = Revealer({
 export const booruCommands = Box({
     className: 'spacing-h-5',
     setup: (self) => {
-        self.pack_end(TagButton('/clear'), false, false, 0);
+        self.pack_end(CommandButton('/clear'), false, false, 0);
+        self.pack_end(CommandButton('/next'), false, false, 0);
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,
@@ -501,6 +509,9 @@ export const sendMessage = (text) => {
             booruContent.add(message);
             booruContent.show_all();
             booruContent.attribute.map.set(Date.now(), message);
+        }
+        else if (text.startsWith('/next')) {
+            sendMessage('+')
         }
     }
     else BooruService.fetch(text);
