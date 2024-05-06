@@ -9,7 +9,7 @@ export base="$(pwd)"
 
 # Define paths to update
 folders=(".config" ".local")
-excludes=(".config/hypr/custom", ".config/ags/user_options.js", ".config/hypr/hyprland.conf")
+excludes=(".config/hypr/custom" ".config/ags/user_options.js" ".config/hypr/hyprland.conf")
 
 function get_checksum() {
   # Get the checksum of a specific file
@@ -58,7 +58,7 @@ if ! git fetch; then
 fi
 
 # Check if there are any changes
-if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
+if [[ ! $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
     echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
@@ -69,7 +69,8 @@ modified_files=()
 # Find all files in the specified folders and their subfolders
 while IFS= read -r -d '' file; do
     # If the file is not in the home directory, skip it
-    if [[ ! -f "$HOME/$file" ]]; then
+    if [[ ! -f "$HOME/$file" ]] || file_in_excludes "$file" ; then
+        echo "Skipping $file"
         continue
     fi
 
@@ -84,7 +85,7 @@ while IFS= read -r -d '' file; do
     fi
 done < <(find "${folders[@]}" -type f -print0)
 
-
+echo
 echo "Excluded files and folders: ${excludes[@]}"
 echo 
 
@@ -181,7 +182,7 @@ else
             if [[ -d "$temp_folder/$file" ]]; then
                 mkdir -p "$HOME/$file"
             fi
-            if [[ -f "$temp_folder/$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]]; then
+            if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 
                 # Construct the destination path
                 # Remove the temporary folder path
@@ -210,7 +211,7 @@ for folder in "${folders[@]}"; do
             mkdir -p "$HOME/$file"
         fi
         # Check if the file is a regular file and not in the exclude_folders
-        if [[ -f "$file" && ! $(file_in_excludes "$file") && ! " ${modified_files[@]} " =~ " ${file} " ]];  then
+        if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[! " ${modified_files[@]} " =~ " ${file} " ]]; then
             # Construct the destination path
             destination="$HOME/$file"
             echo "Replacing \"$destination\" ..."
