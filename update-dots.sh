@@ -58,7 +58,7 @@ if ! git fetch; then
 fi
 
 # Check if there are any changes
-if [[ $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
+if [[ ! $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
     echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
@@ -158,7 +158,7 @@ else
 fi
 
 # Then update the repository
-if git pull; then
+if ! git pull; then
     echo "Git pull successful."
 else
     # If the pull failed, clone the repository to a temporary folder and copy the files from there
@@ -178,11 +178,11 @@ else
     for folder in "${folders[@]}"; do
         # Find all files (including those in subdirectories) and copy them
         find "$temp_folder/$folder" -print0 | while IFS= read -r -d '' file; do
-            file="${file/$temp_folder<\//}"
+            file=${file//$temp_folder\//}
             if [[ -d "$temp_folder/$file" ]]; then
                 mkdir -p "$HOME/$file"
             fi
-            if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[! " ${modified_files[@]} " =~ " ${file} " ]]; then
+            if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[ ! " ${modified_files[@]} " =~ " ${file} " ]]; then
                 
                 # Construct the destination path
                 # Remove the temporary folder path
