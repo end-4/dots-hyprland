@@ -13,8 +13,9 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 const { execAsync, exec } = Utils;
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 import { dumpToWorkspace, swapWorkspace } from "./actions.js";
-import { substitute } from "../.miscutils/icons.js";
+import { iconExists, substitute } from "../.miscutils/icons.js";
 import { monitors } from '../.miscutils/hyprlanddata.js';
+import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
 const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
@@ -64,9 +65,12 @@ export default (overviewMonitor = 0) => {
         if (x + w > monitors[monitor]) w = monitors[monitor] - x;
         if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
 
-        const appIcon = Widget.Icon({
+        const iconName = substitute(c);
+        const appIcon = iconExists(iconName) ? Widget.Icon({
             icon: substitute(c),
             size: Math.min(w, h) * userOptions.overview.scale / 2.5,
+        }) : MaterialIcon('terminal', 'gigantic', {
+            css: `font-size: ${Math.min(w, h) * userOptions.overview.scale / 2.5}px`,
         });
         return Widget.Button({
             attribute: {
