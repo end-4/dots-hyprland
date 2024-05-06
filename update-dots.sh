@@ -62,6 +62,7 @@ if [[ ! $(git rev-list HEAD...origin/$current_branch --count) -eq 0 ]]; then
     echo "Repository is already up-to-date. Do not run git pull before this script. Exiting."
     exit 0
 fi
+echo "Excluding files and folders: ${excludes[@]}"
 
 # Then check which files have been modified by the user since the last update to preserve user configurations
 modified_files=()
@@ -86,7 +87,6 @@ while IFS= read -r -d '' file; do
 done < <(find "${folders[@]}" -type f -print0)
 
 echo
-echo "Excluded files and folders: ${excludes[@]}"
 echo 
 
 # Output all modified files
