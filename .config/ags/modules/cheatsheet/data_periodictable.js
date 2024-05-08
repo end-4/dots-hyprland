@@ -162,6 +162,7 @@ export const series = [
         { name: 'Thulium', symbol: 'Tm', number: 69, weight: 168.93, type: 'lanthanum' },
         { name: 'Ytterbium', symbol: 'Yb', number: 70, weight: 173.04, type: 'lanthanum' },
         { name: 'Lutetium', symbol: 'Lu', number: 71, weight: 174.97, type: 'lanthanum' },
+        { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
     ],
     [
         { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
@@ -181,6 +182,7 @@ export const series = [
         { name: 'Mendelevium', symbol: 'Md', number: 101, weight: 258, type: 'actinium' },
         { name: 'Nobelium', symbol: 'No', number: 102, weight: 259, type: 'actinium' },
         { name: 'Lawrencium', symbol: 'Lr', number: 103, weight: 262, type: 'actinium' },
+        { name: '', symbol: '', number: -1, weight: 0, type: 'empty' },
     ],
 ];
 
