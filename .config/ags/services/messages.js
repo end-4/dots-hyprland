@@ -45,6 +45,12 @@ async function batteryMessage() {
             break;
         }
     }
+    if(perc <= userOptions.battery.suspendThreshold) {
+        Utils.execAsync(['bash', '-c',
+                `notify-send "Suspending system" "Critical battery level (${perc}% remaining)" -u critical -a '${APP_NAME}' -t 69420 &`
+            ]).catch(print);
+        Utils.execAsync('systemctl suspend').catch(print);
+    }
 }
 
 // Run them
