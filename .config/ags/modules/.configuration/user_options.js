@@ -125,7 +125,13 @@ let configOptions = {
             'wps': "wps-office2019-kprometheus",
             'wpsoffice': "wps-office2019-kprometheus",
             '': "image-missing",
-        }
+        },
+        regexSubstitutions: [
+            {
+                regex: /^steam_app_(\d+)$/,
+                replace: "steam_icon_$1",
+            }
+        ]
     },
     'keybinds': {
         // Format: Mod1+Mod2+key. CaSe SeNsItIvE!

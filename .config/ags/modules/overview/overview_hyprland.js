@@ -67,7 +67,7 @@ export default (overviewMonitor = 0) => {
 
         const iconName = substitute(c);
         const appIcon = iconExists(iconName) ? Widget.Icon({
-            icon: substitute(c),
+            icon: iconName,
             size: Math.min(w, h) * userOptions.overview.scale / 2.5,
         }) : MaterialIcon('terminal', 'gigantic', {
             css: `font-size: ${Math.min(w, h) * userOptions.overview.scale / 2.5}px`,
