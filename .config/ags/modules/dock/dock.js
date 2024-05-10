@@ -11,6 +11,7 @@ const { Box, Revealer } = Widget;
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { substitute } from '../.miscutils/icons.js';
 
 const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1)
 
@@ -22,25 +23,6 @@ let timers = []
 function clearTimes() {
     timers.forEach(e => GLib.source_remove(e))
     timers = []
-}
-
-function substitute(str) {
-    const subs = [
-        { from: 'code-url-handler', to: 'visual-studio-code' },
-        { from: 'Code', to: 'visual-studio-code' },
-        { from: 'GitHub Desktop', to: 'github-desktop' },
-        { from: 'wps', to: 'wps-office2019-kprometheus' },
-        { from: 'gnome-tweaks', to: 'org.gnome.tweaks' },
-        { from: 'Minecraft* 1.20.1', to: 'minecraft' },
-        { from: '', to: 'image-missing' },
-    ];
-
-    for (const { from, to } of subs) {
-        if (from === str)
-            return to;
-    }
-
-    return str;
 }
 
 function ExclusiveWindow(client) {
