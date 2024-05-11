@@ -85,7 +85,7 @@ const timeRow = Box({
 
 const togglesBox = Widget.Box({
     hpack: 'center',
-    className: 'sidebar-togglesbox spacing-h-10',
+    className: 'sidebar-togglesbox spacing-h-5',
     children: [
         ToggleIconWifi(),
         ToggleIconBluetooth(),

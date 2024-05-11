@@ -121,14 +121,17 @@ export const ModuleCloudflareWarp = async (props = {}) => {
             enabled: false,
         },
         className: 'txt-small sidebar-iconbutton',
-        tooltipText: 'WARP',
+        tooltipText: 'Cloudflare WARP',
         onClicked: (self) => {
             self.attribute.enabled = !self.attribute.enabled;
             self.toggleClassName('sidebar-button-active', self.attribute.enabled);
             if (self.attribute.enabled) Utils.execAsync('warp-cli connect').catch(print)
             else Utils.execAsync('warp-cli disconnect').catch(print);
         },
-        child: MaterialIcon('dns', 'norm'),
+        child: Widget.Icon({
+            icon: 'cloudflare-dns-symbolic',
+            className: 'txt-norm',
+        }),
         setup: (self) => {
             setupCursorHover(self);
             self.attribute.enabled = !exec(`bash -c 'warp-cli status | grep Disconnected'`);
