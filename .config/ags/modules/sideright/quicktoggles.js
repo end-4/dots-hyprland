@@ -114,6 +114,30 @@ export const ModuleNightLight = async (props = {}) => {
     });
 }
 
+export const ModuleCloudflareWarp = async (props = {}) => {
+    if (!exec(`bash -c 'command -v warp-cli'`)) return null;
+    return Widget.Button({
+        attribute: {
+            enabled: false,
+        },
+        className: 'txt-small sidebar-iconbutton',
+        tooltipText: 'WARP',
+        onClicked: (self) => {
+            self.attribute.enabled = !self.attribute.enabled;
+            self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+            if (self.attribute.enabled) Utils.execAsync('warp-cli connect').catch(print)
+            else Utils.execAsync('warp-cli disconnect').catch(print);
+        },
+        child: MaterialIcon('dns', 'norm'),
+        setup: (self) => {
+            setupCursorHover(self);
+            self.attribute.enabled = !exec(`bash -c 'warp-cli status | grep Disconnected'`);
+            self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+        },
+        ...props,
+    });
+}
+
 export const ModuleInvertColors = async (props = {}) => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
