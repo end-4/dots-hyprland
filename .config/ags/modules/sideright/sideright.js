@@ -90,7 +90,7 @@ const togglesBox = Widget.Box({
         ToggleIconBluetooth(),
         await ModuleRawInput(),
         await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
-        ModuleNightLight(),
+        await ModuleNightLight(),
         await ModuleInvertColors(),
         ModuleIdleInhibitor(),
     ]
