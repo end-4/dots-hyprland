@@ -34,6 +34,15 @@
 </details>
 
 <details> 
+  <summary>Default keybinds</summary>
+    
+   - Cheat sheet for default keybinds:
+     
+   ![image](https://github.com/end-4/dots-hyprland/assets/65147258/f6851182-5d88-4d28-a080-aebf4e16fbee)
+
+</details>
+
+<details> 
   <summary>Help improve these dotfiles!</summary>
     
    - Join the [discussions](https://github.com/end-4/dots-hyprland/discussions)
