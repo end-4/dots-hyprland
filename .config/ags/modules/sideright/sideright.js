@@ -13,7 +13,8 @@ import {
     ModuleReloadIcon,
     ModuleSettingsIcon,
     ModulePowerIcon,
-    ModuleRawInput
+    ModuleRawInput,
+    ModuleCloudflareWarp
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleAudioControls from "./centermodules/audiocontrols.js";
@@ -93,6 +94,7 @@ const togglesBox = Widget.Box({
         await ModuleNightLight(),
         await ModuleInvertColors(),
         ModuleIdleInhibitor(),
+        await ModuleCloudflareWarp(),
     ]
 })
 
