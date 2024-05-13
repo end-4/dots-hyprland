@@ -53,6 +53,7 @@ const Windows = () => [
     forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
+    forMonitors(Dock),
     forMonitors(Osk),
     forMonitors(Session),
     ...(userOptions.dock.enabled ? [forMonitors(Dock)] : []),

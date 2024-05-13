@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-term_alpha=100 #Set this to < 100 make all your terminals transparent
+term_alpha=10 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
 if [ ! -d "$HOME"/.cache/ags/user/generated ]; then
     mkdir -p "$HOME"/.cache/ags/user/generated
@@ -167,6 +167,6 @@ fi
 apply_ags &
 apply_hyprland &
 apply_hyprlock &
-apply_gtk &
+#apply_gtk &
 apply_fuzzel &
 apply_term &
