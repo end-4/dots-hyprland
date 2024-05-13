@@ -3,6 +3,7 @@ import SessionScreen from "./sessionscreen.js";
 import PopupWindow from '../.widgethacks/popupwindow.js';
 
 export default (id = 0) => PopupWindow({ // On-screen keyboard
+    monitor: id,
     name: `session${id}`,
     visible: false,
     keymode: 'on-demand',
