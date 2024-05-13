@@ -10,12 +10,12 @@ const cheatsheets = [
     {
         name: 'Keybinds',
         materialIcon: 'keyboard',
-        contentWidget: Keybinds(),
+        contentWidget: Keybinds,
     },
     {
         name: 'Periodic table',
         materialIcon: 'experiment',
-        contentWidget: PeriodicTable(),
+        contentWidget: PeriodicTable,
     },
 ];
 
@@ -70,20 +70,24 @@ const CheatsheetHeader = () => Widget.CenterBox({
     }),
 });
 
-export const sheetContent = ExpandingIconTabContainer({
-    tabsHpack: 'center',
-    tabSwitcherClassName: 'sidebar-icontabswitcher',
-    transitionDuration: userOptions.animations.durationLarge * 1.4,
-    icons: cheatsheets.map((api) => api.materialIcon),
-    names: cheatsheets.map((api) => api.name),
-    children: cheatsheets.map((api) => api.contentWidget),
-    onChange: (self, id) => {
-        self.shown = cheatsheets[id].name;
-        if (cheatsheets[id].onFocus) cheatsheets[id].onFocus();
-    }
-});
+const sheetContents = [];
+const SheetContent = (id) => {
+    sheetContents[id] = ExpandingIconTabContainer({
+        tabsHpack: 'center',
+        tabSwitcherClassName: 'sidebar-icontabswitcher',
+        transitionDuration: userOptions.animations.durationLarge * 1.4,
+        icons: cheatsheets.map((api) => api.materialIcon),
+        names: cheatsheets.map((api) => api.name),
+        children: cheatsheets.map((api) => api.contentWidget()),
+        onChange: (self, id) => {
+            self.shown = cheatsheets[id].name;
+        }
+    });
+    return sheetContents[id];
+}
 
 export default (id) => PopupWindow({
+    monitor: id,
     name: `cheatsheet${id}`,
     layer: 'overlay',
     keymode: 'on-demand',
@@ -96,15 +100,15 @@ export default (id) => PopupWindow({
                 className: "cheatsheet-bg spacing-v-5",
                 children: [
                     CheatsheetHeader(),
-                    sheetContent,
+                    SheetContent(id),
                 ]
             }),
         ],
         setup: (self) => self.on('key-press-event', (widget, event) => { // Typing
             if (checkKeybind(event, userOptions.keybinds.cheatsheet.nextTab))
-                sheetContent.nextTab();
+                sheetContents[id].nextTab();
             else if (checkKeybind(event, userOptions.keybinds.cheatsheet.prevTab))
-                sheetContent.prevTab();
+                sheetContents[id].prevTab();
         })
     })
 });

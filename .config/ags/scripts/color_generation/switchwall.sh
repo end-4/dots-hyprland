@@ -5,11 +5,13 @@ if [ "$1" == "--noswitch" ]; then
     # imgpath=$(ags run-js 'wallpaper.get(0)')
 else
     # Select and set image (hyprland)
-    cd "$HOME/Pictures"
+    cd "$(xdg-user-dir PICTURES)"
     imgpath=$(yad --width 1200 --height 800 --file --title='Choose wallpaper' --add-preview --large-preview)
-    screensizey=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2 | head -1)
+    read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
     cursorposx=$(hyprctl cursorpos -j | gojq '.x' 2>/dev/null) || cursorposx=960
+    cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
     cursorposy=$(hyprctl cursorpos -j | gojq '.y' 2>/dev/null) || cursorposy=540
+    cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
     cursorposy_inverted=$(( screensizey - cursorposy ))
 
     if [ "$imgpath" == '' ]; then
