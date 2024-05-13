@@ -211,8 +211,9 @@ v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
-      i=".config/$i"
+    CONF=$(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr')
+    CONF+=" $(find .local/share/ -mindepth 1 -maxdepth 1)"
+    for i in $CONF; do
       echo "[$0]: Found target: $i"
       if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
       elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"

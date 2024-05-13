@@ -21,13 +21,14 @@ set -e
 # Undo Step 3: Removing copied config and local folders
 printf '\e[36mRemoving copied config and local folders...\n\e[97m'
 
-for i in ags fish fontconfig foot fuzzel hypr mpv wlogout "starship.toml" rubyshot
+for i in ags fish fontconfig foot fuzzel hypr mpv wlogout "starship.toml" rubyshot darkman
   do v rm -rf "$HOME/.config/$i"
 done
 
 v rm -rf "$HOME/.local/bin/fuzzel-emoji"
 v rm -rf "$HOME/.cache/ags"
 v sudo rm -rf "$HOME/.local/state/ags"
+v rm -rf "$HOME"/.local/share/{dark,light}-mode.d
 
 ##############################################################################################################################
 
