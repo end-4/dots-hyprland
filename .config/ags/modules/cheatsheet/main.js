@@ -70,7 +70,7 @@ const CheatsheetHeader = () => Widget.CenterBox({
     }),
 });
 
-const sheetContents = {};
+const sheetContents = [];
 const SheetContent = (id) => {
     sheetContents[id] = ExpandingIconTabContainer({
         tabsHpack: 'center',
