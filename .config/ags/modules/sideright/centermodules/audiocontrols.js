@@ -102,7 +102,7 @@ const AudioDevices = (input = false) => {
                     maxWidthChars: 10,
                     label: `${input ? '[In]' : '[Out]'}`,
                     setup: (self) => self.hook(Audio, (self) => {
-                        self.label = `${input ? '[In]' : '[Out]'} ${input ? Audio.microphone.description :  Audio.speaker.description}`;
+                        self.label = `${input ? '[In]' : '[Out]'} ${input ? Audio.microphone.description : Audio.speaker.description}`;
                     })
                 }),
                 Label({
