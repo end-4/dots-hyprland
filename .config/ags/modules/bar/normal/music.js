@@ -19,7 +19,7 @@ const CUSTOM_MODULE_SCROLLDOWN_SCRIPT = `${GLib.get_home_dir()}/.cache/ags/user/
 function trimTrackTitle(title) {
     if (!title) return '';
     const cleanPatterns = [
-        /【[^】]*】/,         // Touhou n weeb stuff
+        /【[^】]*】/,        // Touhou n weeb stuff
         " [FREE DOWNLOAD]", // F-777
     ];
     cleanPatterns.forEach((expr) => title = title.replace(expr, ''));
@@ -67,13 +67,12 @@ const BarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog
                 resourceProgress,
                 resourceLabel,
             ],
-            setup: (self) => self
-                .poll(5000, () => execAsync(['bash', '-c', command])
-                    .then((output) => {
-                        resourceCircProg.css = `font-size: ${Number(output)}px;`;
-                        resourceLabel.label = `${Math.round(Number(output))}%`;
-                        widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
-                    }).catch(print))
+            setup: (self) => self.poll(5000, () => execAsync(['bash', '-c', command])
+                .then((output) => {
+                    resourceCircProg.css = `font-size: ${Number(output)}px;`;
+                    resourceLabel.label = `${Math.round(Number(output))}%`;
+                    widget.tooltipText = `${name}: ${Math.round(Number(output))}%`;
+                }).catch(print))
             ,
         })
     });
