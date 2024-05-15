@@ -24,7 +24,6 @@ const overviewTick = Variable(false);
 
 export default (overviewMonitor = 0) => {
     const clientMap = new Map();
-    let workspaceGroup = 0;
     const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
         label: `${label}`,
         setup: (menuItem) => {
@@ -324,6 +323,7 @@ export default (overviewMonitor = 0) => {
     const OverviewRow = ({ startWorkspace, workspaces, windowName = 'overview' }) => Widget.Box({
         children: arr(startWorkspace, workspaces).map(Workspace),
         attribute: {
+            workspaceGroup: Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN),
             monitorMap: [],
             getMonitorMap: (box) => {
                 execAsync('hyprctl -j monitors').then(monitors => {
@@ -335,7 +335,6 @@ export default (overviewMonitor = 0) => {
             },
             update: (box) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN) * NUM_OF_WORKSPACES_SHOWN;
-                if (!App.getWindow(windowName)?.visible) return;
                 Hyprland.messageAsync('j/clients').then(clients => {
                     const allClients = JSON.parse(clients);
                     const kids = box.get_children();
@@ -399,6 +398,7 @@ export default (overviewMonitor = 0) => {
                     const previousGroup = box.attribute.workspaceGroup;
                     const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN);
                     if (currentGroup !== previousGroup) {
+                        if (!App.getWindow(windowName) || !App.getWindow(windowName).visible) return;
                         box.attribute.update(box);
                         box.attribute.workspaceGroup = currentGroup;
                     }
