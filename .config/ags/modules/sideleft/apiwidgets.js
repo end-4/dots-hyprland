@@ -90,9 +90,12 @@ export const chatEntry = TextView({
         }, 'hasKey')
         .on("key-press-event", (widget, event) => {
             // Don't send when Shift+Enter
-            if (event.get_keyval()[1] === Gdk.KEY_Return && event.get_state()[1] == Gdk.ModifierType.MOD2_MASK) {
-                apiSendMessage(widget);
-                return true;
+            if (event.get_keyval()[1] === Gdk.KEY_Return) {
+                if (event.get_state()[1] !== 17) {// SHIFT_MASK doesn't work but 17 should be shift
+                    apiSendMessage(widget);
+                    return true;
+                }
+                return false;
             }
             // Keybinds
             if (checkKeybind(event, userOptions.keybinds.sidebar.cycleTab))
