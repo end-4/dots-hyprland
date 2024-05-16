@@ -13,6 +13,7 @@ import Cheatsheet from './modules/cheatsheet/main.js';
 // import DesktopBackground from './modules/desktopbackground/main.js';
 import Dock from './modules/dock/main.js';
 import Corner from './modules/screencorners/main.js';
+import Crosshair from './modules/crosshair/main.js';
 import Indicator from './modules/indicators/main.js';
 import Osk from './modules/onscreenkeyboard/main.js';
 import Overview from './modules/overview/main.js';
@@ -46,7 +47,7 @@ applyStyle().catch(print);
 
 const Windows = () => [
     // forMonitors(DesktopBackground),
-
+    forMonitors(Crosshair),
     Overview(),
     forMonitors(Indicator),
     forMonitors(Cheatsheet),
