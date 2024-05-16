@@ -145,7 +145,7 @@ export default (props) => {
         vscroll: 'automatic',
         child: Box({
             vexpand: true,
-            // homogeneous: true,
+            homogeneous: true,
             children: [notificationList],
         }),
         setup: (self) => {

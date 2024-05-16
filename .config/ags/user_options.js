@@ -4,13 +4,6 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
-    'keybinds': {
-        'sidebar': {
-            'pin': "Ctrl+p",
-            'nextTab': "Ctrl+Page_Down",
-            'prevTab': "Ctrl+Page_Up",
-        },
-    },
 }
 
 export default userConfigOptions;
