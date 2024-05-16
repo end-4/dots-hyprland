@@ -8,6 +8,7 @@ export default (monitor = 0, ) => {
         name: `crosshair${monitor}`,
         layer: 'overlay',
         exclusivity: 'ignore',
+        visible: false,
         child: Widget.Icon({
             icon: 'crosshair-symbolic',
             css: `
