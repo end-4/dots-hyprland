@@ -3,3 +3,6 @@
 .config/ags/scss/_musicwal.scss
 .config/ags/scss/_material.scss
 /cache
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
