@@ -3,9 +3,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import PopupWindow from '../.widgethacks/popupwindow.js';
 import { monitors } from '../.miscutils/hyprlanddata.js';
 
-const WINDOWS_NEED_CLICK2CLOSE = [
-    'sideleft', 'sideright'
-];
+const WINDOWS_NEED_CLICK2CLOSE = [];
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 
