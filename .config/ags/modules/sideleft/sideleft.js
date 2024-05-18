@@ -74,7 +74,6 @@ export const widgetContent = TabContainer({
 export default () => Box({
     // vertical: true,
     vexpand: true,
-    hexpand: true,
     css: 'min-width: 2px;',
     children: [
         widgetContent,
