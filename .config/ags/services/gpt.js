@@ -14,7 +14,7 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'base_url': 'https://api.openai.com/v1/chat/completions',
         'key_get_url': 'https://platform.openai.com/api-keys',
         'key_file': 'openai_key.txt',
-        'model': 'gpt-3.5-turbo-1106',
+        'model': 'gpt-3.5-turbo',
     },
     'oxygen4o': {
         'name': 'Oxygen (GPT-4o)',
@@ -26,13 +26,13 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'model': 'gpt-4o',
     },
     'oxygen3': {
-        'name': 'Oxygen',
+        'name': 'Oxygen (GPT-3.5)',
         'logo_name': 'ai-oxygen-symbolic',
         'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
         'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
         'key_file': 'oxygen_key.txt',
-        'model': 'gpt-3.5-turbo-1106',
+        'model': 'gpt-3.5-turbo',
     },
     'zukijourney': {
         'name': 'zukijourney',
@@ -41,7 +41,7 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'base_url': 'https://zukijourney.xyzbot.net/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
         'key_file': 'zuki_key.txt',
-        'model': 'gpt-3.5-turbo-1106',
+        'model': 'gpt-3.5-turbo',
     },
 }
 
