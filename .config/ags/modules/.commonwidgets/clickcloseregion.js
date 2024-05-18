@@ -7,10 +7,10 @@ export const clickCloseRegion = ({ name, multimonitor = true, monitor = 0, expan
     return EventBox({
         child: Box({
             expand: expand,
-            css: fillMonitor ? `
+            css: `
                 min-width: ${fillMonitor.includes('h') ? monitors[monitor].width : 0}px;
                 min-height: ${fillMonitor.includes('v') ? monitors[monitor].height : 0}px;
-            ` : null,
+            `,
         }),
         setup: (self) => self.on('button-press-event', (self, event) => { // Any mouse button
             if (multimonitor) closeWindowOnAllMonitors(name);
