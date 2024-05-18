@@ -4,7 +4,7 @@ import PopupWindow from '../.widgethacks/popupwindow.js';
 import { monitors } from '../.miscutils/hyprlanddata.js';
 
 const WINDOWS_NEED_CLICK2CLOSE = [
-    'sideleft', 'sideright', 'overview', 'cheatsheet'
+    'sideleft', 'sideright'
 ];
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
@@ -15,6 +15,7 @@ export default (monitor = 0) => PopupWindow({
     layer: 'top',
     anchor: ['top', 'bottom', 'left', 'right'],
     exclusivity: 'ignore',
+    keymode: 'none',
     child: Widget.EventBox({
         attribute: {
             checkWindowRelevance: (currentName) => {
