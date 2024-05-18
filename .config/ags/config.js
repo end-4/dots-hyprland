@@ -20,7 +20,6 @@ import Overview from './modules/overview/main.js';
 import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
-import Click2Close from './modules/click2close/main.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
@@ -64,7 +63,6 @@ const Windows = () => [
     forMonitors((id) => Corner(id, 'bottom right', userOptions.appearance.fakeScreenRounding)),
     forMonitors(BarCornerTopleft),
     forMonitors(BarCornerTopright),
-    forMonitors(Click2Close),
 ];
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
