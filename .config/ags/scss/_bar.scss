@@ -152,7 +152,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-batt-circprog {
     @include fluent_decel_long;
-    min-width: 0.068rem; // line width
+    min-width: 0.136rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
     background-color: $battLayer2;
@@ -181,7 +181,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-ram-circprog {
     @include fluent_decel_long;
-    min-width: 0.068rem; // line width
+    min-width: 0.136rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
     background-color: $ramLayer2;
@@ -203,7 +203,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-swap-circprog {
     @include fluent_decel_long;
-    min-width: 0.068rem; // line width
+    min-width: 0.136rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
     background-color: $swapLayer2;
@@ -225,7 +225,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-cpu-circprog {
     @include fluent_decel_long;
-    min-width: 0.068rem; // line width
+    min-width: 0.136rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
     background-color: $cpuLayer2;
@@ -246,7 +246,7 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-music-circprog {
     @include fluent_decel_long;
-    min-width: 0.068rem; // line width
+    min-width: 0.136rem; // line width
     min-height: 1.636rem;
     padding: 0rem;
     background-color: $musicLayer2;
