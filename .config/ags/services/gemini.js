@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from '../modules/.miscutils/files.js';
 
-const HISTORY_DIR = `${GLib.get_user_cache_dir()}/ags/user/ai/chats/`;
+const HISTORY_DIR = `${GLib.get_user_state_dir()}/ags/user/ai/chats/`;
 const HISTORY_FILENAME = `gemini.txt`;
 const HISTORY_PATH = HISTORY_DIR + HISTORY_FILENAME;
 const initMessages =
@@ -34,9 +34,9 @@ if (!fileExists(`${GLib.get_user_config_dir()}/gemini_history.json`)) {
     Utils.writeFile('[ ]', `${GLib.get_user_config_dir()}/gemini_history.json`).catch(print);
 }
 
-Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
-const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_key.txt`;
-const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_api_dom.txt`;
+Utils.exec(`mkdir -p ${GLib.get_user_state_dir()}/ags/user/ai`);
+const KEY_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/ai/google_key.txt`;
+const APIDOM_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/ai/google_api_dom.txt`;
 function replaceapidom(URL) {
     if (fileExists(APIDOM_FILE_LOCATION)) {
         var contents = Utils.readFile(APIDOM_FILE_LOCATION).trim();
