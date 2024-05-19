@@ -12,8 +12,8 @@ import { showMusicControls } from '../../variables.js';
 import { darkMode, hasPlasmaIntegration } from '../.miscutils/system.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
-const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const colorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
+const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/colormode.txt`;
+const colorMode = Utils.exec(`bash -c "sed -n \'1p\' '${LIGHTDARK_FILE_LOCATION}'"`);
 const lightDark = (colorMode == "light") ? '-l' : '';
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';
@@ -206,11 +206,11 @@ const CoverArt = ({ player, ...rest }) => {
 
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${App.configDir}/scss/_musicmaterial.scss`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss`])
                     .then(() => {
                         exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode.value ? '' : '-l'}`)
-                        exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
-                        exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
+                        exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${GLib.get_user_state_dir()}/ags/scss/_musicwal.scss`);
+                        exec(`sass -I "${GLib.get_user_state_dir()}/ags/scss" -I "${App.configDir}/scss/fallback" "${App.configDir}/scss/_music.scss" "${stylePath}"`);
                         Utils.timeout(200, () => {
                             // self.attribute.showImage(self, coverPath)
                             self.css = `background-image: url('${coverPath}');`; // CSS image

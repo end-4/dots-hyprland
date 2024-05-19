@@ -8,13 +8,14 @@ export function fileExists(filePath) {
 }
 
 const FIRST_RUN_FILE = "firstrun.txt";
-const FIRST_RUN_PATH = GLib.build_filenamev([GLib.get_user_cache_dir(), "ags", "user", FIRST_RUN_FILE]);
+const FIRST_RUN_PATH = `${GLib.get_user_state_dir()}/ags/user/${FIRST_RUN_FILE}`;
 const FIRST_RUN_FILE_CONTENT = "Just a file to confirm that you have been greeted ;)";
 const APP_NAME = "illogical-impulse";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
 const FIRST_RUN_NOTIF_BODY = `First run? 👀 <span foreground="#FF0202" font_weight="bold">CTRL+SUPER+T</span> to pick a wallpaper (or styles will break!)\nFor a list of keybinds, hit <span foreground="#c06af1" font_weight="bold">Super + /</span>.`;
 
 export async function firstRunWelcome() {
+    GLib.mkdir_with_parents(`${GLib.get_user_state_dir()}/ags/user`, 755);
     if (!fileExists(FIRST_RUN_PATH)) {
         Utils.writeFile(FIRST_RUN_FILE_CONTENT, FIRST_RUN_PATH)
             .then(() => {
@@ -54,7 +55,7 @@ async function batteryMessage() {
 }
 
 // Run them
-firstRunWelcome();
+firstRunWelcome().catch(print);
 Utils.timeout(1, () => {
     Battery.connect('changed', () => batteryMessage().catch(print));
 })

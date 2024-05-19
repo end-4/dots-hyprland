@@ -1,7 +1,7 @@
-@import './material';
-@import './musicmaterial';
+@import 'material';
+@import 'musicmaterial';
 @import './wal';
-@import './musicwal';
+@import 'musicwal';
 @import './colors';
 @import './lib_mixins';
 $music_transparentize_amount: 0.3;
