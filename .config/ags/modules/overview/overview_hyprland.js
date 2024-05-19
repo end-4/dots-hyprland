@@ -133,25 +133,25 @@ export default (overviewMonitor = 0) => {
                     children: [
                         appIcon,
                         // TODO: Add xwayland tag instead of just having italics
-                        Widget.Revealer({
-                            transition: 'slide_right',
-                            revealChild: revealInfoCondition,
-                            child: Widget.Revealer({
-                                transition: 'slide_down',
-                                revealChild: revealInfoCondition,
-                                child: Widget.Label({
-                                    maxWidthChars: 10, // Doesn't matter what number
-                                    truncate: 'end',
-                                    className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
-                                    css: `
-                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
-                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
-                            `,
-                                    // If the title is too short, include the class
-                                    label: (title.length <= 1 ? `${c}: ${title}` : title),
-                                })
-                            })
-                        })
+                        // Widget.Revealer({
+                        //     transition: 'slide_right',
+                        //     revealChild: revealInfoCondition,
+                        //     child: Widget.Revealer({
+                        //         transition: 'slide_down',
+                        //         revealChild: revealInfoCondition,
+                        //         child: Widget.Label({
+                        //             maxWidthChars: 10, // Doesn't matter what number
+                        //             truncate: 'end',
+                        //             className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
+                        //             css: `
+                        //         font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
+                        //         margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
+                        //     `,
+                        //             // If the title is too short, include the class
+                        //             label: (title.length <= 1 ? `${c}: ${title}` : title),
+                        //         })
+                        //     })
+                        // })
                     ]
                 })
             }),
