@@ -60,7 +60,7 @@ const initMessages =
         { role: "assistant", content: "## Skeuomorphism\n- A design philosophy- From early days of interface designing- Tries to imitate real-life objects- It's in fact still used by Apple in their icons until today.", },
     ];
 
-Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
+Utils.exec(`mkdir -p ${GLib.get_user_state_dir()}/ags/user/ai`);
 
 class GPTMessage extends Service {
     static {
@@ -139,13 +139,13 @@ class GPTService extends Service {
     _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
     _key = '';
-    _key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+    _key_file_location = `${GLib.get_user_state_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
     _url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
 
     _decoder = new TextDecoder();
 
     _initChecks() {
-        this._key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+        this._key_file_location = `${GLib.get_user_state_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
         if (fileExists(this._key_file_location)) this._key = Utils.readFile(this._key_file_location).trim();
         else this.emit('hasKey', false);
         this._url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);

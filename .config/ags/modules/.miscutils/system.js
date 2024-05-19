@@ -8,8 +8,8 @@ export const isDebianDistro = (distroID == 'linuxmint' || distroID == 'ubuntu' |
 export const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos');
 export const hasFlatpak = !!exec(`bash -c 'command -v flatpak'`);
 
-const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const colorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
+const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/colormode.txt`;
+const colorMode = Utils.exec(`bash -c "sed -n '1p' '${LIGHTDARK_FILE_LOCATION}'"`);
 export let darkMode = Variable(!(Utils.readFile(LIGHTDARK_FILE_LOCATION).split('\n')[0].trim() == 'light'));
 export const hasPlasmaIntegration = !!Utils.exec('bash -c "command -v plasma-browser-integration-host"');
 
