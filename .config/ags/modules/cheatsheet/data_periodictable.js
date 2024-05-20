@@ -107,7 +107,7 @@ export const periodicTable = [
         { name: 'Lanthanum', symbol: 'La', number: 57, weight: 138.91, type: 'lanthanum' },
         { name: 'Hafnium', symbol: 'Hf', number: 72, weight: 178.49, type: 'metal' },
         { name: 'Tantalum', symbol: 'Ta', number: 73, weight: 180.95, type: 'metal' },
-        { name: 'Wolfram', symbol: 'W', number: 74, weight: 183.84, type: 'metal' },
+        { name: 'Tungsten', symbol: 'W', number: 74, weight: 183.84, type: 'metal' },
         { name: 'Rhenium', symbol: 'Re', number: 75, weight: 186.21, type: 'metal' },
         { name: 'Osmium', symbol: 'Os', number: 76, weight: 190.23, type: 'metal' },
         { name: 'Iridium', symbol: 'Ir', number: 77, weight: 192.22, type: 'metal' },
