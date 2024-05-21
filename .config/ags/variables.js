@@ -47,7 +47,6 @@ globalThis['openWindowOnAllMonitors'] = (name) => {
 globalThis['closeEverything'] = () => {
     const numMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
     for (let i = 0; i < numMonitors; i++) {
-        App.closeWindow(`click2close${i}`);
         App.closeWindow(`cheatsheet${i}`);
         App.closeWindow(`session${i}`);
     }
