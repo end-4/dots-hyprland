@@ -49,6 +49,12 @@ let configOptions = {
             'default': "auto",
         },
     },
+    'gaming': {
+        'crosshair': {
+            'size': 20,
+            'color': 'rgba(113,227,32,0.9)',
+        },
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },

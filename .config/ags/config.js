@@ -13,13 +13,13 @@ import Cheatsheet from './modules/cheatsheet/main.js';
 // import DesktopBackground from './modules/desktopbackground/main.js';
 import Dock from './modules/dock/main.js';
 import Corner from './modules/screencorners/main.js';
+import Crosshair from './modules/crosshair/main.js';
 import Indicator from './modules/indicators/main.js';
 import Osk from './modules/onscreenkeyboard/main.js';
 import Overview from './modules/overview/main.js';
 import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
-import Click2Close from './modules/click2close/main.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
@@ -33,12 +33,13 @@ function forMonitorsAsync(widget) {
 }
 
 // SCSS compilation
-Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicwal.scss'`); // reset music styles
-Utils.exec(`bash -c 'echo "" > ${App.configDir}/scss/_musicmaterial.scss'`); // reset music styles
+Utils.exec(`mkdir -p "${GLib.get_user_state_dir()}/ags/scss"`);
+Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/ags/scss/_musicwal.scss'`); // reset music styles
+Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss'`); // reset music styles
 async function applyStyle() {
     Utils.exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
     Print("${COMPILED_STYLE_DIR}/style.css");
-    Utils.exec(`sassc ${App.configDir}/scss/main.scss ${COMPILED_STYLE_DIR}/style.css`);
+    Utils.exec(`sassc -I "${GLib.get_user_state_dir()}/ags/scss" -I "${App.configDir}/scss/fallback" "${App.configDir}/scss/main.scss" "${COMPILED_STYLE_DIR}/style.css"`);
     App.resetCss();
     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
     console.log('[LOG] Styles loaded')
@@ -47,7 +48,7 @@ applyStyle().catch(print);
 
 const Windows = () => [
     // forMonitors(DesktopBackground),
-
+    forMonitors(Crosshair),
     Overview(),
     forMonitors(Indicator),
     forMonitors(Cheatsheet),
@@ -65,7 +66,6 @@ const Windows = () => [
     forMonitors((id) => Corner(id, 'bottom right', userOptions.appearance.fakeScreenRounding)),
     forMonitors(BarCornerTopleft),
     forMonitors(BarCornerTopright),
-    forMonitors(Click2Close),
 ];
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully

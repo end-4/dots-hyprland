@@ -5,6 +5,7 @@ import Keybinds from "./keybinds.js";
 import PeriodicTable from "./periodictable.js";
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
+import clickCloseRegion from '../.commonwidgets/clickcloseregion.js';
 
 const cheatsheets = [
     {
@@ -86,29 +87,41 @@ const SheetContent = (id) => {
     return sheetContents[id];
 }
 
-export default (id) => PopupWindow({
-    monitor: id,
-    name: `cheatsheet${id}`,
-    layer: 'overlay',
-    keymode: 'on-demand',
-    visible: false,
-    child: Widget.Box({
+export default (id) => {
+    const widgetContent = Widget.Box({
         vertical: true,
+        className: "cheatsheet-bg spacing-v-5",
         children: [
-            Widget.Box({
-                vertical: true,
-                className: "cheatsheet-bg spacing-v-5",
-                children: [
-                    CheatsheetHeader(),
-                    SheetContent(id),
-                ]
-            }),
-        ],
-        setup: (self) => self.on('key-press-event', (widget, event) => { // Typing
-            if (checkKeybind(event, userOptions.keybinds.cheatsheet.nextTab))
-                sheetContents[id].nextTab();
-            else if (checkKeybind(event, userOptions.keybinds.cheatsheet.prevTab))
-                sheetContents[id].prevTab();
+            CheatsheetHeader(),
+            SheetContent(id),
+        ]
+    });
+    return PopupWindow({
+        monitor: id,
+        name: `cheatsheet${id}`,
+        layer: 'overlay',
+        keymode: 'on-demand',
+        visible: false,
+        anchor: ['top', 'bottom', 'left', 'right'],
+        child: Widget.Box({
+            vertical: true,
+            children: [
+                clickCloseRegion({ name: 'cheatsheet' }),
+                Widget.Box({
+                    children: [
+                        clickCloseRegion({ name: 'cheatsheet' }),
+                        widgetContent,
+                        clickCloseRegion({ name: 'cheatsheet' }),
+                    ]
+                }),
+                clickCloseRegion({ name: 'cheatsheet' }),
+            ],
+            setup: (self) => self.on('key-press-event', (widget, event) => { // Typing
+                if (checkKeybind(event, userOptions.keybinds.cheatsheet.nextTab))
+                    sheetContents[id].nextTab();
+                else if (checkKeybind(event, userOptions.keybinds.cheatsheet.prevTab))
+                    sheetContents[id].prevTab();
+            })
         })
-    })
-});
+    });
+}

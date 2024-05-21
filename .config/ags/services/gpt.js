@@ -14,14 +14,25 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'base_url': 'https://api.openai.com/v1/chat/completions',
         'key_get_url': 'https://platform.openai.com/api-keys',
         'key_file': 'openai_key.txt',
+        'model': 'gpt-3.5-turbo',
     },
-    'oxygen': {
-        'name': 'Oxygen',
+    'oxygen4o': {
+        'name': 'Oxygen (GPT-4o)',
         'logo_name': 'ai-oxygen-symbolic',
         'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
         'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
         'key_file': 'oxygen_key.txt',
+        'model': 'gpt-4o',
+    },
+    'oxygen3': {
+        'name': 'Oxygen (GPT-3.5)',
+        'logo_name': 'ai-oxygen-symbolic',
+        'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
+        'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
+        'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
+        'key_file': 'oxygen_key.txt',
+        'model': 'gpt-3.5-turbo',
     },
     'zukijourney': {
         'name': 'zukijourney',
@@ -30,21 +41,14 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'base_url': 'https://zukijourney.xyzbot.net/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
         'key_file': 'zuki_key.txt',
-    },
-    'zukijourney_roleplay': {
-        'name': 'zukijourney (roleplay)',
-        'logo_name': 'ai-zukijourney',
-        'description': 'An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it\'s buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key',
-        'base_url': 'https://zukijourney.xyzbot.net/unf/chat/completions',
-        'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
-        'key_file': 'zuki_key.txt',
+        'model': 'gpt-3.5-turbo',
     },
 }
 
 // Custom prompt
 const initMessages =
     [
-        { role: "user", content: "You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with very brief explanation for each command\n3. Otherwise, when asked to summarize information or explaining concepts, you are encouraged to use bullet points and headings. Use casual language and be short and concise. \nThanks!", },
+        { role: "user", content: "You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with brief explanation.\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\". \nNote: Use casual language, be short, while ensuring the factual correctness of your response. If you are unsure or don’t have enough information to provide a confident answer, simply say “I don’t know” or “I’m not sure.”. \nThanks!", },
         { role: "assistant", content: "- Got it!", },
         { role: "user", content: "\"He rushed to where the event was supposed to be hold, he didn't know it got calceled\"", },
         { role: "assistant", content: "## Grammar correction\nErrors:\n\"He rushed to where the event was supposed to be __hold____,__ he didn't know it got calceled\"\nCorrection + minor improvements:\n\"He rushed to the place where the event was supposed to be __held____, but__ he didn't know that it got calceled\"", },
@@ -56,10 +60,7 @@ const initMessages =
         { role: "assistant", content: "## Skeuomorphism\n- A design philosophy- From early days of interface designing- Tries to imitate real-life objects- It's in fact still used by Apple in their icons until today.", },
     ];
 
-// We're using many models to not be restricted to 3 messages per minute.
-// The whole chat will be sent every request anyway.
-Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
-const CHAT_MODELS = ["gpt-3.5-turbo-1106", "gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613"]
+Utils.exec(`mkdir -p ${GLib.get_user_state_dir()}/ags/user/ai`);
 
 class GPTMessage extends Service {
     static {
@@ -137,15 +138,14 @@ class GPTService extends Service {
     _requestCount = 0;
     _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
-    _modelIndex = 0;
     _key = '';
-    _key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+    _key_file_location = `${GLib.get_user_state_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
     _url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
 
     _decoder = new TextDecoder();
 
     _initChecks() {
-        this._key_file_location = `${GLib.get_user_cache_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
+        this._key_file_location = `${GLib.get_user_state_dir()}/ags/user/ai/${PROVIDERS[this._currentProvider]['key_file']}`;
         if (fileExists(this._key_file_location)) this._key = Utils.readFile(this._key_file_location).trim();
         else this.emit('hasKey', false);
         this._url = GLib.Uri.parse(PROVIDERS[this._currentProvider]['base_url'], GLib.UriFlags.NONE);
@@ -161,7 +161,7 @@ class GPTService extends Service {
         this.emit('initialized');
     }
 
-    get modelName() { return CHAT_MODELS[this._modelIndex] }
+    get modelName() { return PROVIDERS[this._currentProvider]['model'] }
     get getKeyUrl() { return PROVIDERS[this._currentProvider]['key_get_url'] }
     get providerID() { return this._currentProvider }
     set providerID(value) {
@@ -240,7 +240,7 @@ class GPTService extends Service {
         const aiResponse = new GPTMessage('assistant', '', true, false)
 
         const body = {
-            model: CHAT_MODELS[this._modelIndex],
+            model: PROVIDERS[this._currentProvider]['model'],
             messages: this._messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
             temperature: this._temperature,
             // temperature: 2, // <- Nuts
