@@ -72,7 +72,7 @@ if [[ $(git rev-list HEAD...origin/"$current_branch" --count) -eq 0 ]]; then
     echo -e "${GREEN}Repository is already up-to-date. Do not run git pull before this script. Exiting...${RESET}"
     exit 0
 fi
-echo -e "${CYAN}Excluding files and folders that remain untouched: ${excludes[@]}${RESET}"
+echo -e "${CYAN}Excluding files and folders that remain untouched:${RESET} ${excludes[@]}"
 
 # Then check which files have been customized by the user since the last update to preserve user configurations
 modified_files=()
@@ -222,15 +222,15 @@ renamed_files=$(git diff --name-status @{1} | awk '$1 ~ /^R/ {print $2, "->", $3
 
 files_to_remove=()
 
-for file in $files_to_remove; do
+for file in $deleted_files; do
     
     if ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
         files_to_remove+=("$file")
     fi
 done
-for file in $files_renamed; do
+for file in $renamed_files; do
     if ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
-        files_renamed+=("$file")
+        files_to_remove+=("$file")
     fi
 done
 
