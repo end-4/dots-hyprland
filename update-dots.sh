@@ -190,11 +190,56 @@ if ! git pull; then
             fi
         done
     done
+    
+    # run diff command to determine which files do only exist in the old dotfiles
+    diff_files=$(diff -qr "$base" "$temp_folder" | grep -E "^Only in $base" | awk '{print $4}')
+    for file in $diff_files; do
+        if ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
+            echo -e "${YELLOW}File $file does not exist in the new dotfiles. Deleting...${RESET}"
+            if [[ -e "$HOME/$file" ]]; then
+                rm -rf "$HOME/$file"
+            fi
+        fi
+    done
+    
     echo -e "${GREEN}New dotfiles have been copied. Cleaning up temporary folder...${RESET}"
     rm -rf "$temp_folder"
     echo -e "${GREEN}Done. You may exit now.${RESET}"
     exit 0
 fi
+
+
+# Check git diff to determine which files have been removed and which have been renamed
+deleted_files=()
+renamed_files=()
+
+# Extract deleted files and save to variable
+deleted_files=$(git diff --name-status @{1} | awk '$1 == "D" {print $2}')
+
+# Extract renamed files and save to variable
+renamed_files=$(git diff --name-status @{1} | awk '$1 ~ /^R/ {print $2, "->", $3}')
+
+
+files_to_remove=()
+
+for file in $files_to_remove; do
+    
+    if ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
+        files_to_remove+=("$file")
+    fi
+done
+for file in $files_renamed; do
+    if ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
+        files_renamed+=("$file")
+    fi
+done
+
+# Remove files
+for file in "${files_to_remove[@]}"; do
+    echo -e "${YELLOW}Removing $file ...${RESET}"
+    rm -rf "$HOME/$file"
+done
+
 
 # Replace unmodified files
 for folder in "${folders[@]}"; do
