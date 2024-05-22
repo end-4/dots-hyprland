@@ -44,7 +44,7 @@ cat << 'EOF'
 |                                                                                                 |
 |  This script will update your dotfiles (.config, .local, etc) by retrieving the latest version  |
 |  from the Git repository and then replacing the old config files with the updated ones.         |
-|  To preserve your customizations, it will ask you if you wanna keep some  modified              |
+|  To preserve your customizations, it will ask you if you wanna keep some customized             |
 |  files untouched.                                                                               |
 |                                                                                                 |
 ###################################################################################################
@@ -63,18 +63,18 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 # fetch the latest version of the repository
 if ! git fetch; then
-    echo -e "${RED}Failed to fetch the latest version of the repository. Exiting.${RESET}"
+    echo -e "${RED}Failed to fetch the latest version of the repository. Exiting...${RESET}"
     exit 1
 fi
 
 # Check if there are any changes
 if [[ $(git rev-list HEAD...origin/"$current_branch" --count) -eq 0 ]]; then
-    echo -e "${GREEN}Repository is already up-to-date. Do not run git pull before this script. Exiting.${RESET}"
+    echo -e "${GREEN}Repository is already up-to-date. Do not run git pull before this script. Exiting...${RESET}"
     exit 0
 fi
-echo -e "${CYAN}Excluding files and folders: ${excludes[@]}${RESET}"
+echo -e "${CYAN}Excluding files and folders that remain untouched: ${excludes[@]}${RESET}"
 
-# Then check which files have been modified by the user since the last update to preserve user configurations
+# Then check which files have been customized by the user since the last update to preserve user configurations
 modified_files=()
 
 # Find all files in the specified folders and their subfolders
@@ -99,12 +99,12 @@ echo
 
 # Output all modified files
 if [[ ${#modified_files[@]} -gt 0 ]]; then
-    echo -e "${MAGENTA}The following files have been modified since the last update:${RESET}"
+    echo -e "${MAGENTA}Customized Files detected: ${RESET}The following files have been customized by you or your system:"
     for file in "${modified_files[@]}"; do
         echo -e "${BLUE}$file${RESET}"
     done
 else
-    read -rp "No files found that have been modified since the last update. All files will be replaced. Are you sure you want to continue? [Y/n] " REPLY
+    read -rp "${YELLOW}No files detected that have been customized since the last update. All files will be replaced. Are you sure you want to continue? [Y/n] ${RESET}" REPLY
     echo
     if [[ $REPLY =~ ^[Nn]$ ]]; then
         echo -e "${RED}Exiting.${RESET}"
@@ -158,7 +158,7 @@ case $REPLY in
         fi
     ;;
     *)
-        echo -e "${GREEN}Keeping every modified file${RESET}"
+        echo -e "${GREEN}Keeping every customized file${RESET}"
     ;;
 esac
 
@@ -190,8 +190,9 @@ if ! git pull; then
             fi
         done
     done
-    echo -e "${GREEN}New dotfiles have been copied. Cleaning up temporary folder.${RESET}"
+    echo -e "${GREEN}New dotfiles have been copied. Cleaning up temporary folder...${RESET}"
     rm -rf "$temp_folder"
+    echo -e "${GREEN}Done. You may exit now.${RESET}"
     exit 0
 fi
 
@@ -209,3 +210,6 @@ for folder in "${folders[@]}"; do
         fi
     done
 done
+
+echo -e "${GREEN}Done. You may exit now.${RESET}"
+
