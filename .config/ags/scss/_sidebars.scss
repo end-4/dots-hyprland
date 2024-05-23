@@ -59,25 +59,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-iconbutton:hover,
 .sidebar-iconbutton:focus {
-    background-color: $hovercolor;
+    background-color: $layer1Hover;
 }
 
 .sidebar-iconbutton:active {
-    background-color: $activecolor;
-}
-
-.sidebar-button {
-    @include element_decel;
-    padding: 0rem $rounding_small;
-}
-
-.sidebar-button:hover,
-.sidebar-button:focus {
-    background-color: $hovercolor;
-}
-
-.sidebar-button:active {
-    background-color: $activecolor;
+    background-color: $layer1Active;
 }
 
 .sidebar-button-active {
@@ -87,11 +73,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-button-active:hover,
 .sidebar-button-active:focus {
-    background-color: mix($primary, $hovercolor, 70%);
+    background-color: mix($primary, $layer1Hover, 70%);
 }
 
 .sidebar-button-active:active {
-    background-color: mix($primary, $hovercolor, 40%);
+    background-color: mix($primary, $layer1Active, 40%);
 }
 
 .sidebar-buttons-separator {
@@ -111,11 +97,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-navrail-btn:hover>box>label:first-child,
 .sidebar-navrail-btn:focus>box>label:first-child {
-    background-color: $hovercolor;
+    background-color: $layer1Hover;
 }
 
 .sidebar-navrail-btn:active>box>label:first-child {
-    background-color: $activecolor;
+    background-color: $layer1Active;
 }
 
 .sidebar-navrail-btn-active>box>label:first-child {
@@ -125,8 +111,8 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-navrail-btn-active:hover>box>label:first-child,
 .sidebar-navrail-btn-active:focus>box>label:first-child {
-    background-color: mix($secondaryContainer, $hovercolor, 90%);
-    color: mix($onSecondaryContainer, $hovercolor, 90%);
+    background-color: mix($secondaryContainer, $layer1Hover, 90%);
+    color: mix($onSecondaryContainer, $layer1Hover, 90%);
 }
 
 .sidebar-sysinfo-grouppad {
@@ -268,7 +254,21 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 }
 
 .sidebar-todo-item {
-    padding-right: 0.545rem;
+    @include small-rounding;
+    margin-right: 0.545rem;
+    // padding: 0.341rem;
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-todo-txt {
+    margin: 0.341rem;
+    margin-bottom: 0rem;
+}
+
+.sidebar-todo-actions {
+    margin: 0.341rem;
+    margin-top: 0rem;
 }
 
 .sidebar-todo-item-action {
@@ -280,11 +280,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-todo-item-action:hover,
 .sidebar-todo-item-action:focus {
-    background-color: $hovercolor;
+    background-color: $layer2Hover;
 }
 
 .sidebar-todo-item-action:active {
-    background-color: $activecolor;
+    background-color: $layer2Active;
 }
 
 .sidebar-todo-crosser {
