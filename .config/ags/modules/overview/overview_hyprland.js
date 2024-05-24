@@ -140,7 +140,7 @@ export default (overviewMonitor = 0) => {
                                 transition: 'slide_down',
                                 revealChild: revealInfoCondition,
                                 child: Widget.Label({
-                                    maxWidthChars: 10, // Doesn't matter what number
+                                    maxWidthChars: 1, // Doesn't matter what number
                                     truncate: 'end',
                                     className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
                                     css: `
