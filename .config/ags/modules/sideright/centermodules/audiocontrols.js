@@ -27,7 +27,7 @@ const AppVolume = (stream) => Box({
             children: [
                 Label({
                     xalign: 0,
-                    maxWidthChars: 10,
+                    maxWidthChars: 1,
                     truncate: 'end',
                     label: stream.description,
                     className: 'txt-small',
@@ -76,7 +76,7 @@ const AudioDevices = (input = false) => {
                     xalign: 0,
                     className: 'txt-small',
                     truncate: 'end',
-                    maxWidthChars: 10,
+                    maxWidthChars: 1,
                     label: stream.description,
                 }),
             ],
@@ -99,7 +99,7 @@ const AudioDevices = (input = false) => {
                     xalign: 0,
                     className: 'txt-small',
                     truncate: 'end',
-                    maxWidthChars: 10,
+                    maxWidthChars: 1,
                     label: `${input ? '[In]' : '[Out]'}`,
                     setup: (self) => self.hook(Audio, (self) => {
                         self.label = `${input ? '[In]' : '[Out]'} ${input ? Audio.microphone.description : Audio.speaker.description}`;
