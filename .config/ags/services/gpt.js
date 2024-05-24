@@ -22,7 +22,7 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'description': 'Official Ollama API.\nPricing: Free.',
         'base_url': 'http://localhost:11434/v1/chat/completions',
         'key_get_url': 'it\'s just ollama',
-        'key_file': 'openai_key.txt',
+        'key_file': 'ollama_key.txt',
         'model': 'llama3:instruct',
     },
     'oxygen4o': {
