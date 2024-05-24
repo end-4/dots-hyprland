@@ -16,6 +16,15 @@ const PROVIDERS = { // There's this list hmm https://github.com/zukixa/cool-ai-s
         'key_file': 'openai_key.txt',
         'model': 'gpt-3.5-turbo',
     },
+    'ollama': {
+        'name': 'Ollama',
+        'logo_name': 'ollama',
+        'description': 'Official Ollama API.\nPricing: Free.',
+        'base_url': 'http://localhost:11434/v1/chat/completions',
+        'key_get_url': 'it\'s just ollama',
+        'key_file': 'ollama_key.txt',
+        'model': 'llama3:instruct',
+    },
     'oxygen4o': {
         'name': 'Oxygen (GPT-4o)',
         'logo_name': 'ai-oxygen-symbolic',
