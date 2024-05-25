@@ -21,7 +21,6 @@ async function updateStuff() {
             monitor.height = Math.ceil(monitor.realHeight / monitor.scale);
         }
     });
-    console.log(monitors)
 }
 
 updateStuff().catch(print);
