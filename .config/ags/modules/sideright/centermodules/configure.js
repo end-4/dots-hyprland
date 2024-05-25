@@ -64,7 +64,7 @@ export default (props) => {
                         ConfigToggle({
                             icon: 'border_clear',
                             name: 'Transparency',
-                            desc: 'Make shell elements transparent\nBlur is also recommended if you enable this',
+                            desc: '[AGS]\nMake shell elements transparent\nBlur is also recommended if you enable this',
                             initValue: exec(`bash -c "sed -n \'2p\' ${GLib.get_user_state_dir()}/ags/user/colormode.txt"`) == "transparent",
                             onChange: (self, newValue) => {
                                 const transparency = newValue == 0 ? "opaque" : "transparent";
@@ -74,15 +74,15 @@ export default (props) => {
                                     .catch(print);
                             },
                         }),
-                        HyprlandToggle({ icon: 'blur_on', name: 'Blur', desc: "Enable blur on transparent elements\nDoesn't affect performance/power consumption unless you have transparent windows.", option: "decoration:blur:enabled" }),
+                        HyprlandToggle({ icon: 'blur_on', name: 'Blur', desc: "[Hyprland]\nEnable blur on transparent elements\nDoesn't affect performance/power consumption unless you have transparent windows.", option: "decoration:blur:enabled" }),
                         Subcategory([
-                            HyprlandToggle({ icon: 'stack_off', name: 'X-ray', desc: "Make everything behind a window/layer except the wallpaper not rendered on its blurred surface\nRecommended to improve performance (if you don't abuse transparency/blur) ", option: "decoration:blur:xray" }),
-                            HyprlandSpinButton({ icon: 'target', name: 'Size', desc: 'Adjust the blur radius. Generally doesn\'t affect performance\nHigher = more color spread', option: 'decoration:blur:size', minValue: 1, maxValue: 1000 }),
-                            HyprlandSpinButton({ icon: 'repeat', name: 'Passes', desc: 'Adjust the number of runs of the blur algorithm\nMore passes = more spread and power consumption\n4 is recommended\n2- would look weird and 6+ would look lame.', option: 'decoration:blur:passes', minValue: 1, maxValue: 10 }),
+                            HyprlandToggle({ icon: 'stack_off', name: 'X-ray', desc: "[Hyprland]\nMake everything behind a window/layer except the wallpaper not rendered on its blurred surface\nRecommended to improve performance (if you don't abuse transparency/blur) ", option: "decoration:blur:xray" }),
+                            HyprlandSpinButton({ icon: 'target', name: 'Size', desc: '[Hyprland]\nAdjust the blur radius. Generally doesn\'t affect performance\nHigher = more color spread', option: 'decoration:blur:size', minValue: 1, maxValue: 1000 }),
+                            HyprlandSpinButton({ icon: 'repeat', name: 'Passes', desc: '[Hyprland] Adjust the number of runs of the blur algorithm\nMore passes = more spread and power consumption\n4 is recommended\n2- would look weird and 6+ would look lame.', option: 'decoration:blur:passes', minValue: 1, maxValue: 10 }),
                         ]),
                         ConfigGap({}),
                         HyprlandToggle({
-                            icon: 'animation', name: 'Animations', desc: 'Enable Hyprland and GTK animations', option: 'animations:enabled',
+                            icon: 'animation', name: 'Animations', desc: '[Hyprland] [GTK]\nEnable animations', option: 'animations:enabled',
                             extraOnChange: (self, newValue) => execAsync(['gsettings', 'set', 'org.gnome.desktop.interface', 'enable-animations', `${newValue}`])
                         }),
                         Subcategory([
@@ -101,9 +101,10 @@ export default (props) => {
                 }),
                 ConfigSection({
                     name: 'Developer', children: [
-                        HyprlandToggle({ icon: 'speed', name: 'Show FPS', desc: "[Nerd] Show Hyprland's FPS overlay", option: "debug:overlay" }),
-                        HyprlandToggle({ icon: 'motion_sensor_active', name: 'Damage tracking', desc: "Enable damage tracking\nGenerally, leave it on.\nTurn off only when a shader doesn't work", option: "debug:damage_tracking", enableValue: 2 }),
-                        HyprlandToggle({ icon: 'destruction', name: 'Damage blink', desc: "[Epilepsy warning!] [Nerd] Show screen damage flashes", option: "debug:damage_blink" }),
+                        HyprlandToggle({ icon: 'speed', name: 'Show FPS', desc: "[Hyprland]\nShow FPS overlay on top-left corner", option: "debug:overlay" }),
+                        HyprlandToggle({ icon: 'sort', name: 'Log to stdout', desc: "[Hyprland]\nPrint LOG, ERR, WARN, etc. messages to the console", option: "debug:enable_stdout_logs" }),
+                        HyprlandToggle({ icon: 'motion_sensor_active', name: 'Damage tracking', desc: "[Hyprland]\nEnable damage tracking\nGenerally, leave it on.\nTurn off only when a shader doesn't work", option: "debug:damage_tracking", enableValue: 2 }),
+                        HyprlandToggle({ icon: 'destruction', name: 'Damage blink', desc: "[Hyprland] [Epilepsy warning!]\nShow screen damage flashes", option: "debug:damage_blink" }),
                     ]
                 }),
             ]
