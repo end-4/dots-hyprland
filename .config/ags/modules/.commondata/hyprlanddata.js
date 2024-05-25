@@ -10,9 +10,14 @@ async function updateStuff() {
     const display = Gdk.Display.get_default();
     monitors.forEach((monitor, i) => {
         const gdkMonitor = display.get_monitor(i);
-        monitor.width = gdkMonitor.get_geometry().width;
-        monitor.height = gdkMonitor.get_geometry().height;
+        monitor.realWidth = monitor.width;
+        monitor.realHeight = monitor.height;
+        // monitor.width = gdkMonitor.get_geometry().width;
+        // monitor.height = gdkMonitor.get_geometry().height;
+        monitor.width = Math.ceil(monitor.realWidth / monitor.scale);
+        monitor.height = Math.ceil(monitor.realHeight / monitor.scale);
     });
+    console.log(monitors)
 }
 
 updateStuff().catch(print);

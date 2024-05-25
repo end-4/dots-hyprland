@@ -8,7 +8,7 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import Wallpaper from '../../services/wallpaper.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { clamp } from '../.miscutils/mathfuncs.js';
-import { monitors } from '../.miscutils/hyprlanddata.js';
+import { monitors } from '../.commondata/hyprlanddata.js';
 
 const DISABLE_AGS_WALLPAPER = true;
 
