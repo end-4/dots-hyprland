@@ -1,3 +1,5 @@
+import GLib from 'gi://GLib';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 import userOverrides from '../../user_options.js';
 
 // Default options.
@@ -72,9 +74,11 @@ let configOptions = {
         'wsNumMarginScale': 0.07,
     },
     'sidebar': {
-        'imageColumns': 2,
-        'imageBooruCount': 20,
-        'imageAllowNsfw': false,
+        'image': {
+            'columns': 2,
+            'batchCount': 20,
+            'allowNsfw': false,
+        },
     },
     'search': {
         'engineBaseUrl': "https://www.google.com/search?q=",
@@ -173,9 +177,11 @@ let configOptions = {
 }
 
 // Override defaults with user's options
+let optionsOkay = true;
 function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (typeof value === 'object') {
+        if (!configOptions[key]) optionsOkay = false;
+        else if (typeof value === 'object') {
             overrideConfigRecursive(value, configOptions[key]);
         } else {
             configOptions[key] = value;
@@ -183,6 +189,13 @@ function overrideConfigRecursive(userOverrides, configOptions = {}) {
     }
 }
 overrideConfigRecursive(userOverrides, configOptions);
+if (!optionsOkay) {
+    Utils.execAsync(['notify-send',
+        'Update your user options',
+        'One or more config options don\'t exist',
+        '-a', 'ags',
+    ]).catch(print);
+}
 
 globalThis['userOptions'] = configOptions;
 export default configOptions;
