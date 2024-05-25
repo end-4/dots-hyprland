@@ -25,6 +25,19 @@ function exists(widget) {
     return widget !== null;
 }
 
+const getFriendlyNotifTimeString = (timeObject) => {
+    const messageTime = GLib.DateTime.new_from_unix_local(timeObject);
+    const oneMinuteAgo = GLib.DateTime.new_now_local().add_seconds(-60);
+    if (messageTime.compare(oneMinuteAgo) > 0)
+        return 'Now';
+    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
+        return messageTime.format(userOptions.time.format);
+    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
+        return 'Yesterday';
+    else
+        return messageTime.format(userOptions.time.dateFormat);
+}
+
 const NotificationIcon = (notifObject) => {
     // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
@@ -218,14 +231,7 @@ export default ({
             }),
         ]
     });
-    let notifTime = '';
-    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
-    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
-        notifTime = messageTime.format(userOptions.time.format);
-    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
-        notifTime = 'Yesterday';
-    else
-        notifTime = messageTime.format(userOptions.time.dateFormat);
+
     const notifTextSummary = Label({
         xalign: 0,
         className: 'txt-small txt-semibold titlefont',
@@ -237,11 +243,15 @@ export default ({
         useMarkup: notifObject.summary.startsWith('<'),
         label: notifObject.summary,
     });
+    const initTimeString = getFriendlyNotifTimeString(notifObject.time);
     const notifTextBody = Label({
         vpack: 'center',
         justification: 'right',
         className: 'txt-smaller txt-semibold',
-        label: notifTime,
+        label: initTimeString,
+        setup: initTimeString == 'Now' ? (self) => {
+            Utils.timeout(60000, () => self.label = getFriendlyNotifTimeString(notifObject.time))
+        } : () => {},
     });
     const notifText = Box({
         valign: Gtk.Align.CENTER,
