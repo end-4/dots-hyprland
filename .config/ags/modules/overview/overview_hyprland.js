@@ -49,7 +49,7 @@ export default (overviewMonitor = 0) => {
         }
     })
 
-    const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, monitor, title, xwayland }, screenCoords) => {
+    const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, initialClass, monitor, title, xwayland }, screenCoords) => {
         const revealInfoCondition = (Math.min(w, h) * userOptions.overview.scale > 70);
         if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
         // Non-primary monitors
@@ -64,6 +64,7 @@ export default (overviewMonitor = 0) => {
         if (x + w > monitors[monitor].width) w = monitors[monitor].width - x;
         if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
 
+        if(c.length == 0) c = initialClass;
         const iconName = substitute(c);
         const appIcon = iconExists(iconName) ? Widget.Icon({
             icon: iconName,
