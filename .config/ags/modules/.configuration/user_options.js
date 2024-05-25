@@ -189,13 +189,11 @@ function overrideConfigRecursive(userOverrides, configOptions = {}) {
     }
 }
 overrideConfigRecursive(userOverrides, configOptions);
-if (!optionsOkay) {
-    Utils.execAsync(['notify-send',
-        'Update your user options',
-        'One or more config options don\'t exist',
-        '-a', 'ags',
-    ]).catch(print);
-}
+if (!optionsOkay) Utils.timeout(2000, () => Utils.execAsync(['notify-send',
+    'Update your user options',
+    'One or more config options don\'t exist',
+    '-a', 'ags',
+]).catch(print))
 
 globalThis['userOptions'] = configOptions;
 export default configOptions;
