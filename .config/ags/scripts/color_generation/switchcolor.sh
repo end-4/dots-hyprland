@@ -9,6 +9,8 @@ STATE_DIR="$XDG_STATE_HOME/ags"
 
 if [ "$1" == "--pick" ]; then
   color=$(hyprpicker --no-fancy)
+elif [[ "$1" = "#"* ]]; then # this is a color
+  color=$1
 else
   color=$(cut -f1 "$STATE_DIR/user/color.txt")
 fi

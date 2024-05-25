@@ -29,7 +29,10 @@ export function launchCustomCommand(command) {
         execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh`, `&`]).catch(print);
     }
     else if (args[0] == '>color') { // Generate colorscheme from color picker
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh --pick`, `&`]).catch(print);
+        if (!args[1])
+            execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh --pick`, `&`]).catch(print);
+        else if(args[1][0] === '#')
+            execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh "${args[1]}"`, `&`]).catch(print);
     }
     else if (args[0] == '>light') { // Light mode
         darkMode.value = false;
@@ -45,8 +48,8 @@ export function launchCustomCommand(command) {
     }
     else if (args[0] == '>badapple') { // Black and white
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "3s/.*/monochrome/" ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
-                .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                .catch(print);
+            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
+            .catch(print);
     }
     else if (args[0] == '>material') { // Use material colors
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && echo "material" > ${GLib.get_user_state_dir()}/ags/user/colorbackend.txt`]).catch(print)
