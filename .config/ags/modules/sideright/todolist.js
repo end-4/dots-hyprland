@@ -105,7 +105,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                             hexpand: true,
                             vertical: true,
                             vpack: 'center',
-                            className: 'txt',
+                            className: 'txt txt-subtext',
                             children: [
                                 MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'gigantic'),
                                 Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
