@@ -55,6 +55,9 @@ let configOptions = {
             'color': 'rgba(113,227,32,0.9)',
         },
     },
+    'monitors': {
+        'scaleMethod': "division", // Either "division" [default] or "gdk"
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },
