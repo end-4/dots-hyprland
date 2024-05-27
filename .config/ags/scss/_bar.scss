@@ -346,7 +346,6 @@ $bar_ws_width_focus_active: 2.045rem;
 .bar-systray-item {
     @include full-rounding;
     @include element_decel;
-    @include symbolic-icon;
     min-height: 1.032rem;
     min-width: 1.032rem;
     font-size: 1.032rem;
