@@ -12,20 +12,21 @@ import { chatEntry } from './apiwidgets.js';
 import { TabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 
-const contents = [
-    {
+const SIDEBARTABS = {
+    'apis': {
         name: 'apis',
         content: apiWidgets,
         materialIcon: 'api',
         friendlyName: 'APIs',
     },
-    {
+    'tools': {
         name: 'tools',
         content: toolBox,
         materialIcon: 'home_repair_service',
         friendlyName: 'Tools',
     },
-]
+}
+const CONTENTS = userOptions.sidebar.pages.order.map((tabName) => SIDEBARTABS[tabName])
 
 const pinButton = Button({
     attribute: {
@@ -61,9 +62,9 @@ const pinButton = Button({
 })
 
 export const widgetContent = TabContainer({
-    icons: contents.map((item) => item.materialIcon),
-    names: contents.map((item) => item.friendlyName),
-    children: contents.map((item) => item.content),
+    icons: CONTENTS.map((item) => item.materialIcon),
+    names: CONTENTS.map((item) => item.friendlyName),
+    children: CONTENTS.map((item) => item.content),
     className: 'sidebar-left spacing-v-10',
     setup: (self) => self.hook(App, (self, currentName, visible) => {
         if (currentName === 'sideleft')

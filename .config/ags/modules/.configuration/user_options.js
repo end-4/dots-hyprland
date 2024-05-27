@@ -79,6 +79,13 @@ let configOptions = {
             'batchCount': 20,
             'allowNsfw': false,
         },
+        'pages': {
+            'order': ["apis", "tools"],
+            'apis': {
+                'order': ["gemini", "gpt", "waifu", "booru"],
+            }
+        },
+
     },
     'search': {
         'engineBaseUrl': "https://www.google.com/search?q=",
