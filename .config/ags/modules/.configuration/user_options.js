@@ -187,7 +187,7 @@ let configOptions = {
 let optionsOkay = true;
 function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (!configOptions[key]) optionsOkay = false;
+        if (configOptions[key] === undefined) optionsOkay = false;
         else if (typeof value === 'object') {
             overrideConfigRecursive(value, configOptions[key]);
         } else {
