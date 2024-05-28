@@ -134,7 +134,7 @@ let configOptions = {
         // are too many files in the search path it'll affect performance
         // Example: ['/usr/share/icons/Tela-nord/scalable/apps']
         'searchPaths': [''],
-
+        'symbolicIconTheme': "Adwaita",
         substitutions: {
             'code-url-handler': "visual-studio-code",
             'Code': "visual-studio-code",
