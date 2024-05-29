@@ -1,6 +1,6 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import { monitors } from '../.miscutils/hyprlanddata.js';
+import { monitors } from '../.commondata/hyprlanddata.js';
 const { Box, EventBox } = Widget;
 
 export const clickCloseRegion = ({ name, multimonitor = true, monitor = 0, expand = true, fillMonitor = '' }) => {

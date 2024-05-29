@@ -98,7 +98,9 @@ export const BooruSettings = () => MarginRevealer({
                         name: 'Lewds',
                         desc: `Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:
 'sidebar': {
-  'imageAllowNsfw': true,
+  'image': {
+    'allowNsfw': true,
+  }
 },`,
                         initValue: BooruService.nsfw,
                         onChange: (self, newValue) => {
@@ -312,7 +314,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     downloadState.shown = 'error';
                     return;
                 }
-                const imageColumns = userOptions.sidebar.imageColumns;
+                const imageColumns = userOptions.sidebar.image.columns;
                 const imageRows = data.length / imageColumns;
 
                 // Init cols

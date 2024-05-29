@@ -14,7 +14,7 @@ const { execAsync, exec } = Utils;
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 import { dumpToWorkspace, swapWorkspace } from "./actions.js";
 import { iconExists, substitute } from "../.miscutils/icons.js";
-import { monitors } from '../.miscutils/hyprlanddata.js';
+import { monitors } from '../.commondata/hyprlanddata.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
 const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
@@ -49,7 +49,7 @@ export default (overviewMonitor = 0) => {
         }
     })
 
-    const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, monitor, title, xwayland }, screenCoords) => {
+    const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, initialClass, monitor, title, xwayland }, screenCoords) => {
         const revealInfoCondition = (Math.min(w, h) * userOptions.overview.scale > 70);
         if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
         // Non-primary monitors
@@ -61,9 +61,10 @@ export default (overviewMonitor = 0) => {
         if (y + h <= 0) x += (Math.floor(y / monitors[monitor].height) * monitors[monitor].height);
         else if (y < 0) { h = y + h; y = 0; }
         // Truncate if offscreen
-        if (x + w > monitors[monitor]) w = monitors[monitor] - x;
+        if (x + w > monitors[monitor].width) w = monitors[monitor].width - x;
         if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
 
+        if(c.length == 0) c = initialClass;
         const iconName = substitute(c);
         const appIcon = iconExists(iconName) ? Widget.Icon({
             icon: iconName,
@@ -133,25 +134,25 @@ export default (overviewMonitor = 0) => {
                     children: [
                         appIcon,
                         // TODO: Add xwayland tag instead of just having italics
-                        // Widget.Revealer({
-                        //     transition: 'slide_right',
-                        //     revealChild: revealInfoCondition,
-                        //     child: Widget.Revealer({
-                        //         transition: 'slide_down',
-                        //         revealChild: revealInfoCondition,
-                        //         child: Widget.Label({
-                        //             maxWidthChars: 10, // Doesn't matter what number
-                        //             truncate: 'end',
-                        //             className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
-                        //             css: `
-                        //         font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
-                        //         margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
-                        //     `,
-                        //             // If the title is too short, include the class
-                        //             label: (title.length <= 1 ? `${c}: ${title}` : title),
-                        //         })
-                        //     })
-                        // })
+                        Widget.Revealer({
+                            transition: 'slide_right',
+                            revealChild: revealInfoCondition,
+                            child: Widget.Revealer({
+                                transition: 'slide_down',
+                                revealChild: revealInfoCondition,
+                                child: Widget.Label({
+                                    maxWidthChars: 1, // Doesn't matter what number
+                                    truncate: 'end',
+                                    className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
+                                    css: `
+                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
+                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
+                            `,
+                                    // If the title is too short, include the class
+                                    label: (title.length <= 1 ? `${c}: ${title}` : title),
+                                })
+                            })
+                        })
                     ]
                 })
             }),

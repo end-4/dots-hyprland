@@ -29,9 +29,9 @@ $rounding_large: 1.705rem;
     -gtk-outline-radius: 9999px;
 }
 
-@mixin symbolic-icon {
-    -gtk-icon-theme: 'Adwaita';
-}
+// @mixin symbolic-icon {
+//    -gtk-icon-theme: 'Adwaita';
+// }
 
 @mixin titlefont {
     // Geometric sans-serif

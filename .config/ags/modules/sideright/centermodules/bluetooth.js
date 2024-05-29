@@ -28,7 +28,7 @@ const BluetoothDevice = (device) => {
         children: [
             Label({
                 xalign: 0,
-                maxWidthChars: 10,
+                maxWidthChars: 1,
                 truncate: 'end',
                 label: device.name,
                 className: 'txt-small',
@@ -38,7 +38,7 @@ const BluetoothDevice = (device) => {
             }),
             Label({
                 xalign: 0,
-                maxWidthChars: 10,
+                maxWidthChars: 1,
                 truncate: 'end',
                 label: device.connected ? 'Connected' : (device.paired ? 'Paired' : ''),
                 className: 'txt-subtext',

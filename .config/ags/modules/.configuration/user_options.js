@@ -1,3 +1,5 @@
+import GLib from 'gi://GLib';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 import userOverrides from '../../user_options.js';
 
 // Default options.
@@ -55,6 +57,9 @@ let configOptions = {
             'color': 'rgba(113,227,32,0.9)',
         },
     },
+    'monitors': {
+        'scaleMethod': "division", // Either "division" [default] or "gdk"
+    },
     'music': {
         'preferredPlayer': "plasma-browser-integration",
     },
@@ -69,9 +74,18 @@ let configOptions = {
         'wsNumMarginScale': 0.07,
     },
     'sidebar': {
-        'imageColumns': 2,
-        'imageBooruCount': 20,
-        'imageAllowNsfw': false,
+        'image': {
+            'columns': 2,
+            'batchCount': 20,
+            'allowNsfw': false,
+        },
+        'pages': {
+            'order': ["apis", "tools"],
+            'apis': {
+                'order': ["gemini", "gpt", "waifu", "booru"],
+            }
+        },
+
     },
     'search': {
         'engineBaseUrl': "https://www.google.com/search?q=",
@@ -120,7 +134,7 @@ let configOptions = {
         // are too many files in the search path it'll affect performance
         // Example: ['/usr/share/icons/Tela-nord/scalable/apps']
         'searchPaths': [''],
-
+        'symbolicIconTheme': "Adwaita",
         substitutions: {
             'code-url-handler': "visual-studio-code",
             'Code': "visual-studio-code",
@@ -170,9 +184,11 @@ let configOptions = {
 }
 
 // Override defaults with user's options
+let optionsOkay = true;
 function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (typeof value === 'object') {
+        if (configOptions[key] === undefined) optionsOkay = false;
+        else if (typeof value === 'object') {
             overrideConfigRecursive(value, configOptions[key]);
         } else {
             configOptions[key] = value;
@@ -180,6 +196,11 @@ function overrideConfigRecursive(userOverrides, configOptions = {}) {
     }
 }
 overrideConfigRecursive(userOverrides, configOptions);
+if (!optionsOkay) Utils.timeout(2000, () => Utils.execAsync(['notify-send',
+    'Update your user options',
+    'One or more config options don\'t exist',
+    '-a', 'ags',
+]).catch(print))
 
 globalThis['userOptions'] = configOptions;
 export default configOptions;

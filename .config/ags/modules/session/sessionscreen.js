@@ -4,7 +4,7 @@ const { Gdk, Gtk } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-import { monitors } from '../.miscutils/hyprlanddata.js';
+import { monitors } from '../.commondata/hyprlanddata.js';
 
 const { exec, execAsync } = Utils;
 

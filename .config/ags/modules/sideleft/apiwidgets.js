@@ -19,8 +19,8 @@ import { widgetContent } from './sideleft.js';
 import { IconTabContainer } from '../.commonwidgets/tabcontainer.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
-const APIS = [
-    {
+const APILIST = {
+    'gemini': {
         name: 'Assistant (Gemini Pro)',
         sendCommand: geminiSendMessage,
         contentWidget: geminiView,
@@ -28,7 +28,7 @@ const APIS = [
         tabIcon: geminiTabIcon,
         placeholderText: 'Message Gemini...',
     },
-    {
+    'gpt': {
         name: 'Assistant (GPTs)',
         sendCommand: chatGPTSendMessage,
         contentWidget: chatGPTView,
@@ -36,7 +36,7 @@ const APIS = [
         tabIcon: chatGPTTabIcon,
         placeholderText: 'Message the model...',
     },
-    {
+    'waifu': {
         name: 'Waifus',
         sendCommand: waifuSendMessage,
         contentWidget: waifuView,
@@ -44,7 +44,7 @@ const APIS = [
         tabIcon: waifuTabIcon,
         placeholderText: 'Enter tags',
     },
-    {
+    'booru': {
         name: 'Booru',
         sendCommand: booruSendMessage,
         contentWidget: booruView,
@@ -52,7 +52,8 @@ const APIS = [
         tabIcon: booruTabIcon,
         placeholderText: 'Enter tags',
     },
-];
+}
+const APIS = userOptions.sidebar.pages.apis.order.map((apiName) => APILIST[apiName]);
 let currentApiId = 0;
 
 function apiSendMessage(textView) {
