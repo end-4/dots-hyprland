@@ -86,7 +86,10 @@ export default (monitor = 0) => {
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
-            if (!isNaN(updateValue)) progress.value = updateValue;
+            if (!isNaN(updateValue)) {
+                if (updateValue != progress.value) Indicator.popup(1);
+                progress.value = updateValue;
+            }
         }),
     });
     return MarginRevealer({
