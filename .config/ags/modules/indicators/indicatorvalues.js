@@ -59,7 +59,7 @@ export default (monitor = 0) => {
         }, 'notify::screen-value'),
         progressSetup: (self) => self.hook(Brightness[monitor], (progress) => {
             const updateValue = Brightness[monitor].screen_value;
-            if (updateValue != progress.value) Indicator.popup(1);
+            if (updateValue !== progress.value) Indicator.popup(1);
             progress.value = updateValue;
         }, 'notify::screen-value'),
     });
@@ -88,7 +88,7 @@ export default (monitor = 0) => {
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
             if (!isNaN(updateValue)) {
-                if (updateValue != progress.value) Indicator.popup(1);
+                if (updateValue !== progress.value) Indicator.popup(1);
                 progress.value = updateValue;
             }
         }),
