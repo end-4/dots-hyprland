@@ -150,9 +150,8 @@ apply_gtk() { # Using gradience-cli
 }
 
 apply_ags() {
-    sass -I "$STATE_DIR/scss" -I "$CONFIG_DIR/scss/fallback" "$CONFIG_DIR"/scss/main.scss "$CACHE_DIR"/user/generated/style.css
+    ags run-js "handleStyles(false);"
     ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
-    ags run-js "App.resetCss(); App.applyCss('${CACHE_DIR}/user/generated/style.css');"
 }
 
 if [[ "$1" = "--bad-apple" ]]; then
