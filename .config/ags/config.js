@@ -6,7 +6,8 @@ import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Stuff
 import userOptions from './modules/.configuration/user_options.js';
-import { firstRunWelcome } from './services/messages.js';
+import { firstRunWelcome, startBatteryWarningService } from './services/messages.js';
+import { startAutoDarkModeService } from './services/darkmode.js';
 // Widgets
 import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
 import Cheatsheet from './modules/cheatsheet/main.js';
@@ -32,7 +33,11 @@ function forMonitorsAsync(widget) {
     return range(n, 0).forEach((n) => widget(n).catch(print))
 }
 
+// Start stuff
 handleStyles(true);
+startAutoDarkModeService().catch(print);
+firstRunWelcome().catch(print);
+startBatteryWarningService().catch(print)
 
 const Windows = () => [
     // forMonitors(DesktopBackground),

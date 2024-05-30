@@ -20,6 +20,11 @@ let configOptions = {
         'durationLarge': 180,
     },
     'appearance': {
+        'autoDarkMode': { // Turns on dark mode in certain hours. Time in 24h format
+            'enabled': false,
+            'from': "18:10",
+            'to': "6:10",
+        },
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
         'layerSmoke': false,
         'layerSmokeStrength': 0.2,

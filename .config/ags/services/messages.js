@@ -14,6 +14,37 @@ const APP_NAME = "illogical-impulse";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
 const FIRST_RUN_NOTIF_BODY = `First run? 👀 <span foreground="#FF0202" font_weight="bold">CTRL+SUPER+T</span> to pick a wallpaper (or styles will break!)\nFor a list of keybinds, hit <span foreground="#c06af1" font_weight="bold">Super + /</span>.`;
 
+var batteryWarned = false;
+async function batteryMessage() {
+    const perc = Battery.percent;
+    const charging = Battery.charging;
+    if (charging) {
+        batteryWarned = false;
+        return;
+    }
+    for (let i = userOptions.battery.warnLevels.length - 1; i >= 0; i--) {
+        if (perc <= userOptions.battery.warnLevels[i] && !charging && !batteryWarned) {
+            batteryWarned = true;
+            Utils.execAsync(['bash', '-c',
+                `notify-send "${userOptions.battery.warnTitles[i]}" "${userOptions.battery.warnMessages[i]}" -u critical -a '${APP_NAME}' -t 69420 &`
+            ]).catch(print);
+            break;
+        }
+    }
+    if (perc <= userOptions.battery.suspendThreshold) {
+        Utils.execAsync(['bash', '-c',
+            `notify-send "Suspending system" "Critical battery level (${perc}% remaining)" -u critical -a '${APP_NAME}' -t 69420 &`
+        ]).catch(print);
+        Utils.execAsync('systemctl suspend').catch(print);
+    }
+}
+
+export async function startBatteryWarningService() {
+    Utils.timeout(1, () => {
+        Battery.connect('changed', () => batteryMessage().catch(print));
+    })
+}
+
 export async function firstRunWelcome() {
     GLib.mkdir_with_parents(`${GLib.get_user_state_dir()}/ags/user`, 755);
     if (!fileExists(FIRST_RUN_PATH)) {
@@ -28,34 +59,3 @@ export async function firstRunWelcome() {
             .catch(print);
     }
 }
-
-var batteryWarned = false;
-async function batteryMessage() {
-    const perc = Battery.percent;
-    const charging = Battery.charging;
-    if(charging) {
-        batteryWarned = false;
-        return;
-    }
-    for (let i = userOptions.battery.warnLevels.length - 1; i >= 0; i--) {
-        if (perc <= userOptions.battery.warnLevels[i] && !charging && !batteryWarned) {
-            batteryWarned = true;
-            Utils.execAsync(['bash', '-c',
-                `notify-send "${userOptions.battery.warnTitles[i]}" "${userOptions.battery.warnMessages[i]}" -u critical -a '${APP_NAME}' -t 69420 &`
-            ]).catch(print);
-            break;
-        }
-    }
-    if(perc <= userOptions.battery.suspendThreshold) {
-        Utils.execAsync(['bash', '-c',
-                `notify-send "Suspending system" "Critical battery level (${perc}% remaining)" -u critical -a '${APP_NAME}' -t 69420 &`
-            ]).catch(print);
-        Utils.execAsync('systemctl suspend').catch(print);
-    }
-}
-
-// Run them
-firstRunWelcome().catch(print);
-Utils.timeout(1, () => {
-    Battery.connect('changed', () => batteryMessage().catch(print));
-})
