@@ -20,7 +20,7 @@ import Overview from './modules/overview/main.js';
 import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
-import { COMPILED_STYLE_DIR, handleStyles } from './init.js';
+import { COMPILED_STYLE_DIR } from './init.js';
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 function forMonitors(widget) {
@@ -32,7 +32,7 @@ function forMonitorsAsync(widget) {
     return range(n, 0).forEach((n) => widget(n).catch(print))
 }
 
-handleStyles();
+handleStyles(true);
 
 const Windows = () => [
     // forMonitors(DesktopBackground),

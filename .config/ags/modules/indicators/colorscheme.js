@@ -7,6 +7,7 @@ const { execAsync } = Utils;
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { showColorScheme } from '../../variables.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { darkMode } from '../.miscutils/system.js';
 
 const ColorBox = ({
     name = 'Color',
@@ -97,8 +98,6 @@ const schemeOptionsArr = [
 ];
 
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/colormode.txt`;
-const initColorMode = Utils.exec(`bash -c "sed -n \'1p\' ${LIGHTDARK_FILE_LOCATION}"`);
-const initColorVal = (initColorMode == "dark") ? 1 : 0;
 const initTransparency = Utils.exec(`bash -c "sed -n \'2p\' ${LIGHTDARK_FILE_LOCATION}"`);
 const initTransparencyVal = (initTransparency == "transparent") ? 1 : 0;
 const initScheme = Utils.exec(`bash -c "sed -n \'3p\' ${LIGHTDARK_FILE_LOCATION}"`);
@@ -123,13 +122,13 @@ const ColorSchemeSettings = () => Widget.Box({
                     icon: 'dark_mode',
                     name: 'Dark Mode',
                     desc: 'Ya should go to sleep!',
-                    initValue: initColorVal,
-                    onChange: (self, newValue) => {
-                        let lightdark = newValue == 0 ? "light" : "dark";
-                        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "1s/.*/${lightdark}/"  ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
-                            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                            .catch(print);
+                    initValue: darkMode.value,
+                    onChange: (_, newValue) => {
+                        darkMode.value = !!newValue;
                     },
+                    extraSetup: (self) => self.hook(darkMode, (self) => {
+                        self.enabled.value = darkMode.value;
+                    }),
                 }),
                 ConfigToggle({
                     icon: 'border_clear',
