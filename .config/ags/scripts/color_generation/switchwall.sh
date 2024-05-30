@@ -28,12 +28,12 @@ if [ "$1" == "--noswitch" ]; then
 	imgpath=$(swww query | awk -F 'image: ' '{print $2}')
 	# imgpath=$(ags run-js 'wallpaper.get(0)')
 elif [[ "$1" ]]; then
-	switch $1
+	switch "$1"
 else
 	# Select and set image (hyprland)
 
     cd "$(xdg-user-dir PICTURES)" || return 1
-	switch $(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')
+	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
 
 # Generate colors for ags n stuff
