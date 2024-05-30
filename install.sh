@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 export base="$(pwd)"
+source ./scriptdata/environment-variables
 source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
@@ -13,7 +14,7 @@ printf "\e[34m[$0]: Hi there! Before we start:\n"
 printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
 printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
 printf "\e[31m"
-printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$HOME/.config/\" and \"$HOME/.local/\" folders!\n"
+printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders!\n"
 printf "\e[0m"
 printf "Enter capital \"YES\" (without quotes) to continue:"
 read -p " " p
@@ -201,7 +202,7 @@ if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 printf "\e[36m[$0]: 3. Copying + Configuring\e[0m\n"
 
 # In case some folders does not exists
-v mkdir -p "$HOME"/.{config,cache,local/{bin,share}}
+v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 
 # `--delete' for rsync to make sure that
 # original dotfiles and new ones in the SAME DIRECTORY
@@ -212,10 +213,10 @@ case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
     for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
-      i=".config/$i"
-      echo "[$0]: Found target: $i"
-      if [ -d "$i" ];then v rsync -av --delete "$i/" "$HOME/$i/"
-      elif [ -f "$i" ];then v rsync -av "$i" "$HOME/$i"
+#      i=".config/$i"
+      echo "[$0]: Found target: .config/$i"
+      if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
+      elif [ -f ".config/$i" ];then v rsync -av ".config/$i" "$XDG_CONFIG_HOME/$i"
       fi
     done
     ;;
@@ -224,7 +225,7 @@ esac
 case $SKIP_FISH in
   true) sleep 0;;
   *)
-    v rsync -av --delete .config/fish/ "$HOME"/.config/fish/
+    v rsync -av --delete .config/fish/ "$XDG_CONFIG_HOME"/fish/
     ;;
 esac
 
@@ -232,8 +233,8 @@ esac
 case $SKIP_AGS in
   true) sleep 0;;
   *)
-    v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$HOME"/.config/ags/
-    t="$HOME/.config/ags/user_options.js"
+    v rsync -av --delete --exclude '/user_options.js' .config/ags/ "$XDG_CONFIG_HOME"/ags/
+    t="$XDG_CONFIG_HOME/ags/user_options.js"
     if [ -f $t ];then
       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
       # v cp -f .config/ags/user_options.js $t.new
@@ -250,8 +251,8 @@ esac
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$HOME"/.config/hypr/
-    t="$HOME/.config/hypr/hyprland.conf"
+    v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
       v cp -f .config/hypr/hyprland.conf $t.new
@@ -261,7 +262,7 @@ case $SKIP_HYPRLAND in
       v cp .config/hypr/hyprland.conf $t
       existed_hypr_conf=n
     fi
-    t="$HOME/.config/hypr/custom"
+    t="$XDG_CONFIG_HOME/hypr/custom"
     if [ -d $t ];then
       echo -e "\e[34m[$0]: \"$t\" already exists, will not do anything.\e[0m"
     else
@@ -274,7 +275,7 @@ esac
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
-v rsync -av ".local/bin/" "$HOME/.local/bin/"
+v rsync -av ".local/bin/" "$XDG_BIN_HOME"
 
 # Dark mode by default
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
@@ -284,7 +285,7 @@ sleep 1
 try hyprctl reload
 
 existed_zsh_conf=n
-grep -q 'source ~/.config/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
+grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
@@ -299,11 +300,11 @@ printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m
 printf "\n"
 
 case $existed_ags_opt in
-  y) printf "\n\e[33m[$0]: Warning: \"~/.config/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
-#    printf "\e[33mPlease use \"~/.config/ags/user_options.js.new\" as a reference for a proper format.\e[0m\n"
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
+#    printf "\e[33mPlease use \"$XDG_CONFIG_HOME/ags/user_options.js.new\" as a reference for a proper format.\e[0m\n"
 ;;esac
 case $existed_hypr_conf in
-  y) printf "\n\e[33m[$0]: Warning: \"~/.config/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
-     printf "\e[33mPlease use \"~/.config/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
-     printf "\e[33mIf this is your first time installation, you must overwrite \"~/.config/hypr/hyprland.conf\" with \"~/.config/hypr/hyprland.conf.new\".\e[0m\n"
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
+     printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
+     printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac

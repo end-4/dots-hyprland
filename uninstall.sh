@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
+source ./scriptdata/environment-variables
 
 function v() {
   echo -e "[$0]: \e[32mNow executing:\e[0m"
@@ -11,8 +12,7 @@ printf 'Hi there!\n'
 printf 'This script 1. will uninstall [end-4/dots-hyprland > illogical-impulse] dotfiles\n'
 printf '            2. will try to revert *mostly everything* installed using install.sh, so it'\''s pretty destructive\n'
 printf '            3. has not been tested, use at your own risk.\n'
-printf '            4. assumes you have default xdg dirs (for example config folder in ~/.config).\n'
-printf '            5. will show all commands that it runs.\n'
+printf '            4. will show all commands that it runs.\n'
 printf 'Ctrl+C to exit. Enter to continue.\n'
 read -r
 set -e
@@ -22,12 +22,12 @@ set -e
 printf '\e[36mRemoving copied config and local folders...\n\e[97m'
 
 for i in ags fish fontconfig foot fuzzel hypr mpv wlogout "starship.toml" rubyshot
-  do v rm -rf "$HOME/.config/$i"
+  do v rm -rf "$XDG_CONFIG_HOME/$i"
 done
 
-v rm -rf "$HOME/.local/bin/fuzzel-emoji"
-v rm -rf "$HOME/.cache/ags"
-v sudo rm -rf "$HOME/.local/state/ags"
+v rm -rf "$XDG_BIN_HOME/fuzzel-emoji"
+v rm -rf "$XDG_CACHE_HOME/ags"
+v sudo rm -rf "$XDG_STATE_HOME/ags"
 
 ##############################################################################################################################
 
