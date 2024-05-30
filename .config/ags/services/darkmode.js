@@ -34,8 +34,6 @@ export async function startAutoDarkModeService() {
         if (fromTime == toTime) return;
         const currentDateTime = GLib.DateTime.new_now_local();
         const currentTime = [currentDateTime.get_hour(), currentDateTime.get_minute()];
-        // console.log(currentTime, fromTime, toTime);
         darkMode.value = timeInRange(currentTime, fromTime, toTime);
     })
 }
-
