@@ -63,6 +63,7 @@ export default (monitor = 0) => {
             progress.value = updateValue;
         }, 'notify::screen-value'),
     });
+
     const volumeIndicator = OsdValue({
         name: 'Volume',
         extraClassName: 'osd-volume',
@@ -87,15 +88,13 @@ export default (monitor = 0) => {
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
             const newDevice = (Audio.speaker?.name);
-            // print(newDevice, device);
             if (!isNaN(updateValue)) {
-                if ((volumeIndicator.attribute.device === undefined || newDevice === volumeIndicator.attribute.device)
-                    && updateValue !== progress.value) {
-                    Indicator.popup(1);
-                }
-                volumeIndicator.attribute.device = newDevice;
+                if (newDevice === volumeIndicator.attribute.device && updateValue !== progress.value) {
+                        Indicator.popup(1);
+                    }
                 progress.value = updateValue;
             }
+            volumeIndicator.attribute.device = newDevice;
         }),
     });
     return MarginRevealer({
