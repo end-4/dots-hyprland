@@ -63,12 +63,11 @@ export default (monitor = 0) => {
             progress.value = updateValue;
         }, 'notify::screen-value'),
     });
-
     const volumeIndicator = OsdValue({
         name: 'Volume',
         extraClassName: 'osd-volume',
         extraProgressClassName: 'osd-volume-progress',
-        attribute: { headphones: undefined },
+        attribute: { headphones: undefined , device: undefined},
         nameSetup: (self) => Utils.timeout(1, () => {
             const updateAudioDevice = (self) => {
                 const usingHeadphones = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headphone');
@@ -87,8 +86,14 @@ export default (monitor = 0) => {
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
+            const newDevice = (Audio.speaker?.name);
+            // print(newDevice, device);
             if (!isNaN(updateValue)) {
-                if (updateValue !== progress.value) Indicator.popup(1);
+                if ((volumeIndicator.attribute.device === undefined || newDevice === volumeIndicator.attribute.device)
+                    && updateValue !== progress.value) {
+                    Indicator.popup(1);
+                }
+                volumeIndicator.attribute.device = newDevice;
                 progress.value = updateValue;
             }
         }),
