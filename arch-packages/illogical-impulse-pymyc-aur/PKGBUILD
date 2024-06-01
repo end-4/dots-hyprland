@@ -1,0 +1,13 @@
+pkgname=illogical-impulse-pymyc-aur
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse PyMYC Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	python-materialyoucolor-git
+	gradience-git
+	python-libsass
+	python-material-color-utilities
+)
+

@@ -1,0 +1,18 @@
+pkgname=illogical-impulse-widgets
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse Widget Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	dart-sass
+	python-pywayland
+	python-psutil
+	hypridle-git
+	hyprlock-git
+	wlogout
+	wl-clipboard
+	hyprpicker-git
+	anyrun-git
+)
+

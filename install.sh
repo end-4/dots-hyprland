@@ -81,12 +81,21 @@ if ! command -v yay >/dev/null 2>&1;then
 else AUR_HELPER=yay
 fi
 
+#if $ask;then
+#  # execute per element of the array $pkglist
+#  for i in "${pkglist[@]}";do v $AUR_HELPER -S --needed $i;done
+#else
+#  # execute for all elements of the array $pkglist in one line
+#  v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
+#fi
+
+metapkgs=(arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
 if $ask;then
-  # execute per element of the array $pkglist
-  for i in "${pkglist[@]}";do v $AUR_HELPER -S --needed $i;done
+	# execute for every meta package
+	for i in "${metapkgs[@]}";do v $AUR_HELPER -Bi --needed --answerclean=n $i;done
 else
-  # execute for all elements of the array $pkglist in one line
-  v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
+	# execute for all meta packages at once
+	v $AUR_HELPER -Bi --needed --answerclean=n --noconfirm ${metapkgs[@]}
 fi
 
 
@@ -110,9 +119,14 @@ case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
     if $ask;then
-      v $AUR_HELPER -S --answerclean=a ${pymyc[@]}
+      # Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually
+      v \
+	    $AUR_HELPER -S --answerclean=a --asdeps ${pymyc[@]} && \
+	    pushd arch-packages/illogical-impulse-pymyc-aur & makepkg -si & popd
     else
-      v $AUR_HELPER -S --answerclean=a --noconfirm ${pymyc[@]}
+      v \
+            $AUR_HELPER -S --answerclean=a --asdeps --noconfirm ${pymyc[@]} && \
+	    pushd arch-packages/illogical-impulse-pymyc-aur & makepkg -si --noconfirm & popd
     fi
     ;;
 esac
