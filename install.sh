@@ -81,16 +81,20 @@ if ! command -v yay >/dev/null 2>&1;then
 else AUR_HELPER=yay
 fi
 
-#if $ask;then
-#  # execute per element of the array $pkglist
-#  for i in "${pkglist[@]}";do v $AUR_HELPER -S --needed $i;done
-#else
-#  # execute for all elements of the array $pkglist in one line
-#  v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
-#fi
+# Install extra packages from dependencies.conf as declared by the user
+if (( ${#pkglist[@]} != 0 )); then
+	if $ask; then
+		# execute per element of the array $pkglist
+		for i in "${pkglist[@]}";do v $AUR_HELPER -S --needed $i;done
+	else
+		# execute for all elements of the array $pkglist in one line
+		v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
+	fi
+fi
 
+# Install core dependencies from the meta-packages
 metapkgs=(arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
-if $ask;then
+if $ask; then
 	# execute for every meta package
 	for i in "${metapkgs[@]}";do v $AUR_HELPER -Bi --needed --answerclean=n $i;done
 else
@@ -119,7 +123,8 @@ case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
     if $ask;then
-      # Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually
+      # Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually.
+      # If we install the deps using --asdeps we can remove them recursively by removing the metapackage.
       v \
 	    $AUR_HELPER -S --answerclean=a --asdeps ${pymyc[@]} && \
 	    pushd arch-packages/illogical-impulse-pymyc-aur & makepkg -si & popd
