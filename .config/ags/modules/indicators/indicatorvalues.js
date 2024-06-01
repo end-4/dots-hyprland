@@ -83,18 +83,22 @@ export default (monitor = 0) => {
             Utils.timeout(1000, updateAudioDevice);
         }),
         labelSetup: (self) => self.hook(Audio, (label) => {
-            label.label = `${Math.round(Audio.speaker?.volume * 100)}`;
+            const newDevice = (Audio.speaker?.name);
+            const updateValue = Math.round(Audio.speaker?.volume * 100);
+            if (!isNaN(updateValue)) {
+                if (newDevice === volumeIndicator.attribute.device && updateValue != label.label) {
+                    Indicator.popup(1);
+                }
+            }
+            volumeIndicator.attribute.device = newDevice;
+            label.label = `${updateValue}`;
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
-            const newDevice = (Audio.speaker?.name);
             if (!isNaN(updateValue)) {
-                if (newDevice === volumeIndicator.attribute.device && updateValue !== progress.value) {
-                        Indicator.popup(1);
-                    }
-                progress.value = updateValue;
+                if (updateValue > 1) progress.value = 1;
+                else progress.value = updateValue;
             }
-            volumeIndicator.attribute.device = newDevice;
         }),
     });
     return MarginRevealer({
