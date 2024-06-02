@@ -138,7 +138,7 @@ esac
 install-pymyc-aur() {
 	# Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually.
 	# If we install the deps using --asdeps we can remove them recursively by removing the metapackage.
-	installflags="--answerclean=a --asdeps"
+	installflags="-S --answerclean=a --asdeps"
 	$ask || installflags="$installflags --noconfirm"
 	$AUR_HELPER $installflags ${pymyc[@]}
 
