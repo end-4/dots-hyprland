@@ -4,6 +4,14 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
+	'apps': {
+		'terminal': 'kitty',
+	},
+	// 'icons': {
+    //     substitutions: {
+    //         'steam_app_964570': "steam_icon_964570",
+    //     },
+    // },
 }
 
 export default userConfigOptions;
