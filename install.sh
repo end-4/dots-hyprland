@@ -97,7 +97,7 @@ remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/o
 readarray -t old_deps_list < ./cache/old_deps_stripped.conf
 pacman -Qeq > ./cache/pacman_explicit_packages
 readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-[ "$ask" = "true" ] && read -p "Attempt to set previously explicitly installed deps as implicit [Y/n]? " convert_explicit
+$ask && read -p "Attempt to set previously explicitly installed deps as implicit [Y/n]? " convert_explicit
 convert_explicit=${convert_explicit:-y}
 
 if [ "$convert_explicit" != "${convert_explicit#[Yy]}" ]; then
@@ -130,6 +130,18 @@ case $SKIP_HYPR_AUR in
     ;;
 esac
 
+install-pymyc-aur() {
+	# Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually.
+	# If we install the deps using --asdeps we can remove them recursively by removing the metapackage.
+	installflags="--answerclean=a --asdeps"
+	$ask || installflags="$installflags --noconfirm"
+	$AUR_HELPER $installflags ${pymyc[@]}
+
+	pushd arch-packages/illogical-impulse-pymyc-aur
+	makepkg -si
+	popd
+}
+
 # https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081690658
 # https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081701482
 # https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081707099
@@ -137,17 +149,8 @@ pymyc=(python-materialyoucolor-git gradience-git python-libsass python-material-
 case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
-    if $ask;then
-      # Yay is bugged and destroys the PKGBUILD if you specify to cleanBuild with the -Bi flag, so we install the deps manually.
-      # If we install the deps using --asdeps we can remove them recursively by removing the metapackage.
-      v \
-	    $AUR_HELPER -S --answerclean=a --asdeps ${pymyc[@]} && \
-	    pushd arch-packages/illogical-impulse-pymyc-aur & makepkg -si & popd
-    else
-      v \
-            $AUR_HELPER -S --answerclean=a --asdeps --noconfirm ${pymyc[@]} && \
-	    pushd arch-packages/illogical-impulse-pymyc-aur & makepkg -si --noconfirm & popd
-    fi
+	  $ask && showfun install-pymyc-aur
+	  v install-pymyc-aur
     ;;
 esac
 
