@@ -4,7 +4,6 @@ pkgrel=1
 pkgdesc='Illogical Impulse Python Dependencies'
 arch=(any)
 license=(None)
-# Add `python-setuptools-scm` and `python-wheel` explicitly to fix #197
 depends=(
 	python-build
 	python-pillow
