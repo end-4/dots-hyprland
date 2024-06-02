@@ -93,19 +93,24 @@ if (( ${#pkglist[@]} != 0 )); then
 fi
 
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages 
-remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-pacman -Qeq > ./cache/pacman_explicit_packages
-readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-$ask && read -p "Attempt to set previously explicitly installed deps as implicit [Y/n]? " convert_explicit
-convert_explicit=${convert_explicit:-y}
+set-explicit-to-implicit() {
+	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
+	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
+	pacman -Qeq > ./cache/pacman_explicit_packages
+	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
 
-if [ "$convert_explicit" != "${convert_explicit#[Yy]}" ]; then
 	echo "Attempting to set previously explicitly installed deps as implicit..."
 	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
 		[ "$i" = "$j" ] && $AUR_HELPER -D --asdeps "$i"
 	done; done
-fi
+
+	return 0
+}
+
+$ask && echo "Attempt to set previously explicitly installed deps as implicit? "
+$ask && showfun set-explicit-to-implicit
+v set-explicit-to-implicit
+
 
 # Install core dependencies from the meta-packages
 metapkgs=(arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
