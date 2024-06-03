@@ -7,11 +7,11 @@ const userConfigOptions = {
 	'apps': {
 		'terminal': 'kitty',
 	},
-	// 'icons': {
-    //     substitutions: {
-    //         'steam_app_964570': "steam_icon_964570",
-    //     },
-    // },
+	'icons': {
+        substitutions: {
+            'vesktop': "discord",
+        },
+    },
 }
 
 export default userConfigOptions;
