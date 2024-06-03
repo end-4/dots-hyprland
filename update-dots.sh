@@ -2,6 +2,8 @@
 # This script updates the dotfiles by fetching the latest version from the Git repository and then replacing files
 # that have not been modified by the user to preserve changes. The remaining files will be replaced with the new ones.
 
+source ./scriptdata/environment-variables
+
 set -euo pipefail
 cd "$(dirname "$0")"
 export base="$(pwd)"
@@ -16,7 +18,7 @@ MAGENTA="\033[0;35m"
 RESET="\033[0m"
 
 # Define paths to update
-folders=(".config" ".local")
+folders=(".config" ".local/bin" ".local/share" ".local/state")
 excludes=(".config/hypr/custom" ".config/ags/user_options.js" ".config/hypr/hyprland.conf")
 
 get_checksum() {
@@ -34,6 +36,27 @@ file_in_excludes() {
         fi
     done
     return 1
+}
+
+get_destination() {
+	# Get the correct destination of the file based on XDG base dirs
+	local file="$1"
+	local localdir="$(echo $file | cut -d/ -f1-2)"
+	local everything_else="$(echo $file | cut -d/ -f3-)"
+	# Check if path is config
+	if [ "$(echo $file | cut -d/ -f1)" = ".config" ]; then
+		printf "$XDG_CONFIG_HOME/$(echo $file | cut -d/ -f2-)"
+
+	# Local directory
+	elif [ "$localdir" = ".local/bin" ]; then
+		printf "$XDG_BIN_HOME/$everything_else"
+	
+	# There are no files in either of the following right now, but putting it here just in case as .local was specified
+	elif [ "$localdir" = ".local/share" ]; then
+		printf "$XDG_DATA_HOME/$everything_else"
+	elif [ "$localdir" = ".local/state" ]; then
+		printf "$XDG_STATE_HOME/$everything_else"
+	fi
 }
 
 # Greetings!
@@ -80,14 +103,14 @@ modified_files=()
 # Find all files in the specified folders and their subfolders
 while IFS= read -r -d '' file; do
     # If the file is not in the home directory, skip it
-    if [[ ! -f "$HOME/$file" ]] || file_in_excludes "$file"; then
+    if [[ ! -f "$(get_destination $file)" ]] || file_in_excludes "$file"; then
         echo -e "${YELLOW}Skipping $file${RESET}"
         continue
     fi
     
     # Calculate checksums
     base_checksum=$(get_checksum "$base/$file")
-    home_checksum=$(get_checksum "$HOME/$file")
+    home_checksum=$(get_checksum "$(get_destination $file)")
     
     # Compare checksums and add to modified_files if necessary
     if [[ $base_checksum != $home_checksum ]]; then
@@ -180,10 +203,10 @@ if ! git pull; then
         find "$temp_folder/$folder" -print0 | while IFS= read -r -d '' file; do
             file=${file//$temp_folder\//}
             if [[ -d "$temp_folder/$file" ]]; then
-                mkdir -p "$HOME/$file"
+                mkdir -p "$(get_destination $file)"
             fi
             if [[ -f "$temp_folder/$file" ]] && ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
-                destination="$HOME/$file"
+                destination=$(get_destination $file)
                 echo -e "${BLUE}Replacing $destination ...${RESET}"
                 mkdir -p "$(dirname "$destination")"
                 cp -f "$temp_folder/$file" "$destination"
@@ -218,8 +241,9 @@ if ! git pull; then
     # Remove files
     for file in "${files_to_remove[@]}"; do
         echo -e "${YELLOW}Removing $file ...${RESET}"
-        if [[ -f "$HOME/$file" ]]; then
-            rm -rf "$HOME/$file"
+	homefile="$(get_destination $file)"
+        if [[ -f "$homefile" ]]; then
+            rm -rf "$homefile"
         fi
     done
     
@@ -258,8 +282,9 @@ done
 # Remove files
 for file in "${files_to_remove[@]}"; do
     echo -e "${YELLOW}Removing $file ...${RESET}"
-    if [[ -f "$HOME/$file" ]]; then
-        rm -rf "$HOME/$file"
+    homefile=$(get_destination $file)
+    if [[ -f "$homefile" ]]; then
+        rm -rf "$homefile"
     fi
 done
 
@@ -268,10 +293,10 @@ done
 for folder in "${folders[@]}"; do
     find "$folder" -print0 | while IFS= read -r -d '' file; do
         if [[ -d "$file" ]]; then
-            mkdir -p "$HOME/$file"
+            mkdir -p "$(get_destination $file)"
         fi
         if [[ -f "$file" ]] && ! file_in_excludes "$file" && [[ ! " ${modified_files[*]} " =~ " $file " ]]; then
-            destination="$HOME/$file"
+            destination="$(get_destination $file)"
             echo -e "${BLUE}Replacing \"$destination\" ...${RESET}"
             mkdir -p "$(dirname "$destination")"
             cp -f "$base/$file" "$destination"
