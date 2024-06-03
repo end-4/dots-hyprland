@@ -52,17 +52,15 @@
 <details>
   <summary>Software overview</summary>
 
-  - This dotfile setup is intended to work out of the box and has a fair amount of deps. Partial list of top level software used by hyprland here:
 
   | Software | Purpose |
   | ------------- | ------------- |
-  | [AGS](https://github.com/Aylur/ags) | A GTK widget system, responsible for the status bar and various useful widgets |
-  | [anyrun](https://github.com/anyrun-org/anyrun) | Main app launcher/runner, default entry point for Super key, with AI integration and various actions |
-  | [Fuzzel](https://mark.stosberg.com/fuzzel-a-great-dmenu-and-rofi-altenrative-for-wayland/) | Secondary app launcher/runner |
-  | [wlogout](https://github.com/ArtsyMacaw/wlogout) | logout/lock/shutdown menu |
+  | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
+  | [AGS](https://github.com/Aylur/ags) | A GTK widget system, responsible for the status bar, sidebars, etc. |
+  | [Fuzzel](https://mark.stosberg.com/fuzzel-a-great-dmenu-and-rofi-altenrative-for-wayland/) | For clipboard and emoji picker |
 
 
-  - For a more comprehensive list of dependencies, see [the dependencies conf used by the install script](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
+  - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
 </details>
 
 <details> 
