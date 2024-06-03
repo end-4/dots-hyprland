@@ -1,0 +1,20 @@
+pkgname=illogical-impulse-fonts-themes
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	adw-gtk3-git
+	qt5ct
+	qt5-wayland
+	fontconfig
+	ttf-readex-pro
+	ttf-jetbrains-mono-nerd
+	ttf-material-symbols-variable-git
+	ttf-space-mono-nerd
+	fish
+	foot
+	starship
+)
+
