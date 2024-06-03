@@ -88,7 +88,7 @@
 
 **Weeb powers**
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/98fe2c03-a128-45c0-8155-3a6080db3b84) -->
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/711f5475-93ca-4097-a960-8047acc85cc7✨)
+![image](https://github.com/end-4/dots-hyprland/assets/97237370/711f5475-93ca-4097-a960-8047acc85cc7)
 
 **Easy window management**
 <!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
