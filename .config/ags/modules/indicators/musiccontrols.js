@@ -26,7 +26,7 @@ function isRealPlayer(player) {
         // playerctld just copies other buses and we don't need duplicates
         !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') &&
         // Non-instance mpd bus
-        !player.busName.endsWith('.mpd')
+        !(player.busName.endsWith('.mpd') && !player.busName.endsWith('MediaPlayer2.mpd'))
     );
 }
 
