@@ -28,7 +28,7 @@ let configOptions = {
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
         'layerSmoke': false,
         'layerSmokeStrength': 0.2,
-        'fakeScreenRounding': true,
+        'fakeScreenRounding': 1, // 0: None | 1: Always | 2: When not fullscreen
     },
     'apps': {
         'bluetooth': "blueberry",
