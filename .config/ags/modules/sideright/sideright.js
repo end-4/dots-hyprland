@@ -31,28 +31,28 @@ const centerWidgets = [
     {
         name: 'Notifications',
         materialIcon: 'notifications',
-        contentWidget: ModuleNotificationList(),
+        contentWidget: ModuleNotificationList,
     },
     {
         name: 'Audio controls',
         materialIcon: 'volume_up',
-        contentWidget: ModuleAudioControls(),
+        contentWidget: ModuleAudioControls,
     },
     {
         name: 'Bluetooth',
         materialIcon: 'bluetooth',
-        contentWidget: ModuleBluetooth(),
+        contentWidget: ModuleBluetooth,
     },
     {
         name: 'Wifi networks',
         materialIcon: 'wifi',
-        contentWidget: ModuleWifiNetworks(),
+        contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
     },
     {
         name: 'Live config',
         materialIcon: 'tune',
-        contentWidget: ModuleConfigure(),
+        contentWidget: ModuleConfigure,
     },
 ];
 
@@ -103,7 +103,7 @@ export const sidebarOptionsStack = ExpandingIconTabContainer({
     tabSwitcherClassName: 'sidebar-icontabswitcher',
     icons: centerWidgets.map((api) => api.materialIcon),
     names: centerWidgets.map((api) => api.name),
-    children: centerWidgets.map((api) => api.contentWidget),
+    children: centerWidgets.map((api) => api.contentWidget()),
     onChange: (self, id) => {
         self.shown = centerWidgets[id].name;
         if (centerWidgets[id].onFocus) centerWidgets[id].onFocus();
@@ -130,7 +130,6 @@ export default () => Box({
                     className: 'spacing-v-5',
                     children: [
                         timeRow,
-                        // togglesFlowBox,
                         togglesBox,
                     ]
                 }),
