@@ -120,8 +120,8 @@ install-local-pkgbuild() {
 	x pushd $location
 	
 	source ./PKGBUILD
-	x $AUR_HELPER -S $installflags --asdeps $depends
-	x makepkg -si
+	x $AUR_HELPER -S $installflags --asdeps "${depends[@]}"
+	x makepkg -si --noconfirm
 
 	x popd
 }
