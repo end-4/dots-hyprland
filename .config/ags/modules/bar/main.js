@@ -84,14 +84,14 @@ export const Bar = async (monitor = 0) => {
         }
     });
     const shortBarContent = Widget.CenterBox({
-        className: 'bar-bg-focus',
+        className: 'bar-bg',
         startWidget: (await WindowTitle(monitor)),
         centerWidget: Widget.Box({
             className: 'spacing-h-4',
             children: [
                 Widget.Box({
                     homogeneous: true,
-                    children: [await FocusOptionalWorkspaces()],
+                    children: [await NormalOptionalWorkspaces()],
                 }),
             ]
         }),
@@ -99,7 +99,7 @@ export const Bar = async (monitor = 0) => {
         setup: (self) => {
             self.hook(Battery, (self) => {
                 if(!Battery.available) return;
-                self.toggleClassName('bar-bg-focus-batterylow', Battery.percent <= userOptions.battery.low);
+                self.toggleClassName('bar-bg-batterylow', Battery.percent <= userOptions.battery.low);
             })
         }
     });

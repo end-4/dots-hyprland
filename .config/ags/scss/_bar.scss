@@ -17,6 +17,11 @@ $bar_ws_width_focus_active: 2.045rem;
     min-height: 2.727rem;
 }
 
+.bar-bg-batterylow {
+    background-color: mix($layer0, $errorContainer, 80%);
+    min-height: 2.727rem;
+}
+
 .bar-bg-focus {
     background-color: $layer0;
     min-height: 1.364rem;
