@@ -1,6 +1,7 @@
 const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
 import WindowTitle from "./normal/spaceleft.js";
 import Indicators from "./normal/spaceright.js";
@@ -82,6 +83,26 @@ export const Bar = async (monitor = 0) => {
             })
         }
     });
+    const shortBarContent = Widget.CenterBox({
+        className: 'bar-bg-focus',
+        startWidget: (await WindowTitle(monitor)),
+        centerWidget: Widget.Box({
+            className: 'spacing-h-4',
+            children: [
+                Widget.Box({
+                    homogeneous: true,
+                    children: [await FocusOptionalWorkspaces()],
+                }),
+            ]
+        }),
+        endWidget: Indicators(),
+        setup: (self) => {
+            self.hook(Battery, (self) => {
+                if(!Battery.available) return;
+                self.toggleClassName('bar-bg-focus-batterylow', Battery.percent <= userOptions.battery.low);
+            })
+        }
+    });
     return Widget.Window({
         monitor,
         name: `bar${monitor}`,
@@ -95,9 +116,17 @@ export const Bar = async (monitor = 0) => {
             children: {
                 'normal': normalBarContent,
                 'focus': focusedBarContent,
+                'short': shortBarContent,
             },
             setup: (self) => self.hook(currentShellMode, (self) => {
-                self.shown = currentShellMode.value;
+                const monitorInfo = Hyprland.getMonitor(monitor);
+                let width = monitorInfo?.width;
+                if (monitorInfo?.transform % 2 == 1)
+                    width = monitorInfo?.height;
+                console.log(width);
+                let state = currentShellMode.value;
+                if (width < 1800 && state == 'normal') state = 'short';
+                self.shown = state;
             })
         }),
     });
