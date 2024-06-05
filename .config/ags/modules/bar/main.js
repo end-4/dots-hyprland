@@ -1,8 +1,8 @@
 const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
+import { monitors } from '../.commondata/hyprlanddata.js';
 import WindowTitle from "./normal/spaceleft.js";
 import Indicators from "./normal/spaceright.js";
 import Music from "./normal/music.js";
@@ -119,13 +119,8 @@ export const Bar = async (monitor = 0) => {
                 'short': shortBarContent,
             },
             setup: (self) => self.hook(currentShellMode, (self) => {
-                const monitorInfo = Hyprland.getMonitor(monitor);
-                let width = monitorInfo?.width;
-                if (monitorInfo?.transform % 2 == 1)
-                    width = monitorInfo?.height;
-                console.log(width);
                 let state = currentShellMode.value;
-                if (width < 1800 && state == 'normal') state = 'short';
+                if (monitors[monitor].width < 1800 && state == 'normal') state = 'short';
                 self.shown = state;
             })
         }),
