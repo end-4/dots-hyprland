@@ -10,11 +10,21 @@ async function updateStuff() {
     const display = Gdk.Display.get_default();
     monitors.forEach((monitor, i) => {
         const gdkMonitor = display.get_monitor(i);
-        monitor.realWidth = monitor.width;
-        monitor.realHeight = monitor.height;
+        if (monitor.transform % 2 == 0) {
+            monitor.realWidth = monitor.width;
+            monitor.realHeight = monitor.height;
+        } else {
+            monitor.realWidth = monitor.height;
+            monitor.realHeight = monitor.height;
+        }
         if (userOptions.monitors.scaleMethod.toLowerCase == "gdk") {
-            monitor.width = gdkMonitor.get_geometry().width;
-            monitor.height = gdkMonitor.get_geometry().height;
+            if (monitor.transform % 2 == 0) {
+                monitor.width = gdkMonitor.get_geometry().width;
+                monitor.height = gdkMonitor.get_geometry().height;
+            } else {
+                monitor.width = gdkMonitor.get_geometry().height;
+                monitor.height = gdkMonitor.get_geometry().width;
+            }
         }
         else { // == "division"
             monitor.width = Math.ceil(monitor.realWidth / monitor.scale);
