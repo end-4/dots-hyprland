@@ -94,57 +94,7 @@ export const SearchAndWindows = () => {
         className: 'overview-search-box txt-small txt',
         hpack: 'center',
         onAccept: (self) => { // This is when you hit Enter
-            const text = self.text;
-            if (text.length == 0) return;
-            const isAction = text.startsWith('>');
-            const isDir = (['/', '~'].includes(entry.text[0]));
-
-            if (userOptions.search.enableMathResults && couldBeMath(text)) { // Eval on typing is dangerous, this is a workaround
-                try {
-                    const fullResult = eval(text.replace(/\^/g, "**"));
-                    // copy
-                    execAsync(['wl-copy', `${fullResult}`]).catch(print);
-                    App.closeWindow('overview');
-                    return;
-                } catch (e) {
-                    // console.log(e);
-                }
-            }
-            if (userOptions.search.enableDirectorySearch && isDir) {
-                App.closeWindow('overview');
-                execAsync(['bash', '-c', `xdg-open "${expandTilde(text)}"`, `&`]).catch(print);
-                return;
-            }
-            if (_appSearchResults.length > 0) {
-                App.closeWindow('overview');
-                _appSearchResults[0].launch();
-                return;
-            }
-            else if (userOptions.search.enableActions && text[0] == '>') { // Custom commands
-                App.closeWindow('overview');
-                launchCustomCommand(text);
-                return;
-            }
-            // Fallback: Execute command
-            if (userOptions.search.enableCommands && !isAction && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
-                if (text.startsWith('sudo'))
-                    execAndClose(text, true);
-                else
-                    execAndClose(text, false);
-            }
-            else if (userOptions.search.enableAiSearch) {
-                GeminiService.send(text);
-                App.closeWindow('overview');
-                App.openWindow('sideleft');
-            }
-            else if (userOptions.search.enableWebSearch) {
-                App.closeWindow('overview');
-                let search = userOptions.search.engineBaseUrl + text;
-                for (let site of userOptions.search.excludedSites) {
-                    if (site) search += ` -site:${site}`;
-                }
-                execAsync(['bash', '-c', `xdg-open '${search}' &`]).catch(print);
-            }
+            resultsBox.children[0].onClicked();
         },
         onChange: (entry) => { // this is when you type
             const isAction = entry.text[0] == '>';
