@@ -198,7 +198,7 @@ function overrideConfigRecursive(userOverrides, configOptions = {}, check = true
         if (configOptions[key] === undefined && check) {
             optionsOkay = false;
         }
-        else if (typeof value === 'object') {
+        else if (typeof value === 'object' && !(value instanceof Array)) {
             if (key === "substitutions" || key === "regexSubstitutions") {
                 overrideConfigRecursive(value, configOptions[key], false);
             } else overrideConfigRecursive(value, configOptions[key]);
