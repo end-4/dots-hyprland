@@ -159,7 +159,11 @@ export const SearchButton = ({ text = '' }) => searchItem({
     content: `${text}`,
     onActivate: () => {
         App.closeWindow('overview');
-        execAsync(['bash', '-c', `xdg-open '${userOptions.search.engineBaseUrl}${text} ${['', ...userOptions.search.excludedSites].join(' -site:')}' &`]).catch(print);
+        let search = userOptions.search.engineBaseUrl + text;
+        for (let site of userOptions.search.excludedSites) {
+            if (site) search += ` -site:${site}`;
+        }
+        execAsync(['bash', '-c', `xdg-open '${search}' &`]).catch(print);
     },
 });
 
