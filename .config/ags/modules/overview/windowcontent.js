@@ -8,7 +8,7 @@ const { execAsync, exec } = Utils;
 import { execAndClose, expandTilde, hasUnterminatedBackslash, couldBeMath, launchCustomCommand, ls } from './miscfunctions.js';
 import {
     CalculationResultButton, CustomCommandButton, DirectoryButton,
-    DesktopEntryButton, ExecuteCommandButton, SearchButton, AiButton
+    DesktopEntryButton, ExecuteCommandButton, SearchButton, AiButton, NoResultButton,
 } from './searchbuttons.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 import GeminiService from '../../services/gemini.js';
@@ -99,7 +99,7 @@ export const SearchAndWindows = () => {
             const isAction = text.startsWith('>');
             const isDir = (['/', '~'].includes(entry.text[0]));
 
-            if (couldBeMath(text)) { // Eval on typing is dangerous, this is a workaround
+            if (userOptions.search.enableMathResults && couldBeMath(text)) { // Eval on typing is dangerous, this is a workaround
                 try {
                     const fullResult = eval(text.replace(/\^/g, "**"));
                     // copy
@@ -110,7 +110,7 @@ export const SearchAndWindows = () => {
                     // console.log(e);
                 }
             }
-            if (isDir) {
+            if (userOptions.search.enableDirectorySearch && isDir) {
                 App.closeWindow('overview');
                 execAsync(['bash', '-c', `xdg-open "${expandTilde(text)}"`, `&`]).catch(print);
                 return;
@@ -120,23 +120,30 @@ export const SearchAndWindows = () => {
                 _appSearchResults[0].launch();
                 return;
             }
-            else if (text[0] == '>') { // Custom commands
+            else if (userOptions.search.enableActions && text[0] == '>') { // Custom commands
                 App.closeWindow('overview');
                 launchCustomCommand(text);
                 return;
             }
             // Fallback: Execute command
-            if (!isAction && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+            if (userOptions.search.enableCommands && !isAction && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                 if (text.startsWith('sudo'))
                     execAndClose(text, true);
                 else
                     execAndClose(text, false);
             }
-
-            else {
+            else if (userOptions.search.enableAiSearch) {
                 GeminiService.send(text);
                 App.closeWindow('overview');
                 App.openWindow('sideleft');
+            }
+            else if (userOptions.search.enableWebSearch) {
+                App.closeWindow('overview');
+                let search = userOptions.search.engineBaseUrl + text;
+                for (let site of userOptions.search.excludedSites) {
+                    if (site) search += ` -site:${site}`;
+                }
+                execAsync(['bash', '-c', `xdg-open '${search}' &`]).catch(print);
             }
         },
         onChange: (entry) => { // this is when you type
@@ -162,7 +169,7 @@ export const SearchAndWindows = () => {
             _appSearchResults = Applications.query(text);
 
             // Calculate
-            if (couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
+            if (userOptions.search.enableMathResults && couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
                     const fullResult = eval(text.replace(/\^/g, "**"));
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
@@ -170,14 +177,14 @@ export const SearchAndWindows = () => {
                     // console.log(e);
                 }
             }
-            if (isDir) {
+            if (userOptions.search.enableDirectorySearch && isDir) {
                 var contents = [];
                 contents = ls({ path: text, silent: true });
                 contents.forEach((item) => {
                     resultsBox.add(DirectoryButton(item));
                 })
             }
-            if (isAction) { // Eval on typing is dangerous, this is a workaround.
+            if (userOptions.search.enableActions && isAction) { // Eval on typing is dangerous, this is a workaround.
                 resultsBox.add(CustomCommandButton({ text: entry.text }));
             }
             // Add application entries
@@ -190,13 +197,16 @@ export const SearchAndWindows = () => {
 
             // Fallbacks
             // if the first word is an actual command
-            if (!isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+            if (userOptions.search.enableCommands && !isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                 resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
             }
 
             // Add fallback: search
-            resultsBox.add(AiButton({ text: entry.text }));
-            resultsBox.add(SearchButton({ text: entry.text }));
+            if (userOptions.search.enableAiSearch)
+                resultsBox.add(AiButton({ text: entry.text }));
+            if (userOptions.search.enableWebSearch)
+                resultsBox.add(SearchButton({ text: entry.text }));
+            if (resultsBox.children.length == 0) resultsBox.add(NoResultButton());
             resultsBox.show_all();
         },
     });

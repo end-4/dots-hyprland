@@ -7,6 +7,15 @@ import { searchItem } from './searchitem.js';
 import { execAndClose, couldBeMath, launchCustomCommand } from './miscfunctions.js';
 import GeminiService from '../../services/gemini.js';
 
+export const NoResultButton = () => searchItem({
+    materialIconName: 'Error',
+    name: "Search invalid",
+    content: "No results found!",
+    onActivate: () => {
+        App.closeWindow('overview');
+    },
+});
+
 export const DirectoryButton = ({ parentPath, name, type, icon }) => {
     const actionText = Widget.Revealer({
         revealChild: false,
