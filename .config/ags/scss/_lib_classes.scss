@@ -374,6 +374,22 @@
     margin-bottom: 0rem;
 }
 
+.spacing-h-30>* {
+    margin-right: 1.364rem;
+}
+
+.spacing-h-30>*:last-child {
+    margin-right: 0rem;
+}
+
+.spacing-v-30>* {
+    margin-bottom: 1.364rem;
+}
+
+.spacing-v-30>*:last-child {
+    margin-bottom: 0rem;
+}
+
 .anim-enter {
     @include anim-enter;
 }

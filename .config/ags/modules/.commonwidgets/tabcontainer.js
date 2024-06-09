@@ -103,7 +103,6 @@ export const IconTabContainer = ({
     let previousShownIndex = 0;
     const count = Math.min(iconWidgets.length, names.length, children.length);
     const tabs = Box({
-        homogeneous: true,
         hpack: tabsHpack,
         className: `spacing-h-5 ${tabSwitcherClassName}`,
         children: iconWidgets.map((icon, i) => Button({
