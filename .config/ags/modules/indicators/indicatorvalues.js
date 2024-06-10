@@ -84,7 +84,7 @@ export default (monitor = 0) => {
         }),
         labelSetup: (self) => self.hook(Audio, (label) => {
             const newDevice = (Audio.speaker?.name);
-            const updateValue = Math.round(Audio.speaker?.volume * 100);
+            const updateValue = Audio.speaker?.is_muted ? label.label = `󰖁` : label.label = `${Math.round(Audio.speaker?.volume * 100)}`;
             if (!isNaN(updateValue)) {
                 if (newDevice === volumeIndicator.attribute.device && updateValue != label.label) {
                     Indicator.popup(1);
