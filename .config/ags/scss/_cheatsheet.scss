@@ -11,6 +11,10 @@
     color: $cheatsheetTitle;
 }
 
+.cheatsheet-bind-lineheight {
+    min-height: 2.045rem;
+}
+
 .cheatsheet-key {
     @include techfont;
     min-height: 1.364rem;
