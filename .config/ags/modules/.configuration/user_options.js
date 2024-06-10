@@ -56,6 +56,9 @@ let configOptions = {
             'default': "auto",
         },
     },
+    'configPaths': {
+        'keybinds': "",
+    },
     'gaming': {
         'crosshair': {
             'size': 20,

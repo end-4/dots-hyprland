@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import re
+import os
 from os.path import expandvars as os_expandvars
 from typing import Dict, List
 
@@ -34,6 +35,8 @@ class Section(dict):
 
 
 def read_content(path: str) -> str:
+    if (not os.access(os_expandvars(path), os.R_OK)):
+        return ("error")
     with open(os_expandvars(path), "r") as file:
         return file.read()
 
@@ -201,6 +204,8 @@ def get_binds_recursive(current_content, scope):
 def parse_keys(path: str) -> Dict[str, List[KeyBinding]]:
     global content_lines
     content_lines = read_content(path).splitlines()
+    if content_lines[0] == "error":
+        return "error"
     return get_binds_recursive(Section([], [], ""), 0)
 
 
