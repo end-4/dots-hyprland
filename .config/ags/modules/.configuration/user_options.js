@@ -93,6 +93,12 @@ let configOptions = {
 
     },
     'search': {
+        'enableActions': true,
+        'enableCommands': true,
+        'enableMathResults': true,
+        'enableDirectorySearch': true,
+        'enableAiSearch': true,
+        'enableWebSearch': true,
         'engineBaseUrl': "https://www.google.com/search?q=",
         'excludedSites': ["quora.com"],
     },
