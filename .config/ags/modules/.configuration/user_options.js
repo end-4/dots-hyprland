@@ -57,7 +57,7 @@ let configOptions = {
         },
     },
     'configPaths': {
-        'keybinds': "",
+        'keybinds': "", //custom path to keybinds.conf for the cheatsheet
     },
     'gaming': {
         'crosshair': {
