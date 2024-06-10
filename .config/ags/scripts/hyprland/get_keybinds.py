@@ -35,9 +35,9 @@ class Section(dict):
 
 
 def read_content(path: str) -> str:
-    if (not os.access(os_expandvars(path), os.R_OK)):
+    if (not os.access(os.path.expanduser(os.path.expandvars(path)), os.R_OK)):
         return ("error")
-    with open(os_expandvars(path), "r") as file:
+    with open(os.path.expanduser(os.path.expandvars(path)), "r") as file:
         return file.read()
 
 
