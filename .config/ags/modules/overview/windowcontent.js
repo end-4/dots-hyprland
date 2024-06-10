@@ -119,7 +119,7 @@ export const SearchAndWindows = () => {
             _appSearchResults = Applications.query(text);
 
             // Calculate
-            if (userOptions.search.enableMathResults && couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
+            if (userOptions.search.enableFeatures.mathResults && couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
                     const fullResult = eval(text.replace(/\^/g, "**"));
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
@@ -127,14 +127,14 @@ export const SearchAndWindows = () => {
                     // console.log(e);
                 }
             }
-            if (userOptions.search.enableDirectorySearch && isDir) {
+            if (userOptions.search.enableFeatures.directorySearch && isDir) {
                 var contents = [];
                 contents = ls({ path: text, silent: true });
                 contents.forEach((item) => {
                     resultsBox.add(DirectoryButton(item));
                 })
             }
-            if (userOptions.search.enableActions && isAction) { // Eval on typing is dangerous, this is a workaround.
+            if (userOptions.search.enableFeatures.actions && isAction) { // Eval on typing is dangerous, this is a workaround.
                 resultsBox.add(CustomCommandButton({ text: entry.text }));
             }
             // Add application entries
@@ -147,14 +147,14 @@ export const SearchAndWindows = () => {
 
             // Fallbacks
             // if the first word is an actual command
-            if (userOptions.search.enableCommands && !isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+            if (userOptions.search.enableFeatures.commands && !isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                 resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
             }
 
             // Add fallback: search
-            if (userOptions.search.enableAiSearch)
+            if (userOptions.search.enableFeatures.aiSearch)
                 resultsBox.add(AiButton({ text: entry.text }));
-            if (userOptions.search.enableWebSearch)
+            if (userOptions.search.enableFeatures.webSearch)
                 resultsBox.add(SearchButton({ text: entry.text }));
             if (resultsBox.children.length == 0) resultsBox.add(NoResultButton());
             resultsBox.show_all();
