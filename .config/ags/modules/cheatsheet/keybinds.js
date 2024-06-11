@@ -8,7 +8,7 @@ const { Box, Label, Scrollable } = Widget;
 const HYPRLAND_KEYBIND_CONFIG_FILE = userOptions.configPaths.keybinds ?
     userOptions.configPaths.keybinds : `${GLib.get_user_config_dir()}/hypr/hyprland/keybinds.conf`;
 const KEYBIND_SECTIONS_PER_PAGE = 3;
-const keybindListfunc = () => {
+const getKeybindList = () => {
     let data = Utils.exec(`${App.configDir}/scripts/hyprland/get_keybinds.py --path ${HYPRLAND_KEYBIND_CONFIG_FILE}`);
     if (data == "\"error\"") {
         Utils.timeout(2000, () => Utils.execAsync(['notify-send',
@@ -20,7 +20,7 @@ const keybindListfunc = () => {
     }
     return JSON.parse(data);
 };
-const keybindList = keybindListfunc();
+const keybindList = getKeybindList();
 
 const keySubstitutions = {
     "Super": "󰖳",
