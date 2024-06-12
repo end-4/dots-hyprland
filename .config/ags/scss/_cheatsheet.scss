@@ -11,6 +11,10 @@
     color: $cheatsheetTitle;
 }
 
+.cheatsheet-bind-lineheight {
+    min-height: 2.045rem;
+}
+
 .cheatsheet-key {
     @include techfont;
     min-height: 1.364rem;
@@ -119,6 +123,7 @@ $coloractinium: $term7;
     background-color: $colorlanthanum;
     color: $term0;
 }
+
 .cheatsheet-periodictable-actinium {
     @include cheatsheet-periodictable-element;
     background-color: $coloractinium;
@@ -141,17 +146,22 @@ $coloractinium: $term7;
     @include cheatsheet-periodictable-legend-color;
     background-color: $colormetal;
 }
+
 .cheatsheet-periodictable-legend-color-nonmetal {
     @include cheatsheet-periodictable-legend-color;
     background-color: $colornonmetal;
 }
+
 .cheatsheet-periodictable-legend-color-noblegas {
     @include cheatsheet-periodictable-legend-color;
     background-color: $colornoblegas;
-}.cheatsheet-periodictable-legend-color-lanthanum {
+}
+
+.cheatsheet-periodictable-legend-color-lanthanum {
     @include cheatsheet-periodictable-legend-color;
     background-color: $colorlanthanum;
 }
+
 .cheatsheet-periodictable-legend-color-actinium {
     @include cheatsheet-periodictable-legend-color;
     background-color: $coloractinium;

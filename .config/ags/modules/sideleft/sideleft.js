@@ -108,11 +108,11 @@ export default () => Box({
                 // Switch API type
                 else if (checkKeybind(event, userOptions.keybinds.sidebar.apis.nextTab)) {
                     const toSwitchTab = widgetContent.attribute.children[widgetContent.attribute.shown.value];
-                    toSwitchTab.attribute.nextTab();
+                    toSwitchTab.nextTab();
                 }
                 else if (checkKeybind(event, userOptions.keybinds.sidebar.apis.prevTab)) {
                     const toSwitchTab = widgetContent.attribute.children[widgetContent.attribute.shown.value];
-                    toSwitchTab.attribute.prevTab();
+                    toSwitchTab.prevTab();
                 }
             }
 

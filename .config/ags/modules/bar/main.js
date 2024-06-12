@@ -78,7 +78,7 @@ export const Bar = async (monitor = 0) => {
         endWidget: Widget.Box({}),
         setup: (self) => {
             self.hook(Battery, (self) => {
-                if(!Battery.available) return;
+                if (!Battery.available) return;
                 self.toggleClassName('bar-bg-focus-batterylow', Battery.percent <= userOptions.battery.low);
             })
         }
@@ -103,6 +103,9 @@ export const Bar = async (monitor = 0) => {
             })
         }
     });
+    const nothingContent = Widget.Box({
+        className: 'bar-bg-nothing',
+    })
     return Widget.Window({
         monitor,
         name: `bar${monitor}`,
@@ -117,6 +120,7 @@ export const Bar = async (monitor = 0) => {
                 'normal': normalBarContent,
                 'focus': focusedBarContent,
                 'short': shortBarContent,
+                'nothing': nothingContent,
             },
             setup: (self) => self.hook(currentShellMode, (self) => {
                 let state = currentShellMode.value;

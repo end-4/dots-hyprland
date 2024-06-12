@@ -93,6 +93,14 @@ let configOptions = {
 
     },
     'search': {
+        'enableFeatures': {
+            'actions': true,
+            'commands': true,
+            'mathResults': true,
+            'directorySearch': true,
+            'aiSearch': true,
+            'webSearch': true,
+        },
         'engineBaseUrl': "https://www.google.com/search?q=",
         'excludedSites': ["quora.com"],
     },
@@ -185,8 +193,12 @@ let configOptions = {
             'prevTab': "Ctrl+Page_Up",
         },
         'cheatsheet': {
-            'nextTab': "Page_Down",
-            'prevTab': "Page_Up",
+            'keybinds': {
+                'nextTab': "Page_Down",
+                'prevTab': "Page_Up",
+            },
+            'nextTab': "Ctrl+Page_Down",
+            'prevTab': "Ctrl+Page_Up",
         }
     },
 }
@@ -198,7 +210,7 @@ function overrideConfigRecursive(userOverrides, configOptions = {}, check = true
         if (configOptions[key] === undefined && check) {
             optionsOkay = false;
         }
-        else if (typeof value === 'object') {
+        else if (typeof value === 'object' && !(value instanceof Array)) {
             if (key === "substitutions" || key === "regexSubstitutions") {
                 overrideConfigRecursive(value, configOptions[key], false);
             } else overrideConfigRecursive(value, configOptions[key]);
