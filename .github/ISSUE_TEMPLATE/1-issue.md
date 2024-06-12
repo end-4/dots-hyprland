@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-- I have read the [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage) and the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/03troubleshooting) pages of the wiki
+- I have read the Usage and Troubleshooting pages of the wiki: https://end-4.github.io/dots-hyprland-wiki/en/i-i/03troubleshooting/
 - I have made sure that both my config and system packages are up to date
 - Linux distro: 
 
