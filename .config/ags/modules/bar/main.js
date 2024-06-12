@@ -124,7 +124,7 @@ export const Bar = async (monitor = 0) => {
             },
             setup: (self) => self.hook(currentShellMode, (self) => {
                 let state = currentShellMode.value;
-                if (monitors[monitor].width < 1800 && state == 'normal') state = 'short';
+                if (monitors[monitor].width < 1400 && state == 'normal') state = 'short';
                 self.shown = state;
             })
         }),
