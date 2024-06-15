@@ -10,7 +10,7 @@ async function updateStuff() {
     const display = Gdk.Display.get_default();
     monitors.forEach((monitor, i) => {
         const gdkMonitor = display.get_monitor(i);
-        if (monitor.transform % 2 == 0) {
+        if (monitor.transform % 2 == 0) { //switch width and height if monitor is rotated
             monitor.realWidth = monitor.width;
             monitor.realHeight = monitor.height;
         } else {
@@ -18,7 +18,7 @@ async function updateStuff() {
             monitor.realHeight = monitor.width;
         }
         if (userOptions.monitors.scaleMethod.toLowerCase == "gdk") {
-            if (monitor.transform % 2 == 0) { // does get_geometry() return rotated values?
+            if (monitor.transform % 2 == 0) { //gdkMonitor also does not account for rotation
                 monitor.width = gdkMonitor.get_geometry().width;
                 monitor.height = gdkMonitor.get_geometry().height;
             } else {
