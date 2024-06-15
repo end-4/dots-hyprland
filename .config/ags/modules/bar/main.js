@@ -83,26 +83,6 @@ export const Bar = async (monitor = 0) => {
             })
         }
     });
-    const shortBarContent = Widget.CenterBox({
-        className: 'bar-bg',
-        startWidget: (await WindowTitle(monitor)),
-        centerWidget: Widget.Box({
-            className: 'spacing-h-4',
-            children: [
-                Widget.Box({
-                    homogeneous: true,
-                    children: [await NormalOptionalWorkspaces()],
-                }),
-            ]
-        }),
-        endWidget: Indicators(),
-        setup: (self) => {
-            self.hook(Battery, (self) => {
-                if(!Battery.available) return;
-                self.toggleClassName('bar-bg-batterylow', Battery.percent <= userOptions.battery.low);
-            })
-        }
-    });
     const nothingContent = Widget.Box({
         className: 'bar-bg-nothing',
     })
@@ -119,15 +99,20 @@ export const Bar = async (monitor = 0) => {
             children: {
                 'normal': normalBarContent,
                 'focus': focusedBarContent,
-                'short': shortBarContent,
                 'nothing': nothingContent,
             },
-            setup: (self) => self.hook(currentShellMode, (self) => {
-                let state = currentShellMode.value;
-                if (monitors[monitor].width < 1400 && state == 'normal') state = 'short';
-                self.shown = state;
-            })
-        }),
+            setup: (self) => self
+                .hook(currentShellMode, (self) => {
+                    self.shown = currentShellMode.value;
+                })
+                .on("size-allocate", (self) => {
+                    if (self.children[currentShellMode.value]?.get_allocated_width() > monitors[monitor].width) {
+                        self.children[currentShellMode.value].centerWidget.children[0].visible = false;
+                        self.children[currentShellMode.value].centerWidget.children[2].visible = false;
+                    }
+                })
+            ,
+        })
     });
 }
 
