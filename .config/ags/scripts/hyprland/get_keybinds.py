@@ -7,6 +7,7 @@ from typing import Dict, List
 TITLE_REGEX = "#+!"
 HIDE_COMMENT = "[hidden]"
 MOD_SEPARATORS = ['+', ' ']
+COMMENT_BIND_PATTERN = "#/#"
 
 parser = argparse.ArgumentParser(description='Hyprland keybind reader')
 parser.add_argument('--path', type=str, default="$HOME/.config/hypr/hyprland.conf", help='path to keybind file (sourcing isn\'t supported)')
@@ -56,7 +57,7 @@ def autogenerate_comment(dispatcher: str, params: str = "") -> str:
                 }.get(params, "null"))
 
         case "pin":
-            return "Pin window"
+            return "Window: pin (show on all workspaces)"
 
         case "splitratio":
             return "Window split ratio {}".format(params)
@@ -124,7 +125,7 @@ def autogenerate_comment(dispatcher: str, params: str = "") -> str:
             return "Window: move to workspace {}".format(params)
 
         case "togglespecialworkspace":
-            return "Toggle special workspace"
+            return "Workspace: toggle special"
 
         case "exec":
             return "Execute: {}".format(params)
@@ -132,7 +133,7 @@ def autogenerate_comment(dispatcher: str, params: str = "") -> str:
         case _:
             return ""
 
-def get_keybind_at_line(line_number):
+def get_keybind_at_line(line_number, line_start = 0):
     global content_lines
     line = content_lines[line_number]
     _, keys = line.split("=", 1)
@@ -185,6 +186,11 @@ def get_binds_recursive(current_content, scope):
             # print("[[ Found h{0} at line {1} ]] {2}".format(heading_scope, reading_line+1, content_lines[reading_line]))
             reading_line += 1
             current_content["children"].append(get_binds_recursive(Section([], [], section_name), heading_scope))
+
+        elif line.startswith(COMMENT_BIND_PATTERN):
+            keybind = get_keybind_at_line(reading_line, line_start=len(COMMENT_BIND_PATTERN))
+            if(keybind != None):
+                current_content["keybinds"].append(keybind)
 
         elif line == "" or line.startswith("$") or line.startswith("#"): # Comment, ignore
             pass

@@ -20,6 +20,8 @@ const keySubstitutions = {
     "mouse:272": "LMB",
     "mouse:273": "RMB",
     "mouse:275": "MouseBack",
+    "Slash": "/",
+    "Hash": "#"
 }
 
 const substituteKey = (key) => {
