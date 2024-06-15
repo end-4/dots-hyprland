@@ -33,6 +33,7 @@ let configOptions = {
     'apps': {
         'bluetooth': "blueberry",
         'imageViewer': "loupe",
+        'vpn': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center network",
         'network': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
         'settings': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
         'taskManager': "gnome-usage",
