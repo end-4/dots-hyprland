@@ -1,4 +1,4 @@
-// This is for the right pills of the bar. 
+// This is for the right pills of the bar.
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Label, Button, Overlay, Revealer, Scrollable, Stack, EventBox } = Widget;
@@ -161,11 +161,11 @@ const BatteryModule = () => Stack({
                                 .catch(print);
                             const weatherCode = weather.current_condition[0].weatherCode;
                             const weatherDesc = weather.current_condition[0].weatherDesc[0].value;
-                            const temperature = weather.current_condition[0].temp_C;
-                            const feelsLike = weather.current_condition[0].FeelsLikeC;
+                            const temperature = weather.current_condition[0][`temp_${userOptions.weather.preferredUnit}`];
+                            const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                             const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
                             self.children[0].label = weatherSymbol;
-                            self.children[1].label = `${temperature}℃ • Feels like ${feelsLike}℃`;
+                            self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • Feels like ${feelsLike}°${userOptions.weather.preferredUnit}`;
                             self.tooltipText = weatherDesc;
                         }).catch((err) => {
                             try { // Read from cache
@@ -174,11 +174,11 @@ const BatteryModule = () => Stack({
                                 );
                                 const weatherCode = weather.current_condition[0].weatherCode;
                                 const weatherDesc = weather.current_condition[0].weatherDesc[0].value;
-                                const temperature = weather.current_condition[0].temp_C;
-                                const feelsLike = weather.current_condition[0].FeelsLikeC;
+                                const temperature = weather.current_condition[0][`temp_${userOptions.weather.preferredUnit}`];
+                                const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                                 const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
                                 self.children[0].label = weatherSymbol;
-                                self.children[1].label = `${temperature}℃ • Feels like ${feelsLike}℃`;
+                                self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • Feels like ${feelsLike}°${userOptions.weather.preferredUnit}`;
                                 self.tooltipText = weatherDesc;
                             } catch (err) {
                                 print(err);
