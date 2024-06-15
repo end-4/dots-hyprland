@@ -15,10 +15,10 @@ async function updateStuff() {
             monitor.realHeight = monitor.height;
         } else {
             monitor.realWidth = monitor.height;
-            monitor.realHeight = monitor.height;
+            monitor.realHeight = monitor.width;
         }
         if (userOptions.monitors.scaleMethod.toLowerCase == "gdk") {
-            if (monitor.transform % 2 == 0) {
+            if (monitor.transform % 2 == 0) { // does get_geometry() return rotated values?
                 monitor.width = gdkMonitor.get_geometry().width;
                 monitor.height = gdkMonitor.get_geometry().height;
             } else {
