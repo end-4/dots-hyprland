@@ -50,45 +50,22 @@ esac
 remove_bashcomments_emptylines ${DEPLISTFILE} ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
 
+# Use yay. Because paru do not support cleanbuild.
+# Also see https://wiki.hyprland.org/FAQ/#how-do-i-update
 if ! command -v yay >/dev/null 2>&1;then
-  if ! command -v paru >/dev/null 2>&1;then
-    echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
-    showfun install-yay
-    v install-yay
-    AUR_HELPER=yay
-  else
-    echo -e "\e[33m[$0]: \"yay\" not found, but \"paru\" found.\e[0m"
-    echo -e "\e[33mIt is not recommended to use \"paru\" as warned in Hyprland Wiki:\e[0m"
-    echo -e "\e[33m    \"If you are using the AUR (hyprland-git) package, you will need to cleanbuild to update the package. Paru has been problematic with updating before, use Yay.\"\e[0m"
-    echo -e "\e[33mReference: https://wiki.hyprland.org/FAQ/#how-do-i-update\e[0m"
-    if $ask;then
-      printf "Install \"yay\"?\n"
-      printf "  y = Yes, install \"yay\" for me first. (DEFAULT)\n"
-      printf "  n = No, use \"paru\" at my own risk.\n"
-      printf "  a = Abort.\n"
-      sleep 2
-      read -p "====> " p
-      case $p in
-        [Nn]) AUR_HELPER=paru;;
-        [Aa]) echo -e "\e[34mAlright, aborting...\e[0m";exit 1;;
-        *) v paru -S --needed --noconfirm yay-bin;
-           AUR_HELPER=yay;;
-      esac
-    else
-      AUR_HELPER=paru
-    fi
-  fi
-else AUR_HELPER=yay
+  echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
+  showfun install-yay
+  v install-yay
 fi
 
 # Install extra packages from dependencies.conf as declared by the user
 if (( ${#pkglist[@]} != 0 )); then
 	if $ask; then
 		# execute per element of the array $pkglist
-		for i in "${pkglist[@]}";do v $AUR_HELPER -S --needed $i;done
+		for i in "${pkglist[@]}";do v yay -S --needed $i;done
 	else
 		# execute for all elements of the array $pkglist in one line
-		v $AUR_HELPER -S --needed --noconfirm ${pkglist[*]}
+		v yay -S --needed --noconfirm ${pkglist[*]}
 	fi
 fi
 
@@ -101,7 +78,7 @@ set-explicit-to-implicit() {
 
 	echo "Attempting to set previously explicitly installed deps as implicit..."
 	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && $AUR_HELPER -D --asdeps "$i"
+		[ "$i" = "$j" ] && yay -D --asdeps "$i"
 	done; done
 
 	return 0
@@ -120,7 +97,7 @@ install-local-pkgbuild() {
 	x pushd $location
 	
 	source ./PKGBUILD
-	x $AUR_HELPER -S $installflags --asdeps "${depends[@]}"
+	x yay -S $installflags --asdeps "${depends[@]}"
 	x makepkg -si --noconfirm
 
 	x popd
@@ -142,21 +119,21 @@ case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
 	  pymycinstallflags="--clean"
-	  $ask && showfun install-local-pkgbuild || pymycinstallflags="$installflags --noconfirm"
+	  $ask && showfun install-local-pkgbuild || pymycinstallflags="$pymycinstallflags --noconfirm"
 	  v install-local-pkgbuild "./arch-packages/illogical-impulse-pymyc-aur" "$pymycinstallflags"
     ;;
 esac
 
 
-# https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
+# Why need cleanbuild? see https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
+# Why install deps by running a seperate command? see pinned comment of https://aur.archlinux.org/packages/hyprland-git
 case $SKIP_HYPR_AUR in
   true) sleep 0;;
   *)
-    if $ask;then
-      v $AUR_HELPER -S --answerclean=a hyprland-git
-    else
-      v $AUR_HELPER -S --answerclean=a --noconfirm hyprland-git
-    fi
+	  hyprland_installflags="-S --clean"
+	  $ask || hyprland_installflags="$hyprland_installflags --noconfirm"
+    v yay $hyprland_installflags --asdeps hyprutils-git hyprlang-git hyprcursor-git hyprwayland-scanner-git
+    v yay $hyprland_installflags --answerclean=a hyprland-git
     ;;
 esac
 
