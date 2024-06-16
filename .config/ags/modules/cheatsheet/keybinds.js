@@ -5,13 +5,22 @@ import Widget from "resource:///com/github/Aylur/ags/widget.js";
 import { IconTabContainer } from "../.commonwidgets/tabcontainer.js";
 const { Box, Label, Scrollable } = Widget;
 
-const HYPRLAND_KEYBIND_CONFIG_FILE = `${GLib.get_user_config_dir()}/hypr/hyprland/keybinds.conf`;
+const HYPRLAND_KEYBIND_CONFIG_FILE = userOptions.cheatsheet.keybinds.configPath ?
+    userOptions.cheatsheet.keybinds.configPath : `${GLib.get_user_config_dir()}/hypr/hyprland/keybinds.conf`;
 const KEYBIND_SECTIONS_PER_PAGE = 3;
-const keybindList = JSON.parse(
-    Utils.exec(
-        `${App.configDir}/scripts/hyprland/get_keybinds.py --path ${HYPRLAND_KEYBIND_CONFIG_FILE}`,
-    ),
-);
+const getKeybindList = () => {
+    let data = Utils.exec(`${App.configDir}/scripts/hyprland/get_keybinds.py --path ${HYPRLAND_KEYBIND_CONFIG_FILE}`);
+    if (data == "\"error\"") {
+        Utils.timeout(2000, () => Utils.execAsync(['notify-send',
+        'Update path to keybinds',
+        'Keybinds hyprland config file not found. Check your user options.',
+            '-a', 'ags',
+        ]).catch(print))
+        return { children: [] };
+    }
+    return JSON.parse(data);
+};
+const keybindList = getKeybindList();
 
 const keySubstitutions = {
     "Super": "󰖳",
