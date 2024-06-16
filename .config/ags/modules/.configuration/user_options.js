@@ -56,8 +56,10 @@ let configOptions = {
             'default': "auto",
         },
     },
-    'configPaths': {
-        'keybinds': "", //custom path to keybinds.conf for the cheatsheet
+    'cheatsheet': {
+        'keybinds': {
+            'configPath': "" // Path to hyprland keybind config file. Leave empty for default (~/.config/hypr/hyprland/keybinds.conf)
+        }
     },
     'gaming': {
         'crosshair': {
