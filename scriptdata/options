@@ -14,7 +14,6 @@ If no option is specified, run default install process.
   -f, --force               (Dangerous) Force mode without any confirm
   -c, --clean               Clean the build cache first
   -s, --skip-sysupdate      Skip \"sudo pacman -Syu\"
-      --skip-ags            Skip installing ags and its config
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-hypr-aur       Skip installing hyprland-git
       --skip-pymyc-aur      Skip installing python-materialyoucolor-git, gradience-git,
@@ -36,7 +35,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-ags,skip-fish,skip-hyprland,skip-hypr-aur,skip-pymyc-aur,skip-plasmaintg,skip-miscconf \
+       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-fish,skip-hyprland,skip-hypr-aur,skip-pymyc-aur,skip-plasmaintg,skip-miscconf \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -63,7 +62,6 @@ while true ; do
     ## Ones without parameter
     -f|--force) ask=false;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
-    --skip-ags) SKIP_AGS=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
     --skip-hypr-aur) SKIP_HYPR_AUR=true;shift;;
     --skip-pymyc-aur) SKIP_PYMYC_AUR=true;shift;;

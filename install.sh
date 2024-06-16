@@ -127,7 +127,7 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
+metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,ags,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
 
 for i in "${metapkgs[@]}"; do
 	metainstallflags="--needed"
@@ -188,19 +188,6 @@ v systemctl --user enable ydotool --now
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
-
-case $SKIP_AGS in
-  true) sleep 0;;
-  *)
-    if command -v ags >/dev/null 2>&1;then
-      echo -e "\e[33m[$0]: Command \"ags\" already exists, no need to install.\e[0m"
-      echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-      ask_ags=$ask
-    else ask_ags=true
-    fi
-    if $ask_ags;then showfun install-ags;v install-ags;fi
-    ;;
-esac
 
 if $(fc-list|grep -q Rubik); then
   echo -e "\e[33m[$0]: Font \"Rubik\" already exists, no need to install.\e[0m"
@@ -331,6 +318,9 @@ try hyprctl reload
 existed_zsh_conf=n
 grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
+existed_ags_localbin=n
+test -f /usr/local/bin/ags && existed_ags_localbin=y
+
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
 printf "\n"
@@ -351,4 +341,7 @@ case $existed_hypr_conf in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
      printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
+;;esac
+case $existed_ags_localbin in
+  y) printf "\n\e[31m[$0]: \!! Important \!! : Please delete \"/usr/local/bin/ags\" manually as soon as possible, since we\'re now using local PKGBUILD to build AGS for Arch(based) Linux distros, and \"/usr/local/bin/ags\" takes precedence over it.\e[0m\n"
 ;;esac
