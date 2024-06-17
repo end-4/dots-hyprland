@@ -84,6 +84,19 @@ let configOptions = {
         'wsNumMarginScale': 0.07,
     },
     'sidebar': {
+        'ai': {
+            'extraGptModels': {
+                'oxygen3': {
+                    'name': 'Oxygen (GPT-3.5)',
+                    'logo_name': 'ai-oxygen-symbolic',
+                    'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
+                    'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
+                    'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
+                    'key_file': 'oxygen_key.txt',
+                    'model': 'gpt-3.5-turbo',
+                },
+            }
+        },
         'image': {
             'columns': 2,
             'batchCount': 20,
@@ -95,7 +108,6 @@ let configOptions = {
                 'order': ["gemini", "gpt", "waifu", "booru"],
             }
         },
-
     },
     'search': {
         'enableFeatures': {
@@ -217,7 +229,7 @@ function overrideConfigRecursive(userOverrides, configOptions = {}, check = true
             optionsOkay = false;
         }
         else if (typeof value === 'object' && !(value instanceof Array)) {
-            if (key === "substitutions" || key === "regexSubstitutions") {
+            if (key === "substitutions" || key === "regexSubstitutions" || key === "extraGptModels") {
                 overrideConfigRecursive(value, configOptions[key], false);
             } else overrideConfigRecursive(value, configOptions[key]);
         } else {
