@@ -291,6 +291,9 @@ grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshr
 existed_ags_localbin=n
 test -f /usr/local/bin/ags && existed_ags_localbin=y
 
+existed_ags_localshare=n
+test -d /usr/local/share/com.github.Aylur.ags && existed_ags_localshare=y
+
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
 printf "\n"
@@ -314,4 +317,7 @@ case $existed_hypr_conf in
 ;;esac
 case $existed_ags_localbin in
   y) printf "\n\e[31m[$0]: \!! Important \!! : Please delete \"/usr/local/bin/ags\" manually as soon as possible, since we\'re now using local PKGBUILD to build AGS for Arch(based) Linux distros, and \"/usr/local/bin/ags\" takes precedence over it.\e[0m\n"
+;;esac
+case $existed_ags_localshare in
+  y) printf "\n\e[31m[$0]: \!! Important \!! : Please delete \"/usr/local/share/com.github.Aylur.ags\" manually as soon as possible, since we\'re now using local PKGBUILD to build AGS for Arch(based) Linux distros, and \"/usr/local/share/com.github.Aylur.ags\" may take precedence over it.\e[0m\n"
 ;;esac
