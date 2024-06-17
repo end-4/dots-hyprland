@@ -16,7 +16,7 @@ depends=(
 	wget
 	ripgrep
 	gojq
-        jq
+	jq
 	npm
 	meson
 	typescript
