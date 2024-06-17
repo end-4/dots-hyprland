@@ -229,7 +229,7 @@ function overrideConfigRecursive(userOverrides, configOptions = {}, check = true
             optionsOkay = false;
         }
         else if (typeof value === 'object' && !(value instanceof Array)) {
-            if (key === "substitutions" || key === "regexSubstitutions") {
+            if (key === "substitutions" || key === "regexSubstitutions" || key === "extraGptModels") {
                 overrideConfigRecursive(value, configOptions[key], false);
             } else overrideConfigRecursive(value, configOptions[key]);
         } else {
