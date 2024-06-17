@@ -1,4 +1,4 @@
-# Copied from AUR package maintained by kotontrion <kotontrion@tutanota.de>
+# Modified from AUR package "aylurs-gtk-shell-git" maintained by kotontrion <kotontrion@tutanota.de>
 pkgname=illogical-impulse-ags
 _pkgname=ags
 pkgver=r525.05e0f23

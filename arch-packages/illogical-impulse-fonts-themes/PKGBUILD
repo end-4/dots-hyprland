@@ -13,6 +13,7 @@ depends=(
 	ttf-jetbrains-mono-nerd
 	ttf-material-symbols-variable-git
 	ttf-space-mono-nerd
+	ttf-rubik-vf
 	fish
 	foot
 	starship

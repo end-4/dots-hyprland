@@ -161,18 +161,11 @@ esac
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
 v systemctl --user enable ydotool --now
+v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
-
-if $(fc-list|grep -q Rubik); then
-  echo -e "\e[33m[$0]: Font \"Rubik\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_Rubik=$ask
-else ask_Rubik=true
-fi
-if $ask_Rubik;then showfun install-Rubik;v install-Rubik;fi
 
 if $(fc-list|grep -q Gabarito); then
   echo -e "\e[33m[$0]: Font \"Gabarito\" already exists, no need to install.\e[0m"
