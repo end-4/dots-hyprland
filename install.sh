@@ -272,13 +272,14 @@ warn_files=()
 warn_files_tests=()
 warn_files_tests+=(/usr/local/bin/ags)
 warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
-warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}[wght].ttf)
+warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}'[wght]'.ttf)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
 warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
 warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
-for i in $warn_files_test; do
-  test -f $t && warn_files+=($t)
-  test -d $t && warn_files+=($t)
+for i in ${warn_files_tests[@]}; do
+  echo $i
+  test -f $i && warn_files+=($i)
+  test -d $i && warn_files+=($i)
 done
 
 #####################################################################################
@@ -303,6 +304,6 @@ case $existed_hypr_conf in
      printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
 
-if [[ ! -z "$warn_files" ]]; then
+if [[ ! -z "${warn_files[@]}" ]]; then
   printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation.\e[0m\n"
 fi
