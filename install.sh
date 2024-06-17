@@ -288,11 +288,16 @@ try hyprctl reload
 existed_zsh_conf=n
 grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshrc && existed_zsh_conf=y
 
-existed_ags_localbin=n
-test -f /usr/local/bin/ags && existed_ags_localbin=y
-
-existed_ags_localshare=n
-test -d /usr/local/share/com.github.Aylur.ags && existed_ags_localshare=y
+warn_files=()
+warn_files_tests=()
+warn_files_tests+=(/usr/local/bin/ags)
+warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
+warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik[wght].ttf)
+warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik-Italic[wght].ttf)
+for i in $warn_files_test; do
+  test -f $t && warn_files+=($t)
+  test -d $t && warn_files+=($t)
+done
 
 #####################################################################################
 printf "\e[36m[$0]: Finished. See the \"Import Manually\" folder and grab anything you need.\e[0m\n"
@@ -315,9 +320,7 @@ case $existed_hypr_conf in
      printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
-case $existed_ags_localbin in
-  y) printf "\n\e[31m[$0]: \!! Important \!! : Please delete \"/usr/local/bin/ags\" manually as soon as possible, since we\'re now using local PKGBUILD to build AGS for Arch(based) Linux distros, and \"/usr/local/bin/ags\" takes precedence over it.\e[0m\n"
-;;esac
-case $existed_ags_localshare in
-  y) printf "\n\e[31m[$0]: \!! Important \!! : Please delete \"/usr/local/share/com.github.Aylur.ags\" manually as soon as possible, since we\'re now using local PKGBUILD to build AGS for Arch(based) Linux distros, and \"/usr/local/share/com.github.Aylur.ags\" may take precedence over it.\e[0m\n"
-;;esac
+
+if [[ ! -z "$warn_files" ]]; then
+  printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation.\e[0m\n"
+fi
