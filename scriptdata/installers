@@ -66,6 +66,7 @@ install-Gabarito (){
   x cd $base
 }
 
+# Not for Arch(based) distro.
 install-OneUI (){
   x mkdir -p $base/cache/OneUI4-Icons
   x cd $base/cache/OneUI4-Icons

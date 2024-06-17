@@ -104,7 +104,9 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,ags,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
+metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
+metapkgs+=(./arch-packages/illogical-impulse-ags)
+metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
 
 for i in "${metapkgs[@]}"; do
 	metainstallflags="--needed"
@@ -166,14 +168,6 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
-
-if $(test -d /usr/local/share/icons/OneUI); then
-  echo -e "\e[33m[$0]: Icon pack \"OneUI\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_OneUI=$ask
-else ask_OneUI=true
-fi
-if $ask_OneUI;then showfun install-OneUI;v install-OneUI;fi
 
 if $(test -d /usr/local/share/icons/Bibata-Modern-Classic); then
   echo -e "\e[33m[$0]: Cursor theme \"Bibata-Modern-Classic\" already exists, no need to install.\e[0m"
@@ -286,6 +280,7 @@ warn_files_tests+=(/usr/local/bin/ags)
 warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}[wght].ttf)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
+warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
 for i in $warn_files_test; do
   test -f $t && warn_files+=($t)
   test -d $t && warn_files+=($t)
