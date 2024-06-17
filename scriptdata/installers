@@ -81,6 +81,7 @@ install-OneUI (){
   x cd $base
 }
 
+# Not for Arch(based) distro.
 install-bibata (){
   x mkdir -p $base/cache/bibata-cursor
   x cd $base/cache/bibata-cursor

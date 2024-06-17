@@ -8,6 +8,7 @@ url="https://github.com/end-4/OneUI4-Icons"
 license=('GPL3')
 source=("git+${url}.git")
 sha256sums=('SKIP')
+options=('!strip')
 
 pkgver(){
   cd $srcdir/$_pkgname

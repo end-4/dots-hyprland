@@ -107,6 +107,8 @@ install-local-pkgbuild() {
 metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
 metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
+[[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
+  metapkgs+=(./arch-packages/illogical-impulse-bibata-modern-classic-bin)
 
 for i in "${metapkgs[@]}"; do
 	metainstallflags="--needed"
@@ -120,7 +122,7 @@ done
 case $SKIP_PYMYC_AUR in
   true) sleep 0;;
   *)
-	  pymycinstallflags="--clean"
+	  pymycinstallflags=""
 	  $ask && showfun install-local-pkgbuild || pymycinstallflags="$pymycinstallflags --noconfirm"
 	  v install-local-pkgbuild "./arch-packages/illogical-impulse-pymyc-aur" "$pymycinstallflags"
     ;;
@@ -132,7 +134,7 @@ esac
 case $SKIP_HYPR_AUR in
   true) sleep 0;;
   *)
-	  hyprland_installflags="-S --clean"
+	  hyprland_installflags="-S"
 	  $ask || hyprland_installflags="$hyprland_installflags --noconfirm"
     v yay $hyprland_installflags --asdeps hyprutils-git hyprlang-git hyprcursor-git hyprwayland-scanner-git
     v yay $hyprland_installflags --answerclean=a hyprland-git
@@ -168,14 +170,6 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
-
-if $(test -d /usr/local/share/icons/Bibata-Modern-Classic); then
-  echo -e "\e[33m[$0]: Cursor theme \"Bibata-Modern-Classic\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_bibata=$ask
-else ask_bibata=true
-fi
-if $ask_bibata;then showfun install-bibata;v install-bibata;fi
 
 if command -v LaTeX >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: Program \"MicroTeX\" already exists, no need to install.\e[0m"
@@ -281,6 +275,7 @@ warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}[wght].ttf)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
 warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
+warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
 for i in $warn_files_test; do
   test -f $t && warn_files+=($t)
   test -d $t && warn_files+=($t)
