@@ -51,6 +51,7 @@ install-Rubik (){
   x cd $base
 }
 
+# Not for Arch(based) distro.
 install-Gabarito (){
   x mkdir -p $base/cache/Gabarito
   x cd $base/cache/Gabarito

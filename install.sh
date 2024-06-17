@@ -167,14 +167,6 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
 
-if $(fc-list|grep -q Gabarito); then
-  echo -e "\e[33m[$0]: Font \"Gabarito\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_Gabarito=$ask
-else ask_Gabarito=true
-fi
-if $ask_Gabarito;then showfun install-Gabarito;v install-Gabarito;fi
-
 if $(test -d /usr/local/share/icons/OneUI); then
   echo -e "\e[33m[$0]: Icon pack \"OneUI\" already exists, no need to install.\e[0m"
   echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
@@ -292,8 +284,8 @@ warn_files=()
 warn_files_tests=()
 warn_files_tests+=(/usr/local/bin/ags)
 warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
-warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik[wght].ttf)
-warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik-Italic[wght].ttf)
+warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}[wght].ttf)
+warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
 for i in $warn_files_test; do
   test -f $t && warn_files+=($t)
   test -d $t && warn_files+=($t)
