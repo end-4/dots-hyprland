@@ -9,6 +9,7 @@ depends=(
 	python-pywayland
 	python-psutil
 	hypridle-git
+ 	hyprutils-git
 	hyprlock-git
 	wlogout
 	wl-clipboard
