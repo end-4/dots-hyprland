@@ -102,7 +102,7 @@ const Latex = (content = '') => {
                 // You can add this line in the middle for debugging: echo "$text" > ${filePath}.tmp
                 const renderScript = `#!/usr/bin/env bash
 text=$(cat ${filePath} | sed 's/$/ \\\\\\\\/g' | sed 's/&=/=/g')
-cd "$(dirname $(command -v LaTeX))"
+cd /opt/MicroTeX
 ./LaTeX -headless -input="$text" -output=${outFilePath} -textsize=${fontSize * 1.1} -padding=0 -maxwidth=${latexViewArea.get_allocated_width() * 0.85} > /dev/null 2>&1
 sed -i 's/fill="rgb(0%, 0%, 0%)"/style="fill:#000000"/g' ${outFilePath}
 sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#000000'}"/g' ${outFilePath}

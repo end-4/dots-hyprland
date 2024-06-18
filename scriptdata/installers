@@ -105,8 +105,8 @@ install-MicroTeX (){
   x cd build
   x cmake ..
   x make -j32
-	x sudo mkdir -p /usr/local/bin
-  x sudo cp ./LaTeX /usr/local/bin/
-  x sudo cp -r ./res /usr/local/bin/
+	x sudo mkdir -p /opt/MicroTeX
+  x sudo cp ./LaTeX /opt/MicroTeX/
+  x sudo cp -r ./res /opt/MicroTeX/
   x cd $base
 }

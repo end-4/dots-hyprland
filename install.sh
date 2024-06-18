@@ -104,11 +104,13 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets})
+metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,portal,python,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
+metapkgs+=(./arch-packages/illogical-impulse-microtex-git)
 metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
 [[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
   metapkgs+=(./arch-packages/illogical-impulse-bibata-modern-classic-bin)
+try sudo pacman -R illogical-impulse-microtex
 
 for i in "${metapkgs[@]}"; do
 	metainstallflags="--needed"
@@ -170,14 +172,6 @@ v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 #####################################################################################
 printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
 sleep 1
-
-if command -v LaTeX >/dev/null 2>&1;then
-  echo -e "\e[33m[$0]: Program \"MicroTeX\" already exists, no need to install.\e[0m"
-  echo -e "\e[34mYou can reinstall it in order to update to the latest version anyway.\e[0m"
-  ask_MicroTeX=$ask
-else ask_MicroTeX=true
-fi
-if $ask_MicroTeX;then showfun install-MicroTeX;v install-MicroTeX;fi
 
 #####################################################################################
 printf "\e[36m[$0]: 3. Copying + Configuring\e[0m\n"
@@ -276,6 +270,7 @@ warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}'[wght]'.ttf)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
 warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
 warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
+warn_files_tests+=(/usr/local/bin/{LaTeX,res})
 for i in ${warn_files_tests[@]}; do
   echo $i
   test -f $i && warn_files+=($i)
@@ -305,5 +300,5 @@ case $existed_hypr_conf in
 ;;esac
 
 if [[ ! -z "${warn_files[@]}" ]]; then
-  printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation.\e[0m\n"
+  printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.\e[0m\n"
 fi
