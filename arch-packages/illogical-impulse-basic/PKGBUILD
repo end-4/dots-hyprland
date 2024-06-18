@@ -15,7 +15,6 @@ depends=(
 	rsync
 	wget
 	ripgrep
-	gojq
 	jq
 	npm
 	meson
@@ -23,4 +22,3 @@ depends=(
 	gjs
 	xdg-user-dirs
 )
-

@@ -8,7 +8,7 @@ fi
 
 
 # Get the current workspace number
-current=$(swaymsg -t get_workspaces | gojq '.[] | select(.focused==true) | .num')
+current=$(swaymsg -t get_workspaces | jq '.[] | select(.focused==true) | .num')
 
 # Check if a number was passed as an argument
 if [[ "$1" =~ ^[+-]?[0-9]+$ ]]; then
@@ -25,6 +25,6 @@ fi
 # Switch to the new workspace
 if [[ $2 == 'move' ]]; then
   swaymsg move container to workspace $new_workspace
-else 
+else
   swaymsg workspace $new_workspace
 fi

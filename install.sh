@@ -69,7 +69,7 @@ if (( ${#pkglist[@]} != 0 )); then
 	fi
 fi
 
-# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages 
+# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
 set-explicit-to-implicit() {
 	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
 	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
@@ -95,7 +95,7 @@ install-local-pkgbuild() {
 	local installflags=$2
 
 	x pushd $location
-	
+
 	source ./PKGBUILD
 	x yay -S $installflags --asdeps "${depends[@]}"
 	x makepkg -si --noconfirm
@@ -265,9 +265,13 @@ grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshr
 warn_files=()
 warn_files_tests=()
 warn_files_tests+=(/usr/local/bin/ags)
+warn_files_tests+=(/usr/local/etc/pam.d/ags)
+warn_files_tests+=(/usr/local/lib/{GUtils-1.0.typelib,Gvc-1.0.typelib,libgutils.so,libgvc.so})
 warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}'[wght]'.ttf)
+warn_files_tests+=(/usr/local/share/licenses/ttf-rubik)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
+warn_files_tests+=(/usr/local/share/licenses/ttf-gabarito)
 warn_files_tests+=(/usr/local/share/icons/OneUI{,-dark,-light})
 warn_files_tests+=(/usr/local/share/icons/Bibata-Modern-Classic)
 warn_files_tests+=(/usr/local/bin/{LaTeX,res})
