@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# TODO: This file should be provided for non-Arch(based) distros. As for Arch Linux, we should write local PKGBUILDs, which is the "right" way compared to copying files directly into /usr/local/* .
-# P.S. install-yay() should be kept.
+# This file is provided for non-Arch(based) distros.
+# As for Arch Linux, we use local PKGBUILDs or AUR packages, which is the "right" way compared to copying files directly into /usr/local/* .
+# P.S. install-yay() should be kept for Arch(based) distros.
 
 # This script depends on `functions' .
 # This is NOT a script for execution, but for loading functions, so NOT need execution permission.
@@ -95,6 +96,7 @@ install-bibata (){
   x cd $base
 }
 
+# Not for Arch(based) distro.
 install-MicroTeX (){
   x mkdir -p $base/cache/MicroTeX
   x cd $base/cache/MicroTeX
