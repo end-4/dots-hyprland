@@ -34,7 +34,7 @@ const GeminiInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (Gemini Pro)',
+                label: 'Assistant (Gemini)',
             }),
             Box({
                 className: 'spacing-h-5',
