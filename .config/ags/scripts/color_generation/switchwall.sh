@@ -6,9 +6,9 @@ CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 switch() {
 	imgpath=$1
 	read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
-	cursorposx=$(hyprctl cursorpos -j | gojq '.x' 2>/dev/null) || cursorposx=960
+	cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
 	cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
-	cursorposy=$(hyprctl cursorpos -j | gojq '.y' 2>/dev/null) || cursorposy=540
+	cursorposy=$(hyprctl cursorpos -j | jq '.y' 2>/dev/null) || cursorposy=540
 	cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
 	cursorposy_inverted=$((screensizey - cursorposy))
 
