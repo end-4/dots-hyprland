@@ -185,6 +185,19 @@ export default (props) => {
                 })
             })
         ]
+    });
+    const bottomBar = Box({
+        homogeneous: true,
+        children: [Button({
+            hpack: 'center',
+            className: 'txt-small txt sidebar-centermodules-bottombar-button',
+            onClicked: () => {
+                execAsync(['bash', '-c', userOptions.apps.network]).catch(print);
+                closeEverything();
+            },
+            label: 'More',
+            setup: setupCursorHover,
+        })],
     })
     return Box({
         ...props,
@@ -193,8 +206,7 @@ export default (props) => {
         children: [
             CurrentNetwork(),
             networkList,
-            // mainContent,
-            // status,
+            bottomBar,
         ]
     });
 }

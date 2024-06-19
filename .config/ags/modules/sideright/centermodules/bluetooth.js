@@ -135,7 +135,7 @@ export default (props) => {
             hpack: 'center',
             className: 'txt-small txt sidebar-centermodules-bottombar-button',
             onClicked: () => {
-                execAsync(userOptions.apps.bluetooth).catch(print);
+                execAsync(['bash', '-c', userOptions.apps.bluetooth]).catch(print);
                 closeEverything();
             },
             label: 'More',

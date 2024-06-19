@@ -34,7 +34,7 @@ let configOptions = {
         'bluetooth': "blueberry",
         'imageViewer': "loupe",
         'network': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
-        'settings': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
+        'settings': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center",
         'taskManager': "gnome-usage",
         'terminal': "foot", // This is only for shell actions
     },
