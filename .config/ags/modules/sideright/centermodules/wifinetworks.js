@@ -1,7 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Network from "resource:///com/github/Aylur/ags/service/network.js";
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Entry, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
+const { Box, Button, Entry, Icon, Label, Revealer, Scrollable, Slider, Stack, Overlay } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
@@ -161,8 +161,9 @@ export default (props) => {
     const networkList = Box({
         vertical: true,
         className: 'spacing-v-10',
-        children: [
-            Scrollable({
+        children: [Overlay({
+            passThrough: true,
+            child: Scrollable({
                 vexpand: true,
                 child: Box({
                     attribute: {
@@ -180,11 +181,14 @@ export default (props) => {
                         },
                     },
                     vertical: true,
-                    className: 'spacing-v-5',
+                    className: 'spacing-v-5 margin-bottom-15',
                     setup: (self) => self.hook(Network, self.attribute.updateNetworks),
                 })
-            })
-        ]
+            }),
+            overlays: [Box({
+                className: 'sidebar-centermodules-scrollgradient-bottom'
+            })]
+        })]
     });
     const bottomBar = Box({
         homogeneous: true,

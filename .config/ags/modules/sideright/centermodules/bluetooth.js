@@ -1,7 +1,7 @@
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Icon, Label, Scrollable, Slider, Stack } = Widget;
+const { Box, Button, Icon, Label, Scrollable, Slider, Stack, Overlay } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
@@ -103,22 +103,28 @@ export default (props) => {
             ]
         })]
     });
-    const deviceList = Scrollable({
-        vexpand: true,
-        child: Box({
-            attribute: {
-                'updateDevices': (self) => {
-                    const devices = Bluetooth.devices;
-                    self.children = devices.map(d => BluetoothDevice(d));
+    const deviceList = Overlay({
+        passThrough: true,
+        child: Scrollable({
+            vexpand: true,
+            child: Box({
+                attribute: {
+                    'updateDevices': (self) => {
+                        const devices = Bluetooth.devices;
+                        self.children = devices.map(d => BluetoothDevice(d));
+                    },
                 },
-            },
-            vertical: true,
-            className: 'spacing-v-5',
-            setup: (self) => self
-                .hook(Bluetooth, self.attribute.updateDevices, 'device-added')
-                .hook(Bluetooth, self.attribute.updateDevices, 'device-removed')
-            ,
-        })
+                vertical: true,
+                className: 'spacing-v-5 margin-bottom-15',
+                setup: (self) => self
+                    .hook(Bluetooth, self.attribute.updateDevices, 'device-added')
+                    .hook(Bluetooth, self.attribute.updateDevices, 'device-removed')
+                ,
+            })
+        }),
+        overlays: [Box({
+            className: 'sidebar-centermodules-scrollgradient-bottom'
+        })]
     });
     const mainContent = Stack({
         children: {

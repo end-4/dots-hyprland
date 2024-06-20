@@ -993,3 +993,7 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-centermodules-bottombar-button:active {
     background-color: $layer2Active;
 }
+
+.sidebar-centermodules-scrollgradient-bottom {
+    background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
+}
