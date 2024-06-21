@@ -15,8 +15,9 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Wifi | Right-click to configure',
     onClicked: () => Network.toggleWifi(),
-    onSecondaryClick: () => {
-        sidebarOptionsStack.focusName('Wifi networks')
+    onSecondaryClickRelease: () => {
+        execAsync(['bash', '-c', `${userOptions.apps.network}`]).catch(print);
+        closeEverything();
     },
     child: NetworkIndicator(),
     setup: (self) => {
