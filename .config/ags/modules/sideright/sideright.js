@@ -75,14 +75,14 @@ const timeRow = Box({
                         return execAsync(['bash', '-c', 'uptime']).then(output => {
                         	const uptimeRegex = /up\s+((\d+)\s+days?,\s+)?((\d+):(\d+)),/;
                         	const matches = uptimeRegex.exec(output);
-            
+
                             if (matches) {
                             	const days = matches[2] ? parseInt(matches[2]) : 0;
                                 const hours = matches[4] ? parseInt(matches[4]) : 0;
                                 const minutes = matches[5] ? parseInt(matches[5]) : 0;
-            
+
                                 let formattedUptime = '';
-            
+
                                 if (days > 0) {
                                 	formattedUptime += `${days} d `;
                                 }
@@ -90,7 +90,7 @@ const timeRow = Box({
                                 	formattedUptime += `${hours} h `;
                                 }
                                 formattedUptime += `${minutes} m`;
-            
+
                                 return formattedUptime;
                             } else {
                             	throw new Error('Failed to parse uptime output');
@@ -98,7 +98,7 @@ const timeRow = Box({
                         });
                     }
                 };
-            
+
                 self.poll(5000, label => {
                 	getUptime().then(upTimeString => {
                     	label.label = `Uptime: ${upTimeString}`;

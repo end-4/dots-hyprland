@@ -217,6 +217,7 @@ let configOptions = {
             },
             'nextTab': "Ctrl+Page_Down",
             'prevTab': "Ctrl+Page_Up",
+            'cycleTab': "Ctrl+Tab",
         }
     },
 }
