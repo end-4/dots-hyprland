@@ -26,7 +26,7 @@ export const getDistroIcon = () => {
     if(distroID == 'endeavouros') return 'endeavouros-symbolic';
     if(distroID == 'cachyos') return 'cachyos-symbolic';
     // Funny flake
-    if(distroID == 'nixos') return 'nixos-symbolic';
+    if(distroID == 'nixos') return 'nix-snowflake-symbolic';
     // Cool thing
     if(distroID == 'fedora') return 'fedora-symbolic';
     // Debians
