@@ -195,7 +195,7 @@ def get_binds_recursive(current_content, scope):
             if(keybind != None):
                 current_content["keybinds"].append(keybind)
 
-        elif line == "" or line.startswith("$") or line.startswith("#"): # Comment, ignore
+        elif line == "" or not line.lstrip().startswith("bind"): # Comment, ignore
             pass
 
         else: # Normal keybind
