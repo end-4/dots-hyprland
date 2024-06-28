@@ -125,7 +125,7 @@ for (let i = 0; i < service.length; i++) {
                 service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
                 break;
             case "auto":
-                if (monitorSn in ddcSnBus)
+                if (monitorSn in ddcSnBus && !!exec(`bash -c 'command -v ddcutil'`))
                     service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
                 else
                     service[i] = new BrightnessCtlService();
