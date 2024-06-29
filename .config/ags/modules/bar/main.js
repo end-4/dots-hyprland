@@ -2,6 +2,7 @@ const { Gtk } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 
+import { monitors } from '../.commondata/hyprlanddata.js';
 import WindowTitle from "./normal/spaceleft.js";
 import Indicators from "./normal/spaceright.js";
 import Music from "./normal/music.js";
@@ -100,11 +101,18 @@ export const Bar = async (monitor = 0) => {
                 'focus': focusedBarContent,
                 'nothing': nothingContent,
             },
-            setup: (self) => self.hook(currentShellMode, (self) => {
-                self.shown = currentShellMode.value;
-
-            })
-        }),
+            setup: (self) => self
+                .hook(currentShellMode, (self) => {
+                    self.shown = currentShellMode.value;
+                })
+                .on("size-allocate", (self) => {
+                    if (self.children[currentShellMode.value]?.get_allocated_width() > monitors[monitor].width) {
+                        self.children[currentShellMode.value].centerWidget.children[0].visible = false;
+                        self.children[currentShellMode.value].centerWidget.children[2].visible = false;
+                    }
+                })
+            ,
+        })
     });
 }
 
