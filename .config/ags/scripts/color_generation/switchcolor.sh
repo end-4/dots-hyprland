@@ -22,9 +22,7 @@ sed -i "1s/.*/$color/" "$STATE_DIR/user/color.txt"
 # Use Gradience?
 colormodelines=$(wc -l "$COLORMODE_FILE_DIR"  | awk '{print $1}' )
 if [ "$2" == "--no-gradience" ]; then
-  echo 'AAAAAAAAAAAAAAAAA' "$colormodelines"
   if [ "$colormodelines" == "3" ]; then
-  echo "$COLORMODE_FILE_DIR"
     echo 'nogradience' >> "$COLORMODE_FILE_DIR"
   else
     sed -i "4s/.*/nogradience/" "$COLORMODE_FILE_DIR"
