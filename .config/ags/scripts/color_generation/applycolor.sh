@@ -122,8 +122,22 @@ apply_hyprlock() {
     cp "$CACHE_DIR"/user/generated/hypr/hyprlock.conf "$XDG_CONFIG_HOME"/hypr/hyprlock.conf
 }
 
-apply_gtk() { # Using gradience-cli
+apply_lightdark() {
     lightdark=$(get_light_dark)
+    if [ "$lightdark" = "light" ]; then
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+    else
+        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    fi
+}
+
+apply_gtk() { # Using gradience-cli
+    usegradience=$(sed -n '4p' "$STATE_DIR/user/colormode.txt")
+    if [[ "$usegradience" = "nogradience" ]]; then
+        rm "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
+        rm "$XDG_CONFIG_HOME/gtk-4.0/gtk.css"
+        return
+    fi
 
     # Copy template
     mkdir -p "$CACHE_DIR"/user/generated/gradience
@@ -137,15 +151,13 @@ apply_gtk() { # Using gradience-cli
     mkdir -p "$XDG_CONFIG_HOME/presets" # create gradience presets folder
     gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both
 
-    # Set light/dark preference
     # And set GTK theme manually as Gradience defaults to light adw-gtk3
     # (which is unreadable when broken when you use dark mode)
+    lightdark=$(get_light_dark)
     if [ "$lightdark" = "light" ]; then
         gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
     else
         gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
-        gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
     fi
 }
 
@@ -154,25 +166,17 @@ apply_ags() {
     ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
 }
 
-if [[ "$1" = "--bad-apple" ]]; then
-    lightdark=$(get_light_dark)
-    cp scripts/color_generation/specials/_material_badapple"${lightdark}".scss $STATE_DIR/scss/_material.scss
-    colornames=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f1)
-    colorstrings=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-else
-    colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
-    colorstrings=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-fi
+
+colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
+colorstrings=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+IFS=$'\n'
+colorlist=( $colornames ) # Array of color names
+colorvalues=( $colorstrings ) # Array of color values
 
 apply_ags &
 apply_hyprland &
 apply_hyprlock &
+apply_lightdark &
 apply_gtk &
 apply_fuzzel &
 apply_term &
