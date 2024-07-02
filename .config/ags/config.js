@@ -22,6 +22,7 @@ import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
 import { COMPILED_STYLE_DIR } from './init.js';
+import { Wallpaperpicker } from './modules/wallpaperpicker/main.js';
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
 function forMonitors(widget) {
@@ -47,6 +48,8 @@ const Windows = () => [
     forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
+    forMonitors((id) => Wallpaperpicker(id)),
+    // forMonitors(Dock),
     forMonitors(Osk),
     forMonitors(Session),
     ...(userOptions.dock.enabled ? [forMonitors(Dock)] : []),

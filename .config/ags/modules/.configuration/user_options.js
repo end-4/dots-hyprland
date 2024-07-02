@@ -131,6 +131,9 @@ let configOptions = {
         'dateInterval': 5000,
         'dateFormat': "%d/%m", // On notif time
     },
+    'wallpaper': {
+        'path': "$HOME/Pictures/wallpapers",
+    },
     'weather': {
         'city': "",
         'preferredUnit': "C", // Either C or F
