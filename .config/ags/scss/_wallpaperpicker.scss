@@ -1,0 +1,29 @@
+
+.wallpapers {
+    background-color: transparent;
+    border-radius: 6px;
+}
+
+.wallpaperContainer {
+	margin: 2px 2px;
+	background-color: $background;
+	border-radius: 1rem;
+}
+
+.wallpaperButton {
+	margin: 10px 20px;
+    padding: 0.3rem 2rem;
+    border: 0.2rem;
+	border-radius: 5rem;
+    border-style: solid;
+    border-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.wallpaperButton:hover {
+    border-color: $onBackground;
+}
+
+.wallpaperImage {
+    font-size: 14px;
+}

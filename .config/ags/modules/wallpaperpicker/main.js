@@ -14,7 +14,6 @@ function setWallpaper(path) {
 
 function closeWindow() {
     App.closeWindow('wallpaper')
-    files.value = ""
 }
 
 //function OpenWallpaper() {
@@ -29,25 +28,27 @@ function closeWindow() {
 //}
 
 export const Wallpaperpicker = (monitor = 0) => {
-    let files = Utils.exec(`find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$|.gif$'`);
+    let files = Utils.exec(`bash -c "find $HOME/Pictures/wallpapers -type f | head -n 20 | grep -E '.jpg$|.jpeg$|.png$|.gif$'"`);
     return Widget.Window({
-        name: 'wallpaper',
+        name: 'wallpaperpicker',
         class_name: "wallpapers",
         monitor,
-        anchor: ["bottom", "top", "left"],
-        exclusivity: "exclusive",
+        anchor: ["top", "left", "right"],
+        // anchor: ["left", "top", "bottom"],
+        exclusivity: "normal",
         layer: "overlay",
-        margins: [12, 0, 12, 12],
-        visible: false,
+        margins: [2],
+        visible: true,
         child: Widget.Scrollable({
+            // vscroll: "always",
+            // hscroll: "never",
             vscroll: "never",
             hscroll: "always",
             child: Widget.Box({
+                // vertical: true,
                 class_name: 'wallpaperContainer',
-                vertical: false,
-                children: files.bind().as(x => x.split("\n")
-                    .filter(x => x !== "")
-                    .map(path => ImagesList(path)))
+                children: files.split("\n").filter(x => x !== "")
+                    .map(path => ImagesList(path))
             }),
         }),
     })
@@ -62,11 +63,10 @@ function ImagesList(path) {
         },
         child: Widget.Icon({
             class_name: 'wallpaperImage',
-            size: 100,
+            size: 180,
             icon: `${path}`
         })
     })
 }
 
-export { Wallpaperpicker  }
 //export { OpenWallpaper, Wallpaper }
