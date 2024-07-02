@@ -17,6 +17,7 @@ switch() {
 		exit 0
 	fi
 
+	#notify-send -t 2000 "cursorposx: $cursorposx"
 	# ags run-js "wallpaper.set('')"
 	# sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
 	swww img "$imgpath" --transition-step 100 --transition-fps 120 \
