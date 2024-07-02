@@ -19,23 +19,16 @@ function updateFiles() {
 //    })
 //}
 
-function setWallpaper(path) {
-    Utils.execAsync(['bash', '-c', `sh ${scriptDir} ${path}`]).catch(print);
-}
-
-function closeWindow() {
-    App.closeWindow('wallpaperpicker')
-}
-
-export const Wallpaperpicker = (monitor = 0) => {
+export default (id) => {
     let files = Utils.exec(`bash -c "find $HOME/Pictures/wallpapers -type f | head -n 20 | grep -E '.jpg$|.jpeg$|.png$|.gif$'"`);
     return Widget.Window({
-        name: 'wallpaperpicker',
+        name: `wallpaperpicker${id}`,
         class_name: "wallpapers",
-        monitor,
+        monitor: id,
         anchor: ["top", "left", "right"],
         exclusivity: "normal",
         layer: "overlay",
+        keymode: "on-demand",
         margins: [7],
         visible: false,
         child: Widget.Scrollable({
@@ -45,20 +38,20 @@ export const Wallpaperpicker = (monitor = 0) => {
             child: Widget.Box({
                 class_name: 'wallpaperContainer',
                 children: files.split("\n").filter(x => x !== "")
-                    .map(path => ImagesList(path))
+                    .map(path => ImagesList(path, id))
             }),
         }),
         setup: (self) => {
-            self.keybind("Escape", () => closeWindow());
+            self.keybind("Escape", () => closeEverything());
         },
     })
 }
 
-function ImagesList(path) {
+function ImagesList(path, id) {
     return Widget.Button({
         class_name: 'wallpaperButton',
         onPrimaryClick: () => {
-            closeWindow();
+            App.closeWindow(`wallpaperpicker${id}`);
             Utils.execAsync(['bash', '-c', `sh ${scriptDir} ${path}`]).catch(print);
         },
         child: Widget.Icon({

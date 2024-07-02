@@ -21,7 +21,7 @@ globalThis['currentMode'] = currentShellMode;
 globalThis['cycleMode'] = () => {
     if (currentShellMode.value === 'normal') {
         currentShellMode.value = 'focus';
-    } 
+    }
     else if (currentShellMode.value === 'focus') {
         currentShellMode.value = 'nothing';
     }
@@ -53,6 +53,7 @@ globalThis['closeEverything'] = () => {
     for (let i = 0; i < numMonitors; i++) {
         App.closeWindow(`cheatsheet${i}`);
         App.closeWindow(`session${i}`);
+        App.closeWindow(`wallpaperpicker${i}`);
     }
     App.closeWindow('sideleft');
     App.closeWindow('sideright');
