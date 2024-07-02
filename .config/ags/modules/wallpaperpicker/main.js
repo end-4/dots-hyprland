@@ -20,7 +20,7 @@ function updateFiles() {
 //}
 
 export default (id) => {
-    let files = Utils.exec(`bash -c "find $HOME/Pictures/wallpapers -type f | head -n 20 | grep -E '.jpg$|.jpeg$|.png$|.gif$'"`);
+    let files = Utils.exec(`bash -c "find $HOME/Pictures/wallpapers -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
     return Widget.Window({
         name: `wallpaperpicker${id}`,
         class_name: "wallpapers",
@@ -33,7 +33,7 @@ export default (id) => {
         visible: false,
         child: Widget.Scrollable({
             vscroll: "never",
-            hscroll: "alyways",
+            hscroll: "always",
             class_name: 'wallpaperScroll',
             child: Widget.Box({
                 class_name: 'wallpaperContainer',
@@ -48,6 +48,12 @@ export default (id) => {
 }
 
 function ImagesList(path, id) {
+    let gif = path.endsWith(".gif");
+    let thumbnail = `${path.substr(path.lastIndexOf(".") + 1, path.length)}`;
+    // thumbnail = thumbnail.substr(0, thumbnail.lastIndexOf(".") - 1);
+    // console.log(thumbnail);
+    // thumbnail += `\x00icon\x1f${path}`;
+    // console.log(thumbnail);
     return Widget.Button({
         class_name: 'wallpaperButton',
         onPrimaryClick: () => {
@@ -57,7 +63,7 @@ function ImagesList(path, id) {
         child: Widget.Icon({
             class_name: 'wallpaperImage',
             size: 180,
-            icon: `${path}`
+            icon: (gif ? thumbnail : path),
         })
     })
 }
