@@ -133,6 +133,10 @@ let configOptions = {
     },
     'wallpaper': {
         'path': "$HOME/Pictures/wallpapers",
+        'autoChange': true,
+        'interval': 1800, // In seconds
+        'smart': true, // messes up dark mode
+        'popup': true,
     },
     'weather': {
         'city': "",

@@ -20,7 +20,7 @@ function updateFiles() {
 //}
 
 export default (id) => {
-    let files = Utils.exec(`bash -c "find $HOME/Pictures/wallpapers -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
+    let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
     return Widget.Window({
         name: `wallpaperpicker${id}`,
         class_name: "wallpapers",
@@ -58,7 +58,7 @@ function ImagesList(path, id) {
         class_name: 'wallpaperButton',
         onPrimaryClick: () => {
             App.closeWindow(`wallpaperpicker${id}`);
-            Utils.execAsync(['bash', '-c', `sh ${scriptDir} ${path}`]).catch(print);
+            setWallpaper(path);
         },
         child: Widget.Icon({
             class_name: 'wallpaperImage',
@@ -66,4 +66,16 @@ function ImagesList(path, id) {
             icon: (gif ? thumbnail : path),
         })
     })
+}
+
+function setWallpaper(path) {
+    let smartflag = userOptions.wallpaper.smart ? '--smart' : '';
+    let popupflag = userOptions.wallpaper.popup ? '' : '--no-popup';
+    console.log(`sh ${scriptDir} ${path} ${smartflag} ${popupflag}`);
+    Utils.execAsync(['bash', '-c', `sh ${scriptDir} ${path} ${smartflag} ${popupflag}`]).catch(print);
+}
+
+globalThis['randomWallpaper'] = () => {
+    let path= Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$' | shuf -n 1"`);
+    setWallpaper(path);
 }
