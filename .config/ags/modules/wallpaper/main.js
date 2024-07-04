@@ -72,10 +72,10 @@ function setWallpaper(path) {
     let smartflag = userOptions.wallpaper.smart ? '--smart' : '';
     let popupflag = userOptions.wallpaper.popup ? '' : '--no-popup';
     console.log(`sh ${scriptDir} ${path} ${smartflag} ${popupflag}`);
-    Utils.execAsync(['bash', '-c', `sh ${scriptDir} ${path} ${smartflag} ${popupflag}`]).catch(print);
+    Utils.execAsync(['bash', '-c', `sh "${scriptDir}" "${path}" "${smartflag}" "${popupflag}"`]).catch(print);
 }
 
 globalThis['randomWallpaper'] = () => {
-    let path= Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$' | shuf -n 1"`);
+    let path= Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$|.svg' | shuf -n 1"`);
     setWallpaper(path);
 }
