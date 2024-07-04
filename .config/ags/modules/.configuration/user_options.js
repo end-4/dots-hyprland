@@ -132,11 +132,11 @@ let configOptions = {
         'dateFormat': "%d/%m", // On notif time
     },
     'wallpaper': {
-        'path': "$HOME/Pictures/wallpapers",
-        'autoChange': true,
+        'path': "$HOME/Pictures/wallpapers", // wallpaper folder
+        'autoChange': true, // Changes wallpaper regularly
         'interval': 1800, // In seconds
-        'smart': true, // messes up dark mode
-        'popup': true,
+        'smart': true, // sets dark / light mode based on wallpaper
+        'popup': true, // Shows a color preview when changing wallpaper
     },
     'weather': {
         'city': "",
