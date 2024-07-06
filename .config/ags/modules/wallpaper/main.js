@@ -80,7 +80,18 @@ export default (id) => {
         /* setup: (self) => {
             self.keybind("Escape", () => closeEverything());
         }, */
+        setup: (self) => {
+            autoWallpaper();
+        },
     })
+}
+
+export function autoWallpaper() {
+    if (userOptions.wallpaper.autoChange) {
+        Utils.interval(userOptions.wallpaper.interval * 1000, () => {
+            randomWallpaper();
+        })
+    }
 }
 
 function ImagesList(path, id) {
