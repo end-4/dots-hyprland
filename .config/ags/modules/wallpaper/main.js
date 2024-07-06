@@ -1,3 +1,8 @@
+import PopupWindow from '../.widgethacks/popupwindow.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const { Box, Window } = Widget;
+
 //const b = Variable(false);
 const dir = userOptions.wallpaper.path;
 const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
@@ -19,31 +24,62 @@ function updateFiles() {
 //    })
 //}
 
+// const PopupWindow = ({
+//     name,
+//     child,
+//     showClassName = "",
+//     hideClassName = "",
+//     ...props
+// }) => {
+//     return Window({
+//         name,
+//         visible: false,
+//         layer: 'overlay',
+//         ...props,
+
+//         // child: child,
+//         child: Box({
+//             setup: (self) => {
+//                 self.keybind("Escape", () => closeEverything());
+//                 if (showClassName != "" && hideClassName !== "") {
+//                     self.hook(App, (self, currentName, visible) => {
+//                         if (currentName === name) {
+//                             self.toggleClassName(hideClassName, !visible);
+//                         }
+//                     });
+
+//                     if (showClassName !== "" && hideClassName !== "")
+//                         self.className = `${showClassName} ${hideClassName}`;
+//                 }
+//             },
+//             child: child,
+//         }),
+//     });
+// }
+
 export default (id) => {
-    let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
-    return Widget.Window({
+    let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$'"`);//|.jpg$|.jpeg$|.png$'"`);
+    return PopupWindow({
         name: `wallpaperpicker${id}`,
-        class_name: "wallpapers",
+        class_name: "wallpaper",
         monitor: id,
         anchor: ["top", "left", "right"],
-        exclusivity: "normal",
+        // anchor: ["left", "top", "bottom"],
         layer: "overlay",
         keymode: "on-demand",
         margins: [7],
-        visible: false,
         child: Widget.Scrollable({
-            vscroll: "never",
-            hscroll: "always",
             class_name: 'wallpaperScroll',
+            hscroll: "never",
+            vscroll: "always",
             child: Widget.Box({
                 class_name: 'wallpaperContainer',
-                children: files.split("\n").filter(x => x !== "")
-                    .map(path => ImagesList(path, id))
+                children: files.split("\n").map(path => ImagesList(path, id))
             }),
         }),
-        setup: (self) => {
+        /* setup: (self) => {
             self.keybind("Escape", () => closeEverything());
-        },
+        }, */
     })
 }
 
@@ -60,11 +96,11 @@ function ImagesList(path, id) {
             App.closeWindow(`wallpaperpicker${id}`);
             setWallpaper(path);
         },
-        child: Widget.Icon({
-            class_name: 'wallpaperImage',
-            size: 180,
-            icon: (gif ? thumbnail : path),
-        })
+        setup : (self) => {
+            Utils.idle(() => {
+                self.css = `background-image: url("${path}");`;
+            });
+        },
     })
 }
 

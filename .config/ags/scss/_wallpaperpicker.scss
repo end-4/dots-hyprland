@@ -1,7 +1,6 @@
-
-.wallpapers {
-    background-color: $background;
-    border-radius: 1.5rem;
+.wallpaper {
+    @include large-rounding;
+    background-color: $layer0;
 }
 
 .wallpaperScroll {
@@ -13,19 +12,22 @@
 }
 
 .wallpaperButton {
-	margin: 0rem 0rem;
-	padding: 0rem 0.7rem;
+    background-color: $primaryContainer;
+	margin: 0.5rem;
+	// padding: 0.2rem;
     border: 0.2rem;
-	border-radius: 0.4rem;
+	border-radius: 2rem;
     border-style: solid;
-    border-color: transparent;
+    border-color: $primaryContainer;
     transition: all 0.3s ease;
+
+    min-height: 9rem;
+    min-width: 16rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .wallpaperButton:hover {
     border-color: $primary;
-}
-
-.wallpaperImage {
-    font-size: 14px;
 }
