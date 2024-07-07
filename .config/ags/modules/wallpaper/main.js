@@ -57,7 +57,7 @@ function updateFiles() {
 //     });
 // }
 
-export default (id) => {
+export const WallpaperPicker = (id) => {
     let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$'"`);//|.jpg$|.jpeg$|.png$'"`);
     return PopupWindow({
         name: `wallpaperpicker${id}`,
@@ -70,8 +70,9 @@ export default (id) => {
         margins: [7],
         child: Widget.Scrollable({
             class_name: 'wallpaperScroll',
-            hscroll: "never",
-            vscroll: "always",
+            hexpand: true,
+            hscroll: "always",
+            vscroll: "never",
             child: Widget.Box({
                 class_name: 'wallpaperContainer',
                 children: files.split("\n").map(path => ImagesList(path, id))
@@ -80,18 +81,7 @@ export default (id) => {
         /* setup: (self) => {
             self.keybind("Escape", () => closeEverything());
         }, */
-        setup: (self) => {
-            autoWallpaper();
-        },
     })
-}
-
-export function autoWallpaper() {
-    if (userOptions.wallpaper.autoChange) {
-        Utils.interval(userOptions.wallpaper.interval * 1000, () => {
-            randomWallpaper();
-        })
-    }
 }
 
 function ImagesList(path, id) {
@@ -113,6 +103,14 @@ function ImagesList(path, id) {
             });
         },
     })
+}
+
+export function autoWallpaper() {
+    if (userOptions.wallpaper.autoChange) {
+        Utils.interval(userOptions.wallpaper.interval * 1000, () => {
+            randomWallpaper();
+        })
+    }
 }
 
 function setWallpaper(path) {

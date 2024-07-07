@@ -21,7 +21,7 @@ import Overview from './modules/overview/main.js';
 import Session from './modules/session/main.js';
 import SideLeft from './modules/sideleft/main.js';
 import SideRight from './modules/sideright/main.js';
-import Wallpaperpicker from './modules/wallpaper/main.js';
+import { WallpaperPicker, autoWallpaper } from './modules/wallpaper/main.js';
 import { COMPILED_STYLE_DIR } from './init.js';
 
 const range = (length, start = 1) => Array.from({ length }, (_, i) => i + start);
@@ -36,9 +36,11 @@ function forMonitorsAsync(widget) {
 
 // Start stuff
 handleStyles(true);
+autoWallpaper();
 startAutoDarkModeService().catch(print);
 firstRunWelcome().catch(print);
-startBatteryWarningService().catch(print)
+startBatteryWarningService().catch(print);
+
 
 const Windows = () => [
     // forMonitors(DesktopBackground),
@@ -48,7 +50,7 @@ const Windows = () => [
     forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
-    forMonitors(Wallpaperpicker),
+    forMonitors(WallpaperPicker),
     // forMonitors(Dock),
     forMonitors(Osk),
     forMonitors(Session),
