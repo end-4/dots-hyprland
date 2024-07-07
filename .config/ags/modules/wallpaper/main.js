@@ -33,17 +33,27 @@ export const WallpaperPicker = (id) => {
 }
 
 function ImagesList(path, id) {
-    return Widget.Button({
-        class_name: 'wallpaperButton',
-        onPrimaryClick: () => {
-            App.closeWindow(`wallpaperpicker${id}`);
-            setWallpaper(path);
-        },
-        setup : (self) => {
-            Utils.idle(() => {
-                self.css = `background-image: url("${path}");`;
-            });
-        },
+    let basename = path.split("/").pop();
+    return Widget.Box({
+        vertical: true,
+        children: [
+            Widget.Button({
+                class_name: 'wallpaperButton',
+                onPrimaryClick: () => {
+                    App.closeWindow(`wallpaperpicker${id}`);
+                    setWallpaper(path);
+                },
+                setup : (self) => {
+                    Utils.idle(() => {
+                        self.css = `background-image: url("${path}");`;
+                    });
+                },
+            }),
+            Widget.Label({
+                label: `${basename.length < 30 ? basename : basename.substr(0, 25) +
+                    " (...) " + basename.substr(basename.lastIndexOf("."), basename.length)}`,
+            }),
+        ],
     })
 }
 
