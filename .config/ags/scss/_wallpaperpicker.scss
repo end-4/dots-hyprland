@@ -8,7 +8,7 @@
 }
 
 .wallpaperContainer {
-	padding: 0.3rem;
+	padding: 0.3rem 0.3rem 0.6rem 0.3rem;
 }
 
 .wallpaperButton {
@@ -23,11 +23,13 @@
 
     min-height: 9rem;
     min-width: 16rem;
-    background-size: cover;
+    background-size: 100%;
+    // background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .wallpaperButton:hover {
-    border-color: $primary;
+	border-color: $primary;
+    background-size: 115%;
 }
