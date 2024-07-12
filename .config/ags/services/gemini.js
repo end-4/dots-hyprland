@@ -147,7 +147,7 @@ class GeminiService extends Service {
     _usingHistory = userOptions.ai.useHistory;
     _key = '';
     _requestCount = 0;
-    _safe = true;
+    _safe = userOptions.ai.safety;
     _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
     _modelIndex = 0;
