@@ -230,7 +230,7 @@ export default (overviewMonitor = 0) => {
         const widget = Widget.Box({
             className: 'overview-tasks-workspace',
             vpack: 'center',
-            // Adding 1px to minimum width/height to accomodate 1px padding space for contents:
+            // Rounding and adding 1px to minimum width/height to work around scaling inaccuracy:
             css: `
                 min-width: ${1 + Math.round(monitors[overviewMonitor].width * userOptions.overview.scale)}px;
                 min-height: ${1 + Math.round(monitors[overviewMonitor].height * userOptions.overview.scale)}px;
