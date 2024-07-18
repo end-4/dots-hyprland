@@ -12,6 +12,7 @@ const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 
 export const WallpaperPicker = (id) => {
     let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$ '"`);
+    console.log(Object.keys(Gdk));
     return PopupWindow({
         name: `wallpaperpicker${id}`,
         class_name: "wallpaper",
@@ -34,33 +35,52 @@ export const WallpaperPicker = (id) => {
 }
 
 function ImagesList(path, id) {
-    // console.log(Object.keys(Gdk));
     let basename = path.split("/").pop();
-    let image;
-    if (basename.lastIndexOf(".") + 1 == "gif") {
-        let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
-        image = Gtk.Image.new_from_animation(animation);
-    } else {
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
-        image = Gtk.Image.new_from_pixbuf(pixbuf);
-    }
-    console.log("Image: ", image);
+    let image;// = Gtk.Image.new();
+    let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 150, 150, false);
+    // image = Utils.idle(() => {
+        // if (basename.lastIndexOf(".") + 1 == "gif") {
+        //     let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
+        //     image = Gtk.Image.new_from_animation(animation);
+        // } else {
+            // image = Gtk.Image.new_from_pixbuf(pixbuf);
+        // }
+    // });
+    // Gtk.Widget.set_name(image, 'wallpaperImage');
+    // console.log("Image: ", image);
     return Widget.Box({
         vertical: true,
         children: [
             Widget.Button({
                 class_name: 'wallpaperButton',
-                child: Widget.Box({
-                    child: image,
-                     //Widget.Label({label: "No Image",}),
-                    // css: 'max-width: 16rem, max-height: 9rem;',
+                child: Widget.Icon({
+                    class_name: 'wallpaperIcon',
+                    icon: pixbuf,
+                    size: 150,
                 }),
+                // child: Widget.Box({
+                //     child: image,
+                //      //Widget.Label({label: "No Image",}),
+                //     // css: 'max-width: 16rem, max-height: 9rem;',
+                // }),
                 onPrimaryClick: () => {
                     App.closeWindow(`wallpaperpicker${id}`);
                     setWallpaper(path);
                 },
                 // setup : (self) => {
-                //     let image = gtk_image_new_from_file(path);
+                //     let test = self;
+                //     Utils.idle((test) => {
+                //         if (basename.lastIndexOf(".") + 1 == "gif") {
+                //             let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
+                //             let image = Gtk.Image.new_from_animation(animation);
+                //         } else {
+                //             let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+                //             // Gtk.Image.set_from_pixbuf(image, pixbuf);
+                //             let image = Gtk.Image.new_from_pixbuf(pixbuf);
+                //         }
+                //         self.child = image;
+                //     });
+                //     // let image = gtk_image_new_from_file(path);
                 //     // Utils.idle(() => {
                 //     //     self.css = `background-image: url("${path}");`;
                 //     // });
