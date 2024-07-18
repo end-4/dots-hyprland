@@ -12,7 +12,7 @@ const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 
 export const WallpaperPicker = (id) => {
     let files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$ '"`);
-    console.log(Object.keys(Gdk));
+    // console.log(Object.keys(Gdk));
     return PopupWindow({
         name: `wallpaperpicker${id}`,
         class_name: "wallpaper",
@@ -36,33 +36,34 @@ export const WallpaperPicker = (id) => {
 
 function ImagesList(path, id) {
     let basename = path.split("/").pop();
-    let image;// = Gtk.Image.new();
-    let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 150, 150, false);
-    // image = Utils.idle(() => {
-        // if (basename.lastIndexOf(".") + 1 == "gif") {
-        //     let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
-        //     image = Gtk.Image.new_from_animation(animation);
-        // } else {
-            // image = Gtk.Image.new_from_pixbuf(pixbuf);
-        // }
-    // });
-    // Gtk.Widget.set_name(image, 'wallpaperImage');
+    // let image = Gtk.Image.new_from_file(path);
+    // let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path, 160, 90);
+    // let image = Gtk.Image.new_from_pixbuf(pixbuf);
+    let image;
+    if (basename.lastIndexOf(".") + 1 == "gif") {
+        let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
+        image = Gtk.Image.new_from_animation(animation);
+    } else {
+        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+        image = Gtk.Image.new_from_pixbuf(pixbuf);
+    }
     // console.log("Image: ", image);
     return Widget.Box({
+        class_name: 'wallpaperBox',
         vertical: true,
         children: [
             Widget.Button({
                 class_name: 'wallpaperButton',
-                child: Widget.Icon({
-                    class_name: 'wallpaperIcon',
-                    icon: pixbuf,
-                    size: 150,
-                }),
-                // child: Widget.Box({
-                //     child: image,
-                //      //Widget.Label({label: "No Image",}),
-                //     // css: 'max-width: 16rem, max-height: 9rem;',
+                // child: Widget.Icon({
+                //     class_name: 'wallpaperIcon',
+                //     icon: pixbuf,
+                //     size: 150,
                 // }),
+                child: Widget.Box({
+                    hpack: 'center',
+                    child: image,
+                     //Widget.Label({label: "No Image",}),
+                }),
                 onPrimaryClick: () => {
                     App.closeWindow(`wallpaperpicker${id}`);
                     setWallpaper(path);
@@ -87,8 +88,9 @@ function ImagesList(path, id) {
                 // },
             }),
             Widget.Label({
-                label: `${basename.length < 30 ? basename : basename.substr(0, 25) +
-                    " (...) " + basename.substr(basename.lastIndexOf("."), basename.length)}`,
+                label: basename,
+                truncate: `middle`,
+                justification: 'center',
             }),
         ],
     })

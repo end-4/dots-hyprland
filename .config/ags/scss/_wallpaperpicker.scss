@@ -7,35 +7,26 @@
 	margin: 0rem 1rem;
 }
 
-.wallpaperContainer {
-	padding: 0.3rem 0.3rem 0.6rem 0.3rem;
+// .wallpaperContainer {
+// 	padding: 0rem 1rem;
+// }
+
+.wallpaperBox {
+    margin: 0.6rem 0.4rem;
 }
 
 .wallpaperButton {
     background-color: $primaryContainer;
-	margin: 0.5rem;
-	// padding: 0.2rem;
-    border: 0.2rem;
-	border-radius: 2rem;
+	margin: 0.2rem;
+	padding: 0.3rem;
+    border: 0.12rem;
+	border-radius: 0.6rem;
     border-style: solid;
     border-color: $primaryContainer;
     transition: all 0.3s ease;
-
-    // min-height: 9rem;
-    // min-width: 16rem;
-    // background-size: 100%;
-    // // background-size: cover;
-    // background-position: center;
-    // background-repeat: no-repeat;
 }
 
 .wallpaperButton:hover {
 	border-color: $primary;
-    background-size: 115%;
-}
-
-.wallpaperIcon {
-    border-radius: 2rem;
-    // min-height: 9rem;
-    // min-width: 16rem;
+    background-color: $primary;
 }
