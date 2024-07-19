@@ -41,6 +41,12 @@ const scripts = [
         command: `sudo pacman -Syyu`,
         enabled: isArchDistro,
     },
+	{
+        icon: 'arch-symbolic',
+        name: 'Change resolution',
+        command: `bash .config/ags/modules/sideleft/tools/changeres.sh`,
+        enabled: isArchDistro,
+    },
     {
         icon: 'arch-symbolic',
         name: 'Remove orphan packages',
