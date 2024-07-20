@@ -33,9 +33,20 @@ update_resolution_config() {
         exit 1
     fi
 
+    # Extract the resolution and refresh rate from the modeline
+    local resolution
+    resolution=$(echo "$modeline" | grep -oP '^[0-9]+x[0-9]+')
+    local rate
+    rate=$(echo "$modeline" | grep -oP '[0-9]+.[0-9]+$')
+
+    if [ -z "$resolution" ] || [ -z "$rate" ]; then
+        echo "Failed to extract resolution or refresh rate from modeline"
+        exit 1
+    fi
+
     local configPath="${HOME}/.config/hypr/hyprland/general.conf"
     local newConfigContent
-    newConfigContent=$(sed "s/^monitor=.*$/monitor=eDP-1, $modeline, auto, 1/" "$configPath")
+    newConfigContent=$(sed "s/^monitor=.*$/monitor=eDP-1, $resolution@$rate, auto, 1/" "$configPath")
 
     echo "$newConfigContent" > "$configPath"
 }
