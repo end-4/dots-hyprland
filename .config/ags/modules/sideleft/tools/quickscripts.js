@@ -42,11 +42,11 @@ const scripts = [
         enabled: isArchDistro,
     },
 	{
-        icon: 'arch-symbolic',
-        name: 'Change resolution',
-        command: `bash .config/ags/modules/sideleft/tools/changeres.sh`,
-        enabled: isArchDistro,
-    },
+    	icon: 'desktop-symbolic',
+    	name: 'Change resolution',
+    	command: `bash ${App.configDir}/modules/sideleft/tools/changeres.sh`,
+    	enabled: true,
+	},
     {
         icon: 'arch-symbolic',
         name: 'Remove orphan packages',
