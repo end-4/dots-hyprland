@@ -10,20 +10,30 @@
 
 .wallpaperBox {
     margin: 0.6rem 0.4rem;
+    border-radius: 0.6rem;
+    background-color: $secondaryContainer;
 }
 
 .wallpaperButton {
-    background-color: $primaryContainer;
-	margin: 0.2rem;
-	padding: 0.3rem;
-    border: 0.12rem;
+    background-color: $secondaryContainer;
+    margin: 0.2rem 0rem;
+	padding: 0.4rem;
 	border-radius: 0.6rem;
-    border-style: solid;
-    border-color: $primaryContainer;
+    // border: 0.12rem;
+    // border-style: solid;
+    // border-color: $secondaryContainer;
     transition: all 0.3s ease;
 }
 
 .wallpaperButton:hover {
-	border-color: $primary;
-    background-color: $primary;
+    // border-color: $secondary;
+    background-color: $secondary;
+}
+
+.wallpaperLabel {
+    color: $secondary;
+    background-color: $secondaryContainer;
+    border-radius: 0.4rem;
+    margin: 0.2rem 0rem;
+    padding: 0rem 1rem;
 }

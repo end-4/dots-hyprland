@@ -99,6 +99,7 @@ function ImagesList(path, id) {
                 // },
             }),
             Widget.Label({
+                class_name: 'wallpaperLabel',
                 label: basename,
                 truncate: `middle`,
                 justification: 'center',
