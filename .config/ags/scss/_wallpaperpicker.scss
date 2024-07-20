@@ -1,15 +1,12 @@
-.wallpaper {
-    @include large-rounding;
+.wallpaperContainer {
+    @include normal-rounding;
+    margin: 0.8rem;
     background-color: $layer0;
 }
 
 .wallpaperScroll {
 	margin: 0rem 1rem;
 }
-
-// .wallpaperContainer {
-// 	padding: 0rem 1rem;
-// }
 
 .wallpaperBox {
     margin: 0.6rem 0.4rem;
