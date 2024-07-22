@@ -16,7 +16,7 @@ If no option is specified, run default install process.
   -s, --skip-sysupdate      Skip \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
       --skip-hypr-aur       Skip installing hyprland-git
-      --skip-pymyc-aur      Skip installing python-materialyoucolor-git, gradience-git,
+      --skip-pymyc-aur      Skip installing python-materialyoucolor-git, gradience,
                             python-libsass and python-material-color-utilities
       --skip-fish           Skip installing the config for Fish
       --skip-plasmaintg     Skip installing plasma-browser-integration
