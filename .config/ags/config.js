@@ -50,7 +50,6 @@ const Windows = () => [
     forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
-    forMonitors(WallpaperPicker),
     // forMonitors(Dock),
     forMonitors(Osk),
     forMonitors(Session),
@@ -63,6 +62,7 @@ const Windows = () => [
     forMonitors((id) => Corner(id, 'bottom right', userOptions.appearance.fakeScreenRounding !== 0)),
     forMonitors(BarCornerTopleft),
     forMonitors(BarCornerTopright),
+    forMonitors(WallpaperPicker),
 ];
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
