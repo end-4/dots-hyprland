@@ -14,7 +14,7 @@ const APISERVICES = {
 
 const getWorkingImageSauce = (url) => {
     if (url.includes('pximg.net')) {
-        return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/')).replace(/_p\d+\.png$/, '')}`;
+        return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
     }
     return url;
 }
