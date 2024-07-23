@@ -15,7 +15,7 @@ function updateFiles(id) {
 }
 
 const wallpaperScrollable = (id) => {
-    Utils.idle(updateFiles(id));
+    // Utils.idle(updateFiles(id));
     let children = files.bind().as(n => n.split("\n").map(path => ImagesList(path, id)));
     return Widget.Box({
         class_name: 'wallpaperContainer',
@@ -32,7 +32,7 @@ const wallpaperScrollable = (id) => {
 };
 
 export const WallpaperPicker = (id) => {
-    Utils.idle(updateFiles(id));
+    // Utils.idle(updateFiles(id));
     // console.log(Object.keys(Gdk));
     return PopupWindow({
         name: `wallpaperpicker${id}`,

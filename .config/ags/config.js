@@ -41,7 +41,6 @@ startAutoDarkModeService().catch(print);
 firstRunWelcome().catch(print);
 startBatteryWarningService().catch(print);
 
-
 const Windows = () => [
     // forMonitors(DesktopBackground),
     forMonitors(Crosshair),
