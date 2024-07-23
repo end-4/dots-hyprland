@@ -6,7 +6,7 @@ arch=(any)
 license=(None)
 depends=(
 	python-materialyoucolor-git
-	gradience-git
+	gradience
 	python-libsass
 	python-material-color-utilities
 )
