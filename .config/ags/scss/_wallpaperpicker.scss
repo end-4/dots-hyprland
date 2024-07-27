@@ -47,3 +47,7 @@
     margin: 0rem 0rem;
     padding: 0.2rem 1rem ;
 }
+
+.icon-material {
+    @include icon-material;
+}

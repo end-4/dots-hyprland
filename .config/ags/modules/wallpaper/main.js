@@ -15,13 +15,15 @@ function updateFiles(id) {
 function ImagesList(path, monitor, timeout) {
     if (!path || path.search("No such file or directory") != -1) return Widget.Label({
         class_name: 'wallpaperPlaceholder',
-        label: "Wallpaper folder empty or nonexistent. Please add files of type .png/.jpg/.jpeg or change the path in `~/.config/ags/user_options.js`.",
+        label: "Wallpaper folder empty or nonexistent. Please add files of type .png/.jpg/.jpeg/.gif or change the path in `~/.config/ags/user_options.js`.",
     });
     let basename = path.split("/").pop();
+    // let variable = Variable("");
+    let gif = basename.substr(basename.lastIndexOf(".") + 1, basename.length) == "gif";
     let variable = Variable(Widget.Label({
         //TODO find better way
-        class_name: 'wallpaperPlacerholder',
-        label: "Image still loading",
+        class_name: gif ? "wallpaperPlaceholder icon-material txt-gigantic" : "wallpaperPlaceholder",
+        label: gif ? "gif_box" : "Image still loading",
     }));
     let child = variable.bind();
     return Widget.Box({
@@ -39,16 +41,17 @@ function ImagesList(path, monitor, timeout) {
                     setWallpaper(path);
                 },
                 setup: () => {
-                    // Utils.idle(() => {
-                    Utils.timeout(timeout * 500, () => {
-                        console.log(path);
-                        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
-                        let image = Gtk.Image.new_from_pixbuf(pixbuf);
-                        variable.value = Widget.Box({
-                            hpack: 'center',
-                            child: image,
+                    if (!gif) {
+                        // Utils.idle(() => {
+                        Utils.timeout(timeout * 500, () => {
+                            let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+                            let image = Gtk.Image.new_from_pixbuf(pixbuf);
+                            variable.value = Widget.Box({
+                                hpack: 'center',
+                                child: image,
+                            });
                         });
-                    });
+                    }
                 },
             }),
             Widget.Label({
@@ -61,7 +64,7 @@ function ImagesList(path, monitor, timeout) {
 }
 
 const wallpaperScrollable = (id) => {
-    const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
+    const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
     let i = 0;
     return Widget.Box({
         class_name: 'wallpaperContainer',
