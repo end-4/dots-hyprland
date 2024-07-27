@@ -117,9 +117,12 @@ function ImagesList(path, id) {
 }
 
 export function autoWallpaper() {
+    let interval = userOptions.wallpaper.interval * 1000;
     if (userOptions.wallpaper.autoChange) {
-        Utils.interval(userOptions.wallpaper.interval * 1000, () => {
-            randomWallpaper();
+        Utils.timeout(interval, () => {
+            Utils.interval(interval, () => {
+                randomWallpaper();
+            })
         })
     }
 }
