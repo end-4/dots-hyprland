@@ -30,10 +30,19 @@
     background-color: $secondary;
 }
 
+.wallpaperImageBox {
+    min-width: 160px;
+    min-height: 90px;
+}
+
+.wallpaperPlaceholder {
+    min-width: 160px;
+}
+
 .wallpaperLabel {
     color: $secondary;
     background-color: $secondaryContainer;
     border-radius: 0.4rem;
     margin: 0rem 0rem;
-    padding: 0.2rem 1rem ;0.4rem 1rem;
+    padding: 0.2rem 1rem ;
 }

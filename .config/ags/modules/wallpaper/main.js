@@ -6,17 +6,110 @@ const { Gio, GLib, Gtk, GdkPixbuf, Gdk } = imports.gi;
 
 const dir = userOptions.wallpaper.path;
 const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
-const files = Variable("");
+// const files = Variable("");
 // const children = Variable([ Widget.Label({ label: `Files still loading` }), Widget.Label({ label: 'test' }) ]);
+const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
+// let children = [ Widget.Label({ label: `Files still loading` }), Widget.Label({ label: 'test' }) ];
+// children = await files.split("\n").map(path => ImagesList(path, 0));
 
 function updateFiles(id) {
-    files.value = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
+    // files.value = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
     // children.value = files.split("\n").map(path => ImagesList(path, id));
 }
 
+function ImagesList(path, monitor, timeout) {
+    if (!path) return Widget.Label({
+        label: "Folder empty",
+    });
+    let basename = path.split("/").pop();
+    // let image;
+    // if (basename.lastIndexOf(".") + 1 == "gif") {
+    //     let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
+    //     image = Gtk.Image.new_from_animation(animation);
+    // } else {
+    //     let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+    //     image = Gtk.Image.new_from_pixbuf(pixbuf);
+    // }
+    let variable = Variable(Widget.Label({
+        //TODO find better way
+        class_name: 'wallpaperPlaceholder',
+        label: "Image still loading",
+    }));
+    let child = variable.bind();
+    // Utils.execAsync((child, path) => {
+    //     let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+    //     let image = Gtk.Image.new_from_pixbuf(pixbuf);
+    //     // child.value = Widget.Box({
+    //     //     hpack: 'center',
+    //     //     child: image,
+    //     // });
+    // });
+    return Widget.Box({
+        class_name: 'wallpaperBox',
+        vertical: true,
+        children: [
+            Widget.Button({
+                class_name: 'wallpaperButton',
+                child: Widget.Box({
+                    class_name: 'wallpaperImageBox',
+                    child: child,
+                }),
+                // child: Widget.Box({
+                //     hpack: 'center',
+                //     child: image,
+                //      //Widget.Label({label: "No Image",}),
+                // }),
+                onPrimaryClick: () => {
+                    App.closeWindow(`wallpaperpicker${monitor}`);
+                    setWallpaper(path);
+                },
+                setup: (self) => {
+                    // Utils.idle(() => {
+                    Utils.timeout(timeout * 500, () => {
+                        console.log(path);
+                        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+                        let image = Gtk.Image.new_from_pixbuf(pixbuf);
+                        variable.value = Widget.Box({
+                            hpack: 'center',
+                            child: image,
+                        });
+                        // child.value = Widget.Label({label: "WOOrking yay",});
+                    });
+                    // });
+                    // let test = self;
+                    // Utils.idle((test) => {
+                    //     if (basename.lastIndexOf(".") + 1 == "gif") {
+                    //         let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
+                    //         let image = Gtk.Image.new_from_animation(animation);
+                    //     } else {
+                    //         let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
+                    //         // Gtk.Image.set_from_pixbuf(image, pixbuf);
+                    //         let image = Gtk.Image.new_from_pixbuf(pixbuf);
+                    //     }
+                    //     self.child = image;
+                    // });
+                    // let image = gtk_image_new_from_file(path);
+                    // Utils.idle(() => {
+                    //     self.css = `background-image: url("${path}");`;
+                    // });
+                },
+            }),
+            Widget.Label({
+                class_name: 'wallpaperLabel',
+                label: basename,
+                truncate: `middle`,
+            }),
+        ],
+    })
+}
+
 const wallpaperScrollable = (id) => {
+    let i = 0;
     // Utils.idle(updateFiles(id));
-    let children = files.bind().as(n => n.split("\n").map(path => ImagesList(path, id)));
+    // arr = files.split("\n");
+    // children = (arr, i) => {
+
+    // }
     return Widget.Box({
         class_name: 'wallpaperContainer',
         child: Widget.Scrollable({
@@ -25,7 +118,7 @@ const wallpaperScrollable = (id) => {
             hscroll: "always",
             vscroll: "never",
             child: Widget.Box({
-                children: children,
+                children: files.split("\n").map(path =>ImagesList(path, id, i++)),
             }),
         }),
     });
@@ -47,72 +140,6 @@ export const WallpaperPicker = (id) => {
                 clickCloseRegion({ name: `wallpaperpicker` , fillMonitor: `vertical`}),
             ],
         }),
-    })
-}
-
-function ImagesList(path, id) {
-    if (!path) return Widget.Label({
-        label: "Folder empty",
-    });
-    let basename = path.split("/").pop();
-    // let image = Gtk.Image.new_from_file(path);
-    // let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path, 160, 90);
-    // let image = Gtk.Image.new_from_pixbuf(pixbuf);
-    let image;
-    if (basename.lastIndexOf(".") + 1 == "gif") {
-        let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
-        image = Gtk.Image.new_from_animation(animation);
-    } else {
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
-        image = Gtk.Image.new_from_pixbuf(pixbuf);
-    }
-    // console.log("Image: ", image);
-    return Widget.Box({
-        class_name: 'wallpaperBox',
-        vertical: true,
-        children: [
-            Widget.Button({
-                class_name: 'wallpaperButton',
-                // child: Widget.Icon({
-                //     class_name: 'wallpaperIcon',
-                //     icon: pixbuf,
-                //     size: 150,
-                // }),
-                child: Widget.Box({
-                    hpack: 'center',
-                    child: image,
-                     //Widget.Label({label: "No Image",}),
-                }),
-                onPrimaryClick: () => {
-                    App.closeWindow(`wallpaperpicker${id}`);
-                    setWallpaper(path);
-                },
-                // setup: (self) => {
-                //     let test = self;
-                //     Utils.idle((test) => {
-                //         if (basename.lastIndexOf(".") + 1 == "gif") {
-                //             let animation = GdkPixbuf.PixbufAnimation.new_from_file(path);
-                //             let image = Gtk.Image.new_from_animation(animation);
-                //         } else {
-                //             let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
-                //             // Gtk.Image.set_from_pixbuf(image, pixbuf);
-                //             let image = Gtk.Image.new_from_pixbuf(pixbuf);
-                //         }
-                //         self.child = image;
-                //     });
-                //     // let image = gtk_image_new_from_file(path);
-                //     // Utils.idle(() => {
-                //     //     self.css = `background-image: url("${path}");`;
-                //     // });
-                // },
-            }),
-            Widget.Label({
-                class_name: 'wallpaperLabel',
-                label: basename,
-                truncate: `middle`,
-                // justification: 'center',
-            }),
-        ],
     })
 }
 
