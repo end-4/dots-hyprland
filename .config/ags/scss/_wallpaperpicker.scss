@@ -1,14 +1,16 @@
-.wallpaperContainer {
+.wallpaperpicker-bg {
     @include normal-rounding;
+    @include elevation-border;
+    @include elevation2;
     margin: 0.8rem;
     background-color: $layer0;
 }
 
-.wallpaperScroll {
-	margin: 0rem 1rem;
-}
+// .wallpaperpicker-scroll {
+// 	margin: 0rem 1rem;
+// }
 
-.wallpaperBox {
+.wallpaperpicker-box {
     margin: 0.6rem 0.4rem;
     border-radius: 0.6rem;
     background-color: $secondaryContainer;

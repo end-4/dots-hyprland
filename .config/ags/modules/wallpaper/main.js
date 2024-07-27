@@ -7,11 +7,6 @@ const { Gio, GLib, Gtk, GdkPixbuf, Gdk } = imports.gi;
 const dir = userOptions.wallpaper.path;
 const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 
-function updateFiles(id) {
-    // files.value = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
-    // children.value = files.split("\n").map(path => ImagesList(path, id));
-}
-
 function ImagesList(path, monitor, timeout) {
     if (!path || path.search("No such file or directory") != -1) return Widget.Label({
         class_name: 'wallpaperPlaceholder',
@@ -27,7 +22,7 @@ function ImagesList(path, monitor, timeout) {
     }));
     let child = variable.bind();
     return Widget.Box({
-        class_name: 'wallpaperBox',
+        class_name: 'wallpaperpicker-boxW',
         vertical: true,
         children: [
             Widget.Button({
@@ -67,9 +62,9 @@ const wallpaperScrollable = (id) => {
     const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$'"`);
     let i = 0;
     return Widget.Box({
-        class_name: 'wallpaperContainer',
+        class_name: 'wallpaperpicker-bg',
         child: Widget.Scrollable({
-            class_name: 'wallpaperScroll',
+            class_name: 'wallpaperpicker-scroll',
             hexpand: true,
             hscroll: "always",
             vscroll: "never",
@@ -113,10 +108,6 @@ function setWallpaper(path) {
     let popupflag = userOptions.wallpaper.popup ? '' : '--no-popup';
     Utils.execAsync(['bash', '-c', `sh "${scriptDir}" "${path}" "${smartflag}" "${popupflag}"`]).catch(print);
 }
-
-// globalThis['updateFiles'] = () => {
-//     files.value = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
-// }
 
 globalThis['randomWallpaper'] = () => {
     let path= Utils.exec(`bash -c "find ${dir} -type f | grep -E '.gif$|.jpg$|.jpeg$|.png$' | shuf -n 1"`);
