@@ -6,7 +6,6 @@ const { Gio, GLib, Gtk, GdkPixbuf, Gdk } = imports.gi;
 
 const dir = userOptions.wallpaper.path;
 const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
-const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
 
 function updateFiles(id) {
     // files.value = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
@@ -14,13 +13,14 @@ function updateFiles(id) {
 }
 
 function ImagesList(path, monitor, timeout) {
-    if (!path) return Widget.Label({
-        label: "Folder empty",
+    if (!path || path.search("No such file or directory") != -1) return Widget.Label({
+        class_name: 'wallpaperPlaceholder',
+        label: "Wallpaper folder empty or nonexistent. Please add files of type .png/.jpg/.jpeg or change the path in `~/.config/ags/user_options.js`.",
     });
     let basename = path.split("/").pop();
     let variable = Variable(Widget.Label({
         //TODO find better way
-        class_name: 'wallpaperPlaceholder',
+        class_name: 'wallpaperPlacerholder',
         label: "Image still loading",
     }));
     let child = variable.bind();
@@ -61,6 +61,7 @@ function ImagesList(path, monitor, timeout) {
 }
 
 const wallpaperScrollable = (id) => {
+    const files = Utils.exec(`bash -c "find ${dir} -type f | grep -E '.jpg$|.jpeg$|.png$'"`);
     let i = 0;
     return Widget.Box({
         class_name: 'wallpaperContainer',
