@@ -12,7 +12,7 @@ import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../.commondat
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;
 Utils.exec(`mkdir -p ${WEATHER_CACHE_FOLDER}`);
 
-const BatBatteryProgress = () => {
+const BarBatteryProgress = () => {
     const _updateProgress = (circprog) => { // Set circular progress value
         circprog.css = `font-size: ${Math.abs(Battery.percent)}px;`
 
@@ -116,7 +116,7 @@ const BarBattery = () => Box({
                 }),
             }),
             overlays: [
-                BatBatteryProgress(),
+                BarBatteryProgress(),
             ]
         }),
     ]
