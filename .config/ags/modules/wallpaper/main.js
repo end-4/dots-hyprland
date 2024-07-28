@@ -9,7 +9,7 @@ const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 
 function ImagesList(path, monitor, timeout) {
     if (!path || path.search("No such file or directory") != -1) return Widget.Label({
-        class_name: 'wallpaperPlaceholder',
+        class_name: 'wallpaperpicker-min',
         label: "Wallpaper folder empty or nonexistent. Please add files of type .png/.jpg/.jpeg/.gif or change the path in `~/.config/ags/user_options.js`.",
     });
     let basename = path.split("/").pop();
@@ -17,18 +17,18 @@ function ImagesList(path, monitor, timeout) {
     let gif = basename.substr(basename.lastIndexOf(".") + 1, basename.length) == "gif";
     let variable = Variable(Widget.Label({
         //TODO find better way
-        class_name: gif ? "wallpaperPlaceholder icon-material txt-gigantic" : "wallpaperPlaceholder",
+        class_name: gif ? "wallpaperpicker-min icon-material txt-gigantic" : "wallpaperpicker-min",
         label: gif ? "gif_box" : "Image still loading",
     }));
     let child = variable.bind();
     return Widget.Box({
-        class_name: 'wallpaperpicker-boxW',
+        class_name: 'wallpaperpicker-box',
         vertical: true,
         children: [
             Widget.Button({
-                class_name: 'wallpaperButton',
+                class_name: 'wallpaperpicker-button',
                 child: Widget.Box({
-                    class_name: 'wallpaperImageBox',
+                    class_name: 'wallpaperpicker-min',
                     child: child,
                 }),
                 onPrimaryClick: () => {
@@ -50,7 +50,7 @@ function ImagesList(path, monitor, timeout) {
                 },
             }),
             Widget.Label({
-                class_name: 'wallpaperLabel',
+                class_name: "wallpaperpicker-label",
                 label: basename,
                 truncate: `middle`,
             }),
