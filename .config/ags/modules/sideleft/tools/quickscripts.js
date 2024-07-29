@@ -12,6 +12,12 @@ import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscu
 
 const scripts = [
     {
+    	icon: 'desktop-symbolic',
+    	name: 'Change screen resolution',
+    	command: `bash ${App.configDir}/modules/sideleft/tools/changeres.sh`,
+    	enabled: true,
+	},
+    {
         icon: 'nixos-symbolic',
         name: 'Trim system generations to 5',
         command: `sudo ${App.configDir}/scripts/quickscripts/nixos-trim-generations.sh 5 0 system`,
