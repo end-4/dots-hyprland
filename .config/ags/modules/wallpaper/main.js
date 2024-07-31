@@ -7,7 +7,7 @@ const { Gio, GLib, Gtk, GdkPixbuf, Gdk } = imports.gi;
 const dir = userOptions.wallpaper.path;
 const scriptDir = `${App.configDir}/scripts/color_generation/switchwall.sh`;
 
-function ImagesList(path, monitor, timeout) {
+function ImagesList(path, monitor, nb) {
     if (!path || path.search("No such file or directory") != -1) return Widget.Label({
         class_name: 'wallpaperpicker-min',
         label: "Wallpaper folder empty or nonexistent. Please add files of type .png/.jpg/.jpeg/.gif or change the path in `~/.config/ags/user_options.js`.",
@@ -38,12 +38,15 @@ function ImagesList(path, monitor, timeout) {
                 setup: () => {
                     if (!gif) {
                         // Utils.idle(() => {
-                        Utils.timeout(timeout * 500, () => {
+                        let timeout = 500;
+                        Utils.timeout(nb * timeout, () => {
                             let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, 160, 90, false);
-                            let image = Gtk.Image.new_from_pixbuf(pixbuf);
-                            variable.value = Widget.Box({
-                                hpack: 'center',
-                                child: image,
+                            Utils.timeout(timeout / 2, () => {
+                                let image = Gtk.Image.new_from_pixbuf(pixbuf);
+                                variable.value = Widget.Box({
+                                    hpack: 'center',
+                                    child: image,
+                                });
                             });
                         });
                     }
