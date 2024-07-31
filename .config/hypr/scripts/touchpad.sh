@@ -4,13 +4,13 @@ export STATUS_FILE="$XDG_RUNTIME_DIR/touchpad.status"
 
 enable_touchpad() {
     printf "true" >"$STATUS_FILE"
-    notify-send -u normal "Touchpad Enabled"
+    notify-send -i '/usr/share/icons/OneUI-dark/24/devices/input-touchpad-on.svg' -u normal "Touchpad Enabled"
     hyprctl keyword '$HYPR_TOUCHPAD_ENABLED' "true" -r
 }
 
 disable_touchpad() {
     printf "false" >"$STATUS_FILE"
-    notify-send -u normal "Touchpad Disabled"
+    notify-send -i '/usr/share/icons/OneUI-dark/24/devices/input-touchpad-off.svg' -u normal "Touchpad Disabled"
     hyprctl keyword '$HYPR_TOUCHPAD_ENABLED' "false" -r
 }
 
