@@ -28,16 +28,27 @@ const BarBatteryProgress = () => {
     })
 }
 
+const time = Variable('', {
+    poll: [
+        userOptions.time.interval,
+        () => GLib.DateTime.new_now_local().format(userOptions.time.format),
+    ],
+})
+
+const date = Variable('', {
+    poll: [
+        userOptions.time.dateInterval,
+        () => GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong),
+    ],
+})
+
 const BarClock = () => Widget.Box({
     vpack: 'center',
     className: 'spacing-h-4 bar-clock-box',
     children: [
         Widget.Label({
             className: 'bar-time',
-            label: GLib.DateTime.new_now_local().format(userOptions.time.format),
-            setup: (self) => self.poll(userOptions.time.interval, label => {
-                label.label = GLib.DateTime.new_now_local().format(userOptions.time.format);
-            }),
+            label: time.bind(),
         }),
         Widget.Label({
             className: 'txt-norm txt-onLayer1',
@@ -45,10 +56,7 @@ const BarClock = () => Widget.Box({
         }),
         Widget.Label({
             className: 'txt-smallie bar-date',
-            label: GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong),
-            setup: (self) => self.poll(userOptions.time.dateInterval, (label) => {
-                label.label = GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong);
-            }),
+            label: date.bind(),
         }),
     ],
 });
