@@ -29,7 +29,7 @@ const SeparatorDot = () => Widget.Revealer({
     ,
 });
 
-export default () => {
+export default (monitor = 0) => {
     const barTray = Tray();
     const barStatusIcons = StatusIcons({
         className: 'bar-statusicons',
@@ -38,7 +38,7 @@ export default () => {
                 self.toggleClassName('bar-statusicons-active', visible);
             }
         }),
-    });
+    }, monitor);
     const SpaceRightDefaultClicks = (child) => Widget.EventBox({
         onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
         onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
