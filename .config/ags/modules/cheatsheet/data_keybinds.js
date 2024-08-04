@@ -46,7 +46,7 @@ export const keybindList = [[
         "icon": "widgets",
         "name": "Widgets (AGS)",
         "binds": [
-            { "keys": ["󰖳", "OR", "󰖳", "+", "Tab"], "action": "Toggle overview/launcher" },
+            { "keys": ["󰖳", "+", "R"], "action": "Toggle overview/launcher" },
             { "keys": ["Ctrl", "󰖳", "+", "R"], "action": "Restart AGS" },
             { "keys": ["󰖳", "+", "/"], "action": "Toggle this cheatsheet" },
             { "keys": ["󰖳", "+", "N"], "action": "Toggle system sidebar" },

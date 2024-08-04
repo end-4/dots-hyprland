@@ -83,7 +83,7 @@ export const GeminiSettings = () => MarginRevealer({
                     { value: 0.50, name: 'Balanced', },
                     { value: 1.00, name: 'Creative', },
                 ],
-                initIndex: 2,
+                initIndex: userOptions.ai.precision,
                 onChange: (value, name) => {
                     GeminiService.temperature = value;
                 },

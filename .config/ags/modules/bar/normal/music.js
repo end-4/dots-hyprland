@@ -213,7 +213,7 @@ export default () => {
         child: Box({
             className: 'spacing-h-4',
             children: [
-                SystemResourcesOrCustomModule(),
+                // SystemResourcesOrCustomModule(),
                 EventBox({
                     child: BarGroup({ child: musicStuff }),
                     onPrimaryClick: () => showMusicControls.setValue(!showMusicControls.value),

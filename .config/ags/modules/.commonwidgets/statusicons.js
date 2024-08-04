@@ -35,6 +35,16 @@ export const MicMuteIndicator = () => Widget.Revealer({
     child: MaterialIcon('mic_off', 'norm'),
 });
 
+export const SoundMuteIndicator = () => Widget.Revealer({
+    transition: 'slide_left',
+    transitionDuration: userOptions.animations.durationSmall,
+    revealChild: false,
+    setup: (self) => self.hook(Audio, (self) => {
+        self.revealChild = Audio.speaker?.stream?.isMuted;
+    }),
+    child: MaterialIcon('volume_off', 'norm'),
+});
+
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
         transition: 'slide_left',
@@ -293,7 +303,8 @@ export const StatusIcons = (props = {}, monitor = 0) => Widget.Box({
     child: Widget.Box({
         className: 'spacing-h-15',
         children: [
-            MicMuteIndicator(),
+            // MicMuteIndicator(),
+            SoundMuteIndicator(),
             optionalKeyboardLayoutInstances[monitor],
             NotificationIndicator(),
             NetworkIndicator(),
