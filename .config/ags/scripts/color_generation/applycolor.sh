@@ -163,7 +163,9 @@ apply_gtk() { # Using gradience-cli
 
 apply_ags() {
     ags run-js "handleStyles(false);"
-    ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
+    if [ "$popup" = true ]; then
+        ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
+    fi
 }
 
 
@@ -173,6 +175,12 @@ IFS=$'\n'
 colorlist=( $colornames ) # Array of color names
 colorvalues=( $colorstrings ) # Array of color values
 
+popup=true
+for arg in "$@"; do
+    if [ "$arg" = "--no-popup" ]; then
+        popup=false
+    fi
+done
 apply_ags &
 apply_hyprland &
 apply_hyprlock &

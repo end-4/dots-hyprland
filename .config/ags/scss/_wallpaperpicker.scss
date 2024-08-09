@@ -1,0 +1,44 @@
+.wallpaperpicker-bg {
+    @include normal-rounding;
+    @include elevation-border;
+    @include elevation2;
+    margin: 0.8rem;
+    background-color: $background;
+}
+
+.wallpaperpicker-scroll {
+	margin: 0rem 1rem;
+}
+
+.wallpaperpicker-box {
+    margin: 0.8rem 0.4rem;
+    border-radius: 0.6rem;
+    background-color: $layer1;
+}
+
+.wallpaperpicker-button {
+    margin: 0.2rem 0rem;
+	padding: 0.4rem;
+	border-radius: 0.6rem;
+    transition: all 0.3s ease;
+}
+
+.wallpaperpicker-button:hover {
+    background-color: mix($primary, $layer1Hover, 40%);
+}
+
+.wallpaperpicker-label {
+    color: $onLayer1;
+    border-radius: 0.4rem;
+    margin: 0rem 0rem;
+    padding: 0.2rem 1rem;
+}
+
+.wallpaperpicker-min {
+    min-width: 160px;
+    min-height: 90px;
+}
+
+.icon-material {
+    @include icon-material;
+}

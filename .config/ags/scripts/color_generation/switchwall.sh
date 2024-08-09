@@ -17,6 +17,7 @@ switch() {
 		exit 0
 	fi
 
+	#notify-send -t 2000 "cursorposx: $cursorposx"
 	# ags run-js "wallpaper.set('')"
 	# sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
 	swww img "$imgpath" --transition-step 100 --transition-fps 120 \
@@ -24,7 +25,23 @@ switch() {
 		--transition-pos "$cursorposx, $cursorposy_inverted"
 }
 
-if [ "$1" == "--noswitch" ]; then
+noswitch=false
+smartflag=''
+popupflag=''
+
+for arg in "$@"; do
+	if [ "$arg" == "--noswitch" ]; then
+		noswitch=true
+	fi
+	if [ "$arg" == "--no-popup" ]; then
+		popupflag='--no-popup'
+	fi
+	if [ "$arg" == "--smart" ]; then
+		smartflag='--smart'
+	fi
+done
+
+if [ "$noswitch" == true ]; then
 	imgpath=$(swww query | awk -F 'image: ' '{print $2}')
 	# imgpath=$(ags run-js 'wallpaper.get(0)')
 elif [[ "$1" ]]; then
@@ -37,4 +54,4 @@ else
 fi
 
 # Generate colors for ags n stuff
-"$CONFIG_DIR"/scripts/color_generation/colorgen.sh "${imgpath}" --apply --smart
+"$CONFIG_DIR"/scripts/color_generation/colorgen.sh "${imgpath}" --apply "$smartflag" "$popupflag"

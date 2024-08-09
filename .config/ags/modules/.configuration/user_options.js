@@ -132,6 +132,13 @@ let configOptions = {
         'dateInterval': 5000,
         'dateFormat': "%d/%m", // On notif time
     },
+    'wallpaper': {
+        'path': "$HOME/Pictures/wallpapers", // wallpaper folder
+        'autoChange': false, // Changes wallpaper regularly
+        'interval': 1800, // In seconds
+        'smart': true, // sets dark / light mode based on wallpaper
+        'popup': true, // Shows a color preview when changing wallpaper
+    },
     'weather': {
         'city': "",
         'preferredUnit': "C", // Either C or F
