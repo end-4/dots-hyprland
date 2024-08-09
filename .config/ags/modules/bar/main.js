@@ -58,7 +58,7 @@ export const Bar = async (monitor = 0) => {
                 SideModule([System()]),
             ]
         }),
-        endWidget: Indicators(),
+        endWidget: Indicators(monitor),
     });
     const focusedBarContent = Widget.CenterBox({
         className: 'bar-bg-focus',
