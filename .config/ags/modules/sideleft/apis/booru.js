@@ -290,8 +290,9 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         ]
     });
     const pageImages = Box({
+        hpack: 'start',
         homogeneous: true,
-        className: 'sidebar-booru-imagegrid margin-top-5',
+        className: 'sidebar-booru-imagegrid',
     })
     const pageImageRevealer = Revealer({
         transition: 'slide_down',
