@@ -230,9 +230,10 @@ export default (overviewMonitor = 0) => {
         const widget = Widget.Box({
             className: 'overview-tasks-workspace',
             vpack: 'center',
+            // Rounding and adding 1px to minimum width/height to work around scaling inaccuracy:
             css: `
-                min-width: ${monitors[overviewMonitor].width * userOptions.overview.scale}px;
-                min-height: ${monitors[overviewMonitor].height * userOptions.overview.scale}px;
+                min-width: ${1 + Math.round(monitors[overviewMonitor].width * userOptions.overview.scale)}px;
+                min-height: ${1 + Math.round(monitors[overviewMonitor].height * userOptions.overview.scale)}px;
             `,
             children: [Widget.EventBox({
                 hexpand: true,
@@ -412,6 +413,8 @@ export default (overviewMonitor = 0) => {
 
     return Widget.Revealer({
         revealChild: true,
+        // hpack to prevent unneeded expansion in overview-tasks-workspace:
+        hpack: 'center',
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         child: Widget.Box({
