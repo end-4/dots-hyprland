@@ -21,10 +21,6 @@ function guessMessageType(summary) {
     return 'chat';
 }
 
-function exists(widget) {
-    return widget !== null;
-}
-
 const getFriendlyNotifTimeString = (timeObject) => {
     const messageTime = GLib.DateTime.new_from_unix_local(timeObject);
     const oneMinuteAgo = GLib.DateTime.new_now_local().add_seconds(-60);
@@ -39,7 +35,6 @@ const getFriendlyNotifTimeString = (timeObject) => {
 }
 
 const NotificationIcon = (notifObject) => {
-    // { appEntry, appIcon, image }, urgency = 'normal'
     if (notifObject.image) {
         return Box({
             valign: Gtk.Align.CENTER,
@@ -85,7 +80,7 @@ export default ({
     isPopup = false,
     props = {},
 } = {}) => {
-    const popupTimeout = notifObject.timeout || (notifObject.urgency == 'critical' ? 8000 : 3000);
+    const popupTimeout = notifObject.urgency == 'critical' ? 8000 : (notifObject.timeout || 3000);
     const command = (isPopup ?
         () => notifObject.dismiss() :
         () => notifObject.close()
@@ -105,20 +100,10 @@ export default ({
         }, wholeThing);
     }
     const widget = EventBox({
-        onHover: (self) => {
-            self.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
-            if (!wholeThing.attribute.hovered)
-                wholeThing.attribute.hovered = true;
-        },
-        onHoverLost: (self) => {
-            self.window.set_cursor(null);
-            if (wholeThing.attribute.hovered)
-                wholeThing.attribute.hovered = false;
-            if (isPopup) {
-                command();
-            }
-        },
         onMiddleClick: (self) => {
+            destroyWithAnims();
+        },
+        onSecondaryClick: (self) => {
             destroyWithAnims();
         },
         setup: (self) => {
@@ -141,6 +126,7 @@ export default ({
     let wholeThing = Revealer({
         attribute: {
             'close': undefined,
+            'hasBeenHovered': false,
             'destroyWithAnims': destroyWithAnims,
             'dragging': false,
             'held': false,
@@ -153,9 +139,24 @@ export default ({
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
         }),
+        setup: (self) => self
+        .on('enter-notify-event', () => {
+            self.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
+            self.attribute.hovered = true;
+            self.attribute.hasBeenHovered = true;
+        }).on('leave-notify-event', () => {
+            self.window.set_cursor(null);
+            self.attribute.hovered = false;
+            Utils.timeout(popupTimeout, () => {
+                if (!self.attribute.hovered) {
+                    destroyWithAnims();
+                }
+            })
+        })
     });
 
     const display = Gdk.Display.get_default();
+    const goodBody = notifObject.body.replace(/<a.*?>(.*?)<\/a>/g, '').trim();
     const notifTextPreview = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationSmall,
@@ -168,7 +169,7 @@ export default ({
             justify: Gtk.Justification.LEFT,
             maxWidthChars: 1,
             truncate: 'end',
-            label: notifObject.body.split("\n")[0],
+            label: goodBody.split("\n")[0],
         }),
     });
     const notifTextExpanded = Revealer({
@@ -187,7 +188,7 @@ export default ({
                     justify: Gtk.Justification.LEFT,
                     maxWidthChars: 1,
                     wrap: true,
-                    label: notifObject.body,
+                    label: goodBody,
                 }),
                 Box({
                     className: 'notif-actions spacing-h-5',
@@ -446,17 +447,23 @@ export default ({
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-    if (isPopup) Utils.timeout(popupTimeout, () => {
-        if (wholeThing) {
-            wholeThing.revealChild = false;
-            Utils.timeout(userOptions.animations.durationSmall, () => {
-                if (wholeThing) {
-                    wholeThing.destroy();
-                    wholeThing = null;
-                }
-                command();
-            }, wholeThing);
-        }
-    })
+
+    const closeAfterTimeout = () => {
+        Utils.timeout(popupTimeout, () => {
+            if (wholeThing && !wholeThing.attribute.hasBeenHovered) {
+                wholeThing.revealChild = false;
+                Utils.timeout(userOptions.animations.durationSmall, () => {
+                    if (wholeThing) {
+                        wholeThing.destroy();
+                        wholeThing = null;
+                    }
+                    command();
+                }, wholeThing);
+            }
+        })
+    }
+
+    if (isPopup) closeAfterTimeout();
+
     return wholeThing;
 }
