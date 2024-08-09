@@ -13,10 +13,33 @@ const dummyWs = Box({ className: 'bar-ws' }); // Not shown. Only for getting siz
 const dummyActiveWs = Box({ className: 'bar-ws bar-ws-active' }); // Not shown. Only for getting size props
 const dummyOccupiedWs = Box({ className: 'bar-ws bar-ws-occupied' }); // Not shown. Only for getting size props
 
+const mix = (value1, value2, perc) => {
+    return value1 * perc + value2 * (1 - perc);
+}
+
+const getFontWeightName = (weight) => {
+    switch (weight) {
+        case Pango.Weight.ULTRA_LIGHT:
+            return 'UltraLight';
+        case Pango.Weight.LIGHT:
+            return 'Light';
+        case Pango.Weight.NORMAL:
+            return 'Normal';
+        case Pango.Weight.BOLD:
+            return 'Bold';
+        case Pango.Weight.ULTRA_BOLD:
+            return 'UltraBold';
+        case Pango.Weight.HEAVY:
+            return 'Heavy';
+        default:
+            return 'Normal';
+    }
+}
+
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
     return DrawingArea({
-        // css: `transition: 300ms cubic-bezier(0.1, 1, 0, 1);`,
+        className: 'bar-ws-container',
         attribute: {
             initialized: false,
             workspaceMask: 0,
@@ -65,6 +88,7 @@ const WorkspaceContents = (count = 10) => {
                 const workspaceRadius = workspaceDiameter / 2;
                 const workspaceFontSize = workspaceStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL) / 4 * 3;
                 const workspaceFontFamily = workspaceStyleContext.get_property('font-family', Gtk.StateFlags.NORMAL);
+                const workspaceFontWeight = workspaceStyleContext.get_property('font-weight', Gtk.StateFlags.NORMAL);
                 const wsbg = workspaceStyleContext.get_property('background-color', Gtk.StateFlags.NORMAL);
                 const wsfg = workspaceStyleContext.get_property('color', Gtk.StateFlags.NORMAL);
 
@@ -84,16 +108,15 @@ const WorkspaceContents = (count = 10) => {
 
                 // Font
                 const layout = PangoCairo.create_layout(cr);
-                const fontDesc = Pango.font_description_from_string(`${workspaceFontFamily[0]} ${workspaceFontSize}`);
+                const fontDesc = Pango.font_description_from_string(`${workspaceFontFamily[0]} ${getFontWeightName(workspaceFontWeight)} ${workspaceFontSize}`);
                 layout.set_font_description(fontDesc);
                 cr.setAntialias(Cairo.Antialias.BEST);
                 // Get kinda min radius for number indicators
                 layout.set_text("0".repeat(count.toString().length), -1);
                 const [layoutWidth, layoutHeight] = layout.get_pixel_size();
-                const indicatorRadius = Math.max(layoutWidth, layoutHeight) / 2 * 1.2; // a bit smaller than sqrt(2)*radius
+                const indicatorRadius = Math.max(layoutWidth, layoutHeight) / 2 * 1.15; // smaller than sqrt(2)*radius
                 const indicatorGap = workspaceRadius - indicatorRadius;
 
-                // Draw workspace numbers
                 for (let i = 1; i <= count; i++) {
                     if (area.attribute.workspaceMask & (1 << i)) {
                         // Draw bg highlight
@@ -116,12 +139,31 @@ const WorkspaceContents = (count = 10) => {
                             cr.rectangle(wsCenterX, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
                             cr.fill();
                         }
-
-                        // Set color for text
-                        cr.setSourceRGBA(occupiedfg.red, occupiedfg.green, occupiedfg.blue, occupiedfg.alpha);
                     }
+                }
+
+                // Draw active ws
+                cr.setSourceRGBA(activebg.red, activebg.green, activebg.blue, activebg.alpha);
+                cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius, 0, 2 * Math.PI);
+                cr.fill();
+
+                // Draw workspace numbers
+                for (let i = 1; i <= count; i++) {
+                    const inactivecolors = area.attribute.workspaceMask & (1 << i) ? occupiedfg : wsfg;
+                    if (i == activeWs) {
+                        cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
+                    }
+                    // Moving to
+                    else if ((i == Math.floor(activeWs) && Hyprland.active.workspace.id < activeWs) || (i == Math.ceil(activeWs) && Hyprland.active.workspace.id > activeWs)) {
+                        cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
+                    }
+                    // Moving from
+                    else if ((i == Math.floor(activeWs) && Hyprland.active.workspace.id > activeWs) || (i == Math.ceil(activeWs) && Hyprland.active.workspace.id < activeWs)) {
+                        cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
+                    }
+                    // Inactive
                     else
-                        cr.setSourceRGBA(wsfg.red, wsfg.green, wsfg.blue, wsfg.alpha);
+                        cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
 
                     layout.set_text(`${i + offset}`, -1);
                     const [layoutWidth, layoutHeight] = layout.get_pixel_size();
@@ -131,16 +173,6 @@ const WorkspaceContents = (count = 10) => {
                     PangoCairo.show_layout(cr, layout);
                     cr.stroke();
                 }
-
-                // Draw active ws
-                // base
-                cr.setSourceRGBA(activebg.red, activebg.green, activebg.blue, activebg.alpha);
-                cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius, 0, 2 * Math.PI);
-                cr.fill();
-                // inner decor
-                cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
-                cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius * 0.2, 0, 2 * Math.PI);
-                cr.fill();
             }))
         ,
     })
