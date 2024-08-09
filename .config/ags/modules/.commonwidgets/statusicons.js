@@ -279,6 +279,16 @@ const OptionalKeyboardLayout = async () => {
 };
 const optionalKeyboardLayoutInstance = await OptionalKeyboardLayout();
 
+const VPNIndicator = () => Widget.Revealer({
+    child: MaterialIcon('lock', 'norm'),
+    transition: 'slide_left',
+    revealChild: false,
+    transitionDuration: userOptions.animations.durationSmall,
+    setup: (self) => self.hook(Network.vpn, (self) => {
+        self.revealChild = (Network.vpn.activatedConnections.length > 0);
+    })
+})
+
 export const StatusIcons = (props = {}) => Widget.Box({
     ...props,
     child: Widget.Box({
@@ -287,6 +297,7 @@ export const StatusIcons = (props = {}) => Widget.Box({
             MicMuteIndicator(),
             optionalKeyboardLayoutInstance,
             NotificationIndicator(),
+            VPNIndicator(),
             NetworkIndicator(),
             Widget.Box({
                 className: 'spacing-h-5',
