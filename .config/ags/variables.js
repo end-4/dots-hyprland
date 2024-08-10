@@ -16,17 +16,27 @@ globalThis['openColorScheme'] = showColorScheme;
 globalThis['mpris'] = Mpris;
 
 // Mode switching
-export const currentShellMode = Variable('normal', {}) // normal, focus
+const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
+const initialMonitorShellModes = Array.from({ length: numberOfMonitors }, () => 'normal');
+export const currentShellMode = Variable(initialMonitorShellModes, {}) // normal, focus
+
+const updateMonitorShellMode = (monitorShellModes, monitor, mode) => {
+    const newValue = [...monitorShellModes.value];
+    newValue[monitor] = mode;
+    monitorShellModes.value = newValue;
+}
 globalThis['currentMode'] = currentShellMode;
 globalThis['cycleMode'] = () => {
-    if (currentShellMode.value === 'normal') {
-        currentShellMode.value = 'focus';
-    } 
-    else if (currentShellMode.value === 'focus') {
-        currentShellMode.value = 'nothing';
+    const monitor = Hyprland.active.monitor.id || 0;
+
+    if (currentShellMode.value[monitor] === 'normal') {
+        updateMonitorShellMode(currentShellMode, monitor, 'focus')
+    }
+    else if (currentShellMode.value[monitor] === 'focus') {
+        updateMonitorShellMode(currentShellMode, monitor, 'nothing')
     }
     else {
-        currentShellMode.value = 'normal';
+        updateMonitorShellMode(currentShellMode, monitor, 'normal')
     }
 }
 
