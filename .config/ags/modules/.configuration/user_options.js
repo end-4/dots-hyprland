@@ -221,6 +221,11 @@ let configOptions = {
             'cycleTab': "Ctrl+Tab",
         }
     },
+    'bar': {
+        // Array of bar styles for each monitor.
+        // Example for four monitors: ["normal", "focus", "normal", "nothing"]
+        'monitors': ["normal"]
+    },
 }
 
 // Override defaults with user's options

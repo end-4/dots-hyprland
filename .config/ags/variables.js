@@ -15,11 +15,23 @@ globalThis['openMusicControls'] = showMusicControls;
 globalThis['openColorScheme'] = showColorScheme;
 globalThis['mpris'] = Mpris;
 
-// Mode switching
-const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
-const initialMonitorShellModes = Array.from({ length: numberOfMonitors }, () => 'normal');
-export const currentShellMode = Variable(initialMonitorShellModes, {}) // normal, focus
+// load monitor shell modes from userOptions
+const initialMonitorShellModes = () => {
+    const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
+    const monitorBarConfigs = [];
+    for (let i = 0; i < numberOfMonitors; i++) {
+        if (userOptions.bar.monitors[i]) {
+            monitorBarConfigs.push(userOptions.bar.monitors[i])
+        } else {
+            monitorBarConfigs.push('normal')
+        }
+    }
+    return monitorBarConfigs;
 
+}
+export const currentShellMode = Variable(initialMonitorShellModes(), {}) // normal, focus
+
+// Mode switching
 const updateMonitorShellMode = (monitorShellModes, monitor, mode) => {
     const newValue = [...monitorShellModes.value];
     newValue[monitor] = mode;
