@@ -5,7 +5,7 @@ pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	adw-gtk3-git
+    adw-gtk-theme-git
 	qt5ct
 	qt5-wayland
 	fontconfig
