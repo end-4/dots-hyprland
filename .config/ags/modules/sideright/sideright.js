@@ -9,7 +9,6 @@ import {
     ModuleNightLight,
     ModuleInvertColors,
     ModuleIdleInhibitor,
-    ModuleEditIcon,
     ModuleReloadIcon,
     ModuleSettingsIcon,
     ModulePowerIcon,
@@ -109,9 +108,8 @@ const timeRow = Box({
             },
         }),
         Widget.Box({ hexpand: true }),
-        // ModuleEditIcon({ hpack: 'end' }), // TODO: Make this work
         ModuleReloadIcon({ hpack: 'end' }),
-        ModuleSettingsIcon({ hpack: 'end' }),
+        // ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
         ModulePowerIcon({ hpack: 'end' }),
     ]
 });

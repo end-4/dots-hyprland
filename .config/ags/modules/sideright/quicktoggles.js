@@ -224,19 +224,6 @@ export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make
     ...props,
 });
 
-export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this work
-    ...props,
-    className: 'txt-small sidebar-iconbutton',
-    onClicked: () => {
-        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center', '&']);
-        App.closeWindow('sideright');
-    },
-    child: MaterialIcon('edit', 'norm'),
-    setup: button => {
-        setupCursorHover(button);
-    }
-})
-
 export const ModuleReloadIcon = (props = {}) => Widget.Button({
     ...props,
     className: 'txt-small sidebar-iconbutton',

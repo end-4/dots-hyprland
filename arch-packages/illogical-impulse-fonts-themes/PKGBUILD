@@ -5,7 +5,7 @@ pkgdesc='Illogical Impulse Fonts and Theming Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	adw-gtk3-git
+    adw-gtk-theme-git
 	qt5ct
 	qt5-wayland
 	fontconfig
@@ -14,7 +14,7 @@ depends=(
 	ttf-material-symbols-variable-git
 	ttf-space-mono-nerd
 	ttf-rubik-vf
-  ttf-gabarito-git
+    ttf-gabarito-git
 	fish
 	foot
 	starship
