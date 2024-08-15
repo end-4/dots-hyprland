@@ -101,8 +101,7 @@ export const Bar = async (monitor = 0) => {
                 'nothing': nothingContent,
             },
             setup: (self) => self.hook(currentShellMode, (self) => {
-                self.shown = currentShellMode.value;
-
+                self.shown = currentShellMode.value[monitor];
             })
         }),
     });

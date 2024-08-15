@@ -221,6 +221,12 @@ let configOptions = {
             'cycleTab': "Ctrl+Tab",
         }
     },
+    'bar': {
+        // Array of bar modes for each monitor. Hit Ctrl+Alt+Slash to cycle.
+        // Modes: "normal", "focus" (workspace indicator only), "nothing"
+        // Example for four monitors: ["normal", "focus", "normal", "nothing"]
+        'modes': ["normal"]
+    },
 }
 
 // Override defaults with user's options
