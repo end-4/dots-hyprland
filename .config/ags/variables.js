@@ -20,8 +20,8 @@ const initialMonitorShellModes = () => {
     const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
     const monitorBarConfigs = [];
     for (let i = 0; i < numberOfMonitors; i++) {
-        if (userOptions.bar.monitors[i]) {
-            monitorBarConfigs.push(userOptions.bar.monitors[i])
+        if (userOptions.bar.modes[i]) {
+            monitorBarConfigs.push(userOptions.bar.modes[i])
         } else {
             monitorBarConfigs.push('normal')
         }
