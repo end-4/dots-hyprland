@@ -221,17 +221,14 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     ImageAction({
                         name: 'Save image',
                         icon: 'save',
-                        action: () => {
+                        action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:')); 
                             const tagDirectory = currentTags.join('_');
                             let fileExtension = data.file_ext || 'jpg'; 
                             const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${tagDirectory} && curl -L -o $(xdg-user-dir PICTURES)/homework/${tagDirectory}/${data.md5}.${fileExtension} '${data.file_url}'`;                            
                             execAsync(['bash', '-c', saveCommand])
-                                // .then(() => {
-                                //     print(`Image saved to $(xdg-user-dir PICTURES)/homework/${tagDirectory}/${data.md5}.${data.file_ext}`);
-                                // })
-                                .then(() => self.label = 'done')
-                                .catch(print);
+                            .then(() => self.label = 'done')
+                            .catch(print);
                         },
                     }),
                 ]
