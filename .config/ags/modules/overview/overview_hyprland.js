@@ -51,6 +51,7 @@ export default (overviewMonitor = 0) => {
 
     const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, initialClass, monitor, title, xwayland }, screenCoords) => {
         const revealInfoCondition = (Math.min(w, h) * userOptions.overview.scale > 70);
+        monitor = monitors.findIndex(element => element.id === monitor);
         if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
         // Non-primary monitors
         if (screenCoords.x != 0) x -= screenCoords.x;
