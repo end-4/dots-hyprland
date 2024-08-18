@@ -250,12 +250,8 @@ export default ({
         className: 'txt-smaller txt-semibold',
         label: initTimeString,
         setup: initTimeString == 'Now' ? (self) => {
-            let id = Utils.timeout(60000, () => {
-                self.label = getFriendlyNotifTimeString(notifObject.time);
-                id = null;
-            });
-            self.connect('destroy', () => { if (id) GLib.source_remove(id) });
-        } : () => { },
+            Utils.timeout(60000, () => self.label = getFriendlyNotifTimeString(notifObject.time))
+        } : () => {},
     });
     const notifText = Box({
         valign: Gtk.Align.CENTER,

@@ -3,7 +3,7 @@ import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 import { RoundedCorner } from "../.commonwidgets/cairo_roundedcorner.js";
 
-if(userOptions.appearance.fakeScreenRounding === 2) Hyprland.connect('event', (service, name, data) => {
+if(userOptions.appearance.fakeScreenRounding === 0) Hyprland.connect('event', (service, name, data) => {
     if (name == 'fullscreen') {
         const monitor = Hyprland.active.monitor.id;
         if (data == '1') {

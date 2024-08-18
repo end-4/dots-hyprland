@@ -1,0 +1,88 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "none"
+opacity = 1
+
+[window.padding]
+x = 24
+y = 24
+
+[window.dimensions]
+columns = 80
+lines = 35
+
+[scrolling]
+history = 1000
+multiplier = 3
+
+[font]
+size = 13
+
+[font.normal]
+family = "JetBrains Mono Nerd Font"
+style = "Medium"
+
+[font.bold]
+family = "JetBrains Mono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrains Mono Nerd Font"
+style = "Italic"
+
+[font.offset]
+y = 0
+
+[font.glyph_offset]
+y = 0
+
+[colors]
+[colors.primary]
+background = "0x181825"
+foreground = "0xFFFFFF" # Brightest white for the font
+
+[colors.cursor]
+text = "CellBackground"
+cursor = "CellForeground"
+
+[colors.search.matches]
+foreground = "0x1E1E2E"
+background = "0xFAB387"
+
+[colors.search.focused_match]
+foreground = "0x1E1E2E"
+background = "0xFAB387"
+
+[colors.selection]
+text = "CellForeground"
+background = "0x45475A"
+
+[colors.vi_mode_cursor]
+text = "CellBackground"
+cursor = "CellForeground"
+
+[colors.normal]
+black = "0x45475A"
+red = "0xF38BA8"
+green = "0xA6E3A1"
+yellow = "0xF9E2AF"
+blue = "0x89B4FA"
+magenta = "0xF5C2E7"
+cyan = "0x94E2D5"
+white = "0xBAC2DE"
+
+[colors.bright]
+black = "0x6C7086"
+red = "0xF38BA8"
+green = "0xA6E3A1"
+yellow = "0xF9E2AF"
+blue = "0x89B4FA"
+magenta = "0xF5C2E7"
+cyan = "0x94E2D5"
+white = "0xA6ADC8"
+
+[cursor]
+style = "Block"
+vi_mode_style = "Block"

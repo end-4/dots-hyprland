@@ -7,7 +7,7 @@ import userOverrides from '../../user_options.js';
 let configOptions = {
     // General stuff
     'ai': {
-        'defaultGPTProvider': "openai",
+        'defaultGPTProvider': "openrouter",
         'defaultTemperature': 0.9,
         'enhancements': true,
         'useHistory': true,
@@ -37,7 +37,7 @@ let configOptions = {
         'network': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
         'settings': "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center",
         'taskManager': "gnome-usage",
-        'terminal': "foot", // This is only for shell actions
+        'terminal': "alacritty -e ", // This is only for shell actions
     },
     'battery': {
         'low': 20,
@@ -101,12 +101,12 @@ let configOptions = {
         'image': {
             'columns': 2,
             'batchCount': 20,
-            'allowNsfw': false,
+            'allowNsfw': true,
         },
         'pages': {
             'order': ["apis", "tools"],
             'apis': {
-                'order': ["gemini", "gpt", "waifu", "booru"],
+                'order': ["gpt", "gemini", "waifu", "booru"],
             }
         },
     },
@@ -133,19 +133,19 @@ let configOptions = {
         'dateFormat': "%d/%m", // On notif time
     },
     'weather': {
-        'city': "",
+        'city': "Durgapur",
         'preferredUnit': "C", // Either C or F
     },
     'workspaces': {
         'shown': 10,
     },
     'dock': {
-        'enabled': false,
+        'enabled': true,
         'hiddenThickness': 5,
-        'pinnedApps': ['firefox', 'org.gnome.Nautilus'],
+        'pinnedApps': ['systemsettings','cachy-browser','gnome-system-monitor','org.gnome.Nautilus','spotify','com.obsproject.Studio','freetube','codium','beeper','obsidian','stremio','tor-browser','libreoffice-writer','virt-manager','wireshark'],
         'layer': 'top',
         'monitorExclusivity': true, // Dock will move to other monitor along with focus if enabled
-        'searchPinnedAppIcons': false, // Try to search for the correct icon if the app class isn't an icon name
+        'searchPinnedAppIcons': false , // Try to search for the correct icon if the app class isn't an icon name
         'trigger': ['client-added', 'client-removed'], // client_added, client_move, workspace_active, client_active
         // Automatically hide dock after `interval` ms since trigger
         'autoHide': [

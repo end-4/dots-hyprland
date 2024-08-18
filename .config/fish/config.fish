@@ -18,8 +18,27 @@ if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
 end
 
 alias pamcan=pacman
+alias vim=nvim
+alias ins='sudo pacman -S'
+alias virtualbox='bash -c "QT_STYLE_OVERRIDE=kvantum VirtualBox"'
+alias openfile="fzf | xargs -o xdg-open"
+
+
+
 
 # function fish_prompt
 #   set_color cyan; echo (pwd)
 #   set_color green; echo '> '
 # end
+
+fish_add_path /home/deb/.spicetify
+set -gx EDITOR nvim
+source (/usr/bin/starship init fish --print-full-init | psub)
+mcfly init fish | source
+set -gx TERMINAL kitty
+alias term='kitty'
+
+
+source /usr/share/cachyos-fish-config/cachyos-config.fish
+
+fastfetch

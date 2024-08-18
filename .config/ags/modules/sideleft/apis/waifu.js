@@ -186,16 +186,13 @@ const WaifuImage = (taglist) => {
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
-        child: Box({
-            className: 'margin-top-5',
-            children: [Overlay({
-                child: Box({
-                    homogeneous: true,
-                    className: 'sidebar-waifu-image',
-                    children: [blockImage],
-                }),
-                overlays: [blockImageActions],
-            })]
+        child: Overlay({
+            child: Box({
+                homogeneous: true,
+                className: 'sidebar-waifu-image margin-top-5',
+                children: [blockImage],
+            }),
+            overlays: [blockImageActions],
         }),
     });
     const thisBlock = Box({

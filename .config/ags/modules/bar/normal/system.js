@@ -12,7 +12,7 @@ import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../.commondat
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;
 Utils.exec(`mkdir -p ${WEATHER_CACHE_FOLDER}`);
 
-const BarBatteryProgress = () => {
+const BatBatteryProgress = () => {
     const _updateProgress = (circprog) => { // Set circular progress value
         circprog.css = `font-size: ${Math.abs(Battery.percent)}px;`
 
@@ -28,27 +28,16 @@ const BarBatteryProgress = () => {
     })
 }
 
-const time = Variable('', {
-    poll: [
-        userOptions.time.interval,
-        () => GLib.DateTime.new_now_local().format(userOptions.time.format),
-    ],
-})
-
-const date = Variable('', {
-    poll: [
-        userOptions.time.dateInterval,
-        () => GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong),
-    ],
-})
-
 const BarClock = () => Widget.Box({
     vpack: 'center',
     className: 'spacing-h-4 bar-clock-box',
     children: [
         Widget.Label({
             className: 'bar-time',
-            label: time.bind(),
+            label: GLib.DateTime.new_now_local().format(userOptions.time.format),
+            setup: (self) => self.poll(userOptions.time.interval, label => {
+                label.label = GLib.DateTime.new_now_local().format(userOptions.time.format);
+            }),
         }),
         Widget.Label({
             className: 'txt-norm txt-onLayer1',
@@ -56,7 +45,10 @@ const BarClock = () => Widget.Box({
         }),
         Widget.Label({
             className: 'txt-smallie bar-date',
-            label: date.bind(),
+            label: GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong),
+            setup: (self) => self.poll(userOptions.time.dateInterval, (label) => {
+                label.label = GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong);
+            }),
         }),
     ],
 });
@@ -124,7 +116,7 @@ const BarBattery = () => Box({
                 }),
             }),
             overlays: [
-                BarBatteryProgress(),
+                BatBatteryProgress(),
             ]
         }),
     ]

@@ -23,7 +23,6 @@ export default ({
                 Label({
                     className: 'txt-norm',
                     label: `${name}`,
-                    useMarkup: true,
                 }),
                 Box({
                     hexpand: true,
