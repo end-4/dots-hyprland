@@ -1,0 +1,91 @@
+{% if background is defined %}
+background {{background}}
+{% endif %}
+{% if foreground is defined %}
+foreground {{foreground}}
+{% endif %}
+
+{% if cursorForeground is defined %}
+cursor {{cursorForeground}}
+{% endif %}
+{% if cursorBackground is defined %}
+cursor_text_color {{cursorBackground | removeAlpha}}
+{% endif %}
+{% if background is defined %}
+selection_foreground {{background | removeAlpha}}
+{% endif %}
+{% if selectionBackground is defined %}
+selection_background {{selectionBackground | removeAlpha}}
+{% endif %}
+
+{% if ansiBlack is defined %}
+# dull black
+color0 {{ansiBlack}}
+{% endif %}
+{% if ansiBrightBlack is defined %}
+# light black
+color8 {{ansiBrightBlack}}
+{% endif %}
+
+{% if ansiRed is defined %}
+# dull red
+color1 {{ansiRed}}
+{% endif %}
+{% if ansiBrightRed %}
+# light red
+color9 {{ansiBrightRed}}
+{% endif %}
+
+{% if ansiGreen is defined %}
+# dull green
+color2 {{ansiGreen}}
+{% endif %}
+{% if ansiBrightGreen is defined %}
+# light green
+color10 {{ansiBrightGreen}}
+{% endif %}
+
+{% if ansiYellow is defined %}
+# yellow
+color3 {{ansiYellow}}
+{% endif %}
+{% if ansiBrightYellow is defined %}
+# light yellow
+color11 {{ansiBrightYellow}}
+{% endif %}
+
+{% if ansiBlue is defined %}
+# blue
+color4 {{ansiBlue}}
+{% endif %}
+{% if ansiBrightBlue %}
+# light blue
+color12 {{ansiBrightBlue}}
+{% endif %}
+
+{% if ansiMagenta is defined %}
+# magenta
+color5 {{ansiMagenta}}
+{% endif %}
+{% if ansiBrightMagenta is defined %}
+# light magenta
+color13 {{ansiBrightMagenta}}
+{% endif %}
+
+{% if ansiCyan is defined %}
+# cyan
+color6 {{ansiCyan}}
+{% endif %}
+{% if ansiBrightCyan is defined %}
+# light cyan
+color14 {{ansiBrightCyan}}
+{% endif %}
+
+{% if ansiWhite is defined %}
+# dull white
+color7 {{ansiWhite}}
+{% endif %}
+{% if ansiBrightWhite is defined %}
+# bright white
+color15 {{ansiBrightWhite}}
+{% endif %}

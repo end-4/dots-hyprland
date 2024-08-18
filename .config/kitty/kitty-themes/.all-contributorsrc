@@ -1,0 +1,111 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-green.svg?style=for-the-badge)](#contributors)",
+  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><b><%= contributor.name %></b></a><br /><%= contributions %>",
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "scopatz",
+      "name": "Anthony Scopatz",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/320553?v=4",
+      "profile": "http://www.scopatz.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "orangecoloured",
+      "name": "RCKT",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3314891?v=4",
+      "profile": "https://rckt.cc",
+      "contributions": [
+        "theme"
+      ]
+    },
+    {
+      "login": "varmanishant",
+      "name": "varmanishant",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4084912?v=4",
+      "profile": "https://github.com/varmanishant",
+      "contributions": [
+        "theme"
+      ]
+    },
+    {
+      "login": "rlerdorf",
+      "name": "Rasmus Lerdorf",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/54641?v=4",
+      "profile": "https://github.com/rlerdorf",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "Luflosi",
+      "name": "Luflosi",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/15217907?v=4",
+      "profile": "https://github.com/Luflosi",
+      "contributions": [
+        "fix",
+        "question",
+        "doc"
+      ]
+    },
+    {
+      "login": "connorholyday",
+      "name": "Connor Holyday",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4559119?v=4",
+      "profile": "https://holyday.me",
+      "contributions": [
+        "fix"
+      ]
+    },
+    {
+      "login": "BlueDrink9",
+      "name": "BlueDrink9",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/26474254?v=4",
+      "profile": "https://github.com/BlueDrink9",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "brujoand",
+      "name": "Anders Brujordet",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/124421?v=4",
+      "profile": "https://github.com/brujoand",
+      "contributions": [
+        "theme"
+      ]
+    },
+    {
+      "login": "rjshrjndrn",
+      "name": "Rajesh Rajendran",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2563385?v=4",
+      "profile": "http://www.hackouts.com",
+      "contributions": [
+        "fix"
+      ]
+    }
+  ],
+  "types": {
+    "theme": {
+      "symbol": "😻",
+      "description": "New theme added to the collection"
+    },
+    "fix": {
+      "symbol": "🛠️",
+      "description": "Fixed a theme"
+    }
+  },
+  "contributorsPerLine": 7,
+  "projectName": "kitty-themes",
+  "projectOwner": "dexpota",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "commitConvention": "none"
+}

@@ -1,0 +1,6 @@
+[General]
+theme=catppuccin-mocha-lavender
+
+[Applications]
+Default=wireshark-qt
+catppuccin-mocha-lavender=wireshark-qt
