@@ -9,6 +9,7 @@ depends=(
 	wireplumber
 	libdbusmenu-gtk3
 	playerctl
+	obs-studio
 	swww
 )
 

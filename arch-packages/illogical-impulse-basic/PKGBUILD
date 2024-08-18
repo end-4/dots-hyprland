@@ -18,6 +18,7 @@ depends=(
 	jq
 	npm
 	meson
+	aria
 	typescript
 	gjs
 	xdg-user-dirs

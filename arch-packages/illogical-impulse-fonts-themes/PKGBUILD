@@ -8,6 +8,7 @@ depends=(
     adw-gtk-theme-git
 	qt5ct
 	qt5-wayland
+	nwg-look
 	fontconfig
 	ttf-readex-pro
 	ttf-jetbrains-mono-nerd
@@ -15,8 +16,9 @@ depends=(
 	ttf-space-mono-nerd
 	ttf-rubik-vf
     ttf-gabarito-git
+	ttf-ms-fonts
 	fish
-	foot
+	alacritty
 	starship
 )
 
