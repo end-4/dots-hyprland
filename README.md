@@ -94,34 +94,6 @@
 <!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/14e9725c-789f-4412-87b6-cce9504db109)
 
-> [!WARNING]
-> - Only the above is maintained
-> - Stuff below:
->   - Currently, they do NOT work (see [#99](https://github.com/end-4/dots-hyprland/issues/99))
->   - The pics are here mainly for your viewing pleasure
->   - The files are still available, feel free to grab them from the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch if you're willing to see some spaghetti and troubleshoot
-
-- stuff below have showcase videos. click image to view.
-
-### [m3ww](https://github.com/end-4/dots-hyprland/tree/archive)
-   <a href="https://streamable.com/85ch8x">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
-   </a>
-
-### [NovelKnock](https://github.com/end-4/dots-hyprland/tree/archive)
-   <a href="https://streamable.com/7vo61k">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
-   </a>
-
-### [Hybrid](https://github.com/end-4/dots-hyprland/tree/archive)
-   <a href="https://streamable.com/4oogot">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
-   </a>
-
-### [Windoes](https://github.com/end-4/dots-hyprland/tree/archive)
-   <a href="https://streamable.com/5qx614">
-    <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
-   </a>
 
 <div align="center">
     <h2>• thank you •</h2>
