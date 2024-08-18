@@ -6,6 +6,36 @@ source ./scriptdata/functions
 source ./scriptdata/installers
 source ./scriptdata/options
 
+startask (){
+  ...
+}
+
+# Ask user if they want to add the Chaotic AUR repository
+echo "Installing a repository with pre-made files can take less compilation time."
+read -p "Do you want to add the Chaotic AUR repository? (y/n) " -n 1 -r
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  # Retrieve primary key and enable installation of keyring and mirror list
+  echo "Retrieving primary key and enabling installation of keyring and mirror list..."
+  sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+  sudo pacman-key --lsign-key 3056513887B78AEB
+
+  # Install keyring and mirror list
+  echo "Installing keyring and mirror list..."
+  sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+  sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+
+  # Append to /etc/pacman.conf
+  echo "Appending to /etc/pacman.conf..."
+  sudo echo "[chaotic-aur]" | sudo tee -a /etc/pacman.conf
+  sudo echo "Include = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf
+else
+  echo "Skipping addition of Chaotic AUR repository."
+fi
+
+echo "Continuing with the rest of the installation process..."
+
 #####################################################################################
 if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
 prevent_sudo_or_root
@@ -306,3 +336,5 @@ case $existed_hypr_conf in
 if [[ ! -z "${warn_files[@]}" ]]; then
   printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.\e[0m\n"
 fi
+
+
