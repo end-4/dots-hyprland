@@ -78,15 +78,17 @@
 ### Main branch (*illogical-impulse*)
 
 **AI, on-screen indicators**
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/5e081770-0f1e-45c4-ad9c-3d19f488cd85)
+![image](https://github.com/user-attachments/assets/3dec7ac7-3629-4bc1-9e87-60c68edc61df)
+
 
 **Fancy notifications, music controls, system, calendar**
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7)
+![image](https://github.com/user-attachments/assets/81b90b01-ef9d-4af8-a9b5-33618444ff68)
+
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/90c13b64-cde3-4363-9716-718d35845d95) -->
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/9e7adedd-fae8-4cc8-9c81-d7ad489d7559) -->
 
 
-**Weeb powers**
+**Weeb powers..Im not into these (ツ)**
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/98fe2c03-a128-45c0-8155-3a6080db3b84) -->
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/711f5475-93ca-4097-a960-8047acc85cc7)
 
@@ -94,6 +96,7 @@
 <!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/14e9725c-789f-4412-87b6-cce9504db109)
 
+**
 
 <div align="center">
     <h2>• thank you •</h2>
