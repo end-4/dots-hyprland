@@ -96,7 +96,10 @@
 <!--! ![image](https://github.com/end-4/dots-hyprland/assets/97237370/354431f6-8939-487f-9292-0bac71cf9ca8) -->
 ![image](https://github.com/end-4/dots-hyprland/assets/97237370/14e9725c-789f-4412-87b6-cce9504db109)
 
-**
+**Emogi selector,Cheatsheet,Clipboard**
+![image](https://github.com/user-attachments/assets/83b2cac0-20ea-4a1e-b3fc-557dee6ed3d2)
+
+
 
 <div align="center">
     <h2>• thank you •</h2>
