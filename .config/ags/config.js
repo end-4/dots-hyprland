@@ -53,11 +53,13 @@ const Windows = () => [
     ...(userOptions.appearance.fakeScreenRounding !== 0 ? [
         forMonitors((id) => Corner(id, 'top left', true)),
         forMonitors((id) => Corner(id, 'top right', true)),
+        forMonitors((id) => Corner(id, 'bottom left', true)),
+        forMonitors((id) => Corner(id, 'bottom right', true)),
     ] : []),
-    forMonitors((id) => Corner(id, 'bottom left', userOptions.appearance.fakeScreenRounding !== 0)),
-    forMonitors((id) => Corner(id, 'bottom right', userOptions.appearance.fakeScreenRounding !== 0)),
-    forMonitors(BarCornerTopleft),
-    forMonitors(BarCornerTopright),
+    ...(userOptions.appearance.barRoundCorners ? [
+        forMonitors(BarCornerTopleft),
+        forMonitors(BarCornerTopright),
+    ] : []),
 ];
 
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
