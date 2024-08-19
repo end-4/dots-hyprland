@@ -129,6 +129,8 @@ class BooruService extends Service {
                         aspect_ratio: obj.width / obj.height,
                         id: obj.id,
                         tags: obj.tags,
+                        rating: obj.rating,
+                        is_nsfw: (obj.rating != 's'),
                         md5: obj.md5,
                         preview_url: obj.preview_url,
                         preview_width: obj.preview_width,
