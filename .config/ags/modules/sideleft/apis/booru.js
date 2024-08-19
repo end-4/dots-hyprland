@@ -110,6 +110,15 @@ export const BooruSettings = () => MarginRevealer({
                             self.attribute.enabled.value = BooruService.nsfw;
                         }, 'notify::nsfw')
                     }),
+                    ConfigToggle({
+                        icon: 'sell',
+                        name: 'Save in folder by tags',
+                        desc: 'Saves images in folders by their tags',
+                        initValue: userOptions.sidebar.image.saveInFolderByTags,
+                        onChange: (self, newValue) => {
+                            userOptions.sidebar.image.saveInFolderByTags = newValue;
+                        },
+                    }),
                 ]
             })
         ]
@@ -187,7 +196,6 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     // Show
                     // const downloadCommand = `wget -O '${imagePath}' '${data.preview_url}'`;
                     const downloadCommand = `curl -L -o '${imagePath}' '${data.preview_url}'`;
-                    // console.log(downloadCommand)
                     if (!force && fileExists(imagePath)) showImage();
                     else Utils.timeout(delay, () => Utils.execAsync(['bash', '-c', downloadCommand])
                         .then(showImage)
@@ -217,6 +225,19 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                         name: 'Go to source',
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
+                    }),
+                    ImageAction({
+                        name: 'Save image',
+                        icon: 'save',
+                        action: (self) => {
+                            const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
+                            const tagDirectory = currentTags.join('+');
+                            let fileExtension = data.file_ext || 'jpg';
+                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
+                            execAsync(['bash', '-c', saveCommand])
+                                .then(() => self.label = 'done')
+                                .catch(print);
+                        },
                     }),
                 ]
             })

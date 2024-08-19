@@ -29,6 +29,7 @@ let configOptions = {
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
         'layerSmoke': false,
         'layerSmokeStrength': 0.2,
+        'barRoundCorners': 1, // 0: No, 1: Yes
         'fakeScreenRounding': 1, // 0: None | 1: Always | 2: When not fullscreen
     },
     'apps': {
@@ -102,6 +103,7 @@ let configOptions = {
             'columns': 2,
             'batchCount': 20,
             'allowNsfw': false,
+            'saveInFolderByTags': false,
         },
         'pages': {
             'order': ["apis", "tools"],
