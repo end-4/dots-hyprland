@@ -222,9 +222,9 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                         icon: 'save',
                         action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
-                            const tagDirectory = currentTags.join('_');
+                            const tagDirectory = currentTags.join('+');
                             let fileExtension = data.file_ext || 'jpg';
-                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${tagDirectory} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${tagDirectory}/${data.md5}.${fileExtension} '${data.file_url}'`;
+                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.sortInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.sortInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
                             execAsync(['bash', '-c', saveCommand])
                                 .then(() => self.label = 'done')
                                 .catch(print);
