@@ -102,6 +102,7 @@ let configOptions = {
             'columns': 2,
             'batchCount': 20,
             'allowNsfw': false,
+            'sortInFolderByTags': false,
         },
         'pages': {
             'order': ["apis", "tools"],

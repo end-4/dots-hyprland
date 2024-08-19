@@ -187,7 +187,6 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     // Show
                     // const downloadCommand = `wget -O '${imagePath}' '${data.preview_url}'`;
                     const downloadCommand = `curl -L -o '${imagePath}' '${data.preview_url}'`;
-                    // console.log(downloadCommand)
                     if (!force && fileExists(imagePath)) showImage();
                     else Utils.timeout(delay, () => Utils.execAsync(['bash', '-c', downloadCommand])
                         .then(showImage)
@@ -217,6 +216,19 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                         name: 'Go to source',
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
+                    }),
+                    ImageAction({
+                        name: 'Save image',
+                        icon: 'save',
+                        action: (self) => {
+                            const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
+                            const tagDirectory = currentTags.join('+');
+                            let fileExtension = data.file_ext || 'jpg';
+                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.sortInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.sortInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
+                            execAsync(['bash', '-c', saveCommand])
+                                .then(() => self.label = 'done')
+                                .catch(print);
+                        },
                     }),
                 ]
             })
