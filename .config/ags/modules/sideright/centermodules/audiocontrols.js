@@ -64,6 +64,7 @@ const AppVolume = (stream) => Box({
 const AudioDevices = (input = false) => {
     const dropdownShown = Variable(false);
     const DeviceStream = (stream) => Button({
+        tooltipText: stream.description,
         child: Box({
             className: 'txt spacing-h-10',
             children: [
