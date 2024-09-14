@@ -1,5 +1,6 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
+import configOptions from "../modules/.configuration/user_options.js";
 
 function getLanguageCode() {
     let langEnv = GLib.getenv('LANG') || GLib.getenv('LANGUAGE') || 'C.UTF-8'; // Assume the default value contains a dot
@@ -8,7 +9,7 @@ function getLanguageCode() {
 }
 
 const translations = {};
-let currentLanguage = getLanguageCode();
+let currentLanguage = configOptions.i18n.langCode || getLanguageCode();
 
 // Load language file
 async function loadLanguage(lang) {

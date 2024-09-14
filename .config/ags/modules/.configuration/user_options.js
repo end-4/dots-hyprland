@@ -69,6 +69,9 @@ let configOptions = {
             'color': 'rgba(113,227,32,0.9)',
         },
     },
+    'i18n': {
+        'langCode': "",//Customize the locale, such as zh_CN
+    },
     'monitors': {
         'scaleMethod': "division", // Either "division" [default] or "gdk"
     },
