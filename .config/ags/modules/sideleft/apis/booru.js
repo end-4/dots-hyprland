@@ -11,6 +11,7 @@ import BooruService from '../../../services/booru.js';
 import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -67,12 +68,12 @@ const BooruInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by yande.re and konachan',
+                        label: getString('Powered by yande.re and konachan'),
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.',
+                        tooltipText: getString('An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.'),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -95,13 +96,8 @@ export const BooruSettings = () => MarginRevealer({
                 children: [
                     ConfigToggle({
                         icon: 'menstrual_health',
-                        name: 'Lewds',
-                        desc: `Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:
-'sidebar': {
-  'image': {
-    'allowNsfw': true,
-  }
-},`,
+                        name: getString('Lewds'),
+                        desc: getString("Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}"),
                         initValue: BooruService.nsfw,
                         onChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
@@ -112,8 +108,8 @@ export const BooruSettings = () => MarginRevealer({
                     }),
                     ConfigToggle({
                         icon: 'sell',
-                        name: 'Save in folder by tags',
-                        desc: 'Saves images in folders by their tags',
+                        name: getString('Save in folder by tags'),
+                        desc: getString('Saves images in folders by their tags'),
                         initValue: userOptions.sidebar.image.saveInFolderByTags,
                         onChange: (self, newValue) => {
                             userOptions.sidebar.image.saveInFolderByTags = newValue;
@@ -469,7 +465,7 @@ export const booruCommands = Box({
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,
-            label: 'Tags →',
+            label: getString('Tags →'),
             onClicked: () => {
                 booruTags.revealChild = !booruTags.revealChild;
             }

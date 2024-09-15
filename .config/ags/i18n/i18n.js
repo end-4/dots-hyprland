@@ -35,19 +35,10 @@ async function loadLanguage(lang) {
     currentLanguage = lang;
 }
 
-// Set the current language
-function setLanguage(lang) {
-    try {
-        loadLanguage(lang);
-    } catch (error) {
-        console.error(`Failed to set language, language code: ${lang}:`, error);
-    }
-}
-
 // Get translation, if no corresponding value, return the key
-function setString(key) {
+function getString(key) {
     if (!translations[currentLanguage]?.[key]) {
-        console.log('无:' + key);
+        console.log('Not found:' + key);
     }
     return translations[currentLanguage]?.[key] || key;
 }
@@ -63,7 +54,4 @@ function init() {
     }
 }
 
-
-
-
-export { setString, init, setLanguage };
+export { getString, init };

@@ -13,6 +13,7 @@ import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/curso
 import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
 import { chatEntry } from '../apiwidgets.js';
+import { getString } from '../../../i18n/i18n.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
@@ -71,12 +72,12 @@ const WaifuInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by waifu.im + other APIs',
+                        label: getString('Powered by waifu.im + other APIs'),
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Type tags for a random pic.\nNSFW content will not be returned unless\nyou explicitly request such a tag.\n\nDisclaimer: Not affiliated with the providers\nnor responsible for any of their content.',
+                        tooltipText: getString('Type tags for a random pic.\nNSFW content will not be returned unless\nyou explicitly request such a tag.\n\nDisclaimer: Not affiliated with the providers\nnor responsible for any of their content.'),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -368,7 +369,7 @@ export const waifuCommands = Box({
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,
-            label: 'Tags →',
+            label: getString('Tags →'),
             onClicked: () => {
                 waifuTags.revealChild = !waifuTags.revealChild;
             }
