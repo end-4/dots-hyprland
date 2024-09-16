@@ -72,3 +72,14 @@ function prevent_sudo_or_root(){
     root)echo -e "\e[31m[$0]: This script is NOT to be executed with sudo or as root. Aborting...\e[0m";exit 1;;
   esac
 }
+
+
+function backup_configs() {
+  local backup_dir="$BACKUP_DIR"
+  mkdir -p "$backup_dir"
+  echo "Backing up $XDG_CONFIG_HOME to $backup_dir/config_backup"
+  rsync -av --progress "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
+  
+  echo "Backing up $HOME/.local to $backup_dir/local_backup"
+  rsync -av --progress "$HOME/.local/" "$backup_dir/local_backup/"
+}
