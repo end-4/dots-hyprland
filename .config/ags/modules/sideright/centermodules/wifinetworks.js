@@ -6,6 +6,7 @@ const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const MATERIAL_SYMBOL_SIGNAL_STRENGTH = {
     'network-wireless-signal-excellent-symbolic': "signal_wifi_4_bar",
@@ -29,7 +30,7 @@ const WifiNetwork = (accessPoint) => {
             accessPoint.active ? Label({
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
-                label: "Selected",
+                label: getString("Selected"),
             }) : null,
         ]
     });
@@ -69,7 +70,7 @@ const CurrentNetwork = () => {
             Label({
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
-                label: "Current network",
+                label: getString("Current network"),
             }),
             Label({
                 hpack: 'start',
@@ -101,7 +102,7 @@ const CurrentNetwork = () => {
                 Label({
                     className: 'margin-left-5',
                     hpack: 'start',
-                    label: "Authentication",
+                    label: getString("Authentication"),
                 }),
                 Entry({
                     className: 'sidebar-wifinetworks-auth-entry',
@@ -199,7 +200,7 @@ export default (props) => {
                 execAsync(['bash', '-c', userOptions.apps.network]).catch(print);
                 closeEverything();
             },
-            label: 'More',
+            label: getString('More'),
             setup: setupCursorHover,
         })],
     })

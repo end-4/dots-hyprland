@@ -5,12 +5,13 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from '../modules/.miscutils/files.js';
+import { getString } from '../i18n/i18n.js';
 
 const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zukixa/cool-ai-stuff/
     'openai': {
         'name': 'OpenAI',
         'logo_name': 'openai-symbolic',
-        'description': 'Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.',
+        'description': getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
         'base_url': 'https://api.openai.com/v1/chat/completions',
         'key_get_url': 'https://platform.openai.com/api-keys',
         'key_file': 'openai_key.txt',
@@ -19,7 +20,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'ollama': {
         'name': 'Ollama (Llama 3)',
         'logo_name': 'ollama-symbolic',
-        'description': 'Official Ollama API.\nPricing: Free.',
+        'description': getString('Official Ollama API.\nPricing: Free.'),
         'base_url': 'http://localhost:11434/v1/chat/completions',
         'key_get_url': 'it\'s just ollama',
         'key_file': 'ollama_key.txt',
@@ -28,7 +29,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'openrouter': {
         'name': 'OpenRouter (Llama-3-70B)',
         'logo_name': 'openrouter-symbolic',
-        'description': 'A unified interface for LLMs',
+        'description': getString('A unified interface for LLMs'),
         'base_url': 'https://openrouter.ai/api/v1/chat/completions',
         'key_get_url': 'https://openrouter.ai/keys',
         'key_file': 'openrouter_key.txt',
@@ -37,7 +38,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'oxygen4o': {
         'name': 'Oxygen (GPT-4o)',
         'logo_name': 'ai-oxygen-symbolic',
-        'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
+        'description': getString('An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key'),
         'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
         'key_file': 'oxygen_key.txt',
@@ -46,7 +47,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'zukijourney': {
         'name': 'zukijourney (GPT-3.5)',
         'logo_name': 'ai-zukijourney',
-        'description': 'An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it\'s buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key',
+        'description': getString("An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it's buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key"),
         'base_url': 'https://zukijourney.xyzbot.net/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
         'key_file': 'zuki_key.txt',

@@ -37,7 +37,7 @@ async function loadLanguage(lang) {
 
 // Get translation, if no corresponding value, return the key
 function getString(key) {
-    if (!translations[currentLanguage]?.[key]) {
+    if (!translations[currentLanguage]?.[key] && key) {
         console.log('Not found:' + key);
     }
     return translations[currentLanguage]?.[key] || key;
@@ -48,7 +48,6 @@ function init() {
     try {
         loadLanguage(currentLanguage);
         console.log("初始化完成");
-
     } catch (error) {
         console.error('Failed to initialize default language:', error);
     }

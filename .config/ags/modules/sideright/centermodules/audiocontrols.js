@@ -5,6 +5,7 @@ const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { iconExists } from '../../.miscutils/icons.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const AppVolume = (stream) => Box({
     className: 'sidebar-volmixer-stream spacing-h-10',
@@ -165,7 +166,7 @@ export default (props) => {
                     className: 'spacing-v-5 txt-subtext',
                     children: [
                         MaterialIcon('brand_awareness', 'gigantic'),
-                        Label({ label: 'No audio source', className: 'txt-small' }),
+                        Label({ label: getString('No audio source'), className: 'txt-small' }),
                     ]
                 }),
             ]

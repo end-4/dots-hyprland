@@ -8,6 +8,7 @@ import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { AnimatedCircProg } from "../../.commonwidgets/cairo_circularprogress.js";
 import { WWO_CODE, WEATHER_SYMBOL, NIGHT_WEATHER_SYMBOL } from '../../.commondata/weather.js';
+import { getString } from '../../../i18n/i18n.js';
 
 const WEATHER_CACHE_FOLDER = `${GLib.get_user_cache_dir()}/ags/weather`;
 Utils.exec(`mkdir -p ${WEATHER_CACHE_FOLDER}`);
@@ -74,18 +75,18 @@ const Utilities = () => Box({
     className: 'spacing-h-4',
     children: [
         UtilButton({
-            name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
+            name: getString('Screen snip'), icon: 'screenshot_region', onClicked: () => {
                 Utils.execAsync(`${App.configDir}/scripts/grimblast.sh copy area`)
                     .catch(print)
             }
         }),
         UtilButton({
-            name: 'Color picker', icon: 'colorize', onClicked: () => {
+            name: getString('Color picker'), icon: 'colorize', onClicked: () => {
                 Utils.execAsync(['hyprpicker', '-a']).catch(print)
             }
         }),
         UtilButton({
-            name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
+            name: getString('Toggle on-screen keyboard'), icon: 'keyboard', onClicked: () => {
                 toggleWindowOnAllMonitors('osk');
             }
         }),
