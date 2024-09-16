@@ -71,6 +71,7 @@ let configOptions = {
     },
     'i18n': {
         'langCode': "",//Customize the locale, such as zh_CN
+        'Extra_logs': true
     },
     'monitors': {
         'scaleMethod': "division", // Either "division" [default] or "gdk"

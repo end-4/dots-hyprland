@@ -226,5 +226,7 @@
     "Launch EasyEffects (equalizer & other audio effects)": "启动EasyEffects（均衡器和其他音频效果）",
     "Launch GNOME System monitor": "启动GNOME系统监视器",
     "Toggle fallback launcher: anyrun": "切换备用启动器：anyrun",
-    "Toggle fallback launcher: fuzzel": "切换备用启动器：fuzzel"
+    "Toggle fallback launcher: fuzzel": "切换备用启动器：fuzzel",
+    "Initialization complete!": "初始化完成！",
+    "Not found": "未找到:"
 }
