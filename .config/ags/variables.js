@@ -70,6 +70,9 @@ globalThis['openWindowOnAllMonitors'] = (name) => {
     });
 }
 
+export const showSessionWindow = Variable(false, {});
+globalThis['showSessionWindow'] = showSessionWindow;
+
 globalThis['closeEverything'] = () => {
     const numMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
     for (let i = 0; i < numMonitors; i++) {

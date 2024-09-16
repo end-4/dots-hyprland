@@ -257,11 +257,19 @@ export const ModulePowerIcon = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Session',
     onClicked: () => {
-        closeEverything();
-        Utils.timeout(1, () => openWindowOnAllMonitors('session'));
+        showSessionWindow.value = !showSessionWindow.value;
+        if (showSessionWindow.value) {
+            closeEverything();
+            Utils.timeout(1, () => openWindowOnAllMonitors('session'));
+        } else {
+            closeWindowOnAllMonitors('session');
+        }
     },
     child: MaterialIcon('power_settings_new', 'norm'),
     setup: button => {
         setupCursorHover(button);
+        button.hook(showSessionWindow, (btn) => {
+            btn.toggleClassName('sidebar-button-active', showSessionWindow.value);
+        });
     }
 })
