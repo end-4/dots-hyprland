@@ -3,7 +3,6 @@ import App from 'resource:///com/github/Aylur/ags/app.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 import { darkMode } from './modules/.miscutils/system.js';
 export const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
-// i18n_init();
 globalThis['handleStyles'] = (resetMusic) => {
     // Reset
     Utils.exec(`mkdir -p "${GLib.get_user_state_dir()}/ags/scss"`);

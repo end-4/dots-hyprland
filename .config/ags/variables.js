@@ -8,8 +8,6 @@ const { exec, execAsync } = Utils;
 import { init as i18n_init, getString } from './i18n/i18n.js'
 //init i18n, Load language file
 i18n_init()
-// i18n_setLanguage('zh_CN')    //Manual configuration
-
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
 // Global vars for external control (through keybinds)
