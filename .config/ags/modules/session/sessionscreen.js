@@ -68,7 +68,15 @@ export default ({ id = 0 }) => {
     const hibernateButton = SessionButton('Hibernate', 'downloading', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl hibernate || loginctl hibernate']).catch(print) }, {}, 4);
     const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl poweroff || loginctl poweroff']).catch(print) }, {}, 5);
     const rebootButton = SessionButton('Reboot', 'restart_alt', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl reboot || loginctl reboot']).catch(print) }, {}, 6);
-    const cancelButton = SessionButton('Cancel', 'close', () => closeWindowOnAllMonitors('session'), { className: 'session-button-cancel' }, 7);
+    const cancelButton = SessionButton('Cancel', 'close', () => {
+        showSessionWindow.value = !showSessionWindow.value;
+        if (showSessionWindow.value) {
+            closeEverything();
+            Utils.timeout(1, () => openWindowOnAllMonitors("session"));
+        } else {
+            closeWindowOnAllMonitors("session");
+        }
+    }, { className: 'session-button-cancel' }, 7);
 
     const sessionDescription = Widget.Box({
         vertical: true,
@@ -125,10 +133,15 @@ export default ({ id = 0 }) => {
                 ]
             })
         ],
-        setup: (self) => self
-            .hook(App, (_b, name, visible) => {
+        setup: (self) => {
+            self.hook(App, (_b, name, visible) => {
                 if (visible) lockButton.grab_focus(); // Lock is the default option
-            })
-        ,
+            });
+            self.on('key-press-event', (widget, event) => {
+                if (event.get_keyval()[1] === Gdk.KEY_Escape) {
+                    showSessionWindow.value = false;
+                }
+            });
+        },
     });
 }
