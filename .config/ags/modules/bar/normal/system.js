@@ -69,28 +69,45 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
     label: `${icon}`,
 })
 
-const Utilities = () => Box({
-    hpack: 'center',
-    className: 'spacing-h-4',
-    children: [
-        UtilButton({
-            name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
-                Utils.execAsync(`${App.configDir}/scripts/grimblast.sh copy area`)
-                    .catch(print)
+const Utilities = () => {
+    const availableUtilities = {
+        snip: {
+            name: "Screen snip",
+            icon: "screenshot_region",
+            onClicked: () => {
+                Utils.execAsync(`${App.configDir}/scripts/grimblast.sh copy area`).catch(print);
             }
-        }),
-        UtilButton({
-            name: 'Color picker', icon: 'colorize', onClicked: () => {
-                Utils.execAsync(['hyprpicker', '-a']).catch(print)
+        },
+        picker: {
+            name: "Color picker",
+            icon: "colorize",
+            onClicked: () => {
+                Utils.execAsync(['hyprpicker', '-a']).catch(print);
             }
-        }),
-        UtilButton({
-            name: 'Toggle on-screen keyboard', icon: 'keyboard', onClicked: () => {
+        },
+        keyboard: {
+            name: "Toggle on-screen keyboard",
+            icon: "keyboard",
+            onClicked: () => {
                 toggleWindowOnAllMonitors('osk');
             }
-        }),
-    ]
-})
+        },
+    };
+
+    const utilityButtons = userOptions.bar.utilities
+        .filter(utility => availableUtilities[utility])
+        .map(utility => UtilButton({
+            name: availableUtilities[utility].name,
+            icon: availableUtilities[utility].icon,
+            onClicked: availableUtilities[utility].onClicked,
+        }));
+
+    return Box({
+        hpack: 'center',
+        className: 'spacing-h-4',
+        children: utilityButtons,
+    });
+}
 
 const BarBattery = () => Box({
     className: 'spacing-h-4 bar-batt-txt',
