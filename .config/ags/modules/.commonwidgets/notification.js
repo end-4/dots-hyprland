@@ -6,7 +6,6 @@ const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from "../.widgetutils/cursorhover.js";
 import { AnimatedCircProg } from "./cairo_circularprogress.js";
-import { getString } from '../../i18n/i18n.js';
 
 function guessMessageType(summary) {
     const str = summary.toLowerCase();

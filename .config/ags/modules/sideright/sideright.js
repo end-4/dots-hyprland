@@ -25,7 +25,6 @@ import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
-import { getString } from '../../i18n/i18n.js';
 
 const centerWidgets = [
     {

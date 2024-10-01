@@ -11,7 +11,6 @@ import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.common
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { chatEntry } from '../apiwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 const MODEL_NAME = `Gemini`;
 
@@ -35,7 +34,7 @@ const GeminiInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: `${getString('Assistant')} (Gemini)`,
+                label: `Assistant (Gemini)`,
             }),
             Box({
                 className: 'spacing-h-5',

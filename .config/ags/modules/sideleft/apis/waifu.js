@@ -13,7 +13,6 @@ import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/curso
 import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
 import { chatEntry } from '../apiwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
@@ -124,11 +123,11 @@ const WaifuImage = (taglist) => {
         transition: 'slide_up_down',
         transitionDuration: userOptions.animations.durationSmall,
         children: {
-            'api': ImageState('api', 'Calling API'),
-            'download': ImageState('downloading', 'Downloading image'),
-            'done': ImageState('done', 'Finished!'),
-            'error': ImageState('error', 'Error'),
-            'notfound': ImageState('error', 'Not found!'),
+            'api': ImageState('api', getString('Calling API')),
+            'download': ImageState('downloading', getString('Downloading image')),
+            'done': ImageState('done', getString('Finished!')),
+            'error': ImageState('error', getString('Error')),
+            'notfound': ImageState('error', getString('Not found!')),
         },
     });
     const downloadIndicator = MarginRevealer({
@@ -157,12 +156,12 @@ const WaifuImage = (taglist) => {
                     children: [
                         Box({ hexpand: true }),
                         ImageAction({
-                            name: 'Go to source',
+                            name: getString('Go to source'),
                             icon: 'link',
                             action: () => execAsync(['xdg-open', `${thisBlock.attribute.imageData.source}`]).catch(print),
                         }),
                         ImageAction({
-                            name: 'Hoard',
+                            name: getString('Hoard'),
                             icon: 'save',
                             action: (self) => {
                                 execAsync(['bash', '-c', `mkdir -p $(xdg-user-dir PICTURES)/homework${thisBlock.attribute.isNsfw ? '/🌶️' : ''} && cp ${thisBlock.attribute.imagePath} $(xdg-user-dir PICTURES)/homework${thisBlock.attribute.isNsfw ? '/🌶️/' : ''}`])
@@ -171,7 +170,7 @@ const WaifuImage = (taglist) => {
                             },
                         }),
                         ImageAction({
-                            name: 'Open externally',
+                            name: getString('Open externally'),
                             icon: 'open_in_new',
                             action: () => execAsync([IMAGE_VIEWER_APP, `${thisBlock.attribute.imagePath}`]).catch(print),
                         }),

@@ -11,7 +11,6 @@ import BooruService from '../../../services/booru.js';
 import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
-import { getString } from '../../../i18n/i18n.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -213,17 +212,17 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 children: [
                     Box({ hexpand: true }),
                     ImageAction({
-                        name: 'Go to file url',
+                        name: getString('Go to file url'),
                         icon: 'file_open',
                         action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
                     }),
                     ImageAction({
-                        name: 'Go to source',
+                        name: getString('Go to source'),
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
                     }),
                     ImageAction({
-                        name: 'Save image',
+                        name: getString('Save image'),
                         icon: 'save',
                         action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
@@ -259,10 +258,10 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         transition: 'slide_up_down',
         transitionDuration: userOptions.animations.durationSmall,
         children: {
-            'api': PageState('api', 'Calling API'),
-            'download': PageState('downloading', 'Downloading image'),
-            'done': PageState('done', 'Finished!'),
-            'error': PageState('error', 'Error'),
+            'api': PageState('api', getString('Calling API')),
+            'download': PageState('downloading', getString('Downloading image')),
+            'done': PageState('done', getString('Finished!')),
+            'error': PageState('error', getString('Error')),
         },
     });
     const downloadIndicator = MarginRevealer({

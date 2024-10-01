@@ -12,7 +12,6 @@ import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
 import { ColorPickerSelection, hslToHex, hslToRgbValues, hexToHSL } from './color.js';
 import { clamp } from '../../.miscutils/mathfuncs.js';
-import { getString } from '../../../i18n/i18n.js';
 
 export default () => {
     const selectedColor = new ColorPickerSelection();

@@ -5,7 +5,6 @@ const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { iconExists } from '../../.miscutils/icons.js';
-import { getString } from '../../../i18n/i18n.js';
 
 const AppVolume = (stream) => Box({
     className: 'sidebar-volmixer-stream spacing-h-10',

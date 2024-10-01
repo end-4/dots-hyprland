@@ -12,7 +12,6 @@ import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { chatEntry } from '../apiwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
@@ -122,7 +121,7 @@ const GPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: `${getString("Assistant")} (GPTs)`,
+                label: `Assistant (GPTs)`,
             }),
             Box({
                 className: 'spacing-h-5',

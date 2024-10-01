@@ -5,7 +5,6 @@ import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { TabContainer } from '../.commonwidgets/tabcontainer.js';
 import Todo from "../../services/todo.js";
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-import { getString } from '../../i18n/i18n.js';
 
 const TodoListItem = (task, id, isDone, isEven = false) => {
     const taskName = Widget.Label({

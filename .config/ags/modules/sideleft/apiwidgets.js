@@ -17,7 +17,6 @@ const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
 import { widgetContent } from './sideleft.js';
 import { IconTabContainer } from '../.commonwidgets/tabcontainer.js';
-import { getString } from '../../i18n/i18n.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
 const APILIST = {

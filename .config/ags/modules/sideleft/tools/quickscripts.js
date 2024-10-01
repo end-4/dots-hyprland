@@ -9,7 +9,6 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 
 import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscutils/system.js';
-import { getString } from '../../../i18n/i18n.js';
 
 const scripts = [
     {

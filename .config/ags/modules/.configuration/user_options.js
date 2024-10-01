@@ -70,8 +70,8 @@ let configOptions = {
         },
     },
     'i18n': {
-        'langCode': "",//Customize the locale, such as zh_CN
-        'Extra_logs': true
+        'langCode': "",//Customize the locale, such as zh_CN,Optional value references "~/.config/ags/i18n/locales/"
+        'extraLogs': false
     },
     'monitors': {
         'scaleMethod': "division", // Either "division" [default] or "gdk"

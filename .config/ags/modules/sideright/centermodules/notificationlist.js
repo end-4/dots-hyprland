@@ -8,7 +8,6 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import Notification from '../../.commonwidgets/notification.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 export default (props) => {
     const notifEmptyContent = Box({

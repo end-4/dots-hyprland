@@ -6,7 +6,6 @@ const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 const MATERIAL_SYMBOL_SIGNAL_STRENGTH = {
     'network-wireless-signal-excellent-symbolic': "signal_wifi_4_bar",

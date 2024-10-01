@@ -6,7 +6,6 @@ const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
-import { getString } from '../../../i18n/i18n.js';
 
 // can't connect: sync_problem
 
