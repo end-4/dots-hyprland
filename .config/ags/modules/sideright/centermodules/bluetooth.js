@@ -43,7 +43,7 @@ const BluetoothDevice = (device) => {
                 label: device.connected ? 'Connected' : (device.paired ? 'Paired' : ''),
                 className: 'txt-subtext',
                 setup: (self) => self.hook(device, (self) => {
-                    self.label = device.connected ? 'Connected' : (device.paired ? 'Paired' : '');
+                    self.label = device.connected ? getString('Connected') : (device.paired ? getString('Paired') : '');
                 }),
             }),
         ]
@@ -64,7 +64,7 @@ const BluetoothDevice = (device) => {
         vpack: 'center',
         className: 'sidebar-bluetooth-device-remove',
         child: MaterialIcon('delete', 'norm'),
-        tooltipText: 'Remove device',
+        tooltipText: getString('Remove device'),
         setup: setupCursorHover,
         onClicked: () => execAsync(['bluetoothctl', 'remove', device.address]).catch(print),
     });
@@ -144,7 +144,7 @@ export default (props) => {
                 execAsync(['bash', '-c', userOptions.apps.bluetooth]).catch(print);
                 closeEverything();
             },
-            label: 'More',
+            label: getString('More'),
             setup: setupCursorHover,
         })],
     })

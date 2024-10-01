@@ -12,8 +12,8 @@ const getKeybindList = () => {
     let data = Utils.exec(`${App.configDir}/scripts/hyprland/get_keybinds.py --path ${HYPRLAND_KEYBIND_CONFIG_FILE}`);
     if (data == "\"error\"") {
         Utils.timeout(2000, () => Utils.execAsync(['notify-send',
-        'Update path to keybinds',
-        'Keybinds hyprland config file not found. Check your user options.',
+            'Update path to keybinds',
+            'Keybinds hyprland config file not found. Check your user options.',
             '-a', 'ags',
         ]).catch(print))
         return { children: [] };
@@ -45,7 +45,7 @@ const Keybind = (keybindData, type) => { // type: either "keys" or "actions"
     });
     const Action = (text) => Label({ // Binds
         xalign: 0,
-        label: text,
+        label: getString(text),
         className: "txt txt-small cheatsheet-action",
     })
     return Widget.Box({
@@ -74,7 +74,7 @@ const Section = (sectionData, scope) => {
     const name = Label({
         xalign: 0,
         className: "cheatsheet-category-title txt margin-bottom-10",
-        label: sectionData.name,
+        label: getString(sectionData.name),
     })
     const binds = Box({
         className: 'spacing-h-10',

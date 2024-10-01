@@ -29,7 +29,7 @@ const WifiNetwork = (accessPoint) => {
             accessPoint.active ? Label({
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
-                label: "Selected",
+                label: getString("Selected"),
             }) : null,
         ]
     });
@@ -69,7 +69,7 @@ const CurrentNetwork = () => {
             Label({
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
-                label: "Current network",
+                label: getString("Current network"),
             }),
             Label({
                 hpack: 'start',
@@ -101,7 +101,7 @@ const CurrentNetwork = () => {
                 Label({
                     className: 'margin-left-5',
                     hpack: 'start',
-                    label: "Authentication",
+                    label: getString("Authentication"),
                 }),
                 Entry({
                     className: 'sidebar-wifinetworks-auth-entry',
@@ -199,7 +199,7 @@ export default (props) => {
                 execAsync(['bash', '-c', userOptions.apps.network]).catch(print);
                 closeEverything();
             },
-            label: 'More',
+            label: getString('More'),
             setup: setupCursorHover,
         })],
     })

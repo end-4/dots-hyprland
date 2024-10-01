@@ -67,12 +67,12 @@ const BooruInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by yande.re and konachan',
+                        label: getString('Powered by yande.re and konachan'),
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.',
+                        tooltipText: getString('An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.'),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -95,13 +95,8 @@ export const BooruSettings = () => MarginRevealer({
                 children: [
                     ConfigToggle({
                         icon: 'menstrual_health',
-                        name: 'Lewds',
-                        desc: `Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:
-'sidebar': {
-  'image': {
-    'allowNsfw': true,
-  }
-},`,
+                        name: getString('Lewds'),
+                        desc: getString("Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}"),
                         initValue: BooruService.nsfw,
                         onChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
@@ -112,8 +107,8 @@ export const BooruSettings = () => MarginRevealer({
                     }),
                     ConfigToggle({
                         icon: 'sell',
-                        name: 'Save in folder by tags',
-                        desc: 'Saves images in folders by their tags',
+                        name: getString('Save in folder by tags'),
+                        desc: getString('Saves images in folders by their tags'),
                         initValue: userOptions.sidebar.image.saveInFolderByTags,
                         onChange: (self, newValue) => {
                             userOptions.sidebar.image.saveInFolderByTags = newValue;
@@ -217,17 +212,17 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 children: [
                     Box({ hexpand: true }),
                     ImageAction({
-                        name: 'Go to file url',
+                        name: getString('Go to file url'),
                         icon: 'file_open',
                         action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
                     }),
                     ImageAction({
-                        name: 'Go to source',
+                        name: getString('Go to source'),
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
                     }),
                     ImageAction({
-                        name: 'Save image',
+                        name: getString('Save image'),
                         icon: 'save',
                         action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
@@ -263,10 +258,10 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         transition: 'slide_up_down',
         transitionDuration: userOptions.animations.durationSmall,
         children: {
-            'api': PageState('api', 'Calling API'),
-            'download': PageState('downloading', 'Downloading image'),
-            'done': PageState('done', 'Finished!'),
-            'error': PageState('error', 'Error'),
+            'api': PageState('api', getString('Calling API')),
+            'download': PageState('downloading', getString('Downloading image')),
+            'done': PageState('done', getString('Finished!')),
+            'error': PageState('error', getString('Error')),
         },
     });
     const downloadIndicator = MarginRevealer({
@@ -469,7 +464,7 @@ export const booruCommands = Box({
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,
-            label: 'Tags →',
+            label: getString('Tags →'),
             onClicked: () => {
                 booruTags.revealChild = !booruTags.revealChild;
             }

@@ -28,28 +28,28 @@ import { checkKeybind } from '../.widgetutils/keybind.js';
 
 const centerWidgets = [
     {
-        name: 'Notifications',
+        name: getString('Notifications'),
         materialIcon: 'notifications',
         contentWidget: ModuleNotificationList,
     },
     {
-        name: 'Audio controls',
+        name: getString('Audio controls'),
         materialIcon: 'volume_up',
         contentWidget: ModuleAudioControls,
     },
     {
-        name: 'Bluetooth',
+        name: getString('Bluetooth'),
         materialIcon: 'bluetooth',
         contentWidget: ModuleBluetooth,
     },
     {
-        name: 'Wifi networks',
+        name: getString('Wifi networks'),
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
     },
     {
-        name: 'Live config',
+        name: getString('Live config'),
         materialIcon: 'tune',
         contentWidget: ModuleConfigure,
     },
@@ -66,43 +66,44 @@ const timeRow = Box({
             hpack: 'center',
             className: 'txt-small txt',
             setup: (self) => {
-            	const getUptime = async () => {
-                	try {
-                    	await execAsync(['bash', '-c', 'uptime -p']);
+                const getUptime = async () => {
+                    try {
+                        await execAsync(['bash', '-c', 'uptime -p']);
                         return execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`]);
                     } catch {
                         return execAsync(['bash', '-c', 'uptime']).then(output => {
-                        	const uptimeRegex = /up\s+((\d+)\s+days?,\s+)?((\d+):(\d+)),/;
-                        	const matches = uptimeRegex.exec(output);
+                            const uptimeRegex = /up\s+((\d+)\s+days?,\s+)?((\d+):(\d+)),/;
+                            const matches = uptimeRegex.exec(output);
 
                             if (matches) {
-                            	const days = matches[2] ? parseInt(matches[2]) : 0;
+                                const days = matches[2] ? parseInt(matches[2]) : 0;
                                 const hours = matches[4] ? parseInt(matches[4]) : 0;
                                 const minutes = matches[5] ? parseInt(matches[5]) : 0;
 
                                 let formattedUptime = '';
 
                                 if (days > 0) {
-                                	formattedUptime += `${days} d `;
+                                    formattedUptime += `${days} d `;
                                 }
                                 if (hours > 0) {
-                                	formattedUptime += `${hours} h `;
+                                    formattedUptime += `${hours} h `;
                                 }
                                 formattedUptime += `${minutes} m`;
 
                                 return formattedUptime;
                             } else {
-                            	throw new Error('Failed to parse uptime output');
+                                throw new Error('Failed to parse uptime output');
                             }
                         });
                     }
                 };
 
                 self.poll(5000, label => {
-                	getUptime().then(upTimeString => {
-                    	label.label = `Uptime: ${upTimeString}`;
+                    getUptime().then(upTimeString => {
+                        label.label = `${getString("Uptime:"
+                        )} ${upTimeString}`;
                     }).catch(err => {
-                    	console.error(`Failed to fetch uptime: ${err}`);
+                        console.error(`Failed to fetch uptime: ${err}`);
                     });
                 });
             },

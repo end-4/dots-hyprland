@@ -10,7 +10,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'openai': {
         'name': 'OpenAI',
         'logo_name': 'openai-symbolic',
-        'description': 'Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.',
+        'description': getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
         'base_url': 'https://api.openai.com/v1/chat/completions',
         'key_get_url': 'https://platform.openai.com/api-keys',
         'key_file': 'openai_key.txt',
@@ -19,7 +19,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'ollama': {
         'name': 'Ollama (Llama 3)',
         'logo_name': 'ollama-symbolic',
-        'description': 'Official Ollama API.\nPricing: Free.',
+        'description': getString('Official Ollama API.\nPricing: Free.'),
         'base_url': 'http://localhost:11434/v1/chat/completions',
         'key_get_url': 'it\'s just ollama',
         'key_file': 'ollama_key.txt',
@@ -28,7 +28,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'openrouter': {
         'name': 'OpenRouter (Llama-3-70B)',
         'logo_name': 'openrouter-symbolic',
-        'description': 'A unified interface for LLMs',
+        'description': getString('A unified interface for LLMs'),
         'base_url': 'https://openrouter.ai/api/v1/chat/completions',
         'key_get_url': 'https://openrouter.ai/keys',
         'key_file': 'openrouter_key.txt',
@@ -37,7 +37,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'oxygen4o': {
         'name': 'Oxygen (GPT-4o)',
         'logo_name': 'ai-oxygen-symbolic',
-        'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
+        'description': getString('An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key'),
         'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
         'key_file': 'oxygen_key.txt',
@@ -46,7 +46,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
     'zukijourney': {
         'name': 'zukijourney (GPT-3.5)',
         'logo_name': 'ai-zukijourney',
-        'description': 'An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it\'s buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key',
+        'description': getString("An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it's buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key"),
         'base_url': 'https://zukijourney.xyzbot.net/v1/chat/completions',
         'key_get_url': 'https://discord.com/invite/Y4J6XXnmQ6',
         'key_file': 'zuki_key.txt',
@@ -57,7 +57,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
 // Custom prompt
 const initMessages =
     [
-        { role: "user", content: "You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with brief explanation.\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\". \nNote: Use casual language, be short, while ensuring the factual correctness of your response. If you are unsure or don’t have enough information to provide a confident answer, simply say “I don’t know” or “I’m not sure.”. \nThanks!", },
+        { role: "user", content: getString("You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with brief explanation.\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\". \nNote: Use casual language, be short, while ensuring the factual correctness of your response. If you are unsure or don’t have enough information to provide a confident answer, simply say “I don’t know” or “I’m not sure.”. \nThanks!"), },
         { role: "assistant", content: "- Got it!", },
         { role: "user", content: "\"He rushed to where the event was supposed to be hold, he didn't know it got calceled\"", },
         { role: "assistant", content: "## Grammar correction\nErrors:\n\"He rushed to where the event was supposed to be __hold____,__ he didn't know it got calceled\"\nCorrection + minor improvements:\n\"He rushed to the place where the event was supposed to be __held____, but__ he didn't know that it got calceled\"", },

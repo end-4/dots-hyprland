@@ -5,7 +5,9 @@ import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { exec, execAsync } = Utils;
-
+import { init as i18n_init, getString } from './i18n/i18n.js'
+//init i18n, Load language file
+i18n_init()
 Gtk.IconTheme.get_default().append_search_path(`${App.configDir}/assets/icons`);
 
 // Global vars for external control (through keybinds)
@@ -14,7 +16,7 @@ export const showColorScheme = Variable(false, {})
 globalThis['openMusicControls'] = showMusicControls;
 globalThis['openColorScheme'] = showColorScheme;
 globalThis['mpris'] = Mpris;
-
+globalThis['getString'] = getString
 // load monitor shell modes from userOptions
 const initialMonitorShellModes = () => {
     const numberOfMonitors = Gdk.Display.get_default()?.get_n_monitors() || 1;
