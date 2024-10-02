@@ -83,7 +83,7 @@ const KeyboardControls = () => Box({
         Button({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => { // TODO: Proper clipboard widget, since fuzzel doesn't receive mouse inputs
-                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel --no-fuzzy --dmenu | cliphist decode | wl-copy"]).catch(print);
+                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel  --match-mode fzf --dmenu | cliphist decode | wl-copy"]).catch(print);
             },
             label: 'assignment',
         }),

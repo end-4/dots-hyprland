@@ -7,33 +7,45 @@ source ./scriptdata/installers
 source ./scriptdata/options
 
 #####################################################################################
-if ! command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n";exit 1;fi
+if ! command -v pacman >/dev/null 2>&1; then 
+  printf "\e[31m[$0]: pacman not found, it seems that the system is not ArchLinux or Arch-based distros. Aborting...\e[0m\n"
+  exit 1
+fi
 prevent_sudo_or_root
-startask (){
-printf "\e[34m[$0]: Hi there! Before we start:\n"
-printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
-printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
-printf "\e[31m"
-printf "Please CONFIRM that you HAVE ALREADY BACKED UP \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders!\n"
-printf "\e[0m"
-printf "Enter capital \"YES\" (without quotes) to continue:"
-read -p " " p
-case $p in "YES")sleep 0;; *)echo "Received \"$p\", aborting...";exit 1;;esac
-printf '\n'
-printf 'Do you want to confirm every time before a command executes?\n'
-printf '  y = Yes, ask me before executing each of them. (DEFAULT)\n'
-printf '  n = No, just execute them automatically.\n'
-printf '  a = Abort.\n'
-read -p "====> " p
-case $p in
-  n)ask=false;;
-  a)exit 1;;
-  *)ask=true;;
-esac
+
+startask () {
+  printf "\e[34m[$0]: Hi there! Before we start:\n"
+  printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
+  printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
+  printf "\e[31m"
+  
+  printf "Would you like to create a backup for \"$XDG_CONFIG_HOME\" and \"$HOME/.local/\" folders?\n[y/N]: "
+  read -p " " backup_confirm
+  case $backup_confirm in
+    [yY][eE][sS]|[yY])
+      backup_configs
+      ;;
+    *)
+      echo "Skipping backup..."
+      ;;
+  esac
+  
+
+  printf '\n'
+  printf 'Do you want to confirm every time before a command executes?\n'
+  printf '  y = Yes, ask me before executing each of them. (DEFAULT)\n'
+  printf '  n = No, just execute them automatically.\n'
+  printf '  a = Abort.\n'
+  read -p "====> " p
+  case $p in
+    n) ask=false ;;
+    a) exit 1 ;;
+    *) ask=true ;;
+  esac
 }
 
 case $ask in
-  false)sleep 0;;
+  false)sleep 0 ;;
   *)startask ;;
 esac
 
