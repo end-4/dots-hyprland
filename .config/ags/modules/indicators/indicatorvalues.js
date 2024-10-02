@@ -91,7 +91,13 @@ export default (monitor = 0) => {
                 }
             }
             volumeIndicator.attribute.device = newDevice;
-            label.label = `${updateValue}`;
+            if(updateValue === 0) {
+                label.className = 'osd-value-icon icon-material';
+                label.label = 'volume_off';
+            } else {
+                label.className = "osd-value-txt";
+                label.label = `${updateValue}`;
+            }
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
             const updateValue = Audio.speaker?.volume;
