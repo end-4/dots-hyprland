@@ -10,7 +10,6 @@ import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
-import { booruView, booruCommands, sendMessage as booruSendMessage, booruTabIcon } from './apis/booru.js';
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 import { checkKeybind } from '../.widgetutils/keybind.js';
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
@@ -42,14 +41,6 @@ const APILIST = {
         contentWidget: waifuView,
         commandBar: waifuCommands,
         tabIcon: waifuTabIcon,
-        placeholderText: 'Enter tags',
-    },
-    'booru': {
-        name: 'Booru',
-        sendCommand: booruSendMessage,
-        contentWidget: booruView,
-        commandBar: booruCommands,
-        tabIcon: booruTabIcon,
         placeholderText: 'Enter tags',
     },
 }

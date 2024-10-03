@@ -3,11 +3,9 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 const { Box, EventBox } = Widget;
 import {
-    ToggleIconBluetooth,
     ToggleIconWifi,
     HyprToggleIcon,
     ModuleNightLight,
-    ModuleInvertColors,
     ModuleIdleInhibitor,
     ModuleReloadIcon,
     ModuleSettingsIcon,
@@ -18,7 +16,6 @@ import {
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleAudioControls from "./centermodules/audiocontrols.js";
 import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
-import ModuleBluetooth from "./centermodules/bluetooth.js";
 import ModuleConfigure from "./centermodules/configure.js";
 import { ModuleCalendar } from "./calendar.js";
 import { getDistroIcon } from '../.miscutils/system.js';
@@ -28,28 +25,23 @@ import { checkKeybind } from '../.widgetutils/keybind.js';
 
 const centerWidgets = [
     {
-        name: 'Notifications',
+        name: 'Уведомления',
         materialIcon: 'notifications',
         contentWidget: ModuleNotificationList,
     },
     {
-        name: 'Audio controls',
+        name: 'Управление звуком',
         materialIcon: 'volume_up',
         contentWidget: ModuleAudioControls,
     },
     {
-        name: 'Bluetooth',
-        materialIcon: 'bluetooth',
-        contentWidget: ModuleBluetooth,
-    },
-    {
-        name: 'Wifi networks',
+        name: 'Wifi сети',
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
     },
     {
-        name: 'Live config',
+        name: 'Live конфигурация',
         materialIcon: 'tune',
         contentWidget: ModuleConfigure,
     },
@@ -69,7 +61,7 @@ const timeRow = Box({
             	const getUptime = async () => {
                 	try {
                     	await execAsync(['bash', '-c', 'uptime -p']);
-                        return execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/d/;s/ hour\\| hours/h/;s/ minute\\| minutes/m/;s/,[^,]*//2'`]);
+                        return execAsync(['bash', '-c', `uptime -p | sed -e 's/...//;s/ day\\| days/д/;s/ hour\\| hours/ч/;s/ minute\\| minutes/м/;s/,[^,]*//2'`]);
                     } catch {
                         return execAsync(['bash', '-c', 'uptime']).then(output => {
                         	const uptimeRegex = /up\s+((\d+)\s+days?,\s+)?((\d+):(\d+)),/;
@@ -83,12 +75,12 @@ const timeRow = Box({
                                 let formattedUptime = '';
 
                                 if (days > 0) {
-                                	formattedUptime += `${days} d `;
+                                	formattedUptime += `${days} д `;
                                 }
                                 if (hours > 0) {
-                                	formattedUptime += `${hours} h `;
+                                	formattedUptime += `${hours} ч `;
                                 }
-                                formattedUptime += `${minutes} m`;
+                                formattedUptime += `${minutes} м`;
 
                                 return formattedUptime;
                             } else {
@@ -100,7 +92,7 @@ const timeRow = Box({
 
                 self.poll(5000, label => {
                 	getUptime().then(upTimeString => {
-                    	label.label = `Uptime: ${upTimeString}`;
+                    	label.label = `Время работы - ${upTimeString}`;
                     }).catch(err => {
                     	console.error(`Failed to fetch uptime: ${err}`);
                     });
@@ -119,11 +111,9 @@ const togglesBox = Widget.Box({
     className: 'sidebar-togglesbox spacing-h-5',
     children: [
         ToggleIconWifi(),
-        ToggleIconBluetooth(),
         // await ModuleRawInput(),
         // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         await ModuleNightLight(),
-        await ModuleInvertColors(),
         ModuleIdleInhibitor(),
         await ModuleCloudflareWarp(),
     ]
