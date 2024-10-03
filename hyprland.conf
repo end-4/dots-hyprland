@@ -1,0 +1,1 @@
+.config/hypr/hyprland.conf
