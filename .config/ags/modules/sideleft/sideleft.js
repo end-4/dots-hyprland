@@ -17,13 +17,13 @@ const SIDEBARTABS = {
         name: 'apis',
         content: apiWidgets,
         materialIcon: 'api',
-        friendlyName: 'APIs',
+        friendlyName: 'ИИ Чаты',
     },
     'tools': {
         name: 'tools',
         content: toolBox,
         materialIcon: 'home_repair_service',
-        friendlyName: 'Tools',
+        friendlyName: 'Инструменты',
     },
 }
 const CONTENTS = userOptions.sidebar.pages.order.map((tabName) => SIDEBARTABS[tabName])

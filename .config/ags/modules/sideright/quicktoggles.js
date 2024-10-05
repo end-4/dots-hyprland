@@ -3,17 +3,16 @@ import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
-import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
-import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusicons.js';
+import { NetworkIndicator } from '../.commonwidgets/statusicons.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { sidebarOptionsStack } from './sideright.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
-    tooltipText: 'Wifi | Right-click to configure',
+    tooltipText: 'Wifi | ПКМ для настройки',
     onClicked: () => Network.toggleWifi(),
     onSecondaryClickRelease: () => {
         execAsync(['bash', '-c', `${userOptions.apps.network}`]).catch(print);
@@ -24,31 +23,7 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
         setupCursorHover(self);
         self.hook(Network, button => {
             button.toggleClassName('sidebar-button-active', [Network.wifi?.internet, Network.wired?.internet].includes('connected'))
-            button.tooltipText = (`${Network.wifi?.ssid} | Right-click to configure` || 'Unknown');
-        });
-    },
-    ...props,
-});
-
-export const ToggleIconBluetooth = (props = {}) => Widget.Button({
-    className: 'txt-small sidebar-iconbutton',
-    tooltipText: 'Bluetooth | Right-click to configure',
-    onClicked: () => {
-        const status = Bluetooth?.enabled;
-        if (status)
-            exec('rfkill block bluetooth');
-        else
-            exec('rfkill unblock bluetooth');
-    },
-    onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', `${userOptions.apps.bluetooth}`]).catch(print);
-        closeEverything();
-    },
-    child: BluetoothIndicator(),
-    setup: (self) => {
-        setupCursorHover(self);
-        self.hook(Bluetooth, button => {
-            button.toggleClassName('sidebar-button-active', Bluetooth?.enabled)
+            button.tooltipText = (`${Network.wifi?.ssid} | ПКМ для настройки` || 'Unknown');
         });
     },
     ...props,
@@ -86,7 +61,7 @@ export const ModuleNightLight = async (props = {}) => {
             enabled: false,
         },
         className: 'txt-small sidebar-iconbutton',
-        tooltipText: 'Night Light',
+        tooltipText: 'Защита зрения',
         onClicked: (self) => {
             self.attribute.enabled = !self.attribute.enabled;
             self.toggleClassName('sidebar-button-active', self.attribute.enabled);
@@ -140,37 +115,6 @@ export const ModuleCloudflareWarp = async (props = {}) => {
         },
         ...props,
     });
-}
-
-export const ModuleInvertColors = async (props = {}) => {
-    try {
-        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        return Widget.Button({
-            className: 'txt-small sidebar-iconbutton',
-            tooltipText: 'Color inversion',
-            onClicked: (button) => {
-                // const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-                Hyprland.messageAsync('j/getoption decoration:screen_shader')
-                    .then((output) => {
-                        const shaderPath = JSON.parse(output)["str"].trim();
-                        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-                            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader '[[EMPTY]]'`]).catch(print);
-                            button.toggleClassName('sidebar-button-active', false);
-                        }
-                        else {
-                            Hyprland.messageAsync(`j/keyword decoration:screen_shader ${GLib.get_user_config_dir()}/hypr/shaders/invert.frag`)
-                                .catch(print);
-                            button.toggleClassName('sidebar-button-active', true);
-                        }
-                    })
-            },
-            child: MaterialIcon('invert_colors', 'norm'),
-            setup: setupCursorHover,
-            ...props,
-        })
-    } catch {
-        return null;
-    };
 }
 
 export const ModuleRawInput = async (props = {}) => {

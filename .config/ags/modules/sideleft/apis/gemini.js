@@ -34,7 +34,7 @@ const GeminiInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (Gemini)',
+                label: 'Ассистент (Gemini)',
             }),
             Box({
                 className: 'spacing-h-5',
@@ -44,12 +44,12 @@ const GeminiInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Powered by Google',
+                        label: 'Работает от Google',
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren\'t linked to your account,\n    but will be read by human reviewers to improve the model.',
+                        tooltipText: 'Использует gemini-pro.\пне связан, не одобрен и не спонсируется Google.Конфиденциальность: сообщения чата не привязаны к вашей учетной записи, но будут прочитаны пользователями, которые проверят их, чтобы улучшить модель.',
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -79,9 +79,9 @@ export const GeminiSettings = () => MarginRevealer({
                 name: 'Randomness',
                 desc: 'Gemini\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
                 options: [
-                    { value: 0.00, name: 'Precise', },
-                    { value: 0.50, name: 'Balanced', },
-                    { value: 1.00, name: 'Creative', },
+                    { value: 0.00, name: 'Точный', },
+                    { value: 0.50, name: 'Баланс', },
+                    { value: 1.00, name: 'Креатив', },
                 ],
                 initIndex: 2,
                 onChange: (value, name) => {
@@ -96,8 +96,8 @@ export const GeminiSettings = () => MarginRevealer({
                 children: [
                     ConfigToggle({
                         icon: 'model_training',
-                        name: 'Enhancements',
-                        desc: 'Tells Gemini:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
+                        name: 'Улучшения',
+                        desc: 'Рассказывает Gemini:\ n- Это помощник по боковой панели Linux \ n- Будьте кратки и используйте основные пункты',
                         initValue: GeminiService.assistantPrompt,
                         onChange: (self, newValue) => {
                             GeminiService.assistantPrompt = newValue;
@@ -105,8 +105,8 @@ export const GeminiSettings = () => MarginRevealer({
                     }),
                     ConfigToggle({
                         icon: 'shield',
-                        name: 'Safety',
-                        desc: 'When turned off, tells the API (not the model) \nto not block harmful/explicit content',
+                        name: 'Безопасность',
+                        desc: 'Когда он выключен, сообщает API (не модели), чтобы он не блокировал вредоносный/ явный контент',
                         initValue: GeminiService.safe,
                         onChange: (self, newValue) => {
                             GeminiService.safe = newValue;
@@ -114,8 +114,8 @@ export const GeminiSettings = () => MarginRevealer({
                     }),
                     ConfigToggle({
                         icon: 'history',
-                        name: 'History',
-                        desc: 'Saves chat history\nMessages in previous chats won\'t show automatically, but they are there',
+                        name: 'История',
+                        desc: 'Сохраняет историю чатов. Сообщения в предыдущих чатах не будут отображаться автоматически, но они есть',
                         initValue: GeminiService.useHistory,
                         onChange: (self, newValue) => {
                             GeminiService.useHistory = newValue;
@@ -212,7 +212,7 @@ export const sendMessage = (text) => {
     if (text.length == 0) return;
     if (GeminiService.key.length == 0) {
         GeminiService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GeminiService.keyPath}\``, 'API Key', geminiView));
+        chatContent.add(SystemMessage(`Ключ сохранен в\n\`${GeminiService.keyPath}\``, 'API Key', geminiView));
         text = '';
         return;
     }
@@ -223,7 +223,7 @@ export const sendMessage = (text) => {
             clearChat();
             GeminiService.loadHistory();
         }
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${GeminiService.modelName}\``, '/model', geminiView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Сейчас используется \`${GeminiService.modelName}\``, '/model', geminiView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
@@ -237,18 +237,18 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(
-                `Key stored in:\n\`${GeminiService.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                `Ключ, хранится в:\n\`${GeminiService.keyPath}\`\nЧтобы обновить этот ключ, введите \`/key YOUR_API_KEY\``,
                 '/key',
                 geminiView));
             else {
                 GeminiService.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${GeminiService.keyPath}\``, '/key', geminiView));
+                chatContent.add(SystemMessage(`API Ключ обновлен в\n\`${GeminiService.keyPath}\``, '/key', geminiView));
             }
         }
         else if (text.startsWith('/test'))
             chatContent.add(SystemMessage(markdownTest, `Markdown test`, geminiView));
         else
-            chatContent.add(SystemMessage(`Invalid command.`, 'Error', geminiView))
+            chatContent.add(SystemMessage(`Не известная команда.`, 'Error', geminiView))
     }
     else {
         GeminiService.send(text);

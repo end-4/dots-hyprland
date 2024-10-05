@@ -82,7 +82,7 @@ export default (props) => {
         }),
         setup: setupCursorHover,
     });
-    const silenceButton = ListActionButton('notifications_paused', 'Silence', (self) => {
+    const silenceButton = ListActionButton('notifications_paused', 'Не беспокоить', (self) => {
         Notifications.dnd = !Notifications.dnd;
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
