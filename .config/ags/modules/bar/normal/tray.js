@@ -24,7 +24,7 @@ export const Tray = (props = {}) => {
         ,
     });
     const trayRevealer = Widget.Revealer({
-        revealChild: true,
+        revealChild: !userOptions.appearance.onHoverTray.enabled,
         transition: 'slide_left',
         transitionDuration: userOptions.animations.durationLarge,
         child: trayContent,
