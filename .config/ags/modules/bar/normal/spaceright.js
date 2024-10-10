@@ -40,8 +40,20 @@ export default (monitor = 0) => {
         }),
     }, monitor);
     const SpaceRightDefaultClicks = (child) => Widget.EventBox({
-        onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
-        onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
+        onHover: () => {
+            barStatusIcons.toggleClassName('bar-statusicons-hover', true);
+            if (userOptions.appearance.onHoverTray.enabled == true) {
+                barTray.children[0].revealChild = true;
+            }
+        },
+        onHoverLost: () => {
+            barStatusIcons.toggleClassName('bar-statusicons-hover', false);
+            if (userOptions.appearance.onHoverTray.enabled == true) {
+                setTimeout(() => {
+                    barTray.children[0].revealChild = false;
+                }, userOptions.appearance.onHoverTray.delay)
+            }
+        },
         onPrimaryClick: () => App.toggleWindow('sideright'),
         onSecondaryClick: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
         onMiddleClick: () => execAsync('playerctl play-pause').catch(print),
