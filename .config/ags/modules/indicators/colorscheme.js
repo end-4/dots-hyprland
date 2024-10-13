@@ -78,19 +78,19 @@ function calculateSchemeInitIndex(optionsArr, searchValue = 'vibrant') {
 
 const schemeOptionsArr = [
     [
-        { name: 'Tonal Spot', value: 'tonalspot' },
-        { name: 'Fruit Salad', value: 'fruitsalad' },
-        { name: 'Fidelity', value: 'fidelity' },
-        { name: 'Rainbow', value: 'rainbow' },
+        { name: 'Тональное пятно', value: 'tonalspot' },
+        { name: 'Фруктовый салат', value: 'fruitsalad' },
+        { name: 'Верный', value: 'fidelity' },
+        { name: 'Радужный', value: 'rainbow' },
     ],
     [
-        { name: 'Neutral', value: 'neutral' },
-        { name: 'Monochrome', value: 'monochrome' },
-        { name: 'Expressive', value: 'expressive' },
-        { name: 'Vibrant', value: 'vibrant' },
+        { name: 'Нейтральный', value: 'neutral' },
+        { name: 'Одноцветный', value: 'monochrome' },
+        { name: 'Выразительный', value: 'expressive' },
+        { name: 'Динамичный', value: 'vibrant' },
     ],
     [
-        { name: 'Vibrant+', value: 'morevibrant' },
+        { name: 'Динамичный+', value: 'morevibrant' },
     ],
     //[
     //  { name: 'Content', value: 'content' },
@@ -114,14 +114,14 @@ const ColorSchemeSettings = () => Widget.Box({
                 Widget.Label({
                     xalign: 0,
                     className: 'txt-norm titlefont txt',
-                    label: 'Options',
+                    label: 'Опции',
                     hpack: 'center',
                 }),
                 //////////////////
                 ConfigToggle({
                     icon: 'dark_mode',
-                    name: 'Dark Mode',
-                    desc: 'Ya should go to sleep!',
+                    name: 'Темная тема',
+                    desc: 'Я спать хочу!',
                     initValue: darkMode.value,
                     onChange: (_, newValue) => {
                         darkMode.value = !!newValue;
@@ -132,8 +132,8 @@ const ColorSchemeSettings = () => Widget.Box({
                 }),
                 ConfigToggle({
                     icon: 'border_clear',
-                    name: 'Transparency',
-                    desc: 'Make shell elements transparent',
+                    name: 'Прозрачность',
+                    desc: 'Сделает shell элементы прозрачными',
                     initValue: initTransparencyVal,
                     onChange: (self, newValue) => {
                         let transparency = newValue == 0 ? "opaque" : "transparent";
@@ -143,20 +143,20 @@ const ColorSchemeSettings = () => Widget.Box({
                     },
                 }),
                 Widget.Box({
-                    tooltipText: 'Theme GTK apps using accent color\n(drawback: dark/light mode switching requires restart)',
+                    tooltipText: 'Тема GTK приложений использующая главный цвет\n(темный/светлый режим требует перезагрузку)',
                     className: 'txt spacing-h-5 configtoggle-box',
                     children: [
                         MaterialIcon('imagesearch_roller', 'norm'),
                         Widget.Label({
                             className: 'txt txt-small',
-                            label: 'Use Gradience',
+                            label: 'Использовать Gradience',
                         }),
                         Widget.Box({ hexpand: true }),
                         ConfigMulipleSelection({
                             hpack: 'center',
                             vpack: 'center',
                             optionsArr: [
-                                [{ name: 'Off', value: 0 }, { name: 'On', value: 1 }],
+                                [{ name: 'Нет', value: 0 }, { name: 'Да', value: 1 }],
                             ],
                             initIndex: [-1, -1],
                             onChange: (value, name) => {
@@ -179,7 +179,7 @@ const ColorSchemeSettings = () => Widget.Box({
                 Widget.Label({
                     xalign: 0,
                     className: 'txt-norm titlefont txt margin-top-5',
-                    label: 'Scheme styles',
+                    label: 'Стиль цветовой схемы',
                     hpack: 'center',
                 }),
                 //////////////////
@@ -207,7 +207,7 @@ const ColorschemeContent = () => Widget.Box({
         Widget.Label({
             xalign: 0,
             className: 'txt-norm titlefont txt',
-            label: 'Color scheme',
+            label: 'Цветовая схема',
             hpack: 'center',
         }),
         Widget.Box({

@@ -398,12 +398,3 @@ $bar_ws_width_focus_active: 2.045rem;
 .bar-spaceright {
     color: $barspacerightOnLayer0;
 }
-
-.bar-bluetooth-device {
-    @include full-rounding;
-    @include symbolic-icon;
-    min-height: 1.032rem;
-    min-width: 1.032rem;
-    font-size: 1.032rem;
-    padding: 0.205rem 0.341rem;
-}

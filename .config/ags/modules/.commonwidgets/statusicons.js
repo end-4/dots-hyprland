@@ -4,7 +4,6 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 import { MaterialIcon } from './materialicon.js';
-import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
 import { languages } from './statusicons_languages.js';
@@ -82,45 +81,6 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
     return widget;
 }
 
-export const BluetoothIndicator = () => Widget.Stack({
-    transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationSmall,
-    children: {
-        'false': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
-        'true': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
-    },
-    setup: (self) => self
-        .hook(Bluetooth, stack => {
-            stack.shown = String(Bluetooth.enabled);
-        })
-    ,
-});
-
-const BluetoothDevices = () => Widget.Box({
-    className: 'spacing-h-5',
-    setup: self => self.hook(Bluetooth, self => {
-        self.children = Bluetooth.connected_devices.map((device) => {
-            return Widget.Box({
-                className: 'bar-bluetooth-device spacing-h-5',
-                vpack: 'center',
-                tooltipText: device.name,
-                children: [
-                    Widget.Icon(`${device.iconName}-symbolic`),
-                    ...(device.batteryPercentage ? [Widget.Label({
-                        className: 'txt-smallie',
-                        label: `${device.batteryPercentage}`,
-                        setup: (self) => {
-                            self.hook(device, (self) => {
-                                self.label = `${device.batteryPercentage}`;
-                            }, 'notify::batteryPercentage')
-                        }
-                    })] : []),
-                ]
-            });
-        });
-        self.visible = Bluetooth.connected_devices.length > 0;
-    }, 'notify::connected-devices'),
-})
 
 const NetworkWiredIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
@@ -297,10 +257,6 @@ export const StatusIcons = (props = {}, monitor = 0) => Widget.Box({
             optionalKeyboardLayoutInstances[monitor],
             NotificationIndicator(),
             NetworkIndicator(),
-            Widget.Box({
-                className: 'spacing-h-5',
-                children: [BluetoothIndicator(), BluetoothDevices()]
-            })
         ]
     })
 });

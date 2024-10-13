@@ -13,7 +13,7 @@ import { distroID, isArchDistro, isDebianDistro, hasFlatpak } from '../../.miscu
 const scripts = [
     {
     	icon: 'desktop-symbolic',
-    	name: 'Change screen resolution',
+    	name: 'Изменить разрешение экрана',
     	command: `bash ${App.configDir}/modules/sideleft/tools/changeres.sh`,
     	enabled: true,
 	},
@@ -43,19 +43,19 @@ const scripts = [
     },
     {
         icon: 'arch-symbolic',
-        name: 'Update packages',
+        name: 'Обновить пакеты',
         command: `sudo pacman -Syyu`,
         enabled: isArchDistro,
     },
     {
         icon: 'arch-symbolic',
-        name: 'Remove orphan packages',
+        name: 'Удаление потерянных пакетов',
         command: `sudo pacman -R $(pacman -Qdtq)`,
         enabled: isArchDistro,
     },
     {
         icon: 'flatpak-symbolic',
-        name: 'Uninstall unused flatpak packages',
+        name: 'Удаление неиспользуемых пакетов flatpak',
         command: `flatpak uninstall --unused`,
         enabled: hasFlatpak,
     },
@@ -63,7 +63,7 @@ const scripts = [
 
 export default () => SidebarModule({
     icon: MaterialIcon('code', 'norm'),
-    name: 'Quick scripts',
+    name: 'Скрипты',
     child: Box({
         vertical: true,
         className: 'spacing-v-5',
