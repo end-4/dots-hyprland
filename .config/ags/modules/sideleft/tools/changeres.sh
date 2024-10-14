@@ -9,11 +9,27 @@ get_current_resolution() {
     echo "$width $height $refreshRate"
 }
 
+get_focused_monitor_name() {
+    local outputs count_outputs focused
+    outputs=$(hyprctl monitors -j)
+    count_outputs=$(echo "$outputs" | jq 'length')
+
+    for i in $(seq 0 $(($count_outputs - 1))); do
+        focused=$(echo "$outputs" | jq -r ".[$i].focused")
+        if [[ "$focused" == "true" ]]; then
+            echo "$outputs" | jq -r ".[$i].name"
+            return
+        fi
+    done
+    return 1
+}
+
 update_resolution_config() {
     local newWidth="$1" newHeight="$2" newRefreshRate="$3"
-    local currentRes width height refreshRate modelineOutput modeline resolution rate configPath="${HOME}/.config/hypr/hyprland/general.conf"
+    local currentRes name width height refreshRate modelineOutput modeline resolution rate configPath="${HOME}/.config/hypr/hyprland/general.conf"
 
     currentRes=$(get_current_resolution)
+    name=$(get_focused_monitor_name)
 
     width=${newWidth:-$(echo "$currentRes" | awk '{print $1}')}
     height=${newHeight:-$(echo "$currentRes" | awk '{print $2}')}
@@ -35,7 +51,9 @@ update_resolution_config() {
         exit 1
     fi
 
-    sed "s/^monitor=.*$/monitor=eDP-1, $resolution@$rate, auto, 1/" "$configPath"
+    sed -E -i.bak "/^monitor = [^,]+,/s/^monitor = [^,]+,.*/monitor = $name, $resolution@$rate, auto, 1/" "$configPath"
+
+    echo "Resolution updated in configuration for monitor: $name"
 }
 
 # Main script
