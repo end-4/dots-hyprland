@@ -4,7 +4,7 @@ const Cairo = imports.cairo;
 const Pango = imports.gi.Pango;
 const PangoCairo = imports.gi.PangoCairo;
 import App from 'resource:///com/github/Aylur/ags/app.js';
-import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Box, DrawingArea, EventBox } = Widget;
 import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
@@ -15,7 +15,7 @@ const dummyOccupiedWs = Box({ className: 'bar-ws bar-ws-occupied' }); // Not sho
 
 const mix = (value1, value2, perc) => {
     return value1 * perc + value2 * (1 - perc);
-}
+};
 
 const getFontWeightName = (weight) => {
     switch (weight) {
@@ -34,7 +34,7 @@ const getFontWeightName = (weight) => {
         default:
             return 'Normal';
     }
-}
+};
 
 // Font size = workspace id
 const WorkspaceContents = (count = 10) => {
@@ -46,7 +46,6 @@ const WorkspaceContents = (count = 10) => {
             workspaceGroup: 0,
             updateMask: (self) => {
                 const offset = Math.floor((Hyprland.active.workspace.id - 1) / count) * userOptions.workspaces.shown;
-                // if (self.attribute.initialized) return; // We only need this to run once
                 const workspaces = Hyprland.workspaces;
                 let workspaceMask = 0;
                 for (let i = 0; i < workspaces.length; i++) {
@@ -55,9 +54,7 @@ const WorkspaceContents = (count = 10) => {
                     if (workspaces[i].windows > 0)
                         workspaceMask |= (1 << (ws.id - offset));
                 }
-                // console.log('Mask:', workspaceMask.toString(2));
                 self.attribute.workspaceMask = workspaceMask;
-                // self.attribute.initialized = true;
                 self.queue_draw();
             },
             toggleMask: (self, occupied, name) => {
@@ -101,7 +98,7 @@ const WorkspaceContents = (count = 10) => {
                 const activefg = activeWorkspaceStyleContext.get_property('color', Gtk.StateFlags.NORMAL);
                 area.set_size_request(workspaceDiameter * count, -1);
                 const widgetStyleContext = area.get_style_context();
-                const activeWs = widgetStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
+                const activeWs = Hyprland.active.workspace.id;
 
                 const activeWsCenterX = -(workspaceDiameter / 2) + (workspaceDiameter * activeWs);
                 const activeWsCenterY = height / 2;
@@ -147,25 +144,26 @@ const WorkspaceContents = (count = 10) => {
                 cr.arc(activeWsCenterX, activeWsCenterY, indicatorRadius, 0, 2 * Math.PI);
                 cr.fill();
 
-                // Draw workspace numbers
+                // Draw workspace numbers/icons
                 for (let i = 1; i <= count; i++) {
+                    const wsIndex = i + offset - 1;
+                    const wsLabel = userOptions.workspaces.labels[wsIndex + 1] || `${i}`;  // Check for specific workspace label, otherwise use number
                     const inactivecolors = area.attribute.workspaceMask & (1 << i) ? occupiedfg : wsfg;
+
                     if (i == activeWs) {
                         cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
                     }
-                    // Moving to
                     else if ((i == Math.floor(activeWs) && Hyprland.active.workspace.id < activeWs) || (i == Math.ceil(activeWs) && Hyprland.active.workspace.id > activeWs)) {
                         cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
                     }
-                    // Moving from
                     else if ((i == Math.floor(activeWs) && Hyprland.active.workspace.id > activeWs) || (i == Math.ceil(activeWs) && Hyprland.active.workspace.id < activeWs)) {
                         cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
                     }
-                    // Inactive
-                    else
+                    else {
                         cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
+                    }
 
-                    layout.set_text(`${i + offset}`, -1);
+                    layout.set_text(wsLabel, -1);  // Render workspace label (icon or number)
                     const [layoutWidth, layoutHeight] = layout.get_pixel_size();
                     const x = -workspaceRadius + (workspaceDiameter * i) - (layoutWidth / 2);
                     const y = (height - layoutHeight) / 2;
@@ -176,7 +174,7 @@ const WorkspaceContents = (count = 10) => {
             }))
         ,
     })
-}
+};
 
 export default () => EventBox({
     onScrollUp: () => Hyprland.messageAsync(`dispatch workspace -1`).catch(print),
@@ -205,7 +203,7 @@ export default () => EventBox({
             const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
             Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
                 .catch(print);
-        })
+        });
         self.on('button-press-event', (self, event) => {
             if (event.get_button()[1] === 1) {
                 self.attribute.clicked = true;
@@ -214,11 +212,10 @@ export default () => EventBox({
                 const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
                 Utils.execAsync([`${App.configDir}/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
                     .catch(print);
-            }
-            else if (event.get_button()[1] === 8) {
+            } else if (event.get_button()[1] === 8) {
                 Hyprland.messageAsync(`dispatch togglespecialworkspace`).catch(print);
             }
-        })
+        });
         self.on('button-release-event', (self) => self.attribute.clicked = false);
     }
-})
+});
