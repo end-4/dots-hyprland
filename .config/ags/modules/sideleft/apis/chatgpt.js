@@ -53,7 +53,7 @@ const ProviderSwitcher = () => {
     }
     const indicatorChevron = MaterialIcon('expand_more', 'norm');
     const indicatorButton = Button({
-        tooltipText: 'Select ChatGPT-compatible API provider',
+        tooltipText: getString('Select ChatGPT-compatible API provider'),
         child: Box({
             className: 'spacing-h-10 txt',
             children: [
@@ -121,7 +121,7 @@ const GPTInfo = () => {
                 className: 'txt txt-title-small sidebar-chat-welcome-txt',
                 wrap: true,
                 justify: Gtk.Justification.CENTER,
-                label: 'Assistant (GPTs)',
+                label: `Assistant (GPTs)`,
             }),
             Box({
                 className: 'spacing-h-5',
@@ -131,12 +131,12 @@ const GPTInfo = () => {
                         className: 'txt-smallie txt-subtext',
                         wrap: true,
                         justify: Gtk.Justification.CENTER,
-                        label: 'Provider shown above',
+                        label: getString('Provider shown above'),
                     }),
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: 'Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.',
+                        tooltipText: getString('Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.'),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -164,11 +164,11 @@ const GPTSettings = () => MarginRevealer({
                 hpack: 'center',
                 icon: 'casino',
                 name: 'Randomness',
-                desc: 'The model\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1',
+                desc: getString('The model\'s temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1'),
                 options: [
-                    { value: 0.00, name: 'Precise', },
-                    { value: 0.50, name: 'Balanced', },
-                    { value: 1.00, name: 'Creative', },
+                    { value: 0.00, name: getString('Precise'), },
+                    { value: 0.50, name: getString('Balanced'), },
+                    { value: 1.00, name: getString('Creative'), },
                 ],
                 initIndex: 2,
                 onChange: (value, name) => {
@@ -183,8 +183,8 @@ const GPTSettings = () => MarginRevealer({
                 children: [
                     ConfigToggle({
                         icon: 'model_training',
-                        name: 'Enhancements',
-                        desc: 'Tells the model:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points',
+                        name: getString('Enhancements'),
+                        desc: getString('Tells the model:\n- It\'s a Linux sidebar assistant\n- Be brief and use bullet points'),
                         initValue: GPTService.assistantPrompt,
                         onChange: (self, newValue) => {
                             GPTService.assistantPrompt = newValue;
@@ -212,7 +212,7 @@ export const OpenaiApiKeyInstructions = () => Box({
                 wrap: true,
                 className: 'txt sidebar-chat-welcome-txt',
                 justify: Gtk.Justification.CENTER,
-                label: 'An API key is required\nYou can grab one <u>here</u>, then enter it below'
+                label: getString('An API key is required\nYou can grab one <u>here</u>, then enter it below')
             }),
             setup: setupCursorHover,
             onClicked: () => {
@@ -287,7 +287,7 @@ export const sendMessage = (text) => {
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${GPTService.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`${getString("Currently using")} \`${GPTService.modelName}\``, '/model', chatGPTView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
@@ -301,18 +301,18 @@ export const sendMessage = (text) => {
         else if (text.startsWith('/key')) {
             const parts = text.split(' ');
             if (parts.length == 1) chatContent.add(SystemMessage(
-                `Key stored in:\n\`${GPTService.keyPath}\`\nTo update this key, type \`/key YOUR_API_KEY\``,
+                `${getString("Key stored in:")}\n\`${GPTService.keyPath}\`\n${getString("To update this key, type")} \`/key YOUR_API_KEY\``,
                 '/key',
                 chatGPTView));
             else {
                 GPTService.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${GPTService.keyPath}\``, '/key', chatGPTView));
+                chatContent.add(SystemMessage(`${getString("Updated API Key at")}\n\`${GPTService.keyPath}\``, '/key', chatGPTView));
             }
         }
         else if (text.startsWith('/test'))
             chatContent.add(SystemMessage(markdownTest, `Markdown test`, chatGPTView));
         else
-            chatContent.add(SystemMessage(`Invalid command.`, 'Error', chatGPTView))
+            chatContent.add(SystemMessage(getString("Invalid command."), 'Error', chatGPTView))
     }
     else {
         GPTService.send(text);
@@ -346,7 +346,7 @@ export const chatGPTView = Box({
                 // Always scroll to bottom with new content
                 const adjustment = scrolledWindow.get_vadjustment();
                 adjustment.connect("changed", () => {
-                    if(!chatEntry.hasFocus) return;
+                    if (!chatEntry.hasFocus) return;
                     adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
                 })
             }
