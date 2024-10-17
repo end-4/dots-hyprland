@@ -149,6 +149,8 @@ const WorkspaceContents = (count = 10) => {
 
                 // Draw workspace numbers
                 for (let i = 1; i <= count; i++) {
+                    const wsIndex = i + offset;
+                    const wsLabel = userOptions.workspaces.labels[wsIndex] || `${wsIndex}`;
                     const inactivecolors = area.attribute.workspaceMask & (1 << i) ? occupiedfg : wsfg;
                     if (i == activeWs) {
                         cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
@@ -165,7 +167,7 @@ const WorkspaceContents = (count = 10) => {
                     else
                         cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
 
-                    layout.set_text(`${i + offset}`, -1);
+                    layout.set_text(`${wsLabel}`, -1);
                     const [layoutWidth, layoutHeight] = layout.get_pixel_size();
                     const x = -workspaceRadius + (workspaceDiameter * i) - (layoutWidth / 2);
                     const y = (height - layoutHeight) / 2;
