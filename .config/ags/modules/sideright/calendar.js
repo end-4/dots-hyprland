@@ -30,13 +30,13 @@ function getDateInXMonthsTime(x) {
 }
 
 const weekDays = [ // MONDAY IS THE FIRST DAY OF THE WEEK :HESRIGHTYOUKNOW:
-    { day: 'Mo', today: 0 },
-    { day: 'Tu', today: 0 },
-    { day: 'We', today: 0 },
-    { day: 'Th', today: 0 },
-    { day: 'Fr', today: 0 },
-    { day: 'Sa', today: 0 },
-    { day: 'Su', today: 0 },
+    { day: getString('Mo'), today: 0 },
+    { day: getString('Tu'), today: 0 },
+    { day: getString('We'), today: 0 },
+    { day: getString('Th'), today: 0 },
+    { day: getString('Fr'), today: 0 },
+    { day: getString('Sa'), today: 0 },
+    { day: getString('Su'), today: 0 },
 ]
 
 const CalendarDay = (day, today) => Widget.Button({
@@ -192,8 +192,8 @@ export const ModuleCalendar = () => Box({
             vertical: true,
             className: 'sidebar-navrail spacing-v-10',
             children: [
-                StackButton('calendar', 'calendar_month', 'Calendar'),
-                StackButton('todo', 'done_outline', 'To Do'),
+                StackButton('calendar', 'calendar_month', getString('Calendar')),
+                StackButton('todo', 'done_outline', getString('To Do')),
                 // StackButton(box, 'stars', 'star', 'GitHub'),
             ]
         }), false, false, 0);
