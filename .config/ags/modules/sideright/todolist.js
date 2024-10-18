@@ -108,7 +108,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                             className: 'txt txt-subtext',
                             children: [
                                 MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'gigantic'),
-                                Label({ label: `${isDone ? 'Finished tasks will go here' : 'Nothing here!'}` })
+                                Label({ label: `${isDone ? getString('Finished tasks will go here') : getString('Nothing here!')}` })
                             ]
                         })
                     ]
@@ -132,7 +132,7 @@ const UndoneTodoList = () => {
             className: 'txt-small sidebar-todo-new',
             halign: 'end',
             vpack: 'center',
-            label: '+ New task',
+            label: getString('+ New task'),
             setup: setupCursorHover,
             onClicked: (self) => {
                 newTaskButton.revealChild = false;
@@ -166,7 +166,7 @@ const UndoneTodoList = () => {
         // hexpand: true,
         vpack: 'center',
         className: 'txt-small sidebar-todo-entry',
-        placeholderText: 'Add a task...',
+        placeholderText: getString('Add a task...'),
         onAccept: ({ text }) => {
             if (text == '') return;
             Todo.add(text)
@@ -216,7 +216,7 @@ const UndoneTodoList = () => {
 
 export const TodoWidget = () => TabContainer({
     icons: ['format_list_bulleted', 'task_alt'],
-    names: ['Unfinished', 'Done'],
+    names: [getString('Unfinished'), getString('Done')],
     children: [
         UndoneTodoList(),
         todoItems(true),

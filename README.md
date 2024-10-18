@@ -85,6 +85,9 @@
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/90c13b64-cde3-4363-9716-718d35845d95) -->
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/9e7adedd-fae8-4cc8-9c81-d7ad489d7559) -->
 
+**I suck at chemistry but it looks cool so...** <sub><sub><sub><sub><sub><sub>(the table was all ai generated anyway)</sub></sub></sub></sub></sub></sub>
+![image](https://github.com/user-attachments/assets/aed031ec-b41a-4937-b9d3-b20542359a74)
+
 
 **Weeb powers**
 <!-- ![image](https://github.com/end-4/dots-hyprland/assets/97237370/98fe2c03-a128-45c0-8155-3a6080db3b84) -->

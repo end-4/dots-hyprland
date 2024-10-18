@@ -29,11 +29,11 @@ const getFriendlyNotifTimeString = (timeObject) => {
     const messageTime = GLib.DateTime.new_from_unix_local(timeObject);
     const oneMinuteAgo = GLib.DateTime.new_now_local().add_seconds(-60);
     if (messageTime.compare(oneMinuteAgo) > 0)
-        return 'Now';
+        return getString('Now');
     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
         return messageTime.format(userOptions.time.format);
     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
-        return 'Yesterday';
+        return getString('Yesterday');
     else
         return messageTime.format(userOptions.time.dateFormat);
 }
@@ -198,7 +198,7 @@ export default ({
                             onClicked: () => destroyWithAnims(),
                             setup: setupCursorHover,
                             child: Label({
-                                label: 'Close',
+                                label: getString('Close'),
                             }),
                         }),
                         ...notifObject.actions.map(action => Widget.Button({
