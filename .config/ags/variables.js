@@ -41,17 +41,21 @@ const updateMonitorShellMode = (monitorShellModes, monitor, mode) => {
 }
 globalThis['currentMode'] = currentShellMode;
 globalThis['cycleMode'] = () => {
-    const monitor = Hyprland.active.monitor.id || 0;
+    // const monitor = Hyprland.active.monitor.id || 0;
+    const monitors = JSON.parse(exec('hyprctl monitors all -j'))
+    monitors.map((monitor) => {
 
-    if (currentShellMode.value[monitor] === 'normal') {
-        updateMonitorShellMode(currentShellMode, monitor, 'focus')
-    }
-    else if (currentShellMode.value[monitor] === 'focus') {
-        updateMonitorShellMode(currentShellMode, monitor, 'nothing')
-    }
-    else {
-        updateMonitorShellMode(currentShellMode, monitor, 'normal')
-    }
+        if (currentShellMode.value[monitor.id] === 'normal') {
+            updateMonitorShellMode(currentShellMode, monitor.id, 'focus')
+        }
+        else if (currentShellMode.value[monitor.id] === 'focus') {
+            updateMonitorShellMode(currentShellMode, monitor.id, 'nothing')
+        }
+        else {
+            updateMonitorShellMode(currentShellMode, monitor.id, 'normal')
+        }
+
+    })
 }
 
 // Window controls
