@@ -1,7 +1,7 @@
 # Modified from AUR package "aylurs-gtk-shell-git" maintained by kotontrion <kotontrion@tutanota.de>
 pkgname=illogical-impulse-ags
 _pkgname=ags
-pkgver=r545.aaef50b
+pkgver=r549.60180a1
 pkgrel=1
 pkgdesc="Aylurs's Gtk Shell (AGS), version fixed for illogical-impulse dotfiles."
 arch=('x86_64')
