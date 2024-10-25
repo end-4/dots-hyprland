@@ -267,8 +267,7 @@ async function config_error_parse (e) {
     });
 }
 
-const update = (file, event = 1) => {
-    if (event != 1) { return; }
+const update = (file) => {
     if (fileExists (file)) {
         try {
             const userOverrides = Utils.readFile (file);
@@ -288,7 +287,9 @@ const update = (file, event = 1) => {
 
 update (USER_CONFIG_FOLDER + 'config.json');
 
-Utils.monitorFile (USER_CONFIG_FOLDER + 'config.json', update);
+Utils.monitorFile (USER_CONFIG_FOLDER + 'config.json', (file, event) => {
+    if (event == 1) { update (file.get_path()); }
+});
 
 globalThis['userOptions'] = _userOptions;
 export default _userOptions;
