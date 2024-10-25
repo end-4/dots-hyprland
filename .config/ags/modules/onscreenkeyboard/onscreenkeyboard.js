@@ -2,14 +2,15 @@ const { Gtk } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
 
-const { Box, EventBox, Button, Revealer } = Widget;
+const { Box, EventBox, Button, Window, Revealer, Fixed, Label } = Widget;
 const { execAsync } = Utils;
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { DEFAULT_OSK_LAYOUT, oskLayouts } from './data_keyboardlayouts.js';
 import { setupCursorHoverGrab } from '../.widgetutils/cursorhover.js';
 
-const keyboardLayout = oskLayouts[userOptions.onScreenKeyboard.layout] ? userOptions.onScreenKeyboard.layout : DEFAULT_OSK_LAYOUT;
+const keyboardLayout = oskLayouts[userOptions.asyncGet().onScreenKeyboard.layout] ? userOptions.asyncGet().onScreenKeyboard.layout : DEFAULT_OSK_LAYOUT;
 const keyboardJson = oskLayouts[keyboardLayout];
 
 async function startYdotoolIfNeeded() {
@@ -83,7 +84,7 @@ const KeyboardControls = () => Box({
         Button({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => { // TODO: Proper clipboard widget, since fuzzel doesn't receive mouse inputs
-                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel  --match-mode fzf --dmenu | cliphist decode | wl-copy"]).catch(print);
+                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"]).catch(print);
             },
             label: 'assignment',
         }),
@@ -196,72 +197,59 @@ const KeyboardItself = (kbJson) => {
     })
 }
 
-const KeyboardWindow = () => Box({
-    vexpand: true,
-    hexpand: true,
-    vertical: true,
-    className: 'osk-window spacing-v-5',
-    children: [
-        TopDecor(),
-        Box({
-            className: 'osk-body spacing-h-10',
-            children: [
-                KeyboardControls(),
-                Widget.Box({ className: 'separator-line' }),
-                KeyboardItself(keyboardJson),
-            ],
-        })
-    ],
-    setup: (self) => self.hook(App, (self, name, visible) => { // Update on open
-        if (!name) return;
-        if (name.startsWith('osk') && visible) {
-            self.setCss(`margin-bottom: -0px;`);
-        }
-    }),
-});
+const KeyboardWindow = (nameWindow) => {
+    const child = Box({
+        vexpand: true,
+        hexpand: true,
+        vertical: true,
+        margin_bottom: 0,
+        className: 'osk-window spacing-v-5',
+        children: [
+            TopDecor(),
+            Box({
+                className: 'osk-body spacing-h-10',
+                children: [
+                    KeyboardControls(),
+                    Widget.Box({ className: 'separator-line' }),
+                    KeyboardItself(keyboardJson),
+                ],
+            })
+        ],
+        setup: (self) => self.hook(App, (self, name, visible) => { // Update on open
+            if (name === nameWindow && visible) {
+                self.margin_bottom = 15;
+            }
+        }),
+    });
 
-export default ({ id }) => {
-    const kbWindow = KeyboardWindow();
-    const gestureEvBox = EventBox({ child: kbWindow })
+    const gestureEvBox = EventBox({child })
     const gesture = Gtk.GestureDrag.new(gestureEvBox);
-    gesture.connect('drag-begin', async () => {
+
+    // gesture.connect('drag-begin', () => {
+    //     try {
+            
+    //     } catch {
+    //         return;
+    //     }
+    // });
+
+    gesture.connect('drag-update', () => {
         try {
-            const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-            Hyprland.messageAsync('j/cursorpos').then((out) => {
-                gesture.startY = JSON.parse(out).y;
-            }).catch(print);
+            const offsetY = gesture.get_offset()[2]||0;
+            const margin_bottom = Math.min(100, child.margin_bottom - offsetY);
+            if (margin_bottom < 0) {
+                App.closeWindow (nameWindow);
+                return;
+            }
+            child.margin_bottom = margin_bottom;
         } catch {
             return;
         }
     });
-    gesture.connect('drag-update', async () => {
-        try {
-            const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-            Hyprland.messageAsync('j/cursorpos').then((out) => {
-                const currentY = JSON.parse(out).y;
-                const offset = gesture.startY - currentY;
 
-                if (offset > 0) return;
-
-                kbWindow.setCss(`
-                margin-bottom: ${offset}px;
-            `);
-            }).catch(print);
-        } catch {
-            return;
-        }
-    });
-    gesture.connect('drag-end', () => {
-        var offset = gesture.get_offset()[2];
-        if (offset > 50) {
-            App.closeWindow(`osk${id}`);
-        }
-        else {
-            kbWindow.setCss(`
-            transition: margin-bottom 170ms cubic-bezier(0.05, 0.7, 0.1, 1);
-            margin-bottom: 0px;
-        `);
-        }
-    })
     return gestureEvBox;
+}
+
+export default ({ name }) => {
+    return KeyboardWindow(name);
 };

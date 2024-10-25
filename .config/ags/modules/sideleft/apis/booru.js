@@ -109,9 +109,9 @@ export const BooruSettings = () => MarginRevealer({
                         icon: 'sell',
                         name: getString('Save in folder by tags'),
                         desc: getString('Saves images in folders by their tags'),
-                        initValue: userOptions.sidebar.image.saveInFolderByTags,
+                        initValue: userOptions.asyncGet().sidebar.image.saveInFolderByTags,
                         onChange: (self, newValue) => {
-                            userOptions.sidebar.image.saveInFolderByTags = newValue;
+                            userOptions.asyncGet().sidebar.image.saveInFolderByTags = newValue;
                         },
                     }),
                 ]
@@ -205,7 +205,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         });
         const imageActions = Revealer({
             transition: 'crossfade',
-            transitionDuration: userOptions.animations.durationLarge,
+            transitionDuration: userOptions.asyncGet().animations.durationLarge,
             child: Box({
                 vpack: 'start',
                 className: 'sidebar-booru-image-actions spacing-h-3',
@@ -228,7 +228,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
                             const tagDirectory = currentTags.join('+');
                             let fileExtension = data.file_ext || 'jpg';
-                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
+                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.asyncGet().sidebar.image.saveInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.asyncGet().sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
                             execAsync(['bash', '-c', saveCommand])
                                 .then(() => self.label = 'done')
                                 .catch(print);
@@ -244,7 +244,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         });
         const imageRevealer = Revealer({
             transition: 'slide_down',
-            transitionDuration: userOptions.animations.durationLarge,
+            transitionDuration: userOptions.asyncGet().animations.durationLarge,
             child: EventBox({
                 onHover: () => { imageActions.revealChild = true },
                 onHoverLost: () => { imageActions.revealChild = false },
@@ -256,7 +256,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
     const downloadState = Stack({
         homogeneous: false,
         transition: 'slide_up_down',
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         children: {
             'api': PageState('api', getString('Calling API')),
             'download': PageState('downloading', getString('Downloading image')),
@@ -312,7 +312,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
     })
     const pageImageRevealer = Revealer({
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         child: pageImages,
     });
@@ -331,7 +331,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     downloadState.shown = 'error';
                     return;
                 }
-                const imageColumns = userOptions.sidebar.image.columns;
+                const imageColumns = userOptions.asyncGet().sidebar.image.columns;
                 const imageRows = data.length / imageColumns;
 
                 // Init cols
@@ -435,7 +435,7 @@ export const booruView = Scrollable({
 const booruTags = Revealer({
     revealChild: false,
     transition: 'crossfade',
-    transitionDuration: userOptions.animations.durationLarge,
+    transitionDuration: userOptions.asyncGet().animations.durationLarge,
     child: Box({
         className: 'spacing-h-5',
         children: [

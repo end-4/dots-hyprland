@@ -76,7 +76,7 @@ const SheetContent = (id) => {
     sheetContents[id] = ExpandingIconTabContainer({
         tabsHpack: 'center',
         tabSwitcherClassName: 'sidebar-icontabswitcher',
-        transitionDuration: userOptions.animations.durationLarge * 1.4,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge * 1.4,
         icons: cheatsheets.map((api) => api.materialIcon),
         names: cheatsheets.map((api) => api.name),
         children: cheatsheets.map((api) => api.contentWidget()),
@@ -119,21 +119,21 @@ export default (id) => {
             ],
             setup: (self) => self.on('key-press-event', (widget, event) => { // Typing
                 // Whole sheet
-                if (checkKeybind(event, userOptions.keybinds.cheatsheet.nextTab))
+                if (checkKeybind(event, userOptions.asyncGet().keybinds.cheatsheet.nextTab))
                     sheetContents.forEach(tab => tab.nextTab())
-                else if (checkKeybind(event, userOptions.keybinds.cheatsheet.prevTab))
+                else if (checkKeybind(event, userOptions.asyncGet().keybinds.cheatsheet.prevTab))
                     sheetContents.forEach(tab => tab.prevTab())
-                else if (checkKeybind(event, userOptions.keybinds.cheatsheet.cycleTab))
+                else if (checkKeybind(event, userOptions.asyncGet().keybinds.cheatsheet.cycleTab))
                     sheetContents.forEach(tab => tab.cycleTab())
                 // Keybinds
                 if (sheets.attribute.names[sheets.attribute.shown.value] == 'Keybinds') { // If Keybinds tab is focused
-                    if (checkKeybind(event, userOptions.keybinds.cheatsheet.keybinds.nextTab)) {
+                    if (checkKeybind(event, userOptions.asyncGet().keybinds.cheatsheet.keybinds.nextTab)) {
                         sheetContents.forEach((sheet) => {
                             const toSwitchTab = sheet.attribute.children[sheet.attribute.shown.value];
                             toSwitchTab.nextTab();
                         })
                     }
-                    else if (checkKeybind(event, userOptions.keybinds.cheatsheet.keybinds.prevTab)) {
+                    else if (checkKeybind(event, userOptions.asyncGet().keybinds.cheatsheet.keybinds.prevTab)) {
                         sheetContents.forEach((sheet) => {
                             const toSwitchTab = sheet.attribute.children[sheet.attribute.shown.value];
                             toSwitchTab.prevTab();

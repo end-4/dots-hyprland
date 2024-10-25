@@ -1,4 +1,4 @@
-const { Gdk, Gio, GLib, Gtk } = imports.gi;
+const { Gdk, Gio, Pango, GLib, Gtk } = imports.gi;
 import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
@@ -62,15 +62,25 @@ const HighlightedCode = (content, lang) => {
     return sourceView;
 }
 
-const TextBlock = (content = '') => Label({
-    hpack: 'fill',
-    className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
-    useMarkup: true,
-    xalign: 0,
-    wrap: true,
-    selectable: true,
-    label: content,
-});
+const TextBlock = (content = '') => {
+    const item = Label({
+        attribute: {
+            'updateText': (text) => {
+                item.label = text;
+            },
+            type: 'text'
+        },
+        hpack: 'fill',
+        className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
+        useMarkup: true,
+        xalign: 0,
+        wrap: true,
+        selectable: true,
+        label: content,
+        wrapMode: Pango.WrapMode.WORD_CHAR,
+    })
+    return item;
+};
 
 Utils.execAsync(['bash', '-c', `rm -rf ${LATEX_DIR}`])
     .then(() => Utils.execAsync(['bash', '-c', `mkdir -p ${LATEX_DIR}`]))
@@ -177,7 +187,8 @@ const CodeBlock = (content = '', lang = 'txt') => {
         attribute: {
             'updateText': (text) => {
                 sourceView.get_buffer().set_text(text, -1);
-            }
+            },
+            'type': 'code'
         },
         className: 'sidebar-chat-codeblock',
         vertical: true,
@@ -208,37 +219,68 @@ const Divider = () => Box({
     className: 'sidebar-chat-divider',
 })
 
+const updateContentAndBlockType = (contentBox, i, type, typeObj, text) => {
+    const kids = contentBox.get_children();
+    if (i < kids.length) { 
+        if (kids[i].attribute.type != type) {
+            kids[i] = typeObj (text);
+        }
+        else {
+            kids[i].attribute.updateText(text);
+        }
+    }
+    else {
+        contentBox.add (typeObj (text));
+    }
+}
+
 const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
         attribute: {
             'fullUpdate': (self, content, useCursor = false) => {
                 // Clear and add first text widget
-                const children = contentBox.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    child.destroy();
-                }
-                contentBox.add(TextBlock())
+                // const children = contentBox.get_children();
+                // for (let i = 0; i < children.length; i++) {
+                //    const child = children[i];
+                //    child.destroy();
+                // }
+                // contentBox.add(TextBlock())
                 // Loop lines. Put normal text in markdown parser
                 // and put code into code highlighter (TODO)
                 let lines = content.split('\n');
                 let lastProcessed = 0;
                 let inCode = false;
+                let i = 0;
+                let lang = 'txt';
+                const LangCodeBlock = (text) => CodeBlock (text, lang);
                 for (const [index, line] of lines.entries()) {
                     // Code blocks
                     const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
                         const kids = self.get_children();
-                        const lastLabel = kids[kids.length - 1];
+                        //const currentLabel = kids.length < i ? kids[i] : undefined;
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        if (!inCode) {
-                            lastLabel.label = md2pango(blockContent);
-                            contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
-                        }
-                        else {
-                            lastLabel.attribute.updateText(blockContent);
-                            contentBox.add(TextBlock());
+                        if (blockContent) {
+                            if (!inCode) {
+                                // '```XXX ' <- line
+                                const _line = line.trim()
+                                if (_line.length <= 3) { lang = 'txt'; }
+                                else { lang = _line.substr (3).trim(); }
+                                // add text block with prev data, bcz we will create code block
+                                // blockContent contains the prev content
+                                if (blockContent) {
+                                    const text = md2pango(blockContent);
+                                    updateContentAndBlockType (contentBox, i, 'text', TextBlock, text);
+                                    //contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
+                                }
+                            }
+                            else {
+                                updateContentAndBlockType (contentBox, i, 'code', LangCodeBlock, blockContent);
+                            }
+
+                            // next element
+                            i++;
                         }
 
                         lastProcessed = index + 1;
@@ -248,22 +290,26 @@ const MessageContent = (content) => {
                     const dividerRegex = /^\s*---/;
                     if (!inCode && dividerRegex.test(line)) {
                         const kids = self.get_children();
-                        const lastLabel = kids[kids.length - 1];
+                        //const currentLabel = kids.length < i ? kids[i] : undefined;
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.label = md2pango(blockContent);
+                        const text = md2pango(blockContent);
+                        updateContentAndBlockType (contentBox, i, 'text', TextBlock, text);
                         contentBox.add(Divider());
-                        contentBox.add(TextBlock());
                         lastProcessed = index + 1;
+
+                        i += 2;
                     }
                 }
                 if (lastProcessed < lines.length) {
                     const kids = self.get_children();
-                    const lastLabel = kids[kids.length - 1];
+                    //const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`;
+                        updateContentAndBlockType(contentBox, i, 'text', TextBlock, `${md2pango(blockContent)}${useCursor ? userOptions.asyncGet().ai.writingCursor : ''}`);
                     else
-                        lastLabel.attribute.updateText(blockContent);
+                        updateContentAndBlockType(contentBox, i, 'code', LangCodeBlock, blockContent);
+                    
+                    i++;
                 }
                 // Debug: plain text
                 // contentBox.add(Label({
@@ -296,7 +342,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
     const messageArea = Stack({
         homogeneous: message.role !== 'user',
         transition: 'crossfade',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         children: {
             'thinking': messageLoadingSkeleton,
             'message': messageContentBox,
@@ -317,6 +363,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         wrap: true,
                         useMarkup: true,
                         label: (message.role == 'user' ? USERNAME : modelName),
+                        wrapMode: Pango.WrapMode.WORD_CHAR,
                     }),
                     Box({
                         homogeneous: true,
@@ -355,6 +402,7 @@ export const SystemMessage = (content, commandName, scrolledWindow) => {
                         className: 'txt txt-bold sidebar-chat-name sidebar-chat-name-system',
                         wrap: true,
                         label: `System  •  ${commandName}`,
+                        wrapMode: Pango.WrapMode.WORD_CHAR,
                     }),
                     messageContentBox,
                 ],

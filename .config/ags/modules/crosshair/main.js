@@ -12,8 +12,8 @@ export default (monitor = 0, ) => {
         child: Widget.Icon({
             icon: 'crosshair-symbolic',
             css: `
-                font-size: ${userOptions.gaming.crosshair.size}px;
-                color: ${userOptions.gaming.crosshair.color};
+                font-size: ${userOptions.asyncGet().gaming.crosshair.size}px;
+                color: ${userOptions.asyncGet().gaming.crosshair.color};
             `,
         }),
         setup: enableClickthrough,

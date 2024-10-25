@@ -1,3 +1,5 @@
+const Pango = imports.gi.Pango;
+
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Label, Revealer } = Widget;
@@ -14,6 +16,7 @@ const TodoListItem = (task, id, isDone, isEven = false) => {
         className: 'txt txt-small sidebar-todo-txt',
         label: task.content,
         selectable: true,
+        wrapMode: Pango.WrapMode.WORD_CHAR,
     });
     const actions = Box({
         hpack: 'end',
@@ -77,7 +80,7 @@ const TodoListItem = (task, id, isDone, isEven = false) => {
     const widgetRevealer = Widget.Revealer({
         revealChild: true,
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: todoContent,
     })
     return Box({
@@ -108,7 +111,7 @@ const todoItems = (isDone) => Widget.Scrollable({
                             className: 'txt txt-subtext',
                             children: [
                                 MaterialIcon(`${isDone ? 'checklist' : 'check_circle'}`, 'gigantic'),
-                                Label({ label: `${isDone ? getString('Finished tasks will go here') : getString('Nothing here!')}` })
+                                Label({ label: `${isDone ? getString('Finished tasks will go here') : getString('Nothing here!')}`, wrapMode: Pango.WrapMode.WORD_CHAR, })
                             ]
                         })
                     ]
@@ -126,7 +129,7 @@ const todoItems = (isDone) => Widget.Scrollable({
 const UndoneTodoList = () => {
     const newTaskButton = Revealer({
         transition: 'slide_left',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: true,
         child: Button({
             className: 'txt-small sidebar-todo-new',
@@ -145,7 +148,7 @@ const UndoneTodoList = () => {
     });
     const cancelAddTask = Revealer({
         transition: 'slide_right',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',
@@ -176,13 +179,13 @@ const UndoneTodoList = () => {
     });
     const newTaskEntryRevealer = Revealer({
         transition: 'slide_right',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         child: newTaskEntry,
     });
     const confirmAddTask = Revealer({
         transition: 'slide_right',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         child: Button({
             className: 'txt-norm icon-material sidebar-todo-add',

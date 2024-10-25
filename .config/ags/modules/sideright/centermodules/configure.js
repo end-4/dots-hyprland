@@ -90,10 +90,10 @@ export default (props) => {
                                 icon: 'clear_all',
                                 name: getString('Choreography delay'),
                                 desc: getString('In milliseconds, the delay between animations of a series'),
-                                initValue: userOptions.animations.choreographyDelay,
+                                initValue: userOptions.asyncGet().animations.choreographyDelay,
                                 step: 10, minValue: 0, maxValue: 1000,
                                 onChange: (self, newValue) => {
-                                    userOptions.animations.choreographyDelay = newValue
+                                    userOptions.asyncGet().animations.choreographyDelay = newValue
                                 },
                             })
                         ]),

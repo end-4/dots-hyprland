@@ -294,11 +294,11 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 }
 
 .sidebar-todo-crosser-crossed {
-    background-color: $onBackground;
+    background-color: transparent;
 }
 
 .sidebar-todo-crosser-removed {
-    background-color: $error;
+    background-color: transparent;
 }
 
 .sidebar-todo-new {

@@ -7,12 +7,12 @@ export function iconExists(iconName) {
 
 export function substitute(str) {
     // Normal substitutions
-    if (userOptions.icons.substitutions[str])
-        return userOptions.icons.substitutions[str];
+    if (userOptions.asyncGet().icons.substitutions[str])
+        return userOptions.asyncGet().icons.substitutions[str];
 
     // Regex substitutions
-    for (let i = 0; i < userOptions.icons.regexSubstitutions.length; i++) {
-        const substitution = userOptions.icons.regexSubstitutions[i];
+    for (let i = 0; i < userOptions.asyncGet().icons.regexSubstitutions.length; i++) {
+        const substitution = userOptions.asyncGet().icons.regexSubstitutions[i];
         const replacedName = str.replace(
             substitution.regex,
             substitution.replace,

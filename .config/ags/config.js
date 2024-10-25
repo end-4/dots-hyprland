@@ -49,14 +49,14 @@ const Windows = () => [
     SideRight(),
     forMonitors(Osk),
     forMonitors(Session),
-    ...(userOptions.dock.enabled ? [forMonitors(Dock)] : []),
-    ...(userOptions.appearance.fakeScreenRounding !== 0 ? [
+    ...(userOptions.asyncGet().dock.enabled ? [forMonitors(Dock)] : []),
+    ...(userOptions.asyncGet().appearance.fakeScreenRounding !== 0 ? [
         forMonitors((id) => Corner(id, 'top left', true)),
         forMonitors((id) => Corner(id, 'top right', true)),
         forMonitors((id) => Corner(id, 'bottom left', true)),
         forMonitors((id) => Corner(id, 'bottom right', true)),
     ] : []),
-    ...(userOptions.appearance.barRoundCorners ? [
+    ...(userOptions.asyncGet().appearance.barRoundCorners ? [
         forMonitors(BarCornerTopleft),
         forMonitors(BarCornerTopright),
     ] : []),
@@ -72,7 +72,7 @@ App.config({
     css: `${COMPILED_STYLE_DIR}/style.css`,
     stackTraceOnError: true,
     closeWindowDelay: closeWindowDelays,
-    windows: Windows().flat(1),
+    windows: Windows().flat(1)
 });
 
 // Stuff that don't need to be toggled. And they're async so ugh...

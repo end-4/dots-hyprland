@@ -167,7 +167,7 @@ export default () => EventBox({
             if (!self.attribute.clicked) return;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
-            const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
+            const wsId = Math.ceil(cursorX * userOptions.asyncGet().workspaces.shown / widgetWidth);
             switchToWorkspace(wsId);
         })
         self.on('button-press-event', (self, event) => {
@@ -175,7 +175,7 @@ export default () => EventBox({
             self.attribute.clicked = true;
             const [_, cursorX, cursorY] = event.get_coords();
             const widgetWidth = self.get_allocation().width;
-            const wsId = Math.ceil(cursorX * userOptions.workspaces.shown / widgetWidth);
+            const wsId = Math.ceil(cursorX * userOptions.asyncGet().workspaces.shown / widgetWidth);
             switchToWorkspace(wsId);
         })
         self.on('button-release-event', (self) => self.attribute.clicked = false);

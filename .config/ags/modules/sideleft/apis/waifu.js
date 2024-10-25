@@ -24,7 +24,7 @@ async function getImageViewerApp(preferredApp) {
 }
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
-const IMAGE_VIEWER_APP = getImageViewerApp(userOptions.apps.imageViewer); // Gnome's image viewer cuz very comfortable zooming
+const IMAGE_VIEWER_APP = getImageViewerApp(userOptions.asyncGet().apps.imageViewer); // Gnome's image viewer cuz very comfortable zooming
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
 
 // Create cache folder and clear pics from previous session
@@ -121,7 +121,7 @@ const WaifuImage = (taglist) => {
     const downloadState = Stack({
         homogeneous: false,
         transition: 'slide_up_down',
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         children: {
             'api': ImageState('api', getString('Calling API')),
             'download': ImageState('downloading', getString('Downloading image')),
@@ -184,7 +184,7 @@ const WaifuImage = (taglist) => {
     });
     const blockImageRevealer = Revealer({
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         child: Box({
             className: 'margin-top-5',
@@ -334,7 +334,7 @@ export const waifuView = Scrollable({
 const waifuTags = Revealer({
     revealChild: false,
     transition: 'crossfade',
-    transitionDuration: userOptions.animations.durationLarge,
+    transitionDuration: userOptions.asyncGet().animations.durationLarge,
     child: Box({
         className: 'spacing-h-5',
         children: [

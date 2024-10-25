@@ -170,7 +170,7 @@ export const ExpandingIconTabContainer = ({
     icons, names, children, className = '',
     setup = () => { }, onChange = () => { },
     tabsHpack = 'center', tabSwitcherClassName = '',
-    transitionDuration = userOptions.animations.durationLarge,
+    transitionDuration = userOptions.asyncGet().animations.durationLarge,
     ...rest
 }) => {
     const shownIndex = Variable(0);
@@ -186,8 +186,8 @@ export const ExpandingIconTabContainer = ({
                 transition2: 'crossfade',
                 duration1: 0,
                 duration2: 0,
-                // duration1: userOptions.animations.durationSmall,
-                // duration2: userOptions.animations.durationSmall,
+                // duration1: userOptions.asyncGet().animations.durationSmall,
+                // duration2: userOptions.asyncGet().animations.durationSmall,
                 child: Label({
                     className: 'margin-left-5 txt-small',
                     label: names[i],

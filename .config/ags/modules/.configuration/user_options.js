@@ -1,12 +1,15 @@
 import GLib from 'gi://GLib';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
-import userOverrides from '../../user_options.js';
+//import userOverrides from '../../user_options.js';
+import { writable, clone } from '../.miscutils/store.js';
+import { fileExists } from '../.miscutils/files.js';
 
 // Default options.
 // Add overrides in ~/.config/ags/user_options.js
-let configOptions = {
+const configOptions = {
     // General stuff
     'ai': {
+        'onSearch': "gemini",
         'defaultGPTProvider': "openai",
         'defaultTemperature': 0.9,
         'enhancements': true,
@@ -91,17 +94,9 @@ let configOptions = {
     },
     'sidebar': {
         'ai': {
-            'extraGptModels': {
-                'oxygen3': {
-                    'name': 'Oxygen (GPT-3.5)',
-                    'logo_name': 'ai-oxygen-symbolic',
-                    'description': 'An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key',
-                    'base_url': 'https://app.oxyapi.uk/v1/chat/completions',
-                    'key_get_url': 'https://discord.com/invite/kM6MaCqGKA',
-                    'key_file': 'oxygen_key.txt',
-                    'model': 'gpt-3.5-turbo',
-                },
-            }
+            '__custom': ['extraGptModels'],
+            'extraGptModels': {},
+            'initMessages': []
         },
         'image': {
             'columns': 2,
@@ -115,6 +110,12 @@ let configOptions = {
                 'order': ["gemini", "gpt", "waifu", "booru"],
             }
         },
+        'translater': {
+            '__custom': ['languages'],
+            'from': 'auto',
+            'to': 'en',
+            'languages': {}
+        }
     },
     'search': {
         'enableFeatures': {
@@ -171,6 +172,7 @@ let configOptions = {
         // The file names are processed at startup, so if there
         // are too many files in the search path it'll affect performance
         // Example: ['/usr/share/icons/Tela-nord/scalable/apps']
+        '__custom': ['substitutions', 'regexSubstitutions'],
         'searchPaths': [''],
         'symbolicIconTheme': {
             "dark": "Adwaita",
@@ -231,7 +233,8 @@ let configOptions = {
         // Array of bar modes for each monitor. Hit Ctrl+Alt+Slash to cycle.
         // Modes: "normal", "focus" (workspace indicator only), "nothing"
         // Example for four monitors: ["normal", "focus", "normal", "nothing"]
-        'modes': ["normal"]
+        'modes': ["normal"],
+        'wallpaper_folder': null
     },
 }
 
@@ -239,24 +242,53 @@ let configOptions = {
 let optionsOkay = true;
 function overrideConfigRecursive(userOverrides, configOptions = {}, check = true) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (configOptions[key] === undefined && check) {
+        if ((configOptions[key] === undefined && check) || key == '__custom') {
             optionsOkay = false;
         }
         else if (typeof value === 'object' && !(value instanceof Array)) {
-            if (key === "substitutions" || key === "regexSubstitutions" || key === "extraGptModels") {
-                overrideConfigRecursive(value, configOptions[key], false);
-            } else overrideConfigRecursive(value, configOptions[key]);
+            if (configOptions['__custom'] instanceof Array && 
+                configOptions['__custom'].indexOf(key) >= 0) {
+                configOptions[key] = value;
+            } else {
+                overrideConfigRecursive(value, configOptions[key], check);
+            }
         } else {
             configOptions[key] = value;
         }
     }
 }
-overrideConfigRecursive(userOverrides, configOptions);
-if (!optionsOkay) Utils.timeout(2000, () => Utils.execAsync(['notify-send',
-    'Update your user options',
-    'One or more config options don\'t exist',
-    '-a', 'ags',
-]).catch(print))
+const USER_CONFIG_FOLDER = GLib.get_home_dir() + '/.ags/';
+const _userOptions = writable (configOptions);
 
-globalThis['userOptions'] = configOptions;
-export default configOptions;
+async function config_error_parse (e) {
+    Utils.notify ({
+        summary: 'Failed to load config',
+        body: e.message || 'Unknown'
+    });
+}
+
+const update = (file, event = 1) => {
+    if (event != 1) { return; }
+    if (fileExists (file)) {
+        try {
+            const userOverrides = Utils.readFile (file);
+            const copy_configOptions = clone (configOptions);
+            overrideConfigRecursive(JSON.parse(userOverrides), copy_configOptions);
+            if (!optionsOkay) Utils.timeout(2000, () => Utils.execAsync(['notify-send',
+                'Update your user options',
+                'One or more config options don\'t exist',
+                '-a', 'ags',
+            ]).catch(print))
+            _userOptions.set (copy_configOptions);
+        } catch (e) {
+            config_error_parse (e);
+        }
+    }
+};
+
+update (USER_CONFIG_FOLDER + 'config.json');
+
+Utils.monitorFile (USER_CONFIG_FOLDER + 'config.json', update);
+
+globalThis['userOptions'] = _userOptions;
+export default _userOptions;

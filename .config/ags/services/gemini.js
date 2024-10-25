@@ -142,13 +142,13 @@ class GeminiService extends Service {
         });
     }
 
-    _assistantPrompt = userOptions.ai.enhancements;
+    _assistantPrompt = userOptions.asyncGet().ai.enhancements;
     _cycleModels = true;
-    _usingHistory = userOptions.ai.useHistory;
+    _usingHistory = userOptions.asyncGet().ai.useHistory;
     _key = '';
     _requestCount = 0;
-    _safe = userOptions.ai.safety;
-    _temperature = userOptions.ai.defaultTemperature;
+    _safe = userOptions.asyncGet().ai.safety;
+    _temperature = userOptions.asyncGet().ai.defaultTemperature;
     _messages = [];
     _modelIndex = 0;
     _decoder = new TextDecoder();
@@ -298,7 +298,7 @@ class GeminiService extends Service {
             // "key": this._key,
             // "apiKey": this._key,
         };
-        const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
+        const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.asyncGet().ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({
             method: 'POST',
@@ -308,11 +308,17 @@ class GeminiService extends Service {
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(JSON.stringify(body)));
 
         session.send_async(message, GLib.DEFAULT_PRIORITY, null, (_, result) => {
-            const stream = session.send_finish(result);
-            this.readResponse(new Gio.DataInputStream({
-                close_base_stream: true,
-                base_stream: stream
-            }), aiResponse);
+            try {
+                const stream = session.send_finish(result);
+                this.readResponse(new Gio.DataInputStream({
+                    close_base_stream: true,
+                    base_stream: stream
+                }), aiResponse);
+            }
+            catch (e) {
+                aiResponse.addDelta (e.message);
+                aiResponse.thinking = false;
+            }
         });
         this._messages.push(aiResponse);
         this.emit('newMsg', this._messages.length - 1);

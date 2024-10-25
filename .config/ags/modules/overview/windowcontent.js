@@ -56,7 +56,7 @@ export const SearchAndWindows = () => {
         vertical: true,
     });
     const resultsRevealer = Widget.Revealer({
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         transition: 'slide_down',
         // duration: 200,
@@ -65,7 +65,7 @@ export const SearchAndWindows = () => {
     });
     const entryPromptRevealer = Widget.Revealer({
         transition: 'crossfade',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: true,
         hpack: 'center',
         child: Widget.Label({
@@ -76,7 +76,7 @@ export const SearchAndWindows = () => {
 
     const entryIconRevealer = Widget.Revealer({
         transition: 'crossfade',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         revealChild: false,
         hpack: 'end',
         child: Widget.Label({
@@ -119,7 +119,7 @@ export const SearchAndWindows = () => {
             _appSearchResults = Applications.query(text);
 
             // Calculate
-            if (userOptions.search.enableFeatures.mathResults && couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
+            if (userOptions.asyncGet().search.enableFeatures.mathResults && couldBeMath(text)) { // Eval on typing is dangerous; this is a small workaround.
                 try {
                     const fullResult = eval(text.replace(/\^/g, "**"));
                     resultsBox.add(CalculationResultButton({ result: fullResult, text: text }));
@@ -127,14 +127,14 @@ export const SearchAndWindows = () => {
                     // console.log(e);
                 }
             }
-            if (userOptions.search.enableFeatures.directorySearch && isDir) {
+            if (userOptions.asyncGet().search.enableFeatures.directorySearch && isDir) {
                 var contents = [];
                 contents = ls({ path: text, silent: true });
                 contents.forEach((item) => {
                     resultsBox.add(DirectoryButton(item));
                 })
             }
-            if (userOptions.search.enableFeatures.actions && isAction) { // Eval on typing is dangerous, this is a workaround.
+            if (userOptions.asyncGet().search.enableFeatures.actions && isAction) { // Eval on typing is dangerous, this is a workaround.
                 resultsBox.add(CustomCommandButton({ text: entry.text }));
             }
             // Add application entries
@@ -147,14 +147,14 @@ export const SearchAndWindows = () => {
 
             // Fallbacks
             // if the first word is an actual command
-            if (userOptions.search.enableFeatures.commands && !isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
+            if (userOptions.asyncGet().search.enableFeatures.commands && !isAction && !hasUnterminatedBackslash(text) && exec(`bash -c "command -v ${text.split(' ')[0]}"`) != '') {
                 resultsBox.add(ExecuteCommandButton({ command: entry.text, terminal: entry.text.startsWith('sudo') }));
             }
 
             // Add fallback: search
-            if (userOptions.search.enableFeatures.aiSearch)
+            if (userOptions.asyncGet().search.enableFeatures.aiSearch)
                 resultsBox.add(AiButton({ text: entry.text }));
-            if (userOptions.search.enableFeatures.webSearch)
+            if (userOptions.asyncGet().search.enableFeatures.webSearch)
                 resultsBox.add(SearchButton({ text: entry.text }));
             if (resultsBox.children.length == 0) resultsBox.add(NoResultButton());
             resultsBox.show_all();
@@ -189,11 +189,11 @@ export const SearchAndWindows = () => {
             .on('key-press-event', (widget, event) => { // Typing
                 const keyval = event.get_keyval()[1];
                 const modstate = event.get_state()[1];
-                if (checkKeybind(event, userOptions.keybinds.overview.altMoveLeft))
+                if (checkKeybind(event, userOptions.asyncGet().keybinds.overview.altMoveLeft))
                     entry.set_position(Math.max(entry.get_position() - 1, 0));
-                else if (checkKeybind(event, userOptions.keybinds.overview.altMoveRight))
+                else if (checkKeybind(event, userOptions.asyncGet().keybinds.overview.altMoveRight))
                     entry.set_position(Math.min(entry.get_position() + 1, entry.get_text().length));
-                else if (checkKeybind(event, userOptions.keybinds.overview.deleteToEnd)) {
+                else if (checkKeybind(event, userOptions.asyncGet().keybinds.overview.deleteToEnd)) {
                     const text = entry.get_text();
                     const pos = entry.get_position();
                     const newText = text.slice(0, pos);

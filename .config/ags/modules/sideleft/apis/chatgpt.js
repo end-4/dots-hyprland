@@ -19,13 +19,15 @@ export const chatGPTTabIcon = Icon({
 });
 
 const ProviderSwitcher = () => {
+    let unsubscriber = () => {};
+
     const ProviderChoice = (id, provider) => {
         const providerSelected = MaterialIcon('check', 'norm', {
             setup: (self) => self.hook(GPTService, (self) => {
                 self.toggleClassName('invisible', GPTService.providerID !== id);
             }, 'providerChanged')
         });
-        return Button({
+        const btn =  Button({
             tooltipText: provider.description,
             onClicked: () => {
                 GPTService.providerID = id;
@@ -50,6 +52,7 @@ const ProviderSwitcher = () => {
             }),
             setup: setupCursorHover,
         });
+        return btn;
     }
     const indicatorChevron = MaterialIcon('expand_more', 'norm');
     const indicatorButton = Button({
@@ -64,7 +67,7 @@ const ProviderSwitcher = () => {
                     className: 'txt-small',
                     label: GPTService.providerID,
                     setup: (self) => self.hook(GPTService, (self) => {
-                        self.label = `${GPTService.providers[GPTService.providerID]['name']}`;
+                        self.label = GPTService.providerID in GPTService.providers ?  GPTService.providers[GPTService.providerID]['name'] : getString('Unknown');
                     }, 'providerChanged')
                 }),
                 indicatorChevron,
@@ -79,7 +82,6 @@ const ProviderSwitcher = () => {
     const providerList = Revealer({
         revealChild: false,
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
         child: Box({
             vertical: true, className: 'spacing-v-5 sidebar-chat-providerswitcher-list',
             children: [
@@ -90,11 +92,18 @@ const ProviderSwitcher = () => {
                     setup: (self) => self.hook(GPTService, (self) => {
                         self.children = Object.entries(GPTService.providers)
                             .map(([id, provider]) => ProviderChoice(id, provider));
-                    }, 'initialized'),
+                    }, 'providersUpdated'),
                 })
             ]
         })
-    })
+    });
+
+    unsubscriber = userOptions.subscribe ((n) => {
+        providerList.transition_duration = n.animations.durationLarge;
+    });
+
+    providerList.on('destroy', unsubscriber);
+
     return Box({
         hpack: 'center',
         vertical: true,
@@ -196,16 +205,15 @@ const GPTSettings = () => MarginRevealer({
     })
 });
 
-export const OpenaiApiKeyInstructions = () => Box({
-    homogeneous: true,
-    children: [Revealer({
+export const OpenaiApiKeyInstructions = () => {
+    let unsubscriber = () => {};
+
+    const revealer = Revealer({
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
         setup: (self) => self
             .hook(GPTService, (self, hasKey) => {
                 self.revealChild = (GPTService.key.length == 0);
-            }, 'hasKey')
-        ,
+            }, 'hasKey'),
         child: Button({
             child: Label({
                 useMarkup: true,
@@ -219,8 +227,21 @@ export const OpenaiApiKeyInstructions = () => Box({
                 Utils.execAsync(['bash', '-c', `xdg-open ${GPTService.getKeyUrl}`]);
             }
         })
-    })]
-});
+    });
+
+    const box = Box({
+        homogeneous: true,
+        children: [revealer]
+    });
+
+    revealer.on('destroy', unsubscriber);
+
+    unsubscriber = userOptions.subscribe ((n) => {
+        revealer.transition_duration = n.animations.durationLarge;
+    });
+
+    return box;
+}
 
 const GPTWelcome = () => Box({
     vexpand: true,
@@ -244,7 +265,8 @@ export const chatContent = Box({
         .hook(GPTService, (box, id) => {
             const message = GPTService.messages[id];
             if (!message) return;
-            box.add(ChatMessage(message, `Model (${GPTService.providers[GPTService.providerID]['name']})`))
+            box.add(ChatMessage(message, `Model (${GPTService.providerID in GPTService.providers ? 
+                GPTService.providers[GPTService.providerID]['name'] : 'Unknown'})`))
         }, 'newMsg')
     ,
 });
@@ -321,6 +343,9 @@ export const sendMessage = (text) => {
 
 export const chatGPTView = Box({
     vertical: true,
+    attribute: {
+        'pinnedDown': true
+    },
     children: [
         ProviderSwitcher(),
         Scrollable({
@@ -345,10 +370,15 @@ export const chatGPTView = Box({
                 })
                 // Always scroll to bottom with new content
                 const adjustment = scrolledWindow.get_vadjustment();
+
                 adjustment.connect("changed", () => {
-                    if (!chatEntry.hasFocus) return;
+                    if (!chatGPTView.attribute.pinnedDown) { return; }
                     adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
                 })
+
+                adjustment.connect("value-changed", () => {
+                    chatGPTView.attribute.pinnedDown = adjustment.get_value() == (adjustment.get_upper() - adjustment.get_page_size());
+                });
             }
         })
     ]

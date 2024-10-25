@@ -27,10 +27,10 @@ const timeInRange = (time, rangeStart, rangeEnd) => { // Arrays of [hour, minute
 }
 
 export async function startAutoDarkModeService() {
-    Utils.interval(userOptions.time.interval, () => {
-        if ((!userOptions.appearance.autoDarkMode.enabled)) return;
-        const fromTime = (userOptions.appearance.autoDarkMode.from).split(':').map(Number);
-        const toTime = (userOptions.appearance.autoDarkMode.to).split(':').map(Number);
+    Utils.interval(userOptions.asyncGet().time.interval, () => {
+        if ((!userOptions.asyncGet().appearance.autoDarkMode.enabled)) return;
+        const fromTime = (userOptions.asyncGet().appearance.autoDarkMode.from).split(':').map(Number);
+        const toTime = (userOptions.asyncGet().appearance.autoDarkMode.to).split(':').map(Number);
         if (fromTime == toTime) return;
         const currentDateTime = GLib.DateTime.new_now_local();
         const currentTime = [currentDateTime.get_hour(), currentDateTime.get_minute()];

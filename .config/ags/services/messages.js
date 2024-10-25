@@ -22,16 +22,16 @@ async function batteryMessage() {
         batteryWarned = false;
         return;
     }
-    for (let i = userOptions.battery.warnLevels.length - 1; i >= 0; i--) {
-        if (perc <= userOptions.battery.warnLevels[i] && !charging && !batteryWarned) {
+    for (let i = userOptions.asyncGet().battery.warnLevels.length - 1; i >= 0; i--) {
+        if (perc <= userOptions.asyncGet().battery.warnLevels[i] && !charging && !batteryWarned) {
             batteryWarned = true;
             Utils.execAsync(['bash', '-c',
-                `notify-send "${userOptions.battery.warnTitles[i]}" "${userOptions.battery.warnMessages[i]}" -u critical -a '${APP_NAME}' -t 69420 &`
+                `notify-send "${userOptions.asyncGet().battery.warnTitles[i]}" "${userOptions.asyncGet().battery.warnMessages[i]}" -u critical -a '${APP_NAME}' -t 69420 &`
             ]).catch(print);
             break;
         }
     }
-    if (perc <= userOptions.battery.suspendThreshold) {
+    if (perc <= userOptions.asyncGet().battery.suspendThreshold) {
         Utils.execAsync(['bash', '-c',
             `notify-send "Suspending system" "Critical battery level (${perc}% remaining)" -u critical -a '${APP_NAME}' -t 69420 &`
         ]).catch(print);

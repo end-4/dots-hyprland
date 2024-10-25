@@ -17,7 +17,7 @@ import { iconExists, substitute } from "../.miscutils/icons.js";
 import { monitors } from '../.commondata/hyprlanddata.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
-const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.overview.numOfRows;
+const NUM_OF_WORKSPACES_SHOWN = userOptions.asyncGet().overview.numOfCols * userOptions.asyncGet().overview.numOfRows;
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 const overviewTick = Variable(false);
@@ -50,7 +50,7 @@ export default (overviewMonitor = 0) => {
     })
 
     const Window = ({ address, at: [x, y], size: [w, h], workspace: { id, name }, class: c, initialClass, monitor, title, xwayland }, screenCoords) => {
-        const revealInfoCondition = (Math.min(w, h) * userOptions.overview.scale > 70);
+        const revealInfoCondition = (Math.min(w, h) * userOptions.asyncGet().overview.scale > 70);
         if (w <= 0 || h <= 0 || (c === '' && title === '')) return null;
         // Non-primary monitors
         if (screenCoords.x != 0) x -= screenCoords.x;
@@ -68,25 +68,25 @@ export default (overviewMonitor = 0) => {
         const iconName = substitute(c);
         const appIcon = iconExists(iconName) ? Widget.Icon({
             icon: iconName,
-            size: Math.min(w, h) * userOptions.overview.scale / 2.5,
+            size: Math.min(w, h) * userOptions.asyncGet().overview.scale / 2.5,
         }) : MaterialIcon('terminal', 'gigantic', {
-            css: `font-size: ${Math.min(w, h) * userOptions.overview.scale / 2.5}px`,
+            css: `font-size: ${Math.min(w, h) * userOptions.asyncGet().overview.scale / 2.5}px`,
         });
         return Widget.Button({
             attribute: {
                 address, x, y, w, h, ws: id,
                 updateIconSize: (self) => {
-                    appIcon.size = Math.min(self.attribute.w, self.attribute.h) * userOptions.overview.scale / 2.5;
+                    appIcon.size = Math.min(self.attribute.w, self.attribute.h) * userOptions.asyncGet().overview.scale / 2.5;
                 },
             },
             className: 'overview-tasks-window',
             hpack: 'start',
             vpack: 'start',
             css: `
-                margin-left: ${Math.round(x * userOptions.overview.scale)}px;
-                margin-top: ${Math.round(y * userOptions.overview.scale)}px;
-                margin-right: -${Math.round((x + w) * userOptions.overview.scale)}px;
-                margin-bottom: -${Math.round((y + h) * userOptions.overview.scale)}px;
+                margin-left: ${Math.round(x * userOptions.asyncGet().overview.scale)}px;
+                margin-top: ${Math.round(y * userOptions.asyncGet().overview.scale)}px;
+                margin-right: -${Math.round((x + w) * userOptions.asyncGet().overview.scale)}px;
+                margin-bottom: -${Math.round((y + h) * userOptions.asyncGet().overview.scale)}px;
             `,
             onClicked: (self) => {
                 Hyprland.messageAsync(`dispatch focuswindow address:${address}`);
@@ -145,8 +145,8 @@ export default (overviewMonitor = 0) => {
                                     truncate: 'end',
                                     className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
                                     css: `
-                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
-                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
+                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.asyncGet().overview.scale / 14.6}px;
+                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.asyncGet().overview.scale / 10}px;
                             `,
                                     // If the title is too short, include the class
                                     label: (title.length <= 1 ? `${c}: ${title}` : title),
@@ -189,12 +189,12 @@ export default (overviewMonitor = 0) => {
             attribute: {
                 put: (widget, x, y) => {
                     if (!widget.attribute) return;
-                    // Note: x and y are already multiplied by userOptions.overview.scale
+                    // Note: x and y are already multiplied by userOptions.asyncGet().overview.scale
                     const newCss = `
                         margin-left: ${Math.round(x)}px;
                         margin-top: ${Math.round(y)}px;
-                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.overview.scale))}px;
-                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.overview.scale))}px;
+                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.asyncGet().overview.scale))}px;
+                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.asyncGet().overview.scale))}px;
                     `;
                     widget.css = newCss;
                     fixed.pack_start(widget, false, false, 0);
@@ -202,12 +202,12 @@ export default (overviewMonitor = 0) => {
                 move: (widget, x, y) => {
                     if (!widget) return;
                     if (!widget.attribute) return;
-                    // Note: x and y are already multiplied by userOptions.overview.scale
+                    // Note: x and y are already multiplied by userOptions.asyncGet().overview.scale
                     const newCss = `
                         margin-left: ${Math.round(x)}px;
                         margin-top: ${Math.round(y)}px;
-                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.overview.scale))}px;
-                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.overview.scale))}px;
+                        margin-right: -${Math.round(x + (widget.attribute.w * userOptions.asyncGet().overview.scale))}px;
+                        margin-bottom: -${Math.round(y + (widget.attribute.h * userOptions.asyncGet().overview.scale))}px;
                     `;
                     widget.css = newCss;
                 },
@@ -217,8 +217,8 @@ export default (overviewMonitor = 0) => {
             className: 'overview-tasks-workspace-number',
             label: `${index}`,
             css: `
-                margin: ${Math.min(monitors[overviewMonitor].width, monitors[overviewMonitor].height) * userOptions.overview.scale * userOptions.overview.wsNumMarginScale}px;
-                font-size: ${monitors[overviewMonitor].height * userOptions.overview.scale * userOptions.overview.wsNumScale}px;
+                margin: ${Math.min(monitors[overviewMonitor].width, monitors[overviewMonitor].height) * userOptions.asyncGet().overview.scale * userOptions.asyncGet().overview.wsNumMarginScale}px;
+                font-size: ${monitors[overviewMonitor].height * userOptions.asyncGet().overview.scale * userOptions.asyncGet().overview.wsNumScale}px;
             `,
             setup: (self) => self.hook(Hyprland.active.workspace, (self) => {
                 // Update when going to new ws group
@@ -232,8 +232,8 @@ export default (overviewMonitor = 0) => {
             vpack: 'center',
             // Rounding and adding 1px to minimum width/height to work around scaling inaccuracy:
             css: `
-                min-width: ${1 + Math.round(monitors[overviewMonitor].width * userOptions.overview.scale)}px;
-                min-height: ${1 + Math.round(monitors[overviewMonitor].height * userOptions.overview.scale)}px;
+                min-width: ${1 + Math.round(monitors[overviewMonitor].width * userOptions.asyncGet().overview.scale)}px;
+                min-height: ${1 + Math.round(monitors[overviewMonitor].height * userOptions.asyncGet().overview.scale)}px;
             `,
             children: [Widget.EventBox({
                 hexpand: true,
@@ -285,8 +285,8 @@ export default (overviewMonitor = 0) => {
                     c.attribute.h = clientJson.size[1];
                     c.attribute.updateIconSize(c);
                     fixed.attribute.move(c,
-                        Math.max(0, clientJson.at[0] * userOptions.overview.scale),
-                        Math.max(0, clientJson.at[1] * userOptions.overview.scale)
+                        Math.max(0, clientJson.at[0] * userOptions.asyncGet().overview.scale),
+                        Math.max(0, clientJson.at[1] * userOptions.asyncGet().overview.scale)
                     );
                     return;
                 }
@@ -295,8 +295,8 @@ export default (overviewMonitor = 0) => {
             if (newWindow === null) return;
             // clientMap.set(clientJson.address, newWindow);
             fixed.attribute.put(newWindow,
-                Math.max(0, newWindow.attribute.x * userOptions.overview.scale),
-                Math.max(0, newWindow.attribute.y * userOptions.overview.scale)
+                Math.max(0, newWindow.attribute.x * userOptions.asyncGet().overview.scale),
+                Math.max(0, newWindow.attribute.y * userOptions.asyncGet().overview.scale)
             );
             clientMap.set(clientJson.address, newWindow);
         };
@@ -416,14 +416,14 @@ export default (overviewMonitor = 0) => {
         // hpack to prevent unneeded expansion in overview-tasks-workspace:
         hpack: 'center',
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Widget.Box({
             vertical: true,
             className: 'overview-tasks',
-            children: Array.from({ length: userOptions.overview.numOfRows }, (_, index) =>
+            children: Array.from({ length: userOptions.asyncGet().overview.numOfRows }, (_, index) =>
                 OverviewRow({
-                    startWorkspace: 1 + index * userOptions.overview.numOfCols,
-                    workspaces: userOptions.overview.numOfCols,
+                    startWorkspace: 1 + index * userOptions.asyncGet().overview.numOfCols,
+                    workspaces: userOptions.asyncGet().overview.numOfCols,
                 })
             )
         }),

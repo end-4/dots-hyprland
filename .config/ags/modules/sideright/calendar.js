@@ -147,7 +147,7 @@ const contentStack = Widget.Stack({
         // 'stars': Widget.Label({ label: 'GitHub feed will be here' }),
     },
     transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationLarge,
+    transitionDuration: userOptions.asyncGet().animations.durationLarge,
     setup: (stack) => Utils.timeout(1, () => {
         stack.shown = defaultShown;
     })

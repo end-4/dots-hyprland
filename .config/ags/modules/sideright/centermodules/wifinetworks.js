@@ -1,3 +1,4 @@
+const { Pango } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Network from "resource:///com/github/Aylur/ags/service/network.js";
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -27,6 +28,7 @@ const WifiNetwork = (accessPoint) => {
                 label: accessPoint.ssid
             }),
             accessPoint.active ? Label({
+                wrapMode: Pango.WrapMode.WORD_CHAR,
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
                 label: getString("Selected"),
@@ -67,11 +69,13 @@ const CurrentNetwork = () => {
         hexpand: true,
         children: [
             Label({
+                wrapMode: Pango.WrapMode.WORD_CHAR,
                 hpack: 'start',
                 className: 'txt-smaller txt-subtext',
                 label: getString("Current network"),
             }),
             Label({
+                wrapMode: Pango.WrapMode.WORD_CHAR,
                 hpack: 'start',
                 label: Network.wifi?.ssid,
                 setup: (self) => self.hook(Network, (self) => {
@@ -83,6 +87,7 @@ const CurrentNetwork = () => {
     });
     const networkStatus = Box({
         children: [Label({
+            wrapMode: Pango.WrapMode.WORD_CHAR,
             vpack: 'center',
             className: 'txt-subtext',
             setup: (self) => self.hook(Network, (self) => {
@@ -93,12 +98,13 @@ const CurrentNetwork = () => {
     })
     const networkAuth = Revealer({
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Box({
             className: 'margin-top-10 spacing-v-5',
             vertical: true,
             children: [
                 Label({
+                    wrapMode: Pango.WrapMode.WORD_CHAR,
                     className: 'margin-left-5',
                     hpack: 'start',
                     label: getString("Authentication"),
@@ -150,7 +156,7 @@ const CurrentNetwork = () => {
         vertical: true,
         children: [Revealer({
             transition: 'slide_down',
-            transitionDuration: userOptions.animations.durationLarge,
+            transitionDuration: userOptions.asyncGet().animations.durationLarge,
             revealChild: Network.wifi,
             child: actualContent,
         })]
@@ -196,7 +202,7 @@ export default (props) => {
             hpack: 'center',
             className: 'txt-small txt sidebar-centermodules-bottombar-button',
             onClicked: () => {
-                execAsync(['bash', '-c', userOptions.apps.network]).catch(print);
+                execAsync(['bash', '-c', userOptions.asyncGet().apps.network]).catch(print);
                 closeEverything();
             },
             label: getString('More'),

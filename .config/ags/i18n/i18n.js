@@ -1,7 +1,7 @@
 const Gio = imports.gi.Gio;
 const GLib = imports.gi.GLib;
 import configOptions from "../modules/.configuration/user_options.js";
-const { langCode, Extra_logs } = configOptions.i18n
+const { langCode, Extra_logs } = configOptions.asyncGet().i18n
 const translations = {};
 
 let currentLanguage = langCode || getLanguageCode();
