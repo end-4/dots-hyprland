@@ -4,8 +4,9 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 import { searchItem } from './searchitem.js';
-import { execAndClose, couldBeMath, launchCustomCommand } from './miscfunctions.js';
+import { execAndClose, couldBeMath, launchCustomCommand, expandTilde } from './miscfunctions.js';
 import GeminiService from '../../services/gemini.js';
+import ChatGPTService from '../../services/gpt.js';
 
 export const NoResultButton = () => searchItem({
     materialIconName: 'Error',
@@ -20,7 +21,7 @@ export const DirectoryButton = ({ parentPath, name, type, icon }) => {
     const actionText = Widget.Revealer({
         revealChild: false,
         transition: "crossfade",
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Widget.Label({
             className: 'overview-search-results-txt txt txt-small txt-action',
             label: 'Open',
@@ -29,7 +30,7 @@ export const DirectoryButton = ({ parentPath, name, type, icon }) => {
     const actionTextRevealer = Widget.Revealer({
         revealChild: false,
         transition: "slide_left",
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         child: actionText,
     });
     return Widget.Button({
@@ -88,7 +89,7 @@ export const DesktopEntryButton = (app) => {
     const actionText = Widget.Revealer({
         revealChild: false,
         transition: "crossfade",
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Widget.Label({
             className: 'overview-search-results-txt txt txt-small txt-action',
             label: 'Launch',
@@ -97,9 +98,11 @@ export const DesktopEntryButton = (app) => {
     const actionTextRevealer = Widget.Revealer({
         revealChild: false,
         transition: "slide_left",
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         child: actionText,
     });
+    const isFile = app.iconName !== null && app.iconName.startsWith('~') || app.iconName.startsWith('.') || app.iconName.startsWith('/');
+    const css = `background-size:cover;background-image:${isFile ? `url('${expandTilde(app.iconName)}')` : 'none'};`;
     return Widget.Button({
         className: 'overview-search-result-btn',
         onClicked: () => {
@@ -114,9 +117,10 @@ export const DesktopEntryButton = (app) => {
                         Widget.Box({
                             className: 'overview-search-results-icon',
                             homogeneous: true,
-                            child: Widget.Icon({
-                                icon: app.iconName,
-                            }),
+                            css: css,
+                            children: isFile ? [] : [Widget.Icon ({
+                                icon: app.iconName
+                            })],
                         }),
                         Widget.Label({
                             className: 'overview-search-results-txt txt txt-norm',
@@ -168,8 +172,8 @@ export const SearchButton = ({ text = '' }) => searchItem({
     content: `${text}`,
     onActivate: () => {
         App.closeWindow('overview');
-        let search = userOptions.search.engineBaseUrl + text;
-        for (let site of userOptions.search.excludedSites) {
+        let search = userOptions.asyncGet().search.engineBaseUrl + text;
+        for (let site of userOptions.asyncGet().search.excludedSites) {
             if (site) search += ` -site:${site}`;
         }
         execAsync(['bash', '-c', `xdg-open '${search}' &`]).catch(print);
@@ -178,11 +182,17 @@ export const SearchButton = ({ text = '' }) => searchItem({
 
 export const AiButton = ({ text }) => searchItem({
     materialIconName: 'chat_paste_go',
-    name: 'Ask Gemini',
+    name: userOptions.asyncGet().ai.onSearch == 'gemini' ? 'Ask Gemini' : 'Ask ChatGPT',
     actionName: 'Ask',
     content: `${text}`,
     onActivate: () => {
-        GeminiService.send(text);
+        if (userOptions.asyncGet().ai.onSearch == 'gemini') {
+            GeminiService.send(text);
+        }
+        else {
+            ChatGPTService.send(text);
+        }
+        
         App.closeWindow('overview');
         App.openWindow('sideleft');
     },

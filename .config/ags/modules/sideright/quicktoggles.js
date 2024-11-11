@@ -16,7 +16,7 @@ export const ToggleIconWifi = (props = {}) => Widget.Button({
     tooltipText: getString('Wifi | Right-click to configure'),
     onClicked: () => Network.toggleWifi(),
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', `${userOptions.apps.network}`]).catch(print);
+        execAsync(['bash', '-c', `${userOptions.asyncGet().apps.network}`]).catch(print);
         closeEverything();
     },
     child: NetworkIndicator(),
@@ -41,7 +41,7 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
             exec('rfkill unblock bluetooth');
     },
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', `${userOptions.apps.bluetooth}`]).catch(print);
+        execAsync(['bash', '-c', `${userOptions.asyncGet().apps.bluetooth}`]).catch(print);
         closeEverything();
     },
     child: BluetoothIndicator(),
@@ -243,7 +243,7 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: getString('Open Settings'),
     onClicked: () => {
-        execAsync(['bash', '-c', `${userOptions.apps.settings}`, '&']);
+        execAsync(['bash', '-c', `${userOptions.asyncGet().apps.settings}`, '&']);
         App.closeWindow('sideright');
     },
     child: MaterialIcon('settings', 'norm'),

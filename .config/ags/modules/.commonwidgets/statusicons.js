@@ -27,7 +27,7 @@ function isLanguageMatch(abbreviation, word) {
 
 export const MicMuteIndicator = () => Widget.Revealer({
     transition: 'slide_left',
-    transitionDuration: userOptions.animations.durationSmall,
+    transitionDuration: userOptions.asyncGet().animations.durationSmall,
     revealChild: false,
     setup: (self) => self.hook(Audio, (self) => {
         self.revealChild = Audio.microphone?.stream?.isMuted;
@@ -38,7 +38,7 @@ export const MicMuteIndicator = () => Widget.Revealer({
 export const NotificationIndicator = (notifCenterName = 'sideright') => {
     const widget = Widget.Revealer({
         transition: 'slide_left',
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         revealChild: false,
         setup: (self) => self
             .hook(Notifications, (self, id) => {
@@ -84,7 +84,7 @@ export const NotificationIndicator = (notifCenterName = 'sideright') => {
 
 export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationSmall,
+    transitionDuration: userOptions.asyncGet().animations.durationSmall,
     children: {
         'false': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
         'true': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
@@ -124,7 +124,7 @@ const BluetoothDevices = () => Widget.Box({
 
 const NetworkWiredIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationSmall,
+    transitionDuration: userOptions.asyncGet().animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
         'unknown': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
@@ -156,7 +156,7 @@ const SimpleNetworkIndicator = () => Widget.Icon({
 
 const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationSmall,
+    transitionDuration: userOptions.asyncGet().animations.durationSmall,
     children: {
         'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
         'disconnected': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
@@ -182,7 +182,7 @@ const NetworkWifiIndicator = () => Widget.Stack({
 
 export const NetworkIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationSmall,
+    transitionDuration: userOptions.asyncGet().animations.durationSmall,
     children: {
         'fallback': SimpleNetworkIndicator(),
         'wifi': NetworkWifiIndicator(),
@@ -235,7 +235,7 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
         updateCurrentKeyboards();
         const widgetRevealer = Widget.Revealer({
             transition: 'slide_left',
-            transitionDuration: userOptions.animations.durationSmall,
+            transitionDuration: userOptions.asyncGet().animations.durationSmall,
             revealChild: languageStackArray.length > 1,
         });
         const widgetKids = {
@@ -246,7 +246,7 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
         }
         const widgetContent = Widget.Stack({
             transition: 'slide_up_down',
-            transitionDuration: userOptions.animations.durationSmall,
+            transitionDuration: userOptions.asyncGet().animations.durationSmall,
             children: widgetKids,
             setup: (self) => self.hook(Hyprland, (stack, kbName, layoutName) => {
                 if (!kbName) {
@@ -272,7 +272,7 @@ const HyprlandXkbKeyboardLayout = async ({ useFlag } = {}) => {
 
 const OptionalKeyboardLayout = async () => {
     try {
-        return await HyprlandXkbKeyboardLayout({ useFlag: userOptions.appearance.keyboardUseFlag });
+        return await HyprlandXkbKeyboardLayout({ useFlag: userOptions.asyncGet().appearance.keyboardUseFlag });
     } catch {
         return null;
     }

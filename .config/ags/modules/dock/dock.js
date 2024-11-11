@@ -13,7 +13,7 @@ import { getAllFiles, searchIcons } from './icons.js'
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { substitute } from '../.miscutils/icons.js';
 
-const icon_files = userOptions.icons.searchPaths.map(e => getAllFiles(e)).flat(1)
+const icon_files = userOptions.asyncGet().icons.searchPaths.map(e => getAllFiles(e)).flat(1)
 
 let isPinned = false
 let cachePath = new Map()
@@ -80,7 +80,7 @@ const AppButton = ({ icon, ...rest }) => Widget.Revealer({
     },
     revealChild: false,
     transition: 'slide_right',
-    transitionDuration: userOptions.animations.durationLarge,
+    transitionDuration: userOptions.asyncGet().animations.durationLarge,
     child: Widget.Button({
         ...rest,
         className: 'dock-app-btn dock-app-btn-animate',
@@ -119,7 +119,7 @@ const Taskbar = (monitor) => Widget.Box({
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
-                // for (const appName of userOptions.dock.pinnedApps) {
+                // for (const appName of userOptions.asyncGet().dock.pinnedApps) {
                 //     if (appClass.includes(appName.toLowerCase()))
                 //         return null;
                 // }
@@ -177,7 +177,7 @@ const Taskbar = (monitor) => Widget.Box({
             if (!removedButton) return;
             removedButton.revealChild = false;
 
-            Utils.timeout(userOptions.animations.durationLarge, () => {
+            Utils.timeout(userOptions.asyncGet().animations.durationLarge, () => {
                 removedButton.destroy();
                 box.attribute.map.delete(address);
                 box.children = Array.from(box.attribute.map.values());
@@ -194,13 +194,13 @@ const Taskbar = (monitor) => Widget.Box({
 const PinnedApps = () => Widget.Box({
     class_name: 'dock-apps',
     homogeneous: true,
-    children: userOptions.dock.pinnedApps
+    children: userOptions.asyncGet().dock.pinnedApps
         .map(term => ({ app: Applications.query(term)?.[0], term }))
         .filter(({ app }) => app)
         .map(({ app, term = true }) => {
             const newButton = AppButton({
                 // different icon, emm...
-                icon: userOptions.dock.searchPinnedAppIcons ?
+                icon: userOptions.asyncGet().dock.searchPinnedAppIcons ?
                     searchIcons(app.name, icon_files) :
                     app.icon_name,
                 onClicked: () => {
@@ -244,7 +244,7 @@ export default (monitor = 0) => {
     const dockRevealer = Revealer({
         attribute: {
             'updateShow': self => { // I only use mouse to resize. I don't care about keyboard resize if that's a thing
-                if (userOptions.dock.monitorExclusivity)
+                if (userOptions.asyncGet().dock.monitorExclusivity)
                     self.revealChild = Hyprland.active.monitor.id === monitor;
                 else
                     self.revealChild = true;
@@ -254,16 +254,16 @@ export default (monitor = 0) => {
         },
         revealChild: false,
         transition: 'slide_up',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: dockContent,
         setup: (self) => {
             const callback = (self, trigger) => {
-                if (!userOptions.dock.trigger.includes(trigger)) return
+                if (!userOptions.asyncGet().dock.trigger.includes(trigger)) return
                 const flag = self.attribute.updateShow(self)
 
                 if (flag) clearTimes();
 
-                const hidden = userOptions.dock.autoHide.find(e => e["trigger"] === trigger)
+                const hidden = userOptions.asyncGet().dock.autoHide.find(e => e["trigger"] === trigger)
 
                 if (hidden) {
                     let id = Utils.timeout(hidden.interval, () => {
@@ -289,7 +289,7 @@ export default (monitor = 0) => {
         },
         child: Box({
             homogeneous: true,
-            css: `min-height: ${userOptions.dock.hiddenThickness}px;`,
+            css: `min-height: ${userOptions.asyncGet().dock.hiddenThickness}px;`,
             children: [dockRevealer],
         }),
         setup: self => self.on("leave-notify-event", () => {

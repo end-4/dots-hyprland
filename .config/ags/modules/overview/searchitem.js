@@ -4,7 +4,7 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
     const actionText = Widget.Revealer({
         revealChild: false,
         transition: "crossfade",
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Widget.Label({
             className: 'overview-search-results-txt txt txt-small txt-action',
             label: `${actionName}`,
@@ -13,7 +13,7 @@ export const searchItem = ({ materialIconName, name, actionName, content, onActi
     const actionTextRevealer = Widget.Revealer({
         revealChild: false,
         transition: "slide_left",
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         child: actionText,
     })
     return Widget.Button({

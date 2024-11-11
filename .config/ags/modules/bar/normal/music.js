@@ -60,7 +60,7 @@ const BarResource = (name, icon, command, circprogClassName = 'bar-batt-circprog
         className: `txt-smallie ${textClassName}`,
     });
     const widget = Button({
-        onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.apps.taskManager}`]).catch(print),
+        onClicked: () => Utils.execAsync(['bash', '-c', `${userOptions.asyncGet().apps.taskManager}`]).catch(print),
         child: Box({
             className: `spacing-h-4 ${textClassName}`,
             children: [
@@ -188,7 +188,7 @@ export default () => {
                     Revealer({
                         revealChild: true,
                         transition: 'slide_left',
-                        transitionDuration: userOptions.animations.durationLarge,
+                        transitionDuration: userOptions.asyncGet().animations.durationLarge,
                         child: Box({
                             className: 'spacing-h-10 margin-left-10',
                             children: [

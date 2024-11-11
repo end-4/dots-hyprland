@@ -18,6 +18,7 @@ import {
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleAudioControls from "./centermodules/audiocontrols.js";
 import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
+import ModulePowerProfiles from './centermodules/powerprofiles.js';
 import ModuleBluetooth from "./centermodules/bluetooth.js";
 import ModuleConfigure from "./centermodules/configure.js";
 import { ModuleCalendar } from "./calendar.js";
@@ -36,6 +37,11 @@ const centerWidgets = [
         name: getString('Audio controls'),
         materialIcon: 'volume_up',
         contentWidget: ModuleAudioControls,
+    },
+    {
+        name: 'Power Profiles',
+        materialIcon: 'speed',
+        contentWidget: ModulePowerProfiles,
     },
     {
         name: getString('Bluetooth'),
@@ -177,10 +183,10 @@ export default () => Box({
     ],
     setup: (self) => self
         .on('key-press-event', (widget, event) => { // Handle keybinds
-            if (checkKeybind(event, userOptions.keybinds.sidebar.options.nextTab)) {
+            if (checkKeybind(event, userOptions.asyncGet().keybinds.sidebar.options.nextTab)) {
                 sidebarOptionsStack.nextTab();
             }
-            else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
+            else if (checkKeybind(event, userOptions.asyncGet().keybinds.sidebar.options.prevTab)) {
                 sidebarOptionsStack.prevTab();
             }
         })

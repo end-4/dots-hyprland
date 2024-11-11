@@ -14,7 +14,7 @@ globalThis['handleStyles'] = (resetMusic) => {
     let lightdark = darkMode.value ? "dark" : "light";
     Utils.writeFileSync(
         `@mixin symbolic-icon {
-    -gtk-icon-theme: '${userOptions.icons.symbolicIconTheme[lightdark]}';
+    -gtk-icon-theme: '${userOptions.asyncGet().icons.symbolicIconTheme[lightdark]}';
 }
 `,
         `${GLib.get_user_state_dir()}/ags/scss/_lib_mixins_overrides.scss`)

@@ -1,5 +1,5 @@
 // This file is for the actual widget for each single notification
-const { GLib, Gdk, Gtk } = imports.gi;
+const { GLib, Gdk, Gtk, Pango } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js'
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
@@ -31,11 +31,11 @@ const getFriendlyNotifTimeString = (timeObject) => {
     if (messageTime.compare(oneMinuteAgo) > 0)
         return getString('Now');
     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
-        return messageTime.format(userOptions.time.format);
+        return messageTime.format(userOptions.asyncGet().time.format);
     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
         return getString('Yesterday');
     else
-        return messageTime.format(userOptions.time.dateFormat);
+        return messageTime.format(userOptions.asyncGet().time.dateFormat);
 }
 
 const NotificationIcon = (notifObject) => {
@@ -93,10 +93,10 @@ export default ({
     const destroyWithAnims = () => {
         widget.sensitive = false;
         notificationBox.setCss(middleClickClose);
-        Utils.timeout(userOptions.animations.durationSmall, () => {
+        Utils.timeout(userOptions.asyncGet().animations.durationSmall, () => {
             if (wholeThing) wholeThing.revealChild = false;
         }, wholeThing);
-        Utils.timeout(userOptions.animations.durationSmall * 2, () => {
+        Utils.timeout(userOptions.asyncGet().animations.durationSmall * 2, () => {
             command();
             if (wholeThing) {
                 wholeThing.destroy();
@@ -149,7 +149,7 @@ export default ({
         },
         revealChild: false,
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationLarge,
+        transitionDuration: userOptions.asyncGet().animations.durationLarge,
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
         }),
@@ -158,7 +158,7 @@ export default ({
     const display = Gdk.Display.get_default();
     const notifTextPreview = Revealer({
         transition: 'slide_down',
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         revealChild: true,
         child: Label({
             xalign: 0,
@@ -169,11 +169,12 @@ export default ({
             maxWidthChars: 1,
             truncate: 'end',
             label: notifObject.body.split("\n")[0],
+            wrapMode: Pango.WrapMode.WORD_CHAR,
         }),
     });
     const notifTextExpanded = Revealer({
         transition: 'slide_up',
-        transitionDuration: userOptions.animations.durationSmall,
+        transitionDuration: userOptions.asyncGet().animations.durationSmall,
         revealChild: false,
         child: Box({
             vertical: true,
@@ -188,6 +189,7 @@ export default ({
                     maxWidthChars: 1,
                     wrap: true,
                     label: notifObject.body,
+                    wrapMode: Pango.WrapMode.WORD_CHAR,
                 }),
                 Box({
                     className: 'notif-actions spacing-h-5',
@@ -199,6 +201,7 @@ export default ({
                             setup: setupCursorHover,
                             child: Label({
                                 label: getString('Close'),
+                                wrapMode: Pango.WrapMode.WORD_CHAR,
                             }),
                         }),
                         ...notifObject.actions.map(action => Widget.Button({
@@ -208,6 +211,7 @@ export default ({
                             setup: setupCursorHover,
                             child: Label({
                                 label: action.label,
+                                wrapMode: Pango.WrapMode.WORD_CHAR,
                             }),
                         }))
                     ],
@@ -242,6 +246,7 @@ export default ({
         ellipsize: 3,
         useMarkup: notifObject.summary.startsWith('<'),
         label: notifObject.summary,
+        wrapMode: Pango.WrapMode.WORD_CHAR,
     });
     const initTimeString = getFriendlyNotifTimeString(notifObject.time);
     const notifTextBody = Label({
@@ -256,6 +261,7 @@ export default ({
             });
             self.connect('destroy', () => { if (id) GLib.source_remove(id) });
         } : () => { },
+        wrapMode: Pango.WrapMode.WORD_CHAR,
     });
     const notifText = Box({
         valign: Gtk.Align.CENTER,
@@ -322,17 +328,17 @@ export default ({
     const maxOffset = 10.227;
     const endMargin = 20.455;
     const disappearHeight = 6.818;
-    const leftAnim1 = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    const leftAnim1 = `transition: ${userOptions.asyncGet().animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                        margin-left: -${Number(maxOffset + endMargin)}rem;
                        margin-right: ${Number(maxOffset + endMargin)}rem;
                        opacity: 0;`;
 
-    const rightAnim1 = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    const rightAnim1 = `transition: ${userOptions.asyncGet().animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                         margin-left:   ${Number(maxOffset + endMargin)}rem;
                         margin-right: -${Number(maxOffset + endMargin)}rem;
                         opacity: 0;`;
 
-    const middleClickClose = `transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.85, 0, 0.15, 1);
+    const middleClickClose = `transition: ${userOptions.asyncGet().animations.durationSmall}ms cubic-bezier(0.85, 0, 0.15, 1);
                               margin-left:   ${Number(maxOffset + endMargin)}rem;
                               margin-right: -${Number(maxOffset + endMargin)}rem;
                               opacity: 0;`;
@@ -417,10 +423,10 @@ export default ({
                         self.setCss(leftAnim1);
                         widget.sensitive = false;
                     }
-                    Utils.timeout(userOptions.animations.durationSmall, () => {
+                    Utils.timeout(userOptions.asyncGet().animations.durationSmall, () => {
                         if (wholeThing) wholeThing.revealChild = false;
                     }, wholeThing);
-                    Utils.timeout(userOptions.animations.durationSmall * 2, () => {
+                    Utils.timeout(userOptions.asyncGet().animations.durationSmall * 2, () => {
                         command();
                         if (wholeThing) {
                             wholeThing.destroy();
@@ -449,7 +455,7 @@ export default ({
     if (isPopup) Utils.timeout(popupTimeout, () => {
         if (wholeThing) {
             wholeThing.revealChild = false;
-            Utils.timeout(userOptions.animations.durationSmall, () => {
+            Utils.timeout(userOptions.asyncGet().animations.durationSmall, () => {
                 if (wholeThing) {
                     wholeThing.destroy();
                     wholeThing = null;

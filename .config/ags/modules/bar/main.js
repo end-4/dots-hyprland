@@ -78,7 +78,7 @@ export const Bar = async (monitor = 0) => {
         setup: (self) => {
             self.hook(Battery, (self) => {
                 if (!Battery.available) return;
-                self.toggleClassName('bar-bg-focus-batterylow', Battery.percent <= userOptions.battery.low);
+                self.toggleClassName('bar-bg-focus-batterylow', Battery.percent <= userOptions.asyncGet().battery.low);
             })
         }
     });
@@ -94,7 +94,7 @@ export const Bar = async (monitor = 0) => {
         child: Widget.Stack({
             homogeneous: false,
             transition: 'slide_up_down',
-            transitionDuration: userOptions.animations.durationLarge,
+            transitionDuration: userOptions.asyncGet().animations.durationLarge,
             children: {
                 'normal': normalBarContent,
                 'focus': focusedBarContent,

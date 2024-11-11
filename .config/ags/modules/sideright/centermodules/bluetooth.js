@@ -1,3 +1,4 @@
+const { Pango } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -35,6 +36,7 @@ const BluetoothDevice = (device) => {
                 setup: (self) => self.hook(device, (self) => {
                     self.label = device.name;
                 }),
+                wrapMode: Pango.WrapMode.WORD_CHAR,
             }),
             Label({
                 xalign: 0,
@@ -45,6 +47,7 @@ const BluetoothDevice = (device) => {
                 setup: (self) => self.hook(device, (self) => {
                     self.label = device.connected ? getString('Connected') : (device.paired ? getString('Paired') : '');
                 }),
+                wrapMode: Pango.WrapMode.WORD_CHAR,
             }),
         ]
     });
@@ -97,7 +100,7 @@ export default (props) => {
                     className: 'spacing-v-5 txt-subtext',
                     children: [
                         MaterialIcon('bluetooth_disabled', 'gigantic'),
-                        Label({ label: 'No Bluetooth devices', className: 'txt-small' }),
+                        Label({ label: 'No Bluetooth devices', className: 'txt-small', wrapMode: Pango.WrapMode.WORD_CHAR, }),
                     ]
                 }),
             ]
@@ -141,7 +144,7 @@ export default (props) => {
             hpack: 'center',
             className: 'txt-small txt sidebar-centermodules-bottombar-button',
             onClicked: () => {
-                execAsync(['bash', '-c', userOptions.apps.bluetooth]).catch(print);
+                execAsync(['bash', '-c', userOptions.asyncGet().apps.bluetooth]).catch(print);
                 closeEverything();
             },
             label: getString('More'),

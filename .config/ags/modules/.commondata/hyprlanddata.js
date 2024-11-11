@@ -12,7 +12,7 @@ async function updateStuff() {
         const gdkMonitor = display.get_monitor(i);
         monitor.realWidth = monitor.width;
         monitor.realHeight = monitor.height;
-        if (userOptions.monitors.scaleMethod.toLowerCase == "gdk") {
+        if (userOptions.asyncGet().monitors.scaleMethod.toLowerCase == "gdk") {
             monitor.width = gdkMonitor.get_geometry().width;
             monitor.height = gdkMonitor.get_geometry().height;
         }
