@@ -689,6 +689,23 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
     background-color: $surfaceVariant;
 }
 
+.btn {
+    @include element_decel;
+    background-color: $utilsLayer2;
+    padding: 5px;
+    color: $utilsOnLayer2;
+    border-radius: 10px;
+    -gtk-outline-radius: 10px;
+}
+
+.btn:hover,
+.btn:focus {
+    background-color: $layer2Hover;
+}
+.btn:active {
+    background-color: $layer2Active;
+}
+
 .sidebar-chat-codeblock-code {
     @include techfont;
     padding: 0.682rem;

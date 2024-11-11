@@ -118,6 +118,11 @@ const configOptions = {
         }
     },
     'search': {
+        'watchers': [
+            '/usr/share/applications',
+            '~/.local/share/applications',
+            '/var/lib/flatpak/exports/share'
+        ],
         'enableFeatures': {
             'actions': true,
             'commands': true,

@@ -4,7 +4,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 import { searchItem } from './searchitem.js';
-import { execAndClose, couldBeMath, launchCustomCommand } from './miscfunctions.js';
+import { execAndClose, couldBeMath, launchCustomCommand, expandTilde } from './miscfunctions.js';
 import GeminiService from '../../services/gemini.js';
 import ChatGPTService from '../../services/gpt.js';
 
@@ -101,6 +101,8 @@ export const DesktopEntryButton = (app) => {
         transitionDuration: userOptions.asyncGet().animations.durationSmall,
         child: actionText,
     });
+    const isFile = app.iconName !== null && app.iconName.startsWith('~') || app.iconName.startsWith('.') || app.iconName.startsWith('/');
+    const css = `background-size:cover;background-image:${isFile ? `url('${expandTilde(app.iconName)}')` : 'none'};`;
     return Widget.Button({
         className: 'overview-search-result-btn',
         onClicked: () => {
@@ -115,9 +117,10 @@ export const DesktopEntryButton = (app) => {
                         Widget.Box({
                             className: 'overview-search-results-icon',
                             homogeneous: true,
-                            child: Widget.Icon({
-                                icon: app.iconName,
-                            }),
+                            css: css,
+                            children: isFile ? [] : [Widget.Icon ({
+                                icon: app.iconName
+                            })],
                         }),
                         Widget.Label({
                             className: 'overview-search-results-txt txt txt-norm',

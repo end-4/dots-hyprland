@@ -270,10 +270,15 @@ export const TranslaterView = Box ({
             vertical: false,
             children: [
                 LanguageSwitcher('from'),
-                Label ({
+                Button ({
                     valign: Gtk.Align.START,
-                    css: 'margin-top:0.65rem;',
-                    label: 'to'
+                    label: 'compare_arrows',
+                    className: 'btn icon-material txt-norm',
+                    on_clicked: () => {
+                        const temp = GoogleTranslater.toLanguage;
+                        GoogleTranslater.toLanguage = GoogleTranslater.fromLanguage;
+                        GoogleTranslater.fromLanguage = temp;
+                    }
                 }),
                 LanguageSwitcher('to')
             ]

@@ -1,3 +1,5 @@
+import GLib from "gi://GLib";
+
 export function clone(obj) {
     var copy;
 
@@ -55,9 +57,11 @@ export function Writable (value) {
      * @param {any}value — to set
      */
     this.set = (value) => {
-        _value = value;
+        if (!_value !== value) {
+            _value = value;
 
-        notify_all();
+            notify_all();
+        }
     };
 
     /**
@@ -82,7 +86,7 @@ export function Writable (value) {
      * @param {Function} updater — callback
      */
     this.update = (updater) => {
-        set (notify_one(updater))
+        this.set (notify_one(updater))
     };
 
     this.fetch = async () => {
@@ -106,4 +110,16 @@ export function Writable (value) {
 
 export function writable (n) {
     return new Writable (n);
+}
+
+/**
+ * 
+ * @param {GLib.Source|null} lastAction 
+ * @param {number} delay 
+ * @param {() => void} callback 
+ * @returns {GLib.Source}
+ */
+export function waitLastAction (lastAction, delay, callback) {
+    if (lastAction !== null) { clearTimeout (lastAction); }
+    return setTimeout (callback, delay);
 }

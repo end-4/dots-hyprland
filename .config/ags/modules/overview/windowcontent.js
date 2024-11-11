@@ -2,7 +2,8 @@ const { Gdk, Gtk } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-
+import GLib from "gi://GLib";
+import Gio from 'gi://Gio';
 import Applications from 'resource:///com/github/Aylur/ags/service/applications.js';
 const { execAsync, exec } = Utils;
 import { execAndClose, expandTilde, hasUnterminatedBackslash, couldBeMath, launchCustomCommand, ls } from './miscfunctions.js';
@@ -12,6 +13,7 @@ import {
 } from './searchbuttons.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 import GeminiService from '../../services/gemini.js';
+import { Writable, writable, waitLastAction } from '../.miscutils/store.js';
 
 // Add math funcs
 const { abs, sin, cos, tan, cot, asin, acos, atan, acot } = Math;
@@ -47,6 +49,39 @@ const OptionalOverview = async () => {
 };
 
 const overviewContent = await OptionalOverview();
+
+/**
+ * @type {Gio.FileMonitor[]}
+ */
+let monitors = [];
+/**
+ * @type {GLib.Source|null}
+ */
+let waitToRereadDesktop = null;
+
+const watchersOption = writable ([]);
+
+watchersOption.subscribe (/*** @param {string[]} paths */ (paths) => {
+    for (const monitor of monitors) {
+        monitor.cancel();
+    }
+
+    monitors = [];
+
+    for (const path of paths) {
+        const monitor = Utils.monitorFile (expandTilde(path), () => {
+            waitToRereadDesktop = waitLastAction (waitToRereadDesktop, 500, () => {
+                Applications.reload();
+                waitToRereadDesktop = null;
+            });
+        });
+        if (monitor !== null) { monitors.push(monitor); }
+    }
+});
+
+userOptions.subscribe ((n) => {
+    watchersOption.set (n.search.watchers ?? []);
+});
 
 export const SearchAndWindows = () => {
     var _appSearchResults = [];
@@ -84,7 +119,6 @@ export const SearchAndWindows = () => {
             label: 'search',
         }),
     });
-
     const entryIcon = Widget.Box({
         className: 'overview-search-prompt-box',
         setup: box => box.pack_start(entryIconRevealer, true, true, 0),
