@@ -79,9 +79,10 @@ function prevent_sudo_or_root(){
 function backup_configs() {
   local backup_dir="$BACKUP_DIR"
   mkdir -p "$backup_dir"
+  
   echo "Backing up $XDG_CONFIG_HOME to $backup_dir/config_backup"
-  rsync -av --progress "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
+  rsync -av --progress --exclude='.git' --exclude='lib/python3*/site-packages' --exclude='VSCodium/CachedData' --exclude='Code/CachedData' "$XDG_CONFIG_HOME/" "$backup_dir/config_backup/"
   
   echo "Backing up $HOME/.local to $backup_dir/local_backup"
-  rsync -av --progress "$HOME/.local/" "$backup_dir/local_backup/"
+  rsync -av --progress --exclude='.git' --exclude='lib/python3*/site-packages' --exclude='VSCodium/CachedData' --exclude='Code/CachedData' "$HOME/.local/" "$backup_dir/local_backup/"
 }
