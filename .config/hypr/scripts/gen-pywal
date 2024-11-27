@@ -7,9 +7,6 @@ GLYPH='󰏘'
 
 # Execute other commands
 
-echo -e "\n${GREEN}${GLYPH} Changing icons color ${NC}"
-python ~/.config/hypr/scripts/icons-colors.py
-
 echo -e "\n${GREEN}${GLYPH} Running colors-foot.py ${NC}"
 python ~/.config/hypr/scripts/colors-foot.py
 
@@ -32,7 +29,7 @@ python ~/.config/hypr/scripts/build-kvantum.py
 echo -e "\n${GREEN}${GLYPH} Generating rofi colors ${NC}"
 ~/.config/hypr/scripts/pywal-rofi
 
-echo -e "\n${GREEN}${GLYPH} changing spotiify theme (text) ${NC}"
+# echo -e "\n${GREEN}${GLYPH} changing spotiify theme (text) ${NC}"
 # pywal-spicetify text
 # spicetify apply
 
