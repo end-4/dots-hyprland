@@ -1,0 +1,331 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2154
+
+# Your wal colour scheme file
+WAL_COLOURS_FILE="${HOME}/.cache/wal/colors.json"
+# The directory of this script, so that this script can be called from anywhere
+EXTENSION_DIRECTORY="$HOME/.config/zed"
+# The file to write the generated theme to, and that Zed will read
+THEME_FILE="${EXTENSION_DIRECTORY}/themes/wal-theme.json"
+
+# If the wal colour scheme file does not exist, exit with an error
+if [[ ! -f "${WAL_COLOURS_FILE}" ]]; then
+	echo "error: wal colourscheme file not found."
+
+	exit 1
+fi
+
+# Create the themes directory if it does not exist
+mkdir -p "${EXTENSION_DIRECTORY}/themes"
+
+eval "$(jq -r '
+  .special as $special |
+  .colors as $colors |
+  "background=\($special.background) foreground=\($special.foreground)
+   cursor=\($special.cursor) color0=\($colors.color0) color1=\($colors.color1)
+   color2=\($colors.color2) color3=\($colors.color3) color4=\($colors.color4)
+   color5=\($colors.color5) color6=\($colors.color6) color7=\($colors.color7)
+   color8=\($colors.color8) color9=\($colors.color9) color10=\($colors.color10)
+   color11=\($colors.color11) color12=\($colors.color12)
+   color13=\($colors.color13) color14=\($colors.color14)
+   color15=\($colors.color15)"
+  ' "${WAL_COLOURS_FILE}" || true)"
+
+# Generate the Zed theme
+cat <<EOF >"${THEME_FILE}"
+{
+  "\$schema": "https://zed.dev/schema/themes/v0.1.0.json",
+  "name": "wal Theme",
+  "author": "Fuwn <contact@fuwn.me>",
+  "themes": [
+    {
+      "name": "wal",
+      "appearance": "dark",
+      "style": {
+        "background.appearance": "opaque",
+        "border": "${color8}",
+        "border.variant": "${color8}",
+        "border.focused": "${color9}",
+        "border.selected": "${color8}",
+        "border.transparent": "${color8}",
+        "border.disabled": "${color8}",
+        "elevated_surface.background": "${color0}",
+        "surface.background": "${color0}",
+        "background": "${background}",
+        "element.background": "${color0}",
+        "element.hover": "${color1}",
+        "element.active": "${color2}",
+        "element.selected": "${color3}",
+        "element.disabled": "${color8}",
+        "drop_target.background": "${color3}",
+        "ghost_element.background": "${color0}",
+        "ghost_element.hover": "${color1}",
+        "ghost_element.active": "${color2}",
+        "ghost_element.selected": "${color3}",
+        "ghost_element.disabled": "${color8}",
+        "text": "${foreground}",
+        "text.muted": "${color8}",
+        "text.placeholder": "${color8}",
+        "text.disabled": "${color8}",
+        "text.accent": "${color10}",
+        "icon": "${color8}",
+        "icon.muted": "${color8}",
+        "icon.disabled": "${color8}",
+        "icon.placeholder": "${color8}",
+        "icon.accent": "${color10}",
+        "status_bar.background": "${background}",
+        "title_bar.background": "${background}",
+        "toolbar.background": "${background}",
+        "tab_bar.background": "${background}",
+        "tab.inactive_background": "${background}",
+        "tab.active_background": "${background}10",
+        "tab.active_foreground": "${foreground}",
+        "tab.inactive_foreground": "${foreground}",
+        "tab.unfocused_active_foreground": "${color1}",
+        "tab.unfocused_inactive_foreground": "${background}",
+        "search.match_background": "${color3}",
+        "panel.background": "${background}",
+        "panel.focused_border": "${color9}",
+        "pane.focused_border": "${color9}",
+        "pane_group.border": "${color8}",
+        "scrollbar.thumb.background": "${color8}",
+        "scrollbar.thumb.hover_background": "${color7}",
+        "scrollbar.thumb.border": "${color8}",
+        "scrollbar.track.background": "${background}",
+        "scrollbar.track.border": "${color8}",
+        "editor.foreground": "${foreground}",
+        "editor.background": "${background}",
+        "editor.gutter.background": "${background}",
+        "editor.subheader.background": "${color0}",
+        "editor.active_line.background": "${color3}",
+        "editor.highlighted_line.background": "${color1}",
+        "editor.line_number": "${color7}",
+        "editor.active_line_number": "${color8}",
+        "editor.invisible": "${color8}",
+        "editor.wrap_guide": "${color8}",
+        "editor.active_wrap_guide": "${color8}",
+        "editor.document_highlight.read_background": "${color3}",
+        "editor.document_highlight.write_background": "${color4}",
+        "terminal.background": "${background}",
+        "terminal.foreground": "${foreground}",
+        "terminal.bright_foreground": "${color15}",
+        "terminal.dim_foreground": "${color8}",
+        "terminal.ansi.black": "${color0}",
+        "terminal.ansi.bright_black": "${color8}",
+        "terminal.ansi.dim_black": "${color8}",
+        "terminal.ansi.red": "${color1}",
+        "terminal.ansi.bright_red": "${color9}",
+        "terminal.ansi.dim_red": "${color9}",
+        "terminal.ansi.green": "${color2}",
+        "terminal.ansi.bright_green": "${color10}",
+        "terminal.ansi.dim_green": "${color10}",
+        "terminal.ansi.yellow": "${color3}",
+        "terminal.ansi.bright_yellow": "${color11}",
+        "terminal.ansi.dim_yellow": "${color11}",
+        "terminal.ansi.blue": "${color4}",
+        "terminal.ansi.bright_blue": "${color12}",
+        "terminal.ansi.dim_blue": "${color12}",
+        "terminal.ansi.magenta": "${color5}",
+        "terminal.ansi.bright_magenta": "${color13}",
+        "terminal.ansi.dim_magenta": "${color13}",
+        "terminal.ansi.cyan": "${color6}",
+        "terminal.ansi.bright_cyan": "${color14}",
+        "terminal.ansi.dim_cyan": "${color14}",
+        "terminal.ansi.white": "${color7}",
+        "terminal.ansi.bright_white": "${color15}",
+        "terminal.ansi.dim_white": "${color15}",
+        "link_text.hover": "${color4}",
+        "conflict": "${color1}",
+        "conflict.background": "${color0}",
+        "conflict.border": "${color1}",
+        "created": "${color2}",
+        "created.background": "${color0}",
+        "created.border": "${color2}",
+        "deleted": "${color1}",
+        "deleted.background": "${color0}",
+        "deleted.border": "${color1}",
+        "error": "${color1}",
+        "error.background": "${color0}",
+        "error.border": "${color1}",
+        "hidden": "${color8}",
+        "hidden.background": "${color0}",
+        "hidden.border": "${color8}",
+        "hint": "${color8}",
+        "hint.background": "${color0}",
+        "hint.border": "${color8}",
+        "ignored": "${color8}",
+        "ignored.background": "${color0}",
+        "ignored.border": "${color8}",
+        "info": "${color4}",
+        "info.background": "${color0}",
+        "info.border": "${color4}",
+        "modified": "${color3}",
+        "modified.background": "${color0}",
+        "modified.border": "${color3}",
+        "predictive": "${color5}",
+        "predictive.background": "${color0}",
+        "predictive.border": "${color5}",
+        "renamed": "${color6}",
+        "renamed.background": "${color0}",
+        "renamed.border": "${color6}",
+        "success": "${color2}",
+        "success.background": "${color0}",
+        "success.border": "${color2}",
+        "unreachable": "${color8}",
+        "unreachable.background": "${color0}",
+        "unreachable.border": "${color8}",
+        "warning": "${color3}",
+        "warning.background": "${color0}",
+        "warning.border": "${color3}",
+        "players": [
+          {
+            "cursor": "${cursor}",
+            "background": "${color0}",
+            "selection": "${color1}"
+          }
+        ],
+        "syntax": {
+          "attribute": {
+            "color": "${color13}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "comment": {
+            "color": "${color8}",
+            "font_style": "italic",
+            "font_weight": "normal"
+          },
+          "comment.doc": {
+            "color": "${color8}",
+            "font_style": "italic",
+            "font_weight": "normal"
+          },
+          "constant": {
+            "color": "${color3}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "constructor": {
+            "color": "${color5}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "embedded": {
+            "color": "${foreground}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "function": {
+            "color": "${color1}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "keyword": {
+            "color": "${color2}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "link_text": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "link_uri": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "number": {
+            "color": "${color3}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "operator": {
+            "color": "${color6}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "property": {
+            "color": "${foreground}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "punctuation": {
+            "color": "${color7}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "punctuation.bracket": {
+            "color": "${color7}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "punctuation.delimiter": {
+            "color": "${color7}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "punctuation.list_marker": {
+            "color": "${color7}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "punctuation.special": {
+            "color": "${color7}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "string": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "string.escape": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "string.regex": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "string.special": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "string.special.symbol": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "tag": {
+            "color": "${color2}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "text.literal": {
+            "color": "${color10}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "variable": {
+            "color": "${foreground}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          },
+          "variable.special": {
+            "color": "${foreground}",
+            "font_style": "normal",
+            "font_weight": "normal"
+          }
+        }
+      }
+    }
+  ]
+}
+EOF
+
+echo "zed theme generated: ${THEME_FILE}"

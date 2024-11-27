@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Get current GTK theme
+theme=$(gsettings get org.gnome.desktop.interface gtk-theme)
+
+# Define your Pywal color scheme paths
+dark_theme="$HOME/.cache/wal/colors-rofi-dark.rasi"
+light_theme="$HOME/.cache/wal/colors-rofi-light.rasi"
+rofi_theme="$HOME/.config/rofi/colors.rasi"
+
+# Strip quotes from theme name
+theme=${theme//\'/}
+
+# Check if the theme name contains "dark"
+if [[ "$theme" == *"dark"* ]]; then
+	echo "Detected dark theme. Linking dark Pywal colors to Rofi."
+	ln -sf "$dark_theme" "$rofi_theme"
+else
+	echo "Detected light theme. Linking light Pywal colors to Rofi."
+	ln -sf "$light_theme" "$rofi_theme"
+fi
+
+# Reload Rofi to apply the changes
+# rofi -reload
