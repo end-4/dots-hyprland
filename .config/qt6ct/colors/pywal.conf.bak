@@ -1,0 +1,8 @@
+[General]
+Description=Material You inspired colors
+Name=Material You
+
+[ColorScheme]
+active_colors=#ff27201F, #ffF3E3DC, #ffAB5929, #ffAC3B00, #ffA68167, #ffB04A2C, #ff27201F, #ff27201F, #ff27201F, #ffF3E3DC, #ffF3E3DC, #ff27201F, #ffA68167, #ff27201F, #ffAB5929, #ffA9753F, #ffAB5929, #ffF3E3DC, #ffF3E3DC, #ff27201F, #ffF3E3DC
+disabled_colors=#ff0D0D0C, #ffF3E3DC, #ffAB5929, #ffAC3B00, #ffA68167, #ffB04A2C, #ff0D0D0C, #ff0D0D0C, #ff0D0D0C, #ff0D0D0C, #ffF3E3DC, #ff27201F, #ffA68167, #ff0D0D0C, #ffAB5929, #ffA9753F, #ffAB5929, #ffF3E3DC, #ffF3E3DC, #ff0D0D0C, #ffF3E3DC
+inactive_colors=#ff27201F, #ffF3E3DC, #ffAB5929, #ffAC3B00, #ffA68167, #ffB04A2C, #ff27201F, #ff27201F, #ff27201F, #ffF3E3DC, #ffF3E3DC, #ff27201F, #ffA68167, #ff27201F, #ffAB5929, #ffA9753F, #ffAB5929, #ffF3E3DC, #ffF3E3DC, #ff27201F, #ffF3E3DC

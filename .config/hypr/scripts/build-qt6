@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Define file paths
+WAL_COLORS_PATH="$HOME/.cache/wal/colors"
+PYWAL_CONF_PATH="$HOME/.config/qt6ct/colors/pywal.conf"
+
+# Read colors from ~/.cache/wal/colors
+if [[ ! -f $WAL_COLORS_PATH ]]; then
+  echo "Colors file not found: $WAL_COLORS_PATH"
+  exit 1
+fi
+
+# Read colors into an array
+wal_colors=()
+while IFS= read -r line; do
+    wal_colors+=("$line")
+done < "$WAL_COLORS_PATH"
+
+# Ensure we have 16 colors
+if [[ ${#wal_colors[@]} -ne 16 ]]; then
+  echo "The colors file should contain exactly 16 colors."
+  exit 1
+fi
+
+# Backup the original pywal.conf
+cp "$PYWAL_CONF_PATH" "$PYWAL_CONF_PATH.bak"
+
+# Function to update colors in pywal.conf
+update_colors() {
+  local section=$1
+  sed -i "/^\[$section\]/,/^\[/s/^active_colors=.*/active_colors=#ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[1]:1}, #ff${wal_colors[4]:1}, #ff${wal_colors[5]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[12]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[10]:1}, #ff${wal_colors[11]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}/" "$PYWAL_CONF_PATH"
+  sed -i "/^\[$section\]/,/^\[/s/^disabled_colors=.*/disabled_colors=#ff${wal_colors[8]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[1]:1}, #ff${wal_colors[4]:1}, #ff${wal_colors[5]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[12]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[10]:1}, #ff${wal_colors[11]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[8]:1}, #ff${wal_colors[0]:1}/" "$PYWAL_CONF_PATH"
+  sed -i "/^\[$section\]/,/^\[/s/^inactive_colors=.*/inactive_colors=#ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[1]:1}, #ff${wal_colors[4]:1}, #ff${wal_colors[5]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[12]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[3]:1}, #ff${wal_colors[10]:1}, #ff${wal_colors[11]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[0]:1}, #ff${wal_colors[7]:1}, #ff${wal_colors[0]:1}/" "$PYWAL_CONF_PATH"
+
+  # Replace #ffCF5235 with the 1st color (#ff${wal_colors[0]:1})
+  sed -i "s/#ffCF5235/#ff${wal_colors[0]:1}/g" "$PYWAL_CONF_PATH"
+}
+
+# Update colors in pywal.conf
+update_colors "ColorScheme"
+
+echo "pywal.conf updated successfully."

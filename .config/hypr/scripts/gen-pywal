@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Define formatting variables
+GREEN='\033[1;32m'
+NC='\033[0m' # No Color
+GLYPH='󰏘'
+
+# Execute other commands
+
+echo -e "\n${GREEN}${GLYPH} Running colors-foot.py ${NC}"
+python ~/.config/hypr/scripts/colors-foot.py
+
+echo -e "\n${GREEN}${GLYPH} Running colors script (for hyprlock, lock screen) ${NC}"
+~/.config/hypr/scripts/colors
+
+echo -e "\n${GREEN}${GLYPH} Aplying hyprland colors (for window borders) ${NC}"
+python3 ~/.config/hypr/scripts/colors-hypr.py
+
+echo -e "\n${GREEN}${GLYPH} Running colors-folders.py (for papirus colored folders).${NC}"
+python ~/.config/hypr/scripts/colors-folders.py
+
+echo -e "\n${GREEN}${GLYPH} Building Qt theme with script build-qt ${NC}"
+~/.config/hypr/scripts/build-qt
+~/.config/hypr/scripts/build-qt6
+
+echo -e "\n${GREEN}${GLYPH} Building kvuntum theme with script build-kvuntum ${NC}"
+python ~/.config/hypr/scripts/build-kvantum.py
+
+echo -e "\n${GREEN}${GLYPH} Generating rofi colors ${NC}"
+~/.config/hypr/scripts/pywal-rofi
+
+# echo -e "\n${GREEN}${GLYPH} changing spotiify theme (text) ${NC}"
+# pywal-spicetify text
+# spicetify apply
+
+echo -e "\n${GREEN}${GLYPH} Running walogram (for telegram) ${NC}"
+walogram -s
+
+echo -e "\n${GREEN}${GLYPH} Running pywal-discord (for discord) ${NC}"
+pywal-discord -p ~/.config/vesktop/themes/
+
+echo -e "\n${GREEN}${GLYPH} Running zed-theme (for Zed) ${NC}"
+~/.config/hypr/scripts/zed-theme
+
+echo -e "\n${GREEN}${GLYPH} Script execution completed.${NC}"
+
+# Randomly decide whether to show the "Did you notice?" notification
+#show_notice=$((RANDOM % 5)) # 20% chance
+
+#if [ $show_notice -eq 0 ]; then
+# Choose a new random icon
+#  random_index=$((RANDOM % ${#icons[@]}))
+#  icon=${icons[$random_index]}
+#  echo -e "${GREEN}${GLYPH} Sending 'Did you notice?' notification with icon: $icon${NC}"
+#  notify-send -i "$icon" -e -h string:x-canonical-private-synchronous:sys-notify -u low -t 10000 "Did you notice?" "The notification icon has changed!"
+#fi

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Define the path to the colors file and the output file
+colors_file_path="$HOME/.cache/wal/colors"
+output_file_path="$HOME/.cache/wal/colors-hypr.conf"
+
+# Run swww query and capture its output
+swww_output=$(swww query)
+
+# Extract the path from swww query output
+path=$(echo "$swww_output" | grep -o '/home/[^"]*')
+
+# Check if the colors file exists
+if [[ ! -f $colors_file_path ]]; then
+  echo "The colors file does not exist at $colors_file_path"
+  exit 1
+fi
+
+# Read the colors from the colors file
+colors=()
+while IFS= read -r line; do
+  colors+=("$line")
+done < "$colors_file_path"
+
+# Ensure there are enough colors in the colors file
+if [[ ${#colors[@]} -lt 12 ]]; then
+  echo "The colors file does not contain enough colors."
+  exit 1
+fi
+
+# Extract specific colors and remove the '#' character where necessary
+color1="${colors[3]#'#'}"
+color2="${colors[0]#'#'}"
+
+# Function to convert hex to RGB
+hex_to_rgb() {
+  hex=$1
+  r=$((16#${hex:0:2}))
+  g=$((16#${hex:2:2}))
+  b=$((16#${hex:4:2}))
+  echo "$r, $g, $b"
+}
+
+# Convert hex colors to RGB
+color_inner=$(hex_to_rgb "${colors[0]#'#'}")
+color_outer=$(hex_to_rgb "${colors[1]#'#'}")
+color_font=$(hex_to_rgb "${colors[3]#'#'}")
+color_check=$(hex_to_rgb "${colors[5]#'#'}")
+color_fail=$(hex_to_rgb "${colors[11]#'#'}")
+
+# Create the content for the colors-hypr.conf file
+config_content=$(cat << EOF
+\$color1 = $color1
+\$color2 = $color2
+
+\$color-hyprlock-inner = rgb($color_inner)
+\$color-hyprlock-outer = rgb($color_outer)
+\$color-hyprlock-font = rgb($color_font)
+\$color-hyprlock-check = rgb($color_check)
+\$color-hyprlock-fail = rgb($color_fail)
+
+\$path = $path
+EOF
+)
+
+# Write the content to the output file
+echo "$config_content" > "$output_file_path"
+
+echo "colors-hypr.conf has been created at $output_file_path"
