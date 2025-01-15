@@ -65,12 +65,12 @@ export default () => {
         if (monitors.length - 1 < monitor) {
             monitor = monitors.length - 1;
         }
-        // Properly scale for multi monitors
-        w *= monitors[overviewMonitor.value].width / monitors[monitor].width;
-        h *= monitors[overviewMonitor.value].height / monitors[monitor].height;
         // Truncate if offscreen
         if (x + w > monitors[monitor].width) w = monitors[monitor].width - x;
         if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
+        // Properly scale for multi monitors
+        w *= monitors[overviewMonitor.value].width / monitors[monitor].width;
+        h *= monitors[overviewMonitor.value].height / monitors[monitor].height;
 
         if (c.length == 0) c = initialClass;
         const iconName = substitute(c);
