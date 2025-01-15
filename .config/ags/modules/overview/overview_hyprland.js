@@ -60,6 +60,7 @@ export default (overviewMonitor = 0) => {
         else if (x < 0) { w = x + w; x = 0; }
         if (y + h <= 0) x += (Math.floor(y / monitors[monitor].height) * monitors[monitor].height);
         else if (y < 0) { h = y + h; y = 0; }
+        // Prevents throwing an error when multiple monitors are plugged in but only one is enabled (#1047)
         if (monitors.length - 1 < monitor) {
             monitor = monitors.length - 1;
         }
