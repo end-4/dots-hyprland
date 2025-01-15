@@ -60,6 +60,9 @@ export default (overviewMonitor = 0) => {
         else if (x < 0) { w = x + w; x = 0; }
         if (y + h <= 0) x += (Math.floor(y / monitors[monitor].height) * monitors[monitor].height);
         else if (y < 0) { h = y + h; y = 0; }
+        if (monitors.length - 1 < monitor) {
+            monitor = monitors.length - 1;
+        }
         // Truncate if offscreen
         if (x + w > monitors[monitor].width) w = monitors[monitor].width - x;
         if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
