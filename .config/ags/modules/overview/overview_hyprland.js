@@ -414,7 +414,10 @@ export default () => {
                     }
                 })
                 .hook(App, (box, name, visible) => { // Update on open
-                    if (name == 'overview' && visible) box.attribute.update(box);
+                    if (name == 'overview' && visible) {
+                        overviewMonitor.value = Hyprland.active.monitor.id
+                        box.attribute.update(box);
+                    }
                 })
         },
     });
@@ -434,6 +437,6 @@ export default () => {
                     workspaces: userOptions.overview.numOfCols,
                 })
             )
-        }),
-    }).hook(Hyprland, () => { overviewMonitor.value = Hyprland.active.monitor.id; });
+        })
+    })
 }
