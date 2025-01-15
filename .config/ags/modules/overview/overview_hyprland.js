@@ -415,7 +415,7 @@ export default () => {
                 })
                 .hook(App, (box, name, visible) => { // Update on open
                     if (name == 'overview' && visible) {
-                        overviewMonitor.value = Hyprland.active.monitor.id
+                        overviewMonitor.value = Hyprland.active.monitor.id;
                         box.attribute.update(box);
                     }
                 })
