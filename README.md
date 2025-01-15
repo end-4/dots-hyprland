@@ -145,7 +145,10 @@
 - Funny useful number: https://github.com/sponsors/end-4
 - Funny useless number:
 
-[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?background=%230d1117&axis=%23e6edf3&line=%234759e7)](https://starchart.cc/end-4/dots-hyprland)
+[![Stargazers over time](https://starchart.cc/end-4/dots-hyprland.svg?variant=adaptive)](https://starchart.cc/end-4/dots-hyprland)
+
+- *Jokes aside i do appreciate both*
+
 
 <div align="center">
     <h2>• inspirations •</h2>
