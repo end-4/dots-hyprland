@@ -38,9 +38,9 @@ env_editor_confirm() {
   fi
 }
 
-NOTIFY=yes
-CURSOR=no
-FREEZE=yes
+NOTIFY=no
+CURSOR=
+FREEZE=
 WAIT=no
 SCALE=
 HYPRPICKER_PID=-1
