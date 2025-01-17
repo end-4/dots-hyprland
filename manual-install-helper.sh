@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 #
 # This script is for installing/updating some "packages" for non-Arch users.
 #

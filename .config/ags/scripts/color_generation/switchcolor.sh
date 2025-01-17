@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"

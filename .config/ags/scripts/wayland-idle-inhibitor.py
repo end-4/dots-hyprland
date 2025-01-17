@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/bin/bash
 
 import sys
 from dataclasses import dataclass

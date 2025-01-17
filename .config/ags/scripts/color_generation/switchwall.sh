@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 CONFIG_DIR="$XDG_CONFIG_HOME/ags"
