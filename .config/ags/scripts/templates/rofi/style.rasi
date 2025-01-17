@@ -9,17 +9,17 @@
 
 /***-- Import Material colors --***/
 *{
-  background:                      #161B26;
-  error:                           #FFB4AB;
-  onBackground:                    #DFE2EF;
-  onError:                         #690005;
-  onErrorContainer:                #FFDAD6;
-  onPrimary:                       #002E69;
-  onSecondary:                     #2B2E4D;
-  onSecondaryContainer:            #DFE0FF;
-  primary:                         #ADC6FF;
-  secondary:                       #C1C4EB;
-  secondaryContainer:              #414465;
+  background:                      {{ $term0 }};
+  error:                           {{ $error }};
+  onBackground:                    {{ $onBackground }};
+  onError:                         {{ $onError }};
+  onErrorContainer:                {{ $onErrorContainer }};
+  onPrimary:                       {{ $onPrimary }};
+  onSecondary:                     {{ $onSecondary }};
+  onSecondaryContainer:            {{ $onSecondaryContainer }};
+  primary:                         {{ $primary }};
+  secondary:                       {{ $secondary }};
+  secondaryContainer:              {{ $secondaryContainer }};
 }
 
 /*****----- Configuration -----*****/

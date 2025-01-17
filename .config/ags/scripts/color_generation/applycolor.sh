@@ -181,6 +181,27 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAwdColors.py" # apply config colors
 }
 
+apply_folderColor() {
+  sh "$CONFIG_DIR/scripts/color_generation/changeFolder_color.sh"
+}
+
+apply_rofi() {
+  # Check if scripts/templates/rofi/rofi.rasi exists
+  if [ ! -f "scripts/templates/rofi/style.rasi" ]; then
+    echo "Template file not found for Hyprland colors. Skipping that."
+    return
+  fi
+  # Copy template
+  mkdir -p "$CACHE_DIR"/user/generated/rofi/
+  cp "scripts/templates/rofi/style.rasi" "$CACHE_DIR"/user/generated/rofi/style.rasi
+  # Apply colors
+  for i in "${!colorlist[@]}"; do
+    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/rofi/style.rasi
+  done
+
+  cp "$CACHE_DIR"/user/generated/rofi/style.rasi "$XDG_CONFIG_HOME"/rofi/style.rasi
+}
+
 colornames=$(cat "$STATE_DIR"/scss/_material.scss | cut -d: -f1)
 colorstrings=$(cat "$STATE_DIR"/scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
 IFS=$'\n'
@@ -196,3 +217,5 @@ apply_qt &
 apply_pywal &
 apply_fuzzel &
 apply_term &
+apply_folderColor &
+apply_rofi &
