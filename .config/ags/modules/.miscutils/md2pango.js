@@ -10,7 +10,7 @@ const replacements = {
         { name: 'NUMBERING', re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: ' $1 $2' },
     ],
     'escapes': [
-        { name: 'COMMENT', re: /<!--.*-->/, sub: '' },
+        { name: 'COMMENT', re: /<!--[\s\S]*?-->/, sub: '' },
         { name: 'AMPERSTAND', re: /&/g, sub: '&amp;' },
         { name: 'LESSTHAN', re: /</g, sub: '&lt;' },
         { name: 'GREATERTHAN', re: />/g, sub: '&gt;' },

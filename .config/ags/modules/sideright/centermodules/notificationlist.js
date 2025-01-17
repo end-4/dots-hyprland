@@ -22,7 +22,7 @@ export default (props) => {
                     className: 'spacing-v-5 txt-subtext',
                     children: [
                         MaterialIcon('notifications_active', 'gigantic'),
-                        Label({ label: 'No notifications', className: 'txt-small' }),
+                        Label({ label: getString('No notifications'), className: 'txt-small' }),
                     ]
                 }),
             ]
@@ -82,7 +82,7 @@ export default (props) => {
         }),
         setup: setupCursorHover,
     });
-    const silenceButton = ListActionButton('notifications_paused', 'Silence', (self) => {
+    const silenceButton = ListActionButton('notifications_paused', getString('Silence'), (self) => {
         Notifications.dnd = !Notifications.dnd;
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
@@ -101,7 +101,7 @@ export default (props) => {
         setup: (self) => self.hook(Notifications, (self) => {
             self.revealChild = Notifications.notifications.length > 0;
         }),
-        child: ListActionButton('clear_all', 'Clear', () => {
+        child: ListActionButton('clear_all', getString('Clear'), () => {
             Notifications.clear();
             const kids = notificationList.get_children();
             for (let i = 0; i < kids.length; i++) {
@@ -114,7 +114,7 @@ export default (props) => {
         attribute: {
             updateCount: (self) => {
                 const count = Notifications.notifications.length;
-                if (count > 0) self.label = `${count} notifications`;
+                if (count > 0) self.label = `${count} ${getString("notifications")}`;
                 else self.label = '';
             },
         },

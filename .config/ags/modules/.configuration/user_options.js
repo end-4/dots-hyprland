@@ -69,6 +69,10 @@ let configOptions = {
             'color': 'rgba(113,227,32,0.9)',
         },
     },
+    'i18n': {
+        'langCode': "",//Customize the locale, such as zh_CN,Optional value references "~/.config/ags/i18n/locales/"
+        'extraLogs': false
+    },
     'monitors': {
         'scaleMethod': "division", // Either "division" [default] or "gdk"
     },
@@ -235,6 +239,10 @@ let configOptions = {
 let optionsOkay = true;
 function overrideConfigRecursive(userOverrides, configOptions = {}, check = true) {
     for (const [key, value] of Object.entries(userOverrides)) {
+        if (!check) {
+            configOptions[key] = value;
+            continue;
+        }
         if (configOptions[key] === undefined && check) {
             optionsOkay = false;
         }
@@ -242,8 +250,6 @@ function overrideConfigRecursive(userOverrides, configOptions = {}, check = true
             if (key === "substitutions" || key === "regexSubstitutions" || key === "extraGptModels") {
                 overrideConfigRecursive(value, configOptions[key], false);
             } else overrideConfigRecursive(value, configOptions[key]);
-        } else {
-            configOptions[key] = value;
         }
     }
 }

@@ -26,6 +26,22 @@ function trimTrackTitle(title) {
     return title;
 }
 
+function adjustVolume(direction) {
+    const step = 0.03; 
+    execAsync(['playerctl', 'volume'])
+        .then((output) => {
+            let currentVolume = parseFloat(output.trim());
+            let newVolume = direction === 'up' ? currentVolume + step : currentVolume - step;
+
+            if (newVolume > 1.0) newVolume = 1.0;
+            if (newVolume < 0.0) newVolume = 0.0;
+
+            execAsync(['playerctl', 'volume', newVolume.toFixed(2)]).catch(print);
+        })
+        .catch(print);
+}
+
+
 const BarGroup = ({ child }) => Box({
     className: 'bar-group-margin bar-sides',
     children: [
@@ -105,6 +121,8 @@ const switchToRelativeWorkspace = async (self, num) => {
     }
 }
 
+
+
 export default () => {
     // TODO: use cairo to make button bounce smaller on click, if that's possible
     const playingState = Box({ // Wrap a box cuz overlay can't have margins itself
@@ -145,7 +163,7 @@ export default () => {
             if (mpris)
                 label.label = `${trimTrackTitle(mpris.trackTitle)} • ${mpris.trackArtists.join(', ')}`;
             else
-                label.label = 'No media';
+                label.label = getString('No media');
         }),
     })
     const musicStuff = Box({
@@ -183,7 +201,7 @@ export default () => {
         } else return BarGroup({
             child: Box({
                 children: [
-                    BarResource('RAM Usage', 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
+                    BarResource(getString('RAM Usage'), 'memory', `LANG=C free | awk '/^Mem/ {printf("%.2f\\n", ($3/$2) * 100)}'`,
                         'bar-ram-circprog', 'bar-ram-txt', 'bar-ram-icon'),
                     Revealer({
                         revealChild: true,
@@ -192,9 +210,9 @@ export default () => {
                         child: Box({
                             className: 'spacing-h-10 margin-left-10',
                             children: [
-                                BarResource('Swap Usage', 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
+                                BarResource(getString('Swap Usage'), 'swap_horiz', `LANG=C free | awk '/^Swap/ {if ($2 > 0) printf("%.2f\\n", ($3/$2) * 100); else print "0";}'`,
                                     'bar-swap-circprog', 'bar-swap-txt', 'bar-swap-icon'),
-                                BarResource('CPU Usage', 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
+                                BarResource(getString('CPU Usage'), 'settings_motion_mode', `LANG=C top -bn1 | grep Cpu | sed 's/\\,/\\./g' | awk '{print $2}'`,
                                     'bar-cpu-circprog', 'bar-cpu-txt', 'bar-cpu-icon'),
                             ]
                         }),
@@ -208,8 +226,8 @@ export default () => {
         });
     }
     return EventBox({
-        onScrollUp: (self) => switchToRelativeWorkspace(self, -1),
-        onScrollDown: (self) => switchToRelativeWorkspace(self, +1),
+        onScrollUp: () => adjustVolume('up'),
+        onScrollDown: () => adjustVolume('down'),
         child: Box({
             className: 'spacing-h-4',
             children: [
@@ -228,3 +246,4 @@ export default () => {
         })
     });
 }
+
