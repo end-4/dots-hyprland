@@ -46,7 +46,7 @@ const OptionalOverview = async () => {
     }
 };
 
-const overviewContent = await OptionalOverview();
+// const overviewContent = await OptionalOverview();
 
 export const SearchAndWindows = () => {
     var _appSearchResults = [];
@@ -104,7 +104,7 @@ export const SearchAndWindows = () => {
             // check empty if so then dont do stuff
             if (entry.text == '') {
                 resultsRevealer.revealChild = false;
-                overviewContent.revealChild = true;
+                // overviewContent.revealChild = true;
                 entryPromptRevealer.revealChild = true;
                 entryIconRevealer.revealChild = false;
                 entry.toggleClassName('overview-search-box-extended', false);
@@ -112,7 +112,7 @@ export const SearchAndWindows = () => {
             }
             const text = entry.text;
             resultsRevealer.revealChild = true;
-            overviewContent.revealChild = false;
+            // overviewContent.revealChild = false;
             entryPromptRevealer.revealChild = false;
             entryIconRevealer.revealChild = true;
             entry.toggleClassName('overview-search-box-extended', true);
@@ -176,7 +176,7 @@ export const SearchAndWindows = () => {
                     entryIcon,
                 ]
             }),
-            overviewContent,
+            // overviewContent,
             resultsRevealer,
         ],
         setup: (self) => self

@@ -4,6 +4,16 @@
 //   options listed in this file will override the default ones in the above file
 
 const userConfigOptions = {
-}
+	weather: {
+		city: "Tallinn", // Europe/Tallinn or Tallinn?
+		preferredUnit: "C", // Either C or F
+	},
+	workspaces: {
+		shown: 8,
+	},
+	appearance: {
+		barRoundCorners: 0, // 0: No, 1: Yes - Looks ugly imo
+	},
+};
 
 export default userConfigOptions;
