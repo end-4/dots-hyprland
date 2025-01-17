@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Define formatting variables
+GREEN='\033[1;32m'
+NC='\033[0m' # No Color
+GLYPH='󰏘'
+
+# Execute other commands
+
+# echo -e "\n${GREEN}${GLYPH} Running colors-foot.py ${NC}"
+# python ~/.config/hypr/scripts/colors-foot.py
+
+echo -e "\n${GREEN}${GLYPH} Running colors-folders.py (for papirus colored folders).${NC}"
+python ~/.config/pywal/colors-folders.py
+
+echo -e "\n${GREEN}${GLYPH} Generating rofi colors ${NC}"
+python ~/.config/pywal/rofi-colors.py
+
+# echo -e "\n${GREEN}${GLYPH} Generating sddm colors ${NC}"
+# ~/.config/pywal/sddm-pywal
+
+# echo -e "\n${GREEN}${GLYPH} Generating Ghostty terminal colors ${NC}"
+# python ~/.config/pywal/ghosttyPywal.py
+
+echo -e "\n${GREEN}${GLYPH} changing spotiify theme (text) ${NC}"
+pywal-spicetify text
+# spicetify apply
+
+echo -e "\n${GREEN}${GLYPH} Running walogram (for telegram) ${NC}"
+walogram -s
+
+echo -e "\n${GREEN}${GLYPH} Running pywal-discord (for discord) ${NC}"
+pywal-discord
+
+echo -e "\n${GREEN}${GLYPH} Script execution completed.${NC}"
