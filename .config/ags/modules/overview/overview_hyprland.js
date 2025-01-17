@@ -437,6 +437,6 @@ export default () => {
                     workspaces: userOptions.overview.numOfCols,
                 })
             )
-        })
+        }),
     });
 }
