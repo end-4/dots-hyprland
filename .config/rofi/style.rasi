@@ -9,17 +9,17 @@
 
 /***-- Import Material colors --***/
 *{
-  background:                      #161B26;
+  background:                      #191A21;
   error:                           #FFB4AB;
-  onBackground:                    #DFE2EF;
+  onBackground:                    #E3E2E9;
   onError:                         #690005;
   onErrorContainer:                #FFDAD6;
-  onPrimary:                       #002E69;
-  onSecondary:                     #2B2E4D;
-  onSecondaryContainer:            #DFE0FF;
-  primary:                         #ADC6FF;
-  secondary:                       #C1C4EB;
-  secondaryContainer:              #414465;
+  onPrimary:                       #1A2E60;
+  onSecondary:                     #2A3042;
+  onSecondaryContainer:            #DDE1F9;
+  primary:                         #B3C5FF;
+  secondary:                       #C1C6DD;
+  secondaryContainer:              #414659;
 }
 
 /*****----- Configuration -----*****/

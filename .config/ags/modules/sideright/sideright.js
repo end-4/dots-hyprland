@@ -13,7 +13,8 @@ import {
     ModuleSettingsIcon,
     ModulePowerIcon,
     ModuleRawInput,
-    ModuleCloudflareWarp
+    ModuleCloudflareWarp,
+    ModuleGameMode
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./centermodules/notificationlist.js";
 import ModuleAudioControls from "./centermodules/audiocontrols.js";
@@ -121,12 +122,13 @@ const togglesBox = Widget.Box({
     children: [
         ToggleIconWifi(),
         ToggleIconBluetooth(),
-        // await ModuleRawInput(),
+        await ModuleRawInput(),
         // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         await ModuleNightLight(),
         await ModuleInvertColors(),
+        await ModuleGameMode(),
         ModuleIdleInhibitor(),
-        await ModuleCloudflareWarp(),
+        await ModuleCloudflareWarp()
     ]
 })
 

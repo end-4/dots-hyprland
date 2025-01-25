@@ -209,10 +209,22 @@ export default (props) => {
               }),
             ]),
             HyprlandToggle({
+              icon: "shadow",
+              name: getString("Shadow"),
+              desc: getString("[Hyprland]\nEnable shadow on transparent elements.",),
+              option: "decoration:shadow:enabled",
+            }),
+            HyprlandToggle({
               icon: "auto_fix_high",
               name: getString("Blur Special"),
               desc: getString("[Hyprland]\nEnable special blur effects."),
               option: "decoration:blur:special",
+            }),
+            HyprlandToggle({
+              icon: "brightness_2",
+              name: getString("Dim Special"),
+              desc: getString("[Hyprland]\nEnable special dim effects."),
+              option: "decoration:dim_special",
             }),
             ConfigGap({}),
             HyprlandToggle({

@@ -1,0 +1,36 @@
+@import "grid"
+
+window {
+    height:                         env(ROFI_GAME_LAUNCHER_HEIGHT, 360);
+    width:                          100%;
+
+    location:                       south;
+    anchor:                         south;
+
+    border:                         4px 0px 0px 0px;
+}
+
+listview {
+    padding:                        0px;
+    dynamic:                        true;
+    columns:                        env(ROFI_GAME_LAUNCHER_N_ENTRIES, 16);
+}
+
+element-icon {
+    padding:                        0px -40px;
+    horizontal-align:               0.5;
+    border:                         4px 4px solid 4px 4px;
+    border-color:                   transparent;
+    border-radius:                  16;
+    size:                           240;
+}
+
+element-icon selected {
+    border-color:                   @primary;
+}
+
+element-text {
+    horizontal-align:               0.5;
+    horizontal-align:               0.5;
+    width:                          160px;
+}

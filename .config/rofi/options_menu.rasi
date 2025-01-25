@@ -1,0 +1,52 @@
+configuration {
+    show-icons:                     false;
+    font:                           "Fira Sans 20";
+}
+
+@import "colors.rasi"
+
+window {
+    height:                         270;
+    width:                          200;
+    location:                       east;
+    anchor:                         east;
+    transparency:                   "real";
+    background-color:               @background-transparent;
+    border:                         4px 0px solid 4px 4px;
+    border-radius:                  12px 0px 0px 12px;
+    border-color:                   @primary;
+}
+
+mainbox {
+    children:                       [message, listview];
+    padding:                        0px 0px;
+}
+
+
+textbox {
+    horizontal-align:               0.5;
+    border:                         0px 0px 2px;
+    border-color:                   @primary;
+    margin:                         12px;
+    padding:                        12px;
+}
+
+listview {
+    padding:                        8px 16px;
+}
+
+element {
+    padding:                        8px;
+    orientation:                    vertical;
+}
+
+element selected {
+    border:                         4px 4px solid 4px 4px;
+    border-radius:                  8;
+    border-color:                   @primary;
+}
+
+element-text {
+    horizontal-align:               0;
+    padding:                        0px 8px;
+}

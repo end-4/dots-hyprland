@@ -59,3 +59,8 @@ export const getDistroName = () => {
     if(distroID == 'kali') return 'Kali Linux';
     return 'Linux';
 }
+
+export const getLaptop = async () => {
+  const result = await Utils.exec('hostnamectl chassis | grep -i "laptop"');
+  return result.trim() !== '';
+}

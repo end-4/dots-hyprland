@@ -1,0 +1,23 @@
+// Set colors and font from rgbairoment variables, with Nord color fallbacks.
+// These rgbaironment variables are set when Rofi is invoked through the
+// script scripts/rofi-wrapper.sh
+
+configuration {
+    font:                   "Fira Sans 13";
+}
+
+* {
+    background-color:       transparent;
+    background:             #191A21;
+    background-transparent: #121318F0;
+    text-color:             #E3E2E9;
+    primary:                #B3C5FF;
+    secondary:              #C1C6DD;
+    urgent:                 #FFB4AB;
+    onPrimary:              #1A2E60;
+    onSecondary:            #2A3042;
+    primaryContainer:       #324478;
+    onPrimaryContainer:     #DBE1FF;
+    secondaryContainer:     #414659;
+    onSecondaryContainer:   #DDE1F9;
+}

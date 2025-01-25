@@ -1,0 +1,106 @@
+configuration {
+    show-icons:                     true;
+    window-format:                  "{t}";
+    window-match-fields:            "title";
+}
+
+@import "colors.rasi"
+
+window {
+    height:                         100%;
+    width:                          400;
+    location:                       east;
+    anchor:                         east;
+    transparency:                   "real";
+    background-color:               @background-transparent;
+    border:                         0px 0px 0px 4px;
+    border-color:                   @primary;
+}
+
+mainbox {
+    children:                       [inputbar-box, listview];
+    padding:                        0px 0px;
+}
+
+listview {
+    background-color:               transparent;
+    padding:                        0px;
+    dynamic:                        true;
+}
+
+inputbar-box {
+    children:                       [inputbar-side, inputbar, dummy];
+    margin:                         0px 0px -2px 0px;
+    orientation:                    horizontal;
+    expand:                         false;
+}
+
+//inputbar-side {
+//    margin:                         29px -100% 0px 0px;
+//    border:                         5px 0px 0px 0px;
+//    border-color:                   @background-transparent;
+//    background-color:               transparent;
+//}
+
+inputbar {
+    children:                       [textbox-prompt, entry];
+    margin:                         12px 0px;
+    background-color:               @primaryContainer;
+    border:                         5px;
+    border-color:                   @background-transparent;
+    border-radius:                  8px;
+}
+
+textbox-prompt {
+    font:                           "Material Symbols Rounded 18";
+    text-color:                     @onSecondaryContainer;
+    padding:                        0px 4px 0px 2px;
+    horizontal-align:               0.5;
+    vertical-align:                 0.5;
+    str:                            "search";
+    expand:                         false;
+}
+
+entry {
+    expand:                         false;
+    padding:                        4px;
+    margin:                         -6px;
+    horizontal-align:               0.5;
+    width:                          300;
+    background-color:               @secondaryContainer;
+    border:                         6px;
+    border-color:                   @onSecondaryContainer;
+    border-radius:                  8px;
+}
+
+element {
+    children:                       [element-icon, element-text];
+    padding:                        4px;
+    margin:                         8px 24px;
+    orientation:                    horizontal;
+    border:                         5px;
+    border-color:                   transparent;
+    border-radius:                  8;
+}
+
+element selected {
+    border-color:                   @primary;
+}
+
+element normal.urgent, element alternate.urgent {
+    border-color:                   @urgent;
+}
+
+element normal.active, element alternate.active {
+    border-color:                   @secondary;
+}
+
+element-icon {
+    padding:                        0px;
+    size:                           32;
+}
+
+element-text {
+    horizontal-align:               0;
+    vertical-align:                 0.5;
+}

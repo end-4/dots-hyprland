@@ -10,6 +10,7 @@ import { BluetoothIndicator, NetworkIndicator } from '../.commonwidgets/statusic
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { sidebarOptionsStack } from './sideright.js';
+import { getLaptop } from '../.miscutils/system.js';
 
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
@@ -54,30 +55,37 @@ export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     ...props,
 });
 
+
 export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}) => {
-    try {
-        return Widget.Button({
-            className: 'txt-small sidebar-iconbutton',
-            tooltipText: `${name}`,
-            onClicked: (button) => {
-                // Set the value to 1 - value
-                Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
-                    const currentOption = JSON.parse(result).int;
-                    execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
-                    button.toggleClassName('sidebar-button-active', currentOption == 0);
-                }).catch(print);
-            },
-            child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
-            setup: button => {
-                button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
-                setupCursorHover(button);
-            },
-            ...props,
-        })
-    } catch {
+    if (await getLaptop()) {
+        try {
+            return Widget.Button({
+                className: 'txt-small sidebar-iconbutton',
+                tooltipText: `${name}`,
+                onClicked: (button) => {
+                    // Set the value to 1 - value
+                    Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
+                        const currentOption = JSON.parse(result).int;
+                        execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
+                        button.toggleClassName('sidebar-button-active', currentOption == 0);
+                    }).catch(print);
+                },
+                child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
+                setup: button => {
+                    button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
+                    setupCursorHover(button);
+                },
+                ...props,
+            });
+        } catch {
+            return null;
+        }
+    } else {
         return null;
     }
-}
+};
+
+
 
 export const ModuleNightLight = async (props = {}) => {
     if (!exec(`bash -c 'command -v gammastep'`)) return null;
@@ -202,7 +210,33 @@ export const ModuleRawInput = async (props = {}) => {
         return null;
     };
 }
-
+export const ModuleGameMode = async (props = {}) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: getString('Hyprland Game Mode'),
+            onClicked: (button) => {
+                Hyprland.messageAsync('j/getoption animations:enabled')
+                    .then((output) => {
+                        const value = JSON.parse(output)["int"];
+                        if (value == 1) {
+                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0" & hyprctl reload`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', false);
+                        } else {
+                            execAsync(['bash', '-c', `hyprctl keyword animations:enabled 1 & hyprctl reload`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', true);
+                        }
+                    })
+            },
+            child: MaterialIcon('gamepad', 'norm'),
+            setup: setupCursorHover,
+            ...props,
+        })
+    } catch {
+        return null;
+    };
+}
 export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
     attribute: {
         enabled: false,
