@@ -115,6 +115,14 @@ install-local-pkgbuild() {
 	x popd
 }
 
+# create a virtual environment and store python packages into it
+ags_state_dir=$XDG_STATE_DIR/ags
+venv_dir=$ags_state_dir
+
+x mkdir -p $ags_state-dir
+x uv venv --prompt .venv $venv_dir
+x source $venv_dir/bin/activate
+
 # Install core dependencies from the meta-packages
 metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,portal,python,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
