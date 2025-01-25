@@ -114,10 +114,6 @@ install-MicroTeX (){
 }
 
 install-uv (){
-  x mkdir -p $base/cache/uv
-  x cd $base/cache/uv
-  export UV_INSTALL_DIR=$base/cache
   x curl -LsSf https://astral.sh/uv/install.sh | sh
-  x cd $base
 }
 
