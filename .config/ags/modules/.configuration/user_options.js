@@ -144,6 +144,9 @@ let configOptions = {
     },
     'workspaces': {
         'shown': 10,
+        'labels': {
+            1: '🎵'
+        }
     },
     'dock': {
         'enabled': false,
