@@ -2,15 +2,14 @@
 pkgname=illogical-impulse-ags
 _pkgname=ags
 pkgver=r525.05e0f23
-pkgrel=1
+pkgrel=2
 pkgdesc="Aylurs's Gtk Shell (AGS), version fixed for illogical-impulse dotfiles."
 arch=('x86_64')
 url="https://github.com/Aylur/ags"
 license=('GPL3')
 makedepends=('git' 'gobject-introspection' 'meson' 'npm' 'typescript')
-depends=('gjs' 'glib2' 'glib2-devel' 'glibc' 'gtk3' 'gtk-layer-shell' 'libpulse' 'pam')
-optdepends=('gnome-bluetooth-3.0: required for bluetooth service'
-            'greetd: required for greetd service'
+depends=('gjs' 'glib2' 'glib2-devel' 'glibc' 'gtk3' 'gtk-layer-shell' 'libpulse' 'pam' 'gnome-bluetooth-3.0' 'gammastep')
+optdepends=('greetd: required for greetd service'
             'libdbusmenu-gtk3: required for systemtray service'
             'libsoup3: required for the Utils.fetch feature'
             'libnotify: required for sending notifications'
