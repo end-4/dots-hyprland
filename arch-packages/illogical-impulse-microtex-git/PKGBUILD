@@ -22,6 +22,11 @@ pkgver() {
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
+prepare() {
+    cd $_pkgname
+    sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
+}
+
 build() {
   cd $_pkgname
   cmake -B build -S . -DCMAKE_BUILD_TYPE=None

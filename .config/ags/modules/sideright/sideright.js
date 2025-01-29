@@ -26,7 +26,7 @@ import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
-
+import { powerBox } from './powerprofile.js';
 const centerWidgets = [
     {
         name: getString('Notifications'),
@@ -111,7 +111,7 @@ const timeRow = Box({
         }),
         Widget.Box({ hexpand: true }),
         ModuleReloadIcon({ hpack: 'end' }),
-        // ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
+        ModuleSettingsIcon({ hpack: 'end' }), // Button does work, gnome-control-center is kinda broken
         ModulePowerIcon({ hpack: 'end' }),
     ]
 });
@@ -173,7 +173,8 @@ export default () => Box({
                         sidebarOptionsStack,
                     ],
                 }),
-                ModuleCalendar(),
+                powerBox,
+                ModuleCalendar()
             ]
         }),
     ],

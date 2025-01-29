@@ -7,11 +7,8 @@ license=(None)
 depends=(
   adw-gtk-theme-git
   qt5ct
-  qt5-wayland
   qt6ct
-  kvantum
-  kvantum-qt5
-  papirus-folders
+  qt5-wayland
   fontconfig
   ttf-readex-pro
   ttf-jetbrains-mono-nerd
@@ -19,7 +16,11 @@ depends=(
   ttf-space-mono-nerd
   ttf-rubik-vf
   ttf-gabarito-git
+  fd
   fish
   foot
   starship
+  kvantum
+  kvantum-qt5
+  papirus-folders
 )

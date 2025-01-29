@@ -62,7 +62,7 @@ esac
 remove_bashcomments_emptylines ${DEPLISTFILE} ./cache/dependencies_stripped.conf
 readarray -t pkglist < ./cache/dependencies_stripped.conf
 
-# Use yay. Because paru do not support cleanbuild.
+# Use yay. Because paru does not support cleanbuild.
 # Also see https://wiki.hyprland.org/FAQ/#how-do-i-update
 if ! command -v yay >/dev/null 2>&1;then
   echo -e "\e[33m[$0]: \"yay\" not found.\e[0m"
@@ -182,11 +182,7 @@ v systemctl --user enable ydotool --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 
 #####################################################################################
-printf "\e[36m[$0]: 2. Installing parts from source repo\e[0m\n"
-sleep 1
-
-#####################################################################################
-printf "\e[36m[$0]: 3. Copying + Configuring\e[0m\n"
+printf "\e[36m[$0]: 2. Copying + Configuring\e[0m\n"
 
 # In case some folders does not exists
 v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
