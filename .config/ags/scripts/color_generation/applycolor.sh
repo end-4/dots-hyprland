@@ -168,7 +168,7 @@ apply_ags() {
 
 apply_qt() {
   sh "$CONFIG_DIR/scripts/kvantum/materialQT.sh"          # generate kvantum theme
-  python "$CONFIG_DIR/scripts/kvantum/changeAwdColors.py" # apply config colors
+  python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
 colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
