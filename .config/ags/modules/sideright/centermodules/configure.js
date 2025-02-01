@@ -259,6 +259,23 @@ export default (props) => {
             ]),
           ],
         }),
+        ConfigSection({
+          name: getString("Monitor"),
+          children: [
+            HyprlandToggle({
+            icon: "trending_up",
+            name: getString("Variable Frame Rate (VFR)"),
+            desc: getString("[Hyprland]\nEnable or disable Variable Frame Rate (VFR) to allow dynamic frame output adjustments."),
+            option: "misc:vfr", // This is the actual setting from your config
+            }),
+            HyprlandToggle({
+              icon: "visibility", // Material Symbol Rounded icon for synchronization (ideal for VRR)
+              name: getString("Variable Refresh Rate (VRR)"),
+              desc: getString("[Hyprland]\nEnable or disable Variable Refresh Rate (VRR) to allow dynamic screen refresh rate adjustments."),
+              option: "misc:vrr", // The setting for VRR from your config
+            }),
+          ],
+        }),
         // Developer Section
         ConfigSection({
           name: getString("Developer"),

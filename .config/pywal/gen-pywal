@@ -5,13 +5,22 @@ GREEN='\033[1;32m'
 NC='\033[0m' # No Color
 GLYPH='󰏘'
 
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+CONFIG_DIR="$XDG_CONFIG_HOME/pywal"
+
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+CACHE_DIR="$XDG_CACHE_HOME/ags"
+
 # Execute other commands
 
 # echo -e "\n${GREEN}${GLYPH} Running colors-foot.py ${NC}"
 # python ~/.config/hypr/scripts/colors-foot.py
 
-echo -e "\n${GREEN}${GLYPH} Generating Ghostty terminal colors ${NC}"
-python ~/.config/pywal/ghosttyPywal.py
+# echo -e "\n${GREEN}${GLYPH} Generating Ghostty terminal colors ${NC}"
+# python "$CONFIG_DIR/ghosttyPywal.py"
+
+# echo -e "\n${GREEN}${GLYPH} Generating AdwSteamGtk theme ${NC}"
+# python "$CONFIG_DIR/AdwSteamGtk.py" -f "$CACHE_DIR/user/generated/gradience/preset.json" -d
 
 echo -e "\n${GREEN}${GLYPH} changing spotiify theme (text) ${NC}"
 pywal-spicetify text

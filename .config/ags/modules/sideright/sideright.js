@@ -26,7 +26,7 @@ import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
-import { powerBox } from './powerprofile.js';
+import { powerModule } from './powerprofile.js';
 const centerWidgets = [
     {
         name: getString('Notifications'),
@@ -173,7 +173,7 @@ export default () => Box({
                         sidebarOptionsStack,
                     ],
                 }),
-                powerBox,
+                powerModule,
                 ModuleCalendar()
             ]
         }),
