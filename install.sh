@@ -143,6 +143,7 @@ gradience_dir=/tmp/gradience
 x git clone https://github.com/ZeyadMoustafaKamal/Gradience.git $gradience_dir
 x cd $gradience_dir
 x git submodule update --init --recursive
+x uv pip install -r requirements.txt
 x meson setup build --prefix=$VIRTUAL_ENV
 x meson compile -C build
 x meson install -C build
