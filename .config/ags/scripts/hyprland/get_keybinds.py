@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S\_/bin/sh\_-xc\_"exec\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/python\_-E\_"\$0"\_"\$@""$ ./get_keybinds.py
+
 import argparse
 import re
 import os
