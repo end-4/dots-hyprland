@@ -115,16 +115,8 @@ install-local-pkgbuild() {
 	x popd
 }
 
-# create a virtual environment and store python packages into it
-ags_state_dir=$XDG_STATE_DIR/ags
-venv_dir=$ags_state_dir
-
-x mkdir -p $ags_state-dir
-x uv venv --prompt .venv $venv_dir
-x source $venv_dir/bin/activate
-
 # Install core dependencies from the meta-packages
-metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,portal,python,screencapture,widgets})
+metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
 metapkgs+=(./arch-packages/illogical-impulse-microtex-git)
 metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
@@ -138,18 +130,24 @@ for i in "${metapkgs[@]}"; do
 	v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
-# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081690658
-# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081701482
-# https://github.com/end-4/dots-hyprland/issues/428#issuecomment-2081707099
-case $SKIP_PYMYC_AUR in
-  true) sleep 0;;
-  *)
-	  pymycinstallflags=""
-	  $ask && showfun install-local-pkgbuild || pymycinstallflags="$pymycinstallflags --noconfirm"
-	  v install-local-pkgbuild "./arch-packages/illogical-impulse-pymyc-aur" "$pymycinstallflags"
-    ;;
-esac
+ags_state_dir=~/.local/state/ags
 
+x mkdir -p $ags_state_dir
+# we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
+x uv venv --prompt .venv $PYTHON_VENV_PATH -p 3.12
+x source $PYTHON_VENV_PATH/bin/activate
+x uv pip install -r scriptdata/requirements.txt
+
+# install gradience
+gradience_dir=/tmp/gradience
+x git clone https://github.com/ZeyadMoustafaKamal/Gradience.git $gradience_dir
+x cd $gradience_dir
+x git submodule update --init --recursive
+x meson setup build --prefix=$VIRTUAL_ENV
+x meson compile -C build
+x meson install -C build
+x cd -
+x deactivate # We don't need the virtual environment anymore
 
 # Why need cleanbuild? see https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
 # Why install deps by running a seperate command? see pinned comment of https://aur.archlinux.org/packages/hyprland-git

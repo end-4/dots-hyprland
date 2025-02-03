@@ -6,6 +6,8 @@ cffi==1.17.1
     # via pywayland
 libsass==0.23.0
     # via -r scriptdata/requirements.in
+lxml==5.3.0
+    # via -r scriptdata/requirements.in
 material-color-utilities==0.2.1
     # via -r scriptdata/requirements.in
 materialyoucolor @ git+https://github.com/T-Dynamos/materialyoucolor-python.git@73080739dc7c46d378a7624881e9c1e6b20b23f1
@@ -22,8 +24,12 @@ pillow==11.1.0
     #   material-color-utilities
 psutil==6.1.1
     # via -r scriptdata/requirements.in
+pycairo==1.27.0
+    # via pygobject
 pycparser==2.22
     # via cffi
+pygobject==3.50.0
+    # via -r scriptdata/requirements.in
 pyproject-hooks==1.2.0
     # via build
 pywal==3.3.0
