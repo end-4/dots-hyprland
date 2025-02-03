@@ -31,6 +31,10 @@ let configOptions = {
         'layerSmokeStrength': 0.2,
         'barRoundCorners': 1, // 0: No, 1: Yes
         'fakeScreenRounding': 1, // 0: None | 1: Always | 2: When not fullscreen
+        'onHoverTray': { // Appears the tray only on mouse hover
+            'enabled': false,
+            'delay': 5000, // Delay, in milliseconds, before the tray disappears again
+        },
     },
     'apps': {
         'bluetooth': "blueberry",
