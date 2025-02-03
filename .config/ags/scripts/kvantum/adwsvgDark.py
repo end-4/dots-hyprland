@@ -35,9 +35,12 @@ def update_svg_colors(svg_path, old_to_new_colors, output_path):
     print(f"SVG colors have been updated and saved to {output_path}!")
 
 def main():
-    scss_file = os.path.expanduser('~/.local/state/ags/scss/_material.scss')  # Hardcoded path to the SCSS file
-    svg_path = os.path.expanduser('~/.config/Kvantum/Colloid/ColloidDark.svg')  # Hardcoded path to the input SVG file
-    output_path = os.path.expanduser('~/.config/Kvantum/MaterialAdw/MaterialAdw.svg')  # Hardcoded path to the output SVG file
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
+    xdg_state_home = os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state"))
+
+    scss_file = os.path.join(xdg_state_home, "ags", "scss", "_material.scss")
+    svg_path = os.path.join(xdg_config_home, "Kvantum", "Colloid", "ColloidDark.svg")
+    output_path = os.path.join(xdg_config_home, "Kvantum", "MaterialAdw", "MaterialAdw.svg")
 
     # Read colors from the SCSS file
     color_data = read_scss(scss_file)

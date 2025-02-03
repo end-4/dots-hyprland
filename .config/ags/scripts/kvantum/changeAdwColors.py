@@ -28,9 +28,12 @@ def update_config_colors(config_file, colors, mappings):
         file.write(config_content)
 
 if __name__ == "__main__":
-    scss_file = os.path.expanduser('~/.local/state/ags/scss/_material.scss')
-    config_file = os.path.expanduser('~/.config/Kvantum/MaterialAdw/MaterialAdw.kvconfig')  # Replace with the actual path to your config file
-    
+    xdg_config_home = os.environ.get("XDG_CONFIG_HOME", os.path.expanduser("~/.config"))
+    xdg_state_home = os.environ.get("XDG_STATE_HOME", os.path.expanduser("~/.local/state"))
+
+    config_file = os.path.join(xdg_config_home, "Kvantum", "MaterialAdw", "MaterialAdw.kvconfig")
+    scss_file = os.path.join(xdg_state_home, "ags", "scss", "_material.scss")
+
     # Define your mappings here
     mappings = {
         'window.color': 'background',

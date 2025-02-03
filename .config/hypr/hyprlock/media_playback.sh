@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory where the album art will be saved
-cache_dir="$HOME/.cache/hyprlock_music"
+cache_dir="$HOME/.cache/hyprlock/music_art"
 
 # Path to the SCSS file to extract $color1 (color will be used for the banner if it's created)
 scss_file="$HOME/.local/state/ags/scss/_musicwal.scss"
@@ -9,11 +9,9 @@ scss_file="$HOME/.local/state/ags/scss/_musicwal.scss"
 # Max length for song and artist names
 MAX_LENGTH=20
 
-# Function to delete the album art
+# Function to delete the album art and music_art folder
 delete_art() {
-  rm -f "$cache_dir/album_art.png" 2>/dev/null
-  rm -f "$cache_dir/album_art_resized.png" 2>/dev/null
-  rm -f "$cache_dir/banner.png" 2>/dev/null
+  rm -rf "$cache_dir" 2>/dev/null
 }
 
 # Extract the color1 value dynamically from the SCSS file (this part is kept but won't be used now)
@@ -34,8 +32,8 @@ fi
 player_status=$(playerctl status 2>&1)
 
 if [[ "$player_status" == *"No players found"* ]]; then
-  # If no player is found, delete the album art and exit
-  delete_art
+  # If no player is found, delete the music_art folder and exit
+  rm -rf "$cache_dir" 2>/dev/null
   exit 0 # Exit the script as there is no active media
 fi
 
@@ -43,16 +41,28 @@ fi
 song=$(playerctl metadata title 2>/dev/null)
 artist=$(playerctl metadata artist 2>/dev/null)
 
+# Check if song and artist are properly fetched
+if [[ -z "$song" ]]; then
+  exit 1
+fi
+
+if [[ -z "$artist" ]]; then
+  exit 1
+fi
+
 # Extract any URL line from the metadata output using grep (catch any line with http/https)
 album_art_url=$(playerctl metadata 2>/dev/null | grep -oP 'http[s]?://[^\s]+' | head -n 1)
 
 # Ensure the directory ~/.cache/hyprlock/ exists
 mkdir -p "$cache_dir" 2>/dev/null
 
-# Define paths for art and banner
-album_art_path="$cache_dir/album_art.png"
-album_art_path_resized="$cache_dir/album_art_resized.png"
-banner_image_path="$cache_dir/banner.png"
+# Define sanitized song name (to avoid file system issues like spaces and special characters)
+sanitized_song_name=$(echo "$song" | sed 's/[[:space:]]/_/g') # Sanitize spaces to underscores
+
+# Define paths for art and banner (based on sanitized song name)
+album_art_path="$cache_dir/$sanitized_song_name.png"                   # Use song name for album art
+album_art_path_resized="$cache_dir/${sanitized_song_name}_resized.png" # Correctly add "_resized" for resized image
+banner_image_path="$cache_dir/${sanitized_song_name}_banner.png"       # Correctly add "_banner" for banner image
 
 # Function to truncate string if it exceeds the max length
 truncate_string() {
