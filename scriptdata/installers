@@ -112,3 +112,8 @@ install-MicroTeX (){
   x sudo cp -r ./res /opt/MicroTeX/
   x cd $base
 }
+
+install-uv (){
+  x curl -LsSf https://astral.sh/uv/install.sh | sh
+}
+

@@ -1,0 +1,10 @@
+build
+pillow
+pywal
+setuptools-scm
+wheel
+pywayland
+psutil
+git+https://github.com/T-Dynamos/materialyoucolor-python.git
+libsass
+material-color-utilities
