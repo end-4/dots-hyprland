@@ -1,15 +1,16 @@
 pkgname=illogical-impulse-python
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Illogical Impulse Python Dependencies'
 arch=(any)
 license=(None)
 depends=(
-    gtk4
-    libadwaita
-    libsoup3
-    libportal-gtk4
-    blueprint-compiler
-    gobject-introspection
-    sassc
+  uv
+  gtk4
+  libadwaita
+  libsoup3
+  libportal-gtk4
+  blueprint-compiler
+  gobject-introspection
+  sassc
 )

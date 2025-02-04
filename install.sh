@@ -130,28 +130,9 @@ for i in "${metapkgs[@]}"; do
 	v install-local-pkgbuild "$i" "$metainstallflags"
 done
 
-ags_state_dir=~/.local/state/ags
-
-showfun install-uv
-v install-uv
-
-x mkdir -p $ags_state_dir
-# we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
-x uv venv --prompt .venv $PYTHON_VENV_PATH -p 3.12
-x source $PYTHON_VENV_PATH/bin/activate
-x uv pip install -r scriptdata/requirements.txt
-
-# install gradience
-gradience_dir=/tmp/gradience
-x git clone https://github.com/ZeyadMoustafaKamal/Gradience.git $gradience_dir
-x cd $gradience_dir
-x git submodule update --init --recursive
-x uv pip install -r requirements.txt
-x meson setup build --prefix=$VIRTUAL_ENV
-x meson compile -C build
-x meson install -C build
-x cd -
-x deactivate # We don't need the virtual environment anymore
+# These python packages are installed using uv, not pacman.
+showfun install-python-packages
+v install-python-packages
 
 # Why need cleanbuild? see https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
 # Why install deps by running a seperate command? see pinned comment of https://aur.archlinux.org/packages/hyprland-git
@@ -320,6 +301,10 @@ case $existed_hypr_conf in
      printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
+
+if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
+  printf "\n\e[31m[$0]: \!! Important \!! : Please ensure environment variable \e[0m \$ILLOGICAL_IMPULSE_VIRTUAL_ENV \e[31m is set to proper value (by default \"~/.local/state/ags/.venv\"), or AGS config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.\e[0m\n"
+fi
 
 if [[ ! -z "${warn_files[@]}" ]]; then
   printf "\n\e[31m[$0]: \!! Important \!! : Please delete \e[0m ${warn_files[*]} \e[31m manually as soon as possible, since we\'re now using AUR package or local PKGBUILD to install them for Arch(based) Linux distros, and they'll take precedence over our installation, or at least take up more space.\e[0m\n"
