@@ -149,7 +149,7 @@ apply_gtk() { # Using gradience-cli
   done
 
   mkdir -p "$XDG_CONFIG_HOME/presets" # create gradience presets folder
-  gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both
+  $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both
 
   # And set GTK theme manually as Gradience defaults to light adw-gtk3
   # (which is unreadable when broken when you use dark mode)
