@@ -1,5 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-xc\_"exec\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/python\_-E\_"\$0"\_"\$@""$ ./get_keybinds.py
-
+#!/usr/bin/env -S\_/bin/sh\_-xc\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
 import argparse
 import re
 import os
