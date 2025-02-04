@@ -124,7 +124,7 @@ install-python-packages (){
 
   x mkdir -p $base/cache/gradience && cd $base/cache/gradience
   try git init -b main
-  try git remote add origin https://github.com/clsty/ii-gradience.git
+  try git remote add origin https://github.com/end-4/ii-gradience.git
   x git pull origin main && git submodule update --init --recursive
   x uv pip install -r requirements.txt
   x meson setup build --prefix=$VIRTUAL_ENV
