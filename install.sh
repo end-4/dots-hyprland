@@ -132,6 +132,9 @@ done
 
 ags_state_dir=~/.local/state/ags
 
+showfun install-uv
+v install-uv
+
 x mkdir -p $ags_state_dir
 # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
 x uv venv --prompt .venv $PYTHON_VENV_PATH -p 3.12
