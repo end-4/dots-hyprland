@@ -15,3 +15,5 @@ install-Gabarito
 install-OneUI
 install-bibata
 install-MicroTeX
+install-uv
+install-python-packages

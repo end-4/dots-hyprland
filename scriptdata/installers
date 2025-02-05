@@ -113,8 +113,11 @@ install-MicroTeX (){
   x cd $base
 }
 
-# Below command can be used to install uv, but it's already an Arch package so...
-# curl -LsSf https://astral.sh/uv/install.sh | sh
+install-uv (){
+  x curl -LsSf https://astral.sh/uv/install.sh | sh
+}
+
+# Both for Arch(based) and other distros.
 install-python-packages (){
   x mkdir -p $PYTHON_VENV_PATH
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
