@@ -6,6 +6,7 @@ arch=(any)
 license=(None)
 depends=(
   hyprutils
+  hyprpicker
   hyprlang
   hypridle
   hyprland-qt-support
