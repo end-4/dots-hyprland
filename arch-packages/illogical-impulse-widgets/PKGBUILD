@@ -6,8 +6,6 @@ arch=(any)
 license=(None)
 depends=(
 	dart-sass
-	python-pywayland
-	python-psutil
 	hypridle
  	hyprutils
 	hyprlock
