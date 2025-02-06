@@ -135,3 +135,20 @@ install-python-packages (){
   x cd -
   x deactivate # We don't need the virtual environment anymore
 }
+
+handle-deprecated-dependencies (){
+  printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
+  for i in illogical-impulse-{microtex,pymyc-aur} {hyprutils,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
+	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
+	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
+	pacman -Qeq > ./cache/pacman_explicit_packages
+	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
+
+	echo "Attempting to set previously explicitly installed deps as implicit..."
+	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
+		[ "$i" = "$j" ] && yay -D --asdeps "$i"
+	done; done
+
+	return 0
+}

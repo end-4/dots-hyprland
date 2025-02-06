@@ -81,24 +81,8 @@ if (( ${#pkglist[@]} != 0 )); then
 	fi
 fi
 
-# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-set-explicit-to-implicit() {
-	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-	pacman -Qeq > ./cache/pacman_explicit_packages
-	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-
-	echo "Attempting to set previously explicitly installed deps as implicit..."
-	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && yay -D --asdeps "$i"
-	done; done
-
-	return 0
-}
-
-$ask && echo "Attempt to set previously explicitly installed deps as implicit? "
-$ask && showfun set-explicit-to-implicit
-v set-explicit-to-implicit
+showfun handle-deprecated-dependencies
+v handle-deprecated-dependencies
 
 # https://github.com/end-4/dots-hyprland/issues/581
 # yay -Bi is kinda hit or miss, instead cd into the relevant directory and manually source and install deps
@@ -118,11 +102,11 @@ install-local-pkgbuild() {
 # Install core dependencies from the meta-packages
 metapkgs=(./arch-packages/illogical-impulse-{audio,python,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
+metapkgs+=(./arch-packages/illogical-impulse-hyprland)
 metapkgs+=(./arch-packages/illogical-impulse-microtex-git)
 metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
 [[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
   metapkgs+=(./arch-packages/illogical-impulse-bibata-modern-classic-bin)
-try sudo pacman -R illogical-impulse-{microtex,pymyc-aur}
 
 for i in "${metapkgs[@]}"; do
 	metainstallflags="--needed"
@@ -133,19 +117,6 @@ done
 # These python packages are installed using uv, not pacman.
 showfun install-python-packages
 v install-python-packages
-
-# Why need cleanbuild? see https://github.com/end-4/dots-hyprland/issues/389#issuecomment-2040671585
-# Why install deps by running a seperate command? see pinned comment of https://aur.archlinux.org/packages/hyprland-git
-case $SKIP_HYPR_AUR in
-  true) sleep 0;;
-  *)
-	  hyprland_installflags="-S"
-	  $ask || hyprland_installflags="$hyprland_installflags --noconfirm"
-    v yay $hyprland_installflags --asdeps hyprutils-git hyprlang-git hyprcursor-git hyprwayland-scanner-git
-    v yay $hyprland_installflags --answerclean=a hyprland-git
-    ;;
-esac
-
 
 ## Optional dependencies
 if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
