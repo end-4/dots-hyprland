@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 XDG_BIN_HOME=${XDG_BIN_HOME:-$HOME/.local/bin}
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
@@ -7,4 +7,3 @@ XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 BACKUP_DIR=${BACKUP_DIR:-$HOME/backup}
 UV_NO_MODIFY_PATH=1
 PYTHON_VENV_PATH=$XDG_STATE_HOME/ags/.venv
-#PYTHON_BIN_PATH=$PYTHON_VENV_PATH/bin/python
