@@ -81,24 +81,8 @@ if (( ${#pkglist[@]} != 0 )); then
 	fi
 fi
 
-# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
-set-explicit-to-implicit() {
-	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
-	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
-	pacman -Qeq > ./cache/pacman_explicit_packages
-	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
-
-	echo "Attempting to set previously explicitly installed deps as implicit..."
-	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
-		[ "$i" = "$j" ] && yay -D --asdeps "$i"
-	done; done
-
-	return 0
-}
-
-$ask && echo "Attempt to set previously explicitly installed deps as implicit? "
-$ask && showfun set-explicit-to-implicit
-v set-explicit-to-implicit
+showfun handle-deprecated-dependencies
+v handle-deprecated-dependencies
 
 # https://github.com/end-4/dots-hyprland/issues/581
 # yay -Bi is kinda hit or miss, instead cd into the relevant directory and manually source and install deps
@@ -116,8 +100,6 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
-v for i in illogical-impulse-{microtex,pymyc-aur} {hyprutils,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 metapkgs=(./arch-packages/illogical-impulse-{audio,python,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
