@@ -1,0 +1,18 @@
+pkgname=illogical-impulse-hyprland
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse Hyprland relatated packages'
+arch=(any)
+license=(None)
+depends=(
+  hyprutils
+  hyprlang
+  hypridle
+  hyprland-qt-support
+  hyprland-qtutils
+  hyprlock
+  xdg-desktop-portal-hyprland
+  hyprcursor
+  hyprwayland-scanner
+  hyprland
+)
