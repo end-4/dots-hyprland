@@ -171,6 +171,8 @@ v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
 v systemctl --user enable ydotool --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
+v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
 
 #####################################################################################
 printf "\e[36m[$0]: 2. Copying + Configuring\e[0m\n"
@@ -270,9 +272,6 @@ esac
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
 v rsync -av ".local/bin/" "$XDG_BIN_HOME"
-
-# Dark mode by default
-v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # Prevent hyprland from not fully loaded
 sleep 1
