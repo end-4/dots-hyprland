@@ -225,9 +225,9 @@ esac
 case $SKIP_HYPRLAND in
   true) sleep 0;;
   *)
-    v rsync -av --delete --exclude '/custom' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
+    v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    if [ -f $t ];then
+    if [ -f $t_0 ];then
       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
       v cp -f .config/hypr/hyprland.conf $t.new
       existed_hypr_conf=y
@@ -235,6 +235,26 @@ case $SKIP_HYPRLAND in
       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
       v cp .config/hypr/hyprland.conf $t
       existed_hypr_conf=n
+    fi
+    t="$XDG_CONFIG_HOME/hypr/hypridle.conf"
+    if [ -f $t ];then
+      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+      v cp -f .config/hypr/hypridle.conf $t.new
+      existed_hypridle_conf=y
+    else
+      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+      v cp .config/hypr/hypridle.conf $t
+      existed_hypridle_conf=n
+    fi
+    t="$XDG_CONFIG_HOME/hypr/hyprlock.conf"
+    if [ -f $t ];then
+      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
+      v cp -f .config/hypr/hyprlock.conf $t.new
+      existed_hyprlock_conf=y
+    else
+      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
+      v cp .config/hypr/hyprlock.conf $t
+      existed_hyprlock_conf=n
     fi
     t="$XDG_CONFIG_HOME/hypr/custom"
     if [ -d $t ];then
@@ -300,6 +320,14 @@ case $existed_hypr_conf in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
      printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
      printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
+;;esac
+case $existed_hypridle_conf in
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. \e[0m\n"
+     printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hypridle.conf.new\" as a reference for a proper format.\e[0m\n"
+;;esac
+case $existed_hyprlock_conf in
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprlock.conf\" already existed before and we didn't overwrite it. \e[0m\n"
+     printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprlock.conf.new\" as a reference for a proper format.\e[0m\n"
 ;;esac
 
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
