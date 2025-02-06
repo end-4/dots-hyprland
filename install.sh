@@ -116,8 +116,8 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-try sudo pacman -R illogical-impulse-{microtex,pymyc-aur}
-try sudo pacman -Rdd {hyprutils,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git
+printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
+v for i in illogical-impulse-{microtex,pymyc-aur} {hyprutils,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 metapkgs=(./arch-packages/illogical-impulse-{audio,python,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-ags)
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
