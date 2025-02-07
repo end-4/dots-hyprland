@@ -118,6 +118,8 @@ install-uv (){
 
 # Both for Arch(based) and other distros.
 install-python-packages (){
+  UV_NO_MODIFY_PATH=1
+  PYTHON_VENV_PATH=$XDG_STATE_HOME/ags/.venv
   x mkdir -p $PYTHON_VENV_PATH
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
   x uv venv --prompt .venv $PYTHON_VENV_PATH -p 3.12
