@@ -50,6 +50,6 @@ v sudo rm /etc/modules-load.d/i2c-dev.conf
 read -p "Do you want to uninstall packages used by the dotfiles?\nCtrl+C to exit, or press Enter to proceed"
 
 # Removing installed yay packages and dependencies
-v yay -Rns hyprland-git illogical-impulse-{audio,backlight,basic,fonts-themes,gnome,gtk,microtex,portal,python,screencapture,widgets} plasma-browser-integration
+v yay -Rns illogical-impulse-{ags,audio,backlight,basic,bibata-modern-classic-bin,fonts-themes,gnome,gtk,hyprland,microtex-git,oneui4-icons-git,portal,python,screencapture,widgets} plasma-browser-integration
 
 printf '\e[36mUninstall Complete.\n\e[97m'
