@@ -132,7 +132,7 @@ install-python-packages (){
   x meson setup build --prefix=$VIRTUAL_ENV
   x meson compile -C build
   x meson install -C build
-  for i in "glib-2.0" "gradience" "appdata";do
+  for i in "glib-2.0" "gradience"; do
     x rsync -av "$PYTHON_VENV_PATH"/share/$i/ "$XDG_DATA_HOME"/$i/
   done
   x cd -
