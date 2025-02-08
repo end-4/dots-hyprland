@@ -203,6 +203,34 @@ export const ModuleRawInput = async (props = {}) => {
     };
 }
 
+export const ModuleGameMode = async (props = {}) => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: getString('Hyprland Game Mode'),
+            onClicked: (button) => {
+                Hyprland.messageAsync('j/getoption animations:enabled')
+                    .then((output) => {
+                        const value = JSON.parse(output)["int"];
+                        if (value == 1) {
+                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 0" & hyprctl reload`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', false);
+                        } else {
+                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 1; keyword general:allow_tearing 1" & hyprctl reload`]).catch(print);
+                            button.toggleClassName('sidebar-button-active', true);
+                        }
+                    })
+            },
+            child: MaterialIcon('gamepad', 'norm'),
+            setup: setupCursorHover,
+            ...props,
+        })
+    } catch {
+        return null;
+    };
+}
+
 export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
     attribute: {
         enabled: false,

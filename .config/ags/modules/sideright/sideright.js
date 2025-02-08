@@ -13,6 +13,7 @@ import {
     ModuleSettingsIcon,
     ModulePowerIcon,
     ModuleRawInput,
+    ModuleGameMode,
     ModuleCloudflareWarp
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./centermodules/notificationlist.js";
@@ -125,6 +126,7 @@ const togglesBox = Widget.Box({
         // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
         await ModuleNightLight(),
         await ModuleInvertColors(),
+        await ModuleGameMode(),
         ModuleIdleInhibitor(),
         await ModuleCloudflareWarp(),
     ]
