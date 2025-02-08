@@ -214,9 +214,9 @@ export const ModuleGameMode = async (props = {}) => {
                     .then((output) => {
                         const enabled = JSON.parse(output)["int"] === 1;
                         if (enabled) {
-                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 1" & hyprctl reload`]).catch(print);
+                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 1"`]).catch(print);
                         } else {
-                            execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 1; keyword general:allow_tearing 0" & hyprctl reload`]).catch(print);
+                            execAsync(['bash', '-c', `hyprctl reload`]).catch(print);
                         }
                         button.toggleClassName('sidebar-button-active', enabled);
                     })
