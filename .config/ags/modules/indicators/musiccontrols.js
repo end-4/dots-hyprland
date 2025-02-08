@@ -208,11 +208,7 @@ const CoverArt = ({ player, ...rest }) => {
                 execAsync(['bash', '-c',
                     `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss`])
                     .then(() => {
-                      // TODO: Use python venv, like
-                      //   source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
-                      //   wal -i ......
-                      //   deactivate
-                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode.value ? '' : '-l'}`)
+                        exec(`${App.configDir}/scripts/color_generation/pywal.sh -i "${player.coverPath}" -n -t -s -e -q ${darkMode.value ? '' : '-l'}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${GLib.get_user_state_dir()}/ags/scss/_musicwal.scss`);
                         exec(`sass -I "${GLib.get_user_state_dir()}/ags/scss" -I "${App.configDir}/scss/fallback" "${App.configDir}/scss/_music.scss" "${stylePath}"`);
                         Utils.timeout(200, () => {
