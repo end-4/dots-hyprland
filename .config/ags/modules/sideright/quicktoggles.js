@@ -210,7 +210,7 @@ export const ModuleGameMode = async (props = {}) => {
             className: 'txt-small sidebar-iconbutton',
             tooltipText: getString('Hyprland Game Mode'),
             onClicked: (button) => {
-                Hyprland.messageAsync('j/getoption animations:enabled')
+                Utils.execAsync(`hyprctl -j getoption animations:enabled`)
                     .then((output) => {
                         const enabled = JSON.parse(output)["int"] === 1;
                         if (enabled) {
