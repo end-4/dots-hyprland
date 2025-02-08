@@ -67,6 +67,8 @@ if args.path is not None:
     if image.format == "GIF":
         image.seek(1)
 
+    if image.mode in ["L", "P"]:
+        image = image.convert('RGB')
     wsize, hsize = image.size
     wsize_new, hsize_new = calculate_optimal_size(wsize, hsize, args.size)
     if wsize_new < wsize or hsize_new < hsize:
