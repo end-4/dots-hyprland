@@ -27,6 +27,18 @@ import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 
+const QUICK_TOGGLES = {
+    'wifi': ToggleIconWifi(),
+    'bluetooth': ToggleIconBluetooth(),
+    'rawinput': await ModuleRawInput(),
+    'touchpad': await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
+    'nightlight': await ModuleNightLight(),
+    'invertcolors': await ModuleInvertColors(),
+    'gamemode': await ModuleGameMode(),
+    'idleinhibitor': ModuleIdleInhibitor(),
+    'cloudflarewarp': await ModuleCloudflareWarp(),
+}
+
 const centerWidgets = [
     {
         name: getString('Notifications'),
@@ -119,17 +131,7 @@ const timeRow = Box({
 const togglesBox = Widget.Box({
     hpack: 'center',
     className: 'sidebar-togglesbox spacing-h-5',
-    children: [
-        ToggleIconWifi(),
-        ToggleIconBluetooth(),
-        // await ModuleRawInput(),
-        // await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
-        await ModuleNightLight(),
-        await ModuleInvertColors(),
-        await ModuleGameMode(),
-        ModuleIdleInhibitor(),
-        await ModuleCloudflareWarp(),
-    ]
+    children: userOptions.sidebar.quickToggles.order.map(toggle => QUICK_TOGGLES[toggle])
 })
 
 export const sidebarOptionsStack = ExpandingIconTabContainer({
