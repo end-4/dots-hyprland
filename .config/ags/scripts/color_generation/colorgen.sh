@@ -41,7 +41,7 @@ backend="material" # color generator backend
 if [ ! -f "$STATE_DIR/user/colorbackend.txt" ]; then
     echo "material" > "$STATE_DIR/user/colorbackend.txt"
 else
-    backend=$(cat "$STATE_DIR/user/colorbackend.txt") # either "" or "-l"
+    backend=$(cat "$STATE_DIR/user/colorbackend.txt")
 fi
 
 cd "$CONFIG_DIR/scripts/" || exit
@@ -70,18 +70,24 @@ elif [ "$backend" = "material" ]; then
     fi
 elif [ "$backend" = "pywal" ]; then
     # clear and generate
+    source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
     wal -c
     wal -i "$1" -n $lightdark -q
+    deactivate
     # copy scss
     cp "$XDG_CACHE_HOME/wal/colors.scss" "$CACHE_DIR"/user/generated/material_colors.scss
 
     cat color_generation/pywal_to_material.scss >> "$CACHE_DIR"/user/generated/material_colors.scss
     if [ "$2" = "--apply" ]; then
         sass -I "$STATE_DIR/scss" -I "$CONFIG_DIR/scss/fallback" "$CACHE_DIR"/user/generated/material_colors.scss "$CACHE_DIR"/user/generated/colors_classes.scss --style compressed
-        sed -i "s/ { color//g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        # sed -i "s/ { color//g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        # sed -i "s/\./$/g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        # sed -i "s/}//g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        sed -i "s/{color//g" "$CACHE_DIR"/user/generated/colors_classes.scss
         sed -i "s/\./$/g" "$CACHE_DIR"/user/generated/colors_classes.scss
-        sed -i "s/}//g" "$CACHE_DIR"/user/generated/colors_classes.scss
-        if [ "$lightdark" = "-l" ]; then
+        sed -i "s/\:/: /g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        sed -i "s/}/;\n/g" "$CACHE_DIR"/user/generated/colors_classes.scss
+        if [ "$lightdark" = "light" ]; then
             printf "\n""\$darkmode: false;""\n" >> "$CACHE_DIR"/user/generated/colors_classes.scss
         else
             printf "\n""\$darkmode: true;""\n" >> "$CACHE_DIR"/user/generated/colors_classes.scss
