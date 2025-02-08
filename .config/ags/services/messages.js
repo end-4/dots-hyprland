@@ -51,7 +51,7 @@ export async function firstRunWelcome() {
         Utils.writeFile(FIRST_RUN_FILE_CONTENT, FIRST_RUN_PATH)
             .then(() => {
                 // Note that we add a little delay to make sure the cool circular progress works
-                Utils.execAsync(['hyprctl', 'keyword', 'bind', "Super,Slash,exec,ags -t cheatsheet"]).catch(print);
+                Utils.execAsync(['hyprctl', 'keyword', 'bind', 'Super,Slash,exec,for ((i=0; i<$(hyprctl monitors -j | jq length); i++)); do ags -t "cheatsheet""$i"; done']).catch(print);
                 Utils.execAsync(['bash', '-c',
                     `sleep 0.5; notify-send "Millis since epoch" "$(date +%s%N | cut -b1-13)"; sleep 0.5; notify-send '${FIRST_RUN_NOTIF_TITLE}' '${FIRST_RUN_NOTIF_BODY}' -a '${APP_NAME}' &`
                 ]).catch(print)
