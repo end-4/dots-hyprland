@@ -212,14 +212,13 @@ export const ModuleGameMode = async (props = {}) => {
             onClicked: (button) => {
                 Hyprland.messageAsync('j/getoption animations:enabled')
                     .then((output) => {
-                        const value = JSON.parse(output)["int"];
-                        if (value == 1) {
+                        const enabled = JSON.parse(output)["int"] === 1;
+                        if (enabled) {
                             execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 1" & hyprctl reload`]).catch(print);
-                            button.toggleClassName('sidebar-button-active', false);
                         } else {
                             execAsync(['bash', '-c', `hyprctl --batch "keyword animations:enabled 1; keyword general:allow_tearing 0" & hyprctl reload`]).catch(print);
-                            button.toggleClassName('sidebar-button-active', true);
                         }
+                        button.toggleClassName('sidebar-button-active', enabled);
                     })
             },
             child: MaterialIcon('gamepad', 'norm'),
