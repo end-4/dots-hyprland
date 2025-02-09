@@ -40,7 +40,7 @@ body:
   - type: textarea
     attributes:
       label: Quick diagnose info
-      discription: "Run `./diagnose` inside the repo, and paste the result below."
+      description: "Run `./diagnose` inside the repo, and paste the result below."
       value: "\n<!-- Run `./diagnose` inside the repo, and paste the result below. -->\n<details><summary>Quick diagnose</summary>\n\n```\n(Paste your diagnose result here!)\n```\n\n</details>"
     validations:
       required: true
