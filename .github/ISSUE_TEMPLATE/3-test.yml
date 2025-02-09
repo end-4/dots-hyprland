@@ -1,7 +1,7 @@
 name: Issue (testing, DO NOT USE)
 description: for reporting any issue
 title: "[Issue] "
-labels: ["triage"]
+labels: ["ISSUE"]
 body:
   - type: checkboxes
     attributes:
@@ -28,15 +28,22 @@ body:
         Describe your problem below.
         1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
         2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
+           - Bar and widgets not showing? run `pkill ags; ags` for logs.
+           - Installation failed? Run installation again for logs.
+           - Optionally also run `./diagnose` inside the repo for logs.
 
   - type: textarea
     attributes:
       label: The issue
       value: |
+        .
+        (Describe your issue here!)
+        .
+        <!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->
         <details><summary>Logs</summary>
         ```plain
-        (Put the your log content here!)
-        </details>
+        (Put your log content here!)
         ```
+        </details>
     validations:
       required: true
