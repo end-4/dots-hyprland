@@ -14,7 +14,7 @@ body:
 
   - type: input
     attributes:
-      label: Linux distro:
+      label: "Linux distro:"
       description: You may get it by running `lsb_release -a` or `cat /etc/{lsb,os}-release`.
       placeholder: e.g. Arch Linux
     validations:
