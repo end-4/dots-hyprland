@@ -1,17 +1,22 @@
-name: Issue.
+name: Issue
 description: for reporting any issue
 title: "[Issue] "
 labels: ["ISSUE"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+      **Tip:**
+      If your issue is not a feature request, and it does not  fit into the following form, for example "how can I edit some widget", please use [discussions](https://github.com/end-4/dots-hyprland/discussions) instead.
   - type: checkboxes
     attributes:
       label: Before you submit
       options:
         - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage/) pages.
           required: true
-        - label: I've updated to the latest version following the [guidance](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#updating).
+        - label: I've successfully updated to the latest version following the [guidance](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#updating).
           required: false # Not required cuz user may have failed to do so
-        - label: I've had the system packages up to date.
+        - label: I've successfully updated the system packages to the latest.
           required: false # Not required cuz user may have failed to do so
 
   - type: textarea
@@ -34,6 +39,13 @@ body:
   - type: textarea
     attributes:
       label: The issue
-      value: "\n<!-- Describe your issue here! -->\n\n<details><summary>Logs</summary>\n\n```\n<!-- Put your log content here!-->\n```\n\n</details>"
+      value: "\n<!-- Describe your issue here! -->\n\n<details><summary>Click to toggle folding</summary>\n\n```\n<!-- Put your log content here!-->\n<!-- You may use more code blocks when needed.-->\n```\n\n</details>"
     validations:
       required: true
+
+  - type: checkboxes
+    attributes:
+      label: Last check
+      options:
+        - label: I agree that it's usually impossible for others to help me without my logs.
+          required: true

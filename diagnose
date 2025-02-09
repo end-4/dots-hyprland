@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
-# This script is for quickly generate helpful logs
+# This script is for quickly generate helpful info
 #
 
 cd "$(dirname "$0")";export base="$(pwd)"
-logfile=diagnose.log;rm $logfile
+output_file=diagnose.result;rm $output_file
 export LANG=C;export LC_ALL=C
 
-x() { ii_exec "$@" 2>&1 | tee -a $logfile ; }
-e() { ii_box "$@" | tee -a $logfile ; }
+x() { ii_exec "$@" 2>&1 | tee -a $output_file ; }
+e() { ii_box "$@" | tee -a $output_file ; }
 ii_box() {
   length=$(echo "$1" | wc -L);total_width=$((length + 2))
   #line=$(printf "═%.0s" $(seq 1 $total_width))
@@ -70,4 +70,4 @@ x ags --version
 e "Checking python venv"
 
 
-e "Finished. Output saved as \"dianose.log\"."
+e "Finished. Output saved as \"$output_file\"."
