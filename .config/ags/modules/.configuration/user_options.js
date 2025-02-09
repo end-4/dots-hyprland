@@ -188,6 +188,7 @@ let configOptions = {
             'pavucontrol-qt': "pavucontrol",
             'wps': "wps-office2019-kprometheus",
             'wpsoffice': "wps-office2019-kprometheus",
+            'footclient': "foot",
             '': "image-missing",
         },
         regexSubstitutions: [
