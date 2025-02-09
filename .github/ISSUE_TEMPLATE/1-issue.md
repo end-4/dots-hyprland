@@ -14,7 +14,7 @@ assignees: ''
 ---
 ## The issue
 <!-- Describe your problem here. -->
-<!-- 1. Use `LANG=C` to get the output of a command in English, eg. `LANG=C date` displays time in English. -->
+<!-- 1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English. -->
 <!-- 2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible. -->
 
 <details>
