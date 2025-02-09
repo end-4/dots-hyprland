@@ -1,6 +1,6 @@
 name: Issue
 description: for reporting any issue
-title: "[Issue] "
+title: ""
 labels: ["ISSUE"]
 body:
   - type: markdown
