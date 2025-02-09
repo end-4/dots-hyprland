@@ -30,11 +30,17 @@ body:
         2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
            - Bar and widgets not showing? run `pkill ags; ags` for logs.
            - Installation failed? Run installation again for logs.
-           - Optionally also run `./diagnose` inside the repo for logs.
 
   - type: textarea
     attributes:
       label: The issue
-      value: "\n(Describe your issue here!)\n<!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->\n<details><summary>Logs</summary>\n\n```\n(Put your log content here!)\n```\n\n</details>"
+      value: "\n(Describe your issue here!)\n\n<!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->\n<details><summary>Logs</summary>\n\n```\n(Put your log content here!)\n```\n\n</details>"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Quick diagnose info
+      discription: "Run `./diagnose` inside the repo, and paste the result below."
+      value: "\n<!-- Run `./diagnose` inside the repo, and paste the result below. -->\n<details><summary>Quick diagnose</summary>\n\n```\n(Paste your diagnose result here!)\n```\n\n</details>"
     validations:
       required: true
