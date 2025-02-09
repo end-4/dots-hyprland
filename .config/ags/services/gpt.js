@@ -25,6 +25,15 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
         'key_file': 'ollama_key.txt',
         'model': 'llama3:instruct',
     },
+    'ollama': {
+        'name': 'Ollama (DeepSeek-R1)',
+        'logo_name': 'ollama-symbolic',
+        'description': getString('Official Ollama API.\nPricing: Free.'),
+        'base_url': 'http://localhost:11434/v1/chat/completions',
+        'key_get_url': 'it\'s just ollama',
+        'key_file': 'ollama_key.txt',
+        'model': 'deepseek-r1:7b',
+    },
     'openrouter': {
         'name': 'OpenRouter (Llama-3-70B)',
         'logo_name': 'openrouter-symbolic',
