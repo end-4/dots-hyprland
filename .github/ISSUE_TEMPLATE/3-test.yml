@@ -25,7 +25,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Describe your problem below.
+        **Describe your problem below.**
         1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
         2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
            - Bar and widgets not showing? run `pkill ags; ags` for logs.
@@ -35,17 +35,20 @@ body:
   - type: textarea
     attributes:
       label: The issue
-      value: |
-        #blank
+      description: |
+        line1
+        line2
+      value: >
+              
         (Describe your issue here!)
-        #blank
+              
         <!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->
         <details><summary>Logs</summary>
-        #blank
+              
         ```
         (Put your log content here!)
         ```
-        #blank
+              
         </details>
     validations:
       required: true
