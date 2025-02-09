@@ -5,7 +5,7 @@ labels: ["triage"]
 body:
   - type: checkboxes
     attributes:
-      label: v1.1 Before you submit
+      label: v1.2 Before you submit
       options:
         - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage/) pages
           required: true
@@ -21,7 +21,8 @@ body:
       required: true
 
   - type: markdown
-    attributes: "## The issue"
+    attributes: 
+      value: "## The issue"
   - type: markdown
     attributes:
       value: |
