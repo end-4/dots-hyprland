@@ -30,7 +30,7 @@ let configOptions = {
         'layerSmoke': false,
         'layerSmokeStrength': 0.2,
         'barRoundCorners': 1, // 0: No, 1: Yes
-        'fakeScreenRounding': 1, // 0: None | 1: Always | 2: When not fullscreen
+        'fakeScreenRounding': 2, // 0: None | 1: Always | 2: When not fullscreen
     },
     'apps': {
         'bluetooth': "blueberry",
@@ -115,6 +115,9 @@ let configOptions = {
                 'order': ["gemini", "gpt", "waifu", "booru"],
             }
         },
+        'quickToggles': {
+            'order': ["wifi", "bluetooth", "nightlight", "gamemode", "idleinhibitor", "cloudflarewarp"],
+        }
     },
     'search': {
         'enableFeatures': {
@@ -185,6 +188,7 @@ let configOptions = {
             'pavucontrol-qt': "pavucontrol",
             'wps': "wps-office2019-kprometheus",
             'wpsoffice': "wps-office2019-kprometheus",
+            'footclient': "foot",
             '': "image-missing",
         },
         regexSubstitutions: [
@@ -236,29 +240,17 @@ let configOptions = {
 }
 
 // Override defaults with user's options
-let optionsOkay = true;
-function overrideConfigRecursive(userOverrides, configOptions = {}, check = true) {
+function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (!check) {
+        if (typeof value === 'object' && !(value instanceof Array)) {
+            overrideConfigRecursive(value, configOptions[key]);
+        }
+        else {
             configOptions[key] = value;
-            continue;
-        }
-        if (configOptions[key] === undefined && check) {
-            optionsOkay = false;
-        }
-        else if (typeof value === 'object' && !(value instanceof Array)) {
-            if (key === "substitutions" || key === "regexSubstitutions" || key === "extraGptModels") {
-                overrideConfigRecursive(value, configOptions[key], false);
-            } else overrideConfigRecursive(value, configOptions[key]);
         }
     }
 }
 overrideConfigRecursive(userOverrides, configOptions);
-if (!optionsOkay) Utils.timeout(2000, () => Utils.execAsync(['notify-send',
-    'Update your user options',
-    'One or more config options don\'t exist',
-    '-a', 'ags',
-]).catch(print))
 
 globalThis['userOptions'] = configOptions;
 export default configOptions;

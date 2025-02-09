@@ -2,6 +2,7 @@
 .config/ags/scss/_musicmaterial.scss
 .config/ags/scss/_musicwal.scss
 .config/ags/scss/_material.scss
+/diagnose.result
 /cache
 # Ignore Python cache files
 __pycache__/

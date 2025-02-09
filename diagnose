@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# This script is for quickly generate helpful info
+#
+
+cd "$(dirname "$0")";export base="$(pwd)"
+output_file=diagnose.result;rm $output_file
+export LANG=C;export LC_ALL=C
+
+x() { ii_exec "$@" 2>&1 | tee -a $output_file ; }
+e() { ii_box "$@" | tee -a $output_file ; }
+ii_box() {
+  length=$(echo "$1" | wc -L);total_width=$((length + 2))
+  #line=$(printf "═%.0s" $(seq 1 $total_width))
+  #border_up="╔${line}╗";border_down="╚${line}╝"
+  #border_vertical="║"
+  line=$(printf "=%.0s" $(seq 1 $total_width))
+  border_up="/${line}\\";border_down="\\${line}/"
+  border_vertical="|"
+  echo -e "\n$border_up"
+  echo "$border_vertical $1 $border_vertical"
+  echo "$border_down"
+}
+ii_exec() {
+  printf "\n[===diagnose===] $*\n"
+  "$@"
+  err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
+}
+ii_check_distro() {
+  lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
+}
+ii_check_venv() {
+  source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+  which gradience-cli
+  deactivate
+}
+
+e "Checking git repo info"
+x git remote get-url origin
+x git rev-parse HEAD
+
+e "Checking distro"
+x ii_check_distro 
+
+e "Checking variables"
+x declare -p XDG_BIN_HOME # ~/.local/bin
+x declare -p XDG_CACHE_HOME # ~/.cache
+x declare -p XDG_CONFIG_HOME # ~/.config
+x declare -p XDG_DATA_HOME # ~/.local/share
+x declare -p XDG_STATE_HOME # ~/.local/state
+x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/ags/.venv
+
+e "Checking directories/files"
+x ls -l $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/gradience-cli
+x ls $XDG_DATA_HOME/glib-2.0/schemas
+x ls $XDG_DATA_HOME/gradience
+#x cat ~/.config/ags/
+
+#e "Checking command existence"
+#commands=(yay pacman zypper apt dnf yum)
+#commands+=(ags swww)
+#commands+=(Hyprland hypr{ctl,idle,lock,picker})
+#commands+=(uv)
+#for i in "${commands[@]}";do x command -v $i;done
+
+e "Checking versions"
+x Hyprland --version
+x ags --version
+
+e "Checking python venv"
+
+
+e "Finished. Output saved as \"$output_file\"."

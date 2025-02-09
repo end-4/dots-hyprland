@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+#!/usr/bin/env -S\_/bin/sh\_-xc\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
 import sys
 from dataclasses import dataclass
 from signal import SIGINT, SIGTERM, signal

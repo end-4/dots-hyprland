@@ -1,16 +1,16 @@
-#!/usr/bin/env bash
 # This file is provided for non-Arch(based) distros.
 # As for Arch Linux, we use local PKGBUILDs or AUR packages, which is the "right" way compared to copying files directly into /usr/local/* .
 # P.S. install-yay() should be kept for Arch(based) distros.
 
 # This script depends on `functions' .
-# This is NOT a script for execution, but for loading functions, so NOT need execution permission.
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
 # The script that use this file should have two lines on its top as follows:
 # cd "$(dirname "$0")"
 # export base="$(pwd)"
 
+# Only for Arch(based) distro.
 install-yay() {
   x sudo pacman -S --needed --noconfirm base-devel
   x git clone https://aur.archlinux.org/yay-bin.git /tmp/buildyay
@@ -111,4 +111,52 @@ install-MicroTeX (){
   x sudo cp ./LaTeX /opt/MicroTeX/
   x sudo cp -r ./res /opt/MicroTeX/
   x cd $base
+}
+
+# Not for Arch(based) distro.
+install-uv (){
+  x curl -LsSf https://astral.sh/uv/install.sh | sh
+}
+
+# Both for Arch(based) and other distros.
+install-python-packages (){
+  UV_NO_MODIFY_PATH=1
+  ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/ags/.venv
+  x mkdir -p $ILLOGICAL_IMPULSE_VIRTUAL_ENV
+  # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
+  x uv venv --prompt .venv $ILLOGICAL_IMPULSE_VIRTUAL_ENV -p 3.12
+  x source $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/activate
+  x uv pip install -r scriptdata/requirements.txt
+
+  x mkdir -p $base/cache/gradience && cd $base/cache/gradience
+  try git init -b main
+  try git remote add origin https://github.com/end-4/ii-gradience.git
+  x git pull origin main && git submodule update --init --recursive
+  x uv pip install -r requirements.txt
+  x meson setup build --prefix=$VIRTUAL_ENV
+  x meson compile -C build
+  x meson install -C build
+  x cd -
+  x deactivate # We don't need the virtual environment anymore
+  for i in "glib-2.0" "gradience"; do
+    x rsync -av "$ILLOGICAL_IMPULSE_VIRTUAL_ENV"/share/$i/ "$XDG_DATA_HOME"/$i/
+  done
+}
+
+# Only for Arch(based) distro.
+handle-deprecated-dependencies (){
+  printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
+  for i in illogical-impulse-{microtex,pymyc-aur} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+# Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
+	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
+	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
+	pacman -Qeq > ./cache/pacman_explicit_packages
+	readarray -t explicitly_installed < ./cache/pacman_explicit_packages
+
+	echo "Attempting to set previously explicitly installed deps as implicit..."
+	for i in "${explicitly_installed[@]}"; do for j in "${old_deps_list[@]}"; do
+		[ "$i" = "$j" ] && yay -D --asdeps "$i"
+	done; done
+
+	return 0
 }
