@@ -1,6 +1,6 @@
 name: Issue (testing, DO NOT USE)
 description: for reporting any issue
-title: "[Issue]: "
+title: "[Issue] "
 labels: ["triage"]
 body:
   - type: checkboxes
@@ -23,10 +23,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        "## The issue"
-        "Describe your problem below."
-        "1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English."
-        "2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible."
+        ## The issue
+        Describe your problem below.
+        1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
+        2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
   - type: textarea
     attributes:
       label: Issue description
