@@ -36,16 +36,16 @@ body:
     attributes:
       label: The issue
       value: |
-         
+        #blank
         (Describe your issue here!)
-         
+        #blank
         <!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->
         <details><summary>Logs</summary>
-
+        #blank
         ```
         (Put your log content here!)
         ```
-
+        #blank
         </details>
     validations:
       required: true
