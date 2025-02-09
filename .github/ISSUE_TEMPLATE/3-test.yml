@@ -18,7 +18,7 @@ body:
     attributes:
       label: Quick diagnose info
       description: "Run `./diagnose` inside the repo, and paste the result below."
-      value: "\n<!-- Run `./diagnose` inside the repo, and paste the result below. -->\n<details><summary>Quick diagnose</summary>\n\n```\n(Paste your diagnose result here!)\n```\n\n</details>"
+      value: "<details><summary>Quick diagnose</summary>\n\n```\n<!-- Run `./diagnose` inside the repo, and paste the result here. -->\n```\n\n</details>"
     validations:
       required: true
 
@@ -34,6 +34,6 @@ body:
   - type: textarea
     attributes:
       label: The issue
-      value: "\n(Describe your issue here!)\n\n<!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->\n<details><summary>Logs</summary>\n\n```\n(Put your log content here!)\n```\n\n</details>"
+      value: "\n<!-- Describe your issue here! -->\n\n<details><summary>Logs</summary>\n\n```\n<!-- Put your log content here!-->\n```\n\n</details>"
     validations:
       required: true

@@ -29,6 +29,11 @@ ii_exec() {
 ii_check_distro() {
   lsb_release -a || cat /etc/os-release || cat /etc/lsb-release
 }
+ii_check_venv() {
+  source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+  which gradience-cli
+  deactivate
+}
 
 e "Checking git repo info"
 x git remote get-url origin
@@ -49,17 +54,20 @@ e "Checking directories/files"
 x ls -l $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/gradience-cli
 x ls $XDG_DATA_HOME/glib-2.0/schemas
 x ls $XDG_DATA_HOME/gradience
-x cat ~/.config/ags/
+#x cat ~/.config/ags/
 
-e "Checking command existence"
-commands=(pacman zypper apt dnf yum Hyprland)
-for i in "${commands[@]}";do x command -v $i;done
+#e "Checking command existence"
+#commands=(yay pacman zypper apt dnf yum)
+#commands+=(ags swww)
+#commands+=(Hyprland hypr{ctl,idle,lock,picker})
+#commands+=(uv)
+#for i in "${commands[@]}";do x command -v $i;done
 
 e "Checking versions"
 x Hyprland --version
 x ags --version
 
-#e "Checking Color Generators"
-#x ~/.config/ags/scripts/color_generation/applycolor.sh
+e "Checking python venv"
+
 
 e "Finished. Output saved as \"dianose.log\"."
