@@ -5,9 +5,7 @@ labels: ["ISSUE"]
 body:
   - type: markdown
     attributes:
-      value: |
-      **Tip:**
-      If your issue is not a feature request, and it does not  fit into the following form, for example "how can I edit some widget", please use [discussions](https://github.com/end-4/dots-hyprland/discussions) instead.
+      value: "**Tip:** If your issue is not a feature request, and it does not  fit into the following form, for example \"how can I edit some widget\", please use [discussions](https://github.com/end-4/dots-hyprland/discussions) instead."
   - type: checkboxes
     attributes:
       label: Before you submit
