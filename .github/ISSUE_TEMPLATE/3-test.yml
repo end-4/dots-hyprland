@@ -35,17 +35,6 @@ body:
   - type: textarea
     attributes:
       label: The issue
-      value: >
-              
-        (Describe your issue here!)
-              
-        <!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->
-        <details><summary>Logs</summary>
-              
-        ```
-        (Put your log content here!)
-        ```
-              
-        </details>
+      value: "\n(Describe your issue here!)\n<!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->\n<details><summary>Logs</summary>\n\n```\n(Put your log content here!)\n```\n\n</details>"
     validations:
       required: true
