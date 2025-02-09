@@ -25,7 +25,7 @@ const PROVIDERS = Object.assign({ // There's this list hmm https://github.com/zu
         'key_file': 'ollama_key.txt',
         'model': 'llama3:instruct',
     },
-    'ollama': {
+    'ollama-deepseek': {
         'name': 'Ollama (DeepSeek-R1)',
         'logo_name': 'ollama-symbolic',
         'description': getString('Official Ollama API.\nPricing: Free.'),
