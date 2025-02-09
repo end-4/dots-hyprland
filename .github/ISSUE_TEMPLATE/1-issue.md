@@ -23,6 +23,7 @@ assignees: ''
 <!-- ↓↓ DO NOT IGNORE THIS. NO HELP CAN BE GIVEN WITHOUT SUFFICIENT LOGS -->
 <!-- Bar and widgets not showing? run `pkill ags; ags` for logs -->
 <!-- Installation failed? Run installation again for logs -->
+<!-- Optionally also run `./diagnose` inside the repo for logs -->
 
 ```plain
 Paste logs here

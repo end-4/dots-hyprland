@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# This script is for quickly generate helpful logs
+#
+
+cd "$(dirname "$0")";export base="$(pwd)"
+logfile=diagnose.log;rm $logfile
+export LANG=C;export LC_ALL=C
+
+function d() { ii_diagnose "$@" 2>&1 | tee -a $logfile ; }
+function e() { ii_box "$@" | tee -a $logfile ; }
+function ii_box() {
+  length=$(echo "$1" | wc -L);total_width=$((length + 2))
+  #line=$(printf "═%.0s" $(seq 1 $total_width))
+  #border_up="╔${line}╗";border_down="╚${line}╝"
+  #border_vertical="║"
+  line=$(printf "=%.0s" $(seq 1 $total_width))
+  border_up="/${line}\\";border_down="\\${line}/"
+  border_vertical="|"
+  echo -e "\n$border_up"
+  echo "$border_vertical $1 $border_vertical"
+  echo "$border_down"
+}
+function ii_diagnose() {
+  printf "\n[===diagnose===] $*\n"
+  "$@"
+  err=$?;if [ ! $err -eq 0 ];then echo "[---EXIT $err---]";else echo "[---SUCCESS---]";fi
+}
+
+e "Checking distro"
+d cat /etc/*-release
+d lsb_release -a
+
+e "Checking variables"
+d declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV
+d declare -p XDG_BIN_HOME
+d declare -p XDG_CACHE_HOME
+d declare -p XDG_CONFIG_HOME
+d declare -p XDG_DATA_HOME
+d declare -p XDG_STATE_HOME
+
+e "Checking directories"
+d ls -l $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin
+d ls -l ~/.local/share/glib-2.0
+d ls -l ~/.local/share/gradience
+
+e "Checking command existence"
+d command -v pacman
+
+#e "Checking Color Generators"
+#d ~/.config/ags/scripts/color_generation/applycolor.sh
