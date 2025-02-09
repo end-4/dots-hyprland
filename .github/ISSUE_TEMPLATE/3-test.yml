@@ -35,9 +35,6 @@ body:
   - type: textarea
     attributes:
       label: The issue
-      description: |
-        line1
-        line2
       value: >
               
         (Describe your issue here!)
