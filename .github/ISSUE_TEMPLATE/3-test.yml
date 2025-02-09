@@ -5,38 +5,38 @@ labels: ["triage"]
 body:
   - type: checkboxes
     attributes:
-      label: v1.2 Before you submit
+      label: Before you submit
       options:
-        - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage/) pages
+        - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage/) pages.
           required: true
-        - label: I have made sure that both [my config](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#updating) and system packages are up to date
-          required: true
+        - label: I've updated to the latest version following the [guidance](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#updating).
+          required: false # Not required cuz user may have failed to do so
+        - label: I've had the system packages up to date.
+          required: false # Not required cuz user may have failed to do so
 
   - type: input
     attributes:
       label: "Linux distro:"
-      description: You may get it by running `lsb_release -a` or `cat /etc/{lsb,os}-release`.
+      description: Not sure? Run `lsb_release -a` or `cat /etc/{lsb,os}-release`.
       placeholder: e.g. Arch Linux
     validations:
       required: true
 
-  - type: markdown
-    attributes: 
-      value: "## The issue"
   - type: markdown
     attributes:
       value: |
         Describe your problem below.
         1. Use `LANG=C LC_ALL=C` to get the output of a command in English, eg. `LANG=C LC_ALL=C date` displays time in English.
         2. If it throws errors, **PLEASE**, attach logs and describe in detail if possible.
+
   - type: textarea
     attributes:
-      label: Issue description
+      label: The issue
+      value: |
+        <details><summary>Logs</summary>
+        ```plain
+        (Put the your log content here!)
+        </details>
+        ```
     validations:
       required: true
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
