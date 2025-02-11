@@ -105,7 +105,7 @@ const CurrentNetwork = () => {
         ]
     });
     const networkBandwidth = Box({
-         vertical: true,
+        vertical: true,
         hexpand: true,
         hpack: 'center',
         className: 'sidebar-wifinetworks-bandwidth',
