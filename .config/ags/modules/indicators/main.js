@@ -23,7 +23,7 @@ export default (monitor = 0) => Widget.Window({
             css: 'min-height: 2px;',
             children: [
                 IndicatorValues(monitor),
-                MusicControls(),
+                // MusicControls(),
                 NotificationPopups(),
                 ColorScheme(),
             ]

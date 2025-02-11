@@ -78,8 +78,8 @@ function calculateSchemeInitIndex(optionsArr, searchValue = 'vibrant') {
 
 const schemeOptionsArr = [
     [
-        { name: getString('Tonal Spot'), value: 'tonalspot' },
-        { name: getString('Fruit Salad'), value: 'fruitsalad' },
+        { name: getString('Tonal Spot'), value: 'tonal-spot' },
+        { name: getString('Fruit Salad'), value: 'fruit-salad' },
         { name: getString('Fidelity'), value: 'fidelity' },
         { name: getString('Rainbow'), value: 'rainbow' },
     ],
@@ -87,14 +87,14 @@ const schemeOptionsArr = [
         { name: getString('Neutral'), value: 'neutral' },
         { name: getString('Monochrome'), value: 'monochrome' },
         { name: getString('Expressive'), value: 'expressive' },
-        { name: getString('Vibrant'), value: 'vibrant' },
+        { name: getString('Vibrant'), value: 'content' },
     ],
     [
-        { name: getString('Vibrant+'), value: 'morevibrant' },
+        // { name: getString('Vibrant+'), value: 'morevibrant' },
     ],
-    //[
-    //  { name: getString('Content'), value: 'content' },
-    //]
+    [
+     { name: getString('Content'), value: 'content' },
+    ]
 ];
 
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/colormode.txt`;
@@ -133,43 +133,18 @@ const ColorSchemeSettings = () => Widget.Box({
                 ConfigToggle({
                     icon: 'border_clear',
                     name: getString('Transparency'),
-                    desc: getString('Make shell elements transparent'),
+                    desc: getString('Make Everything transparent'),
                     initValue: initTransparencyVal,
-                    onChange: (self, newValue) => {
-                        let transparency = newValue == 0 ? "opaque" : "transparent";
-                        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "2s/.*/${transparency}/"  ${GLib.get_user_state_dir()}/ags/user/colormode.txt`])
-                            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
-                            .catch(print);
+                    onChange: async (self, newValue) => {
+                        try {
+                            const transparency = newValue == 0 ? "opaque" : "transparent";
+                            await execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && sed -i "2s/.*/${transparency}/"  ${GLib.get_user_state_dir()}/ags/user/colormode.txt`]);
+                            await execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/applycolor.sh &`]);
+                        } catch (error) {
+                            console.error('Error changing transparency:', error);
+                        }
                     },
-                }),
-                Widget.Box({
-                    tooltipText: getString('Theme GTK apps using accent color\n(drawback: dark/light mode switching requires restart)'),
-                    className: 'txt spacing-h-5 configtoggle-box',
-                    children: [
-                        MaterialIcon('imagesearch_roller', 'norm'),
-                        Widget.Label({
-                            className: 'txt txt-small',
-                            label: getString('Use Gradience'),
-                        }),
-                        Widget.Box({ hexpand: true }),
-                        ConfigMulipleSelection({
-                            hpack: 'center',
-                            vpack: 'center',
-                            optionsArr: [
-                                [{ name: 'Off', value: 0 }, { name: 'On', value: 1 }],
-                            ],
-                            initIndex: [-1, -1],
-                            onChange: (value, name) => {
-                                const ADWAITA_BLUE = "#3584E4";
-                                if (value) execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh - --yes-gradience`, `&`])
-                                    .catch(print);
-                                else execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh "${ADWAITA_BLUE}" --no-gradience`, `&`])
-                                    .catch(print);
-
-                            },
-                        }),
-                    ]
-                }),
+                })
             ]
         }),
         Widget.Box({

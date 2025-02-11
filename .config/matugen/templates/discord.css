@@ -1,0 +1,108 @@
+/**
+ * @name Material Discord
+ * @version 3.0.5
+ * @description A theme based on Google's Material Design
+ * @author CapnKitten
+ *
+ * @website http://github.com/CapnKitten
+ * @source https://github.com/CapnKitten/BetterDiscord/blob/master/Themes/Material-Discord/css/source.css
+ * @donate https://paypal.me/capnkitten
+ * @invite jzJkA6Z
+ */
+
+ @import url(https://capnkitten.github.io/BetterDiscord/Themes/Material-Discord/css/source.css);
+
+ /* Material You addon */
+ @import url(https://capnkitten.github.io/BetterDiscord/Themes/Material-Discord/css/addons/material-you/source.css);
+ 
+ /* MATERIAL YOU DARK THEME SETTINGS */
+ .theme-dark {
+     --saturation-modifier: 0.31;
+     --lightness-modifier: 0.225;
+     --text-lightness-modifier: 1.0;
+ }
+ 
+ /* MATERIAL YOU LIGHT THEME SETTINGS */
+ .theme-light {
+     --saturation-modifier: 0.74;
+     --lightness-modifier: 2.125;
+     --text-lightness-modifier: 1.0;
+ }
+ 
+ :root {
+     /* ACCENT HSL AND TEXT COLOR SETTINGS */
+     --accent-hue: 227;
+     --accent-saturation: 71%;
+     --accent-lightness: 61%;
+     --accent-text-color: hsl(0,0%,100%); /* DOES NOTHING WITH MATERIAL YOU ENABLED */
+     --accent-button-action: hsl(0,0%,100%);
+ 
+     /* ALERT HSL AND TEXT COLOR SETTINGS */
+     --alert-hue: 0;
+     --alert-saturation: 85%;
+     --alert-lightness: 61%;
+     --alert-text-color: hsl(0,0%,100%); /* DOES NOTHING WITH MATERIAL YOU ENABLED */
+ 
+     /* WARNING HSL AND TEXT COLOR SETTINGS*/
+     --warning-hue: 40;
+     --warning-saturation: 86.4%;
+     --warning-lightness: 56.9%;
+     --warning-text-color: hsl(0,0%,100%); /* DOES NOTHING WITH MATERIAL YOU ENABLED */
+ 
+     /* MESSAGE SETTINGS */
+     --message-radius: 18px;
+     --message-padding-top: 8px;
+     --message-padding-side: 12px;
+ 
+     /* MESSAGE MEDIA SETTINGS */
+     --media-radius: 10px;
+ 
+     /* CARD SETTINGS */
+     --card-radius: 8px;
+     --card-radius-big: 18px;
+ 
+     /* BUTTON SETTINGS */
+     --button-height: 36px;
+     --button-padding: 0 24px;
+     --button-action-color: hsl(0,0%,100%);
+ 
+     /* INPUT SETTINGS */
+     --input-height: 36px;
+     --input-padding: 0 12px;
+ 
+     /* POPOUT AND MODAL SETTINGS */
+     --popout-radius: 8px;
+     --popout-radius-big: 18px;
+ 
+     /* TOOLTIP SETTINGS */
+     --tooltip-color: hsl(0,0%,38%,0.9);
+     --tooltip-text-color: hsl(0,0%,87%);
+     --tooltip-font-size: 12px;
+     --tooltip-padding: 8px;
+     --tooltip-radius: 8px;
+ 
+     /* SCROLLBAR SETTINGS */
+     --scrollbar-width: 10px;
+     --scrollbar-thin-width: 6px;
+     --app-bg: {{colors.surface.default.hex}};
+   --main-color: {{colors.surface.default.hex}};
+   --main-alt: {{colors.surface.default.hex}};
+   --status-picker-color: {{colors.primary_container.default.hex}};
+   --sidebar-panel-color: {{colors.primary_container.default.hex}};
+   --tooltip-color: {{colors.surface.default.hex}};
+   --tooltip-text-color: {{colors.on_surface.default.hex}};
+   --accent-text-color: {{colors.on_surface.default.hex}};
+   --card-color-filled: {{colors.primary_container.default.hex}};
+   --card-color-hover: {{colors.inverse_primary.default.hex}};
+   --card-color-active: {{colors.inverse_primary.default.hex}};
+   --card-header-text-color: {{colors.on_surface.default.hex}};
+   --input-text-color: {{colors.on_surface.default.hex}};
+   --message-color: {{colors.primary_container.default.hex}};
+   --message-color-hover: {{colors.inverse_primary.default.hex}};
+   --message-color-alt: {{colors.primary_container.default.hex}};
+   --attachment-color: {{colors.on_primary.default.hex}};
+   --main-textarea-color: {{colors.primary_container.default.hex}};
+   --card-border-color: {{colors.primary_container.default.hex}};
+   --switch-knob-color: {{colors.primary_container.default.hex}};
+   --accent-hue: {{colors.primary_container.default.hue}};
+ }

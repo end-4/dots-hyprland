@@ -1,0 +1,75 @@
+[config.wallpaper]
+command = "swww"
+
+[templates.ags]
+input_path = '~/.config/matugen/templates/ags.scss'
+output_path = '~/.local/state/ags/scss/_material.scss'
+post_hook='agsv1 run-js "handleStyles(false);"'
+
+[templates.gradience]
+input_path = '~/.config/matugen/templates/gradience.json'
+output_path = '~/.cache/ags/user/generated/gradience/gradience.json'
+post_hook='rm -rf ~/.config/gtk-4.0 && gradience-cli apply -p ~/.cache/ags/user/generated/gradience/gradience.json --gtk both'
+[templates.hyprlock]
+input_path = '~/.config/matugen/templates/hyprlock.conf'
+output_path = '~/.config/hypr/hyprlock.conf'
+post_hook = 'hyprctl reload'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland-colors.conf'
+output_path = '~/.config/hypr/colors.conf'
+
+[templates.spicetify]
+input_path = '~/.config/matugen/templates/colors.ini'
+output_path = '~/.config/spicetify/Themes/Comfy/color.ini'
+
+[templates.qt5ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt5ct/colors/matugen.conf'
+
+[templates.qt6ct]
+input_path = '~/.config/matugen/templates/qtct-colors.conf'
+output_path = '~/.config/qt6ct/colors/matugen.conf'
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship-colors.toml'
+output_path = '~/.config/starship.toml'
+post_hook = 'starship init zsh > ~/.zshrc'
+
+[templates.obsidian]
+input_path = '~/.config/matugen/templates/obsidian.css'
+output_path = '/mnt/Data/General-Archive/obsidian/.obsidian/snippets/material-you.css'
+
+[templates.vscode]
+input_path = '~/.config/matugen/templates/vscode-color-theme.json'
+output_path = '~/.windsurf/extensions/theme-material-you/themes/vscode.json'
+post_hook = 'cp ~/.config/matugen/other/vscode-package.json ~/.windsurf/extensions/theme-material-you/package.json'
+
+[templates.pywalfox]
+input_path = '~/.config/matugen/templates/pywalfox-colors.json'
+output_path = '~/.cache/wal/colors.json'
+post_hook = 'pywalfox update'
+
+[templates.heroic]
+input_path = '~/.config/matugen/templates/heroic-theme.css'
+output_path = '~/.config/heroic/themes/material-you.css'
+
+[templates.discord]
+input_path = '~/.config/matugen/templates/discord.css'
+output_path = '~/.config/vesktop/themes/material-you.css'
+
+[templates.telegram]
+input_path = '~/.config/matugen/templates/telegram-colors.tdesktop-theme'
+output_path = '~/.config/telegram-desktop/themes/material-you.tdesktop-theme'
+
+[templates.kitty]
+input_path = '~/.config/matugen/templates/kitty-colors.conf'
+output_path = '~/.config/kitty/colors.conf'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/colors.rasi'
+
+[templates.anyrun]
+input_path = '~/.config/matugen/templates/anyrun.css'
+output_path = '~/.config/anyrun/style.css'
