@@ -58,7 +58,7 @@ x ls $XDG_DATA_HOME/gradience
 
 #e "Checking command existence"
 #commands=(yay pacman zypper apt dnf yum)
-#commands+=(ags swww)
+commands+=(ags agsv1)
 #commands+=(Hyprland hypr{ctl,idle,lock,picker})
 #commands+=(uv)
 #for i in "${commands[@]}";do x command -v $i;done
@@ -66,8 +66,6 @@ x ls $XDG_DATA_HOME/gradience
 e "Checking versions"
 x Hyprland --version
 x ags --version
-
-e "Checking python venv"
-
+x agsv1 --version
 
 e "Finished. Output saved as \"$output_file\"."
