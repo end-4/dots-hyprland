@@ -149,6 +149,11 @@ let configOptions = {
         'shown': 10,
         'style': 'japanese'
     },
+    'wallselect': {
+        'enabled': true,
+        'wallpaperFolder': '/Pictures/Wallpapers',
+        'wallpaperLimit': 100
+    },
     'dock': {
         'enabled': false,
         'hiddenThickness': 5,

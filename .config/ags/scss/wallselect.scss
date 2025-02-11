@@ -1,0 +1,50 @@
+.wallpaper-list {
+    .preview-box {
+        min-width: 150px;
+        min-height: 90px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+    }
+
+    button {
+        padding: 4px;
+        margin: 4px;
+    }
+
+    .scroll-box {
+        min-height: 110px;
+    }
+}
+
+.wallpaper-window {
+    @extend .sidebar-right;
+}
+
+.wallpaper-placeholder {
+    padding: 2rem;
+
+    .txt-large {
+        font-size: 1.2em;
+    }
+
+    .txt-subtext {
+        opacity: 0.8;
+    }
+}
+
+.generate-thumbnails {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    margin-right: 0.5rem;
+    
+    &:hover {
+        background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+    }
+    
+    &:active {
+        background-color: mix($secondaryContainer, $onSecondaryContainer, 80%);
+    }
+}
