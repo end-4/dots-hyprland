@@ -206,7 +206,7 @@ const CoverArt = ({ player, ...rest }) => {
 
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `python ${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss`])
                     .then(() => {
                         exec(`${App.configDir}/scripts/color_generation/pywal.sh -i "${player.coverPath}" -n -t -s -e -q ${darkMode.value ? '' : '-l'}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${GLib.get_user_state_dir()}/ags/scss/_musicwal.scss`);
