@@ -1,0 +1,258 @@
+/*****----- Configuration -----*****/
+configuration {
+	modi:                       "drun,filebrowser,emoji,run,recursivebrowser";
+    show-icons:                 true;
+    display-drun:               "";
+    display-run:                "";
+    display-filebrowser:        "";
+    display-recursivebrowser:   "󰈞";
+    display-emoji:              "󰞅";
+    display-window:             "";
+    display-calc:               "";
+	drun-display-format:        "{name}";
+	window-format:              "{w} · {c} · {t}";
+}
+
+/*****----- Global Properties -----*****/
+@import                          "colors.rasi"
+@import                          "fonts.rasi"
+
+* {
+    border-colour:               var(primary);
+    handle-colour:               var(on-surface);
+    background-colour:           var(surface);
+    foreground-colour:           var(on-surface);
+    alternate-background:        var(surface-container);
+    normal-background:           var(surface);
+    normal-foreground:           var(on-surface);
+    urgent-background:           var(error);
+    urgent-foreground:           var(on-error);
+    active-background:           var(primary-container);
+    active-foreground:           var(on-primary-container);
+    selected-normal-background:  var(primary);
+    selected-normal-foreground:  var(on-primary);
+    selected-urgent-background:  var(error-container);
+    selected-urgent-foreground:  var(on-error-container);
+    selected-active-background:  var(secondary-container);
+    selected-active-foreground:  var(on-secondary-container);
+    alternate-normal-background: var(surface-container);
+    alternate-normal-foreground: var(on-surface-variant);
+    alternate-urgent-background: var(error);
+    alternate-urgent-foreground: var(on-error); 
+    alternate-active-background: var(primary-container);
+    alternate-background:        var(surface-container);
+    alternate-active-foreground: var(on-primary-container);
+    wbg:#00000090;
+    element-bg:#00000025;
+    }
+/*****----- Main Window -----*****/
+window {
+    transparency:                "real";
+    location:                    west;
+    anchor:                      west;
+    fullscreen:                  false;
+    width:                       400px;
+    height:                      98.9%;
+    x-offset:                    0px;
+    y-offset:                    0px;
+    enabled:                     true;
+    margin:                      0px 0px 0px 8px;
+    border-radius:               18px;
+    padding:                     2px;
+    border:                      0px solid 0px;
+    border-color:                var(outline-variant);
+    cursor:                      "default";
+    background-color:            @wbg;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled:                     true;
+    spacing:                     8px;
+    margin:                      0px;
+    padding:                     16px;
+    border:                      0px;
+    border-radius:               0px;
+    border-color:                var(outline);
+    background-color:            transparent;
+    children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    enabled:                     true;
+    spacing:                     20px;
+    margin:                      0px 0px 8px 0px;
+    padding:                     12px;
+    border-radius:               25px;
+    border-color:                var(outline);
+    background-color:            var(surface-container);
+    text-color:                  var(on-surface);
+    children:                    ["entry","prompt"];
+}
+
+prompt {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  inherit;
+    margin: 			 0 4px;
+}
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "::";
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+entry {
+    enabled:                     true;
+    background-color:            transparent;
+    text-color:                  inherit;
+    cursor:                      text;
+    placeholder:                 "Type to search";
+    opacity:                     0.3;
+    placeholder-color:           var(on-surface-variant);
+}
+num-filtered-rows {
+    enabled:                     true;
+    expand:                      false;
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+textbox-num-sep {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "/";
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+num-rows {
+    enabled:                     true;
+    expand:                      false;
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+case-indicator {
+    enabled:                     true;
+    background-color:            inherit;
+    text-color:                  inherit;
+}
+
+/*****----- Listview -----*****/
+listview {
+    enabled:                     true;
+    columns:                     1;
+    lines:                       8;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   false;
+    layout:                      vertical;
+    reverse:                     false;
+    fixed-height:                true;
+    fixed-columns:               true;
+
+    spacing:                     6px;
+    margin:                      0px;
+    padding:                     4px 0px;
+    border:                      0px;
+    background-color:            transparent;
+}
+
+scrollbar {
+    handle-width:                5px ;
+    handle-color:                @handle-colour;
+    border-radius:               12px;
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled:                     true;
+    spacing:                     18px;
+    margin:                      2px;
+    padding:                     10px;
+    border:                      0px solid;
+    border-radius:               12px;
+    background-color:            @element-bg;
+    text-color:                  var(on-primary);
+    cursor:                      pointer;
+    orientation:                 horizontal;
+}
+
+element.selected {
+    background-color:            var(primary);
+    text-color:                  var(on-primary);
+}
+
+element-icon {
+    background-color:            transparent;
+    text-color:                  inherit;
+    size:                        38px;
+    cursor:                      inherit;
+}
+
+element-text {
+    background-color:            transparent;
+    text-color:                  inherit;
+    highlight:                   inherit;
+    cursor:                      inherit;
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+}
+
+/*****----- Mode Switcher -----*****/
+mode-switcher{
+    enabled:                     true;
+    spacing:                     8px;
+    margin:                      8px 0px 0px 0px;
+    padding:                     5px;
+    border:                      0.3px solid;
+    border-radius:               25px;
+    border-color:                var(outline);
+    background-color:            @element-bg;
+}
+
+button {
+    padding:                     7px 12px;
+    border-radius:               25px;
+    background-color:            transparent;
+    text-color:                  var(on-surface-variant);
+    cursor:                      pointer;
+}
+button selected {
+    background-color:            var(primary);
+    text-color:                  var(on-primary);
+}
+
+/*****----- Message -----*****/
+message {
+    enabled:                     true;
+    margin:                      0px;
+    padding:                     8px 8px;
+    border:                      1px solid;
+    border-radius:               8px;
+    border-color:                var(outline);
+    background-color:            var(surface-container);
+    text-color:                  var(on-surface);
+}
+textbox {
+    padding:                     8px;
+    border:                      0px solid;
+    border-radius:               4px;
+    border-color:                var(outline);
+    background-color:            var(surface-container);
+    text-color:                  var(on-surface);
+    vertical-align:              0.5;
+    horizontal-align:            0.0;
+    highlight:                   none;
+    placeholder-color:           var(on-surface);
+    blink:                       true;
+    markup:                      true;
+}
+error-message {
+    padding:                     10px;
+    border:                      0px solid;
+    border-radius:               0px;
+    border-color:                @border-colour;
+    background-color:            @background-colour;
+    text-color:                  @foreground-colour;
+}

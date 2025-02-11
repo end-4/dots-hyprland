@@ -1,0 +1,4 @@
+* {
+    font: "Rubik 12";
+    font-mono: "JetBrainsMono Nerd Font 12";
+}

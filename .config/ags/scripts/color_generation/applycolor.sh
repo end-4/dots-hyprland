@@ -24,7 +24,7 @@ secondline=$(sed -n '2p' "$colormodefile")
 
 # Determine terminal opacity based on the second line
 if [[ "$secondline" == *"transparent"* ]]; then # Set for transparent background
-    term_transparency=0.83 
+    term_transparency=0.83
     ags_transparency=True
     hypr_opacity=0.9
     hypr_value=1
@@ -73,13 +73,13 @@ apply_transparency() {
     # Ags
     sed -i "s/$transparent:.*;/$transparent:$ags_transparency;/" ~/.config/ags/scss/mode.scss
     agsv1 run-js "handleStyles(false);"
-    # Rofi 
+    # Rofi
     sed -i "s/wbg:.*;/wbg:$rofi_alpha;/" ~/.config/rofi/config.rasi
     sed -i "s/element-bg:.*;/element-bg:$rofi_alpha_element;/" ~/.config/rofi/config.rasi
     # Hyprland
-    sed -i "s/windowrule = opacity .*\ override/windowrule = opacity $hypr_opacity override/" ~/.config/hypr/hyprland/rules/default.conf     
+    sed -i "s/windowrule = opacity .*\ override/windowrule = opacity $hypr_opacity override/" ~/.config/hypr/hyprland/rules.conf
     # Terminal
-    sed -i "s/background_opacity  .*\ override/background_opacity  $term_transparency override/" ~/.config/kitty/kitty.conf     
+    sed -i "s/background_opacity  .*\ override/background_opacity  $term_transparency override/" ~/.config/kitty/kitty.conf
 }
 
 colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
