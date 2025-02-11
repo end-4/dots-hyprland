@@ -147,6 +147,7 @@ let configOptions = {
     },
     'workspaces': {
         'shown': 10,
+        'style': 'japanese'
     },
     'dock': {
         'enabled': false,
