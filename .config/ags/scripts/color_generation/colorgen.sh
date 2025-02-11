@@ -59,11 +59,13 @@ elif [ "$backend" = "material" ]; then
     if [ "$3" = "--smart" ]; then
         smartflag='--smart'
     fi
-    color_generation/generate_colors_material.py --path "$1" \
+    source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+    python color_generation/generate_colors_material.py --path "$(eval echo $1)" \
     --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" \
     --termscheme $terminalscheme --blend_bg_fg \
     --cache "$STATE_DIR/user/color.txt" $smartflag \
     > "$CACHE_DIR"/user/generated/material_colors.scss
+    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$CACHE_DIR"/user/generated/material_colors.scss "$STATE_DIR/scss/_material.scss"
         color_generation/applycolor.sh
