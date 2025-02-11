@@ -24,11 +24,6 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     padding: 1.023rem;
 }
 
-.network-bandwidth {
-    min-width: 6.300rem;
-    padding-left: 1.000rem;
-}
-
 .sidebar-group {
     @include normal-rounding;
     @include group-padding;
@@ -979,6 +974,11 @@ $waifu_image_overlay_transparency: 0.7;
     background-color: $layer1;
     color: $onLayer1;
     padding: 0.682rem;
+}
+
+.sidebar-wifinetworks-bandwidth {
+    min-width: 6.300rem;
+    padding-left: 1.000rem;
 }
 
 .sidebar-centermodules-bottombar-button {
