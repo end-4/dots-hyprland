@@ -8,6 +8,7 @@ body:
   - type: checkboxes
     attributes:
       label: "Step 1. Before you submit"
+      description: "Hint: The 2nd and 3rd checkbox is **not** forcely required as you may have failed to do so."
       options:
         - label: I have read the [Troubleshooting](https://end-4.github.io/dots-hyprland-wiki/en/i-i/04troubleshooting/) and [Usage](https://end-4.github.io/dots-hyprland-wiki/en/i-i/02usage/) pages.
           required: true
