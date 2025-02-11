@@ -108,7 +108,7 @@ const CurrentNetwork = () => {
          vertical: true,
         hexpand: true,
         hpack: 'center',
-        className: 'network-bandwidth',
+        className: 'sidebar-wifinetworks-bandwidth',
             children: [
                NetResource('arrow_warm_up'  , `${App.configDir}/scripts/network_scripts/network_bandwidth.py sent`),
                NetResource('arrow_cool_down', `${App.configDir}/scripts/network_scripts/network_bandwidth.py recv`),
