@@ -6,12 +6,12 @@
 # export SWWW_TRANSITION_DURATION=1
 # export SWWW_TRANSITION_POS=bottom-right
 
-wallpaper=$(find ~/Imagens/pictures/Imagens/* -type f | shuf -n1)
+wallpaper=$(find ~/Imagens/Imagens/* -type f | shuf -n1)
 swww img "$wallpaper" \
     --transition-bezier .43,1.19,1,.4 \
     --transition-type grow \
     --transition-duration 1 \
     --transition-fps 75 \
     --transition-pos bottom-right
-sh /home/lucas/.config/ags/scripts/color_generation/colorgen.sh "${wallpaper}" --apply --smart;
+sh $HOME/.config/ags/scripts/color_generation/colorgen.sh "${wallpaper}" --apply --smart;
 exit 0

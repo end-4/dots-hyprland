@@ -17,7 +17,12 @@ if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
     cat ~/.cache/ags/user/generated/terminal/sequences.txt
 end
 
-alias pamcan=pacman
+alias pamcan=pamcan
+alias php="mise exec -- php"
+alias php="mise exec -- yarn"
+alias php="mise exec -- node"
+alias php="mise exec -- pipx"
+alias php="mise exec -- npm"
 
 # function fish_prompt
 #   set_color cyan; echo (pwd)
