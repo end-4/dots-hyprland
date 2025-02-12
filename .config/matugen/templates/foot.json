@@ -1,0 +1,38 @@
+{
+    "dark": {
+      "term0": "{{colors.background.default.hex}}",
+      "term1": "{{colors.error.default.hex}}",
+      "term2": "{{colors.secondary.default.hex}}",
+      "term3": "{{colors.tertiary.default.hex}}",
+      "term4": "#458588",
+      "term5": "{{colors.primary.default.hex}}",
+      "term6": "#689D6A",
+      "term7": "{{colors.surface_variant.default.hex}}",
+      "term8": "{{colors.on_background.default.hex}}",
+      "term9": "{{colors.error.default.hex}}",
+      "term10": "{{colors.secondary.default.hex}}",
+      "term11": "{{colors.tertiary.default.hex}}",
+      "term12": "#83A598",
+      "term13": "{{colors.primary.default.hex}}",
+      "term14": "#8EC07C",
+      "term15": "{{colors.surface.default.hex}}"
+    },
+    "light": {
+      "term0": "{{colors.surface.default.hex}}",
+      "term1": "{{colors.error.default.hex}}",
+      "term2": "{{colors.secondary.default.hex}}",
+      "term3": "{{colors.tertiary.default.hex}}",
+      "term4": "#FFD866",
+      "term5": "{{colors.primary.default.hex}}",
+      "term6": "#78DCE8",
+      "term7": "{{colors.on_surface.default.hex}}",
+      "term8": "{{colors.background.default.hex}}",
+      "term9": "{{colors.error.default.hex}}",
+      "term10": "{{colors.secondary.default.hex}}",
+      "term11": "{{colors.tertiary.default.hex}}",
+      "term12": "#FFD866",
+      "term13": "{{colors.primary.default.hex}}",
+      "term14": "#78DCE8",
+      "term15": "{{colors.surface_variant.default.hex}}"
+    }
+  }

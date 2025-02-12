@@ -1,0 +1,90 @@
+[global]
+monitor = 0
+follow = none
+width = 380
+height = 95
+origin = top-right
+offset = 12x12
+scale = 0
+notification_limit = 0
+progress_bar = true
+progress_bar_height = 4
+progress_bar_frame_width = 0
+progress_bar_min_width = 150
+progress_bar_max_width = 300
+indicate_hidden = yes
+transparency = 3
+separator_height = 6
+padding = 12
+horizontal_padding = 12
+text_icon_padding = 12
+frame_width = 0
+sort = yes
+font = "Rubik 10"
+line_height = 3
+markup = full
+format = "<span font='Rubik Medium 11'><b>%s</b></span>\n<span font='Rubik 10'>%b</span>"
+alignment = left
+vertical_alignment = center
+show_age_threshold = 60
+ellipsize = middle
+ignore_newline = no
+stack_duplicates = true
+hide_duplicate_count = false
+show_indicators = yes
+icon_position = left
+min_icon_size = 24
+max_icon_size = 32
+icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+icon_path = /usr/share/icons/Papirus-Dark/48x48/actions/:/usr/share/icons/Papirus-Dark/48x48/apps/:/usr/share/icons/Papirus-Dark/48x48/devices/:/usr/share/icons/Papirus-Dark/48x48/emblems/:/usr/share/icons/Papirus-Dark/48x48/emotes/:/usr/share/icons/Papirus-Dark/48x48/mimetypes/:/usr/share/icons/Papirus-Dark/48x48/places/:/usr/share/icons/Papirus-Dark/48x48/status/
+sticky_history = yes
+history_length = 20
+browser = /usr/bin/xdg-open
+always_run_script = true
+title = Dunst
+class = Dunst
+corner_radius = 14
+ignore_dbusclose = false
+force_xwayland = false
+force_xinerama = false
+mouse_left_click = close_current
+mouse_middle_click = do_action, close_current
+mouse_right_click = close_all
+separator_color = frame
+frame_color = "{{colors.primary.default.hex}}"
+highlight = "{{colors.primary.default.hex}}"
+separator_color= "{{colors.outline.default.hex}}"
+gap_size = 8
+enable_posix_regex = true
+enable_recursive_icon_lookup = true
+enable_markup = true
+
+# Animation settings
+enable_animations = true
+animation_frame_interval = 8
+animation_time_in = 200
+animation_time_out = 200
+animation_time_delta = 200
+animation_easing_in = "ease-out"
+animation_easing_out = "ease-in"
+
+[experimental]
+per_monitor_dpi = false
+
+[urgency_low]
+timeout = 3
+background = "{{colors.surface.default.hex}}"
+foreground = "{{colors.on_surface.default.hex}}"
+highlight = "{{colors.primary_container.default.hex}}"
+
+[urgency_normal]
+timeout = 6
+background = "{{colors.surface.default.hex}}"
+foreground = "{{colors.on_surface.default.hex}}"
+highlight = "{{colors.primary_container.default.hex}}"
+
+[urgency_critical]
+timeout = 0
+background = "{{colors.surface.default.hex}}"
+foreground = "{{colors.on_surface.default.hex}}"
+highlight = "{{colors.error.default.hex}}"

@@ -1,0 +1,112 @@
+{
+    "name": "Material You",
+    "colors": {
+        "editor.background": "{{colors.background.default.hex}}",
+        "editor.foreground": "{{colors.on_background.default.hex}}",
+        "activityBar.background": "{{colors.surface.default.hex}}",
+        "activityBar.foreground": "{{colors.on_surface.default.hex}}",
+        "activityBar.inactiveForeground": "{{colors.outline.default.hex}}",
+        "activityBarBadge.background": "{{colors.primary.default.hex}}",
+        "activityBarBadge.foreground": "{{colors.on_primary.default.hex}}",
+        "badge.background": "{{colors.primary.default.hex}}",
+        "badge.foreground": "{{colors.on_primary.default.hex}}",
+        "button.background": "{{colors.primary.default.hex}}",
+        "button.foreground": "{{colors.on_primary.default.hex}}",
+        "button.hoverBackground": "{{colors.primary_container.default.hex}}",
+        "dropdown.background": "{{colors.surface.default.hex}}",
+        "dropdown.foreground": "{{colors.on_surface.default.hex}}",
+        "editor.lineHighlightBackground": "{{colors.surface_variant.default.hex}}40",
+        "editor.selectionBackground": "{{colors.primary.default.hex}}40",
+        "editor.wordHighlightBackground": "{{colors.secondary.default.hex}}40",
+        "editorCursor.foreground": "{{colors.primary.default.hex}}",
+        "editorGroup.border": "{{colors.outline.default.hex}}",
+        "editorGroupHeader.tabsBackground": "{{colors.background.default.hex}}",
+        "editorIndentGuide.background": "{{colors.outline.default.hex}}40",
+        "editorLineNumber.foreground": "{{colors.outline.default.hex}}",
+        "editorLineNumber.activeForeground": "{{colors.primary.default.hex}}",
+        "focusBorder": "{{colors.primary.default.hex}}",
+        "list.activeSelectionBackground": "{{colors.primary.default.hex}}40",
+        "list.activeSelectionForeground": "{{colors.on_surface.default.hex}}",
+        "list.hoverBackground": "{{colors.surface_variant.default.hex}}40",
+        "list.hoverForeground": "{{colors.on_surface_variant.default.hex}}",
+        "list.inactiveSelectionBackground": "{{colors.surface_variant.default.hex}}40",
+        "panel.background": "{{colors.surface.default.hex}}",
+        "panel.border": "{{colors.outline.default.hex}}",
+        "panelTitle.activeForeground": "{{colors.primary.default.hex}}",
+        "peekView.border": "{{colors.primary.default.hex}}",
+        "peekViewEditor.background": "{{colors.surface.default.hex}}",
+        "peekViewResult.background": "{{colors.surface_variant.default.hex}}",
+        "peekViewTitle.background": "{{colors.surface.default.hex}}",
+        "progressBar.background": "{{colors.primary.default.hex}}",
+        "scrollbar.shadow": "{{colors.background.default.hex}}00",
+        "scrollbarSlider.activeBackground": "{{colors.primary.default.hex}}80",
+        "scrollbarSlider.background": "{{colors.surface_variant.default.hex}}40",
+        "scrollbarSlider.hoverBackground": "{{colors.surface_variant.default.hex}}80",
+        "sideBar.background": "{{colors.surface.default.hex}}",
+        "sideBar.foreground": "{{colors.on_surface.default.hex}}",
+        "sideBarSectionHeader.background": "{{colors.surface_variant.default.hex}}",
+        "sideBarSectionHeader.foreground": "{{colors.on_surface_variant.default.hex}}",
+        "sideBarTitle.foreground": "{{colors.primary.default.hex}}",
+        "statusBar.background": "{{colors.surface_variant.default.hex}}",
+        "statusBar.foreground": "{{colors.on_surface_variant.default.hex}}",
+        "statusBar.debuggingBackground": "{{colors.tertiary.default.hex}}",
+        "statusBar.debuggingForeground": "{{colors.on_tertiary.default.hex}}",
+        "statusBar.noFolderBackground": "{{colors.surface.default.hex}}",
+        "statusBarItem.remoteBackground": "{{colors.primary.default.hex}}",
+        "statusBarItem.remoteForeground": "{{colors.on_primary.default.hex}}",
+        "tab.activeBackground": "{{colors.surface.default.hex}}",
+        "tab.activeForeground": "{{colors.primary.default.hex}}",
+        "tab.inactiveBackground": "{{colors.background.default.hex}}",
+        "tab.inactiveForeground": "{{colors.outline.default.hex}}",
+        "terminal.background": "{{colors.background.default.hex}}",
+        "terminal.foreground": "{{colors.on_background.default.hex}}",
+        "titleBar.activeBackground": "{{colors.surface.default.hex}}",
+        "titleBar.activeForeground": "{{colors.on_surface.default.hex}}",
+        "titleBar.inactiveBackground": "{{colors.surface_variant.default.hex}}",
+        "titleBar.inactiveForeground": "{{colors.on_surface_variant.default.hex}}"
+    },
+    "tokenColors": [
+        {
+            "scope": ["comment", "punctuation.definition.comment", "string.comment"],
+            "settings": {
+                "foreground": "{{colors.outline.default.hex}}"
+            }
+        },
+        {
+            "scope": ["constant", "entity.name.constant", "variable.other.constant", "variable.other.enummember"],
+            "settings": {
+                "foreground": "{{colors.primary.default.hex}}"
+            }
+        },
+        {
+            "scope": ["entity.name", "entity.other.attribute-name"],
+            "settings": {
+                "foreground": "{{colors.tertiary.default.hex}}"
+            }
+        },
+        {
+            "scope": ["entity.name.tag", "keyword", "storage.type", "storage.modifier"],
+            "settings": {
+                "foreground": "{{colors.primary.default.hex}}"
+            }
+        },
+        {
+            "scope": ["string", "string punctuation.section.embedded source"],
+            "settings": {
+                "foreground": "{{colors.secondary.default.hex}}"
+            }
+        },
+        {
+            "scope": ["variable", "variable.parameter.function"],
+            "settings": {
+                "foreground": "{{colors.on_background.default.hex}}"
+            }
+        },
+        {
+            "scope": ["support.function", "entity.name.function"],
+            "settings": {
+                "foreground": "{{colors.tertiary.default.hex}}"
+            }
+        }
+    ]
+}

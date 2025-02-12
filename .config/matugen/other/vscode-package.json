@@ -1,0 +1,20 @@
+{
+  "name": "material",
+  "displayName": "Generated Matugen Theme",
+  "description": "A VS Code theme inspired by Material You, designed to provide a calming and efficient coding environment.",
+  "version": "1.0.0",
+  "publisher": "Pharmaracist",
+  "engines": {
+    "vscode": "1.91.0"
+  },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Generated Matugen Theme",
+        "uiTheme": "vs-dark",
+        "path": "./themes/vscode.json"
+      }
+    ]
+  }
+}
