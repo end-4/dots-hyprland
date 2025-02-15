@@ -1,3 +1,5 @@
+// PreGenerated Matugen Template for AGS 
+
 $primary: {{colors.primary.default.hex}};
 $onPrimary: {{colors.on_primary.default.hex}};
 $primaryContainer: {{colors.primary_container.default.hex}};
@@ -51,19 +53,20 @@ $success: {{colors.primary.default.hex}};
 $onSuccess: {{colors.on_primary.default.hex}};
 $successContainer: {{colors.primary_container.default.hex}};
 $onSuccessContainer: {{colors.on_primary_container.default.hex}};
-$term0: #181A26;
-$term1: #A078FF;
-$term2: #64DCF0;
-$term3: #FFDCF3;
-$term4: #94ABD7;
-$term5: #ADA1ED;
-$term6: #9DCEFF;
-$term7: #E8D3DE;
-$term8: #C3B5C0;
-$term9: #CAB4FF;
-$term10: #F7FDFF;
-$term11: #FFFFFF;
-$term12: #CDDDF8;
-$term13: #DED4FF;
-$term14: #F8FAFF;
-$term15: #DEE0FF;
+
+$term0: $background;
+$term1: $primary;
+$term2: $secondary;
+$term3: $tertiary;
+$term4: $error;
+$term5: $surface;
+$term6: $surfaceVariant;
+$term7: $surfaceDim;
+$term8: $inverseSurface;
+$term9: $onPrimary;
+$term10: $onSecondary;
+$term11: $onTertiary;
+$term12: $onError;
+$term13: $onBackground;
+$term14: $surfaceContainer;
+$term15: $surfaceContainerHighest;
