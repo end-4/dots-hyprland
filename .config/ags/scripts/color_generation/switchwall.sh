@@ -32,7 +32,7 @@ elif [[ "$1" ]]; then
 else
 	# Select and set image (hyprland)
 
-    cd "$(xdg-user-dir PICTURES)" || return 1
+    cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
 	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
 
