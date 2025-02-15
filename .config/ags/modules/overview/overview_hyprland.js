@@ -153,9 +153,9 @@ export default () => {
                                     truncate: 'end',
                                     className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
                                     css: overviewMonitor.bind().as(monitor => `
-                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
-                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
-                            `),
+                                        font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
+                                        margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
+                                    `),
                                     // If the title is too short, include the class
                                     label: (title.length <= 1 ? `${c}: ${title}` : title),
                                 })
