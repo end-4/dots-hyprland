@@ -87,13 +87,13 @@ const schemeOptionsArr = [
         { name: getString('Neutral'), value: 'neutral' },
         { name: getString('Monochrome'), value: 'monochrome' },
         { name: getString('Expressive'), value: 'expressive' },
-        { name: getString('Vibrant'), value: 'content' },
+        // { name: getString('Vibrant'), value: 'content' },
+        { name: getString('Content'), value: 'content' },
     ],
     [
         // { name: getString('Vibrant+'), value: 'morevibrant' },
     ],
     [
-     { name: getString('Content'), value: 'content' },
     ]
 ];
 

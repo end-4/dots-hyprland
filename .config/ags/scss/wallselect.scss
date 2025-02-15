@@ -1,19 +1,19 @@
 .wallpaper-list {
     .preview-box {
-        min-width: 150px;
-        min-height: 90px;
+        min-width: 9.375rem;
+        min-height: 5.625rem;
         background-size: cover;
         background-position: center;
-        border-radius: 8px;
+        border-radius: 0.5rem;
     }
 
     button {
-        padding: 4px;
-        margin: 4px;
+        padding: 0.25rem;
+        margin: 0.25rem;
     }
 
     .scroll-box {
-        min-height: 110px;
+        min-height: 6.875rem;
     }
 }
 
@@ -35,7 +35,7 @@
 
 .generate-thumbnails {
     padding: 0.5rem 1rem;
-    border-radius: 9999px;
+    border-radius: 624.9375rem;
     background-color: $secondaryContainer;
     color: $onSecondaryContainer;
     margin-right: 0.5rem;

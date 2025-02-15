@@ -1,6 +1,6 @@
 * {
     all: unset;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
 #window,
@@ -33,12 +33,12 @@
 #match:selected,
 #match:hover,
 #plugin:hover {
-    background: #2e3131;
+    background: #121318;
 }
 
 #entry {
-    background: #0b0f10;
-    border: 1px solid #0b0f10;
+    background: #121318;
+    /* border: 1px solid #8f9099; */
     border-radius: 16px;
     margin: 0.5rem;
     padding: 0.3rem 1rem;
@@ -59,8 +59,9 @@ list > #plugin:hover {
 }
 
 box#main {
-    background: #0b0f10;
-    box-shadow: inset 0 0 0 1px #0b0f10, 0 0 0 1px #0b0f10;
-    border-radius: 24px;
+    background: #121318;
+    /* box-shadow: inset 0 0 0 1px #000000, 0 0 0 1px; */
+    border-radius: 20px;
+    min-height:30px;
     padding: 0.3rem;
 }

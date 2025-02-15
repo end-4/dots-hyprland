@@ -10,7 +10,7 @@ import { firstRunWelcome, startBatteryWarningService } from './services/messages
 import { startAutoDarkModeService } from './services/darkmode.js';
 // Widgets
 import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
-// import Cheatsheet from './modules/cheatsheet/main.js';
+import Cheatsheet from './modules/cheatsheet/main.js';
 // import DesktopBackground from './modules/desktopbackground/main.js';
 import Wallselect from './modules/wallselect/main.js'
 import Dock from './modules/dock/main.js';
@@ -46,7 +46,7 @@ const Windows = () => [
     forMonitors(Wallselect),
     Overview(),
     forMonitors(Indicator),
-  //  forMonitors(Cheatsheet),
+    forMonitors(Cheatsheet),
     SideLeft(),
     SideRight(),
     forMonitors(Osk),

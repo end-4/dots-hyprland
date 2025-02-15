@@ -23,11 +23,11 @@ materialscheme=""
 if [ ! -f $colormodefile ]; then
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
-    echo "vibrant" >> $colormodefile
+    echo "content" >> $colormodefile
 elif [[ $(wc -l < $colormodefile) -ne 3 || $(wc -w < $colormodefile) -ne 3 ]]; then
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
-    echo "vibrant" >> $colormodefile
+    echo "content" >> $colormodefile
 else
     lightdark=$(sed -n '1p' $colormodefile)
     transparency=$(sed -n '2p' $colormodefile)
@@ -53,7 +53,7 @@ if [[ ! "$1" = "#"* ]]; then # this is an image
     echo "$1" > "$STATE_DIR/user/current_wallpaper.txt"
 fi
 
-matugen image "$1" -m "$lightdark" -t "scheme-$materialscheme" 
+matugen image "$1" --mode "$lightdark" -t "scheme-$materialscheme" 
 # Apply the generated colors if --apply flag is set
 if [ "$2" = "" ]; then
 exit

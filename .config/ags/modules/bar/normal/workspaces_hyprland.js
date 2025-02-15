@@ -38,7 +38,7 @@ const getFontWeightName = (weight) => {
 
 // Number style conversion functions
 const numberStyles = {
-    'arabic': (n) => n.toString(),
+    'normal': (n) => n.toString(),
     'thai': (n) => n.toString().replace(/[0-9]/g, d => '๐๑๒๓๔๕๖๗๘๙'[d]),
     'japanese': (n) => n.toString().replace(/[0-9]/g, d => '〇一二三四五六七八九'[d]),
     'chinese': (n) => n.toString().replace(/[0-9]/g, d => '零一二三四五六七八九'[d]),
@@ -47,8 +47,8 @@ const numberStyles = {
     'bengali': (n) => n.toString().replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'[d])
 };
 
-const convertNumber = (number, style = 'arabic') => {
-    const converter = numberStyles[style] || numberStyles.arabic;
+const convertNumber = (number, style = 'normal') => {
+    const converter = numberStyles[style] || numberStyles.normal;
     return converter(number);
 };
 
@@ -182,7 +182,7 @@ const WorkspaceContents = (count = 10) => {
                         cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
 
                     // Convert number to selected style
-                    const numberStyle = userOptions.workspaces.style || 'arabic';
+                    const numberStyle = userOptions.workspaces.style || 'normal';
                     const displayNumber = convertNumber(i + offset, numberStyle);
                     layout.set_text(displayNumber, -1);
                     
