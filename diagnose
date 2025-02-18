@@ -85,11 +85,13 @@ x agsv1 --version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
-echo "(Optional) Do you agree to upload the file \"$output_file\" to the online pastebin (https://0x0.st)? (y/N)"
-read -p "====> " p
+echo "(Optional) Do you agree to upload the file \"$output_file\" to the online pastebin (https://0x0.st)?"
+echo "Note: it is a public service and the logfile will be expired in 15 days."
+echo "You should have a look at the content of \"$output_file\" before agreeing to upload it."
+read -p "y=yes, n=no (default) ====> " p
 case $p in
   [yY]) echo "OK, uploading..."
-        curl -F'file=@diagnose.result' https://0x0.st && \
+        curl -F'file=@diagnose.result' -Fexpires=360 -Fsecret= https://0x0.st && \
           echo "Uploaded. Please attach the URL above when asking for help."
         ;;
   *) echo "Uploading aborted.";;
