@@ -976,6 +976,11 @@ $waifu_image_overlay_transparency: 0.7;
     padding: 0.682rem;
 }
 
+.sidebar-wifinetworks-bandwidth {
+    min-width: 6.3rem;
+    padding-left: 1rem;
+}
+
 .sidebar-centermodules-bottombar-button {
     @include full-rounding;
     @include element_decel;

@@ -227,9 +227,26 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                         action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
                             const tagDirectory = currentTags.join('+');
-                            let fileExtension = data.file_ext || 'jpg';
-                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
+                            const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${fileName}" '${data.file_url}'`;
+                            print(saveCommand)
                             execAsync(['bash', '-c', saveCommand])
+                                .then(() => self.label = 'done')
+                                .catch(print);
+                        },
+                    }),
+                    ImageAction({
+                        name: getString('Set as wallpaper'),
+                        icon: 'wallpaper',
+                        action: (self) => {
+                            const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
+                            let fileExtension = data.file_ext || 'jpg';
+                            print(data)
+                            const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/Wallpapers" && curl -L -o "$(xdg-user-dir PICTURES)/Wallpapers/${fileName}" '${data.file_url}'`;
+                            const setWallpaperCommand = `${App.configDir}/scripts/color_generation/switchwall.sh "$(xdg-user-dir PICTURES)/Wallpapers/${fileName}"`;
+                            // const 
+                            execAsync(['bash', '-c', `${saveCommand} && ${setWallpaperCommand}`])
                                 .then(() => self.label = 'done')
                                 .catch(print);
                         },
@@ -460,7 +477,9 @@ export const booruCommands = Box({
     className: 'spacing-h-5',
     setup: (self) => {
         self.pack_end(CommandButton('/clear'), false, false, 0);
-        self.pack_end(CommandButton('/next'), false, false, 0);
+        self.pack_end(CommandButton('+'), false, false, 0);
+        self.pack_end(CommandButton('/mode konachan', 'Konachan'), false, false, 0);
+        self.pack_end(CommandButton('/mode yandere', 'yande.re'), false, false, 0);
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,

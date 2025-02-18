@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an idea for this project
+labels: ["FEATURE"]
+body:
+  - type: markdown
+    attributes:
+      value: "NOTE: Please write in **English**."
+
+  - type: textarea
+    attributes:
+      label: "What would you like to be added?"
+      description: "Can be a suggestion for an existing feature. You can suggest a widget, minor user interaction changes.. whatever."
+
+  - type: textarea
+    attributes:
+      label: "How will it help?"
+      description: "It's helpful to include examples (like in your use case)."
+
+  - type: textarea
+    attributes:
+      label: "Extra info"
+      description: "If you want a new widget, a pic of the inspiration (if available) would be awesome."

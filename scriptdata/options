@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# This is NOT a script for execution, but for loading functions, so NOT need execution permission.
+# This is NOT a script for execution, but for loading functions, so NOT need execution permission or shebang.
 # NOTE that you NOT need to `cd ..' because the `$0' is NOT this file, but the script file which will source this file.
 
 # The script that use this file should have two lines on its top as follows:
@@ -15,9 +14,6 @@ If no option is specified, run default install process.
   -c, --clean               Clean the build cache first
   -s, --skip-sysupdate      Skip \"sudo pacman -Syu\"
       --skip-hyprland       Skip installing the config for Hyprland
-      --skip-hypr-aur       Skip installing hyprland-git
-      --skip-pymyc-aur      Skip installing python-materialyoucolor-git, gradience,
-                            python-libsass and python-material-color-utilities
       --skip-fish           Skip installing the config for Fish
       --skip-plasmaintg     Skip installing plasma-browser-integration
       --skip-miscconf       Skip copying the dirs and files to \".configs\" except for
@@ -35,7 +31,7 @@ cleancache(){
 # `man getopt` to see more
 para=$(getopt \
        -o hfk:cs \
-       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-fish,skip-hyprland,skip-hypr-aur,skip-pymyc-aur,skip-plasmaintg,skip-miscconf \
+       -l help,force,fontset:,deplistfile:,clean,skip-sysupdate,skip-fish,skip-hyprland,skip-plasmaintg,skip-miscconf \
        -n "$0" -- "$@")
 [ $? != 0 ] && echo "$0: Error when getopt, please recheck parameters." && exit 1
 #####################################################################################
@@ -63,8 +59,6 @@ while true ; do
     -f|--force) ask=false;shift;;
     -s|--skip-sysupdate) SKIP_SYSUPDATE=true;shift;;
     --skip-hyprland) SKIP_HYPRLAND=true;shift;;
-    --skip-hypr-aur) SKIP_HYPR_AUR=true;shift;;
-    --skip-pymyc-aur) SKIP_PYMYC_AUR=true;shift;;
     --skip-fish) SKIP_FISH=true;shift;;
     --skip-miscconf) SKIP_MISCCONF=true;shift;;
     --skip-plasmaintg) SKIP_PLASMAINTG=true;shift;;
