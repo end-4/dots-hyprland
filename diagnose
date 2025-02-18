@@ -93,7 +93,7 @@ echo "3. Only agree when necessary, typically when you are creating an issue and
 read -p "y=yes, n=no (default) ====> " p
 case $p in
   [yY]) echo "OK, uploading..."
-        curl -F'file=@diagnose.result' -Fexpires=360 -Fsecret= https://0x0.st && \
+        curl -F'file=@diagnose.result' -Fexpires=360 https://0x0.st && \
           echo "Uploaded. Please attach the URL above when asking for help."
         ;;
   *) echo "Uploading aborted.";;
