@@ -74,3 +74,13 @@ x ags --version
 x agsv1 --version
 
 e "Finished. Output saved as \"$output_file\"."
+if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi
+echo "(Optional) Do you agree to upload the file \"$output_file\" to the online pastebin (https://0x0.st)? (y/N)"
+read -p "====> " p
+case $p in
+  [yY]) echo "OK, uploading..."
+        curl -F'file=@diagnose.result' https://0x0.st && \
+          echo "Uploaded. Please attach the URL above when asking for help."
+        ;;
+  *) echo "Uploading aborted.";;
+esac
