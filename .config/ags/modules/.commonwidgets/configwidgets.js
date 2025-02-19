@@ -69,6 +69,10 @@ export const ConfigToggle = ({
         },
         child: widgetContent,
         onClicked: (self) => self.attribute.toggle(self),
+        onHoverLost: () => { // mouse away
+            toggleIcon.toggleClassName('switch-fg-toggling-false', false);
+            if (enabled.value) toggleIcon.toggleClassName('txt-poof', false);
+        },
         setup: (self) => {
             setupCursorHover(self);
             self.connect('pressed', () => { // mouse down
