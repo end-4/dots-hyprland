@@ -1,0 +1,121 @@
+[2025-02-22 10:34:33.424]: Info: Sunshine version: 2025.122.141614
+[2025-02-22 10:34:33.424]: Info: Package Publisher: Third Party Publisher
+[2025-02-22 10:34:33.424]: Info: Publisher Website: 
+[2025-02-22 10:34:33.424]: Info: Get support: https://app.lizardbyte.dev/support
+[2025-02-22 10:34:33.477]: Error: Couldn't initialize cuda: CUDA_ERROR_NO_DEVICE:no CUDA-capable device is detected
+[2025-02-22 10:34:33.477]: Info: Found display [wayland-1]
+[2025-02-22 10:34:33.570]: Info: Found interface: zxdg_output_manager_v1(9) version 3
+[2025-02-22 10:34:33.570]: Info: Found interface: wl_output(52) version 4
+[2025-02-22 10:34:33.570]: Warning: Missing Wayland wire for wlr-export-dmabuf
+[2025-02-22 10:34:33.570]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:33.570]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:33.570]: Info: Found display [wayland-1]
+[2025-02-22 10:34:33.570]: Info: Found display [wayland-1]
+[2025-02-22 10:34:33.581]: Info: Found interface: zxdg_output_manager_v1(9) version 3
+[2025-02-22 10:34:33.581]: Info: Found interface: wl_output(52) version 4
+[2025-02-22 10:34:33.589]: Info: Resolution: 1024x768
+[2025-02-22 10:34:33.589]: Info: Name: Unknown-1
+[2025-02-22 10:34:33.589]: Info: Found monitor:    (Unknown-1)
+[2025-02-22 10:34:33.589]: Info: Offset: 0x0
+[2025-02-22 10:34:33.589]: Info: Logical size: 1024x768
+[2025-02-22 10:34:33.589]: Info: -------- Start of KMS monitor list --------
+[2025-02-22 10:34:33.589]: Error: Unknown Monitor connector type [Unknown]: Please report this to the GitHub issue tracker
+[2025-02-22 10:34:33.589]: Info: Monitor 0 is Unknown-1:    (Unknown-1)
+[2025-02-22 10:34:33.589]: Info: --------- End of KMS monitor list ---------
+[2025-02-22 10:34:33.664]: Info: System tray created
+[2025-02-22 10:34:33.727]: Warning: Gamepad ds5 is disabled due to Permission denied
+[2025-02-22 10:34:33.727]: Info: // Testing for available encoders, this may generate errors. You can safely ignore those errors. //
+[2025-02-22 10:34:33.727]: Info: Trying encoder [nvenc]
+[2025-02-22 10:34:33.727]: Info: Screencasting with KMS
+[2025-02-22 10:34:33.727]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:33.727]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:33.727]: Error: Couldn't find monitor [0]
+[2025-02-22 10:34:33.727]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:33.727]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:33.727]: Error: Couldn't find monitor [0]
+[2025-02-22 10:34:33.928]: Info: Screencasting with KMS
+[2025-02-22 10:34:33.928]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:33.928]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:33.928]: Error: Couldn't find monitor [0]
+[2025-02-22 10:34:33.928]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:33.928]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:33.928]: Error: Couldn't find monitor [0]
+[2025-02-22 10:34:34.128]: Info: Encoder [nvenc] failed
+[2025-02-22 10:34:34.129]: Info: Trying encoder [vaapi]
+[2025-02-22 10:34:34.129]: Info: Screencasting with KMS
+[2025-02-22 10:34:34.129]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:34.129]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:34.129]: Info: Found monitor for DRM screencasting
+[2025-02-22 10:34:34.129]: Error: Failed to determine panel orientation, defaulting to landscape.
+[2025-02-22 10:34:34.129]: Info: Found connector ID [36]
+[2025-02-22 10:34:34.129]: Warning: No KMS cursor plane found. Cursor may not be displayed while streaming!
+[2025-02-22 10:34:34.135]: Error: Couldn't initialize va display: operation failed
+[2025-02-22 10:34:34.135]: Warning: Monitor  doesn't support hardware encoding. Reverting back to GPU -> RAM -> GPU
+[2025-02-22 10:34:34.135]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:34.135]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:34.140]: Info: Found monitor for DRM screencasting
+[2025-02-22 10:34:34.140]: Error: Failed to determine panel orientation, defaulting to landscape.
+[2025-02-22 10:34:34.140]: Info: Found connector ID [36]
+[2025-02-22 10:34:34.140]: Warning: No KMS cursor plane found. Cursor may not be displayed while streaming!
+[2025-02-22 10:34:34.172]: Info: Creating encoder [h264_vaapi]
+[2025-02-22 10:34:34.172]: Info: Color coding: SDR (Rec. 601)
+[2025-02-22 10:34:34.172]: Info: Color depth: 8-bit
+[2025-02-22 10:34:34.172]: Info: Color range: JPEG
+[2025-02-22 10:34:34.172]: Error: Couldn't open /dev/dri/renderD128: No such file or directory
+[2025-02-22 10:34:34.172]: Info: Creating encoder [h264_vaapi]
+[2025-02-22 10:34:34.172]: Info: Color coding: SDR (Rec. 601)
+[2025-02-22 10:34:34.172]: Info: Color depth: 8-bit
+[2025-02-22 10:34:34.172]: Info: Color range: JPEG
+[2025-02-22 10:34:34.172]: Error: Couldn't open /dev/dri/renderD128: No such file or directory
+[2025-02-22 10:34:34.172]: Info: Encoder [vaapi] failed
+[2025-02-22 10:34:34.174]: Info: Trying encoder [software]
+[2025-02-22 10:34:34.175]: Info: Screencasting with KMS
+[2025-02-22 10:34:34.175]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:34.175]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:34.175]: Info: Found monitor for DRM screencasting
+[2025-02-22 10:34:34.175]: Error: Failed to determine panel orientation, defaulting to landscape.
+[2025-02-22 10:34:34.175]: Info: Found connector ID [36]
+[2025-02-22 10:34:34.175]: Warning: No KMS cursor plane found. Cursor may not be displayed while streaming!
+[2025-02-22 10:34:34.194]: Info: Creating encoder [libx264]
+[2025-02-22 10:34:34.194]: Info: Color coding: SDR (Rec. 601)
+[2025-02-22 10:34:34.194]: Info: Color depth: 8-bit
+[2025-02-22 10:34:34.195]: Info: Color range: JPEG
+[2025-02-22 10:34:34.203]: Info: [libx264 @ 0x575620106940] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2 AVX512
+[2025-02-22 10:34:34.207]: Info: [libx264 @ 0x575620106940] profile High, level 4.2, 4:2:0, 8-bit
+[2025-02-22 10:34:34.255]: Info: [libx264 @ 0x575620106940] frame I:1     Avg QP:24,21  size:  1212
+[2025-02-22 10:34:34.255]: Info: [libx264 @ 0x575620106940] mb I  I16..4: 99,9%  0,0%  0,0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] 8x8 transform intra:0,0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] coded y,uvDC,uvAC intra: 0,0% 0,0% 0,0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] i16 v,h,dc,p: 97%  0%  3%  0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu:  0%  0% 75% 12%  0%  0%  0%  0% 12%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu:  0%  0% 100%  0%  0%  0%  0%  0%  0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] i8c dc,h,v,p: 100%  0%  0%  0%
+[2025-02-22 10:34:34.256]: Info: [libx264 @ 0x575620106940] kb/s:581,76
+[2025-02-22 10:34:34.257]: Info: Creating encoder [libx264]
+[2025-02-22 10:34:34.257]: Info: Color coding: SDR (Rec. 601)
+[2025-02-22 10:34:34.257]: Info: Color depth: 8-bit
+[2025-02-22 10:34:34.257]: Info: Color range: JPEG
+[2025-02-22 10:34:34.257]: Info: [libx264 @ 0x575620106940] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2 AVX512
+[2025-02-22 10:34:34.261]: Info: [libx264 @ 0x575620106940] profile High 4:4:4 Predictive, level 4.2, 4:4:4, 8-bit
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] frame I:1     Avg QP:31,00  size:  1312
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] mb I  I16..4: 99,9%  0,0%  0,0%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] 8x8 transform intra:0,0%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] coded y,u,v intra: 0,0% 0,0% 0,0%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] i16 v,h,dc,p: 97%  0%  3%  0%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu:  0%  0% 75% 12%  0%  0%  0%  0% 12%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu:  0%  0% 100%  0%  0%  0%  0%  0%  0%
+[2025-02-22 10:34:34.292]: Info: [libx264 @ 0x575620106940] kb/s:629,76
+[2025-02-22 10:34:34.297]: Info: Screencasting with KMS
+[2025-02-22 10:34:34.297]: Info: /dev/dri/card0 -> simpledrm
+[2025-02-22 10:34:34.297]: Warning: No render device name for: /dev/dri/card0
+[2025-02-22 10:34:34.297]: Info: Found monitor for DRM screencasting
+[2025-02-22 10:34:34.297]: Error: Failed to determine panel orientation, defaulting to landscape.
+[2025-02-22 10:34:34.297]: Info: Found connector ID [36]
+[2025-02-22 10:34:34.297]: Warning: No KMS cursor plane found. Cursor may not be displayed while streaming!
+[2025-02-22 10:34:34.319]: Info: 
+[2025-02-22 10:34:34.319]: Info: // Ignore any errors mentioned above, they are not relevant. //
+[2025-02-22 10:34:34.319]: Info: 
+[2025-02-22 10:34:34.319]: Info: Found H.264 encoder: libx264 [software]
+[2025-02-22 10:34:34.324]: Info: Adding avahi service patrick-systemproductname
+[2025-02-22 10:34:34.326]: Info: Configuration UI available at [https://localhost:47990]
+[2025-02-22 10:34:35.167]: Info: Avahi service patrick-systemproductname successfully established.

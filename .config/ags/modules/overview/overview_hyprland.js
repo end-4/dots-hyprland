@@ -21,9 +21,8 @@ const NUM_OF_WORKSPACES_SHOWN = userOptions.overview.numOfCols * userOptions.ove
 const TARGET = [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 0)];
 
 const overviewTick = Variable(false);
-const overviewMonitor = Variable(0);
 
-export default () => {
+export default (overviewMonitor = 0) => {
     const clientMap = new Map();
     const ContextMenuWorkspaceArray = ({ label, actionFunc, thisWorkspace }) => Widget.MenuItem({
         label: `${label}`,
@@ -61,18 +60,11 @@ export default () => {
         else if (x < 0) { w = x + w; x = 0; }
         if (y + h <= 0) x += (Math.floor(y / monitors[monitor].height) * monitors[monitor].height);
         else if (y < 0) { h = y + h; y = 0; }
-        // Prevents throwing an error when multiple monitors are plugged in but only one is enabled (#1047)
-        if (monitors.length - 1 < monitor) {
-            monitor = monitors.length - 1;
-        }
-        // Properly scale for multi monitors
-        w *= monitors[overviewMonitor.value].width / monitors[monitor].width;
-        h *= monitors[overviewMonitor.value].height / monitors[monitor].height;
         // Truncate if offscreen
-        if (x + w > monitors[overviewMonitor.value].width) w = monitors[overviewMonitor.value].width - x;
-        if (y + h > monitors[overviewMonitor.value].height) h = monitors[overviewMonitor.value].height - y;
+        if (x + w > monitors[monitor].width) w = monitors[monitor].width - x;
+        if (y + h > monitors[monitor].height) h = monitors[monitor].height - y;
 
-        if (c.length == 0) c = initialClass;
+        if(c.length == 0) c = initialClass;
         const iconName = substitute(c);
         const appIcon = iconExists(iconName) ? Widget.Icon({
             icon: iconName,
@@ -152,10 +144,10 @@ export default () => {
                                     maxWidthChars: 1, // Doesn't matter what number
                                     truncate: 'end',
                                     className: `margin-top-5 ${xwayland ? 'txt txt-italic' : 'txt'}`,
-                                    css: overviewMonitor.bind().as(monitor => `
-                                        font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
-                                        margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
-                                    `),
+                                    css: `
+                                font-size: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 14.6}px;
+                                margin: 0px ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale / 10}px;
+                            `,
                                     // If the title is too short, include the class
                                     label: (title.length <= 1 ? `${c}: ${title}` : title),
                                 })
@@ -224,10 +216,10 @@ export default () => {
         const WorkspaceNumber = ({ index, ...rest }) => Widget.Label({
             className: 'overview-tasks-workspace-number',
             label: `${index}`,
-            css: overviewMonitor.bind().as(monitor => `
-                margin: ${Math.min(monitors[monitor].width, monitors[monitor].height) * userOptions.overview.scale * userOptions.overview.wsNumMarginScale}px;
-                font-size: ${monitors[monitor].height * userOptions.overview.scale * userOptions.overview.wsNumScale}px;
-            `),
+            css: `
+                margin: ${Math.min(monitors[overviewMonitor].width, monitors[overviewMonitor].height) * userOptions.overview.scale * userOptions.overview.wsNumMarginScale}px;
+                font-size: ${monitors[overviewMonitor].height * userOptions.overview.scale * userOptions.overview.wsNumScale}px;
+            `,
             setup: (self) => self.hook(Hyprland.active.workspace, (self) => {
                 // Update when going to new ws group
                 const currentGroup = Math.floor((Hyprland.active.workspace.id - 1) / NUM_OF_WORKSPACES_SHOWN);
@@ -239,10 +231,10 @@ export default () => {
             className: 'overview-tasks-workspace',
             vpack: 'center',
             // Rounding and adding 1px to minimum width/height to work around scaling inaccuracy:
-            css: overviewMonitor.bind().as(monitor => `
-                min-width: ${1 + Math.round(monitors[monitor].width * userOptions.overview.scale)}px;
-                min-height: ${1 + Math.round(monitors[monitor].height * userOptions.overview.scale)}px;
-            `),
+            css: `
+                min-width: ${1 + Math.round(monitors[overviewMonitor].width * userOptions.overview.scale)}px;
+                min-height: ${1 + Math.round(monitors[overviewMonitor].height * userOptions.overview.scale)}px;
+            `,
             children: [Widget.EventBox({
                 hexpand: true,
                 onPrimaryClick: () => {
@@ -414,10 +406,7 @@ export default () => {
                     }
                 })
                 .hook(App, (box, name, visible) => { // Update on open
-                    if (name == 'overview' && visible) {
-                        overviewMonitor.value = Hyprland.active.monitor.id;
-                        box.attribute.update(box);
-                    }
+                    if (name == 'overview' && visible) box.attribute.update(box);
                 })
         },
     });

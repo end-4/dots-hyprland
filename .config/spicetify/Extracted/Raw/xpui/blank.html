@@ -1,0 +1,24 @@
+<html>
+  <script>
+    window.addEventListener(
+      'message',
+      function (e) {
+        if (!e.origin.endsWith && e.origin !== 'xpui.app.spotify.com') {
+          return;
+        }
+
+        if (!e.origin.endsWith('.spotify.com')) {
+          return;
+        }
+
+        if (e.data.type !== 'html') {
+          return;
+        }
+
+        document.write(e.data.html);
+        document.close();
+      },
+      false,
+    );
+  </script>
+</html>

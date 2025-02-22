@@ -1,0 +1,47 @@
+{
+    "env": {
+        "PATH": "$(PATH):$(HOME)\/.local\/bin"
+    },
+    "apps": [
+        {
+            "name": "Desktop",
+            "image-path": "desktop.png"
+        },
+        {
+            "name": "Low Res Desktop",
+            "image-path": "desktop.png",
+            "prep-cmd": [
+                {
+                    "do": "xrandr --output HDMI-1 --mode 1920x1080",
+                    "undo": "xrandr --output HDMI-1 --mode 1920x1200"
+                }
+            ]
+        },
+        {
+            "name": "Steam Big Picture",
+            "detached": [
+                "\/home\/patrick\/script\/steam_sunshine.sh"
+            ],
+            "image-path": "steam.png",
+            "exclude-global-prep-cmd": "",
+            "auto-detach": "true",
+            "wait-all": "true",
+            "exit-timeout": "5",
+            "cmd": ""
+        },
+        {
+            "name": "Steam GameMode",
+            "output": "",
+            "cmd": "",
+            "exclude-global-prep-cmd": "false",
+            "elevated": "false",
+            "auto-detach": "true",
+            "wait-all": "true",
+            "exit-timeout": "5",
+            "detached": [
+                "gamescope -e -b -f -W 1920 -H 1080 -r 240 -- steam -bigpicture &> \/home\/patrick\/script\/logfile .log"
+            ],
+            "image-path": ""
+        }
+    ]
+}

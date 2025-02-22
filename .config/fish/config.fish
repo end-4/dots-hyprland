@@ -1,25 +1,20 @@
-function fish_prompt -d "Write out the prompt"
-    # This shows up as USER@HOST /home/user/ >, with the directory colored
-    # $USER and $hostname are set by fish, so you can just use them
-    # instead of using `whoami` and `hostname`
-    printf '%s@%s %s%s%s > ' $USER $hostname \
-        (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
-end
+# Add ~/.local/bin to the PATH if it's not already there
+set -U fish_user_paths ~/.local/bin $fish_user_paths
 
+# Initialize Oh My Posh with the specific theme (this should be the first thing to run)
+oh-my-posh init fish --config ~/.cache/oh-my-posh/themes/hul10.omp.json | source
+
+# Additional commands for interactive sessions
 if status is-interactive
-    # Commands to run in interactive sessions can go here
     set fish_greeting
-
 end
 
-starship init fish | source
+# Optional: Include the sequences.txt if needed
 if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
     cat ~/.cache/ags/user/generated/terminal/sequences.txt
 end
 
+# Alias for pacman
 alias pamcan=pacman
 
-# function fish_prompt
-#   set_color cyan; echo (pwd)
-#   set_color green; echo '> '
-# end
+fish_add_path /home/patrick/.spicetify

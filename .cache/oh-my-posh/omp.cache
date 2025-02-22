@@ -1,0 +1,17 @@
+{
+    "environment_platform": {
+        "value": "endeavouros",
+        "timestamp": 1738073419,
+        "ttl": -1
+    },
+    "is_wsl": {
+        "value": "false",
+        "timestamp": 1738073419,
+        "ttl": -1
+    },
+    "upgrade_check": {
+        "value": "",
+        "timestamp": 1739972586,
+        "ttl": 604800
+    }
+}

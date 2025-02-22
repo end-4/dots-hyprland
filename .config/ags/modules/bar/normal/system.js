@@ -173,7 +173,7 @@ const BatteryModule = () => Stack({
                             const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                             const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
                             self.children[0].label = weatherSymbol;
-                            self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • ${getString('Feels like')} ${feelsLike}°${userOptions.weather.preferredUnit}`;
+                            self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • Feels like ${feelsLike}°${userOptions.weather.preferredUnit}`;
                             self.tooltipText = weatherDesc;
                         }).catch((err) => {
                             try { // Read from cache
@@ -186,7 +186,7 @@ const BatteryModule = () => Stack({
                                 const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                                 const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
                                 self.children[0].label = weatherSymbol;
-                                self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • ${getString('Feels like')} ${feelsLike}°${userOptions.weather.preferredUnit}`;
+                                self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • Feels like ${feelsLike}°${userOptions.weather.preferredUnit}`;
                                 self.tooltipText = weatherDesc;
                             } catch (err) {
                                 print(err);
@@ -216,7 +216,7 @@ const BatteryModule = () => Stack({
 const switchToRelativeWorkspace = async (self, num) => {
     try {
         const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
-        Hyprland.messageAsync(`dispatch workspace r${num > 0 ? '+' : ''}${num}`).catch(print);
+        Hyprland.messageAsync(`dispatch workspace ${num > 0 ? '+' : ''}${num}`).catch(print);
     } catch {
         execAsync([`${App.configDir}/scripts/sway/swayToRelativeWs.sh`, `${num}`]).catch(print);
     }

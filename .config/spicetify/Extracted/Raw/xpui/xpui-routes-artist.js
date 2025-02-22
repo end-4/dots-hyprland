@@ -1,0 +1,2 @@
+"use strict";(("undefined"!=typeof self?self:global).webpackChunkclient_web=("undefined"!=typeof self?self:global).webpackChunkclient_web||[]).push([[1408],{98846:(e,l,f)=>{f.d(l,{f:()=>t,z:()=>s});var n=f(30758),o=f(668),c=f(7180);function s(e,l=o.l0o){const f=(0,c.as)();return(0,n.useEffect)((()=>(e&&f((0,c.Mo)(e)),()=>{f((0,c.Hf)())})),[e,f]),e||l}const t=({color:e,fallbackColor:l})=>(s(e,l),null)}}]);
+//# sourceMappingURL=xpui-routes-artist.js.map

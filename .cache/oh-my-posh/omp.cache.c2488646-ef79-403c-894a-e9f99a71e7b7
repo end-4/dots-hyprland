@@ -1,0 +1,12 @@
+{
+    "prompt_count_cache": {
+        "value": "1",
+        "timestamp": 1738073560,
+        "ttl": 86400
+    },
+    "template_cache": {
+        "value": "{\"SegmentsCache\":{\"Path\":{\"Text\":\"  \\u003cLINK\\u003efile:/home/patrick\\u003cTEXT\\u003e~\\u003c/TEXT\\u003e\\u003c/LINK\\u003e \",\"Location\":\"/home/patrick\",\"Path\":\"~\",\"Folders\":[],\"StackCount\":0,\"Writable\":true,\"RootDir\":false},\"Session\":{\"Text\":\" patrick \",\"DefaultUserName\":\"\",\"SSHSession\":false},\"Status\":{\"Text\":\" CONFIG ERROR \",\"String\":\"0\",\"Meaning\":\"0\",\"Code\":0,\"Error\":false}},\"Segments\":{},\"Var\":{},\"ShellVersion\":\"3.7.1\",\"AbsolutePWD\":\"/home/patrick\",\"PSWD\":\"\",\"UserName\":\"patrick\",\"HostName\":\"patrick-systemproductname\",\"PWD\":\"~\",\"Shell\":\"fish\",\"Folder\":\"patrick\",\"OS\":\"endeavouros\",\"Code\":0,\"PromptCount\":1,\"SHLVL\":1,\"Jobs\":0,\"WSL\":false,\"Root\":false}",
+        "timestamp": 1738073560,
+        "ttl": 86400
+    }
+}

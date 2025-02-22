@@ -1,0 +1,57 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "foreground": "#CB4B16",
+          "style": "plain",
+          "template": " {{ reason .Code }} ",
+          "type": "status"
+        },
+        {
+          "foreground": "#CECE04",
+          "style": "plain",
+          "template": " \uf0e7 ",
+          "type": "root"
+        },
+        {
+          "foreground": "#FFFFFF",
+          "style": "plain",
+          "template": "{{ .UserName }}@{{ .HostName }} ",
+          "type": "session"
+        },
+        {
+          "foreground": "#0973C0",
+          "properties": {
+            "style": "full"
+          },
+          "style": "plain",
+          "template": "{{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "#C1C106",
+          "style": "plain",
+          "template": "<#ffffff>git:</>{{ .HEAD }} ",
+          "type": "git"
+        },
+        {
+          "foreground": "#100e23",
+          "style": "plain",
+          "template": " \ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} ",
+          "type": "python"
+        },
+        {
+          "foreground": "#ffffff",
+          "style": "plain",
+          "template": "<#CB4B16>\u276f</><#CACA02>\u276f</><#4E9A06>\u276f</> ",
+          "type": "text"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "version": 3
+}

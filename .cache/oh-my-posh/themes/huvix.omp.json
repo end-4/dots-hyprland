@@ -1,0 +1,83 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "foreground": "#FFE082",
+          "style": "plain",
+          "template": "@{{ .UserName }} \u279c",
+          "type": "session"
+        },
+        {
+          "foreground": "#56B6C2",
+          "properties": {
+            "style": "agnoster_short"
+          },
+          "style": "plain",
+          "template": " {{ .Path }} ",
+          "type": "path"
+        },
+        {
+          "foreground": "#7FD5EA",
+          "style": "powerline",
+          "template": "(\ue626{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}) ",
+          "type": "go"
+        },
+        {
+          "foreground": "#9e7eff",
+          "style": "powerline",
+          "template": "(\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}) ",
+          "type": "python"
+        },
+        {
+          "foreground": "#56B6C2",
+          "properties": {
+            "branch_icon": ""
+          },
+          "style": "plain",
+          "template": "<#E8CC97>git(</>{{ .HEAD }}<#E8CC97>) </>",
+          "type": "git"
+        },
+        {
+          "foreground": "#FFAB91",
+          "properties": {
+            "always_enabled": false,
+            "style": "austin",
+            "threshold": 100
+          },
+          "style": "powerline",
+          "template": "{{ .FormattedMs }}",
+          "type": "executiontime"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "foreground": "#193549",
+          "foreground_templates": [
+            "{{if eq \"Charging\" .State.String}}#64B5F6{{end}}",
+            "{{if eq \"Discharging\" .State.String}}#E36464{{end}}",
+            "{{if eq \"Full\" .State.String}}#66BB6A{{end}}"
+          ],
+          "properties": {
+            "charged_icon": "\ue22f ",
+            "charging_icon": "\ue234 ",
+            "discharging_icon": "\ue231 "
+          },
+          "style": "powerline",
+          "template": "[{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }}\uf295]",
+          "type": "battery"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "version": 3
+}
