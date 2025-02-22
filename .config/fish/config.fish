@@ -19,11 +19,11 @@ end
 
 alias pamcan=pamcan
 alias php="mise exec -- php"
-alias php="mise exec -- yarn"
-alias php="mise exec -- node"
-alias php="mise exec -- pipx"
-alias php="mise exec -- npm"
-
+alias yarn="mise exec -- yarn"
+alias node="mise exec -- node"
+alias pipx="mise exec -- pipx"
+alias npm="mise exec -- npm"
+alias composer="mise exec -- composer"
 # function fish_prompt
 #   set_color cyan; echo (pwd)
 #   set_color green; echo '> '
