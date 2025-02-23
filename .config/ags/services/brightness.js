@@ -97,9 +97,17 @@ async function listDdcMonitorsSnBus() {
             if (!reg.test(display))
                 return;
             const lines = display.split('\n');
-            const sn = lines[3].split(':')[3];
-            const busNum = lines[1].split('/dev/i2c-')[1];
-            ddcSnBus[sn] = busNum;
+            let sn, busNum;
+            for (let line of lines) {
+                line = line.trim()
+                if (line.startsWith('Monitor:')) {
+                    sn = line.split(':')[3];
+                } else if (line.startsWith('I2C bus:')) {
+                    busNum = line.split('/dev/i2c-')[1];
+                }
+            }
+            if (sn && busNum)
+                ddcSnBus[sn] = busNum;
         });
     } catch (err) {
         print(err);
