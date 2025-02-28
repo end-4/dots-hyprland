@@ -117,7 +117,7 @@ install-MicroTeX (){
 
 # Not for Arch(based) distro.
 install-uv (){
-  x bash <(curl -s "https://astral.sh/uv/install.sh")
+  x bash <(curl -LJs "https://astral.sh/uv/install.sh")
 }
 
 # Both for Arch(based) and other distros.
