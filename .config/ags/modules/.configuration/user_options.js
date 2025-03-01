@@ -182,6 +182,7 @@ let configOptions = {
         substitutions: {
             'code-url-handler': "visual-studio-code",
             'Code': "visual-studio-code",
+            'code-oss': "visual-studio-code",
             'GitHub Desktop': "github-desktop",
             'Minecraft* 1.20.1': "minecraft",
             'gnome-tweaks': "org.gnome.tweaks",
@@ -189,6 +190,7 @@ let configOptions = {
             'wps': "wps-office2019-kprometheus",
             'wpsoffice': "wps-office2019-kprometheus",
             'footclient': "foot",
+            'arduino-ide': "arduino",
             '': "image-missing",
         },
         regexSubstitutions: [

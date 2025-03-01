@@ -28,6 +28,8 @@
     "An API key is required\nYou can grab one <u>here</u>, then enter it below": "An API key is required\nYou can grab one <u>here</u>, then enter it below",
     "Tells the model:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points": "Tells the model:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points",
     "Powered by waifu.im + other APIs": "Powered by waifu.im + other APIs",
+    "APIs": "APIs",
+    "Tools": "Tools",
     "Type tags for a random pic.\nNSFW content will not be returned unless\nyou explicitly request such a tag.\n\nDisclaimer: Not affiliated with the providers\nnor responsible for any of their content.": "Type tags for a random pic.\nNSFW content will not be returned unless\nyou explicitly request such a tag.\n\nDisclaimer: Not affiliated with the providers\nnor responsible for any of their content.",
     "Tags →": "Tags →",
     "Invalid command.": "Invalid command.",
