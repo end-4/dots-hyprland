@@ -190,3 +190,4 @@ apply_term &
 
 #Executing lockcolor.sh on exit
 trap '$HOME/.config/ags/scripts/color_generation/lockcolor.sh' EXIT
+trap '$HOME/.config/ags/scripts/color_generation/cavacolor.sh' EXIT
