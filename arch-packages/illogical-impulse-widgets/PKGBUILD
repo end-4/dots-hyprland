@@ -13,4 +13,5 @@ depends=(
 	wl-clipboard
 	hyprpicker
 	anyrun-git
+	cava
 )
