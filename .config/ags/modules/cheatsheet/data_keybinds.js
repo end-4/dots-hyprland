@@ -58,6 +58,7 @@ export const keybindList = [[
             { "keys": ["rightCtrl"], "action": "Dismiss/close sidebar" },
 
             { "keys": ["Ctrl", "󰖳", "+", "T"], "action": "Change wallpaper+colorscheme" },
+            { "keys": ["Alt", "󰖳", "+", "T"], "action": "Change wallpaper randomly+colorscheme" },
 
             // { "keys": ["󰖳", "+", "B"], "action": "Toggle left sidebar" },
             // { "keys": ["󰖳", "+", "N"], "action": "Toggle right sidebar" },
