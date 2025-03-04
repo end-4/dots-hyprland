@@ -187,3 +187,6 @@ apply_gtk &
 apply_qt &
 apply_fuzzel &
 apply_term &
+
+#Executing lockcolor.sh on exit
+trap '$HOME/.config/ags/scripts/color_generation/lockcolor.sh' EXIT
