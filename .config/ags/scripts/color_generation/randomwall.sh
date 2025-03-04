@@ -6,7 +6,7 @@ CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 # Cache DIR
 CACHE_DIR="$HOME/.cache/swww"
 CACHE_FILE="$CACHE_DIR/wall.$ext"
-WALLPAPER_DIR="$HOME/Pictures/Wallpaper"
+WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 
 switch() {
 	imgpath=$1
