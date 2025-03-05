@@ -151,9 +151,9 @@
 
 
 <div align="center">
-    <h2>• inspirations •</h2>
+    <h2>• inspirations/copying •</h2>
     <h3></h3>
 </div>
 
- - osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
-
+ - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
+ - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing". (this note is here because some people actually asked)
