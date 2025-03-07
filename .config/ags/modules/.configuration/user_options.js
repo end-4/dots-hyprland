@@ -242,7 +242,7 @@ let configOptions = {
 // Override defaults with user's options
 function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (typeof value === 'object' && !(value instanceof Array)) {
+        if (typeof value === 'object' && !(value instanceof Array) && configOptions[key] !== undefined) {
             overrideConfigRecursive(value, configOptions[key]);
         }
         else {
