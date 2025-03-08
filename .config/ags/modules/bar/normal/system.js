@@ -169,12 +169,13 @@ const BatteryModule = () => Stack({
                                 .catch(print);
                             const weatherCode = weather.current_condition[0].weatherCode;
                             const weatherDesc = weather.current_condition[0].weatherDesc[0].value;
+                            const translatedWeatherDesc = getString(weatherDesc) || weatherDesc;
                             const temperature = weather.current_condition[0][`temp_${userOptions.weather.preferredUnit}`];
                             const feelsLike = weather.current_condition[0][`FeelsLike${userOptions.weather.preferredUnit}`];
                             const weatherSymbol = WEATHER_SYMBOL[WWO_CODE[weatherCode]];
                             self.children[0].label = weatherSymbol;
                             self.children[1].label = `${temperature}°${userOptions.weather.preferredUnit} • ${getString('Feels like')} ${feelsLike}°${userOptions.weather.preferredUnit}`;
-                            self.tooltipText = weatherDesc;
+                            self.tooltipText = translatedWeatherDesc;
                         }).catch((err) => {
                             try { // Read from cache
                                 const weather = JSON.parse(
