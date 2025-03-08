@@ -142,8 +142,10 @@ const CurrentNetwork = () => {
                     onAccept: (self) => {
                         authLock = false;
                         networkAuth.revealChild = false;
-                        execAsync(`nmcli device wifi connect '${connectAttempt}' password '${self.text}'`)
-                            .catch(print);
+                        execAsync(['nmcli', 'connection', 'delete', connectAttempt])
+                            .catch(print)
+                            .then(() => execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
+                                .catch(print));
                     }
                 })
             ]
