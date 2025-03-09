@@ -43,6 +43,8 @@
     "Message the model...": "Message the model...",
     "Enter API Key...": "Enter API Key...",
     "Enter tags": "Enter tags",
+    "Enter tags and/or page number": "Enter tags and/or page number",
+    "No tag in mind? Type a page number": "No tag in mind? Type a page number",
     "Quick scripts": "Quick scripts",
     "Change screen resolution": "Change screen resolution",
     "Update packages": "Update packages",
