@@ -34,7 +34,7 @@ body:
            - Bar and widgets not showing? run `pkill agsv1; agsv1` for logs.
            - Installation failed? Run installation again for logs.
            - You may use more code blocks when needed.
-        3. In case you are confused, the `<details>``<summary>``</summary>``</datils>` are HTML tags for folding the logs (typically very long) inside. Please do not touch them (unless you know what you are doing).
+        3. In case you are confused, the `<details>`, `<summary>`, `</summary>`, `</details>` are HTML tags for folding the logs (typically very long) inside. Please do not touch them (unless you know what you are doing).
         4. If the logs are suuuuuuper long, consider using an online pastebin service instead.
 
   - type: textarea
