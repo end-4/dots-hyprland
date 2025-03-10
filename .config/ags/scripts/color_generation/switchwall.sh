@@ -3,6 +3,11 @@
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 CONFIG_DIR="$XDG_CONFIG_HOME/ags"
 
+# Direktori cache untuk wallpaper
+CACHE_DIR="$HOME/.cache/swww"
+CACHE_FILE="$CACHE_DIR/wall.$ext"
+
+
 switch() {
 	imgpath=$1
 	read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -17,9 +22,31 @@ switch() {
 		exit 0
 	fi
 
-	# agsv1 run-js "wallpaper.set('')"
-	# sleep 0.1 && agsv1 run-js "wallpaper.set('${imgpath}')" &
-	swww img "$imgpath" --transition-step 100 --transition-fps 120 \
+	mkdir -p "$CACHE_DIR"
+	rm -f "$CACHE_DIR"/wall.*
+	
+	# Dapatkan ekstensi asli file (jpg, png, dll.)
+    ext="${imgpath##*.}"
+
+    # Pastikan ekstensi dalam huruf kecil
+    ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+
+    # Jika ekstensi kosong atau tidak valid, gunakan default jpg
+    if [[ -z "$ext" || ! "$ext" =~ ^(jpg|jpeg|png|bmp|webp)$ ]]; then
+        ext="jpg"
+    fi
+
+    # Simpan gambar dengan nama sesuai format
+    CACHE_FILE="$CACHE_DIR/wall.$ext"
+
+    # Salin dan timpa file lama
+    cp "$imgpath" "$CACHE_FILE"
+	
+	ln -sf "$CACHE_FILE" "$CACHE_DIR/wallpaper"
+
+	# ags run-js "wallpaper.set('')"
+	# sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
+	swww img "$imgpath" --transition-step 100 --transition-fps 144 \
 		--transition-type grow --transition-angle 30 --transition-duration 1 \
 		--transition-pos "$cursorposx, $cursorposy_inverted"
 }
@@ -32,7 +59,7 @@ elif [[ "$1" ]]; then
 else
 	# Select and set image (hyprland)
 
-    cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
+   cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
 	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
 
