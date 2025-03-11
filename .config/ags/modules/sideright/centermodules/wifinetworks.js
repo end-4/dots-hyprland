@@ -81,7 +81,8 @@ const NetResource = (icon, command) => {
 
 const CurrentNetwork = () => {
     let authLock = false;
-    // console.log(Network.wifi);
+    let timeoutId = null;
+
     const bottomSeparator = Box({
         className: 'separator-line',
     });
@@ -138,7 +139,7 @@ const CurrentNetwork = () => {
                 }),
                 Entry({
                     className: 'sidebar-wifinetworks-auth-entry',
-                    visibility: false, // Password dots
+                    visibility: false,
                     onAccept: (self) => {
                         authLock = false;
                         networkAuth.revealChild = false;
@@ -155,6 +156,14 @@ const CurrentNetwork = () => {
                 authLock = true;
                 connectAttempt = Network.wifi.ssid;
                 self.revealChild = true;
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                }
+                timeoutId = setTimeout(() => {
+                    authLock = false;
+                    self.revealChild = false;
+                    Network.wifi.state = 'activated'; 
+                }, 20000); // 20 seconds timeout
             }
         }),
     });
