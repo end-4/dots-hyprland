@@ -90,6 +90,14 @@ export const chatEntry = TextView({
             self.placeholderText = (Gemini.key.length > 0 ? getString('Message Gemini...') : getString('Enter Google AI API Key...'));
         }, 'hasKey')
         .on("key-press-event", (widget, event) => {
+            // Swtich APIs with Tab
+            const key = event.get_keyval()[1];
+            if (key === Gdk.KEY_Tab || key === Gdk.KEY_ISO_Left_Tab) {
+                const dir = key === Gdk.KEY_Tab ? 1 : -1;
+                const newId = (currentApiId + dir + APIS.asyncGet().length) % APIS.asyncGet().length;
+                switchToTab(newId);
+                return true;
+            }
             // Don't send when Shift+Enter
             if (event.get_keyval()[1] === Gdk.KEY_Return || event.get_keyval()[1] === Gdk.KEY_KP_Enter) {
                 if (event.get_state()[1] !== 17) {// SHIFT_MASK doesn't work but 17 should be shift
