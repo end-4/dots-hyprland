@@ -10,7 +10,6 @@ depends=(
   libadwaita
   libsoup3
   libportal-gtk4
-  blueprint-compiler
   gobject-introspection
   sassc
 )
