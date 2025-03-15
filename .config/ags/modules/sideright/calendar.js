@@ -233,9 +233,9 @@ export const ModuleCalendar = () => {
                 vpack: 'center',
                 className: 'txt txt-small sidebar-calendar-collapsed-pill',
                 label: `${Todo.todo_json.length} ${getString('To do tasks')}`,
-                setup: self => self.hook(Todo, (self) => {
+                setup: (self) => self.hook(Todo, (self) => {
                     self.label = `${Todo.todo_json.length} ${getString('To do tasks')}`
-                })
+                }, 'updated')
             }),
         ]
     })
