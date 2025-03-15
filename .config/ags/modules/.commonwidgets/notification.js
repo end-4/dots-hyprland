@@ -25,6 +25,15 @@ function exists(widget) {
     return widget !== null;
 }
 
+function processNotificationBody(body, appEntry) {
+    // Only process Chrome/Chromium notifications
+    if (appEntry?.toLowerCase().includes('chrome')) {
+        // Remove the first line
+        return body.split('\n\n').slice(1).join('\n\n');
+    }
+    return body;
+}
+
 const getFriendlyNotifTimeString = (timeObject) => {
     const messageTime = GLib.DateTime.new_from_unix_local(timeObject);
     const oneMinuteAgo = GLib.DateTime.new_now_local().add_seconds(-60);
@@ -39,7 +48,22 @@ const getFriendlyNotifTimeString = (timeObject) => {
 }
 
 const NotificationIcon = (notifObject) => {
-    // { appEntry, appIcon, image }, urgency = 'normal'
+
+    if (notifObject.hints?.image_path?.deepUnpack) {
+        const imagePath = notifObject.hints.image_path.deepUnpack();
+        return Box({
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            className: 'notif-icon',
+            css: `
+                background-image: url("${imagePath}");
+                background-size: auto 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+            `,
+        });
+    }
+
     if (notifObject.image) {
         return Box({
             valign: Gtk.Align.CENTER,
@@ -168,7 +192,7 @@ export default ({
             justify: Gtk.Justification.LEFT,
             maxWidthChars: 1,
             truncate: 'end',
-            label: notifObject.body.split("\n")[0],
+            label: processNotificationBody(notifObject.body, notifObject.appEntry).split("\n")[0]
         }),
     });
     const notifTextExpanded = Revealer({
@@ -187,7 +211,7 @@ export default ({
                     justify: Gtk.Justification.LEFT,
                     maxWidthChars: 1,
                     wrap: true,
-                    label: notifObject.body,
+                    label: processNotificationBody(notifObject.body, notifObject.appEntry)
                 }),
                 Box({
                     className: 'notif-actions spacing-h-5',
