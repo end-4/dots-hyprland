@@ -117,7 +117,10 @@ let configOptions = {
         },
         'quickToggles': {
             'order': ["wifi", "bluetooth", "nightlight", "gamemode", "idleinhibitor", "cloudflarewarp"],
-        }
+        },
+        'calendar': {
+            'expandByDefault': true,
+        },
     },
     'search': {
         'enableFeatures': {

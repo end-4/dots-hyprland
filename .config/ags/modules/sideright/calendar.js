@@ -259,7 +259,7 @@ export const ModuleCalendar = () => {
         transition: 'slide_up_down',
         transitionDuration: userOptions.animations.durationLarge,
         setup: (stack) => Utils.timeout(1, () => {
-            stack.shown = 'expanded';
+            stack.shown = userOptions.sidebar.calendar.expandByDefault ? 'expanded' : 'collapsed';
         })
     })
 
