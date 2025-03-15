@@ -132,7 +132,7 @@ install-python-packages (){
 
   x mkdir -p $base/cache/blueprint-compiler && cd $base/cache/blueprint-compiler
   try git init -b main
-  try git remote add origin https://github.com/clsty/ii-blueprint-compiler.git
+  try git remote add origin https://github.com/end-4/ii-blueprint-compiler.git
   x git pull origin main && git submodule update --init --recursive
   x meson setup build --prefix=$VIRTUAL_ENV
   x meson compile -C build
