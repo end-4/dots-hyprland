@@ -16,6 +16,8 @@ body:
           required: false # Not required cuz user may have failed to do so
         - label: I've successfully updated the system packages to the latest.
           required: false # Not required cuz user may have failed to do so
+        - label: I've ticked the checkboxes without reading their contents
+          required: false # Obviously
 
   - type: textarea
     attributes:
