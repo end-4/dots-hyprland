@@ -56,7 +56,7 @@ printf "\e[36m[$0]: 1. Get packages and setup user groups/services\n\e[0m"
 # Issue #363
 case $SKIP_SYSUPDATE in
   true) sleep 0;;
-  *) v sudo pacman -Syu;;
+  *) sudo pacman -Syu;;
 esac
 
 remove_bashcomments_emptylines ${DEPLISTFILE} ./cache/dependencies_stripped.conf
