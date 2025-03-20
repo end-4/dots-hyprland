@@ -143,28 +143,32 @@ const CurrentNetwork = () => {
                     onAccept: (self) => {
                         authLock = false;
                         networkAuth.revealChild = false;
-                        execAsync(['nmcli', 'connection', 'delete', connectAttempt])
-                            .catch(print)
-                            .then(() => execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
-                                .catch(print));
+                        execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
+                            .catch(print);
                     }
-                })
+                })                
             ]
         }),
         setup: (self) => self.hook(Network, (self) => {
-            if (Network.wifi.state == 'failed' || Network.wifi.state == 'need_auth') {
-                authLock = true;
-                connectAttempt = Network.wifi.ssid;
-                self.revealChild = true;
-                if (timeoutId) {
-                    clearTimeout(timeoutId);
+            execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
+                .then((savedConnections) => {
+                const savedSSIDs = savedConnections.split('\n');
+                if (Network.wifi.state == 'failed' || 
+                    (Network.wifi.state == 'need_auth' && !savedSSIDs.includes(Network.wifi.ssid))) {
+                        authLock = true;
+                        connectAttempt = Network.wifi.ssid;
+                        self.revealChild = true;
+                        if (timeoutId) {
+                            clearTimeout(timeoutId);
+                        }
+                        timeoutId = setTimeout(() => {
+                            authLock = false;
+                            self.revealChild = false;
+                            Network.wifi.state = 'activated'; 
+                        }, 20000); // 20 seconds timeout
+                    }
                 }
-                timeoutId = setTimeout(() => {
-                    authLock = false;
-                    self.revealChild = false;
-                    Network.wifi.state = 'activated'; 
-                }, 20000); // 20 seconds timeout
-            }
+            ).catch(print);
         }),
     });
     const actualContent = Box({
