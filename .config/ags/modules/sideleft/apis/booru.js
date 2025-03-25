@@ -136,7 +136,7 @@ const booruWelcome = Box({
 
 const BooruPage = (taglist, serviceName = 'Booru') => {
     const PageState = (icon, name) => Box({
-        className: 'spacing-h-5 txt',
+        className: 'spacing-h-5 txt margin-right-5',
         children: [
             Label({
                 className: 'sidebar-waifu-txt txt-smallie',
@@ -227,9 +227,26 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                         action: (self) => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
                             const tagDirectory = currentTags.join('+');
-                            let fileExtension = data.file_ext || 'jpg';
-                            const saveCommand = `mkdir -p $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''} && curl -L -o $(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${data.md5}.${fileExtension} '${data.file_url}'`;
+                            const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${fileName}" '${data.file_url}'`;
+                            print(saveCommand)
                             execAsync(['bash', '-c', saveCommand])
+                                .then(() => self.label = 'done')
+                                .catch(print);
+                        },
+                    }),
+                    ImageAction({
+                        name: getString('Set as wallpaper'),
+                        icon: 'wallpaper',
+                        action: (self) => {
+                            const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
+                            let fileExtension = data.file_ext || 'jpg';
+                            print(data)
+                            const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/Wallpapers" && curl -L -o "$(xdg-user-dir PICTURES)/Wallpapers/${fileName}" '${data.file_url}'`;
+                            const setWallpaperCommand = `${App.configDir}/scripts/color_generation/switchwall.sh "$(xdg-user-dir PICTURES)/Wallpapers/${fileName}"`;
+                            // const 
+                            execAsync(['bash', '-c', `${saveCommand} && ${setWallpaperCommand}`])
                                 .then(() => self.label = 'done')
                                 .catch(print);
                         },
@@ -287,6 +304,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 ]
             }),
             Box({
+                className: 'margin-5',
                 children: [
                     Scrollable({
                         hexpand: true,
@@ -310,11 +328,38 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         homogeneous: true,
         className: 'sidebar-booru-imagegrid',
     })
-    const pageImageRevealer = Revealer({
+    const pageTip = Revealer({
+        transition: 'slide_down',
+        transitionDuration: 0,
+        revealChild: false,
+        child: Box({
+            className: 'txt-subtext margin-5',
+            children: [
+                Box({
+                    homogeneous: true,
+                    className: 'sidebar-booru-tip-icon',
+                    children: [MaterialIcon('lightbulb', 'larger')]
+                }),
+                Label({
+                    label: getString("No tag in mind? Type a page number"),
+                    className: 'txt-smallie',
+                    wrap: true,
+                    xalign: 0,
+                })
+            ]
+        })
+    })
+    const pageContentRevealer = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         revealChild: false,
-        child: pageImages,
+        child: Box({
+            vertical: true,
+            children: [
+                pageImages,
+                pageTip,
+            ]
+        }),
     });
     const thisPage = Box({
         homogeneous: true,
@@ -322,13 +367,20 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
         attribute: {
             'imagePath': '',
             'isNsfw': false,
-            'update': (data, force = false) => { // TODO: Use columns. Sort min to max h/w ratio then greedily put em in...
+            'showContent': () => {
+                Utils.timeout(IMAGE_REVEAL_DELAY,
+                    () => pageContentRevealer.revealChild = true
+                );
+            },
+            'update': (data, force = false) => {
                 // Sort by .aspect_ratio
                 data = data.sort(
                     (a, b) => a.aspect_ratio - b.aspect_ratio
                 );
                 if (data.length == 0) {
+                    pageTip.revealChild = true;
                     downloadState.shown = 'error';
+                    thisPage.attribute.showContent();
                     return;
                 }
                 const imageColumns = userOptions.sidebar.image.columns;
@@ -361,9 +413,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 pageImages.show_all();
 
                 // Reveal stuff
-                Utils.timeout(IMAGE_REVEAL_DELAY,
-                    () => pageImageRevealer.revealChild = true
-                );
+                thisPage.attribute.showContent();
                 downloadIndicator.attribute.hide();
             },
         },
@@ -373,7 +423,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 pageHeading,
                 Box({
                     vertical: true,
-                    children: [pageImageRevealer],
+                    children: [pageContentRevealer],
                 })
             ]
         })],
@@ -446,8 +496,9 @@ const booruTags = Revealer({
                 child: Box({
                     className: 'spacing-h-5',
                     children: [
-                        TagButton('( * )'),
                         TagButton('hololive'),
+                        TagButton('yuri'),
+                        TagButton('thighhighs'),
                     ]
                 })
             }),
@@ -460,7 +511,9 @@ export const booruCommands = Box({
     className: 'spacing-h-5',
     setup: (self) => {
         self.pack_end(CommandButton('/clear'), false, false, 0);
-        self.pack_end(CommandButton('/next'), false, false, 0);
+        self.pack_end(CommandButton('+'), false, false, 0);
+        self.pack_end(CommandButton('/mode konachan', 'Konachan'), false, false, 0);
+        self.pack_end(CommandButton('/mode yandere', 'yande.re'), false, false, 0);
         self.pack_start(Button({
             className: 'sidebar-chat-chip-toggle',
             setup: setupCursorHover,

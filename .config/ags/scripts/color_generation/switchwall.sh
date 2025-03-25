@@ -17,8 +17,8 @@ switch() {
 		exit 0
 	fi
 
-	# ags run-js "wallpaper.set('')"
-	# sleep 0.1 && ags run-js "wallpaper.set('${imgpath}')" &
+	# agsv1 run-js "wallpaper.set('')"
+	# sleep 0.1 && agsv1 run-js "wallpaper.set('${imgpath}')" &
 	swww img "$imgpath" --transition-step 100 --transition-fps 120 \
 		--transition-type grow --transition-angle 30 --transition-duration 1 \
 		--transition-pos "$cursorposx, $cursorposy_inverted"
@@ -26,13 +26,13 @@ switch() {
 
 if [ "$1" == "--noswitch" ]; then
 	imgpath=$(swww query | awk -F 'image: ' '{print $2}')
-	# imgpath=$(ags run-js 'wallpaper.get(0)')
+	# imgpath=$(agsv1 run-js 'wallpaper.get(0)')
 elif [[ "$1" ]]; then
 	switch "$1"
 else
 	# Select and set image (hyprland)
 
-    cd "$(xdg-user-dir PICTURES)" || return 1
+    cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
 	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
 

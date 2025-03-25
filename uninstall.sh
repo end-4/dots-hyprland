@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 source ./scriptdata/environment-variables
+source ./scriptdata/functions
+prevent_sudo_or_root
 
 function v() {
   echo -e "[$0]: \e[32mNow executing:\e[0m"

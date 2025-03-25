@@ -30,7 +30,8 @@
 </details>
 <details> 
   <summary>Instructions</summary>
-    
+
+   - **Prerequisite**: Your system works. That's it. You don't have to reinstall your system!
    - **Automatic**, but guided and transparent, installation for Arch(-based) Linux:
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
@@ -152,9 +153,9 @@
 
 
 <div align="center">
-    <h2>• inspirations •</h2>
+    <h2>• inspirations/copying •</h2>
     <h3></h3>
 </div>
 
- - osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
-
+ - Inspiration: osu!lazer, Windows 11, Material Design 3, AvdanOS (concept)
+ - Copying: The license allows you to. Personally I have absolutely no problem with others redistributing/recreating my work. There's no "stealing" (unless you do weird stuff and violate the license). (this note is here because some people actually asked)

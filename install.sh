@@ -101,7 +101,7 @@ install-local-pkgbuild() {
 
 # Install core dependencies from the meta-packages
 metapkgs=(./arch-packages/illogical-impulse-{audio,python,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
-metapkgs+=(./arch-packages/illogical-impulse-ags)
+metapkgs+=(./arch-packages/illogical-impulse-agsv1)
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
 metapkgs+=(./arch-packages/illogical-impulse-microtex-git)
 metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
@@ -141,6 +141,7 @@ esac
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
 v systemctl --user enable ydotool --now
+v sudo systemctl enable bluetooth --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 

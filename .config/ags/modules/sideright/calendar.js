@@ -1,10 +1,12 @@
-const { Gio } = imports.gi;
+import GLib from 'gi://GLib';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Label } = Widget;
+const { Box, Button, Label, Overlay } = Widget;
+
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 
+import Todo from "../../services/todo.js";
 import { TodoWidget } from "./todolist.js";
 import { getCalendarLayout } from "./calendar_layout.js";
 
@@ -138,66 +140,129 @@ const CalendarWidget = () => {
     });
 };
 
-const defaultShown = 'calendar';
-const contentStack = Widget.Stack({
-    hexpand: true,
-    children: {
-        'calendar': CalendarWidget(),
-        'todo': TodoWidget(),
-        // 'stars': Widget.Label({ label: 'GitHub feed will be here' }),
-    },
-    transition: 'slide_up_down',
-    transitionDuration: userOptions.animations.durationLarge,
-    setup: (stack) => Utils.timeout(1, () => {
-        stack.shown = defaultShown;
-    })
-})
-
-const StackButton = (stackItemName, icon, name) => Widget.Button({
-    className: 'button-minsize sidebar-navrail-btn txt-small spacing-h-5',
-    onClicked: (button) => {
-        contentStack.shown = stackItemName;
-        const kids = button.get_parent().get_children();
-        for (let i = 0; i < kids.length; i++) {
-            if (kids[i] != button) kids[i].toggleClassName('sidebar-navrail-btn-active', false);
-            else button.toggleClassName('sidebar-navrail-btn-active', true);
-        }
-    },
-    child: Box({
-        className: 'spacing-v-5',
+export const ModuleCalendar = () => {
+    const defaultShown = 'calendar';
+    const navrailButton = (stackItemName, icon, name) => Widget.Button({
+        className: 'button-minsize sidebar-navrail-btn txt-small spacing-h-5',
+        onClicked: (button) => {
+            contentStack.shown = stackItemName;
+            const kids = button.get_parent().get_children();
+            for (let i = 0; i < kids.length; i++) {
+                if (kids[i] != button) kids[i].toggleClassName('sidebar-navrail-btn-active', false);
+                else button.toggleClassName('sidebar-navrail-btn-active', true);
+            }
+        },
+        child: Box({
+            className: 'spacing-v-5',
+            vertical: true,
+            children: [
+                Label({
+                    className: `txt icon-material txt-hugeass`,
+                    label: icon,
+                }),
+                Label({
+                    label: name,
+                    className: 'txt txt-smallie',
+                }),
+            ]
+        }),
+        setup: (button) => Utils.timeout(1, () => {
+            setupCursorHover(button);
+            button.toggleClassName('sidebar-navrail-btn-active', defaultShown === stackItemName);
+        })
+    });
+    const navrail = Box({
+        vpack: 'center',
+        homogeneous: true,
         vertical: true,
+        className: 'sidebar-navrail spacing-v-10',
         children: [
-            Label({
-                className: `txt icon-material txt-hugeass`,
-                label: icon,
+            navrailButton('calendar', 'calendar_month', getString('Calendar')),
+            navrailButton('todo', 'done_outline', getString('To Do')),
+        ]
+    });
+    const contentStack = Widget.Stack({
+        hexpand: true,
+        children: {
+            'calendar': CalendarWidget(),
+            'todo': TodoWidget(),
+        },
+        transition: 'slide_up_down',
+        transitionDuration: userOptions.animations.durationLarge,
+        setup: (stack) => Utils.timeout(1, () => {
+            stack.shown = defaultShown;
+        })
+    })
+
+    const CollapseButtonIcon = (collapse) => MaterialIcon(collapse ? 'expand_more' : 'expand_less', 'norm');
+    const CollapseButton = (collapse) => {
+        const collapseButtonIcon = CollapseButtonIcon(collapse);
+        return Button({
+            hpack: 'start',
+            vpack: 'start',
+            className: 'margin-top-5 margin-left-5 margin-bottom-5',
+            onClicked: () => {
+                mainStack.shown = (mainStack.shown == 'expanded') ? 'collapsed' : 'expanded';
+            },
+            setup: setupCursorHover,
+            child: Box({
+                className: 'sidebar-calendar-btn-arrow txt',
+                homogeneous: true,
+                children: [collapseButtonIcon],
             }),
-            Label({
-                label: name,
-                className: 'txt txt-smallie',
+            tooltipText: collapse ? getString('Collapse calendar') : getString('Expand calendar'),
+        })
+    }
+    const date = Variable('', {
+        poll: [
+            userOptions.time.interval,
+            () => GLib.DateTime.new_now_local().format(userOptions.time.calendarDateFormat),
+        ],
+    })
+
+    const collapsedWidget = Box({
+        className: 'spacing-h-5',
+        children: [
+            CollapseButton(false),
+            Widget.Label({
+                vpack: 'center',
+                className: 'txt txt-small sidebar-calendar-collapsed-pill',
+                label: date.bind(),
+            }),
+            Widget.Label({
+                vpack: 'center',
+                className: 'txt txt-small sidebar-calendar-collapsed-pill',
+                label: `${Todo.todo_json.length} ${getString('To do tasks')}`,
+                setup: (self) => self.hook(Todo, (self) => {
+                    self.label = `${Todo.todo_json.length} ${getString('To do tasks')}`
+                }, 'updated')
             }),
         ]
-    }),
-    setup: (button) => Utils.timeout(1, () => {
-        setupCursorHover(button);
-        button.toggleClassName('sidebar-navrail-btn-active', defaultShown === stackItemName);
     })
-});
 
-export const ModuleCalendar = () => Box({
-    className: 'sidebar-group spacing-h-5',
-    setup: (box) => {
-        box.pack_start(Box({
-            vpack: 'center',
-            homogeneous: true,
-            vertical: true,
-            className: 'sidebar-navrail spacing-v-10',
-            children: [
-                StackButton('calendar', 'calendar_month', getString('Calendar')),
-                StackButton('todo', 'done_outline', getString('To Do')),
-                // StackButton(box, 'stars', 'star', 'GitHub'),
-            ]
-        }), false, false, 0);
-        box.pack_end(contentStack, false, false, 0);
-    }
-})
+    const mainStack = Widget.Stack({
+        className: 'sidebar-group',
+        homogeneous: false,
+        children: {
+            'collapsed': collapsedWidget,
+            'expanded': Box({
+                className: 'spacing-h-5',
+                children: [
+                    Overlay({
+                        child: navrail,
+                        overlays: [CollapseButton(true)],
+                    }),
+                    contentStack
+                ]
+            }),
+        },
+        transition: 'slide_up_down',
+        transitionDuration: userOptions.animations.durationLarge,
+        setup: (stack) => Utils.timeout(1, () => {
+            stack.shown = userOptions.sidebar.calendar.expandByDefault ? 'expanded' : 'collapsed';
+        })
+    })
+
+    return mainStack;
+}
 

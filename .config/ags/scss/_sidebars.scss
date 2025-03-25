@@ -175,6 +175,22 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     }
 }
 
+.sidebar-calendar-btn-arrow {
+    @include full-rounding;
+    background-color: $layer2;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
+}
+
 .sidebar-calendar-btn {
     @include full-rounding;
     @include element_decel;
@@ -251,6 +267,24 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-calendar-monthshift-btn:active {
     background-color: $activecolor;
+}
+
+.sidebar-calendar-collapsed-pill {
+    @include full-rounding;
+    background-color: $layer2;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    padding-left: 0.341rem;
+    padding-right: 0.341rem;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
 }
 
 .sidebar-todo-item {
@@ -848,6 +882,7 @@ $waifu_image_overlay_transparency: 0.7;
     @include small-rounding;
     padding: 0.341rem 0.818rem;
     margin: 0.341rem;
+    margin-bottom: 0rem;
     font-weight: bold;
     background-color: $primary;
     color: $onPrimary;
@@ -861,20 +896,22 @@ $waifu_image_overlay_transparency: 0.7;
     @include small-rounding;
     margin: 0.273rem;
     min-width: 11.932rem;
-    // background-color: rgba(100, 200, 0, 0.3);
 }
 
 .sidebar-booru-image-drawingarea {
-    // background-color: rgba(200, 100, 0, 0.3);
     @include small-rounding;
     min-width: 12.273rem;
     min-height: 12.273rem;
 }
 
 .sidebar-booru-image-actions {
-    // background-color: rgba(100, 100, 0, 0.3);
     @include element_decel;
     margin: 0.545rem;
+}
+
+.sidebar-booru-tip-icon {
+    min-width: 2.392rem;
+    min-height: 2.392rem;
 }
 
 .sidebar-volmixer-stream {
@@ -974,6 +1011,11 @@ $waifu_image_overlay_transparency: 0.7;
     background-color: $layer1;
     color: $onLayer1;
     padding: 0.682rem;
+}
+
+.sidebar-wifinetworks-bandwidth {
+    min-width: 6.3rem;
+    padding-left: 1rem;
 }
 
 .sidebar-centermodules-bottombar-button {

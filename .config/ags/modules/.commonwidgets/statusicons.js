@@ -86,14 +86,20 @@ export const BluetoothIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'false': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
-        'true': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
+        'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_disabled' }),
+        'enabled': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth' }),
+        'connected': Widget.Label({ className: 'txt-norm icon-material', label: 'bluetooth_connected' }),
     },
-    setup: (self) => self
-        .hook(Bluetooth, stack => {
-            stack.shown = String(Bluetooth.enabled);
-        })
-    ,
+    setup: (self) =>
+        self.hook(Bluetooth, (stack) => {
+            if (!Bluetooth.enabled) {
+                stack.shown = 'disabled';
+            } else if (Bluetooth.connected_devices.length === 0) {
+                stack.shown = 'enabled';
+            } else if (Bluetooth.connected_devices.length > 0) {
+                stack.shown = 'connected';
+            }
+        }),
 });
 
 const BluetoothDevices = () => Widget.Box({
@@ -158,8 +164,11 @@ const NetworkWifiIndicator = () => Widget.Stack({
     transition: 'slide_up_down',
     transitionDuration: userOptions.animations.durationSmall,
     children: {
-        'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'wifi_off' }),
-        'disconnected': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
+        'disabled': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_off' }),
+		'disconnected': Widget.Label({
+			className: 'txt-norm icon-material',
+			label: 'signal_wifi_statusbar_not_connected',
+		}),
         'connecting': Widget.Label({ className: 'txt-norm icon-material', label: 'settings_ethernet' }),
         '0': Widget.Label({ className: 'txt-norm icon-material', label: 'signal_wifi_0_bar' }),
         '1': Widget.Label({ className: 'txt-norm icon-material', label: 'network_wifi_1_bar' }),
@@ -171,10 +180,11 @@ const NetworkWifiIndicator = () => Widget.Stack({
         if (!Network.wifi) {
             return;
         }
-        if (Network.wifi.internet == 'connected') {
+        if (!Network.wifi.enabled) {
+            stack.shown = 'disabled';
+        } else if (Network.wifi.internet == 'connected') {
             stack.shown = String(Math.ceil(Network.wifi.strength / 25));
-        }
-        else if (["disconnected", "connecting"].includes(Network.wifi.internet)) {
+        } else if (['disconnected', 'connecting'].includes(Network.wifi.internet)) {
             stack.shown = Network.wifi.internet;
         }
     }),
