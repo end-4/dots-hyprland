@@ -48,6 +48,7 @@ export async function startBatteryWarningService() {
 export async function firstRunWelcome() {
     GLib.mkdir_with_parents(`${GLib.get_user_state_dir()}/ags/user`, 755);
     if (!fileExists(FIRST_RUN_PATH)) {
+        Utils.execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh '${App.configDir}/assets/images/default_wallpaper.png'`]).catch(print);
         Utils.writeFile(FIRST_RUN_FILE_CONTENT, FIRST_RUN_PATH)
             .then(() => {
                 // Note that we add a little delay to make sure the cool circular progress works
