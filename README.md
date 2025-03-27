@@ -30,7 +30,8 @@
 </details>
 <details> 
   <summary>Instructions</summary>
-    
+
+   - **Prerequisite**: Your system works. That's it. You don't have to reinstall your system!
    - **Automatic**, but guided and transparent, installation for Arch(-based) Linux:
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")

@@ -175,6 +175,22 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     }
 }
 
+.sidebar-calendar-btn-arrow {
+    @include full-rounding;
+    background-color: $layer2;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
+}
+
 .sidebar-calendar-btn {
     @include full-rounding;
     @include element_decel;
@@ -251,6 +267,24 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 
 .sidebar-calendar-monthshift-btn:active {
     background-color: $activecolor;
+}
+
+.sidebar-calendar-collapsed-pill {
+    @include full-rounding;
+    background-color: $layer2;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    padding-left: 0.341rem;
+    padding-right: 0.341rem;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
 }
 
 .sidebar-todo-item {

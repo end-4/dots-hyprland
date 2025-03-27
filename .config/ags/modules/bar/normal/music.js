@@ -27,18 +27,9 @@ function trimTrackTitle(title) {
 }
 
 function adjustVolume(direction) {
-    const step = 0.03; 
-    execAsync(['playerctl', 'volume'])
-        .then((output) => {
-            let currentVolume = parseFloat(output.trim());
-            let newVolume = direction === 'up' ? currentVolume + step : currentVolume - step;
-
-            if (newVolume > 1.0) newVolume = 1.0;
-            if (newVolume < 0.0) newVolume = 0.0;
-
-            execAsync(['playerctl', 'volume', newVolume.toFixed(2)]).catch(print);
-        })
-        .catch(print);
+    const step = 0.1; // We use a larger step because this is player instance volume, not global
+    const mpris = Mpris.getPlayer('');
+    mpris.volume += (direction === 'up') ? step : -step
 }
 
 
