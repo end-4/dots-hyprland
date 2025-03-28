@@ -1038,7 +1038,9 @@ $waifu_image_overlay_transparency: 0.7;
 }
 
 .sidebar-centermodules-scrollgradient-bottom {
-    background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
+    @if $transparent ==False {
+        background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
+    }
 }
 
 .sidebar-centermodules-scrollgradient-bottom-contentmargin {
