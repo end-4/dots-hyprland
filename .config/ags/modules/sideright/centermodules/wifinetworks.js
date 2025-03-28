@@ -37,31 +37,31 @@ const WifiNetwork = (accessPoint) => {
         ]
     });
     return Button({
-        onClicked: accessPoint.active ? () => {} : () => {
+        onClicked: accessPoint.active ? () => { } : () => {
             connectAttempt = accessPoint.ssid;
             networkAuthSSID.label = `Connecting to: ${connectAttempt}`;
-        
+
             // Check if the SSID is stored
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
-            .then((savedConnections) => {
-                const savedSSIDs = savedConnections.split('\n');
-        
-                if (!savedSSIDs.includes(connectAttempt)) { // SSID not saved: show password input
-                    if (networkAuth) {
-                        networkAuth.revealChild = true;
+                .then((savedConnections) => {
+                    const savedSSIDs = savedConnections.split('\n');
+
+                    if (!savedSSIDs.includes(connectAttempt)) { // SSID not saved: show password input
+                        if (networkAuth) {
+                            networkAuth.revealChild = true;
+                        }
+                    } else { // If SSID is saved, hide password input
+                        if (networkAuth) {
+                            networkAuth.revealChild = false;
+                        }
+                        // Connect
+                        execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt])
+                            .catch(print);
                     }
-                } else { // If SSID is saved, hide password input
-                    if (networkAuth) {
-                        networkAuth.revealChild = false;
-                    }
-                    // Connect
-                    execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt])
-                        .catch(print);
-                }
-            })
-            .catch(print);
-        
-        },        
+                })
+                .catch(print);
+
+        },
         child: Box({
             className: 'sidebar-wifinetworks-network spacing-h-10',
             children: [
@@ -185,10 +185,10 @@ const CurrentNetwork = () => {
             authLock = false;
             // Delete SSID connection before attempting to reconnect
             execAsync(['nmcli', 'connection', 'delete', connectAttempt])
-                .catch(() => {}); // Ignore error if SSID not found
-        
+                .catch(() => { }); // Ignore error if SSID not found
+
             execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
-                .then(() => { 
+                .then(() => {
                     connectAttempt = ''; // Reset SSID after successful connection
                     networkAuth.revealChild = false; // Hide input if successful
                     authFailed.revealChild = false; // Hide failed message if successful
@@ -213,20 +213,17 @@ const CurrentNetwork = () => {
                         .split('\n')
                         .find(line => line.startsWith('yes:'))
                         ?.split(':')[1];
-    
+
                     if (activeSSID) {
                         execAsync(['nmcli', 'connection', 'delete', activeSSID])
-                            .then(() => notify(`Forgot network: ${activeSSID}`))
-                            .catch(err => notify(`Failed to forget network: ${err}`));
-                    } else {
-                        notify('No active network to forget');
+                            .catch(err => Utils.notify(`Failed to forget network: ${err}`));
                     }
                 })
-                .catch(err => notify(`Error: ${err}`));
+                .catch(print);
         },
         setup: setupCursorHover,
     });
-    const settingsButton = Button({
+    const propertiesButton = Button({
         label: 'Properties',
         className: 'txt sidebar-wifinetworks-network-button',
         hexpand: true,
@@ -242,14 +239,22 @@ const CurrentNetwork = () => {
         },
         setup: setupCursorHover,
     });
-    const networkProp = Box({
-        className: 'spacing-h-10',
-        homogeneous: true,
-        children: [
-            settingsButton,
-            forgetButton,
-        ],
-        setup: setupCursorHover,
+    const networkProp = Revealer({
+        transition: 'slide_down',
+        transitionDuration: userOptions.animations.durationLarge,
+        child: Box({
+            className: 'spacing-h-10',
+            homogeneous: true,
+            children: [
+                propertiesButton,
+                forgetButton,
+            ],
+            setup: setupCursorHover,
+        }),
+        setup: (self) => self.hook(Network, (self) => {
+            if (Network.wifi?.ssid === '') self.revealChild = false;
+            else self.revealChild = true;
+        }),
     });
     networkAuth = Revealer({
         transition: 'slide_down',
@@ -266,9 +271,9 @@ const CurrentNetwork = () => {
         setup: (self) => self.hook(Network, (self) => {
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
                 .then((savedConnections) => {
-                const savedSSIDs = savedConnections.split('\n');
-                if (Network.wifi.state == 'failed' || 
-                    (Network.wifi.state == 'need_auth' && !savedSSIDs.includes(Network.wifi.ssid))) {
+                    const savedSSIDs = savedConnections.split('\n');
+                    if (Network.wifi.state == 'failed' ||
+                        (Network.wifi.state == 'need_auth' && !savedSSIDs.includes(Network.wifi.ssid))) {
                         authLock = true;
                         connectAttempt = Network.wifi.ssid;
                         self.revealChild = true;
@@ -279,11 +284,11 @@ const CurrentNetwork = () => {
                             authLock = false;
                             self.revealChild = false;
                             authFailed.revealChild = false;
-                            Network.wifi.state = 'activated'; 
+                            Network.wifi.state = 'activated';
                         }, 20000); // 20 seconds timeout
                     }
                 }
-            ).catch(print);
+                ).catch(print);
         }),
     });
     const actualContent = Box({
