@@ -153,14 +153,15 @@ const CurrentNetwork = () => {
         label: '',
     });
     const cancelAuthButton = Button({
-        className: 'txt sidebar-centermodules-rightbar-button',
+        className: 'txt sidebar-wifinetworks-network-button',
         label: 'Cancel',
         hpack: 'end',
         onClicked: () => {
             networkAuth.revealChild = false;
             networkAuthSSID.label = '';
             networkName.children[1].label = Network.wifi?.ssid;
-        }
+        },
+        setup: setupCursorHover,
     });
     const authHeader = Box({
         vertical: false,
@@ -174,7 +175,7 @@ const CurrentNetwork = () => {
     const forgetButton = Button({
         label: 'Forget',
         hexpand: true,
-        className: 'txt sidebar-centermodules-rightbar-button',
+        className: 'txt sidebar-wifinetworks-network-button',
         onClicked: () => {
             execAsync(['nmcli', '-t', '-f', 'ACTIVE,NAME', 'connection', 'show'])
                 .then(output => {
@@ -196,7 +197,7 @@ const CurrentNetwork = () => {
     });
     const settingsButton = Button({
         label: 'Properties',
-        className: 'txt sidebar-centermodules-rightbar-button',
+        className: 'txt sidebar-wifinetworks-network-button',
         hexpand: true,
         onClicked: () => {
             Utils.execAsync('nmcli -t -f uuid connection show --active').then(uuid => {
@@ -206,7 +207,8 @@ const CurrentNetwork = () => {
             }).catch(error => {
                 Utils.notify('Failed to get connection UUID');
             });
-        }
+        },
+        setup: setupCursorHover,
     });
     const networkProp = Box({
         vertical: false,
@@ -216,7 +218,8 @@ const CurrentNetwork = () => {
         children: [
             settingsButton,
             forgetButton,
-        ]
+        ],
+        setup: setupCursorHover,
     });
     networkAuth = Revealer({
         transition: 'slide_down',
