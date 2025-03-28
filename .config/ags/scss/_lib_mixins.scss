@@ -1,6 +1,7 @@
 // Common colors
 $hovercolor: $surfaceContainerHigh;
 $activecolor: $surfaceContainerHighest;
+$rounding_unsharpen: 0.136rem;
 $rounding_verysmall: 0.477rem;
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
@@ -9,6 +10,10 @@ $rounding_mediumlarge: 1.364rem;
 $rounding_large: 1.705rem;
 
 // Common rules
+@mixin unsharpen-rounding {
+    border-radius: $rounding_unsharpen;
+}
+
 @mixin small-rounding {
     border-radius: $rounding_small;
     -gtk-outline-radius: $rounding_small;

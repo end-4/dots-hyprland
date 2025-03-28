@@ -356,7 +356,7 @@ export default (props) => {
                         },
                     },
                     vertical: true,
-                    className: 'spacing-v-5 margin-bottom-15',
+                    className: 'spacing-v-5 sidebar-centermodules-scrollgradient-bottom-contentmargin',
                     setup: (self) => self.hook(Network, self.attribute.updateNetworks),
                 }),
             }),

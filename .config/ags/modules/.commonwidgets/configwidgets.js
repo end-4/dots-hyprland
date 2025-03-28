@@ -7,8 +7,9 @@ const { Box, Button, Label, Revealer, SpinButton } = Widget;
 
 export const ConfigToggle = ({
     icon, name, desc = '', initValue,
-    expandWidget = true,
+    expandWidget = true, resetButton = false,
     onChange = () => { }, extraSetup = () => { },
+    onReset = () => { },
     ...rest
 }) => {
     const enabled = Variable(initValue);
@@ -48,7 +49,7 @@ export const ConfigToggle = ({
     });
     const widgetContent = Box({
         tooltipText: desc,
-        className: 'txt spacing-h-5 configtoggle-box',
+        className: 'txt spacing-h-5',
         children: [
             ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
             ...(name !== undefined ? [Label({
@@ -85,7 +86,18 @@ export const ConfigToggle = ({
         ...rest,
     });
     interactionWrapper.enabled = enabled;
-    return interactionWrapper;
+    return Box({
+        className: 'configtoggle-box spacing-h-5',
+        children: [
+            interactionWrapper,
+            ...(resetButton ? [Button({
+                className: 'spinbutton-reset',
+                onClicked: onReset,
+                child: MaterialIcon('settings_backup_restore', 'small'),
+                setup: setupCursorHover,
+            })] : []),
+        ]
+    });
 }
 
 export const ConfigSegmentedSelection = ({
@@ -187,8 +199,9 @@ export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
 export const ConfigSpinButton = ({
     icon, name, desc = '', initValue,
     minValue = 0, maxValue = 100, step = 1,
-    expandWidget = true,
+    expandWidget = true, resetButton = false,
     onChange = () => { }, extraSetup = () => { },
+    onReset = () => { },
     ...rest
 }) => {
     const value = Variable(initValue);
@@ -213,6 +226,12 @@ export const ConfigSpinButton = ({
             })] : []),
             ...(expandWidget ? [Box({ hexpand: true })] : []),
             spinButton,
+            ...(resetButton ? [Button({
+                className: 'spinbutton-reset',
+                onClicked: onReset,
+                child: MaterialIcon('settings_backup_restore', 'small'),
+                setup: setupCursorHover,
+            })] : []),
         ],
         setup: (self) => {
             extraSetup(self);
