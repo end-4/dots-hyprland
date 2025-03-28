@@ -224,6 +224,7 @@ const CurrentNetwork = () => {
                 if (uuid.trim()) {
                     Utils.execAsync(`nm-connection-editor --edit ${uuid.trim()}`);
                 }
+                closeEverything();
             }).catch(error => {
                 Utils.notify('Failed to get connection UUID');
             });
