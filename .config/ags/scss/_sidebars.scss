@@ -1039,3 +1039,17 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-centermodules-scrollgradient-bottom {
     background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
 }
+
+.sidebar-centermodules-rightbar-button {
+    @include full-rounding;
+    @include element_decel;
+    min-width: 6.818rem;
+    min-height: 2.25rem;
+    background-color: $layer2Hover;
+    color: $onLayer2;
+}
+
+.sidebar-centermodules-rightbar-button:hover,
+.sidebar-centermodules-rightbar-button:focus {
+    background-color: $layer2Active;
+}

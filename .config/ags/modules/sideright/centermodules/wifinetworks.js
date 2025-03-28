@@ -17,6 +17,8 @@ const MATERIAL_SYMBOL_SIGNAL_STRENGTH = {
 }
 
 let connectAttempt = '';
+let networkAuth = null;
+let networkAuthSSID = null;
 
 const WifiNetwork = (accessPoint) => {
     const networkStrength = MaterialIcon(MATERIAL_SYMBOL_SIGNAL_STRENGTH[accessPoint.iconName], 'hugerass')
@@ -35,15 +37,34 @@ const WifiNetwork = (accessPoint) => {
         ]
     });
     return Button({
-        onClicked: accessPoint.active ? () => { } : () => execAsync(`nmcli device wifi connect ${accessPoint.bssid}`)
-            // .catch(e => {
-            //     Utils.notify({
-            //         summary: "Network",
-            //         body: e,
-            //         actions: { "Open network manager": () => execAsync("nm-connection-editor").catch(print) }
-            //     });
-            // })
-            .catch(print),
+        onClicked: accessPoint.active ? () => {} : () => {
+            connectAttempt = accessPoint.ssid;
+            networkAuthSSID.label = `Connecting to: ${connectAttempt}`;
+        
+            // Cek apakah SSID sudah tersimpan
+            execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
+            .then((savedConnections) => {
+                const savedSSIDs = savedConnections.split('\n');
+        
+                if (!savedSSIDs.includes(connectAttempt)) {
+                    // Jika SSID belum tersimpan, tampilkan input password
+                    if (networkAuth) {
+                        networkAuth.revealChild = true;
+                    }
+                } else {
+                    // Jika SSID sudah tersimpan, sembunyikan input password
+                    if (networkAuth) {
+                        networkAuth.revealChild = false;
+                    }
+        
+                    // Langsung konek tanpa input password
+                    execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt])
+                        .catch(print);
+                }
+            })
+            .catch(print);
+        
+        },        
         child: Box({
             className: 'sidebar-wifinetworks-network spacing-h-10',
             children: [
@@ -124,28 +145,108 @@ const CurrentNetwork = () => {
                 self.label = Network.wifi.state;
             }),
         })]
-    })
-    const networkAuth = Revealer({
+    });
+    networkAuthSSID = Label({
+        className: 'margin-left-5',
+        hpack: 'start',
+        hexpand: true,
+        label: '',
+    });
+    const cancelAuthButton = Button({
+        className: 'txt sidebar-centermodules-rightbar-button',
+        label: 'Cancel',
+        hpack: 'end',
+        onClicked: () => {
+            networkAuth.revealChild = false;
+            networkAuthSSID.label = '';
+            networkName.children[1].label = Network.wifi?.ssid;
+        }
+    });
+    const authHeader = Box({
+        vertical: false,
+        hpack: 'fill',
+        spacing: 10,
+        children: [
+            networkAuthSSID,
+            cancelAuthButton
+        ]
+    });
+    const forgetButton = Button({
+        label: 'Forget Network',
+        hexpand: true,
+        className: 'txt sidebar-centermodules-rightbar-button',
+        onClicked: () => {
+            execAsync(['nmcli', '-t', '-f', 'ACTIVE,NAME', 'connection', 'show'])
+                .then(output => {
+                    const activeSSID = output
+                        .split('\n')
+                        .find(line => line.startsWith('yes:'))
+                        ?.split(':')[1];
+    
+                    if (activeSSID) {
+                        execAsync(['nmcli', 'connection', 'delete', activeSSID])
+                            .then(() => notify(`Forgot network: ${activeSSID}`))
+                            .catch(err => notify(`Failed to forget network: ${err}`));
+                    } else {
+                        notify('No active network to forget');
+                    }
+                })
+                .catch(err => notify(`Error: ${err}`));
+        }
+    });
+    const settingsButton = Button({
+        label: 'Network Properties',
+        className: 'txt sidebar-centermodules-rightbar-button',
+        hexpand: true,
+        onClicked: () => {
+            Utils.execAsync('nmcli -t -f uuid connection show --active').then(uuid => {
+                if (uuid.trim()) {
+                    Utils.execAsync(`nm-connection-editor --edit ${uuid.trim()}`);
+                }
+            }).catch(error => {
+                Utils.notify('Failed to get connection UUID');
+            });
+        }
+    });
+    const networkProp = Box({
+        vertical: false,
+        hpack: 'fill',
+        homogeneous: true,
+        spacing: 10,
+        children: [
+            settingsButton,
+            forgetButton,
+        ]
+    });
+    networkAuth = Revealer({
         transition: 'slide_down',
         transitionDuration: userOptions.animations.durationLarge,
         child: Box({
             className: 'margin-top-10 spacing-v-5',
             vertical: true,
             children: [
-                Label({
-                    className: 'margin-left-5',
-                    hpack: 'start',
-                    label: getString("Authentication"),
-                }),
+                authHeader,
                 Entry({
                     className: 'sidebar-wifinetworks-auth-entry',
                     visibility: false,
                     onAccept: (self) => {
                         authLock = false;
-                        networkAuth.revealChild = false;
+                        // Hapus koneksi SSID sebelum mencoba menyambung ulang
+                        execAsync(['nmcli', 'connection', 'delete', connectAttempt])
+                            .catch(() => {}); // Abaikan error jika SSID tidak ditemukan
+                    
                         execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
-                            .catch(print);
-                    }
+                            .then(() => { 
+                                connectAttempt = ''; // Reset SSID setelah koneksi berhasil
+                                networkAuth.revealChild = false; // Sembunyikan input jika berhasil
+                            })
+                            .catch(() => {
+                                // Jika koneksi gagal, tampilkan kembali input password
+                                networkAuth.revealChild = true;
+                                networkAuthSSID.label = `Authentication failed. Retry for: ${connectAttempt}`;
+                                self.text = ''; // Kosongkan input untuk coba lagi
+                            });
+                    }                    
                 })                
             ]
         }),
@@ -192,6 +293,7 @@ const CurrentNetwork = () => {
                     networkAuth,
                 ]
             }),
+            networkProp,
             bottomSeparator,
         ]
     });
