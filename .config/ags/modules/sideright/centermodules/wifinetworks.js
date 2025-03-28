@@ -41,23 +41,20 @@ const WifiNetwork = (accessPoint) => {
             connectAttempt = accessPoint.ssid;
             networkAuthSSID.label = `Connecting to: ${connectAttempt}`;
         
-            // Cek apakah SSID sudah tersimpan
+            // Check if the SSID is stored
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
             .then((savedConnections) => {
                 const savedSSIDs = savedConnections.split('\n');
         
-                if (!savedSSIDs.includes(connectAttempt)) {
-                    // Jika SSID belum tersimpan, tampilkan input password
+                if (!savedSSIDs.includes(connectAttempt)) { // SSID not saved: show password input
                     if (networkAuth) {
                         networkAuth.revealChild = true;
                     }
-                } else {
-                    // Jika SSID sudah tersimpan, sembunyikan input password
+                } else { // If SSID is saved, hide password input
                     if (networkAuth) {
                         networkAuth.revealChild = false;
                     }
-        
-                    // Langsung konek tanpa input password
+                    // Connect
                     execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt])
                         .catch(print);
                 }
@@ -234,20 +231,20 @@ const CurrentNetwork = () => {
                     visibility: false,
                     onAccept: (self) => {
                         authLock = false;
-                        // Hapus koneksi SSID sebelum mencoba menyambung ulang
+                        // Delete SSID connection before attempting to reconnect
                         execAsync(['nmcli', 'connection', 'delete', connectAttempt])
-                            .catch(() => {}); // Abaikan error jika SSID tidak ditemukan
+                            .catch(() => {}); // Ignore error if SSID not found
                     
                         execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
                             .then(() => { 
-                                connectAttempt = ''; // Reset SSID setelah koneksi berhasil
-                                networkAuth.revealChild = false; // Sembunyikan input jika berhasil
+                                connectAttempt = ''; // Reset SSID after successful connection
+                                networkAuth.revealChild = false; // Hide input if successful
                             })
                             .catch(() => {
-                                // Jika koneksi gagal, tampilkan kembali input password
+                                // Connection failed, show password input again
                                 networkAuth.revealChild = true;
                                 networkAuthSSID.label = `Authentication failed. Retry for: ${connectAttempt}`;
-                                self.text = ''; // Kosongkan input untuk coba lagi
+                                self.text = ''; // Empty input for retry
                             });
                     }                    
                 })                
