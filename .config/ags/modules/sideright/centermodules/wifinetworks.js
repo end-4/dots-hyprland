@@ -126,7 +126,7 @@ const CurrentNetwork = () => {
     const networkBandwidth = Box({
         vertical: true,
         hexpand: true,
-        hpack: 'center',
+        hpack: 'end',
         className: 'sidebar-wifinetworks-bandwidth',
         children: [
             NetResource('arrow_warm_up', `${App.configDir}/scripts/network_scripts/network_bandwidth.py sent`),
@@ -155,8 +155,10 @@ const CurrentNetwork = () => {
         hpack: 'end',
         onClicked: () => {
             networkAuth.revealChild = false;
+            authFailed.revealChild = false;
             networkAuthSSID.label = '';
             networkName.children[1].label = Network.wifi?.ssid;
+            authEntry.text = '';
         },
         setup: setupCursorHover,
     });
@@ -169,6 +171,13 @@ const CurrentNetwork = () => {
             cancelAuthButton
         ]
     });
+    const authFailed = Revealer({
+        revealChild: false,
+        child: Label({
+            className: 'txt txt-italic txt-subtext',
+            label: 'Authentication failed',
+        }),
+    })
     const authEntry = Entry({
         className: 'sidebar-wifinetworks-auth-entry',
         visibility: false,
@@ -182,14 +191,16 @@ const CurrentNetwork = () => {
                 .then(() => { 
                     connectAttempt = ''; // Reset SSID after successful connection
                     networkAuth.revealChild = false; // Hide input if successful
+                    authFailed.revealChild = false; // Hide failed message if successful
+                    self.text = ''; // Empty input for retry
                 })
                 .catch(() => {
                     // Connection failed, show password input again
                     networkAuth.revealChild = true;
-                    networkAuthSSID.label = `Authentication failed. Retry for: ${connectAttempt}`;
-                    self.text = ''; // Empty input for retry
+                    authFailed.revealChild = true;
                 });
-        }                    
+        },
+        placeholderText: 'Enter network password',
     });
     const forgetButton = Button({
         label: 'Forget',
@@ -249,6 +260,7 @@ const CurrentNetwork = () => {
             children: [
                 authHeader,
                 authEntry,
+                authFailed,
             ]
         }),
         setup: (self) => self.hook(Network, (self) => {
@@ -266,6 +278,7 @@ const CurrentNetwork = () => {
                         timeoutId = setTimeout(() => {
                             authLock = false;
                             self.revealChild = false;
+                            authFailed.revealChild = false;
                             Network.wifi.state = 'activated'; 
                         }, 20000); // 20 seconds timeout
                     }
@@ -287,8 +300,7 @@ const CurrentNetwork = () => {
                             MaterialIcon('language', 'hugerass'),
                             networkName,
                             networkBandwidth,
-                            networkStatus,
-
+                            // networkStatus,
                         ]
                     }),
                     networkProp,
