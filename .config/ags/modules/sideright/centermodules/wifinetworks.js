@@ -216,10 +216,14 @@ const CurrentNetwork = () => {
 
                     if (activeSSID) {
                         execAsync(['nmcli', 'connection', 'delete', activeSSID])
-                            .catch(err => Utils.notify(`Failed to forget network: ${err}`));
+                            .catch(err => Utils.execAsync(['notify-send',
+                                "Network",
+                                `Failed to forget network - Hold to copy\n${err}`,
+                                '-a', 'ags',
+                            ]).catch(print));
                     }
                 })
-                .catch(print);
+                .catch();
         },
         setup: setupCursorHover,
     });
@@ -233,9 +237,11 @@ const CurrentNetwork = () => {
                     Utils.execAsync(`nm-connection-editor --edit ${uuid.trim()}`);
                 }
                 closeEverything();
-            }).catch(error => {
-                Utils.notify('Failed to get connection UUID');
-            });
+            }).catch(err => Utils.execAsync(['notify-send',
+                "Network",
+                `Failed to get connection UUID - Hold to copy\n${err}`,
+                '-a', 'ags',
+            ]).catch(print));
         },
         setup: setupCursorHover,
     });
