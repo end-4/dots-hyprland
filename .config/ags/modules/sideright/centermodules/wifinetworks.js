@@ -133,16 +133,16 @@ const CurrentNetwork = () => {
             NetResource('arrow_cool_down', `${App.configDir}/scripts/network_scripts/network_bandwidth.py recv`),
         ]
     });
-    const networkStatus = Box({
-        children: [Label({
-            vpack: 'center',
-            className: 'txt-subtext',
-            setup: (self) => self.hook(Network, (self) => {
-                if (authLock) return;
-                self.label = Network.wifi.state;
-            }),
-        })]
-    });
+    // const networkStatus = Box({
+    //     children: [Label({
+    //         vpack: 'center',
+    //         className: 'txt-subtext',
+    //         setup: (self) => self.hook(Network, (self) => {
+    //             if (authLock) return;
+    //             self.label = Network.wifi.state;
+    //         }),
+    //     })]
+    // });
     networkAuthSSID = Label({
         className: 'margin-left-5',
         hpack: 'start',
