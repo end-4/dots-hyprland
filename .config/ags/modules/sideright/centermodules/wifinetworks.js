@@ -172,7 +172,7 @@ const CurrentNetwork = () => {
         ]
     });
     const forgetButton = Button({
-        label: 'Forget Network',
+        label: 'Forget',
         hexpand: true,
         className: 'txt sidebar-centermodules-rightbar-button',
         onClicked: () => {
@@ -195,7 +195,7 @@ const CurrentNetwork = () => {
         }
     });
     const settingsButton = Button({
-        label: 'Network Properties',
+        label: 'Properties',
         className: 'txt sidebar-centermodules-rightbar-button',
         hexpand: true,
         onClicked: () => {
