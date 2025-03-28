@@ -72,12 +72,18 @@ export default (monitor = 0) => {
         nameSetup: (self) => Utils.timeout(1, () => {
             const updateAudioDevice = (self) => {
                 const usingHeadphones = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headphone');
+                const usingHeadset = (Audio.speaker?.stream?.port)?.toLowerCase().includes('headset');
                 if (volumeIndicator.attribute.headphones === undefined ||
                     volumeIndicator.attribute.headphones !== usingHeadphones) {
                     volumeIndicator.attribute.headphones = usingHeadphones;
                     self.label = usingHeadphones ? 'Headphones' : 'Speakers';
-                    // Indicator.popup(1);
                 }
+                if (volumeIndicator.attribute.headphones === undefined ||
+                    volumeIndicator.attribute.headphones !== usingHeadset) {
+                    volumeIndicator.attribute.headphones = usingHeadset;
+                    self.label = usingHeadset ? 'Headset' : 'Speakers';
+                }
+                // Indicator.popup(1);
             }
             self.hook(Audio, updateAudioDevice);
             Utils.timeout(1000, updateAudioDevice);
