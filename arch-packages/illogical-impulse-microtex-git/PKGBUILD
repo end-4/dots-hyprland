@@ -1,7 +1,7 @@
 pkgname=illogical-impulse-microtex-git
 _pkgname=MicroTeX
 pkgver=r494.0e3707f
-pkgrel=1
+pkgrel=2
 pkgdesc='MicroTeX for illogical-impulse dotfiles.'
 #pkgdesc="A dynamic, cross-platform, and embeddable LaTeX rendering library"
 arch=("x86_64")
@@ -25,6 +25,7 @@ pkgver() {
 prepare() {
     cd $_pkgname
     sed -i 's/gtksourceviewmm-3.0/gtksourceviewmm-4.0/' CMakeLists.txt
+    sed -i 's/tinyxml2.so.10/tinyxml2.so.11/' CMakeLists.txt
 }
 
 build() {
