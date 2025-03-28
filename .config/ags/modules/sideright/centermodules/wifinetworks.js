@@ -169,6 +169,28 @@ const CurrentNetwork = () => {
             cancelAuthButton
         ]
     });
+    const authEntry = Entry({
+        className: 'sidebar-wifinetworks-auth-entry',
+        visibility: false,
+        onAccept: (self) => {
+            authLock = false;
+            // Delete SSID connection before attempting to reconnect
+            execAsync(['nmcli', 'connection', 'delete', connectAttempt])
+                .catch(() => {}); // Ignore error if SSID not found
+        
+            execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
+                .then(() => { 
+                    connectAttempt = ''; // Reset SSID after successful connection
+                    networkAuth.revealChild = false; // Hide input if successful
+                })
+                .catch(() => {
+                    // Connection failed, show password input again
+                    networkAuth.revealChild = true;
+                    networkAuthSSID.label = `Authentication failed. Retry for: ${connectAttempt}`;
+                    self.text = ''; // Empty input for retry
+                });
+        }                    
+    });
     const forgetButton = Button({
         label: 'Forget',
         hexpand: true,
@@ -190,7 +212,8 @@ const CurrentNetwork = () => {
                     }
                 })
                 .catch(err => notify(`Error: ${err}`));
-        }
+        },
+        setup: setupCursorHover,
     });
     const settingsButton = Button({
         label: 'Properties',
@@ -208,10 +231,8 @@ const CurrentNetwork = () => {
         setup: setupCursorHover,
     });
     const networkProp = Box({
-        vertical: false,
-        hpack: 'fill',
+        className: 'spacing-h-10',
         homogeneous: true,
-        spacing: 10,
         children: [
             settingsButton,
             forgetButton,
@@ -226,28 +247,7 @@ const CurrentNetwork = () => {
             vertical: true,
             children: [
                 authHeader,
-                Entry({
-                    className: 'sidebar-wifinetworks-auth-entry',
-                    visibility: false,
-                    onAccept: (self) => {
-                        authLock = false;
-                        // Delete SSID connection before attempting to reconnect
-                        execAsync(['nmcli', 'connection', 'delete', connectAttempt])
-                            .catch(() => {}); // Ignore error if SSID not found
-                    
-                        execAsync(['nmcli', 'device', 'wifi', 'connect', connectAttempt, 'password', self.text])
-                            .then(() => { 
-                                connectAttempt = ''; // Reset SSID after successful connection
-                                networkAuth.revealChild = false; // Hide input if successful
-                            })
-                            .catch(() => {
-                                // Connection failed, show password input again
-                                networkAuth.revealChild = true;
-                                networkAuthSSID.label = `Authentication failed. Retry for: ${connectAttempt}`;
-                                self.text = ''; // Empty input for retry
-                            });
-                    }                    
-                })                
+                authEntry,
             ]
         }),
         setup: (self) => self.hook(Network, (self) => {
@@ -281,7 +281,7 @@ const CurrentNetwork = () => {
                 vertical: true,
                 children: [
                     Box({
-                        className: 'spacing-h-10',
+                        className: 'spacing-h-10 margin-bottom-10',
                         children: [
                             MaterialIcon('language', 'hugerass'),
                             networkName,
@@ -290,10 +290,10 @@ const CurrentNetwork = () => {
 
                         ]
                     }),
-                    networkAuth,
+                    networkProp,
+                    networkAuth
                 ]
             }),
-            networkProp,
             bottomSeparator,
         ]
     });
@@ -334,7 +334,7 @@ export default (props) => {
                     vertical: true,
                     className: 'spacing-v-5 margin-bottom-15',
                     setup: (self) => self.hook(Network, self.attribute.updateNetworks),
-                })
+                }),
             }),
             overlays: [Box({
                 className: 'sidebar-centermodules-scrollgradient-bottom'
