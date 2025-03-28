@@ -14,6 +14,7 @@ const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disa
     desc: desc,
     resetButton: true,
     initValue: JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"] != 0,
+    fetchValue: () => JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"] != 0,
     onChange: (self, newValue) => {
         if (save)
             execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
@@ -23,28 +24,28 @@ const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disa
             ]).catch(print);
         else
             execAsync(['hyprctl', 'keyword', option, `${newValue ? enableValue : disableValue}`]).catch(print);
-        // scripts/hyprland/hyprconfigurator.py --key decoration:rounding --value 12 --file '/home/end/.config/hypr/custom/general.conf'
+        
         extraOnChange(self, newValue);
     },
-    onReset: (self, newValue) => {
+    onReset: async (self) => {
         if (save)
-            execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
+            exec(`bash -c '${App.configDir}/scripts/hyprland/hyprconfigurator.py \
                 --key ${option} \
                 --reset \
-                --file \${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`
-            ]).catch(print);
+                --file "\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf"'`);
         else
-            execAsync(['bash', '-c', `hyprctl reload`]).catch(print);
-        extraOnReset(self, newValue);
+            exec('hyprctl reload')
+        extraOnReset(self);
     },
 });
 
-const HyprlandSpinButton = ({ icon, name, desc = null, option, save = true, ...rest }) => ConfigSpinButton({
+const HyprlandSpinButton = ({ icon, name, desc = null, option, save = true, extraOnChange = () => { }, extraOnReset = () => { }, ...rest }) => ConfigSpinButton({
     icon: icon,
     name: name,
     desc: desc,
     resetButton: true,
     initValue: Number(JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"]),
+    fetchValue: () => Number(JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"]),
     onChange: (self, newValue) => {
         if (save)
             execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
@@ -54,16 +55,18 @@ const HyprlandSpinButton = ({ icon, name, desc = null, option, save = true, ...r
             ]).catch(print);
         else
             execAsync(['hyprctl', 'keyword', option, `${newValue}`]).catch(print);
+
+        extraOnChange(self, newValue);
     },
-    onReset: (self, newValue) => {
+    onReset: async (self) => {
         if (save)
-            execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
+            exec(`bash -c '${App.configDir}/scripts/hyprland/hyprconfigurator.py \
                 --key ${option} \
                 --reset \
-                --file \${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`
-            ]).catch(print);
+                --file "\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf"'`);
         else
-            execAsync(['bash', '-c', `hyprctl reload`]).catch(print);
+            exec('hyprctl reload')
+        extraOnReset(self);
     },
     ...rest,
 });

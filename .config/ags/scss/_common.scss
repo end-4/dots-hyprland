@@ -115,6 +115,14 @@ popover {
     padding: 0.205rem 0.341rem;
 }
 
+.configtoggle-reset {
+    @include small-rounding;
+    color: $onLayer2;
+    background-color: $layer2;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+}
+
 .switch-bg {
     @include element_decel;
     @include full-rounding;
