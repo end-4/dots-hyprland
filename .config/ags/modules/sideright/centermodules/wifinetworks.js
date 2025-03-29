@@ -175,6 +175,7 @@ const CurrentNetwork = () => {
         ]
     });
     const authVisible = Button({
+        vpack: 'center',
         child: MaterialIcon('visibility', 'large'),
         className: 'txt sidebar-wifinetworks-auth-visible',
         onClicked: () => {
@@ -218,8 +219,7 @@ const CurrentNetwork = () => {
         placeholderText: getString('Enter network password'),
     });
     const authBox = Box({
-        className: 'spacing-h-5',
-        vertical: false,
+        className: 'sidebar-wifinetworks-auth-box',
         children: [
             authEntry,
             authVisible,
