@@ -123,6 +123,16 @@ popover {
     min-height: 2.045rem;
 }
 
+.configtoggle-reset:focus,
+.configtoggle-reset:hover {
+    background-color: $layer2Hover;
+}
+
+.configtoggle-reset:active {
+    background-color: $layer2Active;
+}
+
+
 .switch-bg {
     @include element_decel;
     @include full-rounding;
