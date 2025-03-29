@@ -50,6 +50,7 @@ const AppVolume = (stream) => Box({
                     },
                     setup: (self) => self.hook(stream, (self) => {
                         self.value = stream.volume;
+                        self.adjustment["step-increment"] = 0.1;
                     })
                 }),
                 // Box({
