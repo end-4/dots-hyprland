@@ -20,8 +20,8 @@ const conversions = [
         forcePrecision: true,
     },
     {
-        unit1: 'degrees',
-        unit2: 'radians',
+        unit1: 'deg',
+        unit2: 'rad',
         unit1Default: 90,
         formula1to2: '{{x}} * Math.PI / 180',
         formula2to1: '{{x}} * 180 / Math.PI',
@@ -63,13 +63,13 @@ export default () => {
     const ValueBox = ({ unit, initValue = 0, updateCallback }) => {
         const unitName = Label({
             xalign: 0,
-            className: 'txt txt-smallie',
+            className: 'txt txt-smallie txt-semibold margin-top-2 margin-left-2',
             label: `${unit}`,
         });
         const entry = Entry({
             hexpand: 'true',
             widthChars: 10,
-            className: 'txt-small techfont',
+            className: 'txt-small techfont margin-left-2',
             text: `${initValue}`,
             onChange: updateCallback,
         });
