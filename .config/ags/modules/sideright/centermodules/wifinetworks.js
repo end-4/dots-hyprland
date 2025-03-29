@@ -155,6 +155,8 @@ const CurrentNetwork = () => {
         label: getString('Cancel'),
         hpack: 'end',
         onClicked: () => {
+            passwordVisible = false;
+            authEntry.visibility = false;
             networkAuth.revealChild = false;
             authFailed.revealChild = false;
             networkAuthSSID.label = '';
@@ -204,6 +206,8 @@ const CurrentNetwork = () => {
                     networkAuth.revealChild = false; // Hide input if successful
                     authFailed.revealChild = false; // Hide failed message if successful
                     self.text = ''; // Empty input for retry
+                    passwordVisible = false;
+                    authEntry.visibility = false;
                 })
                 .catch(() => {
                     // Connection failed, show password input again
@@ -307,6 +311,8 @@ const CurrentNetwork = () => {
                         }
                         timeoutId = setTimeout(() => {
                             authLock = false;
+                            passwordVisible = false;
+                            authEntry.visibility = false;
                             self.revealChild = false;
                             authFailed.revealChild = false;
                             Network.wifi.state = 'activated';
