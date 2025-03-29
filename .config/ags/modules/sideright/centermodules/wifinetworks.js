@@ -39,7 +39,7 @@ const WifiNetwork = (accessPoint) => {
     return Button({
         onClicked: accessPoint.active ? () => { } : () => {
             connectAttempt = accessPoint.ssid;
-            networkAuthSSID.label = `Connecting to: ${connectAttempt}`;
+            networkAuthSSID.label = `${getString('Connecting to')}: ${connectAttempt}`;
 
             // Check if the SSID is stored
             execAsync(['nmcli', '-g', 'NAME', 'connection', 'show'])
@@ -151,7 +151,7 @@ const CurrentNetwork = () => {
     });
     const cancelAuthButton = Button({
         className: 'txt sidebar-wifinetworks-network-button',
-        label: 'Cancel',
+        label: getString('Cancel'),
         hpack: 'end',
         onClicked: () => {
             networkAuth.revealChild = false;
@@ -175,7 +175,7 @@ const CurrentNetwork = () => {
         revealChild: false,
         child: Label({
             className: 'txt txt-italic txt-subtext',
-            label: 'Authentication failed',
+            label: getString('Authentication failed'),
         }),
     })
     const authEntry = Entry({
@@ -200,10 +200,10 @@ const CurrentNetwork = () => {
                     authFailed.revealChild = true;
                 });
         },
-        placeholderText: 'Enter network password',
+        placeholderText: getString('Enter network password'),
     });
     const forgetButton = Button({
-        label: 'Forget',
+        label: getString('Forget'),
         hexpand: true,
         className: 'txt sidebar-wifinetworks-network-button',
         onClicked: () => {
@@ -228,7 +228,7 @@ const CurrentNetwork = () => {
         setup: setupCursorHover,
     });
     const propertiesButton = Button({
-        label: 'Properties',
+        label: getString('Properties'),
         className: 'txt sidebar-wifinetworks-network-button',
         hexpand: true,
         onClicked: () => {
