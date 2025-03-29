@@ -19,7 +19,6 @@ const MATERIAL_SYMBOL_SIGNAL_STRENGTH = {
 let connectAttempt = '';
 let networkAuth = null;
 let networkAuthSSID = null;
-let passwordVisible = false;
 
 const WifiNetwork = (accessPoint) => {
     const networkStrength = MaterialIcon(MATERIAL_SYMBOL_SIGNAL_STRENGTH[accessPoint.iconName], 'hugerass')
@@ -99,6 +98,7 @@ const NetResource = (icon, command) => {
 }
 
 const CurrentNetwork = () => {
+    let passwordVisible = false;
     let authLock = false;
     let timeoutId = null;
 
