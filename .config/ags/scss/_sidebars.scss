@@ -1007,11 +1007,25 @@ $waifu_image_overlay_transparency: 0.7;
 }
 
 .sidebar-wifinetworks-auth-entry {
-    @include small-rounding;
+    border-radius: 12px 0px 0px 12px;
     background-color: $layer1;
     color: $onLayer1;
     padding: 0.682rem;
     caret-color: $onLayer2;
+}
+
+.sidebar-wifinetworks-auth-visible {
+    @include element_decel;
+    border-radius: 0px 12px 12px 0px;
+    background-color: $layer2Hover;
+    color: $onLayer2;
+    padding: 0.682rem;
+    min-width: 0.918rem;
+}
+
+.sidebar-wifinetworks-auth-visible:hover,
+.sidebar-wifinetworks-auth-visible:focus {
+    background-color: $layer2Active;
 }
 
 .sidebar-wifinetworks-bandwidth {
