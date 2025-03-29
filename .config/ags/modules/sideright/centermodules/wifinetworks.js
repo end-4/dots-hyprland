@@ -98,6 +98,7 @@ const NetResource = (icon, command) => {
 }
 
 const CurrentNetwork = () => {
+    let passwordVisible = false;
     let authLock = false;
     let timeoutId = null;
 
@@ -154,6 +155,8 @@ const CurrentNetwork = () => {
         label: getString('Cancel'),
         hpack: 'end',
         onClicked: () => {
+            passwordVisible = false;
+            authEntry.visibility = false;
             networkAuth.revealChild = false;
             authFailed.revealChild = false;
             networkAuthSSID.label = '';
@@ -171,6 +174,17 @@ const CurrentNetwork = () => {
             cancelAuthButton
         ]
     });
+    const authVisible = Button({
+        vpack: 'center',
+        child: MaterialIcon('visibility', 'large'),
+        className: 'txt sidebar-wifinetworks-auth-visible',
+        onClicked: (self) => {
+            passwordVisible = !passwordVisible;
+            authEntry.visibility = passwordVisible;
+            self.child.label = passwordVisible ? 'visibility_off' : 'visibility';
+        },
+        setup: setupCursorHover,
+    });
     const authFailed = Revealer({
         revealChild: false,
         child: Label({
@@ -181,6 +195,7 @@ const CurrentNetwork = () => {
     const authEntry = Entry({
         className: 'sidebar-wifinetworks-auth-entry',
         visibility: false,
+        hexpand: true,
         onAccept: (self) => {
             authLock = false;
             // Delete SSID connection before attempting to reconnect
@@ -193,6 +208,8 @@ const CurrentNetwork = () => {
                     networkAuth.revealChild = false; // Hide input if successful
                     authFailed.revealChild = false; // Hide failed message if successful
                     self.text = ''; // Empty input for retry
+                    passwordVisible = false;
+                    authEntry.visibility = false;
                 })
                 .catch(() => {
                     // Connection failed, show password input again
@@ -201,6 +218,13 @@ const CurrentNetwork = () => {
                 });
         },
         placeholderText: getString('Enter network password'),
+    });
+    const authBox = Box({
+        className: 'sidebar-wifinetworks-auth-box',
+        children: [
+            authEntry,
+            authVisible,
+        ]
     });
     const forgetButton = Button({
         label: getString('Forget'),
@@ -270,7 +294,7 @@ const CurrentNetwork = () => {
             vertical: true,
             children: [
                 authHeader,
-                authEntry,
+                authBox,
                 authFailed,
             ]
         }),
@@ -288,10 +312,12 @@ const CurrentNetwork = () => {
                         }
                         timeoutId = setTimeout(() => {
                             authLock = false;
+                            passwordVisible = false;
+                            authEntry.visibility = false;
                             self.revealChild = false;
                             authFailed.revealChild = false;
                             Network.wifi.state = 'activated';
-                        }, 20000); // 20 seconds timeout
+                        }, 60000); // 60 seconds timeout
                     }
                 }
                 ).catch(print);
