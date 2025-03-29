@@ -27,3 +27,10 @@ export function setupCursorHoverInfo(button) { // "?" mark cursor on hover
     setupCursorHover(button, 'help');
 }
 
+export function setupCursorHoverHResize(button) { // Resize left right
+    setupCursorHover(button, 'ew-resize');
+}
+
+export function setupCursorHoverVResize(button) { // Resize up down
+    setupCursorHover(button, 'ns-resize');
+}
