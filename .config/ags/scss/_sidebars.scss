@@ -419,9 +419,9 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
 .sidebar-module-btn-arrow {
     @include full-rounding;
     @include icon-material;
-    background-color: $layer2;
     min-width: 1.705rem;
     min-height: 1.705rem;
+    background-color: $layer2;
 
     &:hover,
     &:focus {
@@ -1006,11 +1006,33 @@ $waifu_image_overlay_transparency: 0.7;
     font-size: 2.045rem;
 }
 
-.sidebar-wifinetworks-auth-entry {
+.sidebar-wifinetworks-auth-box {
     @include small-rounding;
     background-color: $layer1;
     color: $onLayer1;
+}
+
+.sidebar-wifinetworks-auth-entry {
+    @include small-rounding;
+    color: $onLayer1;
     padding: 0.682rem;
+    caret-color: $onLayer2;
+}
+
+.sidebar-wifinetworks-auth-visible {
+    @include element_decel;
+    @include small-rounding;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+    margin: 0.341rem;
+
+    &:hover,
+    &:focus {
+        background-color: $layer3Hover;
+    }
+    &:active {
+        background-color: $layer3Active;
+    }
 }
 
 .sidebar-wifinetworks-bandwidth {
@@ -1037,5 +1059,29 @@ $waifu_image_overlay_transparency: 0.7;
 }
 
 .sidebar-centermodules-scrollgradient-bottom {
-    background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
+    @if $transparent ==False {
+        background: linear-gradient(to top, $layer1 0%, transparentize($layer1, 1) 1.023rem);
+    }
+}
+
+.sidebar-centermodules-scrollgradient-bottom-contentmargin {
+    margin-bottom: 1.023rem;
+}
+
+.sidebar-wifinetworks-network-button {
+    @include full-rounding;
+    @include element_decel;
+    min-width: 6.818rem;
+    min-height: 2.25rem;
+    color: $onLayer3;
+    background-color: $layer3;
+
+    &:hover,
+    &:focus {
+        background-color: $layer3Hover;
+    }
+
+    &:active {
+        background-color: $layer3Active;
+    }
 }

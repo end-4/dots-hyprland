@@ -67,7 +67,7 @@ export const periodicTable = [
         { name: 'Scandium', symbol: 'Sc', number: 21, weight: 44.956, type: 'metal' },
         { name: 'Titanium', symbol: 'Ti', number: 22, weight: 47.87, type: 'metal' },
         { name: 'Vanadium', symbol: 'V', number: 23, weight: 50.94, type: 'metal' },
-        { name: 'Chromium', symbol: 'Cr', number: 24, weight: 52, type: 'metal', icon: 'chromium-browser' },
+        { name: 'Chromium', symbol: 'Cr', number: 24, weight: 52, type: 'metal'/*, icon: 'chromium-browser'*/ },
         { name: 'Manganese', symbol: 'Mn', number: 25, weight: 54.94, type: 'metal' },
         { name: 'Iron', symbol: 'Fe', number: 26, weight: 55.85, type: 'metal' },
         { name: 'Cobalt', symbol: 'Co', number: 27, weight: 58.93, type: 'metal' },

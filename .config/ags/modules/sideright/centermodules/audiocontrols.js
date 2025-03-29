@@ -4,7 +4,7 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Box, Button, Icon, Label, Revealer, Scrollable, Slider, Stack } = Widget;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
-import { iconExists } from '../../.miscutils/icons.js';
+import { iconExists, substitute } from '../../.miscutils/icons.js';
 
 const AppVolume = (stream) => Box({
     className: 'sidebar-volmixer-stream spacing-h-10',
@@ -15,7 +15,7 @@ const AppVolume = (stream) => Box({
             tooltipText: stream.stream.name,
             setup: (self) => {
                 self.hook(stream, (self) => {
-                    self.icon = stream.stream.name.toLowerCase();
+                    self.icon = substitute(stream.stream.name);
                 })
             },
         }),
