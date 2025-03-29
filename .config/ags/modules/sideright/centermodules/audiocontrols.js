@@ -15,7 +15,11 @@ const AppVolume = (stream) => Box({
             tooltipText: stream.stream.name,
             setup: (self) => {
                 self.hook(stream, (self) => {
-                    self.icon = substitute(stream.stream.name);
+                    self.icon = substitute(
+                        stream["icon-name"] ||
+                        stream.stream["icon-name"] ||
+                        stream.stream["application-id"] ||
+                        stream.stream["name"]);
                 })
             },
         }),
