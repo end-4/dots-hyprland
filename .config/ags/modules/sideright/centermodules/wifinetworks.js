@@ -178,9 +178,10 @@ const CurrentNetwork = () => {
         vpack: 'center',
         child: MaterialIcon('visibility', 'large'),
         className: 'txt sidebar-wifinetworks-auth-visible',
-        onClicked: () => {
+        onClicked: (self) => {
             passwordVisible = !passwordVisible;
             authEntry.visibility = passwordVisible;
+            self.child.label = passwordVisible ? 'visibility_off' : 'visibility';
         },
         setup: setupCursorHover,
     });
