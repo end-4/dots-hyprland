@@ -510,6 +510,31 @@ $colorpicker_rounding: 0.341rem;
     padding: 0.341rem;
 }
 
+.sidebar-module-csscalc-valuebox {
+    @include small-rounding;
+    padding: 0.341rem;
+    background-color: $layer2;
+    color: $onLayer2;
+}
+
+.sidebar-module-csscalc-valuebox-copybtn {
+    @include verysmall-rounding;
+    @include element_decel;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    background-color: $layer2;
+    color: $onLayer2;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
+}
+
 .sidebar-icontabswitcher {
     @include full-rounding;
     @include group-padding;
