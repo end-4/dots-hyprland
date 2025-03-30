@@ -26,6 +26,7 @@ let configOptions = {
             'from': "18:10",
             'to': "6:10",
         },
+        'borderless': false, // Uhm experimental...
         'keyboardUseFlag': false, // Use flag emoji instead of abbreviation letters
         'layerSmoke': false,
         'layerSmokeStrength': 0.2,

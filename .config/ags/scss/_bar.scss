@@ -43,6 +43,10 @@ $bar_ws_width_focus_active: 2.045rem;
     background-color: $layer1;
 }
 
+.bar-group-borderless {
+    background-color: transparent;
+}
+
 .bar-group-pad {
     padding: 0.205rem;
 }
@@ -171,6 +175,10 @@ $bar_ws_width_focus_active: 2.045rem;
     color: $battOnLayer2;
 }
 
+.bar-batt-circprog-borderless {
+    background-color: transparent;
+}
+
 .bar-batt-circprog-low {
     background-color: $error;
     color: $errorContainer;
@@ -200,6 +208,10 @@ $bar_ws_width_focus_active: 2.045rem;
     color: $ramOnLayer2;
 }
 
+.bar-ram-circprog-borderless {
+    background-color: transparent;
+}
+
 .bar-ram-txt {
     color: $ramOnLayer1;
 }
@@ -220,6 +232,10 @@ $bar_ws_width_focus_active: 2.045rem;
     padding: 0rem;
     background-color: $swapLayer2;
     color: $swapOnLayer2;
+}
+
+.bar-swap-circprog-borderless {
+    background-color: transparent;
 }
 
 .bar-swap-txt {
@@ -244,6 +260,10 @@ $bar_ws_width_focus_active: 2.045rem;
     color: $cpuOnLayer2;
 }
 
+.bar-cpu-circprog-borderless {
+    background-color: transparent;
+}
+
 .bar-cpu-txt {
     color: $cpuOnLayer1;
 }
@@ -263,6 +283,10 @@ $bar_ws_width_focus_active: 2.045rem;
     padding: 0rem;
     background-color: $musicLayer2;
     color: $musicOnLayer2;
+}
+
+.bar-music-circprog-borderless {
+    background-color: transparent;
 }
 
 .bar-music-playstate-playing {
@@ -384,6 +408,10 @@ $bar_ws_width_focus_active: 2.045rem;
     min-width: 1.77rem;
     background-color: $utilsLayer2;
     color: $utilsOnLayer2;
+}
+
+.bar-util-btn-borderless {
+    background-color: transparent;
 }
 
 .bar-util-btn:hover,
