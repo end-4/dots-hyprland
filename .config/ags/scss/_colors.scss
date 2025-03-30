@@ -37,7 +37,7 @@ $onLayer1Inactive: mix($onLayer1, $layer1, 45%);
 $onLayer1: $onSurfaceVariant;
 $layer2: mix($surfaceContainer, $surfaceContainerHigh, 55%);
 $onLayer2: $onSurface;
-$layer3: $surfaceContainerHigh;
+$layer3: mix($surfaceContainerHigh, $onSurface, 96%);
 $onLayer3: $onSurface;
 $layer1Hover: mix($layer1, $onLayer1, 85%);
 $layer1Active: mix($layer1, $onLayer1, 70%);

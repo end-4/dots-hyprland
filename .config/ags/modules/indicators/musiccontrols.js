@@ -10,6 +10,7 @@ import { fileExists } from '../.miscutils/files.js';
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
 import { darkMode, hasPlasmaIntegration } from '../.miscutils/system.js';
+import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/ags/user/colormode.txt`;
@@ -253,7 +254,8 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_previous',
-                })
+                }),
+                setup: setupCursorHover
             }),
             Button({
                 className: 'osd-music-controlbtn',
@@ -261,7 +263,8 @@ const TrackControls = ({ player, ...rest }) => Widget.Revealer({
                 child: Label({
                     className: 'icon-material osd-music-controlbtn-txt',
                     label: 'skip_next',
-                })
+                }),
+                setup: setupCursorHover
             }),
         ],
     }),
@@ -355,10 +358,11 @@ const PlayState = ({ player }) => {
                             label.label = `${player.playBackStatus == 'Playing' ? 'pause' : 'play_arrow'}`;
                         }, 'notify::play-back-status'),
                     }),
+                    setup: setupCursorHover
                 }),
             ],
             passThrough: true,
-        })
+        }),
     });
 }
 

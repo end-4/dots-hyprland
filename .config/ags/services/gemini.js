@@ -44,7 +44,7 @@ function replaceapidom(URL) {
     }
     return URL;
 }
-const CHAT_MODELS = ["gemini-1.5-flash"]
+const CHAT_MODELS = ["gemini-2.0-flash"]
 const ONE_CYCLE_COUNT = 3;
 
 class GeminiMessage extends Service {

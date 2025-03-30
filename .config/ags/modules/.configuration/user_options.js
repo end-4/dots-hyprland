@@ -10,9 +10,8 @@ let configOptions = {
     defaultGPTProvider: "openai",
     defaultTemperature: 0.9,
     enhancements: true,
-    useHistory: true,
+    useHistory: false,
     safety: true,
-    precision: 1,
     writingCursor: " ...", // Warning: Using weird characters can mess up Markdown rendering
     proxyUrl: null, // Can be "socks5://127.0.0.1:9050" or "http://127.0.0.1:8080" for example. Leave it blank if you don't need it.
   },
