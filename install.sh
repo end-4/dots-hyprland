@@ -201,10 +201,17 @@ case $SKIP_HYPRLAND in
   *)
     v rsync -av --delete --exclude '/custom' --exclude '/hyprlock.conf' --exclude '/hypridle.conf' --exclude '/hyprland.conf' .config/hypr/ "$XDG_CONFIG_HOME"/hypr/
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
-    if [ -f $t_0 ];then
+    if [ -f $t ];then
       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      v cp -f .config/hypr/hyprland.conf $t.new
-      existed_hypr_conf=y
+      if [ -f "$XDG_STATE_HOME/ags/user/firstrun.txt" ]
+      then
+        v cp -f .config/hypr/hyprland.conf $t.new
+        existed_hypr_conf=y
+      else
+        v mv $t $t.old
+        v cp -f .config/hypr/hyprland.conf $t
+        existed_hypr_conf_firstrun=y
+      fi
     else
       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
       v cp .config/hypr/hyprland.conf $t
@@ -287,10 +294,13 @@ case $existed_ags_opt in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/ags/user_options.js\" already existed before and we didn't overwrite it. \e[0m\n"
 #    printf "\e[33mPlease use \"$XDG_CONFIG_HOME/ags/user_options.js.new\" as a reference for a proper format.\e[0m\n"
 ;;esac
+case $existed_hypr_conf_firstrun in
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your firstrun, we replaced it with a new one. \e[0m\n"
+     printf "\e[33mAs it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".\e[0m\n"
+;;esac
 case $existed_hypr_conf in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before and we didn't overwrite it. \e[0m\n"
      printf "\e[33mPlease use \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\" as a reference for a proper format.\e[0m\n"
-     printf "\e[33mIf this is your first time installation, you must overwrite \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" with \"$XDG_CONFIG_HOME/hypr/hyprland.conf.new\".\e[0m\n"
 ;;esac
 case $existed_hypridle_conf in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hypridle.conf\" already existed before and we didn't overwrite it. \e[0m\n"
