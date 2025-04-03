@@ -14,13 +14,21 @@ function overrideConfigRecursive(userOverrides, configOptions = {}) {
 }
 
 // Load default options from ~/.config/ags/modules/.configuration/default_options.jsonc
-const configFileContents = Utils.readFile(`${App.configDir}/modules/.configuration/default_options.jsonc`);
-let configOptions = parseJSONC(configFileContents);
-const userOverrideContents = Utils.readFile(`${App.configDir}/user_options.jsonc`);
-let userOverrides = parseJSONC(userOverrideContents);
+const defaultConfigFile = `${App.configDir}/modules/.configuration/default_options.jsonc`;
+const defaultConfigFileContents = Utils.readFile(defaultConfigFile);
+const defaultConfigOptions = parseJSONC(defaultConfigFileContents);
+
+// Clone the default config to avoid modifying the original
+let configOptions = JSON.parse(JSON.stringify(defaultConfigOptions));
+
+// Load user overrides
+const userOverrideFile = `${App.configDir}/user_options.jsonc`;
+const userOverrideContents = Utils.readFile(userOverrideFile);
+const userOverrides = parseJSONC(userOverrideContents);
 
 // Override defaults with user's options
 overrideConfigRecursive(userOverrides, configOptions);
 
+globalThis['userOptionsDefaults'] = defaultConfigOptions;
 globalThis['userOptions'] = configOptions;
 export default configOptions;
