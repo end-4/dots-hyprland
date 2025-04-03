@@ -844,24 +844,24 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
 }
 
 .sidebar-controlbtn-enabled {
-    background-color: $primary;
+    background-color: $secondaryContainer;
 
     label {
-        color: $onPrimary;
+        color: $onSecondaryContainer;
     }
 }
 
 .sidebar-controlbtn-enabled:hover,
 .sidebar-controlbtn-enabled:focus {
-    background-color: mix($primary, $hovercolor, 70%);
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+}
+
+.sidebar-controlbtn-enabled:active {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 75%);
 }
 
 .sidebar-expandbtn-enabled {
     min-width: 29.113rem;
-}
-
-.sidebar-controlbtn-enabled:active {
-    background-color: mix($primary, $hovercolor, 40%);
 }
 
 .sidebar-waifu-heading {
@@ -1059,6 +1059,7 @@ $waifu_image_overlay_transparency: 0.7;
     &:focus {
         background-color: $layer3Hover;
     }
+
     &:active {
         background-color: $layer3Active;
     }
