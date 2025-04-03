@@ -49,7 +49,12 @@ const HighlightedCode = (content, lang) => {
     const buffer = new GtkSource.Buffer();
     const sourceView = new GtkSource.View({
         buffer: buffer,
-        wrap_mode: Gtk.WrapMode.NONE
+        wrap_mode: Gtk.WrapMode.NONE,
+        insertSpacesInsteadOfTabs: true,
+        indentWidth: 4,
+        tabWidth: 4,
+        smartHomeEnd: true,
+        smartBackspace: true,
     });
     const langManager = GtkSource.LanguageManager.get_default();
     let displayLang = langManager.get_language(substituteLang(lang)); // Set your preferred language
@@ -176,6 +181,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
     const codeBlock = Box({
         attribute: {
             'updateText': (text) => {
+                // Enable useful features for multi-line code
+                if (text.split('\n').length > 1) {
+                    sourceView.autoIndent = true;
+                    sourceView.highlightCurrentLine = true;
+                    sourceView.showLineNumbers = true;
+                    sourceView.showLineMarks = true;
+                }
                 sourceView.get_buffer().set_text(text, -1);
             }
         },
