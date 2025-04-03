@@ -68,8 +68,10 @@ export const markdownTest = `## Inline formatting
 ## Code block
 \`\`\`cpp
 #include <bits/stdc++.h>
-const std::string GREETING="UwU";
-int main() { std::cout << GREETING; }
+const std::string GREETING = "UwU";
+int main(int argc, char* argv[]) {
+    std::cout << GREETING; 
+}
 \`\`\`
 ## LaTeX
 \`\`\`latex
