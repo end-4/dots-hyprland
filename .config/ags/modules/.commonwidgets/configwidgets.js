@@ -92,6 +92,9 @@ export const ConfigToggle = ({
         ...rest,
     });
     const wholeThing = Box({
+        attribute: {
+            'enabled': enabled,
+        },
         className: 'configtoggle-box spacing-h-5',
         children: [
             interactionWrapper,

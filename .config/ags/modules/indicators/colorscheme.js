@@ -127,7 +127,7 @@ const ColorSchemeSettings = () => Widget.Box({
                         darkMode.value = !!newValue;
                     },
                     extraSetup: (self) => self.hook(darkMode, (self) => {
-                        self.enabled.value = darkMode.value;
+                        self.attribute.enabled.value = darkMode.value;
                     }),
                 }),
                 ConfigToggle({

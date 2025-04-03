@@ -1,4 +1,4 @@
-const { Gdk, Gio, GLib, Gtk } = imports.gi;
+const { GLib, Gtk } = imports.gi;
 import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
@@ -10,29 +10,7 @@ import md2pango from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
-const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode.value ? '' : '-light'}.xml`;
-const CUSTOM_SCHEME_ID = `custom${darkMode.value ? '' : '-light'}`;
 const USERNAME = GLib.get_user_name();
-
-/////////////////////// Custom source view colorscheme /////////////////////////
-
-function loadCustomColorScheme(filePath) {
-    // Read the XML file content
-    const file = Gio.File.new_for_path(filePath);
-    const [success, contents] = file.load_contents(null);
-
-    if (!success) {
-        logError('Failed to load the XML file.');
-        return;
-    }
-
-    // Parse the XML content and set the Style Scheme
-    const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    schemeManager.append_search_path(file.get_parent().get_path());
-}
-loadCustomColorScheme(CUSTOM_SOURCEVIEW_SCHEME_PATH);
-
-//////////////////////////////////////////////////////////////////////////////
 
 function substituteLang(str) {
     const subs = [
@@ -62,7 +40,7 @@ const HighlightedCode = (content, lang) => {
         buffer.set_language(displayLang);
     }
     const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    buffer.set_style_scheme(schemeManager.get_scheme(CUSTOM_SCHEME_ID));
+    buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
     buffer.set_text(content, -1);
     return sourceView;
 }
@@ -204,7 +182,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     child: sourceView,
                 })],
             })
-        ]
+        ],
+        setup: (self) => self.hook(darkMode, (self) => {
+            const schemeManager = GtkSource.StyleSchemeManager.get_default();
+            Utils.timeout(1000, () => { // Wait for the theme to be loaded
+                sourceView.buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
+            });
+        }, "changed"),
     })
 
     // const schemeIds = styleManager.get_scheme_ids();
