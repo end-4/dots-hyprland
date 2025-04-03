@@ -66,10 +66,10 @@ const expandButton = Button({
         'enabled': false,
         'toggle': (self) => {
             self.attribute.enabled = !self.attribute.enabled;
+            // We don't expand the bar, but the expand button. Funny hax but it works
+            // (somehow directly expanding the sidebar directly makes it unable to unexpand)
+            self.toggleClassName('sidebar-expandbtn-enabled', self.attribute.enabled);
             self.toggleClassName('sidebar-controlbtn-enabled', self.attribute.enabled);
-
-            widgetContent.toggleClassName('sidebar-left-expanded', self.attribute.enabled);
-            widgetContent.toggleClassName('sidebar-left', !self.attribute.enabled);
         },
     },
     vpack: 'start',
