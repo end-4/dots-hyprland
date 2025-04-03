@@ -204,9 +204,9 @@
         // Modifiers: Shift Ctrl Alt Hyper Meta
         // See https://docs.gtk.org/gdk3/index.html#constants for the other keys (they are listed as KEY_key)
         "overview": {
-            "altMoveLeft": "Ctrl+b",
-            "altMoveRight": "Ctrl+f",
-            "deleteToEnd": "Ctrl+k"
+            "altMoveLeft": "Ctrl+B",
+            "altMoveRight": "Ctrl+F",
+            "deleteToEnd": "Ctrl+K"
         },
         "sidebar": {
             "apis": {
@@ -217,7 +217,8 @@
                 "nextTab": "Page_Down",
                 "prevTab": "Page_Up"
             },
-            "pin": "Ctrl+p",
+            "expand": "Ctrl+E",
+            "pin": "Ctrl+P",
             "cycleTab": "Ctrl+Tab",
             "nextTab": "Ctrl+Page_Down",
             "prevTab": "Ctrl+Page_Up"

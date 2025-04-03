@@ -17,7 +17,7 @@ export const checkKeybind = (event, keybind) => {
             if (!(pressedModMask & MODS[keys[i]])) {
                 return false;
             }
-        } else if (pressedKey !== Gdk[`KEY_${keys[i]}`]) {
+        } else if (pressedKey !== Gdk[`KEY_${keys[i]}`] && pressedKey !== Gdk[`KEY_${keys[i].toLowerCase()}`]) {
             return false;
         }
     }
