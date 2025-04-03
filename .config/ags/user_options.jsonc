@@ -5,12 +5,13 @@
 // vim: `:vsp` to split window, move cursor to the path, press `gf`. 
 //      `Ctrl-w` twice to switch between the files
 //
-// This file is parsed with a custom JSONC parser.
+// Limitations of this file
 // Don't expect every JSONC feature in... say, vscode, to work.
-
+// You can only have comments on top of the file
+// 
+// Example: Put this to show 8 (instead of 10) workspaces on the bar
+// "workspaces": {"shown": 8 }
+//
 {
-    // Example: Uncomment the following 3 lines to show 8 (instead of 10) workspaces on the bar
-    // "workspaces": {
-    //     "shown": 8
-    // }
+    
 }

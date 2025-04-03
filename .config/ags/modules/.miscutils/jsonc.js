@@ -1,3 +1,6 @@
+const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
+
 export function parseJSONC(jsoncString) {
     let result = "";
     let inString = false;
