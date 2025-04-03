@@ -44,6 +44,7 @@ export const ConfigToggle = ({
     });
     const toggleButton = Box({
         hpack: 'end',
+        vpack: 'center',
         className: `switch-bg ${enabled.value ? 'switch-bg-true' : ''}`,
         homogeneous: true,
         children: [toggleButtonIndicator],
@@ -55,8 +56,9 @@ export const ConfigToggle = ({
         tooltipText: desc,
         className: 'txt spacing-h-5',
         children: [
-            ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
+            ...(icon !== undefined ? [MaterialIcon(icon, 'norm', {vpack: 'center'})] : []),
             ...(name !== undefined ? [Label({
+                vpack: 'center',
                 className: 'txt txt-small',
                 label: name,
             })] : []),
