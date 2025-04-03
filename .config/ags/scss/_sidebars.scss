@@ -24,6 +24,16 @@ $sidebar_chat_textboxareaColor: mix($onSurfaceVariant, $surfaceVariant, 40%);
     padding: 1.023rem;
 }
 
+.sidebar-left-expanded {
+    @include menu_decel;
+    @include elevation-border;
+    @include elevation2;
+    border-radius: $rounding_large - $elevation_margin + 0.068rem;
+    min-width: 54.545rem;
+    background-color: $background;
+    padding: 1.023rem;
+}
+
 .sidebar-group {
     @include normal-rounding;
     @include group-padding;
@@ -826,7 +836,7 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
     background-color: $activecolor;
 }
 
-.sidebar-pin {
+.sidebar-controlbtn {
     @include small-rounding;
     @include element_decel;
     min-height: 2.386rem;
@@ -834,16 +844,16 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
     color: $onSurface;
 }
 
-.sidebar-pin:hover,
-.sidebar-pin:focus {
+.sidebar-controlbtn:hover,
+.sidebar-controlbtn:focus {
     background-color: $hovercolor;
 }
 
-.sidebar-pin:active {
+.sidebar-controlbtn:active {
     background-color: $activecolor;
 }
 
-.sidebar-pin-enabled {
+.sidebar-controlbtn-enabled {
     background-color: $primary;
 
     label {
@@ -851,12 +861,12 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
     }
 }
 
-.sidebar-pin-enabled:hover,
-.sidebar-pin-enabled:focus {
+.sidebar-controlbtn-enabled:hover,
+.sidebar-controlbtn-enabled:focus {
     background-color: mix($primary, $hovercolor, 70%);
 }
 
-.sidebar-pin-enabled:active {
+.sidebar-controlbtn-enabled:active {
     background-color: mix($primary, $hovercolor, 40%);
 }
 

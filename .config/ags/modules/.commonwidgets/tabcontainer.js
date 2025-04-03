@@ -6,7 +6,12 @@ import { NavigationIndicator } from './cairo_navigationindicator.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { DoubleRevealer } from '../.widgethacks/advancedrevealers.js';
 
-export const TabContainer = ({ icons, names, children, className = '', setup = () => { }, ...rest }) => {
+export const TabContainer = ({
+    icons, names, children,
+    className = '', setup = () => { },
+    extraTabStripWidgets = [],
+    ...rest
+}) => {
     const shownIndex = Variable(0);
     let previousShownIndex = 0;
     const count = Math.min(icons.length, names.length, children.length);
@@ -52,10 +57,17 @@ export const TabContainer = ({ icons, names, children, className = '', setup = (
             onScrollUp: () => mainBox.prevTab(),
             onScrollDown: () => mainBox.nextTab(),
             child: Box({
-                vertical: true,
+                className: 'spacing-h-5',
                 children: [
-                    tabs,
-                    tabIndicatorLine
+                    Box({
+                        vertical: true,
+                        hexpand: true,
+                        children: [
+                            tabs,
+                            tabIndicatorLine
+                        ]
+                    }),
+                    ...extraTabStripWidgets,
                 ]
             })
         })]
