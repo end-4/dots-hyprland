@@ -90,7 +90,7 @@ export const BooruSettings = () => MarginRevealer({
         children: [
             Box({
                 vertical: true,
-                hpack: 'fill',
+                hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({

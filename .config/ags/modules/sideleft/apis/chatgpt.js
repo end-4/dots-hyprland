@@ -178,7 +178,7 @@ const GPTSettings = () => MarginRevealer({
             ConfigGap({ vertical: true, size: 10 }), // Note: size can only be 5, 10, or 15 
             Box({
                 vertical: true,
-                hpack: 'fill',
+                hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({
