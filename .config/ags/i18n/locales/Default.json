@@ -35,7 +35,7 @@
     "Powered by yande.re and konachan": "Powered by yande.re and konachan",
     "An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.": "An image booru. May contain NSFW content.\nWatch your back.\n\nDisclaimer: Not affiliated with the provider\nnor responsible for any of its content.",
     "Lewds": "Lewds",
-    "Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}": "Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}",
+    "Shows naughty stuff when enabled.\nYa like those? Add this to user_options.jsonc:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}": "Shows naughty stuff when enabled.\nYa like those? Add this to user_options.jsonc:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}",
     "Save in folder by tags": "Save in folder by tags",
     "Saves images in folders by their tags": "Saves images in folders by their tags",
     "Message Gemini...": "Message Gemini...",
