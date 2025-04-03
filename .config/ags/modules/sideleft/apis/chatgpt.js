@@ -1,5 +1,4 @@
 const { Gtk } = imports.gi;
-import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -11,7 +10,6 @@ import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.common
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
-import { chatEntry } from '../apiwidgets.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
@@ -280,19 +278,19 @@ export const sendMessage = (text) => {
     if (text.length == 0) return;
     if (GPTService.key.length == 0) {
         GPTService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', chatGPTView));
+        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', ChatGPTView));
         text = '';
         return;
     }
     // Commands
     if (text.startsWith('/')) {
         if (text.startsWith('/clear')) clearChat();
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`${getString("Currently using")} \`${GPTService.modelName}\``, '/model', chatGPTView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`${getString("Currently using")} \`${GPTService.modelName}\``, '/model', ChatGPTView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
             if (firstSpaceIndex == -1 || prompt.length < 1) {
-                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', chatGPTView))
+                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', ChatGPTView))
             }
             else {
                 GPTService.addMessage('user', prompt)
@@ -303,23 +301,23 @@ export const sendMessage = (text) => {
             if (parts.length == 1) chatContent.add(SystemMessage(
                 `${getString("Key stored in:")}\n\`${GPTService.keyPath}\`\n${getString("To update this key, type")} \`/key YOUR_API_KEY\``,
                 '/key',
-                chatGPTView));
+                ChatGPTView));
             else {
                 GPTService.key = parts[1];
-                chatContent.add(SystemMessage(`${getString("Updated API Key at")}\n\`${GPTService.keyPath}\``, '/key', chatGPTView));
+                chatContent.add(SystemMessage(`${getString("Updated API Key at")}\n\`${GPTService.keyPath}\``, '/key', ChatGPTView));
             }
         }
         else if (text.startsWith('/test'))
-            chatContent.add(SystemMessage(markdownTest, `Markdown test`, chatGPTView));
+            chatContent.add(SystemMessage(markdownTest, `Markdown test`, ChatGPTView));
         else
-            chatContent.add(SystemMessage(getString("Invalid command."), 'Error', chatGPTView))
+            chatContent.add(SystemMessage(getString("Invalid command."), 'Error', ChatGPTView))
     }
     else {
         GPTService.send(text);
     }
 }
 
-export const chatGPTView = Box({
+export const ChatGPTView = (chatEntry) => Box({
     vertical: true,
     children: [
         ProviderSwitcher(),

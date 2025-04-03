@@ -1,5 +1,4 @@
 const { Gtk } = imports.gi;
-import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
@@ -10,7 +9,6 @@ import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
-import { chatEntry } from '../apiwidgets.js';
 
 const MODEL_NAME = `Gemini`;
 
@@ -212,7 +210,7 @@ export const sendMessage = (text) => {
     if (text.length == 0) return;
     if (GeminiService.key.length == 0) {
         GeminiService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GeminiService.keyPath}\``, 'API Key', geminiView));
+        chatContent.add(SystemMessage(`Key saved to\n\`${GeminiService.keyPath}\``, 'API Key', GeminiView));
         text = '';
         return;
     }
@@ -223,12 +221,12 @@ export const sendMessage = (text) => {
             clearChat();
             GeminiService.loadHistory();
         }
-        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`${getString("Currently using")} \`${GeminiService.modelName}\``, '/model', geminiView))
+        else if (text.startsWith('/model')) chatContent.add(SystemMessage(`${getString("Currently using")} \`${GeminiService.modelName}\``, '/model', GeminiView))
         else if (text.startsWith('/prompt')) {
             const firstSpaceIndex = text.indexOf(' ');
             const prompt = text.slice(firstSpaceIndex + 1);
             if (firstSpaceIndex == -1 || prompt.length < 1) {
-                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', geminiView))
+                chatContent.add(SystemMessage(`Usage: \`/prompt MESSAGE\``, '/prompt', GeminiView))
             }
             else {
                 GeminiService.addMessage('user', prompt)
@@ -239,23 +237,23 @@ export const sendMessage = (text) => {
             if (parts.length == 1) chatContent.add(SystemMessage(
                 `${getString("Key stored in:")} \n\`${GeminiService.keyPath}\`\n${getString("To update this key, type")} \`/key YOUR_API_KEY\``,
                 '/key',
-                geminiView));
+                GeminiView));
             else {
                 GeminiService.key = parts[1];
-                chatContent.add(SystemMessage(`${getString("Updated API Key at")}\n\`${GeminiService.keyPath}\``, '/key', geminiView));
+                chatContent.add(SystemMessage(`${getString("Updated API Key at")}\n\`${GeminiService.keyPath}\``, '/key', GeminiView));
             }
         }
         else if (text.startsWith('/test'))
-            chatContent.add(SystemMessage(markdownTest, `Markdown test`, geminiView));
+            chatContent.add(SystemMessage(markdownTest, `Markdown test`, GeminiView));
         else
-            chatContent.add(SystemMessage(getString(`Invalid command.`), 'Error', geminiView))
+            chatContent.add(SystemMessage(getString(`Invalid command.`), 'Error', GeminiView))
     }
     else {
         GeminiService.send(text);
     }
 }
 
-export const geminiView = Box({
+export const GeminiView = (chatEntry) => Box({
     homogeneous: true,
     children: [Scrollable({
         className: 'sidebar-chat-viewport',

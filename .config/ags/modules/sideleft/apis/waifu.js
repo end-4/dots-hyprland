@@ -12,7 +12,6 @@ import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
-import { chatEntry } from '../apiwidgets.js';
 
 async function getImageViewerApp(preferredApp) {
     Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
@@ -302,7 +301,7 @@ const waifuContent = Box({
     ,
 });
 
-export const waifuView = Scrollable({
+export const WaifuView = (chatEntry) => Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({

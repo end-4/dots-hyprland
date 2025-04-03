@@ -8,7 +8,6 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import BooruService from '../../../services/booru.js';
-import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
 
@@ -19,7 +18,7 @@ const USER_CACHE_DIR = GLib.get_user_cache_dir();
 Utils.exec(`bash -c 'mkdir -p ${USER_CACHE_DIR}/ags/media/waifus'`);
 Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 
-const TagButton = (command) => Button({
+const TagButton = (command, chatEntry) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
     onClicked: () => { chatEntry.buffer.text += `${command} ` },
     setup: setupCursorHover,
@@ -453,7 +452,7 @@ const booruContent = Box({
     ,
 });
 
-export const booruView = Scrollable({
+export const BooruView = (chatEntry) => Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({
@@ -533,7 +532,7 @@ const clearChat = () => { // destroy!!
     });
 }
 
-export const sendMessage = (text) => {
+export const sendMessage = (text, booruView) => {
     // Commands
     if (text.startsWith('+')) { // Next page
         const lastQuery = BooruService.queries.at(-1);
