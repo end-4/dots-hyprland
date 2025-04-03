@@ -6,7 +6,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Label, Icon, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
-import md2pango from '../../.miscutils/md2pango.js';
+import md2pango, { replaceInlineLatexWithCodeBlocks } from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
@@ -216,12 +216,11 @@ const MessageContent = (content) => {
                     child.destroy();
                 }
                 contentBox.add(TextBlock())
-                // Loop lines. Put normal text in markdown parser
-                // and put code into code highlighter (TODO)
-                let lines = content.split('\n');
+                
+                let lines = replaceInlineLatexWithCodeBlocks(content).split('\n');
                 let lastProcessed = 0;
                 let inCode = false;
-                for (const [index, line] of lines.entries()) {
+                for (let [index, line] of lines.entries()) {
                     // Code blocks
                     const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
