@@ -103,8 +103,7 @@
         "image": {
             "columns": 2,
             "batchCount": 20,
-            "allowNsfw": false,
-            "saveInFolderByTags": false
+            "allowNsfw": false
         },
         "pages": {
             "order": ["apis", "tools"],

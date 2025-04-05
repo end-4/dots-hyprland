@@ -8,8 +8,8 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import BooruService from '../../../services/booru.js';
-import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
+import { AgsToggle } from '../../.commonwidgets/configwidgets_apps.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -93,26 +93,17 @@ export const BooruSettings = () => MarginRevealer({
                 hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
-                    ConfigToggle({
+                    AgsToggle({
                         icon: 'menstrual_health',
                         name: getString('Lewds'),
-                        desc: getString("Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}"),
-                        initValue: BooruService.nsfw,
-                        onChange: (self, newValue) => {
+                        desc: getString("Shows naughty stuff when enabled"),
+                        option: 'sidebar.image.allowNsfw',
+                        extraOnChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
                         },
                         extraSetup: (self) => self.hook(BooruService, (self) => {
                             self.attribute.enabled.value = BooruService.nsfw;
                         }, 'notify::nsfw')
-                    }),
-                    ConfigToggle({
-                        icon: 'sell',
-                        name: getString('Save in folder by tags'),
-                        desc: getString('Saves images in folders by their tags'),
-                        initValue: userOptions.sidebar.image.saveInFolderByTags,
-                        onChange: (self, newValue) => {
-                            userOptions.sidebar.image.saveInFolderByTags = newValue;
-                        },
                     }),
                 ]
             })
@@ -228,7 +219,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
                             const tagDirectory = currentTags.join('+');
                             const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
-                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${fileName}" '${data.file_url}'`;
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${fileName}" '${data.file_url}'`;
                             print(saveCommand)
                             execAsync(['bash', '-c', saveCommand])
                                 .then(() => self.label = 'done')

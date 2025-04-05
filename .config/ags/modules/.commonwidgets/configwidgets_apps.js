@@ -10,6 +10,7 @@ export const AgsToggle = ({
     icon, name, desc = null,
     option, resetButton = true, save = true,
     extraOnChange = () => { }, extraOnReset = () => { },
+    ...rest
 }) => ConfigToggle({
     icon: icon,
     name: name,
@@ -35,6 +36,7 @@ export const AgsToggle = ({
             --file ${AGS_CONFIG_FILE}'`);
         extraOnReset(self);
     },
+    ...rest
 });
 
 export const AgsSpinButton = ({
