@@ -5,6 +5,7 @@ import { getNestedProperty, updateNestedProperty } from "../.miscutils/objects.j
 import { ConfigSpinButton, ConfigToggle } from "./configwidgets.js";
 
 const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
+const HYPRLAND_CONFIG_FILE = `\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`;
 
 export const AgsToggle = ({
     icon, name, desc = null,
@@ -14,7 +15,7 @@ export const AgsToggle = ({
 }) => ConfigToggle({
     icon: icon,
     name: name,
-    desc: desc,
+    desc: `${desc}\n\n${option}\nEdit in ${AGS_CONFIG_FILE}`,
     resetButton: resetButton,
     initValue: getNestedProperty(userOptions, option),
     fetchValue: () => getNestedProperty(userOptions, option),
@@ -47,7 +48,7 @@ export const AgsSpinButton = ({
 }) => ConfigSpinButton({
     icon: icon,
     name: name,
-    desc: desc,
+    desc: `${desc}\n\n${option}\nEdit in ${AGS_CONFIG_FILE}`,
     resetButton: resetButton,
     initValue: getNestedProperty(userOptions, option),
     fetchValue: () => getNestedProperty(userOptions, option),
@@ -81,7 +82,7 @@ export const HyprlandToggle = ({
 }) => ConfigToggle({
     icon: icon,
     name: name,
-    desc: desc,
+    desc: `${desc}\n\n${option}\nEdit in ${HYPRLAND_CONFIG_FILE}`,
     resetButton: resetButton,
     initValue: JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"] != 0,
     fetchValue: () => JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"] != 0,
@@ -90,7 +91,7 @@ export const HyprlandToggle = ({
             execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
             --key ${option} \
             --value ${newValue ? enableValue : disableValue} \
-            --file \${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`
+            --file ${HYPRLAND_CONFIG_FILE}`
             ]).catch(print);
 
         else
@@ -103,7 +104,7 @@ export const HyprlandToggle = ({
             exec(`bash -c '${App.configDir}/scripts/hyprland/hyprconfigurator.py \
                 --key ${option} \
                 --reset \
-                --file "\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf"'`);
+                --file "${HYPRLAND_CONFIG_FILE}"'`);
 
         else
             exec('hyprctl reload');
@@ -119,7 +120,7 @@ export const HyprlandSpinButton = ({
 }) => ConfigSpinButton({
     icon: icon,
     name: name,
-    desc: desc,
+    desc: `${desc}\n\n${option}\nEdit in ${HYPRLAND_CONFIG_FILE}`,
     resetButton: resetButton,
     initValue: Number(JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"]),
     fetchValue: () => Number(JSON.parse(exec(`hyprctl getoption -j ${option}`))["int"]),
@@ -128,7 +129,7 @@ export const HyprlandSpinButton = ({
             execAsync(['bash', '-c', `${App.configDir}/scripts/hyprland/hyprconfigurator.py \
                 --key ${option} \
                 --value ${newValue} \
-                --file \${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`
+                --file ${HYPRLAND_CONFIG_FILE}`
             ]).catch(print);
 
         else
@@ -141,7 +142,7 @@ export const HyprlandSpinButton = ({
             exec(`bash -c '${App.configDir}/scripts/hyprland/hyprconfigurator.py \
                 --key ${option} \
                 --reset \
-                --file "\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf"'`);
+                --file "${HYPRLAND_CONFIG_FILE}"'`);
 
         else
             exec('hyprctl reload');
