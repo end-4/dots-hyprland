@@ -188,7 +188,7 @@ class GeminiService extends Service {
 
     get useHistory() { return this._usingHistory; }
     set useHistory(value) {
-        if (value && !this._usingHistory) this.loadHistory();
+        // if (value && !this._usingHistory) this.loadHistory();
         this._usingHistory = value;
     }
 
