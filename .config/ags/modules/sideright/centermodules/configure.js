@@ -7,6 +7,7 @@ const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { setupCursorHover } from '../../.widgetutils/cursorhover.js';
 import { ConfigGap, ConfigSpinButton, ConfigToggle } from '../../.commonwidgets/configwidgets.js';
+import { getNestedProperty, updateNestedProperty } from '../../.miscutils/objects.js';
 
 const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disableValue = 0, extraOnChange = () => { }, extraOnReset = () => { }, save = true }) => ConfigToggle({
     icon: icon,
@@ -24,7 +25,7 @@ const HyprlandToggle = ({ icon, name, desc = null, option, enableValue = 1, disa
             ]).catch(print);
         else
             execAsync(['hyprctl', 'keyword', option, `${newValue ? enableValue : disableValue}`]).catch(print);
-        
+
         extraOnChange(self, newValue);
     },
     onReset: async (self) => {
@@ -70,6 +71,38 @@ const HyprlandSpinButton = ({ icon, name, desc = null, option, save = true, extr
     },
     ...rest,
 });
+
+const AgsSpinButton = ({
+    icon, name, desc = null, option,
+    save = true, extraOnChange = () => { },
+    ...rest
+}) => ConfigSpinButton({
+    icon: icon,
+    name: name,
+    desc: desc,
+    resetButton: true,
+    initValue: getNestedProperty(userOptions, option),
+    fetchValue: () => getNestedProperty(userOptions, option),
+    step: 10, minValue: 0, maxValue: 1000,
+    onChange: (self, newValue) => {
+        updateNestedProperty(userOptions, option, newValue);
+        if (save) execAsync(['bash', '-c', `${App.configDir}/scripts/ags/agsconfigurator.py \
+            --key ${option} \
+            --value ${newValue} \
+            --file ${App.configDir}/user_options.jsonc`
+        ]).catch(print);
+        extraOnChange(self, newValue);
+    },
+    onReset: async (self) => {
+        updateNestedProperty(userOptions, option,
+            getNestedProperty(userOptionsDefaults, option));
+        if (save) exec(`bash -c '${App.configDir}/scripts/ags/agsconfigurator.py \
+            --key ${option} \
+            --reset \
+            --file ${App.configDir}/user_options.jsonc'`);
+    },
+    ...rest,
+})
 
 const Subcategory = (children) => Box({
     className: 'margin-left-20',
@@ -130,15 +163,12 @@ export default (props) => {
                                 extraOnReset: (self, newValue) => execAsync(['gsettings', 'set', 'org.gnome.desktop.interface', 'enable-animations', 'true']),
                             }),
                             Subcategory([
-                                ConfigSpinButton({
+                                AgsSpinButton({
+                                    option: "animations.choreographyDelay",
                                     icon: 'clear_all',
                                     name: getString('Choreography delay'),
                                     desc: getString('In milliseconds, the delay between animations of a series'),
-                                    initValue: userOptions.animations.choreographyDelay,
                                     step: 10, minValue: 0, maxValue: 1000,
-                                    onChange: (self, newValue) => {
-                                        userOptions.animations.choreographyDelay = newValue
-                                    },
                                 })
                             ]),
                         ]
@@ -158,21 +188,12 @@ export default (props) => {
             className: 'sidebar-centermodules-scrollgradient-bottom'
         })]
     });
-    const footNote = Box({
-        homogeneous: true,
-        children: [Label({
-            hpack: 'center',
-            className: 'txt txt-italic txt-subtext margin-5',
-            label: getString('AGS-related changes aren\'t saved'),
-        })]
-    })
     return Box({
         ...props,
         className: 'spacing-v-5',
         vertical: true,
         children: [
             mainContent,
-            footNote,
         ]
     });
 }

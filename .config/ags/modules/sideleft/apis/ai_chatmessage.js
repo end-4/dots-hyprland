@@ -1,4 +1,4 @@
-const { Gdk, Gio, GLib, Gtk } = imports.gi;
+const { GLib, Gtk } = imports.gi;
 import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
@@ -6,33 +6,11 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { Box, Button, Label, Icon, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
-import md2pango from '../../.miscutils/md2pango.js';
+import md2pango, { replaceInlineLatexWithCodeBlocks } from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
-const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode.value ? '' : '-light'}.xml`;
-const CUSTOM_SCHEME_ID = `custom${darkMode.value ? '' : '-light'}`;
 const USERNAME = GLib.get_user_name();
-
-/////////////////////// Custom source view colorscheme /////////////////////////
-
-function loadCustomColorScheme(filePath) {
-    // Read the XML file content
-    const file = Gio.File.new_for_path(filePath);
-    const [success, contents] = file.load_contents(null);
-
-    if (!success) {
-        logError('Failed to load the XML file.');
-        return;
-    }
-
-    // Parse the XML content and set the Style Scheme
-    const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    schemeManager.append_search_path(file.get_parent().get_path());
-}
-loadCustomColorScheme(CUSTOM_SOURCEVIEW_SCHEME_PATH);
-
-//////////////////////////////////////////////////////////////////////////////
 
 function substituteLang(str) {
     const subs = [
@@ -49,7 +27,12 @@ const HighlightedCode = (content, lang) => {
     const buffer = new GtkSource.Buffer();
     const sourceView = new GtkSource.View({
         buffer: buffer,
-        wrap_mode: Gtk.WrapMode.NONE
+        wrap_mode: Gtk.WrapMode.NONE,
+        insertSpacesInsteadOfTabs: true,
+        indentWidth: 4,
+        tabWidth: 4,
+        smartHomeEnd: true,
+        smartBackspace: true,
     });
     const langManager = GtkSource.LanguageManager.get_default();
     let displayLang = langManager.get_language(substituteLang(lang)); // Set your preferred language
@@ -57,7 +40,7 @@ const HighlightedCode = (content, lang) => {
         buffer.set_language(displayLang);
     }
     const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    buffer.set_style_scheme(schemeManager.get_scheme(CUSTOM_SCHEME_ID));
+    buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
     buffer.set_text(content, -1);
     return sourceView;
 }
@@ -176,6 +159,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
     const codeBlock = Box({
         attribute: {
             'updateText': (text) => {
+                // Enable useful features for multi-line code
+                if (text.split('\n').length > 1) {
+                    sourceView.autoIndent = true;
+                    sourceView.highlightCurrentLine = true;
+                    sourceView.showLineNumbers = true;
+                    sourceView.showLineMarks = true;
+                }
                 sourceView.get_buffer().set_text(text, -1);
             }
         },
@@ -192,7 +182,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     child: sourceView,
                 })],
             })
-        ]
+        ],
+        setup: (self) => self.hook(darkMode, (self) => {
+            const schemeManager = GtkSource.StyleSchemeManager.get_default();
+            Utils.timeout(1000, () => { // Wait for the theme to be loaded
+                sourceView.buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
+            });
+        }, "changed"),
     })
 
     // const schemeIds = styleManager.get_scheme_ids();
@@ -220,12 +216,11 @@ const MessageContent = (content) => {
                     child.destroy();
                 }
                 contentBox.add(TextBlock())
-                // Loop lines. Put normal text in markdown parser
-                // and put code into code highlighter (TODO)
-                let lines = content.split('\n');
+                
+                let lines = replaceInlineLatexWithCodeBlocks(content).split('\n');
                 let lastProcessed = 0;
                 let inCode = false;
-                for (const [index, line] of lines.entries()) {
+                for (let [index, line] of lines.entries()) {
                     // Code blocks
                     const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {

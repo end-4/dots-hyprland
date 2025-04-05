@@ -19,7 +19,7 @@ RESET="\033[0m"
 
 # Define paths to update
 folders=(".config" ".local/bin" ".local/share" ".local/state")
-excludes=(".config/hypr/custom" ".config/ags/user_options.js" ".config/hypr/hyprland.conf")
+excludes=(".config/hypr/custom" ".config/ags/user_options.jsonc" ".config/hypr/hyprland.conf")
 
 get_checksum() {
     # Get the checksum of a specific file

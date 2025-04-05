@@ -16,7 +16,7 @@ const conversions = [
         unit2: 'rem',
         unit1Default: 5,
         formula1to2: '{{x}} / (parseFloat(Utils.exec(\'gsettings get org.gnome.desktop.interface font-name\').split(" ")[1].split("\'"))*4/3)',
-        formula2to1: '{{x}} * 3 / 4',
+        formula2to1: '{{x}} * (parseFloat(Utils.exec(\'gsettings get org.gnome.desktop.interface font-name\').split(" ")[1].split("\'"))*4/3)',
         forcePrecision: true,
     },
     {

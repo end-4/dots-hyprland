@@ -453,7 +453,7 @@ export default ({
                     }, wholeThing);
                 }
                 else {
-                    self.setCss(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+                    self.setCss(`transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                                    margin-left:  ${startMargin}px;
                                    margin-right: ${startMargin}px;
                                    margin-bottom: unset; margin-top: unset;

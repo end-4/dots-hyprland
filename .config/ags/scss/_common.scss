@@ -374,3 +374,7 @@ widget {
 .spinbutton-reset:active {
     background-color: $layer2Active;
 }
+
+textview {
+    caret-color: $onBackground;
+}

@@ -8,7 +8,6 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import BooruService from '../../../services/booru.js';
-import { chatEntry } from '../apiwidgets.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
 
@@ -19,10 +18,11 @@ const USER_CACHE_DIR = GLib.get_user_cache_dir();
 Utils.exec(`bash -c 'mkdir -p ${USER_CACHE_DIR}/ags/media/waifus'`);
 Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 
-const TagButton = (command) => Button({
+const TagButton = (command, entry) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-    onClicked: () => { chatEntry.buffer.text += `${command} ` },
-    setup: setupCursorHover,
+    // Interactions disabled for now because they aren't working
+    // onClicked: () => { entry.buffer.text += `${command} ` },
+    // setup: setupCursorHover,
     label: command,
 });
 
@@ -90,7 +90,7 @@ export const BooruSettings = () => MarginRevealer({
         children: [
             Box({
                 vertical: true,
-                hpack: 'fill',
+                hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
                     ConfigToggle({
@@ -453,7 +453,7 @@ const booruContent = Box({
     ,
 });
 
-export const booruView = Scrollable({
+export const BooruView = (chatEntry) => Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({
@@ -482,31 +482,6 @@ export const booruView = Scrollable({
     }
 });
 
-const booruTags = Revealer({
-    revealChild: false,
-    transition: 'crossfade',
-    transitionDuration: userOptions.animations.durationLarge,
-    child: Box({
-        className: 'spacing-h-5',
-        children: [
-            Scrollable({
-                vscroll: 'never',
-                hscroll: 'automatic',
-                hexpand: true,
-                child: Box({
-                    className: 'spacing-h-5',
-                    children: [
-                        TagButton('hololive'),
-                        TagButton('yuri'),
-                        TagButton('thighhighs'),
-                    ]
-                })
-            }),
-            Box({ className: 'separator-line' }),
-        ]
-    })
-});
-
 export const booruCommands = Box({
     className: 'spacing-h-5',
     setup: (self) => {
@@ -514,15 +489,6 @@ export const booruCommands = Box({
         self.pack_end(CommandButton('+'), false, false, 0);
         self.pack_end(CommandButton('/mode konachan', 'Konachan'), false, false, 0);
         self.pack_end(CommandButton('/mode yandere', 'yande.re'), false, false, 0);
-        self.pack_start(Button({
-            className: 'sidebar-chat-chip-toggle',
-            setup: setupCursorHover,
-            label: getString('Tags →'),
-            onClicked: () => {
-                booruTags.revealChild = !booruTags.revealChild;
-            }
-        }), false, false, 0);
-        self.pack_start(booruTags, true, true, 0);
     }
 });
 
@@ -533,7 +499,7 @@ const clearChat = () => { // destroy!!
     });
 }
 
-export const sendMessage = (text) => {
+export const sendMessage = (text, booruView) => {
     // Commands
     if (text.startsWith('+')) { // Next page
         const lastQuery = BooruService.queries.at(-1);

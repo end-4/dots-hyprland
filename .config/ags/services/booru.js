@@ -80,7 +80,7 @@ class BooruService extends Service {
 
     async fetch(msg) {
         // Init
-        const userArgs = `${msg}${(!this._nsfw || msg.includes('safe')) ? ' rating:safe' : ''}`.split(/\s+/);
+        const userArgs = `${msg.replace('rating:safe', '')}${(!this._nsfw || msg.includes('safe')) ? ' rating:safe' : ''}`.split(/\s+/);
         console.log(userArgs)
 
         let taglist = [];

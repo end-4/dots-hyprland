@@ -10,6 +10,9 @@ import Notification from '../../.commonwidgets/notification.js';
 import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 
 export default (props) => {
+    let previousLength;
+    let clearing = false;
+
     const notifEmptyContent = Box({
         homogeneous: true,
         children: [Box({
@@ -86,15 +89,6 @@ export default (props) => {
         Notifications.dnd = !Notifications.dnd;
         self.toggleClassName('notif-listaction-btn-enabled', Notifications.dnd);
     });
-    // const silenceToggle = ConfigToggle({
-    //     expandWidget: false,
-    //     icon: 'do_not_disturb_on',
-    //     name: 'Do Not Disturb',
-    //     initValue: false,
-    //     onChange: (self, newValue) => {
-    //         Notifications.dnd = newValue;
-    //     },
-    // })
     const clearButton = Revealer({
         transition: 'slide_right',
         transitionDuration: userOptions.animations.durationSmall,
@@ -102,6 +96,7 @@ export default (props) => {
             self.revealChild = Notifications.notifications.length > 0;
         }),
         child: ListActionButton('clear_all', getString('Clear'), () => {
+            clearing = true;
             Notifications.clear();
             const kids = notificationList.get_children();
             for (let i = 0; i < kids.length; i++) {
@@ -134,8 +129,6 @@ export default (props) => {
         children: [
             notifCount,
             silenceButton,
-            // silenceToggle,
-            // Box({ hexpand: true }),
             clearButton,
         ]
     });
@@ -160,9 +153,21 @@ export default (props) => {
             'empty': notifEmptyContent,
             'list': notifList,
         },
-        setup: (self) => self.hook(Notifications, (self) => {
-            self.shown = (Notifications.notifications.length > 0 ? 'list' : 'empty')
-        }),
+        setup: (self) => {
+            previousLength = Notifications.notifications.length;
+            self.hook(Notifications, (self) => {
+                if (Notifications.notifications.length > 0) {
+                    self.shown = 'list';
+                    if (!clearing) previousLength = Notifications.notifications.length;
+                }
+                else {
+                    Utils.timeout(userOptions.animations.choreographyDelay * previousLength, () => {
+                        clearing = false;
+                        if (Notifications.notifications.length == 0) self.shown = 'empty';
+                    })
+                }
+            })
+        },
     });
     return Box({
         ...props,

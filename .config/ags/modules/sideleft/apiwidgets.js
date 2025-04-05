@@ -7,10 +7,10 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 // APIs
 import GPTService from '../../services/gpt.js';
 import Gemini from '../../services/gemini.js';
-import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
-import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
-import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
-import { booruView, booruCommands, sendMessage as booruSendMessage, booruTabIcon } from './apis/booru.js';
+import { GeminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
+import { ChatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { WaifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
+import { BooruView, booruCommands, sendMessage as booruSendMessage, booruTabIcon } from './apis/booru.js';
 import { enableClickthrough } from "../.widgetutils/clickthrough.js";
 import { checkKeybind } from '../.widgetutils/keybind.js';
 const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
@@ -19,56 +19,6 @@ import { widgetContent } from './sideleft.js';
 import { IconTabContainer } from '../.commonwidgets/tabcontainer.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
-const APILIST = {
-    'gemini': {
-        name: 'Assistant (Gemini Pro)',
-        sendCommand: geminiSendMessage,
-        contentWidget: geminiView,
-        commandBar: geminiCommands,
-        tabIcon: geminiTabIcon,
-        placeholderText: getString('Message Gemini...'),
-    },
-    'gpt': {
-        name: 'Assistant (GPTs)',
-        sendCommand: chatGPTSendMessage,
-        contentWidget: chatGPTView,
-        commandBar: chatGPTCommands,
-        tabIcon: chatGPTTabIcon,
-        placeholderText: getString('Message the model...'),
-    },
-    'waifu': {
-        name: 'Waifus',
-        sendCommand: waifuSendMessage,
-        contentWidget: waifuView,
-        commandBar: waifuCommands,
-        tabIcon: waifuTabIcon,
-        placeholderText: getString('Enter tags'),
-    },
-    'booru': {
-        name: 'Booru',
-        sendCommand: booruSendMessage,
-        contentWidget: booruView,
-        commandBar: booruCommands,
-        tabIcon: booruTabIcon,
-        placeholderText: getString('Enter tags and/or page number'),
-    },
-}
-const APIS = userOptions.sidebar.pages.apis.order.map((apiName) => APILIST[apiName]);
-let currentApiId = 0;
-
-function apiSendMessage(textView) {
-    // Get text
-    const buffer = textView.get_buffer();
-    const [start, end] = buffer.get_bounds();
-    const text = buffer.get_text(start, end, true).trimStart();
-    if (!text || text.length == 0) return;
-    // Send
-    APIS[currentApiId].sendCommand(text)
-    // Reset
-    buffer.set_text("", -1);
-    chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
-    chatEntry.set_valign(Gtk.Align.CENTER);
-}
 
 export const chatEntry = TextView({
     hexpand: true,
@@ -116,6 +66,60 @@ export const chatEntry = TextView({
         })
     ,
 });
+
+const APILIST = {
+    'gemini': {
+        name: 'Assistant (Gemini Pro)',
+        sendCommand: geminiSendMessage,
+        contentWidget: GeminiView(chatEntry),
+        commandBar: geminiCommands,
+        tabIcon: geminiTabIcon,
+        placeholderText: getString('Message Gemini...'),
+    },
+    'gpt': {
+        name: 'Assistant (GPTs)',
+        sendCommand: chatGPTSendMessage,
+        contentWidget: ChatGPTView(chatEntry),
+        commandBar: chatGPTCommands,
+        tabIcon: chatGPTTabIcon,
+        placeholderText: getString('Message the model...'),
+    },
+    'waifu': {
+        name: 'Waifus',
+        sendCommand: waifuSendMessage,
+        contentWidget: WaifuView(chatEntry),
+        commandBar: waifuCommands,
+        tabIcon: waifuTabIcon,
+        placeholderText: getString('Enter tags'),
+    },
+    'booru': {
+        name: 'Booru',
+        sendCommand: booruSendMessage,
+        contentWidget: BooruView(chatEntry),
+        commandBar: booruCommands,
+        tabIcon: booruTabIcon,
+        placeholderText: getString('Enter tags and/or page number'),
+    },
+}
+const APIS = userOptions.sidebar.pages.apis.order.map((apiName) => APILIST[apiName]);
+let currentApiId = 0;
+
+function apiSendMessage(textView) {
+    // Get text
+    const buffer = textView.get_buffer();
+    const [start, end] = buffer.get_bounds();
+    const text = buffer.get_text(start, end, true).trimStart();
+    if (!text || text.length == 0) return;
+    // Send
+    if (APIS[currentApiId].name == APILIST['booru'].name)
+        APIS[currentApiId].sendCommand(text, APILIST['booru'].contentWidget)
+    else
+        APIS[currentApiId].sendCommand(text)
+    // Reset
+    buffer.set_text("", -1);
+    chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
+    chatEntry.set_valign(Gtk.Align.CENTER);
+}
 
 chatEntry.get_buffer().connect("changed", (buffer) => {
     const bufferText = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), true);
