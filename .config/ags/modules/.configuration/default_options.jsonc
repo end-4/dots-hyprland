@@ -9,7 +9,20 @@
         "useHistory": false,
         "safety": true,
         "writingCursor": " ...", // Warning: Using weird characters can mess up Markdown rendering
-        "proxyUrl": null // Can be "socks5://127.0.0.1:9050" or "http://127.0.0.1:8080" for example. Leave it blank if you don't need it.
+        "proxyUrl": null, // Can be "socks5://127.0.0.1:9050" or "http://127.0.0.1:8080" for example. Leave it blank if you don't need it.
+        "extraGptModels": {
+            // Below is an example. Copy to user_options.jsonc and edit it
+            // The base url is conveniently ollama's btw
+            // "model_id": {
+            //     "name": "User-added model",
+            //     "logo_name": "ollama-symbolic",
+            //     "description": "A model added by the user",
+            //     "base_url": "http://localhost:11434/v1/chat/completions",
+            //     "key_get_url": "",
+            //     "key_file": "api_key_file.txt",
+            //     "model": "model-name"
+            // },
+        }
     },
     "animations": {
         "choreographyDelay": 35,
@@ -40,9 +53,21 @@
     "battery": {
         "low": 20,
         "critical": 10,
-        "warnLevels": [20, 15, 5],
-        "warnTitles": ["Low battery", "Very low battery", "Critical Battery"],
-        "warnMessages": ["Plug in the charger", "You there?", "PLUG THE CHARGER ALREADY"],
+        "warnLevels": [
+            20,
+            15,
+            5
+        ],
+        "warnTitles": [
+            "Low battery",
+            "Very low battery",
+            "Critical Battery"
+        ],
+        "warnMessages": [
+            "Plug in the charger",
+            "You there?",
+            "PLUG THE CHARGER ALREADY"
+        ],
         "suspendThreshold": 3
     },
     "brightness": {
@@ -87,34 +112,34 @@
         "wsNumMarginScale": 0.07
     },
     "sidebar": {
-        "ai": {
-            "extraGptModels": {
-                // Below is an example. Copy to user_options.jsonc and edit it
-                // The base url is conveniently ollama's btw
-                // "model_id": {
-                //     "name": "User-added model",
-                //     "logo_name": "ollama-symbolic",
-                //     "description": "A model added by the user",
-                //     "base_url": "http://localhost:11434/v1/chat/completions",
-                //     "key_get_url": "",
-                //     "key_file": "api_key_file.txt",
-                //     "model": "model-name"
-                // },
-            }
-        },
         "image": {
             "columns": 2,
             "batchCount": 20,
             "allowNsfw": false
         },
         "pages": {
-            "order": ["apis", "tools"],
+            "order": [
+                "apis",
+                "tools"
+            ],
             "apis": {
-                "order": ["gemini", "gpt", "waifu", "booru"]
+                "order": [
+                    "gemini",
+                    "gpt",
+                    "waifu",
+                    "booru"
+                ]
             }
         },
         "quickToggles": {
-            "order": ["wifi", "bluetooth", "nightlight", "gamemode", "idleinhibitor", "cloudflarewarp"]
+            "order": [
+                "wifi",
+                "bluetooth",
+                "nightlight",
+                "gamemode",
+                "idleinhibitor",
+                "cloudflarewarp"
+            ]
         },
         "calendar": {
             "expandByDefault": true
@@ -130,7 +155,9 @@
             "webSearch": true
         },
         "engineBaseUrl": "https://www.google.com/search?q=",
-        "excludedSites": ["quora.com"]
+        "excludedSites": [
+            "quora.com"
+        ]
     },
     "time": {
         // See https://docs.gtk.org/glib/method.DateTime.format.html
@@ -153,11 +180,17 @@
     "dock": {
         "enabled": false,
         "hiddenThickness": 5,
-        "pinnedApps": ["firefox", "org.gnome.Nautilus"],
+        "pinnedApps": [
+            "firefox",
+            "org.gnome.Nautilus"
+        ],
         "layer": "top",
         "monitorExclusivity": true, // Dock will move to other monitor along with focus if enabled
         "searchPinnedAppIcons": false, // Try to search for the correct icon if the app class isn't an icon name
-        "trigger": ["client-added", "client-removed"], // client_added, client_move, workspace_active, client_active
+        "trigger": [
+            "client-added",
+            "client-removed"
+        ], // client_added, client_move, workspace_active, client_active
         // Automatically hide dock after `interval` ms since trigger
         "autoHide": [
             {
@@ -176,7 +209,9 @@
         // The file names are processed at startup, so if there
         // are too many files in the search path it'll affect performance
         // Example: ["/usr/share/icons/Tela-nord/scalable/apps"]
-        "searchPaths": [""],
+        "searchPaths": [
+            ""
+        ],
         "symbolicIconTheme": {
             "dark": "Adwaita",
             "light": "Adwaita"
@@ -240,6 +275,8 @@
         // Array of bar modes for each monitor. Hit Ctrl+Alt+Slash to cycle.
         // Modes: "normal", "focus" (workspace indicator only), "nothing"
         // Example for four monitors: ["normal", "focus", "normal", "nothing"]
-        "modes": ["normal"]
+        "modes": [
+            "normal"
+        ]
     }
 }

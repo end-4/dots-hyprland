@@ -52,7 +52,7 @@ const PROVIDERS = Object.assign({
         "key_file": "openrouter_key.txt",
         "model": "meta-llama/llama-3-70b-instruct",
     },
-}, userOptions.sidebar.ai.extraGptModels)
+}, userOptions.ai.extraGptModels)
 
 // Custom prompt
 const initMessages =

@@ -11,6 +11,8 @@ import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 
+const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
+
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
     icon: `openai-symbolic`,
@@ -29,6 +31,12 @@ const ProviderSwitcher = () => {
                 GPTService.providerID = id;
                 providerList.revealChild = false;
                 indicatorChevron.label = 'expand_more';
+                // Save provider to config
+                Utils.execAsync(['bash', '-c', `${App.configDir}/scripts/ags/agsconfigurator.py \
+                    --key ai.defaultGPTProvider \
+                    --value ${id} \
+                    --file ${AGS_CONFIG_FILE}`
+                ]).catch(print);
             },
             child: Box({
                 className: 'spacing-h-10 txt',
