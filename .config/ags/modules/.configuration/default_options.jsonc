@@ -200,9 +200,11 @@
         ]
     },
     "keybinds": {
-        // Format: Mod1+Mod2+key. CaSe SeNsItIvE!
+        // Format: "Modifier_1+...+Modifier_n+key". The key is CaSe SeNsItIvE!
         // Modifiers: Shift Ctrl Alt Hyper Meta
-        // See https://docs.gtk.org/gdk3/index.html#constants for the other keys (they are listed as KEY_key)
+        // See https://docs.gtk.org/gdk3/index.html#constants for keys (listed as KEY_key)
+        // You can assign multiple keybinds for the same action. Just split them with a comma
+        // Example: "Ctrl+Page_Down, ctrl+Tab" 
         "overview": {
             "altMoveLeft": "Ctrl+B",
             "altMoveRight": "Ctrl+F",
