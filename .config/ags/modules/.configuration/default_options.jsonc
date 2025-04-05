@@ -89,15 +89,17 @@
     "sidebar": {
         "ai": {
             "extraGptModels": {
-                "oxygen3": {
-                    "name": "Oxygen (GPT-3.5)",
-                    "logo_name": "ai-oxygen-symbolic",
-                    "description": "An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key",
-                    "base_url": "https://app.oxyapi.uk/v1/chat/completions",
-                    "key_get_url": "https://discord.com/invite/kM6MaCqGKA",
-                    "key_file": "oxygen_key.txt",
-                    "model": "gpt-3.5-turbo"
-                }
+                // Below is an example. Copy to user_options.jsonc and edit it
+                // The base url is conveniently ollama's btw
+                // "model_id": {
+                //     "name": "User-added model",
+                //     "logo_name": "ollama-symbolic",
+                //     "description": "A model added by the user",
+                //     "base_url": "http://localhost:11434/v1/chat/completions",
+                //     "key_get_url": "",
+                //     "key_file": "api_key_file.txt",
+                //     "model": "model-name"
+                // },
             }
         },
         "image": {
