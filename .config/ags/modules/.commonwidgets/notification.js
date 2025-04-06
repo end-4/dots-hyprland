@@ -145,6 +145,12 @@ export default ({
         onMiddleClick: (self) => {
             destroyWithAnims();
         },
+        onSecondaryClick: (self) => {
+            expanded = !expanded;
+            notifTextPreview.revealChild = !expanded;
+            notifTextExpanded.revealChild = expanded;
+            notifExpandButton.child.label = `expand_${expanded ? 'less' : 'more'}`;
+        },
         setup: (self) => {
             self.on("button-press-event", () => {
                 wholeThing.attribute.held = true;
@@ -471,7 +477,7 @@ export default ({
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
     if (isPopup) Utils.timeout(popupTimeout, () => {
-        if (wholeThing) {
+        if (wholeThing && !wholeThing.attribute.hovered) {
             wholeThing.revealChild = false;
             Utils.timeout(userOptions.animations.durationSmall, () => {
                 if (wholeThing) {
