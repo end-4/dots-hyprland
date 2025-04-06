@@ -21,7 +21,14 @@ Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 function getDomainName(url) {
     try {
         const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/i);
-        return match ? match[1] : null; // Extract the domain name
+        if (!match) return null;
+
+        const domainParts = match[1].split('.');
+        if (domainParts.length > 2) {
+            // Return only the last two parts (e.g., "yande.re" from "files.yande.re")
+            return domainParts.slice(-2).join('.');
+        }
+        return match[1]; // Return as is if no subdomain
     } catch (error) {
         print(`Invalid URL: ${url}`);
         return null;
@@ -164,12 +171,13 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
             attribute: {
                 'update': (self, data, force = false) => {
                     const imagePath = `${USER_CACHE_DIR}/ags/media/waifus/${data.md5}.${data.file_ext}`;
-                    const widgetStyleContext = imageArea.get_style_context();
-                    const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                    // const widgetStyleContext = imageArea.get_style_context();
+                    // const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                    // const widgetWidth = Math.min(Math.floor(booruContent.get_allocated_width() * 0.9 / userOptions.sidebar.image.columns), data["preview_width"]);
+                    const widgetWidth = Math.floor(booruContent.get_allocated_width() * 0.9 / userOptions.sidebar.image.columns);
                     const widgetHeight = widgetWidth / data.aspect_ratio;
                     imageArea.set_size_request(widgetWidth, widgetHeight);
                     const showImage = () => {
-                        // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, widgetWidth, widgetHeight);
                         const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(imagePath, widgetWidth, widgetHeight, false);
                         imageArea.connect("draw", (widget, cr) => {
                             const borderRadius = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
@@ -215,7 +223,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                     ImageAction({
                         name: `${getString('Go to file url')} (${getDomainName(data.file_url)})`,
                         icon: 'file_open',
-                        action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
+                        action: () => execAsync(['xdg-open', `https://${getDomainName(data.file_url)}/post/show/${data.id}`]).catch(print),
                     }),
                     ImageAction({
                         name: `${getString('Go to source')} (${getDomainName(data.source)})`,
