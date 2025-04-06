@@ -23,7 +23,6 @@
     "An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key": "来自 Tornado Softwares 的 API\n定价：免费：每天 100 次请求\n需要加入他们的 Discord 以获取密钥",
     "An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it's buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key": "来自 GitHub 上的 @zukixa 的 API。\n注意：密钥与 IP 绑定，所以有时会出错。\n定价：免费：每分钟 10 次，每天 800 次。\n需要加入他们的 Discord 才能获得密钥。",
     "Provider shown above": "上述显示的提供商",
-    "Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.": "使用 gpt-3.5-turbo。\n与 OpenAI 无关联，未获得其认可或赞助。\n\n隐私：OpenAI 声明，当您使用他们的 API 时，他们不会使用您的数据。\n我不清楚其他人的情况。",
     "The model's temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1": "模型的 temperature 值。\n  精确 = 0\n  平衡 = 0.5\n  创意 = 1",
     "An API key is required\nYou can grab one <u>here</u>, then enter it below": "需要 API 密钥\n您可以在<u>这里</u>获取一个，然后在下面输入",
     "Tells the model:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points": "告诉模型：\n- 它是一个 Linux 侧边栏助手\n- 保持简洁并使用项目符号",

@@ -23,7 +23,7 @@
     "An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key": "An API from Tornado Softwares\nPricing: Free: 100/day\nRequires you to join their Discord for a key",
     "An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it's buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key": "An API from @zukixa on GitHub.\nNote: Keys are IP-locked so it's buggy sometimes\nPricing: Free: 10/min, 800/day.\nRequires you to join their Discord for a key",
     "Provider shown above": "Provider shown above",
-    "Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.": "Uses gpt-3.5-turbo.\nNot affiliated, endorsed, or sponsored by OpenAI.\n\nPrivacy: OpenAI claims they do not use your data\nwhen you use their API. Idk about others.",
+    "Chat with models compatible with OpenAI's Chat Completions API.\nNot affiliated, endorsed, or sponsored by any of the providers.": "Chat with models compatible with OpenAI's Chat Completions API.\nNot affiliated, endorsed, or sponsored by any of the providers.",
     "The model's temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1": "The model's temperature value.\n  Precise = 0\n  Balanced = 0.5\n  Creative = 1",
     "An API key is required\nYou can grab one <u>here</u>, then enter it below": "An API key is required\nYou can grab one <u>here</u>, then enter it below",
     "Tells the model:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points": "Tells the model:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points",
