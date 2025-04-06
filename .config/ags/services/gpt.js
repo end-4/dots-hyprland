@@ -7,14 +7,14 @@ import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from '../modules/.miscutils/files.js';
 
 const PROVIDERS = Object.assign({
-    "ollama": {
-        "name": "Ollama - Llama 3",
+    "ollama_llama_3_2": {
+        "name": "Ollama - Llama 3.2",
         "logo_name": "ollama-symbolic",
-        "description": getString('Ollama - Llama-3'),
+        "description": getString('Ollama - Llama-3.2'),
         "base_url": 'http://localhost:11434/v1/chat/completions',
         "key_get_url": "",
         "key_file": "ollama_key.txt",
-        "model": "llama3",
+        "model": "llama3.2",
     },
     "ollama_deepseek_r1": {
         "name": "Ollama - DeepSeek R1",

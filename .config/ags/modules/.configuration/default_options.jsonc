@@ -3,7 +3,7 @@
 {
     // General stuff
     "ai": {
-        "defaultGPTProvider": "openai",
+        "defaultGPTProvider": "ollama_llama_3_2",
         "defaultTemperature": 0.5,
         "enhancements": true,
         "keep_alive": -1, // For ollama. -1 means forever
