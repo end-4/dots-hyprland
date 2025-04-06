@@ -216,7 +216,9 @@ export const OpenaiApiKeyInstructions = () => Box({
         transitionDuration: userOptions.animations.durationLarge,
         setup: (self) => self
             .hook(GPTService, (self, hasKey) => {
-                self.revealChild = (GPTService.key.length == 0);
+                self.revealChild = (
+                    GPTService.providers[GPTService.providerID]["requires_key"]
+                    && GPTService.key.length == 0);
             }, 'hasKey')
         ,
         child: Button({
@@ -259,6 +261,11 @@ export const chatContent = Box({
             if (!message) return;
             box.add(ChatMessage(message, `Model (${GPTService.providers[GPTService.providerID]['name']})`))
         }, 'newMsg')
+        .hook(GPTService, (self, hasKey) => {
+            self.revealChild = (
+                GPTService.providers[GPTService.providerID]["requires_key"]
+                && GPTService.key.length == 0);
+        }, 'providerChanged')
     ,
 });
 
@@ -291,9 +298,11 @@ export const chatGPTCommands = Box({
 export const sendMessage = (text) => {
     // Check if text or API key is empty
     if (text.length == 0) return;
-    if (GPTService.key.length == 0) {
+    if (GPTService.providers[GPTService.providerID]["requires_key"]
+        && GPTService.key.length == 0
+        && !text.startsWith('/key')) {
         GPTService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GPTService.keyPath}\``, 'API Key', ChatGPTView));
+        chatContent.add(SystemMessage(`Key saved to \`${GPTService.keyPath}\`\nUpdate anytime with \`/key YOUR_API_KEY\`.`, 'API Key', ChatGPTView));
         text = '';
         return;
     }

@@ -20,6 +20,7 @@
             //     "description": "A model added by the user",
             //     "base_url": "http://localhost:11434/v1/chat/completions",
             //     "key_get_url": "",
+            //     "requires_key": false,
             //     "key_file": "api_key_file.txt",
             //     "model": "model-name"
             // },
