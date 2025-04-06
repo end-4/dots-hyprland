@@ -11,6 +11,9 @@ import apiWidgets from './apiwidgets.js';
 import { chatEntry } from './apiwidgets.js';
 import { TabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
+import { updateNestedProperty } from '../.miscutils/objects.js';
+
+const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
 
 const SIDEBARTABS = {
     'apis': {
@@ -85,10 +88,17 @@ export const widgetContent = TabContainer({
     names: CONTENTS.map((item) => item.friendlyName),
     children: CONTENTS.map((item) => item.content),
     className: 'sidebar-left spacing-v-10',
-    // setup: (self) => self.hook(App, (self, currentName, visible) => {
-    //     if (currentName === 'sideleft')
-    //         self.toggleClassName('sidebar-pinned', pinButton.attribute.enabled && visible);
-    // }),
+    initIndex: CONTENTS.findIndex(obj => obj.name === userOptions.sidebar.pages.defaultPage),
+    onChange: (self, index) => {
+        const pageName = CONTENTS[index].name;
+        const option = 'sidebar.pages.defaultPage';
+        updateNestedProperty(userOptions, option, pageName);
+        execAsync(['bash', '-c', `${App.configDir}/scripts/ags/agsconfigurator.py \
+            --key ${option} \
+            --value ${pageName} \
+            --file ${AGS_CONFIG_FILE}`
+        ]).catch(print);
+    },
     extraTabStripWidgets: [
         // pinButton,
         expandButton,

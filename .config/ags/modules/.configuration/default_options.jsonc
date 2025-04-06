@@ -123,13 +123,15 @@
                 "apis",
                 "tools"
             ],
+            "defaultPage": "apis",
             "apis": {
                 "order": [
                     "gemini",
                     "gpt",
                     "waifu",
                     "booru"
-                ]
+                ],
+                "defaultPage": "gemini"
             }
         },
         "quickToggles": {

@@ -17,8 +17,10 @@ const TextView = Widget.subclass(Gtk.TextView, "AgsTextView");
 
 import { widgetContent } from './sideleft.js';
 import { IconTabContainer } from '../.commonwidgets/tabcontainer.js';
+import { updateNestedProperty } from '../.miscutils/objects.js';
 
 const EXPAND_INPUT_THRESHOLD = 30;
+const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
 
 export const chatEntry = TextView({
     hexpand: true,
@@ -69,40 +71,44 @@ export const chatEntry = TextView({
 
 const APILIST = {
     'gemini': {
-        name: 'Assistant (Gemini Pro)',
-        sendCommand: geminiSendMessage,
-        contentWidget: GeminiView(chatEntry),
-        commandBar: geminiCommands,
-        tabIcon: geminiTabIcon,
-        placeholderText: getString('Message Gemini...'),
+        "name": 'Assistant (Gemini Pro)',
+        "sendCommand": geminiSendMessage,
+        "contentWidget": GeminiView(chatEntry),
+        "commandBar": geminiCommands,
+        "tabIcon": geminiTabIcon,
+        "placeholderText": getString('Message Gemini...'),
     },
     'gpt': {
-        name: 'Assistant (GPTs)',
-        sendCommand: chatGPTSendMessage,
-        contentWidget: ChatGPTView(chatEntry),
-        commandBar: chatGPTCommands,
-        tabIcon: chatGPTTabIcon,
-        placeholderText: getString('Message the model...'),
+        "name": 'Assistant (GPTs)',
+        "sendCommand": chatGPTSendMessage,
+        "contentWidget": ChatGPTView(chatEntry),
+        "commandBar": chatGPTCommands,
+        "tabIcon": chatGPTTabIcon,
+        "placeholderText": getString('Message the model...'),
     },
     'waifu': {
-        name: 'Waifus',
-        sendCommand: waifuSendMessage,
-        contentWidget: WaifuView(chatEntry),
-        commandBar: waifuCommands,
-        tabIcon: waifuTabIcon,
-        placeholderText: getString('Enter tags'),
+        "name": 'Waifus',
+        "sendCommand": waifuSendMessage,
+        "contentWidget": WaifuView(chatEntry),
+        "commandBar": waifuCommands,
+        "tabIcon": waifuTabIcon,
+        "placeholderText": getString('Enter tags'),
     },
     'booru': {
-        name: 'Booru',
-        sendCommand: booruSendMessage,
-        contentWidget: BooruView(chatEntry),
-        commandBar: booruCommands,
-        tabIcon: booruTabIcon,
-        placeholderText: getString('Enter tags and/or page number'),
+        "name": 'Booru',
+        "sendCommand": booruSendMessage,
+        "contentWidget": BooruView(chatEntry),
+        "commandBar": booruCommands,
+        "tabIcon": booruTabIcon,
+        "placeholderText": getString('Enter tags and/or page number'),
     },
 }
-const APIS = userOptions.sidebar.pages.apis.order.map((apiName) => APILIST[apiName]);
-let currentApiId = 0;
+const APIS = userOptions.sidebar.pages.apis.order.map((apiName) => {
+    const obj = { ...APILIST[apiName] };
+    obj["id"] = apiName;
+    return obj;
+});
+let currentApiId = APIS.findIndex(obj => obj.id === userOptions.sidebar.pages.apis.defaultPage);
 
 function apiSendMessage(textView) {
     // Get text
@@ -198,11 +204,21 @@ export const apiContentStack = IconTabContainer({
     iconWidgets: APIS.map((api) => api.tabIcon),
     names: APIS.map((api) => api.name),
     children: APIS.map((api) => api.contentWidget),
+    initIndex: currentApiId,
     onChange: (self, id) => {
         apiCommandStack.shown = APIS[id].name;
         chatPlaceholder.label = APIS[id].placeholderText;
         currentApiId = id;
+        const pageName = APIS[id].id;
+        const option = 'sidebar.pages.apis.defaultPage';
+        updateNestedProperty(userOptions, option, pageName);
+        execAsync(['bash', '-c', `${App.configDir}/scripts/ags/agsconfigurator.py \
+            --key ${option} \
+            --value ${pageName} \
+            --file ${AGS_CONFIG_FILE}`
+        ]).catch(print);
     }
+
 });
 
 function switchToTab(id) {
