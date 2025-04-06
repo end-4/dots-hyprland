@@ -57,13 +57,17 @@ const ProviderSwitcher = () => {
             setup: setupCursorHover,
         });
     }
+    let indicatorIcon = Icon({
+        icon: GPTService.providers[userOptions.ai.defaultGPTProvider]['logo_name'],
+        className: 'txt-large'
+    });
     const indicatorChevron = MaterialIcon('expand_more', 'norm');
     const indicatorButton = Button({
         tooltipText: getString('Select ChatGPT-compatible API provider'),
         child: Box({
             className: 'spacing-h-10 txt',
             children: [
-                MaterialIcon('cloud', 'norm'),
+                indicatorIcon,
                 Label({
                     hexpand: true,
                     xalign: 0,
