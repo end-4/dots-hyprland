@@ -6,6 +6,7 @@
         "defaultGPTProvider": "openai",
         "defaultTemperature": 0.5,
         "enhancements": true,
+        "keep_alive": -1, // For ollama. -1 means forever
         "useHistory": false,
         "safety": true,
         "writingCursor": " ...", // Warning: Using weird characters can mess up Markdown rendering

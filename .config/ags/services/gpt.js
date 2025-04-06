@@ -7,15 +7,6 @@ import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from '../modules/.miscutils/files.js';
 
 const PROVIDERS = Object.assign({
-    "openai": {
-        "name": "OpenAI",
-        "logo_name": "openai-symbolic",
-        "description": getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
-        "base_url": "https://api.openai.com/v1/chat/completions",
-        "key_get_url": "https://platform.openai.com/api-keys",
-        "key_file": "openai_key.txt",
-        "model": "gpt-3.5-turbo",
-    },
     "ollama": {
         "name": "Ollama - Llama 3",
         "logo_name": "ollama-symbolic",
@@ -51,6 +42,15 @@ const PROVIDERS = Object.assign({
         "key_get_url": "https://openrouter.ai/keys",
         "key_file": "openrouter_key.txt",
         "model": "meta-llama/llama-3-70b-instruct",
+    },
+    "openai": {
+        "name": "OpenAI - GPT-3.5",
+        "logo_name": "openai-symbolic",
+        "description": getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
+        "base_url": "https://api.openai.com/v1/chat/completions",
+        "key_get_url": "https://platform.openai.com/api-keys",
+        "key_file": "openai_key.txt",
+        "model": "gpt-3.5-turbo",
     },
 }, userOptions.ai.extraGptModels)
 
@@ -249,11 +249,11 @@ class GPTService extends Service {
         const aiResponse = new GPTMessage('assistant', '', true, false)
 
         const body = {
-            model: PROVIDERS[this._currentProvider]['model'],
-            messages: this._messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
-            temperature: this._temperature,
-            // temperature: 2, // <- Nuts
-            stream: true,
+            "model": PROVIDERS[this._currentProvider]['model'],
+            "messages": this._messages.map(msg => { let m = { role: msg.role, content: msg.content }; return m; }),
+            "temperature": this._temperature,
+            "stream": true,
+            "keep_alive": userOptions.ai.keepAlive,
         };
         const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
