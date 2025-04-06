@@ -6,6 +6,7 @@
         "defaultGPTProvider": "ollama_llama_3_2",
         "defaultTemperature": 0.5,
         "enhancements": true,
+        "charsEachUpdate": 50, // Lower = smoother update rate, but more update lag
         "keep_alive": -1, // For ollama. -1 means forever
         "useHistory": false,
         "safety": true,

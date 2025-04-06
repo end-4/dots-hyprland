@@ -91,6 +91,7 @@ class GPTMessage extends Service {
 
     _role = '';
     _content = '';
+    _lastContentLength = 0;
     _thinking;
     _done = false;
 
@@ -111,8 +112,11 @@ class GPTMessage extends Service {
     get content() { return this._content }
     set content(content) {
         this._content = content;
-        this.notify('content')
-        this.emit('changed')
+        if (this._content.length - this._lastContentLength >= userOptions.ai.charsEachUpdate) {
+            this.notify('content')
+            this.emit('changed')
+            this._lastContentLength = this._content.length;
+        }
     }
 
     get label() { return this._parserState.parsed + this._parserState.stack.join('') }
