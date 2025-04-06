@@ -14,7 +14,7 @@ const PROVIDERS = Object.assign({
         "base_url": 'http://localhost:11434/v1/chat/completions',
         "key_get_url": "",
         "key_file": "ollama_key.txt",
-        "model": "llama3:instruct",
+        "model": "llama3",
     },
     "ollama_deepseek_r1": {
         "name": "Ollama - DeepSeek R1",
