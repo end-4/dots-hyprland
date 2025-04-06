@@ -49,8 +49,8 @@ const replaceCategory = (text, replaces) => {
 // Main function
 
 export function replaceInlineLatexWithCodeBlocks(text) {
-    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$(.*?)\$/gs, (match, square, round, dollar) => {
-        const latex = square || round || dollar;
+    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)/gs, (match, square, round) => {
+        const latex = square || round;
         return `\n\`\`\`latex\n${latex}\n\`\`\`\n`;
     });
 }
