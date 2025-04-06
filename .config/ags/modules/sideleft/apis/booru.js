@@ -18,6 +18,16 @@ const USER_CACHE_DIR = GLib.get_user_cache_dir();
 Utils.exec(`bash -c 'mkdir -p ${USER_CACHE_DIR}/ags/media/waifus'`);
 Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 
+function getDomainName(url) {
+    try {
+        const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/i);
+        return match ? match[1] : null; // Extract the domain name
+    } catch (error) {
+        print(`Invalid URL: ${url}`);
+        return null;
+    }
+}
+
 const TagButton = (command, entry) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
     // Interactions disabled for now because they aren't working
@@ -203,12 +213,12 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 children: [
                     Box({ hexpand: true }),
                     ImageAction({
-                        name: getString('Go to file url'),
+                        name: `${getString('Go to file url')} (${getDomainName(data.file_url)})`,
                         icon: 'file_open',
                         action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
                     }),
                     ImageAction({
-                        name: getString('Go to source'),
+                        name: `${getString('Go to source')} (${getDomainName(data.source)})`,
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
                     }),
