@@ -1,5 +1,5 @@
 // Options in this file override the defaults in:
-//     ~/.config/ags/modules/.configuration/default_options.jsonc
+//     ~/.config/agsv2/modules/.configuration/default_options.jsonc
 //
 // vscode: ctrl+click this: file://./modules/.configuration/default_options.jsonc
 // vim: `:vsp` to split window, move cursor to the path, press `gf`. 

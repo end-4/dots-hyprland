@@ -16,7 +16,7 @@ function getLanguageCode() {
 function loadLanguage(lang) {
     if (!translations[lang]) {
         try {
-            let filePath = `~/.config/ags/i18n/locales/${lang}.json`;
+            let filePath = `~/.config/agsv2/i18n/locales/${lang}.json`;
             filePath = filePath.replace(/^~/, GLib.get_home_dir());
             let file = Gio.File.new_for_path(filePath);
             let [success, contents] = file.load_contents(null);

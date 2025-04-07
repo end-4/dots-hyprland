@@ -8,7 +8,7 @@ export function fileExists(filePath) {
 }
 
 const FIRST_RUN_FILE = "firstrun.txt";
-const FIRST_RUN_PATH = `${GLib.get_user_state_dir()}/ags/user/${FIRST_RUN_FILE}`;
+const FIRST_RUN_PATH = `${GLib.get_user_state_dir()}/agsv2/user/${FIRST_RUN_FILE}`;
 const FIRST_RUN_FILE_CONTENT = "Just a file to confirm that you have been greeted ;)";
 const APP_NAME = "illogical-impulse";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
@@ -46,7 +46,7 @@ export async function startBatteryWarningService() {
 }
 
 export async function firstRunWelcome() {
-    GLib.mkdir_with_parents(`${GLib.get_user_state_dir()}/ags/user`, 755);
+    GLib.mkdir_with_parents(`${GLib.get_user_state_dir()}/agsv2/user`, 755);
     if (!fileExists(FIRST_RUN_PATH)) {
         Utils.execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchwall.sh '${App.configDir}/assets/images/default_wallpaper.png'`]).catch(print);
         Utils.writeFile(FIRST_RUN_FILE_CONTENT, FIRST_RUN_PATH)

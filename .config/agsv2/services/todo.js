@@ -58,13 +58,13 @@ class TodoService extends Service {
 
     constructor() {
         super();
-        this._todoPath = `${GLib.get_user_state_dir()}/ags/user/todo.json`;
+        this._todoPath = `${GLib.get_user_state_dir()}/agsv2/user/todo.json`;
         try {
             const fileContents = Utils.readFile(this._todoPath);
             this._todoJson = JSON.parse(fileContents);
         }
         catch {
-            Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/ags/user'`);
+            Utils.exec(`bash -c 'mkdir -p ${GLib.get_user_cache_dir()}/agsv2/user'`);
             Utils.exec(`touch ${this._todoPath}`);
             Utils.writeFile("[]", this._todoPath).then(() => {
                 this._todoJson = JSON.parse(Utils.readFile(this._todoPath))

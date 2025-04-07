@@ -6,7 +6,7 @@ import { darkMode } from './modules/.miscutils/system.js';
 
 const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode.value ? '' : '-light'}.xml`;
 
-export const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
+export const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/agsv2/user/generated`
 
 function loadSourceViewColorScheme(filePath) {
     // Read the XML file content
@@ -25,10 +25,10 @@ function loadSourceViewColorScheme(filePath) {
 
 globalThis['handleStyles'] = (resetMusic) => {
     // Reset
-    Utils.exec(`mkdir -p "${GLib.get_user_state_dir()}/ags/scss"`);
+    Utils.exec(`mkdir -p "${GLib.get_user_state_dir()}/agsv2/scss"`);
     if (resetMusic) {
-        Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/ags/scss/_musicwal.scss'`); // reset music styles
-        Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/ags/scss/_musicmaterial.scss'`); // reset music styles
+        Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/agsv2/scss/_musicwal.scss'`); // reset music styles
+        Utils.exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/agsv2/scss/_musicmaterial.scss'`); // reset music styles
     }
     // Generate overrides
     let lightdark = darkMode.value ? "dark" : "light";
@@ -38,11 +38,11 @@ globalThis['handleStyles'] = (resetMusic) => {
     -gtk-icon-theme: '${userOptions.icons.symbolicIconTheme[lightdark]}';
 }
 `,
-        `${GLib.get_user_state_dir()}/ags/scss/_lib_mixins_overrides.scss`)
+        `${GLib.get_user_state_dir()}/agsv2/scss/_lib_mixins_overrides.scss`)
     // Compile and apply
     async function applyStyle() {
         Utils.exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
-        Utils.exec(`sass -I "${GLib.get_user_state_dir()}/ags/scss" -I "${App.configDir}/scss/fallback" "${App.configDir}/scss/main.scss" "${COMPILED_STYLE_DIR}/style.css"`);
+        Utils.exec(`sass -I "${GLib.get_user_state_dir()}/agsv2/scss" -I "${App.configDir}/scss/fallback" "${App.configDir}/scss/main.scss" "${COMPILED_STYLE_DIR}/style.css"`);
         App.resetCss();
         App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
         console.log('[LOG] Styles loaded')

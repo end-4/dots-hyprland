@@ -3,9 +3,9 @@
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
-CONFIG_DIR="$XDG_CONFIG_HOME/ags"
-CACHE_DIR="$XDG_CACHE_HOME/ags"
-STATE_DIR="$XDG_STATE_HOME/ags"
+CONFIG_DIR="$XDG_CONFIG_HOME/agsv2"
+CACHE_DIR="$XDG_CACHE_HOME/agsv2"
+STATE_DIR="$XDG_STATE_HOME/agsv2"
 
 term_alpha=100 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
@@ -124,22 +124,22 @@ apply_hyprlock() {
 
 apply_ags_sourceview() {
   # Check if template file exists
-  if [ ! -f "scripts/templates/ags/sourceviewtheme.xml" ]; then
+  if [ ! -f "scripts/templates/agsv2/sourceviewtheme.xml" ]; then
     echo "Template file not found for ags sourceview. Skipping that."
     return
   fi
   # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/ags
-  cp "scripts/templates/ags/sourceviewtheme.xml" "$CACHE_DIR"/user/generated/ags/sourceviewtheme.xml
-  cp "scripts/templates/ags/sourceviewtheme-light.xml" "$CACHE_DIR"/user/generated/ags/sourceviewtheme-light.xml
+  mkdir -p "$CACHE_DIR"/user/generated/agsv2
+  cp "scripts/templates/agsv2/sourceviewtheme.xml" "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme.xml
+  cp "scripts/templates/agsv2/sourceviewtheme-light.xml" "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme-light.xml
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/#${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/ags/sourceviewtheme.xml
-    sed -i "s/{{ ${colorlist[$i]} }}/#${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/ags/sourceviewtheme-light.xml
+    sed -i "s/{{ ${colorlist[$i]} }}/#${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme.xml
+    sed -i "s/{{ ${colorlist[$i]} }}/#${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme-light.xml
   done
 
-  cp "$CACHE_DIR"/user/generated/ags/sourceviewtheme.xml "$XDG_CONFIG_HOME"/ags/assets/themes/sourceviewtheme.xml
-  cp "$CACHE_DIR"/user/generated/ags/sourceviewtheme-light.xml "$XDG_CONFIG_HOME"/ags/assets/themes/sourceviewtheme-light.xml
+  cp "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme.xml "$XDG_CONFIG_HOME"/agsv2/assets/themes/sourceviewtheme.xml
+  cp "$CACHE_DIR"/user/generated/agsv2/sourceviewtheme-light.xml "$XDG_CONFIG_HOME"/agsv2/assets/themes/sourceviewtheme-light.xml
 }
 
 apply_lightdark() {

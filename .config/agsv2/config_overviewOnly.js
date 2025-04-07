@@ -1,7 +1,7 @@
 // Want only the overview from my config? this is what you're looking for!
 // Remember to install: `dart-sass`, `ags`, `material-symbols`, and `xorg-xrandr`
 // To launch this, run the following
-//     ags -c ~/.config/ags/config_overviewOnly.js
+//     ags -c ~/.config/agsv2/config_overviewOnly.js
 // To toggle the overview, run:
 //     ags -t overview
 // You might wanna add that as a keybind (in hyprland.conf)

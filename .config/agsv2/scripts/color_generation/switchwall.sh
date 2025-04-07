@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-CONFIG_DIR="$XDG_CONFIG_HOME/ags"
+CONFIG_DIR="$XDG_CONFIG_HOME/agsv2"
 
 switch() {
 	imgpath=$1
