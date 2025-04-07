@@ -58,7 +58,7 @@ const ProviderSwitcher = () => {
         });
     }
     let indicatorIcon = Icon({
-        icon: GPTService.providers[userOptions.ai.defaultGPTProvider]['logo_name'],
+        icon: GPTService.providers[GPTService._currentProvider]['logo_name'],
         className: 'txt-large',
         setup: (self) => self.hook(GPTService, (self) => {
             self.icon = GPTService.providers[GPTService.providerID]['logo_name'];
