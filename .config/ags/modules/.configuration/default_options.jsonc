@@ -53,6 +53,16 @@
         "taskManager": "gnome-usage",
         "terminal": "foot" // This is only for shell actions
     },
+    "bar": {
+        // Whether to show Swap and CPU usage when there's media. RAM is always shown.
+        "alwaysShowFullResources": false, 
+        // Array of bar modes for each monitor. Hit Ctrl+Alt+Slash to cycle.
+        // Modes: "normal", "focus" (workspace indicator only), "nothing"
+        // Example for four monitors: ["normal", "focus", "normal", "nothing"]
+        "modes": [
+            "normal"
+        ]
+    },
     "battery": {
         "low": 20,
         "critical": 10,
@@ -275,15 +285,5 @@
             "prevTab": "Ctrl+Page_Up",
             "cycleTab": "Ctrl+Tab"
         }
-    },
-    "bar": {
-        // Whether to show Swap and CPU usage when there's media. RAM is always shown.
-        "alwaysShowFullResources": false, 
-        // Array of bar modes for each monitor. Hit Ctrl+Alt+Slash to cycle.
-        // Modes: "normal", "focus" (workspace indicator only), "nothing"
-        // Example for four monitors: ["normal", "focus", "normal", "nothing"]
-        "modes": [
-            "normal"
-        ]
     }
 }
