@@ -8,9 +8,9 @@ import re
 def parse_value(value):
     """Parse the value into its appropriate Python type (e.g., bool, int, float, list, dict, or string)."""
     try:
-        return ast.literal_eval(value)
-    except (ValueError, SyntaxError):
-        return value  # Fallback to string if parsing fails
+        return json.loads(value)
+    except json.JSONDecodeError: # Fallback to string if parsing fails
+        return value
 
 def remove_trailing_commas(json_string):
     """Remove trailing commas from JSON-like structures."""
