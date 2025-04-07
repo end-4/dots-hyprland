@@ -3,11 +3,12 @@ import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Label, Icon, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Icon, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import md2pango, { replaceInlineLatexWithCodeBlocks } from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
+import { setupCursorHover } from "../../.widgetutils/cursorhover.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
 const USERNAME = GLib.get_user_name();
@@ -45,20 +46,104 @@ const HighlightedCode = (content, lang) => {
     return sourceView;
 }
 
-const TextBlock = (content = '') => Label({
-    hpack: 'fill',
-    className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
-    useMarkup: true,
-    xalign: 0,
-    wrap: true,
-    selectable: true,
-    label: content,
-});
+const TextBlock = (content = '') => {
+    const widget = Label({
+        attribute: {
+            'updateTextPlain': (text) => {
+                widget.label = text;
+            },
+            'updateText': (text) => {
+                widget.attribute.updateTextPlain(md2pango(text));
+            }
+        },
+        hpack: 'fill',
+        className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
+        useMarkup: true,
+        xalign: 0,
+        wrap: true,
+        selectable: true,
+        label: content,
+    });
+    return widget;
+}
+
+const ThinkBlock = (content = '', revealChild = true) => {
+    const revealThought = Variable(revealChild);
+    const mainText = Label({
+        hpack: 'fill',
+        className: `txt sidebar-chat-txtblock-think sidebar-chat-txt`,
+        useMarkup: true,
+        xalign: 0,
+        wrap: true,
+        selectable: true,
+        label: content,
+    });
+    const mainTextRevealer = Revealer({
+        transition: 'slide_down',
+        revealChild: revealThought.value,
+        child: mainText,
+        setup: (self) => self.hook(revealThought, (self) => {
+            self.revealChild = revealThought.value;
+        })
+    })
+    const expandIcon = MaterialIcon(revealThought.value ? 'expand_less' : 'expand_more', 'norm', {
+        setup: (self) => self.hook(revealThought, (self) => {
+            self.label = revealThought.value ? 'expand_less' : 'expand_more';
+        })
+    });
+    const widget = Box({
+        attribute: {
+            'updateTextPlain': (text) => {
+                mainText.label = text;
+            },
+            'updateText': (text) => {
+                widget.attribute.updateTextPlain(md2pango(text));
+            },
+            'done': () => {
+                revealThought.value = false;
+            }
+        },
+        className: 'sidebar-chat-thinkblock',
+        vertical: true,
+        children: [
+            Button({
+                onClicked: (self) => {
+                    revealThought.value = !revealThought.value;
+                },
+                child: Box({
+                    className: 'spacing-h-10 padding-10',
+                    children: [
+                        Box({
+                            homogeneous: true,
+                            valign: 'center',
+                            className: 'sidebar-chat-thinkblock-icon',
+                            children: [MaterialIcon('neurology', 'large')]
+                        }),
+                        Label({
+                            valign: 'center',
+                            hexpand: true,
+                            label: 'Chain of Thought',
+                            className: 'txt sidebar-chat-thinkblock-txt',
+                        }),
+                        Box({
+                            className: 'sidebar-chat-thinkblock-btn-arrow',
+                            homogeneous: true,
+                            children: [expandIcon],
+                        }),
+                    ]
+                }),
+                setup: setupCursorHover,
+            }),
+            mainTextRevealer,
+        ]
+    });
+    return widget;
+}
 
 Utils.execAsync(['bash', '-c', `rm -rf ${LATEX_DIR}`])
     .then(() => Utils.execAsync(['bash', '-c', `mkdir -p ${LATEX_DIR}`]))
     .catch(print);
-const Latex = (content = '') => {
+const LatexBlock = (content = '') => {
     const latexViewArea = Box({
         // vscroll: 'never',
         // hscroll: 'automatic',
@@ -122,7 +207,7 @@ sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#0000
 
 const CodeBlock = (content = '', lang = 'txt') => {
     if (lang == 'tex' || lang == 'latex') {
-        return Latex(content);
+        return LatexBlock(content);
     }
     const topBar = Box({
         className: 'sidebar-chat-codeblock-topbar',
@@ -216,7 +301,7 @@ const MessageContent = (content) => {
                     child.destroy();
                 }
                 contentBox.add(TextBlock())
-                
+
                 let lines = replaceInlineLatexWithCodeBlocks(content).split('\n');
                 let lastProcessed = 0;
                 let inCode = false;
@@ -228,7 +313,8 @@ const MessageContent = (content) => {
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
                         if (!inCode) {
-                            lastLabel.label = md2pango(blockContent);
+                            lastLabel.attribute.updateText(blockContent);
+                            if (lastLabel.label == '') lastLabel.destroy();
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
@@ -239,13 +325,31 @@ const MessageContent = (content) => {
                         lastProcessed = index + 1;
                         inCode = !inCode;
                     }
+                    // Think block
+                    const thinkBlockStartRegex = /^\s*<think>/; // Start: <think>
+                    const thinkBlockEndRegex = /<\/think>\s*$/; // End: </think>
+                    if (!inCode && (thinkBlockStartRegex.test(line) || thinkBlockEndRegex.test(line))) {
+                        const kids = self.get_children();
+                        const lastLabel = kids[kids.length - 1];
+                        const blockContent = lines.slice(lastProcessed, index).join('\n');
+
+                        lastLabel.attribute.updateTextPlain(blockContent);
+                        if (lastLabel.label == '') lastLabel.destroy();
+                        if (thinkBlockStartRegex.test(line)) contentBox.add(ThinkBlock());
+                        else {
+                            // lastLabel.attribute.done();
+                            contentBox.add(TextBlock());
+                        }
+
+                        lastProcessed = index + 1;
+                    }
                     // Breaks
                     const dividerRegex = /^\s*---/;
                     if (!inCode && dividerRegex.test(line)) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.label = md2pango(blockContent);
+                        lastLabel.attribute.updateTextPlain(blockContent);
                         contentBox.add(Divider());
                         contentBox.add(TextBlock());
                         lastProcessed = index + 1;
@@ -256,7 +360,7 @@ const MessageContent = (content) => {
                     const lastLabel = kids[kids.length - 1];
                     let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
                     if (!inCode)
-                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`;
+                        lastLabel.attribute.updateTextPlain(`${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`);
                     else
                         lastLabel.attribute.updateText(blockContent);
                 }
