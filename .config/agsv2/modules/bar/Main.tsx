@@ -1,5 +1,5 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3"
-import { Variable } from "astal"
+import { Variable, bind } from "astal"
 
 const time = Variable("").poll(1000, "date")
 
