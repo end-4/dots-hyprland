@@ -108,14 +108,16 @@ $bar_ws_width_focus_active: 2.045rem;
 
 .bar-ws {
     font-size: 1.02rem;
-    font-weight: 600;
+    font-weight: 400;
     min-width: $bar_ws_width;
+    min-height: $bar_ws_width;
     color: $workspaceOnLayer1Inactive;
 }
 
 .bar-ws-active {
     background-color: $workspaceLayer3;
     color: $workspaceOnLayer3;
+    border-radius: 10rem;
 }
 
 .bar-ws-occupied {

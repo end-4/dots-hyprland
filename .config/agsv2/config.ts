@@ -7,6 +7,7 @@ import { firstRunWelcome, startBatteryWarningService } from './services/messages
 import { startAutoDarkModeService } from './services/darkmode';
 // Widgets
 import { Bar } from './modules/bar/Main';
+import { cycleMode, currentShellMode } from "./variables.js";
 // TODO: Make these widgets and import them v
 // 
 // import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/Main';
@@ -72,6 +73,13 @@ startBatteryWarningService().catch(print)
 App.start({
     css: `${COMPILED_STYLE_DIR}/style.css`,
     main() {
-        App.get_monitors().map(Bar)
+        App.get_monitors().map((gdkmonitor, monitorId, _) => Bar({ gdkmonitor, monitorId }))
+    },
+    requestHandler(request, res) {
+        if (request === "cycle_mode") {
+            cycleMode();
+            return res(currentShellMode.get());
+        }
+        res("unknown command");
     },
 })
