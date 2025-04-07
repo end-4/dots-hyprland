@@ -1,0 +1,40 @@
+.session-bg {
+    background-color: transparentize($color: $layer0, $amount: 0.4);
+}
+
+.session-button {
+    @include large-rounding;
+    min-width: 8.182rem;
+    min-height: 8.182rem;
+    background-color: $layer1;
+    color: $onLayer1;
+    font-size: 3rem;
+}
+
+.session-button-focused {
+    background-color: $layer1Hover;
+}
+
+.session-button-desc {
+    background-color: $layer2;
+    color: $onLayer2;
+    border-bottom-left-radius: $rounding_large;
+    border-bottom-right-radius: $rounding_large;
+    padding: 0.205rem 0.341rem;
+    font-weight: 700;
+}
+
+.session-button-cancel {
+    @include large-rounding;
+    min-width: 8.182rem;
+    min-height: 5.455rem;
+    background-color: $layer1;
+    color: $onLayer1;
+    font-size: 3rem;
+}
+
+@for $i from 1 through 7 {
+    .session-color-#{$i} {
+        color: nth($sessionColors, $i);
+    }
+}

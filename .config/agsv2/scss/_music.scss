@@ -1,0 +1,156 @@
+@import 'material';
+@import 'musicmaterial';
+@import './wal';
+@import 'musicwal';
+@import './colors';
+@import './lib_mixins';
+$music_transparentize_amount: 0.3;
+$music_gradient1: mix($color1, $background, 50%);
+
+// @if $darkmode == True {
+//     $music_gradient1: mix($color1, $background, 30%);
+// }
+
+$music_gradient2: $color3;
+$music_gradient3: $color5;
+$music_colorstart_transparentize: 0.3;
+$music_extra_transparentize: 0.15;
+
+$secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6, 80%), 0.5);
+$onSecondaryContainer: mix($color7, $color2, 90%);
+@if $darkmode == False {
+    $onSecondaryContainer: mix($onSecondaryContainer, black, 50%);
+}
+
+.osd-music {
+    @include menu_decel;
+    @include elevation2;
+    margin-top: 0.313rem;
+    @include normal-rounding;
+    // min-height: 7.159rem;
+    min-width: 29.659rem;
+    background-color: $layer0;
+    padding: 0rem 1.023rem;
+    background: // Inspired by Amberol
+        linear-gradient(127deg, transparentize($music_gradient1, $music_colorstart_transparentize), transparentize($music_gradient1, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient(217deg, transparentize($music_gradient2, $music_colorstart_transparentize), transparentize($music_gradient2, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
+        radial-gradient(circle at 0% 100%, $color4 13%, rgba(0, 0, 0, 0) 100%),
+        linear-gradient(336deg, transparentize($music_gradient3, $music_colorstart_transparentize), transparentize($music_gradient3, $music_colorstart_transparentize - $music_transparentize_amount + $music_extra_transparentize) 70.71%),
+        linear-gradient($background, $background), // We don't want wallpaper tint, so here's a fully opaque surface
+    ;
+}
+
+
+.osd-music-cover-fallback {
+    @include element_decel;
+    @include small-rounding;
+    // margin: 1.023rem;
+    min-width: 7.5rem;
+    min-height: 7.5rem;
+    background-color: $layer1;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-cover {
+    @include small-rounding;
+    @include menu_decel;
+    // Must be -top and -bottom or it'll mess up horizontal spacing
+    margin-top: 1.023rem;
+    margin-bottom: 1.023rem;
+    min-width: 7.5rem;
+    min-height: 7.5rem;
+}
+
+.osd-music-cover-art {
+    @include small-rounding;
+    min-width: 7.5rem;
+    min-height: 7.5rem;
+    background-size: cover;
+    background-position: center;
+}
+
+.osd-music-info {
+    margin: 1.023rem 0rem;
+}
+
+.osd-music-title {
+    @include element_decel;
+    @include titlefont;
+    font-size: 1.364rem;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-artists {
+    @include element_decel;
+    @include mainfont;
+    font-size: 0.955rem;
+    color: mix($onSecondaryContainer, $secondaryContainer, 80%);
+}
+
+.osd-music-pill {
+    @include element_decel;
+    @include full-rounding;
+    @include titlefont;
+    min-width: 1.833rem;
+    padding: 0.273rem 0.682rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-controls {
+    @include element_decel;
+    @include full-rounding;
+    @include titlefont;
+    min-width: 1.833rem;
+    padding: 0.205rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-controlbtn {
+    @include menu_decel;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+    @include full-rounding;
+}
+
+.osd-music-controlbtn:hover,
+.osd-music-controlbtn:focus {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 90%);
+}
+
+.osd-music-controlbtn:active {
+    background-color: mix($secondaryContainer, $onSecondaryContainer, 85%);
+}
+
+.osd-music-controlbtn-txt {
+    @include element_decel;
+    transition: 100ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    @include icon-material;
+    font-size: 1.364rem;
+    margin: -0.1rem 0rem;
+}
+
+.osd-music-circprog {
+    @include fluent_decel_long;
+    min-width: 0.409rem; // width of progress
+    min-height: 3.068rem;
+    padding: 0.273rem;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-playstate {
+    @include menu_decel;
+    min-height: 3.068rem;
+    min-width: 3.068rem;
+    border-radius: 10rem;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.osd-music-playstate-btn>label {
+    transition: 50ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    @include icon-material;
+    font-size: 1.364rem;
+    margin: -0.1rem 0rem;
+}

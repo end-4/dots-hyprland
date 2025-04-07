@@ -1,0 +1,119 @@
+$osk_key_height: 2.5rem;
+$osk_key_width: 2.5rem;
+$osk_key_padding: 0.188rem;
+$osk_key_rounding: 0.545rem;
+$osk_key_fontsize: 1.091rem;
+
+.osk-window {
+    // @include menu_decel_fast;
+    @include large-rounding;
+    @include elevation-border;
+    @include elevation2;
+    // min-height: 29.591rem;
+    // min-width: 50rem;
+    background-color: $layer0;
+}
+
+.osk-body {
+    padding: 1.023rem;
+    padding-top: 0rem;
+}
+
+.osk-show {
+    @include menu_decel_fast;
+}
+
+.osk-hide {
+    margin-top: 30.682rem;
+    margin-bottom: -30.682rem;
+    // opacity: 0;
+    @include menu_accel_fast;
+}
+
+.osk-dragline {
+    @include full-rounding;
+    background-color: $onLayer0Inactive;
+    min-height: 0.273rem;
+    min-width: 10.227rem;
+    margin-top: 0.545rem;
+    margin-bottom: 0.205rem;
+}
+
+.osk-key {
+    border-radius: $osk_key_rounding;
+    background-color: $layer1;
+    color: $onLayer1;
+    padding: $osk_key_padding;
+    font-weight: 500;
+    font-size: $osk_key_fontsize;
+}
+
+.osk-key:hover,
+.osk-key:focus {
+    background-color: $layer1Hover;
+}
+
+.osk-key:active {
+    background-color: $layer1Active;
+    font-size: $osk_key_fontsize;
+}
+
+.osk-key-active {
+    background-color: $layer1Active;
+}
+
+.osk-key-normal {
+    min-width: $osk_key_width;
+    min-height: $osk_key_height;
+}
+
+.osk-key-fn {
+    min-width: $osk_key_width * 1.005;
+    min-height: calc($osk_key_height / 2); // dart-sass
+    // min-height: $osk_key_height / 2; // sassc
+}
+
+.osk-key-tab {
+    min-width: $osk_key_width * 1.6;
+    min-height: $osk_key_height;
+}
+
+.osk-key-caps {
+    min-width: $osk_key_width * 1.9;
+    min-height: $osk_key_height;
+}
+
+.osk-key-shift {
+    min-width: $osk_key_width * 2.5;
+    min-height: $osk_key_height;
+}
+
+.osk-key-control {
+    min-width: $osk_key_width * 1.3;
+    min-height: $osk_key_height;
+}
+
+.osk-control-button {
+    border-radius: $osk_key_rounding;
+    background-color: $layer1;
+    color: $onLayer1;
+    font-weight: 500;
+    font-size: $osk_key_fontsize;
+    padding: 0.682rem;
+}
+
+.osk-control-button:hover,
+.osk-control-button:focus {
+    background-color: $layer1Hover;
+}
+
+.osk-control-button:active {
+    background-color: $layer1Active;
+    font-size: $osk_key_fontsize;
+}
+
+.osk-key-empty, .osk-key-empty:hover, .osk-key-empty:focus {
+    min-width: $osk_key_width;
+    min-height: $osk_key_height;
+    background-color: transparent;
+}
