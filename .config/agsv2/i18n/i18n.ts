@@ -1,8 +1,7 @@
-const Gio = imports.gi.Gio;
-const GLib = imports.gi.GLib;
-import configOptions from "../modules/.configuration/user_options.js";
-const { langCode, Extra_logs } = configOptions.i18n
-const translations = {};
+import { Gio, GLib } from "astal";
+import { userOptions } from "../modules/core/configuration/user_options";
+const { langCode, Extra_logs } = userOptions.i18n
+const translations: Record<string, Record<string, string>> = {};
 
 let currentLanguage = langCode || getLanguageCode();
 
@@ -13,7 +12,7 @@ function getLanguageCode() {
 }
 
 // Load language file
-function loadLanguage(lang) {
+function loadLanguage(lang: string) {
     if (!translations[lang]) {
         try {
             let filePath = `~/.config/agsv2/i18n/locales/${lang}.json`;
@@ -47,7 +46,7 @@ function init() {
 }
 
 // Get translation, if no corresponding value, return the key
-function getString(key) {
+function getString(key: string) {
     if (key && !translations[currentLanguage]?.[key] && Extra_logs)
         console.warn(`${translations[currentLanguage]["Not found"] || "Not found"}:::${key}`);
     return translations[currentLanguage]?.[key] || translations['Default']?.[key] || key;
