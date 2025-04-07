@@ -10,6 +10,7 @@ import Todo from "../../services/todo.js";
 import { TodoWidget } from "./todolist.js";
 import { getCalendarLayout } from "./calendar_layout.js";
 
+const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
 
@@ -203,6 +204,12 @@ export const ModuleCalendar = () => {
             className: 'margin-top-5 margin-left-5 margin-bottom-5',
             onClicked: () => {
                 mainStack.shown = (mainStack.shown == 'expanded') ? 'collapsed' : 'expanded';
+                Utils.execAsync(['bash', '-c', `${App.configDir}/scripts/ags/agsconfigurator.py \
+                    --key "sidebar.calendar.expandByDefault" \
+                    --value ${!userOptions.sidebar.calendar.expandByDefault} \
+                    --file ${AGS_CONFIG_FILE}`
+                ]).catch(print);
+
             },
             setup: setupCursorHover,
             child: Box({
@@ -258,9 +265,7 @@ export const ModuleCalendar = () => {
         },
         transition: 'slide_up_down',
         transitionDuration: userOptions.animations.durationLarge,
-        setup: (stack) => Utils.timeout(1, () => {
-            stack.shown = userOptions.sidebar.calendar.expandByDefault ? 'expanded' : 'collapsed';
-        })
+        shown: userOptions.sidebar.calendar.expandByDefault ? 'expanded' : 'collapsed',
     })
 
     return mainStack;
