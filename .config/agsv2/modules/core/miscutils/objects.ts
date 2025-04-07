@@ -1,10 +1,10 @@
-export function getNestedProperty(obj, path) {
-    return path.split('.').reduce((current, key) => {
+export function getNestedProperty(obj: any, path: string) {
+    return path.split('.').reduce((current: { [x: string]: any; hasOwnProperty: (arg0: any) => any; }, key: string | number) => {
         return (current && typeof current === 'object' && current.hasOwnProperty(key)) ? current[key] : undefined;
     }, obj);
 }
 
-export function updateNestedProperty(obj, path, newValue) {
+export function updateNestedProperty(obj: any, path: string, newValue: any) {
     const pathArray = path.split('.');
     const lastKeyIndex = pathArray.length - 1;
 

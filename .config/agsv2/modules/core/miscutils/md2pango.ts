@@ -39,7 +39,7 @@ const replacements = {
     ]
 }
 
-const replaceCategory = (text, replaces) => {
+const replaceCategory = (text: string, replaces: { name: string; re: RegExp; sub: string; }[]) => {
     for (const type of replaces) {
         text = text.replace(type.re, type.sub);
     }
@@ -48,14 +48,14 @@ const replaceCategory = (text, replaces) => {
 
 // Main function
 
-export function replaceInlineLatexWithCodeBlocks(text) {
-    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?<!\w)\$(.*?[^\\])\$(?!\w)/gs, (match, square, round, double, single) => {
+export function replaceInlineLatexWithCodeBlocks(text: string) {
+    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?<!\w)\$(.*?[^\\])\$(?!\w)/gs, (match: any, square: any, round: any, double: any, single: any) => {
         const latex = square || round || double || single;
         return `\n\`\`\`latex\n${latex}\n\`\`\`\n`;
     });
 }
 
-export default (text) => {
+export default (text: string) => {
     let lines = text.split('\n')
     let output = [];
     let inCode = false;

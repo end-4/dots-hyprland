@@ -1,4 +1,4 @@
-export function parseJSONC(jsoncString) {
+export function parseJSONC(jsoncString: string) {
     let result = "";
     let inString = false;
     let inSingleQuote = false;

@@ -1,11 +1,13 @@
-const { Gtk } = imports.gi;
+import { Gtk } from "astal/gtk3";
+import { userOptions } from "../configuration/user_options";
 
-export function iconExists(iconName) {
+
+export function iconExists(iconName: string) {
     let iconTheme = Gtk.IconTheme.get_default();
     return iconTheme.has_icon(iconName);
 }
 
-export function substitute(str) {
+export function substitute(str: string) {
     // Normal substitutions
     if (userOptions.icons.substitutions[str])
         return userOptions.icons.substitutions[str];

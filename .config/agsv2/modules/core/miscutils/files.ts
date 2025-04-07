@@ -1,11 +1,12 @@
-const { Gio, GLib, Gtk } = imports.gi;
+import Gio from "gi://Gio";
+import GLib from "gi://GLib";
 
-export function fileExists(filePath) {
+export function fileExists(filePath: string): boolean {
     let file = Gio.File.new_for_path(filePath);
     return file.query_exists(null);
 }
 
-export function expandTilde(path) {
+export function expandTilde(path: string): string {
     if (path.startsWith('~')) {
         return GLib.get_home_dir() + path.slice(1);
     } else {
