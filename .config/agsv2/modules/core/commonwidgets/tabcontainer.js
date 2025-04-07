@@ -4,8 +4,8 @@ import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Box, Button, EventBox, Label, Overlay, Stack } = Widget;
 import { MaterialIcon } from './materialicon.js';
 import { NavigationIndicator } from './cairo_navigationindicator.js';
-import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-import { DoubleRevealer } from '../.widgethacks/advancedrevealers.js';
+import { setupCursorHover } from '../widgetutils/cursorhover.js';
+import { DoubleRevealer } from '../widgethacks/advancedrevealers.js';
 
 export const TabContainer = ({
     icons, names, children, initIndex = 0,

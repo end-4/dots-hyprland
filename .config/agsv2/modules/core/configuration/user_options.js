@@ -1,6 +1,6 @@
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
-import { parseJSONC } from '../.miscutils/jsonc.js';
+import { parseJSONC } from '../miscutils/jsonc.js';
 
 function overrideConfigRecursive(userOverrides, configOptions = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
