@@ -10,6 +10,7 @@ function guessModelLogo(model) {
     if (model.includes("llama")) return "ollama-symbolic";
     if (model.includes("gemma")) return "google-gemini-symbolic";
     if (model.includes("deepseek")) return "deepseek-symbolic";
+    if (/^phi\d*:/i.test(model)) return "microsoft-symbolic";
     return "ollama-symbolic";
 }
 
@@ -277,6 +278,7 @@ class GPTService extends Service {
             "stream": true,
             "keep_alive": userOptions.ai.keepAlive,
         };
+        // console.log(body);
         const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({
