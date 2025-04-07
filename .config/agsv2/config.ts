@@ -3,8 +3,8 @@ import { App, Gdk, Gtk } from "astal/gtk3"
 import { COMPILED_STYLE_DIR, handleStyles } from './init.js';
 // Stuff
 import { userOptions } from './modules/core/configuration/user_options';
-// import { firstRunWelcome, startBatteryWarningService } from './services/messages.js';
-// import { startAutoDarkModeService } from './services/darkmode.js';
+import { firstRunWelcome, startBatteryWarningService } from './services/messages';
+import { startAutoDarkModeService } from './services/darkmode';
 // Widgets
 import { Bar } from './modules/bar/Main';
 // TODO: Make these widgets and import them v
@@ -36,9 +36,9 @@ import { Bar } from './modules/bar/Main';
 
 // Start stuff
 handleStyles(true);
-// startAutoDarkModeService().catch(print);
-// firstRunWelcome().catch(print);
-// startBatteryWarningService().catch(print)
+startAutoDarkModeService().catch(print);
+firstRunWelcome().catch(print);
+startBatteryWarningService().catch(print)
 
 // const Windows = () => [
 //     // forMonitors(DesktopBackground),
