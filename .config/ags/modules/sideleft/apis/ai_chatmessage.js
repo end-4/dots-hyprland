@@ -122,6 +122,7 @@ const ThinkBlock = (content = '', revealChild = true) => {
                         Label({
                             valign: 'center',
                             hexpand: true,
+                            xalign: 0,
                             label: 'Chain of Thought',
                             className: 'txt sidebar-chat-thinkblock-txt',
                         }),
