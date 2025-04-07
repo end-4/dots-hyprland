@@ -15,8 +15,8 @@ function overrideConfigRecursive(userOverrides: any, configOptions: any = {}) {
     }
 }
 
-// Load default options from ~/.config/agsv2/modules/.configuration/default_options.jsonc
-const defaultConfigFile = `${GLib.get_user_config_dir()}/agsv2/modules/.configuration/default_options.jsonc`;
+// Load default options from ~/.config/agsv2/modules/core/configuration/default_options.jsonc
+const defaultConfigFile = `${GLib.get_user_config_dir()}/agsv2/modules/core/configuration/default_options.jsonc`;
 const defaultConfigFileContents = readFile(defaultConfigFile);
 export const userOptionsDefaults = parseJSONC(defaultConfigFileContents);
 

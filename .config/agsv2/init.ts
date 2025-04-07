@@ -5,7 +5,7 @@ import { App } from "astal/gtk3";
 import { userOptions } from "./modules/core/configuration/user_options.js";
 
 
-const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${GLib.get_user_config_dir}/agsv2/assets/themes/sourceviewtheme${darkMode.get() ? '' : '-light'}.xml`;
+const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${GLib.get_user_config_dir()}/agsv2/assets/themes/sourceviewtheme${darkMode.get() ? '' : '-light'}.xml`;
 
 export const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/agsv2/user/generated`
 
@@ -43,7 +43,7 @@ export function handleStyles(resetMusic: boolean) {
     // Compile and apply
     async function applyStyle() {
         exec(`mkdir -p ${COMPILED_STYLE_DIR}`);
-        exec(`sass -I "${GLib.get_user_state_dir()}/agsv2/scss" -I "${GLib.get_user_config_dir}/agsv2/scss/fallback" "${GLib.get_user_config_dir}/agsv2/scss/main.scss" "${COMPILED_STYLE_DIR}/style.css"`);
+        exec(`sass -I "${GLib.get_user_state_dir()}/agsv2/scss" -I "${GLib.get_user_config_dir()}/agsv2/scss/fallback" "${GLib.get_user_config_dir()}/agsv2/scss/main.scss" "${COMPILED_STYLE_DIR}/style.css"`);
         App.reset_css();
         App.apply_css(`${COMPILED_STYLE_DIR}/style.css`);
         console.log('[LOG] Styles loaded')
