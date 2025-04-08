@@ -49,12 +49,15 @@ const HighlightedCode = (content, lang) => {
 const TextBlock = (content = '') => {
     const widget = Label({
         attribute: {
-            'updateTextPlain': (text) => {
-                widget.label = text;
-            },
+            'text': content,
             'updateText': (text) => {
-                widget.attribute.updateTextPlain(md2pango(text));
-            }
+                widget.attribute.text = text;
+                widget.label = md2pango(widget.attribute.text)
+            },
+            'appendText': (text) => {
+                widget.attribute.text += text;
+                widget.label = md2pango(widget.attribute.text)
+            },
         },
         hpack: 'fill',
         className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
@@ -93,11 +96,14 @@ const ThinkBlock = (content = '', revealChild = true) => {
     });
     const widget = Box({
         attribute: {
-            'updateTextPlain': (text) => {
-                mainText.label = text;
-            },
+            'text': content,
             'updateText': (text) => {
-                widget.attribute.updateTextPlain(md2pango(text));
+                widget.attribute.text = text;
+                mainText.label = md2pango(widget.attribute.text);
+            },
+            'appendText': (text) => {
+                widget.attribute.text += text;
+                mainText.label = md2pango(widget.attribute.text);
             },
             'done': () => {
                 revealThought.value = false;
@@ -150,7 +156,7 @@ const LatexBlock = (content = '') => {
         // hscroll: 'automatic',
         // homogeneous: true,
         attribute: {
-            render: async (self, text) => {
+            'render': async (self, text) => {
                 if (text.length == 0) return;
                 const styleContext = self.get_style_context();
                 const fontSize = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
@@ -193,9 +199,15 @@ sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#0000
         className: 'sidebar-chat-latex',
         homogeneous: true,
         attribute: {
+            'text': content,
             'updateText': (text) => {
-                latexViewArea.attribute.render(latexViewArea, text).catch(print);
-            }
+                wholeThing.attribute.text = text;
+                latexViewArea.attribute.render(latexViewArea, wholeThing.attribute.text).catch(print);
+            },
+            'appendText': (text) => {
+                wholeThing.attribute.text += text;
+                latexViewArea.attribute.render(latexViewArea, wholeThing.attribute.text).catch(print);
+            },
         },
         children: [Scrollable({
             vscroll: 'never',
@@ -253,7 +265,10 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     sourceView.showLineMarks = true;
                 }
                 sourceView.get_buffer().set_text(text, -1);
-            }
+            },
+            'appendText': (text) => {
+                codeBlock.attribute.updateText(sourceView.get_buffer().text + text);
+            },
         },
         className: 'sidebar-chat-codeblock',
         vertical: true,
@@ -294,76 +309,83 @@ const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
         attribute: {
+            'lastUpdateTextLength': 0,
+            'inCode': false,
             'fullUpdate': (self, content, useCursor = false) => {
-                // Clear and add first text widget
-                const children = contentBox.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    child.destroy();
+                // First text widget
+                if (contentBox.attribute.lastUpdateTextLength === 0
+                    && contentBox.get_children().length === 0
+                ) {
+                    contentBox.add(TextBlock())
                 }
-                contentBox.add(TextBlock())
 
-                let lines = replaceInlineLatexWithCodeBlocks(content).split('\n');
+                const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
+                const thinkBlockStartRegex = /^\s*<think>/; // Start: <think>
+                const thinkBlockEndRegex = /<\/think>\s*$/; // End: </think>
+                const dividerRegex = /^\s*---/;
+                const newContent = content.slice(contentBox.attribute.lastUpdateTextLength);
+                // print("CONTENT:'" + content + "'")
+                // print("LAST UPDATE LENGTH:" + contentBox.attribute.lastUpdateTextLength)
+                // print("NEW CONTENT:" + newContent)
+                if (newContent.length == 0) return;
+                let lines = replaceInlineLatexWithCodeBlocks(newContent).split('\n');
+                // let lines = newContent.split('\n');
+
+                // Process each line except the last line (potentially incomplete)
                 let lastProcessed = 0;
-                let inCode = false;
                 for (let [index, line] of lines.entries()) {
+                    if (index == lines.length - 1) break;
                     // Code blocks
-                    const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        if (!inCode) {
-                            lastLabel.attribute.updateText(blockContent);
-                            if (lastLabel.label == '') lastLabel.destroy();
+
+                        if (!contentBox.attribute.inCode) {
+                            lastLabel.attribute.appendText(blockContent);
+                            if (lastLabel.label === '') lastLabel.destroy();
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
-                            lastLabel.attribute.updateText(blockContent);
+                            lastLabel.attribute.appendText(blockContent);
                             contentBox.add(TextBlock());
                         }
 
                         lastProcessed = index + 1;
-                        inCode = !inCode;
+                        contentBox.attribute.inCode = !contentBox.attribute.inCode;
                     }
                     // Think block
-                    const thinkBlockStartRegex = /^\s*<think>/; // Start: <think>
-                    const thinkBlockEndRegex = /<\/think>\s*$/; // End: </think>
-                    if (!inCode && (thinkBlockStartRegex.test(line) || thinkBlockEndRegex.test(line))) {
+                    if (!contentBox.attribute.inCode && (thinkBlockStartRegex.test(line) || thinkBlockEndRegex.test(line))) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
 
-                        lastLabel.attribute.updateTextPlain(blockContent);
-                        if (lastLabel.label == '') lastLabel.destroy();
+                        lastLabel.attribute.appendText(blockContent);
+                        if (lastLabel.label === '') lastLabel.destroy();
                         if (thinkBlockStartRegex.test(line)) contentBox.add(ThinkBlock());
                         else {
-                            // lastLabel.attribute.done();
+                            lastLabel.attribute.done();
                             contentBox.add(TextBlock());
                         }
 
                         lastProcessed = index + 1;
                     }
                     // Breaks
-                    const dividerRegex = /^\s*---/;
-                    if (!inCode && dividerRegex.test(line)) {
+                    if (!contentBox.attribute.inCode && dividerRegex.test(line)) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.attribute.updateTextPlain(blockContent);
+                        lastLabel.attribute.appendText(blockContent);
                         contentBox.add(Divider());
                         contentBox.add(TextBlock());
                         lastProcessed = index + 1;
                     }
                 }
-                if (lastProcessed < lines.length) {
+                if (lastProcessed < lines.length - 1) {
                     const kids = self.get_children();
                     const lastLabel = kids[kids.length - 1];
-                    let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
-                    if (!inCode)
-                        lastLabel.attribute.updateTextPlain(`${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`);
-                    else
-                        lastLabel.attribute.updateText(blockContent);
+                    let blockContent = lines.slice(lastProcessed, lines.length - 1).join('\n') + '\n';
+                    lastLabel.attribute.appendText(blockContent);
                 }
                 // Debug: plain text
                 // contentBox.add(Label({
@@ -376,6 +398,7 @@ const MessageContent = (content) => {
                 //     label: '------------------------------\n' + md2pango(content),
                 // }))
                 contentBox.show_all();
+                contentBox.attribute.lastUpdateTextLength = content.length - lines[lines.length - 1].length;
             }
         }
     });
@@ -416,7 +439,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         className: `txt txt-bold sidebar-chat-name sidebar-chat-name-${message.role == 'user' ? 'user' : 'bot'}`,
                         wrap: true,
                         useMarkup: true,
-                        label: (message.role == 'user' ? USERNAME : modelName),
+                        label: (message.role === 'user' ? USERNAME : modelName),
                     }),
                     Box({
                         homogeneous: true,
@@ -432,7 +455,10 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         messageContentBox.attribute.fullUpdate(messageContentBox, message.content, message.role != 'user');
                     }, 'notify::content')
                     .hook(message, (label, isDone) => { // Remove the cursor
-                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, false);
+                        if (!isDone && message.role !== 'user') return;
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content + '\n', false);
+                        // print('----------------')
+                        // print(message.content)
                     }, 'notify::done')
                 ,
             })
@@ -442,7 +468,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
 }
 
 export const SystemMessage = (content, commandName, scrolledWindow) => {
-    const messageContentBox = MessageContent(content);
+    const messageContentBox = MessageContent(content + '\n'); // Add newline so everything is added
     const thisMessage = Box({
         className: 'sidebar-chat-message',
         children: [
