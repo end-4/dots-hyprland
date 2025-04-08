@@ -3,8 +3,8 @@ import { bind } from "astal"
 import { currentShellMode } from '../../variables.js';
 import { userOptions } from "../core/configuration/user_options"
 
-import WindowTitle from "./normal/WindowTitle"
-import Indicators from "./normal/Indicators"
+import WindowTitle from "./normal/SpaceLeft.js"
+import Indicators from "./normal/SpaceRight.js"
 import Music from "./normal/Music"
 import System from "./normal/System"
 import NormalWorkspaces from "./normal/WorkspacesHyprland"
