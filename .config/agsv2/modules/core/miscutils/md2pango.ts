@@ -7,7 +7,7 @@ const monospaceFonts = 'JetBrains Mono NF, JetBrains Mono Nerd Font, JetBrains M
 const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
 const replacements = {
     'indents': [
-        { name: 'BULLET', re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: ' $1- $3' },
+        { name: 'BULLET', re: /^(\s*)([*-]\s)(.*)(\s*)$/, sub: ' $1- $3' },
         { name: 'NUMBERING', re: /^(\s*[0-9]+\.\s)(.*)(\s*)$/, sub: ' $1 $2' },
     ],
     'escapes': [
@@ -28,8 +28,8 @@ const replacements = {
         { name: 'UND', re: /(__)(\S[\s\S]*?\S)(__)/g, sub: "<u>$2</u>" },
         { name: 'EMPH', re: /\*(\S.*?\S)\*/g, sub: "<i>$1</i>" },
         // { name: 'EMPH', re: /_(\S.*?\S)_/g, sub: "<i>$1</i>" },
-        { name: 'HEXCOLOR', re: /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g, sub: '<span bgcolor="#$1" fgcolor="#000000" font_family="' + monospaceFonts + '">#$1</span>' },
-        { name: 'INLCODE', re: /(`)([^`]*)(`)/g, sub: '<span font_weight="bold" font_family="' + monospaceFonts + '">$2</span>' },
+        { name: 'HEXCOLOR', re: /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/g, sub: `<span bgcolor="#$1" fgcolor="#000000" font_family="${  monospaceFonts  }">#$1</span>` },
+        { name: 'INLCODE', re: /(`)([^`]*)(`)/g, sub: `<span font_weight="bold" font_family="${  monospaceFonts  }">$2</span>` },
         // { name: 'UND', re: /(__|\*\*)(\S[\s\S]*?\S)(__|\*\*)/g, sub: "<u>$2</u>" },
     ],
     'forceLatex': [
@@ -49,14 +49,14 @@ const replaceCategory = (text: string, replaces: { name: string; re: RegExp; sub
 // Main function
 
 export function replaceInlineLatexWithCodeBlocks(text: string) {
-    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?<!\w)\$(.*?[^\\])\$(?!\w)/gs, (match: any, square: any, round: any, double: any, single: any) => {
+    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?<!\w)\$(.*?[^\\])\$(?!\w)/gs, (match: string, square: string, round: string, double: string, single: string) => {
         const latex = square || round || double || single;
         return `\n\`\`\`latex\n${latex}\n\`\`\`\n`;
     });
 }
 
 export default (text: string) => {
-    let lines = text.split('\n')
+    const lines = text.split('\n')
     let output = [];
     let inCode = false;
     // Replace

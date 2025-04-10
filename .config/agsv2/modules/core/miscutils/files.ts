@@ -1,7 +1,7 @@
 import { Gio, GLib } from "astal";
 
 export function fileExists(filePath: string): boolean {
-    let file = Gio.File.new_for_path(filePath);
+    const file = Gio.File.new_for_path(filePath);
     return file.query_exists(null);
 }
 

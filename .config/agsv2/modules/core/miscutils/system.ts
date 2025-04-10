@@ -10,7 +10,7 @@ export const hasFlatpak = !!exec(`bash -c 'command -v flatpak | cat'`);
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/agsv2/user/colormode.txt`;
 export const darkMode = Variable(!(readFile(LIGHTDARK_FILE_LOCATION).split('\n')[0].trim() == 'light'));
 darkMode.subscribe((value) => {
-    let lightdark = value ? "dark" : "light";
+    const lightdark = value ? "dark" : "light";
     execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/agsv2/user && sed -i "1s/.*/${lightdark}/"  ${GLib.get_user_state_dir()}/agsv2/user/colormode.txt`])
         .then(_ => execAsync(['bash', '-c', `${GLib.get_user_config_dir()}/agsv2/scripts/color_generation/switchcolor.sh`]))
         .then(_ => execAsync(['bash', '-c', `command -v darkman && darkman set ${lightdark}`])) // Optional darkman integration

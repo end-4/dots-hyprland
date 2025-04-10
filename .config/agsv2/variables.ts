@@ -49,17 +49,17 @@ export function cycleMode() {
 // Window controls
 const range = (length: number, start = 1) => Array.from({ length }, (_, i) => i + start);
 
-export function toggleWindowOnAllMonitors(name: any) {
+export function toggleWindowOnAllMonitors(name: string) {
     range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
         App.toggle_window(`${name}${id}`);
     });
 }
-export function closeWindowOnAllMonitors(name: any) {
+export function closeWindowOnAllMonitors(name: string) {
     range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
         App.remove_window(App.get_window(`${name}${id}`)!);
     });
 }
-export function openWindowOnAllMonitors(name: any) {
+export function openWindowOnAllMonitors(name: string) {
     range(Gdk.Display.get_default()?.get_n_monitors() || 1, 0).forEach(id => {
         // TODO: Test it because I'm sure this does not work
         App.add_window(App.get_window(`${name}${id}`)!);

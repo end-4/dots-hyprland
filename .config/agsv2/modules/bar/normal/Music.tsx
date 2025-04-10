@@ -6,7 +6,6 @@ import { MaterialIcon } from "../../core/commonwidgets/MaterialIcon";
 import { showMusicControls } from '../../../variables';
 import { Astal, Gdk, Gtk } from "astal/gtk3";
 import { userOptions } from "../../core/configuration/user_options";
-import AstalHyprland from "gi://AstalHyprland";
 import { getString } from "../../../i18n/i18n";
 import { DrawingArea, Revealer } from "astal/gtk3/widget";
 
@@ -19,7 +18,6 @@ const CUSTOM_MODULE_SCROLLUP_SCRIPT = `${GLib.get_user_cache_dir()}/agsv2/user/s
 const CUSTOM_MODULE_SCROLLDOWN_SCRIPT = `${GLib.get_user_cache_dir()}/agsv2/user/scripts/custom-module-scrolldown.sh`;
 
 const mpris = AstalMpris.get_default();
-const hypr = AstalHyprland.get_default();
 
 function trimTrackTitle(title: string) {
     if (!title) return '';
@@ -32,7 +30,7 @@ function trimTrackTitle(title: string) {
 }
 
 function plasma(players: AstalMpris.Player[]) {
-    return players.find((player, _) => player.busName === "org.mpris.MediaPlayer2.plasma-browser-integration");
+    return players.find((player) => player.busName === "org.mpris.MediaPlayer2.plasma-browser-integration");
 }
 
 function BarResource({
@@ -62,7 +60,7 @@ function BarResource({
     const percentage = Variable(0);
 
     interval(5000, () => {
-        execAsync(['bash', '-c', command]).then((output: any) => {
+        execAsync(['bash', '-c', command]).then((output: string) => {
             percentage.set(Number(output));
         }).catch(print);
     });
@@ -71,12 +69,12 @@ function BarResource({
         <box className={`spacing-h-4 ${textClassName}`}>
             <box homogeneous={true}>
                 <overlay>
-                    <box valign={Gtk.Align.CENTER} className={`${iconClassName}`} homogeneous={true}>
+                    <box valign={Gtk.Align.CENTER} className={iconClassName} homogeneous={true}>
                         <MaterialIcon icon={icon} size="small" />
                     </box>
                     <overlay>
                         <AnimatedCircProg
-                            className={`${circprogClassName}`}
+                            className={circprogClassName}
                             valign={Gtk.Align.CENTER}
                             halign={Gtk.Align.CENTER}
                             css={bind(percentage).as(percentage => `font-size: ${percentage}px;`)}

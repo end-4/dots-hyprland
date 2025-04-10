@@ -23,9 +23,9 @@ export default function WindowTitle({ gdkmonitor, monitorId }: { gdkmonitor: Gdk
         >
             {bind(focused).as(f => {
                 const topdesc = f.client == null ? "Desktop" : bind(f.client, "class").as((_class) => _class ?? "Desktop");
-                const title = f.client == null ? "Workspace " + (f.workspace?.id ?? "") : bind(f.client, "title").as((title) => title ?? "Workspace " + (f.workspace?.id ?? ""));
+                const title = f.client == null ? `Workspace ${f.workspace?.id ?? ""}` : bind(f.client, "title").as((title) => title ?? `Workspace ${f.workspace?.id ?? ""}`);
                 const vadjustment = f.client == null ? scrollPos() : bind(f.client, "title").as(_ => scrollPos());
-                
+
                 return <box vertical={true}>
                     <label
                         xalign={0}
@@ -33,7 +33,7 @@ export default function WindowTitle({ gdkmonitor, monitorId }: { gdkmonitor: Gdk
                         truncate={true}
                         className="txt-smaller bar-wintitle-topdesc txt"
                         label={topdesc}
-                        />
+                    />
                     <scrollable
                         // HACK: To prevent Japanese characters from being cut off
                         hexpand={true}

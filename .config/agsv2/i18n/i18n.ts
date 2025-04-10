@@ -6,8 +6,8 @@ const translations: Record<string, Record<string, string>> = {};
 let currentLanguage = langCode || getLanguageCode();
 
 function getLanguageCode() {
-    let langEnv = GLib.getenv('LANG') || GLib.getenv('LANGUAGE') || 'Default.';
-    let langCode = langEnv.split('.')[0];
+    const langEnv = GLib.getenv('LANG') || GLib.getenv('LANGUAGE') || 'Default.';
+    const langCode = langEnv.split('.')[0];
     return langCode;
 }
 
@@ -17,11 +17,11 @@ function loadLanguage(lang: string) {
         try {
             let filePath = `~/.config/agsv2/i18n/locales/${lang}.json`;
             filePath = filePath.replace(/^~/, GLib.get_home_dir());
-            let file = Gio.File.new_for_path(filePath);
-            let [success, contents] = file.load_contents(null);
+            const file = Gio.File.new_for_path(filePath);
+            const [success, contents] = file.load_contents(null);
             if (success) {
-                let decoder = new TextDecoder('utf-8');
-                let jsonString = decoder.decode(contents);
+                const decoder = new TextDecoder('utf-8');
+                const jsonString = decoder.decode(contents);
                 translations[lang] = JSON.parse(jsonString);
             }
         } catch (error) {

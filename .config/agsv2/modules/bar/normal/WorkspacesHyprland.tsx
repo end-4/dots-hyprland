@@ -66,7 +66,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         try {
             Number(event.button);
         } catch (error) {
-            const button = parseInt((error as string).toString().at(7) as string);
+            const button = Number((error as string).toString().at(7));
             console.log(button)
             switch (button) {
                 case 8:
@@ -82,11 +82,13 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
 
         switch (event.button) {
             case Astal.MouseButton.PRIMARY:
-                const widgetWidth = self.get_allocation().width;
-                const wsId = Math.ceil(event.x * userOptions.workspaces.shown / widgetWidth);
-                execAsync([`${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
-                    .catch(print);
-                break;
+                {
+                    const widgetWidth = self.get_allocation().width;
+                    const wsId = Math.ceil(event.x * userOptions.workspaces.shown / widgetWidth);
+                    execAsync([`${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
+                        .catch(print);
+                    break;
+                }
             case Astal.MouseButton.SECONDARY:
                 App.toggle_window('overview')
                 break;

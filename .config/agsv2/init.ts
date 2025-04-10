@@ -32,7 +32,7 @@ export function handleStyles(resetMusic: boolean) {
         exec(`bash -c 'echo "" > ${GLib.get_user_state_dir()}/agsv2/scss/_musicmaterial.scss'`); // reset music styles
     }
     // Generate overrides
-    let lightdark = darkMode.get() ? "dark" : "light";
+    const lightdark = darkMode.get() ? "dark" : "light";
     writeFile(
         `${GLib.get_user_state_dir()}/agsv2/scss/_lib_mixins_overrides.scss`,
         `

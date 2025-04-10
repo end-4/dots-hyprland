@@ -3,7 +3,7 @@ import { userOptions } from "../configuration/user_options";
 
 
 export function iconExists(iconName: string) {
-    let iconTheme = Gtk.IconTheme.get_default();
+    const iconTheme = Gtk.IconTheme.get_default();
     return iconTheme.has_icon(iconName);
 }
 

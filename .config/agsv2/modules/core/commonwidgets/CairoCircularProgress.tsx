@@ -55,7 +55,7 @@ export function AnimatedCircProg({
             for (let i = 0; i < initAnimPoints; i++) {
                 timeout(Math.max(10, i * oneStep), () => {
                     if (!area) return;
-                    area.css = `${initFrom != initTo ? 'font-size: ' + (initFrom + (transitionDistance / initAnimPoints * (i + 1))) + 'px;' : ''}`;
+                    area.css = initFrom != initTo ? `font-size: ${initFrom + (transitionDistance / initAnimPoints * (i + 1))}px;` : '';
                 });
             }
         }
@@ -115,7 +115,7 @@ export function AnimatedCircProg({
     }
 
     return <drawingarea
-        css={`${initFrom != initTo ? 'font-size: ' + initFrom + 'px; transition: ' + initAnimTime + 'ms linear;' : ''}`}
+        css={initFrom != initTo ? `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;` : ''}
         setup={setup}
         onDraw={onDraw}
         {...rest}

@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getNestedProperty(obj: any, path: string) {
-    return path.split('.').reduce((current: { [x: string]: any; hasOwnProperty: (arg0: any) => any; }, key: string | number) => {
-        return (current && typeof current === 'object' && current.hasOwnProperty(key)) ? current[key] : undefined;
+    return path.split('.').reduce((current, key: string) => {
+        return (current && typeof current === 'object' && Object.prototype.hasOwnProperty.call(current, key)) ? current[key] : undefined;
     }, obj);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function updateNestedProperty(obj: any, path: string, newValue: any) {
     const pathArray = path.split('.');
     const lastKeyIndex = pathArray.length - 1;
@@ -16,7 +18,7 @@ export function updateNestedProperty(obj: any, path: string, newValue: any) {
             return false; // Previous part of path is not an object
         }
 
-        if (!current.hasOwnProperty(key)) {
+        if (!Object.prototype.hasOwnProperty.call(current, key)) {
             current[key] = {}; // Create the missing object
         }
         current = current[key];

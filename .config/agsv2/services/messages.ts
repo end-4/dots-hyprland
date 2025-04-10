@@ -1,10 +1,10 @@
-import { Gio, GLib, execAsync, timeout, writeFileAsync, bind } from "astal";
+import { Gio, GLib, execAsync, timeout, writeFileAsync } from "astal";
 import AstalBattery from "gi://AstalBattery";
 import { userOptions } from "../modules/core/configuration/user_options";
 
 
 export function fileExists(filePath: string) {
-    let file = Gio.File.new_for_path(filePath);
+    const file = Gio.File.new_for_path(filePath);
     return file.query_exists(null);
 }
 
@@ -16,7 +16,7 @@ const APP_NAME = "illogical-impulse";
 const FIRST_RUN_NOTIF_TITLE = "Welcome!";
 const FIRST_RUN_NOTIF_BODY = `First run? 👀 <span foreground="#FF0202" font_weight="bold">CTRL+SUPER+T</span> to pick a wallpaper (or styles will break!)\nFor a list of keybinds, hit <span foreground="#c06af1" font_weight="bold">Super + /</span>.`;
 
-var batteryWarned = false;
+let batteryWarned = false;
 async function batteryMessage() {
     const isBattery = BATTERY.isBattery;
     if (!isBattery) {

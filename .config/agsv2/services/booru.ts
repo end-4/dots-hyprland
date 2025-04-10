@@ -79,7 +79,7 @@ class BooruService extends GObject.Object {
         const userArgs = `${msg.replace('rating:safe', '')}${(!this.nsfw || msg.includes('safe')) ? ' rating:safe' : ''}`.split(/\s+/);
         // console.log(userArgs)
 
-        let taglist = [];
+        const taglist = [];
         let page = 1;
         // Construct body/headers
         for (let i = 0; i < userArgs.length; i++) {
@@ -120,7 +120,25 @@ class BooruService extends GObject.Object {
                 // console.log(dataString);
                 const parsedData = JSON.parse(dataString);
                 // console.log(parsedData)
-                this.responses[newMessageId] = parsedData.map((obj: { width: number; height: number; id: any; tags: any; rating: string; md5: any; preview_url: any; preview_width: any; preview_height: any; sample_url: any; sample_width: any; sample_height: any; file_url: any; file_ext: any; file_width: any; file_height: any; source: any; }) => {
+                this.responses[newMessageId] = parsedData.map((obj: {
+                    width: number;
+                    height: number;
+                    id: number;
+                    tags: string;
+                    rating: string;
+                    md5: string;
+                    preview_url: string;
+                    preview_width: number;
+                    preview_height: number;
+                    sample_url: string;
+                    sample_width: number;
+                    sample_height: number;
+                    file_url: string;
+                    file_ext: string;
+                    file_width: number;
+                    file_height: number;
+                    source: string;
+                }) => {
                     return {
                         aspect_ratio: obj.width / obj.height,
                         id: obj.id,

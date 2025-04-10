@@ -6,8 +6,8 @@ export function parseJSONC(jsoncString: string) {
     let inSingleLineComment = false;
 
     for (let i = 0; i < jsoncString.length; i++) {
-        let char = jsoncString[i];
-        let nextChar = jsoncString[i + 1];
+        const char = jsoncString[i];
+        const nextChar = jsoncString[i + 1];
 
         // Handle string start/end
         if (!inSingleLineComment && !inMultiLineComment) {
