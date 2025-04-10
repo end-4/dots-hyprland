@@ -5,11 +5,13 @@ pragma Singleton
 Singleton {
     property QtObject m3colors
     property QtObject colors
+    property QtObject rounding
+    property QtObject font
 
     function mix(color1, color2, percentage) {
         var c1 = Qt.color(color1);
         var c2 = Qt.color(color2);
-        return Qt.rgba((1 - percentage) * c1.r + percentage * c2.r, (1 - percentage) * c1.g + percentage * c2.g, (1 - percentage) * c1.b + percentage * c2.b, (1 - percentage) * c1.a + percentage * c2.a);
+        return Qt.rgba(percentage * c1.r + (1 - percentage) * c2.r, percentage * c1.g + (1 - percentage) * c2.g, percentage * c1.b + (1 - percentage) * c2.b, percentage * c1.a + (1 - percentage) * c2.a);
     }
 
     m3colors: QtObject {
@@ -96,6 +98,40 @@ Singleton {
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: mix(colLayer0, colOnLayer0, 0.85)
         property color colLayer0Active: m3colors.m3surfaceContainerHigh
+        property color colLayer1: m3colors.m3surfaceContainerLow;
+        property color colOnLayer1: m3colors.m3onSurfaceVariant;
+        property color colOnLayer1Inactive: mix(colOnLayer1, colLayer1, 0.45);
+        property color colLayer2: mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
+        property color colOnLayer2: m3colors.m3onSurface;
+        property color colLayer3: mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
+        property color colOnLayer3: m3colors.m3onSurface;
+    }
+
+    rounding: QtObject {
+        property int unsharpen: 2
+        property int verysmall: 8
+        property int small: 12
+        property int normal: 17
+        property int large: 25
+        property int full: 9999
+    }
+
+    font: QtObject {
+        property QtObject family: QtObject {
+            property string main: "Rubik"
+            property string title: "Gabarito"
+            property string iconMaterial: "Material Symbols Rounded"
+            property string iconNerd: "SpaceMono NF"
+            property string monospace: "JetBrains Mono NF"
+            property string reading: "Readex Pro"
+        }
+        property QtObject pointSize: QtObject {
+            property int smaller: 10
+            property int small: 11
+            property int normal: 12
+            property int large: 13
+            property int larger: 16
+        }
     }
 
 }

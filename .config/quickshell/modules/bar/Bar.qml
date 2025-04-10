@@ -22,17 +22,31 @@ Scope {
 
             // Middle section
             RowLayout {
-                anchors.top: parent.top
-                anchors.bottom: parent.top
                 anchors.centerIn: parent
+                implicitWidth: 500
 
-                // Rectangle {
-                    
-                // }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
 
-                // ClockWidget {
-                //     Layout.fillHeight: true
-                // }
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    ClockWidget {
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+                    UtilButtons {
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                }
 
             }
 
