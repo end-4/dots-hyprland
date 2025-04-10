@@ -12,7 +12,6 @@ Rectangle {
     readonly property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
     readonly property real percentage: UPower.displayDevice.percentage
     readonly property bool isLow: percentage <= ConfigOptions.bar.batteryLowThreshold / 100
-    readonly property int batterySlideDistance: 10
     readonly property color batteryLowBackground: Appearance.m3colors.darkmode ? Appearance.m3colors.m3error : Appearance.m3colors.m3errorContainer
     readonly property color batteryLowOnBackground: Appearance.m3colors.darkmode ? Appearance.m3colors.m3errorContainer : Appearance.m3colors.m3error
 
@@ -20,12 +19,6 @@ Rectangle {
     implicitHeight: 32
     color: Appearance.colors.colLayer1
     radius: Appearance.rounding.small
-
-    Process {
-        id: screenSnip
-
-        command: ["grimblast", "copy", "area"]
-    }
 
     RowLayout {
         id: rowLayout
@@ -50,7 +43,7 @@ Rectangle {
         StyledText {
             Layout.alignment: Qt.AlignVCenter
             color: Appearance.colors.colOnLayer1
-            text: `${percentage * 100}%`
+            text: `${Math.round(percentage * 100)}%`
         }
 
         CircularProgress {

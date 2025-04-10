@@ -10,6 +10,7 @@ Scope {
 
         PanelWindow {
             id: barRoot
+
             property var modelData
 
             screen: modelData
@@ -31,6 +32,10 @@ Scope {
                     spacing: 4
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
+                    Resources {
+                    }
+
                 }
 
                 RowLayout {

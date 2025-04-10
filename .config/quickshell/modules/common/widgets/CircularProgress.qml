@@ -8,8 +8,8 @@ Item {
     property int size: 30
     property int lineWidth: 2
     property real value: 0
-    property color primaryColor: "#29b6f6"
-    property color secondaryColor: "#e0e0e0"
+    property color primaryColor: "#70585D"
+    property color secondaryColor: "#FFF8F7"
     property bool fill: false
     property int fillOverflow: 2
     property int animationDuration: 1000
@@ -60,6 +60,7 @@ Item {
         Behavior on degree {
             NumberAnimation {
                 duration: root.animationDuration
+                easing.type: Easing.OutCubic
             }
 
         }
