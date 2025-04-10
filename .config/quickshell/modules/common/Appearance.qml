@@ -105,6 +105,10 @@ Singleton {
         property color colOnLayer2: m3colors.m3onSurface;
         property color colLayer3: mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
         property color colOnLayer3: m3colors.m3onSurface;
+        property color colLayer2Hover: mix(colLayer2, colOnLayer2, 0.90);
+        property color colLayer2Active: mix(colLayer2, colOnLayer2, 0.80);
+        property color colLayer3Hover: mix(colLayer3, colOnLayer3, 0.90);
+        property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
     }
 
     rounding: QtObject {
@@ -119,7 +123,7 @@ Singleton {
     font: QtObject {
         property QtObject family: QtObject {
             property string main: "Rubik"
-            property string title: "Gabarito"
+            property string title: "Rubik"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "SpaceMono NF"
             property string monospace: "JetBrains Mono NF"
