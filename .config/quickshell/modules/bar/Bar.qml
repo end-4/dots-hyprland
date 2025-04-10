@@ -25,7 +25,7 @@ Scope {
             RowLayout {
                 anchors.centerIn: parent
                 implicitWidth: 500
-                spacing: 8 // TODO: Why is this halved when rendered??
+                spacing: 8
 
                 RowLayout {
                     spacing: 4
@@ -54,6 +54,10 @@ Scope {
                     }
 
                     UtilButtons {
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    Battery {
                         Layout.alignment: Qt.AlignVCenter
                     }
 

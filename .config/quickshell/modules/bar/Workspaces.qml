@@ -97,7 +97,6 @@ Rectangle {
                 
                 color: Appearance.colors.colLayer2
                 opacity: workspaceOccupied[index] ? 1 : 0
-                // color: workspaceOccupied[index] ? Appearance.colors.colLayer2 : "transparent"
 
                 Behavior on opacity {
                     NumberAnimation {
@@ -154,9 +153,7 @@ Rectangle {
             Button {
                 id: button
                 Layout.fillHeight: true
-                topInset: 7
-                bottomInset: 7
-                onPressed: Hyprland.dispath(`workspace ${index+1}`)
+                onPressed: Hyprland.dispatch(`workspace ${index+1}`)
                 width: workspaceButtonWidth
 
                 contentItem: StyledText {
