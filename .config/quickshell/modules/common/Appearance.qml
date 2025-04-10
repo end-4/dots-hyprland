@@ -4,6 +4,7 @@ pragma Singleton
 
 Singleton {
     property QtObject m3colors
+    property QtObject animation
     property QtObject colors
     property QtObject rounding
     property QtObject font
@@ -135,6 +136,14 @@ Singleton {
             property int normal: 12
             property int large: 13
             property int larger: 16
+        }
+    }
+
+    animation: QtObject {
+        property QtObject elementDecel: QtObject {
+            property int duration: 100
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: [0, 0.55, 0.45, 1]
         }
     }
 
