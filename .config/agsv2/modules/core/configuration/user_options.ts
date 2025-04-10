@@ -1,16 +1,13 @@
-import { readFile } from "astal/file";
+import { readFile } from 'astal/file';
 import { parseJSONC } from '../miscutils/jsonc';
-import { GLib } from "astal";
+import { GLib } from 'astal';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function overrideConfigRecursive(userOverrides: any, configOptions: any = {}) {
     for (const [key, value] of Object.entries(userOverrides)) {
-        if (typeof value === 'object'
-            && !(value instanceof Array)
-            && configOptions[key]) {
+        if (typeof value === 'object' && !(value instanceof Array) && configOptions[key]) {
             overrideConfigRecursive(value, configOptions[key]);
-        }
-        else {
+        } else {
             configOptions[key] = value;
         }
     }

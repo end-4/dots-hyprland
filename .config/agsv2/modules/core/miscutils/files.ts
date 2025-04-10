@@ -1,4 +1,4 @@
-import { Gio, GLib } from "astal";
+import { Gio, GLib } from 'astal';
 
 export function fileExists(filePath: string): boolean {
     const file = Gio.File.new_for_path(filePath);

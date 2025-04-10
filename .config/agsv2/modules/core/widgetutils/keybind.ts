@@ -1,12 +1,12 @@
-import { Gdk } from "astal/gtk3";
+import { Gdk } from 'astal/gtk3';
 
 const MODS = {
-    'shift': Gdk.ModifierType.SHIFT_MASK,
-    'ctrl': Gdk.ModifierType.CONTROL_MASK,
-    'alt': Gdk.ModifierType.MOD1_MASK,
-    'hyper': Gdk.ModifierType.HYPER_MASK,
-    'meta': Gdk.ModifierType.META_MASK
-}
+    shift: Gdk.ModifierType.SHIFT_MASK,
+    ctrl: Gdk.ModifierType.CONTROL_MASK,
+    alt: Gdk.ModifierType.MOD1_MASK,
+    hyper: Gdk.ModifierType.HYPER_MASK,
+    meta: Gdk.ModifierType.META_MASK,
+};
 
 const checkSingleKeybind = (event: Gdk.EventKey, keybind: string) => {
     const pressedModMask = event.state;
@@ -17,12 +17,15 @@ const checkSingleKeybind = (event: Gdk.EventKey, keybind: string) => {
             if (!(pressedModMask & MODS[keys[i].toLowerCase() as keyof typeof MODS])) {
                 return false;
             }
-        } else if (pressedKey !== Gdk[`KEY_${keys[i]}` as keyof typeof Gdk] && pressedKey !== Gdk[`KEY_${keys[i].toLowerCase()}` as keyof typeof Gdk]) {
+        } else if (
+            pressedKey !== Gdk[`KEY_${keys[i]}` as keyof typeof Gdk] &&
+            pressedKey !== Gdk[`KEY_${keys[i].toLowerCase()}` as keyof typeof Gdk]
+        ) {
             return false;
         }
     }
     return true;
-}
+};
 
 export const checkKeybind = (event: Gdk.EventKey, keybind: string) => {
     const keybinds = keybind.replace(' ', '').split(',');
@@ -31,4 +34,4 @@ export const checkKeybind = (event: Gdk.EventKey, keybind: string) => {
             return true;
         }
     }
-}
+};

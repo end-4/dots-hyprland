@@ -3,17 +3,30 @@ import { execAsync, exec } from 'astal/process';
 import { readFile } from 'astal/file';
 
 export const distroID = exec(`bash -c 'cat /etc/os-release | grep "^ID=" | cut -d "=" -f 2 | sed "s/\\"//g"'`).trim();
-export const isDebianDistro = (distroID == 'linuxmint' || distroID == 'ubuntu' || distroID == 'debian' || distroID == 'zorin' || distroID == 'popos' || distroID == 'raspbian' || distroID == 'kali');
-export const isArchDistro = (distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos');
+export const isDebianDistro =
+    distroID == 'linuxmint' ||
+    distroID == 'ubuntu' ||
+    distroID == 'debian' ||
+    distroID == 'zorin' ||
+    distroID == 'popos' ||
+    distroID == 'raspbian' ||
+    distroID == 'kali';
+export const isArchDistro = distroID == 'arch' || distroID == 'endeavouros' || distroID == 'cachyos';
 export const hasFlatpak = !!exec(`bash -c 'command -v flatpak | cat'`);
 
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_state_dir()}/agsv2/user/colormode.txt`;
 export const darkMode = Variable(!(readFile(LIGHTDARK_FILE_LOCATION).split('\n')[0].trim() == 'light'));
 darkMode.subscribe((value) => {
-    const lightdark = value ? "dark" : "light";
-    execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/agsv2/user && sed -i "1s/.*/${lightdark}/"  ${GLib.get_user_state_dir()}/agsv2/user/colormode.txt`])
-        .then(_ => execAsync(['bash', '-c', `${GLib.get_user_config_dir()}/agsv2/scripts/color_generation/switchcolor.sh`]))
-        .then(_ => execAsync(['bash', '-c', `command -v darkman && darkman set ${lightdark}`])) // Optional darkman integration
+    const lightdark = value ? 'dark' : 'light';
+    execAsync([
+        `bash`,
+        `-c`,
+        `mkdir -p ${GLib.get_user_state_dir()}/agsv2/user && sed -i "1s/.*/${lightdark}/" ${GLib.get_user_state_dir()}/agsv2/user/colormode.txt`,
+    ])
+        .then((_) =>
+            execAsync(['bash', '-c', `${GLib.get_user_config_dir()}/agsv2/scripts/color_generation/switchcolor.sh`])
+        )
+        .then((_) => execAsync(['bash', '-c', `command -v darkman && darkman set ${lightdark}`])) // Optional darkman integration
         .catch(print);
 });
 export const hasPlasmaIntegration = !!exec('bash -c "command -v plasma-browser-integration-host"');
@@ -36,7 +49,7 @@ export const getDistroIcon = () => {
     if (distroID == 'raspbian') return 'debian-symbolic';
     if (distroID == 'kali') return 'debian-symbolic';
     return 'linux-symbolic';
-}
+};
 
 export const getDistroName = () => {
     // Arches
@@ -56,4 +69,4 @@ export const getDistroName = () => {
     if (distroID == 'raspbian') return 'Raspbian';
     if (distroID == 'kali') return 'Kali Linux';
     return 'Linux';
-}
+};

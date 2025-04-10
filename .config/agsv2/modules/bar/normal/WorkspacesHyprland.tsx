@@ -1,12 +1,12 @@
-import { App, Astal, Gdk, Gtk, Widget } from "astal/gtk3"
-import { bind, execAsync, GLib } from "astal"
-import Hyprland from "gi://AstalHyprland"
-import { userOptions } from "../../core/configuration/user_options";
-import Cairo from "gi://cairo";
-import giCairo from "cairo";
-import PangoCairo from "gi://PangoCairo";
-import Pango from "gi://Pango";
-import { toggleWindowOnAllMonitors } from "../../../variables";
+import { App, Astal, Gdk, Gtk, Widget } from 'astal/gtk3';
+import { bind, execAsync, GLib } from 'astal';
+import Hyprland from 'gi://AstalHyprland';
+import { userOptions } from '../../core/configuration/user_options';
+import Cairo from 'gi://cairo';
+import giCairo from 'cairo';
+import PangoCairo from 'gi://PangoCairo';
+import Pango from 'gi://Pango';
+import { toggleWindowOnAllMonitors } from '../../../variables';
 
 export default function Workspaces({ count = userOptions.workspaces.shown }: { count?: number }) {
     const hypr = Hyprland.get_default();
@@ -20,7 +20,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
 
     const mix = (value1: number, value2: number, perc: number) => {
         return value1 * perc + value2 * (1 - perc);
-    }
+    };
 
     const getFontWeightName = (weight: unknown) => {
         switch (weight) {
@@ -39,7 +39,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
             default:
                 return 'Normal';
         }
-    }
+    };
 
     function onScroll(_: Astal.EventBox, event: Astal.ScrollEvent) {
         if (event.direction === Gdk.ScrollDirection.SMOOTH) {
@@ -51,15 +51,15 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         }
 
         if (event.direction === Gdk.ScrollDirection.UP) {
-            hypr.message_async(`dispatch workspace r-1`, null)
+            hypr.message_async(`dispatch workspace r-1`, null);
         } else if (event.direction === Gdk.ScrollDirection.DOWN) {
-            hypr.message_async(`dispatch workspace r+1`, null)
+            hypr.message_async(`dispatch workspace r+1`, null);
         }
     }
 
     function onClick(self: Astal.EventBox, event: Astal.ClickEvent) {
         // HACK: to prevent the error:
-        // 
+        //
         // astal-Message: 16:37:51.097: Error: 8 is not a valid value for enumeration MouseButton
         // onClick@file:///run/user/1000/ags.js:1461:19
         // _init/GLib.MainLoop.prototype.runAsync/</<@resource:///org/gnome/gjs/modules/core/overrides/GLib.js:263:34
@@ -67,13 +67,13 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
             Number(event.button);
         } catch (error) {
             const button = Number((error as string).toString().at(7));
-            console.log(button)
+            console.log(button);
             switch (button) {
                 case 8:
-                    event.button = Astal.MouseButton.BACK
+                    event.button = Astal.MouseButton.BACK;
                     break;
                 case 9:
-                    event.button = Astal.MouseButton.FORWARD
+                    event.button = Astal.MouseButton.FORWARD;
                     break;
                 default:
                     break;
@@ -81,19 +81,21 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         }
 
         switch (event.button) {
-            case Astal.MouseButton.PRIMARY:
-                {
-                    const widgetWidth = self.get_allocation().width;
-                    const wsId = Math.ceil(event.x * userOptions.workspaces.shown / widgetWidth);
-                    execAsync([`${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
-                        .catch(print);
-                    break;
-                }
+            case Astal.MouseButton.PRIMARY: {
+                const widgetWidth = self.get_allocation().width;
+                const wsId = Math.ceil((event.x * userOptions.workspaces.shown) / widgetWidth);
+                execAsync([
+                    `${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`,
+                    'workspace',
+                    `${wsId}`,
+                ]).catch(print);
+                break;
+            }
             case Astal.MouseButton.SECONDARY:
-                App.toggle_window('overview')
+                App.toggle_window('overview');
                 break;
             case Astal.MouseButton.MIDDLE:
-                toggleWindowOnAllMonitors('osk')
+                toggleWindowOnAllMonitors('osk');
                 break;
             case Astal.MouseButton.BACK:
                 hypr.message_async(`dispatch togglespecialworkspace`, null);
@@ -109,7 +111,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
             const ws = hypr.workspaces[i];
             if (ws.id <= offset || ws.id > offset + count) continue; // Out of range, ignore
             if (ws.clients.length == 0) continue;
-            _workspaceMask |= (1 << (ws.id - offset));
+            _workspaceMask |= 1 << (ws.id - offset);
         }
         workspaceMask = _workspaceMask;
         // self.attribute.initialized = true;
@@ -118,7 +120,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
 
     function onDraw(area: Widget.DrawingArea, cr?: giCairo.Context) {
         if (!cr) return;
-        area.set_property("css", `font-size: ${(hypr.focusedWorkspace.id - 1) % count + 1}px;`)
+        area.set_property('css', `font-size: ${((hypr.focusedWorkspace.id - 1) % count) + 1}px;`);
         const offset = Math.floor((hypr.focusedWorkspace.id - 1) / count) * userOptions.workspaces.shown;
 
         const allocation = area.get_allocation();
@@ -127,57 +129,74 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         const workspaceStyleContext = dummyWs.get_style_context();
         const workspaceDiameter = workspaceStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL) as number;
         const workspaceRadius = workspaceDiameter / 2;
-        const workspaceFontSize = workspaceStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL) as number / 4 * 3;
-        const workspaceFontFamily = workspaceStyleContext.get_property('font-family', Gtk.StateFlags.NORMAL) as string[];
+        const workspaceFontSize =
+            ((workspaceStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL) as number) / 4) * 3;
+        const workspaceFontFamily = workspaceStyleContext.get_property(
+            'font-family',
+            Gtk.StateFlags.NORMAL
+        ) as string[];
         const workspaceFontWeight = workspaceStyleContext.get_property('font-weight', Gtk.StateFlags.NORMAL) as number;
         const wsbg = workspaceStyleContext.get_property('background-color', Gtk.StateFlags.NORMAL);
         const wsfg = workspaceStyleContext.get_property('color', Gtk.StateFlags.NORMAL) as Gdk.RGBA;
 
         const occupiedWorkspaceStyleContext = dummyOccupiedWs.get_style_context();
-        const occupiedbg = occupiedWorkspaceStyleContext.get_property('background-color', Gtk.StateFlags.NORMAL) as Gdk.RGBA;
+        const occupiedbg = occupiedWorkspaceStyleContext.get_property(
+            'background-color',
+            Gtk.StateFlags.NORMAL
+        ) as Gdk.RGBA;
         const occupiedfg = occupiedWorkspaceStyleContext.get_property('color', Gtk.StateFlags.NORMAL) as Gdk.RGBA;
 
         const activeWorkspaceStyleContext = dummyActiveWs.get_style_context();
-        const activebg = activeWorkspaceStyleContext.get_property('background-color', Gtk.StateFlags.NORMAL) as Gdk.RGBA;
+        const activebg = activeWorkspaceStyleContext.get_property(
+            'background-color',
+            Gtk.StateFlags.NORMAL
+        ) as Gdk.RGBA;
         const activefg = activeWorkspaceStyleContext.get_property('color', Gtk.StateFlags.NORMAL) as Gdk.RGBA;
         area.set_size_request(workspaceDiameter * count, -1);
         const widgetStyleContext = area.get_style_context();
         const activeWs = widgetStyleContext.get_property('font-size', Gtk.StateFlags.NORMAL) as number;
 
-        const activeWsCenterX = -(workspaceDiameter / 2) + (workspaceDiameter * activeWs);
+        const activeWsCenterX = -(workspaceDiameter / 2) + workspaceDiameter * activeWs;
         const activeWsCenterY = height / 2;
 
         // Font
         const layout = PangoCairo.create_layout(cr);
-        const fontDesc = Pango.font_description_from_string(`${workspaceFontFamily[0]} ${getFontWeightName(workspaceFontWeight)} ${workspaceFontSize}`);
+        const fontDesc = Pango.font_description_from_string(
+            `${workspaceFontFamily[0]} ${getFontWeightName(workspaceFontWeight)} ${workspaceFontSize}`
+        );
         layout.set_font_description(fontDesc);
         cr.setAntialias(Cairo.Antialias.BEST);
         // Get kinda min radius for number indicators
-        layout.set_text("0".repeat(count.toString().length), -1);
+        layout.set_text('0'.repeat(count.toString().length), -1);
         const [layoutWidth, layoutHeight] = layout.get_pixel_size();
-        const indicatorRadius = Math.max(layoutWidth, layoutHeight) / 2 * 1.15; // smaller than sqrt(2)*radius
+        const indicatorRadius = (Math.max(layoutWidth, layoutHeight) / 2) * 1.15; // smaller than sqrt(2)*radius
         const indicatorGap = workspaceRadius - indicatorRadius;
 
         for (let i = 1; i <= count; i++) {
             if (workspaceMask & (1 << i)) {
                 // Draw bg highlight
                 cr.setSourceRGBA(occupiedbg.red, occupiedbg.green, occupiedbg.blue, occupiedbg.alpha);
-                const wsCenterX = -(workspaceRadius) + (workspaceDiameter * i);
+                const wsCenterX = -workspaceRadius + workspaceDiameter * i;
                 const wsCenterY = height / 2;
-                if (!(workspaceMask & (1 << (i - 1)))) { // Left
+                if (!(workspaceMask & (1 << (i - 1)))) {
+                    // Left
                     cr.arc(wsCenterX, wsCenterY, workspaceRadius, 0.5 * Math.PI, 1.5 * Math.PI);
                     cr.fill();
-                }
-                else {
-                    cr.rectangle(wsCenterX - workspaceRadius, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
+                } else {
+                    cr.rectangle(
+                        wsCenterX - workspaceRadius,
+                        wsCenterY - workspaceRadius,
+                        workspaceRadius,
+                        workspaceRadius * 2
+                    );
                     cr.fill();
                 }
-                if (!(workspaceMask & (1 << (i + 1)))) { // Right
+                if (!(workspaceMask & (1 << (i + 1)))) {
+                    // Right
                     cr.arc(wsCenterX, wsCenterY, workspaceRadius, -0.5 * Math.PI, 0.5 * Math.PI);
                     cr.fill();
-                }
-                else {
-                    cr.rectangle(wsCenterX, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2)
+                } else {
+                    cr.rectangle(wsCenterX, wsCenterY - workspaceRadius, workspaceRadius, workspaceRadius * 2);
                     cr.fill();
                 }
             }
@@ -195,20 +214,35 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
                 cr.setSourceRGBA(activefg.red, activefg.green, activefg.blue, activefg.alpha);
             }
             // Moving to
-            else if ((i == Math.floor(activeWs) && hypr.focusedWorkspace.id < activeWs) || (i == Math.ceil(activeWs) && hypr.focusedWorkspace.id > activeWs)) {
-                cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
+            else if (
+                (i == Math.floor(activeWs) && hypr.focusedWorkspace.id < activeWs) ||
+                (i == Math.ceil(activeWs) && hypr.focusedWorkspace.id > activeWs)
+            ) {
+                cr.setSourceRGBA(
+                    mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)),
+                    mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)),
+                    mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)),
+                    activefg.alpha
+                );
             }
             // Moving from
-            else if ((i == Math.floor(activeWs) && hypr.focusedWorkspace.id > activeWs) || (i == Math.ceil(activeWs) && hypr.focusedWorkspace.id < activeWs)) {
-                cr.setSourceRGBA(mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)), mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)), mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)), activefg.alpha);
+            else if (
+                (i == Math.floor(activeWs) && hypr.focusedWorkspace.id > activeWs) ||
+                (i == Math.ceil(activeWs) && hypr.focusedWorkspace.id < activeWs)
+            ) {
+                cr.setSourceRGBA(
+                    mix(activefg.red, inactivecolors.red, 1 - Math.abs(activeWs - i)),
+                    mix(activefg.green, inactivecolors.green, 1 - Math.abs(activeWs - i)),
+                    mix(activefg.blue, inactivecolors.blue, 1 - Math.abs(activeWs - i)),
+                    activefg.alpha
+                );
             }
             // Inactive
-            else
-                cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
+            else cr.setSourceRGBA(inactivecolors.red, inactivecolors.green, inactivecolors.blue, inactivecolors.alpha);
 
             layout.set_text(`${i + offset}`, -10);
             const [layoutWidth, layoutHeight] = layout.get_pixel_size();
-            const x = -workspaceRadius + (workspaceDiameter * i) - (layoutWidth / 2);
+            const x = -workspaceRadius + workspaceDiameter * i - layoutWidth / 2;
             const y = (height - layoutHeight) / 2;
             cr.moveTo(x, y);
             PangoCairo.show_layout(cr, layout);
@@ -216,16 +250,16 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         }
     }
 
-    bind(hypr, "workspaces").subscribe((workspaces) => {
-        workspaces.forEach(workspace => {
-            bind(workspace, "clients").subscribe((clients) => {
+    bind(hypr, 'workspaces').subscribe((workspaces) => {
+        workspaces.forEach((workspace) => {
+            bind(workspace, 'clients').subscribe((clients) => {
                 updateMask(drawingArea!);
             });
         });
     });
 
-    bind(hypr, "focusedWorkspace").subscribe((workspace) => {
-        drawingArea!.set_property("css", `font-size: ${(workspace.id - 1) % count + 1}px;`)
+    bind(hypr, 'focusedWorkspace').subscribe((workspace) => {
+        drawingArea!.set_property('css', `font-size: ${((workspace.id - 1) % count) + 1}px;`);
         const previousGroup = workspaceGroup;
         const currentGroup = Math.floor((workspace.id - 1) / count);
         if (currentGroup !== previousGroup) {
@@ -234,21 +268,25 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         }
     });
 
-    return <eventbox
-        onScroll={onScroll}
-        onClick={onClick}
-    >
-        <box className="bar-group-margin">
-            <box
-                className={`bar-group${userOptions.appearance.borderless ? '-borderless' : ''} bar-group-standalone bar-group-pad`}
-                css={"min-width: 2px;"}
-            >
-                <drawingarea
-                    className="bar-ws-container"
-                    setup={self => { drawingArea = self; updateMask(self); }}
-                    onDraw={onDraw}
-                />
+    return (
+        <eventbox onScroll={onScroll} onClick={onClick}>
+            <box className="bar-group-margin">
+                <box
+                    className={`bar-group${
+                        userOptions.appearance.borderless ? '-borderless' : ''
+                    } bar-group-standalone bar-group-pad`}
+                    css={'min-width: 2px;'}
+                >
+                    <drawingarea
+                        className="bar-ws-container"
+                        setup={(self) => {
+                            drawingArea = self;
+                            updateMask(self);
+                        }}
+                        onDraw={onDraw}
+                    />
+                </box>
             </box>
-        </box>
-    </eventbox>
-} 
+        </eventbox>
+    );
+}

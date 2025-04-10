@@ -1,7 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getNestedProperty(obj: any, path: string) {
     return path.split('.').reduce((current, key: string) => {
-        return (current && typeof current === 'object' && Object.prototype.hasOwnProperty.call(current, key)) ? current[key] : undefined;
+        return current && typeof current === 'object' && Object.prototype.hasOwnProperty.call(current, key)
+            ? current[key]
+            : undefined;
     }, obj);
 }
 

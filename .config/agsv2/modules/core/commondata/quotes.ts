@@ -8,7 +8,7 @@ export const quotes = [
         author: 'vaxry',
     },
     {
-        quote: "haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV",
+        quote: 'haha pointers hee hee i love pointe-\\\nProcess Vaxry exited with signal SIGSEGV',
         author: 'vaxry',
-    }
+    },
 ];

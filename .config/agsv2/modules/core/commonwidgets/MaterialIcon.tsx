@@ -6,9 +6,5 @@ interface MaterialIconProps extends Omit<LabelProps, 'child'> {
 }
 
 export function MaterialIcon({ icon, size, ...rest }: MaterialIconProps) {
-    return <label
-        className={`icon-material txt-${size}`}
-        label={icon}
-        {...rest}
-    />;
+    return <label className={`icon-material txt-${size}`} label={icon} {...rest} />;
 }

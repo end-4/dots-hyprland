@@ -1,6 +1,6 @@
-import { Gio, GLib } from "astal";
-import { userOptions } from "../modules/core/configuration/user_options";
-const { langCode, Extra_logs } = userOptions.i18n
+import { Gio, GLib } from 'astal';
+import { userOptions } from '../modules/core/configuration/user_options';
+const { langCode, Extra_logs } = userOptions.i18n;
 const translations: Record<string, Record<string, string>> = {};
 
 let currentLanguage = langCode || getLanguageCode();
@@ -25,7 +25,7 @@ function loadLanguage(lang: string) {
                 translations[lang] = JSON.parse(jsonString);
             }
         } catch (error) {
-            if (Extra_logs || lang === "Default")
+            if (Extra_logs || lang === 'Default')
                 console.warn(`Failed to load language file, language code: ${lang}:\n`, error);
             return;
         }
@@ -37,9 +37,8 @@ function loadLanguage(lang: string) {
 function init() {
     try {
         loadLanguage(currentLanguage);
-        if (Extra_logs)
-            console.log(getString("Initialization complete!") || "Initialization complete!");
-        loadLanguage("Default");
+        if (Extra_logs) console.log(getString('Initialization complete!') || 'Initialization complete!');
+        loadLanguage('Default');
     } catch (error) {
         console.error('Failed to initialize default language:', error);
     }
@@ -48,7 +47,7 @@ function init() {
 // Get translation, if no corresponding value, return the key
 function getString(key: string) {
     if (key && !translations[currentLanguage]?.[key] && Extra_logs)
-        console.warn(`${translations[currentLanguage]["Not found"] || "Not found"}:::${key}`);
+        console.warn(`${translations[currentLanguage]['Not found'] || 'Not found'}:::${key}`);
     return translations[currentLanguage]?.[key] || translations['Default']?.[key] || key;
 }
 export { getString, init };

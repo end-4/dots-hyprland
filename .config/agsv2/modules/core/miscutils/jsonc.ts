@@ -1,5 +1,5 @@
 export function parseJSONC(jsoncString: string) {
-    let result = "";
+    let result = '';
     let inString = false;
     let inSingleQuote = false;
     let inMultiLineComment = false;

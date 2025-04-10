@@ -1,4 +1,3 @@
-
 // -- Styling --
 // min-height for diameter
 // min-width for trough stroke
@@ -8,10 +7,10 @@
 // color for progress color
 // -- Usage --
 // font size for progress value (0-100px) (hacky i know, but i want animations)
-import { timeout } from "astal"
-import { Gdk, Gtk } from "astal/gtk3";
-import { DrawingAreaProps, DrawingArea } from "astal/gtk3/widget";
-import giCairo from "cairo";
+import { timeout } from 'astal';
+import { Gdk, Gtk } from 'astal/gtk3';
+import { DrawingAreaProps, DrawingArea } from 'astal/gtk3/widget';
+import giCairo from 'cairo';
 
 interface AnimatedCircProgProps extends Omit<DrawingAreaProps, 'child'> {
     initFrom?: number;
@@ -26,7 +25,7 @@ export function AnimatedCircProg({
     initTo = 0,
     initAnimTime = 2900,
     initAnimPoints = 1,
-    extraSetup = () => { },
+    extraSetup = () => {},
     ...rest
 }: AnimatedCircProgProps) {
     function setup(area: DrawingArea) {
@@ -45,7 +44,7 @@ export function AnimatedCircProg({
             area.css = `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;`;
             timeout(20, () => {
                 area.css = `font-size: ${initTo}px;`;
-            })
+            });
             const transitionDistance = initTo - initFrom;
             const oneStep = initAnimTime / initAnimPoints;
             area.css = `
@@ -55,11 +54,13 @@ export function AnimatedCircProg({
             for (let i = 0; i < initAnimPoints; i++) {
                 timeout(Math.max(10, i * oneStep), () => {
                     if (!area) return;
-                    area.css = initFrom != initTo ? `font-size: ${initFrom + (transitionDistance / initAnimPoints * (i + 1))}px;` : '';
+                    area.css =
+                        initFrom != initTo
+                            ? `font-size: ${initFrom + (transitionDistance / initAnimPoints) * (i + 1)}px;`
+                            : '';
                 });
             }
-        }
-        else area.css = 'font-size: 0px;';
+        } else area.css = 'font-size: 0px;';
         extraSetup(area);
     }
 
@@ -76,7 +77,7 @@ export function AnimatedCircProg({
         const marginBottom = styleContext.get_margin(Gtk.StateFlags.NORMAL).bottom;
         area.set_size_request(width + marginLeft + marginRight, height + marginTop + marginBottom);
 
-        const progressValue = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL) as number / 100.0;
+        const progressValue = (styleContext.get_property('font-size', Gtk.StateFlags.NORMAL) as number) / 100.0;
 
         const bg_stroke = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL) as number;
         const fg_stroke = bg_stroke - padding;
@@ -84,7 +85,7 @@ export function AnimatedCircProg({
         const center_x = width / 2.0 + marginLeft;
         const center_y = height / 2.0 + marginTop;
         const start_angle = -Math.PI / 2.0;
-        const end_angle = start_angle + (2 * Math.PI * progressValue);
+        const end_angle = start_angle + 2 * Math.PI * progressValue;
         const start_x = center_x + Math.cos(start_angle) * radius;
         const start_y = center_y + Math.sin(start_angle) * radius;
         const end_x = center_x + Math.cos(end_angle) * radius;
@@ -114,10 +115,12 @@ export function AnimatedCircProg({
         cr.fill();
     }
 
-    return <drawingarea
-        css={initFrom != initTo ? `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;` : ''}
-        setup={setup}
-        onDraw={onDraw}
-        {...rest}
-    />
+    return (
+        <drawingarea
+            css={initFrom != initTo ? `font-size: ${initFrom}px; transition: ${initAnimTime}ms linear;` : ''}
+            setup={setup}
+            onDraw={onDraw}
+            {...rest}
+        />
+    );
 }
