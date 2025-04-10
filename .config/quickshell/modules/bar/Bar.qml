@@ -9,6 +9,7 @@ Scope {
         model: Quickshell.screens
 
         PanelWindow {
+            id: barRoot
             property var modelData
 
             screen: modelData
@@ -24,8 +25,10 @@ Scope {
             RowLayout {
                 anchors.centerIn: parent
                 implicitWidth: 500
+                spacing: 8 // TODO: Why is this halved when rendered??
 
                 RowLayout {
+                    spacing: 4
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
@@ -33,15 +36,23 @@ Scope {
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    spacing: 4
+
+                    Workspaces {
+                        bar: barRoot
+                    }
+
                 }
 
                 RowLayout {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    spacing: 4
 
                     ClockWidget {
                         Layout.alignment: Qt.AlignVCenter
                     }
+
                     UtilButtons {
                         Layout.alignment: Qt.AlignVCenter
                     }

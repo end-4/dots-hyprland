@@ -145,6 +145,10 @@ Singleton {
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: [0, 0.55, 0.45, 1]
         }
+        property QtObject menuDecel: QtObject {
+            property int duration: 250
+            property int type: Easing.OutCubic
+        }
     }
 
 }
