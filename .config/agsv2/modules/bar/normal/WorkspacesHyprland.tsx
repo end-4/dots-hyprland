@@ -41,7 +41,7 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
         }
     }
 
-    function onScroll(self: Astal.EventBox, event: Astal.ScrollEvent) {
+    function onScroll(_: Astal.EventBox, event: Astal.ScrollEvent) {
         if (event.direction === Gdk.ScrollDirection.SMOOTH) {
             if (event.delta_y < 0) {
                 event.direction = Gdk.ScrollDirection.UP;
@@ -58,30 +58,44 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
     }
 
     function onClick(self: Astal.EventBox, event: Astal.ClickEvent) {
-        let button: Astal.MouseButton | number;
-
         // HACK: to prevent the error:
         // 
         // astal-Message: 16:37:51.097: Error: 8 is not a valid value for enumeration MouseButton
         // onClick@file:///run/user/1000/ags.js:1461:19
         // _init/GLib.MainLoop.prototype.runAsync/</<@resource:///org/gnome/gjs/modules/core/overrides/GLib.js:263:34
         try {
-            button = event.button as number;
+            Number(event.button);
         } catch (error) {
-            button = parseInt((error as string).toString().at(7) as string);
+            const button = parseInt((error as string).toString().at(7) as string);
+            console.log(button)
+            switch (button) {
+                case 8:
+                    event.button = Astal.MouseButton.BACK
+                    break;
+                case 9:
+                    event.button = Astal.MouseButton.FORWARD
+                    break;
+                default:
+                    break;
+            }
         }
 
-        if (button === Astal.MouseButton.PRIMARY) {
-            const widgetWidth = self.get_allocation().width;
-            const wsId = Math.ceil(event.x * userOptions.workspaces.shown / widgetWidth);
-            execAsync([`${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
-                .catch(print);
-        } else if (button === Astal.MouseButton.MIDDLE) {
-            toggleWindowOnAllMonitors('osk')
-        } else if (button === Astal.MouseButton.SECONDARY) {
-            App.toggle_window('overview')
-        } else if (button === Astal.MouseButton.BACK || button === 8) {
-            hypr.message_async(`dispatch togglespecialworkspace`, null);
+        switch (event.button) {
+            case Astal.MouseButton.PRIMARY:
+                const widgetWidth = self.get_allocation().width;
+                const wsId = Math.ceil(event.x * userOptions.workspaces.shown / widgetWidth);
+                execAsync([`${GLib.get_user_config_dir()}/agsv2/scripts/hyprland/workspace_action.sh`, 'workspace', `${wsId}`])
+                    .catch(print);
+                break;
+            case Astal.MouseButton.SECONDARY:
+                App.toggle_window('overview')
+                break;
+            case Astal.MouseButton.MIDDLE:
+                toggleWindowOnAllMonitors('osk')
+                break;
+            case Astal.MouseButton.BACK:
+                hypr.message_async(`dispatch togglespecialworkspace`, null);
+                break;
         }
     }
 

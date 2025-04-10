@@ -20,20 +20,28 @@ export default function Indicators({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.
     const tray = SystemTray.get_default()
     const audio = Wp.get_default()?.audio
 
-    const handleScroll = (event: Astal.ScrollEvent) => {
+    function onScroll(_: Astal.EventBox, event: Astal.ScrollEvent) {
         if (!audio) return
         const speaker = audio.defaultSpeaker
 
         if (event.direction === Gdk.ScrollDirection.SMOOTH) {
-            const step = event.delta_y < 0 ? 0.01 : -0.01
-            speaker.volume += step
+            if (event.delta_y < 0) {
+                event.direction = Gdk.ScrollDirection.UP;
+            } else {
+                event.direction = Gdk.ScrollDirection.DOWN;
+            }
         }
 
         const step = speaker.volume <= 0.09 ? 0.01 : 0.03
-        speaker.volume += event.delta_y < 0 ? step : -step
+
+        if (event.direction === Gdk.ScrollDirection.UP) {
+            speaker.volume += step
+        } else if (event.direction === Gdk.ScrollDirection.DOWN) {
+            speaker.volume -= step
+        }
     }
 
-    const handleClick = (event: Astal.ClickEvent) => {
+    function onClick(_: Astal.EventBox, event: Astal.ClickEvent) {
         switch (event.button) {
             case Astal.MouseButton.PRIMARY:
                 App.toggle_window('sideright')
@@ -48,8 +56,8 @@ export default function Indicators({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.
     }
 
     return <eventbox
-        onScroll={(_, event) => handleScroll(event)}
-        onClick={(_, event) => handleClick(event)}
+        onScroll={onScroll}
+        onClick={onClick}
     >
         <box className="spacing-h-5 bar-spaceright">
             <box hexpand={true} />
