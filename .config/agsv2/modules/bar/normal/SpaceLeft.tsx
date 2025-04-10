@@ -14,7 +14,6 @@ export default function WindowTitle({ gdkmonitor, monitorId }: { gdkmonitor: Gdk
     );
     const scrollPos = () => Gtk.Adjustment.new(6, 0, 100, 1, 10, 0);
 
-
     return <box className="bar-space-button" vertical={true} onDestroy={focused.drop}>
         <scrollable
             hexpand={true}
@@ -24,7 +23,7 @@ export default function WindowTitle({ gdkmonitor, monitorId }: { gdkmonitor: Gdk
         >
             {bind(focused).as(f => {
                 const topdesc = f.client == null ? "Desktop" : bind(f.client, "class").as((_class) => _class ?? "Desktop");
-                const title = f.client == null ? "Workspace " + f.workspace.id : bind(f.client, "title").as((title) => title ?? "Workspace " + f.workspace.id);
+                const title = f.client == null ? "Workspace " + (f.workspace?.id ?? "") : bind(f.client, "title").as((title) => title ?? "Workspace " + (f.workspace?.id ?? ""));
                 const vadjustment = f.client == null ? scrollPos() : bind(f.client, "title").as(_ => scrollPos());
                 
                 return <box vertical={true}>
