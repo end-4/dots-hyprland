@@ -4,14 +4,16 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 
 Rectangle {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
-    readonly property list<bool> workspaceOccupied: []
+    readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / ConfigOptions.bar.workspacesShown)
+    property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
     property int activeWorkspaceMargin: 1
@@ -29,7 +31,10 @@ Rectangle {
     function updateWorkspaceOccupied() {
         workspaceOccupied = Array.from({ length: ConfigOptions.bar.workspacesShown }, (_, i) => {
             return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * ConfigOptions.bar.workspacesShown + i + 1);
-        });
+        })
+        if(!activeWindow?.activated) {
+            workspaceOccupied[(monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspacesShown] = false;
+        }
     }
 
     // Initialize workspaceOccupied when the component is created
