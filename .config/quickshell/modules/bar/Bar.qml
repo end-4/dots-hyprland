@@ -5,6 +5,10 @@ import QtQuick.Layouts
 import Quickshell
 
 Scope {
+    id: bar
+    readonly property int barHeight: 40
+    readonly property int sideCenterModuleWidth: 360
+
     Variants {
         model: Quickshell.screens
 
@@ -14,7 +18,7 @@ Scope {
             property var modelData
 
             screen: modelData
-            height: 40
+            height: barHeight
             color: Appearance.colors.colLayer0
 
             // Left section
@@ -25,15 +29,19 @@ Scope {
             // Middle section
             RowLayout {
                 anchors.centerIn: parent
-                implicitWidth: 500
                 spacing: 8
 
                 RowLayout {
+                    Layout.preferredWidth: sideCenterModuleWidth
                     spacing: 4
-                    Layout.fillWidth: true
                     Layout.fillHeight: true
+                    implicitWidth: 350
 
                     Resources {
+                    }
+
+                    Media {
+                        Layout.fillWidth: true
                     }
 
                 }
@@ -50,12 +58,13 @@ Scope {
                 }
 
                 RowLayout {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: sideCenterModuleWidth
                     Layout.fillHeight: true
                     spacing: 4
 
                     ClockWidget {
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
                     }
 
                     UtilButtons {

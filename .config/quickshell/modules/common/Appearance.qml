@@ -141,13 +141,12 @@ Singleton {
 
     animation: QtObject {
         property QtObject elementDecel: QtObject {
-            property int duration: 100
-            property int type: Easing.BezierSpline
-            property list<real> bezierCurve: [0, 0.55, 0.45, 1]
+            property int duration: 180
+            property int type: Easing.OutCirc
         }
         property QtObject menuDecel: QtObject {
-            property int duration: 250
-            property int type: Easing.OutCubic
+            property int duration: 350
+            property int type: Easing.OutQuint
         }
     }
 

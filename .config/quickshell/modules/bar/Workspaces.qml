@@ -107,14 +107,12 @@ Rectangle {
                     NumberAnimation {
                         duration: Appearance.animation.elementDecel.duration
                         easing.type: Appearance.animation.elementDecel.type
-                        easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
                     }
                 }
                 Behavior on radiusLeft {
                     NumberAnimation {
                         duration: Appearance.animation.elementDecel.duration
                         easing.type: Appearance.animation.elementDecel.type
-                        easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
                     }
                 }
 
@@ -122,7 +120,6 @@ Rectangle {
                     NumberAnimation {
                         duration: Appearance.animation.elementDecel.duration
                         easing.type: Appearance.animation.elementDecel.type
-                        easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
                     }
                 }
 
@@ -177,7 +174,6 @@ Rectangle {
                         ColorAnimation {
                             duration: Appearance.animation.elementDecel.duration
                             easing.type: Appearance.animation.elementDecel.type
-                            easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
                         }
 
                     }

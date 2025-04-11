@@ -27,13 +27,12 @@ Rectangle {
         anchors.centerIn: parent
 
         Rectangle {
-            implicitWidth: (isCharging ? boltIcon.width : 0) - rowLayout.spacing
+            implicitWidth: (isCharging ? boltIcon.width : 0)
 
             Behavior on implicitWidth {
                 NumberAnimation {
                     duration: Appearance.animation.elementDecel.duration
                     easing.type: Appearance.animation.elementDecel.type
-                    easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
                 }
 
             }

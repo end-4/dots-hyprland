@@ -24,7 +24,6 @@ Button {
             ColorAnimation {
                 duration: Appearance.animation.elementDecel.duration
                 easing.type: Appearance.animation.elementDecel.type
-                easing.bezierCurve: Appearance.animation.elementDecel.bezierCurve
             }
 
         }
