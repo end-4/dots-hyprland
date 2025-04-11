@@ -9,6 +9,7 @@ Rectangle {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
+    property int preferredWidth: 400
 
     height: parent.height
     width: colLayout.width
@@ -25,13 +26,17 @@ Rectangle {
         StyledText {
             font.pointSize: Appearance.font.pointSize.smaller
             color: Appearance.colors.colSubtext
-            text: activeWindow.activated ? activeWindow?.appId : "Desktop"
+            Layout.preferredWidth: preferredWidth
+            elide: Text.ElideRight
+            text: activeWindow?.activated ? activeWindow?.appId : "Desktop"
         }
 
         StyledText {
             font.pointSize: Appearance.font.pointSize.small
             color: Appearance.colors.colOnLayer0
-            text: activeWindow.activated ? activeWindow?.title : `Workspace ${monitor.activeWorkspace?.id}`
+            Layout.preferredWidth: preferredWidth
+            elide: Text.ElideRight
+            text: activeWindow?.activated ? activeWindow?.title : `Workspace ${monitor.activeWorkspace?.id}`
         }
 
     }

@@ -30,6 +30,17 @@ Scope {
                 ActiveWindow {
                     bar: barRoot
                 }
+                // Scroll to switch workspaces
+
+                WheelHandler {
+                    onWheel: (event) => {
+                        if (event.angleDelta.y < 0)
+                            Brightness.value = -1;
+                        else if (event.angleDelta.y > 0)
+                            Brightness.value = 1;
+                    }
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                }
 
             }
 
