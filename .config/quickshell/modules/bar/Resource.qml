@@ -5,14 +5,13 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
-Rectangle {
+Item {
     required property string iconName
     required property double percentage
     property bool shown: true
     clip: true
     implicitWidth: resourceRowLayout.x < 0 ? 0 : childrenRect.width
     implicitHeight: childrenRect.height
-    color: "transparent"
 
     RowLayout {
         spacing: 4

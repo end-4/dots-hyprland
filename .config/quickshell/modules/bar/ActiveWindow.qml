@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-Rectangle {
+Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
@@ -13,7 +13,6 @@ Rectangle {
 
     height: parent.height
     width: colLayout.width
-    color: "transparent"
     Layout.leftMargin: Appearance.rounding.screenRounding
     
 

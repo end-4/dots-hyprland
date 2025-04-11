@@ -6,14 +6,13 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
-Rectangle {
+Item {
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: activePlayer?.trackTitle.replace(/【[^】]*】/, "") || "No media"
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 40
-    color: "transparent"
 
     // Background
     Rectangle {

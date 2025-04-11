@@ -1,4 +1,5 @@
 import "../common"
+import "../common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -30,8 +31,8 @@ Scope {
                 ActiveWindow {
                     bar: barRoot
                 }
-                // Scroll to switch workspaces
 
+                // Scroll to change brightness
                 WheelHandler {
                     onWheel: (event) => {
                         if (event.angleDelta.y < 0)
@@ -100,6 +101,30 @@ Scope {
             // Right section
             RowLayout {
                 anchors.right: parent.right
+                implicitHeight: barHeight
+                spacing: 20
+
+                SysTray {
+                    bar: barRoot
+                }
+
+                Item { // TODO make this wifi & bluetooth
+                    Layout.leftMargin: Appearance.rounding.screenRounding
+                }
+
+                // Scroll to change volume
+                WheelHandler {
+                    onWheel: (event) => {
+                        const currentVolume = Audio.sink?.audio.volume;
+                        const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
+                        if (event.angleDelta.y < 0)
+                            Audio.sink.audio.volume -= step;
+                        else if (event.angleDelta.y > 0)
+                            Audio.sink.audio.volume += step;
+                    }
+                    acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                }
+
             }
 
             anchors {

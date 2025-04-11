@@ -8,7 +8,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 
-Rectangle {
+Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
@@ -48,7 +48,6 @@ Rectangle {
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 40
-    color: "transparent"
 
     // Background
     Rectangle {
@@ -176,8 +175,7 @@ Rectangle {
 
                 }
                 
-                background: Rectangle {
-                    color: "transparent" // Transparent background
+                background: Item {
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
                 }
