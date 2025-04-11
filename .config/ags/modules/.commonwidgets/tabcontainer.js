@@ -1,3 +1,4 @@
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 const { Box, Button, EventBox, Label, Overlay, Stack } = Widget;
@@ -7,12 +8,13 @@ import { setupCursorHover } from '../.widgetutils/cursorhover.js';
 import { DoubleRevealer } from '../.widgethacks/advancedrevealers.js';
 
 export const TabContainer = ({
-    icons, names, children,
+    icons, names, children, initIndex = 0,
     className = '', setup = () => { },
+    onChange = () => { },
     extraTabStripWidgets = [],
     ...rest
 }) => {
-    const shownIndex = Variable(0);
+    const shownIndex = Variable(initIndex);
     let previousShownIndex = 0;
     const count = Math.min(icons.length, names.length, children.length);
     const tabs = Box({
@@ -72,6 +74,8 @@ export const TabContainer = ({
             })
         })]
     });
+
+    shownIndex.setValue(initIndex)
     const contentStack = Stack({
         transition: 'slide_left_right',
         children: children.reduce((acc, currentValue, index) => {
@@ -82,6 +86,7 @@ export const TabContainer = ({
             self.shown = `${shownIndex.value}`;
         }),
     });
+    
     const mainBox = Box({
         attribute: {
             children: children,
@@ -94,9 +99,11 @@ export const TabContainer = ({
             self.pack_start(tabSection, false, false, 0);
             self.pack_end(contentStack, true, true, 0);
             setup(self);
+            self.hook(shownIndex, (self) => onChange(self, shownIndex.value));
         },
         ...rest,
     });
+
     mainBox.nextTab = () => shownIndex.value = Math.min(shownIndex.value + 1, count - 1);
     mainBox.prevTab = () => shownIndex.value = Math.max(shownIndex.value - 1, 0);
     mainBox.cycleTab = () => shownIndex.value = (shownIndex.value + 1) % count;
@@ -107,11 +114,12 @@ export const TabContainer = ({
 
 export const IconTabContainer = ({
     iconWidgets, names, children, className = '',
+    initIndex = 0,
     setup = () => { }, onChange = () => { },
     tabsHpack = 'center', tabSwitcherClassName = '',
     ...rest
 }) => {
-    const shownIndex = Variable(0);
+    const shownIndex = Variable(initIndex);
     let previousShownIndex = 0;
     const count = Math.min(iconWidgets.length, names.length, children.length);
     const tabs = Box({

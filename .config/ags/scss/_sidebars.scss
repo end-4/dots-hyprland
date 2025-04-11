@@ -701,6 +701,43 @@ $skeleton-accent: mix($secondary, $onSecondary, 50%);
     padding-left: 0.818rem;
 }
 
+.sidebar-chat-txtblock-think {
+    margin-left: -0.136rem;
+    padding: 0.682rem;
+    padding-left: 1.159rem;
+}
+
+.sidebar-chat-thinkblock {
+    @include small-rounding;
+    background-color: $layer2;
+    color: $onLayer3;
+}
+
+.sidebar-chat-thinkblock-icon {
+    @include verysmall-rounding;
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+}
+
+.sidebar-chat-thinkblock-btn-arrow {
+    @include full-rounding;
+    @include icon-material;
+    min-width: 1.705rem;
+    min-height: 1.705rem;
+    background-color: $layer2;
+
+    &:hover,
+    &:focus {
+        background-color: $layer2Hover;
+    }
+
+    &:active {
+        background-color: $layer2Active;
+    }
+}
+
 .sidebar-chat-txt {
     @include readingfont;
 }

@@ -9,6 +9,7 @@ import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
+import { AgsToggle } from '../../.commonwidgets/configwidgets_apps.js';
 
 const MODEL_NAME = `Gemini`;
 
@@ -47,7 +48,7 @@ const GeminiInfo = () => {
                     Button({
                         className: 'txt-subtext txt-norm icon-material',
                         label: 'info',
-                        tooltipText: getString("Uses gemini-pro.\nNot affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren't linked to your account,\n    but will be read by human reviewers to improve the model."),
+                        tooltipText: getString("Not affiliated, endorsed, or sponsored by Google.\n\nPrivacy: Chat messages aren't linked to your account,\nbut will be read by human reviewers to improve the model."),
                         setup: setupCursorHoverInfo,
                     }),
                 ]
@@ -92,33 +93,42 @@ export const GeminiSettings = () => MarginRevealer({
                 hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
-                    ConfigToggle({
+                    AgsToggle({
                         icon: 'model_training',
                         name: getString('Prompt'),
                         desc: getString("Tells Gemini:\n- It's a Linux sidebar assistant\n- Be brief and use bullet points"),
-                        initValue: GeminiService.assistantPrompt,
-                        onChange: (self, newValue) => {
+                        option: "ai.enhancements",
+                        extraOnChange: (self, newValue) => {
                             GeminiService.assistantPrompt = newValue;
                         },
+                        extraOnReset: (self, newValue) => {
+                            GeminiService.assistantPrompt = userOptions.ai.enhancements;
+                        },
                     }),
-                    ConfigToggle({
+                    AgsToggle({
                         icon: 'shield',
                         name: getString('Safety'),
                         desc: getString("When turned off, tells the API (not the model) \nto not block harmful/explicit content"),
-                        initValue: GeminiService.safe,
-                        onChange: (self, newValue) => {
+                        option: "ai.safety",
+                        extraOnChange: (self, newValue) => {
                             GeminiService.safe = newValue;
                         },
+                        extraOnReset: (self, newValue) => {
+                            GeminiService.safe = userOptions.ai.safety;
+                        },
                     }),
-                    ConfigToggle({
+                    AgsToggle({
                         icon: 'history',
                         name: getString('History'),
                         desc: getString("Saves chat history\nMessages in previous chats won't show automatically, but they are there"),
-                        initValue: GeminiService.useHistory,
-                        onChange: (self, newValue) => {
+                        option: "ai.useHistory",
+                        extraOnChange: (self, newValue) => {
                             GeminiService.useHistory = newValue;
                         },
-                    }),
+                        extraOnReset: (self, newValue) => {
+                            GeminiService.useHistory = userOptions.ai.useHistory;
+                        },
+                    })
                 ]
             })
         ]
@@ -156,7 +166,7 @@ const geminiWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [
@@ -210,7 +220,7 @@ export const sendMessage = (text) => {
     if (text.length == 0) return;
     if (GeminiService.key.length == 0) {
         GeminiService.key = text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${GeminiService.keyPath}\``, 'API Key', GeminiView));
+        chatContent.add(SystemMessage(`Key saved to \`${GeminiService.keyPath}\`\nUpdate anytime with /key YOUR_API_KEY.`, 'API Key', GeminiView));
         text = '';
         return;
     }
