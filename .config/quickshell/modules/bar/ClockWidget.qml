@@ -16,7 +16,6 @@ Rectangle {
         anchors.centerIn: parent
 
         StyledText {
-            font.family: Appearance.font.family.title
             font.pointSize: Appearance.font.pointSize.large
             color: Appearance.colors.colOnLayer1
             text: DateTime.time

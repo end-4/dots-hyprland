@@ -95,6 +95,7 @@ Singleton {
     }
 
     colors: QtObject {
+        property color colSubtext: m3colors.m3outline
         property color colLayer0: m3colors.m3background
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: mix(colLayer0, colOnLayer0, 0.85)
@@ -119,6 +120,7 @@ Singleton {
         property int normal: 17
         property int large: 25
         property int full: 9999
+        property int screenRounding: large
     }
 
     font: QtObject {

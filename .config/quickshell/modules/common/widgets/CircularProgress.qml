@@ -19,6 +19,12 @@ Item {
     onValueChanged: {
         canvas.degree = value * 360;
     }
+    onPrimaryColorChanged: {
+        canvas.requestPaint();
+    }
+    onSecondaryColorChanged: {
+        canvas.requestPaint();
+    }
 
     Canvas {
         id: canvas
@@ -27,9 +33,11 @@ Item {
 
         anchors.fill: parent
         antialiasing: true
+
         onDegreeChanged: {
             requestPaint();
         }
+
         onPaint: {
             var ctx = getContext("2d");
             var x = root.width / 2;

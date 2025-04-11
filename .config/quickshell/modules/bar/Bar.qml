@@ -6,6 +6,7 @@ import Quickshell
 
 Scope {
     id: bar
+
     readonly property int barHeight: 40
     readonly property int sideCenterModuleWidth: 360
 
@@ -24,6 +25,12 @@ Scope {
             // Left section
             RowLayout {
                 anchors.left: parent.left
+                implicitHeight: barHeight
+
+                ActiveWindow {
+                    bar: barRoot
+                }
+
             }
 
             // Middle section

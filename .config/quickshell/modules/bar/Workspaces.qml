@@ -32,9 +32,6 @@ Rectangle {
         workspaceOccupied = Array.from({ length: ConfigOptions.bar.workspacesShown }, (_, i) => {
             return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * ConfigOptions.bar.workspacesShown + i + 1);
         })
-        if(!activeWindow?.activated) {
-            workspaceOccupied[(monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspacesShown] = false;
-        }
     }
 
     // Initialize workspaceOccupied when the component is created
@@ -47,7 +44,6 @@ Rectangle {
             updateWorkspaceOccupied();
         }
     }
-
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
@@ -92,8 +88,8 @@ Rectangle {
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
                 radius: Appearance.rounding.full
-                property var radiusLeft: workspaceOccupied[index-1] ? 0 : Appearance.rounding.full
-                property var radiusRight: workspaceOccupied[index+1] ? 0 : Appearance.rounding.full
+                property var radiusLeft: (workspaceOccupied[index-1] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index)) ? 0 : Appearance.rounding.full
+                property var radiusRight: (workspaceOccupied[index+1] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index+2)) ? 0 : Appearance.rounding.full
 
                 topLeftRadius: radiusLeft
                 bottomLeftRadius: radiusLeft
@@ -101,7 +97,7 @@ Rectangle {
                 bottomRightRadius: radiusRight
                 
                 color: Appearance.colors.colLayer2
-                opacity: workspaceOccupied[index] ? 1 : 0
+                opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index+1)) ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
