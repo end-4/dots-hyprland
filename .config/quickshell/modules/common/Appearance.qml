@@ -146,7 +146,7 @@ Singleton {
         }
         property QtObject menuDecel: QtObject {
             property int duration: 350
-            property int type: Easing.OutQuint
+            property int type: Easing.OutExpo
         }
     }
 
