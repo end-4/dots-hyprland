@@ -59,7 +59,7 @@ const replaceCategory = (text: string, replaces: { name: string; re: RegExp; sub
 
 export function replaceInlineLatexWithCodeBlocks(text: string) {
     return text.replace(
-        /\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?<!\w)\$(.*?[^\\])\$(?!\w)/gs,
+        /\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?:^|[^\w])\$(.*?[^\\])\$(?!\w)/gs,
         (match: string, square: string, round: string, double: string, single: string) => {
             const latex = square || round || double || single;
             return `\n\`\`\`latex\n${latex}\n\`\`\`\n`;
