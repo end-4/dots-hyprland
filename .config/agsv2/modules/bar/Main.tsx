@@ -38,7 +38,7 @@ export function Bar({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.Monitor; monito
                         <box className="bar-sidemodule">
                             <Music />
                         </box>
-                        <box className="workspaces" homogeneous={true}>
+                        <box homogeneous={true}>
                             <NormalWorkspaces />
                         </box>
                         <box className="bar-sidemodule">
@@ -46,9 +46,7 @@ export function Bar({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.Monitor; monito
                         </box>
                     </box>
                     <box homogeneous={false}>
-                        <box className="bar-sidemodule" hexpand={true}>
-                            <Indicators gdkmonitor={gdkmonitor} monitorId={monitorId} />
-                        </box>
+                        <Indicators gdkmonitor={gdkmonitor} monitorId={monitorId} />
                         <box className="bar-corner-spacing" />
                     </box>
                 </centerbox>

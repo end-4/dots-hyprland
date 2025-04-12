@@ -67,7 +67,6 @@ export default function Workspaces({ count = userOptions.workspaces.shown }: { c
             Number(event.button);
         } catch (error) {
             const button = Number((error as string).toString().at(7));
-            console.log(button);
             switch (button) {
                 case 8:
                     event.button = Astal.MouseButton.BACK;

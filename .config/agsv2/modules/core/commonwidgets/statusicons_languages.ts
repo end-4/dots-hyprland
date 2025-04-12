@@ -7,7 +7,7 @@ export const languages = [
     {
         layout: 'us',
         name: 'English (US)',
-        flag: '🇺🇸'
+        flag: '🇺🇸',
     },
     {
         layout: 'ru',
@@ -55,8 +55,13 @@ export const languages = [
         flag: '🇻🇳',
     },
     {
+        layout: 'de',
+        name: 'German',
+        flag: '🇩🇪',
+    },
+    {
         layout: 'undef',
         name: 'Undefined',
         flag: '🧐',
     },
-]
+];
