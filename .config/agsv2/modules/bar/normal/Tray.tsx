@@ -43,7 +43,7 @@ function SysTrayItem(item: AstalTray.TrayItem) {
     }
 
     return (
-        <button className="bar-systray-item" onClick={onClick}>
+        <button className="bar-systray-item" onClick={onClick} onDestroy={entryBinding.drop}>
             <icon halign={Gtk.Align.CENTER} gicon={item.gicon} tooltipMarkup={bind(item, 'tooltipMarkup')} />
         </button>
     );

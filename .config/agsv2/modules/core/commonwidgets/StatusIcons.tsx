@@ -93,6 +93,7 @@ function NotificationIndicator({ notifCenterName = 'sideright' }: { notifCenterN
             transitionType={Gtk.RevealerTransitionType.SLIDE_LEFT}
             transitionDuration={userOptions.animations.durationSmall}
             setup={setup}
+            onDestroy={handles.drop}
         >
             <box>
                 <MaterialIcon icon="notifications" size="norm" />
@@ -126,6 +127,7 @@ function BluetoothIndicator() {
             transitionType={Gtk.StackTransitionType.SLIDE_UP_DOWN}
             transitionDuration={userOptions.animations.durationSmall}
             setup={setup}
+            onDestroy={status.drop}
         >
             <label name="disabled" className="txt-norm icon-material" label="bluetooth_disabled" />
             <label name="enabled" className="txt-norm icon-material" label="bluetooth" />
@@ -179,6 +181,7 @@ function NetworkWiredIndicator({ name }: { name: string }) {
             transitionType={Gtk.StackTransitionType.SLIDE_UP_DOWN}
             transitionDuration={userOptions.animations.durationSmall}
             setup={setup}
+            onDestroy={status.drop}
         >
             <SimpleNetworkIndicator name="fallback" />
             <label name="unknown" className={'txt-norm icon-material'} label={'wifi_off'} />
@@ -279,9 +282,7 @@ function HyprlandXkbKeyboardLayout({ useFlag = userOptions.appearance.keyboardUs
                     <label name="undef" label="?" />
                     {keyboardLanguages.map((keyboardLanguage) => {
                         const lang = languages.find((lang) => lang.layout == keyboardLanguage);
-                        return (
-                            <label name={keyboardLanguage} label={useFlag && lang ? lang.flag : keyboardLanguage} />
-                        );
+                        return <label name={keyboardLanguage} label={useFlag && lang ? lang.flag : keyboardLanguage} />;
                     })}
                 </stack>
             </revealer>
