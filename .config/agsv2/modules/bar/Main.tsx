@@ -8,6 +8,7 @@ import Indicators from './normal/SpaceRight.js';
 import Music from './normal/Music';
 import System from './normal/System';
 import NormalWorkspaces from './normal/WorkspacesHyprland';
+import FocusWorkspaces from './focus/WorkspacesHyprland';
 
 export function Bar({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.Monitor; monitorId: number }) {
     const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
@@ -53,11 +54,11 @@ export function Bar({ gdkmonitor, monitorId }: { gdkmonitor: Gdk.Monitor; monito
 
                 {/* Focus Mode */}
                 <centerbox className="bar-bg-focus" name="focus">
-                    <box className="bar-sidemodule" />
+                    <box />
                     <box className="spacing-h-4">
                         <box className="bar-sidemodule" />
-                        <box className="workspaces" homogeneous={true}>
-                            {/* <FocusWorkspaces /> */}
+                        <box homogeneous={true}>
+                            <FocusWorkspaces />
                         </box>
                         <box className="bar-sidemodule" />
                     </box>
