@@ -181,7 +181,7 @@ function SystemResources() {
         revealer = self;
         const player = plasma(players);
         if (!player) return (revealer!.revealChild = true);
-        revealer!.revealChild = false;
+        revealer!.revealChild = userOptions.bar.alwaysShowFullResources || false;
     }
 
     return (
