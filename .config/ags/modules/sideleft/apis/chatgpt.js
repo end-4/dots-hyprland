@@ -58,7 +58,7 @@ const ProviderSwitcher = () => {
         });
     }
     let indicatorIcon = Icon({
-        icon: GPTService.providers[userOptions.ai.defaultGPTProvider]['logo_name'],
+        icon: GPTService.providers[GPTService._currentProvider]['logo_name'],
         className: 'txt-large',
         setup: (self) => self.hook(GPTService, (self) => {
             self.icon = GPTService.providers[GPTService.providerID]['logo_name'];
@@ -241,7 +241,7 @@ const GPTWelcome = () => Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [

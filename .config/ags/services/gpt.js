@@ -6,6 +6,23 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import { fileExists } from '../modules/.miscutils/files.js';
 
+function guessModelLogo(model) {
+    if (model.includes("llama")) return "ollama-symbolic";
+    if (model.includes("gemma")) return "google-gemini-symbolic";
+    if (model.includes("deepseek")) return "deepseek-symbolic";
+    if (/^phi\d*:/i.test(model)) return "microsoft-symbolic";
+    return "ollama-symbolic";
+}
+
+function guessModelName(model) {
+    const replaced = model.replace(/-/g, ' ').replace(/:/g, ' ');
+    const words = replaced.split(' ');
+    words[words.length - 1] = words[words.length - 1].replace(/(\d+)b$/, (_, num) => `${num}B`)
+    words[words.length - 1] = `[${words[words.length - 1]}]`; // Surround the last word with square brackets
+    const result = words.join(' ');
+    return result.charAt(0).toUpperCase() + result.slice(1); // Capitalize the first letter
+}
+
 const PROVIDERS = Object.assign({
     "ollama_llama_3_2": {
         "name": "Ollama - Llama 3.2",
@@ -16,26 +33,6 @@ const PROVIDERS = Object.assign({
         "requires_key": false,
         "key_file": "ollama_key.txt",
         "model": "llama3.2",
-    },
-    "ollama_deepseek_r1": {
-        "name": "Ollama - DeepSeek R1",
-        "logo_name": "deepseek-symbolic",
-        "description": getString('That popular Chinese model that thinks thoroughly'),
-        "base_url": "http://localhost:11434/v1/chat/completions",
-        "key_get_url": "",
-        "key_file": "ollama_key.txt",
-        "requires_key": false,
-        "model": "deepseek-r1",
-    },
-    "ollama_gemma3": {
-        "name": "Ollama - Gemma 3",
-        "logo_name": "google-gemini-symbolic",
-        "description": getString('Gemma 3 from Google. Runs on a single GPU.'),
-        "base_url": "http://localhost:11434/v1/chat/completions",
-        "key_get_url": "",
-        "key_file": "ollama_key.txt",
-        "requires_key": false,
-        "model": "gemma3",
     },
     "openrouter": {
         "name": "OpenRouter (Llama-3-70B)",
@@ -58,6 +55,23 @@ const PROVIDERS = Object.assign({
         "model": "gpt-3.5-turbo",
     },
 }, userOptions.ai.extraGptModels)
+
+const installedOllamaModels = JSON.parse(
+    Utils.exec(`${App.configDir}/scripts/ai/show-installed-ollama-models.sh`))
+    || [];
+installedOllamaModels.forEach(model => {
+    const providerKey = `ollama_${model}`; // Generate a unique key for each model
+    PROVIDERS[providerKey] = {
+        name: `Ollama - ${guessModelName(model)}`,
+        logo_name: guessModelLogo(model),
+        description: `Ollama model: ${model}`,
+        base_url: 'http://localhost:11434/v1/chat/completions',
+        key_get_url: "",
+        requires_key: false,
+        key_file: "ollama_key.txt",
+        model: `${model}`
+    };
+});
 
 // Custom prompt
 const initMessages =
@@ -152,7 +166,7 @@ class GPTService extends Service {
     }
 
     _assistantPrompt = true;
-    _currentProvider = userOptions.ai.defaultGPTProvider;
+    _currentProvider = PROVIDERS[userOptions.ai.defaultGPTProvider] ? userOptions.ai.defaultGPTProvider : Object.keys(PROVIDERS)[0];
     _requestCount = 0;
     _temperature = userOptions.ai.defaultTemperature;
     _messages = [];
@@ -264,6 +278,7 @@ class GPTService extends Service {
             "stream": true,
             "keep_alive": userOptions.ai.keepAlive,
         };
+        // console.log(body);
         const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({

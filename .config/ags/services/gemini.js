@@ -284,7 +284,7 @@ class GeminiService extends Service {
     send(msg) {
         this._messages.push(new GeminiMessage('user', msg, false));
         this.emit('newMsg', this._messages.length - 1);
-        const aiResponse = new GeminiMessage('model', 'thinking...', true, false)
+        const aiResponse = new GeminiMessage('model', '', true, false)
 
         const body =
         {

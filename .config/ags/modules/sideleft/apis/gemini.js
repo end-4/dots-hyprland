@@ -166,7 +166,7 @@ const geminiWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [
