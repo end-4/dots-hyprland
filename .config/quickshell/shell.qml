@@ -13,8 +13,9 @@ ShellRoot {
     Bar {
     }
 
-    // SidebarRight {
-    // }
+    SidebarRight {
+    }
+
     ScreenCorners {
     }
 }
