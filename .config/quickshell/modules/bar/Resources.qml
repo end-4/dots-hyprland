@@ -28,14 +28,14 @@ Rectangle {
         Resource {
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
-            shown: ConfigOptions.bar.resources.alwaysShowSwap || (MprisController.activePlayer == null)
+            shown: ConfigOptions.bar.resources.alwaysShowSwap || (MprisController.activePlayer?.trackTitle == null)
             Layout.leftMargin: shown ? 4 : 0
         }
 
         Resource {
             iconName: "settings_slow_motion"
             percentage: ResourceUsage.cpuUsage
-            shown: ConfigOptions.bar.resources.alwaysShowCpu || (MprisController.activePlayer == null)
+            shown: ConfigOptions.bar.resources.alwaysShowCpu || !(MprisController.activePlayer?.trackTitle?.length > 0)
             Layout.leftMargin: shown ? 4 : 0
         }
 

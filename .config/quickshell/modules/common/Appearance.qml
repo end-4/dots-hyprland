@@ -8,6 +8,7 @@ Singleton {
     property QtObject colors
     property QtObject rounding
     property QtObject font
+    property QtObject sizes
 
     function mix(color1, color2, percentage) {
         var c1 = Qt.color(color1);
@@ -150,6 +151,14 @@ Singleton {
             property int duration: 350
             property int type: Easing.OutExpo
         }
+    }
+
+    sizes: QtObject {
+        property int barHeight: 40
+        property int barCenterSideModuleWidth: 360
+        property int sidebarWidth: 450
+        property int hyprlandGapsOut: 5
+        property int elevationMargin: 7
     }
 
 }
