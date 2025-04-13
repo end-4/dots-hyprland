@@ -21,8 +21,9 @@ MouseArea {
             item.activate();
             break;
         case Qt.RightButton:
-            item.hasMenu && menu.open();
-            break;
+            if (item.hasMenu) {
+                menu.open();
+            }
         default:
             console.log("Buttonevent unhandled");
         }
@@ -35,8 +36,8 @@ MouseArea {
         anchor.window: bar
         anchor.rect.x: root.x + bar.width
         anchor.rect.y: root.y
-        anchor.rect.height: root.height * 3
-        anchor.edges: Edges.Left | Edges.Bottom
+        anchor.rect.height: root.height
+        anchor.edges: Edges.Bottom
     }
 
     IconImage {
