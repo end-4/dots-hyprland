@@ -15,7 +15,7 @@ Scope {
 
         PanelWindow {
             id: barRoot
-            visible: !activeWindow?.fullscreen
+            visible: (ConfigOptions.appearance.fakeScreenRounding === 1 || (ConfigOptions.appearance.fakeScreenRounding === 2 && !activeWindow?.fullscreen))
 
             property var modelData
 
@@ -25,6 +25,7 @@ Scope {
                 item: null
             }
             WlrLayershell.namespace: "quickshell:screenCorners"
+            WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
             anchors {
