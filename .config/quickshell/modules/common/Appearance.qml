@@ -16,6 +16,12 @@ Singleton {
         return Qt.rgba(percentage * c1.r + (1 - percentage) * c2.r, percentage * c1.g + (1 - percentage) * c2.g, percentage * c1.b + (1 - percentage) * c2.b, percentage * c1.a + (1 - percentage) * c2.a);
     }
 
+    // Transparentize
+    function transparentize(color, percentage) {
+        var c = Qt.color(color);
+        return Qt.rgba(c.r, c.g, c.b, c.a * (1 - percentage));
+    }
+
     m3colors: QtObject {
         property bool darkmode: false
         property bool transparent: false

@@ -16,7 +16,7 @@ Singleton {
     property var previousCpuStats
 
 	Timer {
-		interval: 50
+		interval: 10
         running: true 
         repeat: true
 		onTriggered: {
