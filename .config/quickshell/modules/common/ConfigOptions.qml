@@ -20,4 +20,8 @@ Singleton {
         property int updateInterval: 3000
     }
 
+    property QtObject hacks: QtObject {
+        property int arbitraryRaceConditionDelay: 10
+    }
+
 }

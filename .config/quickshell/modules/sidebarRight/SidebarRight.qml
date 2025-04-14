@@ -5,14 +5,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell
+import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
 Scope {
-    id: bar
-
-    readonly property int sidebarWidth: Appearance.sizes.sidebarWidth
+    property int sidebarWidth: Appearance.sizes.sidebarWidth
+    property int sidebarPadding: 15
 
     Variants {
         id: sidebarVariants
@@ -29,6 +29,7 @@ Scope {
             exclusiveZone: 0
             width: sidebarWidth
             WlrLayershell.namespace: "quickshell:sidebarRight"
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
             anchors {
@@ -38,9 +39,29 @@ Scope {
             }
 
             HyprlandFocusGrab {
-                active: sidebarRoot.visible
                 id: grab
                 windows: [ sidebarRoot ]
+                active: false
+                onCleared: () => {
+                    // sidebarRoot.visible = false
+                    if (!active) sidebarRoot.visible = false
+                }
+            }
+
+            Connections {
+                target: sidebarRoot
+                function onVisibleChanged() {
+                    delayedGrabTimer.start()
+                }
+            }
+
+            Timer {
+                id: delayedGrabTimer
+                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                repeat: false
+                onTriggered: {
+                    grab.active = sidebarRoot.visible
+                }
             }
 
             // Background
@@ -58,6 +79,70 @@ Scope {
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
                         event.accepted = true; // Prevent further propagation of the event
+                    }
+                }
+
+                ColumnLayout {
+                    anchors.centerIn: parent
+                    height: parent.height - sidebarPadding * 2
+                    width: parent.width - sidebarPadding * 2
+                    spacing: sidebarPadding
+
+                    RowLayout {
+                        Layout.fillHeight: false
+                        spacing: 10
+                        Layout.margins: 10
+                        Layout.topMargin: 10
+
+                        CustomIcon {
+                            width: 25
+                            height: 25
+                            source: SystemInfo.distroIcon
+                        }
+
+                        StyledText {
+                            font.pointSize: Appearance.font.pointSize.normal
+                            color: Appearance.colors.colOnLayer0
+                            text: `Uptime: ${DateTime.uptime}`
+                        }
+
+                        Item {
+                            Layout.fillHeight: true
+                        }
+
+
+                    }
+
+                    Rectangle {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillHeight: false
+                        radius: Appearance.rounding.full
+                        color: Appearance.colors.colLayer1
+                        implicitWidth: sidebarQuickControlsRow.implicitWidth + 10
+                        implicitHeight: sidebarQuickControlsRow.implicitHeight + 10
+                        
+                        
+                        RowLayout {
+                            id: sidebarQuickControlsRow
+                            anchors.fill: parent
+                            anchors.margins: 5
+                            spacing: 5
+                            Rectangle {
+                                width: 40
+                                height: 40
+                                color: "#77000000"
+                                radius: Appearance.rounding.full
+                            }
+
+                            QuickToggleButton {
+                                toggled: false
+                            }
+                            
+                        }
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }

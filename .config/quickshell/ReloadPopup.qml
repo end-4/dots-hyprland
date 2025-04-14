@@ -97,6 +97,7 @@ Scope {
 				// A progress bar on the bottom of the screen, showing how long until the
 				// popup is removed.
 				Rectangle {
+					z: 2
 					id: bar
 					color: failed ? "#ff93000A" : "#ff0C1F13"
 					anchors.bottom: parent.bottom
@@ -109,9 +110,9 @@ Scope {
 						id: anim
 						target: bar
 						property: "width"
-						from: rect.width
+						from: rect.width - bar.anchors.margins * 2
 						to: 0
-						duration: failed ? 10000 : 800
+						duration: failed ? 10000 : 1000
 						onFinished: popupLoader.active = false
 
 						// Pause the animation when the mouse is hovering over the popup,
@@ -119,6 +120,18 @@ Scope {
 						// when the mouse moves on and off the popup.
 						paused: mouseArea.containsMouse
 					}
+				}
+				// Its bg
+				Rectangle {
+					z: 1
+					id: bar_bg
+					color: failed ? "#30af1b25" : "#4027643e"
+					anchors.bottom: parent.bottom
+					anchors.left: parent.left
+					anchors.margins: 10
+					height: 5
+					radius: 9999
+					width: rect.width - bar.anchors.margins * 2
 				}
 
 				// We could set `running: true` inside the animation, but the width of the
