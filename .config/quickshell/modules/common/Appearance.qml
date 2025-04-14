@@ -162,6 +162,7 @@ Singleton {
     sizes: QtObject {
         property int barHeight: 40
         property int barCenterSideModuleWidth: 360
+        property int barPreferredSideSectionWidth: 400
         property int sidebarWidth: 450
         property int hyprlandGapsOut: 5
         property int elevationMargin: 7

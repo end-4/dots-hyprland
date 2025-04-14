@@ -9,7 +9,7 @@ Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-    property int preferredWidth: 400
+    property int preferredWidth: Appearance.sizes.barPreferredSideSectionWidth
 
     height: parent.height
     width: colLayout.width

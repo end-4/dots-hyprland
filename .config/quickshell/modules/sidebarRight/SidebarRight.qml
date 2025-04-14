@@ -21,6 +21,7 @@ Scope {
         PanelWindow {
             id: sidebarRoot
             visible: false
+            focusable: true
 
             property var modelData
 
@@ -36,6 +37,12 @@ Scope {
                 bottom: true
             }
 
+            HyprlandFocusGrab {
+                active: sidebarRoot.visible
+                id: grab
+                windows: [ sidebarRoot ]
+            }
+
             // Background
             Rectangle {
                 id: sidebarRightBackground
@@ -45,6 +52,14 @@ Scope {
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+
+                focus: true
+                Keys.onPressed: {
+                    if (event.key === Qt.Key_Escape) {
+                        sidebarRoot.visible = false;
+                        event.accepted = true; // Prevent further propagation of the event
+                    }
+                }
             }
 
             // Shadow

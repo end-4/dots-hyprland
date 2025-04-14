@@ -67,6 +67,7 @@ Scope {
 
 				ColumnLayout {
 					id: layout
+					spacing: 10
 					anchors {
 						top: parent.top
 						topMargin: 10
@@ -78,7 +79,7 @@ Scope {
 						font.family: "Rubik"
 						font.pointSize: 14
 						// color: Appearance.colors.colOnBackground
-						text: root.failed ? "Reload failed" : "Reload completed"
+						text: root.failed ? "Quickshell: Reload failed" : "Quickshell reloaded"
 						color: failed ? "#ff93000A" : "#ff0C1F13"
 					}
 

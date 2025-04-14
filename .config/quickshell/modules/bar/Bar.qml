@@ -4,12 +4,22 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 
 Scope {
     id: bar
 
     readonly property int barHeight: Appearance.sizes.barHeight
     readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
+
+    Process {
+        id: toggleSidebarRight
+        command: ["qs", "ipc", "call", "sidebarRight", "toggle"]
+    }
+    Process {
+        id: toggleSidebarLeft
+        command: ["qs", "ipc", "call", "sidebarLeft", "toggle"]
+    }
 
     Variants {
         model: Quickshell.screens
@@ -42,6 +52,7 @@ Scope {
                 height: barHeight
                 // Left section
                 RowLayout {
+                    id: leftSection
                     anchors.left: parent.left
                     implicitHeight: barHeight
 
@@ -64,6 +75,7 @@ Scope {
 
                 // Middle section
                 RowLayout {
+                    id: middleSection
                     anchors.centerIn: parent
                     spacing: 8
 
@@ -117,18 +129,37 @@ Scope {
 
                 // Right section
                 RowLayout {
+                    id: rightSection
                     anchors.right: parent.right
                     implicitHeight: barHeight
+                    width: Appearance.sizes.barPreferredSideSectionWidth
                     spacing: 20
-
-                    SysTray {
-                        bar: barRoot
-                    }
+                    layoutDirection: Qt.RightToLeft
 
                     Item { // TODO make this wifi & bluetooth
                         Layout.leftMargin: Appearance.rounding.screenRounding
+                        Layout.fillWidth: false
                     }
 
+                    SysTray {
+                        bar: barRoot
+                        Layout.fillWidth: false
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+
+                }
+                MouseArea {
+                    anchors.fill: rightSection
+                    acceptedButtons: Qt.LeftButton
+                    onPressed: (event) => {
+                        if (event.button === Qt.LeftButton) {
+                            toggleSidebarRight.running = true
+                        }
+                    }
                     // Scroll to change volume
                     WheelHandler {
                         onWheel: (event) => {
@@ -141,7 +172,6 @@ Scope {
                         }
                         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                     }
-
                 }
             }
 
