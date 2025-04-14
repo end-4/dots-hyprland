@@ -1,8 +1,8 @@
 //@ pragma UseQApplication
 
 import "./modules/bar/"
-import "./modules/sidebarRight/"
 import "./modules/screenCorners/"
+import "./modules/sidebarRight/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -18,4 +18,8 @@ ShellRoot {
 
     ScreenCorners {
     }
+
+    ReloadPopup {
+    }
+
 }
