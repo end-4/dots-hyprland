@@ -122,6 +122,8 @@ Singleton {
         property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
         property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.7)
         property color colPrimaryActive: mix(m3colors.m3primary, colLayer1Active, 0.4)
+        property color colTooltip: m3colors.m3inverseSurface
+        property color colOnTooltip: m3colors.m3inverseOnSurface
     }
 
     rounding: QtObject {
@@ -148,7 +150,8 @@ Singleton {
             property int small: 11
             property int normal: 12
             property int large: 13
-            property int larger: 16
+            property int larger: 14
+            property int huge: 16
         }
     }
 

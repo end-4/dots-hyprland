@@ -1,5 +1,5 @@
-import "../common"
-import "../common/widgets"
+import "root:/modules/common"
+import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell

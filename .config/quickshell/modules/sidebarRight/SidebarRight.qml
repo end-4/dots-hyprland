@@ -1,5 +1,5 @@
-import "../common"
-import "../common/widgets"
+import "root:/modules/common"
+import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -92,7 +92,7 @@ Scope {
                         Layout.fillHeight: false
                         spacing: 10
                         Layout.margins: 10
-                        Layout.topMargin: 10
+                        Layout.bottomMargin: 5
 
                         CustomIcon {
                             width: 25
@@ -127,15 +127,45 @@ Scope {
                             anchors.fill: parent
                             anchors.margins: 5
                             spacing: 5
-                            Rectangle {
-                                width: 40
-                                height: 40
-                                color: "#77000000"
-                                radius: Appearance.rounding.full
+
+                            QuickToggleButton {
+                                property bool enabled: false
+                                buttonIcon: "gamepad"
+                                toggled: enabled
+                                onClicked: {
+                                    enabled = !enabled
+                                    if (enabled) {
+                                        gameModeOn.running = true
+                                    } else {
+                                        gameModeOff.running = true
+                                    }
+                                }
+                                Process {
+                                    id: gameModeOn
+                                    command: ['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 1"`]
+                                }
+                                Process {
+                                    id: gameModeOff
+                                    command: ['bash', '-c', `hyprctl reload`]
+                                }
+                                StyledToolTip {
+                                    content: "Game mode"
+                                }
                             }
 
                             QuickToggleButton {
-                                toggled: false
+                                toggled: idleInhibitor.running
+                                buttonIcon: "coffee"
+                                onClicked: {
+                                    idleInhibitor.running = !idleInhibitor.running
+                                }
+                                Process {
+                                    id: idleInhibitor
+                                    command: ["bash", "-c", "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/scripts/wayland-idle-inhibitor.py"]
+                                }
+                                StyledToolTip {
+                                    content: "Keep system awake"
+                                }
                             }
                             
                         }
