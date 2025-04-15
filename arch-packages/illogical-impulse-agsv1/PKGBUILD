@@ -38,6 +38,7 @@ sha256sums=('962f99dcf202eef30e978d1daedc7cdf213e07a3b52413c1fb7b54abc7bd08e6'
 
 prepare() {
   cd "$srcdir/$_pkgname-$pkgver"
+  rm -rf subprojects/gvc
   mv -T "$srcdir"/libgnome-volume-control subprojects/gvc
 
   # Overwrite greetd.ts with fixed version
