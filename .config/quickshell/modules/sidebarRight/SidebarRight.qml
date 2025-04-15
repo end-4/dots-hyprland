@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -128,45 +129,11 @@ Scope {
                             anchors.margins: 5
                             spacing: 5
 
-                            QuickToggleButton {
-                                property bool enabled: false
-                                buttonIcon: "gamepad"
-                                toggled: enabled
-                                onClicked: {
-                                    enabled = !enabled
-                                    if (enabled) {
-                                        gameModeOn.running = true
-                                    } else {
-                                        gameModeOff.running = true
-                                    }
-                                }
-                                Process {
-                                    id: gameModeOn
-                                    command: ['bash', '-c', `hyprctl --batch "keyword animations:enabled 0; keyword decoration:shadow:enabled 0; keyword decoration:blur:enabled 0; keyword general:gaps_in 0; keyword general:gaps_out 0; keyword general:border_size 1; keyword decoration:rounding 0; keyword general:allow_tearing 1"`]
-                                }
-                                Process {
-                                    id: gameModeOff
-                                    command: ['bash', '-c', `hyprctl reload`]
-                                }
-                                StyledToolTip {
-                                    content: "Game mode"
-                                }
-                            }
-
-                            QuickToggleButton {
-                                toggled: idleInhibitor.running
-                                buttonIcon: "coffee"
-                                onClicked: {
-                                    idleInhibitor.running = !idleInhibitor.running
-                                }
-                                Process {
-                                    id: idleInhibitor
-                                    command: ["bash", "-c", "${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/scripts/wayland-idle-inhibitor.py"]
-                                }
-                                StyledToolTip {
-                                    content: "Keep system awake"
-                                }
-                            }
+                            Network {}
+                            Bluetooth {}
+                            NightLight {}
+                            GameMode {}
+                            IdleInhibitor {}
                             
                         }
                     }
@@ -200,6 +167,15 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = !panelWindow.visible;
+                }
+            }
+        }
+
+        function close(): void {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = false;
                 }
             }
         }

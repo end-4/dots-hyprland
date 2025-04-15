@@ -7,6 +7,7 @@ import Quickshell.Services.SystemTray
 import Quickshell.Wayland
 import Quickshell.Widgets
 
+// TODO: More fancy animation
 Item {
     id: root
 
@@ -32,6 +33,17 @@ Item {
                 item: modelData
             }
 
+        }
+
+        StyledText {
+            Layout.alignment: Qt.AlignVCenter
+            font.pointSize: Appearance.font.pointSize.larger
+            color: Appearance.colors.colSubtext
+            text: "•"
+            visible: {
+                console.log("SystemTray.values.length", SystemTray.items.values.length)
+                SystemTray.items.values.length > 0
+            }
         }
 
     }

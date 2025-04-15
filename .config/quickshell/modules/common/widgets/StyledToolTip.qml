@@ -12,10 +12,12 @@ ToolTip {
     background: Rectangle {
         color: Appearance.colors.colTooltip
         radius: Appearance.rounding.small
+        implicitWidth: tooltipText.implicitWidth + 2 * padding
     }
     StyledText {
-        text: content
         id: tooltipText
+        text: content
         color: Appearance.colors.colOnTooltip
+        wrapMode: Text.WordWrap
     }
 }

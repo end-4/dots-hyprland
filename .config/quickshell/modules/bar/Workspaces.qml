@@ -12,6 +12,7 @@ Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
+    
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / ConfigOptions.bar.workspacesShown)
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
@@ -68,6 +69,16 @@ Item {
                 Hyprland.dispatch(`workspace r-1`);
         }
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.BackButton
+        onPressed: (event) => {
+            if (event.button === Qt.BackButton) {
+                Hyprland.dispatch(`togglespecialworkspace`);
+            } 
+        }
     }
 
     // Workspaces - background

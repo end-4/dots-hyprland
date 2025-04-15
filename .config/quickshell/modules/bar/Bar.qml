@@ -136,9 +136,27 @@ Scope {
                     spacing: 20
                     layoutDirection: Qt.RightToLeft
 
-                    Item { // TODO make this wifi & bluetooth
-                        Layout.leftMargin: Appearance.rounding.screenRounding
+                    RowLayout { // TODO make this wifi & bluetooth
+                        Layout.rightMargin: Appearance.rounding.screenRounding
                         Layout.fillWidth: false
+                        spacing: 15
+                        
+                        MaterialSymbol {
+                            text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
+                                Network.networkStrength > 80 ? "signal_wifi_4_bar" :
+                                Network.networkStrength > 60 ? "network_wifi_3_bar" :
+                                Network.networkStrength > 40 ? "network_wifi_2_bar" :
+                                Network.networkStrength > 20 ? "network_wifi_1_bar" :
+                                "signal_wifi_0_bar"
+                            ) : "signal_wifi_off"
+                            font.pointSize: Appearance.font.pointSize.larger
+                            color: Appearance.colors.colOnLayer0
+                        }
+                        MaterialSymbol {
+                            text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                            font.pointSize: Appearance.font.pointSize.larger
+                            color: Appearance.colors.colOnLayer0
+                        }
                     }
 
                     SysTray {
@@ -155,6 +173,7 @@ Scope {
                 MouseArea {
                     anchors.fill: rightSection
                     acceptedButtons: Qt.LeftButton
+                    propagateComposedEvents: true
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
                             toggleSidebarRight.running = true
