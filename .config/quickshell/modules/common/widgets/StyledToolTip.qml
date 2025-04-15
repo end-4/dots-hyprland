@@ -12,7 +12,7 @@ ToolTip {
     background: Rectangle {
         color: Appearance.colors.colTooltip
         radius: Appearance.rounding.small
-        implicitWidth: tooltipText.implicitWidth + 2 * padding
+        width: tooltipText.width + 2 * padding
     }
     StyledText {
         id: tooltipText

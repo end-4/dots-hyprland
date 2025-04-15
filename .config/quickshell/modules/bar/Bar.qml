@@ -133,7 +133,7 @@ Scope {
                     anchors.right: parent.right
                     implicitHeight: barHeight
                     width: Appearance.sizes.barPreferredSideSectionWidth
-                    spacing: 20
+                    spacing: 5
                     layoutDirection: Qt.RightToLeft
             
                     Rectangle {
