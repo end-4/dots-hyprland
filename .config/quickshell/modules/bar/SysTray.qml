@@ -37,11 +37,10 @@ Item {
 
         StyledText {
             Layout.alignment: Qt.AlignVCenter
-            font.pointSize: Appearance.font.pointSize.larger
+            font.pixelSize: Appearance.font.pixelSize.larger
             color: Appearance.colors.colSubtext
             text: "•"
             visible: {
-                console.log("SystemTray.values.length", SystemTray.items.values.length)
                 SystemTray.items.values.length > 0
             }
         }

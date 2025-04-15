@@ -171,7 +171,7 @@ Item {
                     anchors.fill: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    font.pointSize: Appearance.font.pointSize.small
+                    font.pixelSize: Appearance.font.pixelSize.small
                     text: `${workspaceValue}`
                     elide: Text.ElideRight
                     color: (monitor.activeWorkspace?.id == workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)

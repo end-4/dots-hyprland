@@ -13,12 +13,12 @@ Scope {
     readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
 
     Process {
-        id: toggleSidebarRight
-        command: ["qs", "ipc", "call", "sidebarRight", "toggle"]
+        id: openSidebarRight
+        command: ["qs", "ipc", "call", "sidebarRight", "open"]
     }
     Process {
-        id: toggleSidebarLeft
-        command: ["qs", "ipc", "call", "sidebarLeft", "toggle"]
+        id: openSidebarLeft
+        command: ["qs", "ipc", "call", "sidebarLeft", "open"]
     }
 
     Variants {
@@ -135,27 +135,35 @@ Scope {
                     width: Appearance.sizes.barPreferredSideSectionWidth
                     spacing: 20
                     layoutDirection: Qt.RightToLeft
-
-                    RowLayout { // TODO make this wifi & bluetooth
+            
+                    Rectangle {
+                        Layout.margins: 4
                         Layout.rightMargin: Appearance.rounding.screenRounding
-                        Layout.fillWidth: false
-                        spacing: 15
-                        
-                        MaterialSymbol {
-                            text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
-                                Network.networkStrength > 80 ? "signal_wifi_4_bar" :
-                                Network.networkStrength > 60 ? "network_wifi_3_bar" :
-                                Network.networkStrength > 40 ? "network_wifi_2_bar" :
-                                Network.networkStrength > 20 ? "network_wifi_1_bar" :
-                                "signal_wifi_0_bar"
-                            ) : "signal_wifi_off"
-                            font.pointSize: Appearance.font.pointSize.larger
-                            color: Appearance.colors.colOnLayer0
-                        }
-                        MaterialSymbol {
-                            text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
-                            font.pointSize: Appearance.font.pointSize.larger
-                            color: Appearance.colors.colOnLayer0
+                        Layout.fillHeight: true
+                        implicitWidth: rowLayout.implicitWidth + 10*2
+                        radius: Appearance.rounding.full
+                        color: barRightSideMouseArea.pressed ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                        RowLayout {
+                            id: rowLayout
+                            anchors.centerIn: parent
+                            spacing: 15
+                            
+                            MaterialSymbol {
+                                text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
+                                    Network.networkStrength > 80 ? "signal_wifi_4_bar" :
+                                    Network.networkStrength > 60 ? "network_wifi_3_bar" :
+                                    Network.networkStrength > 40 ? "network_wifi_2_bar" :
+                                    Network.networkStrength > 20 ? "network_wifi_1_bar" :
+                                    "signal_wifi_0_bar"
+                                ) : "signal_wifi_off"
+                                font.pixelSize: Appearance.font.pixelSize.larger
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            MaterialSymbol {
+                                text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
+                                font.pixelSize: Appearance.font.pixelSize.larger
+                                color: Appearance.colors.colOnLayer0
+                            }
                         }
                     }
 
@@ -171,12 +179,21 @@ Scope {
 
                 }
                 MouseArea {
+                    id: barRightSideMouseArea
+                    property bool hovered: false
                     anchors.fill: rightSection
                     acceptedButtons: Qt.LeftButton
+                    hoverEnabled: true
                     propagateComposedEvents: true
+                    onEntered: (event) => {
+                        barRightSideMouseArea.hovered = true
+                    }
+                    onExited: (event) => {
+                        barRightSideMouseArea.hovered = false
+                    }
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
-                            toggleSidebarRight.running = true
+                            openSidebarRight.running = true
                         }
                     }
                     // Scroll to change volume

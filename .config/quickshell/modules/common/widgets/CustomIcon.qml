@@ -1,5 +1,4 @@
 import QtQuick
-import Qt.labs.platform
 import Quickshell
 import Quickshell.Widgets
 
@@ -7,7 +6,7 @@ Item {
     id: root
     
     property string source: ""
-    property string iconFolder: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0] + "/quickshell/assets/icons"  // The folder to check first
+    property string iconFolder: "root:/assets/icons"  // The folder to check first
     width: 30
     height: 30
     

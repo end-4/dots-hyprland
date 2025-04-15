@@ -44,7 +44,6 @@ Scope {
                 windows: [ sidebarRoot ]
                 active: false
                 onCleared: () => {
-                    // sidebarRoot.visible = false
                     if (!active) sidebarRoot.visible = false
                 }
             }
@@ -102,9 +101,10 @@ Scope {
                         }
 
                         StyledText {
-                            font.pointSize: Appearance.font.pointSize.normal
+                            font.pixelSize: Appearance.font.pixelSize.normal
                             color: Appearance.colors.colOnLayer0
                             text: `Uptime: ${DateTime.uptime}`
+                            textFormat: Text.MarkdownText
                         }
 
                         Item {
@@ -138,9 +138,16 @@ Scope {
                         }
                     }
 
-                    Item {
+                    Rectangle {
+                        Layout.alignment: Qt.AlignHCenter
                         Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        radius: Appearance.rounding.normal
+                        color: Appearance.colors.colLayer1
                     }
+
+                    // Calendar
+                    SidebarCalendar {}
                 }
             }
 
@@ -176,6 +183,15 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = false;
+                }
+            }
+        }
+
+        function open(): void {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = true;
                 }
             }
         }

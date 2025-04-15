@@ -16,19 +16,19 @@ Rectangle {
         anchors.centerIn: parent
 
         StyledText {
-            font.pointSize: Appearance.font.pointSize.large
+            font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
             text: DateTime.time
         }
 
         StyledText {
-            font.pointSize: Appearance.font.pointSize.small
+            font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
             text: "•"
         }
 
         StyledText {
-            font.pointSize: Appearance.font.pointSize.small
+            font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer1
             text: DateTime.date
         }

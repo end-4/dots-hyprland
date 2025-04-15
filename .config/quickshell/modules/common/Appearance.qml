@@ -122,6 +122,10 @@ Singleton {
         property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
         property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.7)
         property color colPrimaryActive: mix(m3colors.m3primary, colLayer1Active, 0.4)
+        property color colSecondaryHover: mix(m3colors.m3secondary, colLayer1Hover, 0.7)
+        property color colSecondaryActive: mix(m3colors.m3secondary, colLayer1Active, 0.4)
+        property color colSecondaryContainerHover: mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.8)
+        property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.6)
         property color colTooltip: m3colors.m3inverseSurface
         property color colOnTooltip: m3colors.m3inverseOnSurface
     }
@@ -145,13 +149,14 @@ Singleton {
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
         }
-        property QtObject pointSize: QtObject {
-            property int smaller: 10
-            property int small: 11
-            property int normal: 12
-            property int large: 13
-            property int larger: 14
-            property int huge: 16
+        property QtObject pixelSize: QtObject {
+            property int smaller: 13
+            property int small: 15
+            property int normal: 16
+            property int large: 17
+            property int larger: 19
+            property int huge: 22
+            property int hugeass: 23
         }
     }
 

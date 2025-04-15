@@ -30,7 +30,7 @@ Button {
         
         MaterialSymbol {
             anchors.centerIn: parent
-            font.pointSize: Appearance.font.pointSize.larger
+            font.pixelSize: Appearance.font.pixelSize.larger
             text: buttonIcon
             color: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
 

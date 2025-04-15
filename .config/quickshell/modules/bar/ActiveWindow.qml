@@ -23,7 +23,7 @@ Item {
         spacing: -4
 
         StyledText {
-            font.pointSize: Appearance.font.pointSize.smaller
+            font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight
@@ -31,7 +31,7 @@ Item {
         }
 
         StyledText {
-            font.pointSize: Appearance.font.pointSize.small
+            font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight

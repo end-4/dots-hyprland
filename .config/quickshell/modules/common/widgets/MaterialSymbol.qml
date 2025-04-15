@@ -6,6 +6,6 @@ Text {
     renderType: Text.NativeRendering
     verticalAlignment: Text.AlignVCenter
     font.family: Appearance.font.family.iconMaterial
-    font.pointSize: Appearance.font.pointSize.small
+    font.pixelSize: Appearance.font.pixelSize.small
     color: Appearance.colors.colOnBackground
 }
