@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import "calendar_layout.js" as CalendarLayout
 
 Rectangle {
     Layout.alignment: Qt.AlignHCenter
@@ -11,11 +12,11 @@ Rectangle {
     Layout.fillWidth: true
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    height: 300
+    implicitHeight: 300
 
     RowLayout {
         id: calendarRow
-        anchors.centerIn: parent
+        anchors.fill: parent
         width: parent.width - 10 * 2
         height: parent.height - 10 * 2
         spacing: 10
@@ -24,8 +25,8 @@ Rectangle {
         ColumnLayout {
             id: tabBar
             Layout.fillHeight: true
-            Layout.leftMargin: 10
-            spacing: 10
+            Layout.leftMargin: 15
+            spacing: 15
             Repeater {
                 model: [ 
                     {"name": "Calendar", "icon": "calendar_month"}, 
@@ -46,49 +47,53 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             property int realIndex: 0
-            // currentIndex: 0
-            Connections {
-                target: calendarRow
-                function onSelectedTabChanged() {
-                    // console.log("Real index changed to: " + tabStack.realIndex)
-                    delayedStackSwitch.start()
-                    tabStack.realIndex = calendarRow.selectedTab
-                }
-            }
-            Timer {
-                id: delayedStackSwitch
-                interval: Appearance.animation.elementDecel.duration
-                repeat: false
-                onTriggered: {
-                    tabStack.currentIndex = calendarRow.selectedTab
-                }
-            }
+            property int animationDuration: Appearance.animation.elementDecel.duration * 1.5
 
+            // Calendar
             Component {
                 id: calendarWidget
-                Rectangle {
-                    anchors.fill: parent
-                    color: "pink"
-                    width: 30; height: 30;
-                    radius: Appearance.rounding.small
-                    StyledText {
-                        anchors.margins: 10
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        text: "## Calendar\n- Lorem ipsum\n- Dolor shit amet\n\nSigma Ohayo rc1 Pro+ Premium Hippuland hi ask vaxry for pleas fix 123 Billions must lorem ipsum ipsum yesterdays tears are tomorrows coom awawawa"
-                        wrapMode: Text.WordWrap
-                        textFormat: Text.MarkdownText
+                ColumnLayout {
+                    anchors.centerIn: parent
+                    spacing: 5
+                    RowLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        spacing: 5
+                        Repeater {
+                            model: CalendarLayout.weekDays
+                            delegate: CalendarDayButton {
+                                day: modelData.day
+                                isToday: modelData.today
+                                bold: true
+                            }
+                        }
+                    }
+                    Repeater {
+                        model: CalendarLayout.getCalendarLayout(null, true)
+                        delegate: RowLayout {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: false
+                            spacing: 5
+                            Repeater {
+                                model: modelData
+                                delegate: CalendarDayButton {
+                                    day: modelData.day
+                                    isToday: modelData.today
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            // To Do
             Component {
                 id: todoWidget
-                Rectangle {
+                Item {
                     anchors.fill: parent
-                    color: "lavender"
+                    // color: "lavender"
+                    // radius: Appearance.rounding.small
                     width: 30; height: 30;
-                    radius: Appearance.rounding.small
                     StyledText {
                         anchors.margins: 10
                         anchors.left: parent.left
@@ -98,6 +103,22 @@ Rectangle {
                         wrapMode: Text.WordWrap
                         textFormat: Text.MarkdownText
                     }
+                }
+            }
+
+            Connections {
+                target: calendarRow
+                function onSelectedTabChanged() {
+                    delayedStackSwitch.start()
+                    tabStack.realIndex = calendarRow.selectedTab
+                }
+            }
+            Timer {
+                id: delayedStackSwitch
+                interval: tabStack.animationDuration / 2
+                repeat: false
+                onTriggered: {
+                    tabStack.currentIndex = calendarRow.selectedTab
                 }
             }
 
@@ -111,12 +132,10 @@ Rectangle {
                     property int tabIndex: index
                     property string tabType: modelData.type
                     property int animDistance: 5
-                    opacity: (tabStack.currentIndex === tabItem.tabIndex && tabStack.realIndex === tabItem.tabIndex) ? 1 : 
-                        (tabStack.currentIndex === tabItem.tabIndex && tabStack.realIndex !== tabItem.tabIndex) ? 0 :
-                        (tabStack.realIndex === tabItem.tabIndex) ? 1 : 0
+                    opacity: (tabStack.currentIndex === tabItem.tabIndex && tabStack.realIndex === tabItem.tabIndex) ? 1 : 0
                     y: (tabStack.realIndex === tabItem.tabIndex) ? 0 : (tabStack.realIndex < tabItem.tabIndex) ? animDistance : -animDistance
-                    Behavior on opacity { NumberAnimation { duration: Appearance.animation.elementDecel.duration; easing.type: Easing.OutCubic } }
-                    Behavior on y { NumberAnimation { duration: Appearance.animation.elementDecel.duration * 2; easing.type: Easing.OutCubic } }
+                    Behavior on opacity { NumberAnimation { duration: tabStack.animationDuration / 2; easing.type: Easing.OutCubic } }
+                    Behavior on y { NumberAnimation { duration: tabStack.animationDuration; easing.type: Easing.OutExpo } }
                     Loader {
                         anchors.fill: parent
                         sourceComponent: (tabType === "calendar") ? calendarWidget : todoWidget

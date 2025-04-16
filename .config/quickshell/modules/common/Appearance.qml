@@ -169,6 +169,10 @@ Singleton {
             property int duration: 350
             property int type: Easing.OutExpo
         }
+        property QtObject positionShift: QtObject {
+            property int duration: 160
+            property int type: Easing.InOutExpo
+        }
     }
 
     sizes: QtObject {
