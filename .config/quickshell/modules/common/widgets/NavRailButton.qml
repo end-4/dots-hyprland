@@ -36,7 +36,6 @@ Button {
                     duration: Appearance.animation.elementDecel.duration
                     easing.type: Appearance.animation.elementDecel.type
                 }
-
             }
             MaterialSymbol {
                 id: navRailButtonIcon

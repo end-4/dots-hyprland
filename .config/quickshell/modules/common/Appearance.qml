@@ -162,7 +162,7 @@ Singleton {
 
     animation: QtObject {
         property QtObject elementDecel: QtObject {
-            property int duration: 180
+            property int duration: 200
             property int type: Easing.OutCirc
             property int velocity: 650
         }
@@ -171,8 +171,9 @@ Singleton {
             property int type: Easing.OutExpo
         }
         property QtObject positionShift: QtObject {
-            property int duration: 160
+            property int duration: 300
             property int type: Easing.InOutExpo
+            property int velocity: 650
         }
     }
 

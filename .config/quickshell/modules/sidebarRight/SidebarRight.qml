@@ -148,7 +148,7 @@ Scope {
                     }
 
                     // Calendar
-                    SidebarCalendar {}
+                    BottomWidgetGroup {}
                 }
             }
 

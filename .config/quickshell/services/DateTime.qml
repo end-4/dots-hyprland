@@ -1,3 +1,4 @@
+import "root:/modules/common"
 import QtQuick
 import Quickshell
 import Quickshell.Io

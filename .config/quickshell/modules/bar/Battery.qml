@@ -34,9 +34,7 @@ Rectangle {
                     duration: Appearance.animation.elementDecel.duration
                     easing.type: Appearance.animation.elementDecel.type
                 }
-
             }
-
         }
 
         StyledText {
