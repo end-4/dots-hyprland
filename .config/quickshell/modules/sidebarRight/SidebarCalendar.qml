@@ -28,7 +28,7 @@ Rectangle {
             Layout.leftMargin: 15
             spacing: 15
             Repeater {
-                model: [ 
+                model: [
                     {"name": "Calendar", "icon": "calendar_month"}, 
                     {"name": "To Do", "icon": "done_outline"} 
                 ]
@@ -65,6 +65,7 @@ Rectangle {
                                 day: modelData.day
                                 isToday: modelData.today
                                 bold: true
+                                interactable: false
                             }
                         }
                     }

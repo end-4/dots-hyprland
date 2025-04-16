@@ -9,6 +9,7 @@ Button {
     property string day
     property int isToday
     property bool bold
+    property bool interactable: true
 
     Layout.fillWidth: false
     Layout.fillHeight: false
@@ -18,12 +19,20 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full
-        color: (isToday == 1) ? (button.down ? Appearance.colors.colPrimaryActive : 
-            button.hovered ? Appearance.colors.colPrimaryHover : 
+        color: (isToday == 1) ? ((interactable && button.down) ? Appearance.colors.colPrimaryActive : 
+            (interactable && button.hovered) ? Appearance.colors.colPrimaryHover : 
             Appearance.m3colors.m3primary) : 
-            button.down ? Appearance.colors.colLayer1Active : 
-            button.hovered ? Appearance.colors.colLayer1Hover : 
+            (interactable && button.down) ? Appearance.colors.colLayer1Active : 
+            (interactable && button.hovered) ? Appearance.colors.colLayer1Hover : 
             Appearance.transparentize(Appearance.colors.colLayer1, 1)
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+
+        }
     }
     
     contentItem: StyledText {
@@ -34,6 +43,14 @@ Button {
         color: (isToday == 1) ? Appearance.m3colors.m3onPrimary : 
             (isToday == 0) ? Appearance.colors.colOnLayer1 : 
             Appearance.m3colors.m3outline
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+
+        }
     }
 }
 
