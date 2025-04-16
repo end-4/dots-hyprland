@@ -1,10 +1,11 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "./calendar"
+import "./calendar/calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
-import "calendar_layout.js" as CalendarLayout
 
 Rectangle {
     Layout.alignment: Qt.AlignHCenter
@@ -12,19 +13,21 @@ Rectangle {
     Layout.fillWidth: true
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    implicitHeight: 300
+    implicitHeight: 343 // TODO NO HARD CODE
 
     RowLayout {
         id: calendarRow
         anchors.fill: parent
-        width: parent.width - 10 * 2
+        // width: parent.width - 10 * 2
         height: parent.height - 10 * 2
         spacing: 10
         property int selectedTab: 0
         
+        // Navigation rail
         ColumnLayout {
             id: tabBar
             Layout.fillHeight: true
+            Layout.fillWidth: false
             Layout.leftMargin: 15
             spacing: 15
             Repeater {
@@ -42,44 +45,119 @@ Rectangle {
                 }
             }
         }
+
+        // Content area
         StackLayout {
             id: tabStack
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            // Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
             property int realIndex: 0
             property int animationDuration: Appearance.animation.elementDecel.duration * 1.5
 
             // Calendar
             Component {
                 id: calendarWidget
-                ColumnLayout {
+
+                Item {
                     anchors.centerIn: parent
-                    spacing: 5
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: false
-                        spacing: 5
-                        Repeater {
-                            model: CalendarLayout.weekDays
-                            delegate: CalendarDayButton {
-                                day: modelData.day
-                                isToday: modelData.today
-                                bold: true
-                                interactable: false
+                    width: calendarColumn.width
+                    height: calendarColumn.height
+                    property int monthShift: 0
+                    property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onWheel: {
+                            if (wheel.angleDelta.y > 0) {
+                                monthShift--;
+                            } else if (wheel.angleDelta.y < 0) {
+                                monthShift++;
                             }
                         }
                     }
-                    Repeater {
-                        model: CalendarLayout.getCalendarLayout(null, true)
-                        delegate: RowLayout {
+                    ColumnLayout {
+                        id: calendarColumn
+                        anchors.centerIn: parent
+                        spacing: 5
+
+                        // Calendar header
+                        RowLayout {
                             Layout.fillWidth: true
                             Layout.fillHeight: false
                             spacing: 5
+                            CalendarHeaderButton {
+                                onClicked: {
+                                    monthShift = 0;
+                                }
+                                content: StyledText {
+                                    text: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
+                                    horizontalAlignment: Text.AlignHCenter
+                                    font.pixelSize: Appearance.font.pixelSize.larger
+                                    color: Appearance.colors.colOnLayer1
+                                }
+                            }
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: false
+                            }
+                            CalendarHeaderButton {
+                                forceCircle: true
+                                onClicked: {
+                                    monthShift--;
+                                }
+                                content: MaterialSymbol {
+                                    text: "chevron_left"
+                                    font.pixelSize: Appearance.font.pixelSize.large
+                                    horizontalAlignment: Text.AlignHCenter
+                                    color: Appearance.colors.colOnLayer1
+                                }
+                            }
+                            CalendarHeaderButton {
+                                forceCircle: true
+                                onClicked: {
+                                    monthShift++;
+                                }
+                                content: MaterialSymbol {
+                                    text: "chevron_right"
+                                    font.pixelSize: Appearance.font.pixelSize.large
+                                    horizontalAlignment: Text.AlignHCenter
+                                    color: Appearance.colors.colOnLayer1
+                                }
+                            }
+                        }
+
+                        // Week days row
+                        RowLayout {
+                            id: weekDaysRow
+                            Layout.alignment: Qt.AlignHCenter
+                            Layout.fillHeight: false
+                            spacing: 5
                             Repeater {
-                                model: modelData
+                                model: CalendarLayout.weekDays
                                 delegate: CalendarDayButton {
                                     day: modelData.day
                                     isToday: modelData.today
+                                    bold: true
+                                    interactable: false
+                                }
+                            }
+                        }
+
+                        // Real week rows
+                        Repeater {
+                            id: calendarRows
+                            model: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
+                            delegate: RowLayout {
+                                Layout.alignment: Qt.AlignHCenter
+                                Layout.fillHeight: false
+                                spacing: 5
+                                Repeater {
+                                    model: modelData
+                                    delegate: CalendarDayButton {
+                                        day: modelData.day
+                                        isToday: modelData.today
+                                    }
                                 }
                             }
                         }
@@ -128,7 +206,7 @@ Rectangle {
                     { type: "calendar" },
                     { type: "todo" }
                 ]
-                Item {
+                Item { // TODO: make behavior on y also act for the item that's switched to
                     id: tabItem
                     property int tabIndex: index
                     property string tabType: modelData.type

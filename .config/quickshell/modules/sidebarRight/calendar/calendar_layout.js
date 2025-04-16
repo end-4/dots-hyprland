@@ -40,6 +40,26 @@ function getPrevMonthDays(month, year) {
     return 31;
 }
 
+function getDateInXMonthsTime(x) {
+    var currentDate = new Date(); // Get the current date
+    if (x == 0) return currentDate; // If x is 0, return the current date
+
+    var targetMonth = currentDate.getMonth() + x; // Calculate the target month
+    var targetYear = currentDate.getFullYear(); // Get the current year
+
+    // Adjust the year and month if necessary
+    targetYear += Math.floor(targetMonth / 12);
+    targetMonth = (targetMonth % 12 + 12) % 12;
+
+    // Create a new date object with the target year and month
+    var targetDate = new Date(targetYear, targetMonth, 1);
+
+    // Set the day to the last day of the month to get the desired date
+    // targetDate.setDate(0);
+
+    return targetDate;
+}
+
 function getCalendarLayout(dateObject, highlight) {
     if (!dateObject) dateObject = new Date();
     const weekday = (dateObject.getDay() + 6) % 7; // MONDAY IS THE FIRST DAY OF THE WEEK
