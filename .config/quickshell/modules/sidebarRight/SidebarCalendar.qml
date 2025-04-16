@@ -13,13 +13,13 @@ Rectangle {
     Layout.fillWidth: true
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    implicitHeight: 343 // TODO NO HARD CODE
+    // implicitHeight: 343 // TODO NO HARD CODE
+    height: calendarWidgetRow.height
 
     RowLayout {
-        id: calendarRow
-        anchors.fill: parent
-        // width: parent.width - 10 * 2
-        height: parent.height - 10 * 2
+        id: calendarWidgetRow
+        anchors.fill: parent 
+        height: tabStack.height
         spacing: 10
         property int selectedTab: 0
         
@@ -36,11 +36,11 @@ Rectangle {
                     {"name": "To Do", "icon": "done_outline"} 
                 ]
                 NavRailButton {
-                    toggled: calendarRow.selectedTab == index
+                    toggled: calendarWidgetRow.selectedTab == index
                     buttonText: modelData.name
                     buttonIcon: modelData.icon
                     onClicked: {
-                        calendarRow.selectedTab = index
+                        calendarWidgetRow.selectedTab = index
                     }
                 }
             }
@@ -50,7 +50,7 @@ Rectangle {
         StackLayout {
             id: tabStack
             Layout.fillWidth: true
-            // Layout.fillHeight: true
+            height: 358 // ???? wtf
             Layout.alignment: Qt.AlignVCenter
             property int realIndex: 0
             property int animationDuration: Appearance.animation.elementDecel.duration * 1.5
@@ -65,6 +65,7 @@ Rectangle {
                     height: calendarColumn.height
                     property int monthShift: 0
                     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
+                    property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
 
                     MouseArea {
                         anchors.fill: parent
@@ -84,17 +85,12 @@ Rectangle {
                         // Calendar header
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.fillHeight: false
                             spacing: 5
                             CalendarHeaderButton {
+                                buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
+                                tooltipText: (monthShift === 0) ? "" : "Jump to current month"
                                 onClicked: {
                                     monthShift = 0;
-                                }
-                                content: StyledText {
-                                    text: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
-                                    horizontalAlignment: Text.AlignHCenter
-                                    font.pixelSize: Appearance.font.pixelSize.larger
-                                    color: Appearance.colors.colOnLayer1
                                 }
                             }
                             Item {
@@ -106,9 +102,9 @@ Rectangle {
                                 onClicked: {
                                     monthShift--;
                                 }
-                                content: MaterialSymbol {
+                                contentItem: MaterialSymbol {
                                     text: "chevron_left"
-                                    font.pixelSize: Appearance.font.pixelSize.large
+                                    font.pixelSize: Appearance.font.pixelSize.larger
                                     horizontalAlignment: Text.AlignHCenter
                                     color: Appearance.colors.colOnLayer1
                                 }
@@ -118,9 +114,9 @@ Rectangle {
                                 onClicked: {
                                     monthShift++;
                                 }
-                                content: MaterialSymbol {
+                                contentItem: MaterialSymbol {
                                     text: "chevron_right"
-                                    font.pixelSize: Appearance.font.pixelSize.large
+                                    font.pixelSize: Appearance.font.pixelSize.larger
                                     horizontalAlignment: Text.AlignHCenter
                                     color: Appearance.colors.colOnLayer1
                                 }
@@ -147,16 +143,17 @@ Rectangle {
                         // Real week rows
                         Repeater {
                             id: calendarRows
-                            model: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
+                            // model: calendarLayout
+                            model: 6
                             delegate: RowLayout {
                                 Layout.alignment: Qt.AlignHCenter
                                 Layout.fillHeight: false
                                 spacing: 5
                                 Repeater {
-                                    model: modelData
+                                    model: Array(7).fill(modelData)
                                     delegate: CalendarDayButton {
-                                        day: modelData.day
-                                        isToday: modelData.today
+                                        day: calendarLayout[modelData][index].day
+                                        isToday: calendarLayout[modelData][index].today
                                     }
                                 }
                             }
@@ -186,10 +183,10 @@ Rectangle {
             }
 
             Connections {
-                target: calendarRow
+                target: calendarWidgetRow
                 function onSelectedTabChanged() {
                     delayedStackSwitch.start()
-                    tabStack.realIndex = calendarRow.selectedTab
+                    tabStack.realIndex = calendarWidgetRow.selectedTab
                 }
             }
             Timer {
@@ -197,7 +194,7 @@ Rectangle {
                 interval: tabStack.animationDuration / 2
                 repeat: false
                 onTriggered: {
-                    tabStack.currentIndex = calendarRow.selectedTab
+                    tabStack.currentIndex = calendarWidgetRow.selectedTab
                 }
             }
 

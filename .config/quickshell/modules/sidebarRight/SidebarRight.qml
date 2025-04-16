@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/services"
 import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
@@ -129,8 +130,8 @@ Scope {
                             anchors.margins: 5
                             spacing: 5
 
-                            Network {}
-                            Bluetooth {}
+                            NetworkToggle {}
+                            BluetoothToggle {}
                             NightLight {}
                             GameMode {}
                             IdleInhibitor {}

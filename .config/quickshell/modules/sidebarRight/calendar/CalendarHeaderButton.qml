@@ -6,11 +6,18 @@ import QtQuick.Layouts
 
 Button {
     id: button
-    required default property Item content
+    property string buttonText: ""
+    property string tooltipText: ""
     property bool forceCircle: false
 
     implicitHeight: 30
     implicitWidth: forceCircle ? implicitHeight : (contentItem.implicitWidth + 10 * 2)
+
+    Behavior on implicitWidth {
+        SmoothedAnimation {
+            velocity: Appearance.animation.elementDecel.velocity
+        }
+    }
 
     background: Rectangle {
         anchors.fill: parent
@@ -26,6 +33,15 @@ Button {
         }
 
     }
-    contentItem: content
+    contentItem: StyledText {
+        text: buttonText
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: Appearance.font.pixelSize.larger
+        color: Appearance.colors.colOnLayer1
+    }
 
+    StyledToolTip {
+        content: tooltipText
+        extraVisibleCondition: tooltipText.length > 0
+    }
 }

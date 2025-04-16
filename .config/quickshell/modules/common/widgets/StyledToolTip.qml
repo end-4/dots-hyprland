@@ -6,16 +6,25 @@ import QtQuick.Layouts
 
 ToolTip {
     property string content
-    parent: parent
-    visible: parent.hovered
+    property bool extraVisibleCondition: true
     padding: 7
+    
+    visible: (extraVisibleCondition && parent.hovered)
+
     background: Rectangle {
         color: Appearance.colors.colTooltip
         radius: Appearance.rounding.small
-        width: tooltipText.width + 2 * padding
+        width: tooltipTextObject.width + 2 * padding
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
+        opacity: visible ? 1 : 0
     }
     StyledText {
-        id: tooltipText
+        id: tooltipTextObject
         text: content
         color: Appearance.colors.colOnTooltip
         wrapMode: Text.WordWrap
