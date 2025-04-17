@@ -58,7 +58,9 @@ Scope {
 				MouseArea {
 					id: mouseArea
 					anchors.fill: parent
-					onClicked: popupLoader.active = false
+					onClicked: {
+						popupLoader.active = false
+					}
 
 					// makes the mouse area track mouse hovering, so the hide animation
 					// can be paused when hovering.
