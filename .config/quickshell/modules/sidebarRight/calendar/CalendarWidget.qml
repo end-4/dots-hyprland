@@ -28,9 +28,9 @@ Item {
     MouseArea {
         anchors.fill: parent
         onWheel: (event) => {
-            if (wheel.angleDelta.y > 0) {
+            if (event.angleDelta.y > 0) {
                 monthShift--;
-            } else if (wheel.angleDelta.y < 0) {
+            } else if (event.angleDelta.y < 0) {
                 monthShift++;
             }
         }
