@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
+import Quickshell.Widgets
 
 TabButton {
     id: button
@@ -25,16 +26,34 @@ TabButton {
             }
         }
     }
-    contentItem: StyledText {
-        id: buttonTextWidget
+    contentItem: Item {
         anchors.centerIn: buttonBackground
-        horizontalAlignment: Text.AlignHCenter
-        text: buttonText
-        color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
-        Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+        RowLayout {
+            anchors.centerIn: parent
+            spacing: 0
+            MaterialSymbol {
+                Layout.rightMargin: 5
+                text: buttonIcon
+                font.pixelSize: Appearance.font.pixelSize.larger
+                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Appearance.animation.elementDecel.duration
+                        easing.type: Appearance.animation.elementDecel.type
+                    }
+                }
+            }
+            StyledText {
+                id: buttonTextWidget
+                horizontalAlignment: Text.AlignHCenter
+                text: buttonText
+                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Appearance.animation.elementDecel.duration
+                        easing.type: Appearance.animation.elementDecel.type
+                    }
+                }
             }
         }
     }

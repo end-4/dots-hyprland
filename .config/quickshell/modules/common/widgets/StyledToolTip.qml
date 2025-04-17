@@ -27,6 +27,6 @@ ToolTip {
         id: tooltipTextObject
         text: content
         color: Appearance.colors.colOnTooltip
-        wrapMode: Text.WordWrap
+        wrapMode: Text.Wrap
     }
 }

@@ -36,7 +36,7 @@ Item {
                 delegate: StyledTabButton {
                     selected: (index == currentTab)
                     buttonText: modelData.name
-                    // buttonIcon: modelData.icon
+                    buttonIcon: modelData.icon
                 }
             }
         }
@@ -71,10 +71,14 @@ Item {
 
             // To Do tab
             TaskList {
-                taskList: Todo.list.filter(item => !item.done)
+                taskList: Todo.list
+                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
+                    .filter(function(item) { return !item.done; })
             }
             TaskList {
-                taskList: Todo.list.filter(item => item.done)
+                taskList: Todo.list
+                    .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
+                    .filter(function(item) { return item.done; })
             }
 
         }

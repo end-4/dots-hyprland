@@ -6,11 +6,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Item {
+    // Layout.topMargin: 10
+    anchors.topMargin: 10
     property int monthShift: 0
     property var viewingDate: CalendarLayout.getDateInXMonthsTime(monthShift)
     property var calendarLayout: CalendarLayout.getCalendarLayout(viewingDate, monthShift === 0)
     width: calendarColumn.width
-    height: calendarColumn.height
+    implicitHeight: calendarColumn.height + 10 * 2
 
     MouseArea {
         anchors.fill: parent

@@ -19,6 +19,17 @@ Singleton {
     function markDone(index) {
         if (index >= 0 && index < list.length) {
             list[index].done = true
+            // Reassign to trigger onListChanged
+            root.list = list.slice(0)
+            todoFileView.setText(JSON.stringify(root.list))
+        }
+    }
+
+    function markUnfinished(index) {
+        if (index >= 0 && index < list.length) {
+            list[index].done = false
+            // Reassign to trigger onListChanged
+            root.list = list.slice(0)
             todoFileView.setText(JSON.stringify(root.list))
         }
     }
@@ -26,6 +37,8 @@ Singleton {
     function deleteItem(index) {
         if (index >= 0 && index < list.length) {
             list.splice(index, 1)
+            // Reassign to trigger onListChanged
+            root.list = list.slice(0)
             todoFileView.setText(JSON.stringify(root.list))
         }
     }

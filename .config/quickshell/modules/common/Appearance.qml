@@ -166,6 +166,11 @@ Singleton {
             property int type: Easing.OutCirc
             property int velocity: 650
         }
+        property QtObject elementDecelFast: QtObject {
+            property int duration: 140
+            property int type: Easing.OutCirc
+            property int velocity: 750
+        }
         property QtObject menuDecel: QtObject {
             property int duration: 350
             property int type: Easing.OutExpo

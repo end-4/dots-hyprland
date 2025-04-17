@@ -10,16 +10,9 @@ import QtQuick.Window
 import Quickshell
 
 ShellRoot {
-    Bar {
-    }
-
-    SidebarRight {
-    }
-
-    ScreenCorners {
-    }
-
-    ReloadPopup {
-    }
-
+    Bar {}
+    SidebarRight {}
+    ScreenCorners {}
+    ReloadPopup {}
 }
+
