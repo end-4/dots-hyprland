@@ -22,6 +22,7 @@ QuickToggleButton {
         }
         hoverEnabled: false
         propagateComposedEvents: true
+        cursorShape: Qt.PointingHandCursor 
     }
     Process {
         id: configureBluetooth
