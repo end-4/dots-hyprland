@@ -12,6 +12,8 @@ Button {
     implicitHeight: 30
     implicitWidth: buttonTextWidget.implicitWidth + 15 * 2
 
+    PointingHandInteraction {}
+
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full
@@ -34,7 +36,7 @@ Button {
         anchors.rightMargin: 15
         text: buttonText
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: Appearance.font.pixelSize.normal
+        font.pixelSize: Appearance.font.pixelSize.small
         color: button.enabled ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
 
         Behavior on color {

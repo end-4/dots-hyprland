@@ -13,6 +13,8 @@ TabButton {
     property bool selected: false
     height: buttonBackground.height
 
+    PointingHandInteraction {}
+
     background: Rectangle {
         id: buttonBackground
         radius: Appearance.rounding.small

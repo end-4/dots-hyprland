@@ -12,12 +12,13 @@ Button {
 
     implicitHeight: 30
     implicitWidth: forceCircle ? implicitHeight : (contentItem.implicitWidth + 10 * 2)
-
     Behavior on implicitWidth {
         SmoothedAnimation {
             velocity: Appearance.animation.elementDecel.velocity
         }
     }
+
+    PointingHandInteraction {}
 
     background: Rectangle {
         anchors.fill: parent

@@ -13,6 +13,8 @@ Button {
     implicitWidth: 40
     implicitHeight: 40
 
+    PointingHandInteraction {}
+
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full

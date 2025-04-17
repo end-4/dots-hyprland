@@ -12,6 +12,8 @@ Button {
     implicitHeight: 30
     implicitWidth: implicitHeight
 
+    PointingHandInteraction {}
+
     Behavior on implicitWidth {
         SmoothedAnimation {
             velocity: Appearance.animation.elementDecel.velocity

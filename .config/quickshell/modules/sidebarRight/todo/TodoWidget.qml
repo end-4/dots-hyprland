@@ -11,7 +11,7 @@ Item {
     property int currentTab: 0
     property var tabButtonList: [{"icon": "checklist", "name": "Unfinished"}, {"name": "Done", "icon": "check_circle"}]
     property bool showAddDialog: false
-    property int dialogMargins: 25
+    property int dialogMargins: 20
     property int fabSize: 48
     property int fabMargins: 14
 
@@ -124,9 +124,9 @@ Item {
         anchors.bottom: parent.bottom
         anchors.rightMargin: root.fabMargins
         anchors.bottomMargin: root.fabMargins
-
         width: root.fabSize
         height: root.fabSize
+        PointingHandInteraction {}
 
         onClicked: root.showAddDialog = true
 

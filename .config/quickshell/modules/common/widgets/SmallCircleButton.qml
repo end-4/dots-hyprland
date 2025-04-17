@@ -11,6 +11,8 @@ Button {
     required default property Item content
     property bool extraActiveCondition: false
 
+    PointingHandInteraction{}
+
     implicitHeight: Math.max(content.implicitHeight, 26, content.implicitHeight)
     implicitWidth: Math.max(content.implicitHeight, 26, content.implicitWidth)
     contentItem: content
