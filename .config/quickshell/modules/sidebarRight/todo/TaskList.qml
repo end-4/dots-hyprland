@@ -26,27 +26,30 @@ Item {
                     id: todoItem
                     property bool pendingDoneToggle: false
                     property bool pendingDelete: false
+                    property bool enableHeightAnimation: false
 
                     Layout.fillWidth: true
                     implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
                     height: implicitHeight
                     clip: true
 
-                    // Behavior on implicitHeight {
-                    //     NumberAnimation {
-                    //         duration: Appearance.animation.elementDecel.duration
-                    //         easing.type: Appearance.animation.elementDecel.type
-                    //     }
-                    // }
+                    Behavior on implicitHeight {
+                        enabled: enableHeightAnimation
+                        NumberAnimation {
+                            duration: Appearance.animation.elementDecelFast.duration
+                            easing.type: Appearance.animation.elementDecelFast.type
+                        }
+                    }
 
                     function startAction() {
+                        enableHeightAnimation = true
                         todoItem.implicitHeight = 0
                         actionTimer.start()
                     }
 
                     Timer {
                         id: actionTimer
-                        interval: Appearance.animation.elementDecelFast.duration + ConfigOptions.hacks.arbitraryRaceConditionDelay
+                        interval: Appearance.animation.elementDecelFast.duration
                         repeat: false
                         onTriggered: {
                             if (todoItem.pendingDelete) {
@@ -63,7 +66,7 @@ Item {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
-                        implicitHeight: todoContentRowLayout.implicitHeight + todoListItemPadding * 2
+                        implicitHeight: todoContentRowLayout.implicitHeight
                         color: Appearance.colors.colLayer2
                         radius: Appearance.rounding.small
                         ColumnLayout {
@@ -83,6 +86,7 @@ Item {
                             RowLayout {
                                 Layout.leftMargin: 10
                                 Layout.rightMargin: 10
+                                Layout.bottomMargin: todoListItemPadding
                                 Item {
                                     Layout.fillWidth: true
                                 }
@@ -92,8 +96,6 @@ Item {
                                     onClicked: {
                                         todoItem.pendingDoneToggle = true
                                         todoItem.startAction()
-                                        // if (!modelData.done) Todo.markDone(modelData.originalIndex)
-                                        // else Todo.markUnfinished(modelData.originalIndex)
                                     }
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
@@ -108,7 +110,6 @@ Item {
                                     onClicked: {
                                         todoItem.pendingDelete = true
                                         todoItem.startAction()
-                                        // Todo.deleteItem(modelData.originalIndex)
                                     }
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
