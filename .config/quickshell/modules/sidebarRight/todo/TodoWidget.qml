@@ -175,8 +175,19 @@ Item {
 
     Item {
         anchors.fill: parent
-        visible: root.showAddDialog
+        visible: false
         z: 1000
+
+        opacity: root.showAddDialog ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation { 
+                duration: Appearance.animation.elementDecelFast.duration
+                easing.type: Appearance.animation.elementDecelFast.type
+            }
+        }
+        onOpacityChanged: {
+            visible = opacity > 0
+        }
 
         onVisibleChanged: {
             if (!visible) {
@@ -188,7 +199,7 @@ Item {
         Rectangle { // Scrim
             anchors.fill: parent
             radius: Appearance.rounding.small
-            color: "#80000000"
+            color: Appearance.colors.colScrim
             MouseArea {
                 hoverEnabled: true
                 anchors.fill: parent
