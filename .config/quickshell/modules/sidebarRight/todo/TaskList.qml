@@ -8,10 +8,14 @@ import QtQuick.Layouts
 Item {
     id: root
     required property var taskList;
+    property string emptyPlaceholderIcon
+    property string emptyPlaceholderText
     property int todoListItemSpacing: 5
     property int todoListItemPadding: 8
+    property int listBottomPadding: 80
 
     Flickable { // Scrolled window
+        id: flickable
         anchors.fill: parent
         contentHeight: columnLayout.height
         clip: true
@@ -123,6 +127,35 @@ Item {
                         }
                     }
                 }
+
+            }
+            // Bottom padding
+            Item {
+                implicitHeight: listBottomPadding
+            }
+        }
+    }
+    // Placeholder when list is empty
+    Item {
+        visible: taskList.length === 0
+        anchors.fill: parent
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 5
+
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignHCenter
+                text: emptyPlaceholderIcon
+                font.pixelSize: 55
+                color: Appearance.m3colors.m3outline
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                text: emptyPlaceholderText
+                font.pixelSize: Appearance.font.pixelSize.normal
+                color: Appearance.m3colors.m3outline
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

@@ -13,7 +13,17 @@ Singleton {
     
     function addItem(item) {
         list.push(item)
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
         todoFileView.setText(JSON.stringify(root.list))
+    }
+
+    function addTask(desc) {
+        const item = {
+            "content": desc,
+            "done": false,
+        }
+        addItem(item)
     }
 
     function markDone(index) {

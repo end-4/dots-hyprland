@@ -120,9 +120,11 @@ Singleton {
         property color colLayer2Active: mix(colLayer2, colOnLayer2, 0.80);
         property color colLayer3Hover: mix(colLayer3, colOnLayer3, 0.90);
         property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
-        property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.7)
-        property color colPrimaryActive: mix(m3colors.m3primary, colLayer1Active, 0.4)
-        property color colSecondaryHover: mix(m3colors.m3secondary, colLayer1Hover, 0.7)
+        property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.85)
+        property color colPrimaryActive: mix(m3colors.m3primary, colLayer1Active, 0.7)
+        property color colPrimaryContainerHover: mix(m3colors.m3primaryContainer, colLayer1Hover, 0.7)
+        property color colPrimaryContainerActive: mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
+        property color colSecondaryHover: mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: mix(m3colors.m3secondary, colLayer1Active, 0.4)
         property color colSecondaryContainerHover: mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.8)
         property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.6)
@@ -144,7 +146,7 @@ Singleton {
         property QtObject family: QtObject {
             property string main: "Rubik"
             property string title: "Rubik"
-            property string iconMaterial: "Material Symbols Rounded"
+            property string iconMaterial: "Material Symbols Outlined"
             property string iconNerd: "SpaceMono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
@@ -189,6 +191,8 @@ Singleton {
         property int sidebarWidth: 450
         property int hyprlandGapsOut: 5
         property int elevationMargin: 7
+        property int fabShadowRadius: 5
+        property int fabHoveredShadowRadius: 7
     }
 
 }

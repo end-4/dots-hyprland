@@ -21,21 +21,16 @@ Rectangle {
         {"type": "calendar", "name": "Calendar", "icon": "calendar_month", "widget": calendarWidget}, 
         {"type": "todo", "name": "To Do", "icon": "done_outline", "widget": todoWidget} 
     ]
-    // Calendar
-    Component {
-        id: calendarWidget
 
-        CalendarWidget {
-            anchors.centerIn: parent
-        }
-    }
-
-    // To Do
-    Component {
-        id: todoWidget
-        TodoWidget {
-            anchors.fill: parent
-            anchors.margins: 5
+    Keys.onPressed: (event) => {
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp)
+            && event.modifiers === Qt.ControlModifier) {
+            if (event.key === Qt.Key_PageDown) {
+                root.selectedTab = Math.min(root.selectedTab + 1, root.tabs.length - 1)
+            } else if (event.key === Qt.Key_PageUp) {
+                root.selectedTab = Math.max(root.selectedTab - 1, 0)
+            }
+            event.accepted = true;
         }
     }
 
@@ -72,7 +67,7 @@ Rectangle {
             height: tabStack.children[0]?.tabLoader?.implicitHeight // TODO: make this less stupid
             Layout.alignment: Qt.AlignVCenter
             property int realIndex: 0
-            property int animationDuration: Appearance.animation.elementDecel.duration * 1.5
+            property int animationDuration: Appearance.animation.elementDecelFast.duration * 1.5
 
             // Switch the tab on halfway of the anim duration
             Connections {
@@ -109,9 +104,28 @@ Rectangle {
                         id: tabLoader
                         anchors.fill: parent
                         sourceComponent: modelData.widget
+                        focus: root.selectedTab === tabItem.tabIndex
                     }
                 }
             }
+        }
+    }
+
+    // Calendar component
+    Component {
+        id: calendarWidget
+
+        CalendarWidget {
+            anchors.centerIn: parent
+        }
+    }
+
+    // To Do component
+    Component {
+        id: todoWidget
+        TodoWidget {
+            anchors.fill: parent
+            anchors.margins: 5
         }
     }
 }

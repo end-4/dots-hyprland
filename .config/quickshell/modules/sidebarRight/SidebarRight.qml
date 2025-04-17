@@ -76,7 +76,7 @@ Scope {
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
 
                 focus: true
-                Keys.onPressed: {
+                Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
                         event.accepted = true; // Prevent further propagation of the event

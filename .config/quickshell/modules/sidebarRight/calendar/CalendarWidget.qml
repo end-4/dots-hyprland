@@ -14,9 +14,20 @@ Item {
     width: calendarColumn.width
     implicitHeight: calendarColumn.height + 10 * 2
 
+    Keys.onPressed: (event) => {
+        if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp)
+            && event.modifiers === Qt.NoModifier) {
+            if (event.key === Qt.Key_PageDown) {
+                monthShift++;
+            } else if (event.key === Qt.Key_PageUp) {
+                monthShift--;
+            }
+            event.accepted = true;
+        }
+    }
     MouseArea {
         anchors.fill: parent
-        onWheel: {
+        onWheel: (event) => {
             if (wheel.angleDelta.y > 0) {
                 monthShift--;
             } else if (wheel.angleDelta.y < 0) {
@@ -24,6 +35,7 @@ Item {
             }
         }
     }
+
     ColumnLayout {
         id: calendarColumn
         anchors.centerIn: parent
