@@ -43,20 +43,15 @@ function guessMessageType(summary) {
 // }
 
 const getFriendlyNotifTimeString = (timeObject) => {
-    const messageTime = new Date(timeObject * 1000);
+    const messageTime = timeObject;
     const now = new Date();
     const oneMinuteAgo = new Date(now.getTime() - 60000);
 
-    if (messageTime > oneMinuteAgo) {
+    if (messageTime > oneMinuteAgo) 
         return 'Now';
-    }
-    else if (messageTime.toDateString() === now.toDateString()) {
-        return messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    else if (messageTime.toDateString() === new Date(now.getTime() - 86400000).toDateString()) {
+    if (messageTime.toDateString() === now.toDateString())
+        return Qt.formatDateTime(messageTime, "hh:mm");
+    if (messageTime.toDateString() === new Date(now.getTime() - 86400000).toDateString()) 
         return 'Yesterday';
-    }
-    else {
-        return messageTime.toLocaleDateString();
-    }
+    return Qt.formatDateTime(messageTime, "MMMM dd");
 };
