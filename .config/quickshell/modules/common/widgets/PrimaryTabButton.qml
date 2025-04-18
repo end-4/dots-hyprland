@@ -11,6 +11,7 @@ TabButton {
     property string buttonText
     property string buttonIcon
     property bool selected: false
+    property int tabContentWidth: contentItem.children[0].implicitWidth
     height: buttonBackground.height
 
     PointingHandInteraction {}
@@ -18,7 +19,7 @@ TabButton {
     background: Rectangle {
         id: buttonBackground
         radius: Appearance.rounding.small
-        implicitHeight: 37
+        implicitHeight: 50
         color: (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
         
         Behavior on color {
@@ -27,19 +28,18 @@ TabButton {
                 easing.type: Appearance.animation.elementDecel.type
             }
         }
-
-        // border.color: button.activeFocus ? Appearance.m3colors.m3secondary : Appearance.transparentize(Appearance.m3colors.m3secondary, 1)
-        // border.width: button.activeFocus ? 2 : 0
     }
     contentItem: Item {
         anchors.centerIn: buttonBackground
-        RowLayout {
+        ColumnLayout {
             anchors.centerIn: parent
             spacing: 0
             MaterialSymbol {
-                Layout.rightMargin: 5
+                visible: buttonIcon?.length > 0
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
                 text: buttonIcon
-                font.pixelSize: Appearance.font.pixelSize.larger
+                font.pixelSize: 24
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                 Behavior on color {
                     ColorAnimation {
@@ -50,9 +50,11 @@ TabButton {
             }
             StyledText {
                 id: buttonTextWidget
+                Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: buttonText
+                font.pixelSize: Appearance.font.pixelSize.small
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                text: buttonText
                 Behavior on color {
                     ColorAnimation {
                         duration: Appearance.animation.elementDecel.duration

@@ -50,9 +50,9 @@ Item {
                 WheelHandler {
                     onWheel: (event) => {
                         if (event.angleDelta.y < 0)
-                            currentTab = Math.min(currentTab + 1, root.tabButtonList.length - 1)
+                            tabBar.currentIndex = Math.min(tabBar.currentIndex + 1, root.tabButtonList.length - 1)
                         else if (event.angleDelta.y > 0)
-                            currentTab = Math.max(currentTab - 1, 0)
+                            tabBar.currentIndex = Math.max(tabBar.currentIndex - 1, 0)
                     }
                     acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                 }
@@ -60,7 +60,7 @@ Item {
 
             Repeater {
                 model: root.tabButtonList
-                delegate: StyledTabButton {
+                delegate: SecondaryTabButton {
                     selected: (index == currentTab)
                     buttonText: modelData.name
                     buttonIcon: modelData.icon
@@ -68,21 +68,47 @@ Item {
             }
         }
 
-        Item {
+        Item { // Tab indicator
+            id: tabIndicator
             Layout.fillWidth: true
+            height: 3
+            property bool enableIndicatorAnimation: false
+            Connections {
+                target: root
+                function onCurrentTabChanged() {
+                    tabIndicator.enableIndicatorAnimation = true
+                }
+            }
             Rectangle {
-                property int indicatorPadding: 15
-                id: indicator
                 color: Appearance.m3colors.m3primary
-                height: 3
                 radius: Appearance.rounding.full
-
-                width: tabBar.width / root.tabButtonList.length - indicatorPadding * 2
-                x: indicatorPadding + tabBar.width / root.tabButtonList.length * currentTab
                 z: 2
-                Behavior on x { SmoothedAnimation {
-                    velocity: Appearance.animation.positionShift.velocity
-                } }
+
+                anchors.fill: parent
+                anchors.leftMargin: {
+                    const tabCount = root.tabButtonList.length
+                    const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+                    const fullTabSize = tabBar.width / tabCount;
+                    return fullTabSize * currentTab + (fullTabSize - targetWidth) / 2;
+                }
+                anchors.rightMargin: {
+                    const tabCount = root.tabButtonList.length
+                    const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+                    const fullTabSize = tabBar.width / tabCount;
+                    return fullTabSize * (tabCount - currentTab - 1) + (fullTabSize - targetWidth) / 2;
+                }
+                Behavior on anchors.leftMargin { 
+                    enabled: tabIndicator.enableIndicatorAnimation
+                    SmoothedAnimation {
+                        velocity: Appearance.animation.positionShift.velocity
+                    } 
+                }
+                Behavior on anchors.rightMargin { 
+                    enabled: tabIndicator.enableIndicatorAnimation
+                    SmoothedAnimation {
+                        velocity: Appearance.animation.positionShift.velocity
+                    } 
+                }
                 
             }
         }

@@ -140,12 +140,10 @@ Scope {
                     }
 
                     // Center widget group
-                    Rectangle {
+                    CenterWidgetGroup {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
-                        radius: Appearance.rounding.normal
-                        color: Appearance.colors.colLayer1
                     }
 
                     BottomWidgetGroup {
