@@ -10,17 +10,45 @@ import Quickshell
 
 Rectangle {
     id: root
-    Layout.alignment: Qt.AlignHCenter
-    Layout.fillHeight: false
-    Layout.fillWidth: true
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    height: bottomWidgetGroupRow.height
+    // height: collapsed ? collapsedBottomWidgetGroupRow.height : bottomWidgetGroupRow.height
+    implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
     property int selectedTab: 0
+    property bool collapsed: false
     property var tabs: [
         {"type": "calendar", "name": "Calendar", "icon": "calendar_month", "widget": calendarWidget}, 
-        {"type": "todo", "name": "To Do", "icon": "done_outline", "widget": todoWidget} 
+        {"type": "todo", "name": "To Do", "icon": "done_outline", "widget": todoWidget}
     ]
+
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: Appearance.animation.elementDecel.duration
+            easing.type: Appearance.animation.elementDecel.type
+        }
+    }
+
+    Component.onCompleted: {
+        bottomWidgetGroupRow.opacity = !collapsed
+        collapsedBottomWidgetGroupRow.opacity = collapsed
+    }
+
+    function setCollapsed(state) {
+        collapsed = state
+        if (collapsed) bottomWidgetGroupRow.opacity = 0
+        else collapsedBottomWidgetGroupRow.opacity = 0
+        collapseCleanFadeTimer.start()
+    }
+
+    Timer {
+        id: collapseCleanFadeTimer
+        interval: Appearance.animation.elementDecel.duration / 2
+        repeat: false
+        onTriggered: {
+            if(collapsed) collapsedBottomWidgetGroupRow.opacity = 1
+            else bottomWidgetGroupRow.opacity = 1
+        }
+    }
 
     Keys.onPressed: (event) => {
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp)
@@ -34,28 +62,99 @@ Rectangle {
         }
     }
 
+    // The thing when collapsed
+    RowLayout {
+        id: collapsedBottomWidgetGroupRow
+        visible: opacity != 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementDecel.duration / 2
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
+
+        spacing: 15
+        
+        CalendarHeaderButton {
+            Layout.margins: 10
+            Layout.rightMargin: 0
+            forceCircle: true
+            onClicked: {
+                root.setCollapsed(false)
+            }
+            contentItem: MaterialSymbol {
+                text: "keyboard_arrow_up"
+                font.pixelSize: Appearance.font.pixelSize.larger
+                horizontalAlignment: Text.AlignHCenter
+                color: Appearance.colors.colOnLayer1
+            }
+        }
+
+        StyledText {
+            property int remainingTasks: Todo.list.filter(task => !task.done).length;
+            Layout.margins: 10
+            Layout.leftMargin: 0
+            text: `${DateTime.day} ${DateTime.month} ${DateTime.year} • ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
+            font.pixelSize: Appearance.font.pixelSize.large
+            color: Appearance.colors.colOnLayer1
+        }
+    }
+
+    // The thing when expanded
     RowLayout {
         id: bottomWidgetGroupRow
+
+        visible: opacity != 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementDecel.duration / 2
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
+
         anchors.fill: parent 
         height: tabStack.height
         spacing: 10
         
         // Navigation rail
-        ColumnLayout {
-            id: tabBar
+        Item {
             Layout.fillHeight: true
             Layout.fillWidth: false
-            Layout.leftMargin: 15
-            spacing: 15
-            Repeater {
-                model: root.tabs
-                NavRailButton {
-                    toggled: root.selectedTab == index
-                    buttonText: modelData.name
-                    buttonIcon: modelData.icon
-                    onClicked: {
-                        root.selectedTab = index
+            Layout.leftMargin: 10
+            Layout.topMargin: 10
+            width: tabBar.width
+            // Navigation rail buttons
+            ColumnLayout {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                id: tabBar
+                spacing: 15
+                Repeater {
+                    model: root.tabs
+                    NavRailButton {
+                        toggled: root.selectedTab == index
+                        buttonText: modelData.name
+                        buttonIcon: modelData.icon
+                        onClicked: {
+                            root.selectedTab = index
+                        }
                     }
+                }
+            }
+            // Collapse button
+            CalendarHeaderButton {
+                anchors.left: parent.left
+                anchors.top: parent.top
+                forceCircle: true
+                onClicked: {
+                    root.setCollapsed(true)
+                }
+                contentItem: MaterialSymbol {
+                    text: "keyboard_arrow_down"
+                    font.pixelSize: Appearance.font.pixelSize.larger
+                    horizontalAlignment: Text.AlignHCenter
+                    color: Appearance.colors.colOnLayer1
                 }
             }
         }

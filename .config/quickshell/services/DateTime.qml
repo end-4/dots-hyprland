@@ -7,6 +7,7 @@ pragma Singleton
 Singleton {
     property string time: Qt.formatDateTime(clock.date, "hh:mm")
     property string date: Qt.formatDateTime(clock.date, "dddd, dd/MM")
+    property string day: Qt.formatDateTime(clock.date, "dd")
     property string month: Qt.formatDateTime(clock.date, "MMMM")
     property string year: Qt.formatDateTime(clock.date, "yyyy")
     property string uptime: "0h, 0m"

@@ -84,9 +84,9 @@ Scope {
                 }
 
                 ColumnLayout {
-                    anchors.centerIn: parent
-                    height: parent.height - sidebarPadding * 2
-                    width: parent.width - sidebarPadding * 2
+                    anchors.fill: parent
+                    anchors.margins: sidebarPadding
+                    
                     spacing: sidebarPadding
 
                     RowLayout {
@@ -139,6 +139,7 @@ Scope {
                         }
                     }
 
+                    // Center widget group
                     Rectangle {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.fillHeight: true
@@ -147,8 +148,12 @@ Scope {
                         color: Appearance.colors.colLayer1
                     }
 
-                    // Calendar
-                    BottomWidgetGroup {}
+                    BottomWidgetGroup {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.fillHeight: false
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: implicitHeight
+                    }
                 }
             }
 
