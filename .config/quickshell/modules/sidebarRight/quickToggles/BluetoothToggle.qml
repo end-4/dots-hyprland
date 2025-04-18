@@ -12,7 +12,7 @@ QuickToggleButton {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton | Qt.LeftButton
-        onClicked: {
+        onClicked: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
                 toggleBluetooth.running = true
             }

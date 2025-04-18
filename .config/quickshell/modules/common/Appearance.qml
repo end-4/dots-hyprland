@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject m3colors

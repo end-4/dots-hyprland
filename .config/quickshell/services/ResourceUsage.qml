@@ -1,5 +1,7 @@
-import "root:/modules/common"
 pragma Singleton
+pragma ComponentBehavior: Bound
+
+import "root:/modules/common"
 import QtQuick
 import Quickshell
 import Quickshell.Io

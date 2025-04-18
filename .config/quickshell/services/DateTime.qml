@@ -3,6 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 Singleton {
     property string time: Qt.formatDateTime(clock.date, "hh:mm")
@@ -14,7 +15,6 @@ Singleton {
 
     SystemClock {
         id: clock
-
         precision: SystemClock.Minutes
     }
 

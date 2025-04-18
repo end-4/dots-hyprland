@@ -46,6 +46,7 @@ Item {
             Layout.fillWidth: true
             spacing: 5
             CalendarHeaderButton {
+                clip: true
                 buttonText: `${monthShift != 0 ? "• " : ""}${viewingDate.toLocaleDateString(Qt.locale(), "MMMM yyyy")}`
                 tooltipText: (monthShift === 0) ? "" : "Jump to current month"
                 onClicked: {

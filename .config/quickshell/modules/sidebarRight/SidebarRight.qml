@@ -93,7 +93,7 @@ Scope {
                         Layout.fillHeight: false
                         spacing: 10
                         Layout.margins: 10
-                        Layout.bottomMargin: 5
+                        Layout.bottomMargin: 0
 
                         CustomIcon {
                             width: 25

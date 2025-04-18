@@ -12,7 +12,7 @@ Rectangle {
     id: root
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
-    // height: collapsed ? collapsedBottomWidgetGroupRow.height : bottomWidgetGroupRow.height
+    clip: true
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
     property int selectedTab: 0
     property bool collapsed: false

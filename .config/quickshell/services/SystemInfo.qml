@@ -1,7 +1,9 @@
+pragma Singleton
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
-pragma Singleton
 
 Singleton {
     property string distroName: "Unknown"

@@ -3,6 +3,7 @@ import "root:/modules/common/widgets"
 import "root:/services"
 import "./calendar"
 import "./todo"
+import "./notifications"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -103,7 +104,7 @@ Rectangle {
             currentIndex: currentTab
             onCurrentIndexChanged: currentTab = currentIndex
 
-            Item{}
+            NotificationList {}
             Item{}
         }
     }

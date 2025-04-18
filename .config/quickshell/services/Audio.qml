@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 Singleton {
     id: root
