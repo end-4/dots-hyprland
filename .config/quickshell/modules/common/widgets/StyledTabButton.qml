@@ -28,8 +28,8 @@ TabButton {
             }
         }
 
-        border.color: button.activeFocus ? Appearance.m3colors.m3secondary : Appearance.transparentize(Appearance.m3colors.m3secondary, 1)
-        border.width: button.activeFocus ? 2 : 0
+        // border.color: button.activeFocus ? Appearance.m3colors.m3secondary : Appearance.transparentize(Appearance.m3colors.m3secondary, 1)
+        // border.width: button.activeFocus ? 2 : 0
     }
     contentItem: Item {
         anchors.centerIn: buttonBackground

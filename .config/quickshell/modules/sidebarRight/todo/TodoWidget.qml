@@ -252,13 +252,13 @@ Item {
                     focus: root.showAddDialog
                     onAccepted: dialog.addTask()
 
-                    // background: Rectangle {
-                    //     anchors.fill: parent
-                    //     radius: Appearance.rounding.verysmall
-                    //     border.width: 2
-                    //     border.color: todoInput.activeFocus ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
-                    //     color: "transparent"
-                    // }
+                    background: Rectangle {
+                        anchors.fill: parent
+                        radius: Appearance.rounding.verysmall
+                        border.width: 2
+                        border.color: todoInput.activeFocus ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
+                        color: "transparent"
+                    }
 
                     cursorDelegate: Rectangle {
                         width: 1
