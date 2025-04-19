@@ -66,6 +66,15 @@ Singleton {
         root.discard(id);
     }
 
+    function discardAll() {
+        root.list = []
+        triggerListChange()
+        notifFileView.setText(JSON.stringify(root.list, null, 2))
+        notifServer.trackedNotifications.values.forEach((notif) => {
+            notif.dismiss()
+        })
+    }
+
     function attemptInvokeAction(id, notifIdentifier) {
         const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id === id);
         if (notifServerIndex !== -1) {

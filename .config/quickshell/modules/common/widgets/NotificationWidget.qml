@@ -24,7 +24,7 @@ Item {
     Behavior on implicitHeight {
         enabled: enableAnimation
         NumberAnimation {
-            duration: Appearance.animation.elementDecel.duration
+            duration: Appearance.animation.elementDecelFast.duration
             easing.type: Appearance.animation.elementDecel.type
         }
     }
@@ -33,21 +33,31 @@ Item {
         root.ready = true
     }
 
-    function destroyWithAnimation() {
-        notificationRowWrapper.anchors.left = undefined
-        notificationRowWrapper.anchors.right = undefined
-        notificationRowWrapper.anchors.fill = undefined
-        notificationBackground.anchors.left = undefined
-        notificationBackground.anchors.right = undefined
-        notificationBackground.anchors.fill = undefined
-        notificationRowWrapper.x = width
-        notificationBackground.x = width
-        destroyTimer1.start()
+    function destroyWithAnimation(delay = 0) {
+        destroyTimer0.interval = delay
+        destroyTimer0.start()
+    }
+
+    Timer {
+        id: destroyTimer0
+        interval: 0
+        repeat: false
+        onTriggered: {
+            notificationRowWrapper.anchors.left = undefined
+            notificationRowWrapper.anchors.right = undefined
+            notificationRowWrapper.anchors.fill = undefined
+            notificationBackground.anchors.left = undefined
+            notificationBackground.anchors.right = undefined
+            notificationBackground.anchors.fill = undefined
+            notificationRowWrapper.x = width
+            notificationBackground.x = width
+            destroyTimer1.start()
+        }
     }
 
     Timer {
         id: destroyTimer1
-        interval: Appearance.animation.elementDecel.duration / 2
+        interval: Appearance.animation.elementDecelFast.duration
         repeat: false
         onTriggered: {
             notificationRowWrapper.anchors.top = undefined
@@ -59,7 +69,7 @@ Item {
 
     Timer {
         id: destroyTimer2
-        interval: Appearance.animation.elementDecel.duration
+        interval: Appearance.animation.elementDecelFast.duration
         repeat: false
         onTriggered: {
             root.destroy()
@@ -102,7 +112,7 @@ Item {
             Behavior on x {
                 enabled: enableAnimation
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecel.duration
+                    duration: Appearance.animation.elementDecelFast.duration
                     easing.type: Appearance.animation.elementDecel.type
                 }
             }
@@ -120,7 +130,7 @@ Item {
         Behavior on x {
             enabled: enableAnimation
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration
+                duration: Appearance.animation.elementDecelFast.duration
                 easing.type: Appearance.animation.elementDecel.type
             }
         }

@@ -70,6 +70,40 @@ Item {
         }
     }
 
+    // Placeholder when list is empty
+    Item {
+        anchors.fill: flickable
+
+        visible: opacity > 0
+        opacity: (root.notificationWidgetList.length === 0) ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
+
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 5
+
+            MaterialSymbol {
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: 55
+                color: Appearance.m3colors.m3outline
+                text: "notifications_active"
+            }
+            StyledText {
+                Layout.alignment: Qt.AlignHCenter
+                font.pixelSize: Appearance.font.pixelSize.normal
+                color: Appearance.m3colors.m3outline
+                horizontalAlignment: Text.AlignHCenter
+                text: "No notifications"
+            }
+        }
+    }
+
     RowLayout {
         id: statusRow
         anchors.left: parent.left
@@ -90,6 +124,24 @@ Item {
                     duration: Appearance.animation.elementDecel.duration
                     easing.type: Appearance.animation.elementDecel.type
                 }
+            }
+        }
+
+        Item { Layout.fillWidth: true }
+
+        NotificationStatusButton {
+            buttonIcon: "clear_all"
+            buttonText: "Clear"
+            onClicked: () => {
+                for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
+                // for (let i = 0; i < notificationWidgetList.length; i++) {
+                    const widget = notificationWidgetList[i];
+                    if (widget && widget.notificationObject) {
+                        widget.destroyWithAnimation();
+                    }
+                }
+                notificationWidgetList = [];
+                Notifications.discardAll()
             }
         }
     }

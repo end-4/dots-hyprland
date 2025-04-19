@@ -130,7 +130,7 @@ Singleton {
 
 	function setActivePlayer(player: MprisPlayer) {
 		const targetPlayer = player ?? Mpris.players[0];
-		console.log(`setactive: ${targetPlayer} from ${activePlayer}`)
+		console.log(`[Mpris] Active player ${targetPlayer} << ${activePlayer}`)
 
 		if (targetPlayer && this.activePlayer) {
 			this.__reverse = Mpris.players.indexOf(targetPlayer) < Mpris.players.indexOf(this.activePlayer);

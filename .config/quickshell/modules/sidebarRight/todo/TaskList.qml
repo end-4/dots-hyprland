@@ -145,16 +145,16 @@ Item {
 
             MaterialSymbol {
                 Layout.alignment: Qt.AlignHCenter
-                text: emptyPlaceholderIcon
                 font.pixelSize: 55
                 color: Appearance.m3colors.m3outline
+                text: emptyPlaceholderIcon
             }
             StyledText {
                 Layout.alignment: Qt.AlignHCenter
-                text: emptyPlaceholderText
                 font.pixelSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3outline
                 horizontalAlignment: Text.AlignHCenter
+                text: emptyPlaceholderText
             }
         }
     }
