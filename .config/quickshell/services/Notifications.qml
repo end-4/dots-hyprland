@@ -19,7 +19,7 @@ Singleton {
 	NotificationServer {
         id: notifServer
         // actionIconsSupported: true
-        // actionsSupported: true
+        actionsSupported: true
         bodyHyperlinksSupported: true
         // bodyImagesSupported: true
         bodyMarkupSupported: true
@@ -32,7 +32,12 @@ Singleton {
             notification.tracked = true
             const newNotifObject = {
                 "id": notification.id,
-                "actions": [],
+                "actions": notification.actions.map((action) => {
+                    return {
+                        "identifier": action.identifier,
+                        "text": action.text,
+                    }
+                }),
                 "appIcon": notification.appIcon,
                 "appName": notification.appName,
                 "body": notification.body,
@@ -57,6 +62,16 @@ Singleton {
         if (notifServerIndex !== -1) {
             notifServer.trackedNotifications.values[notifServerIndex].dismiss()
         }
+        root.discard(id);
+    }
+
+    function attemptInvokeAction(id, notifIdentifier) {
+        const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id === id);
+        if (notifServerIndex !== -1) {
+            const notifServerNotif = notifServer.trackedNotifications.values[notifServerIndex];
+            const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
+            action.invoke()
+        } else console.log("Notification not found in server: " + id)
         root.discard(id);
     }
 

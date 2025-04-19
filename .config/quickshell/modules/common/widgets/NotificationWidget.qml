@@ -24,8 +24,8 @@ Item {
     Behavior on implicitHeight {
         enabled: enableAnimation
         NumberAnimation {
-            duration: Appearance.animation.elementDecel.duration
-            easing.type: Appearance.animation.elementDecel.type
+            duration: Appearance.animation.elementDecelFast.duration
+            easing.type: Appearance.animation.elementDecelFast.type
         }
     }
 
@@ -42,7 +42,7 @@ Item {
 
     Timer {
         id: destroyTimer
-        interval: Appearance.animation.elementDecel.duration
+        interval: Appearance.animation.elementDecelFast.duration
         repeat: false
         onTriggered: {
             root.destroy()
@@ -51,11 +51,12 @@ Item {
 
     MouseArea { // Middle click to close
         anchors.fill: parent
-        acceptedButtons: Qt.MiddleButton
+        acceptedButtons: Qt.MiddleButton | Qt.RightButton
         onClicked: (mouse) => {
-            if (mouse.button == Qt.MiddleButton) {
-                Notifications.discardNotification(notificationObject.id)
-            }
+            if (mouse.button == Qt.MiddleButton) 
+                Notifications.discardNotification(notificationObject.id);
+            else if (mouse.button == Qt.RightButton) 
+                root.expanded = !root.expanded;
         }
     }
 
@@ -64,7 +65,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: notificationListSpacing
         color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-            Appearance.m3colors.m3secondaryContainer : Appearance.colors.colLayer2
+            Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
         radius: Appearance.rounding.normal
     }
 
@@ -92,14 +93,15 @@ Item {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
                 radius: Appearance.rounding.full
-                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                    Appearance.m3colors.m3secondary : Appearance.m3colors.m3secondaryContainer
+                color: Appearance.m3colors.m3secondaryContainer
                 MaterialSymbol {
                     visible: notificationObject.appIcon == ""
-                    text: NotificationUtils.guessMessageType(notificationObject.summary)
+                    text: (notificationObject.urgency == NotificationUrgency.Critical) ? "release_alert" : 
+                        NotificationUtils.guessMessageType(notificationObject.summary)
                     anchors.fill: parent
                     color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                        Appearance.m3colors.m3onSecondary : Appearance.m3colors.m3onSecondaryContainer
+                        Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
+                        Appearance.m3colors.m3onSecondaryContainer
                     font.pixelSize: 27
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -192,17 +194,56 @@ Item {
 
                 StyledText { // Notification body
                     Layout.fillWidth: true
-                    Layout.bottomMargin: 10
                     Layout.leftMargin: 10
                     Layout.rightMargin: 10
+                    Layout.bottomMargin: 10
                     clip: true
+
                     wrapMode: expanded ? Text.Wrap : Text.NoWrap
                     elide: Text.ElideRight
                     font.pixelSize: Appearance.font.pixelSize.small
                     horizontalAlignment: Text.AlignLeft
                     color: Appearance.m3colors.m3outline
                     // textFormat: Text.MarkdownText
-                    text: notificationObject.body   
+                    text: notificationObject.body
+                }
+
+                Flickable {
+                    Layout.fillWidth: true
+                    Layout.topMargin: -5
+                    Layout.leftMargin: 10
+                    Layout.rightMargin: 10
+                    Layout.bottomMargin: 10
+                    visible: expanded
+                    implicitHeight: actionRowLayout.implicitHeight
+                    contentWidth: actionRowLayout.implicitWidth
+
+                    RowLayout { // Actions
+                        id: actionRowLayout
+
+                        Repeater {
+                            id: actionRepeater
+                            model: notificationObject.actions
+                            NotificationActionButton {
+                                Layout.fillWidth: true
+                                buttonText: modelData.text
+                                urgency: notificationObject.urgency
+                                onClicked: {
+                                    Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                                }
+                            }
+                        }
+
+                        NotificationActionButton {
+                            Layout.fillWidth: true
+                            buttonText: "Close"
+                            urgency: notificationObject.urgency
+                            onClicked: {
+                                Notifications.discardNotification(notificationObject.id);
+                            }
+                        }
+                        
+                    }
                 }
             }
         }
