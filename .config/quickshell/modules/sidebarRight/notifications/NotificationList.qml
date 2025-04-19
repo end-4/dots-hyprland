@@ -44,7 +44,7 @@ Item {
             for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
                 const widget = notificationWidgetList[i];
                 if (widget && widget.notificationObject && widget.notificationObject.id === id) {
-                    widget.fancyDestroy();
+                    widget.destroyWithAnimation();
                     notificationWidgetList.splice(i, 1);
                 }
             }
@@ -53,7 +53,10 @@ Item {
 
     Flickable { // Scrollable window
         id: flickable
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: statusRow.top
         contentHeight: columnLayout.height
         clip: true
 
@@ -64,6 +67,21 @@ Item {
             spacing: 0 // The widgets themselves have margins for spacing
 
             // Notifications are added by the above signal handlers
+        }
+    }
+
+    RowLayout {
+        id: statusRow
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        StyledText {
+            Layout.margins: 10
+            Layout.bottomMargin: 5
+            Layout.alignment: Qt.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: `${notificationWidgetList.length} Notifications`
         }
     }
 }

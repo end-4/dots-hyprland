@@ -24,8 +24,8 @@ Item {
     Behavior on implicitHeight {
         enabled: enableAnimation
         NumberAnimation {
-            duration: Appearance.animation.elementDecelFast.duration
-            easing.type: Appearance.animation.elementDecelFast.type
+            duration: Appearance.animation.elementDecel.duration
+            easing.type: Appearance.animation.elementDecel.type
         }
     }
 
@@ -33,16 +33,33 @@ Item {
         root.ready = true
     }
 
-    function fancyDestroy() {
-        implicitHeight = 0
-        notificationRowWrapper.anchors.top = undefined
-        notificationRowWrapper.anchors.bottom = root.bottom
-        destroyTimer.start()
+    function destroyWithAnimation() {
+        notificationRowWrapper.anchors.left = undefined
+        notificationRowWrapper.anchors.right = undefined
+        notificationRowWrapper.anchors.fill = undefined
+        notificationBackground.anchors.left = undefined
+        notificationBackground.anchors.right = undefined
+        notificationBackground.anchors.fill = undefined
+        notificationRowWrapper.x = width
+        notificationBackground.x = width
+        destroyTimer1.start()
     }
 
     Timer {
-        id: destroyTimer
-        interval: Appearance.animation.elementDecelFast.duration
+        id: destroyTimer1
+        interval: Appearance.animation.elementDecel.duration / 2
+        repeat: false
+        onTriggered: {
+            notificationRowWrapper.anchors.top = undefined
+            notificationRowWrapper.anchors.bottom = root.bottom
+            implicitHeight = 0
+            destroyTimer2.start()
+        }
+    }
+
+    Timer {
+        id: destroyTimer2
+        interval: Appearance.animation.elementDecel.duration
         repeat: false
         onTriggered: {
             root.destroy()
@@ -61,12 +78,30 @@ Item {
     }
 
     // Background
-    Rectangle {
+    Item {
+        id: notificationBackgroundWrapper
+
         anchors.fill: parent
+        implicitHeight: notificationColumnLayout.implicitHeight
         anchors.topMargin: notificationListSpacing
-        color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-            Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
-        radius: Appearance.rounding.normal
+
+        Rectangle {
+            id: notificationBackground
+            anchors.fill: parent
+            anchors.bottom: parent.bottom
+
+            color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
+            radius: Appearance.rounding.normal
+
+            Behavior on x {
+                enabled: enableAnimation
+                NumberAnimation {
+                    duration: Appearance.animation.elementDecel.duration
+                    easing.type: Appearance.animation.elementDecel.type
+                }
+            }
+        }
     }
 
 
@@ -76,6 +111,15 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
+
+        Behavior on x {
+            enabled: enableAnimation
+            NumberAnimation {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
+
         ColumnLayout {
             id: notificationColumnLayout
             anchors.left: parent.left
