@@ -38,10 +38,6 @@ function guessMessageType(summary) {
     return 'chat';
 }
 
-function exists(widget) {
-    return widget !== null;
-}
-
 function processNotificationBody(body, appEntry) {
     // Only process Chrome/Chromium notifications
     if (appEntry?.toLowerCase().includes('chrome')) {
