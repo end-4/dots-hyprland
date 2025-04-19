@@ -94,7 +94,6 @@ Item {
                                 Item {
                                     Layout.fillWidth: true
                                 }
-                                // layoutDirection: Qt.RightToLeft
                                 TodoItemActionButton {
                                     Layout.fillWidth: false
                                     onClicked: {

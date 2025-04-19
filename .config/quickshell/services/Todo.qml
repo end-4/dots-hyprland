@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 
 import Quickshell;
 import Quickshell.Io;
-import Quickshell.Services.Pipewire;
 import Qt.labs.platform
 import QtQuick;
 
@@ -68,6 +67,7 @@ Singleton {
         onLoaded: {
             const fileContents = todoFileView.text()
             root.list = JSON.parse(fileContents)
+            console.log("[To Do] File loaded")
         }
         onLoadFailed: (error) => {
             if(error == FileViewError.FileNotFound) {

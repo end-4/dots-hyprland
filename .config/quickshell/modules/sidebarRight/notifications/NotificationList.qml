@@ -7,6 +7,50 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 
 Item {
+    id: root
+    property Component notifComponent: NotificationWidget {}
+    property list<NotificationWidget> notificationWidgetList: []
+
+    // Signal handlers to add/remove notifications
+    Connections {
+        target: Notifications
+        function onInitDone() {
+            // notificationRepeater.model = Notifications.list.slice().reverse()
+            Notifications.list.slice().reverse().forEach((notification) => {
+                const notif = root.notifComponent.createObject(columnLayout, { notificationObject: notification });
+                notificationWidgetList.push(notif)
+            })
+        }
+        function onNotify(notification) {
+            // notificationRepeater.model = [notification, ...notificationRepeater.model]
+            const notif = root.notifComponent.createObject(columnLayout, { notificationObject: notification });
+            notificationWidgetList.unshift(notif)
+
+            // Remove stuff from t he column, add back
+            for (let i = 0; i < notificationWidgetList.length; i++) {
+                if (notificationWidgetList[i].parent === columnLayout) {
+                    notificationWidgetList[i].parent = null;
+                }
+            }
+
+            // Add notification widgets to the column
+            for (let i = 0; i < notificationWidgetList.length; i++) {
+                if (notificationWidgetList[i].parent === null) {
+                    notificationWidgetList[i].parent = columnLayout;
+                }
+            }
+        }
+        function onDiscard(id) {
+            for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
+                const widget = notificationWidgetList[i];
+                if (widget && widget.notificationObject && widget.notificationObject.id === id) {
+                    widget.fancyDestroy();
+                    notificationWidgetList.splice(i, 1);
+                }
+            }
+        }
+    }
+
     Flickable { // Scrollable window
         id: flickable
         anchors.fill: parent
@@ -14,20 +58,12 @@ Item {
         clip: true
 
         ColumnLayout { // Scrollable window content
+            id: columnLayout
             anchors.left: parent.left
             anchors.right: parent.right
-            id: columnLayout
+            spacing: 0 // The widgets themselves have margins for spacing
 
-            Repeater {
-                model: Notifications.list
-
-                delegate: NotificationWidget {
-                    notificationObject: modelData
-                }
-
-            }
-
+            // Notifications are added by the above signal handlers
         }
-
     }
 }

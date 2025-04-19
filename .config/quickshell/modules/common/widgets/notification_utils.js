@@ -42,8 +42,8 @@ function guessMessageType(summary) {
 //         return messageTime.format(userOptions.time.dateFormat);
 // }
 
-const getFriendlyNotifTimeString = (timeObject) => {
-    const messageTime = timeObject;
+const getFriendlyNotifTimeString = (timestamp) => {
+    const messageTime = new Date(timestamp);
     const now = new Date();
     const oneMinuteAgo = new Date(now.getTime() - 60000);
 
