@@ -15,6 +15,8 @@ Button {
     leftPadding: 10
     rightPadding: 10
 
+    PointingHandInteraction {}
+
     background: Rectangle {
         radius: Appearance.rounding.small
         color: (urgency == NotificationUrgency.Critical) ? 
