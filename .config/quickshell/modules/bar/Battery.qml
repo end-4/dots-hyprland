@@ -71,7 +71,7 @@ Rectangle {
         text: "bolt"
         font.pixelSize: Appearance.font.pixelSize.large
         color: Appearance.m3colors.m3onSecondaryContainer
-        visible: opacity !== 0 // Only show when charging
+        visible: opacity > 0 // Only show when charging
         opacity: isCharging ? 1 : 0 // Keep opacity for visibility
 
         Behavior on opacity {

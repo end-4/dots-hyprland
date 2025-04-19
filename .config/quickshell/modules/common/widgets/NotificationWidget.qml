@@ -81,14 +81,19 @@ Item {
     Item {
         id: notificationBackgroundWrapper
 
-        anchors.fill: parent
-        implicitHeight: notificationColumnLayout.implicitHeight
+        // anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
         anchors.topMargin: notificationListSpacing
+        implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
 
         Rectangle {
             id: notificationBackground
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.bottom: parent.bottom
+            height: notificationColumnLayout.implicitHeight
 
             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                 Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
@@ -109,7 +114,7 @@ Item {
         id: notificationRowWrapper
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
 
         Behavior on x {

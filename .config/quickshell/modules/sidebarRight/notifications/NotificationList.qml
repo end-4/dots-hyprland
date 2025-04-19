@@ -81,7 +81,16 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: `${notificationWidgetList.length} Notifications`
+            text: `${notificationWidgetList.length} notification${notificationWidgetList.length > 1 ? "s" : ""}`
+
+            opacity: notificationWidgetList.length > 0 ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementDecel.duration
+                    easing.type: Appearance.animation.elementDecel.type
+                }
+            }
         }
     }
 }

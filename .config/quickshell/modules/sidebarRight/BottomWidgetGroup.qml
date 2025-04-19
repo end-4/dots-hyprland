@@ -65,7 +65,7 @@ Rectangle {
     // The thing when collapsed
     RowLayout {
         id: collapsedBottomWidgetGroupRow
-        visible: opacity != 0
+        visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
                 duration: Appearance.animation.elementDecel.duration / 2
@@ -104,7 +104,7 @@ Rectangle {
     RowLayout {
         id: bottomWidgetGroupRow
 
-        visible: opacity != 0
+        visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
                 duration: Appearance.animation.elementDecel.duration / 2
