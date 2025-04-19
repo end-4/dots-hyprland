@@ -19,8 +19,7 @@ Item {
     Layout.fillWidth: true
     clip: true
 
-    // implicitHeight: notificationRowLayout.implicitHeight
-    implicitHeight: ready ? notificationRowLayout.implicitHeight + notificationListSpacing : 0
+    implicitHeight: ready ? notificationColumnLayout.implicitHeight + notificationListSpacing : 0
     Behavior on implicitHeight {
         enabled: enableAnimation
         NumberAnimation {
@@ -75,175 +74,186 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        implicitHeight: notificationRowLayout.implicitHeight + notificationListSpacing
-        RowLayout {
-            id: notificationRowLayout
-
+        implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
+        ColumnLayout {
+            id: notificationColumnLayout
             anchors.left: parent.left
             anchors.right: parent.right
-            // anchors.top: parent.top
             anchors.bottom: parent.bottom
-            Rectangle { // App icon
-                id: iconRectangle
-                implicitWidth: 47
-                implicitHeight: 47
-                Layout.leftMargin: 10
-                Layout.topMargin: 10
-                Layout.bottomMargin: 10
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: false
-                radius: Appearance.rounding.full
-                color: Appearance.m3colors.m3secondaryContainer
-                MaterialSymbol {
-                    visible: notificationObject.appIcon == ""
-                    text: (notificationObject.urgency == NotificationUrgency.Critical) ? "release_alert" : 
-                        NotificationUtils.guessMessageType(notificationObject.summary)
-                    anchors.fill: parent
-                    color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                        Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
-                        Appearance.m3colors.m3onSecondaryContainer
-                    font.pixelSize: 27
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                IconImage {
-                    visible: notificationObject.appIcon != ""
-                    anchors.centerIn: parent
-                    implicitSize: 33
-                    asynchronous: true
-                    source: Quickshell.iconPath(notificationObject.appIcon)
-                }
-            }
-            ColumnLayout { // Notification content
-                spacing: 0
-                Layout.fillWidth: true
+            RowLayout {
+                id: notificationRowLayout
 
-                RowLayout { // Row of summary, time and expand button
-                    Layout.topMargin: 10
+                Layout.fillWidth: true                    
+
+                Rectangle { // App icon
+                    id: iconRectangle
+                    implicitWidth: 47
+                    implicitHeight: 47
                     Layout.leftMargin: 10
-                    Layout.rightMargin: 10
+                    Layout.topMargin: 10
+                    Layout.bottomMargin: 10
+                    Layout.alignment: Qt.AlignTop
+                    Layout.fillWidth: false
+                    radius: Appearance.rounding.full
+                    color: Appearance.m3colors.m3secondaryContainer
+                    MaterialSymbol {
+                        visible: notificationObject.appIcon == ""
+                        text: (notificationObject.urgency == NotificationUrgency.Critical) ? "release_alert" : 
+                            NotificationUtils.guessMessageType(notificationObject.summary)
+                        anchors.fill: parent
+                        color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                            Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
+                            Appearance.m3colors.m3onSecondaryContainer
+                        font.pixelSize: 27
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    IconImage {
+                        visible: notificationObject.appIcon != ""
+                        anchors.centerIn: parent
+                        implicitSize: 33
+                        asynchronous: true
+                        source: Quickshell.iconPath(notificationObject.appIcon)
+                    }
+                }
+                ColumnLayout { // Notification content
+                    spacing: 0
                     Layout.fillWidth: true
 
-                    StyledText { // Summary
+                    RowLayout { // Row of summary, time and expand button
+                        Layout.topMargin: 10
+                        Layout.leftMargin: 10
+                        Layout.rightMargin: 10
                         Layout.fillWidth: true
-                        horizontalAlignment: Text.AlignLeft
-                        font.pixelSize: Appearance.font.pixelSize.normal
-                        color: Appearance.colors.colOnLayer2
-                        text: notificationObject.summary
-                        wrapMode: expanded ? Text.Wrap : Text.NoWrap
-                        elide: Text.ElideRight
-                    }
 
-                    Item { Layout.fillWidth: true }
-
-                    StyledText { // Time
-                        id: notificationTimeText
-                        Layout.fillWidth: false
-                        wrapMode: Text.Wrap
-                        horizontalAlignment: Text.AlignLeft
-                        font.pixelSize: Appearance.font.pixelSize.smaller
-                        color: Appearance.m3colors.m3outline
-                        text: NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
-
-                        Connections {
-                            target: DateTime
-                            function onTimeChanged() {
-                                notificationTimeText.text = NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
-                            }
-                        }
-                    }
-
-                    Button { // Expand button
-                        Layout.alignment: Qt.AlignVCenter
-                        id: expandButton
-                        implicitWidth: 22
-                        implicitHeight: 22
-
-                        PointingHandInteraction{}
-                        onClicked: {
-                            root.enableAnimation = true
-                            root.expanded = !root.expanded
-                        }
-
-                        background: Rectangle {
-                            anchors.fill: parent
-                            radius: Appearance.rounding.full
-                            color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : Appearance.transparentize(Appearance.colors.colLayer2, 1))
-
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: Appearance.animation.elementDecel.duration
-                                    easing.type: Appearance.animation.elementDecel.type
-                                }
-
-                            }
-
-                        }
-
-                        contentItem: MaterialSymbol {
-                            anchors.centerIn: parent
-                            text: expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        StyledText { // Summary
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignLeft
                             font.pixelSize: Appearance.font.pixelSize.normal
                             color: Appearance.colors.colOnLayer2
+                            text: notificationObject.summary
+                            wrapMode: expanded ? Text.Wrap : Text.NoWrap
+                            elide: Text.ElideRight
                         }
 
-                    }
-                }
+                        Item { Layout.fillWidth: true }
 
-                StyledText { // Notification body
-                    Layout.fillWidth: true
-                    Layout.leftMargin: 10
-                    Layout.rightMargin: 10
-                    Layout.bottomMargin: 10
-                    clip: true
+                        StyledText { // Time
+                            id: notificationTimeText
+                            Layout.fillWidth: false
+                            wrapMode: Text.Wrap
+                            horizontalAlignment: Text.AlignLeft
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3outline
+                            text: NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
 
-                    wrapMode: expanded ? Text.Wrap : Text.NoWrap
-                    elide: Text.ElideRight
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    horizontalAlignment: Text.AlignLeft
-                    color: Appearance.m3colors.m3outline
-                    // textFormat: Text.MarkdownText
-                    text: notificationObject.body
-                }
-
-                Flickable {
-                    Layout.fillWidth: true
-                    Layout.topMargin: -5
-                    Layout.leftMargin: 10
-                    Layout.rightMargin: 10
-                    Layout.bottomMargin: 10
-                    visible: expanded
-                    implicitHeight: actionRowLayout.implicitHeight
-                    contentWidth: actionRowLayout.implicitWidth
-
-                    RowLayout { // Actions
-                        id: actionRowLayout
-
-                        Repeater {
-                            id: actionRepeater
-                            model: notificationObject.actions
-                            NotificationActionButton {
-                                Layout.fillWidth: true
-                                buttonText: modelData.text
-                                urgency: notificationObject.urgency
-                                onClicked: {
-                                    Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
+                            Connections {
+                                target: DateTime
+                                function onTimeChanged() {
+                                    notificationTimeText.text = NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
                                 }
                             }
                         }
 
+                        Button { // Expand button
+                            Layout.alignment: Qt.AlignVCenter
+                            id: expandButton
+                            implicitWidth: 22
+                            implicitHeight: 22
+
+                            PointingHandInteraction{}
+                            onClicked: {
+                                root.enableAnimation = true
+                                root.expanded = !root.expanded
+                            }
+
+                            background: Rectangle {
+                                anchors.fill: parent
+                                radius: Appearance.rounding.full
+                                color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : Appearance.transparentize(Appearance.colors.colLayer2, 1))
+
+                                Behavior on color {
+                                    ColorAnimation {
+                                        duration: Appearance.animation.elementDecel.duration
+                                        easing.type: Appearance.animation.elementDecel.type
+                                    }
+
+                                }
+
+                            }
+
+                            contentItem: MaterialSymbol {
+                                anchors.centerIn: parent
+                                text: expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                font.pixelSize: Appearance.font.pixelSize.normal
+                                color: Appearance.colors.colOnLayer2
+                            }
+
+                        }
+                    }
+
+                    StyledText { // Notification body
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 10
+                        Layout.rightMargin: 10
+                        Layout.bottomMargin: 10
+                        clip: true
+
+                        wrapMode: expanded ? Text.Wrap : Text.NoWrap
+                        elide: Text.ElideRight
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        horizontalAlignment: Text.AlignLeft
+                        color: Appearance.m3colors.m3outline
+                        // textFormat: Text.MarkdownText
+                        text: notificationObject.body
+                    }
+                }
+            }
+
+
+            // Actions
+            Flickable {
+                id: actionsFlickable
+                Layout.fillWidth: true
+                Layout.topMargin: -5
+                Layout.leftMargin: 10
+                Layout.rightMargin: 10
+                Layout.bottomMargin: 10
+                implicitHeight: actionRowLayout.implicitHeight
+                contentWidth: actionRowLayout.implicitWidth
+                clip: true
+
+                visible: expanded
+
+                RowLayout {
+                    id: actionRowLayout
+
+                    Repeater {
+                        id: actionRepeater
+                        model: notificationObject.actions
                         NotificationActionButton {
                             Layout.fillWidth: true
-                            buttonText: "Close"
+                            buttonText: modelData.text
                             urgency: notificationObject.urgency
                             onClicked: {
-                                Notifications.discardNotification(notificationObject.id);
+                                Notifications.attemptInvokeAction(notificationObject.id, modelData.identifier);
                             }
                         }
-                        
                     }
+
+                    NotificationActionButton {
+                        Layout.fillWidth: true
+                        buttonText: "Close"
+                        urgency: notificationObject.urgency
+                        implicitWidth: (notificationObject.actions.length == 0) ? (actionsFlickable.width) : 
+                            (contentItem.implicitWidth + leftPadding + rightPadding)
+                        onClicked: {
+                            Notifications.discardNotification(notificationObject.id);
+                        }
+                    }
+                    
                 }
             }
         }
