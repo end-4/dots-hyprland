@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/services"
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -109,11 +110,49 @@ Item {
                         verticalAlignment: Text.AlignVCenter
                     }
                     IconImage {
-                        visible: notificationObject.appIcon != ""
+                        visible: notificationObject.image == "" && notificationObject.appIcon != ""
                         anchors.centerIn: parent
                         implicitSize: 33
                         asynchronous: true
                         source: Quickshell.iconPath(notificationObject.appIcon)
+                    }
+                    Item {
+                        anchors.fill: parent
+                        visible: notificationObject.image != ""
+                        Image {
+                            id: notifImage
+
+                            anchors.fill: parent
+                            readonly property int size: parent.width
+
+                            source: notificationObject?.image
+                            fillMode: Image.PreserveAspectCrop
+                            cache: false
+                            antialiasing: true
+                            asynchronous: true
+
+                            width: size
+                            height: size
+                            sourceSize.width: size
+                            sourceSize.height: size
+
+                            layer.enabled: true
+                            layer.effect: OpacityMask {
+                                maskSource: Rectangle {
+                                    width: notifImage.size
+                                    height: notifImage.size
+                                    radius: Appearance.rounding.full
+                                }
+                            }
+                        }
+                        IconImage {
+                            visible: notificationObject.appIcon != ""
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            implicitSize: 23
+                            asynchronous: true
+                            source: Quickshell.iconPath(notificationObject.appIcon)
+                        }
                     }
                 }
                 ColumnLayout { // Notification content
@@ -211,7 +250,6 @@ Item {
                     }
                 }
             }
-
 
             // Actions
             Flickable {

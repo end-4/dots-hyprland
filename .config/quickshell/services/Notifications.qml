@@ -24,8 +24,8 @@ Singleton {
         // bodyImagesSupported: true
         bodyMarkupSupported: true
         bodySupported: true
-        // imageSupported: true
-        keepOnReload: false // I can't figure out RetainableLock, using a custom solution with a json file instead
+        imageSupported: true
+        keepOnReload: false
         persistenceSupported: true
 
         onNotification: (notification) => {
@@ -41,6 +41,7 @@ Singleton {
                 "appIcon": notification.appIcon,
                 "appName": notification.appName,
                 "body": notification.body,
+                "image": notification.image,
                 "summary": notification.summary,
                 "time": Date.now(),
                 "urgency": notification.urgency.toString(),
