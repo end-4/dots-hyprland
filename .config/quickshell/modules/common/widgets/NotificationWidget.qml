@@ -125,6 +125,7 @@ Item {
         onDragStartedChanged: () => {
             // Prevent drag focus being shifted to parent flickable
             root.parent.parent.parent.interactive = !dragStarted
+            root.enableAnimation = !dragStarted
         }
         onReleased: (mouse) => {
             dragStarted = false
