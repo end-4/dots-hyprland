@@ -24,7 +24,7 @@ Singleton {
         // actionIconsSupported: true
         actionsSupported: true
         bodyHyperlinksSupported: true
-        // bodyImagesSupported: true
+        bodyImagesSupported: true
         bodyMarkupSupported: true
         bodySupported: true
         imageSupported: true

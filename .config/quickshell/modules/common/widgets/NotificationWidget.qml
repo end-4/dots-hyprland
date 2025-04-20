@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Services.Notifications
 import "./notification_utils.js" as NotificationUtils
@@ -19,6 +20,11 @@ Item {
 
     Layout.fillWidth: true
     clip: true
+
+    Process {
+        id: closeSidebarProcess
+        command: ["bash", "-c", `qs ipc call sidebarRight close`]
+    }
 
     implicitHeight: ready ? notificationColumnLayout.implicitHeight + notificationListSpacing : 0
     Behavior on implicitHeight {
@@ -96,7 +102,7 @@ Item {
         // Flick right to dismiss
         property real startX: 0
         property real dragStartThreshold: 10
-        property real dragConfirmThresholdRatio: 0.2
+        property real dragConfirmThreshold: 70
         property bool dragStarted: false
 
         onPressed: (mouse) => {
@@ -111,7 +117,7 @@ Item {
         onReleased: (mouse) => {
             dragStarted = false
             if (mouse.button === Qt.LeftButton) {
-                if (notificationRowWrapper.x > width * dragConfirmThresholdRatio) {
+                if (notificationRowWrapper.x > dragConfirmThreshold) {
                     Notifications.discardNotification(notificationObject.id);
                 } else {
                     // Animate back if not far enough
@@ -376,6 +382,7 @@ Item {
                         }
 
                         StyledText { // Notification body
+                            id: notificationBodyText
                             Layout.fillWidth: true
                             Layout.leftMargin: 10
                             Layout.rightMargin: 10
@@ -387,8 +394,21 @@ Item {
                             font.pixelSize: Appearance.font.pixelSize.small
                             horizontalAlignment: Text.AlignLeft
                             color: Appearance.m3colors.m3outline
-                            // textFormat: Text.MarkdownText
-                            text: expanded ? notificationObject.body : notificationObject.body.split("\n")[0]
+                            textFormat: expanded ? Text.RichText : Text.StyledText
+                            text: expanded 
+                                ? `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                                  `${notificationObject.body.replace(/\n/g, "<br/>")}` 
+                                : notificationObject.body.replace(/<img/g, "\n <img").split("\n")[0]
+                            onLinkActivated: {
+                                Qt.openUrlExternally(link)
+                                closeSidebarProcess.running = true
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                acceptedButtons: Qt.NoButton // Only for hover
+                                hoverEnabled: true
+                                cursorShape: notificationBodyText.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            }
                         }
                     }
                 }
