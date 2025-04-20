@@ -29,7 +29,7 @@ Rectangle {
         Resource {
             iconName: "swap_horiz"
             percentage: ResourceUsage.swapUsedPercentage
-            shown: ConfigOptions.bar.resources.alwaysShowSwap || (MprisController.activePlayer?.trackTitle == null)
+            shown: (ConfigOptions.bar.resources.alwaysShowSwap && percentage > 0) || (MprisController.activePlayer?.trackTitle == null)
             Layout.leftMargin: shown ? 4 : 0
         }
 
