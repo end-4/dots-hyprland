@@ -17,6 +17,17 @@ Rectangle {
     property int currentTab: 0
     property var tabButtonList: [{"icon": "notifications", "name": "Notifications"}, {"icon": "volume_up", "name": "Volume mixer"}]
 
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) {
+            if (event.key === Qt.Key_PageDown) {
+                root.currentTab = Math.min(root.currentTab + 1, root.tabButtonList.length - 1)
+            } else if (event.key === Qt.Key_PageUp) {
+                root.currentTab = Math.max(root.currentTab - 1, 0)
+            }
+            event.accepted = true;
+        }
+    }
+
     ColumnLayout {
         anchors.margins: 5
         anchors.fill: parent

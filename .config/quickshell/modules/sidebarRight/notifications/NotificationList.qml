@@ -79,8 +79,8 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.menuDecel.duration
+                easing.type: Appearance.animation.menuDecel.type
             }
         }
 
@@ -130,6 +130,8 @@ Item {
         Item { Layout.fillWidth: true }
 
         NotificationStatusButton {
+            Layout.alignment: Qt.AlignVCenter
+            Layout.topMargin: 5
             buttonIcon: "clear_all"
             buttonText: "Clear"
             onClicked: () => {

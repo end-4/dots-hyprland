@@ -75,7 +75,6 @@ Scope {
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
 
-                focus: true
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
@@ -141,6 +140,7 @@ Scope {
 
                     // Center widget group
                     CenterWidgetGroup {
+                        focus: sidebarRoot.visible
                         Layout.alignment: Qt.AlignHCenter
                         Layout.fillHeight: true
                         Layout.fillWidth: true
