@@ -310,16 +310,6 @@ Item {
                                 elide: Text.ElideRight
                             }
 
-                            // StyledText { // dot
-                            //     id: notificationDot
-                            //     Layout.fillWidth: false
-                            //     wrapMode: Text.Wrap
-                            //     horizontalAlignment: Text.AlignLeft
-                            //     font.pixelSize: Appearance.font.pixelSize.smaller
-                            //     color: Appearance.m3colors.m3outline
-                            //     text: NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
-                            // }
-
                             StyledText { // Time
                                 id: notificationTimeText
                                 Layout.fillWidth: false
@@ -338,8 +328,6 @@ Item {
                                     }
                                 }
                             }
-
-                            Item { Layout.fillWidth: true }
 
                             Button { // Expand button
                                 Layout.alignment: Qt.AlignTop
