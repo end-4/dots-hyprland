@@ -127,10 +127,10 @@ Singleton {
         property color colPrimaryContainerActive: mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
         property color colSecondaryHover: mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: mix(m3colors.m3secondary, colLayer1Active, 0.4)
-        property color colSecondaryContainerHover: mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.67)
-        property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.6)
-        property color colSurfaceContainerHighestHover: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.9)
-        property color colSurfaceContainerHighestActive: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.82)
+        property color colSecondaryContainerHover: mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)
+        property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
+        property color colSurfaceContainerHighestHover: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
+        property color colSurfaceContainerHighestActive: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.85)
         property color colTooltip: m3colors.m3inverseSurface
         property color colOnTooltip: m3colors.m3inverseOnSurface
         property color colScrim: transparentize(m3colors.m3scrim, 0.5)

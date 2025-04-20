@@ -26,6 +26,11 @@ Item {
         command: ["bash", "-c", `qs ipc call sidebarRight close`]
     }
 
+    Process {
+        id: copyNotificationBody
+        command: ["bash", "-c", `wl-copy "${notificationObject.body}"`]
+    }
+
     implicitHeight: ready ? notificationColumnLayout.implicitHeight + notificationListSpacing : 0
     Behavior on implicitHeight {
         enabled: enableAnimation
@@ -108,6 +113,13 @@ Item {
         onPressed: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
                 startX = mouse.x
+            }
+        }
+        onPressAndHold: (mouse) => {
+            if (mouse.button === Qt.LeftButton) {
+                copyNotificationBody.running = true
+                notificationSummaryText.text = `${notificationObject.summary} (copied)`
+                console.log(notificationSummaryText.text)
             }
         }
         onDragStartedChanged: () => {
@@ -306,6 +318,7 @@ Item {
                             Layout.fillWidth: true
 
                             StyledText { // Summary
+                                id: notificationSummaryText
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignBottom
@@ -475,12 +488,53 @@ Item {
 
                     NotificationActionButton {
                         Layout.fillWidth: true
+                        urgency: notificationObject.urgency
+                        implicitWidth: (notificationObject.actions.length == 0) ? (actionsFlickable.width / 2) : 
+                            (contentItem.implicitWidth + leftPadding + rightPadding)
+
+                        onClicked: {
+                            copyNotificationBody.running = true
+                            copyIcon.text = "inventory"
+                            copyIconTimer.stop()
+                            copyIconTimer.start()
+                        }
+
+                        Timer {
+                            id: copyIconTimer
+                            interval: 1500
+                            repeat: false
+                            onTriggered: {
+                                copyIcon.text = "content_copy"
+                            }
+                        }
+
+                        contentItem: MaterialSymbol {
+                            id: copyIcon
+                            font.pixelSize: Appearance.font.pixelSize.large
+                            horizontalAlignment: Text.AlignHCenter
+                            color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
+                            text: "content_copy"
+                        }
+                    }
+
+                    NotificationActionButton {
+                        Layout.fillWidth: true
                         buttonText: "Close"
                         urgency: notificationObject.urgency
-                        implicitWidth: (notificationObject.actions.length == 0) ? (actionsFlickable.width) : 
+                        implicitWidth: (notificationObject.actions.length == 0) ? (actionsFlickable.width / 2) : 
                             (contentItem.implicitWidth + leftPadding + rightPadding)
+
                         onClicked: {
                             Notifications.discardNotification(notificationObject.id);
+                        }
+
+                        contentItem: MaterialSymbol {
+                            font.pixelSize: Appearance.font.pixelSize.large
+                            horizontalAlignment: Text.AlignHCenter
+                            color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
+                            text: "close"
                         }
                     }
                     
