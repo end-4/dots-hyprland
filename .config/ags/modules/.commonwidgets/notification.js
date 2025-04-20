@@ -8,21 +8,34 @@ import { setupCursorHover } from "../.widgetutils/cursorhover.js";
 import { AnimatedCircProg } from "./cairo_circularprogress.js";
 
 function guessMessageType(summary) {
-    const str = summary.toLowerCase();
-    if (str.includes('reboot')) return 'restart_alt';
-    if (str.includes('recording')) return 'screen_record';
-    if (str.includes('battery') || summary.includes('power')) return 'power';
-    if (str.includes('screenshot')) return 'screenshot_monitor';
-    if (str.includes('welcome')) return 'waving_hand';
-    if (str.includes('time')) return 'scheduleb';
-    if (str.includes('installed')) return 'download';
-    if (str.includes('update')) return 'update';
-    if (str.startsWith('file')) return 'folder_copy';
-    return 'chat';
-}
+    const keywordsToTypes = {
+        'reboot': 'restart_alt',
+        'recording': 'screen_record',
+        'battery': 'power',
+        'power': 'power',
+        'screenshot': 'screenshot_monitor',
+        'welcome': 'waving_hand',
+        'time': 'scheduleb',
+        'installed': 'download',
+        'update': 'update',
+        'ai response': 'neurology',
+        'startswith:file': 'folder_copy', // Declarative startsWith check
+    };
 
-function exists(widget) {
-    return widget !== null;
+    const lowerSummary = summary.toLowerCase();
+
+    for (const [keyword, type] of Object.entries(keywordsToTypes)) {
+        if (keyword.startsWith('startswith:')) {
+            const startsWithKeyword = keyword.replace('startswith:', '');
+            if (lowerSummary.startsWith(startsWithKeyword)) {
+                return type;
+            }
+        } else if (lowerSummary.includes(keyword)) {
+            return type;
+        }
+    }
+
+    return 'chat';
 }
 
 function processNotificationBody(body, appEntry) {
@@ -144,6 +157,12 @@ export default ({
         },
         onMiddleClick: (self) => {
             destroyWithAnims();
+        },
+        onSecondaryClick: (self) => {
+            expanded = !expanded;
+            notifTextPreview.revealChild = !expanded;
+            notifTextExpanded.revealChild = expanded;
+            notifExpandButton.child.label = `expand_${expanded ? 'less' : 'more'}`;
         },
         setup: (self) => {
             self.on("button-press-event", () => {
@@ -453,7 +472,7 @@ export default ({
                     }, wholeThing);
                 }
                 else {
-                    self.setCss(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+                    self.setCss(`transition: ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity ${userOptions.animations.durationSmall}ms cubic-bezier(0.05, 0.7, 0.1, 1);
                                    margin-left:  ${startMargin}px;
                                    margin-right: ${startMargin}px;
                                    margin-bottom: unset; margin-top: unset;
@@ -471,7 +490,7 @@ export default ({
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
     if (isPopup) Utils.timeout(popupTimeout, () => {
-        if (wholeThing) {
+        if (wholeThing && !wholeThing.attribute.hovered) {
             wholeThing.revealChild = false;
             Utils.timeout(userOptions.animations.durationSmall, () => {
                 if (wholeThing) {

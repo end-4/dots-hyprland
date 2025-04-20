@@ -4,6 +4,7 @@
 
 const monospaceFonts = 'JetBrains Mono NF, JetBrains Mono Nerd Font, JetBrains Mono NL, SpaceMono NF, SpaceMono Nerd Font, monospace';
 
+const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
 const replacements = {
     'indents': [
         { name: 'BULLET', re: /^(\s*)([\*\-]\s)(.*)(\s*)$/, sub: ' $1- $3' },
@@ -31,6 +32,11 @@ const replacements = {
         { name: 'INLCODE', re: /(`)([^`]*)(`)/g, sub: '<span font_weight="bold" font_family="' + monospaceFonts + '">$2</span>' },
         // { name: 'UND', re: /(__|\*\*)(\S[\s\S]*?\S)(__|\*\*)/g, sub: "<u>$2</u>" },
     ],
+    'forceLatex': [
+        { name: 'LATEX_INLINE_SQUARE', re: /\\\[(.*?)\\\]/g, sub: '\n```latex\n$1\n```' },
+        { name: 'LATEX_INLINE_ROUND', re: /\\\((.*?)\\\)/g, sub: '\n```latex\n$1\n```' },
+        { name: 'LATEX_INLINE_DOLLAR', re: /\$(.*?)\$/g, sub: '\n```latex\n$1\n```' }
+    ]
 }
 
 const replaceCategory = (text, replaces) => {
@@ -42,12 +48,22 @@ const replaceCategory = (text, replaces) => {
 
 // Main function
 
+export function replaceInlineLatexWithCodeBlocks(text) {
+    return text.replace(/\\\[(.*?)\\\]|\\\((.*?)\\\)|\$\$(.*?)\$\$|(?:^|[^\w])\$(.*?[^\\])\$(?!\w)/gs, (match, square, round, double, single) => {
+        const latex = square || round || double || single;
+        return `\n\`\`\`latex\n${latex}\n\`\`\`\n`;
+    });
+}
+
 export default (text) => {
     let lines = text.split('\n')
     let output = [];
+    let inCode = false;
     // Replace
     for (const line of lines) {
         let result = line;
+        if (codeBlockRegex.test(line)) inCode = !inCode;
+        if (inCode) continue;
         result = replaceCategory(result, replacements.indents);
         result = replaceCategory(result, replacements.escapes);
         result = replaceCategory(result, replacements.sections);
@@ -68,10 +84,14 @@ export const markdownTest = `## Inline formatting
 ## Code block
 \`\`\`cpp
 #include <bits/stdc++.h>
-const std::string GREETING="UwU";
-int main() { std::cout << GREETING; }
+const std::string GREETING = "UwU";
+int main(int argc, char* argv[]) {
+    std::cout << GREETING; 
+}
 \`\`\`
 ## LaTeX
+- Inline LaTeX: \\[ \\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} \\]
+- Block LaTeX:
 \`\`\`latex
 \\frac{d}{dx} \\left( \\frac{x-438}{x^2+23x-7} \\right) = \\frac{-x^2 + 869}{(x^2+23x-7)^2} \\\\ → \\\\ cos(2x) = 2cos^2(x) - 1 = 1 - 2sin^2(x) = cos^2(x) - sin^2(x)
 \`\`\`

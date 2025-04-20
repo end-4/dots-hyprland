@@ -1,7 +1,8 @@
 // Common colors
 $hovercolor: $surfaceContainerHigh;
 $activecolor: $surfaceContainerHighest;
-$rounding_verysmall: 0.477rem;
+$rounding_unsharpen: 0.136rem;
+$rounding_verysmall: 0.545rem;
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
 $rounding_medium: 1.159rem;
@@ -9,6 +10,15 @@ $rounding_mediumlarge: 1.364rem;
 $rounding_large: 1.705rem;
 
 // Common rules
+@mixin unsharpen-rounding {
+    border-radius: $rounding_unsharpen;
+}
+
+@mixin verysmall-rounding {
+    border-radius: $rounding_verysmall;
+    -gtk-outline-radius: $rounding_verysmall;
+}
+
 @mixin small-rounding {
     border-radius: $rounding_small;
     -gtk-outline-radius: $rounding_small;
@@ -40,7 +50,7 @@ $rounding_large: 1.705rem;
 
 @mixin mainfont {
     // Other clean sans-serif
-    font-family: "Rubik", "Geist", "AR One Sans", "Reddit Sans", "Inter",
+    font-family: "Rubik", "Adwaita Sans", "42dotSans", "Geist", "AR One Sans", "Reddit Sans", "Inter",
         "Roboto", "Ubuntu", "Noto Sans", sans-serif;
     // font-weight: 500;
 }

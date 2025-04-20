@@ -1,38 +1,17 @@
-const { Gdk, Gio, GLib, Gtk } = imports.gi;
+const { GLib, Gtk } = imports.gi;
 import GtkSource from "gi://GtkSource?version=3.0";
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { Box, Button, Label, Icon, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Icon, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
-import md2pango from '../../.miscutils/md2pango.js';
+import md2pango, { replaceInlineLatexWithCodeBlocks } from '../../.miscutils/md2pango.js';
 import { darkMode } from "../../.miscutils/system.js";
+import { setupCursorHover } from "../../.widgetutils/cursorhover.js";
 
 const LATEX_DIR = `${GLib.get_user_cache_dir()}/ags/media/latex`;
-const CUSTOM_SOURCEVIEW_SCHEME_PATH = `${App.configDir}/assets/themes/sourceviewtheme${darkMode.value ? '' : '-light'}.xml`;
-const CUSTOM_SCHEME_ID = `custom${darkMode.value ? '' : '-light'}`;
 const USERNAME = GLib.get_user_name();
-
-/////////////////////// Custom source view colorscheme /////////////////////////
-
-function loadCustomColorScheme(filePath) {
-    // Read the XML file content
-    const file = Gio.File.new_for_path(filePath);
-    const [success, contents] = file.load_contents(null);
-
-    if (!success) {
-        logError('Failed to load the XML file.');
-        return;
-    }
-
-    // Parse the XML content and set the Style Scheme
-    const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    schemeManager.append_search_path(file.get_parent().get_path());
-}
-loadCustomColorScheme(CUSTOM_SOURCEVIEW_SCHEME_PATH);
-
-//////////////////////////////////////////////////////////////////////////////
 
 function substituteLang(str) {
     const subs = [
@@ -49,7 +28,12 @@ const HighlightedCode = (content, lang) => {
     const buffer = new GtkSource.Buffer();
     const sourceView = new GtkSource.View({
         buffer: buffer,
-        wrap_mode: Gtk.WrapMode.NONE
+        wrap_mode: Gtk.WrapMode.NONE,
+        insertSpacesInsteadOfTabs: true,
+        indentWidth: 4,
+        tabWidth: 4,
+        smartHomeEnd: true,
+        smartBackspace: true,
     });
     const langManager = GtkSource.LanguageManager.get_default();
     let displayLang = langManager.get_language(substituteLang(lang)); // Set your preferred language
@@ -57,31 +41,122 @@ const HighlightedCode = (content, lang) => {
         buffer.set_language(displayLang);
     }
     const schemeManager = GtkSource.StyleSchemeManager.get_default();
-    buffer.set_style_scheme(schemeManager.get_scheme(CUSTOM_SCHEME_ID));
+    buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
     buffer.set_text(content, -1);
     return sourceView;
 }
 
-const TextBlock = (content = '') => Label({
-    hpack: 'fill',
-    className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
-    useMarkup: true,
-    xalign: 0,
-    wrap: true,
-    selectable: true,
-    label: content,
-});
+const TextBlock = (content = '') => {
+    const widget = Label({
+        attribute: {
+            'text': content,
+            'updateText': (text) => {
+                widget.attribute.text = text;
+                widget.label = md2pango(widget.attribute.text)
+            },
+            'appendText': (text) => {
+                widget.attribute.text += text;
+                widget.label = md2pango(widget.attribute.text)
+            },
+        },
+        hpack: 'fill',
+        className: 'txt sidebar-chat-txtblock sidebar-chat-txt',
+        useMarkup: true,
+        xalign: 0,
+        wrap: true,
+        selectable: true,
+        label: content,
+    });
+    return widget;
+}
+
+const ThinkBlock = (content = '', revealChild = true) => {
+    const revealThought = Variable(revealChild);
+    const mainText = Label({
+        hpack: 'fill',
+        className: `txt sidebar-chat-txtblock-think sidebar-chat-txt`,
+        useMarkup: true,
+        xalign: 0,
+        wrap: true,
+        selectable: true,
+        label: content,
+    });
+    const mainTextRevealer = Revealer({
+        transition: 'slide_down',
+        revealChild: revealThought.value,
+        child: mainText,
+        setup: (self) => self.hook(revealThought, (self) => {
+            self.revealChild = revealThought.value;
+        })
+    })
+    const expandIcon = MaterialIcon(revealThought.value ? 'expand_less' : 'expand_more', 'norm', {
+        setup: (self) => self.hook(revealThought, (self) => {
+            self.label = revealThought.value ? 'expand_less' : 'expand_more';
+        })
+    });
+    const widget = Box({
+        attribute: {
+            'text': content,
+            'updateText': (text) => {
+                widget.attribute.text = text;
+                mainText.label = md2pango(widget.attribute.text);
+            },
+            'appendText': (text) => {
+                widget.attribute.text += text;
+                mainText.label = md2pango(widget.attribute.text);
+            },
+            'done': () => {
+                revealThought.value = false;
+            }
+        },
+        className: 'sidebar-chat-thinkblock',
+        vertical: true,
+        children: [
+            Button({
+                onClicked: (self) => {
+                    revealThought.value = !revealThought.value;
+                },
+                child: Box({
+                    className: 'spacing-h-10 padding-10',
+                    children: [
+                        Box({
+                            homogeneous: true,
+                            valign: 'center',
+                            className: 'sidebar-chat-thinkblock-icon',
+                            children: [MaterialIcon('neurology', 'large')]
+                        }),
+                        Label({
+                            valign: 'center',
+                            hexpand: true,
+                            xalign: 0,
+                            label: 'Chain of Thought',
+                            className: 'txt sidebar-chat-thinkblock-txt',
+                        }),
+                        Box({
+                            className: 'sidebar-chat-thinkblock-btn-arrow',
+                            homogeneous: true,
+                            children: [expandIcon],
+                        }),
+                    ]
+                }),
+                setup: setupCursorHover,
+            }),
+            mainTextRevealer,
+        ]
+    });
+    return widget;
+}
 
 Utils.execAsync(['bash', '-c', `rm -rf ${LATEX_DIR}`])
     .then(() => Utils.execAsync(['bash', '-c', `mkdir -p ${LATEX_DIR}`]))
     .catch(print);
-const Latex = (content = '') => {
+const LatexBlock = (content = '') => {
     const latexViewArea = Box({
         // vscroll: 'never',
         // hscroll: 'automatic',
         // homogeneous: true,
         attribute: {
-            render: async (self, text) => {
+            'render': async (self, text) => {
                 if (text.length == 0) return;
                 const styleContext = self.get_style_context();
                 const fontSize = styleContext.get_property('font-size', Gtk.StateFlags.NORMAL);
@@ -124,9 +199,15 @@ sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#0000
         className: 'sidebar-chat-latex',
         homogeneous: true,
         attribute: {
+            'text': content,
             'updateText': (text) => {
-                latexViewArea.attribute.render(latexViewArea, text).catch(print);
-            }
+                wholeThing.attribute.text = text;
+                latexViewArea.attribute.render(latexViewArea, wholeThing.attribute.text).catch(print);
+            },
+            'appendText': (text) => {
+                wholeThing.attribute.text += text;
+                latexViewArea.attribute.render(latexViewArea, wholeThing.attribute.text).catch(print);
+            },
         },
         children: [Scrollable({
             vscroll: 'never',
@@ -139,7 +220,7 @@ sed -i 's/stroke="rgb(0%, 0%, 0%)"/stroke="${darkMode.value ? '#ffffff' : '#0000
 
 const CodeBlock = (content = '', lang = 'txt') => {
     if (lang == 'tex' || lang == 'latex') {
-        return Latex(content);
+        return LatexBlock(content);
     }
     const topBar = Box({
         className: 'sidebar-chat-codeblock-topbar',
@@ -176,8 +257,18 @@ const CodeBlock = (content = '', lang = 'txt') => {
     const codeBlock = Box({
         attribute: {
             'updateText': (text) => {
+                // Enable useful features for multi-line code
+                if (text.split('\n').length > 1) {
+                    sourceView.autoIndent = true;
+                    sourceView.highlightCurrentLine = true;
+                    sourceView.showLineNumbers = true;
+                    sourceView.showLineMarks = true;
+                }
                 sourceView.get_buffer().set_text(text, -1);
-            }
+            },
+            'appendText': (text) => {
+                codeBlock.attribute.updateText(sourceView.get_buffer().text + text);
+            },
         },
         className: 'sidebar-chat-codeblock',
         vertical: true,
@@ -192,7 +283,13 @@ const CodeBlock = (content = '', lang = 'txt') => {
                     child: sourceView,
                 })],
             })
-        ]
+        ],
+        setup: (self) => self.hook(darkMode, (self) => {
+            const schemeManager = GtkSource.StyleSchemeManager.get_default();
+            Utils.timeout(1000, () => { // Wait for the theme to be loaded
+                sourceView.buffer.set_style_scheme(schemeManager.get_scheme(`custom${darkMode.value ? '' : '-light'}`));
+            });
+        }, "changed"),
     })
 
     // const schemeIds = styleManager.get_scheme_ids();
@@ -212,58 +309,83 @@ const MessageContent = (content) => {
     const contentBox = Box({
         vertical: true,
         attribute: {
+            'lastUpdateTextLength': 0,
+            'inCode': false,
             'fullUpdate': (self, content, useCursor = false) => {
-                // Clear and add first text widget
-                const children = contentBox.get_children();
-                for (let i = 0; i < children.length; i++) {
-                    const child = children[i];
-                    child.destroy();
+                // First text widget
+                if (contentBox.attribute.lastUpdateTextLength === 0
+                    && contentBox.get_children().length === 0
+                ) {
+                    contentBox.add(TextBlock())
                 }
-                contentBox.add(TextBlock())
-                // Loop lines. Put normal text in markdown parser
-                // and put code into code highlighter (TODO)
-                let lines = content.split('\n');
+
+                const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
+                const thinkBlockStartRegex = /^\s*<think>/; // Start: <think>
+                const thinkBlockEndRegex = /<\/think>\s*$/; // End: </think>
+                const dividerRegex = /^\s*---/;
+                const newContent = content.slice(contentBox.attribute.lastUpdateTextLength);
+                // print("CONTENT:'" + content + "'")
+                // print("LAST UPDATE LENGTH:" + contentBox.attribute.lastUpdateTextLength)
+                // print("NEW CONTENT:" + newContent)
+                if (newContent.length == 0) return;
+                let lines = replaceInlineLatexWithCodeBlocks(newContent).split('\n');
+                // let lines = newContent.split('\n');
+
+                // Process each line except the last line (potentially incomplete)
                 let lastProcessed = 0;
-                let inCode = false;
-                for (const [index, line] of lines.entries()) {
+                for (let [index, line] of lines.entries()) {
+                    if (index == lines.length - 1) break;
                     // Code blocks
-                    const codeBlockRegex = /^\s*```([a-zA-Z0-9]+)?\n?/;
                     if (codeBlockRegex.test(line)) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        if (!inCode) {
-                            lastLabel.label = md2pango(blockContent);
+
+                        if (!contentBox.attribute.inCode) {
+                            lastLabel.attribute.appendText(blockContent);
+                            if (lastLabel.label === '') lastLabel.destroy();
                             contentBox.add(CodeBlock('', codeBlockRegex.exec(line)[1]));
                         }
                         else {
-                            lastLabel.attribute.updateText(blockContent);
+                            lastLabel.attribute.appendText(blockContent);
                             contentBox.add(TextBlock());
                         }
 
                         lastProcessed = index + 1;
-                        inCode = !inCode;
+                        contentBox.attribute.inCode = !contentBox.attribute.inCode;
                     }
-                    // Breaks
-                    const dividerRegex = /^\s*---/;
-                    if (!inCode && dividerRegex.test(line)) {
+                    // Think block
+                    if (!contentBox.attribute.inCode && (thinkBlockStartRegex.test(line) || thinkBlockEndRegex.test(line))) {
                         const kids = self.get_children();
                         const lastLabel = kids[kids.length - 1];
                         const blockContent = lines.slice(lastProcessed, index).join('\n');
-                        lastLabel.label = md2pango(blockContent);
+
+                        lastLabel.attribute.appendText(blockContent);
+                        if (lastLabel.label === '') lastLabel.destroy();
+                        if (thinkBlockStartRegex.test(line)) contentBox.add(ThinkBlock());
+                        else {
+                            lastLabel.attribute.done();
+                            contentBox.add(TextBlock());
+                        }
+
+                        lastProcessed = index + 1;
+                    }
+                    // Breaks
+                    if (!contentBox.attribute.inCode && dividerRegex.test(line)) {
+                        const kids = self.get_children();
+                        const lastLabel = kids[kids.length - 1];
+                        const blockContent = lines.slice(lastProcessed, index).join('\n');
+                        lastLabel.attribute.appendText(blockContent);
                         contentBox.add(Divider());
                         contentBox.add(TextBlock());
                         lastProcessed = index + 1;
                     }
                 }
-                if (lastProcessed < lines.length) {
+                if (lastProcessed < lines.length - 1) {
                     const kids = self.get_children();
                     const lastLabel = kids[kids.length - 1];
-                    let blockContent = lines.slice(lastProcessed, lines.length).join('\n');
-                    if (!inCode)
-                        lastLabel.label = `${md2pango(blockContent)}${useCursor ? userOptions.ai.writingCursor : ''}`;
-                    else
-                        lastLabel.attribute.updateText(blockContent);
+                    let blockContent = lines.slice(lastProcessed, lines.length - 1).join('\n') + '\n';
+                    lastLabel.attribute.appendText(blockContent);
                 }
                 // Debug: plain text
                 // contentBox.add(Label({
@@ -276,6 +398,7 @@ const MessageContent = (content) => {
                 //     label: '------------------------------\n' + md2pango(content),
                 // }))
                 contentBox.show_all();
+                contentBox.attribute.lastUpdateTextLength = content.length - lines[lines.length - 1].length;
             }
         }
     });
@@ -316,7 +439,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         className: `txt txt-bold sidebar-chat-name sidebar-chat-name-${message.role == 'user' ? 'user' : 'bot'}`,
                         wrap: true,
                         useMarkup: true,
-                        label: (message.role == 'user' ? USERNAME : modelName),
+                        label: (message.role === 'user' ? USERNAME : modelName),
                     }),
                     Box({
                         homogeneous: true,
@@ -332,7 +455,10 @@ export const ChatMessage = (message, modelName = 'Model') => {
                         messageContentBox.attribute.fullUpdate(messageContentBox, message.content, message.role != 'user');
                     }, 'notify::content')
                     .hook(message, (label, isDone) => { // Remove the cursor
-                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content, false);
+                        if (!isDone && message.role !== 'user') return;
+                        messageContentBox.attribute.fullUpdate(messageContentBox, message.content + '\n', false);
+                        // print('----------------')
+                        // print(message.content)
                     }, 'notify::done')
                 ,
             })
@@ -342,7 +468,7 @@ export const ChatMessage = (message, modelName = 'Model') => {
 }
 
 export const SystemMessage = (content, commandName, scrolledWindow) => {
-    const messageContentBox = MessageContent(content);
+    const messageContentBox = MessageContent(content + '\n'); // Add newline so everything is added
     const thisMessage = Box({
         className: 'sidebar-chat-message',
         children: [

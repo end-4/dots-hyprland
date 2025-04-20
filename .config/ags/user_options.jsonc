@@ -1,0 +1,19 @@
+// Options in this file override the defaults in:
+//     ~/.config/ags/modules/.configuration/default_options.jsonc
+//
+// vscode: ctrl+click this: file://./modules/.configuration/default_options.jsonc
+// vim : `:vsp` to split window, move cursor to the path, press `gf`. 
+//      `Ctrl-w` twice to switch between the files
+//
+// Limitations of this file:
+// * Only line comments (//) are allowed
+// * Comments are not allowed in or below the actual content
+//   (will be nuked with updates from the UI)
+//
+// 
+// Example: Put this to show 8 (instead of 10) workspaces on the bar
+// "workspaces": {"shown": 8 }
+//
+{
+    
+}

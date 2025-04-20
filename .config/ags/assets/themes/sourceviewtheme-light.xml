@@ -3,13 +3,13 @@
   <author>end_4</author>
   <_description>Catppuccin port but very random</_description>
 
-  <style name="bracket-match"  background="#E3E6EB" bold="true"/>
+  <style name="bracket-match"  background="#FDC2A6" foreground="#653D28" bold="true"/>
   <style name="bracket-mismatch"  background="#E3E6EB" underline="true"/>
   <style name="c:preprocessor" foreground="#DF8E1D"/>
   <style name="css:at-rules" foreground="#8839EF"/>
   <style name="css:color" foreground="#DF8E1D"/>
   <style name="css:keyword" foreground="#256BF5"/>
-  <style name="current-line"  background="#E3E6EB"/>
+  <style name="current-line"  background="#F9DCD8"/>
   <style name="cursor" foreground="#DC8A78"/>
   <style name="def:base-n-integer" foreground="#DF8E1D"/>
   <style name="def:boolean" foreground="#DF8E1D"/>

@@ -1,16 +1,16 @@
 pkgname=illogical-impulse-widgets
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
 depends=(
 	dart-sass
 	hypridle
- 	hyprutils
+ hyprutils
 	hyprlock
 	wlogout
 	wl-clipboard
 	hyprpicker
-	anyrun-git
+	nm-connection-editor
 )

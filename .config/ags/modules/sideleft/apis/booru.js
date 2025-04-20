@@ -8,9 +8,8 @@ import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
 import { setupCursorHover, setupCursorHoverInfo } from '../../.widgetutils/cursorhover.js';
 import BooruService from '../../../services/booru.js';
-import { chatEntry } from '../apiwidgets.js';
-import { ConfigToggle } from '../../.commonwidgets/configwidgets.js';
 import { SystemMessage } from './ai_chatmessage.js';
+import { AgsToggle } from '../../.commonwidgets/configwidgets_apps.js';
 
 const IMAGE_REVEAL_DELAY = 13; // Some wait for inits n other weird stuff
 const USER_CACHE_DIR = GLib.get_user_cache_dir();
@@ -19,10 +18,28 @@ const USER_CACHE_DIR = GLib.get_user_cache_dir();
 Utils.exec(`bash -c 'mkdir -p ${USER_CACHE_DIR}/ags/media/waifus'`);
 Utils.exec(`bash -c 'rm ${USER_CACHE_DIR}/ags/media/waifus/*'`);
 
-const TagButton = (command) => Button({
+function getDomainName(url) {
+    try {
+        const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/i);
+        if (!match) return null;
+
+        const domainParts = match[1].split('.');
+        if (domainParts.length > 2) {
+            // Return only the last two parts (e.g., "yande.re" from "files.yande.re")
+            return domainParts.slice(-2).join('.');
+        }
+        return match[1]; // Return as is if no subdomain
+    } catch (error) {
+        print(`Invalid URL: ${url}`);
+        return null;
+    }
+}
+
+const TagButton = (command, entry) => Button({
     className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-    onClicked: () => { chatEntry.buffer.text += `${command} ` },
-    setup: setupCursorHover,
+    // Interactions disabled for now because they aren't working
+    // onClicked: () => { entry.buffer.text += `${command} ` },
+    // setup: setupCursorHover,
     label: command,
 });
 
@@ -90,29 +107,20 @@ export const BooruSettings = () => MarginRevealer({
         children: [
             Box({
                 vertical: true,
-                hpack: 'fill',
+                hpack: 'center',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
-                    ConfigToggle({
+                    AgsToggle({
                         icon: 'menstrual_health',
                         name: getString('Lewds'),
-                        desc: getString("Shows naughty stuff when enabled.\nYa like those? Add this to user_options.js:\n\t'sidebar': {\n\t'image': {\n\t\t'allowNsfw': true,\n\t}\n}"),
-                        initValue: BooruService.nsfw,
-                        onChange: (self, newValue) => {
+                        desc: getString("Shows naughty stuff when enabled"),
+                        option: 'sidebar.image.allowNsfw',
+                        extraOnChange: (self, newValue) => {
                             BooruService.nsfw = newValue;
                         },
                         extraSetup: (self) => self.hook(BooruService, (self) => {
                             self.attribute.enabled.value = BooruService.nsfw;
                         }, 'notify::nsfw')
-                    }),
-                    ConfigToggle({
-                        icon: 'sell',
-                        name: getString('Save in folder by tags'),
-                        desc: getString('Saves images in folders by their tags'),
-                        initValue: userOptions.sidebar.image.saveInFolderByTags,
-                        onChange: (self, newValue) => {
-                            userOptions.sidebar.image.saveInFolderByTags = newValue;
-                        },
                     }),
                 ]
             })
@@ -124,7 +132,7 @@ const booruWelcome = Box({
     vexpand: true,
     homogeneous: true,
     child: Box({
-        className: 'spacing-v-15',
+        className: 'spacing-v-15 margin-top-15 margin-bottom-15',
         vpack: 'center',
         vertical: true,
         children: [
@@ -163,12 +171,13 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
             attribute: {
                 'update': (self, data, force = false) => {
                     const imagePath = `${USER_CACHE_DIR}/ags/media/waifus/${data.md5}.${data.file_ext}`;
-                    const widgetStyleContext = imageArea.get_style_context();
-                    const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                    // const widgetStyleContext = imageArea.get_style_context();
+                    // const widgetWidth = widgetStyleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
+                    // const widgetWidth = Math.min(Math.floor(booruContent.get_allocated_width() * 0.9 / userOptions.sidebar.image.columns), data["preview_width"]);
+                    const widgetWidth = Math.floor(booruContent.get_allocated_width() * 0.9 / userOptions.sidebar.image.columns);
                     const widgetHeight = widgetWidth / data.aspect_ratio;
                     imageArea.set_size_request(widgetWidth, widgetHeight);
                     const showImage = () => {
-                        // const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, widgetWidth, widgetHeight);
                         const pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(imagePath, widgetWidth, widgetHeight, false);
                         imageArea.connect("draw", (widget, cr) => {
                             const borderRadius = widget.get_style_context().get_property('border-radius', Gtk.StateFlags.NORMAL);
@@ -212,12 +221,12 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                 children: [
                     Box({ hexpand: true }),
                     ImageAction({
-                        name: getString('Go to file url'),
+                        name: `${getString('Go to file url')} (${getDomainName(data.file_url)})`,
                         icon: 'file_open',
-                        action: () => execAsync(['xdg-open', `${data.file_url}`]).catch(print),
+                        action: () => execAsync(['xdg-open', `https://${getDomainName(data.file_url)}/post/show/${data.id}`]).catch(print),
                     }),
                     ImageAction({
-                        name: getString('Go to source'),
+                        name: `${getString('Go to source')} (${getDomainName(data.source)})`,
                         icon: 'open_in_new',
                         action: () => execAsync(['xdg-open', `${data.source}`]).catch(print),
                     }),
@@ -228,7 +237,7 @@ const BooruPage = (taglist, serviceName = 'Booru') => {
                             const currentTags = BooruService.queries.at(-1).realTagList.filter(tag => !tag.includes('rating:'));
                             const tagDirectory = currentTags.join('+');
                             const fileName = decodeURIComponent((data.file_url).substring((data.file_url).lastIndexOf('/') + 1));
-                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? tagDirectory : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${userOptions.sidebar.image.saveInFolderByTags ? (tagDirectory + '/') : ''}${fileName}" '${data.file_url}'`;
+                            const saveCommand = `mkdir -p "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}" && curl -L -o "$(xdg-user-dir PICTURES)/homework/${data.is_nsfw ? '🌶️/' : ''}${fileName}" '${data.file_url}'`;
                             print(saveCommand)
                             execAsync(['bash', '-c', saveCommand])
                                 .then(() => self.label = 'done')
@@ -453,7 +462,7 @@ const booruContent = Box({
     ,
 });
 
-export const booruView = Scrollable({
+export const BooruView = (chatEntry) => Scrollable({
     className: 'sidebar-chat-viewport',
     vexpand: true,
     child: Box({
@@ -482,31 +491,6 @@ export const booruView = Scrollable({
     }
 });
 
-const booruTags = Revealer({
-    revealChild: false,
-    transition: 'crossfade',
-    transitionDuration: userOptions.animations.durationLarge,
-    child: Box({
-        className: 'spacing-h-5',
-        children: [
-            Scrollable({
-                vscroll: 'never',
-                hscroll: 'automatic',
-                hexpand: true,
-                child: Box({
-                    className: 'spacing-h-5',
-                    children: [
-                        TagButton('hololive'),
-                        TagButton('yuri'),
-                        TagButton('thighhighs'),
-                    ]
-                })
-            }),
-            Box({ className: 'separator-line' }),
-        ]
-    })
-});
-
 export const booruCommands = Box({
     className: 'spacing-h-5',
     setup: (self) => {
@@ -514,15 +498,6 @@ export const booruCommands = Box({
         self.pack_end(CommandButton('+'), false, false, 0);
         self.pack_end(CommandButton('/mode konachan', 'Konachan'), false, false, 0);
         self.pack_end(CommandButton('/mode yandere', 'yande.re'), false, false, 0);
-        self.pack_start(Button({
-            className: 'sidebar-chat-chip-toggle',
-            setup: setupCursorHover,
-            label: getString('Tags →'),
-            onClicked: () => {
-                booruTags.revealChild = !booruTags.revealChild;
-            }
-        }), false, false, 0);
-        self.pack_start(booruTags, true, true, 0);
     }
 });
 
@@ -533,7 +508,7 @@ const clearChat = () => { // destroy!!
     });
 }
 
-export const sendMessage = (text) => {
+export const sendMessage = (text, booruView) => {
     // Commands
     if (text.startsWith('+')) { // Next page
         const lastQuery = BooruService.queries.at(-1);

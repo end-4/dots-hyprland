@@ -115,6 +115,24 @@ popover {
     padding: 0.205rem 0.341rem;
 }
 
+.configtoggle-reset {
+    @include small-rounding;
+    color: $onLayer2;
+    background-color: $layer2;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+}
+
+.configtoggle-reset:focus,
+.configtoggle-reset:hover {
+    background-color: $layer2Hover;
+}
+
+.configtoggle-reset:active {
+    background-color: $layer2Active;
+}
+
+
 .switch-bg {
     @include element_decel;
     @include full-rounding;
@@ -306,14 +324,57 @@ widget {
 
 .spinbutton {
     @include small-rounding;
+    color: $onLayer2;
     background-color: $layer2;
-    padding: 0.341rem;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+    caret-color: $onLayer2;
+
     entry {
         color: $onLayer2;
-        margin: 0.136rem 0.273rem;
+        margin: 0.477rem 0.614rem;
     }
+
     button {
-        margin-left: 0.205rem;
-        padding: 0.136rem;
+        @include unsharpen-rounding;
+        min-width: 2.045rem;
+        min-height: 2.045rem;
+        -gtk-outline-radius: $rounding_small;
     }
+
+    button.up {
+        // Only apply rounding to (+) button
+        border-top-right-radius: $rounding_small;
+        border-bottom-right-radius: $rounding_small;
+    }
+
+    // button:focus, // Looks weird after clicking cuz it'll highlight both + and -
+    button:hover {
+        background-color: $layer2Hover;
+    }
+
+    button:active {
+        background-color: $layer2Active;
+    }
+}
+
+.spinbutton-reset {
+    @include small-rounding;
+    color: $onLayer2;
+    background-color: $layer2;
+    min-width: 2.045rem;
+    min-height: 2.045rem;
+}
+
+.spinbutton-reset:focus,
+.spinbutton-reset:hover {
+    background-color: $layer2Hover;
+}
+
+.spinbutton-reset:active {
+    background-color: $layer2Active;
+}
+
+textview {
+    caret-color: $onBackground;
 }
