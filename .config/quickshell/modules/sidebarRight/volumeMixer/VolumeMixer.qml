@@ -15,6 +15,16 @@ Item {
         id: flickable
         anchors.fill: parent
         contentHeight: volumeMixerColumnLayout.height
+        
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: flickable.width
+                height: flickable.height
+                radius: Appearance.rounding.normal
+            }
+        }
+
         ColumnLayout {
             id: volumeMixerColumnLayout
             anchors.top: parent.top
