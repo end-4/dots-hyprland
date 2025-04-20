@@ -9,7 +9,7 @@ ToolTip {
     property bool extraVisibleCondition: true
     padding: 7
     
-    visible: (extraVisibleCondition && parent.hovered)
+    visible: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered))
 
     background: Rectangle {
         color: Appearance.colors.colTooltip

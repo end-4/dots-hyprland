@@ -2,8 +2,9 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
 import "./calendar"
-import "./todo"
 import "./notifications"
+import "./todo"
+import "./volumeMixer"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -125,7 +126,7 @@ Rectangle {
             }
 
             NotificationList {}
-            Item{}
+            VolumeMixer {}
         }
     }
 }
