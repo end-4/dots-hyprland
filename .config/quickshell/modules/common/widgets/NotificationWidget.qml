@@ -82,14 +82,59 @@ Item {
         }
     }
 
-    MouseArea { // Middle click to close
+    MouseArea {
+        // Middle click to close
         anchors.fill: parent
-        acceptedButtons: Qt.MiddleButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         onClicked: (mouse) => {
             if (mouse.button == Qt.MiddleButton) 
                 Notifications.discardNotification(notificationObject.id);
             else if (mouse.button == Qt.RightButton) 
                 root.toggleExpanded()
+        }
+
+        // Flick right to dismiss
+        property real startX: 0
+        property real dragStartThreshold: 10
+        property real dragConfirmThresholdRatio: 0.2
+        property bool dragStarted: false
+
+        onPressed: (mouse) => {
+            if (mouse.button === Qt.LeftButton) {
+                startX = mouse.x
+            }
+        }
+        onDragStartedChanged: () => {
+            // Prevent drag focus being shifted to parent flickable
+            root.parent.parent.parent.interactive = !dragStarted
+        }
+        onReleased: (mouse) => {
+            dragStarted = false
+            if (mouse.button === Qt.LeftButton) {
+                if (notificationRowWrapper.x > width * dragConfirmThresholdRatio) {
+                    Notifications.discardNotification(notificationObject.id);
+                } else {
+                    // Animate back if not far enough
+                    notificationRowWrapper.x = 0
+                    notificationBackground.x = 0
+                }
+            }
+        }
+        onPositionChanged: (mouse) => {
+            if (mouse.buttons & Qt.LeftButton) {
+                let dx = mouse.x - startX
+                if (dragStarted || dx > dragStartThreshold) {
+                    dragStarted = true
+                    notificationRowWrapper.anchors.left = undefined
+                    notificationRowWrapper.anchors.right = undefined
+                    notificationRowWrapper.anchors.fill = undefined
+                    notificationBackground.anchors.left = undefined
+                    notificationBackground.anchors.right = undefined
+                    notificationBackground.anchors.fill = undefined
+                    notificationRowWrapper.x = Math.max(0, dx)
+                    notificationBackground.x = Math.max(0, dx)
+                }
+            }
         }
     }
 
@@ -257,6 +302,7 @@ Item {
                             StyledText { // Summary
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignBottom
                                 font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer2
                                 text: notificationObject.summary
@@ -264,11 +310,21 @@ Item {
                                 elide: Text.ElideRight
                             }
 
-                            Item { Layout.fillWidth: true }
+                            // StyledText { // dot
+                            //     id: notificationDot
+                            //     Layout.fillWidth: false
+                            //     wrapMode: Text.Wrap
+                            //     horizontalAlignment: Text.AlignLeft
+                            //     font.pixelSize: Appearance.font.pixelSize.smaller
+                            //     color: Appearance.m3colors.m3outline
+                            //     text: NotificationUtils.getFriendlyNotifTimeString(notificationObject.time)
+                            // }
 
                             StyledText { // Time
                                 id: notificationTimeText
                                 Layout.fillWidth: false
+                                Layout.alignment: Qt.AlignTop
+                                Layout.topMargin: 3
                                 wrapMode: Text.Wrap
                                 horizontalAlignment: Text.AlignLeft
                                 font.pixelSize: Appearance.font.pixelSize.smaller
@@ -283,8 +339,10 @@ Item {
                                 }
                             }
 
+                            Item { Layout.fillWidth: true }
+
                             Button { // Expand button
-                                Layout.alignment: Qt.AlignVCenter
+                                Layout.alignment: Qt.AlignTop
                                 id: expandButton
                                 implicitWidth: 22
                                 implicitHeight: 22
@@ -311,11 +369,19 @@ Item {
 
                                 contentItem: MaterialSymbol {
                                     anchors.centerIn: parent
-                                    text: expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                                    // text: expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
+                                    text: "keyboard_arrow_down"
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
                                     font.pixelSize: Appearance.font.pixelSize.normal
                                     color: Appearance.colors.colOnLayer2
+                                    rotation: expanded ? 180 : 0
+                                    Behavior on rotation {
+                                        NumberAnimation {
+                                            duration: Appearance.animation.elementDecel.duration
+                                            easing.type: Appearance.animation.elementDecel.type
+                                        }
+                                    }
                                 }
 
                             }

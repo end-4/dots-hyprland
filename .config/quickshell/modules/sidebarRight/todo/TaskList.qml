@@ -4,6 +4,7 @@ import "root:/services"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 
 Item {
     id: root
@@ -25,7 +26,9 @@ Item {
             width: parent.width
             spacing: 0
             Repeater {
-                model: taskList
+                model: ScriptModel {
+                    values: taskList
+                }
                 delegate: Item {
                     id: todoItem
                     property bool pendingDoneToggle: false
