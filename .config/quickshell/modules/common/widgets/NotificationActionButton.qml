@@ -15,7 +15,7 @@ Button {
     leftPadding: 10
     rightPadding: 10
 
-    PointingHandInteraction {}
+    // PointingHandInteraction {}
 
     background: Rectangle {
         radius: Appearance.rounding.small

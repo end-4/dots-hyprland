@@ -11,6 +11,9 @@ Singleton {
 	id: root
     property var filePath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/notifications/notifications.json`
     property var list: []
+    // Quickshell's notification IDs starts at 1 on each run, while saved notifications
+    // can already contain higher IDs. This is a workaround to avoid id collisions
+    property int idOffset
 
     signal initDone();
     signal notify(notification: var);
@@ -31,7 +34,7 @@ Singleton {
         onNotification: (notification) => {
             notification.tracked = true
             const newNotifObject = {
-                "id": notification.id,
+                "id": notification.id + root.idOffset,
                 "actions": notification.actions.map((action) => {
                     return {
                         "identifier": action.identifier,
@@ -54,7 +57,7 @@ Singleton {
 
     function discardNotification(id) {
         const index = root.list.findIndex((notif) => notif.id === id);
-        const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id === id);
+        const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id + root.idOffset === id);
         if (index !== -1) {
             root.list.splice(index, 1);
             notifFileView.setText(JSON.stringify(root.list, null, 2))
@@ -76,12 +79,13 @@ Singleton {
     }
 
     function attemptInvokeAction(id, notifIdentifier) {
-        const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id === id);
+        const notifServerIndex = notifServer.trackedNotifications.values.findIndex((notif) => notif.id + root.idOffset === id);
         if (notifServerIndex !== -1) {
             const notifServerNotif = notifServer.trackedNotifications.values[notifServerIndex];
             const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
             action.invoke()
-        } else console.log("Notification not found in server: " + id)
+        } 
+        // else console.log("Notification not found in server: " + id)
         root.discard(id);
     }
 
@@ -103,7 +107,14 @@ Singleton {
         onLoaded: {
             const fileContents = notifFileView.text()
             root.list = JSON.parse(fileContents)
+            // Find largest id
+            let maxId = 0
+            root.list.forEach((notif) => {
+                maxId = Math.max(maxId, notif.id)
+            })
+
             console.log("[Notifications] File loaded")
+            root.idOffset = maxId
             root.initDone()
         }
         onLoadFailed: (error) => {
