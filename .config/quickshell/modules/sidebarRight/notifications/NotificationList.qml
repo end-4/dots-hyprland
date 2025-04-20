@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -58,7 +59,15 @@ Item {
         anchors.top: parent.top
         anchors.bottom: statusRow.top
         contentHeight: columnLayout.height
-        clip: true
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: flickable.width
+                height: flickable.height
+                radius: Appearance.rounding.normal
+            }
+        }
 
         ColumnLayout { // Scrollable window content
             id: columnLayout

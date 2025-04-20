@@ -4,6 +4,7 @@ import "root:/services"
 import "./calendar"
 import "./todo"
 import "./notifications"
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -111,9 +112,17 @@ Rectangle {
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
             currentIndex: currentTab
             onCurrentIndexChanged: currentTab = currentIndex
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: swipeView.width
+                    height: swipeView.height
+                    radius: Appearance.rounding.normal
+                }
+            }
 
             NotificationList {}
             Item{}

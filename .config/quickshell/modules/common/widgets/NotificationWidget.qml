@@ -425,7 +425,15 @@ Item {
                 implicitHeight: expanded ? actionRowLayout.implicitHeight : 0
                 height: expanded ? actionRowLayout.implicitHeight : 0
                 contentWidth: actionRowLayout.implicitWidth
-                clip: true
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: actionsFlickable.width
+                        height: actionsFlickable.height
+                        radius: Appearance.rounding.small
+                    }
+                }
 
                 opacity: expanded ? 1 : 0
                 visible: opacity > 0
