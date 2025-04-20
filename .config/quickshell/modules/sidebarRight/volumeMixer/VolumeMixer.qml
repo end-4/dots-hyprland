@@ -11,76 +11,296 @@ import Quickshell.Services.Pipewire
 
 Item {
     id: root
-    Flickable {
-        id: flickable
-        anchors.fill: parent
-        contentHeight: volumeMixerColumnLayout.height
+    property bool showDeviceSelector: false
+    property bool deviceSelectorInput
+    property int dialogMargins: 16
+    property PwNode selectedDevice
 
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: flickable.width
-                height: flickable.height
-                radius: Appearance.rounding.normal
+    function showDeviceSelectorDialog(input) {
+        root.selectedDevice = null
+        root.showDeviceSelector = true
+        root.deviceSelectorInput = input
+    }
+
+    Keys.onPressed: (event) => {
+        // Close dialog on pressing Esc if open
+        if (event.key === Qt.Key_Escape && root.showDeviceSelector) {
+            root.showDeviceSelector = false
+            event.accepted = true;
+        }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Flickable {
+                id: flickable
+                anchors.fill: parent
+                contentHeight: volumeMixerColumnLayout.height
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: flickable.width
+                        height: flickable.height
+                        radius: Appearance.rounding.normal
+                    }
+                }
+
+                ColumnLayout {
+                    id: volumeMixerColumnLayout
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.margins: 10
+                    spacing: 10
+
+                    // Get a list of nodes that output to the default sink
+                    PwNodeLinkTracker {
+                        id: linkTracker
+                        node: Pipewire.defaultAudioSink
+                    }
+
+                    Repeater {
+                        model: linkTracker.linkGroups
+
+                        VolumeMixerEntry {
+                            Layout.fillWidth: true
+                            // Get links to the default sinnk
+                            required property PwLinkGroup modelData
+                            // Consider sources that output to the default sink
+                            node: modelData.source
+                        }
+                    }
+                }
+            }
+
+            // Placeholder when list is empty
+            Item {
+                anchors.fill: flickable
+
+                visible: opacity > 0
+                opacity: (linkTracker.linkGroups.length === 0) ? 1 : 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Appearance.animation.menuDecel.duration
+                        easing.type: Appearance.animation.menuDecel.type
+                    }
+                }
+
+                ColumnLayout {
+                    anchors.centerIn: parent
+                    spacing: 5
+
+                    MaterialSymbol {
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: 55
+                        color: Appearance.m3colors.m3outline
+                        text: "brand_awareness"
+                    }
+                    StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        font.pixelSize: Appearance.font.pixelSize.normal
+                        color: Appearance.m3colors.m3outline
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "No audio source"
+                    }
+                }
+            }
+        }
+        // Device selector
+        RowLayout {
+            id: deviceSelectorRowLayout
+            Layout.fillWidth: true
+            Layout.fillHeight: false
+            AudioDeviceSelectorButton {
+                Layout.fillWidth: true
+                input: false
+                onClicked: root.showDeviceSelectorDialog(input)
+            }
+            AudioDeviceSelectorButton {
+                Layout.fillWidth: true
+                input: true
+                onClicked: root.showDeviceSelectorDialog(input)
+            }
+        }
+    }
+
+    // Device selector dialog
+    Item {
+        anchors.fill: parent
+        z: 9999
+
+        visible: opacity > 0
+        opacity: root.showDeviceSelector ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation { 
+                duration: Appearance.animation.elementDecelFast.duration
+                easing.type: Appearance.animation.elementDecelFast.type
             }
         }
 
-        ColumnLayout {
-            id: volumeMixerColumnLayout
-            anchors.top: parent.top
+        Rectangle { // Scrim
+            id: scrimOverlay
+            anchors.fill: parent
+            radius: Appearance.rounding.small
+            color: Appearance.colors.colScrim
+            MouseArea {
+                hoverEnabled: true
+                anchors.fill: parent
+                preventStealing: true
+                propagateComposedEvents: false
+            }
+        }
+
+        Rectangle { // The dialog
+            id: dialog
+            color: Appearance.m3colors.m3surfaceContainerHigh
+            radius: Appearance.rounding.normal
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: 10
-            spacing: 10
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 30
+            implicitHeight: dialogColumnLayout.implicitHeight
+            
+            ColumnLayout {
+                id: dialogColumnLayout
+                anchors.fill: parent
+                spacing: 16
 
-            // get a list of nodes that output to the default sink
-            PwNodeLinkTracker {
-                id: linkTracker
-                node: Pipewire.defaultAudioSink
-            }
+                StyledText {
+                    id: dialogTitle
+                    Layout.topMargin: dialogMargins
+                    Layout.leftMargin: dialogMargins
+                    Layout.rightMargin: dialogMargins
+                    Layout.alignment: Qt.AlignLeft
+                    color: Appearance.m3colors.m3onSurface
+                    font.pixelSize: Appearance.font.pixelSize.larger
+                    text: `Select ${root.deviceSelectorInput ? "input" : "output"} device`
+                }
 
-            Repeater {
-                model: linkTracker.linkGroups
+                Rectangle {
+                    color: Appearance.m3colors.m3outline
+                    implicitHeight: 1
+                    Layout.fillWidth: true
+                    Layout.leftMargin: dialogMargins
+                    Layout.rightMargin: dialogMargins
+                }
 
-                VolumeMixerEntry {
-                    required property PwLinkGroup modelData
-                    node: modelData.source // target = default sink, source = what we need
+                Flickable {
+                    id: dialogFlickable
+                    Layout.fillWidth: true
+                    clip: true
+                    implicitHeight: Math.min(scrimOverlay.height - dialogMargins * 8 - dialogTitle.height - dialogButtonsRowLayout.height, devicesColumnLayout.implicitHeight)
+                    
+                    contentHeight: devicesColumnLayout.implicitHeight
+
+                    ColumnLayout {
+                        id: devicesColumnLayout
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Layout.fillWidth: true
+
+                        Repeater {
+                            model: Pipewire.nodes.values.filter(node => {
+                                return !node.isStream && node.isSink !== root.deviceSelectorInput && node.audio
+                            })
+
+                            delegate: RadioButton {
+                                Layout.leftMargin: root.dialogMargins
+                                Layout.rightMargin: root.dialogMargins
+                                Layout.fillWidth: true
+                                leftInset: 4
+                                rightInset: 4
+                                topInset: 4
+                                bottomInset: 4
+                                checked: modelData.id === Pipewire.defaultAudioSink.id
+
+                                onCheckedChanged: {
+                                    if (checked) {
+                                        root.selectedDevice = modelData
+                                    }
+                                }
+
+                                indicator: Item{}
+                                
+                                contentItem: RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: 8
+                                    Rectangle {
+                                        id: radio
+                                        Layout.fillWidth: false
+                                        Layout.alignment: Qt.AlignVCenter
+                                        width: 20
+                                        height: 20
+                                        radius: 10
+                                        border.color: checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
+                                        border.width: 2
+                                        color: "transparent"
+
+                                        Rectangle {
+                                            anchors.centerIn: parent
+                                            width: 10
+                                            height: 10
+                                            radius: 5
+                                            color: checked ? Appearance.m3colors.m3primary : "transparent"
+                                            visible: checked
+                                        }
+                                    }
+                                    StyledText {
+                                        text: modelData.description
+                                        Layout.alignment: Qt.AlignVCenter
+                                        Layout.fillWidth: true
+                                        wrapMode: Text.Wrap
+                                        color: Appearance.m3colors.m3onSurface
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    color: Appearance.m3colors.m3outline
+                    implicitHeight: 1
+                    Layout.fillWidth: true
+                    Layout.leftMargin: dialogMargins
+                    Layout.rightMargin: dialogMargins
+                }
+
+                RowLayout {
+                    id: dialogButtonsRowLayout
+                    Layout.bottomMargin: dialogMargins
+                    Layout.leftMargin: dialogMargins
+                    Layout.rightMargin: dialogMargins
+                    Layout.alignment: Qt.AlignRight
+
+                    DialogButton {
+                        buttonText: "Cancel"
+                        onClicked: {
+                            root.showDeviceSelector = false
+                        }
+                    }
+                    DialogButton {
+                        buttonText: "OK"
+                        onClicked: {
+                            root.showDeviceSelector = false
+                            if (root.selectedDevice) {
+                                if (root.deviceSelectorInput) {
+                                    Pipewire.preferredDefaultAudioSource = root.selectedDevice
+                                } else {
+                                    Pipewire.preferredDefaultAudioSink = root.selectedDevice
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    // Placeholder when list is empty
-    Item {
-        anchors.fill: flickable
-
-        visible: opacity > 0
-        opacity: (linkTracker.linkGroups.length === 0) ? 1 : 0
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.menuDecel.duration
-                easing.type: Appearance.animation.menuDecel.type
-            }
-        }
-
-        ColumnLayout {
-            anchors.centerIn: parent
-            spacing: 5
-
-            MaterialSymbol {
-                Layout.alignment: Qt.AlignHCenter
-                font.pixelSize: 55
-                color: Appearance.m3colors.m3outline
-                text: "brand_awareness"
-            }
-            StyledText {
-                Layout.alignment: Qt.AlignHCenter
-                font.pixelSize: Appearance.font.pixelSize.normal
-                color: Appearance.m3colors.m3outline
-                horizontalAlignment: Text.AlignHCenter
-                text: "No audio source"
-            }
-        }
-    }
 }

@@ -121,7 +121,7 @@ Rectangle {
                 maskSource: Rectangle {
                     width: swipeView.width
                     height: swipeView.height
-                    radius: Appearance.rounding.normal
+                    radius: Appearance.rounding.small
                 }
             }
 

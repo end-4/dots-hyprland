@@ -201,18 +201,15 @@ Item {
 
     Item {
         anchors.fill: parent
-        visible: false
-        z: 1000
+        z: 9999
 
+        visible: opacity > 0
         opacity: root.showAddDialog ? 1 : 0
         Behavior on opacity {
             NumberAnimation { 
                 duration: Appearance.animation.elementDecelFast.duration
                 easing.type: Appearance.animation.elementDecelFast.type
             }
-        }
-        onOpacityChanged: {
-            visible = opacity > 0
         }
 
         onVisibleChanged: {
@@ -236,9 +233,12 @@ Item {
 
         Rectangle { // The dialog
             id: dialog
-            implicitWidth: parent.width - dialogMargins * 2
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: root.dialogMargins
             implicitHeight: dialogColumnLayout.implicitHeight
-            anchors.centerIn: parent
+
             color: Appearance.m3colors.m3surfaceContainerHigh
             radius: Appearance.rounding.normal
 
@@ -252,8 +252,8 @@ Item {
             }
 
             ColumnLayout {
-                anchors.fill: parent
                 id: dialogColumnLayout
+                anchors.fill: parent
                 spacing: 16
 
                 StyledText {

@@ -8,45 +8,51 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
-
-RowLayout {
+Item {
     id: root
     required property PwNode node;
 	PwObjectTracker { objects: [ node ] }
 
-    spacing: 10
+    implicitHeight: rowLayout.implicitHeight
 
-    Image {
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        visible: source != ""
-        sourceSize.width: 50
-        sourceSize.height: 50
-        source: {
-            const icon = node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
-            return `image://icon/${icon}`;
-        }
-    }
+    RowLayout {
+        id: rowLayout
+        anchors.fill: parent
+        spacing: 10
 
-    ColumnLayout {
-        Layout.fillWidth: true
-        RowLayout {
-            StyledText {
-                Layout.fillWidth: true
-                font.pixelSize: Appearance.font.pixelSize.normal
-                elide: Text.ElideRight
-                text: {
-                    // application.name -> description -> name
-                    const app = node.properties["application.name"] ?? (node.description != "" ? node.description : node.name);
-                    const media = node.properties["media.name"];
-                    return media != undefined ? `${app} • ${media}` : app;
-                }
+        Image {
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            visible: source != ""
+            sourceSize.width: 50
+            sourceSize.height: 50
+            source: {
+                const icon = root.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
+                return `image://icon/${icon}`;
             }
         }
 
-        RowLayout {
-            StyledSlider {
-                value: node.audio.volume
-                onValueChanged: node.audio.volume = value
+        ColumnLayout {
+            Layout.fillWidth: true
+            RowLayout {
+                StyledText {
+                    Layout.fillWidth: true
+                    font.pixelSize: Appearance.font.pixelSize.normal
+                    elide: Text.ElideRight
+                    text: {
+                        // application.name -> description -> name
+                        const app = root.node.properties["application.name"] ?? (root.node.description != "" ? root.node.description : root.node.name);
+                        const media = root.node.properties["media.name"];
+                        return media != undefined ? `${app} • ${media}` : app;
+                    }
+                }
+            }
+
+            RowLayout {
+                StyledSlider {
+                    id: slider
+                    value: root.node.audio.volume
+                    onValueChanged: root.node.audio.volume = value
+                }
             }
         }
     }

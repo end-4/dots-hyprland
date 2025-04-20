@@ -140,7 +140,8 @@ Item {
 
         NotificationStatusButton {
             Layout.alignment: Qt.AlignVCenter
-            Layout.topMargin: 5
+            Layout.margins: 5
+            Layout.topMargin: 10
             buttonIcon: "clear_all"
             buttonText: "Clear"
             onClicked: () => {
