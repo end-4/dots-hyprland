@@ -26,12 +26,16 @@ Singleton {
         }
     }
 
+    property QtObject osd: QtObject {
+        property int timeout: 1000
+    }
+
     property QtObject resources: QtObject {
         property int updateInterval: 3000
     }
 
     property QtObject hacks: QtObject {
-        property int arbitraryRaceConditionDelay: 10
+        property int arbitraryRaceConditionDelay: 10 // milliseconds
     }
 
 }

@@ -134,6 +134,7 @@ Singleton {
         property color colTooltip: m3colors.m3inverseSurface
         property color colOnTooltip: m3colors.m3inverseOnSurface
         property color colScrim: transparentize(m3colors.m3scrim, 0.5)
+        property color colShadow: transparentize(m3colors.m3shadow, 0.75)
     }
 
     rounding: QtObject {

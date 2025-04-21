@@ -14,7 +14,6 @@ Scope {
         model: Quickshell.screens
 
         PanelWindow {
-            id: barRoot
             visible: (ConfigOptions.appearance.fakeScreenRounding === 1 || (ConfigOptions.appearance.fakeScreenRounding === 2 && !activeWindow?.fullscreen))
 
             property var modelData

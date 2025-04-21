@@ -1,6 +1,6 @@
 // From https://github.com/rafzby/circular-progressbar
 // License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
-// Modified
+// Modified so it looks like in Material 3: https://m3.material.io/components/progress-indicators/specs
 import QtQuick 2.9
 
 Item {

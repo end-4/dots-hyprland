@@ -162,7 +162,7 @@ Scope {
                 verticalOffset: 2
                 radius: Appearance.sizes.elevationMargin
                 samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.transparentize(Appearance.m3colors.m3shadow, 0.55)
+                color: Appearance.colors.colShadow
                 source: sidebarRightBackground
             }
 

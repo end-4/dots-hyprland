@@ -1,6 +1,7 @@
 //@ pragma UseQApplication
 
 import "./modules/bar/"
+import "./modules/onScreenDisplay/"
 import "./modules/screenCorners/"
 import "./modules/sidebarRight/"
 import QtQuick
@@ -14,5 +15,6 @@ ShellRoot {
     SidebarRight {}
     ScreenCorners {}
     ReloadPopup {}
+    OnScreenDisplay {}
 }
 

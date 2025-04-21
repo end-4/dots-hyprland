@@ -12,6 +12,7 @@ Scope {
 
     readonly property int barHeight: Appearance.sizes.barHeight
     readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
+    readonly property int osdHideMouseMoveThreshold: 20
 
     Process {
         id: openSidebarRight
@@ -20,6 +21,10 @@ Scope {
     Process {
         id: openSidebarLeft
         command: ["qs", "ipc", "call", "sidebarLeft", "open"]
+    }
+    Process {
+        id: hideOsd
+        command: ["qs", "ipc", "call", "osd", "hide"]
     }
 
     Variants {
@@ -60,18 +65,6 @@ Scope {
                     ActiveWindow {
                         bar: barRoot
                     }
-
-                    // Scroll to change brightness
-                    WheelHandler {
-                        onWheel: (event) => {
-                            if (event.angleDelta.y < 0)
-                                Brightness.value = -1;
-                            else if (event.angleDelta.y > 0)
-                                Brightness.value = 1;
-                        }
-                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                    }
-
                 }
 
                 // Middle section
@@ -179,9 +172,57 @@ Scope {
 
 
                 }
-                MouseArea {
+                
+                // Interactions
+                MouseArea { // Left side: scroll to change brightness
+                    id: barLeftSideMouseArea
+                    property bool hovered: false
+                    property real lastScrollX: 0
+                    property real lastScrollY: 0
+                    property bool trackingScroll: false
+                    anchors.fill: leftSection
+                    acceptedButtons: Qt.LeftButton
+                    hoverEnabled: true
+                    propagateComposedEvents: true
+                    onEntered: (event) => {
+                        barLeftSideMouseArea.hovered = true
+                    }
+                    onExited: (event) => {
+                        barLeftSideMouseArea.hovered = false
+                        barLeftSideMouseArea.trackingScroll = false
+                    }
+                    // Scroll to change brightness
+                    WheelHandler {
+                        onWheel: (event) => {
+                            if (event.angleDelta.y < 0)
+                                Brightness.increment = -1;
+                            else if (event.angleDelta.y > 0)
+                                Brightness.increment = 1;
+                            // Store the mouse position and start tracking
+                            barLeftSideMouseArea.lastScrollX = event.x;
+                            barLeftSideMouseArea.lastScrollY = event.y;
+                            barLeftSideMouseArea.trackingScroll = true;
+                        }
+                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    }
+                    onPositionChanged: (mouse) => {
+                        if (barLeftSideMouseArea.trackingScroll) {
+                            const dx = mouse.x - barLeftSideMouseArea.lastScrollX;
+                            const dy = mouse.y - barLeftSideMouseArea.lastScrollY;
+                            if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
+                                hideOsd.running = true;
+                                barLeftSideMouseArea.trackingScroll = false;
+                            }
+                        }
+                    }
+                }
+
+                MouseArea { // Right side: scroll to change volume
                     id: barRightSideMouseArea
                     property bool hovered: false
+                    property real lastScrollX: 0
+                    property real lastScrollY: 0
+                    property bool trackingScroll: false
                     anchors.fill: rightSection
                     acceptedButtons: Qt.LeftButton
                     hoverEnabled: true
@@ -191,6 +232,7 @@ Scope {
                     }
                     onExited: (event) => {
                         barRightSideMouseArea.hovered = false
+                        barRightSideMouseArea.trackingScroll = false
                     }
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
@@ -200,14 +242,28 @@ Scope {
                     // Scroll to change volume
                     WheelHandler {
                         onWheel: (event) => {
-                            const currentVolume = Audio.sink?.audio.volume;
+                            const currentVolume = Audio.value;
                             const step = currentVolume < 0.1 ? 0.01 : 0.02 || 0.2;
                             if (event.angleDelta.y < 0)
                                 Audio.sink.audio.volume -= step;
                             else if (event.angleDelta.y > 0)
                                 Audio.sink.audio.volume += step;
+                            // Store the mouse position and start tracking
+                            barRightSideMouseArea.lastScrollX = event.x;
+                            barRightSideMouseArea.lastScrollY = event.y;
+                            barRightSideMouseArea.trackingScroll = true;
                         }
                         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                    }
+                    onPositionChanged: (mouse) => {
+                        if (barRightSideMouseArea.trackingScroll) {
+                            const dx = mouse.x - barRightSideMouseArea.lastScrollX;
+                            const dy = mouse.y - barRightSideMouseArea.lastScrollY;
+                            if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
+                                hideOsd.running = true;
+                                barRightSideMouseArea.trackingScroll = false;
+                            }
+                        }
                     }
                 }
             }
