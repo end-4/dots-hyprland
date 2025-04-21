@@ -200,7 +200,7 @@ Scope {
                     Layout.alignment: Qt.AlignHCenter
                     radius: Appearance.rounding.normal
                     implicitHeight: sessionSubtitle.implicitHeight + 10 * 2
-                    implicitWidth: sessionSubtitle.implicitWidth + 10 * 2
+                    implicitWidth: sessionSubtitle.implicitWidth + 15 * 2
                     color: Appearance.colors.colTooltip
                     clip: true
 

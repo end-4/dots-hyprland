@@ -37,6 +37,7 @@ Button {
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: false
             Layout.leftMargin: 5
+            color: Appearance.colors.colOnLayer2
             font.pixelSize: Appearance.font.pixelSize.hugeass
             text: input ? "mic_external_on" : "media_output"
         }

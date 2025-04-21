@@ -38,6 +38,7 @@ Item {
                 Layout.leftMargin: valueIndicatorLeftPadding
                 Layout.topMargin: valueIndicatorVerticalPadding
                 Layout.bottomMargin: valueIndicatorVerticalPadding
+                color: Appearance.colors.colOnLayer0
                 text: root.icon
                 font.pixelSize: 30
             }

@@ -28,7 +28,7 @@ Scope {
     }
 
     Connections {
-        target: Audio.sink.audio
+        target: Audio.sink?.audio
         function onVolumeChanged() {
             if (!Audio.ready) return
             root.triggerOsd()
@@ -97,7 +97,7 @@ Scope {
                     OsdValueIndicator {
                         id: osdValues
                         anchors.centerIn: parent 
-                        value: Audio.sink.audio.volume
+                        value: Audio.sink?.audio.volume
                         icon: "volume_up"
                         name: "Volume"
                     }

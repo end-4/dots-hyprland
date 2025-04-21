@@ -36,7 +36,7 @@ Scope {
     }
 
     Connections {
-        target: Audio.sink.audio
+        target: Audio.sink?.audio
         function onVolumeChanged() {
             if (!Audio.ready) return
             root.showOsdValues = false

@@ -53,6 +53,7 @@ Button {
     contentItem: MaterialSymbol {
         id: icon
         anchors.fill: parent
+        color: Appearance.colors.colOnLayer2
         horizontalAlignment: Text.AlignHCenter
         text: buttonIcon
         font.pixelSize: 40

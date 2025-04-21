@@ -7,7 +7,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
 
-    property bool ready: Pipewire.defaultAudioSink.ready
+    property bool ready: Pipewire.defaultAudioSink?.ready
     property var sink: Pipewire.defaultAudioSink
     property var source: Pipewire.defaultAudioSource
 

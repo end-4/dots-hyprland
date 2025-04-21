@@ -381,7 +381,6 @@ Item {
 
                                 contentItem: MaterialSymbol {
                                     anchors.centerIn: parent
-                                    // text: expanded ? "keyboard_arrow_up" : "keyboard_arrow_down"
                                     text: "keyboard_arrow_down"
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter

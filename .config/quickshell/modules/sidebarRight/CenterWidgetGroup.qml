@@ -110,7 +110,7 @@ Rectangle {
 
         SwipeView {
             id: swipeView
-            Layout.topMargin: 10
+            Layout.topMargin: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: currentTab
