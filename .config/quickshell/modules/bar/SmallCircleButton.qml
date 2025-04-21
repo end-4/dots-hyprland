@@ -1,4 +1,5 @@
 import "root:/modules/common"
+import "root:/modules/common/widgets/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

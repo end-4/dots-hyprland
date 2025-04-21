@@ -78,7 +78,6 @@ Scope {
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
-                        event.accepted = true; // Prevent further propagation of the event
                     }
                 }
 
@@ -108,10 +107,23 @@ Scope {
                         }
 
                         Item {
-                            Layout.fillHeight: true
+                            Layout.fillWidth: true
                         }
 
-
+                        QuickToggleButton {
+                            toggled: false
+                            buttonIcon: "power_settings_new"
+                            onClicked: {
+                                openSessionMenu.running = true
+                            }
+                            Process {
+                                id: openSessionMenu
+                                command: ["qs", "ipc", "call", "session", "open"]
+                            }
+                            StyledToolTip {
+                                content: "Session"
+                            }
+                        }
                     }
 
                     Rectangle {

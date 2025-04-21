@@ -3,6 +3,7 @@
 import "./modules/bar/"
 import "./modules/onScreenDisplay/"
 import "./modules/screenCorners/"
+import "./modules/session/"
 import "./modules/sidebarRight/"
 import QtQuick
 import QtQuick.Controls
@@ -12,10 +13,11 @@ import Quickshell
 
 ShellRoot {
     Bar {}
-    SidebarRight {}
-    ScreenCorners {}
-    ReloadPopup {}
     OnScreenDisplayBrightness {}
     OnScreenDisplayVolume {}
+    ReloadPopup {}
+    ScreenCorners {}
+    Session {}
+    SidebarRight {}
 }
 

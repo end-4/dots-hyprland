@@ -30,8 +30,8 @@ Item {
 
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow
-            spacing: 5
             Layout.margins: 10
+            spacing: 10
 
             MaterialSymbol { // Icon
                 Layout.alignment: Qt.AlignVCenter
@@ -47,8 +47,8 @@ Item {
                 spacing: 5
 
                 RowLayout { // Name fill left, value on the right end
-                    Layout.leftMargin: valueBarHeight / 2 // Align text with progressbar radius curve's left end
-                    Layout.rightMargin: valueBarHeight / 2 // Align text with progressbar radius curve's left end
+                    Layout.leftMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
+                    Layout.rightMargin: valueProgressBar.height / 2 // Align text with progressbar radius curve's left end
 
                     StyledText {
                         color: Appearance.colors.colOnLayer0
