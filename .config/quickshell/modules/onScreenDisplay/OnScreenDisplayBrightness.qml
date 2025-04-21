@@ -57,8 +57,6 @@ Scope {
 
             anchors {
                 top: true
-                left: true
-                right: true
             }
             mask: Region {
                 item: osdValuesWrapper

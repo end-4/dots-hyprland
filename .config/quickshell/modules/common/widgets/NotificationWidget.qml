@@ -13,13 +13,15 @@ import "./notification_utils.js" as NotificationUtils
 Item {
     id: root
     property var notificationObject
+    property bool popup: false
     property bool expanded: false
     property bool enableAnimation: true
     property int notificationListSpacing: 5
     property bool ready: false
+    property int defaultTimeoutValue: 5000
 
     Layout.fillWidth: true
-    clip: true
+    clip: !popup
 
     Process {
         id: closeSidebarProcess
@@ -42,6 +44,16 @@ Item {
 
     Component.onCompleted: {
         root.ready = true
+        if (popup) timeoutTimer.start()
+    }
+
+    Timer {
+        id: timeoutTimer
+        interval: notificationObject.expireTimeout ?? root.defaultTimeoutValue
+        repeat: false
+        onTriggered: {
+            Notifications.timeoutNotification(notificationObject.id);
+        }
     }
 
     function destroyWithAnimation(delay = 0) {
@@ -104,7 +116,7 @@ Item {
                 root.toggleExpanded()
         }
 
-        // Flick right to dismiss
+        // Flick right to dismiss/discard
         property real startX: 0
         property real dragStartThreshold: 10
         property real dragConfirmThreshold: 70
@@ -124,7 +136,7 @@ Item {
         }
         onDragStartedChanged: () => {
             // Prevent drag focus being shifted to parent flickable
-            root.parent.parent.parent.interactive = !dragStarted
+            if (root.parent.parent.parent.interactive !== undefined) root.parent.parent.parent.interactive = !dragStarted
             root.enableAnimation = !dragStarted
         }
         onReleased: (mouse) => {
@@ -195,6 +207,18 @@ Item {
                     easing.type: Appearance.animation.elementDecel.type
                 }
             }
+        }
+
+        DropShadow {
+            visible: popup
+            id: notificationShadow
+            anchors.fill: notificationBackground
+            source: notificationBackground
+            radius: 5
+            samples: radius * 2 + 1
+            color: Appearance.colors.colShadow
+            verticalOffset: 2
+            horizontalOffset: 0
         }
     }
 
@@ -332,6 +356,21 @@ Item {
                                 text: notificationObject.summary
                                 wrapMode: expanded ? Text.Wrap : Text.NoWrap
                                 elide: Text.ElideRight
+                            }
+
+                            CircularProgress {
+                                id: notificationProgress
+                                visible: popup
+                                Layout.alignment: Qt.AlignVCenter
+                                lineWidth: 2
+                                value: popup ? 1 : 0
+                                size: 20
+                                animationDuration: notificationObject.expireTimeout ?? root.defaultTimeoutValue
+                                easingType: Easing.Linear
+
+                                Component.onCompleted: {
+                                    value = 0
+                                }
                             }
 
                             StyledText { // Time

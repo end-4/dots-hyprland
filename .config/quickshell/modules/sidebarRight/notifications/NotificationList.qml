@@ -22,6 +22,7 @@ Item {
                 notificationWidgetList.push(notif)
             })
         }
+
         function onNotify(notification) {
             // notificationRepeater.model = [notification, ...notificationRepeater.model]
             const notif = root.notifComponent.createObject(columnLayout, { notificationObject: notification });
@@ -41,6 +42,7 @@ Item {
                 }
             }
         }
+
         function onDiscard(id) {
             for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
                 const widget = notificationWidgetList[i];
@@ -49,6 +51,16 @@ Item {
                     notificationWidgetList.splice(i, 1);
                 }
             }
+        }
+
+        function onDiscardAll() {
+            for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
+                const widget = notificationWidgetList[i];
+                if (widget && widget.notificationObject) {
+                    widget.destroyWithAnimation();
+                }
+            }
+            notificationWidgetList = [];
         }
     }
 
@@ -145,15 +157,7 @@ Item {
             buttonIcon: "clear_all"
             buttonText: "Clear"
             onClicked: () => {
-                for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
-                // for (let i = 0; i < notificationWidgetList.length; i++) {
-                    const widget = notificationWidgetList[i];
-                    if (widget && widget.notificationObject) {
-                        widget.destroyWithAnimation();
-                    }
-                }
-                notificationWidgetList = [];
-                Notifications.discardAll()
+                Notifications.discardAllNotifications()
             }
         }
     }

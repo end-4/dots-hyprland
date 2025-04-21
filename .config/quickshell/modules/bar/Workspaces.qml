@@ -163,32 +163,31 @@ Item {
                 Layout.fillHeight: true
                 onPressed: Hyprland.dispatch(`workspace ${index+1}`)
                 width: workspaceButtonWidth
-
-                contentItem: StyledText {
-                    z: 3
-                    property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspacesShown + index + 1
-
-                    anchors.fill: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    font.pixelSize: Appearance.font.pixelSize.small
-                    text: `${workspaceValue}`
-                    elide: Text.ElideRight
-                    color: (monitor.activeWorkspace?.id == workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)
-
-                    Behavior on color {
-                        ColorAnimation {
-                            duration: Appearance.animation.elementDecel.duration
-                            easing.type: Appearance.animation.elementDecel.type
-                        }
-
-                    }
-
-                }
                 
                 background: Item {
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
+                    StyledText {
+                        z: 3
+                        property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspacesShown + index + 1
+
+                        anchors.centerIn: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10"))
+                        text: `${workspaceValue}`
+                        elide: Text.ElideRight
+                        color: (monitor.activeWorkspace?.id == workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)
+
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: Appearance.animation.elementDecel.duration
+                                easing.type: Appearance.animation.elementDecel.type
+                            }
+
+                        }
+
+                    }
                 }
                 
 

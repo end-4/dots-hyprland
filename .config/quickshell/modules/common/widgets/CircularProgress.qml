@@ -1,7 +1,8 @@
 // From https://github.com/rafzby/circular-progressbar
 // License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
 // Modified so it looks like in Material 3: https://m3.material.io/components/progress-indicators/specs
-import QtQuick 2.9
+import QtQuick
+import "root:/modules/common"
 
 Item {
     id: root
@@ -9,15 +10,19 @@ Item {
     property int size: 30
     property int lineWidth: 2
     property real value: 0
-    property color primaryColor: "#70585D"
-    property color secondaryColor: "#FFF8F7"
+    property color primaryColor: Appearance.m3colors.m3onSecondaryContainer
+    property color secondaryColor: Appearance.m3colors.m3secondaryContainer
     property real gapAngle: Math.PI / 10
     property bool fill: false
     property int fillOverflow: 2
     property int animationDuration: 1000
+    property var easingType: Easing.OutCubic
 
     width: size
     height: size
+
+    signal animationFinished();
+
     onValueChanged: {
         canvas.degree = value * 360;
     }
@@ -62,12 +67,12 @@ Item {
 
             // Secondary
             ctx.beginPath();
-            ctx.arc(x, y, radius, progressAngle + gapAngle, startAngle - gapAngle);
+            ctx.arc(x, y, radius, progressAngle + gapAngle, fullAngle - gapAngle);
             ctx.strokeStyle = root.secondaryColor;
             ctx.stroke();
 
             // Primary (value indication)
-            var endAngle = (progressAngle === startAngle) ? startAngle + epsilon : progressAngle;
+            var endAngle = progressAngle + (value > 0 ? 0 : epsilon);
             ctx.beginPath();
             ctx.arc(x, y, radius, startAngle, endAngle);
             ctx.strokeStyle = root.primaryColor;
@@ -77,7 +82,7 @@ Item {
         Behavior on degree {
             NumberAnimation {
                 duration: root.animationDuration
-                easing.type: Easing.OutCubic
+                easing.type: root.easingType
             }
 
         }

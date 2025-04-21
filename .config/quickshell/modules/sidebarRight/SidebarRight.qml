@@ -1,6 +1,7 @@
+import "root:/"
+import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/services"
 import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
@@ -24,6 +25,10 @@ Scope {
             id: sidebarRoot
             visible: false
             focusable: true
+
+            onVisibleChanged: {
+                GlobalStates.sidebarRightOpenCount += visible ? 1 : -1
+            }
 
             property var modelData
 
@@ -191,6 +196,7 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = !panelWindow.visible;
+                    if(panelWindow.visible) Notifications.timeoutAll();
                 }
             }
         }
@@ -209,6 +215,7 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = true;
+                    if(panelWindow.visible) Notifications.timeoutAll();
                 }
             }
         }

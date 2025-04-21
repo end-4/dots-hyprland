@@ -18,6 +18,8 @@ Singleton {
     signal initDone();
     signal notify(notification: var);
     signal discard(id: var);
+    signal discardAll();
+    signal timeout(id: var);
 
 	NotificationServer {
         id: notifServer
@@ -69,12 +71,23 @@ Singleton {
         root.discard(id);
     }
 
-    function discardAll() {
+    function discardAllNotifications() {
         root.list = []
         triggerListChange()
         notifFileView.setText(JSON.stringify(root.list, null, 2))
         notifServer.trackedNotifications.values.forEach((notif) => {
             notif.dismiss()
+        })
+        root.discardAll();
+    }
+
+    function timeoutNotification(id) {
+        root.timeout(id);
+    }
+
+    function timeoutAll() {
+        root.list.forEach((notif) => {
+            root.timeout(notif.id);
         })
     }
 
