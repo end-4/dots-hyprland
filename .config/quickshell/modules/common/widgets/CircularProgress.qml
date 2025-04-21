@@ -1,5 +1,6 @@
 // From https://github.com/rafzby/circular-progressbar
 // License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
+// Modified
 import QtQuick 2.9
 
 Item {
@@ -10,6 +11,7 @@ Item {
     property real value: 0
     property color primaryColor: "#70585D"
     property color secondaryColor: "#FFF8F7"
+    property real gapAngle: Math.PI / 10
     property bool fill: false
     property int fillOverflow: 2
     property int animationDuration: 1000
@@ -46,6 +48,8 @@ Item {
             var startAngle = (Math.PI / 180) * 270;
             var fullAngle = (Math.PI / 180) * (270 + 360);
             var progressAngle = (Math.PI / 180) * (270 + degree);
+            var epsilon = 0.01; // Small angle in radians
+            
             ctx.reset();
             if (root.fill) {
                 ctx.fillStyle = root.secondaryColor;
@@ -55,12 +59,17 @@ Item {
             }
             ctx.lineCap = 'round';
             ctx.lineWidth = root.lineWidth;
+
+            // Secondary
             ctx.beginPath();
-            ctx.arc(x, y, radius, startAngle, fullAngle);
+            ctx.arc(x, y, radius, progressAngle + gapAngle, startAngle - gapAngle);
             ctx.strokeStyle = root.secondaryColor;
             ctx.stroke();
+
+            // Primary (value indication)
+            var endAngle = (progressAngle === startAngle) ? startAngle + epsilon : progressAngle;
             ctx.beginPath();
-            ctx.arc(x, y, radius, startAngle, progressAngle);
+            ctx.arc(x, y, radius, startAngle, endAngle);
             ctx.strokeStyle = root.primaryColor;
             ctx.stroke();
         }
