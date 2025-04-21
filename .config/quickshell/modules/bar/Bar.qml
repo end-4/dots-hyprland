@@ -23,14 +23,18 @@ Scope {
         command: ["qs", "ipc", "call", "sidebarLeft", "open"]
     }
     Process {
-        id: hideOsd
-        command: ["qs", "ipc", "call", "osd", "hide"]
+        id: hideOsdBrightness
+        command: ["qs", "ipc", "call", "osdBrightness", "hide"]
+    }
+    Process {
+        id: hideOsdVolume
+        command: ["qs", "ipc", "call", "osdVolume", "hide"]
     }
 
-    Variants {
+    Variants { // For each monitor
         model: Quickshell.screens
 
-        PanelWindow {
+        PanelWindow { // Bar window
             id: barRoot
 
             property var modelData
@@ -49,15 +53,15 @@ Scope {
                 right: true
             }
 
-            Rectangle {
+            Rectangle { // Bar background
                 id: barContent
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.top: parent.top
                 color: Appearance.colors.colLayer0
                 height: barHeight
-                // Left section
-                RowLayout {
+                
+                RowLayout { // Left section
                     id: leftSection
                     anchors.left: parent.left
                     implicitHeight: barHeight
@@ -67,8 +71,7 @@ Scope {
                     }
                 }
 
-                // Middle section
-                RowLayout {
+                RowLayout { // Middle section
                     id: middleSection
                     anchors.centerIn: parent
                     spacing: 8
@@ -210,7 +213,7 @@ Scope {
                             const dx = mouse.x - barLeftSideMouseArea.lastScrollX;
                             const dy = mouse.y - barLeftSideMouseArea.lastScrollY;
                             if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
-                                hideOsd.running = true;
+                                hideOsdBrightness.running = true;
                                 barLeftSideMouseArea.trackingScroll = false;
                             }
                         }
@@ -260,7 +263,7 @@ Scope {
                             const dx = mouse.x - barRightSideMouseArea.lastScrollX;
                             const dy = mouse.y - barRightSideMouseArea.lastScrollY;
                             if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
-                                hideOsd.running = true;
+                                hideOsdVolume.running = true;
                                 barRightSideMouseArea.trackingScroll = false;
                             }
                         }

@@ -77,4 +77,16 @@ Singleton {
         }
     }
 
+    IpcHandler {
+		target: "brightness"
+
+		function increment() {
+            root.increment = 1
+        }
+
+        function decrement() {
+            root.increment = -1
+        }
+	}
+
 }

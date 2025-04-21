@@ -39,7 +39,7 @@ Scope {
         target: Audio.sink.audio
         function onVolumeChanged() {
             if (!Audio.ready) return
-            root.triggerOsd()
+            root.showOsdValues = false
         }
     }
 
@@ -61,7 +61,7 @@ Scope {
                 right: true
             }
             mask: Region {
-                item: columnLayout
+                item: osdValuesWrapper
             }
 
             width: columnLayout.implicitWidth
@@ -75,9 +75,17 @@ Scope {
                     height: 1 // Prevent Wayland protocol error
                 }
                 Item {
-                    implicitHeight: true ? osdValues.implicitHeight : 0
-                    implicitWidth: osdValues.implicitWidth
+                    id: osdValuesWrapper
+                    // Extra space for shadow
+                    implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
+                    implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
                     clip: true
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: root.showOsdValues = false
+                    }
 
                     Behavior on implicitHeight {
                         NumberAnimation {
@@ -86,11 +94,12 @@ Scope {
                         }
                     }
 
-                    OsdValues {
+                    OsdValueIndicator {
                         id: osdValues
-                        anchors.bottom: parent.bottom
-                        // height: showOsdValues ? implicitHeight : 0
-                        // implicitHeight: 0
+                        anchors.centerIn: parent 
+                        value: Brightness.value
+                        icon: "light_mode"
+                        name: "Brightness"
                     }
                 }
             }
@@ -100,7 +109,7 @@ Scope {
     }
 
     IpcHandler {
-		target: "osd"
+		target: "osdBrightness"
 
 		function trigger() {
             root.triggerOsd()

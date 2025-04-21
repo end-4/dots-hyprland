@@ -15,6 +15,7 @@ ShellRoot {
     SidebarRight {}
     ScreenCorners {}
     ReloadPopup {}
-    OnScreenDisplay {}
+    OnScreenDisplayBrightness {}
+    OnScreenDisplayVolume {}
 }
 
