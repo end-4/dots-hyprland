@@ -1,5 +1,5 @@
 import "root:/"
-import "root:/modules/common"
+import "root:/modules/common/"
 import "root:/modules/common/widgets"
 import "root:/services"
 import QtQuick
@@ -40,7 +40,6 @@ Scope {
 
             color: "transparent"
             width: Appearance.sizes.notificationPopupWidth
-            height: columnLayout.implicitHeight
 
             // Signal handlers to add/remove notifications
             Connections {

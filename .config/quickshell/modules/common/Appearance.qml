@@ -195,7 +195,7 @@ Singleton {
         property int barCenterSideModuleWidth: 360
         property int barPreferredSideSectionWidth: 400
         property int sidebarWidth: 450
-        
+        property int notificationPopupWidth: 410
         property int hyprlandGapsOut: 5
         property int elevationMargin: 7
         property int fabShadowRadius: 5
