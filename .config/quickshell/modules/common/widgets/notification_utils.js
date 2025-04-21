@@ -1,4 +1,9 @@
-function guessMessageType(summary) {
+
+
+function findSuitableMaterialSymbol(summary = "") {
+    const defaultType = 'chat';
+    if(summary.length === 0) return defaultType;
+
     const keywordsToTypes = {
         'reboot': 'restart_alt',
         'recording': 'screen_record',
@@ -26,7 +31,7 @@ function guessMessageType(summary) {
         }
     }
 
-    return 'chat';
+    return defaultType;
 }
 
 // const getFriendlyNotifTimeString = (timeObject) => {

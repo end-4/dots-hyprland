@@ -251,8 +251,12 @@ Item {
                         color: Appearance.m3colors.m3secondaryContainer
                         MaterialSymbol {
                             visible: notificationObject.appIcon == ""
-                            text: (notificationObject.urgency == NotificationUrgency.Critical) ? "release_alert" : 
-                                NotificationUtils.guessMessageType(notificationObject.summary)
+                            text: {
+                                const defaultIcon = NotificationUtils.findSuitableMaterialSymbol("")
+                                const guessedIcon = NotificationUtils.findSuitableMaterialSymbol(notificationObject.summary)
+                                return (notificationObject.urgency == NotificationUrgency.Critical && guessedIcon === defaultIcon) ?
+                                    "release_alert" : guessedIcon
+                            }
                             anchors.fill: parent
                             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                 Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :

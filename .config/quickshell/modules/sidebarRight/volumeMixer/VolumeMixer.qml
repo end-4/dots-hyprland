@@ -200,25 +200,33 @@ Item {
 
                     ColumnLayout {
                         id: devicesColumnLayout
-                        anchors.top: parent.top
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        anchors.fill: parent
                         Layout.fillWidth: true
+                        spacing: 0
 
                         Repeater {
                             model: Pipewire.nodes.values.filter(node => {
                                 return !node.isStream && node.isSink !== root.deviceSelectorInput && node.audio
                             })
 
+                            // This could and should be refractored, but all data becomes null when passed wtf
                             delegate: RadioButton {
+                                id: radioButton
                                 Layout.leftMargin: root.dialogMargins
                                 Layout.rightMargin: root.dialogMargins
                                 Layout.fillWidth: true
-                                leftInset: 4
-                                rightInset: 4
-                                topInset: 4
-                                bottomInset: 4
-                                checked: modelData.id === Pipewire.defaultAudioSink.id
+                                implicitHeight: 40
+                                checked: modelData.id === Pipewire.defaultAudioSink?.id
+
+                                Connections {
+                                    target: root
+                                    function onShowDeviceSelectorChanged() {
+                                        if(!root.showDeviceSelector) return;
+                                        radioButton.checked = (modelData.id === Pipewire.defaultAudioSink?.id)
+                                    }
+                                }
+
+                                PointingHandInteraction {}
 
                                 onCheckedChanged: {
                                     if (checked) {
@@ -230,25 +238,75 @@ Item {
                                 
                                 contentItem: RowLayout {
                                     Layout.fillWidth: true
-                                    spacing: 8
+                                    spacing: 12
                                     Rectangle {
                                         id: radio
                                         Layout.fillWidth: false
                                         Layout.alignment: Qt.AlignVCenter
                                         width: 20
                                         height: 20
-                                        radius: 10
-                                        border.color: checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
+                                        radius: Appearance.rounding.full
+                                        border.color: checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurfaceVariant
                                         border.width: 2
                                         color: "transparent"
 
+                                        // Checked indicator
                                         Rectangle {
                                             anchors.centerIn: parent
-                                            width: 10
-                                            height: 10
-                                            radius: 5
-                                            color: checked ? Appearance.m3colors.m3primary : "transparent"
-                                            visible: checked
+                                            width: checked ? 10 : 4
+                                            height: checked ? 10 : 4
+                                            radius: Appearance.rounding.full
+                                            color: Appearance.m3colors.m3primary
+                                            opacity: checked ? 1 : 0
+
+                                            Behavior on opacity {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
+                                            Behavior on width {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
+                                            Behavior on height {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
+
+                                        }
+
+                                        // Hover
+                                        Rectangle {
+                                            anchors.centerIn: parent
+                                            width: radioButton.hovered ? 40 : 20
+                                            height: radioButton.hovered ? 40 : 20
+                                            radius: Appearance.rounding.full
+                                            color: Appearance.m3colors.m3onSurface
+                                            opacity: radioButton.hovered ? 0.1 : 0
+
+                                            Behavior on opacity {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
+                                            Behavior on width {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
+                                            Behavior on height {
+                                                NumberAnimation {
+                                                    duration: Appearance.animation.elementDecelFast.duration
+                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                }
+                                            }
                                         }
                                     }
                                     StyledText {
@@ -260,6 +318,9 @@ Item {
                                     }
                                 }
                             }
+                        }
+                        Item {
+                            implicitHeight: dialogMargins
                         }
                     }
                 }

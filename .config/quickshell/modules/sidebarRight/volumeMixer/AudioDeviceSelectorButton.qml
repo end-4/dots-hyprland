@@ -56,7 +56,7 @@ Button {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                text: input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description
+                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? "Unknown"
                 color: Appearance.m3colors.m3outline
             }
         }
