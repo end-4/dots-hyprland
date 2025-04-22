@@ -78,8 +78,8 @@ Item {
             notificationBackground.anchors.left = undefined
             notificationBackground.anchors.right = undefined
             notificationBackground.anchors.fill = undefined
-            notificationRowWrapper.x = width
-            notificationBackground.x = width
+            notificationRowWrapper.x = width + 5 * 2 // Account for shadow
+            notificationBackground.x = width + 5 * 2 // Account for shadow
             destroyTimer1.start()
         }
     }
