@@ -18,11 +18,16 @@ Rectangle { // Window
     property var scale
     property var availableWorkspaceWidth
     property var availableWorkspaceHeight
+    
+    property var targetWindowWidth: windowData?.size[0] * scale
+    property var targetWindowHeight: windowData?.size[1] * scale
+    property bool hovered: false
+    property bool pressed: false
 
     property var iconToWindowRatio: 0.35
     property var iconToWindowRatioCompact: 0.6
     property var iconPath: Quickshell.iconPath(Icons.noKnowledgeIconGuess(windowData?.class))
-    property bool compactMode: Appearance.font.pixelSize.smaller * 4 > root.height || Appearance.font.pixelSize.smaller * 4 > root.width
+    property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
 
     z: 1
     x: Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0)
@@ -31,7 +36,7 @@ Rectangle { // Window
     height: Math.min(windowData?.size[1] * root.scale, availableWorkspaceHeight - y)
 
     radius: Appearance.rounding.windowRounding * root.scale
-    color: Appearance.colors.colLayer2
+    color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
     border.color : Appearance.transparentize(Appearance.m3colors.m3outline, 0.9)
     border.pixelAligned : false
     border.width : 1
@@ -69,6 +74,11 @@ Rectangle { // Window
     MouseArea {
         id: mouseArea
         anchors.fill: parent
+        hoverEnabled: true
+        onEntered: root.hovered = true
+        onExited: root.hovered = false
+        onPressed: root.pressed = true
+        onReleased: root.pressed = false
         onClicked: {
             if (windowData) {
                 closeOverview.running = true
@@ -87,8 +97,14 @@ Rectangle { // Window
             id: windowIcon
             Layout.alignment: Qt.AlignHCenter
             source: root.iconPath
-            width: root.width * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
-            height: root.height * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+            implicitSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+
+            Behavior on implicitSize {
+                NumberAnimation {
+                    duration: Appearance.animation.elementDecel.duration
+                    easing.type: Appearance.animation.elementDecel.type
+                }
+            }
         }
 
         StyledText {
