@@ -3,6 +3,7 @@
 import "./modules/bar/"
 import "./modules/notificationPopup/"
 import "./modules/onScreenDisplay/"
+import "./modules/overview/"
 import "./modules/screenCorners/"
 import "./modules/session/"
 import "./modules/sidebarRight/"
@@ -17,6 +18,7 @@ ShellRoot {
     NotificationPopup {}
     OnScreenDisplayBrightness {}
     OnScreenDisplayVolume {}
+    Overview {}
     ReloadPopup {}
     ScreenCorners {}
     Session {}

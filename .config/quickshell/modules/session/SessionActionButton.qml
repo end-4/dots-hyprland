@@ -31,10 +31,6 @@ Button {
         }
     }
 
-    onClicked: {
-        console.log("Button clicked:", buttonText)
-    }
-
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full

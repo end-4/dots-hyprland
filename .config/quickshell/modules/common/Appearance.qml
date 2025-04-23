@@ -145,6 +145,7 @@ Singleton {
         property int large: 25
         property int full: 9999
         property int screenRounding: large
+        property int windowRounding: 20
     }
 
     font: QtObject {

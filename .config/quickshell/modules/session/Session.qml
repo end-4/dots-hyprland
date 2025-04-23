@@ -187,7 +187,7 @@ Scope {
                     SessionActionButton {
                         id: sessionFirmwareReboot
                         focus: sessionRoot.visible
-                        buttonIcon: "reset_wrench"
+                        buttonIcon: "settings_applications"
                         buttonText: "Reboot to firmware settings"
                         onClicked:  { firmwareReboot.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }

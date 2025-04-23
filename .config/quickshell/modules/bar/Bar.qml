@@ -30,6 +30,10 @@ Scope {
         id: hideOsdVolume
         command: ["qs", "ipc", "call", "osdVolume", "hide"]
     }
+    Process {
+        id: toggleOverview
+        command: ["qs", "ipc", "call", "overview", "toggle"]
+    }
 
     Variants { // For each monitor
         model: Quickshell.screens
@@ -220,6 +224,19 @@ Scope {
                     }
                 }
 
+                MouseArea { // Middle: right-click to toggle overview
+                    id: barMiddleMouseArea
+                    anchors.fill: middleSection
+                    acceptedButtons: Qt.RightButton
+                    
+                    onPressed: (event) => {
+                        if (event.button === Qt.RightButton) {
+                            toggleOverview.running = true;
+                        }
+                    }
+
+                }
+
                 MouseArea { // Right side: scroll to change volume
                     id: barRightSideMouseArea
                     property bool hovered: false
@@ -250,7 +267,7 @@ Scope {
                             if (event.angleDelta.y < 0)
                                 Audio.sink.audio.volume -= step;
                             else if (event.angleDelta.y > 0)
-                                Audio.sink.audio.volume += step;
+                                Audio.sink.audio.volume = Math.min(1, Audio.sink.audio.volume + step);
                             // Store the mouse position and start tracking
                             barRightSideMouseArea.lastScrollX = event.x;
                             barRightSideMouseArea.lastScrollY = event.y;

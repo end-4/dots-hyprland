@@ -30,6 +30,12 @@ Singleton {
         property int timeout: 1000
     }
 
+    property QtObject overview: QtObject {
+        property real scale: 0.18 // Relative to screen size
+        property real numOfRows: 2
+        property real numOfCols: 5
+    }
+
     property QtObject resources: QtObject {
         property int updateInterval: 3000
     }

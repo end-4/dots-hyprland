@@ -131,7 +131,6 @@ Item {
             if (mouse.button === Qt.LeftButton) {
                 copyNotificationBody.running = true
                 notificationSummaryText.text = `${notificationObject.summary} (copied)`
-                console.log(notificationSummaryText.text)
             }
         }
         onDragStartedChanged: () => {
