@@ -25,6 +25,7 @@ Rectangle { // Window
     property bool pressed: false
 
     property var iconToWindowRatio: 0.35
+    property var xwaylandIndicatorToIconRatio: 0.35
     property var iconToWindowRatioCompact: 0.6
     property var iconPath: Quickshell.iconPath(Icons.noKnowledgeIconGuess(windowData?.class))
     property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
@@ -108,11 +109,11 @@ Rectangle { // Window
 
             IconImage {
                 id: xwaylandIndicator
-                visible: windowData?.xwayland
+                visible: ConfigOptions.overview.showXwaylandIndicator && windowData?.xwayland
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 source: Quickshell.iconPath("xorg")
-                implicitSize: windowIcon.implicitSize * 0.35
+                implicitSize: windowIcon.implicitSize * xwaylandIndicatorToIconRatio
             }
         }
 
