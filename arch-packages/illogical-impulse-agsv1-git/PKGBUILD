@@ -1,7 +1,7 @@
 # Modified from AUR package "aylurs-gtk-shell-git" maintained by kotontrion <kotontrion@tutanota.de>
 pkgname=illogical-impulse-agsv1-git
 _pkgname=ii-agsv1
-pkgver=r2.897e59e
+pkgver=r3.3e8d365
 pkgrel=2
 pkgdesc="Aylurs's Gtk Shell (AGS), patched for illogical-impulse dotfiles."
 arch=('x86_64')
@@ -16,7 +16,7 @@ optdepends=('greetd: required for greetd service'
             'networkmanager: required for network service'
             'power-profiles-daemon: required for powerprofiles service'
             'upower: required for battery service')
-conflicts=('illogical-impulse-agsv1' 'aylurs-gtk-shell' 'aylurs-gtk-shell-git')
+conflicts=('illogical-impulse-agsv1')
 backup=('etc/pam.d/ags')
 source=("git+${url}.git")
 sha256sums=('SKIP')
