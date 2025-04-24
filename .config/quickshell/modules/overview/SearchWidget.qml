@@ -17,6 +17,21 @@ Item { // Wrapper
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
+    Keys.onPressed: {
+        // Only handle printable characters (ignore modifiers, arrows, etc.)
+        if (event.text && event.text.length === 1 && event.key !== Qt.Key_Enter && event.key !== Qt.Key_Return) {
+            if (!searchInput.activeFocus) {
+                searchInput.forceActiveFocus();
+                // Insert the character at the cursor position
+                searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition) +
+                                   event.text +
+                                   searchInput.text.slice(searchInput.cursorPosition);
+                searchInput.cursorPosition += 1;
+                event.accepted = true;
+            }
+        }
+    }
+
     Rectangle { // Background
         id: searchWidgetContent
         anchors.centerIn: parent
@@ -53,15 +68,15 @@ Item { // Wrapper
                 TextField { // Search box
                     id: searchInput
 
-                    padding: 15
+                    focus: root.panelWindow.visible || GlobalStates.overviewOpen
                     Layout.rightMargin: 15
+                    padding: 15
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSurface
                     placeholderText: qsTr("Search")
                     placeholderTextColor: Appearance.m3colors.m3outline
-                    focus: root.panelWindow.visible || GlobalStates.overviewOpen
-
                     implicitWidth: Appearance.sizes.searchWidth
+
 
                     onTextChanged: root.searchingText = text
                     Connections {
@@ -69,6 +84,16 @@ Item { // Wrapper
                         function onVisibleChanged() {
                             searchInput.selectAll()
                             root.searchingText = ""
+                        }
+                    }
+
+                    onAccepted: {
+                        if (appResults.count > 0) {
+                            // Get the first visible delegate and trigger its click
+                            let firstItem = appResults.itemAtIndex(0);
+                            if (firstItem && firstItem.clicked) {
+                                firstItem.clicked();
+                            }
                         }
                     }
 
@@ -93,7 +118,7 @@ Item { // Wrapper
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
-                implicitHeight: 600
+                implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
                 clip: true
                 topMargin: 10
                 bottomMargin: 10
@@ -101,7 +126,7 @@ Item { // Wrapper
                 KeyNavigation.up: searchBar
 
                 model: ScriptModel {
-                    id: model;
+                    id: model
                     values: DesktopEntries.applications.values
                         .filter((entry) => {
                             if (root.searchingText == "") return false

@@ -50,7 +50,7 @@ Button {
         anchors.fill: parent
         anchors.leftMargin: root.horizontalMargin
         anchors.rightMargin: root.horizontalMargin
-        radius: Appearance.rounding.small
+        radius: Appearance.rounding.normal
         color: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
     }
 
