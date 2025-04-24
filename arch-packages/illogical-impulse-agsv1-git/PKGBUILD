@@ -1,11 +1,11 @@
 # Modified from AUR package "aylurs-gtk-shell-git" maintained by kotontrion <kotontrion@tutanota.de>
 pkgname=illogical-impulse-agsv1-git
 _pkgname=ii-agsv1
-pkgver=r3.3e8d365
-pkgrel=3
+pkgver=r4.3e8d365
+pkgrel=4
 pkgdesc="Aylurs's Gtk Shell (AGS), patched for illogical-impulse dotfiles."
 arch=('x86_64')
-url="https://github.com/clsty/ii-agsv1"
+url="https://github.com/end-4/ii-agsv1"
 license=('GPL-3.0-only')
 makedepends=('git' 'gobject-introspection' 'meson' 'npm' 'typescript')
 depends=('gvfs' 'gjs' 'glib2' 'glib2-devel' 'glibc' 'gtk3' 'gtk-layer-shell' 'libpulse' 'pam' 'gnome-bluetooth-3.0' 'gammastep')
