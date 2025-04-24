@@ -105,6 +105,15 @@ Rectangle { // Window
                     easing.type: Appearance.animation.elementDecel.type
                 }
             }
+
+            IconImage {
+                id: xwaylandIndicator
+                visible: windowData?.xwayland
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                source: Quickshell.iconPath("xorg")
+                implicitSize: windowIcon.implicitSize * 0.35
+            }
         }
 
         StyledText {
