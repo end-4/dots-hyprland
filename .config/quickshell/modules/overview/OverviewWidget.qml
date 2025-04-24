@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
@@ -32,9 +33,10 @@ Item {
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
 
-    // onWindowsChanged: {
-    //     console.log("Windows changed")
-    // }
+    Process {
+        id: closeOverview
+        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to by async to work?
+    }
 
     Rectangle {
         id: overviewBackground
@@ -68,6 +70,15 @@ Item {
                             implicitHeight: (monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale
                             color: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
                             radius: Appearance.rounding.screenRounding * root.scale
+
+                            MouseArea {
+                                id: mouseArea
+                                anchors.fill: parent
+                                onClicked: (event) => {
+                                    closeOverview.running = true
+                                    Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
+                                }
+                            }
 
                             StyledText {
                                 z: 9999

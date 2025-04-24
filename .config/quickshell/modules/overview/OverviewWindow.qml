@@ -80,10 +80,13 @@ Rectangle { // Window
         onExited: root.hovered = false
         onPressed: root.pressed = true
         onReleased: root.pressed = false
-        onClicked: {
+        onClicked: (event) => {
             if (windowData) {
                 closeOverview.running = true
+                Hyprland.dispatch(`keyword cursor:no_warps true`)
                 Hyprland.dispatch(`focuswindow address:${windowData.address}`)
+                Hyprland.dispatch(`keyword cursor:no_warps false`)
+                event.accepted = true
             }
         }
     }
