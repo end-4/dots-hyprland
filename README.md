@@ -1,6 +1,14 @@
-# QUICKSHELL, WIP, DO NOT USE
+# Quickshell illogical-impulse
+## Feel free to try it - here are the steps
 
-i hope ill actually properly learn quickshell this time
+- Assumption: You are already using the AGS illogical-impulse
+- Install Qt packages (idk which are actually needed so this is everything I have): `qt5-base qt5-declarative qt5-graphicaleffects qt5-imageformats qt5-quickcontrols qt5-quickcontrols2 qt5-svg qt5-translations qt5-wayland qt5-x11extras qt6-5compat qt6-base qt6-declarative qt6-imageformats qt6-multimedia qt6-positioning qt6-quicktimeline qt6-sensors qt6-svg qt6-tools qt6-translations qt6-virtualkeyboard qt6-wayland qt6-webchannel qt6-webengine qt6-websockets qt6-webview`
+- Then install quickshell: `yay -S quickshell`
+- Copy `.config/quickshell` folder and hyprland keybind file (or just manually copy over the lines containing `qs ipc call`) (backing up is your responsibility)
+- Run quickshell with `qs` and enjoy... 
+  - We currently have bar, right sidebar, search/overview
+  - Tips: scrolled windows are flickable
+
 
 <div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
