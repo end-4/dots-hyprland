@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Services.Mpris
 
 Scope {
     id: bar
@@ -257,6 +258,9 @@ Scope {
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
                             openSidebarRight.running = true
+                        }
+                        else if (event.button === Qt.RightButton) {
+                            MprisController.activePlayer.next()
                         }
                     }
                     // Scroll to change volume
