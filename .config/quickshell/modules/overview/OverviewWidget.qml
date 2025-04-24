@@ -35,7 +35,7 @@ Item {
 
     Process {
         id: closeOverview
-        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to by async to work?
+        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to be async to work?
     }
 
     Rectangle {
