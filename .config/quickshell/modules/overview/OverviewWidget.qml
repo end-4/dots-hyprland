@@ -13,8 +13,8 @@ import "./icons.js" as Icons
 
 Item {
     id: root
-    required property var bar
-    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
+    required property var panelWindow
+    readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
     readonly property var toplevels: ToplevelManager.toplevels
     readonly property int workspacesShown: ConfigOptions.overview.numOfRows * ConfigOptions.overview.numOfCols
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)

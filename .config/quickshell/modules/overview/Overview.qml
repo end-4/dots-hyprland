@@ -24,6 +24,7 @@ Scope {
 
             WlrLayershell.namespace: "quickshell:overview"
             WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
             mask: Region {
@@ -40,7 +41,7 @@ Scope {
             HyprlandFocusGrab {
                 id: grab
                 windows: [ root ]
-                active: false
+                active: GlobalStates.overviewOpen
                 onCleared: () => {
                     if (!active) GlobalStates.overviewOpen = false
                 }
@@ -80,42 +81,17 @@ Scope {
                     width: 1 // Prevent Wayland protocol error
                 }
 
-                TextField {
-                    id: searchInput
-
+                SearchWidget {
+                    panelWindow: root
                     Layout.alignment: Qt.AlignHCenter
-                    padding: 15
-                    color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    selectedTextColor: Appearance.m3colors.m3onSurface
-                    placeholderText: qsTr("Search")
-                    placeholderTextColor: Appearance.m3colors.m3outline
-                    focus: root.visible
-
-                    onTextChanged: root.searchingText = text
-                    Connections {
-                        target: root
-                        function onVisibleChanged() {
-                            searchInput.selectAll()
-                            root.searchingText = ""
-                        }
-                    }
-
-                    background: Rectangle {
-                        anchors.fill: parent
-                        radius: Appearance.rounding.normal
-                        color: Appearance.colors.colLayer0
-                    }
-
-                    cursorDelegate: Rectangle {
-                        width: 1
-                        color: searchInput.activeFocus ? Appearance.m3colors.m3primary : "transparent"
-                        radius: 1
+                    onSearchingTextChanged: (text) => {
+                        root.searchingText = searchingText
                     }
                 }
 
                 OverviewWidget {
+                    panelWindow: root
                     visible: (root.searchingText == "")
-                    bar: root
                 }
             }
 
