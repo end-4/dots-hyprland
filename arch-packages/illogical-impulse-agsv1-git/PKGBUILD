@@ -2,7 +2,7 @@
 pkgname=illogical-impulse-agsv1-git
 _pkgname=ii-agsv1
 pkgver=r2.897e59e
-pkgrel=1
+pkgrel=2
 pkgdesc="Aylurs's Gtk Shell (AGS), patched for illogical-impulse dotfiles."
 arch=('x86_64')
 url="https://github.com/clsty/ii-agsv1"
@@ -19,8 +19,7 @@ optdepends=('greetd: required for greetd service'
 conflicts=('illogical-impulse-agsv1' 'aylurs-gtk-shell' 'aylurs-gtk-shell-git')
 backup=('etc/pam.d/ags')
 source=("git+${url}.git")
-sha256sums=('SKIP'
-            'SKIP')
+sha256sums=('SKIP')
 
 pkgver(){
   cd $srcdir/$_pkgname
