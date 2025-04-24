@@ -80,12 +80,16 @@ Rectangle { // Window
         onExited: root.hovered = false
         onPressed: root.pressed = true
         onReleased: root.pressed = false
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         onClicked: (event) => {
-            if (windowData) {
+            if (!windowData) return;
+
+            if (event.button === Qt.LeftButton) {
                 closeOverview.running = true
-                Hyprland.dispatch(`keyword cursor:no_warps true`)
-                Hyprland.dispatch(`focuswindow address:${windowData.address}`)
-                Hyprland.dispatch(`keyword cursor:no_warps false`)
+                Hyprland.dispatch(`workspace ${windowData.workspace.id}`)
+                event.accepted = true
+            } else if (event.button === Qt.MiddleButton) {
+                Hyprland.dispatch(`closewindow address:${windowData.address}`)
                 event.accepted = true
             }
         }

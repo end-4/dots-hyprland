@@ -275,6 +275,7 @@ Item {
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSurface
                     placeholderText: "Task description"
+                    placeholderTextColor: Appearance.m3colors.m3outline
                     focus: root.showAddDialog
                     onAccepted: dialog.addTask()
 

@@ -92,12 +92,10 @@ Item {
                             }
 
                             Repeater { // Window repeater
-                                model: ScriptModel {
-                                    values: windowAddresses.filter((address) => {
-                                        var win = windowByAddress[address]
-                                        return (win?.workspace?.id === workspace.workspaceValue)
-                                    })
-                                }
+                                model: windowAddresses.filter((address) => {
+                                    var win = windowByAddress[address]
+                                    return (win?.workspace?.id === workspace.workspaceValue)
+                                })
                                 delegate: OverviewWindow {
                                     windowData: windowByAddress[modelData]
                                     monitorData: root.monitorData

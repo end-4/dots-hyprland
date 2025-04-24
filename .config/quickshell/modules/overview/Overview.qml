@@ -18,6 +18,7 @@ Scope {
         PanelWindow {
             id: root
             property var modelData
+            property string searchingText: ""
             screen: modelData
             visible: GlobalStates.overviewOpen
 
@@ -70,7 +71,7 @@ Scope {
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
-                        sessionRoot.visible = false;
+                        GlobalStates.overviewOpen = false;
                     }
                 }
 
@@ -79,7 +80,41 @@ Scope {
                     width: 1 // Prevent Wayland protocol error
                 }
 
+                TextField {
+                    id: searchInput
+
+                    Layout.alignment: Qt.AlignHCenter
+                    padding: 15
+                    color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
+                    selectedTextColor: Appearance.m3colors.m3onSurface
+                    placeholderText: "Search, calculate or run"
+                    placeholderTextColor: Appearance.m3colors.m3outline
+                    focus: root.visible
+
+                    onTextChanged: root.searchingText = text
+                    Connections {
+                        target: root
+                        function onVisibleChanged() {
+                            searchInput.selectAll()
+                            root.searchingText = ""
+                        }
+                    }
+
+                    background: Rectangle {
+                        anchors.fill: parent
+                        radius: Appearance.rounding.normal
+                        color: Appearance.colors.colLayer0
+                    }
+
+                    cursorDelegate: Rectangle {
+                        width: 1
+                        color: searchInput.activeFocus ? Appearance.m3colors.m3primary : "transparent"
+                        radius: 1
+                    }
+                }
+
                 OverviewWidget {
+                    visible: (root.searchingText == "")
                     bar: root
                 }
             }
