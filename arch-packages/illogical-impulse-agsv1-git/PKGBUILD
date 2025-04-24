@@ -18,8 +18,7 @@ optdepends=('greetd: required for greetd service'
             'upower: required for battery service')
 conflicts=('illogical-impulse-agsv1' 'aylurs-gtk-shell' 'aylurs-gtk-shell-git')
 backup=('etc/pam.d/ags')
-source=("git+${url}.git"
-        "git+https://gitlab.gnome.org/GNOME/libgnome-volume-control")
+source=("git+${url}.git")
 sha256sums=('SKIP'
             'SKIP')
 
@@ -30,11 +29,6 @@ pkgver(){
 
 prepare() {
   cd $srcdir/$_pkgname
-  rm -rf subprojects/gvc
-  mv -T "$srcdir"/libgnome-volume-control subprojects/gvc
-  #git submodule init
-  #git config submodule.subprojects/gvc.url "$srcdir/libgnome-volume-control"
-  #git -c protocol.file.allow=always submodule update
 }
 
 build() {
