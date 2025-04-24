@@ -127,7 +127,7 @@ Scope {
                                 command: ["qs", "ipc", "call", "session", "open"]
                             }
                             StyledToolTip {
-                                content: "Session"
+                                content: qsTr("Session")
                             }
                         }
                     }

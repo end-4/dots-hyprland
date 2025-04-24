@@ -37,6 +37,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: "Night Light"
+        content: qsTr("Night Light")
     }
 }

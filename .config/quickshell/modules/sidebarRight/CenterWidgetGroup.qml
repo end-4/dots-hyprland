@@ -17,7 +17,7 @@ Rectangle {
     color: Appearance.colors.colLayer1
 
     property int currentTab: 0
-    property var tabButtonList: [{"icon": "notifications", "name": "Notifications"}, {"icon": "volume_up", "name": "Volume mixer"}]
+    property var tabButtonList: [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) {

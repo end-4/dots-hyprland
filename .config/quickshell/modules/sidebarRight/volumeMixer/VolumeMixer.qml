@@ -106,7 +106,7 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.normal
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
-                        text: "No audio source"
+                        text: qsTr("No audio source")
                     }
                 }
             }
@@ -341,13 +341,13 @@ Item {
                     Layout.alignment: Qt.AlignRight
 
                     DialogButton {
-                        buttonText: "Cancel"
+                        buttonText: qsTr("Cancel")
                         onClicked: {
                             root.showDeviceSelector = false
                         }
                     }
                     DialogButton {
-                        buttonText: "OK"
+                        buttonText: qsTr("OK")
                         onClicked: {
                             root.showDeviceSelector = false
                             if (root.selectedDevice) {

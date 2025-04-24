@@ -97,7 +97,7 @@ Scope {
                         anchors.centerIn: parent 
                         value: Brightness.value
                         icon: "light_mode"
-                        name: "Brightness"
+                        name: qsTr("Brightness")
                     }
                 }
             }

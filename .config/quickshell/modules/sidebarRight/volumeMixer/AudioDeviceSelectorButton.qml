@@ -50,14 +50,14 @@ Button {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.normal
-                text: input ? "Input" : "Output"
+                text: input ? qsTr("Input") : qsTr("Output")
                 color: Appearance.colors.colOnLayer2
             }
             StyledText {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? "Unknown"
+                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? qsTr("Unknown")
                 color: Appearance.m3colors.m3outline
             }
         }

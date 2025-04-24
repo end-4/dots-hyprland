@@ -39,7 +39,7 @@ QuickToggleButton {
     }
     StyledToolTip {
         content: `${(Bluetooth.bluetoothEnabled && Bluetooth.bluetoothDeviceName.length > 0) ? 
-            Bluetooth.bluetoothDeviceName : "Bluetooth"} | Right-click to configure`
+            Bluetooth.bluetoothDeviceName : "Bluetooth"} | ${qsTr("Right-click to configure")}`
 
     }
 }

@@ -27,7 +27,7 @@ Item {
             color: Appearance.colors.colSubtext
             Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight
-            text: activeWindow?.activated ? activeWindow?.appId : "Desktop"
+            text: activeWindow?.activated ? activeWindow?.appId : qsTr("Desktop")
         }
 
         StyledText {
@@ -35,7 +35,7 @@ Item {
             color: Appearance.colors.colOnLayer0
             Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight
-            text: activeWindow?.activated ? activeWindow?.title : `Workspace ${monitor.activeWorkspace?.id}`
+            text: activeWindow?.activated ? activeWindow?.title : `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
         }
 
     }

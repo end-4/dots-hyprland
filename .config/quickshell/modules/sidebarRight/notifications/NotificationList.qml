@@ -120,7 +120,7 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3outline
                 horizontalAlignment: Text.AlignHCenter
-                text: "No notifications"
+                text: qsTr("No notifications")
             }
         }
     }
@@ -155,7 +155,7 @@ Item {
             Layout.margins: 5
             Layout.topMargin: 10
             buttonIcon: "clear_all"
-            buttonText: "Clear"
+            buttonText: qsTr("Clear")
             onClicked: () => {
                 Notifications.discardAllNotifications()
             }

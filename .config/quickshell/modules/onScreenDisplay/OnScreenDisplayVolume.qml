@@ -97,7 +97,7 @@ Scope {
                         anchors.centerIn: parent 
                         value: Audio.sink?.audio.volume
                         icon: "volume_up"
-                        name: "Volume"
+                        name: qsTr("Volume")
                     }
                 }
             }

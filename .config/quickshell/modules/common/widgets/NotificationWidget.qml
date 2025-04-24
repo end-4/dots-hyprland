@@ -562,7 +562,7 @@ Item {
 
                     NotificationActionButton {
                         Layout.fillWidth: true
-                        buttonText: "Close"
+                        buttonText: qsTr("Close")
                         urgency: notificationObject.urgency
                         implicitWidth: (notificationObject.actions.length == 0) ? (actionsFlickable.width / 2) : 
                             (contentItem.implicitWidth + leftPadding + rightPadding)

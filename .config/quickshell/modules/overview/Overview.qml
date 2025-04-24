@@ -87,7 +87,7 @@ Scope {
                     padding: 15
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSurface
-                    placeholderText: "Search, calculate or run"
+                    placeholderText: qsTr("Search")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     focus: root.visible
 

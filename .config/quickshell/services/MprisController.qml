@@ -79,9 +79,9 @@ Singleton {
 		this.activeTrack = {
 			uniqueId: this.activePlayer?.uniqueId ?? 0,
 			artUrl: this.activePlayer?.trackArtUrl ?? "",
-			title: this.activePlayer?.trackTitle || "Unknown Title",
-			artist: this.activePlayer?.trackArtist || "Unknown Artist",
-			album: this.activePlayer?.trackAlbum || "Unknown Album",
+			title: this.activePlayer?.trackTitle || qsTr("Unknown Title"),
+			artist: this.activePlayer?.trackArtist || qsTr("Unknown Artist"),
+			album: this.activePlayer?.trackAlbum || qsTr("Unknown Album"),
 		};
 
 		this.trackChanged(__reverse);

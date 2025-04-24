@@ -9,7 +9,7 @@ import Quickshell.Services.Mpris
 
 Item {
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
-    readonly property string cleanedTitle: activePlayer?.trackTitle.replace(/【[^】]*】/, "") || "No media"
+    readonly property string cleanedTitle: activePlayer?.trackTitle.replace(/【[^】]*】/, "") || qsTr("No media")
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2

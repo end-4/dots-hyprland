@@ -9,7 +9,7 @@ import Qt5Compat.GraphicalEffects
 Item {
     id: root
     property int currentTab: 0
-    property var tabButtonList: [{"icon": "checklist", "name": "Unfinished"}, {"name": "Done", "icon": "check_circle"}]
+    property var tabButtonList: [{"icon": "checklist", "name": qsTr("Unfinished")}, {"name": qsTr("Done"), "icon": "check_circle"}]
     property bool showAddDialog: false
     property int dialogMargins: 20
     property int fabSize: 48
@@ -126,7 +126,7 @@ Item {
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
-                emptyPlaceholderText: "Nothing here!"
+                emptyPlaceholderText: qsTr("Nothing here!")
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return !item.done; })
@@ -134,7 +134,7 @@ Item {
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
-                emptyPlaceholderText: "Finished tasks will go here"
+                emptyPlaceholderText: qsTr("Finished tasks will go here")
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return item.done; })
@@ -263,7 +263,7 @@ Item {
                     Layout.alignment: Qt.AlignLeft
                     color: Appearance.m3colors.m3onSurface
                     font.pixelSize: Appearance.font.pixelSize.larger
-                    text: "Add task"
+                    text: qsTr("Add task")
                 }
 
                 TextField {
@@ -274,7 +274,7 @@ Item {
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSurface
-                    placeholderText: "Task description"
+                    placeholderText: qsTr("Task description")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     focus: root.showAddDialog
                     onAccepted: dialog.addTask()
@@ -302,11 +302,11 @@ Item {
                     spacing: 5
 
                     DialogButton {
-                        buttonText: "Cancel"
+                        buttonText: qsTr("Cancel")
                         onClicked: root.showAddDialog = false
                     }
                     DialogButton {
-                        buttonText: "Add"
+                        buttonText: qsTr("Add")
                         enabled: todoInput.text.length > 0
                         onClicked: dialog.addTask()
                     }

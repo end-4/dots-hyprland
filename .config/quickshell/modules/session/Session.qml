@@ -92,7 +92,7 @@ Scope {
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
                         font.weight: Font.DemiBold
-                        text: "Session"
+                        text: qsTr("Session")
                     }
 
                     StyledText { // Small instruction
@@ -100,7 +100,7 @@ Scope {
                         horizontalAlignment: Text.AlignHCenter
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.normal
-                        text: "Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel"
+                        text: qsTr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
                     }
                 }
 
@@ -110,7 +110,7 @@ Scope {
                         id: sessionLock
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
-                        buttonText: "Lock"
+                        buttonText: qsTr("Lock")
                         onClicked:  { lock.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.right: sessionSleep
@@ -120,7 +120,7 @@ Scope {
                         id: sessionSleep
                         focus: sessionRoot.visible
                         buttonIcon: "dark_mode"
-                        buttonText: "Sleep"
+                        buttonText: qsTr("Sleep")
                         onClicked:  { sleep.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLock
@@ -131,7 +131,7 @@ Scope {
                         id: sessionLogout
                         focus: sessionRoot.visible
                         buttonIcon: "logout"
-                        buttonText: "Logout"
+                        buttonText: qsTr("Logout")
                         onClicked: { logout.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
@@ -142,7 +142,7 @@ Scope {
                         id: sessionTaskManager
                         focus: sessionRoot.visible
                         buttonIcon: "browse_activity"
-                        buttonText: "Task Manager"
+                        buttonText: qsTr("Task Manager")
                         onClicked:  { taskManager.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLogout
@@ -156,7 +156,7 @@ Scope {
                         id: sessionHibernate
                         focus: sessionRoot.visible
                         buttonIcon: "downloading"
-                        buttonText: "Hibernate"
+                        buttonText: qsTr("Hibernate")
                         onClicked:  { hibernate.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionLock
@@ -166,7 +166,7 @@ Scope {
                         id: sessionShutdown
                         focus: sessionRoot.visible
                         buttonIcon: "power_settings_new"
-                        buttonText: "Shutdown"
+                        buttonText: qsTr("Shutdown")
                         onClicked:  { shutdown.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionHibernate
@@ -177,7 +177,7 @@ Scope {
                         id: sessionReboot
                         focus: sessionRoot.visible
                         buttonIcon: "restart_alt"
-                        buttonText: "Reboot"
+                        buttonText: qsTr("Reboot")
                         onClicked:  { reboot.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
@@ -188,7 +188,7 @@ Scope {
                         id: sessionFirmwareReboot
                         focus: sessionRoot.visible
                         buttonIcon: "settings_applications"
-                        buttonText: "Reboot to firmware settings"
+                        buttonText: qsTr("Reboot to firmware settings")
                         onClicked:  { firmwareReboot.running = true; sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionTaskManager

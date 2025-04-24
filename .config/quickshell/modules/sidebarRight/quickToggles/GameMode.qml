@@ -25,6 +25,6 @@ QuickToggleButton {
         command: ['bash', '-c', `hyprctl reload`]
     }
     StyledToolTip {
-        content: "Game mode"
+        content: qsTr("Game mode")
     }
 }
