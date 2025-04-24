@@ -2,7 +2,7 @@
 pkgname=illogical-impulse-agsv1-git
 _pkgname=ii-agsv1
 pkgver=r3.3e8d365
-pkgrel=2
+pkgrel=3
 pkgdesc="Aylurs's Gtk Shell (AGS), patched for illogical-impulse dotfiles."
 arch=('x86_64')
 url="https://github.com/clsty/ii-agsv1"
@@ -40,5 +40,6 @@ build() {
 package() {
   cd $srcdir/$_pkgname
   meson install -C build --destdir "$pkgdir"
+  rm ${pkgdir}/usr/bin/ags
   ln -sf /usr/share/com.github.Aylur.ags/com.github.Aylur.ags ${pkgdir}/usr/bin/agsv1
 }
