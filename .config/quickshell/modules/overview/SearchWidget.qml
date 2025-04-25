@@ -183,13 +183,6 @@ Item { // Wrapper
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
 
-                    KeyNavigation.down: {
-                        if (appResults.count > 1) {
-                            appResults.focus = true;
-                            appResults.currentIndex = 1;
-                        }
-                    }
-
                     Behavior on implicitWidth {
                         NumberAnimation {
                             duration: Appearance.animation.elementDecelFast.duration
@@ -243,6 +236,10 @@ Item { // Wrapper
                 bottomMargin: 10
                 spacing: 0
                 KeyNavigation.up: searchBar
+
+                onFocusChanged: {
+                    if(focus) appResults.currentIndex = 1;
+                }
 
                 Connections {
                     target: root
