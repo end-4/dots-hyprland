@@ -11,12 +11,17 @@ import Quickshell.Widgets
 
 Button {
     id: root
-    property DesktopEntry desktopEntry
-    property string itemName: desktopEntry?.name
-    property string itemIcon: desktopEntry?.icon
-    property var itemExecute: desktopEntry?.execute
-    property string itemClickActionName: desktopEntry?.clickActionName
+    property var entry
+    property bool entryShown: entry?.shown ?? true
+    property string itemType: entry?.type
+    property string itemName: entry?.name
+    property string itemIcon: entry?.icon ?? ""
+    property var itemExecute: entry?.execute
+    property string fontType: entry?.fontType ?? "main"
+    property string itemClickActionName: entry?.clickActionName
+    property string materialSymbol: entry?.materialSymbol ?? ""
     
+    visible: root.entryShown
     property int horizontalMargin: 10
     property int buttonHorizontalPadding: 10
     property int buttonVerticalPadding: 5
@@ -61,20 +66,46 @@ Button {
         anchors.leftMargin: root.horizontalMargin + root.buttonHorizontalPadding
         anchors.rightMargin: root.horizontalMargin + root.buttonHorizontalPadding
 
+        // Icon
         IconImage {
+            visible: root.materialSymbol == ""
             source: Quickshell.iconPath(root.itemIcon);
             width: 35
             height: 35
         }
-        StyledText {
-            Layout.fillWidth: true
-            id: nameText
-            font.pixelSize: Appearance.font.pixelSize.normal
+        MaterialSymbol {
+            visible: root.materialSymbol != ""
+            text: root.materialSymbol
+            font.pixelSize: 30
             color: Appearance.m3colors.m3onSurface
-            horizontalAlignment: Text.AlignLeft
-            elide: Text.ElideRight
-            text: root.itemName
+            // width: 35
+            // height: 35
         }
+
+        // Main text
+        ColumnLayout {
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            spacing: 0
+            StyledText {
+                font.pixelSize: Appearance.font.pixelSize.small
+                color: Appearance.colors.colSubtext
+                visible: root.itemType && root.itemType != "App"
+                text: root.itemType
+            }
+            StyledText {
+                Layout.fillWidth: true
+                id: nameText
+                font.pixelSize: Appearance.font.pixelSize.normal
+                font.family: Appearance.font.family[root.fontType]
+                color: Appearance.m3colors.m3onSurface
+                horizontalAlignment: Text.AlignLeft
+                elide: Text.ElideRight
+                text: root.itemName
+            }
+        }
+
+        // Action text
         StyledText {
             Layout.fillWidth: false
             visible: (root.hovered || root.focus)

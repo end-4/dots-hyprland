@@ -41,6 +41,12 @@ Singleton {
         property int updateInterval: 3000
     }
 
+    property QtObject search: QtObject {
+        property int nonAppResultDelay: 30 // This prevents lagging when typing
+        property string engineBaseUrl: "https://www.google.com/search?q="
+        property list<string> excludedSites: [ "quora.com" ]
+    }
+
     property QtObject hacks: QtObject {
         property int arbitraryRaceConditionDelay: 10 // milliseconds
     }
