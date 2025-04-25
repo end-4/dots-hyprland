@@ -19,6 +19,10 @@ Item { // Wrapper
 
     property string mathResult: ""
 
+    function focusFirstItemIfNeeded() {
+        if (searchInput.focus) appResults.currentIndex = 0; // Focus the first item
+    }
+
     Timer {
         id: nonAppResultsTimer
         interval: ConfigOptions.search.nonAppResultDelay
@@ -38,7 +42,7 @@ Item { // Wrapper
         stdout: SplitParser {
             onRead: data => {
                 root.mathResult = data
-                if (searchInput.focus) appResults.currentIndex = 0; // Focus the first item
+                root.focusFirstItemIfNeeded()
             }
         }
     }
@@ -64,6 +68,18 @@ Item { // Wrapper
             }
             webSearch.command = baseCommand.concat(url)
             webSearch.running = true
+        }
+    }
+
+    Process {
+        id: executor
+        property list<string> baseCommand: ["bash", "-c"]
+        function executeCommand(command) {
+            executor.running = false
+            executor.command = baseCommand.concat(
+                `${command} || ${ConfigOptions.apps.terminal} fish -C 'echo "${qsTr("Searching for package with that command")}..." && pacman -F ${command}'`
+            )
+            executor.running = true
         }
     }
 
@@ -148,12 +164,6 @@ Item { // Wrapper
             RowLayout {
                 id: searchBar
                 spacing: 5
-                KeyNavigation.down: {
-                    if (appResults.count > 1) {
-                        appResults.currentIndex = 1;
-                        appResults.forceActiveFocus();
-                    }
-                }
                 MaterialSymbol {
                     id: searchIcon
                     Layout.leftMargin: 15
@@ -169,9 +179,16 @@ Item { // Wrapper
                     padding: 15
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSurface
-                    placeholderText: qsTr("Search")
+                    placeholderText: qsTr("Search, calculate or run")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
+
+                    KeyNavigation.down: {
+                        if (appResults.count > 1) {
+                            appResults.focus = true;
+                            appResults.currentIndex = 1;
+                        }
+                    }
 
                     Behavior on implicitWidth {
                         NumberAnimation {
@@ -269,6 +286,16 @@ Item { // Wrapper
                             materialSymbol: 'calculate',
                             execute: () => {
                                 copyText.copyTextToClipboard(root.mathResult);
+                            }
+                        });
+                        result.push({
+                            name: searchingText,
+                            clickActionName: "Run",
+                            type: qsTr("Run command"),
+                            fontType: "monospace",
+                            materialSymbol: 'terminal',
+                            execute: () => {
+                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
                             }
                         });
                         result.push({
