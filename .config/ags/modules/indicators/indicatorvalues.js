@@ -5,9 +5,10 @@ const { Box, Label, ProgressBar } = Widget;
 import { MarginRevealer } from '../.widgethacks/advancedrevealers.js';
 import Brightness from '../../services/brightness.js';
 import Indicator from '../../services/indicator.js';
+import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
 const OsdValue = ({
-    name, nameSetup = undefined, labelSetup, progressSetup,
+    name, icon, nameSetup = undefined, labelSetup, progressSetup,
     extraClassName = '', extraProgressClassName = '',
     ...rest
 }) => {
@@ -22,27 +23,33 @@ const OsdValue = ({
         setup: labelSetup,
     });
     return Box({ // Volume
-        vertical: true,
         hexpand: true,
-        className: `osd-bg osd-value ${extraClassName}`,
+        className: `osd-bg osd-value ${extraClassName} spacing-h-5`,
         attribute: {
             'disable': () => {
                 valueNumber.label = '󰖭';
             }
         },
         children: [
+            MaterialIcon(icon, 'hugeass', {vpack: 'center'}),
             Box({
-                vexpand: true,
+                vertical: true,
+                className: 'spacing-v-5',
+                vpack: 'center',
                 children: [
-                    valueName,
-                    valueNumber,
+                    Box({
+                        children: [
+                            valueName,
+                            valueNumber,
+                        ]
+                    }),
+                    ProgressBar({
+                        className: `osd-progress ${extraProgressClassName}`,
+                        hexpand: true,
+                        vertical: false,
+                        setup: progressSetup,
+                    })
                 ]
-            }),
-            ProgressBar({
-                className: `osd-progress ${extraProgressClassName}`,
-                hexpand: true,
-                vertical: false,
-                setup: progressSetup,
             })
         ],
         ...rest,
@@ -52,6 +59,7 @@ const OsdValue = ({
 export default (monitor = 0) => {
     const brightnessIndicator = OsdValue({
         name: 'Brightness',
+        icon: 'light_mode',
         extraClassName: 'osd-brightness',
         extraProgressClassName: 'osd-brightness-progress',
         labelSetup: (self) => self.hook(Brightness[monitor], self => {
@@ -66,6 +74,7 @@ export default (monitor = 0) => {
 
     const volumeIndicator = OsdValue({
         name: 'Volume',
+        icon: 'volume_up',
         extraClassName: 'osd-volume',
         extraProgressClassName: 'osd-volume-progress',
         attribute: { headphones: undefined , device: undefined},
