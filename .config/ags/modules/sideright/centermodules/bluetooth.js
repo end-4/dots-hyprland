@@ -57,7 +57,7 @@ const BluetoothDevice = (device) => {
             device.setConnection(newValue);
         },
         extraSetup: (self) => self.hook(device, (self) => {
-            Utils.timeout(200, () => self.enabled.value = device.connected);
+            self.value = device.connected;
         }),
     })
     const deviceRemoveButton = Button({
