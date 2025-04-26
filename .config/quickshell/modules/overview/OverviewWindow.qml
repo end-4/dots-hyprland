@@ -18,6 +18,11 @@ Rectangle { // Window
     property var scale
     property var availableWorkspaceWidth
     property var availableWorkspaceHeight
+    property bool restrictToWorkspace: true
+    property real initX: Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0) + xOffset
+    property real initY: Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0) + yOffset
+    property real xOffset: 0
+    property real yOffset: 0
     
     property var targetWindowWidth: windowData?.size[0] * scale
     property var targetWindowHeight: windowData?.size[1] * scale
@@ -29,12 +34,11 @@ Rectangle { // Window
     property var iconToWindowRatioCompact: 0.6
     property var iconPath: Quickshell.iconPath(Icons.noKnowledgeIconGuess(windowData?.class))
     property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
-
-    z: 1
-    x: Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0)
-    y: Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0)
-    width: Math.min(windowData?.size[0] * root.scale, availableWorkspaceWidth - x)
-    height: Math.min(windowData?.size[1] * root.scale, availableWorkspaceHeight - y)
+    
+    x: initX
+    y: initY
+    width: Math.min(windowData?.size[0] * root.scale, (restrictToWorkspace ? windowData?.size[0] : availableWorkspaceWidth - x + xOffset))
+    height: Math.min(windowData?.size[1] * root.scale, (restrictToWorkspace ? windowData?.size[1] : availableWorkspaceHeight - y + yOffset))
 
     radius: Appearance.rounding.windowRounding * root.scale
     color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
@@ -72,29 +76,6 @@ Rectangle { // Window
         command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to by async to work?
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        onEntered: root.hovered = true
-        onExited: root.hovered = false
-        onPressed: root.pressed = true
-        onReleased: root.pressed = false
-        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
-        onClicked: (event) => {
-            if (!windowData) return;
-
-            if (event.button === Qt.LeftButton) {
-                closeOverview.running = true
-                Hyprland.dispatch(`workspace ${windowData.workspace.id}`)
-                event.accepted = true
-            } else if (event.button === Qt.MiddleButton) {
-                Hyprland.dispatch(`closewindow address:${windowData.address}`)
-                event.accepted = true
-            }
-        }
-    }
-
     ColumnLayout {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -116,7 +97,7 @@ Rectangle { // Window
 
             IconImage {
                 id: xwaylandIndicator
-                visible: ConfigOptions.overview.showXwaylandIndicator && windowData?.xwayland
+                visible: (ConfigOptions.overview.showXwaylandIndicator && windowData?.xwayland) ?? false
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 source: Quickshell.iconPath("xorg")

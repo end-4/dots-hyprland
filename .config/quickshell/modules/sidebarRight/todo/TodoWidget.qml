@@ -273,6 +273,7 @@ Item {
                     Layout.rightMargin: 16
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
+                    renderType: Text.NativeRendering
                     selectedTextColor: Appearance.m3colors.m3onPrimary
                     selectionColor: Appearance.m3colors.m3primary
                     placeholderText: qsTr("Task description")

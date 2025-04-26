@@ -215,6 +215,7 @@ Item { // Wrapper
                     focus: root.panelWindow.visible || GlobalStates.overviewOpen
                     Layout.rightMargin: 15
                     padding: 15
+                    renderType: Text.NativeRendering
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onPrimary
                     selectionColor: Appearance.m3colors.m3primary

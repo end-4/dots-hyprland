@@ -233,7 +233,7 @@ Scope {
     }
     Process {
         id: logout
-        command: ["bash", "-c", "loginctl terminate-session $XDG_SESSION_ID"]
+        command: ["bash", "-c", "pkill Hyprland"] // loginctl terminate-session hangs SDDM
     }
     Process {
         id: hibernate

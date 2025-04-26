@@ -24,8 +24,22 @@ Item {
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale: ConfigOptions.overview.scale
 
+    property real workspaceImplicitWidth: (monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale
+    property real workspaceImplicitHeight: (monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale
+
     property real workspaceNumberMargin: 80
     property real workspaceNumberSize: 80
+    property int workspaceZ: 0
+    property int windowZ: 1
+    property int windowDraggingZ: 99999
+    property real workspaceSpacing: 5
+
+    property int draggingFromWorkspace: -1
+    property int draggingTargetWorkspace: -1
+
+    onDraggingFromWorkspaceChanged: {
+        console.log("draggingTargetWorkspace", draggingFromWorkspace)
+    }
 
     implicitWidth: overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
@@ -43,21 +57,23 @@ Item {
         
         anchors.fill: parent
 
-        implicitWidth: columnLayout.implicitWidth + 5 * 2
-        implicitHeight: columnLayout.implicitHeight + 5 * 2
+        implicitWidth: workspaceColumnLayout.implicitWidth + 5 * 2
+        implicitHeight: workspaceColumnLayout.implicitHeight + 5 * 2
         color: Appearance.colors.colLayer0
         radius: Appearance.rounding.screenRounding * root.scale + 5 * 2
 
         ColumnLayout {
-            id: columnLayout
-            anchors.centerIn: parent
-            spacing: 5
+            id: workspaceColumnLayout
 
+            z: root.workspaceZ
+            anchors.centerIn: parent
+            spacing: workspaceSpacing
             Repeater {
                 model: ConfigOptions.overview.numOfRows
                 delegate: RowLayout {
                     id: row
                     property int rowIndex: index
+                    spacing: workspaceSpacing
 
                     Repeater { // Workspace repeater
                         model: ConfigOptions.overview.numOfCols
@@ -65,44 +81,127 @@ Item {
                             id: workspace
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * ConfigOptions.overview.numOfCols + colIndex + 1
+                            property color defaultColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
 
-                            implicitWidth: (monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale
-                            implicitHeight: (monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale
-                            color: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
+                            implicitWidth: root.workspaceImplicitWidth
+                            implicitHeight: root.workspaceImplicitHeight
+                            color: defaultColor
                             radius: Appearance.rounding.screenRounding * root.scale
+                            border.width: 2
+                            border.color: "transparent"
 
                             MouseArea {
-                                id: mouseArea
+                                id: workspaceArea
                                 anchors.fill: parent
-                                onClicked: (event) => {
-                                    closeOverview.running = true
-                                    Hyprland.dispatch(`workspace ${workspace.workspaceValue}`)
+                                acceptedButtons: Qt.LeftButton
+                                onClicked: {
+                                    if (root.draggingTargetWorkspace === -1) {
+                                        closeOverview.running = true
+                                        Hyprland.dispatch(`workspace ${workspaceValue}`)
+                                    }
                                 }
                             }
 
-                            StyledText {
-                                z: 9999
-                                anchors.left: parent.left
-                                anchors.top: parent.top
-                                anchors.leftMargin: root.workspaceNumberMargin * root.scale
-                                anchors.topMargin: root.workspaceNumberMargin * root.scale
-                                font.pixelSize: root.workspaceNumberSize * root.scale
-                                color: Appearance.colors.colSubtext
-                                text: workspaceValue
+                            DropArea {
+                                anchors.fill: parent
+                                onEntered: {
+                                    root.draggingTargetWorkspace = workspaceValue
+                                    if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
+                                    border.color = Appearance.colors.colLayer2Hover
+                                    workspace.color = Appearance.mix(defaultColor, Appearance.colors.colLayer1Hover, 0.1)
+                                }
+                                onExited: {
+                                    border.color = "transparent"
+                                    workspace.color = defaultColor
+                                    if (root.draggingTargetWorkspace == workspaceValue) root.draggingTargetWorkspace = -1
+                                }
                             }
 
-                            Repeater { // Window repeater
-                                model: windowAddresses.filter((address) => {
-                                    var win = windowByAddress[address]
-                                    return (win?.workspace?.id === workspace.workspaceValue)
-                                })
-                                delegate: OverviewWindow {
-                                    windowData: windowByAddress[modelData]
-                                    monitorData: root.monitorData
-                                    scale: root.scale
-                                    availableWorkspaceWidth: workspace.implicitWidth
-                                    availableWorkspaceHeight: workspace.implicitHeight
-                                }
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: windowSpace
+            anchors.centerIn: parent
+            implicitWidth: workspaceColumnLayout.implicitWidth
+            implicitHeight: workspaceColumnLayout.implicitHeight
+
+            Repeater { // Window repeater
+                model: windowAddresses.filter((address) => {
+                    var win = windowByAddress[address]
+                    return (root.workspaceGroup * root.workspacesShown < win.workspace.id && win.workspace.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                })
+                delegate: OverviewWindow {
+                    id: window
+                    windowData: windowByAddress[modelData]
+                    monitorData: root.monitorData
+                    scale: root.scale
+                    availableWorkspaceWidth: root.workspaceImplicitWidth
+                    availableWorkspaceHeight: root.workspaceImplicitHeight
+
+                    property bool atInitPosition: (initX == x && initY == y)
+                    restrictToWorkspace: Drag.active || atInitPosition
+
+                    property int workspaceColIndex: (windowData?.workspace.id - 1) % ConfigOptions.overview.numOfCols
+                    property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / ConfigOptions.overview.numOfCols)
+                    xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex
+                    yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex
+
+                    Timer {
+                        id: updateWindowPosition
+                        interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                        repeat: false
+                        running: false
+                        onTriggered: {
+                            window.x = Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0) + xOffset
+                            window.y = Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0) + yOffset
+                        }
+                    }
+
+                    z: atInitPosition ? root.windowZ : root.windowDraggingZ
+                    Drag.hotSpot.x: targetWindowWidth / 2
+                    Drag.hotSpot.y: targetWindowHeight / 2
+                    MouseArea {
+                        id: dragArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: hovered = true
+                        onExited: hovered = false
+                        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+                        drag.target: parent
+                        onPressed: {
+                            root.draggingFromWorkspace = windowData?.workspace.id
+                            window.pressed = true
+                            window.Drag.active = true
+                            window.Drag.source = window
+                        }
+                        onReleased: {
+                            const targetWorkspace = root.draggingTargetWorkspace
+                            window.pressed = false
+                            window.Drag.active = false
+                            root.draggingFromWorkspace = -1
+                            if (targetWorkspace !== -1 && targetWorkspace !== windowData?.workspace.id) {
+                                Hyprland.dispatch(`movetoworkspacesilent ${targetWorkspace}, address:${window.windowData?.address}`)
+                                updateWindowPosition.restart()
+                            }
+                            else {
+                                window.x = window.initX
+                                window.y = window.initY
+                            }
+                        }
+                        onClicked: (event) => {
+                            if (!windowData) return;
+
+                            if (event.button === Qt.LeftButton) {
+                                closeOverview.running = true
+                                Hyprland.dispatch(`workspace ${windowData.workspace.id}`)
+                                event.accepted = true
+                            } else if (event.button === Qt.MiddleButton) {
+                                Hyprland.dispatch(`closewindow address:${windowData.address}`)
+                                event.accepted = true
                             }
                         }
                     }
@@ -112,6 +211,7 @@ Item {
     }
 
     DropShadow {
+        z: -9999
         anchors.fill: overviewBackground
         horizontalOffset: 0
         verticalOffset: 2
