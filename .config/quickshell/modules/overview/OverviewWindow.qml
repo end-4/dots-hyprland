@@ -1,3 +1,4 @@
+import "root:/modules/common/functions/icons.js" as Icons
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
@@ -8,7 +9,6 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Hyprland
-import "./icons.js" as Icons
 
 Rectangle { // Window
     id: root

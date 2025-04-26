@@ -16,7 +16,6 @@ import "./services/"
 
 ShellRoot {
     Component.onCompleted: {
-        console.log("ShellRoot loaded")
         MaterialTheme.reapplyTheme()
     }
 

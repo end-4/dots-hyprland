@@ -18,11 +18,15 @@ Singleton {
     }
 
     property QtObject bar: QtObject {
-        property int workspacesShown: 10
         property int batteryLowThreshold: 20
         property QtObject resources: QtObject {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
+        }
+        property QtObject workspaces: QtObject {
+            property int shown: 10
+            property bool alwaysShowNumbers: false
+            property int showNumberDelay: 150 // milliseconds
         }
     }
 

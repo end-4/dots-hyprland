@@ -1,8 +1,10 @@
+import "root:/modules/common/"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
+import Qt5Compat.GraphicalEffects
 
 MouseArea {
     id: root
@@ -21,9 +23,9 @@ MouseArea {
             item.activate();
             break;
         case Qt.RightButton:
-            if (item.hasMenu)
-                menu.open();
-
+            if (item.hasMenu) menu.open();
+            event.accepted = true;
+            break;
         }
     }
 
@@ -39,10 +41,17 @@ MouseArea {
     }
 
     IconImage {
+        id: trayIcon
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
+    }
+
+    ColorOverlay {
+        anchors.fill: trayIcon
+        source: trayIcon
+        color: Appearance.colors.colOnLayer0
     }
 
 }

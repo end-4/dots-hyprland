@@ -99,11 +99,21 @@ Scope {
                         Layout.topMargin: 5
                         Layout.bottomMargin: 0
 
-                        // CustomIcon {
-                        //     width: 25
-                        //     height: 25
-                        //     source: SystemInfo.distroIcon
-                        // }
+                        Item {
+                            implicitWidth: distroIcon.width
+                            implicitHeight: distroIcon.height
+                            CustomIcon {
+                                id: distroIcon
+                                width: 25
+                                height: 25
+                                source: SystemInfo.distroIcon
+                            }
+                            ColorOverlay {
+                                anchors.fill: distroIcon
+                                source: distroIcon
+                                color: Appearance.colors.colOnLayer0
+                            }
+                        }
 
                         StyledText {
                             font.pixelSize: Appearance.font.pixelSize.normal
@@ -215,6 +225,21 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = true;
+                    if(panelWindow.visible) Notifications.timeoutAll();
+                }
+            }
+        }
+    }
+
+    GlobalShortcut {
+        name: "sidebarRightToggle"
+        description: "Toggles right sidebar on press"
+
+        onPressed: {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = !panelWindow.visible;
                     if(panelWindow.visible) Notifications.timeoutAll();
                 }
             }

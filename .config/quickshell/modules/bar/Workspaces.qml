@@ -1,5 +1,8 @@
+import "root:/"
+import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/icons.js" as Icons
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -7,18 +10,21 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
+import Quickshell.Widgets
+import Qt5Compat.GraphicalEffects
 
 Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
     
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / ConfigOptions.bar.workspacesShown)
+    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / ConfigOptions.bar.workspaces.shown)
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
+    property int workspaceIconSize: workspaceButtonWidth * 0.8
     property int activeWorkspaceMargin: 1
-    property double animatedActiveWorkspaceIndex: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspacesShown
+    property double animatedActiveWorkspaceIndex: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspaces.shown
 
     Behavior on animatedActiveWorkspaceIndex {
         NumberAnimation {
@@ -30,8 +36,8 @@ Item {
 
     // Function to update workspaceOccupied
     function updateWorkspaceOccupied() {
-        workspaceOccupied = Array.from({ length: ConfigOptions.bar.workspacesShown }, (_, i) => {
-            return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * ConfigOptions.bar.workspacesShown + i + 1);
+        workspaceOccupied = Array.from({ length: ConfigOptions.bar.workspaces.shown }, (_, i) => {
+            return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * ConfigOptions.bar.workspaces.shown + i + 1);
         })
     }
 
@@ -91,7 +97,7 @@ Item {
         implicitHeight: 40
 
         Repeater {
-            model: ConfigOptions.bar.workspacesShown
+            model: ConfigOptions.bar.workspaces.shown
 
             Rectangle {
                 z: 1
@@ -156,7 +162,7 @@ Item {
         implicitHeight: 40
 
         Repeater {
-            model: ConfigOptions.bar.workspacesShown
+            model: ConfigOptions.bar.workspaces.shown
 
             Button {
                 id: button
@@ -165,19 +171,31 @@ Item {
                 width: workspaceButtonWidth
                 
                 background: Item {
+                    id: workspaceButtonBackground
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
+                    property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspaces.shown + index + 1
+                    property var biggestWindow: {
+                        const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == workspaceButtonBackground.workspaceValue)
+                        return windowsInThisWorkspace.reduce((maxWin, win) => {
+                            const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0)
+                            const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0)
+                            return winArea > maxArea ? win : maxWin
+                        }, null)
+                    }
+                    property var mainAppIconSource: Quickshell.iconPath(Icons.noKnowledgeIconGuess(biggestWindow?.class))
+
                     StyledText {
+                        opacity: (ConfigOptions.bar.workspaces.alwaysShowNumbers || GlobalStates.workspaceShowNumbers || !workspaceButtonBackground.biggestWindow) ? 1 : 0
                         z: 3
-                        property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspacesShown + index + 1
 
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
-                        text: `${workspaceValue}`
+                        text: `${workspaceButtonBackground.workspaceValue}`
                         elide: Text.ElideRight
-                        color: (monitor.activeWorkspace?.id == workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)
+                        color: (monitor.activeWorkspace?.id == workspaceButtonBackground.workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)
 
                         Behavior on color {
                             ColorAnimation {
@@ -187,6 +205,27 @@ Item {
 
                         }
 
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: Appearance.animation.elementDecelFast.duration
+                                easing.type: Appearance.animation.elementDecelFast.type
+                            }
+                        }
+
+                    }
+                    IconImage {
+                        id: mainAppIcon
+                        opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 1 : 0
+                        source: workspaceButtonBackground.mainAppIconSource
+                        anchors.centerIn: parent
+                        implicitSize: workspaceIconSize
+
+                        Behavior on opacity {
+                            NumberAnimation {
+                                duration: Appearance.animation.elementDecelFast.duration
+                                easing.type: Appearance.animation.elementDecelFast.type
+                            }
+                        }
                     }
                 }
                 

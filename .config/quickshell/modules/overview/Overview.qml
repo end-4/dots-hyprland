@@ -113,4 +113,21 @@ Scope {
         }
 	}
 
+    GlobalShortcut {
+        name: "overviewToggle"
+        description: "Toggles overview on press"
+
+        onPressed: {
+            GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
+        }
+    }
+    GlobalShortcut {
+        name: "overviewToggleRelease"
+        description: "Toggles overview on release"
+
+        onReleased: {
+            GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
+        }
+    }
+
 }

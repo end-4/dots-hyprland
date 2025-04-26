@@ -287,4 +287,18 @@ Scope {
         }
     }
 
+    GlobalShortcut {
+        name: "sessionToggle"
+        description: "Toggles session screen on press"
+
+        onPressed: {
+            for (let i = 0; i < sessionVariants.instances.length; i++) {
+                let panelWindow = sessionVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = !panelWindow.visible;
+                }
+            }
+        }
+    }
+
 }

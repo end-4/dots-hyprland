@@ -25,7 +25,7 @@ Item {
 
     Process {
         id: closeSidebarProcess
-        command: ["bash", "-c", `qs ipc call sidebarRight close`]
+        command: ["qs", "ipc", "call", "sidebarRight", "close"]
     }
 
     Process {

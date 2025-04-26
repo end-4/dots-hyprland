@@ -9,7 +9,6 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "./icons.js" as Icons
 
 Item {
     id: root
@@ -128,7 +127,7 @@ Item {
             Repeater { // Window repeater
                 model: windowAddresses.filter((address) => {
                     var win = windowByAddress[address]
-                    return (root.workspaceGroup * root.workspacesShown < win.workspace.id && win.workspace.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                    return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
                 })
                 delegate: OverviewWindow {
                     id: window
