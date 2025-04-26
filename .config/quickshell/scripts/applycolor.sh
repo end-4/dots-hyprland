@@ -10,8 +10,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 term_alpha=100 #Set this to < 100 make all your terminals transparent
 # sleep 0 # idk i wanted some delay or colors dont get applied properly
-if [ ! -d "$CACHE_DIR"/user/generated ]; then
-  mkdir -p "$CACHE_DIR"/user/generated
+if [ ! -d "$STATE_DIR"/user/generated ]; then
+  mkdir -p "$STATE_DIR"/user/generated
 fi
 cd "$CONFIG_DIR" || exit
 
@@ -33,18 +33,18 @@ apply_term() {
     return
   fi
   # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/terminal
-  cp "$SCRIPT_DIR"/terminal/sequences.txt "$CACHE_DIR"/user/generated/terminal/sequences.txt
+  mkdir -p "$STATE_DIR"/user/generated/terminal
+  cp "$SCRIPT_DIR"/terminal/sequences.txt "$STATE_DIR"/user/generated/terminal/sequences.txt
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/terminal/sequences.txt
+    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/sequences.txt
   done
 
-  sed -i "s/\$alpha/$term_alpha/g" "$CACHE_DIR/user/generated/terminal/sequences.txt"
+  sed -i "s/\$alpha/$term_alpha/g" "$STATE_DIR/user/generated/terminal/sequences.txt"
 
   for file in /dev/pts/*; do
     if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
-      cat "$CACHE_DIR"/user/generated/terminal/sequences.txt >"$file"
+      cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
     fi
   done
 }
