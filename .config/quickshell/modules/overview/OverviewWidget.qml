@@ -37,10 +37,6 @@ Item {
     property int draggingFromWorkspace: -1
     property int draggingTargetWorkspace: -1
 
-    onDraggingFromWorkspaceChanged: {
-        console.log("draggingTargetWorkspace", draggingFromWorkspace)
-    }
-
     implicitWidth: overviewBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: overviewBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
 
