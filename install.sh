@@ -94,7 +94,7 @@ install-local-pkgbuild() {
 
 	source ./PKGBUILD
 	x yay -S $installflags --asdeps "${depends[@]}"
-	x makepkg -si --noconfirm
+	x makepkg -Asi --noconfirm
 
 	x popd
 }
