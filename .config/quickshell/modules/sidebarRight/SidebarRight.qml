@@ -99,11 +99,11 @@ Scope {
                         Layout.topMargin: 5
                         Layout.bottomMargin: 0
 
-                        CustomIcon {
-                            width: 25
-                            height: 25
-                            source: SystemInfo.distroIcon
-                        }
+                        // CustomIcon {
+                        //     width: 25
+                        //     height: 25
+                        //     source: SystemInfo.distroIcon
+                        // }
 
                         StyledText {
                             font.pixelSize: Appearance.font.pixelSize.normal

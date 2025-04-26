@@ -1,7 +1,9 @@
 import "root:/"
+import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import Qt5Compat.GraphicalEffects
+import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -11,6 +13,7 @@ import Quickshell.Io
 Item { // Wrapper
     id: root
     required property var panelWindow
+    readonly property string xdgConfigHome: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
     property string searchingText: ""
     property bool showResults: searchingText != ""
     property real searchBarHeight: searchBar.height + Appearance.sizes.elevationMargin * 2
@@ -18,6 +21,41 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
+    property var searchActions: [
+        {
+            action: "img", 
+            execute: () => {
+                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh`.replace(/file:\/\//, ""))
+            }
+        },
+        {
+            action: "dark",
+            execute: () => {
+                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh --mode dark --noswitch`.replace(/file:\/\//, ""))
+            }
+        },
+        {
+            action: "light",
+            execute: () => {
+                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh --mode light --noswitch`.replace(/file:\/\//, ""))
+            }
+        },
+        {
+            action: "accentcolor",
+            execute: (args) => {
+                console.log(args)
+                executor.executeCommand(
+                    `${xdgConfigHome}/quickshell/scripts/switchwall.sh --noswitch --color ${args != '' ? ("'"+args+"'") : ""}`
+                    .replace(/file:\/\//, ""))
+            }
+        },
+        {
+            action: "todo",
+            execute: (args) => {
+                Todo.addTask(args)
+            }
+        },
+    ]
 
     function focusFirstItemIfNeeded() {
         if (searchInput.focus) appResults.currentIndex = 0; // Focus the first item
@@ -178,7 +216,8 @@ Item { // Wrapper
                     Layout.rightMargin: 15
                     padding: 15
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    selectedTextColor: Appearance.m3colors.m3onSurface
+                    selectedTextColor: Appearance.m3colors.m3onPrimary
+                    selectionColor: Appearance.m3colors.m3primary
                     placeholderText: qsTr("Search, calculate or run")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
@@ -275,6 +314,22 @@ Item { // Wrapper
                         );
 
                         // Add non-app results
+                        // Launcher actions
+                        for (let action of root.searchActions) {
+                            const actionString = `${ConfigOptions.search.prefix.action}${action.action}`
+                            if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
+                                result.push({
+                                    name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
+                                    clickActionName: "Run",
+                                    type: "Action",
+                                    materialSymbol: 'settings_suggest',
+                                    execute: () => {
+                                        action.execute(root.searchingText.split(" ").slice(1).join(" "))
+                                    },
+                                });
+                            }
+                        }
+                        // Qalc math result
                         result.push({
                             name: root.mathResult,
                             clickActionName: "Copy",
@@ -285,6 +340,7 @@ Item { // Wrapper
                                 copyText.copyTextToClipboard(root.mathResult);
                             }
                         });
+                        // Run command
                         result.push({
                             name: searchingText,
                             clickActionName: "Run",
@@ -295,6 +351,7 @@ Item { // Wrapper
                                 executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
                             }
                         });
+                        // Web search
                         result.push({
                             name: root.searchingText,
                             clickActionName: "Search",

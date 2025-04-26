@@ -273,7 +273,8 @@ Item {
                     Layout.rightMargin: 16
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    selectedTextColor: Appearance.m3colors.m3onSurface
+                    selectedTextColor: Appearance.m3colors.m3onPrimary
+                    selectionColor: Appearance.m3colors.m3primary
                     placeholderText: qsTr("Task description")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     focus: root.showAddDialog

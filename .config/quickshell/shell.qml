@@ -12,8 +12,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
+import "./services/"
 
 ShellRoot {
+    Component.onCompleted: {
+        console.log("ShellRoot loaded")
+        MaterialTheme.reapplyTheme()
+    }
+
     Bar {}
     NotificationPopup {}
     OnScreenDisplayBrightness {}

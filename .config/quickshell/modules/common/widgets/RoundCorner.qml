@@ -6,6 +6,10 @@ Item {
     property int size: 25
     property color color: "#000000"
 
+    onColorChanged: {
+        canvas.requestPaint();
+    }
+
     property QtObject cornerEnum: QtObject {
         property int topLeft: 0
         property int topRight: 1
