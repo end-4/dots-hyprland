@@ -62,7 +62,7 @@ x declare -p XDG_CACHE_HOME # ~/.cache
 x declare -p XDG_CONFIG_HOME # ~/.config
 x declare -p XDG_DATA_HOME # ~/.local/share
 x declare -p XDG_STATE_HOME # ~/.local/state
-x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/ags/.venv
+x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/quickshell/.venv
 
 e "Checking directories/files"
 x ls -l ~/.local/state/ags/.venv
