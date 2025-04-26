@@ -22,7 +22,10 @@ Item {
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
-    property int workspaceIconSize: workspaceButtonWidth * 0.8
+    property real workspaceIconSize: workspaceButtonWidth * 0.8
+    property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
+    property real workspaceIconOpacityShrinked: 1
+    property real workspaceIconMarginShrinked: -4
     property int activeWorkspaceMargin: 1
     property double animatedActiveWorkspaceIndex: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspaces.shown
 
@@ -213,12 +216,23 @@ Item {
                         }
 
                     }
+                    Item {
+                        anchors.centerIn: parent
+                        width: workspaceButtonWidth
+                        height: workspaceButtonWidth
                     IconImage {
                         id: mainAppIcon
-                        opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 1 : 0
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                            (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+                        anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                            (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+
+                        opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                            1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
                         source: workspaceButtonBackground.mainAppIconSource
-                        anchors.centerIn: parent
-                        implicitSize: workspaceIconSize
+                        implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
 
                         Behavior on opacity {
                             NumberAnimation {
@@ -226,6 +240,25 @@ Item {
                                 easing.type: Appearance.animation.elementDecelFast.type
                             }
                         }
+                        Behavior on anchors.bottomMargin {
+                            NumberAnimation {
+                                duration: Appearance.animation.elementDecelFast.duration
+                                easing.type: Appearance.animation.elementDecelFast.type
+                            }
+                        }
+                        Behavior on anchors.rightMargin {
+                            NumberAnimation {
+                                duration: Appearance.animation.elementDecelFast.duration
+                                easing.type: Appearance.animation.elementDecelFast.type
+                            }
+                        }
+                        Behavior on implicitSize {
+                            NumberAnimation {
+                                duration: Appearance.animation.elementDecelFast.duration
+                                easing.type: Appearance.animation.elementDecelFast.type
+                            }
+                        }
+                    }
                     }
                 }
                 
