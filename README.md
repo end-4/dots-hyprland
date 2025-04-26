@@ -4,7 +4,7 @@
 - **Assumption**: You are already using the AGS illogical-impulse
 - **Install Qt packages** (idk which are actually needed so this is everything I have): `qt5-base qt5-declarative qt5-graphicaleffects qt5-imageformats qt5-quickcontrols qt5-quickcontrols2 qt5-svg qt5-translations qt5-wayland qt5-x11extras qt6-5compat qt6-base qt6-declarative qt6-imageformats qt6-multimedia qt6-positioning qt6-quicktimeline qt6-sensors qt6-svg qt6-tools qt6-translations qt6-virtualkeyboard qt6-wayland qt6-webchannel qt6-webengine qt6-websockets qt6-webview`
 - **Install quickshell and more stuff**: `yay -S quickshell matugen-bin`
-- **Copy** `.config/quickshell` folder and hyprland config files in `.config/hypr/hyprland/` (the files are still AGS-friendly and shouldn't affect your use of the normal illogical-impulse) (still, backing up is your responsibility)
+- **Copy** `.config/quickshell` folder and hyprland config files in `.config/hypr/hyprland/` (backing up is your responsibility)
 - **Run quickshell** with `qs` and see how things are - it's not finished for daily use, but **feedback is very welcome**
   - We currently have bar, right sidebar, search/overview
   - Tips: scrolled windows are flickable
