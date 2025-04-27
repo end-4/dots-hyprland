@@ -16,7 +16,7 @@ Scope { // Scope
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
-    property var tabButtonList: [{"icon": "neurology", "name": qsTr("LLMs")}, {"icon": "flare", "name": qsTr("Waifus")}]
+    property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "flare", "name": qsTr("Waifus")}]
 
     Variants { // Window repeater
         id: sidebarVariants
@@ -81,10 +81,20 @@ Scope { // Scope
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+                focus: sidebarRoot.visible
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
+                    }
+                    if (event.modifiers === Qt.ControlModifier) {
+                        console.log("Control pressed")
+                        if (event.key === Qt.Key_PageDown) {
+                            sidebarRoot.currentTab = Math.min(sidebarRoot.currentTab + 1, root.tabButtonList.length - 1)
+                        } else if (event.key === Qt.Key_PageUp) {
+                            sidebarRoot.currentTab = Math.max(sidebarRoot.currentTab - 1, 0)
+                        }
+                        event.accepted = true;
                     }
                 }
 
