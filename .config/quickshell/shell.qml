@@ -6,6 +6,7 @@ import "./modules/onScreenDisplay/"
 import "./modules/overview/"
 import "./modules/screenCorners/"
 import "./modules/session/"
+import "./modules/sidebarLeft/"
 import "./modules/sidebarRight/"
 import QtQuick
 import QtQuick.Controls
@@ -27,6 +28,7 @@ ShellRoot {
     ReloadPopup {}
     ScreenCorners {}
     Session {}
+    SidebarLeft {}
     SidebarRight {}
 }
 

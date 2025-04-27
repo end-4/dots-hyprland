@@ -22,7 +22,7 @@ Item {
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
-    property real workspaceIconSize: workspaceButtonWidth * 0.8
+    property real workspaceIconSize: workspaceButtonWidth * 0.75
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
     property real workspaceIconMarginShrinked: -4

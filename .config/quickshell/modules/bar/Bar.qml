@@ -199,6 +199,11 @@ Scope {
                         barLeftSideMouseArea.hovered = false
                         barLeftSideMouseArea.trackingScroll = false
                     }
+                    onPressed: (event) => {
+                        if (event.button === Qt.LeftButton) {
+                            openSidebarLeft.running = true
+                        }
+                    }
                     // Scroll to change brightness
                     WheelHandler {
                         onWheel: (event) => {
