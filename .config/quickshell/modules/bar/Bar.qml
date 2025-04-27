@@ -70,8 +70,10 @@ Scope {
                     id: leftSection
                     anchors.left: parent.left
                     implicitHeight: barHeight
+                    width: (barRoot.width - middleSection.width) / 2
 
                     ActiveWindow {
+                        Layout.fillWidth: true
                         bar: barRoot
                     }
                 }
@@ -134,7 +136,7 @@ Scope {
                     id: rightSection
                     anchors.right: parent.right
                     implicitHeight: barHeight
-                    width: Appearance.sizes.barPreferredSideSectionWidth
+                    width: (barRoot.width - middleSection.width) / 2
                     spacing: 5
                     layoutDirection: Qt.RightToLeft
             

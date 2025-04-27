@@ -9,7 +9,6 @@ Item {
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
-    property int preferredWidth: Appearance.sizes.barPreferredSideSectionWidth
 
     height: parent.height
     width: colLayout.width
@@ -19,21 +18,23 @@ Item {
     ColumnLayout {
         id: colLayout
 
-        anchors.centerIn: parent
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.right: parent.right
         spacing: -4
 
         StyledText {
+            Layout.fillWidth: true
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
-            Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight
             text: activeWindow?.activated ? activeWindow?.appId : qsTr("Desktop")
         }
 
         StyledText {
+            Layout.fillWidth: true
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
-            Layout.preferredWidth: preferredWidth
             elide: Text.ElideRight
             text: activeWindow?.activated ? activeWindow?.title : `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
         }
