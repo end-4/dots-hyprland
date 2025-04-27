@@ -12,7 +12,6 @@ Item {
 
     height: parent.height
     width: colLayout.width
-    Layout.leftMargin: Appearance.rounding.screenRounding
     
 
     ColumnLayout {

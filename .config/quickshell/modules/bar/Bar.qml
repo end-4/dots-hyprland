@@ -1,9 +1,11 @@
+import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
@@ -51,6 +53,34 @@ Scope {
                     anchors.left: parent.left
                     implicitHeight: barHeight
                     width: (barRoot.width - middleSection.width) / 2
+                    spacing: 10
+
+                    Rectangle {
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                        Layout.leftMargin: Appearance.rounding.screenRounding
+                        Layout.fillWidth: false
+                        
+                        // Layout.fillHeight: true
+                        radius: Appearance.rounding.full
+                        color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpenCount > 0) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                        implicitWidth: distroIcon.width + 5*2
+                        implicitHeight: distroIcon.height + 5*2
+
+                        CustomIcon {
+                            id: distroIcon
+                            anchors.centerIn: parent
+                            width: 19.5
+                            height: 19.5
+                            source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
+                                SystemInfo.distroIcon : "google-gemini-symbolic"
+
+                        }
+                        ColorOverlay {
+                            anchors.fill: distroIcon
+                            source: distroIcon
+                            color: Appearance.colors.colOnLayer0
+                        }
+                    }
 
                     ActiveWindow {
                         Layout.fillWidth: true
@@ -124,11 +154,11 @@ Scope {
                         Layout.margins: 4
                         Layout.rightMargin: Appearance.rounding.screenRounding
                         Layout.fillHeight: true
-                        implicitWidth: rowLayout.implicitWidth + 10*2
+                        implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
                         radius: Appearance.rounding.full
-                        color: barRightSideMouseArea.pressed ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                        color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpenCount > 0) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
                         RowLayout {
-                            id: rowLayout
+                            id: indicatorsRowLayout
                             anchors.centerIn: parent
                             spacing: 15
                             
