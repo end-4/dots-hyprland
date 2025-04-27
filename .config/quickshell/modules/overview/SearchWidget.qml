@@ -254,7 +254,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 height: 1
-                color: Appearance.m3colors.m3outline
+                color: Appearance.m3colors.m3outlineVariant
             }
 
             ListView { // App results

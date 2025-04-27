@@ -6,12 +6,12 @@ import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 
 Scope {
     property int sidebarWidth: Appearance.sizes.sidebarWidth

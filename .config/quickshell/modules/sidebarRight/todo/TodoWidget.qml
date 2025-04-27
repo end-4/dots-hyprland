@@ -113,6 +113,13 @@ Item {
             }
         }
 
+        Rectangle { // Tabbar bottom border
+            id: tabBarBottomBorder
+            Layout.fillWidth: true
+            height: 1
+            color: Appearance.m3colors.m3outlineVariant
+        }
+
         SwipeView {
             id: swipeView
             Layout.topMargin: 10
@@ -120,7 +127,10 @@ Item {
             Layout.fillHeight: true
             clip: true
             currentIndex: currentTab
-            onCurrentIndexChanged: currentTab = currentIndex
+            onCurrentIndexChanged: {
+                tabIndicator.enableIndicatorAnimation = true
+                currentTab = currentIndex
+            }
 
             // To Do tab
             TaskList {

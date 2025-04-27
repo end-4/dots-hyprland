@@ -42,7 +42,7 @@ Button {
         font.weight: bold ? Font.Bold : isToday == -1 ? Font.Normal : Font.DemiBold
         color: (isToday == 1) ? Appearance.m3colors.m3onPrimary : 
             (isToday == 0) ? Appearance.colors.colOnLayer1 : 
-            Appearance.m3colors.m3outline
+            Appearance.m3colors.m3outlineVariant
 
         Behavior on color {
             ColorAnimation {
