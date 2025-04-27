@@ -21,15 +21,16 @@ Scope {
             property var modelData
             property string searchingText: ""
             screen: modelData
-            visible: GlobalStates.overviewOpen
+            // visible: GlobalStates.overviewOpen
+            visible: true
 
             WlrLayershell.namespace: "quickshell:overview"
             WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+            // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
 
             mask: Region {
-                item: columnLayout
+                item: GlobalStates.overviewOpen ? columnLayout : null
             }
 
             anchors {
@@ -69,6 +70,7 @@ Scope {
 
             ColumnLayout {
                 id: columnLayout
+                visible: GlobalStates.overviewOpen
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Keys.onPressed: (event) => {
@@ -123,6 +125,14 @@ Scope {
 
         onPressed: {
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
+        }
+    }
+    GlobalShortcut {
+        name: "overviewClose"
+        description: "Closes overview"
+
+        onPressed: {
+            GlobalStates.overviewOpen = false
         }
     }
     GlobalShortcut {

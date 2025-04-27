@@ -203,4 +203,19 @@ Scope { // Scope
         }
     }
 
+    GlobalShortcut {
+        name: "sidebarLeftOpen"
+        description: "Opens left sidebar on press"
+
+        onPressed: {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = true;
+                    if(panelWindow.visible) Notifications.timeoutAll();
+                }
+            }
+        }
+    }
+
 }

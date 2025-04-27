@@ -5,6 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -14,27 +15,6 @@ Scope {
     readonly property int barHeight: Appearance.sizes.barHeight
     readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
     readonly property int osdHideMouseMoveThreshold: 20
-
-    Process {
-        id: openSidebarRight
-        command: ["qs", "ipc", "call", "sidebarRight", "open"]
-    }
-    Process {
-        id: openSidebarLeft
-        command: ["qs", "ipc", "call", "sidebarLeft", "open"]
-    }
-    Process {
-        id: hideOsdBrightness
-        command: ["qs", "ipc", "call", "osdBrightness", "hide"]
-    }
-    Process {
-        id: hideOsdVolume
-        command: ["qs", "ipc", "call", "osdVolume", "hide"]
-    }
-    Process {
-        id: toggleOverview
-        command: ["qs", "ipc", "call", "overview", "toggle"]
-    }
 
     Variants { // For each monitor
         model: Quickshell.screens
@@ -203,7 +183,7 @@ Scope {
                     }
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
-                            openSidebarLeft.running = true
+                            Hyprland.dispatch('global quickshell:sidebarLeftOpen')
                         }
                     }
                     // Scroll to change brightness
@@ -225,7 +205,7 @@ Scope {
                             const dx = mouse.x - barLeftSideMouseArea.lastScrollX;
                             const dy = mouse.y - barLeftSideMouseArea.lastScrollY;
                             if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
-                                hideOsdBrightness.running = true;
+                                Hyprland.dispatch('global quickshell:osdBrightnessHide')
                                 barLeftSideMouseArea.trackingScroll = false;
                             }
                         }
@@ -239,7 +219,7 @@ Scope {
                     
                     onPressed: (event) => {
                         if (event.button === Qt.RightButton) {
-                            toggleOverview.running = true;
+                            Hyprland.dispatch('global quickshell:overviewToggle')
                         }
                     }
 
@@ -264,7 +244,7 @@ Scope {
                     }
                     onPressed: (event) => {
                         if (event.button === Qt.LeftButton) {
-                            openSidebarRight.running = true
+                            Hyprland.dispatch('global quickshell:sidebarRightOpen')
                         }
                         else if (event.button === Qt.RightButton) {
                             MprisController.activePlayer.next()
@@ -291,7 +271,7 @@ Scope {
                             const dx = mouse.x - barRightSideMouseArea.lastScrollX;
                             const dy = mouse.y - barRightSideMouseArea.lastScrollY;
                             if (Math.sqrt(dx*dx + dy*dy) > osdHideMouseMoveThreshold) {
-                                hideOsdVolume.running = true;
+                                Hyprland.dispatch('global quickshell:osdVolumeHide')
                                 barRightSideMouseArea.trackingScroll = false;
                             }
                         }

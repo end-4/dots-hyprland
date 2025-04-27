@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
+import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 import "./notification_utils.js" as NotificationUtils
 
@@ -22,11 +23,6 @@ Item {
 
     Layout.fillWidth: true
     clip: !popup
-
-    Process {
-        id: closeSidebarProcess
-        command: ["qs", "ipc", "call", "sidebarRight", "close"]
-    }
 
     Process {
         id: copyNotificationBody
@@ -456,7 +452,7 @@ Item {
                                 : notificationObject.body.replace(/<img/g, "\n <img").split("\n")[0]
                             onLinkActivated: {
                                 Qt.openUrlExternally(link)
-                                closeSidebarProcess.running = true
+                                Hyprland.dispatch("global quickshell:sidebarRightClose")
                             }
                             MouseArea {
                                 anchors.fill: parent

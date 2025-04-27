@@ -130,11 +130,7 @@ Scope {
                             toggled: false
                             buttonIcon: "power_settings_new"
                             onClicked: {
-                                openSessionMenu.running = true
-                            }
-                            Process {
-                                id: openSessionMenu
-                                command: ["qs", "ipc", "call", "session", "open"]
+                                Hyprland.dispatch("global quickshell:sessionOpen")
                             }
                             StyledToolTip {
                                 content: qsTr("Session")
@@ -240,6 +236,34 @@ Scope {
                 let panelWindow = sidebarVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = !panelWindow.visible;
+                    if(panelWindow.visible) Notifications.timeoutAll();
+                }
+            }
+        }
+    }
+    GlobalShortcut {
+        name: "sidebarRightOpen"
+        description: "Opens right sidebar on press"
+
+        onPressed: {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = true;
+                    if(panelWindow.visible) Notifications.timeoutAll();
+                }
+            }
+        }
+    }
+    GlobalShortcut {
+        name: "sidebarRightClose"
+        description: "Closes right sidebar on press"
+
+        onPressed: {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = false;
                     if(panelWindow.visible) Notifications.timeoutAll();
                 }
             }

@@ -42,11 +42,6 @@ Item {
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
 
-    Process {
-        id: closeOverview
-        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to be async to work?
-    }
-
     Rectangle {
         id: overviewBackground
         
@@ -91,7 +86,7 @@ Item {
                                 acceptedButtons: Qt.LeftButton
                                 onClicked: {
                                     if (root.draggingTargetWorkspace === -1) {
-                                        closeOverview.running = true
+                                        Hyprland.dispatch(`global quickshell:overviewClose`)
                                         Hyprland.dispatch(`workspace ${workspaceValue}`)
                                     }
                                 }
@@ -191,7 +186,7 @@ Item {
                             if (!windowData) return;
 
                             if (event.button === Qt.LeftButton) {
-                                closeOverview.running = true
+                                Hyprland.dispatch(`global quickshell:overviewClose`)
                                 Hyprland.dispatch(`workspace ${windowData.workspace.id}`)
                                 event.accepted = true
                             } else if (event.button === Qt.MiddleButton) {

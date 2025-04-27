@@ -71,11 +71,6 @@ Rectangle { // Window
         }
     }
 
-    Process {
-        id: closeOverview
-        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to by async to work?
-    }
-
     ColumnLayout {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left

@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 
 Scope {
     id: root
@@ -121,5 +122,21 @@ Scope {
             showOsdValues = !showOsdValues
         }
 	}
+    GlobalShortcut {
+        name: "osdVolumeTrigger"
+        description: "Triggers volume OSD on press"
+
+        onPressed: {
+            root.triggerOsd()
+        }
+    }
+    GlobalShortcut {
+        name: "osdVolumeHide"
+        description: "Hides volume OSD on press"
+
+        onPressed: {
+            root.showOsdValues = false
+        }
+    }
 
 }

@@ -2,9 +2,10 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
 import "../"
-import Quickshell.Io
-import Quickshell
 import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Hyprland
 
 QuickToggleButton {
     toggled: Network.networkName.length > 0 && Network.networkName != "lo"
@@ -23,16 +24,13 @@ QuickToggleButton {
                 toggleNetwork.running = true
             }
             if (mouse.button === Qt.RightButton) {
-                configureNetwork.running = true
+                Hyprland.dispatch(`exec ${ConfigOptions.apps.network}`)
+                Hyprland.dispatch("global quickshell:sidebarRightClose")
             }
         }
         hoverEnabled: false
         propagateComposedEvents: true
         cursorShape: Qt.PointingHandCursor 
-    }
-    Process {
-        id: configureNetwork
-        command: ["bash", "-c", `${ConfigOptions.apps.network} & qs ipc call sidebarRight close`]
     }
     Process {
         id: toggleNetwork

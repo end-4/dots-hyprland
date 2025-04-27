@@ -111,7 +111,7 @@ Scope {
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
                         buttonText: qsTr("Lock")
-                        onClicked:  { lock.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec loginctl lock-session"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.right: sessionSleep
                         KeyNavigation.down: sessionHibernate
@@ -120,7 +120,7 @@ Scope {
                         id: sessionSleep
                         buttonIcon: "dark_mode"
                         buttonText: qsTr("Sleep")
-                        onClicked:  { sleep.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec systemctl suspend || loginctl suspend"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLock
                         KeyNavigation.right: sessionLogout
@@ -130,7 +130,7 @@ Scope {
                         id: sessionLogout
                         buttonIcon: "logout"
                         buttonText: qsTr("Logout")
-                        onClicked: { logout.running = true; sessionRoot.visible = false }
+                        onClicked: { Hyprland.dispatch("exec pkill Hyprland"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
                         KeyNavigation.right: sessionTaskManager
@@ -140,7 +140,7 @@ Scope {
                         id: sessionTaskManager
                         buttonIcon: "browse_activity"
                         buttonText: qsTr("Task Manager")
-                        onClicked:  { taskManager.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec gnome-system-monitor & disown"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLogout
                         KeyNavigation.down: sessionFirmwareReboot
@@ -153,7 +153,7 @@ Scope {
                         id: sessionHibernate
                         buttonIcon: "downloading"
                         buttonText: qsTr("Hibernate")
-                        onClicked:  { hibernate.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec systemctl hibernate || loginctl hibernate"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionLock
                         KeyNavigation.right: sessionShutdown
@@ -162,7 +162,7 @@ Scope {
                         id: sessionShutdown
                         buttonIcon: "power_settings_new"
                         buttonText: qsTr("Shutdown")
-                        onClicked:  { shutdown.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec systemctl poweroff || loginctl poweroff"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionHibernate
                         KeyNavigation.right: sessionReboot
@@ -172,7 +172,7 @@ Scope {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
                         buttonText: qsTr("Reboot")
-                        onClicked:  { reboot.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec reboot || loginctl reboot"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
                         KeyNavigation.right: sessionFirmwareReboot
@@ -182,7 +182,7 @@ Scope {
                         id: sessionFirmwareReboot
                         buttonIcon: "settings_applications"
                         buttonText: qsTr("Reboot to firmware settings")
-                        onClicked:  { firmwareReboot.running = true; sessionRoot.visible = false }
+                        onClicked:  { Hyprland.dispatch("exec systemctl reboot --firmware-setup || loginctl reboot --firmware-setup"); sessionRoot.visible = false }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionTaskManager
                         KeyNavigation.left: sessionReboot
@@ -214,39 +214,6 @@ Scope {
 
         }
 
-    }
-
-    Process {
-        id: lock
-        command: ["bash", "-c", "loginctl lock-session"]
-    }
-    Process {
-        id: sleep
-        command: ["bash", "-c", "systemctl suspend || loginctl suspend"]
-    }
-    Process {
-        id: logout
-        command: ["bash", "-c", "pkill Hyprland"] // loginctl terminate-session hangs SDDM
-    }
-    Process {
-        id: hibernate
-        command: ["bash", "-c", "systemctl hibernate || loginctl hibernate"]
-    }
-    Process {
-        id: shutdown
-        command: ["bash", "-c", "systemctl poweroff || loginctl poweroff"]
-    }
-    Process {
-        id: reboot
-        command: ["bash", "-c", "systemctl reboot || loginctl reboot"]
-    }
-    Process {
-        id: firmwareReboot
-        command: ["bash", "-c", "systemctl reboot --firmware-setup || loginctl reboot --firmware-setup"]
-    }
-    Process {
-        id: taskManager
-        command: ["bash", "-c", "gnome-system-monitor & disown"]
     }
 
     IpcHandler {
@@ -289,6 +256,19 @@ Scope {
                 let panelWindow = sessionVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     panelWindow.visible = !panelWindow.visible;
+                }
+            }
+        }
+    }
+    GlobalShortcut {
+        name: "sessionOpen"
+        description: "Opens session screen on press"
+
+        onPressed: {
+            for (let i = 0; i < sessionVariants.instances.length; i++) {
+                let panelWindow = sessionVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = true
                 }
             }
         }

@@ -8,6 +8,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
+import Quickshell.Hyprland
 
 Button {
     id: root
@@ -35,7 +36,7 @@ Button {
     PointingHandInteraction {}
     onClicked: {
         root.itemExecute()
-        closeOverview.running = true
+        Hyprland.dispatch("global quickshell:overviewClose")
     }
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -115,10 +116,5 @@ Button {
             horizontalAlignment: Text.AlignRight
             text: root.itemClickActionName
         }
-    }
-
-    Process {
-        id: closeOverview
-        command: ["bash", "-c", "qs ipc call overview close &"] // Somehow has to be async to work?
     }
 }

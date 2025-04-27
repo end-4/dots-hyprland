@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import Quickshell.Wayland
 
 Scope {
@@ -121,5 +122,22 @@ Scope {
             showOsdValues = !showOsdValues
         }
 	}
+
+    GlobalShortcut {
+        name: "osdBrightnessTrigger"
+        description: "Triggers brightness OSD on press"
+
+        onPressed: {
+            root.triggerOsd()
+        }
+    }
+    GlobalShortcut {
+        name: "osdBrightnessHide"
+        description: "Hides brightness OSD on press"
+
+        onPressed: {
+            root.showOsdValues = false
+        }
+    }
 
 }

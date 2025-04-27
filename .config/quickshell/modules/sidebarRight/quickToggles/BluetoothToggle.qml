@@ -5,6 +5,7 @@ import "root:/modules/common/widgets"
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 QuickToggleButton {
     toggled: Bluetooth.bluetoothEnabled
@@ -17,16 +18,14 @@ QuickToggleButton {
                 toggleBluetooth.running = true
             }
             if (mouse.button === Qt.RightButton) {
-                configureBluetooth.running = true
+                Hyprland.dispatch(`exec ${ConfigOptions.apps.bluetooth}`)
+                Hyprland.dispatch("global quickshell:sidebarRightClose")
+
             }
         }
         hoverEnabled: false
         propagateComposedEvents: true
         cursorShape: Qt.PointingHandCursor 
-    }
-    Process {
-        id: configureBluetooth
-        command: ["bash", "-c", `${ConfigOptions.apps.bluetooth} & qs ipc call sidebarRight close`]
     }
     Process {
         id: toggleBluetooth
