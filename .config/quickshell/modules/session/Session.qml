@@ -118,7 +118,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionSleep
-                        focus: sessionRoot.visible
                         buttonIcon: "dark_mode"
                         buttonText: qsTr("Sleep")
                         onClicked:  { sleep.running = true; sessionRoot.visible = false }
@@ -129,7 +128,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionLogout
-                        focus: sessionRoot.visible
                         buttonIcon: "logout"
                         buttonText: qsTr("Logout")
                         onClicked: { logout.running = true; sessionRoot.visible = false }
@@ -140,7 +138,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionTaskManager
-                        focus: sessionRoot.visible
                         buttonIcon: "browse_activity"
                         buttonText: qsTr("Task Manager")
                         onClicked:  { taskManager.running = true; sessionRoot.visible = false }
@@ -154,7 +151,6 @@ Scope {
                     spacing: 15
                     SessionActionButton {
                         id: sessionHibernate
-                        focus: sessionRoot.visible
                         buttonIcon: "downloading"
                         buttonText: qsTr("Hibernate")
                         onClicked:  { hibernate.running = true; sessionRoot.visible = false }
@@ -164,7 +160,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionShutdown
-                        focus: sessionRoot.visible
                         buttonIcon: "power_settings_new"
                         buttonText: qsTr("Shutdown")
                         onClicked:  { shutdown.running = true; sessionRoot.visible = false }
@@ -175,7 +170,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionReboot
-                        focus: sessionRoot.visible
                         buttonIcon: "restart_alt"
                         buttonText: qsTr("Reboot")
                         onClicked:  { reboot.running = true; sessionRoot.visible = false }
@@ -186,7 +180,6 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionFirmwareReboot
-                        focus: sessionRoot.visible
                         buttonIcon: "settings_applications"
                         buttonText: qsTr("Reboot to firmware settings")
                         onClicked:  { firmwareReboot.running = true; sessionRoot.visible = false }
