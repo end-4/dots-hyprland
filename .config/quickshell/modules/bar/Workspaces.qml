@@ -220,45 +220,45 @@ Item {
                         anchors.centerIn: parent
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
-                    IconImage {
-                        id: mainAppIcon
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
-                            (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
-                        anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
-                            (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+                        IconImage {
+                            id: mainAppIcon
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                                (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
+                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                                (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
-                        opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
-                            1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
-                        source: workspaceButtonBackground.mainAppIconSource
-                        implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
+                            opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                                1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
+                            source: workspaceButtonBackground.mainAppIconSource
+                            implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
 
-                        Behavior on opacity {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementDecelFast.duration
-                                easing.type: Appearance.animation.elementDecelFast.type
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: Appearance.animation.elementDecelFast.duration
+                                    easing.type: Appearance.animation.elementDecelFast.type
+                                }
+                            }
+                            Behavior on anchors.bottomMargin {
+                                NumberAnimation {
+                                    duration: Appearance.animation.elementDecelFast.duration
+                                    easing.type: Appearance.animation.elementDecelFast.type
+                                }
+                            }
+                            Behavior on anchors.rightMargin {
+                                NumberAnimation {
+                                    duration: Appearance.animation.elementDecelFast.duration
+                                    easing.type: Appearance.animation.elementDecelFast.type
+                                }
+                            }
+                            Behavior on implicitSize {
+                                NumberAnimation {
+                                    duration: Appearance.animation.elementDecelFast.duration
+                                    easing.type: Appearance.animation.elementDecelFast.type
+                                }
                             }
                         }
-                        Behavior on anchors.bottomMargin {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementDecelFast.duration
-                                easing.type: Appearance.animation.elementDecelFast.type
-                            }
-                        }
-                        Behavior on anchors.rightMargin {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementDecelFast.duration
-                                easing.type: Appearance.animation.elementDecelFast.type
-                            }
-                        }
-                        Behavior on implicitSize {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementDecelFast.duration
-                                easing.type: Appearance.animation.elementDecelFast.type
-                            }
-                        }
-                    }
                     }
                 }
                 
