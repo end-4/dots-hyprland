@@ -24,11 +24,6 @@ Item {
     Layout.fillWidth: true
     clip: !popup
 
-    Process {
-        id: copyNotificationBody
-        command: ["bash", "-c", `wl-copy "${notificationObject.body}"`]
-    }
-
     implicitHeight: ready ? notificationColumnLayout.implicitHeight + notificationListSpacing : 0
     Behavior on implicitHeight {
         enabled: enableAnimation
@@ -125,7 +120,7 @@ Item {
         }
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
-                copyNotificationBody.running = true
+                Hyprland.dispatch(`exec wl-copy '${notificationObject.body}'`)
                 notificationSummaryText.text = `${notificationObject.summary} (copied)`
             }
         }
@@ -531,7 +526,7 @@ Item {
                             (contentItem.implicitWidth + leftPadding + rightPadding)
 
                         onClicked: {
-                            copyNotificationBody.running = true
+                            Hyprland.dispatch(`exec wl-copy '${notificationObject.body}'`)
                             copyIcon.text = "inventory"
                             copyIconTimer.stop()
                             copyIconTimer.start()

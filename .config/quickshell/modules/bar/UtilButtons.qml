@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 Rectangle {
     Layout.alignment: Qt.AlignVCenter
@@ -11,18 +12,6 @@ Rectangle {
     implicitHeight: 32
     color: Appearance.colors.colLayer1
     radius: Appearance.rounding.small
-
-    Process {
-        id: screenSnip
-
-        command: ["grimblast", "copy", "area"]
-    }
-
-    Process {
-        id: pickColor
-
-        command: ["hyprpicker", "-a"]
-    }
 
     RowLayout {
         id: rowLayout
@@ -32,7 +21,7 @@ Rectangle {
 
         SmallCircleButton {
             Layout.alignment: Qt.AlignVCenter
-            onClicked: screenSnip.running = true
+            onClicked: Hyprland.dispatch("exec grimblast copy area")
 
             MaterialSymbol {
                 anchors.centerIn: parent
@@ -45,7 +34,7 @@ Rectangle {
 
         SmallCircleButton {
             Layout.alignment: Qt.AlignVCenter
-            onClicked: pickColor.running = true
+            onClicked: Hyprland.dispatch("exec hyprpicker -a")
 
             MaterialSymbol {
                 anchors.centerIn: parent

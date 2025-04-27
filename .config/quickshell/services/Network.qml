@@ -34,7 +34,6 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.networkName = data
-                // console.log("Network: " + data);
             }
         }
     }
@@ -46,7 +45,6 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 root.networkStrength = parseInt(data);
-                // console.log("Network Strength: " + data);
             }
         }
     }

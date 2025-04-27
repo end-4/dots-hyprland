@@ -9,6 +9,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 
 Item { // Wrapper
     id: root
@@ -82,16 +83,6 @@ Item { // Wrapper
                 root.mathResult = data
                 root.focusFirstItemIfNeeded()
             }
-        }
-    }
-
-    Process {
-        id: copyText
-        property list<string> baseCommand: ["wl-copy"]
-        function copyTextToClipboard(text) {
-            copyText.running = false
-            copyText.command = baseCommand.concat(text)
-            copyText.running = true
         }
     }
 
@@ -338,7 +329,7 @@ Item { // Wrapper
                             fontType: "monospace",
                             materialSymbol: 'calculate',
                             execute: () => {
-                                copyText.copyTextToClipboard(root.mathResult);
+                                Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
                             }
                         });
                         // Run command

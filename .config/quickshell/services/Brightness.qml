@@ -1,7 +1,8 @@
-import Quickshell
-import Quickshell.Io
 pragma Singleton
 pragma ComponentBehavior: Bound
+import Quickshell
+import Quickshell.Io
+import Quickshell.Hyprland
 
 Singleton {
     id: root
@@ -88,5 +89,4 @@ Singleton {
             root.increment = -1
         }
 	}
-
 }
