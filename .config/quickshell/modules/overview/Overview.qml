@@ -10,7 +10,8 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
-    id: overview
+    id: root
+    property bool overviewReleaseMightTrigger: true
 
     Variants {
         model: Quickshell.screens
@@ -111,6 +112,9 @@ Scope {
         function open() {
             GlobalStates.overviewOpen = true
         }
+        function toggleReleaseInterrupt() {
+            root.overviewReleaseMightTrigger = false
+        }
 	}
 
     GlobalShortcut {
@@ -125,8 +129,26 @@ Scope {
         name: "overviewToggleRelease"
         description: "Toggles overview on release"
 
+        onPressed: {
+            root.overviewReleaseMightTrigger = true
+        }
+
         onReleased: {
+            if (!root.overviewReleaseMightTrigger) {
+                root.overviewReleaseMightTrigger = true
+                return
+            }
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
+        }
+    }
+    GlobalShortcut {
+        name: "overviewToggleReleaseInterrupt"
+        description: "Interrupts possibility of overview being toggled on release" +
+            "This is necessary because onReleased triggers whether or not you press something else while holding the key." +
+            "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
+
+        onPressed: {
+            root.overviewReleaseMightTrigger = false
         }
     }
 
