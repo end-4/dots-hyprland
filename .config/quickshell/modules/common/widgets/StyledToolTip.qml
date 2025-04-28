@@ -14,7 +14,7 @@ ToolTip {
 
     Connections {
         target: parent
-        onHoveredChanged: {
+        function onHoveredChanged() {
             if (parent.hovered) {
                 tooltipShowDelay.restart()
             } else {

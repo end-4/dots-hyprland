@@ -16,7 +16,7 @@ Scope { // Scope
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
-    property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "flare", "name": qsTr("Waifus")}]
+    property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "bookmark_heart", "name": qsTr("Anime")}]
 
     Variants { // Window repeater
         id: sidebarVariants
@@ -88,7 +88,6 @@ Scope { // Scope
                         sidebarRoot.visible = false;
                     }
                     if (event.modifiers === Qt.ControlModifier) {
-                        console.log("Control pressed")
                         if (event.key === Qt.Key_PageDown) {
                             sidebarRoot.currentTab = Math.min(sidebarRoot.currentTab + 1, root.tabButtonList.length - 1)
                         } else if (event.key === Qt.Key_PageUp) {
@@ -133,8 +132,11 @@ Scope { // Scope
                             }
                         }
 
-                        Item {}
-                        Item {}
+                        StyledText {
+                            text: "To be implemented"
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+                        Anime {}
                     }
                     
                 }

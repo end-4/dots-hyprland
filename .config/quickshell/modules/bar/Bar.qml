@@ -83,6 +83,7 @@ Scope {
                     }
 
                     ActiveWindow {
+                        Layout.rightMargin: Appearance.rounding.screenRounding
                         Layout.fillWidth: true
                         bar: barRoot
                     }

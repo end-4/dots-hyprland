@@ -56,6 +56,7 @@ ColumnLayout {
             z: 2
 
             anchors.fill: parent
+            // TODO: make the end point in the moving direction go first
             anchors.leftMargin: {
                 const tabCount = root.tabButtonList.length
                 const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
