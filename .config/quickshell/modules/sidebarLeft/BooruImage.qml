@@ -4,6 +4,7 @@ import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
 Button {
@@ -14,6 +15,10 @@ Button {
     padding: 0
 
     PointingHandInteraction {}
+
+    onClicked: {
+        Hyprland.dispatch(`exec xdg-open ${imageData.source}`)
+    }
 
     background: Rectangle {
         implicitWidth: imageData.width
