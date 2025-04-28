@@ -15,6 +15,17 @@ Item {
     property var panelWindow
     property var inputField: tagInputField
 
+    Keys.onPressed: (event) => {
+        tagInputField.forceActiveFocus()
+        if (event.key === Qt.Key_PageUp) {
+            booruResponseListView.contentY = Math.max(0, booruResponseListView.contentY - booruResponseListView.height / 2)
+            event.accepted = true
+        } else if (event.key === Qt.Key_PageDown) {
+            booruResponseListView.contentY = Math.min(booruResponseListView.contentHeight - booruResponseListView.height, booruResponseListView.contentY + booruResponseListView.height / 2)
+            event.accepted = true
+        }
+    }
+
     onFocusChanged: (focus) => {
         if (focus) {
             tagInputField.forceActiveFocus()
@@ -36,6 +47,14 @@ Item {
                     width: swipeView.width
                     height: swipeView.height
                     radius: Appearance.rounding.small
+                }
+            }
+
+            Behavior on contentY {
+                NumberAnimation {
+                    id: scrollAnim
+                    duration: Appearance.animation.elementDecel.duration
+                    easing.type: Appearance.animation.elementDecel.type
                 }
             }
 

@@ -32,26 +32,45 @@ Rectangle {
     ColumnLayout {
         id: columnLayout
         
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
         anchors.margins: responsePadding
         spacing: root.imageSpacing
 
-        // Header: provider name
-        Rectangle {
-            id: providerNameWrapper
-            color: Appearance.m3colors.m3secondaryContainer
-            radius: Appearance.rounding.small
-            // height: providerName.implicitHeight
-            implicitWidth: providerName.implicitWidth + 10 * 2
-            implicitHeight: Math.max(providerName.implicitHeight + 5 * 2, 30)
-            Layout.alignment: Qt.AlignLeft
+        // Provider name
+        RowLayout {
+            Rectangle {
+                id: providerNameWrapper
+                color: Appearance.m3colors.m3secondaryContainer
+                radius: Appearance.rounding.small
+                implicitWidth: providerName.implicitWidth + 10 * 2
+                implicitHeight: Math.max(providerName.implicitHeight + 5 * 2, 30)
+                Layout.alignment: Qt.AlignVCenter
 
-            StyledText {
-                id: providerName
-                anchors.centerIn: parent
-                font.pixelSize: Appearance.font.pixelSize.large
-                color: Appearance.m3colors.m3onSecondaryContainer
-                text: Booru.providers[root.responseData.provider].name
+                StyledText {
+                    id: providerName
+                    anchors.centerIn: parent
+                    font.pixelSize: Appearance.font.pixelSize.large
+                    color: Appearance.m3colors.m3onSecondaryContainer
+                    text: Booru.providers[root.responseData.provider].name
+                }
+            }
+            Item { Layout.fillWidth: true }
+            Rectangle {
+                color: Appearance.colors.colLayer2
+                radius: Appearance.rounding.small
+                implicitWidth: Math.max(pageNumber.implicitWidth + 10 * 2, 20)
+                implicitHeight: pageNumber.implicitHeight + 5 * 2
+                Layout.alignment: Qt.AlignVCenter
+
+                StyledText {
+                    id: pageNumber
+                    anchors.centerIn: parent
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    color: Appearance.colors.colOnLayer2
+                    text: `Page ${root.responseData.page}`
+                }
             }
         }
 
@@ -155,30 +174,9 @@ Rectangle {
 
                 Repeater {
                     model: modelData.images
-                    Rectangle {
-                        implicitWidth: image.width
-                        implicitHeight: image.height
-                        radius: Appearance.rounding.small
-                        color: Appearance.colors.colLayer2
-                        Image {
-                            id: image
-                            anchors.fill: parent
-                            sourceSize.width: imageRow.rowHeight * modelData.aspect_ratio
-                            sourceSize.height: imageRow.rowHeight
-                            fillMode: Image.PreserveAspectFit
-                            source: modelData.preview_url
-                            width: imageRow.rowHeight * modelData.aspect_ratio
-                            height: imageRow.rowHeight
-
-                            layer.enabled: true
-                            layer.effect: OpacityMask {
-                                maskSource: Rectangle {
-                                    width: image.width
-                                    height: image.height
-                                    radius: Appearance.rounding.small
-                                }
-                            }
-                        }
+                    delegate: BooruImage {
+                        imageData: modelData
+                        rowHeight: imageRow.rowHeight
                     }
                 }
             }
