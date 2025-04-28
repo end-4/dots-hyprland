@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import "root:/modules/common"
 import Quickshell;
 import Quickshell.Io;
 import Qt.labs.platform
@@ -9,6 +10,7 @@ import QtQuick;
 Singleton {
     id: root
 
+    property var responses: []
     property var getWorkingImageSource: (url) => {
         if (url.includes('pximg.net')) {
             return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
@@ -16,8 +18,10 @@ Singleton {
         return url;
     }
 
-    property var providerList: ["yandere", "konachan", "danbooru", "gelbooru"]
+    property var defaultUserAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+    property var providerList: ["yandere", "konachan", "zerochan", "danbooru", "gelbooru"]
     property var providers: {
+        "system": { "name": "System" },
         "yandere": {
             "name": "yande.re",
             "url": "https://yande.re",
@@ -27,6 +31,8 @@ Singleton {
                 return response.map(item => {
                     return {
                         "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
                         "aspect_ratio": item.width / item.height,
                         "tags": item.tags,
                         "rating": item.rating,
@@ -50,6 +56,8 @@ Singleton {
                 return response.map(item => {
                     return {
                         "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
                         "aspect_ratio": item.width / item.height,
                         "tags": item.tags,
                         "rating": item.rating,
@@ -64,6 +72,32 @@ Singleton {
                 })
             }
         },
+        "zerochan": {
+            "name": "Zerochan",
+            "url": "https://www.zerochan.net",
+            "api": "https://www.zerochan.net/?json",
+            "listAccess": ["items"],
+            "mapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
+                        "aspect_ratio": item.width / item.height,
+                        "tags": item.tags.join(" "),
+                        "rating": "safe", // Zerochan doesn't have nsfw
+                        "is_nsfw": false,
+                        "md5": item.md5,
+                        "preview_url": item.thumbnail,
+                        "sample_url": item.thumbnail,
+                        "file_url": item.thumbnail,
+                        "file_ext": "avif",
+                        "source": getWorkingImageSource(item.source),
+                        "character": item.tag
+                    }
+                })
+            }
+        },
         "danbooru": {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
@@ -73,6 +107,8 @@ Singleton {
                 return response.map(item => {
                     return {
                         "id": item.id,
+                        "width": item.image_width,
+                        "height": item.image_height,
                         "aspect_ratio": item.image_width / item.image_height,
                         "tags": item.tag_string,
                         "rating": item.rating,
@@ -96,6 +132,8 @@ Singleton {
                 return response.map(item => {
                     return {
                         "id": item.id,
+                        "width": item.width,
+                        "height": item.height,
                         "aspect_ratio": item.width / item.height,
                         "tags": item.tags,
                         "rating": item.rating.replace('general', 's').charAt(0),
@@ -111,11 +149,8 @@ Singleton {
             }
         }
     }
-    property var responses: []
-    onResponsesChanged: {
-        console.log("[Booru] Responses changed: " + JSON.stringify(responses))
-    }
-    property var currentProvider: "yandere"
+    
+    property var currentProvider: ConfigOptions.sidebar.booru.defaultProvider
     
     function setProvider(provider) {
         if (providerList.indexOf(provider) !== -1) {
@@ -125,18 +160,40 @@ Singleton {
         }
     }
 
-    function constructRequestUrl(tags, nsfw=true, limit=20) {
+    function clearResponses() {
+        responses = []
+    }
+
+    function addSystemMessage(message) {
+        responses.push({
+            "provider": "system",
+            "tags": [],
+            "page": 1,
+            "images": [],
+            "message": `${message}`
+        })
+    }
+
+    function constructRequestUrl(tags, nsfw=true, limit=20, page=1) {
         var provider = providers[currentProvider]
         var baseUrl = provider.api
         var tagString = tags.join(" ")
-        if (!nsfw) {
+        if (!nsfw && currentProvider !== "zerochan") {
             tagString += " rating:safe"
         }
         var params = []
-        // Danbooru, Yandere, Konachan: tags & limit
-        if (currentProvider === "danbooru" || currentProvider === "yandere" || currentProvider === "konachan") {
+        // Tags & limit
+        if (currentProvider === "zerochan") {
+            params.push("c=" + tagString) // zerochan doesn't have search in api, so we use color
+            params.push("l=" + limit)
+            params.push("s=" + "fav")
+            params.push("t=" + 1)
+            params.push("p=" + page)
+        }
+        else {
             params.push("tags=" + encodeURIComponent(tagString))
             params.push("limit=" + limit)
+            params.push("page=" + page)
         }
         var url = baseUrl
         if (baseUrl.indexOf("?") === -1) {
@@ -147,8 +204,8 @@ Singleton {
         return url
     }
 
-    function makeRequest(tags, nsfw=true, limit=20) {
-        var url = constructRequestUrl(tags, nsfw, limit)
+    function makeRequest(tags, nsfw=false, limit=20, page=1) {
+        var url = constructRequestUrl(tags, nsfw, limit, page)
         console.log("[Booru] Making request to " + url)
 
         var xhr = new XMLHttpRequest()
@@ -157,6 +214,7 @@ Singleton {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
                     // console.log("[Booru] Raw response length: " + xhr.responseText.length)
+                    console.log("[Booru] Raw response: " + xhr.responseText)
                     var response = JSON.parse(xhr.responseText)
 
                     // Access nested properties based on listAccess
@@ -169,9 +227,15 @@ Singleton {
                         }
                     }
                     response = providers[currentProvider].mapFunc(response)
-                    // console.log("[Booru] Scoped & mapped response: " + JSON.stringify(response))
+                    console.log("[Booru] Scoped & mapped response: " + JSON.stringify(response))
                     var newResponses = root.responses.slice() // make a shallow copy
-                    newResponses.push(response)
+                    newResponses.push({
+                        "provider": currentProvider,
+                        "tags": tags,
+                        "page": page,
+                        "images": response,
+                        "message": ""
+                    })
                     root.responses = newResponses
                     
                 } catch (e) {
@@ -185,11 +249,18 @@ Singleton {
 
         try {
             // Required for danbooru
-            xhr.setRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
-        } catch (e) {
-            console.log("Could not set User-Agent:", e)
-        }
-        xhr.send()    
+            if (currentProvider == "danbooru") {
+                xhr.setRequestHeader("User-Agent", defaultUserAgent)
+            }
+            else if (currentProvider == "zerochan") {
+                const userAgent = ConfigOptions.sidebar.booru.zerochan.username ? `Desktop sidebar booru viewer - ${ConfigOptions.sidebar.booru.zerochan.username}` : defaultUserAgent
+                console.log("Setting User-Agent for zerochan: " + userAgent)
+                xhr.setRequestHeader("User-Agent", userAgent)
+            }
+            xhr.send()
+        } catch (error) {
+            console.log("Could not set User-Agent:", error)
+        } 
     }
 }
 

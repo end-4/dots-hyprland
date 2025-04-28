@@ -55,6 +55,17 @@ Singleton {
         }
     }
 
+    property QtObject sidebar: QtObject {
+        property QtObject booru: QtObject {
+            property bool allowNsfw: false
+            property string defaultProvider: "yandere"
+            property int limit: 20 // Images per page
+            property QtObject zerochan: QtObject {
+                // property string username
+            }
+        }
+    }
+
     property QtObject hacks: QtObject {
         property int arbitraryRaceConditionDelay: 10 // milliseconds
     }

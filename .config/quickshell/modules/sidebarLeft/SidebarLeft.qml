@@ -5,12 +5,12 @@ import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 
 Scope { // Scope
     id: root
@@ -136,7 +136,9 @@ Scope { // Scope
                             text: "To be implemented"
                             horizontalAlignment: Text.AlignHCenter
                         }
-                        Anime {}
+                        Anime {
+                            panelWindow: sidebarRoot
+                        }
                     }
                     
                 }
