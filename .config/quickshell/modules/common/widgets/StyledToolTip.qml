@@ -7,10 +7,11 @@ import QtQuick.Layouts
 ToolTip {
     property string content
     property bool extraVisibleCondition: true
+    property bool alternativeVisibleCondition: false
     property bool internalVisibleCondition: false
     padding: 7
     
-    visible: (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered) && internalVisibleCondition)
+    visible: ((extraVisibleCondition && (parent.hovered === undefined || parent?.hovered) && internalVisibleCondition)) || alternativeVisibleCondition
 
     Connections {
         target: parent
@@ -36,7 +37,8 @@ ToolTip {
     background: Rectangle {
         color: Appearance.colors.colTooltip
         radius: Appearance.rounding.small
-        width: tooltipTextObject.width + 2 * padding
+        implicitWidth: tooltipTextObject.width + 2 * padding
+        implicitHeight: tooltipTextObject.height + 2 * padding
         Behavior on opacity {
             OpacityAnimator {
                 duration: Appearance.animation.elementDecel.duration
