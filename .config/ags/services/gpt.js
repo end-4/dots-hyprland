@@ -143,6 +143,7 @@ class GPTMessage extends Service {
     }
 
     addDelta(delta) {
+        if (delta == null) return;
         if (this.thinking) {
             this.thinking = false;
             this.content = delta;
