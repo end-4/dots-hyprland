@@ -103,10 +103,7 @@ Item {
                     }
                 }
                 delegate: BooruResponse {
-                    responseData: {
-                        console.log("Data at index " + index + ": " + JSON.stringify(modelData))
-                        return modelData
-                    }
+                    responseData: modelData
                     tagInputField: root.inputField
                 }
             }

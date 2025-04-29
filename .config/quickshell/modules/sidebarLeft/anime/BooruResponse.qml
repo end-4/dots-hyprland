@@ -14,7 +14,7 @@ import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: root
-    property var responseData: {}
+    property var responseData
     property var tagInputField
 
     onResponseDataChanged: {
