@@ -207,9 +207,10 @@ Rectangle {
                 Repeater {
                     model: modelData.images
                     delegate: BooruImage {
+                        required property var modelData
                         imageData: modelData
                         rowHeight: imageRow.rowHeight
-                        manualDownload: root.responseData.provider == "danbooru"
+                        manualDownload: ["danbooru", "waifu.im"].includes(root.responseData.provider)
                         previewDownloadPath: root.previewDownloadPath
                         downloadPath: root.downloadPath
                         nsfwPath: root.nsfwPath

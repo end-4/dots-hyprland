@@ -27,7 +27,7 @@ Singleton {
     }
 
     property var defaultUserAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-    property var providerList: ["yandere", "konachan", "zerochan", "danbooru", "gelbooru"]
+    property var providerList: ["yandere", "konachan", "zerochan", "danbooru", "gelbooru", "waifu.im"]
     property var providers: {
         "system": { "name": "System" },
         "yandere": {
@@ -155,7 +155,32 @@ Singleton {
                     }
                 })
             }
-        }
+        },
+        "waifu.im": {
+            "name": "waifu.im",
+            "url": "https://waifu.im",
+            "api": "https://api.waifu.im/search",
+            "listAccess": ["images"],
+            "mapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "id": item.image_id,
+                        "width": item.width,
+                        "height": item.height,
+                        "aspect_ratio": item.width / item.height,
+                        "tags": item.tags.map(tag => {return tag.name}).join(" "),
+                        "rating": item.is_nsfw ? "e" : "s",
+                        "is_nsfw": item.is_nsfw,
+                        "md5": item.md5,
+                        "preview_url": item.sample_url ?? item.url, // preview_url just says access denied (maybe i fucked up and sent too many requests idk)
+                        "sample_url": item.url,
+                        "file_url": item.url,
+                        "file_ext": item.extension,
+                        "source": getWorkingImageSource(item.source) ?? item.url,
+                    }
+                })
+            }
+        },
     }
     
     property var currentProvider: ConfigOptions.sidebar.booru.defaultProvider
@@ -189,7 +214,7 @@ Singleton {
         var provider = providers[currentProvider]
         var baseUrl = provider.api
         var tagString = tags.join(" ")
-        if (!nsfw && currentProvider !== "zerochan") {
+        if (!nsfw && !(["zerochan", "waifu.im"].includes(currentProvider))) {
             tagString += " rating:safe"
         }
         var params = []
@@ -200,6 +225,14 @@ Singleton {
             params.push("s=" + "fav")
             params.push("t=" + 1)
             params.push("p=" + page)
+        }
+        else if (currentProvider === "waifu.im") {
+            var tagsArray = tagString.split(" ");
+            tagsArray.forEach(tag => {
+                params.push("included_tags=" + encodeURIComponent(tag));
+            });
+            params.push("limit=" + Math.min(limit, 30)) // Only admin can do > 30
+            params.push("is_nsfw=" + (nsfw ? "null" : "false")) // null is random
         }
         else {
             params.push("tags=" + encodeURIComponent(tagString))
@@ -230,12 +263,14 @@ Singleton {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
                     // console.log("[Booru] Raw response length: " + xhr.responseText.length)
-                    console.log("[Booru] Raw response: " + xhr.responseText)
+                    // console.log("[Booru] Raw response: " + xhr.responseText)
                     var response = JSON.parse(xhr.responseText)
 
                     // Access nested properties based on listAccess
                     var accessList = providers[currentProvider].listAccess
                     for (var i = 0; i < accessList.length; ++i) {
+                        // console.log("[Booru] Accessing property: " + accessList[i])
+                        // console.log("[Booru] Current response: " + JSON.stringify(response))
                         if (response && response.hasOwnProperty(accessList[i])) {
                             response = response[accessList[i]]
                         } else {

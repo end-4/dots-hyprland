@@ -22,10 +22,10 @@ Button {
     Process {
         id: downloadProcess
         running: false
-        command: ["bash", "-c", `curl '${imageData.preview_url}' -o '${previewDownloadPath}/${root.fileName}' && echo 'done'`]
+        command: ["bash", "-c", `curl '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.previewDownloadPath}/${root.fileName}' && echo 'done'`]
         stdout: SplitParser {
             onRead: (data) => {
-                console.log("Download output:", data)
+                // console.log("Download output:", data)
                 if(data.includes("done")) {
                     imageObject.source = `${previewDownloadPath}/${root.fileName}`
                 }
@@ -35,6 +35,9 @@ Button {
 
     Component.onCompleted: {
         if (root.manualDownload) {
+            // console.log("Manual download triggered")
+            // console.log("Image data:", JSON.stringify(root.imageData))
+            // console.log("Download command:", downloadProcess.command.join(" "))
             downloadProcess.running = true
         }
     }
