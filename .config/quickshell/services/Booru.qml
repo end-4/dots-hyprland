@@ -17,6 +17,7 @@ Singleton {
         }
     }
 
+    property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
     property var getWorkingImageSource: (url) => {
         if (url.includes('pximg.net')) {
@@ -203,7 +204,12 @@ Singleton {
         else {
             params.push("tags=" + encodeURIComponent(tagString))
             params.push("limit=" + limit)
-            params.push("page=" + page)
+            if (currentProvider == "gelbooru") {
+                params.push("pid=" + page)
+            }
+            else {
+                params.push("page=" + page)
+            }
         }
         var url = baseUrl
         if (baseUrl.indexOf("?") === -1) {
@@ -224,7 +230,7 @@ Singleton {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
                     // console.log("[Booru] Raw response length: " + xhr.responseText.length)
-                    // console.log("[Booru] Raw response: " + xhr.responseText)
+                    console.log("[Booru] Raw response: " + xhr.responseText)
                     var response = JSON.parse(xhr.responseText)
 
                     // Access nested properties based on listAccess
@@ -243,11 +249,18 @@ Singleton {
                         "tags": tags,
                         "page": page,
                         "images": response,
-                        "message": ""
+                        "message": response.length > 0 ? "" : root.failMessage
                     }]
                     
                 } catch (e) {
                     console.log("[Booru] Failed to parse response: " + e)
+                    root.responses = [...root.responses, {
+                        "provider": currentProvider,
+                        "tags": tags,
+                        "page": page,
+                        "images": [],
+                        "message": root.failMessage
+                    }]
                 }
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {

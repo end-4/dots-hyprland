@@ -1,9 +1,11 @@
 import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell.Io
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
@@ -11,10 +13,31 @@ Button {
     id: root
     property var imageData
     property var rowHeight
+    property bool manualDownload: false
+    property string previewDownloadPath
+    property string downloadPath
+    property string nsfwPath
+    property string fileName: decodeURIComponent((imageData.file_url).substring((imageData.file_url).lastIndexOf('/') + 1))
 
-    // onImageDataChanged: {
-    //     console.log("Image data changed:", imageData)
-    // }
+    Process {
+        id: downloadProcess
+        running: false
+        command: ["bash", "-c", `curl '${imageData.preview_url}' -o '${previewDownloadPath}/${root.fileName}' && echo 'done'`]
+        stdout: SplitParser {
+            onRead: (data) => {
+                console.log("Download output:", data)
+                if(data.includes("done")) {
+                    imageObject.source = `${previewDownloadPath}/${root.fileName}`
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        if (root.manualDownload) {
+            downloadProcess.running = true
+        }
+    }
 
     padding: 0
     implicitWidth: imageObject.width

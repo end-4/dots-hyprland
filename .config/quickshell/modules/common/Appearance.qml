@@ -113,12 +113,14 @@ Singleton {
         property color colOnLayer1Inactive: mix(colOnLayer1, colLayer1, 0.45);
         property color colLayer2: mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
         property color colOnLayer2: m3colors.m3onSurface;
+        property color colOnLayer2Disabled: mix(colOnLayer2, m3colors.m3background, 0.4);
         property color colLayer3: mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
         property color colOnLayer3: m3colors.m3onSurface;
         property color colLayer1Hover: mix(colLayer1, colOnLayer1, 0.88);
         property color colLayer1Active: mix(colLayer1, colOnLayer1, 0.77);
         property color colLayer2Hover: mix(colLayer2, colOnLayer2, 0.90);
         property color colLayer2Active: mix(colLayer2, colOnLayer2, 0.80);
+        property color colLayer2Disabled: mix(colLayer2, m3colors.m3background, 0.8);
         property color colLayer3Hover: mix(colLayer3, colOnLayer3, 0.90);
         property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
         property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.85)

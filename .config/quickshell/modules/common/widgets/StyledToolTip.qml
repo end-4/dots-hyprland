@@ -9,7 +9,7 @@ ToolTip {
     property bool extraVisibleCondition: true
     property bool alternativeVisibleCondition: false
     property bool internalVisibleCondition: false
-    padding: 7
+    padding: 5
     
     visible: ((extraVisibleCondition && (parent.hovered === undefined || parent?.hovered) && internalVisibleCondition)) || alternativeVisibleCondition
 
@@ -50,6 +50,7 @@ ToolTip {
     StyledText {
         id: tooltipTextObject
         text: content
+        font.pixelSize: Appearance.font.pixelSize.smaller
         color: Appearance.colors.colOnTooltip
         wrapMode: Text.Wrap
     }

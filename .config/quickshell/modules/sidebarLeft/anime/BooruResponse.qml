@@ -17,11 +17,15 @@ Rectangle {
     property var responseData
     property var tagInputField
 
+    property string previewDownloadPath
+    property string downloadPath
+    property string nsfwPath
+
     onResponseDataChanged: {
         console.log("Response data changed:", responseData)
     }
 
-    property real availableWidth: parent?.width
+    property real availableWidth: parent.width ?? 0
     property real rowTooShortThreshold: 100
     property real imageSpacing: 5
     property real responsePadding: 5
@@ -65,7 +69,7 @@ Rectangle {
                 visible: root.responseData.page != "" && root.responseData.page > 0
                 implicitWidth: Math.max(pageNumber.implicitWidth + 10 * 2, 30)
                 implicitHeight: pageNumber.implicitHeight + 5 * 2
-                Layout.alignment: Qt.AlignTop
+                Layout.alignment: Qt.AlignVCenter
 
                 StyledText {
                     id: pageNumber
@@ -205,6 +209,10 @@ Rectangle {
                     delegate: BooruImage {
                         imageData: modelData
                         rowHeight: imageRow.rowHeight
+                        manualDownload: root.responseData.provider == "danbooru"
+                        previewDownloadPath: root.previewDownloadPath
+                        downloadPath: root.downloadPath
+                        nsfwPath: root.nsfwPath
                     }
                 }
             }

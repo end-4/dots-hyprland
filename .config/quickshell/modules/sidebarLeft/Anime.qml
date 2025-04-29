@@ -3,6 +3,7 @@ import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "./anime/"
+import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -15,6 +16,14 @@ Item {
     id: root
     property var panelWindow
     property var inputField: tagInputField
+    property string previewDownloadPath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/waifus`.replace("file://", "")
+    property string downloadPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework").replace("file://", "")
+    property string nsfwPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework/🌶️").replace("file://", "")
+
+    Component.onCompleted: {
+        Hyprland.dispatch(`exec rm -rf ${previewDownloadPath}`)
+        Hyprland.dispatch(`exec mkdir -p ${previewDownloadPath}`)
+    }
 
     function handleInput(inputText) {
         if (inputText.startsWith("/")) {
@@ -28,8 +37,14 @@ Item {
                 const newProvider = args[0];
                 Booru.setProvider(newProvider);
             }
-            else if (command == "lewd" || command == "nsfw") {
+            else if (command == "nsfw") {
                 ConfigOptions.sidebar.booru.allowNsfw = !ConfigOptions.sidebar.booru.allowNsfw
+            }
+            else if (command == "safe") {
+                ConfigOptions.sidebar.booru.allowNsfw = false
+            }
+            else if (command == "lewd") {
+                ConfigOptions.sidebar.booru.allowNsfw = true
             }
             
         }
@@ -105,6 +120,9 @@ Item {
                 delegate: BooruResponse {
                     responseData: modelData
                     tagInputField: root.inputField
+                    previewDownloadPath: root.previewDownloadPath
+                    downloadPath: root.downloadPath
+                    nsfwPath: root.nsfwPath
                 }
             }
 
@@ -164,33 +182,77 @@ Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                TextArea { // The actual input field widget
-                    id: tagInputField
-                    wrapMode: TextArea.Wrap
-                    Layout.fillWidth: true
+                
+                RowLayout {
                     Layout.topMargin: 5
-                    padding: 10
-                    color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    renderType: Text.NativeRendering
-                    selectedTextColor: Appearance.m3colors.m3onPrimary
-                    selectionColor: Appearance.m3colors.m3primary
-                    placeholderText: qsTr("Enter tags")
-                    placeholderTextColor: Appearance.m3colors.m3outline
+                    spacing: 0
+                    TextArea { // The actual input field widget
+                        id: tagInputField
+                        wrapMode: TextArea.Wrap
+                        Layout.fillWidth: true
+                        padding: 10
+                        color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
+                        renderType: Text.NativeRendering
+                        selectedTextColor: Appearance.m3colors.m3onPrimary
+                        selectionColor: Appearance.m3colors.m3primary
+                        placeholderText: qsTr("Enter tags")
+                        placeholderTextColor: Appearance.m3colors.m3outline
 
-                    background: Item {}
+                        background: Item {}
 
-                    Keys.onPressed: (event) => {
-                        if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
-                            if (event.modifiers & Qt.ShiftModifier) {
-                                // Insert newline
-                                tagInputField.insert(tagInputField.cursorPosition, "\n")
-                                event.accepted = true
-                            } else { // Accept text
+                        Keys.onPressed: (event) => {
+                            if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
+                                if (event.modifiers & Qt.ShiftModifier) {
+                                    // Insert newline
+                                    tagInputField.insert(tagInputField.cursorPosition, "\n")
+                                    event.accepted = true
+                                } else { // Accept text
+                                    const inputText = tagInputField.text
+                                    root.handleInput(inputText)
+                                    tagInputField.clear()
+                                    event.accepted = true
+                                }
+                            }
+                        }
+                    }
+                    Button { // Send button
+                        id: sendButton
+                        Layout.alignment: Qt.AlignTop
+                        Layout.rightMargin: 5
+                        implicitWidth: 40
+                        implicitHeight: 40
+                        enabled: tagInputField.text.length > 0
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: sendButton.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            onClicked: {
                                 const inputText = tagInputField.text
                                 root.handleInput(inputText)
                                 tagInputField.clear()
-                                event.accepted = true
                             }
+                        }
+
+                        background: Rectangle {
+                            radius: Appearance.rounding.small
+                            color: sendButton.enabled ? (sendButton.down ? Appearance.colors.colPrimaryActive : 
+                                sendButton.hovered ? Appearance.colors.colPrimaryHover :
+                                Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
+                                
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: Appearance.animation.elementDecel.duration
+                                    easing.type: Appearance.animation.elementDecel.type
+                                }
+                            }
+                        }
+
+                        contentItem: MaterialSymbol {
+                            anchors.centerIn: parent
+                            text: "send"
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pixelSize: Appearance.font.pixelSize.larger
+                            color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
                         }
                     }
                 }
@@ -216,8 +278,6 @@ Item {
                     Item {
                         implicitHeight: providerRowLayout.implicitHeight + 5 * 2
                         implicitWidth: providerRowLayout.implicitWidth + 10 * 2
-                        // radius: Appearance.rounding.small
-                        // color: Appearance.colors.colLayer1
                         
                         RowLayout {
                             id: providerRowLayout
@@ -249,7 +309,7 @@ Item {
                     }
 
                     StyledText {
-                        font.pixelSize: Appearance.font.pixelSize.small
+                        font.pixelSize: Appearance.font.pixelSize.large
                         color: Appearance.colors.colOnLayer1
                         text: "•"
                     }
@@ -267,13 +327,13 @@ Item {
                                 Layout.leftMargin: 10
                                 Layout.alignment: Qt.AlignVCenter
                                 font.pixelSize: Appearance.font.pixelSize.smaller
-                                color: Appearance.colors.coloOnLayer1
+                                color: Appearance.colors.colOnLayer1
                                 text: qsTr("NSFW")
                             }
                             StyledSwitch {
                                 id: nsfwSwitch
                                 enabled: Booru.currentProvider !== "zerochan"
-                                scale: 0.75
+                                scale: 0.6
                                 Layout.alignment: Qt.AlignVCenter
                                 checked: (ConfigOptions.sidebar.booru.allowNsfw && Booru.currentProvider !== "zerochan")
                                 onCheckedChanged: {
@@ -294,9 +354,9 @@ Item {
                             buttonText: modelData.name
                             background: Rectangle {
                                 radius: Appearance.rounding.small
-                                color: (tagButton.down ? Appearance.colors.colLayer1Active : 
-                                    tagButton.hovered ? Appearance.colors.colLayer1Hover :
-                                    Appearance.transparentize(Appearance.colors.colLayer1, 1))
+                                color: tagButton.down ? Appearance.colors.colLayer2Active : 
+                                    tagButton.hovered ? Appearance.colors.colLayer2Hover :
+                                    Appearance.colors.colLayer2
                                     
                                 Behavior on color {
                                     ColorAnimation {
