@@ -19,7 +19,7 @@ Singleton {
 
     property QtObject bar: QtObject {
         property int batteryLowThreshold: 20
-        property string topLeftIcon: "gemini" // Options: distro, gemini
+        property string topLeftIcon: "spark" // Options: distro, spark
         property QtObject resources: QtObject {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false

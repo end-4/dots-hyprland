@@ -72,7 +72,7 @@ Scope {
                             width: 19.5
                             height: 19.5
                             source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
-                                SystemInfo.distroIcon : "google-gemini-symbolic"
+                                SystemInfo.distroIcon : "spark-symbolic"
 
                         }
                         ColorOverlay {
