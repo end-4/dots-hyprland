@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "./anime/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
