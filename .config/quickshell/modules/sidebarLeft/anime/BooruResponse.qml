@@ -61,10 +61,8 @@ Rectangle {
                 }
             }
             Item { Layout.fillWidth: true }
-            Rectangle { // Page number
+            Item { // Page number
                 visible: root.responseData.page != "" && root.responseData.page > 0
-                color: Appearance.colors.colLayer2
-                radius: Appearance.rounding.small
                 implicitWidth: Math.max(pageNumber.implicitWidth + 10 * 2, 30)
                 implicitHeight: pageNumber.implicitHeight + 5 * 2
                 Layout.alignment: Qt.AlignTop
@@ -125,7 +123,8 @@ Rectangle {
                         Layout.fillWidth: false
                         buttonText: modelData
                         onClicked: {
-                            root.tagInputField.text += " " + modelData
+                            if(root.tagInputField.text.length !== 0) root.tagInputField.text += " "
+                            root.tagInputField.text += modelData
                         }
                     }
                 }
@@ -168,6 +167,7 @@ Rectangle {
                         height: 0,
                         images: [],
                     };
+                    const availableImageWidth = availableWidth - root.imageSpacing - (responsePadding * 2)
                     if (i + 1 < responseList.length) {
                         const img1 = responseList[i];
                         const img2 = responseList[i + 1];
@@ -175,7 +175,7 @@ Rectangle {
                         // Let h = row height, w1 = h * aspect1, w2 = h * aspect2
                         // w1 + w2 = availableWidth => h = availableWidth / (aspect1 + aspect2)
                         const combinedAspect = img1.aspect_ratio + img2.aspect_ratio;
-                        const rowHeight = (availableWidth - root.imageSpacing - responsePadding * 2) / combinedAspect;
+                        const rowHeight = availableImageWidth / combinedAspect;
                         if (rowHeight >= rowTooShortThreshold) {
                             row.height = rowHeight;
                             row.images.push(img1);
@@ -186,6 +186,7 @@ Rectangle {
                         }
                     }
                     // Otherwise, put only one image in the row
+                    const rowHeight = availableImageWidth / responseList[i].aspect_ratio;
                     rows.push({
                         height: availableWidth / responseList[i].aspect_ratio,
                         images: [responseList[i]],

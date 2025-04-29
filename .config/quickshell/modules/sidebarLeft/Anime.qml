@@ -97,17 +97,31 @@ Item {
 
                 spacing: 10
                 model: ScriptModel {
-                    values: Booru.responses
+                    values: {
+                        console.log(JSON.stringify(Booru.responses))
+                        return Booru.responses
+                    }
                 }
                 delegate: BooruResponse {
-                    responseData: modelData
+                    responseData: {
+                        console.log("Data at index " + index + ": " + JSON.stringify(modelData))
+                        return modelData
+                    }
                     tagInputField: root.inputField
                 }
             }
 
             Item { // Placeholder when list is empty
-                visible: Booru.responses.length === 0
+                opacity: Booru.responses.length === 0 ? 1 : 0
+                visible: opacity > 0
                 anchors.fill: parent
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Appearance.animation.elementDecel.duration
+                        easing.type: Appearance.animation.elementDecel.type
+                    }
+                }
 
                 ColumnLayout {
                     anchors.centerIn: parent

@@ -148,8 +148,16 @@ Item {
     }
     
     Item { // Placeholder when list is empty
-        visible: taskList.length === 0
+        visible: opacity > 0
+        opacity: taskList.length === 0 ? 1 : 0
         anchors.fill: parent
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Appearance.animation.elementDecel.duration
+                easing.type: Appearance.animation.elementDecel.type
+            }
+        }
 
         ColumnLayout {
             anchors.centerIn: parent
