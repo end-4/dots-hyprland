@@ -71,41 +71,6 @@ Item {
         id: columnLayout
         anchors.fill: parent
 
-        Rectangle {
-            Layout.alignment: Qt.AlignHCenter
-            implicitHeight: providerRowLayout.implicitHeight + 5 * 2
-            implicitWidth: providerRowLayout.implicitWidth + 10 * 2
-            radius: Appearance.rounding.small
-            color: Appearance.colors.colLayer1
-            RowLayout {
-                id: providerRowLayout
-                anchors.centerIn: parent
-
-                MaterialSymbol {
-                    text: "api"
-                    font.pixelSize: Appearance.font.pixelSize.large
-                }
-                StyledText {
-                    id: providerName
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    font.weight: Font.DemiBold
-                    color: Appearance.m3colors.m3onSurface
-                    text: Booru.providers[Booru.currentProvider].name
-                }
-            }
-            StyledToolTip {
-                id: toolTip
-                alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
-            }
-
-            MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-        }
-
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -248,6 +213,47 @@ Item {
                         }, 
                     ]
 
+                    Item {
+                        implicitHeight: providerRowLayout.implicitHeight + 5 * 2
+                        implicitWidth: providerRowLayout.implicitWidth + 10 * 2
+                        // radius: Appearance.rounding.small
+                        // color: Appearance.colors.colLayer1
+                        
+                        RowLayout {
+                            id: providerRowLayout
+                            anchors.centerIn: parent
+
+                            MaterialSymbol {
+                                text: "api"
+                                font.pixelSize: Appearance.font.pixelSize.large
+                            }
+                            StyledText {
+                                id: providerName
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                font.weight: Font.DemiBold
+                                color: Appearance.m3colors.m3onSurface
+                                text: Booru.providers[Booru.currentProvider].name
+                            }
+                        }
+                        StyledToolTip {
+                            id: toolTip
+                            alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
+                            content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
+                        }
+
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
+                    }
+
+                    StyledText {
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        color: Appearance.colors.colOnLayer1
+                        text: "•"
+                    }
+
                     Rectangle {
                         implicitWidth: switchesRow.implicitWidth
 
@@ -266,10 +272,12 @@ Item {
                             }
                             StyledSwitch {
                                 id: nsfwSwitch
+                                enabled: Booru.currentProvider !== "zerochan"
                                 scale: 0.75
                                 Layout.alignment: Qt.AlignVCenter
-                                checked: ConfigOptions.sidebar.booru.allowNsfw
+                                checked: (ConfigOptions.sidebar.booru.allowNsfw && Booru.currentProvider !== "zerochan")
                                 onCheckedChanged: {
+                                    if (!nsfwSwitch.enabled) return;
                                     ConfigOptions.sidebar.booru.allowNsfw = checked
                                 }
                             }

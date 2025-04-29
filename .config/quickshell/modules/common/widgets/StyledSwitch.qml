@@ -10,6 +10,8 @@ Switch {
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
 
+    PointingHandInteraction {}
+
     // Custom track styling
     background: Rectangle {
         width: parent.width
