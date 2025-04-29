@@ -90,8 +90,15 @@ Scope { // Scope
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
                             sidebarRoot.currentTab = Math.min(sidebarRoot.currentTab + 1, root.tabButtonList.length - 1)
-                        } else if (event.key === Qt.Key_PageUp) {
+                        } 
+                        else if (event.key === Qt.Key_PageUp) {
                             sidebarRoot.currentTab = Math.max(sidebarRoot.currentTab - 1, 0)
+                        }
+                        else if (event.key === Qt.Key_Tab) {
+                            sidebarRoot.currentTab = (sidebarRoot.currentTab + 1) % root.tabButtonList.length;
+                        }
+                        else if (event.key === Qt.Key_Backtab) {
+                            sidebarRoot.currentTab = (sidebarRoot.currentTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
                         }
                         event.accepted = true;
                     }

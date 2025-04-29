@@ -12,7 +12,13 @@ Button {
     property var imageData
     property var rowHeight
 
+    // onImageDataChanged: {
+    //     console.log("Image data changed:", imageData)
+    // }
+
     padding: 0
+    implicitWidth: imageObject.width
+    implicitHeight: imageObject.height
 
     PointingHandInteraction {}
 
@@ -21,27 +27,27 @@ Button {
     }
 
     background: Rectangle {
-        implicitWidth: imageData.width
-        implicitHeight: imageData.height
+        implicitWidth: imageObject.width
+        implicitHeight: imageObject.height
         radius: Appearance.rounding.small
         color: Appearance.colors.colLayer2
     }
 
     contentItem: Image {
-        id: imageData
+        id: imageObject
         anchors.fill: parent
-        sourceSize.width: imageRow.rowHeight * modelData.aspect_ratio
-        sourceSize.height: imageRow.rowHeight
+        sourceSize.width: root.rowHeight * modelData.aspect_ratio
+        sourceSize.height: root.rowHeight
         fillMode: Image.PreserveAspectFit
         source: modelData.preview_url
-        width: imageRow.rowHeight * modelData.aspect_ratio
-        height: imageRow.rowHeight
+        width: root.rowHeight * modelData.aspect_ratio
+        height: root.rowHeight
 
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {
-                width: imageData.width
-                height: imageData.height
+                width: imageObject.width
+                height: imageObject.height
                 radius: Appearance.rounding.small
             }
         }

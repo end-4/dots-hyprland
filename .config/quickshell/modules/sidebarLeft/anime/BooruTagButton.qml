@@ -22,8 +22,6 @@ Button {
         color: (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
             button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
             Appearance.m3colors.m3surfaceContainerHighest)
-        
-
     }
 
     contentItem: StyledText {

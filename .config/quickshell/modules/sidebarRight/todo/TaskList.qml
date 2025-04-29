@@ -146,8 +146,8 @@ Item {
             }
         }
     }
-    // Placeholder when list is empty
-    Item {
+    
+    Item { // Placeholder when list is empty
         visible: taskList.length === 0
         anchors.fill: parent
 

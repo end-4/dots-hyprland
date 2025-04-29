@@ -14,8 +14,12 @@ import Qt5Compat.GraphicalEffects
 
 Rectangle {
     id: root
-    property var responseData
+    property var responseData: {}
     property var tagInputField
+
+    onResponseDataChanged: {
+        console.log("Response data changed:", responseData)
+    }
 
     property real availableWidth: parent?.width
     property real rowTooShortThreshold: 100
@@ -38,9 +42,8 @@ Rectangle {
         anchors.margins: responsePadding
         spacing: root.imageSpacing
 
-        // Provider name
-        RowLayout {
-            Rectangle {
+        RowLayout { // Header
+            Rectangle { // Provider name
                 id: providerNameWrapper
                 color: Appearance.m3colors.m3secondaryContainer
                 radius: Appearance.rounding.small
@@ -52,31 +55,33 @@ Rectangle {
                     id: providerName
                     anchors.centerIn: parent
                     font.pixelSize: Appearance.font.pixelSize.large
+                    font.weight: Font.DemiBold
                     color: Appearance.m3colors.m3onSecondaryContainer
                     text: Booru.providers[root.responseData.provider].name
                 }
             }
             Item { Layout.fillWidth: true }
-            Rectangle {
+            Rectangle { // Page number
+                visible: root.responseData.page != "" && root.responseData.page > 0
                 color: Appearance.colors.colLayer2
                 radius: Appearance.rounding.small
-                implicitWidth: Math.max(pageNumber.implicitWidth + 10 * 2, 20)
+                implicitWidth: Math.max(pageNumber.implicitWidth + 10 * 2, 30)
                 implicitHeight: pageNumber.implicitHeight + 5 * 2
-                Layout.alignment: Qt.AlignVCenter
+                Layout.alignment: Qt.AlignTop
 
                 StyledText {
                     id: pageNumber
                     anchors.centerIn: parent
-                    font.pixelSize: Appearance.font.pixelSize.small
+                    font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colOnLayer2
                     text: `Page ${root.responseData.page}`
                 }
             }
         }
 
-        // Tags
-        Flickable {
+        Flickable { // Tag strip
             id: tagsFlickable
+            visible: root.responseData.tags.length > 0
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: {
                 console.log(root.responseData)
@@ -125,6 +130,28 @@ Rectangle {
                     }
                 }
                 
+            }
+        }
+
+        StyledText { // Message
+            id: messageText
+            Layout.fillWidth: true
+            visible: root.responseData.message.length > 0
+            font.pixelSize: Appearance.font.pixelSize.small
+            color: Appearance.colors.colOnLayer1
+            text: root.responseData.message
+            wrapMode: Text.WordWrap
+            Layout.margins: responsePadding
+            textFormat: Text.MarkdownText
+            onLinkActivated: (link) => {
+                Qt.openUrlExternally(link)
+                Hyprland.dispatch("global quickshell:sidebarLeftClose")
+            }
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton // Only for hover
+                hoverEnabled: true
+                cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
             }
         }
 

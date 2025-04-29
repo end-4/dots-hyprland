@@ -28,6 +28,14 @@ Rectangle {
             }
             event.accepted = true;
         }
+        if (event.modifiers === Qt.ControlModifier) {
+            if (event.key === Qt.Key_Tab) {
+                root.currentTab = (root.currentTab + 1) % root.tabButtonList.length;
+            } else if (event.key === Qt.Key_Backtab) {
+                root.currentTab = (root.currentTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
+            }
+            event.accepted = true;
+        }
     }
 
     ColumnLayout {

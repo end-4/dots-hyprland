@@ -10,6 +10,13 @@ import QtQuick;
 Singleton {
     id: root
 
+    Connections {
+        target: ConfigOptions.sidebar.booru
+        function onAllowNsfwChanged() {
+            root.addSystemMessage(ConfigOptions.sidebar.booru.allowNsfw ? qsTr("Tiddies enabled") : qsTr("No horny"))
+        }
+    }
+
     property var responses: []
     property var getWorkingImageSource: (url) => {
         if (url.includes('pximg.net')) {
@@ -42,7 +49,7 @@ Singleton {
                         "sample_url": item.sample_url ?? item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source),
+                        "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
             }
@@ -67,7 +74,7 @@ Singleton {
                         "sample_url": item.sample_url ?? item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source),
+                        "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
             }
@@ -92,7 +99,7 @@ Singleton {
                         "sample_url": item.thumbnail,
                         "file_url": item.thumbnail,
                         "file_ext": "avif",
-                        "source": getWorkingImageSource(item.source),
+                        "source": getWorkingImageSource(item.source) ?? item.thumbnail,
                         "character": item.tag
                     }
                 })
@@ -118,7 +125,7 @@ Singleton {
                         "sample_url": item.file_url ?? item.large_file_url,
                         "file_url": item.large_file_url,
                         "file_ext": item.file_ext,
-                        "source": getWorkingImageSource(item.source),
+                        "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
             }
@@ -143,7 +150,7 @@ Singleton {
                         "sample_url": item.sample_url ?? item.file_url,
                         "file_url": item.file_url,
                         "file_ext": item.file_url.split('.').pop(),
-                        "source": getWorkingImageSource(item.source),
+                        "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
             }
@@ -155,8 +162,11 @@ Singleton {
     function setProvider(provider) {
         if (providerList.indexOf(provider) !== -1) {
             currentProvider = provider
+            root.addSystemMessage(qsTr("Provider set to ") + providers[provider].name
+                + (provider == "zerochan" ? qsTr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
         } else {
             console.log("[Booru] Invalid provider: " + provider)
+            root.addSystemMessage(qsTr("Invalid provider. Supported providers: \n- ") + providerList.join("\n- "))
         }
     }
 
@@ -165,13 +175,13 @@ Singleton {
     }
 
     function addSystemMessage(message) {
-        responses.push({
+        responses = [...responses, {
             "provider": "system",
             "tags": [],
-            "page": 1,
+            "page": -1,
             "images": [],
             "message": `${message}`
-        })
+        }]
     }
 
     function constructRequestUrl(tags, nsfw=true, limit=20, page=1) {
@@ -214,7 +224,7 @@ Singleton {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
                     // console.log("[Booru] Raw response length: " + xhr.responseText.length)
-                    console.log("[Booru] Raw response: " + xhr.responseText)
+                    // console.log("[Booru] Raw response: " + xhr.responseText)
                     var response = JSON.parse(xhr.responseText)
 
                     // Access nested properties based on listAccess
@@ -227,16 +237,14 @@ Singleton {
                         }
                     }
                     response = providers[currentProvider].mapFunc(response)
-                    console.log("[Booru] Scoped & mapped response: " + JSON.stringify(response))
-                    var newResponses = root.responses.slice() // make a shallow copy
-                    newResponses.push({
+                    // console.log("[Booru] Scoped & mapped response: " + JSON.stringify(response))
+                    root.responses = [...root.responses, {
                         "provider": currentProvider,
                         "tags": tags,
                         "page": page,
                         "images": response,
                         "message": ""
-                    })
-                    root.responses = newResponses
+                    }]
                     
                 } catch (e) {
                     console.log("[Booru] Failed to parse response: " + e)

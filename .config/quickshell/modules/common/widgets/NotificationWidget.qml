@@ -445,7 +445,7 @@ Item {
                                 ? `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
                                   `${notificationObject.body.replace(/\n/g, "<br/>")}` 
                                 : notificationObject.body.replace(/<img/g, "\n <img").split("\n")[0]
-                            onLinkActivated: {
+                            onLinkActivated: (link) => {
                                 Qt.openUrlExternally(link)
                                 Hyprland.dispatch("global quickshell:sidebarRightClose")
                             }
@@ -453,7 +453,7 @@ Item {
                                 anchors.fill: parent
                                 acceptedButtons: Qt.NoButton // Only for hover
                                 hoverEnabled: true
-                                cursorShape: notificationBodyText.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
+                                cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
                             }
                         }
                     }
