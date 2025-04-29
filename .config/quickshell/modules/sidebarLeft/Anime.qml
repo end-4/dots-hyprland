@@ -112,10 +112,7 @@ Item {
 
                 spacing: 10
                 model: ScriptModel {
-                    values: {
-                        console.log(JSON.stringify(Booru.responses))
-                        return Booru.responses
-                    }
+                    values: Booru.responses
                 }
                 delegate: BooruResponse {
                     responseData: modelData

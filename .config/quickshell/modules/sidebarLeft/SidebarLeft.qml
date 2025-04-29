@@ -229,4 +229,18 @@ Scope { // Scope
         }
     }
 
+    GlobalShortcut {
+        name: "sidebarLeftClose"
+        description: "Closes left sidebar on press"
+
+        onPressed: {
+            for (let i = 0; i < sidebarVariants.instances.length; i++) {
+                let panelWindow = sidebarVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    panelWindow.visible = false;
+                }
+            }
+        }
+    }
+
 }

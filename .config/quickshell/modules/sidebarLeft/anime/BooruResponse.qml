@@ -26,7 +26,7 @@ Rectangle {
     }
 
     property real availableWidth: parent.width ?? 0
-    property real rowTooShortThreshold: 100
+    property real rowTooShortThreshold: 185
     property real imageSpacing: 5
     property real responsePadding: 5
 
@@ -190,9 +190,9 @@ Rectangle {
                         }
                     }
                     // Otherwise, put only one image in the row
-                    const rowHeight = availableImageWidth / responseList[i].aspect_ratio;
+                    const rowHeight = (availableWidth - (responsePadding * 2)) / responseList[i].aspect_ratio;
                     rows.push({
-                        height: availableWidth / responseList[i].aspect_ratio,
+                        height: rowHeight,
                         images: [responseList[i]],
                     });
                     i += 1;
