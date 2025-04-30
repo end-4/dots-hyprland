@@ -218,5 +218,44 @@ Rectangle {
                 }
             }
         }
+
+        Button { // Next page button
+            id: button
+            property string buttonText
+            visible: root.responseData.page != "" && root.responseData.page > 0
+
+            Layout.alignment: Qt.AlignRight
+            implicitHeight: 30
+            leftPadding: 10
+            rightPadding: 10
+
+            PointingHandInteraction {}
+            onClicked: {
+                tagInputField.text = `${responseData.tags.join(" ")} ${parseInt(root.responseData.page) + 1}`
+                tagInputField.accept()
+            }
+
+            background: Rectangle {
+                radius: Appearance.rounding.small
+                color: (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
+                    button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
+                    Appearance.m3colors.m3surfaceContainerHighest)
+            }
+
+            contentItem: RowLayout {
+                spacing: 0
+                StyledText {
+                    Layout.alignment: Text.AlignVCenter
+                    text: "Next page"
+                    color: Appearance.m3colors.m3onSurface
+                }
+                MaterialSymbol {
+                    Layout.alignment: Text.AlignVCenter
+                    font.pixelSize: Appearance.font.pixelSize.larger
+                    color: Appearance.m3colors.m3onSurface
+                    text: "chevron_right"
+                }
+            }
+        }
     }
 }

@@ -91,9 +91,9 @@ Button {
             PointingHandInteraction {}
 
             background: Rectangle {
-                color: menuButton.down ? Appearance.mix(Appearance.colors.colScrim, Appearance.m3colors.m3onSurface, 0.6) :
-                    menuButton.hovered ? Appearance.mix(Appearance.colors.colScrim, Appearance.m3colors.m3onSurface, 0.8) :
-                    Appearance.colors.colScrim
+                color: menuButton.down ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
+                    menuButton.hovered ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
+                    Appearance.transparentize(Appearance.m3colors.m3surface, 0.3)
                 radius: Appearance.rounding.full
             }
 
@@ -131,7 +131,7 @@ Button {
                     buttonText: "Open file link"
                     onClicked: {
                         root.showActions = false
-                        Hyprland.dispatch("global quickshell:sidebarLeftClose")
+                        // Hyprland.dispatch("global quickshell:sidebarLeftClose")
                         Hyprland.dispatch(`exec xdg-open '${root.imageData.file_url}'`)
                     }
                 }
@@ -152,7 +152,7 @@ Button {
                     buttonText: "Download"
                     onClicked: {
                         root.showActions = false
-                        Hyprland.dispatch("global quickshell:sidebarLeftClose")
+                        // Hyprland.dispatch("global quickshell:sidebarLeftClose")
                         Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send 'Download complete' '${root.downloadPath}/${root.fileName}'`)
                     }
                 }

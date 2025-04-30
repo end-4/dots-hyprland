@@ -19,6 +19,7 @@ Item {
     property string previewDownloadPath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/waifus`.replace("file://", "")
     property string downloadPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework").replace("file://", "")
     property string nsfwPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework/🌶️").replace("file://", "")
+    property real scrollOnNewResponse: 100
 
     Component.onCompleted: {
         Hyprland.dispatch(`exec rm -rf ${previewDownloadPath}`)
@@ -46,7 +47,18 @@ Item {
             else if (command == "lewd") {
                 ConfigOptions.sidebar.booru.allowNsfw = true
             }
-            
+            else if (command == "next") {
+                if (Booru.responses.length > 0) {
+                    const lastResponse = Booru.responses[Booru.responses.length - 1]
+                    root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
+                }
+            }
+        }
+        else if (inputText.trim() == "+") {
+            if (Booru.responses.length > 0) {
+                const lastResponse = Booru.responses[Booru.responses.length - 1]
+                root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
+            }
         }
         else {
             // Create tag list
@@ -92,7 +104,9 @@ Item {
             ListView { // Booru responses
                 id: booruResponseListView
                 anchors.fill: parent
-                clip: true
+                
+                property int lastResponseLength: 0
+
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Rectangle {
@@ -112,7 +126,14 @@ Item {
 
                 spacing: 10
                 model: ScriptModel {
-                    values: Booru.responses
+                    values: {
+                        if(Booru.responses.length > booruResponseListView.lastResponseLength) {
+                            if (booruResponseListView.lastResponseLength > 0 && Booru.responses[booruResponseListView.lastResponseLength].provider != "system")
+                                booruResponseListView.contentY = booruResponseListView.contentY + root.scrollOnNewResponse
+                            booruResponseListView.lastResponseLength = Booru.responses.length
+                        }
+                        return Booru.responses
+                    }
                 }
                 delegate: BooruResponse {
                     responseData: modelData
@@ -196,6 +217,11 @@ Item {
                         placeholderTextColor: Appearance.m3colors.m3outline
 
                         background: Item {}
+
+                        function accept() {
+                            root.handleInput(text)
+                            text = ""
+                        }
 
                         Keys.onPressed: (event) => {
                             if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
