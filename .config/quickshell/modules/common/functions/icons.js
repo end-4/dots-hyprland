@@ -8,6 +8,7 @@ const substitutions = {
     "wps": "wps-office2019-kprometheus",
     "wpsoffice": "wps-office2019-kprometheus",
     "footclient": "foot",
+    "zen": "zen-browser",
     "": "image-missing"
 }
 const regexSubstitutions = [
