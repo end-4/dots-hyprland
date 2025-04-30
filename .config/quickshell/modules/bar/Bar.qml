@@ -7,6 +7,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import Quickshell
+import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Mpris
@@ -27,6 +28,7 @@ Scope {
             property var modelData
 
             screen: modelData
+            WlrLayershell.namespace: "quickshell:bar"
             height: barHeight + Appearance.rounding.screenRounding
             exclusiveZone: barHeight
             mask: Region {
