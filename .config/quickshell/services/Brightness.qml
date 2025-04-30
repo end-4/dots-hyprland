@@ -48,7 +48,7 @@ Singleton {
     Process {
         id: decreaseBrightness
 
-        command: ["brightnessctl", "set", "5%-"]
+        command: ["brightnessctl", "set", "5%-", "-e"]
         running: false
         onExited: {
             running = false;
@@ -59,7 +59,7 @@ Singleton {
     Process {
         id: increaseBrightness
 
-        command: ["brightnessctl", "set", "5%+"]
+        command: ["brightnessctl", "set", "5%+", "-e"]
         running: false
         onExited: {
             running = false;
@@ -70,7 +70,7 @@ Singleton {
     Process {
         id: preventPitchBlack
 
-        command: ["brightnessctl", "set", "1%+"]
+        command: ["brightnessctl", "set", "1%+", "-e"]
         running: false
         onExited: {
             running = false;
