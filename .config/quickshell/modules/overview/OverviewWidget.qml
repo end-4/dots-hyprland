@@ -1,3 +1,4 @@
+import "root:/"
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
@@ -86,7 +87,8 @@ Item {
                                 acceptedButtons: Qt.LeftButton
                                 onClicked: {
                                     if (root.draggingTargetWorkspace === -1) {
-                                        Hyprland.dispatch(`global quickshell:overviewClose`)
+                                        // Hyprland.dispatch(`exec qs ipc call overview close`)
+                                        GlobalStates.overviewOpen = false
                                         Hyprland.dispatch(`workspace ${workspaceValue}`)
                                     }
                                 }
@@ -186,8 +188,8 @@ Item {
                             if (!windowData) return;
 
                             if (event.button === Qt.LeftButton) {
-                                Hyprland.dispatch(`global quickshell:overviewClose`)
-                                Hyprland.dispatch(`workspace ${windowData.workspace.id}`)
+                                GlobalStates.overviewOpen = false
+                                Hyprland.dispatch(`focuswindow address:${windowData.address}`)
                                 event.accepted = true
                             } else if (event.button === Qt.MiddleButton) {
                                 Hyprland.dispatch(`closewindow address:${windowData.address}`)
