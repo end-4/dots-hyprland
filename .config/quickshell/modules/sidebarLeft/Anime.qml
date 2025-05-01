@@ -62,7 +62,7 @@ Item {
         }
         else {
             // Create tag list
-            const tagList = inputText.split(/\s+/);
+            const tagList = inputText.split(/\s+/).filter(tag => tag.length > 0);
             let pageIndex = 1;
             for (let i = 0; i < tagList.length; ++i) { // Detect page number
                 if (/^\d+$/.test(tagList[i])) {
