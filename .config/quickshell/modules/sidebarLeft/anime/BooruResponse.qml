@@ -93,6 +93,7 @@ Rectangle {
             // height: tagRowLayout.implicitHeight
             contentWidth: tagRowLayout.implicitWidth
 
+            clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {

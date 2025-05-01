@@ -40,6 +40,7 @@ Item {
                 anchors.fill: parent
                 contentHeight: volumeMixerColumnLayout.height
 
+                clip: true
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Rectangle {

@@ -63,6 +63,7 @@ Rectangle {
                 root.currentTab = currentIndex
             }
 
+            clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {

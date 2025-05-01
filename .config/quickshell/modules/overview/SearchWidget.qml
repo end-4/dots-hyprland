@@ -181,6 +181,7 @@ Item { // Wrapper
             anchors.centerIn: parent
             spacing: 0
 
+            clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {

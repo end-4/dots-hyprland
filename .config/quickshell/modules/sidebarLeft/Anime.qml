@@ -107,6 +107,7 @@ Item {
                 
                 property int lastResponseLength: 0
 
+                clip: true
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Rectangle {

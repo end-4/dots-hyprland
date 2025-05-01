@@ -21,6 +21,7 @@ Item {
         anchors.fill: parent
         contentHeight: columnLayout.height
 
+        clip: true
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {

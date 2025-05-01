@@ -305,7 +305,7 @@ Item {
                                 height: size
                                 sourceSize.width: size
                                 sourceSize.height: size
-
+                                
                                 layer.enabled: true
                                 layer.effect: OpacityMask {
                                     maskSource: Rectangle {
@@ -472,6 +472,7 @@ Item {
                 height: expanded ? actionRowLayout.implicitHeight : 0
                 contentWidth: actionRowLayout.implicitWidth
 
+                clip: true
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Rectangle {

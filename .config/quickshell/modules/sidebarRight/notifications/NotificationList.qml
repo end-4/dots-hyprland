@@ -72,6 +72,7 @@ Item {
         anchors.bottom: statusRow.top
         contentHeight: columnLayout.height
 
+        clip: true
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {
