@@ -228,7 +228,7 @@ Rectangle {
             Layout.alignment: Qt.AlignRight
             implicitHeight: 30
             leftPadding: 10
-            rightPadding: 10
+            rightPadding: 5
 
             PointingHandInteraction {}
             onClicked: {
