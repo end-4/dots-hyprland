@@ -9,6 +9,7 @@ import QtQuick;
 
 Singleton {
     id: root
+    signal tagSuggestion(string query, var suggestions)
 
     Connections {
         target: ConfigOptions.sidebar.booru
@@ -34,7 +35,6 @@ Singleton {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
-            "listAccess": [],
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -51,6 +51,15 @@ Singleton {
                         "file_url": item.file_url,
                         "file_ext": item.file_ext,
                         "source": getWorkingImageSource(item.source) ?? item.file_url,
+                    }
+                })
+            },
+            "tagSearchTemplate": "https://yande.re/tag.json?order=count&name={{query}}*",
+            "tagMapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "name": item.name,
+                        "count": item.count
                     }
                 })
             }
@@ -59,7 +68,6 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.com",
             "api": "https://konachan.com/post.json",
-            "listAccess": [],
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -78,14 +86,23 @@ Singleton {
                         "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
+            },
+            "tagSearchTemplate": "https://konachan.com/tag.json?order=count&name={{query}}*",
+            "tagMapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "name": item.name,
+                        "count": item.count
+                    }
+                })
             }
         },
         "zerochan": {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
-            "listAccess": ["items"],
             "mapFunc": (response) => {
+                response = response.items
                 return response.map(item => {
                     return {
                         "id": item.id,
@@ -110,7 +127,6 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
-            "listAccess": [],
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -129,14 +145,24 @@ Singleton {
                         "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
+            },
+            "tagSearchTemplate": "https://danbooru.donmai.us/tags.json?search[name_matches]={{query}}*",
+            "tagMapFunc": (response) => {
+                return response.map(item => {
+                    return {
+                        "name": item.name,
+                        "count": item.post_count
+                    }
+                })
             }
+
         },
         "gelbooru": {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
-            "listAccess": ["post"],
             "mapFunc": (response) => {
+                response = response.post
                 return response.map(item => {
                     return {
                         "id": item.id,
@@ -154,14 +180,23 @@ Singleton {
                         "source": getWorkingImageSource(item.source) ?? item.file_url,
                     }
                 })
+            },
+            "tagSearchTemplate": "https://gelbooru.com/index.php?page=dapi&s=tag&q=index&json=1&orderby=count&name_pattern={{query}}%",
+            "tagMapFunc": (response) => {
+                return response.tag.map(item => {
+                    return {
+                        "name": item.name,
+                        "count": item.count
+                    }
+                })
             }
         },
         "waifu.im": {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/search",
-            "listAccess": ["images"],
             "mapFunc": (response) => {
+                response = response.images
                 return response.map(item => {
                     return {
                         "id": item.image_id,
@@ -179,6 +214,11 @@ Singleton {
                         "source": getWorkingImageSource(item.source) ?? item.url,
                     }
                 })
+            },
+            "tagSearchTemplate": "https://api.waifu.im/tags",
+            "tagMapFunc": (response) => {
+                return [...response.versatile.map(item => {return {"name": item}}), 
+                    ...response.nsfw.map(item => {return {"name": item}})]
             }
         },
     }
@@ -191,8 +231,7 @@ Singleton {
             root.addSystemMessage(qsTr("Provider set to ") + providers[provider].name
                 + (provider == "zerochan" ? qsTr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
         } else {
-            console.log("[Booru] Invalid provider: " + provider)
-            root.addSystemMessage(qsTr("Invalid provider. Supported providers: \n- ") + providerList.join("\n- "))
+            root.addSystemMessage(qsTr("Invalid API provider. Supported: \n- ") + providerList.join("\n- "))
         }
     }
 
@@ -255,30 +294,17 @@ Singleton {
 
     function makeRequest(tags, nsfw=false, limit=20, page=1) {
         var url = constructRequestUrl(tags, nsfw, limit, page)
-        console.log("[Booru] Making request to " + url)
+        // console.log("[Booru] Making request to " + url)
 
         var xhr = new XMLHttpRequest()
         xhr.open("GET", url)
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
-                    // console.log("[Booru] Raw response length: " + xhr.responseText.length)
                     // console.log("[Booru] Raw response: " + xhr.responseText)
                     var response = JSON.parse(xhr.responseText)
-
-                    // Access nested properties based on listAccess
-                    var accessList = providers[currentProvider].listAccess
-                    for (var i = 0; i < accessList.length; ++i) {
-                        // console.log("[Booru] Accessing property: " + accessList[i])
-                        // console.log("[Booru] Current response: " + JSON.stringify(response))
-                        if (response && response.hasOwnProperty(accessList[i])) {
-                            response = response[accessList[i]]
-                        } else {
-                            break
-                        }
-                    }
                     response = providers[currentProvider].mapFunc(response)
-                    // console.log("[Booru] Scoped & mapped response: " + JSON.stringify(response))
+                    // console.log("[Booru] Mapped response: " + JSON.stringify(response))
                     root.responses = [...root.responses, {
                         "provider": currentProvider,
                         "tags": tags,
@@ -310,8 +336,51 @@ Singleton {
             }
             else if (currentProvider == "zerochan") {
                 const userAgent = ConfigOptions.sidebar.booru.zerochan.username ? `Desktop sidebar booru viewer - ${ConfigOptions.sidebar.booru.zerochan.username}` : defaultUserAgent
-                console.log("Setting User-Agent for zerochan: " + userAgent)
                 xhr.setRequestHeader("User-Agent", userAgent)
+            }
+            xhr.send()
+        } catch (error) {
+            console.log("Could not set User-Agent:", error)
+        } 
+    }
+
+    property var currentTagRequest: null
+    function triggerTagSearch(query) {
+        if (currentTagRequest) {
+            currentTagRequest.abort();
+        }
+
+        var provider = providers[currentProvider]
+        if (!provider.tagSearchTemplate) {
+            return
+        }
+        var url = provider.tagSearchTemplate.replace("{{query}}", encodeURIComponent(query))
+
+        var xhr = new XMLHttpRequest()
+        currentTagRequest = xhr
+        xhr.open("GET", url)
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                currentTagRequest = null
+                try {
+                    // console.log("[Booru] Raw response: " + xhr.responseText)
+                    var response = JSON.parse(xhr.responseText)
+                    response = provider.tagMapFunc(response)
+                    // console.log("[Booru] Mapped response: " + JSON.stringify(response))
+                    root.tagSuggestion(query, response)
+                } catch (e) {
+                    console.log("[Booru] Failed to parse response: " + e)
+                }
+            }
+            else if (xhr.readyState === XMLHttpRequest.DONE) {
+                console.log("[Booru] Request failed with status: " + xhr.status)
+            }
+        }
+
+        try {
+            // Required for danbooru
+            if (currentProvider == "danbooru") {
+                xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             xhr.send()
         } catch (error) {
