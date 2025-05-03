@@ -14,8 +14,7 @@ ToolTip {
         return ans
     }
     verticalPadding: 5
-    horizontalPadding: 10
-    
+    horizontalPadding: 10    
     opacity: internalVisibleCondition ? 1 : 0
     visible: opacity > 0
 
