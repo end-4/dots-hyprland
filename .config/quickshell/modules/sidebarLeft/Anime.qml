@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "./anime/"
 import Qt.labs.platform
 import QtQuick
@@ -116,6 +117,13 @@ Item {
                 }
             }
             Booru.makeRequest(tagList, ConfigOptions.sidebar.booru.allowNsfw, ConfigOptions.sidebar.booru.limit, pageIndex);
+        }
+    }
+
+    Connections {
+        target: panelWindow
+        function onVisibleChanged(visible) {
+            tagInputField.forceActiveFocus()
         }
     }
 
@@ -346,7 +354,6 @@ Item {
                         repeat: false
                         onTriggered: {
                             const inputText = tagInputField.text
-                            if (inputText.length === 0 || inputText.startsWith(root.commandPrefix)) return;
                             const words = inputText.trim().split(/\s+/);
                             if (words.length > 0) {
                                 Booru.triggerTagSearch(words[words.length - 1]);
@@ -358,15 +365,37 @@ Item {
                         if(tagInputField.text.length === 0) {
                             root.suggestionQuery = ""
                             root.suggestionList = []
+                            searchTimer.stop();
+                            return
+                        }
+                        if(tagInputField.text.startsWith(`${root.commandPrefix}mode`)) {
+                            root.suggestionQuery = tagInputField.text.split(" ")[1] ?? ""
+                            const providerResults = Fuzzy.go(root.suggestionQuery, Booru.providerList.map(provider => {
+                                return {
+                                    name: Fuzzy.prepare(provider),
+                                    obj: provider,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            console.log(JSON.stringify(providerResults))
+                            root.suggestionList = providerResults.map(provider => {
+                                return {
+                                    name: `${tagInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "mode ") : ""}${provider.target}`,
+                                }
+                            })
+                            searchTimer.stop();
                             return
                         }
                         if(tagInputField.text.startsWith(root.commandPrefix)) {
-                            root.suggestionQuery = ""
+                            root.suggestionQuery = tagInputField.text
                             root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(tagInputField.text.substring(1))).map(cmd => {
                                 return {
                                     name: `${root.commandPrefix}${cmd.name}`,
                                 }
                             })
+                            searchTimer.stop();
                             return
                         }
                         searchTimer.restart();
