@@ -294,11 +294,7 @@ Item { // Wrapper
 
                         // Add filtered application entries
                         result = result.concat(
-                            DesktopEntries.applications.values
-                                .filter((entry) => {
-                                    if (root.searchingText == "") return false
-                                    return entry.name.toLowerCase().includes(root.searchingText.toLowerCase())
-                                })
+                            AppSearch.fuzzyQuery(root.searchingText)
                                 .map((entry) => {
                                     entry.clickActionName = "Launch";
                                     entry.type = "App"
@@ -322,17 +318,6 @@ Item { // Wrapper
                                 });
                             }
                         }
-                        // Qalc math result
-                        result.push({
-                            name: root.mathResult,
-                            clickActionName: "Copy",
-                            type: qsTr("Math result"),
-                            fontType: "monospace",
-                            materialSymbol: 'calculate',
-                            execute: () => {
-                                Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
-                            }
-                        });
                         // Run command
                         result.push({
                             name: searchingText,
@@ -342,6 +327,17 @@ Item { // Wrapper
                             materialSymbol: 'terminal',
                             execute: () => {
                                 executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
+                            }
+                        });
+                        // Qalc math result
+                        result.push({
+                            name: root.mathResult,
+                            clickActionName: "Copy",
+                            type: qsTr("Math result"),
+                            fontType: "monospace",
+                            materialSymbol: 'calculate',
+                            execute: () => {
+                                Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
                             }
                         });
                         // Web search

@@ -1,3 +1,5 @@
+.pragma library
+
 const substitutions = {
     "code-url-handler": "visual-studio-code",
     "Code": "visual-studio-code",
