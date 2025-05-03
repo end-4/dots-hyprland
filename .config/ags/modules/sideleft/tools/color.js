@@ -1,8 +1,6 @@
 // It's weird, I know
 const { Gio, GLib } = imports.gi;
 import Service from 'resource:///com/github/Aylur/ags/service.js';
-import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
-const { exec, execAsync } = Utils;
 import { clamp } from '../../.miscutils/mathfuncs.js';
 
 export class ColorPickerSelection extends Service {
