@@ -22,6 +22,7 @@ Singleton {
 
     property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
+    property int runningRequests: 0
     property var getWorkingImageSource: (url) => {
         if (url.includes('pximg.net')) {
             return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
@@ -315,7 +316,6 @@ Singleton {
             "images": [],
             "message": ""
         })
-        root.responses = [...root.responses, newResponse]
 
         var xhr = new XMLHttpRequest()
         xhr.open("GET", url)
@@ -332,6 +332,9 @@ Singleton {
                 } catch (e) {
                     console.log("[Booru] Failed to parse response: " + e)
                     newResponse.message = root.failMessage
+                } finally {
+                    root.runningRequests--;
+                    root.responses = [...root.responses, newResponse]
                 }
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -348,6 +351,7 @@ Singleton {
                 const userAgent = ConfigOptions.sidebar.booru.zerochan.username ? `Desktop sidebar booru viewer - ${ConfigOptions.sidebar.booru.zerochan.username}` : defaultUserAgent
                 xhr.setRequestHeader("User-Agent", userAgent)
             }
+            root.runningRequests++;
             xhr.send()
         } catch (error) {
             console.log("Could not set User-Agent:", error)

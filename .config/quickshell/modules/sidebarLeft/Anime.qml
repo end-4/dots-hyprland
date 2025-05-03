@@ -226,21 +226,53 @@ Item {
                     }
                 }
             }
+
+            Item { // Queries awaiting response
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 10
+                implicitHeight: pendingBackground.implicitHeight
+                opacity: Booru.runningRequests > 0 ? 1 : 0
+                visible: opacity > 0
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                    }
+                }
+
+                Rectangle {
+                    id: pendingBackground
+                    color: Appearance.m3colors.m3inverseSurface
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    implicitHeight: pendingText.implicitHeight + 12 * 2
+                    radius: Appearance.rounding.verysmall
+
+                    StyledText {
+                        id: pendingText
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 12
+                        anchors.rightMargin: 12
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.m3colors.m3inverseOnSurface
+                        wrapMode: Text.Wrap
+                        text: StringUtils.format(qsTr("{0} queries pending"), Booru.runningRequests)
+                    }
+                }
+            }
         }
 
         Item { // Tag suggestion description
-            opacity: tagDescriptionText.text.length > 0 ? 1 : 0
-            visible: opacity > 0
+            visible: tagDescriptionText.text.length > 0
             Layout.fillWidth: true
             implicitHeight: tagDescriptionBackground.implicitHeight
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                }
-            }
 
             Rectangle {
                 id: tagDescriptionBackground
