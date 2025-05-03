@@ -23,14 +23,16 @@ Switch {
 
         Behavior on color {
             ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
         Behavior on border.color {
             ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
     }
@@ -47,26 +49,30 @@ Switch {
 
         Behavior on anchors.leftMargin {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
         Behavior on width {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
         Behavior on height {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
         Behavior on color {
             ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
     }

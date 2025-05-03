@@ -69,6 +69,8 @@ Button {
             source: modelData.preview_url
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
+            visible: opacity > 0
+            opacity: status === Image.Ready ? 1 : 0
 
             layer.enabled: true
             layer.effect: OpacityMask {
@@ -76,6 +78,14 @@ Button {
                     width: imageObject.width
                     height: imageObject.height
                     radius: Appearance.rounding.small
+                }
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }
@@ -111,7 +121,8 @@ Button {
 
         Rectangle {
             id: contextMenu
-            visible: root.showActions
+            opacity: root.showActions ? 1 : 0
+            visible: opacity > 0
             radius: Appearance.rounding.small
             color: Appearance.m3colors.m3surfaceContainer
             anchors.top: menuButton.bottom
@@ -119,6 +130,14 @@ Button {
             anchors.margins: 8
             implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
             implicitWidth: contextMenuColumnLayout.implicitWidth
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
 
             ColumnLayout {
                 id: contextMenuColumnLayout
@@ -155,6 +174,26 @@ Button {
                         // Hyprland.dispatch("global quickshell:sidebarLeftClose")
                         Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)
                     }
+                }
+            }
+        }
+
+        DropShadow {
+            opacity: root.showActions ? 1 : 0
+            visible: opacity > 0
+            anchors.fill: contextMenu
+            source: contextMenu
+            radius: Appearance.sizes.elevationMargin
+            samples: radius * 2 + 1
+            color: Appearance.colors.colShadow
+            verticalOffset: 2
+            horizontalOffset: 0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }

@@ -102,7 +102,7 @@ Button {
                 color: Appearance.m3colors.m3onSurface
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideRight
-                text: root.itemName
+                text: `${root.itemName}`
             }
         }
 

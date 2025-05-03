@@ -28,8 +28,9 @@ Item {
     Behavior on implicitHeight {
         enabled: enableAnimation
         NumberAnimation {
-            duration: Appearance.animation.elementDecelFast.duration
-            easing.type: Appearance.animation.elementDecel.type
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Appearance.animation.elementMoveFast.type
+            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
         }
     }
 
@@ -77,7 +78,7 @@ Item {
 
     Timer {
         id: destroyTimer1
-        interval: Appearance.animation.elementDecelFast.duration
+        interval: Appearance.animation.elementMoveFast.duration
         repeat: false
         onTriggered: {
             notificationRowWrapper.anchors.top = undefined
@@ -89,7 +90,7 @@ Item {
 
     Timer {
         id: destroyTimer2
-        interval: Appearance.animation.elementDecelFast.duration
+        interval: Appearance.animation.elementMoveFast.duration
         repeat: false
         onTriggered: {
             root.destroy()
@@ -186,15 +187,17 @@ Item {
             Behavior on x {
                 enabled: enableAnimation
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecelFast.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
             Behavior on height {
                 enabled: enableAnimation
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecelFast.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }
@@ -224,8 +227,9 @@ Item {
         Behavior on x {
             enabled: enableAnimation
             NumberAnimation {
-                duration: Appearance.animation.elementDecelFast.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 
@@ -241,8 +245,9 @@ Item {
                 Behavior on implicitHeight {
                     enabled: enableAnimation
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                     }
                 }
 
@@ -400,8 +405,9 @@ Item {
 
                                     Behavior on color {
                                         ColorAnimation {
-                                            duration: Appearance.animation.elementDecel.duration
-                                            easing.type: Appearance.animation.elementDecel.type
+                                            duration: Appearance.animation.elementMoveFast.duration
+                                            easing.type: Appearance.animation.elementMoveFast.type
+                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                         }
 
                                     }
@@ -418,8 +424,9 @@ Item {
                                     rotation: expanded ? 180 : 0
                                     Behavior on rotation {
                                         NumberAnimation {
-                                            duration: Appearance.animation.elementDecel.duration
-                                            easing.type: Appearance.animation.elementDecel.type
+                                            duration: Appearance.animation.elementMoveFast.duration
+                                            easing.type: Appearance.animation.elementMoveFast.type
+                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                         }
                                     }
                                 }
@@ -486,20 +493,23 @@ Item {
                 visible: opacity > 0
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                     }
                 }
                 Behavior on height {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                     }
                 }
                 Behavior on implicitHeight {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMoveFast.duration
+                        easing.type: Appearance.animation.elementMoveFast.type
+                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                     }
                 }
 

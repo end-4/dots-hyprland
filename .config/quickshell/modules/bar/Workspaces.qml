@@ -120,21 +120,24 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                     }
                 }
                 Behavior on radiusLeft {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                     }
                 }
 
                 Behavior on radiusRight {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                     }
                 }
 
@@ -202,16 +205,18 @@ Item {
 
                         Behavior on color {
                             ColorAnimation {
-                                duration: Appearance.animation.elementDecel.duration
-                                easing.type: Appearance.animation.elementDecel.type
+                                duration: Appearance.animation.elementMove.duration
+                                easing.type: Appearance.animation.elementMove.type
+                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                             }
 
                         }
 
                         Behavior on opacity {
                             NumberAnimation {
-                                duration: Appearance.animation.elementDecelFast.duration
-                                easing.type: Appearance.animation.elementDecelFast.type
+                                duration: Appearance.animation.elementMoveFast.duration
+                                easing.type: Appearance.animation.elementMoveFast.type
+                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                             }
                         }
 
@@ -236,26 +241,30 @@ Item {
 
                             Behavior on opacity {
                                 NumberAnimation {
-                                    duration: Appearance.animation.elementDecelFast.duration
-                                    easing.type: Appearance.animation.elementDecelFast.type
+                                    duration: Appearance.animation.elementMoveFast.duration
+                                    easing.type: Appearance.animation.elementMoveFast.type
+                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                 }
                             }
                             Behavior on anchors.bottomMargin {
                                 NumberAnimation {
-                                    duration: Appearance.animation.elementDecelFast.duration
-                                    easing.type: Appearance.animation.elementDecelFast.type
+                                    duration: Appearance.animation.elementMoveFast.duration
+                                    easing.type: Appearance.animation.elementMoveFast.type
+                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                 }
                             }
                             Behavior on anchors.rightMargin {
                                 NumberAnimation {
-                                    duration: Appearance.animation.elementDecelFast.duration
-                                    easing.type: Appearance.animation.elementDecelFast.type
+                                    duration: Appearance.animation.elementMoveFast.duration
+                                    easing.type: Appearance.animation.elementMoveFast.type
+                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                 }
                             }
                             Behavior on implicitSize {
                                 NumberAnimation {
-                                    duration: Appearance.animation.elementDecelFast.duration
-                                    easing.type: Appearance.animation.elementDecelFast.type
+                                    duration: Appearance.animation.elementMoveFast.duration
+                                    easing.type: Appearance.animation.elementMoveFast.type
+                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                 }
                             }
                         }

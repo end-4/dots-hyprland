@@ -7,9 +7,10 @@ import Quickshell.Io
 Singleton {
     id: root
 
-    readonly property list<DesktopEntry> list: DesktopEntries.applications.values.filter(a => !a.noDisplay).sort((a, b) => a.name.localeCompare(b.name))
+    readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
+        .sort((a, b) => a.name.localeCompare(b.name))
     readonly property list<var> preppedNames: list.map(a => ({
-                name: Fuzzy.prepare(a.name),
+                name: Fuzzy.prepare(`${a.name} `),
                 entry: a
             }))
 
@@ -17,6 +18,8 @@ Singleton {
         return Fuzzy.go(search, preppedNames, {
             all: true,
             key: "name"
-        }).map(r => r.obj.entry);
+        }).map(r => {
+            return r.obj.entry
+    });
     }
 }

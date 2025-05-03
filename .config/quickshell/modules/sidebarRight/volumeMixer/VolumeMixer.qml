@@ -139,8 +139,9 @@ Item {
         opacity: root.showDeviceSelector ? 1 : 0
         Behavior on opacity {
             NumberAnimation { 
-                duration: Appearance.animation.elementDecelFast.duration
-                easing.type: Appearance.animation.elementDecelFast.type
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 
@@ -262,20 +263,23 @@ Item {
 
                                             Behavior on opacity {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
                                             Behavior on width {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
                                             Behavior on height {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
 
@@ -292,20 +296,23 @@ Item {
 
                                             Behavior on opacity {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
                                             Behavior on width {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
                                             Behavior on height {
                                                 NumberAnimation {
-                                                    duration: Appearance.animation.elementDecelFast.duration
-                                                    easing.type: Appearance.animation.elementDecelFast.type
+                                                    duration: Appearance.animation.elementMoveFast.duration
+                                                    easing.type: Appearance.animation.elementMoveFast.type
+                                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                                                 }
                                             }
                                         }

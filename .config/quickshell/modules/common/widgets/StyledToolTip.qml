@@ -40,9 +40,11 @@ ToolTip {
         implicitWidth: tooltipTextObject.width + 2 * padding
         implicitHeight: tooltipTextObject.height + 2 * padding
         Behavior on opacity {
-            OpacityAnimator {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+            NumberAnimation {
+                target: opacity
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
         opacity: visible ? 1 : 0
@@ -50,7 +52,7 @@ ToolTip {
     StyledText {
         id: tooltipTextObject
         text: content
-        font.pixelSize: Appearance.font.pixelSize.smaller
+        font.pixelSize: Appearance.font.pixelSize.small
         color: Appearance.colors.colOnTooltip
         wrapMode: Text.Wrap
     }

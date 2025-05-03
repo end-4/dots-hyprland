@@ -199,7 +199,7 @@ Scope {
 
                     Behavior on implicitWidth {
                         SmoothedAnimation {
-                            velocity: Appearance.animation.elementDecelFast.velocity
+                            velocity: Appearance.animation.elementMoveFast.velocity
                         }
                     }
 

@@ -28,8 +28,9 @@ Button {
 
         Behavior on color {
             ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
 
         }
@@ -46,8 +47,9 @@ Button {
 
         Behavior on color {
             ColorAnimation {
-                duration: Appearance.animation.elementDecel.duration
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
 
         }

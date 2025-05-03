@@ -38,32 +38,64 @@ Item {
         Hyprland.dispatch(`exec mkdir -p ${previewDownloadPath}`)
     }
 
+    property var allCommands: [
+        {
+            name: "clear",
+            description: qsTr("Clear the current list of images"),
+            execute: () => {
+                Booru.clearResponses();
+            }
+        },
+        {
+            name: "mode",
+            description: qsTr("Set the current API provider"),
+            execute: (args) => {
+                Booru.setProvider(args[0]);
+            }
+        },
+        {
+            name: "nsfw",
+            description: qsTr("Toggle NSFW mode"),
+            execute: () => {
+                ConfigOptions.sidebar.booru.allowNsfw = !ConfigOptions.sidebar.booru.allowNsfw;
+            }
+        },
+        {
+            name: "safe",
+            description: qsTr("Set NSFW mode to false"),
+            execute: () => {
+                ConfigOptions.sidebar.booru.allowNsfw = false;
+            }
+        },
+        {
+            name: "lewd",
+            description: qsTr("Set NSFW mode to true"),
+            execute: () => {
+                ConfigOptions.sidebar.booru.allowNsfw = true;
+            }
+        },
+        {
+            name: "next",
+            description: qsTr("Get the next page of results"),
+            execute: () => {
+                if (Booru.responses.length > 0) {
+                    const lastResponse = Booru.responses[Booru.responses.length - 1];
+                    root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
+                }
+            }
+        }
+    ]
+
     function handleInput(inputText) {
         if (inputText.startsWith(root.commandPrefix)) {
             // Handle special commands
             const command = inputText.split(" ")[0].substring(1);
             const args = inputText.split(" ").slice(1);
-            if (command === "clear") {
-                Booru.clearResponses();
-            } 
-            else if (command === "mode") {
-                const newProvider = args[0];
-                Booru.setProvider(newProvider);
-            }
-            else if (command == "nsfw") {
-                ConfigOptions.sidebar.booru.allowNsfw = !ConfigOptions.sidebar.booru.allowNsfw
-            }
-            else if (command == "safe") {
-                ConfigOptions.sidebar.booru.allowNsfw = false
-            }
-            else if (command == "lewd") {
-                ConfigOptions.sidebar.booru.allowNsfw = true
-            }
-            else if (command == "next") {
-                if (Booru.responses.length > 0) {
-                    const lastResponse = Booru.responses[Booru.responses.length - 1]
-                    root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
-                }
+            const commandObj = root.allCommands.find(cmd => cmd.name === `${command}`);
+            if (commandObj) {
+                commandObj.execute(args);
+            } else {
+                root.addSystemMessage(qsTr("Unknown command: ") + command);
             }
         }
         else if (inputText.trim() == "+") {
@@ -132,8 +164,9 @@ Item {
                 Behavior on contentY {
                     NumberAnimation {
                         id: scrollAnim
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.scroll.duration
+                        easing.type: Appearance.animation.scroll.type
+                        easing.bezierCurve: Appearance.animation.scroll.bezierCurve
                     }
                 }
 
@@ -164,8 +197,9 @@ Item {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Appearance.animation.elementDecel.duration
-                        easing.type: Appearance.animation.elementDecel.type
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                     }
                 }
 
@@ -217,8 +251,9 @@ Item {
                             
                         Behavior on color {
                             ColorAnimation {
-                                duration: Appearance.animation.elementDecel.duration
-                                easing.type: Appearance.animation.elementDecel.type
+                                duration: Appearance.animation.elementMove.duration
+                                easing.type: Appearance.animation.elementMove.type
+                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                             }
                         }
                     }
@@ -278,8 +313,9 @@ Item {
 
             Behavior on implicitHeight {
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecel.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                 }
             }
 
@@ -322,6 +358,15 @@ Item {
                         if(tagInputField.text.length === 0) {
                             root.suggestionQuery = ""
                             root.suggestionList = []
+                            return
+                        }
+                        if(tagInputField.text.startsWith(root.commandPrefix)) {
+                            root.suggestionQuery = ""
+                            root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(tagInputField.text.substring(1))).map(cmd => {
+                                return {
+                                    name: `${root.commandPrefix}${cmd.name}`,
+                                }
+                            })
                             return
                         }
                         searchTimer.restart();
@@ -383,8 +428,9 @@ Item {
                             
                         Behavior on color {
                             ColorAnimation {
-                                duration: Appearance.animation.elementDecel.duration
-                                easing.type: Appearance.animation.elementDecel.type
+                                duration: Appearance.animation.elementMove.duration
+                                easing.type: Appearance.animation.elementMove.type
+                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                             }
                         }
                     }
@@ -409,13 +455,13 @@ Item {
                 anchors.rightMargin: 5
                 spacing: 5
 
-                property var commands: [
+                property var commandsShown: [
                     {
-                        name: "/mode",
+                        name: "mode",
                         sendDirectly: false,
                     },
                     {
-                        name: "/clear",
+                        name: "clear",
                         sendDirectly: true,
                     }, 
                 ]
@@ -493,10 +539,11 @@ Item {
 
                 Repeater { // Command buttons
                     id: commandRepeater
-                    model: commandButtonsRow.commands
+                    model: commandButtonsRow.commandsShown
                     delegate: BooruTagButton {
                         id: tagButton
-                        buttonText: modelData.name
+                        property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
+                        buttonText: commandRepresentation
                         background: Rectangle {
                             radius: Appearance.rounding.small
                             color: tagButton.down ? Appearance.colors.colLayer2Active : 
@@ -505,16 +552,17 @@ Item {
                                 
                             Behavior on color {
                                 ColorAnimation {
-                                    duration: Appearance.animation.elementDecel.duration
-                                    easing.type: Appearance.animation.elementDecel.type
+                                    duration: Appearance.animation.elementMove.duration
+                                    easing.type: Appearance.animation.elementMove.type
+                                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                                 }
                             }
                         }
                         onClicked: {
                             if(modelData.sendDirectly) {
-                                root.handleInput(modelData.name)
+                                root.handleInput(commandRepresentation)
                             } else {
-                                tagInputField.text = modelData.name + " "
+                                tagInputField.text = commandRepresentation + " "
                                 tagInputField.cursorPosition = tagInputField.text.length
                                 tagInputField.forceActiveFocus()
                             }

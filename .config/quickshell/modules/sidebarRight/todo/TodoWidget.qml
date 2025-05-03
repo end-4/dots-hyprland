@@ -174,12 +174,11 @@ Item {
 
             Behavior on color {
                 ColorAnimation {
-                    duration: Appearance.animation.elementDecel.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                 }
-
             }
-
         }
 
         DropShadow {
@@ -195,8 +194,9 @@ Item {
 
             Behavior on verticalOffset {
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecelFast.duration
-                    easing.type: Appearance.animation.elementDecelFast.type
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }
@@ -217,8 +217,9 @@ Item {
         opacity: root.showAddDialog ? 1 : 0
         Behavior on opacity {
             NumberAnimation { 
-                duration: Appearance.animation.elementDecelFast.duration
-                easing.type: Appearance.animation.elementDecelFast.type
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 

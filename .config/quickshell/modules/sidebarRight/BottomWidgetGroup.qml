@@ -23,8 +23,9 @@ Rectangle {
 
     Behavior on implicitHeight {
         NumberAnimation {
-            duration: Appearance.animation.elementDecel.duration
-            easing.type: Appearance.animation.elementDecel.type
+            duration: Appearance.animation.elementMove.duration
+            easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
         }
     }
 
@@ -42,7 +43,7 @@ Rectangle {
 
     Timer {
         id: collapseCleanFadeTimer
-        interval: Appearance.animation.elementDecel.duration / 2
+        interval: Appearance.animation.elementMove.duration / 2
         repeat: false
         onTriggered: {
             if(collapsed) collapsedBottomWidgetGroupRow.opacity = 1
@@ -68,8 +69,9 @@ Rectangle {
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration / 2
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration / 2
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
 
@@ -107,8 +109,9 @@ Rectangle {
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
-                duration: Appearance.animation.elementDecel.duration / 2
-                easing.type: Appearance.animation.elementDecel.type
+                duration: Appearance.animation.elementMove.duration / 2
+                easing.type: Appearance.animation.elementMove.type
+                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
             }
         }
 
@@ -166,7 +169,7 @@ Rectangle {
             height: tabStack.children[0]?.tabLoader?.implicitHeight // TODO: make this less stupid
             Layout.alignment: Qt.AlignVCenter
             property int realIndex: 0
-            property int animationDuration: Appearance.animation.elementDecelFast.duration * 1.5
+            property int animationDuration: Appearance.animation.elementMoveFast.duration * 1.5
 
             // Switch the tab on halfway of the anim duration
             Connections {

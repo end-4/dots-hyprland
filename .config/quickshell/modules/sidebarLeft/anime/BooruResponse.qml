@@ -105,14 +105,16 @@ Rectangle {
 
             Behavior on height {
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecel.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                 }
             }
             Behavior on implicitHeight {
                 NumberAnimation {
-                    duration: Appearance.animation.elementDecel.duration
-                    easing.type: Appearance.animation.elementDecel.type
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                 }
             }
 

@@ -217,8 +217,9 @@ Item { // Wrapper
 
                     Behavior on implicitWidth {
                         NumberAnimation {
-                            duration: Appearance.animation.elementDecelFast.duration
-                            easing.type: Appearance.animation.elementDecelFast.type
+                            duration: Appearance.animation.elementMoveFast.duration
+                            easing.type: Appearance.animation.elementMoveFast.type
+                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
                     }
 
@@ -318,7 +319,23 @@ Item { // Wrapper
                                 });
                             }
                         }
-                        // Run command
+
+                        // Insert math result before command if search starts with a number
+                        const startsWithNumber = /^\d/.test(root.searchingText);
+                        if (startsWithNumber) {
+                            result.push({
+                                name: root.mathResult,
+                                clickActionName: "Copy",
+                                type: qsTr("Math result"),
+                                fontType: "monospace",
+                                materialSymbol: 'calculate',
+                                execute: () => {
+                                    Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
+                                }
+                            });
+                        }
+
+                        // Command
                         result.push({
                             name: searchingText,
                             clickActionName: "Run",
@@ -329,17 +346,21 @@ Item { // Wrapper
                                 executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
                             }
                         });
-                        // Qalc math result
-                        result.push({
-                            name: root.mathResult,
-                            clickActionName: "Copy",
-                            type: qsTr("Math result"),
-                            fontType: "monospace",
-                            materialSymbol: 'calculate',
-                            execute: () => {
-                                Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
-                            }
-                        });
+
+                        // If not already added, add math result after command
+                        if (!startsWithNumber) {
+                            result.push({
+                                name: root.mathResult,
+                                clickActionName: "Copy",
+                                type: qsTr("Math result"),
+                                fontType: "monospace",
+                                materialSymbol: 'calculate',
+                                execute: () => {
+                                    Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
+                                }
+                            });
+                        }
+
                         // Web search
                         result.push({
                             name: root.searchingText,

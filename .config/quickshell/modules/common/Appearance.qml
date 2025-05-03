@@ -6,6 +6,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     property QtObject m3colors
     property QtObject animation
+    property QtObject animationCurves
     property QtObject colors
     property QtObject rounding
     property QtObject font
@@ -171,16 +172,32 @@ Singleton {
         }
     }
 
+    animationCurves: QtObject {
+        readonly property list<real> emphasized: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
+        readonly property list<real> emphasizedAccel: [0.3, 0, 0.8, 0.15, 1, 1]
+        readonly property list<real> emphasizedDecel: [0.05, 0.7, 0.1, 1, 1, 1]
+        readonly property list<real> standard: [0.2, 0, 0, 1, 1, 1]
+        readonly property list<real> standardAccel: [0.3, 0, 1, 1, 1, 1]
+        readonly property list<real> standardDecel: [0, 0, 0, 1, 1, 1]
+    }
+
     animation: QtObject {
-        property QtObject elementDecel: QtObject {
-            property int duration: 200
-            property int type: Easing.OutCirc
+        property QtObject elementMove: QtObject {
+            property int duration: 450
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650
         }
-        property QtObject elementDecelFast: QtObject {
-            property int duration: 140
-            property int type: Easing.OutCirc
+        property QtObject elementMoveFast: QtObject {
+            property int duration: 200
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.standardDecel
             property int velocity: 850
+        }
+        property QtObject scroll: QtObject {
+            property int duration: 400
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.standardDecel
         }
         property QtObject menuDecel: QtObject {
             property int duration: 350
@@ -188,7 +205,8 @@ Singleton {
         }
         property QtObject positionShift: QtObject {
             property int duration: 300
-            property int type: Easing.InOutExpo
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650
         }
     }
