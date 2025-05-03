@@ -21,7 +21,7 @@ Singleton {
     }
 
     property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
-    property list<var> responses: []
+    property var responses: []
     property var getWorkingImageSource: (url) => {
         if (url.includes('pximg.net')) {
             return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
@@ -308,6 +308,15 @@ Singleton {
         var url = constructRequestUrl(tags, nsfw, limit, page)
         // console.log("[Booru] Making request to " + url)
 
+        const newResponse = root.booruResponseDataComponent.createObject(null, {
+            "provider": currentProvider,
+            "tags": tags,
+            "page": page,
+            "images": [],
+            "message": ""
+        })
+        root.responses = [...root.responses, newResponse]
+
         var xhr = new XMLHttpRequest()
         xhr.open("GET", url)
         xhr.onreadystatechange = function() {
@@ -317,23 +326,12 @@ Singleton {
                     var response = JSON.parse(xhr.responseText)
                     response = providers[currentProvider].mapFunc(response)
                     // console.log("[Booru] Mapped response: " + JSON.stringify(response))
-                    root.responses = [...root.responses, root.booruResponseDataComponent.createObject(null, {
-                        "provider": currentProvider,
-                        "tags": tags,
-                        "page": page,
-                        "images": response,
-                        "message": response.length > 0 ? "" : root.failMessage
-                    })]
+                    newResponse.images = response
+                    newResponse.message = response.length > 0 ? "" : root.failMessage
                     
                 } catch (e) {
                     console.log("[Booru] Failed to parse response: " + e)
-                    root.responses = [...root.responses, root.responseDataComponent.createObject(null, {
-                        "provider": currentProvider,
-                        "tags": tags,
-                        "page": page,
-                        "images": [],
-                        "message": root.failMessage
-                    })]
+                    newResponse.message = root.failMessage
                 }
             }
             else if (xhr.readyState === XMLHttpRequest.DONE) {
