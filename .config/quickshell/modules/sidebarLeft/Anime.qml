@@ -18,6 +18,7 @@ Item {
     id: root
     property var panelWindow
     property var inputField: tagInputField
+    readonly property list<var> responses: Booru.responses
     property string previewDownloadPath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/waifus`.replace("file://", "")
     property string downloadPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework").replace("file://", "")
     property string nsfwPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework/🌶️").replace("file://", "")
@@ -59,8 +60,8 @@ Item {
             name: "next",
             description: qsTr("Get the next page of results"),
             execute: () => {
-                if (Booru.responses.length > 0) {
-                    const lastResponse = Booru.responses[Booru.responses.length - 1];
+                if (root.responses.length > 0) {
+                    const lastResponse = root.responses[root.responses.length - 1];
                     root.handleInput(`${lastResponse.tags.join(" ")} ${parseInt(lastResponse.page) + 1}`);
                 }
             }
@@ -94,8 +95,8 @@ Item {
             }
         }
         else if (inputText.trim() == "+") {
-            if (Booru.responses.length > 0) {
-                const lastResponse = Booru.responses[Booru.responses.length - 1]
+            if (root.responses.length > 0) {
+                const lastResponse = root.responses[root.responses.length - 1]
                 root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
             }
         }
@@ -175,12 +176,12 @@ Item {
                 spacing: 10
                 model: ScriptModel {
                     values: {
-                        if(Booru.responses.length > booruResponseListView.lastResponseLength) {
-                            if (booruResponseListView.lastResponseLength > 0 && Booru.responses[booruResponseListView.lastResponseLength].provider != "system")
+                        if(root.responses.length > booruResponseListView.lastResponseLength) {
+                            if (booruResponseListView.lastResponseLength > 0 && root.responses[booruResponseListView.lastResponseLength].provider != "system")
                                 booruResponseListView.contentY = booruResponseListView.contentY + root.scrollOnNewResponse
-                            booruResponseListView.lastResponseLength = Booru.responses.length
+                            booruResponseListView.lastResponseLength = root.responses.length
                         }
-                        return Booru.responses
+                        return root.responses
                     }
                 }
                 delegate: BooruResponse {
@@ -193,7 +194,7 @@ Item {
             }
 
             Item { // Placeholder when list is empty
-                opacity: Booru.responses.length === 0 ? 1 : 0
+                opacity: root.responses.length === 0 ? 1 : 0
                 visible: opacity > 0
                 anchors.fill: parent
 
@@ -558,7 +559,9 @@ Item {
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
+                        // content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
+                        content: StringUtils.format(qsTr("Current API endpoint: {0}\nSet it with {1}mode PROVIDER"), 
+                            Booru.providers[Booru.currentProvider].url, root.commandPrefix)
                     }
 
                     MouseArea {
