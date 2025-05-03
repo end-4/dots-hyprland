@@ -3,6 +3,7 @@ import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "./anime/"
 import Qt.labs.platform
 import QtQuick
@@ -55,36 +56,29 @@ Item {
             }
         },
         {
-            name: "nsfw",
-            description: qsTr("Toggle NSFW mode"),
+            name: "next",
+            description: qsTr("Get the next page of results"),
             execute: () => {
-                ConfigOptions.sidebar.booru.allowNsfw = !ConfigOptions.sidebar.booru.allowNsfw;
+                if (Booru.responses.length > 0) {
+                    const lastResponse = Booru.responses[Booru.responses.length - 1];
+                    root.handleInput(`${lastResponse.tags.join(" ")} ${parseInt(lastResponse.page) + 1}`);
+                }
             }
         },
         {
             name: "safe",
-            description: qsTr("Set NSFW mode to false"),
+            description: qsTr("Disable NSFW content"),
             execute: () => {
                 ConfigOptions.sidebar.booru.allowNsfw = false;
             }
         },
         {
             name: "lewd",
-            description: qsTr("Set NSFW mode to true"),
+            description: qsTr("Allow NSFW content"),
             execute: () => {
                 ConfigOptions.sidebar.booru.allowNsfw = true;
             }
         },
-        {
-            name: "next",
-            description: qsTr("Get the next page of results"),
-            execute: () => {
-                if (Booru.responses.length > 0) {
-                    const lastResponse = Booru.responses[Booru.responses.length - 1];
-                    root.handleInput(lastResponse.tags.join(" ") + ` ${parseInt(lastResponse.page) + 1}`);
-                }
-            }
-        }
     ]
 
     function handleInput(inputText) {
@@ -233,10 +227,47 @@ Item {
             }
         }
 
+        Item { // Tag suggestion description
+            opacity: tagDescriptionText.text.length > 0 ? 1 : 0
+            visible: opacity > 0
+            Layout.fillWidth: true
+            implicitHeight: tagDescriptionBackground.implicitHeight
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
+
+            Rectangle {
+                id: tagDescriptionBackground
+                color: Appearance.colors.colTooltip
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                implicitHeight: tagDescriptionText.implicitHeight + 5 * 2
+                radius: Appearance.rounding.verysmall
+
+                StyledText {
+                    id: tagDescriptionText
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 10
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnTooltip
+                    wrapMode: Text.Wrap
+                    text: root.suggestionList[tagSuggestions.selectedIndex]?.description ?? ""
+                }
+            }
+        }
+
         Flow { // Tag suggestions
             id: tagSuggestions
-            visible: root.suggestionList.length > 0 && 
-                tagInputField.text.length > 0
+            visible: root.suggestionList.length > 0 && tagInputField.text.length > 0
             property int selectedIndex: 0
             Layout.fillWidth: true
             spacing: 5
@@ -249,7 +280,7 @@ Item {
                 }
                 delegate: BooruTagButton {
                     id: tagButton
-                    // buttonText: `${modelData.name}_{${modelData.count}}`
+
                     background: Rectangle {
                         radius: Appearance.rounding.small
                         color: tagSuggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : 
@@ -270,13 +301,19 @@ Item {
                         StyledText {
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: Appearance.m3colors.m3onSurface
-                            text: modelData.name
+                            text: modelData.displayName ?? modelData.name
                         }
                         StyledText {
                             visible: modelData.count !== undefined
                             font.pixelSize: Appearance.font.pixelSize.smaller
                             color: Appearance.m3colors.m3outline
                             text: modelData.count ?? ""
+                        }
+                    }
+
+                    onHoveredChanged: {
+                        if (tagButton.hovered) {
+                            tagSuggestions.selectedIndex = index;
                         }
                     }
                     onClicked: {
@@ -344,7 +381,7 @@ Item {
                     renderType: Text.NativeRendering
                     selectedTextColor: Appearance.m3colors.m3onPrimary
                     selectionColor: Appearance.m3colors.m3primary
-                    placeholderText: qsTr("Enter tags")
+                    placeholderText: StringUtils.format(qsTr('Enter tags, or "{0}" for commands'), root.commandPrefix)
                     placeholderTextColor: Appearance.m3colors.m3outline
 
                     background: Item {}
@@ -379,10 +416,11 @@ Item {
                                 all: true,
                                 key: "name"
                             })
-                            console.log(JSON.stringify(providerResults))
                             root.suggestionList = providerResults.map(provider => {
                                 return {
                                     name: `${tagInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "mode ") : ""}${provider.target}`,
+                                    displayName: `${Booru.providers[provider.target].name}`,
+                                    description: `${Booru.providers[provider.target].description}`,
                                 }
                             })
                             searchTimer.stop();
@@ -393,6 +431,7 @@ Item {
                             root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(tagInputField.text.substring(1))).map(cmd => {
                                 return {
                                     name: `${root.commandPrefix}${cmd.name}`,
+                                    description: `${cmd.description}`,
                                 }
                             })
                             searchTimer.stop();
@@ -517,6 +556,7 @@ Item {
                     }
                     StyledToolTip {
                         id: toolTip
+                        extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
                         content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
                     }
@@ -534,7 +574,7 @@ Item {
                     text: "•"
                 }
 
-                Rectangle {
+                Rectangle { // NSFW toggle
                     implicitWidth: switchesRow.implicitWidth
 
                     RowLayout {
@@ -542,13 +582,22 @@ Item {
                         spacing: 5
                         anchors.centerIn: parent
 
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            PointingHandInteraction {}
+                            onClicked: {
+                                nsfwSwitch.checked = !nsfwSwitch.checked
+                            }
+                        }
+
                         StyledText {
                             Layout.fillHeight: true
                             Layout.leftMargin: 10
                             Layout.alignment: Qt.AlignVCenter
                             font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colOnLayer1
-                            text: qsTr("NSFW")
+                            color: nsfwSwitch.enabled ? Appearance.colors.colOnLayer1 : Appearance.m3colors.m3outline
+                            text: qsTr("Allow NSFW")
                         }
                         StyledSwitch {
                             id: nsfwSwitch

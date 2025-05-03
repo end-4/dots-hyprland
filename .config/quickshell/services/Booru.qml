@@ -35,6 +35,7 @@ Singleton {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
+            "description": "All-rounder | Good quality, decent quantity",
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -68,6 +69,7 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.com",
             "api": "https://konachan.com/post.json",
+            "description": "For desktop wallpapers | Good quality",
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -101,6 +103,7 @@ Singleton {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
+            "description": "Clean stuff | Excellent quality, no NSFW",
             "mapFunc": (response) => {
                 response = response.items
                 return response.map(item => {
@@ -127,6 +130,7 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
+            "description": "The popular one | Best quantity, but quality can vary wildly",
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -161,6 +165,7 @@ Singleton {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
+            "description": "The hentai one | Great quantity, a lot of NSFW, quality varies wildly",
             "mapFunc": (response) => {
                 response = response.post
                 return response.map(item => {
@@ -195,6 +200,7 @@ Singleton {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/search",
+            "description": "Waifus only | Excellent quality, limited quantity",
             "mapFunc": (response) => {
                 response = response.images
                 return response.map(item => {
@@ -226,6 +232,7 @@ Singleton {
     property var currentProvider: ConfigOptions.sidebar.booru.defaultProvider
     
     function setProvider(provider) {
+        provider = provider.toLowerCase()
         if (providerList.indexOf(provider) !== -1) {
             currentProvider = provider
             root.addSystemMessage(qsTr("Provider set to ") + providers[provider].name
@@ -254,7 +261,10 @@ Singleton {
         var baseUrl = provider.api
         var tagString = tags.join(" ")
         if (!nsfw && !(["zerochan", "waifu.im"].includes(currentProvider))) {
-            tagString += " rating:safe"
+            if (currentProvider == "gelbooru") 
+                tagString += " rating:general";
+            else 
+                tagString += " rating:safe";
         }
         var params = []
         // Tags & limit
