@@ -5,55 +5,68 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ToolTip {
+    id: root
     property string content
     property bool extraVisibleCondition: true
     property bool alternativeVisibleCondition: false
-    property bool internalVisibleCondition: false
-    padding: 5
+    property bool internalVisibleCondition: {
+        const ans = (extraVisibleCondition && (parent.hovered === undefined || parent?.hovered)) || alternativeVisibleCondition
+        return ans
+    }
+    verticalPadding: 5
+    horizontalPadding: 10
     
-    visible: ((extraVisibleCondition && (parent.hovered === undefined || parent?.hovered) && internalVisibleCondition)) || alternativeVisibleCondition
+    opacity: internalVisibleCondition ? 1 : 0
+    visible: opacity > 0
 
-    Connections {
-        target: parent
-        function onHoveredChanged() {
-            if (parent.hovered) {
-                tooltipShowDelay.restart()
-            } else {
-                internalVisibleCondition = false
+    Behavior on opacity {
+        NumberAnimation {
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Appearance.animation.elementMoveFast.type
+            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+        }
+    }
+
+    background: Item {}
+    
+    contentItem: Item {
+        id: contentItemBackground
+        implicitWidth: tooltipTextObject.width + 2 * root.horizontalPadding
+        implicitHeight: tooltipTextObject.height + 2 * root.verticalPadding
+
+        Rectangle {
+            id: backgroundRectangle
+            anchors.bottom: contentItemBackground.bottom
+            anchors.horizontalCenter: contentItemBackground.horizontalCenter
+            color: Appearance.colors.colTooltip
+            radius: Appearance.rounding.verysmall
+            width: internalVisibleCondition ? (tooltipTextObject.width + 2 * padding) : 0
+            height: internalVisibleCondition ? (tooltipTextObject.height + 2 * padding) : 0
+            clip: true
+
+            Behavior on width {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
             }
-        }
-    }
-
-    Timer {
-        id: tooltipShowDelay
-        interval: 200
-        repeat: false
-        running: false
-        onTriggered: {
-            internalVisibleCondition = true
-        }
-    }
-
-    background: Rectangle {
-        color: Appearance.colors.colTooltip
-        radius: Appearance.rounding.small
-        implicitWidth: tooltipTextObject.width + 2 * padding
-        implicitHeight: tooltipTextObject.height + 2 * padding
-        Behavior on opacity {
-            NumberAnimation {
-                target: opacity
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            Behavior on height {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
             }
-        }
-        opacity: visible ? 1 : 0
-    }
-    StyledText {
-        id: tooltipTextObject
-        text: content
-        font.pixelSize: Appearance.font.pixelSize.small
-        color: Appearance.colors.colOnTooltip
-        wrapMode: Text.Wrap
+
+            StyledText {
+                id: tooltipTextObject
+                anchors.centerIn: parent
+                text: content
+                font.pixelSize: Appearance.font.pixelSize.smaller
+                color: Appearance.colors.colOnTooltip
+                wrapMode: Text.Wrap
+            }
+        }   
     }
 }

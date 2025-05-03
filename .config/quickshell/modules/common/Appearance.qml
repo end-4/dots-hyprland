@@ -134,8 +134,8 @@ Singleton {
         property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
         property color colSurfaceContainerHighestHover: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
         property color colSurfaceContainerHighestActive: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.85)
-        property color colTooltip: m3colors.m3inverseSurface
-        property color colOnTooltip: m3colors.m3inverseOnSurface
+        property color colTooltip: "#3C4043" // m3colors.m3inverseSurface in the specs, but the m3 website actually uses this color
+        property color colOnTooltip: "#F8F9FA" // m3colors.m3inverseOnSurface in the specs, but the m3 website actually uses this color
         property color colScrim: transparentize(m3colors.m3scrim, 0.5)
         property color colShadow: transparentize(m3colors.m3shadow, 0.75)
     }

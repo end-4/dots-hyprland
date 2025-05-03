@@ -24,15 +24,15 @@ Slider {
 
     Behavior on value { // This makes the adjusted value (like volume) shift smoothly
         SmoothedAnimation {
-            velocity: Appearance.animation.elementMove.velocity
+            velocity: Appearance.animation.elementMoveFast.velocity
         }
     }
 
     Behavior on handleMargins {
         NumberAnimation {
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            duration: Appearance.animation.elementMoveFast.duration
+            easing.type: Appearance.animation.elementMoveFast.type
+            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
         }
     }
 
@@ -93,9 +93,9 @@ Slider {
 
         Behavior on implicitWidth {
             NumberAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
 
