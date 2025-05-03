@@ -142,8 +142,8 @@ export default () => {
                 overlays: [saturationAndLightnessCursor],
             }),
             attribute: {
-                clicked: false,
-                setSaturationAndLightness: (self, event) => {
+                clicked: true,
+                setSaturationAndLightness: (_self, event) => {
                     const allocation = saturationAndLightnessRange.children[0].get_allocation();
                     const [_, cursorX, cursorY] = event.get_coords();
                     const cursorXPercent = clamp(cursorX / allocation.width, 0, 1);
