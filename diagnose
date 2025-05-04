@@ -66,9 +66,7 @@ x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/ags/.venv
 
 e "Checking directories/files"
 x ls -l ~/.local/state/ags/.venv
-x ls -l $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/gradience-cli
 x ls $XDG_DATA_HOME/glib-2.0/schemas
-x ls $XDG_DATA_HOME/gradience
 #x cat ~/.config/ags/
 
 #e "Checking command existence"
