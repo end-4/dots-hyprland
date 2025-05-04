@@ -127,7 +127,7 @@ install-python-packages (){
   x mkdir -p $ILLOGICAL_IMPULSE_VIRTUAL_ENV
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
   x uv venv --prompt .venv $ILLOGICAL_IMPULSE_VIRTUAL_ENV -p 3.12
-  x source $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/activate
+  x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   x uv pip install -r scriptdata/requirements.txt
 
   x mkdir -p $base/cache/blueprint-compiler && cd $base/cache/blueprint-compiler
