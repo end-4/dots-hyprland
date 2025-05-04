@@ -19,21 +19,5 @@ fi
 
 sed -i "1s/.*/$color/" "$STATE_DIR/user/color.txt"
 
-# Use Gradience?
-colormodelines=$(wc -l "$COLORMODE_FILE_DIR"  | awk '{print $1}' )
-if [ "$2" == "--no-gradience" ]; then
-  if [ "$colormodelines" == "3" ]; then
-    echo 'nogradience' >> "$COLORMODE_FILE_DIR"
-  else
-    sed -i "4s/.*/nogradience/" "$COLORMODE_FILE_DIR"
-  fi
-elif [ "$2" == "--yes-gradience" ]; then
-  if [ "$colormodelines" == "3" ]; then
-    echo 'yesgradience' >> "$COLORMODE_FILE_DIR"
-  else
-    sed -i "4s/.*/yesgradience/" "$COLORMODE_FILE_DIR"
-  fi
-fi
-
 # Generate colors for ags n stuff
 "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "${color}" --apply

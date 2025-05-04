@@ -129,30 +129,7 @@ install-python-packages (){
   x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
   x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   x uv pip install -r scriptdata/requirements.txt
-
-  x mkdir -p $base/cache/blueprint-compiler && cd $base/cache/blueprint-compiler
-  try git init -b main
-  try git remote add origin https://github.com/end-4/ii-blueprint-compiler.git
-  x git pull origin main && git submodule update --init --recursive
-  x meson setup build --prefix=$VIRTUAL_ENV
-  x meson compile -C build
-  x meson install -C build
-  x cd -
-
-  x mkdir -p $base/cache/gradience && cd $base/cache/gradience
-  try git init -b main
-  try git remote add origin https://github.com/end-4/ii-gradience.git
-  x git pull origin main && git submodule update --init --recursive
-  x uv pip install -r requirements.txt
-  x meson setup build --prefix=$VIRTUAL_ENV
-  x meson compile -C build
-  x meson install -C build
-  x cd -
-
   x deactivate # We don't need the virtual environment anymore
-  for i in "glib-2.0" "gradience"; do
-    x rsync -av "$ILLOGICAL_IMPULSE_VIRTUAL_ENV"/share/$i/ "$XDG_DATA_HOME"/$i/
-  done
 }
 
 # Only for Arch(based) distro.

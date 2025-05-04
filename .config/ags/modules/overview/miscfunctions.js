@@ -44,19 +44,6 @@ export function launchCustomCommand(command) {
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchcolor.sh`]))
             .catch(print);
     }
-    else if (args[0] == '>adw' || args[0] == '>adwaita') {
-        const ADWAITA_BLUE = "#3584E4";
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh "${ADWAITA_BLUE}" --no-gradience`, `&`])
-            .catch(print);
-    }
-    else if (args[0] == '>grad' || args[0] == '>gradience') {
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh - --yes-gradience`, `&`])
-            .catch(print);
-    }
-    else if (args[0] == '>nograd' || args[0] == '>nogradience') {
-        execAsync([`bash`, `-c`, `${App.configDir}/scripts/color_generation/switchcolor.sh - --no-gradience`, `&`])
-            .catch(print);
-    }
     else if (args[0] == '>material') { // Use material colors
         execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && echo "material" > ${GLib.get_user_state_dir()}/ags/user/colorbackend.txt`]).catch(print)
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
