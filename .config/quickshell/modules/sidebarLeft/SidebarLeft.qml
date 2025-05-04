@@ -140,9 +140,8 @@ Scope { // Scope
                             }
                         }
 
-                        StyledText {
-                            text: "To be implemented"
-                            horizontalAlignment: Text.AlignHCenter
+                        AiChat {
+                            panelWindow: sidebarRoot
                         }
                         Anime {
                             panelWindow: sidebarRoot

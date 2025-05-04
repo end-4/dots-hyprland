@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "../"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -20,10 +21,6 @@ Rectangle {
     property string previewDownloadPath
     property string downloadPath
     property string nsfwPath
-
-    onResponseDataChanged: {
-        console.log("Response data changed:", responseData)
-    }
 
     property real availableWidth: parent.width ?? 0
     property real rowTooShortThreshold: 185
@@ -126,7 +123,7 @@ Rectangle {
                     id: tagRepeater
                     model: root.responseData.tags
 
-                    BooruTagButton {
+                    ApiCommandButton {
                         Layout.fillWidth: false
                         buttonText: modelData
                         onClicked: {

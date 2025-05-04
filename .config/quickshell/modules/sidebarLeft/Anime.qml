@@ -91,7 +91,7 @@ Item {
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                root.addSystemMessage(qsTr("Unknown command: ") + command);
+                Booru.addSystemMessage(qsTr("Unknown command: ") + command);
             }
         }
         else if (inputText.trim() == "+") {
@@ -121,6 +121,11 @@ Item {
             tagInputField.forceActiveFocus()
         }
     }
+    onFocusChanged: (focus) => {
+        if (focus) {
+            tagInputField.forceActiveFocus()
+        }
+    }
 
     Keys.onPressed: (event) => {
         tagInputField.forceActiveFocus()
@@ -135,11 +140,6 @@ Item {
         }
     }
 
-    onFocusChanged: (focus) => {
-        if (focus) {
-            tagInputField.forceActiveFocus()
-        }
-    }
 
     ColumnLayout {
         id: columnLayout
@@ -311,7 +311,7 @@ Item {
                     tagSuggestions.selectedIndex = 0
                     return root.suggestionList.slice(0, 10)
                 }
-                delegate: BooruTagButton {
+                delegate: ApiCommandButton {
                     id: tagButton
 
                     background: Rectangle {
@@ -419,7 +419,7 @@ Item {
 
                     background: Item {}
 
-                    property Timer searchTimer: Timer {
+                    property Timer searchTimer: Timer { // Timer for tag suggestions
                         interval: root.tagSuggestionDelay
                         repeat: false
                         onTriggered: {
@@ -431,7 +431,7 @@ Item {
                         }
                     }
 
-                    onTextChanged: {
+                    onTextChanged: { // Handle tag suggestions
                         if(tagInputField.text.length === 0) {
                             root.suggestionQuery = ""
                             root.suggestionList = []
@@ -618,7 +618,6 @@ Item {
                         anchors.centerIn: parent
 
                         MouseArea {
-                            anchors.fill: parent
                             hoverEnabled: true
                             PointingHandInteraction {}
                             onClicked: {
@@ -653,7 +652,7 @@ Item {
                 Repeater { // Command buttons
                     id: commandRepeater
                     model: commandButtonsRow.commandsShown
-                    delegate: BooruTagButton {
+                    delegate: ApiCommandButton {
                         id: tagButton
                         property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                         buttonText: commandRepresentation
