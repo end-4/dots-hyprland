@@ -23,13 +23,6 @@ Singleton {
     property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
     property int runningRequests: 0
-    property var getWorkingImageSource: (url) => {
-        if (url.includes('pximg.net')) {
-            return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
-        }
-        return url;
-    }
-
     property var defaultUserAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     property var providerList: ["yandere", "konachan", "zerochan", "danbooru", "gelbooru", "waifu.im"]
     property var providers: {
@@ -38,7 +31,7 @@ Singleton {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
-            "description": "All-rounder | Good quality, decent quantity",
+            "description": qsTr("All-rounder | Good quality, decent quantity"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -72,7 +65,7 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.com",
             "api": "https://konachan.com/post.json",
-            "description": "For desktop wallpapers | Good quality",
+            "description": qsTr("For desktop wallpapers | Good quality"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -106,7 +99,7 @@ Singleton {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
-            "description": "Clean stuff | Excellent quality, no NSFW",
+            "description": qsTr("Clean stuff | Excellent quality, no NSFW"),
             "mapFunc": (response) => {
                 response = response.items
                 return response.map(item => {
@@ -133,7 +126,7 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
-            "description": "The popular one | Best quantity, but quality can vary wildly",
+            "description": qsTr("The popular one | Best quantity, but quality can vary wildly"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -168,7 +161,7 @@ Singleton {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
-            "description": "The hentai one | Great quantity, a lot of NSFW, quality varies wildly",
+            "description": qsTr("The hentai one | Great quantity, a lot of NSFW, quality varies wildly"),
             "mapFunc": (response) => {
                 response = response.post
                 return response.map(item => {
@@ -203,7 +196,7 @@ Singleton {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/search",
-            "description": "Waifus only | Excellent quality, limited quantity",
+            "description": qsTr("Waifus only | Excellent quality, limited quantity"),
             "mapFunc": (response) => {
                 response = response.images
                 return response.map(item => {
@@ -231,8 +224,14 @@ Singleton {
             }
         },
     }
-    
     property var currentProvider: ConfigOptions.sidebar.booru.defaultProvider
+
+    function getWorkingImageSource(url) {
+        if (url.includes('pximg.net')) {
+            return `https://www.pixiv.net/en/artworks/${url.substring(url.lastIndexOf('/') + 1).replace(/_p\d+\.(png|jpg|jpeg|gif)$/, '')}`;
+        }
+        return url;
+    }
     
     function setProvider(provider) {
         provider = provider.toLowerCase()
