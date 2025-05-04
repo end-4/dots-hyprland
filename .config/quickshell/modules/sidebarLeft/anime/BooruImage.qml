@@ -1,6 +1,7 @@
 import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
@@ -147,17 +148,17 @@ Button {
                 MenuButton {
                     id: openFileLinkButton
                     Layout.fillWidth: true
-                    buttonText: "Open file link"
+                    buttonText: qsTr("Open file link")
                     onClicked: {
                         root.showActions = false
-                        // Hyprland.dispatch("global quickshell:sidebarLeftClose")
                         Hyprland.dispatch(`exec xdg-open '${root.imageData.file_url}'`)
                     }
                 }
                 MenuButton {
                     id: sourceButton
+                    visible: root.imageData.source && root.imageData.source.length > 0
                     Layout.fillWidth: true
-                    buttonText: "Go to source"
+                    buttonText: StringUtils.format(qsTr("Go to source ({0})"), StringUtils.getDomain(root.imageData.source))
                     enabled: root.imageData.source && root.imageData.source.length > 0
                     onClicked: {
                         root.showActions = false
@@ -171,7 +172,6 @@ Button {
                     buttonText: "Download"
                     onClicked: {
                         root.showActions = false
-                        // Hyprland.dispatch("global quickshell:sidebarLeftClose")
                         Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)
                     }
                 }
