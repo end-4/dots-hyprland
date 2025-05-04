@@ -28,7 +28,6 @@ elif [[ $(wc -l < $colormodefile) -ne 4 || $(wc -w < $colormodefile) -ne 4 ]]; t
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
     echo "vibrant" >> $colormodefile
-    echo "yesgradience" >> $colormodefile
 else
     lightdark=$(sed -n '1p' $colormodefile)
     transparency=$(sed -n '2p' $colormodefile)
