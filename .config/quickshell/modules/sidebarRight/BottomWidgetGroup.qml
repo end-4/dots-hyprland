@@ -37,13 +37,9 @@ Rectangle {
     function setCollapsed(state) {
         collapsed = state
         if (collapsed) {
-            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveExit.bezierCurve
-            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveEnter.bezierCurve
             bottomWidgetGroupRow.opacity = 0
         }
         else {
-            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveExit.bezierCurve
-            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveEnter.bezierCurve
             collapsedBottomWidgetGroupRow.opacity = 0
         }
         collapseCleanFadeTimer.start()
