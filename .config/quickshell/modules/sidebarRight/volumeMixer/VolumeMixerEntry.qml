@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/icons.js" as Icons
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -27,7 +28,7 @@ Item {
             sourceSize.width: 38
             sourceSize.height: 38
             source: {
-                const icon = root.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
+                const icon = Icons.noKnowledgeIconGuess(root.node.properties["application.icon-name"]);
                 return Quickshell.iconPath(icon);
             }
         }
