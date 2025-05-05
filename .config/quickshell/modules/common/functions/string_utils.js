@@ -8,3 +8,10 @@ function getDomain(url) {
   const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/);
   return match ? match[1] : null;
 }
+
+function shellSingleQuoteEscape(str) {
+  // First escape backslashes, then escape single quotes
+  return String(str)
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "'\\''");
+}

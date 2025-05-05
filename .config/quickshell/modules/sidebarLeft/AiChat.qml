@@ -65,10 +65,21 @@ Item {
             }
         },
         {
+            name: "key",
+            description: qsTr("Set API key"),
+            execute: (args) => {
+                if (args[0] == "get") {
+                    Ai.printApiKey()
+                } else {
+                    Ai.setApiKey(args[0]);
+                }
+            }
+        },
+        {
             name: "test",
             description: qsTr("Markdown test message"),
             execute: () => {
-                Ai.addMessage("## ✏️ Markdown test\n- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n", "interface");
+                Ai.addMessage("## ✏️ Markdown test\n- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n", Ai.interfaceRole);
             }
         },
     ]
@@ -82,7 +93,7 @@ Item {
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                Ai.addMessage(qsTr("Unknown command: ") + command, "interface");
+                Ai.addMessage(qsTr("Unknown command: ") + command, Ai.interfaceRole);
             }
         }
         else {
@@ -218,14 +229,6 @@ Item {
                             commandButton.down ? Appearance.colors.colLayer2Active : 
                             commandButton.hovered ? Appearance.colors.colLayer2Hover :
                             Appearance.colors.colLayer2
-                            
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
-                        }
                     }
                     contentItem: RowLayout {
                         spacing: 5
