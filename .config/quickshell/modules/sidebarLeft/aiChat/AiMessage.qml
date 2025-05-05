@@ -18,7 +18,6 @@ Rectangle {
     property var messageData
     property var messageInputField
 
-    property real availableWidth: parent.width ?? 0
     property real messagePadding: 7
     property real contentSpacing: 3
 
