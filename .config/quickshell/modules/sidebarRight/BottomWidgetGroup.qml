@@ -36,8 +36,16 @@ Rectangle {
 
     function setCollapsed(state) {
         collapsed = state
-        if (collapsed) bottomWidgetGroupRow.opacity = 0
-        else collapsedBottomWidgetGroupRow.opacity = 0
+        if (collapsed) {
+            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveExit.bezierCurve
+            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveEnter.bezierCurve
+            bottomWidgetGroupRow.opacity = 0
+        }
+        else {
+            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveExit.bezierCurve
+            bottomWidgetGroupRowFade.easing.bezierCurve = Appearance.animation.elementMoveEnter.bezierCurve
+            collapsedBottomWidgetGroupRow.opacity = 0
+        }
         collapseCleanFadeTimer.start()
     }
 
@@ -69,6 +77,7 @@ Rectangle {
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
+                id: collapsedBottomWidgetGroupRowFade
                 duration: Appearance.animation.elementMove.duration / 2
                 easing.type: Appearance.animation.elementMove.type
                 easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
@@ -109,6 +118,7 @@ Rectangle {
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
+                id: bottomWidgetGroupRowFade
                 duration: Appearance.animation.elementMove.duration / 2
                 easing.type: Appearance.animation.elementMove.type
                 easing.bezierCurve: Appearance.animation.elementMove.bezierCurve

@@ -188,6 +188,18 @@ Singleton {
             property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650
         }
+        property QtObject elementMoveEnter: QtObject {
+            property int duration: 400
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasizedDecel
+            property int velocity: 650
+        }
+        property QtObject elementMoveExit: QtObject {
+            property int duration: 200
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.emphasizedAccel
+            property int velocity: 650
+        }
         property QtObject elementMoveFast: QtObject {
             property int duration: 200
             property int type: Easing.BezierSpline
