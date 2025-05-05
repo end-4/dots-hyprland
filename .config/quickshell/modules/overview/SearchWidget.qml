@@ -87,19 +87,6 @@ Item { // Wrapper
     }
 
     Process {
-        id: webSearch
-        property list<string> baseCommand: ["xdg-open"]
-        function search(query) {
-            let url = ConfigOptions.search.engineBaseUrl + query
-            for (let site of ConfigOptions.search.excludedSites) {
-                url += ` -site:${site}`;
-            }
-            webSearch.command = baseCommand.concat(url)
-            webSearch.startDetached()
-        }
-    }
-
-    Process {
         id: executor
         property list<string> baseCommand: ["bash", "-c"]
         function executeCommand(command) {
@@ -366,7 +353,11 @@ Item { // Wrapper
                             type: "Search the web",
                             materialSymbol: 'travel_explore',
                             execute: () => {
-                                webSearch.search(root.searchingText);
+                                let url = ConfigOptions.search.engineBaseUrl + root.searchingText
+                                for (let site of ConfigOptions.search.excludedSites) {
+                                    url += ` -site:${site}`;
+                                }
+                                Qt.openUrlExternally(url);
                             }
                         });
 

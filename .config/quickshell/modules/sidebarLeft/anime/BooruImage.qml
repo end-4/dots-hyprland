@@ -2,6 +2,7 @@ import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import QtQml
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
@@ -151,7 +152,7 @@ Button {
                     buttonText: qsTr("Open file link")
                     onClicked: {
                         root.showActions = false
-                        Hyprland.dispatch(`exec xdg-open '${root.imageData.file_url}'`)
+                        Qt.openUrlExternally(root.imageData.file_url)
                     }
                 }
                 MenuButton {
@@ -163,7 +164,7 @@ Button {
                     onClicked: {
                         root.showActions = false
                         Hyprland.dispatch("global quickshell:sidebarLeftClose")
-                        Hyprland.dispatch(`exec xdg-open '${root.imageData.source}'`)
+                        Qt.openUrlExternally(root.imageData.source)
                     }
                 }
                 MenuButton {
