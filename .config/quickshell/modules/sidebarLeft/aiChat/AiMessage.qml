@@ -94,7 +94,7 @@ Rectangle {
                         color: Appearance.m3colors.m3onSecondaryContainer
                         text: messageData.role == 'assistant' ? Ai.models[messageData.model].name :
                             (messageData.role == 'user' && SystemInfo.username) ? SystemInfo.username :
-                            Ai.models[messageData.role].name
+                            (messageData.role == 'interface') ? qsTr("Interface") : qsTr("Unknown")
                     }
                 }
             }

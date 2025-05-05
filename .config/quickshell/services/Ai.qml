@@ -11,10 +11,10 @@ import QtQuick;
 Singleton {
     id: root
 
+    readonly property string xdgConfigHome: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
     readonly property string interfaceRole: "interface"
     property Component aiMessageComponent: AiMessageData {}
     property var messages: []
-    property var modelList: ["ollama-llama-3.2", "gemini-2.0-flash"]
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
 
     // Model properties:
@@ -25,17 +25,7 @@ Singleton {
     // - model: Model name of the model
     // - requires_key: Whether the model requires an API key
     // - key_id: The identifier of the API key. Use the same identifier for models that can be accessed with the same key.
-    property var models: { // TODO: Auto-detect installed ollama models
-        "interface": {
-            "name": "Interface",
-        },
-        "ollama-llama-3.2": {
-            "name": "Ollama - Llama 3.2",
-            "icon": "ollama-symbolic",
-            "description": "Local Ollama model - Llama 3.2",
-            "endpoint": "http://localhost:11434/v1/chat/completions",
-            "model": "llama3.2",
-        },
+    property var models: {
         "gemini-2.0-flash": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
@@ -46,10 +36,57 @@ Singleton {
             "key_id": "gemini",
         },
     }
-    property var currentModel: "ollama-llama-3.2"
+    property var modelList: Object.keys(root.models)
+    property var currentModel: Object.keys(root.models)[0]
 
     Component.onCompleted: {
         setModel(currentModel, false); // Do necessary setup for model
+        getOllamaModels.running = true
+    }
+
+    function guessModelLogo(model) {
+        if (model.includes("llama")) return "ollama-symbolic";
+        if (model.includes("gemma")) return "google-gemini-symbolic";
+        if (model.includes("deepseek")) return "deepseek-symbolic";
+        if (/^phi\d*:/i.test(model)) return "microsoft-symbolic";
+        return "ollama-symbolic";
+    }
+
+    function guessModelName(model) {
+        const replaced = model.replace(/-/g, ' ').replace(/:/g, ' ');
+        const words = replaced.split(' ');
+        words[words.length - 1] = words[words.length - 1].replace(/(\d+)b$/, (_, num) => `${num}B`)
+        words[words.length - 1] = `[${words[words.length - 1]}]`; // Surround the last word with square brackets
+        const result = words.join(' ');
+        return result.charAt(0).toUpperCase() + result.slice(1); // Capitalize the first letter
+    }
+
+    Process {
+        id: getOllamaModels
+        command: ["bash", "-c", `${xdgConfigHome}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
+        stdout: SplitParser {
+            onRead: data => {
+                try {
+                    if (data.length === 0) return;
+                    const dataJson = JSON.parse(data);
+                    root.modelList = [...root.modelList, ...dataJson];
+                    dataJson.forEach(model => {
+                        root.models[model] = {
+                            "name": guessModelName(model),
+                            "icon": guessModelLogo(model),
+                            "description": `Local Ollama model: ${model}`,
+                            "endpoint": "http://localhost:11434/v1/chat/completions",
+                            "model": model,
+                        }
+                    });
+
+                    root.modelList = Object.keys(root.models);
+
+                } catch (e) {
+                    console.log("Could not fetch Ollama models:", e);
+                }
+            }
+        }
     }
 
     function addMessage(message, role) {
@@ -96,7 +133,7 @@ Singleton {
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
-                root.addMessage("API key:\n\n- `" + key, Ai.interfaceRole + "`");
+                root.addMessage("API key: \n\n`" + key + "`", Ai.interfaceRole);
             } else {
                 root.addMessage("No API key set for " + model.name, Ai.interfaceRole);
             }
@@ -139,11 +176,6 @@ Singleton {
             if (model.requires_key) requester.environment = ({
                 "API_KEY": root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : "",
             })
-            console.log(JSON.stringify(root.apiKeys))
-            console.log("Model:", model.key_id);
-            console.log(root.apiKeys[model.key_id]);
-
-            console.log("API key: ", requester.environment.API_KEY);
             
             /* Create message object for local storage */
             requester.message = root.aiMessageComponent.createObject(root, {
@@ -161,16 +193,15 @@ Singleton {
                 .map(([k, v]) => `-H '${k}: ${v}'`)
                 .join(' ');
 
-            console.log("Request headers: ", JSON.stringify(requestHeaders));
-            console.log("Header string: ", headerString);
+            // console.log("Request headers: ", JSON.stringify(requestHeaders));
+            // console.log("Header string: ", headerString);
 
             /* Create command string */
             const requestCommandString = `curl --no-buffer '${endpoint}'`
                 + ` ${headerString}`
                 + ' -H "Authorization: Bearer ${API_KEY}"'
                 + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
-            // const requestCommandString = 'notify-send "api key" "${API_KEY}" && curl'
-            console.log("Request command: ", requestCommandString);
+            // console.log("Request command: ", requestCommandString);
             requester.command = baseCommand.concat([requestCommandString]);
             requester.running = true
         }
@@ -184,7 +215,7 @@ Singleton {
                 if (cleanData.startsWith("data:")) {
                     cleanData = cleanData.slice(5).trim();
                 }
-                console.log("Clean data: ", cleanData);
+                // console.log("Clean data: ", cleanData);
                 if (!cleanData) return;
 
                 if (requester.message.thinking) requester.message.thinking = false;
@@ -201,9 +232,18 @@ Singleton {
 
                     if (dataJson.done) requester.message.done = true;
                 } catch (e) {
-                    console.log("Error parsing JSON: ", e);
                     requester.message.content += cleanData;
                 }
+            }
+        }
+
+        onExited: (exitCode, exitStatus) => {
+            try { // to parse full response into json
+                // console.log("Full response: ", requester.message.content + "]"); 
+                const parsedResponse = JSON.parse(requester.message.content + "]");
+                requester.message.content = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
+            } catch (e) { 
+                console.log("Could not parse response: ", e);
             }
         }
     }
