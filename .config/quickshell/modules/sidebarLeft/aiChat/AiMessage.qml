@@ -50,7 +50,7 @@ Rectangle {
                 RowLayout {
                     id: nameRowLayout
                     anchors.centerIn: parent
-                    spacing: 10
+                    spacing: 5
 
                     Item {
                         Layout.alignment: Qt.AlignVCenter

@@ -14,7 +14,6 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
     property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "bookmark_heart", "name": qsTr("Anime")}]
 
@@ -27,6 +26,8 @@ Scope { // Scope
             visible: false
             focusable: true
             property int currentTab: 0
+            property bool extend: false
+            property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
 
             onVisibleChanged: {
                 GlobalStates.sidebarLeftOpenCount += visible ? 1 : -1
@@ -36,7 +37,7 @@ Scope { // Scope
 
             screen: modelData
             exclusiveZone: 0
-            width: sidebarWidth
+            width: Appearance.sizes.sidebarWidthExtended
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"
@@ -45,6 +46,10 @@ Scope { // Scope
                 top: true
                 left: true
                 bottom: true
+            }
+
+            mask: Region {
+                item: sidebarLeftBackground
             }
 
             HyprlandFocusGrab { // Click outside to close
@@ -76,14 +81,26 @@ Scope { // Scope
             Rectangle {
                 id: sidebarLeftBackground
 
-                anchors.centerIn: parent
-                width: parent.width - Appearance.sizes.hyprlandGapsOut * 2
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.topMargin: Appearance.sizes.hyprlandGapsOut
+                anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
+                width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
                 focus: sidebarRoot.visible
 
+                Behavior on width {
+                    NumberAnimation {
+                        duration: Appearance.animation.elementMove.duration
+                        easing.type: Appearance.animation.elementMove.type
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                    }
+                }
+
                 Keys.onPressed: (event) => {
+                    // console.log("Key pressed: " + event.key)
                     if (event.key === Qt.Key_Escape) {
                         sidebarRoot.visible = false;
                     }
@@ -99,6 +116,10 @@ Scope { // Scope
                         }
                         else if (event.key === Qt.Key_Backtab) {
                             sidebarRoot.currentTab = (sidebarRoot.currentTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
+                        }
+                        else if (event.key === Qt.Key_O) {
+                            console.log("Extending sidebar")
+                            sidebarRoot.extend = !sidebarRoot.extend;
                         }
                         event.accepted = true;
                     }

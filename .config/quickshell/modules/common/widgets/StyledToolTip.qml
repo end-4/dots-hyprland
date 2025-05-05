@@ -63,6 +63,7 @@ ToolTip {
                 anchors.centerIn: parent
                 text: content
                 font.pixelSize: Appearance.font.pixelSize.smaller
+                font.hintingPreference: Font.PreferNoHinting // Prevent shaky text
                 color: Appearance.colors.colOnTooltip
                 wrapMode: Text.Wrap
             }

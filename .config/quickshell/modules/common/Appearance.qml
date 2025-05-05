@@ -228,6 +228,7 @@ Singleton {
         property int barCenterSideModuleWidth: 360
         property int barPreferredSideSectionWidth: 400
         property int sidebarWidth: 450
+        property int sidebarWidthExtended: 700
         property int notificationPopupWidth: 410
         property int searchWidthCollapsed: 260
         property int searchWidth: 450
