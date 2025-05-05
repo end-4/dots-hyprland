@@ -1,7 +1,7 @@
-import "root:/modules/common/functions/icons.js" as Icons
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/icons.js" as Icons
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Layouts

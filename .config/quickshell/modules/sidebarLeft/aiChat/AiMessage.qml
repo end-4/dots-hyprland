@@ -123,17 +123,30 @@ Rectangle {
             }
         }
 
-        StyledText { // Message
+        TextEdit { // Message
             id: messageText
             Layout.fillWidth: true
             Layout.margins: messagePadding
+            readOnly: true
+            selectByMouse: true
 
             font.family: Appearance.font.family.reading
+            font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
             font.pixelSize: Appearance.font.pixelSize.small
             wrapMode: Text.WordWrap
             color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
             textFormat: Text.MarkdownText
             text: messageData.thinking ? qsTr("Waiting for response...") : root.messageData.content
+
+            Keys.onPressed: (event) => {
+                if (event.key === Qt.Key_Control) { // Prevent de-select
+                    event.accepted = true
+                }
+                if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
+                    messageText.copy()
+                    event.accepted = true
+                }
+            }
             
             onLinkActivated: (link) => {
                 Qt.openUrlExternally(link)
