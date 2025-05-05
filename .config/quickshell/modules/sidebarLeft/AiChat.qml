@@ -111,7 +111,7 @@ Item {
             ListView { // Message list
                 id: messageListView
                 anchors.fill: parent
-                
+
                 property int lastResponseLength: 0
 
                 clip: true

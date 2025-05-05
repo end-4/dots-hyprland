@@ -89,7 +89,7 @@ Rectangle {
                     StyledText {
                         id: providerName
                         Layout.alignment: Qt.AlignVCenter
-                        font.pixelSize: Appearance.font.pixelSize.large
+                        font.pixelSize: Appearance.font.pixelSize.normal
                         font.weight: Font.DemiBold
                         color: Appearance.m3colors.m3onSecondaryContainer
                         text: messageData.role == 'assistant' ? Ai.models[messageData.model].name :
