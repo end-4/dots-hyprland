@@ -320,14 +320,7 @@ Item {
                             tagButton.down ? Appearance.colors.colLayer2Active : 
                             tagButton.hovered ? Appearance.colors.colLayer2Hover :
                             Appearance.colors.colLayer2
-                            
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
-                        }
+
                     }
                     contentItem: RowLayout {
                         spacing: 5
