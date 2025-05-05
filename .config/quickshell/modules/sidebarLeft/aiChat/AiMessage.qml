@@ -43,19 +43,82 @@ Rectangle {
                 id: nameWrapper
                 color: Appearance.m3colors.m3secondaryContainer
                 radius: Appearance.rounding.small
-                implicitWidth: providerName.implicitWidth + 10 * 2
-                implicitHeight: Math.max(providerName.implicitHeight + 5 * 2, 30)
+                implicitWidth: nameRowLayout.implicitWidth + 10 * 2
+                implicitHeight: Math.max(nameRowLayout.implicitHeight + 5 * 2, 30)
                 Layout.alignment: Qt.AlignVCenter
 
-                StyledText {
-                    id: providerName
+                RowLayout {
+                    id: nameRowLayout
                     anchors.centerIn: parent
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    font.weight: Font.DemiBold
-                    color: Appearance.m3colors.m3onSecondaryContainer
-                    text: messageData.role == 'assistant' ? Ai.models[messageData.model].name :
-                        messageData.role == 'user' ? "User" : 
-                        "System"
+                    spacing: 10
+
+                    Item {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillHeight: true
+                        implicitWidth: messageData.role == 'assistant' ? modelIcon.width : roleIcon.implicitWidth
+                        implicitHeight: messageData.role == 'assistant' ? modelIcon.height : roleIcon.implicitHeight
+
+                        CustomIcon {
+                            id: modelIcon
+                            anchors.centerIn: parent
+                            visible: messageData.role == 'assistant' && Ai.models[messageData.model].icon
+                            width: Appearance.font.pixelSize.large
+                            height: Appearance.font.pixelSize.large
+                            source: messageData.role == 'assistant' ? Ai.models[messageData.model].icon :
+                                messageData.role == 'user' ? 'linux-symbolic' : 'desktop-symbolic'
+                        }
+                        ColorOverlay {
+                            visible: modelIcon.visible
+                            anchors.fill: modelIcon
+                            source: modelIcon
+                            color: Appearance.m3colors.m3onSecondaryContainer
+                        }
+
+                        MaterialSymbol {
+                            id: roleIcon
+                            anchors.centerIn: parent
+                            visible: !modelIcon.visible
+                            iconSize: Appearance.font.pixelSize.larger
+                            color: Appearance.m3colors.m3onSecondaryContainer
+                            text: messageData.role == 'user' ? 'person' : 
+                                messageData.role == 'interface' ? 'settings' : 
+                                messageData.role == 'assistant' ? 'neurology' : 
+                                'computer'
+                        }
+                    }
+
+                    StyledText {
+                        id: providerName
+                        Layout.alignment: Qt.AlignVCenter
+                        font.pixelSize: Appearance.font.pixelSize.large
+                        font.weight: Font.DemiBold
+                        color: Appearance.m3colors.m3onSecondaryContainer
+                        text: messageData.role == 'assistant' ? Ai.models[messageData.model].name :
+                            messageData.role == 'user' ? (SystemInfo.username ?? "User") : 
+                            "System"
+                    }
+                }
+            }
+
+            Item { Layout.fillWidth: true }
+
+            Button { // Not visible to model
+                visible: messageData.role == 'interface'
+                implicitWidth: Math.max(notVisibleToModelText.implicitWidth + 10 * 2, 30)
+                implicitHeight: notVisibleToModelText.implicitHeight + 5 * 2
+                Layout.alignment: Qt.AlignVCenter
+
+                background: Item
+
+                MaterialSymbol {
+                    id: notVisibleToModelText
+                    anchors.centerIn: parent
+                    iconSize: Appearance.font.pixelSize.larger
+                    color: Appearance.colors.colSubtext
+                    text: "visibility_off"
+                }
+                StyledToolTip {
+                    content: qsTr("Not visible to model")
                 }
             }
         }
@@ -65,12 +128,12 @@ Rectangle {
             Layout.fillWidth: true
             Layout.margins: messagePadding
 
-            // font.family: Appearance.font.family.reading
+            font.family: Appearance.font.family.reading
             font.pixelSize: Appearance.font.pixelSize.small
             wrapMode: Text.WordWrap
-            color: Appearance.colors.colOnLayer1
+            color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
             textFormat: Text.MarkdownText
-            text: root.messageData.content
+            text: messageData.thinking ? qsTr("Waiting for response...") : root.messageData.content
             
             onLinkActivated: (link) => {
                 Qt.openUrlExternally(link)
@@ -85,3 +148,4 @@ Rectangle {
         }
     }
 }
+

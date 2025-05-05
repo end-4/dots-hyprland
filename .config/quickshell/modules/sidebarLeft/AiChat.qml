@@ -3,6 +3,7 @@ import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "./aiChat/"
+import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import Qt.labs.platform
 import QtQuick
@@ -19,7 +20,9 @@ Item {
     property var inputField: messageInputField
     readonly property var messages: Ai.messages
     property string commandPrefix: "/"
-    property real scrollOnNewResponse: 60
+
+    property var suggestionQuery: ""
+    property var suggestionList: []
 
     Connections {
         target: panelWindow
@@ -48,6 +51,13 @@ Item {
 
     property var allCommands: [
         {
+            name: "model",
+            description: qsTr("Choose model"),
+            execute: (args) => {
+                Ai.setModel(args[0]);
+            }
+        },
+        {
             name: "clear",
             description: qsTr("Clear chat history"),
             execute: () => {
@@ -55,10 +65,10 @@ Item {
             }
         },
         {
-            name: "model",
-            description: qsTr("Choose model"),
-            execute: (args) => {
-                Ai.setModel(args[0]);
+            name: "test",
+            description: qsTr("Markdown test message"),
+            execute: () => {
+                Ai.addMessage("## ✏️ Markdown test\n- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n", "interface");
             }
         },
     ]
@@ -84,10 +94,10 @@ Item {
         id: columnLayout
         anchors.fill: parent
 
-        Item {
+        Item { // Messages
             Layout.fillWidth: true
             Layout.fillHeight: true
-            ListView { // Messages
+            ListView { // Message list
                 id: messageListView
                 anchors.fill: parent
                 
@@ -114,15 +124,7 @@ Item {
 
                 spacing: 10
                 model: ScriptModel {
-                    values: {
-                        if(root.messages.length > messageListView.lastResponseLength) {
-                            if (messageListView.lastResponseLength > 0 && root.messages[messageListView.lastResponseLength].provider != "system")
-                                messageListView.contentY = messageListView.contentY + root.scrollOnNewResponse
-                            messageListView.lastResponseLength = root.messages.length
-                        }
-                        return root.messages
-                    }
-                    // values: root.messages
+                    values: root.messages
                 }
                 delegate: AiMessage {
                     messageData: modelData
@@ -149,7 +151,7 @@ Item {
 
                     MaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: 55
+                        iconSize: 55
                         color: Appearance.m3colors.m3outline
                         text: "neurology"
                     }
@@ -165,8 +167,115 @@ Item {
             }
         }
 
-        Rectangle { // Tag input area
-            id: tagInputContainer
+        Item { // Suggestion description
+            visible: descriptionText.text.length > 0
+            Layout.fillWidth: true
+            implicitHeight: descriptionBackground.implicitHeight
+
+            Rectangle {
+                id: descriptionBackground
+                color: Appearance.colors.colTooltip
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                implicitHeight: descriptionText.implicitHeight + 5 * 2
+                radius: Appearance.rounding.verysmall
+
+                StyledText {
+                    id: descriptionText
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 10
+                    anchors.rightMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    color: Appearance.colors.colOnTooltip
+                    wrapMode: Text.Wrap
+                    text: root.suggestionList[suggestions.selectedIndex]?.description ?? ""
+                }
+            }
+        }
+
+        Flow { // Suggestions
+            id: suggestions
+            visible: root.suggestionList.length > 0 && messageInputField.text.length > 0
+            property int selectedIndex: 0
+            Layout.fillWidth: true
+            spacing: 5
+
+            Repeater {
+                id: suggestionRepeater
+                model: {
+                    suggestions.selectedIndex = 0
+                    return root.suggestionList.slice(0, 10)
+                }
+                delegate: ApiCommandButton {
+                    id: commandButton
+
+                    background: Rectangle {
+                        radius: Appearance.rounding.small
+                        color: suggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : 
+                            commandButton.down ? Appearance.colors.colLayer2Active : 
+                            commandButton.hovered ? Appearance.colors.colLayer2Hover :
+                            Appearance.colors.colLayer2
+                            
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: Appearance.animation.elementMove.duration
+                                easing.type: Appearance.animation.elementMove.type
+                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                            }
+                        }
+                    }
+                    contentItem: RowLayout {
+                        spacing: 5
+                        StyledText {
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: Appearance.m3colors.m3onSurface
+                            text: modelData.displayName ?? modelData.name
+                        }
+                        StyledText {
+                            visible: modelData.count !== undefined
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.m3colors.m3outline
+                            text: modelData.count ?? ""
+                        }
+                    }
+
+                    onHoveredChanged: {
+                        if (commandButton.hovered) {
+                            suggestions.selectedIndex = index;
+                        }
+                    }
+                    onClicked: {
+                        suggestions.acceptSuggestion(modelData.name)
+                    }
+                }
+            }
+
+            function acceptSuggestion(word) {
+                const words = messageInputField.text.trim().split(/\s+/);
+                if (words.length > 0) {
+                    words[words.length - 1] = word;
+                } else {
+                    words.push(word);
+                }
+                const updatedText = words.join(" ") + " ";
+                messageInputField.text = updatedText;
+                messageInputField.cursorPosition = messageInputField.text.length;
+                messageInputField.forceActiveFocus();
+            }
+
+            function acceptSelectedWord() {
+                if (suggestions.selectedIndex >= 0 && suggestions.selectedIndex < suggestionRepeater.count) {
+                    const word = root.suggestionList[suggestions.selectedIndex].name;
+                    suggestions.acceptSuggestion(word);
+                }
+            }
+        }
+
+        Rectangle { // Input area
+            id: inputWrapper
             property real columnSpacing: 5
             Layout.fillWidth: true
             radius: Appearance.rounding.small
@@ -208,13 +317,56 @@ Item {
 
                     background: Item {}
 
+                    onTextChanged: { // Handle suggestions
+                        if(messageInputField.text.length === 0) {
+                            root.suggestionQuery = ""
+                            root.suggestionList = []
+                            return
+                        } else if(messageInputField.text.startsWith(`${root.commandPrefix}model`)) {
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            const modelResults = Fuzzy.go(root.suggestionQuery, Ai.modelList.map(model => {
+                                return {
+                                    name: Fuzzy.prepare(model),
+                                    obj: model,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            root.suggestionList = modelResults.map(model => {
+                                return {
+                                    name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "model ") : ""}${model.target}`,
+                                    displayName: `${Ai.models[model.target].name}`,
+                                    description: `${Ai.models[model.target].description}`,
+                                }
+                            })
+                        } else if(messageInputField.text.startsWith(root.commandPrefix)) {
+                            root.suggestionQuery = messageInputField.text
+                            root.suggestionList = root.allCommands.filter(cmd => cmd.name.startsWith(messageInputField.text.substring(1))).map(cmd => {
+                                return {
+                                    name: `${root.commandPrefix}${cmd.name}`,
+                                    description: `${cmd.description}`,
+                                }
+                            })
+                        }
+                    }
+
                     function accept() {
                         root.handleInput(text)
                         text = ""
                     }
 
                     Keys.onPressed: (event) => {
-                        if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
+                        if (event.key === Qt.Key_Tab) {
+                            suggestions.acceptSelectedWord();
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Up) {
+                            suggestions.selectedIndex = Math.max(0, suggestions.selectedIndex - 1);
+                            event.accepted = true;
+                        } else if (event.key === Qt.Key_Down) {
+                            suggestions.selectedIndex = Math.min(root.suggestionList.length - 1, suggestions.selectedIndex + 1);
+                            event.accepted = true;
+                        } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
                             if (event.modifiers & Qt.ShiftModifier) {
                                 // Insert newline
                                 messageInputField.insert(messageInputField.cursorPosition, "\n")
@@ -264,10 +416,11 @@ Item {
 
                     contentItem: MaterialSymbol {
                         anchors.centerIn: parent
-                        text: "send"
                         horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
+                        iconSize: Appearance.font.pixelSize.larger
+                        fill: sendButton.enabled ? 1 : 0
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
+                        text: "arrow_upward"
                     }
                 }
             }
@@ -303,7 +456,7 @@ Item {
 
                         MaterialSymbol {
                             text: "api"
-                            font.pixelSize: Appearance.font.pixelSize.large
+                            iconSize: Appearance.font.pixelSize.large
                         }
                         StyledText {
                             id: providerName
@@ -318,7 +471,6 @@ Item {
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        // content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
                         content: StringUtils.format(qsTr("Current model: {0}\nSet it with {1}model MODEL"), 
                             Ai.models[Ai.currentModel].name, root.commandPrefix)
                     }
@@ -336,13 +488,13 @@ Item {
                     id: commandRepeater
                     model: commandButtonsRow.commandsShown
                     delegate: ApiCommandButton {
-                        id: tagButton
+                        id: commandButton
                         property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                         buttonText: commandRepresentation
                         background: Rectangle {
                             radius: Appearance.rounding.small
-                            color: tagButton.down ? Appearance.colors.colLayer2Active : 
-                                tagButton.hovered ? Appearance.colors.colLayer2Hover :
+                            color: commandButton.down ? Appearance.colors.colLayer2Active : 
+                                commandButton.hovered ? Appearance.colors.colLayer2Hover :
                                 Appearance.colors.colLayer2
                                 
                             Behavior on color {
