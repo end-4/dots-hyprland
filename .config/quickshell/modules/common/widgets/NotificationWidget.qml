@@ -280,7 +280,7 @@ Item {
                             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                 Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
                                 Appearance.m3colors.m3onSecondaryContainer
-                            font.pixelSize: 27
+                            iconSize: 27
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
@@ -419,7 +419,7 @@ Item {
                                     text: "keyboard_arrow_down"
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    font.pixelSize: Appearance.font.pixelSize.normal
+                                    iconSize: Appearance.font.pixelSize.normal
                                     color: Appearance.colors.colOnLayer2
                                     rotation: expanded ? 180 : 0
                                     Behavior on rotation {
@@ -554,7 +554,7 @@ Item {
 
                         contentItem: MaterialSymbol {
                             id: copyIcon
-                            font.pixelSize: Appearance.font.pixelSize.large
+                            iconSize: Appearance.font.pixelSize.large
                             horizontalAlignment: Text.AlignHCenter
                             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                 Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
@@ -574,7 +574,7 @@ Item {
                         }
 
                         contentItem: MaterialSymbol {
-                            font.pixelSize: Appearance.font.pixelSize.large
+                            iconSize: Appearance.font.pixelSize.large
                             horizontalAlignment: Text.AlignHCenter
                             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                 Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface

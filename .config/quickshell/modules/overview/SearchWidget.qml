@@ -90,13 +90,12 @@ Item { // Wrapper
         id: webSearch
         property list<string> baseCommand: ["xdg-open"]
         function search(query) {
-            webSearch.running = false
             let url = ConfigOptions.search.engineBaseUrl + query
             for (let site of ConfigOptions.search.excludedSites) {
                 url += ` -site:${site}`;
             }
             webSearch.command = baseCommand.concat(url)
-            webSearch.running = true
+            webSearch.startDetached()
         }
     }
 
@@ -104,11 +103,10 @@ Item { // Wrapper
         id: executor
         property list<string> baseCommand: ["bash", "-c"]
         function executeCommand(command) {
-            executor.running = false
             executor.command = baseCommand.concat(
                 `${command} || ${ConfigOptions.apps.terminal} fish -C 'echo "${qsTr("Searching for package with that command")}..." && pacman -F ${command}'`
             )
-            executor.running = true
+            executor.startDetached()
         }
     }
 
@@ -197,7 +195,7 @@ Item { // Wrapper
                 MaterialSymbol {
                     id: searchIcon
                     Layout.leftMargin: 15
-                    font.pixelSize: Appearance.font.pixelSize.huge
+                    iconSize: Appearance.font.pixelSize.huge
                     color: Appearance.m3colors.m3onSurface
                     text: "search"
                 }

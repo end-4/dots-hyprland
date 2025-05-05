@@ -25,7 +25,7 @@ Button {
         spacing: 5
         Rectangle {
             width: 62
-            implicitHeight: navRailButtonIcon.height + 2*2
+            implicitHeight: navRailButtonIcon.height + 2 * 2
             Layout.alignment: Qt.AlignHCenter
             radius: Appearance.rounding.full
             color: toggled ? 
@@ -42,7 +42,8 @@ Button {
             MaterialSymbol {
                 id: navRailButtonIcon
                 anchors.centerIn: parent
-                font.pixelSize: Appearance.font.pixelSize.hugeass
+                iconSize: Appearance.font.pixelSize.hugeass
+                fill: toggled ? 1 : 0
                 text: buttonIcon
                 color: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
 

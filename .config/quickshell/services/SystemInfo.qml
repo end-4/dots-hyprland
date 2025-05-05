@@ -9,12 +9,14 @@ Singleton {
     property string distroName: "Unknown"
     property string distroId: "unknown"
     property string distroIcon: "linux-symbolic"
+    property string username: "user"
 
     Timer {
         interval: 1
         running: true
         repeat: false
         onTriggered: {
+            getUsername.running = true
             fileOsRelease.reload()
             const textOsRelease = fileOsRelease.text()
 
@@ -42,6 +44,16 @@ Singleton {
                 case "raspbian":
                 case "kali": distroIcon = "debian-symbolic"; break;
                 default: distroIcon = "linux-symbolic"; break;
+            }
+        }
+    }
+
+    Process {
+        id: getUsername
+        command: ["whoami"]
+        stdout: SplitParser {
+            onRead: data => {
+                username = data.trim()
             }
         }
     }

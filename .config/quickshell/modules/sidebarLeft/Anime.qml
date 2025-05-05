@@ -43,17 +43,17 @@ Item {
 
     property var allCommands: [
         {
-            name: "clear",
-            description: qsTr("Clear the current list of images"),
-            execute: () => {
-                Booru.clearResponses();
-            }
-        },
-        {
             name: "mode",
             description: qsTr("Set the current API provider"),
             execute: (args) => {
                 Booru.setProvider(args[0]);
+            }
+        },
+        {
+            name: "clear",
+            description: qsTr("Clear the current list of images"),
+            execute: () => {
+                Booru.clearResponses();
             }
         },
         {
@@ -212,7 +212,7 @@ Item {
 
                     MaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: 55
+                        iconSize: 55
                         color: Appearance.m3colors.m3outline
                         text: "bookmark_heart"
                     }
@@ -538,9 +538,10 @@ Item {
 
                     contentItem: MaterialSymbol {
                         anchors.centerIn: parent
-                        text: "send"
+                        text: "arrow_upward"
                         horizontalAlignment: Text.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.larger
+                        iconSize: Appearance.font.pixelSize.larger
+                        fill: sendButton.enabled ? 1 : 0
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
                     }
                 }
@@ -577,7 +578,7 @@ Item {
 
                         MaterialSymbol {
                             text: "api"
-                            font.pixelSize: Appearance.font.pixelSize.large
+                            iconSize: Appearance.font.pixelSize.large
                         }
                         StyledText {
                             id: providerName

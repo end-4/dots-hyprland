@@ -40,7 +40,8 @@ TabButton {
                 Layout.rightMargin: 5
                 verticalAlignment: Text.AlignVCenter
                 text: buttonIcon
-                font.pixelSize: Appearance.font.pixelSize.huge
+                iconSize: Appearance.font.pixelSize.huge
+                fill: selected ? 1 : 0
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                 Behavior on color {
                     ColorAnimation {

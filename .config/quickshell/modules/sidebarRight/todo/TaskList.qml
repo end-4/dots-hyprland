@@ -118,7 +118,7 @@ Item {
                                         anchors.centerIn: parent
                                         horizontalAlignment: Text.AlignHCenter
                                         text: modelData.done ? "remove_done" : "check"
-                                        font.pixelSize: Appearance.font.pixelSize.larger
+                                        iconSize: Appearance.font.pixelSize.larger
                                         color: Appearance.colors.colOnLayer1
                                     }
                                 }
@@ -132,7 +132,7 @@ Item {
                                         anchors.centerIn: parent
                                         horizontalAlignment: Text.AlignHCenter
                                         text: "delete_forever"
-                                        font.pixelSize: Appearance.font.pixelSize.larger
+                                        iconSize: Appearance.font.pixelSize.larger
                                         color: Appearance.colors.colOnLayer1
                                     }
                                 }
@@ -168,7 +168,7 @@ Item {
 
             MaterialSymbol {
                 Layout.alignment: Qt.AlignHCenter
-                font.pixelSize: 55
+                iconSize: 55
                 color: Appearance.m3colors.m3outline
                 text: emptyPlaceholderIcon
             }

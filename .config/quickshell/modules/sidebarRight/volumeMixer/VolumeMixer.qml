@@ -98,7 +98,7 @@ Item {
 
                     MaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: 55
+                        iconSize: 55
                         color: Appearance.m3colors.m3outline
                         text: "brand_awareness"
                     }

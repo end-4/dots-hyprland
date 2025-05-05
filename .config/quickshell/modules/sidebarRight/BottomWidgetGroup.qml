@@ -86,7 +86,7 @@ Rectangle {
             }
             contentItem: MaterialSymbol {
                 text: "keyboard_arrow_up"
-                font.pixelSize: Appearance.font.pixelSize.larger
+                iconSize: Appearance.font.pixelSize.larger
                 horizontalAlignment: Text.AlignHCenter
                 color: Appearance.colors.colOnLayer1
             }
@@ -155,7 +155,7 @@ Rectangle {
                 }
                 contentItem: MaterialSymbol {
                     text: "keyboard_arrow_down"
-                    font.pixelSize: Appearance.font.pixelSize.larger
+                    iconSize: Appearance.font.pixelSize.larger
                     horizontalAlignment: Text.AlignHCenter
                     color: Appearance.colors.colOnLayer1
                 }

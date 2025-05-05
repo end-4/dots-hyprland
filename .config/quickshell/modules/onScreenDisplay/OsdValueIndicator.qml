@@ -40,7 +40,7 @@ Item {
                 Layout.bottomMargin: valueIndicatorVerticalPadding
                 color: Appearance.colors.colOnLayer0
                 text: root.icon
-                font.pixelSize: 30
+                iconSize: 30
             }
             ColumnLayout { // Stuff
                 Layout.alignment: Qt.AlignVCenter

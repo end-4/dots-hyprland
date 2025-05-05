@@ -75,8 +75,8 @@ Scope {
                             height: 19.5
                             source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
                                 SystemInfo.distroIcon : "spark-symbolic"
-
                         }
+                        
                         ColorOverlay {
                             anchors.fill: distroIcon
                             source: distroIcon
@@ -173,12 +173,12 @@ Scope {
                                     Network.networkStrength > 20 ? "network_wifi_1_bar" :
                                     "signal_wifi_0_bar"
                                 ) : "signal_wifi_off"
-                                font.pixelSize: Appearance.font.pixelSize.larger
+                                iconSize: Appearance.font.pixelSize.larger
                                 color: Appearance.colors.colOnLayer0
                             }
                             MaterialSymbol {
                                 text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
-                                font.pixelSize: Appearance.font.pixelSize.larger
+                                iconSize: Appearance.font.pixelSize.larger
                                 color: Appearance.colors.colOnLayer0
                             }
                         }

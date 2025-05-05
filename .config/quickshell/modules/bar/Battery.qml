@@ -56,7 +56,7 @@ Rectangle {
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: "battery_full"
-                font.pixelSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.normal
                 color: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
             }
 
@@ -70,7 +70,7 @@ Rectangle {
         anchors.left: rowLayout.left
         anchors.verticalCenter: rowLayout.verticalCenter
         text: "bolt"
-        font.pixelSize: Appearance.font.pixelSize.large
+        iconSize: Appearance.font.pixelSize.large
         color: Appearance.m3colors.m3onSecondaryContainer
         visible: opacity > 0 // Only show when charging
         opacity: isCharging ? 1 : 0 // Keep opacity for visibility

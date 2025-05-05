@@ -52,8 +52,8 @@ Button {
         anchors.fill: parent
         color: Appearance.colors.colOnLayer2
         horizontalAlignment: Text.AlignHCenter
+        iconSize: 40
         text: buttonIcon
-        font.pixelSize: 40
     }
 
     StyledToolTip {

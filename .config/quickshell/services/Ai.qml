@@ -20,14 +20,14 @@ Singleton {
         "ollama-llama-3.2": {
             "name": "Ollama - Llama 3.2",
             "icon": "ollama-symbolic",
-            "description": "Ollama - Llama 3.2",
+            "description": "Local Ollama model - Llama 3.2",
             "endpoint": "http://localhost:11434/api/chat",
             "model": "llama3.2",
         },
         "gemini-2.0-flash": {
             "name": "Gemini 2.0 Flash",
             "icon": "gemini-symbolic",
-            "description": "Gemini 2.0 Flash",
+            "description": "Online Gemini 2.0 Flash",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
             "messageMapFunc": function (message) {

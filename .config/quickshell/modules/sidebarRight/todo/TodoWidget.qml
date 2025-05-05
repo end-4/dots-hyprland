@@ -204,7 +204,7 @@ Item {
         contentItem: MaterialSymbol {
             text: "add"
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.huge
+            iconSize: Appearance.font.pixelSize.huge
             color: Appearance.m3colors.m3onPrimaryContainer
         }
     }

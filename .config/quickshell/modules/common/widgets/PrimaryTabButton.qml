@@ -40,7 +40,8 @@ TabButton {
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: buttonIcon
-                font.pixelSize: 24
+                iconSize: Appearance.font.pixelSize.hugeass
+                fill: selected ? 1 : 0
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                 Behavior on color {
                     ColorAnimation {

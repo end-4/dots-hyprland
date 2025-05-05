@@ -29,7 +29,7 @@ Item {
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: iconName
-                font.pixelSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3onSecondaryContainer
             }
 

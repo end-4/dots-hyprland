@@ -251,7 +251,7 @@ Rectangle {
                 }
                 MaterialSymbol {
                     Layout.alignment: Text.AlignVCenter
-                    font.pixelSize: Appearance.font.pixelSize.larger
+                    iconSize: Appearance.font.pixelSize.larger
                     color: Appearance.m3colors.m3onSurface
                     text: "chevron_right"
                 }

@@ -26,7 +26,7 @@ Rectangle {
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: "screenshot_region"
-                font.pixelSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2
             }
 
@@ -39,7 +39,7 @@ Rectangle {
             MaterialSymbol {
                 anchors.centerIn: parent
                 text: "colorize"
-                font.pixelSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2
             }
 

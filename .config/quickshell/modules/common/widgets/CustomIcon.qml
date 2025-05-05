@@ -19,5 +19,6 @@ Item {
             }
             return root.source
         }
+        implicitSize: root.height
     }
 }

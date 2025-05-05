@@ -42,7 +42,7 @@ Button {
         MaterialSymbol {
             text: buttonIcon
             Layout.fillWidth: false
-            font.pixelSize: Appearance.font.pixelSize.larger
+            iconSize: Appearance.font.pixelSize.larger
             color: Appearance.colors.colOnLayer1
         }
         StyledText {

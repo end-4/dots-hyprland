@@ -12,10 +12,10 @@ QuickToggleButton {
     onClicked: {
         nightLightButton.enabled = !nightLightButton.enabled
         if (enabled) {
-            nightLightOn.running = true
+            nightLightOn.startDetached()
         } 
         else {
-            nightLightOff.running = true
+            nightLightOff.startDetached()
         }
     }
     Process {

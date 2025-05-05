@@ -64,7 +64,7 @@ Item {
                 }
                 contentItem: MaterialSymbol {
                     text: "chevron_left"
-                    font.pixelSize: Appearance.font.pixelSize.larger
+                    iconSize: Appearance.font.pixelSize.larger
                     horizontalAlignment: Text.AlignHCenter
                     color: Appearance.colors.colOnLayer1
                 }
@@ -76,7 +76,7 @@ Item {
                 }
                 contentItem: MaterialSymbol {
                     text: "chevron_right"
-                    font.pixelSize: Appearance.font.pixelSize.larger
+                    iconSize: Appearance.font.pixelSize.larger
                     horizontalAlignment: Text.AlignHCenter
                     color: Appearance.colors.colOnLayer1
                 }

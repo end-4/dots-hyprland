@@ -110,7 +110,7 @@ Button {
 
             contentItem: MaterialSymbol {
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Appearance.font.pixelSize.large
+                iconSize: Appearance.font.pixelSize.large
                 color: Appearance.m3colors.m3onSurface
                 text: "more_vert"
             }
