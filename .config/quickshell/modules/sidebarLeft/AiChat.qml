@@ -418,9 +418,9 @@ Item {
                         anchors.centerIn: parent
                         horizontalAlignment: Text.AlignHCenter
                         iconSize: Appearance.font.pixelSize.larger
-                        fill: sendButton.enabled ? 1 : 0
+                        // fill: sendButton.enabled ? 1 : 0
                         color: sendButton.enabled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2Disabled
-                        text: "arrow_upward"
+                        text: "send"
                     }
                 }
             }

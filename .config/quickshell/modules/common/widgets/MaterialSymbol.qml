@@ -7,6 +7,7 @@ Text {
     property real iconSize: Appearance.font.pixelSize.small
     property real fill: 0
     renderType: Text.NativeRendering
+    font.hintingPreference: Font.PreferFullHinting
     verticalAlignment: Text.AlignVCenter
     font.family: Appearance.font.family.iconMaterial
     font.pixelSize: iconSize
