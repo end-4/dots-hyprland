@@ -78,7 +78,6 @@ Button {
             visible: root.materialSymbol != ""
             text: root.materialSymbol
             iconSize: 30
-            fill: (root.hovered || root.focus) ? 1 : 0
             color: Appearance.m3colors.m3onSurface
         }
 
