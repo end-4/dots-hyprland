@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
@@ -23,11 +24,11 @@ Item {
         Image {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             visible: source != ""
-            sourceSize.width: 50
-            sourceSize.height: 50
+            sourceSize.width: 38
+            sourceSize.height: 38
             source: {
                 const icon = root.node.properties["application.icon-name"] ?? "audio-volume-high-symbolic";
-                return `image://icon/${icon}`;
+                return Quickshell.iconPath(icon);
             }
         }
 
