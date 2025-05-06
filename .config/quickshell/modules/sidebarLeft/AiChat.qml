@@ -179,6 +179,7 @@ Item {
                     values: root.messages
                 }
                 delegate: AiMessage {
+                    messageIndex: index
                     messageData: modelData
                     messageInputField: root.inputField
                 }
