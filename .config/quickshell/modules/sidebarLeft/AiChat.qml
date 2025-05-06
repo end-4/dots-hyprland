@@ -77,9 +77,23 @@ Item {
         },
         {
             name: "test",
-            description: qsTr("Markdown test message"),
+            description: qsTr("Markdown test"),
             execute: () => {
-                Ai.addMessage("## ✏️ Markdown test\n- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n", Ai.interfaceRole);
+                Ai.addMessage("## ✏️ Markdown test\n" 
+                    + "- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n\n"
+                    + "- Table:\n\n"
+                    + "|            | Quickshell | AGS/Astal |\n"
+                    + "|:-----------|:----------:|:---------:|\n"
+                    + "| UI Toolkit | Qt         | Gtk3/Gtk4 |\n"
+                    + "| Language   | QML        | Js/Ts/Lua |\n"
+                    + "| Reactivity | Implied | Needs declaration |\n"
+                    + "| Widget placement | Mildly difficult | More intuitive |\n"
+                    + "| Bluetooth & Wifi support | ❌ | ✅ |\n"
+                    + "| No-delay keybinds<br/><sup>(hyprland_global_shortcuts_v1)</sup> | ✅ | ❌ |\n"
+                    + "| Development | New APIs | New syntax |\n"
+                    + "- Code block"
+
+                , Ai.interfaceRole);
             }
         },
     ]
