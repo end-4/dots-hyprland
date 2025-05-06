@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import Qt5Compat.GraphicalEffects
 import Qt.labs.platform
 import QtQuick
@@ -272,8 +273,45 @@ Item { // Wrapper
                     values: {
                         if(root.searchingText == "") return [];
 
-                        // Start math and other non-app stuff
+                        // Start math calculation, declare special result objects
                         nonAppResultsTimer.restart();
+                        const mathResultObject = {
+                            name: root.mathResult,
+                            clickActionName: "Copy",
+                            type: qsTr("Math result"),
+                            fontType: "monospace",
+                            materialSymbol: 'calculate',
+                            execute: () => {
+                                Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(root.mathResult)}'`)
+                            }
+                        }
+                        const commandResultObject = {
+                            name: searchingText,
+                            clickActionName: "Run",
+                            type: qsTr("Run command"),
+                            fontType: "monospace",
+                            materialSymbol: 'terminal',
+                            execute: () => {
+                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
+                            }
+                        }
+                        const launcherActionObjects = root.searchActions
+                            .map(action => {
+                                const actionString = `${ConfigOptions.search.prefix.action}${action.action}`;
+                                if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
+                                    return {
+                                        name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
+                                        clickActionName: "Run",
+                                        type: "Action",
+                                        materialSymbol: 'settings_suggest',
+                                        execute: () => {
+                                            action.execute(root.searchingText.split(" ").slice(1).join(" "))
+                                        },
+                                    };
+                                }
+                                return null;
+                            })
+                            .filter(Boolean);
 
                         // Init result array
                         let result = [];
@@ -288,7 +326,9 @@ Item { // Wrapper
                                 })
                         );
 
-                        // Add non-app results
+                        // Add launcher actions
+                        result = result.concat(launcherActionObjects);
+
                         // Launcher actions
                         for (let action of root.searchActions) {
                             const actionString = `${ConfigOptions.search.prefix.action}${action.action}`
@@ -307,43 +347,15 @@ Item { // Wrapper
 
                         // Insert math result before command if search starts with a number
                         const startsWithNumber = /^\d/.test(root.searchingText);
-                        if (startsWithNumber) {
-                            result.push({
-                                name: root.mathResult,
-                                clickActionName: "Copy",
-                                type: qsTr("Math result"),
-                                fontType: "monospace",
-                                materialSymbol: 'calculate',
-                                execute: () => {
-                                    Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
-                                }
-                            });
-                        }
+                        if (startsWithNumber)
+                            result.push(mathResultObject);
 
                         // Command
-                        result.push({
-                            name: searchingText,
-                            clickActionName: "Run",
-                            type: qsTr("Run command"),
-                            fontType: "monospace",
-                            materialSymbol: 'terminal',
-                            execute: () => {
-                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
-                            }
-                        });
+                        result.push(commandResultObject);
 
                         // If not already added, add math result after command
                         if (!startsWithNumber) {
-                            result.push({
-                                name: root.mathResult,
-                                clickActionName: "Copy",
-                                type: qsTr("Math result"),
-                                fontType: "monospace",
-                                materialSymbol: 'calculate',
-                                execute: () => {
-                                    Hyprland.dispatch(`exec wl-copy '${root.mathResult}'`)
-                                }
-                            });
+                            result.push(mathResultObject);
                         }
 
                         // Web search
