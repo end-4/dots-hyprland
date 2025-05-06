@@ -37,6 +37,35 @@ Singleton {
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
+            // "extraParams": {
+            //     "tools": [
+            //         {
+            //             "google_search": {}
+            //         }
+            //     ]
+            // }
+        },
+        "openrouter-llama4-maverick": {
+            "name": "Llama 4 Maverick (OpenRouter)",
+            "icon": "ollama-symbolic",
+            "description": "Online | OpenRouter | Meta's model",
+            "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
+            "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+            "model": "meta-llama/llama-4-maverick:free",
+            "requires_key": true,
+            "key_id": "openrouter",
+            "key_get_link": "https://openrouter.ai/settings/keys",
+        },
+        "openrouter-deepseek-r1": {
+            "name": "DeepSeek R1 (OpenRouter)",
+            "icon": "deepseek-symbolic",
+            "description": "Online | OpenRouter | DeepSeek's reasoning model",
+            "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
+            "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+            "model": "deepseek/deepseek-r1:free",
+            "requires_key": true,
+            "key_id": "openrouter",
+            "key_get_link": "https://openrouter.ai/settings/keys",
         },
     }
     property var modelList: Object.keys(root.models)
@@ -80,7 +109,7 @@ Singleton {
                         root.models[model] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
-                            "description": `Local Ollama model: ${model}`,
+                            "description": `Local (Ollama) | ${model}`,
                             "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
@@ -105,6 +134,12 @@ Singleton {
             "done": true,
         });
         root.messages = [...root.messages, aiMessage];
+    }
+
+    function removeMessage(index) {
+        if (index < 0 || index >= messages.length) return;
+        root.messages.splice(index, 1);
+        root.messages = [...root.messages];
     }
 
     function setModel(model, feedback = true) {
@@ -161,6 +196,7 @@ Singleton {
         id: requester
         property var baseCommand: ["bash", "-c"]
         property var message
+        property bool isReasoning
 
         function makeRequest() {
             const model = models[currentModel];
@@ -178,6 +214,7 @@ Singleton {
                 "stream": true,
             };
             let data = model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
+
             
             let requestHeaders = {
                 "Content-Type": "application/json",
@@ -214,6 +251,9 @@ Singleton {
                 + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
             // console.log("Request command: ", requestCommandString);
             requester.command = baseCommand.concat([requestCommandString]);
+
+            /* Reset vars and make the request */
+            requester.isReasoning = false
             requester.running = true
         }
 
@@ -227,7 +267,9 @@ Singleton {
                     cleanData = cleanData.slice(5).trim();
                 }
                 // console.log("Clean data: ", cleanData);
-                if (!cleanData) return;
+                if (!cleanData ||
+                    cleanData === ": OPENROUTER PROCESSING"
+                ) return;
 
                 if (requester.message.thinking) requester.message.thinking = false;
                 try {
@@ -236,15 +278,31 @@ Singleton {
                         return;
                     }
                     const dataJson = JSON.parse(cleanData);
-                    const newContent = 
-                        (dataJson.message?.content) ?? // Ollama
-                        (dataJson.choices[0]?.delta?.content) ?? // Normal 
-                        (dataJson.choices[0]?.delta?.reasoning_content) // Deepseek thinking
+
+                    let newContent = "";
+                    const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
+                    const responseReasoning = dataJson.choices[0]?.delta?.reasoning || dataJson.choices[0]?.delta?.reasoning_content;
+
+                    if (responseContent && responseContent.length > 0) {
+                        if (requester.isReasoning) {
+                            requester.isReasoning = false;
+                            requester.message.content += "\n\n</think>\n\n";
+                        }
+                        newContent = dataJson.choices[0]?.delta?.content || dataJson.message.content;
+                    } else if (responseReasoning && responseReasoning.length > 0) {
+                        // console.log("Reasoning content: ", dataJson.choices[0].delta.reasoning);
+                        if (!requester.isReasoning) {
+                            requester.isReasoning = true;
+                            requester.message.content += "\n\n<think>\n\n";
+                        } 
+                        newContent = dataJson.choices[0].delta.reasoning || dataJson.choices[0].delta.reasoning_content;
+                    }
 
                     requester.message.content += newContent;
 
                     if (dataJson.done) requester.message.done = true;
                 } catch (e) {
+                    console.log("Could not parse response: ", e);
                     requester.message.content += cleanData;
                 }
             }
