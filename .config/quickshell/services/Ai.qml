@@ -25,15 +25,18 @@ Singleton {
     // - model: Model name of the model
     // - requires_key: Whether the model requires an API key
     // - key_id: The identifier of the API key. Use the same identifier for models that can be accessed with the same key.
+    // - key_get_link: Link to get the API key
     property var models: {
         "gemini-2.0-flash": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": "Online Gemini 2.0 Flash",
+            "description": "Online | Google's model",
+            "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
             "model": "gemini-2.0-flash",
             "requires_key": true,
             "key_id": "gemini",
+            "key_get_link": "https://aistudio.google.com/app/apikey",
         },
     }
     property var modelList: Object.keys(root.models)
@@ -54,11 +57,14 @@ Singleton {
 
     function guessModelName(model) {
         const replaced = model.replace(/-/g, ' ').replace(/:/g, ' ');
-        const words = replaced.split(' ');
+        let words = replaced.split(' ');
         words[words.length - 1] = words[words.length - 1].replace(/(\d+)b$/, (_, num) => `${num}B`)
+        words = words.map((word) => {
+            return (word.charAt(0).toUpperCase() + word.slice(1))
+        });
         words[words.length - 1] = `[${words[words.length - 1]}]`; // Surround the last word with square brackets
         const result = words.join(' ');
-        return result.charAt(0).toUpperCase() + result.slice(1); // Capitalize the first letter
+        return result;
     }
 
     Process {
@@ -75,6 +81,7 @@ Singleton {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
                             "description": `Local Ollama model: ${model}`,
+                            "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
                         }
@@ -115,17 +122,21 @@ Singleton {
     }
 
     function setApiKey(key) {
-        if (!key || key.length === 0) {
-            root.addMessage("Please enter an API key with the command", Ai.interfaceRole);
+        const model = models[currentModel];
+        if (!model.requires_key) {
+            root.addMessage(`${model.name} does not require an API key`, Ai.interfaceRole);
             return;
         }
-        const model = models[currentModel];
-        if (model.requires_key) {
-            KeyringStorage.setNestedField(["apiKeys", model.key_id], key);
-            root.addMessage("API key set for " + model.name, Ai.interfaceRole);
-        } else {
-            root.addMessage(`This model (${model.name}) does not require an API key`, Ai.interfaceRole);
+        if (!key || key.length === 0) {
+            root.addMessage(
+                StringUtils.format(qsTr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/><br/>For {0}, you can grab one at:\n\n{1}'), 
+                    models[currentModel].name, models[currentModel].key_get_link), 
+                Ai.interfaceRole
+            );
+            return;
         }
+        KeyringStorage.setNestedField(["apiKeys", model.key_id], key);
+        root.addMessage("API key set for " + model.name, Ai.interfaceRole);
     }
 
     function printApiKey() {
@@ -133,9 +144,9 @@ Singleton {
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
-                root.addMessage("API key: \n\n`" + key + "`", Ai.interfaceRole);
+                root.addMessage(StringUtils.format(qsTr("API key:\n\n`{0}`"), key), Ai.interfaceRole);
             } else {
-                root.addMessage("No API key set for " + model.name, Ai.interfaceRole);
+                root.addMessage(StringUtils.format(qsTr("No API key set for {0}"), model.name), Ai.interfaceRole);
             }
         } else {
             root.addMessage(`This model (${model.name}) does not require an API key`, Ai.interfaceRole);
@@ -225,10 +236,12 @@ Singleton {
                         return;
                     }
                     const dataJson = JSON.parse(cleanData);
-                    requester.message.content += 
+                    const newContent = 
                         (dataJson.message?.content) ?? // Ollama
                         (dataJson.choices[0]?.delta?.content) ?? // Normal 
                         (dataJson.choices[0]?.delta?.reasoning_content) // Deepseek thinking
+
+                    requester.message.content += newContent;
 
                     if (dataJson.done) requester.message.done = true;
                 } catch (e) {

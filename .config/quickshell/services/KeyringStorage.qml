@@ -28,17 +28,34 @@ Singleton {
 
     function setNestedField(path, value) {
         if (!root.keyringData) root.keyringData = {};
-        let keys = path
+        let keys = path;
         let obj = root.keyringData;
+        let parents = [obj];
+
+        // Traverse and collect parent objects
         for (let i = 0; i < keys.length - 1; ++i) {
             if (!obj[keys[i]] || typeof obj[keys[i]] !== "object") {
                 obj[keys[i]] = {};
             }
             obj = obj[keys[i]];
+            parents.push(obj);
         }
+
+        // Set the value at the innermost key
         obj[keys[keys.length - 1]] = value;
-        // console.log("[KeyringStorage] Updated keyring data:", JSON.stringify(root.keyringData));
-        saveKeyringData()
+
+        // Reassign each parent object from the bottom up to trigger change notifications
+        for (let i = keys.length - 2; i >= 0; --i) {
+            let parent = parents[i];
+            let key = keys[i];
+            // Shallow clone to change object identity (spread replaced with Object.assign)
+            parent[key] = Object.assign({}, parent[key]);
+        }
+
+        // Finally, reassign root.keyringData to trigger top-level change
+        root.keyringData = Object.assign({}, root.keyringData);
+
+        saveKeyringData();
     }
 
     function fetchKeyringData() {
