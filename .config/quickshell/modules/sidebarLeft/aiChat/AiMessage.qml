@@ -201,8 +201,8 @@ Rectangle {
             font.family: Appearance.font.family.reading
             font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
             font.pixelSize: Appearance.font.pixelSize.small
-            selectedTextColor: Appearance.m3colors.m3onPrimary
-            selectionColor: Appearance.m3colors.m3primary
+            selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+            selectionColor: Appearance.m3colors.m3secondaryContainer
             wrapMode: Text.WordWrap
             color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
             textFormat: root.renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText

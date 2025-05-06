@@ -195,8 +195,8 @@ Item { // Wrapper
                     padding: 15
                     renderType: Text.NativeRendering
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    selectedTextColor: Appearance.m3colors.m3onPrimary
-                    selectionColor: Appearance.m3colors.m3primary
+                    selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+                    selectionColor: Appearance.m3colors.m3secondaryContainer
                     placeholderText: qsTr("Search, calculate or run")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
