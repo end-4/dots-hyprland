@@ -275,7 +275,7 @@ class GPTService extends Service {
                                 aiResponse.addDelta(`<think>\n${result.choices[0].delta.reasoning_content}`);
                             }
                             else {
-                                aiResponse.addDelta(`<think>\n${result.choices[0].delta.reasoning_content}`);
+                                aiResponse.addDelta(`${result.choices[0].delta.reasoning_content}`);
                             }
                         }
                         else {
