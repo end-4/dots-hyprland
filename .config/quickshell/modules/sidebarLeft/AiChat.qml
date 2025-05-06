@@ -82,16 +82,24 @@ Item {
                 Ai.addMessage("## ✏️ Markdown test\n" 
                     + "- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n\n"
                     + "- Table:\n\n"
-                    + "|            | Quickshell | AGS/Astal |\n"
-                    + "|:-----------|:----------:|:---------:|\n"
-                    + "| UI Toolkit | Qt         | Gtk3/Gtk4 |\n"
-                    + "| Language   | QML        | Js/Ts/Lua |\n"
-                    + "| Reactivity | Implied | Needs declaration |\n"
-                    + "| Widget placement | Mildly difficult | More intuitive |\n"
-                    + "| Bluetooth & Wifi support | ❌ | ✅ |\n"
-                    + "| No-delay keybinds<br/><sup>(hyprland_global_shortcuts_v1)</sup> | ✅ | ❌ |\n"
-                    + "| Development | New APIs | New syntax |\n"
-                    + "- Code block"
+                    + "|                          | Quickshell       | AGS/Astal         |\n"
+                    + "|:-------------------------|:----------------:|:-----------------:|\n"
+                    + "| UI Toolkit               | Qt               | Gtk3/Gtk4         |\n"
+                    + "| Language                 | QML              | Js/Ts/Lua         |\n"
+                    + "| Reactivity               | Implied          | Needs declaration |\n"
+                    + "| Widget placement         | Mildly difficult | More intuitive    |\n"
+                    + "| Bluetooth & Wifi support | ❌               | ✅                |\n"
+                    + "| No-delay keybinds        | ✅               | ❌                |\n"
+                    + "| Development              | New APIs         | New syntax        |\n"
+                    + "- Code block\n"
+                    + "```cpp\n"
+                    + "#include <bits/stdc++.h>\n"
+                    + "const std::string GREETING = \"UwU\";\n"
+                    + "int main(int argc, char* argv[]) {\n"
+                    + "    std::cout << GREETING;\n"
+                    + "}\n"
+                    + "```\n"
+
 
                 , Ai.interfaceRole);
             }
@@ -152,6 +160,15 @@ Item {
                     NumberAnimation { 
                         property: "opacity"
                         from: 0; to: 1
+                        duration: Appearance.animation.elementMoveEnter.duration
+                        easing.type: Appearance.animation.elementMoveEnter.type
+                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                    }
+                }
+                remove: Transition {
+                    NumberAnimation { 
+                        property: "opacity"
+                        from: 1; to: 0
                         duration: Appearance.animation.elementMoveEnter.duration
                         easing.type: Appearance.animation.elementMoveEnter.type
                         easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
