@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/services"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -121,7 +122,7 @@ Item {
         }
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
-                Hyprland.dispatch(`exec wl-copy '${notificationObject.body}'`)
+                Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
                 notificationSummaryText.text = `${notificationObject.summary} (copied)`
             }
         }
@@ -537,7 +538,7 @@ Item {
                             (contentItem.implicitWidth + leftPadding + rightPadding)
 
                         onClicked: {
-                            Hyprland.dispatch(`exec wl-copy '${notificationObject.body}'`)
+                            Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
                             copyIcon.text = "inventory"
                             copyIconTimer.stop()
                             copyIconTimer.start()
