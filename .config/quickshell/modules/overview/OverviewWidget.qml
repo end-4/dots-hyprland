@@ -72,14 +72,19 @@ Item {
                             id: workspace
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * ConfigOptions.overview.numOfCols + colIndex + 1
-                            property color defaultColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
+                            property color defaultWorkspaceColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
+                            property color hoveredWorkspaceColor: Appearance.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
+                            property color hoveredBorderColor: Appearance.colors.colLayer2Hover
+                            property color activeBorderColor: Appearance.m3colors.m3secondary
+                            property bool hovered: false
 
                             implicitWidth: root.workspaceImplicitWidth
                             implicitHeight: root.workspaceImplicitHeight
-                            color: defaultColor
+                            color: hovered ? hoveredWorkspaceColor : defaultWorkspaceColor
                             radius: Appearance.rounding.screenRounding * root.scale
                             border.width: 2
-                            border.color: "transparent"
+                            border.color: monitor.activeWorkspace?.id == workspaceValue ? activeBorderColor : 
+                                hovered ? hoveredBorderColor : "transparent"
 
                             MouseArea {
                                 id: workspaceArea
@@ -99,12 +104,10 @@ Item {
                                 onEntered: {
                                     root.draggingTargetWorkspace = workspaceValue
                                     if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
-                                    border.color = Appearance.colors.colLayer2Hover
-                                    workspace.color = Appearance.mix(defaultColor, Appearance.colors.colLayer1Hover, 0.1)
+                                    hovered = true
                                 }
                                 onExited: {
-                                    border.color = "transparent"
-                                    workspace.color = defaultColor
+                                    hovered = false
                                     if (root.draggingTargetWorkspace == workspaceValue) root.draggingTargetWorkspace = -1
                                 }
                             }
