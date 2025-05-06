@@ -151,6 +151,7 @@ Item {
             ListView { // Booru responses
                 id: booruResponseListView
                 anchors.fill: parent
+                spacing: 10
                 
                 property int lastResponseLength: 0
 
@@ -173,7 +174,16 @@ Item {
                     }
                 }
 
-                spacing: 10
+                add: Transition {
+                    NumberAnimation { 
+                        property: "opacity"
+                        from: 0; to: 1
+                        duration: Appearance.animation.elementMoveEnter.duration
+                        easing.type: Appearance.animation.elementMoveEnter.type
+                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                    }
+                }
+
                 model: ScriptModel {
                     values: {
                         if(root.responses.length > booruResponseListView.lastResponseLength) {
