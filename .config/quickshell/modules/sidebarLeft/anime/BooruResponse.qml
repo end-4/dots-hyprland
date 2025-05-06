@@ -23,7 +23,7 @@ Rectangle {
     property string nsfwPath
 
     property real availableWidth: parent.width
-    property real rowTooShortThreshold: 185
+    property real rowTooShortThreshold: 190
     property real imageSpacing: 5
     property real responsePadding: 5
 
@@ -103,7 +103,6 @@ Rectangle {
             visible: root.responseData.tags.length > 0
             Layout.alignment: Qt.AlignLeft
             Layout.fillWidth: {
-                console.log(root.responseData)
                 return true
             }
             implicitHeight: tagRowLayout.implicitHeight
@@ -181,42 +180,59 @@ Rectangle {
         Repeater {
             model: ScriptModel {
                 values: {
-                    // Group two images every row, ensuring they are of the same height
-                    // If the height ends up being too small, put one image in the row and continue
-                    // In other words, this is similar to Android's gallery layout at largest zoom level
+                    // Greedily add images to a row as long as rowHeight >= rowTooShortThreshold
                     let i = 0;
                     let rows = [];
                     const responseList = root.responseData.images;
+                    const minRowHeight = rowTooShortThreshold;
+                    const availableImageWidth = availableWidth - root.imageSpacing - (responsePadding * 2);
+
                     while (i < responseList.length) {
                         let row = {
                             height: 0,
                             images: [],
                         };
-                        const availableImageWidth = availableWidth - root.imageSpacing - (responsePadding * 2)
-                        if (i + 1 < responseList.length) {
-                            const img1 = responseList[i];
-                            const img2 = responseList[i + 1];
-                            // Calculate combined height if both are in the same row
-                            // Let h = row height, w1 = h * aspect1, w2 = h * aspect2
-                            // w1 + w2 = availableWidth => h = availableWidth / (aspect1 + aspect2)
-                            const combinedAspect = img1.aspect_ratio + img2.aspect_ratio;
-                            const rowHeight = availableImageWidth / combinedAspect;
-                            if (rowHeight >= rowTooShortThreshold) {
-                                row.height = rowHeight;
-                                row.images.push(img1);
-                                row.images.push(img2);
-                                rows.push(row);
-                                i += 2;
-                                continue;
+                        let j = i;
+                        let combinedAspect = 0;
+                        let rowHeight = 0;
+
+                        // Try to add as many images as possible without going below minRowHeight
+                        while (j < responseList.length) {
+                            combinedAspect += responseList[j].aspect_ratio;
+                            // Subtract imageSpacing for each gap between images in the row
+                            let imagesInRow = j - i + 1;
+                            let totalSpacing = root.imageSpacing * (imagesInRow - 1);
+                            let rowAvailableWidth = availableImageWidth - totalSpacing;
+                            rowHeight = rowAvailableWidth / combinedAspect;
+                            if (rowHeight < minRowHeight) {
+                                combinedAspect -= responseList[j].aspect_ratio;
+                                imagesInRow -= 1;
+                                totalSpacing = root.imageSpacing * (imagesInRow - 1);
+                                rowAvailableWidth = availableImageWidth - totalSpacing;
+                                rowHeight = rowAvailableWidth / combinedAspect;
+                                break;
                             }
+                            j++;
                         }
-                        // Otherwise, put only one image in the row
-                        const rowHeight = (availableWidth - (responsePadding * 2)) / responseList[i].aspect_ratio;
-                        rows.push({
-                            height: rowHeight,
-                            images: [responseList[i]],
-                        });
-                        i += 1;
+
+                        // If we couldn't add any image (shouldn't happen), add at least one
+                        if (j === i) {
+                            row.images.push(responseList[i]);
+                            row.height = availableImageWidth / responseList[i].aspect_ratio;
+                            rows.push(row);
+                            i++;
+                        } else {
+                            for (let k = i; k < j; k++) {
+                                row.images.push(responseList[k]);
+                            }
+                            // Recalculate spacing for the final row
+                            let imagesInRow = j - i;
+                            let totalSpacing = root.imageSpacing * (imagesInRow - 1);
+                            let rowAvailableWidth = availableImageWidth - totalSpacing;
+                            row.height = rowAvailableWidth / combinedAspect;
+                            rows.push(row);
+                            i = j;
+                        }
                     }
                     return rows;
                 }

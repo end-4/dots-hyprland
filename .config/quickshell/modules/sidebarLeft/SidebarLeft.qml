@@ -118,7 +118,6 @@ Scope { // Scope
                             sidebarRoot.currentTab = (sidebarRoot.currentTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
                         }
                         else if (event.key === Qt.Key_O) {
-                            console.log("Extending sidebar")
                             sidebarRoot.extend = !sidebarRoot.extend;
                         }
                         event.accepted = true;
