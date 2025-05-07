@@ -79,29 +79,45 @@ Item {
             name: "test",
             description: qsTr("Markdown test"),
             execute: () => {
-                Ai.addMessage("## ✏️ Markdown test\n" 
-                    + "- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n\n"
-                    + "- Table:\n\n"
-                    + "|                          | Quickshell       | AGS/Astal         |\n"
-                    + "|--------------------------|------------------|-------------------|\n"
-                    + "| UI Toolkit               | Qt               | Gtk3/Gtk4         |\n"
-                    + "| Language                 | QML              | Js/Ts/Lua         |\n"
-                    + "| Reactivity               | Implied          | Needs declaration |\n"
-                    + "| Widget placement         | Mildly difficult | More intuitive    |\n"
-                    + "| Bluetooth & Wifi support | ❌               | ✅                |\n"
-                    + "| No-delay keybinds        | ✅               | ❌                |\n"
-                    + "| Development              | New APIs         | New syntax        |\n"
-                    + "- Code block\n"
-                    + "```cpp\n"
-                    + "#include <bits/stdc++.h>\n"
-                    + "const std::string GREETING = \"UwU\";\n"
-                    + "int main(int argc, char* argv[]) {\n"
-                    + "    std::cout << GREETING;\n"
-                    + "}\n"
-                    + "```\n"
+                Ai.addMessage(`
+## ✏️ Markdown test
+### Formatting
 
+*Italic*, \`Monospace\`, **Bold**, [Link](https://example.com)
 
-                , Ai.interfaceRole);
+### Table
+
+Quickshell vs AGS/Astal
+
+|                          | Quickshell       | AGS/Astal         |
+|--------------------------|------------------|-------------------|
+| UI Toolkit               | Qt               | Gtk3/Gtk4         |
+| Language                 | QML              | Js/Ts/Lua         |
+| Reactivity               | Implied          | Needs declaration |
+| Widget placement         | Mildly difficult | More intuitive    |
+| Bluetooth & Wifi support | ❌               | ✅                |
+| No-delay keybinds        | ✅               | ❌                |
+| Development              | New APIs         | New syntax        |
+
+### Code block
+
+Just a hello world...
+
+\`\`\`cpp
+#include <bits/stdc++.h>
+// This is intentionally very long to test scrolling
+const std::string GREETING = \"UwU\";
+int main(int argc, char* argv[]) {
+    std::cout << GREETING;
+}
+\`\`\`
+
+### LaTeX
+
+Inline: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+
+`, 
+                    Ai.interfaceRole);
             }
         },
     ]

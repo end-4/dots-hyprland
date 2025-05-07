@@ -14,7 +14,6 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 import org.kde.syntaxhighlighting
-// import org.kde.kirigami as Kirigami
 
 Rectangle {
     id: root
@@ -25,6 +24,7 @@ Rectangle {
     property real messagePadding: 7
     property real contentSpacing: 3
     property real codeBlockBackgroundRounding: Appearance.rounding.small
+    property real codeBlockHeaderPadding: 3
     property real codeBlockComponentSpacing: 2
 
     property bool renderMarkdown: true
@@ -36,6 +36,46 @@ Rectangle {
 
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
+
+    function saveMessage() {
+        if (!root.editing) return;
+        // Get all Loader children (each represents a segment)
+        const segments = messageContentColumnLayout.children
+            .map(child => child.segment)
+            .filter(segment => (segment));
+        // console.log("Segments: " + JSON.stringify(segments))
+
+        // Reconstruct markdown
+        const newContent = segments.map(segment => {
+            if (segment.type === "code") {
+                const lang = segment.lang ? segment.lang : "";
+                // Remove trailing newlines
+                const code = segment.content.replace(/\n+$/, "");
+                return "```" + lang + "\n" + code + "\n```";
+            } else {
+                return segment.content;
+            }
+        }).join("");
+
+        root.editing = false
+        root.messageData.content = newContent;
+    }
+
+    Keys.onPressed: (event) => {
+        if ( // Prevent de-select
+            event.key === Qt.Key_Control || 
+            event.key == Qt.Key_Shift || 
+            event.key == Qt.Key_Alt || 
+            event.key == Qt.Key_Meta
+        ) {
+            event.accepted = true
+        }
+        // Ctrl + S to save
+        if ((event.key === Qt.Key_S) && event.modifiers == Qt.ControlModifier) {
+            root.saveMessage();
+            event.accepted = true;
+        }
+    }
 
     ColumnLayout {
         id: columnLayout
@@ -149,29 +189,12 @@ Rectangle {
                 AiMessageControlButton {
                     id: editButton
                     activated: root.editing
+                    enabled: root.messageData.done
                     buttonIcon: "edit"
                     onClicked: {
                         root.editing = !root.editing
                         if (!root.editing) { // Save changes
-                            // Get all Loader children (each represents a segment)
-                            const segments = messageContentColumnLayout.children
-                                .map(child => child.segment)
-                                .filter(segment => (segment));
-                            // console.log("Segments: " + JSON.stringify(segments))
-
-                            // Reconstruct markdown
-                            const newContent = segments.map(segment => {
-                                if (segment.type === "code") {
-                                    const lang = segment.lang ? segment.lang : "";
-                                    // Remove trailing newlines
-                                    const code = segment.content.replace(/\n+$/, "");
-                                    return "```" + lang + "\n" + code + "\n```";
-                                } else {
-                                    return segment.content;
-                                }
-                            }).join("");
-
-                            root.messageData.content = newContent;
+                            root.saveMessage()
                         }
                     }
                     StyledToolTip {
@@ -204,6 +227,8 @@ Rectangle {
 
         ColumnLayout {
             id: messageContentColumnLayout
+
+            spacing: 0
             Repeater {
                 model: ScriptModel {
                     values: {
@@ -223,6 +248,7 @@ Rectangle {
         Component { // Text block
             id: textBlockComponent
             TextArea {
+                Layout.fillWidth: true
                 readOnly: !root.editing
                 renderType: Text.NativeRendering
                 font.family: Appearance.font.family.reading
@@ -240,9 +266,6 @@ Rectangle {
                 }
 
                 Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Control || event.key == Qt.Key_Shift || event.key == Qt.Key_Alt || event.key == Qt.Key_Meta) { // Prevent de-select
-                        event.accepted = true
-                    }
                     if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
                         messageText.copy()
                         event.accepted = true
@@ -267,7 +290,8 @@ Rectangle {
             id: codeBlockComponent
             ColumnLayout {
                 spacing: codeBlockComponentSpacing
-                Layout.fillWidth: true
+                anchors.left: parent.left
+                anchors.right: parent.right
 
                 Rectangle { // Code background
                     Layout.fillWidth: true
@@ -276,10 +300,15 @@ Rectangle {
                     bottomLeftRadius: Appearance.rounding.unsharpen
                     bottomRightRadius: Appearance.rounding.unsharpen
                     color: Appearance.m3colors.m3surfaceContainerHighest
-                    implicitHeight: codeBlockTitleBarRowLayout.implicitHeight
+                    implicitHeight: codeBlockTitleBarRowLayout.implicitHeight + codeBlockHeaderPadding * 2
 
                     RowLayout { // Language and buttons
                         id: codeBlockTitleBarRowLayout
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: codeBlockHeaderPadding
+                        anchors.rightMargin: codeBlockHeaderPadding
                         spacing: 5
 
                         StyledText {
@@ -296,6 +325,19 @@ Rectangle {
                         }
 
                         Item { Layout.fillWidth: true }
+
+                        AiMessageControlButton {
+                            id: copyCodeButton
+                            buttonIcon: "content_copy"
+                            onClicked: {
+                                Hyprland.dispatch(`exec wl-copy '${StringUtils.unEscapeBackslashes(
+                                    StringUtils.shellSingleQuoteEscape(segment.content)
+                                )}'`)
+                            }
+                            StyledToolTip {
+                                content: qsTr("Copy code")
+                            }
+                        }
                     }
                 }
 
@@ -342,7 +384,6 @@ Rectangle {
                         topRightRadius: Appearance.rounding.unsharpen
                         bottomRightRadius: codeBlockBackgroundRounding
                         color: Appearance.colors.colLayer2
-                        // implicitWidth: codeTextArea.implicitWidth
                         implicitHeight: codeTextArea.implicitHeight
 
                         ScrollView {
@@ -350,11 +391,35 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             implicitWidth: parent.width
-                            implicitHeight: codeTextArea.contentHeight
-                            contentWidth: codeTextArea.contentWidth
-                            contentHeight: codeTextArea.contentHeight
+                            implicitHeight: codeTextArea.implicitHeight + 1
+                            contentWidth: codeTextArea.width - 1
+                            // contentHeight: codeTextArea.contentHeight
                             clip: true
                             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                            
+                            ScrollBar.horizontal: ScrollBar {
+                                anchors.bottom: parent.bottom
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                padding: 5
+                                policy: ScrollBar.AsNeeded
+                                opacity: visualSize == 1 ? 0 : 1
+                                visible: opacity > 0
+
+                                Behavior on opacity {
+                                    NumberAnimation {
+                                        duration: Appearance.animation.elementMoveFast.duration
+                                        easing.type: Appearance.animation.elementMoveFast.type
+                                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                                    }
+                                }
+                                
+                                contentItem: Rectangle {
+                                    implicitHeight: 6
+                                    radius: Appearance.rounding.small
+                                    color: Appearance.colors.colLayer2Active
+                                }
+                            }
 
                             TextArea { // Code
 
@@ -381,13 +446,6 @@ Rectangle {
                                         const cursor = codeTextArea.cursorPosition;
                                         codeTextArea.insert(cursor, "    ");
                                         codeTextArea.cursorPosition = cursor + 4;
-                                        event.accepted = true;
-                                    } else if (
-                                        event.key === Qt.Key_Control ||
-                                        event.key == Qt.Key_Shift ||
-                                        event.key == Qt.Key_Alt ||
-                                        event.key == Qt.Key_Meta
-                                    ) {
                                         event.accepted = true;
                                     } else if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
                                         messageText.copy();

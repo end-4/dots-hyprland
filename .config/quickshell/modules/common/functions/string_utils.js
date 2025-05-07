@@ -33,3 +33,7 @@ function splitMarkdownBlocks(markdown) {
     }
     return result;
 }
+
+function unEscapeBackslashes(str) {
+    return str.replace(/\\\\/g, '\\');
+}
