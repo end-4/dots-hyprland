@@ -11,6 +11,7 @@ Singleton {
     property QtObject rounding
     property QtObject font
     property QtObject sizes
+    property string syntaxHighlightingTheme
 
     function mix(color1, color2, percentage) {
         var c1 = Qt.color(color1);
@@ -238,4 +239,5 @@ Singleton {
         property int fabHoveredShadowRadius: 7
     }
 
+    syntaxHighlightingTheme: Appearance.m3colors.darkmode ? "Monokai" : "ayu Light"
 }

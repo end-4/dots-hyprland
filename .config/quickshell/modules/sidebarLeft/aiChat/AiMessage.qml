@@ -13,6 +13,8 @@ import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
+import org.kde.syntaxhighlighting
+// import org.kde.kirigami as Kirigami
 
 Rectangle {
     id: root
@@ -22,6 +24,8 @@ Rectangle {
 
     property real messagePadding: 7
     property real contentSpacing: 3
+    property real codeBlockBackgroundRounding: Appearance.rounding.small
+    property real codeBlockComponentSpacing: 2
 
     property bool renderMarkdown: true
     property bool editing: false
@@ -149,7 +153,25 @@ Rectangle {
                     onClicked: {
                         root.editing = !root.editing
                         if (!root.editing) { // Save changes
-                            root.messageData.content = messageText.text
+                            // Get all Loader children (each represents a segment)
+                            const segments = messageContentColumnLayout.children
+                                .map(child => child.segment)
+                                .filter(segment => (segment));
+                            // console.log("Segments: " + JSON.stringify(segments))
+
+                            // Reconstruct markdown
+                            const newContent = segments.map(segment => {
+                                if (segment.type === "code") {
+                                    const lang = segment.lang ? segment.lang : "";
+                                    // Remove trailing newlines
+                                    const code = segment.content.replace(/\n+$/, "");
+                                    return "```" + lang + "\n" + code + "\n```";
+                                } else {
+                                    return segment.content;
+                                }
+                            }).join("");
+
+                            root.messageData.content = newContent;
                         }
                     }
                     StyledToolTip {
@@ -159,15 +181,12 @@ Rectangle {
                 AiMessageControlButton {
                     id: toggleMarkdownButton
                     activated: !root.renderMarkdown
-                    buttonIcon: root.renderMarkdown ? "wysiwyg" : "code"
+                    buttonIcon: "code"
                     onClicked: {
                         root.renderMarkdown = !root.renderMarkdown
-                        if (root.renderMarkdown && messageData.finished) {
-                            messageText.text = root.messageData.content
-                        }
                     }
                     StyledToolTip {
-                        content: qsTr("Toggle Markdown rendering")
+                        content: qsTr("View Markdown source")
                     }
                 }
                 AiMessageControlButton {
@@ -183,45 +202,214 @@ Rectangle {
             }
         }
 
-        TextEdit { // Message
-            id: messageText
-            Layout.fillWidth: true
-            Layout.margins: messagePadding
-            readOnly: !root.editing
-            selectByMouse: true
-
-            renderType: Text.NativeRendering
-            font.family: Appearance.font.family.reading
-            font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
-            font.pixelSize: Appearance.font.pixelSize.small
-            selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-            selectionColor: Appearance.m3colors.m3secondaryContainer
-            wrapMode: Text.WordWrap
-            color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
-            textFormat: root.renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText
-            text: messageData.thinking ? qsTr("Waiting for response...") : root.messageData.content
-
-            Keys.onPressed: (event) => {
-                if (event.key === Qt.Key_Control) { // Prevent de-select
-                    event.accepted = true
+        ColumnLayout {
+            id: messageContentColumnLayout
+            Repeater {
+                model: ScriptModel {
+                    values: {
+                        const result = StringUtils.splitMarkdownBlocks(root.messageData.content)
+                        // console.log(JSON.stringify(result))
+                        return result
+                    }
                 }
-                if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
-                    messageText.copy()
-                    event.accepted = true
+                delegate: Loader {
+                    Layout.fillWidth: true
+                    property var segment: modelData
+                    sourceComponent: modelData.type === "code" ? codeBlockComponent : textBlockComponent
                 }
-            }
-            
-            onLinkActivated: (link) => {
-                Qt.openUrlExternally(link)
-                Hyprland.dispatch("global quickshell:sidebarLeftClose")
-            }
-            MouseArea {
-                anchors.fill: parent
-                acceptedButtons: Qt.NoButton // Only for hover
-                hoverEnabled: true
-                cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.IBeamCursor
             }
         }
+
+        Component { // Text block
+            id: textBlockComponent
+            TextArea {
+                readOnly: !root.editing
+                renderType: Text.NativeRendering
+                font.family: Appearance.font.family.reading
+                font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
+                font.pixelSize: Appearance.font.pixelSize.small
+                selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+                selectionColor: Appearance.m3colors.m3secondaryContainer
+                wrapMode: TextEdit.Wrap
+                color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
+                textFormat: root.renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText
+                text: messageData.thinking ? qsTr("Waiting for response...") : segment.content
+
+                onTextChanged: {
+                    segment.content = text
+                }
+
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Control || event.key == Qt.Key_Shift || event.key == Qt.Key_Alt || event.key == Qt.Key_Meta) { // Prevent de-select
+                        event.accepted = true
+                    }
+                    if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
+                        messageText.copy()
+                        event.accepted = true
+                    }
+                }
+
+                onLinkActivated: (link) => {
+                    Qt.openUrlExternally(link)
+                    Hyprland.dispatch("global quickshell:sidebarLeftClose")
+                }
+
+                MouseArea { // Pointing hand for links
+                    anchors.fill: parent
+                    acceptedButtons: Qt.NoButton // Only for hover
+                    hoverEnabled: true
+                    cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.IBeamCursor
+                }
+            }
+        }
+
+        Component { // Code block
+            id: codeBlockComponent
+            ColumnLayout {
+                spacing: codeBlockComponentSpacing
+                Layout.fillWidth: true
+
+                Rectangle { // Code background
+                    Layout.fillWidth: true
+                    topLeftRadius: codeBlockBackgroundRounding
+                    topRightRadius: codeBlockBackgroundRounding
+                    bottomLeftRadius: Appearance.rounding.unsharpen
+                    bottomRightRadius: Appearance.rounding.unsharpen
+                    color: Appearance.m3colors.m3surfaceContainerHighest
+                    implicitHeight: codeBlockTitleBarRowLayout.implicitHeight
+
+                    RowLayout { // Language and buttons
+                        id: codeBlockTitleBarRowLayout
+                        spacing: 5
+
+                        StyledText {
+                            id: codeBlockLanguage
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.fillWidth: false
+                            Layout.topMargin: 7
+                            Layout.bottomMargin: 7
+                            Layout.leftMargin: 10
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            font.weight: Font.DemiBold
+                            color: Appearance.colors.colOnLayer2
+                            text: segment.lang ? Repository.definitionForName(segment.lang).name : "plain"
+                        }
+
+                        Item { Layout.fillWidth: true }
+                    }
+                }
+
+                RowLayout { // Line numbers and code
+                    spacing: codeBlockComponentSpacing
+
+                    Rectangle { // Line numbers
+                        implicitWidth: 40
+                        Layout.fillHeight: true
+                        Layout.fillWidth: false
+                        topLeftRadius: Appearance.rounding.unsharpen
+                        bottomLeftRadius: codeBlockBackgroundRounding
+                        topRightRadius: Appearance.rounding.unsharpen
+                        bottomRightRadius: Appearance.rounding.unsharpen
+                        color: Appearance.colors.colLayer2
+
+                        ColumnLayout {
+                            id: lineNumberColumnLayout
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.rightMargin: 5
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: 0
+                            
+                            Repeater {
+                                model: codeTextArea.text.split("\n").length
+                                Text {
+                                    Layout.fillWidth: true
+                                    Layout.alignment: Qt.AlignRight
+                                    font.family: Appearance.font.family.monospace
+                                    font.pixelSize: Appearance.font.pixelSize.small
+                                    color: Appearance.colors.colSubtext
+                                    horizontalAlignment: Text.AlignRight
+                                    text: index + 1
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle { // Code background
+                        Layout.fillWidth: true
+                        topLeftRadius: Appearance.rounding.unsharpen
+                        bottomLeftRadius: Appearance.rounding.unsharpen
+                        topRightRadius: Appearance.rounding.unsharpen
+                        bottomRightRadius: codeBlockBackgroundRounding
+                        color: Appearance.colors.colLayer2
+                        // implicitWidth: codeTextArea.implicitWidth
+                        implicitHeight: codeTextArea.implicitHeight
+
+                        ScrollView {
+                            id: codeScrollView
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            implicitWidth: parent.width
+                            implicitHeight: codeTextArea.contentHeight
+                            contentWidth: codeTextArea.contentWidth
+                            contentHeight: codeTextArea.contentHeight
+                            clip: true
+                            ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+
+                            TextArea { // Code
+
+                                id: codeTextArea
+                                Layout.fillWidth: true
+                                readOnly: !root.editing
+                                renderType: Text.NativeRendering
+                                font.family: Appearance.font.family.monospace
+                                font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
+                                font.pixelSize: Appearance.font.pixelSize.small
+                                selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+                                selectionColor: Appearance.m3colors.m3secondaryContainer
+                                // wrapMode: TextEdit.Wrap
+                                color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
+
+                                text: segment.content
+                                onTextChanged: {
+                                    segment.content = text
+                                }
+
+                                Keys.onPressed: (event) => {
+                                    if (event.key === Qt.Key_Tab) {
+                                        // Insert 4 spaces at cursor
+                                        const cursor = codeTextArea.cursorPosition;
+                                        codeTextArea.insert(cursor, "    ");
+                                        codeTextArea.cursorPosition = cursor + 4;
+                                        event.accepted = true;
+                                    } else if (
+                                        event.key === Qt.Key_Control ||
+                                        event.key == Qt.Key_Shift ||
+                                        event.key == Qt.Key_Alt ||
+                                        event.key == Qt.Key_Meta
+                                    ) {
+                                        event.accepted = true;
+                                    } else if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
+                                        messageText.copy();
+                                        event.accepted = true;
+                                    }
+                                }
+
+                                SyntaxHighlighter {
+                                    id: highlighter
+                                    textEdit: codeTextArea
+                                    repository: Repository
+                                    definition: Repository.definitionForName(segment.lang || "plaintext")
+                                    // definition: Repository.definitionForName("cpp")
+                                    theme: Appearance.syntaxHighlightingTheme
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
 

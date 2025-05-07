@@ -83,7 +83,7 @@ Item {
                     + "- **Bold**, *Italic*, `Monospace`, [Link](https://example.com)\n\n"
                     + "- Table:\n\n"
                     + "|                          | Quickshell       | AGS/Astal         |\n"
-                    + "|:-------------------------|:----------------:|:-----------------:|\n"
+                    + "|--------------------------|------------------|-------------------|\n"
                     + "| UI Toolkit               | Qt               | Gtk3/Gtk4         |\n"
                     + "| Language                 | QML              | Js/Ts/Lua         |\n"
                     + "| Reactivity               | Implied          | Needs declaration |\n"

@@ -25,6 +25,8 @@ Singleton {
                 Appearance.m3colors[m3Key] = json[key]
             }
         }
+        
+        Appearance.m3colors.darkmode = (Appearance.m3colors.m3background.hslLightness < 0.5)
     }
 
     Timer {
