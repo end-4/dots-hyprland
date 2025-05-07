@@ -10,9 +10,9 @@ function getDomain(url) {
 }
 
 function shellSingleQuoteEscape(str) {
-    // First escape backslashes, then escape single quotes
+    //  escape single quotes
     return String(str)
-        .replace(/\\/g, '\\\\')
+        // .replace(/\\/g, '\\\\')
         .replace(/'/g, "'\\''");
 }
 
@@ -32,8 +32,4 @@ function splitMarkdownBlocks(markdown) {
         result.push({ type: "text", content: markdown.slice(lastIndex) });
     }
     return result;
-}
-
-function unEscapeBackslashes(str) {
-    return str.replace(/\\\\/g, '\\');
 }

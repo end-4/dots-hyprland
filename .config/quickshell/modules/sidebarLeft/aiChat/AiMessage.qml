@@ -27,6 +27,7 @@ Rectangle {
     property real codeBlockHeaderPadding: 3
     property real codeBlockComponentSpacing: 2
 
+    property bool enableMouseSelection: false
     property bool renderMarkdown: true
     property bool editing: false
 
@@ -250,6 +251,7 @@ Rectangle {
             TextArea {
                 Layout.fillWidth: true
                 readOnly: !root.editing
+                selectByMouse: root.enableMouseSelection || root.editing
                 renderType: Text.NativeRendering
                 font.family: Appearance.font.family.reading
                 font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
@@ -281,7 +283,8 @@ Rectangle {
                     anchors.fill: parent
                     acceptedButtons: Qt.NoButton // Only for hover
                     hoverEnabled: true
-                    cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.IBeamCursor
+                    cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : 
+                        (root.enableMouseSelection || root.editing) ? Qt.IBeamCursor : Qt.ArrowCursor
                 }
             }
         }
@@ -330,9 +333,7 @@ Rectangle {
                             id: copyCodeButton
                             buttonIcon: "content_copy"
                             onClicked: {
-                                Hyprland.dispatch(`exec wl-copy '${StringUtils.unEscapeBackslashes(
-                                    StringUtils.shellSingleQuoteEscape(segment.content)
-                                )}'`)
+                                Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segment.content)}'`)
                             }
                             StyledToolTip {
                                 content: qsTr("Copy code")
@@ -422,10 +423,10 @@ Rectangle {
                             }
 
                             TextArea { // Code
-
                                 id: codeTextArea
                                 Layout.fillWidth: true
                                 readOnly: !root.editing
+                                selectByMouse: root.enableMouseSelection || root.editing
                                 renderType: Text.NativeRendering
                                 font.family: Appearance.font.family.monospace
                                 font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
@@ -461,6 +462,16 @@ Rectangle {
                                     // definition: Repository.definitionForName("cpp")
                                     theme: Appearance.syntaxHighlightingTheme
                                 }
+                            }
+                        }
+
+                        // MouseArea to block scrolling
+                        MouseArea {
+                            id: codeBlockMouseArea
+                            anchors.fill: parent
+                            acceptedButtons: root.editing ? Qt.NoButton : Qt.LeftButton
+                            onWheel: (event) => {
+                                event.accepted = false
                             }
                         }
                     }
