@@ -1,0 +1,12 @@
+# pack-refs with: peeled fully-peeled sorted 
+1949be72667dec4220de5cfbd4e3066d32a9a63a refs/heads/do-not-deref-null-pointer
+2a7a100a132eeb77a53fc0a20d86282e96d6c668 refs/heads/gbsneto/unnecessary-warnings
+5f9768a2eac29c1ed56f1fbb449a77a3523683b6 refs/heads/master
+8eee9f464285a6c59a8a3aa7ffb9bca46ee9be76 refs/merge-requests/12/head
+c872e231181d32baa010abd51fa9551d628e7cc3 refs/merge-requests/12/merge
+1949be72667dec4220de5cfbd4e3066d32a9a63a refs/merge-requests/15/head
+69d4bf5e9d7637a160330f1f5910802a465b4fd0 refs/merge-requests/15/merge
+301c7a59def997f29c12873cc4386e3c3b9f7ebb refs/merge-requests/26/head
+e8c4b22eeddbe23afba0b3d803253ff03959ae8d refs/merge-requests/26/merge
+9f5af07ea086072452621591e0f5f6bdd3417caf refs/merge-requests/27/head
+45be0e0139f4ded75dce1d6286136531ba522a3c refs/merge-requests/27/merge

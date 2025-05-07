@@ -66,6 +66,7 @@ bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
 <details>
   <summary>Help improve these dotfiles</summary>
 
+- New: Try the [Quickshell](https://quickshell.outfoxxed.me/)-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs)
 - Join the [discussions](https://github.com/end-4/dots-hyprland/discussions)
 - If you'd like to suggest fixes or a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)
 </details>

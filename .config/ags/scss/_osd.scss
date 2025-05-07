@@ -4,28 +4,27 @@
 
 .osd-bg {
     min-width: 8.864rem;
-    min-height: 3.409rem;
 }
 
 .osd-value {
     @include elevation-border;
     @include elevation2;
+    @include full-rounding;
     background-color: $layer0;
-    border-radius: 1.023rem;
-    padding: 0.625rem 1.023rem;
-    padding-top: 0.313rem;
+    padding: 0.341rem 1.023rem 0.341rem 0.682rem;
+    min-width: 9.545rem;
 }
 
 .osd-progress {
-    min-height: 0.955rem;
-    min-width: 0.068rem;
+    min-height: 0.682rem;
+    min-width: 8.182rem;
     padding: 0rem;
     border-radius: 10rem;
     @include fluent_decel;
 
     trough {
-        min-height: 0.954rem;
-        min-width: 0.068rem;
+        min-height: 0.682rem;
+        min-width: 8.182rem;
         border-radius: 10rem;
         background-color: $layer2;
         // border: 0.068rem solid $onSecondaryContainer;
@@ -33,8 +32,8 @@
 
     progress {
         @include fluent_decel;
-        min-height: 0.680rem;
-        min-width: 0.680rem;
+        min-height: 0.409rem;
+        min-width: 0.409rem;
         margin: 0rem 0.137rem;
         border-radius: 10rem;
         background-color: $onLayer2;
@@ -44,12 +43,10 @@
 .osd-label {
     font-size: 1.023rem;
     font-weight: 500;
-    margin-top: 0.341rem;
 }
 
 .osd-value-txt {
-    @include titlefont;
-    font-size: 1.688rem;
+    font-size: 1.023rem;
     font-weight: 500;
     color: $onLayer0;
 }
