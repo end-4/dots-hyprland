@@ -18,20 +18,37 @@ Button {
 
     background: Rectangle {
         radius: Appearance.rounding.small
-        color: button.activated ? 
-            (button.down ? Appearance.colors.colPrimaryActive : 
+        color: !button.enabled ? Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1) : 
+            button.activated ? (button.down ? Appearance.colors.colPrimaryActive : 
             button.hovered ? Appearance.colors.colPrimaryHover :
             Appearance.m3colors.m3primary) :
             (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
             button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
             Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1))
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            }
+        }
     }
 
     contentItem: MaterialSymbol {
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: Appearance.font.pixelSize.large
-        color: button.activated ? Appearance.m3colors.m3onPrimary :
-            Appearance.m3colors.m3onSurface
         text: buttonIcon
+        color: button.activated ? Appearance.m3colors.m3onPrimary :
+            button.enabled ? Appearance.m3colors.m3onSurface :
+            Appearance.colors.colOnLayer1Inactive
+
+        Behavior on color {
+            ColorAnimation {
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            }
+        }
     }
 }
