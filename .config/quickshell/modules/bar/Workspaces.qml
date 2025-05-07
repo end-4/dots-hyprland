@@ -201,7 +201,10 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
                         text: `${workspaceButtonBackground.workspaceValue}`
                         elide: Text.ElideRight
-                        color: (monitor.activeWorkspace?.id == workspaceButtonBackground.workspaceValue) ? Appearance.m3colors.m3onPrimary : (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : Appearance.colors.colOnLayer1Inactive)
+                        color: (monitor.activeWorkspace?.id == workspaceButtonBackground.workspaceValue) ? 
+                            Appearance.m3colors.m3onPrimary : 
+                            (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : 
+                                Appearance.colors.colOnLayer1Inactive)
 
                         Behavior on color {
                             ColorAnimation {
