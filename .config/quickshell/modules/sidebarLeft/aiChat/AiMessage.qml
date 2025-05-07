@@ -106,8 +106,6 @@ Rectangle {
                 }
             }
 
-            Item { Layout.fillWidth: true }
-
             Button { // Not visible to model
                 id: modelVisibilityIndicator
                 visible: messageData.role == 'interface'
@@ -129,12 +127,7 @@ Rectangle {
                 }
             }
 
-            StyledText {
-                visible: modelVisibilityIndicator.visible
-                font.pixelSize: Appearance.font.pixelSize.larger
-                color: Appearance.colors.colOnLayer1
-                text: "•"
-            }
+            Item { Layout.fillWidth: true }
 
             RowLayout {
                 spacing: 5

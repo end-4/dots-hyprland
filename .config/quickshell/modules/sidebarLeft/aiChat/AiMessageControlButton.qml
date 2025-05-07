@@ -18,10 +18,13 @@ Button {
 
     background: Rectangle {
         radius: Appearance.rounding.small
-        color: button.activated ? Appearance.m3colors.m3primary :
-            button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
+        color: button.activated ? 
+            (button.down ? Appearance.colors.colPrimaryActive : 
+            button.hovered ? Appearance.colors.colPrimaryHover :
+            Appearance.m3colors.m3primary) :
+            (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
             button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-            Appearance.m3colors.m3surfaceContainerHighest
+            Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1))
     }
 
     contentItem: MaterialSymbol {
