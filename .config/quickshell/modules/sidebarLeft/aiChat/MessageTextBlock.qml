@@ -17,11 +17,11 @@ import Quickshell.Hyprland
 
 TextArea {
     // These are needed on the parent loader
-    property bool editing: parent.editing ?? false
-    property bool renderMarkdown: parent.renderMarkdown ?? true
-    property bool enableMouseSelection: parent.enableMouseSelection ?? false
-    property var segment: parent.segment ?? {}
-    property var messageData: parent.messageData ?? {}
+    property bool editing: parent?.editing ?? false
+    property bool renderMarkdown: parent?.renderMarkdown ?? true
+    property bool enableMouseSelection: parent?.enableMouseSelection ?? false
+    property var segment: parent?.segment ?? {}
+    property var messageData: parent?.messageData ?? {}
 
     Layout.fillWidth: true
     readOnly: !editing
