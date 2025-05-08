@@ -12,6 +12,12 @@ Singleton {
     property int sidebarRightOpenCount: 0
     property bool overviewOpen: false
     property bool workspaceShowNumbers: false
+    property bool superReleaseMightTrigger: true
+
+    // When user is not reluctant while pressing super, they probably don't need to see workspace numbers
+    onSuperReleaseMightTriggerChanged: { 
+        workspaceShowNumbersTimer.stop()
+    }
 
     Timer {
         id: workspaceShowNumbersTimer

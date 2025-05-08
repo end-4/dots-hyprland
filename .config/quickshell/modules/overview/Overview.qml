@@ -11,7 +11,6 @@ import Quickshell.Hyprland
 
 Scope {
     id: root
-    property bool overviewReleaseMightTrigger: true
 
     Variants {
         model: Quickshell.screens
@@ -115,7 +114,7 @@ Scope {
             GlobalStates.overviewOpen = true
         }
         function toggleReleaseInterrupt() {
-            root.overviewReleaseMightTrigger = false
+            GlobalStates.superReleaseMightTrigger = false
         }
 	}
 
@@ -140,12 +139,12 @@ Scope {
         description: "Toggles overview on release"
 
         onPressed: {
-            root.overviewReleaseMightTrigger = true
+            GlobalStates.superReleaseMightTrigger = true
         }
 
         onReleased: {
-            if (!root.overviewReleaseMightTrigger) {
-                root.overviewReleaseMightTrigger = true
+            if (!GlobalStates.superReleaseMightTrigger) {
+                GlobalStates.superReleaseMightTrigger = true
                 return
             }
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
@@ -158,7 +157,7 @@ Scope {
             "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
 
         onPressed: {
-            root.overviewReleaseMightTrigger = false
+            GlobalStates.superReleaseMightTrigger = false
         }
     }
 
