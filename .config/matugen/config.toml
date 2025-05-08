@@ -11,7 +11,7 @@ output_path = '~/.local/state/quickshell/user/generated/colors.json'
 
 [templates.hyprland]
 input_path = '~/.config/matugen/templates/hyprland/colors.conf'
-output_path = '~/.config/hypr/hyprland/hyprland/colors.conf'
+output_path = '~/.config/hypr/hyprland/colors.conf'
 
 [templates.hyprlock]
 input_path = '~/.config/matugen/templates/hyprland/hyprlock.conf'
@@ -28,4 +28,5 @@ output_path = '~/.config/gtk-3.0/gtk.css'
 [templates.gtk4]
 input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
+
 
