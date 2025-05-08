@@ -89,19 +89,25 @@ Rectangle {
         
         RowLayout { // Header
             spacing: 15
+            Layout.fillWidth: true
 
             Rectangle { // Name
                 id: nameWrapper
                 color: Appearance.m3colors.m3secondaryContainer
+                // color: "transparent"
                 radius: Appearance.rounding.small
-                implicitWidth: nameRowLayout.implicitWidth + 10 * 2
                 implicitHeight: Math.max(nameRowLayout.implicitHeight + 5 * 2, 30)
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
 
                 RowLayout {
                     id: nameRowLayout
-                    anchors.centerIn: parent
-                    spacing: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 10
+                    anchors.rightMargin: 10
+                    spacing: 7
 
                     Item {
                         Layout.alignment: Qt.AlignVCenter
@@ -141,6 +147,8 @@ Rectangle {
                     StyledText {
                         id: providerName
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true
+                        elide: Text.ElideRight
                         font.pixelSize: Appearance.font.pixelSize.normal
                         font.weight: Font.DemiBold
                         color: Appearance.m3colors.m3onSecondaryContainer
@@ -171,8 +179,6 @@ Rectangle {
                     content: qsTr("Not visible to model")
                 }
             }
-
-            Item { Layout.fillWidth: true }
 
             RowLayout {
                 spacing: 5
@@ -240,11 +246,15 @@ Rectangle {
                 }
                 delegate: Loader {
                     Layout.fillWidth: true
-                    property var segment: modelData
+                    // property var segment: modelData
+                    property var segmentContent: modelData.content
+                    property var segmentLang: modelData.lang
                     property var messageData: root.messageData
                     property var editing: root.editing
                     property var renderMarkdown: root.renderMarkdown
                     property var enableMouseSelection: root.enableMouseSelection
+                    property bool thinking: root.messageData.thinking
+                    property bool done: root.messageData.done
                     
                     source: modelData.type === "code" ? "MessageCodeBlock.qml" : "MessageTextBlock.qml"
                 }

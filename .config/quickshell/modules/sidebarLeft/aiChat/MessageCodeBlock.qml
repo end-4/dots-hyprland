@@ -22,7 +22,8 @@ ColumnLayout {
     property bool editing: parent?.editing ?? false
     property bool renderMarkdown: parent?.renderMarkdown ?? true
     property bool enableMouseSelection: parent?.enableMouseSelection ?? false
-    property var segment: parent?.segment ?? {}
+    property var segmentContent: parent?.segmentContent ?? ({})
+    property var segmentLang: parent?.segmentLang ?? "plaintext"
     property var messageData: parent?.messageData ?? {}
 
     spacing: codeBlockComponentSpacing
@@ -57,7 +58,7 @@ ColumnLayout {
                 font.pixelSize: Appearance.font.pixelSize.small
                 font.weight: Font.DemiBold
                 color: Appearance.colors.colOnLayer2
-                text: segment.lang ? Repository.definitionForName(segment.lang).name : "plain"
+                text: segmentLang ? Repository.definitionForName(segmentLang).name : "plain"
             }
 
             Item { Layout.fillWidth: true }
@@ -66,7 +67,7 @@ ColumnLayout {
                 id: copyCodeButton
                 buttonIcon: "content_copy"
                 onClicked: {
-                    Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segment.content)}'`)
+                    Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segmentContent)}'`)
                 }
                 StyledToolTip {
                     content: qsTr("Copy code")
@@ -160,7 +161,7 @@ ColumnLayout {
                     id: codeTextArea
                     Layout.fillWidth: true
                     readOnly: !editing
-                    selectByMouse: enableMouseSelection || editing
+                    // selectByMouse: enableMouseSelection || editing
                     renderType: Text.NativeRendering
                     font.family: Appearance.font.family.monospace
                     font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
@@ -170,9 +171,9 @@ ColumnLayout {
                     // wrapMode: TextEdit.Wrap
                     color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
 
-                    text: segment.content
+                    text: segmentContent
                     onTextChanged: {
-                        segment.content = text
+                        segmentContent = text
                     }
 
                     Keys.onPressed: (event) => {
@@ -183,7 +184,7 @@ ColumnLayout {
                             codeTextArea.cursorPosition = cursor + 4;
                             event.accepted = true;
                         } else if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
-                            messageText.copy();
+                            codeTextArea.copy();
                             event.accepted = true;
                         }
                     }
@@ -192,23 +193,22 @@ ColumnLayout {
                         id: highlighter
                         textEdit: codeTextArea
                         repository: Repository
-                        definition: Repository.definitionForName(segment.lang || "plaintext")
-                        // definition: Repository.definitionForName("cpp")
+                        definition: Repository.definitionForName(segmentLang || "plaintext")
                         theme: Appearance.syntaxHighlightingTheme
                     }
                 }
             }
 
             // MouseArea to block scrolling
-            MouseArea {
-                id: codeBlockMouseArea
-                anchors.fill: parent
-                acceptedButtons: editing ? Qt.NoButton : Qt.LeftButton
-                cursorShape: (enableMouseSelection || editing) ? Qt.IBeamCursor : Qt.ArrowCursor
-                onWheel: (event) => {
-                    event.accepted = false
-                }
-            }
+            // MouseArea {
+            //     id: codeBlockMouseArea
+            //     anchors.fill: parent
+            //     acceptedButtons: editing ? Qt.NoButton : Qt.LeftButton
+            //     cursorShape: (enableMouseSelection || editing) ? Qt.IBeamCursor : Qt.ArrowCursor
+            //     onWheel: (event) => {
+            //         event.accepted = false
+            //     }
+            // }
         }
     }
 }

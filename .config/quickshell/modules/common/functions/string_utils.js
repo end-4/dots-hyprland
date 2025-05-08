@@ -33,3 +33,11 @@ function splitMarkdownBlocks(markdown) {
     }
     return result;
 }
+
+function trimFileProtocol(str) {
+    return str.startsWith("file://") ? str.slice(7) : str;
+}
+
+function escapeBackslashes(str) {
+    return str.replace(/\\/g, '\\\\');
+}

@@ -14,50 +14,129 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
+import Qt5Compat.GraphicalEffects
 
-TextArea {
+ColumnLayout {
+    id: root
     // These are needed on the parent loader
     property bool editing: parent?.editing ?? false
     property bool renderMarkdown: parent?.renderMarkdown ?? true
     property bool enableMouseSelection: parent?.enableMouseSelection ?? false
-    property var segment: parent?.segment ?? {}
+    property string segmentContent: parent?.segmentContent ?? ({})
     property var messageData: parent?.messageData ?? {}
+    property bool done: parent?.done ?? true
+    property list<string> renderedLatexHashes: []
+
+    property string renderedSegmentContent: ""
 
     Layout.fillWidth: true
-    readOnly: !editing
-    selectByMouse: enableMouseSelection || editing
-    renderType: Text.NativeRendering
-    font.family: Appearance.font.family.reading
-    font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
-    font.pixelSize: Appearance.font.pixelSize.small
-    selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-    selectionColor: Appearance.m3colors.m3secondaryContainer
-    wrapMode: TextEdit.Wrap
-    color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
-    textFormat: renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText
-    text: messageData.thinking ? qsTr("Waiting for response...") : segment.content
 
-    onTextChanged: {
-        segment.content = text
-    }
-
-    Keys.onPressed: (event) => {
-        if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
-            messageText.copy()
-            event.accepted = true
+    function renderLatex() {
+        // Regex for $...$, $$...$$, \[...\]
+        // Note: This is a simple approach and may need refinement for edge cases
+        let regex = /(\$\$([\s\S]+?)\$\$)|(\$([^\$]+?)\$)|(\\\[((?:.|\n)+?)\\\])/g;
+        let match;
+        while ((match = regex.exec(segmentContent)) !== null) {
+            let expression = match[1] || match[2] || match[3];
+            if (expression) {
+                // Qt.callLater(() => {
+                // });
+                    const [renderHash, isNew] = LatexRenderer.requestRender(expression.trim());
+                    if (!renderedLatexHashes.includes(renderHash)) {
+                        renderedLatexHashes.push(renderHash);
+                    }
+            }
         }
     }
 
-    onLinkActivated: (link) => {
-        Qt.openUrlExternally(link)
-        Hyprland.dispatch("global quickshell:sidebarLeftClose")
+    function handleRenderedLatex(hash, force = false) {
+        if (renderedLatexHashes.includes(hash) || force) {
+            const imagePath = LatexRenderer.renderedImagePaths[hash];
+            const markdownImage = `![latex](${imagePath})`;
+
+            const expression = StringUtils.escapeBackslashes(LatexRenderer.processedExpressions[hash]);
+            renderedSegmentContent = renderedSegmentContent.replace(expression, markdownImage);
+        }
     }
 
-    MouseArea { // Pointing hand for links
-        anchors.fill: parent
-        acceptedButtons: Qt.NoButton // Only for hover
-        hoverEnabled: true
-        cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : 
-            (enableMouseSelection || editing) ? Qt.IBeamCursor : Qt.ArrowCursor
+    onDoneChanged: {
+        renderLatex()
+        for (const hash of renderedLatexHashes) {
+            handleRenderedLatex(hash, true);
+        }
+    }
+    onEditingChanged: {
+        if (!editing) {
+            renderLatex()
+        }
+    }
+
+    onSegmentContentChanged: {
+        // console.log("Segment content changed: " + segmentContent);
+        renderedSegmentContent = segmentContent;
+        if (!root.editing && segmentContent) {
+            root.renderLatex();
+        }
+    }
+
+    onRenderedSegmentContentChanged: {
+        // console.log("Rendered segment content changed: " + renderedSegmentContent);
+        if (renderedSegmentContent) {
+            textArea.text = renderedSegmentContent;
+        }
+    }
+
+    // When something finishes rendering
+    // 1. Check if the hash is in the list
+    // 2. If it is, replace the expression with the image path
+    Connections {
+        target: LatexRenderer
+        function onRenderFinished(hash, imagePath) {
+            const expression = LatexRenderer.processedExpressions[hash];
+            // console.log("Render finished: " + hash + " " + expression);
+            handleRenderedLatex(hash);
+        }
+    }
+
+    TextArea {
+        id: textArea
+
+        Layout.fillWidth: true
+        readOnly: !editing
+        selectByMouse: enableMouseSelection || editing
+        renderType: Text.NativeRendering
+        font.family: Appearance.font.family.reading
+        font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
+        font.pixelSize: Appearance.font.pixelSize.small
+        selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
+        selectionColor: Appearance.m3colors.m3secondaryContainer
+        wrapMode: TextEdit.Wrap
+        color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
+        textFormat: renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText
+        text: qsTr("Waiting for response...")
+
+        onTextChanged: {
+            segmentContent = text
+        }
+
+        Keys.onPressed: (event) => {
+            if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
+                messageText.copy()
+                event.accepted = true
+            }
+        }
+
+        onLinkActivated: (link) => {
+            Qt.openUrlExternally(link)
+            Hyprland.dispatch("global quickshell:sidebarLeftClose")
+        }
+
+        MouseArea { // Pointing hand for links
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton // Only for hover
+            hoverEnabled: true
+            cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : 
+                (enableMouseSelection || editing) ? Qt.IBeamCursor : Qt.ArrowCursor
+        }
     }
 }

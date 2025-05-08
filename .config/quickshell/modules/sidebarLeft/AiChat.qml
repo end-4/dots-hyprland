@@ -83,7 +83,8 @@ Item {
 ## ✏️ Markdown test
 ### Formatting
 
-*Italic*, \`Monospace\`, **Bold**, [Link](https://example.com)
+- *Italic*, \`Monospace\`, **Bold**, [Link](https://example.com)
+- Arch lincox icon <img src="/home/end/.config/quickshell/assets/icons/arch-symbolic.svg" height="${Appearance.font.pixelSize.small}"/>
 
 ### Table
 
@@ -114,7 +115,9 @@ int main(int argc, char* argv[]) {
 
 ### LaTeX
 
-Inline: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+- Simple inline: $\\frac{1}{2} = \\frac{2}{4}$
+- Complex inline: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+- Another complex inline: \\\\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\\\]
 
 `, 
                     Ai.interfaceRole);
