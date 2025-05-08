@@ -249,7 +249,7 @@ Singleton {
                 + ` ${headerString}`
                 + ' -H "Authorization: Bearer ${API_KEY}"'
                 + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
-            console.log("Request command: ", requestCommandString);
+            // console.log("Request command: ", requestCommandString);
             requester.command = baseCommand.concat([requestCommandString]);
 
             /* Reset vars and make the request */
@@ -314,7 +314,7 @@ Singleton {
                 const parsedResponse = JSON.parse(requester.message.content + "]");
                 requester.message.content = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
             } catch (e) { 
-                console.log("[AI] Could not parse response on exit: ", e);
+                // console.log("[AI] Could not parse response on exit: ", e);
             }
         }
     }
