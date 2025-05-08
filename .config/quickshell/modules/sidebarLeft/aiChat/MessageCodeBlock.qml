@@ -99,6 +99,7 @@ ColumnLayout {
                 Repeater {
                     model: codeTextArea.text.split("\n").length
                     Text {
+                        required property int index
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignRight
                         font.family: Appearance.font.family.monospace
