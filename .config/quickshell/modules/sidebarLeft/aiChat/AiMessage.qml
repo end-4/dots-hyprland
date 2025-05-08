@@ -470,6 +470,7 @@ Rectangle {
                             id: codeBlockMouseArea
                             anchors.fill: parent
                             acceptedButtons: root.editing ? Qt.NoButton : Qt.LeftButton
+                            cursorShape: (root.enableMouseSelection || root.editing) ? Qt.IBeamCursor : Qt.ArrowCursor
                             onWheel: (event) => {
                                 event.accepted = false
                             }
