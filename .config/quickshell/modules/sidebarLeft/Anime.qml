@@ -37,8 +37,7 @@ Item {
     }
 
     Component.onCompleted: {
-        Hyprland.dispatch(`exec rm -rf ${previewDownloadPath}`)
-        Hyprland.dispatch(`exec mkdir -p ${previewDownloadPath}`)
+        Hyprland.dispatch(`exec rm -rf ${previewDownloadPath} && mkdir -p ${previewDownloadPath}`)
     }
 
     property var allCommands: [
