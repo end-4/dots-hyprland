@@ -10,7 +10,7 @@ import QtQuick;
 Singleton {
     id: root
 
-    property var keyringData: {}
+    property var keyringData: ({})
     // onKeyringDataChanged: {
     //     console.log("[KeyringStorage] Keyring data changed:", JSON.stringify(root.keyringData));
     // }

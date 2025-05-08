@@ -11,7 +11,7 @@ Singleton {
     id: root
     property var windowList: []
     property var addresses: []
-    property var windowByAddress: {}
+    property var windowByAddress: ({})
     property var monitors: []
 
     function updateWindowList() {
