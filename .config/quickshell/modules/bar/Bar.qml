@@ -316,7 +316,7 @@ Scope {
             Item {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.bottom: parent.bottom
+                anchors.top: barContent.bottom
                 height: Appearance.rounding.screenRounding
 
                 RoundCorner {

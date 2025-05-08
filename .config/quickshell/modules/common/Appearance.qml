@@ -146,10 +146,10 @@ Singleton {
         property int verysmall: 8
         property int small: 12
         property int normal: 17
-        property int large: 25
+        property int large: 23
         property int full: 9999
         property int screenRounding: large
-        property int windowRounding: 20
+        property int windowRounding: 18
     }
 
     font: QtObject {
