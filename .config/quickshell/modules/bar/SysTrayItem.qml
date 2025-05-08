@@ -48,10 +48,16 @@ MouseArea {
         height: parent.height
     }
 
-    ColorOverlay {
+    Desaturate {
+        id: desaturatedIcon
         anchors.fill: trayIcon
         source: trayIcon
-        color: Appearance.colors.colOnLayer0
+        desaturation: 1 // 1.0 means fully grayscale
+    }
+    ColorOverlay {
+        anchors.fill: desaturatedIcon
+        source: desaturatedIcon
+        color: Appearance.transparentize(Appearance.colors.colOnLayer0, 0.5)
     }
 
 }
