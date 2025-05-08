@@ -210,7 +210,7 @@ export default () => {
                         }),
                         setup: (self) => self.hook(Mpris, label => {
                             const mpris = Mpris.getPlayer('');
-                            self.revealChild = (!mpris || userOptions.bar.alwaysShowFullResources);
+                            self.revealChild = (!mpris || mpris.playBackStatus !== 'Playing' || userOptions.bar.alwaysShowFullResources);
                         }),
                     })
                 ],
