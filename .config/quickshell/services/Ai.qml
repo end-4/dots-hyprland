@@ -18,6 +18,7 @@ Singleton {
     property string systemPrompt: ConfigOptions.ai.systemPrompt ?? ""
     property var messages: []
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
+    readonly property var apiKeysLoaded: KeyringStorage.loaded
 
     // Model properties:
     // - name: Name of the model
@@ -27,35 +28,46 @@ Singleton {
     // - model: Model name of the model
     // - requires_key: Whether the model requires an API key
     // - key_id: The identifier of the API key. Use the same identifier for models that can be accessed with the same key.
-    // - key_get_link: Link to get the API key
+    // - key_get_link: Link to get an API key
+    // - key_get_description: Description of pricing and how to get an API key
+    // - api_format: The API format of the model. Can be "openai" or "gemini". Default is "openai".
+    // - tools: List of tools that the model can use. Each tool is an object with the tool name as the key and an empty object as the value.
+    // - extraParams: Extra parameters to be passed to the model. This is a JSON object.
     property var models: {
-        "gemini-2.0-flash-gemini-api": {
+        "gemini-2.0-flash-search": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": "Online | Google's model | Has search capabilities, giving you up-to-date information",
+            "description": "Online | Google's model\nGives up-to-date information with search.",
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
+            "key_get_description": "Pricing: free. Data used for training.\n\nInstructions: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
             "api_format": "gemini",
+            "tools": [
+                {
+                    "google_search": {}
+                },
+            ]
         },
         "openrouter-llama4-maverick": {
-            "name": "Llama 4 Maverick (OpenRouter)",
+            "name": "Llama 4 Maverick",
             "icon": "ollama-symbolic",
-            "description": "Online | OpenRouter | Meta's model",
+            "description": "Online via OpenRouter | Meta's model",
             "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "meta-llama/llama-4-maverick:free",
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
+            "key_get_description": "Pricing: free. Data use policy varies depending on your OpenRouter account settings.\n\nInstructions: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
         },
         "openrouter-deepseek-r1": {
-            "name": "DeepSeek R1 (OpenRouter)",
+            "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
-            "description": "Online | OpenRouter | DeepSeek's reasoning model",
+            "description": "Online via OpenRouter | DeepSeek's reasoning model",
             "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "deepseek/deepseek-r1:free",
@@ -87,7 +99,8 @@ Singleton {
         words = words.map((word) => {
             return (word.charAt(0).toUpperCase() + word.slice(1))
         });
-        words[words.length - 1] = `[${words[words.length - 1]}]`; // Surround the last word with square brackets
+        if (words[words.length - 1] === "Latest") words.pop();
+        else words[words.length - 1] = `(${words[words.length - 1]})`; // Surround the last word with square brackets
         const result = words.join(' ');
         return result;
     }
@@ -105,7 +118,7 @@ Singleton {
                         root.models[model] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
-                            "description": `Local (Ollama) | ${model}`,
+                            "description": `Local Ollama model: ${model}`,
                             "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
@@ -138,12 +151,26 @@ Singleton {
         root.messages = [...root.messages];
     }
 
+    function addApiKeyAdvice(model) {
+        root.addMessage(
+            StringUtils.format(qsTr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/><br/>For {0}, you can grab one at:\n\n{1}\n\n{2}'), 
+                model.name, model.key_get_link, model.key_get_description ?? qsTr("<i>No further instruction provided</i>")), 
+            Ai.interfaceRole
+        );
+    }
+
     function setModel(model, feedback = true) {
         if (!model) model = ""
         model = model.toLowerCase()
         if (modelList.indexOf(model) !== -1) {
             currentModel = model
             if (feedback) root.addMessage("Model set to " + models[model].name, Ai.interfaceRole)
+            if (models[model].requires_key) {
+                // If key not there show advice
+                if (root.apiKeysLoaded && (!root.apiKeys[models[model].key_id] || root.apiKeys[models[model].key_id].length === 0)) {
+                    root.addApiKeyAdvice(models[model])
+                }
+            }
         } else {
             if (feedback) root.addMessage(qsTr("Invalid model. Supported: \n- ") + modelList.join("\n- "), Ai.interfaceRole)
         }
@@ -159,14 +186,11 @@ Singleton {
             return;
         }
         if (!key || key.length === 0) {
-            root.addMessage(
-                StringUtils.format(qsTr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/><br/>For {0}, you can grab one at:\n\n{1}'), 
-                    models[currentModel].name, models[currentModel].key_get_link), 
-                Ai.interfaceRole
-            );
+            const model = models[currentModel];
+            root.addApiKeyAdvice(model)
             return;
         }
-        KeyringStorage.setNestedField(["apiKeys", model.key_id], key);
+        KeyringStorage.setNestedField(["apiKeys", model.key_id], key.trim());
         root.addMessage("API key set for " + model.name, Ai.interfaceRole);
     }
 
@@ -175,7 +199,7 @@ Singleton {
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
-                root.addMessage(StringUtils.format(qsTr("API key:\n\n`{0}`"), key), Ai.interfaceRole);
+                root.addMessage(StringUtils.format(qsTr("API key:\n\n```txt\n{0}\n```"), key), Ai.interfaceRole);
             } else {
                 root.addMessage(StringUtils.format(qsTr("No API key set for {0}"), model.name), Ai.interfaceRole);
             }
@@ -212,9 +236,7 @@ Singleton {
                     "parts": [{ text: message.content }]
                 })),
                 "tools": [
-                    {
-                        "google_search": {}
-                    }
+                    ...model.tools,
                 ],
                 "system_instruction": {
                     "parts": [{ text: root.systemPrompt }]
@@ -288,11 +310,15 @@ Singleton {
         }
 
         function parseGeminiBuffer() {
-            const dataJson = JSON.parse(requester.geminiBuffer);
-
-            const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
-            requester.message.content += responseContent;
-            requester.geminiBuffer = "";
+            try {
+                const dataJson = JSON.parse(requester.geminiBuffer);
+                const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
+                requester.message.content += responseContent;
+            } catch (e) {
+                requester.message.content += requester.geminiBuffer
+            } finally {
+                requester.geminiBuffer = "";
+            }
         }
 
         function handleGeminiResponseLine(line) {
@@ -352,7 +378,7 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                console.log("RAW DATA: ", data);
+                // console.log("RAW DATA: ", data);
                 if (data.length === 0) return;
 
                 // Handle response line
@@ -385,6 +411,10 @@ Singleton {
                 requester.message.content = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
             } catch (e) { 
                 // console.log("[AI] Could not parse response on exit: ", e);
+            }
+
+            if (requester.message.content.includes("API key not valid")) {
+                root.addApiKeyAdvice(models[requester.message.model]);
             }
         }
     }

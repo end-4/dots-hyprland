@@ -10,6 +10,7 @@ import QtQuick;
 Singleton {
     id: root
 
+    property bool loaded: false
     property var keyringData: ({})
     // onKeyringDataChanged: {
     //     console.log("[KeyringStorage] Keyring data changed:", JSON.stringify(root.keyringData));
@@ -109,6 +110,7 @@ Singleton {
                 root.keyringData = {};
                 saveKeyringData()
             }
+            root.loaded = true;
         }
     }
     
