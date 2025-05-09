@@ -68,6 +68,9 @@ ColumnLayout {
     onEditingChanged: {
         if (!editing) {
             renderLatex()
+        } else {
+            console.log("Editing mode enabled", segmentContent)
+            textArea.text = segmentContent
         }
     }
 
