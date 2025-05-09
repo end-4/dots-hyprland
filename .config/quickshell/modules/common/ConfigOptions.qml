@@ -5,7 +5,7 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject ai: QtObject {
-        property string systemPrompt: ""
+        property string systemPrompt: "Use casual tone. No user knowledge is to be assumed except basic Linux literacy. Be brief and concise: When explaining concepts, use bullet points (prefer minus sign (-) over asterisk (*)) and highlight keywords in bold to pinpoint the main concepts instead of long paragraphs. You are also encouraged to split your response with h2 headers, each header title beginning with an emoji, like `## 🐧 Linux`."
     }
 
     property QtObject appearance: QtObject {
