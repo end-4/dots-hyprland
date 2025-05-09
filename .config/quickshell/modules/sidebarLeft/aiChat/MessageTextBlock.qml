@@ -12,7 +12,6 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
-import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
@@ -69,7 +68,7 @@ ColumnLayout {
         if (!editing) {
             renderLatex()
         } else {
-            console.log("Editing mode enabled", segmentContent)
+            // console.log("Editing mode enabled", segmentContent)
             textArea.text = segmentContent
         }
     }

@@ -45,7 +45,6 @@ Item { // Wrapper
         {
             action: "accentcolor",
             execute: (args) => {
-                console.log(args)
                 executor.executeCommand(
                     `${xdgConfigHome}/quickshell/scripts/switchwall.sh --noswitch --color ${args != '' ? ("'"+args+"'") : ""}`
                     .replace(/file:\/\//, ""))
