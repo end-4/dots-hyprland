@@ -32,7 +32,7 @@ Item {
     property real thinkBlockComponentSpacing: 2
 
     property var collapseAnimation: messageTextBlock.implicitHeight > 40 ? Appearance.animation.elementMoveEnter : Appearance.animation.elementMoveFast
-    property bool collapsed: root.completed || !root.done
+    property bool collapsed: true /* should be root.completed but its kinda buggy rn so nope */
 
     Layout.fillWidth: true
     implicitHeight: collapsed ? header.implicitHeight : columnLayout.implicitHeight
@@ -46,7 +46,7 @@ Item {
     }
 
     Behavior on implicitHeight {
-        enabled: root.done ?? false
+        enabled: root.completed ?? false
         NumberAnimation {
             duration: collapseAnimation.duration
             easing.type: collapseAnimation.type
@@ -69,7 +69,7 @@ Item {
 
             MouseArea { // Click to reveal
                 id: headerMouseArea
-                enabled: root.done
+                enabled: root.completed
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
@@ -98,12 +98,12 @@ Item {
                     id: thinkBlockLanguage
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignLeft
-                    text: root.done ? "Chain of Thought" : "Thinking..."
+                    text: root.completed ? "Chain of Thought" : ("Thinking" + ".".repeat(Math.random() * 4))
                 }
                 Item { Layout.fillWidth: true }
                 Button { // Expand button
                     id: expandButton
-                    visible: root.done
+                    visible: root.completed
                     implicitWidth: 22
                     implicitHeight: 22
 
@@ -160,7 +160,7 @@ Item {
             clip: true
 
             Behavior on implicitHeight {
-                enabled: root.done ?? false
+                enabled: root.completed ?? false
                 NumberAnimation {
                     duration: collapseAnimation.duration
                     easing.type: collapseAnimation.easing
