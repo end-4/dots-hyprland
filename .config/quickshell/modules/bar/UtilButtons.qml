@@ -19,7 +19,7 @@ Rectangle {
         spacing: 4
         anchors.centerIn: parent
 
-        SmallCircleButton {
+        CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Hyprland.dispatch("exec grimblast copy area")
 
@@ -32,7 +32,7 @@ Rectangle {
 
         }
 
-        SmallCircleButton {
+        CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Hyprland.dispatch("exec hyprpicker -a")
 

@@ -23,15 +23,6 @@ Button {
         radius: Appearance.rounding.full
         color: (button.down || extraActiveCondition) ? Appearance.colors.colLayer2Active : (button.hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2)
 
-        Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
-        }
-
     }
 
 }
