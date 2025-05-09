@@ -152,8 +152,8 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewToggleReleaseInterrupt"
-        description: "Interrupts possibility of overview being toggled on release" +
-            "This is necessary because onReleased triggers whether or not you press something else while holding the key." +
+        description: "Interrupts possibility of overview being toggled on release. " +
+            "This is necessary because onReleased triggers whether or not you press something else while holding the key. " +
             "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
 
         onPressed: {
