@@ -12,7 +12,6 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
-import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 import org.kde.syntaxhighlighting
@@ -25,6 +24,10 @@ ColumnLayout {
     property var segmentContent: parent?.segmentContent ?? ({})
     property var segmentLang: parent?.segmentLang ?? "plaintext"
     property var messageData: parent?.messageData ?? {}
+
+    property real codeBlockBackgroundRounding: Appearance.rounding.small
+    property real codeBlockHeaderPadding: 3
+    property real codeBlockComponentSpacing: 2
 
     spacing: codeBlockComponentSpacing
     anchors.left: parent.left
@@ -161,7 +164,7 @@ ColumnLayout {
                     id: codeTextArea
                     Layout.fillWidth: true
                     readOnly: !editing
-                    // selectByMouse: enableMouseSelection || editing
+                    selectByMouse: enableMouseSelection || editing
                     renderType: Text.NativeRendering
                     font.family: Appearance.font.family.monospace
                     font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text

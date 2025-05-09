@@ -23,9 +23,6 @@ Rectangle {
 
     property real messagePadding: 7
     property real contentSpacing: 3
-    property real codeBlockBackgroundRounding: Appearance.rounding.small
-    property real codeBlockHeaderPadding: 3
-    property real codeBlockComponentSpacing: 2
 
     property bool enableMouseSelection: false
     property bool renderMarkdown: true
@@ -44,7 +41,6 @@ Rectangle {
         const segments = messageContentColumnLayout.children
             .map(child => child.segment)
             .filter(segment => (segment));
-        // console.log("Segments: " + JSON.stringify(segments))
 
         // Reconstruct markdown
         const newContent = segments.map(segment => {
@@ -238,11 +234,7 @@ Rectangle {
             spacing: 0
             Repeater {
                 model: ScriptModel {
-                    values: {
-                        const result = StringUtils.splitMarkdownBlocks(root.messageData.content)
-                        // console.log(JSON.stringify(result))
-                        return result
-                    }
+                    values: StringUtils.splitMarkdownBlocks(root.messageData.content)
                 }
                 delegate: Loader {
                     Layout.fillWidth: true
@@ -255,8 +247,12 @@ Rectangle {
                     property var enableMouseSelection: root.enableMouseSelection
                     property bool thinking: root.messageData.thinking
                     property bool done: root.messageData.done
+                    property bool completed: modelData.completed ?? false
                     
-                    source: modelData.type === "code" ? "MessageCodeBlock.qml" : "MessageTextBlock.qml"
+                    source: modelData.type === "code" ? "MessageCodeBlock.qml" : 
+                        modelData.type === "think" ? "MessageThinkBlock.qml" :
+                        "MessageTextBlock.qml"
+
                 }
             }
         }
