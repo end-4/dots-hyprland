@@ -13,6 +13,7 @@ Singleton {
 
     readonly property string xdgConfigHome: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
     readonly property string interfaceRole: "interface"
+    readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
     property var messages: []
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
@@ -27,23 +28,17 @@ Singleton {
     // - key_id: The identifier of the API key. Use the same identifier for models that can be accessed with the same key.
     // - key_get_link: Link to get the API key
     property var models: {
-        "gemini-2.0-flash": {
+        "gemini-2.0-flash-gemini-api": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": "Online | Google's model",
+            "description": "Online | Google's model | Has search capabilities, giving you up-to-date information",
             "homepage": "https://aistudio.google.com",
-            "endpoint": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
-            // "extraParams": {
-            //     "tools": [
-            //         {
-            //             "google_search": {}
-            //         }
-            //     ]
-            // }
+            "api_format": "gemini",
         },
         "openrouter-llama4-maverick": {
             "name": "Llama 4 Maverick (OpenRouter)",
@@ -197,15 +192,37 @@ Singleton {
         property var baseCommand: ["bash", "-c"]
         property var message
         property bool isReasoning
+        property string apiFormat: "openai"
+        property string geminiBuffer: ""
 
-        function makeRequest() {
-            const model = models[currentModel];
-            let endpoint = model.endpoint;
+        function buildGeminiEndpoint(model) {
+            // console.log("ENDPOINT: " + model.endpoint + `?key=\$\{${root.apiKeyEnvVarName}\}`)
+            return model.endpoint + `?key=\$\{${root.apiKeyEnvVarName}\}`;
+        }
 
-            /* Build request data and headers */
+        function buildOpenAIEndpoint(model) {
+            return model.endpoint;
+        }
+
+        function buildGeminiRequestData(model, messages) {
+            let baseData = {
+                "contents": messages.filter(message => (message.role != Ai.interfaceRole)).map(message => ({
+                    "role": message.role,
+                    "parts": [{ text: message.content }]
+                })),
+                "tools": [
+                    {
+                        "google_search": {}
+                    }
+                ]
+            };
+            return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
+        }
+
+        function buildOpenAIRequestData(model, messages) {
             let baseData = {
                 "model": model.model,
-                "messages": root.messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
+                "messages": messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
                     return {
                         "role": message.role,
                         "content": message.content,
@@ -213,19 +230,25 @@ Singleton {
                 }),
                 "stream": true,
             };
-            let data = model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
+            return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
+        }
 
-            
+        function makeRequest() {
+            const model = models[currentModel];
+            requester.apiFormat = model.api_format ?? "openai";
+
+            /* Put API key in environment variable */
+            if (model.requires_key) requester.environment[`${root.apiKeyEnvVarName}`] = root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : ""
+
+            /* Build endpoint, request data */
+            const endpoint = (apiFormat === "gemini") ? buildGeminiEndpoint(model) : buildOpenAIEndpoint(model);
+            const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, root.messages) : buildOpenAIRequestData(model, root.messages);
+
             let requestHeaders = {
                 "Content-Type": "application/json",
             }
-
-            /* Put API key in environment variable */
-            if (model.requires_key) requester.environment = ({
-                "API_KEY": root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : "",
-            })
             
-            /* Create message object for local storage */
+            /* Create local message object */
             requester.message = root.aiMessageComponent.createObject(root, {
                 "role": "assistant",
                 "model": currentModel,
@@ -245,9 +268,9 @@ Singleton {
             // console.log("Header string: ", headerString);
 
             /* Create command string */
-            const requestCommandString = `curl --no-buffer '${endpoint}'`
+            const requestCommandString = `curl --no-buffer "${endpoint}"`
                 + ` ${headerString}`
-                + ' -H "Authorization: Bearer ${API_KEY}"'
+                + ((apiFormat == "gemini") ? "" : ` -H "Authorization: Bearer \$\{${root.apiKeyEnvVarName}\}"`)
                 + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
             // console.log("Request command: ", requestCommandString);
             requester.command = baseCommand.concat([requestCommandString]);
@@ -257,59 +280,99 @@ Singleton {
             requester.running = true
         }
 
+        function parseGeminiBuffer() {
+            const dataJson = JSON.parse(requester.geminiBuffer);
+
+            const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
+            requester.message.content += responseContent;
+            requester.geminiBuffer = "";
+        }
+
+        function handleGeminiResponseLine(line) {
+            if (line.startsWith("[")) {
+                requester.geminiBuffer += line.slice(1).trim();
+            } else if (line == "]") {
+                requester.geminiBuffer += line.slice(0, -1).trim();
+                parseGeminiBuffer();
+                requester.message.done = true;
+            } else if (line.startsWith(",")) { // end of one entry 
+                parseGeminiBuffer();
+            } else {
+                requester.geminiBuffer += line.trim();
+            }
+        }
+
+        function handleOpenAIResponseLine(line) {
+            // Remove 'data: ' prefix if present and trim whitespace
+            let cleanData = line.trim();
+            if (cleanData.startsWith("data:")) {
+                cleanData = cleanData.slice(5).trim();
+            }
+            // console.log("Clean data: ", cleanData);
+            if (!cleanData ||
+                cleanData === ": OPENROUTER PROCESSING"
+            ) return;
+
+            if (cleanData === "[DONE]") {
+                requester.message.done = true;
+                return;
+            }
+            const dataJson = JSON.parse(cleanData);
+
+            let newContent = "";
+            const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
+            const responseReasoning = dataJson.choices[0]?.delta?.reasoning || dataJson.choices[0]?.delta?.reasoning_content;
+
+            if (responseContent && responseContent.length > 0) {
+                if (requester.isReasoning) {
+                    requester.isReasoning = false;
+                    requester.message.content += "\n\n</think>\n\n";
+                }
+                newContent = dataJson.choices[0]?.delta?.content || dataJson.message.content;
+            } else if (responseReasoning && responseReasoning.length > 0) {
+                // console.log("Reasoning content: ", dataJson.choices[0].delta.reasoning);
+                if (!requester.isReasoning) {
+                    requester.isReasoning = true;
+                    requester.message.content += "\n\n<think>\n\n";
+                } 
+                newContent = dataJson.choices[0].delta.reasoning || dataJson.choices[0].delta.reasoning_content;
+            }
+
+            requester.message.content += newContent;
+
+            if (dataJson.done) requester.message.done = true;
+        }
+
         stdout: SplitParser {
             onRead: data => {
+                console.log("RAW DATA: ", data);
                 if (data.length === 0) return;
 
-                // Remove 'data: ' prefix if present and trim whitespace
-                let cleanData = data.trim();
-                if (cleanData.startsWith("data:")) {
-                    cleanData = cleanData.slice(5).trim();
-                }
-                // console.log("Clean data: ", cleanData);
-                if (!cleanData ||
-                    cleanData === ": OPENROUTER PROCESSING"
-                ) return;
-
+                // Handle response line
                 if (requester.message.thinking) requester.message.thinking = false;
                 try {
-                    if (cleanData === "[DONE]") {
-                        requester.message.done = true;
-                        return;
+                    if (requester.apiFormat === "gemini") {
+                        requester.handleGeminiResponseLine(data);
                     }
-                    const dataJson = JSON.parse(cleanData);
-
-                    let newContent = "";
-                    const responseContent = dataJson.choices[0]?.delta?.content || dataJson.message?.content;
-                    const responseReasoning = dataJson.choices[0]?.delta?.reasoning || dataJson.choices[0]?.delta?.reasoning_content;
-
-                    if (responseContent && responseContent.length > 0) {
-                        if (requester.isReasoning) {
-                            requester.isReasoning = false;
-                            requester.message.content += "\n\n</think>\n\n";
-                        }
-                        newContent = dataJson.choices[0]?.delta?.content || dataJson.message.content;
-                    } else if (responseReasoning && responseReasoning.length > 0) {
-                        // console.log("Reasoning content: ", dataJson.choices[0].delta.reasoning);
-                        if (!requester.isReasoning) {
-                            requester.isReasoning = true;
-                            requester.message.content += "\n\n<think>\n\n";
-                        } 
-                        newContent = dataJson.choices[0].delta.reasoning || dataJson.choices[0].delta.reasoning_content;
+                    else if (requester.apiFormat === "openai") {
+                        requester.handleOpenAIResponseLine(data);
                     }
-
-                    requester.message.content += newContent;
-
-                    if (dataJson.done) requester.message.done = true;
+                    else {
+                        console.log("Unknown API format: ", requester.apiFormat);
+                        requester.message.content += data;
+                    }
                 } catch (e) {
                     console.log("[AI] Could not parse response from stream: ", e);
-                    requester.message.content += cleanData;
+                    requester.message.content += data;
                 }
             }
         }
 
         onExited: (exitCode, exitStatus) => {
-            try { // to parse full response into json
+            requester.message.done = true;
+            if (requester.apiFormat == "gemini") requester.parseGeminiBuffer();
+
+            try { // to parse full response into json for error handling
                 // console.log("Full response: ", requester.message.content + "]"); 
                 const parsedResponse = JSON.parse(requester.message.content + "]");
                 requester.message.content = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
