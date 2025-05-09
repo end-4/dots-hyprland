@@ -17,7 +17,7 @@ import "./services/"
 
 ShellRoot {
     Component.onCompleted: {
-        MaterialTheme.reapplyTheme()
+        MaterialThemeLoader.reapplyTheme()
     }
 
     Bar {}
