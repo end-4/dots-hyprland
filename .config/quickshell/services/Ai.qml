@@ -15,6 +15,7 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
+    property string systemPrompt: ConfigOptions.ai.systemPrompt ?? ""
     property var messages: []
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
 
@@ -214,7 +215,10 @@ Singleton {
                     {
                         "google_search": {}
                     }
-                ]
+                ],
+                "system_instruction": {
+                    "parts": [{ text: root.systemPrompt }]
+                }
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
         }
@@ -222,12 +226,15 @@ Singleton {
         function buildOpenAIRequestData(model, messages) {
             let baseData = {
                 "model": model.model,
-                "messages": messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
-                    return {
-                        "role": message.role,
-                        "content": message.content,
-                    }
-                }),
+                "messages": [
+                    {role: "system", content: root.systemPrompt},
+                    ...messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
+                        return {
+                            "role": message.role,
+                            "content": message.content,
+                        }
+                    }),
+                ],
                 "stream": true,
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;

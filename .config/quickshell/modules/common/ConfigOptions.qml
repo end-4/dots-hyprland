@@ -4,6 +4,10 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 Singleton {
+    property QtObject ai: QtObject {
+        property string systemPrompt: ""
+    }
+
     property QtObject appearance: QtObject {
         property int fakeScreenRounding: 1 // 0: None | 1: Always | 2: When not fullscreen
     }
