@@ -190,7 +190,8 @@
         "preferredUnit": "C" // Either C or F
     },
     "workspaces": {
-        "shown": 10
+        "shown": 10,
+        "labels": {}
     },
     "dock": {
         "enabled": false,
