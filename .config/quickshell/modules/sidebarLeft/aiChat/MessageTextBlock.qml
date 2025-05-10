@@ -121,13 +121,6 @@ ColumnLayout {
             segmentContent = text
         }
 
-        Keys.onPressed: (event) => {
-            if ((event.key === Qt.Key_C) && event.modifiers == Qt.ControlModifier) {
-                messageText.copy()
-                event.accepted = true
-            }
-        }
-
         onLinkActivated: (link) => {
             Qt.openUrlExternally(link)
             Hyprland.dispatch("global quickshell:sidebarLeftClose")
