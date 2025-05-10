@@ -68,9 +68,9 @@ Singleton {
         property QtObject booru: QtObject {
             property bool allowNsfw: false
             property string defaultProvider: "yandere"
-            property int limit: 20 // Images per page
+            property int limit: 20
             property QtObject zerochan: QtObject {
-                // property string username
+                property string username: ""
             }
         }
     }
