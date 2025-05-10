@@ -20,9 +20,14 @@ Item {
     property var inputField: messageInputField
     readonly property var messages: Ai.messages
     property string commandPrefix: "/"
+    property string faviconDownloadPath: StringUtils.trimFileProtocol(`${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/favicons`)
 
     property var suggestionQuery: ""
     property var suggestionList: []
+
+    Component.onCompleted: {
+        Hyprland.dispatch(`exec mkdir -p ${faviconDownloadPath}`)
+    }
 
     Connections {
         target: panelWindow
@@ -205,6 +210,7 @@ int main(int argc, char* argv[]) {
                     messageIndex: index
                     messageData: modelData
                     messageInputField: root.inputField
+                    faviconDownloadPath: root.faviconDownloadPath
                 }
             }
 

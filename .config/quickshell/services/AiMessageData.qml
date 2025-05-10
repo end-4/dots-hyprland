@@ -7,4 +7,6 @@ QtObject {
     property string model
     property bool thinking: true
     property bool done: false
+    property var annotations: []
+    property var annotationSources: []
 }

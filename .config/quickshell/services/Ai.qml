@@ -310,11 +310,33 @@ Singleton {
         }
 
         function parseGeminiBuffer() {
+            // console.log("BUFFER DATA: ", requester.geminiBuffer);
             try {
                 const dataJson = JSON.parse(requester.geminiBuffer);
                 const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
                 requester.message.content += responseContent;
+                const annotationSources = dataJson.candidates[0]?.groundingMetadata.groundingChunks?.map(chunk => {
+                    return {
+                        "type": "url_citation",
+                        "text": chunk?.web?.title,
+                        "url": chunk?.web?.uri,
+                    }
+                });
+                const annotations = dataJson.candidates[0]?.groundingMetadata.groundingSupports?.map(citation => {
+                    return {
+                        "type": "url_citation",
+                        "start_index": citation.segment?.startIndex,
+                        "end_index": citation.segment?.endIndex,
+                        "text": citation?.segment.text,
+                        "url": annotationSources[citation.groundingChunkIndices[0]]?.url,
+                        "sources": citation.groundingChunkIndices
+                    }
+                });
+                requester.message.annotationSources = annotationSources;
+                requester.message.annotations = annotations;
+                // console.log(JSON.stringify(requester.message, null, 2));
             } catch (e) {
+                console.log("[AI] Could not parse response from stream: ", e);
                 requester.message.content += requester.geminiBuffer
             } finally {
                 requester.geminiBuffer = "";

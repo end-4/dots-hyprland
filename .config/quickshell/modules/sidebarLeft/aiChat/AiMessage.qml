@@ -20,6 +20,7 @@ Rectangle {
     property int messageIndex
     property var messageData
     property var messageInputField
+    property string faviconDownloadPath
 
     property real messagePadding: 7
     property real contentSpacing: 3
@@ -74,7 +75,7 @@ Rectangle {
         }
     }
 
-    ColumnLayout {
+    ColumnLayout { // Main layout of the whole thing
         id: columnLayout
 
         anchors.left: parent.left
@@ -228,7 +229,7 @@ Rectangle {
             }
         }
 
-        ColumnLayout {
+        ColumnLayout { // Message content
             id: messageContentColumnLayout
 
             spacing: 0
@@ -255,6 +256,25 @@ Rectangle {
 
                 }
             }
+        }
+
+        Flow { // Annotations
+            id: annotationFlowLayout
+            visible: root.messageData?.annotationSources?.length > 0
+            spacing: 5
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignLeft
+
+            Repeater {
+                model: root.messageData.annotationSources
+                delegate: AnnotationSourceButton {
+                    id: annotationButton
+                    faviconDownloadPath: root.faviconDownloadPath
+                    displayText: modelData.text
+                    url: modelData.url
+                }
+            }
+
         }
 
     }

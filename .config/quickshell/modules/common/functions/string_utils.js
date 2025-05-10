@@ -9,6 +9,11 @@ function getDomain(url) {
     return match ? match[1] : null;
 }
 
+function getBaseUrl(url) {
+    const match = url.match(/^(https?:\/\/[^\/]+)(\/.*)?$/);
+    return match ? match[1] : null;
+}
+
 function shellSingleQuoteEscape(str) {
     //  escape single quotes
     return String(str)
