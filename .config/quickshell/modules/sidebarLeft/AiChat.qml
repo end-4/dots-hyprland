@@ -30,12 +30,6 @@ Item {
         Hyprland.dispatch(`exec mkdir -p ${faviconDownloadPath}`)
     }
 
-    Connections {
-        target: panelWindow
-        function onVisibleChanged(visible) {
-            messageInputField.forceActiveFocus()
-        }
-    }
     onFocusChanged: (focus) => {
         if (focus) {
             messageInputField.forceActiveFocus()

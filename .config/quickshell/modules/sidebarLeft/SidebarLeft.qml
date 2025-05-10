@@ -65,6 +65,7 @@ Scope { // Scope
                 target: sidebarRoot
                 function onVisibleChanged() {
                     delayedGrabTimer.start()
+                    swipeView.children[0].children[0].children[sidebarRoot.selectedTab].forceActiveFocus()
                 }
             }
 
