@@ -24,8 +24,12 @@ Item {
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale: ConfigOptions.overview.scale
 
-    property real workspaceImplicitWidth: (monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale
-    property real workspaceImplicitHeight: (monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale
+    property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
+        ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
+        ((monitor.width - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale)
+    property real workspaceImplicitHeight: (monitorData?.transform % 2 === 1) ? 
+        ((monitor.width - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale) :
+        ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
 
     property real workspaceNumberMargin: 80
     property real workspaceNumberSize: 80
