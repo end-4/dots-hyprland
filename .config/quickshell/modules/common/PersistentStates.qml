@@ -5,8 +5,12 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject sidebar: QtObject {
+        property QtObject centerGroup: QtObject {
+            property int selectedTab: 0
+        }
         property QtObject bottomGroup: QtObject {
             property bool collapsed: false
+            property int selectedTab: 0
         }
     }
 

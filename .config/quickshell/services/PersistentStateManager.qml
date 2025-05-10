@@ -29,6 +29,7 @@ Singleton {
     }
 
     function setState(nestedKey, value) {
+        // console.log(`[PersistentStateManager] Setting state: ${nestedKey} = ${value}`);
         let keys = nestedKey.split(".");
         let obj = PersistentStates;
         let parents = [obj];
@@ -53,7 +54,6 @@ Singleton {
     }
 
     function saveStates() {
-        console.log("[PersistentStateManager] Saving states to file:", root.filePath)
         const plainStates = ObjectUtils.toPlainObject(PersistentStates)
         stateFileView.setText(JSON.stringify(plainStates, null, 2))
     }

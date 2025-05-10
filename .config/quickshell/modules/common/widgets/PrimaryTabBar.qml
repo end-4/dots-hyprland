@@ -7,6 +7,7 @@ import Quickshell
 ColumnLayout {
     id: root
     spacing: 0
+    property bool _initialized: false
     required property var tabButtonList // Something like [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
     required property var externalTrackedTab
     property bool enableIndicatorAnimation: false
@@ -16,7 +17,13 @@ ColumnLayout {
         id: tabBar
         Layout.fillWidth: true
         currentIndex: root.externalTrackedTab
-        onCurrentIndexChanged: root.onCurrentIndexChanged(currentIndex)
+        onCurrentIndexChanged: {
+            if (!root._initialized) {
+                root._initialized = true
+                return
+            }
+            root.onCurrentIndexChanged(currentIndex)
+        }
 
         background: Item {
             WheelHandler {
