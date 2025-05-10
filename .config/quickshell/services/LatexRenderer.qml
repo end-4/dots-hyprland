@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/file_utils.js" as FileUtils
 import "root:/modules/common"
 import QtQuick
 import Quickshell
@@ -25,7 +26,7 @@ Singleton {
     property var processedExpressions: ({})
     property var renderedImagePaths: ({})
     property string microtexBinaryPath: Qt.resolvedUrl("/opt/MicroTeX/LaTeX")
-    property string latexOutputPath: StringUtils.trimFileProtocol(`${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/latex`)
+    property string latexOutputPath: FileUtils.trimFileProtocol(`${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/latex`)
 
     signal renderFinished(string hash, string imagePath)
 
