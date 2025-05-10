@@ -20,28 +20,21 @@ Button {
     property string downloadPath
     property string nsfwPath
     property string fileName: decodeURIComponent((imageData.file_url).substring((imageData.file_url).lastIndexOf('/') + 1))
+    property string filePath: `${root.previewDownloadPath}/${root.fileName}`
 
     property bool showActions: false
 
     Process {
         id: downloadProcess
         running: false
-        command: ["bash", "-c", `curl '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.previewDownloadPath}/${root.fileName}' && echo 'done'`]
-        stdout: SplitParser {
-            onRead: (data) => {
-                // console.log("Download output:", data)
-                if(data.includes("done")) {
-                    imageObject.source = `${previewDownloadPath}/${root.fileName}`
-                }
-            }
+        command: ["bash", "-c", `[ -f ${root.filePath} ] || curl '${root.imageData.preview_url ?? root.imageData.sample_url}' -o '${root.filePath}'`]
+        onExited: (exitCode, exitStatus) => {
+            imageObject.source = `${previewDownloadPath}/${root.fileName}`
         }
     }
 
     Component.onCompleted: {
         if (root.manualDownload) {
-            // console.log("Manual download triggered")
-            // console.log("Image data:", JSON.stringify(root.imageData))
-            // console.log("Download command:", downloadProcess.command.join(" "))
             downloadProcess.running = true
         }
     }
