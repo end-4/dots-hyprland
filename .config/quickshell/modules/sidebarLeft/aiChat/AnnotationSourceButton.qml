@@ -2,6 +2,7 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import Qt5Compat.GraphicalEffects
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
@@ -16,7 +17,7 @@ Button {
     property string url
 
     implicitHeight: 30
-    leftPadding: 10
+    leftPadding: 5
     rightPadding: 10
 
     property string downloadUserAgent: ConfigOptions.networking.userAgent
@@ -37,7 +38,7 @@ Button {
     }
 
     Component.onCompleted: {
-        console.log("Favicon download:", faviconDownloadProcess.command.join(" "))
+        // console.log("Favicon download:", faviconDownloadProcess.command.join(" "))
         faviconDownloadProcess.running = true
     }
 
@@ -61,7 +62,16 @@ Button {
         IconImage {
             id: iconImage
             source: Qt.resolvedUrl(root.faviconUrl)
-            implicitSize: text.implicitHeight
+            implicitSize: 20
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: iconImage.implicitSize
+                    height: iconImage.implicitSize
+                    radius: Appearance.rounding.full
+                }
+            }
         }
         StyledText {
             id: text
