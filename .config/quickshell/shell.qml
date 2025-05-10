@@ -19,6 +19,7 @@ ShellRoot {
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         ConfigLoader.loadConfig()
+        PersistentStateManager.loadStates()
     }
 
     Bar {}

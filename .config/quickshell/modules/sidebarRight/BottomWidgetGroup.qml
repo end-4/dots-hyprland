@@ -29,13 +29,8 @@ Rectangle {
         }
     }
 
-    Component.onCompleted: {
-        bottomWidgetGroupRow.opacity = !collapsed
-        collapsedBottomWidgetGroupRow.opacity = collapsed
-    }
-
     function setCollapsed(state) {
-        PersistentStates.sidebar.bottomGroup.collapsed = state
+        PersistentStateManager.setState("sidebar.bottomGroup.collapsed", state)
         if (collapsed) {
             bottomWidgetGroupRow.opacity = 0
         }
@@ -70,6 +65,7 @@ Rectangle {
     // The thing when collapsed
     RowLayout {
         id: collapsedBottomWidgetGroupRow
+        opacity: collapsed ? 1 : 0
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {
@@ -111,6 +107,7 @@ Rectangle {
     RowLayout {
         id: bottomWidgetGroupRow
 
+        opacity: collapsed ? 0 : 1
         visible: opacity > 0
         Behavior on opacity {
             NumberAnimation {

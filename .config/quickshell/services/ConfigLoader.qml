@@ -25,27 +25,7 @@ Singleton {
         try {
             const json = JSON.parse(fileContent);
 
-            function applyToQtObject(qtObj, jsonObj) {
-                if (!qtObj || typeof jsonObj !== "object" || jsonObj === null) return;
-
-                for (let key in jsonObj) {
-                    if (!qtObj.hasOwnProperty(key)) continue;
-
-                    // Check if the property is a QtObject (not a value)
-                    const value = qtObj[key];
-                    const jsonValue = jsonObj[key];
-
-                    // If it's an object and not an array, recurse
-                    if (value && typeof value === "object" && !Array.isArray(value)) {
-                        applyToQtObject(value, jsonValue);
-                    } else {
-                        // Otherwise, assign the value
-                        qtObj[key] = jsonValue;
-                    }
-                }
-            }
-
-            applyToQtObject(ConfigOptions, json);
+            ObjectUtils.applyToQtObject(ConfigOptions, json);
             if (root.firstLoad) {
                 root.firstLoad = false;
             } else {

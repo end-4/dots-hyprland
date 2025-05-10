@@ -1,7 +1,3 @@
-function trimFileProtocol(str) {
-    return str.startsWith("file://") ? str.slice(7) : str;
-}
-
 function toPlainObject(qtObj) {
     if (qtObj === null || typeof qtObj !== "object") return qtObj;
 
@@ -26,4 +22,24 @@ function toPlainObject(qtObj) {
         }
     }
     return result;
+}
+
+function applyToQtObject(qtObj, jsonObj) {
+    if (!qtObj || typeof jsonObj !== "object" || jsonObj === null) return;
+
+    for (let key in jsonObj) {
+        if (!qtObj.hasOwnProperty(key)) continue;
+
+        // Check if the property is a QtObject (not a value)
+        const value = qtObj[key];
+        const jsonValue = jsonObj[key];
+
+        // If it's an object and not an array, recurse
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+            applyToQtObject(value, jsonValue);
+        } else {
+            // Otherwise, assign the value
+            qtObj[key] = jsonValue;
+        }
+    }
 }
