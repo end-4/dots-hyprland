@@ -18,6 +18,7 @@ Scope {
     readonly property int barHeight: Appearance.sizes.barHeight
     readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
     readonly property int osdHideMouseMoveThreshold: 20
+    property bool showBarBackground: ConfigOptions.bar.showBackground
 
     Variants { // For each monitor
         model: Quickshell.screens
@@ -30,7 +31,7 @@ Scope {
             screen: modelData
             WlrLayershell.namespace: "quickshell:bar"
             height: barHeight + Appearance.rounding.screenRounding
-            exclusiveZone: barHeight
+            exclusiveZone: showBarBackground ? barHeight : (barHeight - 4)
             mask: Region {
                 item: barContent
             }
@@ -47,7 +48,7 @@ Scope {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.top: parent.top
-                color: Appearance.colors.colLayer0
+                color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 height: barHeight
                 
                 RowLayout { // Left section
@@ -324,14 +325,14 @@ Scope {
                     anchors.left: parent.left
                     size: Appearance.rounding.screenRounding
                     corner: cornerEnum.topLeft
-                    color: Appearance.colors.colLayer0
+                    color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 }
                 RoundCorner {
                     anchors.top: parent.top
                     anchors.right: parent.right
                     size: Appearance.rounding.screenRounding
                     corner: cornerEnum.topRight
-                    color: Appearance.colors.colLayer0
+                    color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 }
             }
 

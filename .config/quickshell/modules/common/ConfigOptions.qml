@@ -24,6 +24,7 @@ Singleton {
     property QtObject bar: QtObject {
         property int batteryLowThreshold: 20
         property string topLeftIcon: "spark" // Options: distro, spark
+        property bool showBackground: true
         property QtObject resources: QtObject {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
