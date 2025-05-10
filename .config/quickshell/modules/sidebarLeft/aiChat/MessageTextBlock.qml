@@ -118,6 +118,7 @@ ColumnLayout {
         text: qsTr("Waiting for response...")
 
         onTextChanged: {
+            if (!root.editing) return
             segmentContent = text
         }
 
