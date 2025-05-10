@@ -5,6 +5,9 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject sidebar: QtObject {
+        property QtObject leftSide: QtObject {
+            property int selectedTab: 0
+        }
         property QtObject centerGroup: QtObject {
             property int selectedTab: 0
         }
