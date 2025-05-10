@@ -447,8 +447,8 @@ int main(int argc, char* argv[]) {
                                 event.accepted = true
                             } else { // Accept text
                                 const inputText = messageInputField.text
-                                root.handleInput(inputText)
                                 messageInputField.clear()
+                                root.handleInput(inputText)
                                 event.accepted = true
                             }
                         }

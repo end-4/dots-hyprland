@@ -44,7 +44,7 @@ Singleton {
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": "Pricing: free. Data used for training.\n\nInstructions: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
+            "key_get_description": "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
             "api_format": "gemini",
             "tools": [
                 {
@@ -62,7 +62,7 @@ Singleton {
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": "Pricing: free. Data use policy varies depending on your OpenRouter account settings.\n\nInstructions: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
+            "key_get_description": "**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
         },
         "openrouter-deepseek-r1": {
             "name": "DeepSeek R1",
@@ -153,7 +153,7 @@ Singleton {
 
     function addApiKeyAdvice(model) {
         root.addMessage(
-            StringUtils.format(qsTr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/><br/>For {0}, you can grab one at:\n\n{1}\n\n{2}'), 
+            StringUtils.format(qsTr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}'), 
                 model.name, model.key_get_link, model.key_get_description ?? qsTr("<i>No further instruction provided</i>")), 
             Ai.interfaceRole
         );
@@ -172,9 +172,9 @@ Singleton {
                 }
             }
         } else {
-            if (feedback) root.addMessage(qsTr("Invalid model. Supported: \n- ") + modelList.join("\n- "), Ai.interfaceRole)
+            if (feedback) root.addMessage(qsTr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n"), Ai.interfaceRole) + "\n```"
         }
-        if (models[model].requires_key) {
+        if (models[model]?.requires_key) {
             KeyringStorage.fetchKeyringData();
         } 
     }
