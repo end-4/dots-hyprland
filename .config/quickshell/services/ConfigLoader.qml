@@ -13,6 +13,7 @@ Singleton {
     property string fileDir: `${StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]}/illogical-impulse`
     property string fileName: "config.json"
     property string filePath: `${root.fileDir}/${root.fileName}`
+    property bool firstLoad: true
 
     function toPlainObject(qtObj) {
         if (qtObj === null || typeof qtObj !== "object") return qtObj;
@@ -45,29 +46,40 @@ Singleton {
     }
 
     function applyConfig(fileContent) {
-        const json = JSON.parse(fileContent);
+        try {
+            const json = JSON.parse(fileContent);
 
-        function applyToQtObject(qtObj, jsonObj) {
-            if (!qtObj || typeof jsonObj !== "object" || jsonObj === null) return;
+            function applyToQtObject(qtObj, jsonObj) {
+                if (!qtObj || typeof jsonObj !== "object" || jsonObj === null) return;
 
-            for (let key in jsonObj) {
-                if (!qtObj.hasOwnProperty(key)) continue;
+                for (let key in jsonObj) {
+                    if (!qtObj.hasOwnProperty(key)) continue;
 
-                // Check if the property is a QtObject (not a value)
-                const value = qtObj[key];
-                const jsonValue = jsonObj[key];
+                    // Check if the property is a QtObject (not a value)
+                    const value = qtObj[key];
+                    const jsonValue = jsonObj[key];
 
-                // If it's an object and not an array, recurse
-                if (value && typeof value === "object" && !Array.isArray(value)) {
-                    applyToQtObject(value, jsonValue);
-                } else {
-                    // Otherwise, assign the value
-                    qtObj[key] = jsonValue;
+                    // If it's an object and not an array, recurse
+                    if (value && typeof value === "object" && !Array.isArray(value)) {
+                        applyToQtObject(value, jsonValue);
+                    } else {
+                        // Otherwise, assign the value
+                        qtObj[key] = jsonValue;
+                    }
                 }
             }
-        }
 
-        applyToQtObject(ConfigOptions, json);
+            applyToQtObject(ConfigOptions, json);
+            if (root.firstLoad) {
+                root.firstLoad = false;
+            } else {
+                Hyprland.dispatch(`exec notify-send "Shell configuration reloaded" "${root.filePath}"`)
+            }
+        } catch (e) {
+            console.error("[ConfigLoader] Error reading file:", e);
+            Hyprland.dispatch(`exec notify-send "Shell configuration failed to load" "${root.filePath}"`)
+            return;
+        }
     }
 
     Timer {
@@ -85,6 +97,7 @@ Singleton {
         path: root.filePath
         watchChanges: true
         onFileChanged: {
+            console.log("[ConfigLoader] File changed, reloading...")
             this.reload()
             delayedFileRead.start()
         }
@@ -98,8 +111,9 @@ Singleton {
                 // Apply ConfigOptions json to file
                 const plainConfig = toPlainObject(ConfigOptions)
                 configFileView.setText(JSON.stringify(plainConfig, null, 2))
+                Hyprland.dispatch(`exec notify-send "Shell configuration created" "${root.filePath}"`)
             } else {
-                Hyprland.dispatch(`exec notify-send "Failed to load config file at ${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "Shell configuration failed to load" "${root.filePath}"`)
             }
         }
     }

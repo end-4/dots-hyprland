@@ -13,6 +13,8 @@ function findSuitableMaterialSymbol(summary = "") {
         'welcome': 'waving_hand',
         'time': 'scheduleb',
         'installed': 'download',
+        'configuration reloaded': 'reset_wrench',
+        'config': 'reset_wrench',
         'update': 'update',
         'ai response': 'neurology',
         'startswith:file': 'folder_copy', // Declarative startsWith check
