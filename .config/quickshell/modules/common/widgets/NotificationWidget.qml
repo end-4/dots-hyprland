@@ -22,6 +22,8 @@ Item {
     property bool ready: false
     property int defaultTimeoutValue: 5000
 
+    property var notificationXAnimation: Appearance.animation.elementMoveEnter
+
     Layout.fillWidth: true
     clip: !popup
 
@@ -45,6 +47,7 @@ Item {
         interval: notificationObject.expireTimeout ?? root.defaultTimeoutValue
         repeat: false
         onTriggered: {
+            root.notificationXAnimation = Appearance.animation.elementMoveExit
             Notifications.timeoutNotification(notificationObject.id);
         }
     }
@@ -135,9 +138,11 @@ Item {
             dragStarted = false
             if (mouse.button === Qt.LeftButton) {
                 if (notificationRowWrapper.x > dragConfirmThreshold) {
+                    root.notificationXAnimation = Appearance.animation.elementMoveEnter
                     Notifications.discardNotification(notificationObject.id);
                 } else {
                     // Animate back if not far enough
+                    root.notificationXAnimation = Appearance.animation.elementMoveFast
                     notificationRowWrapper.x = 0
                     notificationBackground.x = 0
                 }
@@ -188,9 +193,9 @@ Item {
             Behavior on x {
                 enabled: enableAnimation
                 NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                    duration: root.notificationXAnimation.duration
+                    easing.type: root.notificationXAnimation.type
+                    easing.bezierCurve: root.notificationXAnimation.bezierCurve
                 }
             }
             Behavior on height {
@@ -228,9 +233,9 @@ Item {
         Behavior on x {
             enabled: enableAnimation
             NumberAnimation {
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                duration: root.notificationXAnimation.duration
+                easing.type: root.notificationXAnimation.type
+                easing.bezierCurve: root.notificationXAnimation.bezierCurve
             }
         }
 
