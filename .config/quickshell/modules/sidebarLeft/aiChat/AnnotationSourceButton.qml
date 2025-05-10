@@ -16,17 +16,17 @@ Button {
     property string displayText
     property string url
 
-    implicitHeight: 30
-    leftPadding: 5
-    rightPadding: 10
-
     property string downloadUserAgent: ConfigOptions.networking.userAgent
     property string faviconDownloadPath
     property string domainName: url.includes("vertexaisearch") ? displayText : StringUtils.getBaseUrl(url)
-    // property string faviconUrl: `https://${domainName}/favicon.ico`
     property string faviconUrl: `https://www.google.com/s2/favicons?domain=${domainName}&sz=32`
     property string fileName: `${domainName}.ico`
     property string faviconFilePath: `${faviconDownloadPath}/${fileName}`
+
+    property real faviconSize: 20
+    implicitHeight: 30
+    leftPadding: (implicitHeight - faviconSize) / 2
+    rightPadding: 10
 
     Process {
         id: faviconDownloadProcess
@@ -38,7 +38,6 @@ Button {
     }
 
     Component.onCompleted: {
-        // console.log("Favicon download:", faviconDownloadProcess.command.join(" "))
         faviconDownloadProcess.running = true
     }
 
@@ -62,7 +61,7 @@ Button {
         IconImage {
             id: iconImage
             source: Qt.resolvedUrl(root.faviconUrl)
-            implicitSize: 20
+            implicitSize: root.faviconSize
 
             layer.enabled: true
             layer.effect: OpacityMask {
