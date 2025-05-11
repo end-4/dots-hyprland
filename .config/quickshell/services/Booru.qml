@@ -16,7 +16,7 @@ Singleton {
     Connections {
         target: ConfigOptions.sidebar.booru
         function onAllowNsfwChanged() {
-            root.addSystemMessage(ConfigOptions.sidebar.booru.allowNsfw ? qsTr("Tiddies enabled") : qsTr("No horny"))
+            root.addSystemMessage(PersistentStates.booru.allowNsfw ? qsTr("Tiddies enabled") : qsTr("No horny"))
         }
     }
 
@@ -224,7 +224,7 @@ Singleton {
             }
         },
     }
-    property var currentProvider: ConfigOptions.sidebar.booru.defaultProvider
+    property var currentProvider: PersistentStates.booru.provider
 
     function getWorkingImageSource(url) {
         if (url.includes('pximg.net')) {
@@ -236,7 +236,7 @@ Singleton {
     function setProvider(provider) {
         provider = provider.toLowerCase()
         if (providerList.indexOf(provider) !== -1) {
-            currentProvider = provider
+            PersistentStateManager.setState("booru.provider", provider)
             root.addSystemMessage(qsTr("Provider set to ") + providers[provider].name
                 + (provider == "zerochan" ? qsTr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
         } else {

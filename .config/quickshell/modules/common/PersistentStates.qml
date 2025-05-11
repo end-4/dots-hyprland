@@ -17,4 +17,9 @@ Singleton {
         }
     }
 
+    property QtObject booru: QtObject {
+        property bool allowNsfw: false
+        property string provider: "yandere"
+    }
+
 }

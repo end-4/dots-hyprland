@@ -69,14 +69,14 @@ Item {
             name: "safe",
             description: qsTr("Disable NSFW content"),
             execute: () => {
-                ConfigOptions.sidebar.booru.allowNsfw = false;
+                PersistentStateManager.setState("booru.allowNsfw", false);
             }
         },
         {
             name: "lewd",
             description: qsTr("Allow NSFW content"),
             execute: () => {
-                ConfigOptions.sidebar.booru.allowNsfw = true;
+                PersistentStateManager.setState("booru.allowNsfw", true);
             }
         },
     ]
@@ -110,7 +110,7 @@ Item {
                     break;
                 }
             }
-            Booru.makeRequest(tagList, ConfigOptions.sidebar.booru.allowNsfw, ConfigOptions.sidebar.booru.limit, pageIndex);
+            Booru.makeRequest(tagList, PersistentStates.booru.allowNsfw, ConfigOptions.sidebar.booru.limit, pageIndex);
         }
     }
 
@@ -641,10 +641,10 @@ Item {
                             enabled: Booru.currentProvider !== "zerochan"
                             scale: 0.6
                             Layout.alignment: Qt.AlignVCenter
-                            checked: (ConfigOptions.sidebar.booru.allowNsfw && Booru.currentProvider !== "zerochan")
+                            checked: (PersistentStates.booru.allowNsfw && Booru.currentProvider !== "zerochan")
                             onCheckedChanged: {
                                 if (!nsfwSwitch.enabled) return;
-                                ConfigOptions.sidebar.booru.allowNsfw = checked
+                                PersistentStateManager.setState("booru.allowNsfw", checked)
                             }
                         }
                     }
