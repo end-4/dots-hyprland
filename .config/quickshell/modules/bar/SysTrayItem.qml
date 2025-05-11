@@ -24,9 +24,9 @@ MouseArea {
             break;
         case Qt.RightButton:
             if (item.hasMenu) menu.open();
-            event.accepted = true;
             break;
         }
+        event.accepted = true;
     }
 
     QsMenuAnchor {
