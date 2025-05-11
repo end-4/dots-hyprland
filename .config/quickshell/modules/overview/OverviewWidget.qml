@@ -18,6 +18,7 @@ Item {
     readonly property var toplevels: ToplevelManager.toplevels
     readonly property int workspacesShown: ConfigOptions.overview.numOfRows * ConfigOptions.overview.numOfCols
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
+    property bool monitorIsFocused: (Hyprland.focusedMonitor.id == monitor.id)
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
@@ -80,15 +81,15 @@ Item {
                             property color hoveredWorkspaceColor: Appearance.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
                             property color activeBorderColor: Appearance.m3colors.m3secondary
-                            property bool hovered: false
+                            property bool hoveredWhileDragging: false
 
                             implicitWidth: root.workspaceImplicitWidth
                             implicitHeight: root.workspaceImplicitHeight
-                            color: hovered ? hoveredWorkspaceColor : defaultWorkspaceColor
+                            color: hoveredWhileDragging ? hoveredWorkspaceColor : defaultWorkspaceColor
                             radius: Appearance.rounding.screenRounding * root.scale
                             border.width: 2
-                            border.color: monitor.activeWorkspace?.id == workspaceValue ? activeBorderColor : 
-                                hovered ? hoveredBorderColor : "transparent"
+                            border.color: (monitor.activeWorkspace?.id == workspaceValue && root.monitorIsFocused) ? activeBorderColor : 
+                                hoveredWhileDragging ? hoveredBorderColor : "transparent"
 
                             MouseArea {
                                 id: workspaceArea
@@ -108,10 +109,10 @@ Item {
                                 onEntered: {
                                     root.draggingTargetWorkspace = workspaceValue
                                     if (root.draggingFromWorkspace == root.draggingTargetWorkspace) return;
-                                    hovered = true
+                                    hoveredWhileDragging = true
                                 }
                                 onExited: {
-                                    hovered = false
+                                    hoveredWhileDragging = false
                                     if (root.draggingTargetWorkspace == workspaceValue) root.draggingTargetWorkspace = -1
                                 }
                             }
