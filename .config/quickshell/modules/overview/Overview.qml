@@ -48,22 +48,6 @@ Scope {
                 }
             }
 
-            Connections {
-                target: root
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = root.visible
-                }
-            }
-
             width: columnLayout.width
             height: columnLayout.height
 
