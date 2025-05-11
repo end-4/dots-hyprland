@@ -37,3 +37,7 @@ output_path = '~/.config/ags/assets/themes/sourceviewtheme.xml'
 input_path = '~/.config/matugen/templates/ags/sourceviewtheme-light.xml'
 output_path = '~/.config/ags/assets/themes/sourceviewtheme-light.xml'
 
+[templates.ags_scss]
+input_path = '~/.config/matugen/templates/ags/_material.scss'
+output_path = '~/.local/state/ags/scss/_material.scss'
+post_hook = 'pidof gjs && agsv1 run-js "handleStyles(false)"'

@@ -44,7 +44,9 @@ apply_term() {
 
   for file in /dev/pts/*; do
     if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
+      {
       cat "$STATE_DIR"/user/generated/terminal/sequences.txt >"$file"
+      } & disown || true
     fi
   done
 }
@@ -54,5 +56,11 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
+apply_ags() {
+  pidof agsv1 && agsv1 run-js "handleStyles(false);"
+  pidof agsv1 && agsv1 run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
+}
+
+apply_ags &
 apply_qt &
 apply_term &
