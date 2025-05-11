@@ -164,15 +164,45 @@ Scope {
                         RowLayout {
                             id: indicatorsRowLayout
                             anchors.centerIn: parent
-                            spacing: 15
+                            property real realSpacing: 15
+                            spacing: 0
                             
-                            MaterialSymbol {
-                                visible: Audio.source?.audio?.muted
-                                text: "mic_off"
-                                iconSize: Appearance.font.pixelSize.larger
-                                color: Appearance.colors.colOnLayer0
+                            Revealer {
+                                reveal: Audio.sink?.audio?.muted
+                                Layout.fillHeight: true
+                                Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                                Behavior on Layout.rightMargin {
+                                    NumberAnimation {
+                                        duration: Appearance.animation.elementMoveFast.duration
+                                        easing.type: Appearance.animation.elementMoveFast.type
+                                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                                    }
+                                }
+                                MaterialSymbol {
+                                    text: "volume_off"
+                                    iconSize: Appearance.font.pixelSize.larger
+                                    color: Appearance.colors.colOnLayer0
+                                }
+                            }
+                            Revealer {
+                                reveal: Audio.source?.audio?.muted
+                                Layout.fillHeight: true
+                                Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                                Behavior on Layout.rightMargin {
+                                    NumberAnimation {
+                                        duration: Appearance.animation.elementMoveFast.duration
+                                        easing.type: Appearance.animation.elementMoveFast.type
+                                        easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                                    }
+                                }
+                                MaterialSymbol {
+                                    text: "mic_off"
+                                    iconSize: Appearance.font.pixelSize.larger
+                                    color: Appearance.colors.colOnLayer0
+                                }
                             }
                             MaterialSymbol {
+                                Layout.rightMargin: indicatorsRowLayout.realSpacing
                                 text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
                                     Network.networkStrength > 80 ? "signal_wifi_4_bar" :
                                     Network.networkStrength > 60 ? "network_wifi_3_bar" :
