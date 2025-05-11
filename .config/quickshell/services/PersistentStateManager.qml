@@ -14,6 +14,7 @@ Singleton {
     property string fileDir: `${StandardPaths.standardLocations(StandardPaths.StateLocation)[0]}`
     property string fileName: "states.json"
     property string filePath: `${root.fileDir}/${root.fileName}`
+    property bool allowWriteback: false
 
     function getState(nestedKey) {
         let keys = nestedKey.split(".");
@@ -29,7 +30,7 @@ Singleton {
     }
 
     function setState(nestedKey, value) {
-        // console.log(`[PersistentStateManager] Setting state: ${nestedKey} = ${value}`);
+        if (!root.allowWriteback) return;
         let keys = nestedKey.split(".");
         let obj = PersistentStates;
         let parents = [obj];
@@ -61,8 +62,8 @@ Singleton {
     function applyStates(fileContent) {
         try {
             const json = JSON.parse(fileContent);
-
             ObjectUtils.applyToQtObject(PersistentStates, json);
+            root.allowWriteback = true
         } catch (e) {
             console.error("[PersistentStateManager] Error reading file:", e);
             return;
