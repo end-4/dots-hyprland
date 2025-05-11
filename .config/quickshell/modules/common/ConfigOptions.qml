@@ -76,7 +76,7 @@ Singleton {
     }
 
     property QtObject hacks: QtObject {
-        property int arbitraryRaceConditionDelay: 10 // milliseconds
+        property int arbitraryRaceConditionDelay: 20 // milliseconds
     }
 
 }
