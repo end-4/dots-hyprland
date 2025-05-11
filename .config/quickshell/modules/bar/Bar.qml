@@ -167,6 +167,12 @@ Scope {
                             spacing: 15
                             
                             MaterialSymbol {
+                                visible: Audio.source?.audio?.muted
+                                text: "mic_off"
+                                iconSize: Appearance.font.pixelSize.larger
+                                color: Appearance.colors.colOnLayer0
+                            }
+                            MaterialSymbol {
                                 text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
                                     Network.networkStrength > 80 ? "signal_wifi_4_bar" :
                                     Network.networkStrength > 60 ? "network_wifi_3_bar" :
