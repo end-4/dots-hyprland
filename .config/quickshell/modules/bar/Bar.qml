@@ -60,7 +60,6 @@ Scope {
                     property real lastScrollX: 0
                     property real lastScrollY: 0
                     property bool trackingScroll: false
-                    anchors.fill: leftSection
                     acceptedButtons: Qt.LeftButton
                     hoverEnabled: true
                     propagateComposedEvents: true
@@ -279,7 +278,7 @@ Scope {
                                 spacing: 0
                                 
                                 Revealer {
-                                    reveal: Audio.sink?.audio?.muted
+                                    reveal: Audio.sink?.audio?.muted ?? false
                                     Layout.fillHeight: true
                                     Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                                     Behavior on Layout.rightMargin {
@@ -296,7 +295,7 @@ Scope {
                                     }
                                 }
                                 Revealer {
-                                    reveal: Audio.source?.audio?.muted
+                                    reveal: Audio.source?.audio?.muted ?? false
                                     Layout.fillHeight: true
                                     Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
                                     Behavior on Layout.rightMargin {
