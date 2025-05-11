@@ -12,7 +12,7 @@ Singleton {
     property var source: Pipewire.defaultAudioSource
 
     PwObjectTracker {
-        objects: [Pipewire.defaultAudioSink, Pipewire.defaultAudioSource]
+        objects: [sink, source]
     }
 
 }
