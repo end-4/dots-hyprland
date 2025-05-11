@@ -19,6 +19,8 @@ Scope {
             id: root
             property var modelData
             property string searchingText: ""
+            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
+            property bool monitorIsFocused: (Hyprland.focusedMonitor.id == monitor.id)
             screen: modelData
             // visible: GlobalStates.overviewOpen
             visible: true
@@ -42,9 +44,27 @@ Scope {
             HyprlandFocusGrab {
                 id: grab
                 windows: [ root ]
-                active: GlobalStates.overviewOpen
+                property bool canBeActive: root.monitorIsFocused
+                active: false
                 onCleared: () => {
                     if (!active) GlobalStates.overviewOpen = false
+                }
+            }
+
+            Connections {
+                target: GlobalStates
+                function onOverviewOpenChanged() {
+                    delayedGrabTimer.start()
+                }
+            }
+
+            Timer {
+                id: delayedGrabTimer
+                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                repeat: false
+                onTriggered: {
+                    if (!grab.canBeActive) return
+                    grab.active = GlobalStates.overviewOpen
                 }
             }
 
