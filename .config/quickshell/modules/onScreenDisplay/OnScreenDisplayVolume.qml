@@ -34,6 +34,10 @@ Scope {
             if (!Audio.ready) return
             root.triggerOsd()
         }
+        function onMutedChanged() {
+            if (!Audio.ready) return
+            root.triggerOsd()
+        }
     }
 
     Connections {
@@ -97,7 +101,7 @@ Scope {
                         id: osdValues
                         anchors.centerIn: parent 
                         value: Audio.sink?.audio.volume ?? 0
-                        icon: "volume_up"
+                        icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
                         name: qsTr("Volume")
                     }
                 }
