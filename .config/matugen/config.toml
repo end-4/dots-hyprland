@@ -29,4 +29,11 @@ output_path = '~/.config/gtk-3.0/gtk.css'
 input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/gtk.css'
 
+[templates.ags_source_view]
+input_path = '~/.config/matugen/templates/ags/sourceviewtheme.xml'
+output_path = '~/.config/ags/assets/themes/sourceviewtheme.xml'
+
+[templates.ags_source_view_light]
+input_path = '~/.config/matugen/templates/ags/sourceviewtheme-light.xml'
+output_path = '~/.config/ags/assets/themes/sourceviewtheme-light.xml'
 
