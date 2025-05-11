@@ -7,7 +7,6 @@ import Quickshell
 ColumnLayout {
     id: root
     spacing: 0
-    property bool _initialized: false
     required property var tabButtonList // Something like [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
     required property var externalTrackedTab
     property bool enableIndicatorAnimation: false
@@ -18,10 +17,6 @@ ColumnLayout {
         Layout.fillWidth: true
         currentIndex: root.externalTrackedTab
         onCurrentIndexChanged: {
-            if (!root._initialized) {
-                root._initialized = true
-                return
-            }
             root.onCurrentIndexChanged(currentIndex)
         }
 
