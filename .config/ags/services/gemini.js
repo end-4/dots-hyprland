@@ -256,7 +256,7 @@ class GeminiService extends Service {
                 try {
                     const [bytes] = stream.read_line_finish(res);
                     const line = this._decoder.decode(bytes);
-                    // console.log(line);
+                    console.log(line);
                     if (line == '[{') { // beginning of response
                         aiResponse._rawData += '{';
                         this.thinking = false;
@@ -299,14 +299,17 @@ class GeminiService extends Service {
             "generationConfig": {
                 "temperature": this._temperature,
             },
-            // "key": this._key,
-            // "apiKey": this._key,
+            "tools": [
+                {
+                    "google_search": {}
+                }
+            ]
         };
         const proxyResolver = new Gio.SimpleProxyResolver({ 'default-proxy': userOptions.ai.proxyUrl });
         const session = new Soup.Session({ 'proxy-resolver': proxyResolver });
         const message = new Soup.Message({
             method: 'POST',
-            uri: GLib.Uri.parse(replaceapidom(`https://generativelanguage.googleapis.com/v1/models/${this.modelName}:streamGenerateContent?key=${this._key}`), GLib.UriFlags.NONE),
+            uri: GLib.Uri.parse(replaceapidom(`https://generativelanguage.googleapis.com/v1beta/models/${this.modelName}:streamGenerateContent?key=${this._key}`), GLib.UriFlags.NONE),
         });
         message.request_headers.append('Content-Type', `application/json`);
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(JSON.stringify(body)));
