@@ -37,7 +37,7 @@ Scope { // Scope
 
             screen: modelData
             exclusiveZone: 0
-            width: Appearance.sizes.sidebarWidthExtended
+            implicitWidth: Appearance.sizes.sidebarWidthExtended
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
             color: "transparent"

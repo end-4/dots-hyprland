@@ -39,7 +39,7 @@ Scope {
             }
 
             color: "transparent"
-            width: Appearance.sizes.notificationPopupWidth
+            implicitWidth: Appearance.sizes.notificationPopupWidth
 
             // Signal handlers to add/remove notifications
             Connections {

@@ -38,8 +38,8 @@ Scope {
 			anchors.top: true
 			margins.top: 0
 
-			width: rect.width + shadow.radius * 2
-			height: rect.height + shadow.radius * 2
+			implicitWidth: rect.width + shadow.radius * 2
+			implicitHeight: rect.height + shadow.radius * 2
 
 			// color blending is a bit odd as detailed in the type reference.
 			color: "transparent"

@@ -37,8 +37,8 @@ Scope {
                 right: true
             }
 
-            width: modelData.width
-            height: modelData.height
+            implicitWidth: modelData.width
+            implicitHeight: modelData.height
 
             HyprlandFocusGrab {
                 id: grab

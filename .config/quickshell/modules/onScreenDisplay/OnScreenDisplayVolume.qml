@@ -67,8 +67,8 @@ Scope {
                 item: osdValuesWrapper
             }
 
-            width: columnLayout.implicitWidth
-            height: columnLayout.implicitHeight
+            implicitWidth: columnLayout.implicitWidth
+            implicitHeight: columnLayout.implicitHeight
             visible: showOsdValues
 
             ColumnLayout {

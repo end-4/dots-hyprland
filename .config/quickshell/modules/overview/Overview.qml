@@ -68,8 +68,8 @@ Scope {
                 }
             }
 
-            width: columnLayout.width
-            height: columnLayout.height
+            implicitWidth: columnLayout.width
+            implicitHeight: columnLayout.height
 
             ColumnLayout {
                 id: columnLayout

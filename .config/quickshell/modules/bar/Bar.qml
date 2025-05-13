@@ -30,7 +30,7 @@ Scope {
 
             screen: modelData
             WlrLayershell.namespace: "quickshell:bar"
-            height: barHeight + Appearance.rounding.screenRounding
+            implicitHeight: barHeight + Appearance.rounding.screenRounding
             exclusiveZone: showBarBackground ? barHeight : (barHeight - 4)
             mask: Region {
                 item: barContent
