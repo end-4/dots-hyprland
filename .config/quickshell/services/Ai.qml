@@ -77,7 +77,7 @@ Singleton {
         },
     }
     property var modelList: Object.keys(root.models)
-    property var currentModel: Object.keys(root.models)[0]
+    property var currentModel: PersistentStates.ai.model
 
     Component.onCompleted: {
         setModel(currentModel, false); // Do necessary setup for model
@@ -163,7 +163,7 @@ Singleton {
         if (!model) model = ""
         model = model.toLowerCase()
         if (modelList.indexOf(model) !== -1) {
-            currentModel = model
+            PersistentStateManager.setState("ai.model", model);
             if (feedback) root.addMessage("Model set to " + models[model].name, Ai.interfaceRole)
             if (models[model].requires_key) {
                 // If key not there show advice

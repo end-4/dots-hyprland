@@ -4,6 +4,10 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 Singleton {
+    property QtObject ai: QtObject {
+        property string model: "gemini-2.0-flash-search"
+    }
+
     property QtObject sidebar: QtObject {
         property QtObject leftSide: QtObject {
             property int selectedTab: 0
