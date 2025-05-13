@@ -49,6 +49,7 @@ ensure_restore_exec() {
 		echo "$restore_line" >> "$EXECS_CONF"
 	fi
 
+	# Add `exec-once = bash $RESTORE_SCRIPT` if not exists
 	if ! grep -q "$restore_line" "$EXECS_CONF"; then
 		echo "$restore_line" >> "$EXECS_CONF"
 	fi
@@ -59,9 +60,10 @@ remove_restore() {
 		rm "$RESTORE_SCRIPT"
 	fi
 
+	# Delete `exec-once = bach $RESTORE_SCRIPT` if exists
 	if [ -f "$EXECS_CONF" ]; then
 		grep -v "exec-once=bash $RESTORE_SCRIPT" "$EXECS_CONF" > "$EXECS_CONF.tmp"
-        mv "$EXECS_CONF.tmp" "$EXECS_CONF"
+		mv "$EXECS_CONF.tmp" "$EXECS_CONF"
 	fi
 }
 
