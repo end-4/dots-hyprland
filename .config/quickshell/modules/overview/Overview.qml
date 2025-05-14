@@ -95,9 +95,15 @@ Scope {
                     }
                 }
 
-                OverviewWidget {
-                    panelWindow: root
-                    visible: (root.searchingText == "")
+                Loader {
+                    id: overviewLoader
+                    active: GlobalStates.overviewOpen
+                    sourceComponent: OverviewWidget {
+                        panelWindow: root
+                        visible: (root.searchingText == "")
+                    }
+                    Layout.preferredWidth: item ? item.implicitWidth : 0
+                    Layout.preferredHeight: item ? item.implicitHeight : 0
                 }
             }
 
