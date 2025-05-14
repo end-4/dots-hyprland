@@ -20,7 +20,7 @@ Scope {
             loading: true
             PanelWindow {
                 id: root
-                visible: true
+                visible: (columnLayout.children.length > 0 || notificationWidgetList.length > 0)
 
                 property Component notifComponent: NotificationWidget {}
                 property list<NotificationWidget> notificationWidgetList: []
@@ -105,11 +105,6 @@ Scope {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: parent.width - Appearance.sizes.hyprlandGapsOut * 2
                     spacing: 0 // The widgets themselves have margins for spacing
-
-                    Item {
-                        implicitHeight: 1
-                        implicitWidth: 1
-                    }
 
                     // Notifications are added by the above signal handlers
                 }
