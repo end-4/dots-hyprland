@@ -213,7 +213,6 @@ Item {
             anchors.fill: notificationBackground
             sourceComponent: DropShadow {
                 id: notificationShadow
-                anchors.fill: notificationBackground
                 source: notificationBackground
                 radius: 5
                 samples: radius * 2 + 1
