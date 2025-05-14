@@ -12,8 +12,8 @@ Button {
     property string urgency
 
     implicitHeight: 30
-    leftPadding: 10
-    rightPadding: 10
+    leftPadding: 15
+    rightPadding: 15
 
     // PointingHandInteraction {}
 
