@@ -429,10 +429,10 @@ int main(int argc, char* argv[]) {
                         if (event.key === Qt.Key_Tab) {
                             suggestions.acceptSelectedWord();
                             event.accepted = true;
-                        } else if (event.key === Qt.Key_Up) {
+                        } else if (event.key === Qt.Key_Up && suggestions.visible) {
                             suggestions.selectedIndex = Math.max(0, suggestions.selectedIndex - 1);
                             event.accepted = true;
-                        } else if (event.key === Qt.Key_Down) {
+                        } else if (event.key === Qt.Key_Down && suggestions.visible) {
                             suggestions.selectedIndex = Math.min(root.suggestionList.length - 1, suggestions.selectedIndex + 1);
                             event.accepted = true;
                         } else if ((event.key === Qt.Key_Enter || event.key === Qt.Key_Return)) {
