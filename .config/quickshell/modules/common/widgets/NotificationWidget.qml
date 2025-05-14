@@ -208,16 +208,19 @@ Item {
             }
         }
 
-        DropShadow {
-            visible: popup
-            id: notificationShadow
+        Loader {
+            active: popup
             anchors.fill: notificationBackground
-            source: notificationBackground
-            radius: 5
-            samples: radius * 2 + 1
-            color: Appearance.colors.colShadow
-            verticalOffset: 2
-            horizontalOffset: 0
+            sourceComponent: DropShadow {
+                id: notificationShadow
+                anchors.fill: notificationBackground
+                source: notificationBackground
+                radius: 5
+                samples: radius * 2 + 1
+                color: Appearance.colors.colShadow
+                verticalOffset: 2
+                horizontalOffset: 0
+            }
         }
     }
 
@@ -274,65 +277,78 @@ Item {
                         Layout.fillWidth: false
                         radius: Appearance.rounding.full
                         color: Appearance.m3colors.m3secondaryContainer
-                        MaterialSymbol {
-                            visible: notificationObject.appIcon == ""
-                            text: {
-                                const defaultIcon = NotificationUtils.findSuitableMaterialSymbol("")
-                                const guessedIcon = NotificationUtils.findSuitableMaterialSymbol(notificationObject.summary)
-                                return (notificationObject.urgency == NotificationUrgency.Critical && guessedIcon === defaultIcon) ?
-                                    "release_alert" : guessedIcon
-                            }
+                        Loader {
+                            id: materialSymbolLoader
+                            active: notificationObject.appIcon == ""
                             anchors.fill: parent
-                            color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
-                                Appearance.m3colors.m3onSecondaryContainer
-                            iconSize: 27
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        IconImage {
-                            visible: notificationObject.image == "" && notificationObject.appIcon != ""
-                            anchors.centerIn: parent
-                            implicitSize: 33
-                            asynchronous: true
-                            source: Quickshell.iconPath(notificationObject.appIcon)
-                        }
-                        Item {
-                            anchors.fill: parent
-                            visible: notificationObject.image != ""
-                            Image {
-                                id: notifImage
-
-                                anchors.fill: parent
-                                readonly property int size: parent.width
-
-                                source: notificationObject?.image
-                                fillMode: Image.PreserveAspectCrop
-                                cache: false
-                                antialiasing: true
-                                asynchronous: true
-
-                                width: size
-                                height: size
-                                sourceSize.width: size
-                                sourceSize.height: size
-                                
-                                layer.enabled: true
-                                layer.effect: OpacityMask {
-                                    maskSource: Rectangle {
-                                        width: notifImage.size
-                                        height: notifImage.size
-                                        radius: Appearance.rounding.full
-                                    }
+                            sourceComponent: MaterialSymbol {
+                                text: {
+                                    const defaultIcon = NotificationUtils.findSuitableMaterialSymbol("")
+                                    const guessedIcon = NotificationUtils.findSuitableMaterialSymbol(notificationObject.summary)
+                                    return (notificationObject.urgency == NotificationUrgency.Critical && guessedIcon === defaultIcon) ?
+                                        "release_alert" : guessedIcon
                                 }
+                                anchors.fill: parent
+                                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                    Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
+                                    Appearance.m3colors.m3onSecondaryContainer
+                                iconSize: 27
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
-                            IconImage {
-                                visible: notificationObject.appIcon != ""
-                                anchors.bottom: parent.bottom
-                                anchors.right: parent.right
-                                implicitSize: 23
+                        }
+                        Loader {
+                            id: appIconLoader
+                            active: notificationObject.image == "" && notificationObject.appIcon != ""
+                            anchors.centerIn: parent
+                            sourceComponent: IconImage {
+                                implicitSize: 33
                                 asynchronous: true
                                 source: Quickshell.iconPath(notificationObject.appIcon)
+                            }
+                        }
+                        Loader {
+                            id: notifImageLoader
+                            active: notificationObject.image != ""
+                            anchors.fill: parent
+                            sourceComponent: Item {
+                                anchors.fill: parent
+                                Image {
+                                    id: notifImage
+                                    anchors.fill: parent
+                                    readonly property int size: parent.width
+
+                                    source: notificationObject?.image
+                                    fillMode: Image.PreserveAspectCrop
+                                    cache: false
+                                    antialiasing: true
+                                    asynchronous: true
+
+                                    width: size
+                                    height: size
+                                    sourceSize.width: size
+                                    sourceSize.height: size
+
+                                    layer.enabled: true
+                                    layer.effect: OpacityMask {
+                                        maskSource: Rectangle {
+                                            width: notifImage.size
+                                            height: notifImage.size
+                                            radius: Appearance.rounding.full
+                                        }
+                                    }
+                                }
+                                Loader {
+                                    id: notifImageAppIconLoader
+                                    active: notificationObject.appIcon != ""
+                                    anchors.bottom: parent.bottom
+                                    anchors.right: parent.right
+                                    sourceComponent: IconImage {
+                                        implicitSize: 23
+                                        asynchronous: true
+                                        source: Quickshell.iconPath(notificationObject.appIcon)
+                                    }
+                                }
                             }
                         }
                     }
