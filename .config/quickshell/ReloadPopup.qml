@@ -27,8 +27,7 @@ Scope {
 		}
 	}
 
-	// Keep the popup in a loader because it isn't needed most of the timeand will take up
-	// memory that could be used for something else.
+	// Keep the popup in a loader because it isn't needed most of the time
 	LazyLoader {
 		id: popupLoader
 

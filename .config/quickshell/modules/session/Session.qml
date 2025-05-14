@@ -29,7 +29,7 @@ Scope {
             WlrLayershell.namespace: "quickshell:session"
             WlrLayershell.layer: WlrLayer.Overlay
             WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: Appearance.transparentize(Appearance.m3colors.m3background, 0.4)
+            color: Appearance.transparentize(Appearance.m3colors.m3background, 0.3)
 
             anchors {
                 top: true
