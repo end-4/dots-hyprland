@@ -328,22 +328,6 @@ Item { // Wrapper
                         // Add launcher actions
                         result = result.concat(launcherActionObjects);
 
-                        // Launcher actions
-                        for (let action of root.searchActions) {
-                            const actionString = `${ConfigOptions.search.prefix.action}${action.action}`
-                            if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
-                                result.push({
-                                    name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
-                                    clickActionName: "Run",
-                                    type: "Action",
-                                    materialSymbol: 'settings_suggest',
-                                    execute: () => {
-                                        action.execute(root.searchingText.split(" ").slice(1).join(" "))
-                                    },
-                                });
-                            }
-                        }
-
                         // Insert math result before command if search starts with a number
                         const startsWithNumber = /^\d/.test(root.searchingText);
                         if (startsWithNumber)
