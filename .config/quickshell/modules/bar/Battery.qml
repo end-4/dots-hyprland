@@ -7,6 +7,7 @@ import Quickshell.Io
 import Quickshell.Services.UPower
 
 Rectangle {
+    id: root
     readonly property var chargeState: UPower.displayDevice.state
     readonly property bool isCharging: chargeState == UPowerDeviceState.Charging
     readonly property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
@@ -27,7 +28,7 @@ Rectangle {
         anchors.centerIn: parent
 
         Rectangle {
-            implicitWidth: (isCharging ? boltIcon.width : 0)
+            implicitWidth: (isCharging ? (boltIconLoader?.item?.width ?? 0) : 0)
 
             Behavior on implicitWidth {
                 NumberAnimation {
@@ -64,26 +65,41 @@ Rectangle {
 
     }
 
-    MaterialSymbol {
-        id: boltIcon
-
+    Loader {
+        id: boltIconLoader
+        active: true
         anchors.left: rowLayout.left
         anchors.verticalCenter: rowLayout.verticalCenter
-        text: "bolt"
-        iconSize: Appearance.font.pixelSize.large
-        color: Appearance.m3colors.m3onSecondaryContainer
-        visible: opacity > 0 // Only show when charging
-        opacity: isCharging ? 1 : 0 // Keep opacity for visibility
 
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+        Connections {
+            target: root
+            function onIsChargingChanged() {
+                if (isCharging) boltIconLoader.active = true
+            }
+        }
+
+        sourceComponent: MaterialSymbol {
+            id: boltIcon
+
+            text: "bolt"
+            iconSize: Appearance.font.pixelSize.large
+            color: Appearance.m3colors.m3onSecondaryContainer
+            visible: opacity > 0 // Only show when charging
+            opacity: isCharging ? 1 : 0 // Keep opacity for visibility
+            onVisibleChanged: {
+                if (!visible) boltIconLoader.active = false
+            }
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                }
+
             }
 
         }
-
     }
 
 }
