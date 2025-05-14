@@ -16,12 +16,12 @@ Scope {
         model: Quickshell.screens
 
         LazyLoader {
+            property var modelData
             loading: true
             PanelWindow {
                 id: root
                 visible: true
 
-                property var modelData
                 property Component notifComponent: NotificationWidget {}
                 property list<NotificationWidget> notificationWidgetList: []
 
