@@ -54,6 +54,18 @@ const scripts = [
         enabled: isArchDistro,
     },
     {
+        icon: 'arch-symbolic',
+        name: getString('Update yay packages'),
+        command: `yay -Syyu`,
+        enabled: isArchDistro,
+    },
+    {
+        icon: 'arch-symbolic',
+        name: getString('Remove yay orphan packages'),
+        command: `yay -Rns $(yay -Qdtq)`,
+        enabled: isArchDistro,
+    },
+    {
         icon: 'flatpak-symbolic',
         name: getString('Uninstall unused flatpak packages'),
         command: `flatpak uninstall --unused`,
