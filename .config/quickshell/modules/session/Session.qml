@@ -40,31 +40,6 @@ Scope {
             implicitWidth: modelData.width
             implicitHeight: modelData.height
 
-            HyprlandFocusGrab {
-                id: grab
-                windows: [ sessionRoot ]
-                active: false
-                onCleared: () => {
-                    if (!active) sessionRoot.visible = false
-                }
-            }
-
-            Connections {
-                target: sessionRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = sessionRoot.visible
-                }
-            }
-
             MouseArea {
                 id: sessionMouseArea
                 anchors.fill: parent
