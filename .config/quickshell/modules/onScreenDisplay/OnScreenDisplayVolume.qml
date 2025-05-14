@@ -51,62 +51,67 @@ Scope {
     Variants {
         model: Quickshell.screens
 
-        PanelWindow {
+        Loader {
+            id: osdLoader
             property var modelData
+            active: showOsdValues
+            PanelWindow {
+                property var modelData
 
-            screen: modelData
-            exclusionMode: ExclusionMode.Normal
-            WlrLayershell.namespace: "quickshell:onScreenDisplay"
-            WlrLayershell.layer: WlrLayer.Overlay
-            color: "transparent"
+                screen: modelData
+                exclusionMode: ExclusionMode.Normal
+                WlrLayershell.namespace: "quickshell:onScreenDisplay"
+                WlrLayershell.layer: WlrLayer.Overlay
+                color: "transparent"
 
-            anchors {
-                top: true
-            }
-            mask: Region {
-                item: osdValuesWrapper
-            }
-
-            implicitWidth: columnLayout.implicitWidth
-            implicitHeight: columnLayout.implicitHeight
-            visible: showOsdValues
-
-            ColumnLayout {
-                id: columnLayout
-                anchors.horizontalCenter: parent.horizontalCenter
-                Item {
-                    height: 1 // Prevent Wayland protocol error
+                anchors {
+                    top: true
                 }
-                Item {
-                    id: osdValuesWrapper
-                    // Extra space for shadow
-                    implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
-                    implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
-                    clip: true
+                mask: Region {
+                    item: osdValuesWrapper
+                }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: root.showOsdValues = false
+                implicitWidth: columnLayout.implicitWidth
+                implicitHeight: columnLayout.implicitHeight
+                visible: osdLoader.active
+
+                ColumnLayout {
+                    id: columnLayout
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Item {
+                        height: 1 // Prevent Wayland protocol error
                     }
+                    Item {
+                        id: osdValuesWrapper
+                        // Extra space for shadow
+                        implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
+                        implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
+                        clip: true
 
-                    Behavior on implicitHeight {
-                        NumberAnimation {
-                            duration: Appearance.animation.menuDecel.duration
-                            easing.type: Appearance.animation.menuDecel.type
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: root.showOsdValues = false
+                        }
+
+                        Behavior on implicitHeight {
+                            NumberAnimation {
+                                duration: Appearance.animation.menuDecel.duration
+                                easing.type: Appearance.animation.menuDecel.type
+                            }
+                        }
+
+                        OsdValueIndicator {
+                            id: osdValues
+                            anchors.centerIn: parent 
+                            value: Audio.sink?.audio.volume ?? 0
+                            icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
+                            name: qsTr("Volume")
                         }
                     }
-
-                    OsdValueIndicator {
-                        id: osdValues
-                        anchors.centerIn: parent 
-                        value: Audio.sink?.audio.volume ?? 0
-                        icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
-                        name: qsTr("Volume")
-                    }
                 }
-            }
 
+            }
         }
 
     }

@@ -47,62 +47,68 @@ Scope {
     Variants {
         model: Quickshell.screens
 
-        PanelWindow {
+        Loader {
+            id: osdLoader
             property var modelData
+            active: showOsdValues
 
-            screen: modelData
-            exclusionMode: ExclusionMode.Normal
-            WlrLayershell.namespace: "quickshell:onScreenDisplay"
-            WlrLayershell.layer: WlrLayer.Overlay
-            color: "transparent"
+            PanelWindow {
+                property var modelData
 
-            anchors {
-                top: true
-            }
-            mask: Region {
-                item: osdValuesWrapper
-            }
+                screen: modelData
+                exclusionMode: ExclusionMode.Normal
+                WlrLayershell.namespace: "quickshell:onScreenDisplay"
+                WlrLayershell.layer: WlrLayer.Overlay
+                color: "transparent"
 
-            implicitWidth: columnLayout.implicitWidth
-            implicitHeight: columnLayout.implicitHeight
-            visible: showOsdValues
-
-            ColumnLayout {
-                id: columnLayout
-                anchors.horizontalCenter: parent.horizontalCenter
-                Item {
-                    height: 1 // Prevent Wayland protocol error
+                anchors {
+                    top: true
                 }
-                Item {
-                    id: osdValuesWrapper
-                    // Extra space for shadow
-                    implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
-                    implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
-                    clip: true
+                mask: Region {
+                    item: osdValuesWrapper
+                }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onEntered: root.showOsdValues = false
+                implicitWidth: columnLayout.implicitWidth
+                implicitHeight: columnLayout.implicitHeight
+                visible: osdLoader.active
+
+                ColumnLayout {
+                    id: columnLayout
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Item {
+                        height: 1 // Prevent Wayland protocol error
                     }
+                    Item {
+                        id: osdValuesWrapper
+                        // Extra space for shadow
+                        implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
+                        implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
+                        clip: true
 
-                    Behavior on implicitHeight {
-                        NumberAnimation {
-                            duration: Appearance.animation.menuDecel.duration
-                            easing.type: Appearance.animation.menuDecel.type
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: root.showOsdValues = false
+                        }
+
+                        Behavior on implicitHeight {
+                            NumberAnimation {
+                                duration: Appearance.animation.menuDecel.duration
+                                easing.type: Appearance.animation.menuDecel.type
+                            }
+                        }
+
+                        OsdValueIndicator {
+                            id: osdValues
+                            anchors.centerIn: parent 
+                            value: Brightness.value
+                            icon: "light_mode"
+                            name: qsTr("Brightness")
                         }
                     }
-
-                    OsdValueIndicator {
-                        id: osdValues
-                        anchors.centerIn: parent 
-                        value: Brightness.value
-                        icon: "light_mode"
-                        name: qsTr("Brightness")
-                    }
                 }
-            }
 
+            }
         }
 
     }
