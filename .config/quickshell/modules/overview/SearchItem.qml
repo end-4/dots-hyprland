@@ -68,17 +68,28 @@ Button {
         anchors.rightMargin: root.horizontalMargin + root.buttonHorizontalPadding
 
         // Icon
-        IconImage {
-            visible: root.materialSymbol == ""
-            source: Quickshell.iconPath(root.itemIcon);
-            width: 35
-            height: 35
+        Loader {
+            id: iconLoader
+            active: true
+            sourceComponent: root.materialSymbol == "" ? iconImageComponent : materialSymbolComponent
         }
-        MaterialSymbol {
-            visible: root.materialSymbol != ""
-            text: root.materialSymbol
-            iconSize: 30
-            color: Appearance.m3colors.m3onSurface
+
+        Component {
+            id: iconImageComponent
+            IconImage {
+                source: Quickshell.iconPath(root.itemIcon)
+                width: 35
+                height: 35
+            }
+        }
+
+        Component {
+            id: materialSymbolComponent
+            MaterialSymbol {
+                text: root.materialSymbol
+                iconSize: 30
+                color: Appearance.m3colors.m3onSurface
+            }
         }
 
         // Main text
