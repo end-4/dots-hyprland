@@ -77,10 +77,10 @@ Singleton {
         },
     }
     property var modelList: Object.keys(root.models)
-    property var currentModel: PersistentStates.ai.model
+    property var currentModelId: PersistentStates.ai.model
 
     Component.onCompleted: {
-        setModel(currentModel, false); // Do necessary setup for model
+        setModel(currentModelId, false); // Do necessary setup for model
         getOllamaModels.running = true
     }
 
@@ -159,34 +159,38 @@ Singleton {
         );
     }
 
-    function setModel(model, feedback = true) {
-        if (!model) model = ""
-        model = model.toLowerCase()
-        if (modelList.indexOf(model) !== -1) {
-            PersistentStateManager.setState("ai.model", model);
-            if (feedback) root.addMessage("Model set to " + models[model].name, Ai.interfaceRole)
-            if (models[model].requires_key) {
+    function getModel() {
+        return models[currentModelId];
+    }
+
+    function setModel(modelId, feedback = true) {
+        if (!modelId) modelId = ""
+        modelId = modelId.toLowerCase()
+        if (modelList.indexOf(modelId) !== -1) {
+            PersistentStateManager.setState("ai.model", modelId);
+            if (feedback) root.addMessage("Model set to " + models[modelId].name, Ai.interfaceRole)
+            if (models[modelId].requires_key) {
                 // If key not there show advice
-                if (root.apiKeysLoaded && (!root.apiKeys[models[model].key_id] || root.apiKeys[models[model].key_id].length === 0)) {
-                    root.addApiKeyAdvice(models[model])
+                if (root.apiKeysLoaded && (!root.apiKeys[models[modelId].key_id] || root.apiKeys[models[modelId].key_id].length === 0)) {
+                    root.addApiKeyAdvice(models[modelId])
                 }
             }
         } else {
             if (feedback) root.addMessage(qsTr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n"), Ai.interfaceRole) + "\n```"
         }
-        if (models[model]?.requires_key) {
+        if (models[modelId]?.requires_key) {
             KeyringStorage.fetchKeyringData();
         } 
     }
 
     function setApiKey(key) {
-        const model = models[currentModel];
+        const model = models[currentModelId];
         if (!model.requires_key) {
             root.addMessage(`${model.name} does not require an API key`, Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
-            const model = models[currentModel];
+            const model = models[currentModelId];
             root.addApiKeyAdvice(model)
             return;
         }
@@ -195,7 +199,7 @@ Singleton {
     }
 
     function printApiKey() {
-        const model = models[currentModel];
+        const model = models[currentModelId];
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
@@ -263,7 +267,7 @@ Singleton {
         }
 
         function makeRequest() {
-            const model = models[currentModel];
+            const model = models[currentModelId];
             requester.apiFormat = model.api_format ?? "openai";
 
             /* Put API key in environment variable */
@@ -280,7 +284,7 @@ Singleton {
             /* Create local message object */
             requester.message = root.aiMessageComponent.createObject(root, {
                 "role": "assistant",
-                "model": currentModel,
+                "model": currentModelId,
                 "content": "",
                 "thinking": true,
                 "done": false,

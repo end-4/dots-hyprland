@@ -533,7 +533,7 @@ int main(int argc, char* argv[]) {
                             font.weight: Font.DemiBold
                             color: Appearance.m3colors.m3onSurface
                             elide: Text.ElideRight
-                            text: Ai.models[Ai.currentModel].name
+                            text: Ai.getModel().name
                         }
                     }
                     StyledToolTip {
@@ -541,7 +541,7 @@ int main(int argc, char* argv[]) {
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
                         content: StringUtils.format(qsTr("Current model: {0}\nSet it with {1}model MODEL"), 
-                            Ai.models[Ai.currentModel].name, root.commandPrefix)
+                            Ai.getModel().name, root.commandPrefix)
                     }
 
                     MouseArea {
