@@ -54,6 +54,12 @@ const scripts = [
         enabled: isArchDistro,
     },
     {
+        icon: 'arch-symbolic',
+        name: getString('Clear pacman cache'),
+        command: `sudo pacman -Sc --noconfirm`,
+        enabled: isArchDistro,
+    },
+    {
         icon: 'flatpak-symbolic',
         name: getString('Uninstall unused flatpak packages'),
         command: `flatpak uninstall --unused`,
