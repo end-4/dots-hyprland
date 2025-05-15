@@ -172,17 +172,17 @@ Item {
 
             Button {
                 id: button
+                property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspaces.shown + index + 1
                 Layout.fillHeight: true
-                onPressed: Hyprland.dispatch(`workspace ${index+1}`)
+                onPressed: Hyprland.dispatch(`workspace ${workspaceValue}`)
                 width: workspaceButtonWidth
                 
                 background: Item {
                     id: workspaceButtonBackground
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
-                    property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspaces.shown + index + 1
                     property var biggestWindow: {
-                        const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == workspaceButtonBackground.workspaceValue)
+                        const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == button.workspaceValue)
                         return windowsInThisWorkspace.reduce((maxWin, win) => {
                             const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0)
                             const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0)
@@ -199,9 +199,9 @@ Item {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         font.pixelSize: Appearance.font.pixelSize.small - ((text.length - 1) * (text !== "10") * 2)
-                        text: `${workspaceButtonBackground.workspaceValue}`
+                        text: `${button.workspaceValue}`
                         elide: Text.ElideRight
-                        color: (monitor.activeWorkspace?.id == workspaceButtonBackground.workspaceValue) ? 
+                        color: (monitor.activeWorkspace?.id == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
                             (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : 
                                 Appearance.colors.colOnLayer1Inactive)
