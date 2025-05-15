@@ -15,98 +15,96 @@ Scope {
     Variants {
         model: Quickshell.screens
 
-        PanelWindow {
-            id: root
+        Loader {
+            id: overviewLoader
+            active: GlobalStates.overviewOpen
             property var modelData
-            property string searchingText: ""
-            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
-            property bool monitorIsFocused: (Hyprland.focusedMonitor.id == monitor.id)
-            screen: modelData
-            // visible: GlobalStates.overviewOpen
-            visible: true
 
-            WlrLayershell.namespace: "quickshell:overview"
-            WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-            color: "transparent"
+            PanelWindow {
+                id: root
+                property string searchingText: ""
+                readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
+                property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
+                screen: modelData
+                visible: true
 
-            mask: Region {
-                item: GlobalStates.overviewOpen ? columnLayout : null
-            }
+                WlrLayershell.namespace: "quickshell:overview"
+                WlrLayershell.layer: WlrLayer.Overlay
+                WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+                color: "transparent"
 
-            anchors {
-                top: true
-                left: true
-                right: true
-                bottom: true
-            }
-
-            HyprlandFocusGrab {
-                id: grab
-                windows: [ root ]
-                property bool canBeActive: root.monitorIsFocused
-                active: false
-                onCleared: () => {
-                    if (!active) GlobalStates.overviewOpen = false
+                mask: Region {
+                    item: GlobalStates.overviewOpen ? columnLayout : null
                 }
-            }
 
-            Connections {
-                target: GlobalStates
-                function onOverviewOpenChanged() {
-                    delayedGrabTimer.start()
+                anchors {
+                    top: true
+                    left: true
+                    right: true
+                    bottom: true
                 }
-            }
 
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    if (!grab.canBeActive) return
-                    grab.active = GlobalStates.overviewOpen
-                }
-            }
-
-            implicitWidth: columnLayout.width
-            implicitHeight: columnLayout.height
-
-            ColumnLayout {
-                id: columnLayout
-                visible: GlobalStates.overviewOpen
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Escape) {
-                        GlobalStates.overviewOpen = false;
+                HyprlandFocusGrab {
+                    id: grab
+                    windows: [ root ]
+                    property bool canBeActive: root.monitorIsFocused
+                    active: false
+                    onCleared: () => {
+                        if (!active) GlobalStates.overviewOpen = false
                     }
                 }
 
-                Item {
-                    height: 1 // Prevent Wayland protocol error
-                    width: 1 // Prevent Wayland protocol error
-                }
-
-                SearchWidget {
-                    panelWindow: root
-                    Layout.alignment: Qt.AlignHCenter
-                    onSearchingTextChanged: (text) => {
-                        root.searchingText = searchingText
+                Connections {
+                    target: GlobalStates
+                    function onOverviewOpenChanged() {
+                        delayedGrabTimer.start()
                     }
                 }
 
-                Loader {
-                    id: overviewLoader
-                    active: GlobalStates.overviewOpen
-                    sourceComponent: OverviewWidget {
+                Timer {
+                    id: delayedGrabTimer
+                    interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                    repeat: false
+                    onTriggered: {
+                        if (!grab.canBeActive) return
+                        grab.active = GlobalStates.overviewOpen
+                    }
+                }
+
+                implicitWidth: columnLayout.width
+                implicitHeight: columnLayout.height
+
+                ColumnLayout {
+                    id: columnLayout
+                    visible: GlobalStates.overviewOpen
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Escape) {
+                            GlobalStates.overviewOpen = false;
+                        }
+                    }
+
+                    Item {
+                        height: 1 // Prevent Wayland protocol error
+                        width: 1 // Prevent Wayland protocol error
+                    }
+
+                    SearchWidget {
+                        panelWindow: root
+                        Layout.alignment: Qt.AlignHCenter
+                        onSearchingTextChanged: (text) => {
+                            root.searchingText = searchingText
+                        }
+                    }
+
+                    OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
                     }
-                    Layout.preferredWidth: item ? item.implicitWidth : 0
-                    Layout.preferredHeight: item ? item.implicitHeight : 0
                 }
-            }
 
+            }
         }
 
     }
