@@ -21,7 +21,6 @@ Singleton {
     }
 
     function increaseBrightness(): void {
-        console.log("increaseBrightness");
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
@@ -114,7 +113,7 @@ Singleton {
             if (Math.round(brightness * 100) === rounded)
                 return;
             brightness = value;
-            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "s", `${rounded}%`];
+            setProc.command = isDdc ? ["ddcutil", "-b", busNum, "setvcp", "10", rounded] : ["brightnessctl", "s", `${rounded}%`, "--quiet"];
             setProc.startDetached();
         }
 
