@@ -35,19 +35,28 @@ TabButton {
         RowLayout {
             anchors.centerIn: parent
             spacing: 0
-            MaterialSymbol {
-                visible: buttonIcon?.length > 0
+            
+            Loader {
+                id: iconLoader
+                active: buttonIcon?.length > 0
+                sourceComponent: buttonIcon?.length > 0 ? materialSymbolComponent : null
                 Layout.rightMargin: 5
-                verticalAlignment: Text.AlignVCenter
-                text: buttonIcon
-                iconSize: Appearance.font.pixelSize.huge
-                fill: selected ? 1 : 0
-                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
-                Behavior on color {
-                    ColorAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            }
+
+            Component {
+                id: materialSymbolComponent
+                MaterialSymbol {
+                    verticalAlignment: Text.AlignVCenter
+                    text: buttonIcon
+                    iconSize: Appearance.font.pixelSize.huge
+                    fill: selected ? 1 : 0
+                    color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                    Behavior on color {
+                        ColorAnimation {
+                            duration: Appearance.animation.elementMove.duration
+                            easing.type: Appearance.animation.elementMove.type
+                            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                        }
                     }
                 }
             }
