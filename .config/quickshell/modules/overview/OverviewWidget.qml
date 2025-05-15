@@ -18,7 +18,7 @@ Item {
     readonly property var toplevels: ToplevelManager.toplevels
     readonly property int workspacesShown: ConfigOptions.overview.numOfRows * ConfigOptions.overview.numOfCols
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
-    property bool monitorIsFocused: (Hyprland.focusedMonitor.id == monitor.id)
+    property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
