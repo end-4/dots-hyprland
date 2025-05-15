@@ -27,15 +27,7 @@ Scope {
             showOsdValues = false
         }
     }
-
-    Connections {
-        target: Brightness ?? null
-        function onValueChanged() {
-            if (!Brightness.ready) return
-            root.triggerOsd()
-        }
-    }
-
+    
     Connections {
         target: Audio.sink?.audio ?? null
         function onVolumeChanged() {
@@ -51,6 +43,15 @@ Scope {
             id: osdLoader
             property var modelData
             active: showOsdValues
+            property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
+
+            Connections {
+                target: brightnessMonitor
+                function onBrightnessChanged() {
+                    if (!brightnessMonitor.ready) return
+                    root.triggerOsd()
+                }
+            }
 
             PanelWindow {
                 property var modelData
@@ -101,7 +102,7 @@ Scope {
                         OsdValueIndicator {
                             id: osdValues
                             anchors.centerIn: parent 
-                            value: Brightness.value
+                            value: brightnessMonitor.brightness
                             icon: "light_mode"
                             name: qsTr("Brightness")
                         }

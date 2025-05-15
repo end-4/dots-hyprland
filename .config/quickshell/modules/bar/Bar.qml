@@ -26,7 +26,8 @@ Scope {
         PanelWindow { // Bar window
             id: barRoot
 
-            property var modelData
+            property ShellScreen modelData
+            property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
 
             screen: modelData
             WlrLayershell.namespace: "quickshell:bar"
@@ -79,9 +80,9 @@ Scope {
                     WheelHandler {
                         onWheel: (event) => {
                             if (event.angleDelta.y < 0)
-                                Brightness.increment = -1;
+                                barRoot.brightnessMonitor.setBrightness(barRoot.brightnessMonitor.brightness - 0.05);
                             else if (event.angleDelta.y > 0)
-                                Brightness.increment = 1;
+                                barRoot.brightnessMonitor.setBrightness(barRoot.brightnessMonitor.brightness + 0.05);
                             // Store the mouse position and start tracking
                             barLeftSideMouseArea.lastScrollX = event.x;
                             barLeftSideMouseArea.lastScrollY = event.y;

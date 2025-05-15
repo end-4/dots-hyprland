@@ -29,6 +29,13 @@ Scope {
     }
 
     Connections {
+        target: Brightness
+        function onBrightnessChanged() {
+            showOsdValues = false
+        }
+    }
+
+    Connections {
         target: Audio.sink?.audio ?? null
         function onVolumeChanged() {
             if (!Audio.ready) return
@@ -37,14 +44,6 @@ Scope {
         function onMutedChanged() {
             if (!Audio.ready) return
             root.triggerOsd()
-        }
-    }
-
-    Connections {
-        target: Brightness ?? null
-        function onValueChanged() {
-            if (!Brightness.ready) return
-            root.showOsdValues = false
         }
     }
 
