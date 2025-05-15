@@ -64,18 +64,6 @@ Singleton {
         id: setProc
     }
 
-    IpcHandler {
-		target: "brightness"
-
-		function increment() {
-            onPressed: root.increaseBrightness()
-        }
-
-        function decrement() {
-            onPressed: root.decreaseBrightness()
-        }
-	}
-
     component BrightnessMonitor: QtObject {
         id: monitor
 
@@ -130,5 +118,29 @@ Singleton {
         id: monitorComp
 
         BrightnessMonitor {}
+    }
+
+    IpcHandler {
+        target: "brightness"
+
+        function increment() {
+            onPressed: root.increaseBrightness()
+        }
+
+        function decrement() {
+            onPressed: root.decreaseBrightness()
+        }
+    }
+
+    GlobalShortcut {
+        name: "brightnessIncrease"
+        description: "Increase brightness"
+        onPressed: root.increaseBrightness()
+    }
+
+    GlobalShortcut {
+        name: "brightnessDecrease"
+        description: "Decrease brightness"
+        onPressed: root.decreaseBrightness()
     }
 }
