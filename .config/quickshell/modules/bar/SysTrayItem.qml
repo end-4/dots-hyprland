@@ -57,7 +57,7 @@ MouseArea {
     ColorOverlay {
         anchors.fill: desaturatedIcon
         source: desaturatedIcon
-        color: Appearance.transparentize(Appearance.colors.colOnLayer0, 0.5)
+        color: Appearance.transparentize(Appearance.colors.colOnLayer0, 0.8)
     }
 
 }
