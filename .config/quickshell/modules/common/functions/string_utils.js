@@ -92,3 +92,20 @@ function splitMarkdownBlocks(markdown) {
 function escapeBackslashes(str) {
     return str.replace(/\\/g, '\\\\');
 }
+
+function wordWrap(str, maxLen) {
+    if (!str) return "";
+    let words = str.split(" ");
+    let lines = [];
+    let current = "";
+    for (let i = 0; i < words.length; ++i) {
+        if ((current + (current.length > 0 ? " " : "") + words[i]).length > maxLen) {
+            if (current.length > 0) lines.push(current);
+            current = words[i];
+        } else {
+            current += (current.length > 0 ? " " : "") + words[i];
+        }
+    }
+    if (current.length > 0) lines.push(current);
+    return lines.join("\n");
+}
