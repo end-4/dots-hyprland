@@ -28,7 +28,7 @@ Singleton {
 
         function onRawEvent(event) {
             // Filter out redundant old v1 events for the same thing
-            if(event in [
+            if(event.name in [
                 "activewindow", "focusedmon", "monitoradded", 
                 "createworkspace", "destroyworkspace", "moveworkspace", 
                 "activespecial", "movewindow", "windowtitle"
