@@ -108,8 +108,8 @@ Singleton {
         property color colSubtext: m3colors.m3outline
         property color colLayer0: m3colors.m3background
         property color colOnLayer0: m3colors.m3onBackground
-        property color colLayer0Hover: mix(colLayer0, colOnLayer0, 0.85)
-        property color colLayer0Active: m3colors.m3surfaceContainerHigh
+        property color colLayer0Hover: mix(colLayer0, colOnLayer0, 0.9)
+        property color colLayer0Active: mix(colLayer0, colOnLayer0, 0.8)
         property color colLayer1: m3colors.m3surfaceContainerLow;
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
         property color colOnLayer1Inactive: mix(colOnLayer1, colLayer1, 0.45);
@@ -155,7 +155,7 @@ Singleton {
     font: QtObject {
         property QtObject family: QtObject {
             property string main: "Rubik"
-            property string title: "Rubik"
+            property string title: "Gabarito"
             property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "SpaceMono NF"
             property string monospace: "JetBrains Mono NF"

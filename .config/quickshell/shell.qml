@@ -1,6 +1,7 @@
 //@ pragma UseQApplication
 
 import "./modules/bar/"
+import "./modules/cheatsheet/"
 import "./modules/notificationPopup/"
 import "./modules/onScreenDisplay/"
 import "./modules/overview/"
@@ -23,6 +24,7 @@ ShellRoot {
     }
 
     Bar {}
+    Cheatsheet {}
     NotificationPopup {}
     OnScreenDisplayBrightness {}
     OnScreenDisplayVolume {}
