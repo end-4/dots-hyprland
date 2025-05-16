@@ -28,7 +28,9 @@ Item {
         "mouse:273": "RMB",
         "mouse:275": "MouseBack",
         "Slash": "/",
-        "Hash": "#"
+        "Hash": "#",
+        "Return": "Enter",
+        // "Shift": "",
     })
 
     RowLayout { // Keybind columns
@@ -120,7 +122,7 @@ Item {
                                             id: commentComponent
                                             Item {
                                                 id: commentItem
-                                                implicitWidth: commentText.implicitWidth + 5 * 2
+                                                implicitWidth: commentText.implicitWidth + 8 * 2
                                                 implicitHeight: commentText.implicitHeight
 
                                                 StyledText {

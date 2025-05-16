@@ -12,7 +12,7 @@ Rectangle {
     property real horizontalPadding: 7
     property real verticalPadding: 2
     property real borderWidth: 1
-    property real bottomBorderWidth: 3
+    property real bottomBorderWidth: 2
     property color borderColor: Appearance.colors.colOnLayer0
     property real borderRadius: 5
     property color keyColor: Appearance.m3colors.m3surfaceContainerLow
