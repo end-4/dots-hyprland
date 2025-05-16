@@ -16,7 +16,7 @@ Button {
     implicitHeight: columnLayout.implicitHeight
     implicitWidth: columnLayout.implicitWidth
 
-    background: Item {}
+    background: null
     PointingHandInteraction {}
 
     // Real stuff

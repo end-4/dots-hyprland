@@ -419,7 +419,7 @@ Item {
                     placeholderText: StringUtils.format(qsTr('Enter tags, or "{0}" for commands'), root.commandPrefix)
                     placeholderTextColor: Appearance.m3colors.m3outline
 
-                    background: Item {}
+                    background: null
 
                     property Timer searchTimer: Timer { // Timer for tag suggestions
                         interval: root.tagSuggestionDelay

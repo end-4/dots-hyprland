@@ -111,7 +111,7 @@ Scope { // Scope
                             cheatsheetRoot.hide()
                         }
 
-                        background: Item {}
+                        background: null
                         contentItem: Rectangle {
                             anchors.fill: parent
                             radius: Appearance.rounding.full

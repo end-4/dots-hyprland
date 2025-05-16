@@ -227,7 +227,7 @@ Item { // Wrapper
                         }
                     }
 
-                    background: Item {}
+                    background: null
 
                     cursorDelegate: Rectangle {
                         width: 1

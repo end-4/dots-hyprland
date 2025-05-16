@@ -383,7 +383,7 @@ int main(int argc, char* argv[]) {
                     placeholderText: StringUtils.format(qsTr('Message the model... "{0}" for commands'), root.commandPrefix)
                     placeholderTextColor: Appearance.m3colors.m3outline
 
-                    background: Item {}
+                    background: null
 
                     onTextChanged: { // Handle suggestions
                         if(messageInputField.text.length === 0) {
