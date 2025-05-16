@@ -55,8 +55,6 @@ Scope {
             property var modelData
             active: showOsdValues
             PanelWindow {
-                property var modelData
-
                 screen: modelData
                 exclusionMode: ExclusionMode.Normal
                 WlrLayershell.namespace: "quickshell:onScreenDisplay"

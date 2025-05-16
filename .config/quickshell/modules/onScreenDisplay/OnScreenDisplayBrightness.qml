@@ -54,8 +54,6 @@ Scope {
             }
 
             PanelWindow {
-                property var modelData
-
                 screen: modelData
                 exclusionMode: ExclusionMode.Normal
                 WlrLayershell.namespace: "quickshell:onScreenDisplay"
