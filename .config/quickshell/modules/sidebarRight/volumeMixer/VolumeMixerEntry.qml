@@ -29,7 +29,7 @@ Item {
             sourceSize.height: 38
             source: {
                 const icon = Icons.noKnowledgeIconGuess(root.node.properties["application.icon-name"]);
-                return Quickshell.iconPath(icon);
+                return Quickshell.iconPath(icon, "image-missing");
             }
         }
 

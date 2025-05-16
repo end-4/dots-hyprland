@@ -189,7 +189,7 @@ Item {
                             return winArea > maxArea ? win : maxWin
                         }, null)
                     }
-                    property var mainAppIconSource: Quickshell.iconPath(Icons.noKnowledgeIconGuess(biggestWindow?.class))
+                    property var mainAppIconSource: Quickshell.iconPath(Icons.noKnowledgeIconGuess(biggestWindow?.class), "image-missing")
 
                     StyledText {
                         opacity: (ConfigOptions.bar.workspaces.alwaysShowNumbers || GlobalStates.workspaceShowNumbers || !workspaceButtonBackground.biggestWindow) ? 1 : 0

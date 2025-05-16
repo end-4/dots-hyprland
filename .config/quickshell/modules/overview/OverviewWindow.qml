@@ -32,7 +32,7 @@ Rectangle { // Window
     property var iconToWindowRatio: 0.35
     property var xwaylandIndicatorToIconRatio: 0.35
     property var iconToWindowRatioCompact: 0.6
-    property var iconPath: Quickshell.iconPath(Icons.noKnowledgeIconGuess(windowData?.class))
+    property var iconPath: Quickshell.iconPath(Icons.noKnowledgeIconGuess(windowData?.class), "image-missing")
     property bool compactMode: Appearance.font.pixelSize.smaller * 4 > targetWindowHeight || Appearance.font.pixelSize.smaller * 4 > targetWindowWidth
     
     x: initX

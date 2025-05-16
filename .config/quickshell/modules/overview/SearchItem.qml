@@ -77,7 +77,7 @@ Button {
         Component {
             id: iconImageComponent
             IconImage {
-                source: Quickshell.iconPath(root.itemIcon)
+                source: Quickshell.iconPath(root.itemIcon, "image-missing")
                 width: 35
                 height: 35
             }

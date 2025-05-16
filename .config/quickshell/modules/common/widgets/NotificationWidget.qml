@@ -303,7 +303,7 @@ Item {
                             sourceComponent: IconImage {
                                 implicitSize: 33
                                 asynchronous: true
-                                source: Quickshell.iconPath(notificationObject.appIcon)
+                                source: Quickshell.iconPath(notificationObject.appIcon, "image-missing")
                             }
                         }
                         Loader {
@@ -345,7 +345,7 @@ Item {
                                     sourceComponent: IconImage {
                                         implicitSize: 23
                                         asynchronous: true
-                                        source: Quickshell.iconPath(notificationObject.appIcon)
+                                        source: Quickshell.iconPath(notificationObject.appIcon, "image-missing")
                                     }
                                 }
                             }
