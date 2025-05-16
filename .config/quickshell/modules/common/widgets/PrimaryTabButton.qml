@@ -12,7 +12,7 @@ TabButton {
     property string buttonIcon
     property bool selected: false
     property int tabContentWidth: contentItem.children[0].implicitWidth
-    property int rippleDuration: 1000
+    property int rippleDuration: 1200
     height: buttonBackground.height
 
     PointingHandInteraction {}
@@ -20,13 +20,12 @@ TabButton {
     component RippleAnim: NumberAnimation {
         duration: rippleDuration
         easing.type: Appearance.animation.elementMoveEnter.type
-        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+        easing.bezierCurve: Appearance.animationCurves.standardDecel
     }
 
     MouseArea {
         anchors.fill: parent
-        onPressed: (event) => {
-    
+        onPressed: (event) => { 
             const {x,y} = event
             const stateY = buttonBackground.y;
             rippleAnim.x = x;
