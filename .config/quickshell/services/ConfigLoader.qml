@@ -12,7 +12,7 @@ import Qt.labs.platform
 
 Singleton {
     id: root
-    property string fileDir: `${StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]}/illogical-impulse`
+    property string fileDir: `${XdgDirectories.config}/illogical-impulse`
     property string fileName: "config.json"
     property string filePath: FileUtils.trimFileProtocol(`${root.fileDir}/${root.fileName}`)
     property bool firstLoad: true

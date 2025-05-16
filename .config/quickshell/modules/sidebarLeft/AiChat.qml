@@ -6,7 +6,6 @@ import "./aiChat/"
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common/functions/file_utils.js" as FileUtils
-import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -21,7 +20,7 @@ Item {
     property var inputField: messageInputField
     readonly property var messages: Ai.messages
     property string commandPrefix: "/"
-    property string faviconDownloadPath: FileUtils.trimFileProtocol(`${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/favicons`)
+    property string faviconDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/favicons`)
 
     property var suggestionQuery: ""
     property var suggestionList: []

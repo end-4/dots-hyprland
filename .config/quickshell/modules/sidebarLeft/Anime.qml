@@ -19,9 +19,9 @@ Item {
     property var panelWindow
     property var inputField: tagInputField
     readonly property var responses: Booru.responses
-    property string previewDownloadPath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/media/waifus`.replace("file://", "")
-    property string downloadPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework").replace("file://", "")
-    property string nsfwPath: (StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0] + "/homework/🌶️").replace("file://", "")
+    property string previewDownloadPath: `${XdgDirectories.cache}/media/waifus`.replace("file://", "")
+    property string downloadPath: (XdgDirectories.pictures  + "/homework").replace("file://", "")
+    property string nsfwPath: (XdgDirectories.pictures + "/homework/🌶️").replace("file://", "")
     property string commandPrefix: "/"
     property real scrollOnNewResponse: 100
     property int tagSuggestionDelay: 210

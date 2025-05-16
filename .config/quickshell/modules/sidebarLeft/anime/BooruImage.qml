@@ -97,7 +97,7 @@ Button {
             PointingHandInteraction {}
 
             StyledToolTip {
-                content: StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)
+                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\nClick for options`
             }
 
             background: Rectangle {

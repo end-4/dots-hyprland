@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import "root:/modules/common"
 import Quickshell;
 import Quickshell.Io;
 import Qt.labs.platform
@@ -8,7 +9,7 @@ import QtQuick;
 
 Singleton {
     id: root
-    property var filePath: `${StandardPaths.standardLocations(StandardPaths.StateLocation)[0]}/user/todo.json`
+    property var filePath: `${XdgDirectories.state}/user/todo.json`
     property var list: []
     
     function addItem(item) {

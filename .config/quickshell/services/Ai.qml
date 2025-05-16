@@ -11,7 +11,6 @@ import QtQuick;
 Singleton {
     id: root
 
-    readonly property string xdgConfigHome: StandardPaths.standardLocations(StandardPaths.ConfigLocation)[0]
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
@@ -107,7 +106,7 @@ Singleton {
 
     Process {
         id: getOllamaModels
-        command: ["bash", "-c", `${xdgConfigHome}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
+        command: ["bash", "-c", `${XdgDirectories.config}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
         stdout: SplitParser {
             onRead: data => {
                 try {

@@ -26,7 +26,7 @@ Singleton {
     property var processedExpressions: ({})
     property var renderedImagePaths: ({})
     property string microtexBinaryPath: Qt.resolvedUrl("/opt/MicroTeX/LaTeX")
-    property string latexOutputPath: FileUtils.trimFileProtocol(`${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/latex`)
+    property string latexOutputPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/latex`)
 
     signal renderFinished(string hash, string imagePath)
 

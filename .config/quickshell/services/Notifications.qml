@@ -1,6 +1,7 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+import "root:/modules/common"
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -9,10 +10,10 @@ import Qt.labs.platform
 
 Singleton {
 	id: root
-    property var filePath: `${StandardPaths.standardLocations(StandardPaths.CacheLocation)[0]}/notifications/notifications.json`
+    property var filePath: `${XdgDirectories.cache}/notifications/notifications.json`
     property var list: []
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
-    // can already contain higher IDs. This is a workaround to avoid id collisions
+    // can already contain higher IDs. This is for avoiding id collisions
     property int idOffset
 
     signal initDone();

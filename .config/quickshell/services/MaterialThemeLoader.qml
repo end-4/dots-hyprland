@@ -5,11 +5,10 @@ import "root:/modules/common"
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import Qt.labs.platform
 
 Singleton {
     id: root
-    property string filePath: `${StandardPaths.standardLocations(StandardPaths.StateLocation)[0]}/user/generated/colors.json`
+    property string filePath: `${XdgDirectories.state}/user/generated/colors.json`
 
     function reapplyTheme() {
         themeFileView.reload()
