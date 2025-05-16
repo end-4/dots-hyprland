@@ -11,7 +11,18 @@ import Quickshell.Hyprland
 
 Singleton {
     id: root
-    property var keybinds: []
+    property var defaultKeybinds: []
+    property var userKeybinds: []
+    property var keybinds: ({
+        children: [
+            ...defaultKeybinds.children,
+            ...userKeybinds.children,
+        ]
+    })
+
+    // onKeybindsChanged: {
+    //     console.log("[CheatsheetKeybinds] Keybinds changed:", JSON.stringify(keybinds, null, 2))
+    // }   
 
     Connections {
         target: Hyprland
@@ -19,13 +30,14 @@ Singleton {
         function onRawEvent(event) {
             console.log("[CheatsheetKeybinds] Event:", event.name)
             if (event.name == "configreloaded") {
-                getKeybinds.running = true
+                getDefaultKeybinds.running = true
+                getUserKeybinds.running = true
             }
         }
     }
 
     Process {
-        id: getKeybinds
+        id: getDefaultKeybinds
         running: true
         command: [FileUtils.trimFileProtocol(`${XdgDirectories.config}/quickshell/scripts/hyprland/get_keybinds.py`), 
             "--path", FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/hyprland/keybinds.conf`),]
@@ -33,7 +45,24 @@ Singleton {
         stdout: SplitParser {
             onRead: data => {
                 try {
-                    root.keybinds = JSON.parse(data)
+                    root.defaultKeybinds = JSON.parse(data)
+                } catch (e) {
+                    console.error("[CheatsheetKeybinds] Error parsing keybinds:", e)
+                }
+            }
+        }
+    }
+
+    Process {
+        id: getUserKeybinds
+        running: true
+        command: [FileUtils.trimFileProtocol(`${XdgDirectories.config}/quickshell/scripts/hyprland/get_keybinds.py`), 
+            "--path", FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/custom/keybinds.conf`),]
+        
+        stdout: SplitParser {
+            onRead: data => {
+                try {
+                    root.userKeybinds = JSON.parse(data)
                 } catch (e) {
                     console.error("[CheatsheetKeybinds] Error parsing keybinds:", e)
                 }
