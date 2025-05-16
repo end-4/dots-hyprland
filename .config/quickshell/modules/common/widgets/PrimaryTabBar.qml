@@ -52,38 +52,39 @@ ColumnLayout {
                 root.enableIndicatorAnimation = true
             }
         }
+
         Rectangle {
+            id: indicator
+            property int tabCount: root.tabButtonList.length
+            property real fullTabSize: root.width / tabCount;
+            property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+
+            implicitWidth: targetWidth
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+            }
+
+            x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
+
             color: Appearance.m3colors.m3primary
             radius: Appearance.rounding.full
-            z: 2
 
-            anchors.fill: parent
-            // TODO: make the end point in the moving direction go first
-            anchors.leftMargin: {
-                const tabCount = root.tabButtonList.length
-                const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
-                const fullTabSize = root.width / tabCount;
-                return fullTabSize * root.externalTrackedTab + (fullTabSize - targetWidth) / 2;
+            Behavior on x {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                }
             }
-            anchors.rightMargin: {
-                const tabCount = root.tabButtonList.length
-                const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
-                const fullTabSize = root.width / tabCount;
-                return fullTabSize * (tabCount - root.externalTrackedTab - 1) + (fullTabSize - targetWidth) / 2;
+
+            Behavior on implicitWidth {
+                NumberAnimation {
+                    duration: Appearance.animation.elementMove.duration
+                    easing.type: Appearance.animation.elementMove.type
+                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                }
             }
-            Behavior on anchors.leftMargin { 
-                enabled: root.enableIndicatorAnimation
-                SmoothedAnimation {
-                    velocity: Appearance.animation.positionShift.velocity
-                } 
-            }
-            Behavior on anchors.rightMargin { 
-                enabled: root.enableIndicatorAnimation
-                SmoothedAnimation {
-                    velocity: Appearance.animation.positionShift.velocity
-                } 
-            }
-            
         }
     }
 
