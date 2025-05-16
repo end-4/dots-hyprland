@@ -156,7 +156,7 @@ Singleton {
         property QtObject family: QtObject {
             property string main: "Rubik"
             property string title: "Rubik"
-            property string iconMaterial: "Material Symbols Outlined"
+            property string iconMaterial: "Material Symbols Rounded"
             property string iconNerd: "SpaceMono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
