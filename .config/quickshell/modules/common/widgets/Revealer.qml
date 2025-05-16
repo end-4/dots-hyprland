@@ -17,17 +17,17 @@ Item {
     Behavior on implicitWidth {
         enabled: !vertical
         NumberAnimation {
-            duration: Appearance.animation.elementMoveFast.duration
-            easing.type: Appearance.animation.elementMoveFast.type
-            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            duration: Appearance.animation.elementMoveEnter.duration
+            easing.type: Appearance.animation.elementMoveEnter.type
+            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
         }
     }
     Behavior on implicitHeight {
         enabled: vertical
         NumberAnimation {
-            duration: Appearance.animation.elementMoveFast.duration
-            easing.type: Appearance.animation.elementMoveFast.type
-            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+            duration: Appearance.animation.elementMoveEnter.duration
+            easing.type: Appearance.animation.elementMoveEnter.type
+            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
         }
     }
 }
