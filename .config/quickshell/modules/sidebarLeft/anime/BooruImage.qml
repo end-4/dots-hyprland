@@ -159,7 +159,9 @@ Button {
                             buttonText: qsTr("Open file link")
                             onClicked: {
                                 root.showActions = false
+                                Hyprland.dispatch("keyword cursor:no_warps true")
                                 Qt.openUrlExternally(root.imageData.file_url)
+                                Hyprland.dispatch("keyword cursor:no_warps false")
                             }
                         }
                         MenuButton {
@@ -170,7 +172,9 @@ Button {
                             enabled: root.imageData.source && root.imageData.source.length > 0
                             onClicked: {
                                 root.showActions = false
+                                Hyprland.dispatch("keyword cursor:no_warps true")
                                 Qt.openUrlExternally(root.imageData.source)
+                                Hyprland.dispatch("keyword cursor:no_warps false")
                             }
                         }
                         MenuButton {
