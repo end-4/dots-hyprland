@@ -104,6 +104,7 @@ Scope {
                             anchors.centerIn: parent 
                             value: brightnessMonitor.brightness
                             icon: "light_mode"
+                            rotateIcon: true
                             name: qsTr("Brightness")
                         }
                     }

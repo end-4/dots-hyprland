@@ -13,6 +13,7 @@ Item {
     required property real value
     required property string icon
     required property string name
+    property bool rotateIcon: false
 
     property real valueIndicatorVerticalPadding: 5
     property real valueIndicatorLeftPadding: 10
@@ -33,14 +34,38 @@ Item {
             Layout.margins: 10
             spacing: 10
 
-            MaterialSymbol { // Icon
+            Item {    
+                implicitWidth: 30
+                implicitHeight: 30
                 Layout.alignment: Qt.AlignVCenter
                 Layout.leftMargin: valueIndicatorLeftPadding
                 Layout.topMargin: valueIndicatorVerticalPadding
                 Layout.bottomMargin: valueIndicatorVerticalPadding
-                color: Appearance.colors.colOnLayer0
-                text: root.icon
-                iconSize: 30
+                MaterialSymbol { // Icon
+                    anchors.centerIn: parent
+                    color: Appearance.colors.colOnLayer0
+                    renderType: Text.QtRendering
+
+                    text: root.icon
+                    iconSize: 20 + 10 * (root.rotateIcon ? value : 1)
+                    rotation: 180 * (root.rotateIcon ? value : 0)
+
+                    Behavior on iconSize {
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMoveEnter.duration
+                            easing.type: Appearance.animation.elementMoveEnter.type
+                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                        }
+                    }
+                    Behavior on rotation {
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMoveEnter.duration
+                            easing.type: Appearance.animation.elementMoveEnter.type
+                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                        }
+                    }
+                
+                }
             }
             ColumnLayout { // Stuff
                 Layout.alignment: Qt.AlignVCenter
