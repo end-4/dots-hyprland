@@ -24,14 +24,14 @@ Singleton {
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
-            monitor.setBrightness(monitor.brightness + 0.1);
+            monitor.setBrightness(monitor.brightness + 0.05);
     }
 
     function decreaseBrightness(): void {
         const focusedName = Hyprland.focusedMonitor.name;
         const monitor = monitors.find(m => focusedName === m.screen.name);
         if (monitor)
-            monitor.setBrightness(monitor.brightness - 0.1);
+            monitor.setBrightness(monitor.brightness - 0.05);
     }
 
     reloadableId: "brightness"
