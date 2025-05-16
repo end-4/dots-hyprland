@@ -28,7 +28,6 @@ Singleton {
         target: Hyprland
 
         function onRawEvent(event) {
-            console.log("[CheatsheetKeybinds] Event:", event.name)
             if (event.name == "configreloaded") {
                 getDefaultKeybinds.running = true
                 getUserKeybinds.running = true
