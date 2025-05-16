@@ -162,6 +162,7 @@ Singleton {
             property string reading: "Readex Pro"
         }
         property QtObject pixelSize: QtObject {
+            property int smallest: 10
             property int smaller: 13
             property int small: 15
             property int normal: 16

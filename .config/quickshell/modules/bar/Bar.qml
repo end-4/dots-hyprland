@@ -100,42 +100,56 @@ Scope {
                             }
                         }
                     }
-                    RowLayout { // Left section
-                        id: leftSection
+                    Item {  // Left section
                         anchors.fill: parent
-                        spacing: 10
+                        implicitHeight: leftSectionRowLayout.implicitHeight
+                        implicitWidth: leftSectionRowLayout.implicitWidth
 
-                        Rectangle {
-                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                            Layout.leftMargin: Appearance.rounding.screenRounding
-                            Layout.fillWidth: false
-                            
-                            // Layout.fillHeight: true
-                            radius: Appearance.rounding.full
-                            color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpenCount > 0) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
-                            implicitWidth: distroIcon.width + 5*2
-                            implicitHeight: distroIcon.height + 5*2
-
-                            CustomIcon {
-                                id: distroIcon
-                                anchors.centerIn: parent
-                                width: 19.5
-                                height: 19.5
-                                source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
-                                    SystemInfo.distroIcon : "spark-symbolic"
-                            }
-                            
-                            ColorOverlay {
-                                anchors.fill: distroIcon
-                                source: distroIcon
-                                color: Appearance.colors.colOnLayer0
-                            }
+                        ScrollHint {
+                            reveal: barLeftSideMouseArea.hovered
+                            icon: "light_mode"
+                            side: "left"
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
                         }
+                        
+                        RowLayout { // Content
+                            id: leftSectionRowLayout
+                            anchors.fill: parent
+                            spacing: 10
 
-                        ActiveWindow {
-                            Layout.rightMargin: Appearance.rounding.screenRounding
-                            Layout.fillWidth: true
-                            bar: barRoot
+                            Rectangle {
+                                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                                Layout.leftMargin: Appearance.rounding.screenRounding
+                                Layout.fillWidth: false
+                                
+                                // Layout.fillHeight: true
+                                radius: Appearance.rounding.full
+                                color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpenCount > 0) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                                implicitWidth: distroIcon.width + 5*2
+                                implicitHeight: distroIcon.height + 5*2
+
+                                CustomIcon {
+                                    id: distroIcon
+                                    anchors.centerIn: parent
+                                    width: 19.5
+                                    height: 19.5
+                                    source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
+                                        SystemInfo.distroIcon : "spark-symbolic"
+                                }
+                                
+                                ColorOverlay {
+                                    anchors.fill: distroIcon
+                                    source: distroIcon
+                                    color: Appearance.colors.colOnLayer0
+                                }
+                            }
+
+                            ActiveWindow {
+                                Layout.rightMargin: Appearance.rounding.screenRounding
+                                Layout.fillWidth: true
+                                bar: barRoot
+                            }
                         }
                     }
                 }
@@ -259,89 +273,103 @@ Scope {
                         }
                     }
 
-                    RowLayout {
-                        id: rightSection
+                    Item {
                         anchors.fill: parent
-                        spacing: 5
-                        layoutDirection: Qt.RightToLeft
-                
-                        Rectangle {
-                            Layout.margins: 4
-                            Layout.rightMargin: Appearance.rounding.screenRounding
-                            Layout.fillHeight: true
-                            implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
-                            radius: Appearance.rounding.full
-                            color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpenCount > 0) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
-                            RowLayout {
-                                id: indicatorsRowLayout
-                                anchors.centerIn: parent
-                                property real realSpacing: 15
-                                spacing: 0
-                                
-                                Revealer {
-                                    reveal: Audio.sink?.audio?.muted ?? false
-                                    Layout.fillHeight: true
-                                    Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                                    Behavior on Layout.rightMargin {
-                                        NumberAnimation {
-                                            duration: Appearance.animation.elementMoveFast.duration
-                                            easing.type: Appearance.animation.elementMoveFast.type
-                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                        implicitHeight: rightSectionRowLayout.implicitHeight
+                        implicitWidth: rightSectionRowLayout.implicitWidth
+                        
+                        ScrollHint {
+                            reveal: barRightSideMouseArea.hovered
+                            icon: "volume_up"
+                            side: "right"
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        RowLayout {
+                            id: rightSectionRowLayout
+                            anchors.fill: parent
+                            spacing: 5
+                            layoutDirection: Qt.RightToLeft
+                    
+                            Rectangle {
+                                Layout.margins: 4
+                                Layout.rightMargin: Appearance.rounding.screenRounding
+                                Layout.fillHeight: true
+                                implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
+                                radius: Appearance.rounding.full
+                                color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpenCount > 0) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                                RowLayout {
+                                    id: indicatorsRowLayout
+                                    anchors.centerIn: parent
+                                    property real realSpacing: 15
+                                    spacing: 0
+                                    
+                                    Revealer {
+                                        reveal: Audio.sink?.audio?.muted ?? false
+                                        Layout.fillHeight: true
+                                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                                        Behavior on Layout.rightMargin {
+                                            NumberAnimation {
+                                                duration: Appearance.animation.elementMoveFast.duration
+                                                easing.type: Appearance.animation.elementMoveFast.type
+                                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                                            }
+                                        }
+                                        MaterialSymbol {
+                                            text: "volume_off"
+                                            iconSize: Appearance.font.pixelSize.larger
+                                            color: Appearance.colors.colOnLayer0
+                                        }
+                                    }
+                                    Revealer {
+                                        reveal: Audio.source?.audio?.muted ?? false
+                                        Layout.fillHeight: true
+                                        Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
+                                        Behavior on Layout.rightMargin {
+                                            NumberAnimation {
+                                                duration: Appearance.animation.elementMoveFast.duration
+                                                easing.type: Appearance.animation.elementMoveFast.type
+                                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                                            }
+                                        }
+                                        MaterialSymbol {
+                                            text: "mic_off"
+                                            iconSize: Appearance.font.pixelSize.larger
+                                            color: Appearance.colors.colOnLayer0
                                         }
                                     }
                                     MaterialSymbol {
-                                        text: "volume_off"
+                                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                                        text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
+                                            Network.networkStrength > 80 ? "signal_wifi_4_bar" :
+                                            Network.networkStrength > 60 ? "network_wifi_3_bar" :
+                                            Network.networkStrength > 40 ? "network_wifi_2_bar" :
+                                            Network.networkStrength > 20 ? "network_wifi_1_bar" :
+                                            "signal_wifi_0_bar"
+                                        ) : "signal_wifi_off"
                                         iconSize: Appearance.font.pixelSize.larger
                                         color: Appearance.colors.colOnLayer0
-                                    }
-                                }
-                                Revealer {
-                                    reveal: Audio.source?.audio?.muted ?? false
-                                    Layout.fillHeight: true
-                                    Layout.rightMargin: reveal ? indicatorsRowLayout.realSpacing : 0
-                                    Behavior on Layout.rightMargin {
-                                        NumberAnimation {
-                                            duration: Appearance.animation.elementMoveFast.duration
-                                            easing.type: Appearance.animation.elementMoveFast.type
-                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                        }
                                     }
                                     MaterialSymbol {
-                                        text: "mic_off"
+                                        text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
                                         iconSize: Appearance.font.pixelSize.larger
                                         color: Appearance.colors.colOnLayer0
                                     }
-                                }
-                                MaterialSymbol {
-                                    Layout.rightMargin: indicatorsRowLayout.realSpacing
-                                    text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
-                                        Network.networkStrength > 80 ? "signal_wifi_4_bar" :
-                                        Network.networkStrength > 60 ? "network_wifi_3_bar" :
-                                        Network.networkStrength > 40 ? "network_wifi_2_bar" :
-                                        Network.networkStrength > 20 ? "network_wifi_1_bar" :
-                                        "signal_wifi_0_bar"
-                                    ) : "signal_wifi_off"
-                                    iconSize: Appearance.font.pixelSize.larger
-                                    color: Appearance.colors.colOnLayer0
-                                }
-                                MaterialSymbol {
-                                    text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
-                                    iconSize: Appearance.font.pixelSize.larger
-                                    color: Appearance.colors.colOnLayer0
                                 }
                             }
+
+                            SysTray {
+                                bar: barRoot
+                                Layout.fillWidth: false
+                                Layout.fillHeight: true
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                            }
                         }
-
-                        SysTray {
-                            bar: barRoot
-                            Layout.fillWidth: false
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-
                     }
                 }
             }
