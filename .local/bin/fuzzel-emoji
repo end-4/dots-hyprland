@@ -1,10 +1,26 @@
 #!/bin/bash
-if [ $? -eq 0 ]
-then
-    sed '1,/^### DATA ###$/d' $0 | fuzzel --match-mode fzf --dmenu | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
-else
-    sed '1,/^### DATA ###$/d' $0 | fuzzel --match-mode fzf --dmenu | cut -d ' ' -f 1 | tr -d '\n' | wl-copy
-fi
+set -euo pipefail
+
+MODE="${1:-type}"
+
+emoji="$(sed '1,/^### DATA ###$/d' "$0" | fuzzel --match-mode fzf --dmenu | cut -d ' ' -f 1 | tr -d '\n')"
+
+case "$MODE" in
+    type)
+        wtype "${emoji}" || wl-copy "${emoji}"
+        ;;
+    copy)
+        wl-copy "${emoji}"
+        ;;
+    both)
+        wtype "${emoji}" || true
+        wl-copy "${emoji}"
+        ;;
+    *)
+        echo "Usage: $0 [type|copy|both]"
+        exit 1
+        ;;
+esac
 exit
 ### DATA ###
 😀 grinning face face smile happy joy :D grin
