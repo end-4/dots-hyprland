@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -11,25 +12,115 @@ TabButton {
     property string buttonText
     property string buttonIcon
     property bool selected: false
+    property int rippleDuration: 1200
     height: buttonBackground.height
     property int tabContentWidth: buttonBackground.width - buttonBackground.radius*2
 
     PointingHandInteraction {}
 
+    component RippleAnim: NumberAnimation {
+        duration: rippleDuration
+        easing.type: Appearance.animation.elementMoveEnter.type
+        easing.bezierCurve: Appearance.animationCurves.standardDecel
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        propagateComposedEvents: true
+        onPressed: (event) => { 
+            const {x,y} = event
+            const stateY = buttonBackground.y;
+            rippleAnim.x = x;
+            rippleAnim.y = y - stateY;
+
+            const dist = (ox,oy) => ox*ox + oy*oy
+            const stateEndY = stateY + buttonBackground.height
+            rippleAnim.radius = Math.sqrt(Math.max(dist(0, stateY), dist(0, stateEndY), dist(width, stateY), dist(width, stateEndY)))
+
+            rippleFadeAnim.complete();
+            rippleAnim.restart();
+        }
+        onReleased: (event) => {
+            button.click() // Because the MouseArea already consumed the event
+            rippleFadeAnim.restart();
+        }
+    }
+
+    RippleAnim {
+        id: rippleFadeAnim
+        target: ripple
+        property: "opacity"
+        to: 0
+    }
+
+    SequentialAnimation {
+        id: rippleAnim
+
+        property real x
+        property real y
+        property real radius
+
+        PropertyAction {
+            target: ripple
+            property: "x"
+            value: rippleAnim.x
+        }
+        PropertyAction {
+            target: ripple
+            property: "y"
+            value: rippleAnim.y
+        }
+        PropertyAction {
+            target: ripple
+            property: "opacity"
+            value: 1
+        }
+        ParallelAnimation {
+            RippleAnim {
+                target: ripple
+                properties: "implicitWidth,implicitHeight"
+                from: 0
+                to: rippleAnim.radius * 2
+            }
+        }
+    }
+
     background: Rectangle {
         id: buttonBackground
         radius: Appearance.rounding.small
         implicitHeight: 37
-        color: (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+        color: (button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: buttonBackground.width
+                height: buttonBackground.height
+                radius: buttonBackground.radius
+            }
+        }
         
         Behavior on color {
             ColorAnimation {
                 duration: Appearance.animation.elementMove.duration
                 easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            }
+        }
+
+        Rectangle {
+            id: ripple
+
+            radius: Appearance.rounding.full
+            color: Appearance.colors.colLayer1Active
+            opacity: 0
+
+            transform: Translate {
+                x: -ripple.width / 2
+                y: -ripple.height / 2
             }
         }
     }
+
     contentItem: Item {
         anchors.centerIn: buttonBackground
         RowLayout {
