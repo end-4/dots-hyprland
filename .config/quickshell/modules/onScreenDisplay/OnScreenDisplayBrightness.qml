@@ -12,7 +12,7 @@ import Quickshell.Wayland
 Scope {
     id: root
     property bool showOsdValues: false
-    property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    property ShellScreen focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
     property var brightnessMonitor: Brightness.getMonitorForScreen(focusedScreen)
 
     function triggerOsd() {
@@ -55,7 +55,7 @@ Scope {
             id: osdRoot
 
             Connections {
-                target: osdLoader
+                target: root
                 function onFocusedScreenChanged() {
                     osdRoot.screen = root.focusedScreen
                 }
@@ -66,9 +66,7 @@ Scope {
             WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
-            anchors {
-                top: true
-            }
+            anchors.top: true
             mask: Region {
                 item: osdValuesWrapper
             }
