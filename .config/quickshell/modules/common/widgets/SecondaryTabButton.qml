@@ -26,7 +26,7 @@ TabButton {
 
     MouseArea {
         anchors.fill: parent
-        propagateComposedEvents: true
+        cursorShape: Qt.PointingHandCursor
         onPressed: (event) => { 
             const {x,y} = event
             const stateY = buttonBackground.y;

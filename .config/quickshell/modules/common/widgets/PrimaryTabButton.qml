@@ -16,8 +16,6 @@ TabButton {
     property int rippleDuration: 1200
     height: buttonBackground.height
 
-    PointingHandInteraction {}
-
     component RippleAnim: NumberAnimation {
         duration: rippleDuration
         easing.type: Appearance.animation.elementMoveEnter.type
@@ -26,7 +24,7 @@ TabButton {
 
     MouseArea {
         anchors.fill: parent
-        propagateComposedEvents: true
+        cursorShape: Qt.PointingHandCursor
         onPressed: (event) => { 
             const {x,y} = event
             const stateY = buttonBackground.y;
