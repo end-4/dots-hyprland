@@ -15,7 +15,7 @@ Item {
     required property string name
     property bool rotateIcon: false
 
-    property real valueIndicatorVerticalPadding: 5
+    property real valueIndicatorVerticalPadding: 9
     property real valueIndicatorLeftPadding: 10
     property real valueIndicatorRightPadding: 20 // An icon is circle ish, a column isn't, hence the extra padding
 
