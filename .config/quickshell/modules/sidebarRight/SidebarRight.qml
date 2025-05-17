@@ -20,7 +20,6 @@ Scope {
     Loader {
         id: sidebarLoader
         active: false
-        property var modelData
         onActiveChanged: {
             GlobalStates.sidebarRightOpenCount += active ? 1 : -1
         }
