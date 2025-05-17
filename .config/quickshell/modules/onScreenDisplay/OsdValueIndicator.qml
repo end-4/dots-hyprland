@@ -14,6 +14,7 @@ Item {
     required property string icon
     required property string name
     property bool rotateIcon: false
+    property bool scaleIcon: false
 
     property real valueIndicatorVerticalPadding: 9
     property real valueIndicatorLeftPadding: 10
@@ -47,7 +48,7 @@ Item {
                     renderType: Text.QtRendering
 
                     text: root.icon
-                    iconSize: 20 + 10 * (root.rotateIcon ? value : 1)
+                    iconSize: 20 + 10 * (root.scaleIcon ? value : 1)
                     rotation: 180 * (root.rotateIcon ? value : 0)
 
                     Behavior on iconSize {

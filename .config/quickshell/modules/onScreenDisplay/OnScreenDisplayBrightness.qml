@@ -106,6 +106,7 @@ Scope {
                         value: root.brightnessMonitor.brightness
                         icon: "light_mode"
                         rotateIcon: true
+                        scaleIcon: true
                         name: qsTr("Brightness")
                     }
                 }
