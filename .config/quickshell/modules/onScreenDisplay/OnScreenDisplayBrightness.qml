@@ -12,7 +12,7 @@ import Quickshell.Wayland
 Scope {
     id: root
     property bool showOsdValues: false
-    property ShellScreen focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
     property var brightnessMonitor: Brightness.getMonitorForScreen(focusedScreen)
 
     function triggerOsd() {
