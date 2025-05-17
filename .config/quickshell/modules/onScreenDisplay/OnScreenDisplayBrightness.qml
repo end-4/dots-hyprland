@@ -39,8 +39,7 @@ Scope {
     }
 
     Connections {
-        target: root.brightnessMonitor
-        enabled: !!root.brightnessMonitor
+        target: Brightness
         function onBrightnessChanged() {
             if (!root.brightnessMonitor.ready) return
             root.triggerOsd()
