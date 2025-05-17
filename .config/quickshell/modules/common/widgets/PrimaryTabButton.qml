@@ -120,6 +120,7 @@ TabButton {
             }
         }
     }
+    
     contentItem: Item {
         anchors.centerIn: buttonBackground
         ColumnLayout {
