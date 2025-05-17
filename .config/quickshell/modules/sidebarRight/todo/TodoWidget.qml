@@ -99,20 +99,12 @@ Item {
 
                 Behavior on x {
                     enabled: tabIndicator.enableIndicatorAnimation
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
                 Behavior on implicitWidth {
                     enabled: tabIndicator.enableIndicatorAnimation
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
             }
         }
@@ -178,11 +170,7 @@ Item {
             color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.m3colors.m3primaryContainer)
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
         }
 

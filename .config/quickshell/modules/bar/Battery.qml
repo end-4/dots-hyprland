@@ -31,11 +31,7 @@ Rectangle {
             implicitWidth: (isCharging ? (boltIconLoader?.item?.width ?? 0) : 0)
 
             Behavior on implicitWidth {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
         }
 
@@ -91,12 +87,7 @@ Rectangle {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
-
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
         }

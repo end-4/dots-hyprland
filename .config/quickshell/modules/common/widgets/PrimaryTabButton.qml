@@ -98,11 +98,7 @@ TabButton {
         }
         
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
         Rectangle {
@@ -133,11 +129,7 @@ TabButton {
                 fill: selected ? 1 : 0
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                 Behavior on color {
-                    ColorAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
             StyledText {
@@ -148,11 +140,7 @@ TabButton {
                 color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
                 text: buttonText
                 Behavior on color {
-                    ColorAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
         }

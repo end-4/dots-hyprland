@@ -27,11 +27,7 @@ Button {
             Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1))
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 
@@ -44,11 +40,7 @@ Button {
             Appearance.colors.colOnLayer1Inactive
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 }

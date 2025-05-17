@@ -33,11 +33,7 @@ Button {
                 (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
             MaterialSymbol {
                 id: navRailButtonIcon
@@ -48,11 +44,7 @@ Button {
                 color: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
 
                 Behavior on color {
-                    ColorAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
         }

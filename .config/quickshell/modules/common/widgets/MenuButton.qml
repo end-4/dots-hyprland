@@ -21,12 +21,7 @@ Button {
             Appearance.transparentize(Appearance.m3colors.m3onSurface, 1))
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
     }
@@ -42,11 +37,7 @@ Button {
         color: button.enabled ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3outline
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 

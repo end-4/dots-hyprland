@@ -215,9 +215,9 @@ int main(int argc, char* argv[]) {
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+                        duration: Appearance.animation.elementMoveEnter.duration
+                        easing.type: Appearance.animation.elementMoveEnter.type
+                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
                     }
                 }
 
@@ -356,11 +356,7 @@ int main(int argc, char* argv[]) {
             border.width: 1
 
             Behavior on implicitHeight {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
             RowLayout { // Input field and send button
@@ -474,11 +470,7 @@ int main(int argc, char* argv[]) {
                             Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
                             
                         Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
+                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
 
@@ -566,11 +558,7 @@ int main(int argc, char* argv[]) {
                                 Appearance.colors.colLayer2
                                 
                             Behavior on color {
-                                ColorAnimation {
-                                    duration: Appearance.animation.elementMove.duration
-                                    easing.type: Appearance.animation.elementMove.type
-                                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                             }
                         }
                         onClicked: {

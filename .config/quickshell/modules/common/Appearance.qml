@@ -4,6 +4,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 Singleton {
+    id: root
     property QtObject m3colors
     property QtObject animation
     property QtObject animationCurves
@@ -189,12 +190,33 @@ Singleton {
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.emphasized
             property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementMove.duration
+                    easing.type: root.animation.elementMove.type
+                    easing.bezierCurve: root.animation.elementMove.bezierCurve
+                }
+            }
+            property Component colorAnimation: Component {
+                ColorAnimation {
+                    duration: root.animation.elementMove.duration
+                    easing.type: root.animation.elementMove.type
+                    easing.bezierCurve: root.animation.elementMove.bezierCurve
+                }
+            }
         }
         property QtObject elementMoveEnter: QtObject {
             property int duration: 400
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.emphasizedDecel
             property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementMoveEnter.duration
+                    easing.type: root.animation.elementMoveEnter.type
+                    easing.bezierCurve: root.animation.elementMoveEnter.bezierCurve
+                }
+            }
         }
         property QtObject elementMoveExit: QtObject {
             property int duration: 200
@@ -207,6 +229,11 @@ Singleton {
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.standardDecel
             property int velocity: 850
+            property Component colorAnimation: Component {ColorAnimation {
+                duration: root.animation.elementMoveFast.duration
+                easing.type: root.animation.elementMoveFast.type
+                easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
+            }}
         }
         property QtObject scroll: QtObject {
             property int duration: 400

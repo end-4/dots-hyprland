@@ -16,18 +16,10 @@ Item {
 
     Behavior on implicitWidth {
         enabled: !vertical
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation
     }
     Behavior on implicitHeight {
         enabled: vertical
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation
     }
 }

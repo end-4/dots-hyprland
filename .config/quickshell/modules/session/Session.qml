@@ -175,9 +175,7 @@ Scope {
                     clip: true
 
                     Behavior on implicitWidth {
-                        SmoothedAnimation {
-                            velocity: Appearance.animation.elementMoveFast.velocity
-                        }
+                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                     }
 
                     StyledText {

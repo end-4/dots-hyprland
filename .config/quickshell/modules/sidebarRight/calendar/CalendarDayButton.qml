@@ -27,12 +27,7 @@ Button {
             Appearance.transparentize(Appearance.colors.colLayer1, 1)
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
     
@@ -46,12 +41,7 @@ Button {
             Appearance.m3colors.m3outlineVariant
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 }

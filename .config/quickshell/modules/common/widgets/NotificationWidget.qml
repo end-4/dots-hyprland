@@ -425,14 +425,8 @@ Item {
                                     color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : Appearance.transparentize(Appearance.colors.colLayer2, 1))
 
                                     Behavior on color {
-                                        ColorAnimation {
-                                            duration: Appearance.animation.elementMoveFast.duration
-                                            easing.type: Appearance.animation.elementMoveFast.type
-                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                        }
-
+                                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                                     }
-
                                 }
 
                                 contentItem: MaterialSymbol {

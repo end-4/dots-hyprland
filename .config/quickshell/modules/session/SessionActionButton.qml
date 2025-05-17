@@ -37,12 +37,7 @@ Button {
         color: (button.down || button.keyboardDown) ? Appearance.colors.colLayer2Active : ((button.hovered || button.focus) ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2)
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMove.colorAnimation.createObject(this)
         }
 
     }

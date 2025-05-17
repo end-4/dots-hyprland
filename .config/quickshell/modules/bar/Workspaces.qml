@@ -119,26 +119,14 @@ Item {
                 opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && monitor.activeWorkspace?.id === index+1)) ? 1 : 0
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
                 Behavior on radiusLeft {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
                 Behavior on radiusRight {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
             }
@@ -205,15 +193,6 @@ Item {
                             Appearance.m3colors.m3onPrimary : 
                             (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : 
                                 Appearance.colors.colOnLayer1Inactive)
-
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
-
-                        }
 
                         Behavior on opacity {
                             NumberAnimation {
