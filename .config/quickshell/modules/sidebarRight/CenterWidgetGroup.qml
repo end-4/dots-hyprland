@@ -62,6 +62,7 @@ Rectangle {
             Layout.topMargin: 5
             Layout.fillWidth: true
             Layout.fillHeight: true
+            spacing: 10
             currentIndex: root.selectedTab
             onCurrentIndexChanged: {
                 tabBar.enableIndicatorAnimation = true

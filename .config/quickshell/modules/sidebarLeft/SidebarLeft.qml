@@ -146,6 +146,7 @@ Scope { // Scope
                         Layout.topMargin: 5
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        spacing: 10
                         currentIndex: sidebarRoot.selectedTab
                         onCurrentIndexChanged: {
                             tabBar.enableIndicatorAnimation = true

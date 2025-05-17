@@ -129,6 +129,7 @@ Item {
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
+            spacing: 10
             clip: true
             currentIndex: currentTab
             onCurrentIndexChanged: {
