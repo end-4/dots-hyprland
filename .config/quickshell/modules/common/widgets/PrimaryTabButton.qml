@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -25,6 +26,7 @@ TabButton {
 
     MouseArea {
         anchors.fill: parent
+        propagateComposedEvents: true
         onPressed: (event) => { 
             const {x,y} = event
             const stateY = buttonBackground.y;
@@ -35,9 +37,20 @@ TabButton {
             const stateEndY = stateY + buttonBackground.height
             rippleAnim.radius = Math.sqrt(Math.max(dist(0, stateY), dist(0, stateEndY), dist(width, stateY), dist(width, stateEndY)))
 
+            rippleFadeAnim.complete();
             rippleAnim.restart();
-            event.accepted = false
         }
+        onReleased: (event) => {
+            button.click() // Because the MouseArea already consumed the event
+            rippleFadeAnim.restart();
+        }
+    }
+
+    RippleAnim {
+        id: rippleFadeAnim
+        target: ripple
+        property: "opacity"
+        to: 0
     }
 
     SequentialAnimation {
@@ -60,7 +73,7 @@ TabButton {
         PropertyAction {
             target: ripple
             property: "opacity"
-            value: 0.1
+            value: 1
         }
         ParallelAnimation {
             RippleAnim {
@@ -69,19 +82,22 @@ TabButton {
                 from: 0
                 to: rippleAnim.radius * 2
             }
-            RippleAnim {
-                target: ripple
-                property: "opacity"
-                to: 0
-            }
         }
     }
 
-    background: ClippingRectangle {
+    background: Rectangle {
         id: buttonBackground
         radius: Appearance.rounding.small
         implicitHeight: 50
-        color: (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+        color: (button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: buttonBackground.width
+                height: buttonBackground.height
+                radius: buttonBackground.radius
+            }
+        }
         
         Behavior on color {
             ColorAnimation {
@@ -95,7 +111,7 @@ TabButton {
             id: ripple
 
             radius: Appearance.rounding.full
-            color: button.current ? Appearance.m3colors.m3primary : Appearance.m3colors.m3onSurface
+            color: Appearance.colors.colLayer1Active
             opacity: 0
 
             transform: Translate {
