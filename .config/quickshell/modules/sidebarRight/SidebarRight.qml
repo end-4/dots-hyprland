@@ -203,6 +203,7 @@ Scope {
 
         function toggle(): void {
             sidebarLoader.active = !sidebarLoader.active;
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
 
         function close(): void {
@@ -211,6 +212,7 @@ Scope {
 
         function open(): void {
             sidebarLoader.active = true;
+            Notifications.timeoutAll();
         }
     }
 
@@ -220,6 +222,7 @@ Scope {
 
         onPressed: {
             sidebarLoader.active = !sidebarLoader.active;
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
     GlobalShortcut {
@@ -228,6 +231,7 @@ Scope {
 
         onPressed: {
             sidebarLoader.active = true;
+            Notifications.timeoutAll();
         }
     }
     GlobalShortcut {
