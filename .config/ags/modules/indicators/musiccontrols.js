@@ -22,8 +22,8 @@ var lastCoverPath = '';
 function isRealPlayer(player) {
     return (
         // Remove unecessary native buses from browsers if there's plasma integration
-        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
-        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
+        // !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
+        // !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
         // playerctld just copies other buses and we don't need duplicates
         !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') &&
         // Non-instance mpd bus
