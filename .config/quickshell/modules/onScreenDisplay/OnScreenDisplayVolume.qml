@@ -72,7 +72,7 @@ Scope {
                 item: osdValuesWrapper
             }
 
-            implicitWidth: columnLayout.implicitWidth
+            implicitWidth: Appearance.sizes.osdWidth
             implicitHeight: columnLayout.implicitHeight
             visible: osdLoader.active
 
@@ -80,13 +80,10 @@ Scope {
                 id: columnLayout
                 anchors.horizontalCenter: parent.horizontalCenter
                 Item {
-                    height: 1 // Prevent Wayland protocol error
-                }
-                Item {
                     id: osdValuesWrapper
                     // Extra space for shadow
-                    implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
-                    implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
+                    implicitHeight: osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2
+                    implicitWidth: osdValues.implicitWidth
                     clip: true
 
                     MouseArea {
@@ -104,14 +101,14 @@ Scope {
 
                     OsdValueIndicator {
                         id: osdValues
-                        anchors.centerIn: parent 
+                        anchors.fill: parent
+                        anchors.margins: Appearance.sizes.elevationMargin
                         value: Audio.sink?.audio.volume ?? 0
                         icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
                         name: qsTr("Volume")
                     }
                 }
             }
-
         }
     }
 

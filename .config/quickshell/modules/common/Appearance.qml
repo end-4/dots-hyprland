@@ -260,18 +260,19 @@ Singleton {
     }
 
     sizes: QtObject {
-        property int barHeight: 40
-        property int barCenterSideModuleWidth: 360
-        property int barPreferredSideSectionWidth: 400
-        property int sidebarWidth: 450
-        property int sidebarWidthExtended: 750
-        property int notificationPopupWidth: 410
-        property int searchWidthCollapsed: 260
-        property int searchWidth: 450
-        property int hyprlandGapsOut: 5
-        property int elevationMargin: 7
-        property int fabShadowRadius: 5
-        property int fabHoveredShadowRadius: 7
+        property real barHeight: 40
+        property real barCenterSideModuleWidth: 360
+        property real barPreferredSideSectionWidth: 400
+        property real sidebarWidth: 450
+        property real sidebarWidthExtended: 750
+        property real osdWidth: 200
+        property real notificationPopupWidth: 410
+        property real searchWidthCollapsed: 260
+        property real searchWidth: 450
+        property real hyprlandGapsOut: 5
+        property real elevationMargin: 7
+        property real fabShadowRadius: 5
+        property real fabHoveredShadowRadius: 7
     }
 
     syntaxHighlightingTheme: Appearance.m3colors.darkmode ? "Monokai" : "ayu Light"

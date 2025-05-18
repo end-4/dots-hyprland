@@ -21,11 +21,12 @@ Item {
     property real valueIndicatorRightPadding: 20 // An icon is circle ish, a column isn't, hence the extra padding
 
     Layout.margins: Appearance.sizes.elevationMargin
-    implicitWidth: valueIndicator.implicitWidth
+    implicitWidth: Appearance.sizes.osdWidth
     implicitHeight: valueIndicator.implicitHeight
 
     WrapperRectangle {
         id: valueIndicator
+        anchors.fill: parent
         radius: Appearance.rounding.full
         color: Appearance.colors.colLayer0
         implicitWidth: valueRow.implicitWidth
@@ -33,9 +34,10 @@ Item {
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow
             Layout.margins: 10
+            anchors.fill: parent
             spacing: 10
 
-            Item {    
+            Item {
                 implicitWidth: 30
                 implicitHeight: 30
                 Layout.alignment: Qt.AlignVCenter
@@ -86,6 +88,7 @@ Item {
                 
                 StyledProgressBar {
                     id: valueProgressBar
+                    Layout.fillWidth: true
                     value: root.value
                 }
             }
