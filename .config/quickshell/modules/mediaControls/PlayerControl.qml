@@ -18,39 +18,51 @@ Item { // Player instance
     required property MprisPlayer player
     // property var artUrl: player?.metadata["xesam:url"] || player?.metadata["mpris:artUrl"] || player?.trackArtUrl
     property var artUrl: player?.trackArtUrl
-    property string localArt
-    property color artDominantColor: "#00000000"
+    property color artDominantColor: Appearance.m3colors.m3primaryFixed
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
 
+    Timer { // Force update for prevision
+        running: playerController.player?.playbackState == MprisPlaybackState.Playing
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            playerController.player.positionChanged()
+        }
+    }
+
     onArtUrlChanged: {
+        if (playerController.artUrl.length == 0) return;
+        colorQuantizer.targetFile = playerController.artUrl // Yes this binding break is intentional
         colorQuantizer.running = true
     }
 
     Process { // Average Color Runner
         id: colorQuantizer
-        command: [ "sh", "-c", `magick ${playerController.player.trackArtUrl} -scale 1x1\\! -format '%[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)]' info: | sed 's/,/\\n/g' | xargs -L 1 printf '%02x' ; echo` ]
+        property string targetFile: playerController.artUrl
+        command: [ "sh", "-c", `magick '${targetFile}' -scale 1x1\\! -format '%[fx:int(255*r+.5)],%[fx:int(255*g+.5)],%[fx:int(255*b+.5)]' info: | sed 's/,/\\n/g' | xargs -L 1 printf '%02x' ; echo` ]
         stdout: SplitParser {
             onRead: data => {
+                // console.log("Color quantizer output:", data)
                 playerController.artDominantColor = "#" + data
             }
         }
     }
 
     property QtObject blendedColors: QtObject {
-        property color colLayer0: Appearance.mix(Appearance.colors.colLayer0, artDominantColor, 0.7)
+        property color colLayer0: Appearance.mix(Appearance.colors.colLayer0, artDominantColor, 0.6)
         property color colLayer1: Appearance.mix(Appearance.colors.colLayer1, artDominantColor, 0.5)
         property color colOnLayer0: Appearance.mix(Appearance.colors.colOnLayer0, artDominantColor, 0.7)
         property color colOnLayer1: Appearance.mix(Appearance.colors.colOnLayer1, artDominantColor, 0.5)
         property color colSubtext: Appearance.mix(Appearance.colors.colSubtext, artDominantColor, 0.5)
-        property color colPrimary: Appearance.mix(Appearance.m3colors.m3primary, artDominantColor, 0.3)
-        property color colPrimaryHover: Appearance.mix(Appearance.colors.colPrimaryHover, artDominantColor, 0.3)
-        property color colPrimaryActive: Appearance.mix(Appearance.colors.colPrimaryActive, artDominantColor, 0.3)
-        property color colSecondaryContainer: Appearance.mix(Appearance.m3colors.m3secondaryContainer, artDominantColor, 0.5)
+        property color colPrimary: Appearance.mix(Appearance.colorWithHueOf(Appearance.m3colors.m3primary, artDominantColor), artDominantColor, 0.5)
+        property color colPrimaryHover: Appearance.mix(Appearance.colorWithHueOf(Appearance.colors.colPrimaryHover, artDominantColor), artDominantColor, 0.3)
+        property color colPrimaryActive: Appearance.mix(Appearance.colorWithHueOf(Appearance.colors.colPrimaryActive, artDominantColor), artDominantColor, 0.3)
+        property color colSecondaryContainer: Appearance.mix(Appearance.m3colors.m3secondaryContainer, artDominantColor, 0.3)
         property color colSecondaryContainerHover: Appearance.mix(Appearance.colors.colSecondaryContainerHover, artDominantColor, 0.3)
         property color colSecondaryContainerActive: Appearance.mix(Appearance.colors.colSecondaryContainerActive, artDominantColor, 0.3)
-        property color colOnPrimary: Appearance.mix(Appearance.colors.colOnPrimary, artDominantColor, 0.5)
+        property color colOnPrimary: Appearance.mix(Appearance.colorWithHueOf(Appearance.m3colors.m3onPrimary, artDominantColor), artDominantColor, 0.5)
         property color colOnSecondaryContainer: Appearance.mix(Appearance.m3colors.m3onSecondaryContainer, artDominantColor, 0.2)
 
     }
@@ -61,6 +73,24 @@ Item { // Player instance
         anchors.margins: Appearance.sizes.elevationMargin
         color: blendedColors.colLayer0
         radius: root.popupRounding
+
+        LinearGradient {
+            anchors.fill: parent
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: background.width
+                    height: background.height
+                    radius: root.popupRounding
+                }
+            }
+            start: Qt.point(0, 0)
+            end: Qt.point(background.width, background.height)
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Appearance.transparentize(artDominantColor, 0.6) }
+                GradientStop { position: 0.4; color: Appearance.transparentize(artDominantColor, 0.8) }
+            }
+        }
 
         RowLayout {
             anchors.fill: parent
@@ -128,35 +158,31 @@ Item { // Player instance
                     StyledText {
                         id: trackTime
                         anchors.bottom: slider.top
-                        anchors.bottomMargin: -4
+                        anchors.bottomMargin: 5
                         anchors.left: parent.left
                         font.pixelSize: Appearance.font.pixelSize.small
                         color: blendedColors.colSubtext
                         elide: Text.ElideRight
                         text: `${StringUtils.friendlyTimeForSeconds(playerController.player?.position)} / ${StringUtils.friendlyTimeForSeconds(playerController.player?.length)}`
                     }
-                    StyledSlider {
+                    StyledProgressBar {
                         id: slider
                         anchors {
                             bottom: parent.bottom
                             left: parent.left
                             right: parent.right
-                            bottomMargin: -8
+                            bottomMargin: 5
                         }
                         highlightColor: blendedColors.colPrimary
                         trackColor: blendedColors.colSecondaryContainer
-                        handleColor: blendedColors.colOnSecondaryContainer
-                        scale: 0.6
                         value: playerController.player?.position / playerController.player?.length
-                        onMoved: playerController.player.position = value * playerController.player.length
-                        tooltipContent: StringUtils.friendlyTimeForSeconds(playerController.player?.position)
                     }
 
                     Button {
                         id: playPauseButton
                         anchors.right: parent.right
                         anchors.bottom: slider.top
-                        anchors.bottomMargin: -1
+                        anchors.bottomMargin: 20
                         implicitWidth: 44
                         implicitHeight: 44
                         onClicked: playerController.player.togglePlaying();
@@ -182,7 +208,7 @@ Item { // Player instance
                             iconSize: Appearance.font.pixelSize.huge
                             fill: 1
                             horizontalAlignment: Text.AlignHCenter
-                            color: playerController.player?.isPlaying ? Appearance.m3colors.m3onPrimary : Appearance.m3colors.m3onSecondaryContainer
+                            color: playerController.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
                             text: playerController.player?.isPlaying ? "pause" : "play_arrow"
 
                             Behavior on color {

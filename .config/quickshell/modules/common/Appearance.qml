@@ -14,6 +14,57 @@ Singleton {
     property QtObject sizes
     property string syntaxHighlightingTheme
 
+    function colorWithHueOf(color1, color2) {
+        // Convert both colors to HSV
+        var c1 = Qt.color(color1);
+        var c2 = Qt.color(color2);
+
+        // Helper to convert RGB to HSV
+        function rgb2hsv(c) {
+            var r = c.r, g = c.g, b = c.b;
+            var max = Math.max(r, g, b), min = Math.min(r, g, b);
+            var h, s, v = max;
+            var d = max - min;
+            s = max === 0 ? 0 : d / max;
+            if (max === min) {
+                h = 0;
+            } else {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return {h: h, s: s, v: v, a: c.a};
+        }
+
+        // Helper to convert HSV to RGB
+        function hsv2rgb(h, s, v, a) {
+            var r, g, b;
+            var i = Math.floor(h * 6);
+            var f = h * 6 - i;
+            var p = v * (1 - s);
+            var q = v * (1 - f * s);
+            var t = v * (1 - (1 - f) * s);
+            switch(i % 6){
+                case 0: r = v, g = t, b = p; break;
+                case 1: r = q, g = v, b = p; break;
+                case 2: r = p, g = v, b = t; break;
+                case 3: r = p, g = q, b = v; break;
+                case 4: r = t, g = p, b = v; break;
+                case 5: r = v, g = p, b = q; break;
+            }
+            return Qt.rgba(r, g, b, a);
+        }
+
+        var hsv1 = rgb2hsv(c1);
+        var hsv2 = rgb2hsv(c2);
+
+        // Use hue from color2, saturation/value/alpha from color1
+        return hsv2rgb(hsv2.h, hsv1.s, hsv1.v, hsv1.a);
+    }
+
     function mix(color1, color2, percentage) {
         var c1 = Qt.color(color1);
         var c2 = Qt.color(color2);

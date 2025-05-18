@@ -13,6 +13,8 @@ ProgressBar {
     property real valueBarWidth: 120
     property real valueBarHeight: 4
     property real valueBarGap: 4
+    property color highlightColor: Appearance.m3colors.m3primary
+    property color trackColor: Appearance.m3colors.m3secondaryContainer
 
     Behavior on value {
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
@@ -34,21 +36,21 @@ ProgressBar {
             width: root.visualPosition * parent.width
             height: parent.height
             radius: Appearance.rounding.full
-            color: Appearance.m3colors.m3primary
+            color: root.highlightColor
         }
         Rectangle { // Right remaining part fill
             anchors.right: parent.right
             width: (1 - root.visualPosition) * parent.width - valueBarGap
             height: parent.height
             radius: Appearance.rounding.full
-            color: Appearance.m3colors.m3secondaryContainer
+            color: root.trackColor
         }
         Rectangle { // Stop point
             anchors.right: parent.right
             width: valueBarGap
             height: valueBarGap
             radius: Appearance.rounding.full
-            color: Appearance.m3colors.m3primary
+            color: root.highlightColor
         }
     }
 }
