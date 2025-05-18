@@ -16,8 +16,10 @@ Slider {
     property real handleWidth: (slider.pressed ? 3 : 5) * scale
     property real handleHeight: 44 * scale
     property real handleLimit: slider.backgroundDotMargins * scale
+    property real trackHeight: 15 * scale
 
     property real limitedHandleRangeWidth: (slider.availableWidth - handleWidth - slider.handleLimit * 2)
+    property string tooltipContent: `${Math.round(value * 100)}%`
     Layout.fillWidth: true
     from: 0
     to: 1
@@ -44,13 +46,14 @@ Slider {
 
     background: Item {
         anchors.verticalCenter: parent.verticalCenter
-        implicitHeight: 12 // Somehow binding this makes it fill height. Must be set with a constant like this
+        implicitHeight: trackHeight
         
         // Fill left
         Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             width: slider.handleLimit + slider.visualPosition * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
-            height: parent.height
+            height: trackHeight
             color: Appearance.m3colors.m3primary
             topLeftRadius: Appearance.rounding.full
             bottomLeftRadius: Appearance.rounding.full
@@ -60,9 +63,10 @@ Slider {
 
         // Fill right
         Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             width: slider.handleLimit + (1 - slider.visualPosition) * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
-            height: parent.height
+            height: trackHeight
             color: Appearance.m3colors.m3secondaryContainer
             topLeftRadius: Appearance.rounding.unsharpen
             bottomLeftRadius: Appearance.rounding.unsharpen
@@ -101,7 +105,7 @@ Slider {
 
         StyledToolTip {
             extraVisibleCondition: slider.pressed
-            content: `${Math.round(slider.value * 100)}%`
+            content: slider.tooltipContent
         }
     }
 }

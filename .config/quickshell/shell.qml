@@ -3,6 +3,7 @@
 
 import "./modules/bar/"
 import "./modules/cheatsheet/"
+import "./modules/mediaControls/"
 import "./modules/notificationPopup/"
 import "./modules/onScreenDisplay/"
 import "./modules/overview/"
@@ -26,6 +27,7 @@ ShellRoot {
 
     Bar {}
     Cheatsheet {}
+    MediaControls {}
     NotificationPopup {}
     OnScreenDisplayBrightness {}
     OnScreenDisplayVolume {}

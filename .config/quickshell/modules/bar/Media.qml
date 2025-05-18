@@ -1,28 +1,22 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import Quickshell.Hyprland
 
 Item {
+    id: root
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
-    readonly property string cleanedTitle: activePlayer?.trackTitle.replace(/【[^】]*】/, "") || qsTr("No media")
+    readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || "No media"
 
     Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 40
-
-    // Background
-    Rectangle {
-        anchors.centerIn: parent
-        width: parent.width
-        implicitHeight: 32
-        color: Appearance.colors.colLayer1
-        radius: Appearance.rounding.small
-    }
 
     Timer {
         running: activePlayer?.playbackState == MprisPlaybackState.Playing
@@ -33,7 +27,7 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton
+        acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
         onPressed: (event) => {
             if (event.button === Qt.MiddleButton) {
                 activePlayer.togglePlaying();
@@ -41,11 +35,21 @@ Item {
                 activePlayer.previous();
             } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
                 activePlayer.next();
-            } 
+            } else if (event.button === Qt.LeftButton) {
+                Hyprland.dispatch("global quickshell:mediaControlsToggle")
+            }
         }
     }
 
-    RowLayout {
+    Rectangle { // Background
+        anchors.centerIn: parent
+        width: parent.width
+        implicitHeight: 32
+        color: Appearance.colors.colLayer1
+        radius: Appearance.rounding.small
+    }
+
+    RowLayout { // Real content
         id: rowLayout
 
         spacing: 4
