@@ -78,11 +78,7 @@ Button {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveEnter.duration
-                    easing.type: Appearance.animation.elementMoveEnter.type
-                    easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
         }
 

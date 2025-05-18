@@ -179,22 +179,18 @@ int main(int argc, char* argv[]) {
                 }
 
                 add: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 0; to: 1
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 0,
+                        to: 1
+                    })]
                 }
                 remove: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 1; to: 0
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 1,
+                        to: 0
+                    })]
                 }
 
                 model: ScriptModel {
@@ -214,11 +210,7 @@ int main(int argc, char* argv[]) {
                 anchors.fill: parent
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 ColumnLayout {

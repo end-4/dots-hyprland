@@ -16,10 +16,10 @@ Item {
 
     Behavior on implicitWidth {
         enabled: !vertical
-        animation: Appearance.animation.elementMoveEnter.numberAnimation
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on implicitHeight {
         enabled: vertical
-        animation: Appearance.animation.elementMoveEnter.numberAnimation
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
 }

@@ -174,13 +174,11 @@ Item {
                 }
 
                 add: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 0; to: 1
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 0,
+                        to: 1
+                    })]
                 }
 
                 model: ScriptModel {
@@ -208,11 +206,7 @@ Item {
                 anchors.fill: parent
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 ColumnLayout {
@@ -246,11 +240,7 @@ Item {
                 visible: opacity > 0
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 Rectangle {

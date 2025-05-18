@@ -223,6 +223,13 @@ Singleton {
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.emphasizedAccel
             property int velocity: 650
+            property Component numberAnimation: Component {
+                NumberAnimation {
+                    duration: root.animation.elementMoveExit.duration
+                    easing.type: root.animation.elementMoveExit.type
+                    easing.bezierCurve: root.animation.elementMoveExit.bezierCurve
+                }
+            }
         }
         property QtObject elementMoveFast: QtObject {
             property int duration: 200

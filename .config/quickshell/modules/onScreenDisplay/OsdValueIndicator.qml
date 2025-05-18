@@ -52,18 +52,10 @@ Item {
                     rotation: 180 * (root.rotateIcon ? value : 0)
 
                     Behavior on iconSize {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveEnter.duration
-                            easing.type: Appearance.animation.elementMoveEnter.type
-                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                        }
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                     }
                     Behavior on rotation {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveEnter.duration
-                            easing.type: Appearance.animation.elementMoveEnter.type
-                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                        }
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                     }
                 
                 }

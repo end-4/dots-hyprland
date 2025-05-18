@@ -15,11 +15,7 @@ ProgressBar {
     property real valueBarGap: 4
 
     Behavior on value {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     
     background: Rectangle {
