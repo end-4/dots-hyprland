@@ -38,7 +38,7 @@ Item {
         StyledText {
             Layout.alignment: Qt.AlignVCenter
             color: Appearance.colors.colOnLayer1
-            text: `${Math.round(percentage * 100)}%`
+            text: `${Math.round(percentage * 100)}`
         }
 
         Behavior on x {
