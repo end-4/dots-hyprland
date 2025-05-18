@@ -263,11 +263,11 @@ Singleton {
         property real barHeight: 40
         property real barCenterSideModuleWidth: 360
         property real barPreferredSideSectionWidth: 400
-        property real sidebarWidth: 450
+        property real sidebarWidth: 460
         property real sidebarWidthExtended: 750
         property real osdWidth: 200
-        property real mediaControlsWidth: 430
-        property real mediaControlsHeight: 150
+        property real mediaControlsWidth: 440
+        property real mediaControlsHeight: 160
         property real notificationPopupWidth: 410
         property real searchWidthCollapsed: 260
         property real searchWidth: 450

@@ -17,6 +17,9 @@ Slider {
     property real handleHeight: 44 * scale
     property real handleLimit: slider.backgroundDotMargins * scale
     property real trackHeight: 15 * scale
+    property color highlightColor: Appearance.m3colors.m3primary
+    property color trackColor: Appearance.m3colors.m3secondaryContainer
+    property color handleColor: Appearance.m3colors.m3onSecondaryContainer
 
     property real limitedHandleRangeWidth: (slider.availableWidth - handleWidth - slider.handleLimit * 2)
     property string tooltipContent: `${Math.round(value * 100)}%`
@@ -54,7 +57,7 @@ Slider {
             anchors.left: parent.left
             width: slider.handleLimit + slider.visualPosition * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
             height: trackHeight
-            color: Appearance.m3colors.m3primary
+            color: slider.highlightColor
             topLeftRadius: Appearance.rounding.full
             bottomLeftRadius: Appearance.rounding.full
             topRightRadius: Appearance.rounding.unsharpen
@@ -67,7 +70,7 @@ Slider {
             anchors.right: parent.right
             width: slider.handleLimit + (1 - slider.visualPosition) * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
             height: trackHeight
-            color: Appearance.m3colors.m3secondaryContainer
+            color: slider.trackColor
             topLeftRadius: Appearance.rounding.unsharpen
             bottomLeftRadius: Appearance.rounding.unsharpen
             topRightRadius: Appearance.rounding.full
@@ -82,7 +85,7 @@ Slider {
             width: slider.backgroundDotSize
             height: slider.backgroundDotSize
             radius: Appearance.rounding.full
-            color: Appearance.m3colors.m3onSecondaryContainer
+            color: slider.handleColor
         }
     }
 
@@ -93,7 +96,7 @@ Slider {
         implicitWidth: slider.handleWidth
         implicitHeight: slider.handleHeight
         radius: Appearance.rounding.full
-        color: Appearance.m3colors.m3onSecondaryContainer
+        color: slider.handleColor
 
         Behavior on implicitWidth {
             NumberAnimation {
