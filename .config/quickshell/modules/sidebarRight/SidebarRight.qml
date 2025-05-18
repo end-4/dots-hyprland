@@ -29,10 +29,6 @@ Scope {
             visible: sidebarLoader.active
             focusable: true
 
-            onVisibleChanged: {
-                if (!visible) sidebarLoader.active = false
-            }
-
             function hide() {
                 sidebarLoader.active = false
             }
