@@ -113,14 +113,14 @@ function wordWrap(str, maxLen) {
 function cleanMusicTitle(title) {
     if (!title) return "";
     // Brackets
-    title = title.replace(/ *\([^)]*\) */g, " "); // Round brackets
-    title = title.replace(/ *\[[^\]]*\] */g, " "); // Square brackets
-    title = title.replace(/ *\{[^\}]*\} */g, " "); // Curly brackets
+    title = title.replace(/^ *\([^)]*\) */g, " "); // Round brackets
+    title = title.replace(/^ *\[[^\]]*\] */g, " "); // Square brackets
+    title = title.replace(/^ *\{[^\}]*\} */g, " "); // Curly brackets
     // Japenis brackets
-    title = title.replace(/【[^】]*】/, "") // Touhou
-    title = title.replace(/《[^》]*》/, "") // ??
-    title = title.replace(/「[^」]*」/, "") // OP/ED
-    title = title.replace(/『[^』]*』/, "") // OP/ED
+    title = title.replace(/^ *【[^】]*】/, "") // Touhou
+    title = title.replace(/^ *《[^》]*》/, "") // ??
+    title = title.replace(/^ *「[^」]*」/, "") // OP/ED
+    title = title.replace(/^ *『[^』]*』/, "") // OP/ED
 
     return title;
 }
