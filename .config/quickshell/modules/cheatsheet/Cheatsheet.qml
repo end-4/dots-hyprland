@@ -22,7 +22,6 @@ Scope { // Scope
         sourceComponent: PanelWindow { // Window
             id: cheatsheetRoot
             visible: cheatsheetLoader.active
-            focusable: true
 
             anchors {
                 top: true
@@ -49,25 +48,9 @@ Scope { // Scope
             HyprlandFocusGrab { // Click outside to close
                 id: grab
                 windows: [ cheatsheetRoot ]
-                active: false
+                active: cheatsheetRoot.visible
                 onCleared: () => {
                     if (!active) cheatsheetRoot.hide()
-                }
-            }
-
-            Connections {
-                target: cheatsheetRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = cheatsheetRoot.visible
                 }
             }
 

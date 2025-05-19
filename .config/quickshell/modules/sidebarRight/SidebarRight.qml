@@ -27,7 +27,6 @@ Scope {
         PanelWindow {
             id: sidebarRoot
             visible: sidebarLoader.active
-            focusable: true
 
             function hide() {
                 sidebarLoader.active = false
@@ -49,25 +48,9 @@ Scope {
             HyprlandFocusGrab {
                 id: grab
                 windows: [ sidebarRoot ]
-                active: false
+                active: sidebarRoot.visible
                 onCleared: () => {
                     if (!active) sidebarRoot.hide()
-                }
-            }
-
-            Connections {
-                target: sidebarRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = sidebarRoot.visible
                 }
             }
 

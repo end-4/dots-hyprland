@@ -27,7 +27,7 @@ Scope { // Scope
         PanelWindow { // Window
             id: sidebarRoot
             visible: sidebarLoader.active
-            focusable: true
+            
             property int selectedTab: PersistentStates.sidebar.leftSide.selectedTab
             property bool extend: false
             property bool pin: false
@@ -37,7 +37,10 @@ Scope { // Scope
                 sidebarLoader.active = false
             }
 
-            exclusiveZone: pin ? sidebarWidth : 0
+            exclusiveZone: {
+                console.log(sidebarRoot.pin ? sidebarWidth : 0)
+                return sidebarRoot.pin ? sidebarWidth : 0
+            }
             implicitWidth: Appearance.sizes.sidebarWidthExtended
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
@@ -57,29 +60,9 @@ Scope { // Scope
             HyprlandFocusGrab { // Click outside to close
                 id: grab
                 windows: [ sidebarRoot ]
-                active: false
+                active: sidebarRoot.visible && !sidebarRoot.pin
                 onCleared: () => {
                     if (!active) sidebarRoot.hide()
-                }
-            }
-
-            Connections {
-                target: sidebarRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                    swipeView.children[0].children[0].children[sidebarRoot.selectedTab].forceActiveFocus()
-                }
-                function onPinChanged() {
-                    grab.active = !sidebarRoot.pin
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = sidebarRoot.visible && !sidebarRoot.pin
                 }
             }
 
