@@ -28,7 +28,7 @@ Scope { // Scope
             id: sidebarRoot
             visible: sidebarLoader.active
             
-            property int selectedTab: PersistentStates.sidebar.leftSide.selectedTab
+            property int selectedTab: 0
             property bool extend: false
             property bool pin: false
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
@@ -88,16 +88,16 @@ Scope { // Scope
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", Math.min(sidebarRoot.selectedTab + 1, root.tabButtonList.length - 1))
+                            sidebarRoot.selectedTab = Math.min(sidebarRoot.selectedTab + 1, root.tabButtonList.length - 1)
                         } 
                         else if (event.key === Qt.Key_PageUp) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", Math.max(sidebarRoot.selectedTab - 1, 0))
+                            sidebarRoot.selectedTab = Math.max(sidebarRoot.selectedTab - 1, 0)
                         }
                         else if (event.key === Qt.Key_Tab) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", (sidebarRoot.selectedTab + 1) % root.tabButtonList.length);
+                            sidebarRoot.selectedTab = (sidebarRoot.selectedTab + 1) % root.tabButtonList.length;
                         }
                         else if (event.key === Qt.Key_Backtab) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", (sidebarRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length);
+                            sidebarRoot.selectedTab = (sidebarRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
                         }
                         else if (event.key === Qt.Key_O) {
                             sidebarRoot.extend = !sidebarRoot.extend;
@@ -120,7 +120,7 @@ Scope { // Scope
                         tabButtonList: root.tabButtonList
                         externalTrackedTab: sidebarRoot.selectedTab
                         function onCurrentIndexChanged(currentIndex) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", currentIndex)
+                            sidebarRoot.selectedTab = currentIndex
                         }
                     }
 
@@ -130,10 +130,11 @@ Scope { // Scope
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         spacing: 10
-                        currentIndex: sidebarRoot.selectedTab
+                        
+                        currentIndex: tabBar.externalTrackedTab
                         onCurrentIndexChanged: {
                             tabBar.enableIndicatorAnimation = true
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", currentIndex)
+                            sidebarRoot.selectedTab = currentIndex
                         }
 
                         clip: true

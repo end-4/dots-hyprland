@@ -16,27 +16,23 @@ Rectangle {
     radius: Appearance.rounding.normal
     color: Appearance.colors.colLayer1
 
-    property int selectedTab: PersistentStates.sidebar.centerGroup.selectedTab
+    property int selectedTab: 0
     property var tabButtonList: [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
-
-    onSelectedTabChanged: {
-        PersistentStateManager.setState("sidebar.centerGroup.selectedTab", selectedTab)
-    }
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) {
             if (event.key === Qt.Key_PageDown) {
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", Math.min(root.selectedTab + 1, root.tabButtonList.length - 1))
+                root.selectedTab = Math.min(root.selectedTab + 1, root.tabButtonList.length - 1)
             } else if (event.key === Qt.Key_PageUp) {
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", Math.max(root.selectedTab - 1, 0))
+                root.selectedTab = Math.max(root.selectedTab - 1, 0)
             }
             event.accepted = true;
         }
         if (event.modifiers === Qt.ControlModifier) {
             if (event.key === Qt.Key_Tab) {
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", (root.selectedTab + 1) % root.tabButtonList.length);
+                root.selectedTab = (root.selectedTab + 1) % root.tabButtonList.length
             } else if (event.key === Qt.Key_Backtab) {
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", (root.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length);
+                root.selectedTab = (root.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length
             }
             event.accepted = true;
         }
@@ -53,7 +49,7 @@ Rectangle {
             externalTrackedTab: root.selectedTab
             
             function onCurrentIndexChanged(currentIndex) {
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", currentIndex)
+                root.selectedTab = currentIndex
             }
         }
 
@@ -66,7 +62,7 @@ Rectangle {
             currentIndex: root.selectedTab
             onCurrentIndexChanged: {
                 tabBar.enableIndicatorAnimation = true
-                PersistentStateManager.setState("sidebar.centerGroup.selectedTab", currentIndex)
+                root.selectedTab = currentIndex
             }
 
             clip: true
