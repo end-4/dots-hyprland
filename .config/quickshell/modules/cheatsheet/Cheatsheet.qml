@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -93,7 +94,7 @@ Scope { // Scope
                         radius: Appearance.rounding.full
                         color: closeButton.pressed ? Appearance.colors.colLayer0Active :
                             closeButton.hovered ? Appearance.colors.colLayer0Hover :
-                            Appearance.transparentize(Appearance.colors.colLayer0, 1)
+                            ColorUtils.transparentize(Appearance.colors.colLayer0, 1)
                         
                         Behavior on color {
                             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

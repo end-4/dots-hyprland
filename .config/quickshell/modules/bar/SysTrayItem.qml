@@ -1,4 +1,5 @@
 import "root:/modules/common/"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
@@ -57,7 +58,7 @@ MouseArea {
     ColorOverlay {
         anchors.fill: desaturatedIcon
         source: desaturatedIcon
-        color: Appearance.transparentize(Appearance.colors.colOnLayer0, 0.6)
+        color: ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.6)
     }
 
 }

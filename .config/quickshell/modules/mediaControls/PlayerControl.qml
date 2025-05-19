@@ -2,6 +2,7 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Layouts
@@ -18,7 +19,7 @@ Item { // Player instance
     required property MprisPlayer player
     // property var artUrl: player?.metadata["xesam:url"] || player?.metadata["mpris:artUrl"] || player?.trackArtUrl
     property var artUrl: player?.trackArtUrl
-    property color artDominantColor: Appearance.m3colors.m3primaryFixed
+    property color artDominantColor: Appearance.m3colors.m3secondaryContainer
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
@@ -34,7 +35,7 @@ Item { // Player instance
         background: Rectangle {
             color: playPauseButton.pressed ? blendedColors.colSecondaryContainerActive : 
                 playPauseButton.hovered ? blendedColors.colSecondaryContainerHover : 
-                Appearance.transparentize(blendedColors.colSecondaryContainer, 1)
+                ColorUtils.transparentize(blendedColors.colSecondaryContainer, 1)
             radius: Appearance.rounding.full
 
             Behavior on color {
@@ -83,19 +84,19 @@ Item { // Player instance
     }
 
     property QtObject blendedColors: QtObject {
-        property color colLayer0: Appearance.mix(Appearance.colors.colLayer0, artDominantColor, 0.6)
-        property color colLayer1: Appearance.mix(Appearance.colors.colLayer1, artDominantColor, 0.5)
-        property color colOnLayer0: Appearance.mix(Appearance.colors.colOnLayer0, artDominantColor, 0.7)
-        property color colOnLayer1: Appearance.mix(Appearance.colors.colOnLayer1, artDominantColor, 0.5)
-        property color colSubtext: Appearance.mix(Appearance.colors.colSubtext, artDominantColor, 0.5)
-        property color colPrimary: Appearance.mix(Appearance.colorWithHueOf(Appearance.m3colors.m3primary, artDominantColor), artDominantColor, 0.5)
-        property color colPrimaryHover: Appearance.mix(Appearance.colorWithHueOf(Appearance.colors.colPrimaryHover, artDominantColor), artDominantColor, 0.3)
-        property color colPrimaryActive: Appearance.mix(Appearance.colorWithHueOf(Appearance.colors.colPrimaryActive, artDominantColor), artDominantColor, 0.3)
-        property color colSecondaryContainer: Appearance.mix(Appearance.m3colors.m3secondaryContainer, artDominantColor, 0.3)
-        property color colSecondaryContainerHover: Appearance.mix(Appearance.colors.colSecondaryContainerHover, artDominantColor, 0.3)
-        property color colSecondaryContainerActive: Appearance.mix(Appearance.colors.colSecondaryContainerActive, artDominantColor, 0.3)
-        property color colOnPrimary: Appearance.mix(Appearance.colorWithHueOf(Appearance.m3colors.m3onPrimary, artDominantColor), artDominantColor, 0.5)
-        property color colOnSecondaryContainer: Appearance.mix(Appearance.m3colors.m3onSecondaryContainer, artDominantColor, 0.2)
+        property color colLayer0: ColorUtils.mix(Appearance.colors.colLayer0, artDominantColor, 0.6)
+        property color colLayer1: ColorUtils.mix(Appearance.colors.colLayer1, artDominantColor, 0.5)
+        property color colOnLayer0: ColorUtils.mix(Appearance.colors.colOnLayer0, artDominantColor, 0.7)
+        property color colOnLayer1: ColorUtils.mix(Appearance.colors.colOnLayer1, artDominantColor, 0.5)
+        property color colSubtext: ColorUtils.mix(Appearance.colors.colSubtext, artDominantColor, 0.5)
+        property color colPrimary: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.m3colors.m3primary, artDominantColor), artDominantColor, 0.5)
+        property color colPrimaryHover: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.colors.colPrimaryHover, artDominantColor), artDominantColor, 0.3)
+        property color colPrimaryActive: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.colors.colPrimaryActive, artDominantColor), artDominantColor, 0.3)
+        property color colSecondaryContainer: ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, artDominantColor, 0.3)
+        property color colSecondaryContainerHover: ColorUtils.mix(Appearance.colors.colSecondaryContainerHover, artDominantColor, 0.3)
+        property color colSecondaryContainerActive: ColorUtils.mix(Appearance.colors.colSecondaryContainerActive, artDominantColor, 0.3)
+        property color colOnPrimary: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.m3colors.m3onPrimary, artDominantColor), artDominantColor, 0.5)
+        property color colOnSecondaryContainer: ColorUtils.mix(Appearance.m3colors.m3onSecondaryContainer, artDominantColor, 0.2)
 
     }
 
@@ -119,8 +120,8 @@ Item { // Player instance
             start: Qt.point(0, 0)
             end: Qt.point(background.width, background.height)
             gradient: Gradient {
-                GradientStop { position: 0.0; color: Appearance.transparentize(artDominantColor, 0.6) }
-                GradientStop { position: 0.4; color: Appearance.transparentize(artDominantColor, 0.8) }
+                GradientStop { position: 0.0; color: ColorUtils.transparentize(artDominantColor, 0.6) }
+                GradientStop { position: 0.4; color: ColorUtils.transparentize(artDominantColor, 0.8) }
             }
         }
 

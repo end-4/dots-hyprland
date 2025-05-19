@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -18,13 +19,13 @@ Button {
 
     background: Rectangle {
         radius: Appearance.rounding.small
-        color: !button.enabled ? Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1) : 
+        color: !button.enabled ? ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1) : 
             button.activated ? (button.down ? Appearance.colors.colPrimaryActive : 
             button.hovered ? Appearance.colors.colPrimaryHover :
             Appearance.m3colors.m3primary) :
             (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
             button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-            Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1))
+            ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHighest, 1))
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

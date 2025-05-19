@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -87,7 +88,7 @@ TabButton {
         id: buttonBackground
         radius: Appearance.rounding.small
         implicitHeight: 50
-        color: (button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+        color: (button.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {

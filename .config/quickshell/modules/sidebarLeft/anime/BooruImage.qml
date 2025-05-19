@@ -2,6 +2,7 @@ import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQml
 import Qt.labs.platform
 import QtQuick
@@ -97,9 +98,9 @@ Button {
             }
 
             background: Rectangle {
-                color: menuButton.down ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
-                    menuButton.hovered ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
-                    Appearance.transparentize(Appearance.m3colors.m3surface, 0.3)
+                color: menuButton.down ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
+                    menuButton.hovered ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
+                    ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
                 radius: Appearance.rounding.full
             }
 

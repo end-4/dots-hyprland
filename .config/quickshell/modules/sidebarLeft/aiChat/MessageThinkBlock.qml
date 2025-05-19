@@ -6,6 +6,7 @@ import "root:/modules/common/"
 import "root:/modules/common/widgets"
 import "../"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -117,7 +118,7 @@ Item {
                         radius: Appearance.rounding.full
                         color: (headerMouseArea.pressed) ? Appearance.colors.colLayer2Active
                             : (headerMouseArea.containsMouse ? Appearance.colors.colLayer2Hover
-                            : Appearance.transparentize(Appearance.colors.colLayer2, 1))
+                            : ColorUtils.transparentize(Appearance.colors.colLayer2, 1))
                         
                         Behavior on color {
                             ColorAnimation {

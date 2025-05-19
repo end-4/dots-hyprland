@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -182,7 +183,7 @@ Item {
             verticalOffset: fabButton.hovered ? 4 : 2
             radius: fabButton.hovered ? Appearance.sizes.fabHoveredShadowRadius : Appearance.sizes.fabShadowRadius
             samples: fabShadow.radius * 2 + 1
-            color: Appearance.transparentize(Appearance.m3colors.m3shadow, 0.55)
+            color: Appearance.colors.colShadow
             z: fabBackground.z - 1
 
             Behavior on verticalOffset {

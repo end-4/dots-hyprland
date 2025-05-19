@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 pragma Singleton
 pragma ComponentBehavior: Bound
 
@@ -13,69 +14,6 @@ Singleton {
     property QtObject font
     property QtObject sizes
     property string syntaxHighlightingTheme
-
-    function colorWithHueOf(color1, color2) {
-        // Convert both colors to HSV
-        var c1 = Qt.color(color1);
-        var c2 = Qt.color(color2);
-
-        // Helper to convert RGB to HSV
-        function rgb2hsv(c) {
-            var r = c.r, g = c.g, b = c.b;
-            var max = Math.max(r, g, b), min = Math.min(r, g, b);
-            var h, s, v = max;
-            var d = max - min;
-            s = max === 0 ? 0 : d / max;
-            if (max === min) {
-                h = 0;
-            } else {
-                switch (max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
-            }
-            return {h: h, s: s, v: v, a: c.a};
-        }
-
-        // Helper to convert HSV to RGB
-        function hsv2rgb(h, s, v, a) {
-            var r, g, b;
-            var i = Math.floor(h * 6);
-            var f = h * 6 - i;
-            var p = v * (1 - s);
-            var q = v * (1 - f * s);
-            var t = v * (1 - (1 - f) * s);
-            switch(i % 6){
-                case 0: r = v, g = t, b = p; break;
-                case 1: r = q, g = v, b = p; break;
-                case 2: r = p, g = v, b = t; break;
-                case 3: r = p, g = q, b = v; break;
-                case 4: r = t, g = p, b = v; break;
-                case 5: r = v, g = p, b = q; break;
-            }
-            return Qt.rgba(r, g, b, a);
-        }
-
-        var hsv1 = rgb2hsv(c1);
-        var hsv2 = rgb2hsv(c2);
-
-        // Use hue from color2, saturation/value/alpha from color1
-        return hsv2rgb(hsv2.h, hsv1.s, hsv1.v, hsv1.a);
-    }
-
-    function mix(color1, color2, percentage) {
-        var c1 = Qt.color(color1);
-        var c2 = Qt.color(color2);
-        return Qt.rgba(percentage * c1.r + (1 - percentage) * c2.r, percentage * c1.g + (1 - percentage) * c2.g, percentage * c1.b + (1 - percentage) * c2.b, percentage * c1.a + (1 - percentage) * c2.a);
-    }
-
-    // Transparentize
-    function transparentize(color, percentage) {
-        var c = Qt.color(color);
-        return Qt.rgba(c.r, c.g, c.b, c.a * (1 - percentage));
-    }
 
     m3colors: QtObject {
         property bool darkmode: false
@@ -160,37 +98,37 @@ Singleton {
         property color colSubtext: m3colors.m3outline
         property color colLayer0: m3colors.m3background
         property color colOnLayer0: m3colors.m3onBackground
-        property color colLayer0Hover: mix(colLayer0, colOnLayer0, 0.9)
-        property color colLayer0Active: mix(colLayer0, colOnLayer0, 0.8)
+        property color colLayer0Hover: ColorUtils.mix(colLayer0, colOnLayer0, 0.9)
+        property color colLayer0Active: ColorUtils.mix(colLayer0, colOnLayer0, 0.8)
         property color colLayer1: m3colors.m3surfaceContainerLow;
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
-        property color colOnLayer1Inactive: mix(colOnLayer1, colLayer1, 0.45);
-        property color colLayer2: mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
+        property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, 0.45);
+        property color colLayer2: ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
         property color colOnLayer2: m3colors.m3onSurface;
-        property color colOnLayer2Disabled: mix(colOnLayer2, m3colors.m3background, 0.4);
-        property color colLayer3: mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
+        property color colOnLayer2Disabled: ColorUtils.mix(colOnLayer2, m3colors.m3background, 0.4);
+        property color colLayer3: ColorUtils.mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
         property color colOnLayer3: m3colors.m3onSurface;
-        property color colLayer1Hover: mix(colLayer1, colOnLayer1, 0.92);
-        property color colLayer1Active: mix(colLayer1, colOnLayer1, 0.85);
-        property color colLayer2Hover: mix(colLayer2, colOnLayer2, 0.90);
-        property color colLayer2Active: mix(colLayer2, colOnLayer2, 0.80);
-        property color colLayer2Disabled: mix(colLayer2, m3colors.m3background, 0.8);
-        property color colLayer3Hover: mix(colLayer3, colOnLayer3, 0.90);
-        property color colLayer3Active: mix(colLayer3, colOnLayer3, 0.80);
-        property color colPrimaryHover: mix(m3colors.m3primary, colLayer1Hover, 0.85)
-        property color colPrimaryActive: mix(m3colors.m3primary, colLayer1Active, 0.7)
-        property color colPrimaryContainerHover: mix(m3colors.m3primaryContainer, colLayer1Hover, 0.7)
-        property color colPrimaryContainerActive: mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
-        property color colSecondaryHover: mix(m3colors.m3secondary, colLayer1Hover, 0.85)
-        property color colSecondaryActive: mix(m3colors.m3secondary, colLayer1Active, 0.4)
-        property color colSecondaryContainerHover: mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)
-        property color colSecondaryContainerActive: mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
-        property color colSurfaceContainerHighestHover: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
-        property color colSurfaceContainerHighestActive: mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.85)
+        property color colLayer1Hover: ColorUtils.mix(colLayer1, colOnLayer1, 0.92);
+        property color colLayer1Active: ColorUtils.mix(colLayer1, colOnLayer1, 0.85);
+        property color colLayer2Hover: ColorUtils.mix(colLayer2, colOnLayer2, 0.90);
+        property color colLayer2Active: ColorUtils.mix(colLayer2, colOnLayer2, 0.80);
+        property color colLayer2Disabled: ColorUtils.mix(colLayer2, m3colors.m3background, 0.8);
+        property color colLayer3Hover: ColorUtils.mix(colLayer3, colOnLayer3, 0.90);
+        property color colLayer3Active: ColorUtils.mix(colLayer3, colOnLayer3, 0.80);
+        property color colPrimaryHover: ColorUtils.mix(m3colors.m3primary, colLayer1Hover, 0.85)
+        property color colPrimaryActive: ColorUtils.mix(m3colors.m3primary, colLayer1Active, 0.7)
+        property color colPrimaryContainerHover: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Hover, 0.7)
+        property color colPrimaryContainerActive: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
+        property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
+        property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
+        property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)
+        property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
+        property color colSurfaceContainerHighestHover: ColorUtils.mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
+        property color colSurfaceContainerHighestActive: ColorUtils.mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.85)
         property color colTooltip: "#3C4043" // m3colors.m3inverseSurface in the specs, but the m3 website actually uses this color
         property color colOnTooltip: "#F8F9FA" // m3colors.m3inverseOnSurface in the specs, but the m3 website actually uses this color
-        property color colScrim: transparentize(m3colors.m3scrim, 0.5)
-        property color colShadow: transparentize(m3colors.m3shadow, 0.75)
+        property color colScrim: ColorUtils.transparentize(m3colors.m3scrim, 0.5)
+        property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.75)
     }
 
     rounding: QtObject {

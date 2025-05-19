@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -187,7 +188,7 @@ Item {
             height: notificationColumnLayout.implicitHeight
 
             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
+                ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
             radius: Appearance.rounding.normal
 
             Behavior on x {
@@ -289,7 +290,7 @@ Item {
                                 }
                                 anchors.fill: parent
                                 color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                    Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
+                                    ColorUtils.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
                                     Appearance.m3colors.m3onSecondaryContainer
                                 iconSize: 27
                                 horizontalAlignment: Text.AlignHCenter
@@ -422,7 +423,7 @@ Item {
                                 background: Rectangle {
                                     anchors.fill: parent
                                     radius: Appearance.rounding.full
-                                    color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : Appearance.transparentize(Appearance.colors.colLayer2, 1))
+                                    color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : ColorUtils.transparentize(Appearance.colors.colLayer2, 1))
 
                                     Behavior on color {
                                         animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

@@ -1,4 +1,5 @@
 import "root:/modules/common"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -16,9 +17,9 @@ Button {
 
     background: Rectangle {
         anchors.fill: parent
-        color: (button.down && button.enabled) ? Appearance.transparentize(Appearance.m3colors.m3onSurface, 0.84) : 
-            ((button.hovered && button.enabled) ? Appearance.transparentize(Appearance.m3colors.m3onSurface, 0.92) : 
-            Appearance.transparentize(Appearance.m3colors.m3onSurface, 1))
+        color: (button.down && button.enabled) ? ColorUtils.transparentize(Appearance.m3colors.m3onSurface, 0.84) : 
+            ((button.hovered && button.enabled) ? ColorUtils.transparentize(Appearance.m3colors.m3onSurface, 0.92) : 
+            ColorUtils.transparentize(Appearance.m3colors.m3onSurface, 1))
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
