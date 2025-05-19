@@ -23,6 +23,38 @@ Item { // Player instance
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
 
+    component TrackChangeButton: Button {
+        id: playPauseButton
+        implicitWidth: 24
+        implicitHeight: 24
+
+        property var iconName
+        PointingHandInteraction {}
+
+        background: Rectangle {
+            color: playPauseButton.pressed ? blendedColors.colSecondaryContainerActive : 
+                playPauseButton.hovered ? blendedColors.colSecondaryContainerHover : 
+                Appearance.transparentize(blendedColors.colSecondaryContainer, 1)
+            radius: Appearance.rounding.full
+
+            Behavior on color {
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
+        }
+
+        contentItem: MaterialSymbol {
+            iconSize: Appearance.font.pixelSize.huge
+            fill: 1
+            horizontalAlignment: Text.AlignHCenter
+            color: blendedColors.colOnSecondaryContainer
+            text: iconName
+
+            Behavior on color {
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
+        }
+    }
+
     Timer { // Force update for prevision
         running: playerController.player?.playbackState == MprisPlaybackState.Playing
         interval: 1000
@@ -153,11 +185,11 @@ Item { // Player instance
                 Item { Layout.fillHeight: true }
                 Item {
                     Layout.fillWidth: true
-                    implicitHeight: trackTime.implicitHeight + slider.implicitHeight
+                    implicitHeight: trackTime.implicitHeight + sliderRow.implicitHeight
 
                     StyledText {
                         id: trackTime
-                        anchors.bottom: slider.top
+                        anchors.bottom: sliderRow.top
                         anchors.bottomMargin: 5
                         anchors.left: parent.left
                         font.pixelSize: Appearance.font.pixelSize.small
@@ -165,24 +197,36 @@ Item { // Player instance
                         elide: Text.ElideRight
                         text: `${StringUtils.friendlyTimeForSeconds(playerController.player?.position)} / ${StringUtils.friendlyTimeForSeconds(playerController.player?.length)}`
                     }
-                    StyledProgressBar {
-                        id: slider
+                    RowLayout {
+                        id: sliderRow
                         anchors {
                             bottom: parent.bottom
                             left: parent.left
                             right: parent.right
                             bottomMargin: 5
                         }
-                        highlightColor: blendedColors.colPrimary
-                        trackColor: blendedColors.colSecondaryContainer
-                        value: playerController.player?.position / playerController.player?.length
+                        TrackChangeButton {
+                            iconName: "skip_previous"
+                            onClicked: playerController.player?.previous()
+                        }
+                        StyledProgressBar {
+                            id: slider
+                            Layout.fillWidth: true
+                            highlightColor: blendedColors.colPrimary
+                            trackColor: blendedColors.colSecondaryContainer
+                            value: playerController.player?.position / playerController.player?.length
+                        }
+                        TrackChangeButton {
+                            iconName: "skip_next"
+                            onClicked: playerController.player?.next()
+                        }
                     }
 
                     Button {
                         id: playPauseButton
                         anchors.right: parent.right
-                        anchors.bottom: slider.top
-                        anchors.bottomMargin: 20
+                        anchors.bottom: sliderRow.top
+                        anchors.bottomMargin: 5
                         implicitWidth: 44
                         implicitHeight: 44
                         onClicked: playerController.player.togglePlaying();
