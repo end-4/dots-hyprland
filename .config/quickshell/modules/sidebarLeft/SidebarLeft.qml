@@ -21,7 +21,7 @@ Scope { // Scope
         id: sidebarLoader
         active: false
         onActiveChanged: {
-            GlobalStates.sidebarLeftOpenCount += active ? 1 : -1
+            GlobalStates.sidebarLeftOpen = sidebarLoader.active
         }
         
         PanelWindow { // Window

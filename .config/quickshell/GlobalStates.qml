@@ -8,8 +8,8 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     id: root
-    property int sidebarLeftOpenCount: 0
-    property int sidebarRightOpenCount: 0
+    property bool sidebarLeftOpen: false
+    property bool sidebarRightOpen: false
     property bool overviewOpen: false
     property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true

@@ -43,7 +43,7 @@ Scope {
             Connections {
                 target: Notifications
                 function onNotify(notification) {
-                    if (GlobalStates.sidebarRightOpenCount > 0) {
+                    if (GlobalStates.sidebarRightOpen) {
                         return
                     }
                     // notificationRepeater.model = [notification, ...notificationRepeater.model]

@@ -127,7 +127,7 @@ Scope {
                                 
                                 // Layout.fillHeight: true
                                 radius: Appearance.rounding.full
-                                color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpenCount > 0) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                                color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpen) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
                                 implicitWidth: distroIcon.width + 5*2
                                 implicitHeight: distroIcon.height + 5*2
 
@@ -301,7 +301,7 @@ Scope {
                                 Layout.fillHeight: true
                                 implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
                                 radius: Appearance.rounding.full
-                                color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpenCount > 0) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                                color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpen) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
                                 RowLayout {
                                     id: indicatorsRowLayout
                                     anchors.centerIn: parent
