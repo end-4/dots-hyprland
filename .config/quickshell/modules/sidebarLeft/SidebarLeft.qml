@@ -37,10 +37,7 @@ Scope { // Scope
                 sidebarLoader.active = false
             }
 
-            exclusiveZone: {
-                console.log(sidebarRoot.pin ? sidebarWidth : 0)
-                return sidebarRoot.pin ? sidebarWidth : 0
-            }
+            exclusiveZone: sidebarRoot.pin ? sidebarWidth : 0
             implicitWidth: Appearance.sizes.sidebarWidthExtended
             WlrLayershell.namespace: "quickshell:sidebarLeft"
             // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
