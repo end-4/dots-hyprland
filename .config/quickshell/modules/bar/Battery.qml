@@ -52,6 +52,7 @@ Rectangle {
 
             MaterialSymbol {
                 anchors.centerIn: parent
+                fill: 1
                 text: "battery_full"
                 iconSize: Appearance.font.pixelSize.normal
                 color: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
