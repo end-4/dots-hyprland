@@ -38,7 +38,7 @@ Singleton {
             if (hours > 0) formatted += `${formatted ? ", " : ""}${hours}h`
             if (minutes > 0 || !formatted) formatted += `${formatted ? ", " : ""}${minutes}m`
             uptime = formatted
-            interval = ConfigOptions.resources.updateInterval;
+            interval = ConfigOptions?.resources?.updateInterval ?? 3000
         }
     }
 

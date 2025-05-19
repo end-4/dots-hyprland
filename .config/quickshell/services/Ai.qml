@@ -14,7 +14,7 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
-    property string systemPrompt: ConfigOptions.ai.systemPrompt ?? ""
+    property string systemPrompt: ConfigOptions?.ai?.systemPrompt ?? ""
     property var messages: []
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
