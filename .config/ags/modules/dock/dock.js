@@ -119,6 +119,21 @@ const Taskbar = (monitor) => Widget.Box({
                 const client = Hyprland.clients[i];
                 if (client["pid"] == -1) return;
                 const appClass = substitute(client.class);
+                const ignoredAppsRegex = userOptions.dock.ignoredAppsRegex || [];
+                let isIgnored = false;
+
+                for (const regex of ignoredAppsRegex) {
+                    try {
+                        const pattern = new RegExp(regex);
+                        if (pattern.test(appClass)) {
+                            isIgnored = true;
+                            break;
+                        }
+                    } catch (e) {}
+                }
+
+                if (isIgnored) continue;
+
                 // for (const appName of userOptions.dock.pinnedApps) {
                 //     if (appClass.includes(appName.toLowerCase()))
                 //         return null;
