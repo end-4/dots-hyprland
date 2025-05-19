@@ -39,12 +39,12 @@ function guessMessageType(summary) {
 }
 
 function processNotificationBody(body, appEntry) {
-    // Only process Chrome/Chromium notifications
+    let processedBody = body;
     if (appEntry?.toLowerCase().includes('chrome')) {
-        // Remove the first line
-        return body.split('\n\n').slice(1).join('\n\n');
+        processedBody = body.split('\n\n').slice(1).join('\n\n');
     }
-    return body;
+    processedBody = processedBody.replace(/<[^>]*>/g, '');
+    return processedBody;
 }
 
 const getFriendlyNotifTimeString = (timeObject) => {
