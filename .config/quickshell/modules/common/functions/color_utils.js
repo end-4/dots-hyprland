@@ -40,22 +40,22 @@ function colorWithSaturationOf(color1, color2) {
 }
 
 /**
- * Adapts color1 to the accent (hue and saturation) of color2, keeping value and alpha from color1.
+ * Adapts color1 to the accent (hue and saturation) of color2 using HSL, keeping lightness and alpha from color1.
  *
  * @param {string} color1 - The base color (any Qt.color-compatible string).
  * @param {string} color2 - The accent color.
  * @returns {Qt.rgba} The resulting color.
  */
 function adaptToAccent(color1, color2) {
-    // Convert both colors to HSV
     var c1 = Qt.color(color1);
     var c2 = Qt.color(color2);
 
-    var hsv1 = rgb2hsv(c1);
-    var hsv2 = rgb2hsv(c2);
+    var hue = c2.hslHue;
+    var sat = c2.hslSaturation;
+    var light = c1.hslLightness;
+    var alpha = c1.a;
 
-    // Use hue from color2, saturation/value/alpha from color1
-    return hsv2rgb(hsv2.h, hsv2.s, hsv1.v, hsv1.a);
+    return Qt.hsla(hue, sat, light, alpha);
 }
 
 /**
