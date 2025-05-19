@@ -318,14 +318,14 @@ Singleton {
                 const dataJson = JSON.parse(requester.geminiBuffer);
                 const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
                 requester.message.content += responseContent;
-                const annotationSources = dataJson.candidates[0]?.groundingMetadata.groundingChunks?.map(chunk => {
+                const annotationSources = dataJson.candidates[0]?.groundingMetadata?.groundingChunks?.map(chunk => {
                     return {
                         "type": "url_citation",
                         "text": chunk?.web?.title,
                         "url": chunk?.web?.uri,
                     }
                 });
-                const annotations = dataJson.candidates[0]?.groundingMetadata.groundingSupports?.map(citation => {
+                const annotations = dataJson.candidates[0]?.groundingMetadata?.groundingSupports?.map(citation => {
                     return {
                         "type": "url_citation",
                         "start_index": citation.segment?.startIndex,
@@ -403,7 +403,7 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                // console.log("RAW DATA: ", data);
+                console.log("RAW DATA: ", data);
                 if (data.length === 0) return;
 
                 // Handle response line
