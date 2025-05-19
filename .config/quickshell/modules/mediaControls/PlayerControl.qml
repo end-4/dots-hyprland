@@ -203,7 +203,6 @@ Item { // Player instance
                             bottom: parent.bottom
                             left: parent.left
                             right: parent.right
-                            bottomMargin: 5
                         }
                         TrackChangeButton {
                             iconName: "skip_previous"
