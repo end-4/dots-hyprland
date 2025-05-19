@@ -24,7 +24,8 @@ Rectangle {
             onClicked: Hyprland.dispatch("exec grimblast copy area")
 
             MaterialSymbol {
-                anchors.centerIn: parent
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 1
                 text: "screenshot_region"
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2
@@ -37,7 +38,8 @@ Rectangle {
             onClicked: Hyprland.dispatch("exec hyprpicker -a")
 
             MaterialSymbol {
-                anchors.centerIn: parent
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 1
                 text: "colorize"
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2
