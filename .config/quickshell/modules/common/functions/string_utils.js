@@ -1,19 +1,40 @@
+/**
+ * Formats a string according to the args that are passed in
+ * @param { string } str 
+ * @param  {...any} args 
+ * @returns 
+ */
 function format(str, ...args) {
     return str.replace(/{(\d+)}/g, (match, index) =>
         typeof args[index] !== 'undefined' ? args[index] : match
     );
 }
 
+/**
+ * Returns the domain of the passed in url or null
+ * @param { string } url 
+ * @returns { string| null } 
+ */
 function getDomain(url) {
     const match = url.match(/^(?:https?:\/\/)?(?:www\.)?([^\/]+)/);
     return match ? match[1] : null;
 }
 
+/**
+ * Returns the base path of the passed in url or null
+ * @param { string } url 
+ * @returns { string | null } 
+ */
 function getBaseUrl(url) {
     const match = url.match(/^(https?:\/\/[^\/]+)(\/.*)?$/);
     return match ? match[1] : null;
 }
 
+/**
+ * Escapes single quotes
+ * @param { string } str 
+ * @returns { string }
+ */
 function shellSingleQuoteEscape(str) {
     //  escape single quotes
     return String(str)
@@ -21,8 +42,15 @@ function shellSingleQuoteEscape(str) {
         .replace(/'/g, "'\\''");
 }
 
+/**
+ * Splits markdown Blocks
+ * @param { string } markdown 
+ */
 function splitMarkdownBlocks(markdown) {
     const regex = /```(\w+)?\n([\s\S]*?)```|<think>([\s\S]*?)<\/think>/g;
+    /**
+     * @type {{type: "text" | "think" | "code"; content: string; lang: string | undefined; completed: boolean | undefined}[]}
+     */
     let result = [];
     let lastIndex = 0;
     let match;
@@ -89,10 +117,21 @@ function splitMarkdownBlocks(markdown) {
     return result;
 }
 
+/**
+ * Returns the original string with backslashes escaped
+ * @param { string } str 
+ * @returns { string }
+ */
 function escapeBackslashes(str) {
     return str.replace(/\\/g, '\\\\');
 }
 
+/**
+ * Wraps words to supplied maximum length
+ * @param { string | null } str 
+ * @param { number } maxLen 
+ * @returns { string }
+ */
 function wordWrap(str, maxLen) {
     if (!str) return "";
     let words = str.split(" ");
