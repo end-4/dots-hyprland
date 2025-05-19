@@ -19,6 +19,7 @@ Scope {
     required property var bar
     property bool visible: false
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
+    readonly property var realPlayers: Mpris.players.values.filter(player => isRealPlayer(player))
     readonly property real osdWidth: Appearance.sizes.osdWidth
     readonly property real widgetWidth: Appearance.sizes.mediaControlsWidth
     readonly property real widgetHeight: Appearance.sizes.mediaControlsHeight
@@ -83,7 +84,7 @@ Scope {
 
                 Repeater {
                     model: ScriptModel {
-                        values: Mpris.players.values.filter(player => isRealPlayer(player))
+                        values: root.realPlayers
                     }
                     delegate: PlayerControl {
                         required property MprisPlayer modelData
@@ -117,6 +118,9 @@ Scope {
         description: "Toggles media controls on press"
 
         onPressed: {
+            if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
+                return;
+            }
             mediaControlsLoader.active = !mediaControlsLoader.active;
             if(mediaControlsLoader.active) Notifications.timeoutAll();
         }
