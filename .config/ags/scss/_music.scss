@@ -20,7 +20,10 @@ $secondaryContainer: transparentize(mix(mix($background, $color2, 50%), $color6,
 $onSecondaryContainer: mix($color7, $color2, 90%);
 @if $darkmode == False {
     $onSecondaryContainer: mix($onSecondaryContainer, black, 50%);
+} @else {
+    $onSecondaryContainer: mix($onSecondaryContainer, white, 50%);
 }
+
 
 .osd-music {
     @include menu_decel;
