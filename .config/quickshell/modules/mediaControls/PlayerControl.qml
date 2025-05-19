@@ -66,7 +66,10 @@ Item { // Player instance
     }
 
     onArtUrlChanged: {
-        if (playerController.artUrl.length == 0) return;
+        if (playerController.artUrl.length == 0) {
+            playerController.artDominantColor = Appearance.m3colors.m3secondaryContainer
+            return;
+        }
         colorQuantizer.targetFile = playerController.artUrl // Yes this binding break is intentional
         colorQuantizer.running = true
     }
