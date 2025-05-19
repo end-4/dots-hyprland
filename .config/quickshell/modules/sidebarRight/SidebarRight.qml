@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
@@ -102,7 +103,7 @@ Scope {
                         StyledText {
                             font.pixelSize: Appearance.font.pixelSize.normal
                             color: Appearance.colors.colOnLayer0
-                            text: `Uptime: ${DateTime.uptime}`
+                            text: StringUtils.format(qsTr("Uptime: {0}"), DateTime.uptime)
                             textFormat: Text.MarkdownText
                         }
 
@@ -197,7 +198,7 @@ Scope {
 
     GlobalShortcut {
         name: "sidebarRightToggle"
-        description: "Toggles right sidebar on press"
+        description: qsTr("Toggles right sidebar on press")
 
         onPressed: {
             sidebarLoader.active = !sidebarLoader.active;
@@ -206,7 +207,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightOpen"
-        description: "Opens right sidebar on press"
+        description: qsTr("Opens right sidebar on press")
 
         onPressed: {
             sidebarLoader.active = true;
@@ -215,7 +216,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightClose"
-        description: "Closes right sidebar on press"
+        description: qsTr("Closes right sidebar on press")
 
         onPressed: {
             sidebarLoader.active = false;

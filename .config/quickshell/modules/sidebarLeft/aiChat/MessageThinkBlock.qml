@@ -99,7 +99,7 @@ Item {
                     id: thinkBlockLanguage
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignLeft
-                    text: root.completed ? "Chain of Thought" : ("Thinking" + ".".repeat(Math.random() * 4))
+                    text: root.completed ? qsTr("Chain of Thought") : (qsTr("Thinking") + ".".repeat(Math.random() * 4))
                 }
                 Item { Layout.fillWidth: true }
                 Button { // Expand button

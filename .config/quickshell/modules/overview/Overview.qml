@@ -128,7 +128,7 @@ Scope {
 
     GlobalShortcut {
         name: "overviewToggle"
-        description: "Toggles overview on press"
+        description: qsTr("Toggles overview on press")
 
         onPressed: {
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
@@ -136,7 +136,7 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewClose"
-        description: "Closes overview"
+        description: qsTr("Closes overview")
 
         onPressed: {
             GlobalStates.overviewOpen = false
@@ -144,7 +144,7 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewToggleRelease"
-        description: "Toggles overview on release"
+        description: qsTr("Toggles overview on release")
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = true
@@ -160,9 +160,9 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewToggleReleaseInterrupt"
-        description: "Interrupts possibility of overview being toggled on release. " +
-            "This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. " +
-            "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
+        description: qsTr("Interrupts possibility of overview being toggled on release. ") +
+            qsTr("This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. ") +
+            qsTr("To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything.")
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = false

@@ -129,7 +129,7 @@ Scope {
 	}
     GlobalShortcut {
         name: "osdVolumeTrigger"
-        description: "Triggers volume OSD on press"
+        description: qsTr("Triggers volume OSD on press")
 
         onPressed: {
             root.triggerOsd()
@@ -137,7 +137,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdVolumeHide"
-        description: "Hides volume OSD on press"
+        description: qsTr("Hides volume OSD on press")
 
         onPressed: {
             root.showOsdValues = false

@@ -31,7 +31,7 @@ Singleton {
 
     GlobalShortcut {
         name: "workspaceNumber"
-        description: "Hold to show workspace numbers, release to show icons"
+        description: qsTr("Hold to show workspace numbers, release to show icons")
 
         onPressed: {
             workspaceShowNumbersTimer.start()

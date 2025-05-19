@@ -94,7 +94,7 @@ Button {
             PointingHandInteraction {}
 
             StyledToolTip {
-                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\nClick for options`
+                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\n${qsTr("Click for options")}`
             }
 
             background: Rectangle {
@@ -177,7 +177,7 @@ Button {
                         MenuButton {
                             id: downloadButton
                             Layout.fillWidth: true
-                            buttonText: "Download"
+                            buttonText: qsTr("Download")
                             onClicked: {
                                 root.showActions = false
                                 Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)

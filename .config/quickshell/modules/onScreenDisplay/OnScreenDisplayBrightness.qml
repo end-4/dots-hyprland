@@ -131,7 +131,7 @@ Scope {
 
     GlobalShortcut {
         name: "osdBrightnessTrigger"
-        description: "Triggers brightness OSD on press"
+        description: qsTr("Triggers brightness OSD on press")
 
         onPressed: {
             root.triggerOsd()
@@ -139,7 +139,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdBrightnessHide"
-        description: "Hides brightness OSD on press"
+        description: qsTr("Hides brightness OSD on press")
 
         onPressed: {
             root.showOsdValues = false

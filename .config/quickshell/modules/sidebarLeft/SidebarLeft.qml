@@ -192,7 +192,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggle"
-        description: "Toggles left sidebar on press"
+        description: qsTr("Toggles left sidebar on press")
 
         onPressed: {
             sidebarLoader.active = !sidebarLoader.active;
@@ -202,7 +202,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftOpen"
-        description: "Opens left sidebar on press"
+        description: qsTr("Opens left sidebar on press")
 
         onPressed: {
             sidebarLoader.active = true;
@@ -212,7 +212,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftClose"
-        description: "Closes left sidebar on press"
+        description: qsTr("Closes left sidebar on press")
 
         onPressed: {
             sidebarLoader.active = false;

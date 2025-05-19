@@ -127,7 +127,7 @@ Item {
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
                 Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
-                notificationSummaryText.text = `${notificationObject.summary} (copied)`
+                notificationSummaryText.text = String.format(qsTr("{0} (copied)"), notificationObject.summary)
             }
         }
         onDragStartedChanged: () => {

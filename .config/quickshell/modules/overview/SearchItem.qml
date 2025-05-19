@@ -103,7 +103,7 @@ Button {
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.small
                 color: Appearance.colors.colSubtext
-                visible: root.itemType && root.itemType != "App"
+                visible: root.itemType && root.itemType != qsTr("App")
                 text: root.itemType
             }
             StyledText {

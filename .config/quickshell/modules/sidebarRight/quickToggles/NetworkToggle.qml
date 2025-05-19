@@ -1,6 +1,7 @@
+import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/services"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "../"
 import QtQuick
 import Quickshell
@@ -42,6 +43,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: `${Network.networkName} | Right-click to configure`
+        content: StringUtils.format(qsTr("{0} | Right-click to configure"), Network.networkName)
     }
 }

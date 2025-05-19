@@ -36,14 +36,14 @@ Singleton {
         "gemini-2.0-flash-search": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": "Online | Google's model\nGives up-to-date information with search.",
+            "description": qsTr("Online | Google's model\nGives up-to-date information with search."),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
+            "key_get_description": qsTr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
             "tools": [
                 {
@@ -54,25 +54,26 @@ Singleton {
         "openrouter-llama4-maverick": {
             "name": "Llama 4 Maverick",
             "icon": "ollama-symbolic",
-            "description": "Online via OpenRouter | Meta's model",
+            "description": StringUtils.format(qsTr("Online via {0} | {1}'s model"), "OpenRouter", "Meta"),
             "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "meta-llama/llama-4-maverick:free",
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": "**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
+            "key_get_description": qsTr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
         },
         "openrouter-deepseek-r1": {
             "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
-            "description": "Online via OpenRouter | DeepSeek's reasoning model",
+            "description": StringUtils.format(qsTr("Online via {0} | {1}'s model"), "OpenRouter", "DeepSeek"),
             "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "deepseek/deepseek-r1:free",
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
+            "key_get_description": qsTr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
         },
     }
     property var modelList: Object.keys(root.models)
@@ -117,7 +118,7 @@ Singleton {
                         root.models[model] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
-                            "description": `Local Ollama model: ${model}`,
+                            "description": StringUtils.format(qsTr("Local Ollama model | {0}"), model),
                             "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
@@ -167,7 +168,7 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             PersistentStateManager.setState("ai.model", modelId);
-            if (feedback) root.addMessage("Model set to " + models[modelId].name, Ai.interfaceRole)
+            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), models[modelId].name, Ai.interfaceRole))
             if (models[modelId].requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[models[modelId].key_id] || root.apiKeys[models[modelId].key_id].length === 0)) {
@@ -185,7 +186,7 @@ Singleton {
     function setApiKey(key) {
         const model = models[currentModelId];
         if (!model.requires_key) {
-            root.addMessage(`${model.name} does not require an API key`, Ai.interfaceRole);
+            root.addMessage(StringUtils.format(qsTr("{0} does not require an API key"), model.name), Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
@@ -194,7 +195,7 @@ Singleton {
             return;
         }
         KeyringStorage.setNestedField(["apiKeys", model.key_id], key.trim());
-        root.addMessage("API key set for " + model.name, Ai.interfaceRole);
+        root.addMessage(StringUtils.format(qsTr("API key set for {0}"), model.name, Ai.interfaceRole));
     }
 
     function printApiKey() {
@@ -207,7 +208,7 @@ Singleton {
                 root.addMessage(StringUtils.format(qsTr("No API key set for {0}"), model.name), Ai.interfaceRole);
             }
         } else {
-            root.addMessage(`This model (${model.name}) does not require an API key`, Ai.interfaceRole);
+            root.addMessage(StringUtils.format(qsTr("{0} does not require an API key"), model.name), Ai.interfaceRole);
         }
     }
 
