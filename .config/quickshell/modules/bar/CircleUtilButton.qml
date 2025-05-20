@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets/"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -21,7 +22,9 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full
-        color: (button.down || extraActiveCondition) ? Appearance.colors.colLayer2Active : (button.hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2)
+        color: (button.down || extraActiveCondition) ? Appearance.colors.colLayer1Active : 
+            (button.hovered ? Appearance.colors.colLayer1Hover : 
+            ColorUtils.transparentize(Appearance.colors.colLayer1, 1))
 
     }
 
