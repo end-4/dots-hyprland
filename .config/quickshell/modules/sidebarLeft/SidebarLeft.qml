@@ -58,6 +58,9 @@ Scope { // Scope
                 id: grab
                 windows: [ sidebarRoot ]
                 active: sidebarRoot.visible && !sidebarRoot.pin
+                onActiveChanged: { // Focus the selected tab
+                    if (active) swipeView.currentItem.forceActiveFocus()
+                }
                 onCleared: () => {
                     if (!active) sidebarRoot.hide()
                 }

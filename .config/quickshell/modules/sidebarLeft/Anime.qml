@@ -114,12 +114,6 @@ Item {
         }
     }
 
-    Connections {
-        target: panelWindow
-        function onVisibleChanged(visible) {
-            tagInputField.forceActiveFocus()
-        }
-    }
     onFocusChanged: (focus) => {
         if (focus) {
             tagInputField.forceActiveFocus()
