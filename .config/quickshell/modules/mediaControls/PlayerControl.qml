@@ -3,6 +3,7 @@ import "root:/modules/common/widgets"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Layouts
@@ -103,7 +104,7 @@ Item { // Player instance
 
     }
 
-    ClippingRectangle { // Background
+    Rectangle { // Background
         id: background
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
@@ -111,13 +112,12 @@ Item { // Player instance
         radius: root.popupRounding
 
         layer.enabled: true
-        layer.effect: MultiEffect {
-            source: background
-            anchors.fill: background
-            shadowEnabled: true
-            shadowColor: Appearance.colors.colShadow
-            shadowVerticalOffset: 1
-            shadowBlur: 0.5
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: background.width
+                height: background.height
+                radius: background.radius
+            }
         }
 
         Image {
@@ -154,11 +154,21 @@ Item { // Player instance
             anchors.margins: root.contentPadding
             spacing: 15
 
-            ClippingRectangle { // Art backgrounmd
+            Rectangle { // Art background
+                id: artBackground
                 Layout.fillHeight: true
                 implicitWidth: height
                 radius: root.artRounding
                 color: blendedColors.colLayer1
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: artBackground.width
+                        height: artBackground.height
+                        radius: artBackground.radius
+                    }
+                }
 
                 Image { // Art image
                     id: mediaArt
