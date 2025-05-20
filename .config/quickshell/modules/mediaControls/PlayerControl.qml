@@ -126,8 +126,8 @@ Item { // Player instance
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: blurredArt.width
-                    height: blurredArt.height
+                    width: background.width
+                    height: background.height
                     radius: root.popupRounding
                 }
             }
