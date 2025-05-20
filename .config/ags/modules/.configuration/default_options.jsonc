@@ -46,10 +46,10 @@
         "fakeScreenRounding": 2 // 0: None | 1: Always | 2: When not fullscreen
     },
     "apps": {
-        "bluetooth": "blueberry",
+        "bluetooth": "better-control --bluetooth",
         "imageViewer": "loupe",
-        "network": "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi",
-        "settings": "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center",
+        "network": "better-control --wifi",
+        "settings": "better-control",
         "taskManager": "gnome-usage",
         "terminal": "foot" // This is only for shell actions
     },
