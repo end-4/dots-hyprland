@@ -103,28 +103,39 @@ Item { // Player instance
 
     }
 
-    Rectangle {
+    Item {
         id: background
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
-        color: blendedColors.colLayer0
-        radius: root.popupRounding
 
-        LinearGradient {
+        FastBlur {
             anchors.fill: parent
+            source: Image {
+                id: blurredArt
+                anchors.fill: parent
+                visible: false
+                source: playerController.artUrl
+                sourceSize.width: parent.width
+                sourceSize.height: parent.height
+                fillMode: Image.PreserveAspectCrop
+                cache: false
+                antialiasing: true
+                asynchronous: true
+            }
+            radius: 128 // Increase for more blur
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: background.width
-                    height: background.height
+                    width: blurredArt.width
+                    height: blurredArt.height
                     radius: root.popupRounding
                 }
             }
-            start: Qt.point(0, 0)
-            end: Qt.point(background.width, background.height)
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: ColorUtils.transparentize(artDominantColor, 0.6) }
-                GradientStop { position: 0.4; color: ColorUtils.transparentize(artDominantColor, 0.8) }
+            layer.smooth: true
+
+            Rectangle {
+                anchors.fill: parent
+                color: ColorUtils.transparentize(blendedColors.colLayer0, 0.25)
             }
         }
 
