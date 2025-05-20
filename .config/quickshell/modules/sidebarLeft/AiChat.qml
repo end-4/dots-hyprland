@@ -18,7 +18,6 @@ Item {
     id: root
     property var panelWindow
     property var inputField: messageInputField
-    readonly property var messages: Ai.messages
     property string commandPrefix: "/"
     property string faviconDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/favicons`)
 
@@ -31,7 +30,7 @@ Item {
 
     onFocusChanged: (focus) => {
         if (focus) {
-            messageInputField.forceActiveFocus()
+            root.inputField.forceActiveFocus()
         }
     }
 
@@ -194,18 +193,22 @@ int main(int argc, char* argv[]) {
                 }
 
                 model: ScriptModel {
-                    values: root.messages
+                    values: Ai.messageIDs
                 }
                 delegate: AiMessage {
+                    required property var modelData
+                    required property int index
                     messageIndex: index
-                    messageData: modelData
+                    messageData: {
+                        Ai.messageByID[modelData]
+                    }
                     messageInputField: root.inputField
                     faviconDownloadPath: root.faviconDownloadPath
                 }
             }
 
             Item { // Placeholder when list is empty
-                opacity: root.messages.length === 0 ? 1 : 0
+                opacity: Ai.messageIDs.length === 0 ? 1 : 0
                 visible: opacity > 0
                 anchors.fill: parent
 

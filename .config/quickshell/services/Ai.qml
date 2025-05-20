@@ -16,8 +16,19 @@ Singleton {
     property Component aiMessageComponent: AiMessageData {}
     property string systemPrompt: ConfigOptions?.ai?.systemPrompt ?? ""
     property var messages: []
+    property var messageIDs: []
+    property var messageByID: ({})
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
+
+    function idForMessage(message) {
+        // Generate a unique ID using timestamp and random value
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+    }
+
+    function safeModelName(modelName) {
+        return modelName.replace(/:/g, "_").replace(/\./g, "_")
+    }
 
     // Model properties:
     // - name: Name of the model
@@ -115,7 +126,8 @@ Singleton {
                     const dataJson = JSON.parse(data);
                     root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
-                        root.models[model] = {
+                        const safeModelName = root.safeModelName(model);
+                        root.models[safeModelName] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
                             "description": StringUtils.format(qsTr("Local Ollama model | {0}"), model),
@@ -142,13 +154,17 @@ Singleton {
             "thinking": false,
             "done": true,
         });
-        root.messages = [...root.messages, aiMessage];
+        const id = idForMessage(aiMessage);
+        root.messageIDs = [...root.messageIDs, id];
+        root.messageByID[id] = aiMessage;
     }
 
     function removeMessage(index) {
-        if (index < 0 || index >= messages.length) return;
-        root.messages.splice(index, 1);
-        root.messages = [...root.messages];
+        if (index < 0 || index >= messageIDs.length) return;
+        const id = root.messageIDs[index];
+        root.messageIDs.splice(index, 1);
+        root.messageIDs = [...root.messageIDs];
+        delete root.messageByID[id];
     }
 
     function addApiKeyAdvice(model) {
@@ -160,6 +176,7 @@ Singleton {
     }
 
     function getModel() {
+        console.log("MODEL:", currentModelId);
         return models[currentModelId];
     }
 
@@ -213,7 +230,8 @@ Singleton {
     }
 
     function clearMessages() {
-        messages = [];
+        root.messageIDs = [];
+        root.messageByID = ({});
     }
 
     Process {
@@ -275,7 +293,8 @@ Singleton {
 
             /* Build endpoint, request data */
             const endpoint = (apiFormat === "gemini") ? buildGeminiEndpoint(model) : buildOpenAIEndpoint(model);
-            const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, root.messages) : buildOpenAIRequestData(model, root.messages);
+            const messageArray = root.messageIDs.map(id => root.messageByID[id]);
+            const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, messageArray) : buildOpenAIRequestData(model, messageArray);
 
             let requestHeaders = {
                 "Content-Type": "application/json",
@@ -289,7 +308,9 @@ Singleton {
                 "thinking": true,
                 "done": false,
             });
-            root.messages = [...root.messages, requester.message];
+            const id = idForMessage(requester.message);
+            root.messageIDs = [...root.messageIDs, id];
+            root.messageByID[id] = requester.message;
 
             /* Build header string for curl */ 
             let headerString = Object.entries(requestHeaders)
@@ -447,15 +468,7 @@ Singleton {
 
     function sendUserMessage(message) {
         if (message.length === 0) return;
-
-        const userMessage = aiMessageComponent.createObject(root, {
-            "role": "user",
-            "content": message,
-            "thinking": false,
-            "done": true,
-        });
-        root.messages = [...root.messages, userMessage];
-
+        root.addMessage(message, "user");
         requester.makeRequest();
     }
 
