@@ -7,6 +7,7 @@ import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
@@ -64,6 +65,16 @@ Scope {
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    source: sidebarRightBackground
+                    anchors.fill: sidebarRightBackground
+                    shadowEnabled: true
+                    shadowColor: Appearance.colors.colShadow
+                    shadowVerticalOffset: 1
+                    shadowBlur: 0.5
+                }
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
@@ -162,17 +173,6 @@ Scope {
                         Layout.preferredHeight: implicitHeight
                     }
                 }
-            }
-
-            // Shadow
-            DropShadow {
-                anchors.fill: sidebarRightBackground
-                horizontalOffset: 0
-                verticalOffset: 2
-                radius: Appearance.sizes.elevationMargin
-                samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.colors.colShadow
-                source: sidebarRightBackground
             }
 
         }

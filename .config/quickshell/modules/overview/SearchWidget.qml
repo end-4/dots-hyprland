@@ -7,6 +7,7 @@ import Qt5Compat.GraphicalEffects
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -160,6 +161,15 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: searchWidgetContent
+            anchors.fill: searchWidgetContent
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
 
         ColumnLayout {
             id: columnLayout
@@ -365,16 +375,5 @@ Item { // Wrapper
             }
             
         }
-    }
-
-    DropShadow {
-        id: searchWidgetShadow
-        anchors.fill: searchWidgetContent
-        source: searchWidgetContent
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1
-        color: Appearance.colors.colShadow
-        verticalOffset: 2
-        horizontalOffset: 0
     }
 }

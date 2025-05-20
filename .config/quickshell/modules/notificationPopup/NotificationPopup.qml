@@ -99,7 +99,7 @@ Scope {
             ColumnLayout { // Scrollable window content
                 id: columnLayout
                 anchors.horizontalCenter: parent.horizontalCenter
-                width: parent.width - Appearance.sizes.hyprlandGapsOut * 2
+                width: parent.width - Appearance.sizes.elevationMargin * 2
                 spacing: 0 // The widgets themselves have margins for spacing
 
                 // Notifications are added by the above signal handlers

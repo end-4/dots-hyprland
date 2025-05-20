@@ -4,8 +4,8 @@ import "root:/services"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -173,25 +173,15 @@ Item {
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
-        }
 
-        DropShadow {
-            id: fabShadow
-            anchors.fill: fabBackground
-            source: fabBackground
-            horizontalOffset: 0
-            verticalOffset: fabButton.hovered ? 4 : 2
-            radius: fabButton.hovered ? Appearance.sizes.fabHoveredShadowRadius : Appearance.sizes.fabShadowRadius
-            samples: fabShadow.radius * 2 + 1
-            color: Appearance.colors.colShadow
-            z: fabBackground.z - 1
-
-            Behavior on verticalOffset {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                }
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                source: fabBackground
+                anchors.fill: fabBackground
+                shadowEnabled: true
+                shadowColor: Appearance.colors.colShadow
+                shadowBlur: 0.6
+                shadowVerticalOffset: fabButton.hovered ? 4 : 2
             }
         }
 

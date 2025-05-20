@@ -5,8 +5,8 @@ import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
@@ -65,6 +65,16 @@ Scope { // Scope
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
 
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    source: cheatsheetBackground
+                    anchors.fill: cheatsheetBackground
+                    shadowEnabled: true
+                    shadowVerticalOffset: 1
+                    shadowColor: Appearance.colors.colShadow
+                    shadowBlur: 0.5
+                }
+
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
                         cheatsheetRoot.hide()
@@ -122,17 +132,6 @@ Scope { // Scope
                     }
                     CheatsheetKeybinds {}
                 }
-            }
-
-            // Shadow
-            DropShadow {
-                anchors.fill: cheatsheetBackground
-                horizontalOffset: 0
-                verticalOffset: 2
-                radius: Appearance.sizes.elevationMargin
-                samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.colors.colShadow
-                source: cheatsheetBackground
             }
 
         }

@@ -261,7 +261,7 @@ Singleton {
         property real searchWidthCollapsed: 260
         property real searchWidth: 450
         property real hyprlandGapsOut: 5
-        property real elevationMargin: 7
+        property real elevationMargin: 8
         property real fabShadowRadius: 5
         property real fabHoveredShadowRadius: 7
     }

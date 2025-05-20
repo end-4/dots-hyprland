@@ -3,10 +3,11 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
-import Qt5Compat.GraphicalEffects
+// import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -30,6 +31,16 @@ Item {
         radius: Appearance.rounding.full
         color: Appearance.colors.colLayer0
         implicitWidth: valueRow.implicitWidth
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: valueIndicator
+            anchors.fill: valueIndicator
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
 
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow
@@ -93,16 +104,5 @@ Item {
                 }
             }
         }
-    }
-
-    DropShadow {
-        id: valueShadow
-        anchors.fill: valueIndicator
-        source: valueIndicator
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1
-        color: Appearance.colors.colShadow
-        verticalOffset: 2
-        horizontalOffset: 0
     }
 }

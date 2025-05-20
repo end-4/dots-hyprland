@@ -5,6 +5,7 @@ import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
@@ -79,6 +80,16 @@ Scope { // Scope
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
                 focus: sidebarRoot.visible
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    source: sidebarLeftBackground
+                    anchors.fill: sidebarLeftBackground
+                    shadowEnabled: true
+                    shadowColor: Appearance.colors.colShadow
+                    shadowVerticalOffset: 1
+                    shadowBlur: 0.5
+                }
 
                 Behavior on width {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
@@ -159,17 +170,6 @@ Scope { // Scope
                     }
                     
                 }
-            }
-
-            // Shadow
-            DropShadow {
-                anchors.fill: sidebarLeftBackground
-                horizontalOffset: 0
-                verticalOffset: 2
-                radius: Appearance.sizes.elevationMargin
-                samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.colors.colShadow
-                source: sidebarLeftBackground
             }
 
         }

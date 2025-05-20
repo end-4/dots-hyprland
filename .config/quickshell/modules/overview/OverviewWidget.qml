@@ -3,8 +3,8 @@ import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import Qt5Compat.GraphicalEffects
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -58,6 +58,16 @@ Item {
         implicitHeight: workspaceColumnLayout.implicitHeight + 5 * 2
         color: Appearance.colors.colLayer0
         radius: Appearance.rounding.screenRounding * root.scale + 5 * 2
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: overviewBackground
+            anchors.fill: overviewBackground
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
 
         ColumnLayout {
             id: workspaceColumnLayout
@@ -209,16 +219,5 @@ Item {
                 }
             }
         }
-    }
-
-    DropShadow {
-        z: -9999
-        anchors.fill: overviewBackground
-        horizontalOffset: 0
-        verticalOffset: 2
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-        color: Appearance.colors.colShadow
-        source: overviewBackground
     }
 }

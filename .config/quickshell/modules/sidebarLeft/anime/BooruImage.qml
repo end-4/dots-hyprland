@@ -8,10 +8,11 @@ import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 
 Button {
     id: root
@@ -137,6 +138,16 @@ Button {
                     implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
                     implicitWidth: contextMenuColumnLayout.implicitWidth
 
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        source: contextMenu
+                        anchors.fill: contextMenu
+                        shadowEnabled: true
+                        shadowColor: Appearance.colors.colShadow
+                        shadowVerticalOffset: 1
+                        shadowBlur: 0.5
+                    }
+
                     Behavior on opacity {
                         NumberAnimation {
                             duration: Appearance.animation.elementMoveFast.duration
@@ -182,26 +193,6 @@ Button {
                                 root.showActions = false
                                 Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)
                             }
-                        }
-                    }
-                }
-
-                DropShadow {
-                    opacity: root.showActions ? 1 : 0
-                    visible: opacity > 0
-                    anchors.fill: contextMenu
-                    source: contextMenu
-                    radius: Appearance.sizes.elevationMargin
-                    samples: radius * 2 + 1
-                    color: Appearance.colors.colShadow
-                    verticalOffset: 2
-                    horizontalOffset: 0
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveFast.duration
-                            easing.type: Appearance.animation.elementMoveFast.type
-                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
                     }
                 }

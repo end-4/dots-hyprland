@@ -5,6 +5,7 @@ import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -191,6 +192,16 @@ Item {
                 ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
             radius: Appearance.rounding.normal
 
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                source: notificationBackground
+                anchors.fill: notificationBackground
+                shadowEnabled: popup
+                shadowColor: Appearance.colors.colShadow
+                shadowVerticalOffset: 1
+                shadowBlur: 0.5
+            }
+
             Behavior on x {
                 enabled: enableAnimation
                 NumberAnimation {
@@ -206,20 +217,6 @@ Item {
                     easing.type: Appearance.animation.elementMoveFast.type
                     easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
-            }
-        }
-
-        Loader {
-            active: popup
-            anchors.fill: notificationBackground
-            sourceComponent: DropShadow {
-                id: notificationShadow
-                source: notificationBackground
-                radius: 5
-                samples: radius * 2 + 1
-                color: Appearance.colors.colShadow
-                verticalOffset: 2
-                horizontalOffset: 0
             }
         }
     }
