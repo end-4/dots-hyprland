@@ -15,6 +15,7 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     required property var bar
+    property bool borderless: ConfigOptions.bar.borderless
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
     
@@ -66,7 +67,7 @@ Item {
         implicitHeight: 32
         implicitWidth: rowLayout.implicitWidth + widgetPadding * 2
         radius: Appearance.rounding.small
-        color: Appearance.colors.colLayer1
+        color: borderless ? "transparent" : Appearance.colors.colLayer1
     }
 
     // Scroll to switch workspaces

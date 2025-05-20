@@ -11,6 +11,7 @@ import Quickshell.Hyprland
 
 Item {
     id: root
+    property bool borderless: ConfigOptions.bar.borderless
     readonly property MprisPlayer activePlayer: MprisController.activePlayer
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || qsTr("No media")
 
@@ -45,7 +46,7 @@ Item {
         anchors.centerIn: parent
         width: parent.width
         implicitHeight: 32
-        color: Appearance.colors.colLayer1
+        color: borderless ? "transparent" : Appearance.colors.colLayer1
         radius: Appearance.rounding.small
     }
 

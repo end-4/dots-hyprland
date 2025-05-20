@@ -8,6 +8,7 @@ import Quickshell.Services.UPower
 
 Rectangle {
     id: root
+    property bool borderless: ConfigOptions.bar.borderless
     readonly property var chargeState: UPower.displayDevice.state
     readonly property bool isCharging: chargeState == UPowerDeviceState.Charging
     readonly property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
@@ -18,7 +19,7 @@ Rectangle {
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
-    color: Appearance.colors.colLayer1
+    color: borderless ? "transparent" : Appearance.colors.colLayer1
     radius: Appearance.rounding.small
 
     RowLayout {

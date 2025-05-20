@@ -7,10 +7,12 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 Rectangle {
+    id: root
+    property bool borderless: ConfigOptions.bar.borderless
     Layout.alignment: Qt.AlignVCenter
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
-    color: Appearance.colors.colLayer1
+    color: borderless ? "transparent" : Appearance.colors.colLayer1
     radius: Appearance.rounding.small
 
     RowLayout {
