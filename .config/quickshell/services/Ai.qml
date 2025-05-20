@@ -176,7 +176,6 @@ Singleton {
     }
 
     function getModel() {
-        console.log("MODEL:", currentModelId);
         return models[currentModelId];
     }
 
@@ -425,7 +424,7 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                console.log("RAW DATA: ", data);
+                // console.log("RAW DATA: ", data);
                 if (data.length === 0) return;
 
                 // Handle response line
