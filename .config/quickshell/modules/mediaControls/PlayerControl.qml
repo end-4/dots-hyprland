@@ -122,7 +122,7 @@ Item { // Player instance
                 antialiasing: true
                 asynchronous: true
             }
-            radius: 128 // Increase for more blur
+            radius: 100 // Increase for more blur
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
