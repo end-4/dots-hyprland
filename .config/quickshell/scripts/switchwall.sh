@@ -27,6 +27,41 @@ post_process() {
     fi
 }
 
+check_and_prompt_upscale() {
+    local img="$1"
+    min_width_desired="$(hyprctl monitors -j | jq '([.[].width] | max)' | xargs)" # max monitor width
+    min_height_desired="$(hyprctl monitors -j | jq '([.[].height] | max)' | xargs)" # max monitor height
+
+    if command -v identify &>/dev/null && [ -f "$img" ]; then
+        local img_width img_height
+        img_width=$(identify -format "%w" "$img" 2>/dev/null)
+        img_height=$(identify -format "%h" "$img" 2>/dev/null)
+        if [[ "$img_width" -lt "$min_width_desired" || "$img_height" -lt "$min_height_desired" ]]; then
+            action=$(notify-send "Upscale?" \
+                "Image resolution (${img_width}x${img_height}) is lower than screen resolution (${min_width_desired}x${min_height_desired})" \
+                -A "open_upscayl=Open Upscayl")
+            if [[ "$action" == "open_upscayl" ]]; then
+                if command -v upscayl &>/dev/null; then
+                    nohup upscayl > /dev/null 2>&1 &
+                else
+                    action2=$(notify-send \
+                        -a "Wallpaper switcher" \
+                        -c "im.error" \
+                        -A "install_upscayl=Install Upscayl (Arch)" \
+                        "Install Upscayl?" \
+                        "yay -S upscayl-bin")
+                    if [[ "$action2" == "install_upscayl" ]]; then
+                        foot yay -S upscayl-bin
+                        if command -v upscayl &>/dev/null; then
+                            nohup upscayl > /dev/null 2>&1 &
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    fi
+}
+
 THUMBNAIL_DIR="/tmp/mpvpaper_thumbnails"
 CUSTOM_DIR="$XDG_CONFIG_HOME/hypr/custom"
 RESTORE_SCRIPT_DIR="$CUSTOM_DIR/scripts"
@@ -90,6 +125,7 @@ switch() {
             exit 0
         fi
 
+        check_and_prompt_upscale "$imgpath" &
         kill_existing_mpvpaper
 
         if is_video "$imgpath"; then
@@ -106,7 +142,7 @@ switch() {
                 echo "Missing deps: ${missing_deps[*]}"
                 echo "Arch: sudo pacman -S ${missing_deps[*]}"
                 action=$(notify-send \
-                    -a "Wallpaper Switcher" \
+                    -a "Wallpaper switcher" \
                     -c "im.error" \
                     -A "install_arch=Install (Arch)" \
                     "Can't switch to video wallpaper" \
