@@ -10,103 +10,98 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
-    id: root
-
     Variants {
         model: Quickshell.screens
+        PanelWindow {
+            id: root
+            required property var modelData
+            property string searchingText: ""
+            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
+            property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
+            screen: modelData
+            visible: GlobalStates.overviewOpen
 
-        Loader {
-            id: overviewLoader
-            active: GlobalStates.overviewOpen
-            property var modelData
+            WlrLayershell.namespace: "quickshell:overview"
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+            color: "transparent"
 
-            PanelWindow {
-                id: root
-                property string searchingText: ""
-                readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
-                property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
-                screen: modelData
-                visible: true
+            mask: Region {
+                item: GlobalStates.overviewOpen ? columnLayout : null
+            }
 
-                WlrLayershell.namespace: "quickshell:overview"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
-                color: "transparent"
+            anchors {
+                top: true
+                left: true
+                right: true
+                bottom: true
+            }
 
-                mask: Region {
-                    item: GlobalStates.overviewOpen ? columnLayout : null
+            HyprlandFocusGrab {
+                id: grab
+                windows: [ root ]
+                property bool canBeActive: root.monitorIsFocused
+                active: false
+                onCleared: () => {
+                    if (!active) GlobalStates.overviewOpen = false
+                }
+            }
+
+            Connections {
+                target: GlobalStates
+                function onOverviewOpenChanged() {
+                    delayedGrabTimer.start()
+                }
+            }
+
+            Timer {
+                id: delayedGrabTimer
+                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                repeat: false
+                onTriggered: {
+                    if (!grab.canBeActive) return
+                    grab.active = GlobalStates.overviewOpen
+                }
+            }
+
+            implicitWidth: columnLayout.width
+            implicitHeight: columnLayout.height
+
+            ColumnLayout {
+                id: columnLayout
+                visible: GlobalStates.overviewOpen
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Escape) {
+                        GlobalStates.overviewOpen = false;
+                    }
                 }
 
-                anchors {
-                    top: true
-                    left: true
-                    right: true
-                    bottom: true
+                Item {
+                    height: 1 // Prevent Wayland protocol error
+                    width: 1 // Prevent Wayland protocol error
                 }
 
-                HyprlandFocusGrab {
-                    id: grab
-                    windows: [ root ]
-                    property bool canBeActive: root.monitorIsFocused
-                    active: false
-                    onCleared: () => {
-                        if (!active) GlobalStates.overviewOpen = false
+                SearchWidget {
+                    panelWindow: root
+                    Layout.alignment: Qt.AlignHCenter
+                    onSearchingTextChanged: (text) => {
+                        root.searchingText = searchingText
                     }
                 }
 
-                Connections {
-                    target: GlobalStates
-                    function onOverviewOpenChanged() {
-                        delayedGrabTimer.start()
-                    }
-                }
-
-                Timer {
-                    id: delayedGrabTimer
-                    interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                    repeat: false
-                    onTriggered: {
-                        if (!grab.canBeActive) return
-                        grab.active = GlobalStates.overviewOpen
-                    }
-                }
-
-                implicitWidth: columnLayout.width
-                implicitHeight: columnLayout.height
-
-                ColumnLayout {
-                    id: columnLayout
-                    visible: GlobalStates.overviewOpen
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Keys.onPressed: (event) => {
-                        if (event.key === Qt.Key_Escape) {
-                            GlobalStates.overviewOpen = false;
-                        }
-                    }
-
-                    Item {
-                        height: 1 // Prevent Wayland protocol error
-                        width: 1 // Prevent Wayland protocol error
-                    }
-
-                    SearchWidget {
-                        panelWindow: root
-                        Layout.alignment: Qt.AlignHCenter
-                        onSearchingTextChanged: (text) => {
-                            root.searchingText = searchingText
-                        }
-                    }
-
-                    OverviewWidget {
+                Loader {
+                    id: overviewLoader
+                    active: GlobalStates.overviewOpen
+                    sourceComponent: OverviewWidget {
                         panelWindow: root
                         visible: (root.searchingText == "")
                     }
                 }
-
             }
-        }
 
+        }
     }
 
     IpcHandler {
