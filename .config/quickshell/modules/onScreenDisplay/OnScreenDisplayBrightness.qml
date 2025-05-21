@@ -50,7 +50,7 @@ Scope {
         id: osdLoader
         active: showOsdValues
 
-        PanelWindow {
+        sourceComponent: PanelWindow {
             id: osdRoot
 
             Connections {

@@ -18,7 +18,7 @@ Scope {
         id: sessionLoader
         active: false
 
-        PanelWindow { // Session menu
+        sourceComponent: PanelWindow { // Session menu
             id: sessionRoot
             visible: sessionLoader.active
             property string subtitle

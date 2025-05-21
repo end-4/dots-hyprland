@@ -50,7 +50,7 @@ Scope {
         id: mediaControlsLoader
         active: false
 
-        PanelWindow {
+        sourceComponent: PanelWindow {
             id: mediaControlsRoot
             visible: mediaControlsLoader.active
 
