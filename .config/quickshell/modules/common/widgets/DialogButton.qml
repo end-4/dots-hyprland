@@ -1,4 +1,5 @@
 import "root:/modules/common"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -17,14 +18,12 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         radius: Appearance.rounding.full
-        color: (button.down && button.enabled) ? Appearance.colors.colLayer1Active : ((button.hovered && button.enabled) ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
+        color: (button.down && button.enabled) ? Appearance.colors.colLayer1Active : 
+            ((button.hovered && button.enabled) ? Appearance.colors.colLayer1Hover : 
+            ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
 
         }
 
@@ -41,11 +40,7 @@ Button {
         color: button.enabled ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 

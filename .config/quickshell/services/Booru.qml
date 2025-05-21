@@ -13,20 +13,13 @@ Singleton {
 
     signal tagSuggestion(string query, var suggestions)
 
-    Connections {
-        target: ConfigOptions.sidebar.booru
-        function onAllowNsfwChanged() {
-            root.addSystemMessage(PersistentStates.booru.allowNsfw ? qsTr("Tiddies enabled") : qsTr("No horny"))
-        }
-    }
-
     property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
     property int runningRequests: 0
-    property var defaultUserAgent: ConfigOptions.networking.userAgent
+    property var defaultUserAgent: ConfigOptions?.networking?.userAgent || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     property var providerList: ["yandere", "konachan", "zerochan", "danbooru", "gelbooru", "waifu.im"]
     property var providers: {
-        "system": { "name": "System" },
+        "system": { "name": qsTr("System") },
         "yandere": {
             "name": "yande.re",
             "url": "https://yande.re",
@@ -347,7 +340,7 @@ Singleton {
                 xhr.setRequestHeader("User-Agent", defaultUserAgent)
             }
             else if (currentProvider == "zerochan") {
-                const userAgent = ConfigOptions.sidebar.booru.zerochan.username ? `Desktop sidebar booru viewer - ${ConfigOptions.sidebar.booru.zerochan.username}` : defaultUserAgent
+                const userAgent = ConfigOptions?.sidebar?.booru?.zerochan?.username ? `Desktop sidebar booru viewer - username: ${ConfigOptions.sidebar.booru.zerochan.username}` : defaultUserAgent
                 xhr.setRequestHeader("User-Agent", userAgent)
             }
             root.runningRequests++;

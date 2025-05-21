@@ -8,6 +8,7 @@ import Quickshell.Services.UPower
 
 Rectangle {
     id: root
+    property bool borderless: ConfigOptions.bar.borderless
     readonly property var chargeState: UPower.displayDevice.state
     readonly property bool isCharging: chargeState == UPowerDeviceState.Charging
     readonly property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
@@ -18,7 +19,7 @@ Rectangle {
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
-    color: Appearance.colors.colLayer1
+    color: borderless ? "transparent" : Appearance.colors.colLayer1
     radius: Appearance.rounding.small
 
     RowLayout {
@@ -31,18 +32,14 @@ Rectangle {
             implicitWidth: (isCharging ? (boltIconLoader?.item?.width ?? 0) : 0)
 
             Behavior on implicitWidth {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
         }
 
         StyledText {
             Layout.alignment: Qt.AlignVCenter
             color: Appearance.colors.colOnLayer1
-            text: `${Math.round(percentage * 100)}%`
+            text: `${Math.round(percentage * 100)}`
         }
 
         CircularProgress {
@@ -56,6 +53,7 @@ Rectangle {
 
             MaterialSymbol {
                 anchors.centerIn: parent
+                fill: 1
                 text: "battery_full"
                 iconSize: Appearance.font.pixelSize.normal
                 color: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
@@ -91,12 +89,7 @@ Rectangle {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
-
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
         }

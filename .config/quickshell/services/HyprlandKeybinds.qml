@@ -11,18 +11,14 @@ import Quickshell.Hyprland
 
 Singleton {
     id: root
-    property var defaultKeybinds: []
-    property var userKeybinds: []
+    property var defaultKeybinds: {"children": []}
+    property var userKeybinds: {"children": []}
     property var keybinds: ({
         children: [
-            ...defaultKeybinds.children,
-            ...userKeybinds.children,
+            ...(defaultKeybinds.children ?? []),
+            ...(userKeybinds.children ?? []),
         ]
     })
-
-    // onKeybindsChanged: {
-    //     console.log("[CheatsheetKeybinds] Keybinds changed:", JSON.stringify(keybinds, null, 2))
-    // }   
 
     Connections {
         target: Hyprland

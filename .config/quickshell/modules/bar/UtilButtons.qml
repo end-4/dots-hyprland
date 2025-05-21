@@ -7,10 +7,12 @@ import Quickshell.Io
 import Quickshell.Hyprland
 
 Rectangle {
+    id: root
+    property bool borderless: ConfigOptions.bar.borderless
     Layout.alignment: Qt.AlignVCenter
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
-    color: Appearance.colors.colLayer1
+    color: borderless ? "transparent" : Appearance.colors.colLayer1
     radius: Appearance.rounding.small
 
     RowLayout {
@@ -24,7 +26,8 @@ Rectangle {
             onClicked: Hyprland.dispatch("exec grimblast copy area")
 
             MaterialSymbol {
-                anchors.centerIn: parent
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 1
                 text: "screenshot_region"
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2
@@ -37,7 +40,8 @@ Rectangle {
             onClicked: Hyprland.dispatch("exec hyprpicker -a")
 
             MaterialSymbol {
-                anchors.centerIn: parent
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 1
                 text: "colorize"
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.colors.colOnLayer2

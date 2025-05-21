@@ -2,10 +2,11 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
@@ -15,18 +16,24 @@ import Quickshell.Hyprland
 Scope { // Scope
     id: root
 
-    Variants { // Window repeater
-        id: cheatsheetVariants
-        model: Quickshell.screens
-
-        PanelWindow { // Window
+    Loader {
+        id: cheatsheetLoader
+        active: false
+        
+        sourceComponent: PanelWindow { // Window
             id: cheatsheetRoot
-            visible: false
-            focusable: true
+            visible: cheatsheetLoader.active
 
-            property var modelData
+            anchors {
+                top: true
+                bottom: true
+                left: true
+                right: true
+            }
 
-            screen: modelData
+            function hide() {
+                cheatsheetLoader.active = false
+            }
             exclusiveZone: 0
             implicitWidth: cheatsheetBackground.width + Appearance.sizes.elevationMargin * 2
             implicitHeight: cheatsheetBackground.height + Appearance.sizes.elevationMargin * 2
@@ -42,25 +49,9 @@ Scope { // Scope
             HyprlandFocusGrab { // Click outside to close
                 id: grab
                 windows: [ cheatsheetRoot ]
-                active: false
+                active: cheatsheetRoot.visible
                 onCleared: () => {
-                    if (!active) cheatsheetRoot.visible = false
-                }
-            }
-
-            Connections {
-                target: cheatsheetRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = cheatsheetRoot.visible
+                    if (!active) cheatsheetRoot.hide()
                 }
             }
 
@@ -74,9 +65,19 @@ Scope { // Scope
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
 
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    source: cheatsheetBackground
+                    anchors.fill: cheatsheetBackground
+                    shadowEnabled: true
+                    shadowVerticalOffset: 1
+                    shadowColor: Appearance.colors.colShadow
+                    shadowBlur: 0.5
+                }
+
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {
-                        cheatsheetRoot.visible = false
+                        cheatsheetRoot.hide()
                     }
                 }
 
@@ -94,23 +95,19 @@ Scope { // Scope
 
                     PointingHandInteraction {}
                     onClicked: {
-                        cheatsheetRoot.visible = false
+                        cheatsheetRoot.hide()
                     }
 
-                    background: Item {}
+                    background: null
                     contentItem: Rectangle {
                         anchors.fill: parent
                         radius: Appearance.rounding.full
                         color: closeButton.pressed ? Appearance.colors.colLayer0Active :
                             closeButton.hovered ? Appearance.colors.colLayer0Hover :
-                            Appearance.transparentize(Appearance.colors.colLayer0, 1)
+                            ColorUtils.transparentize(Appearance.colors.colLayer0, 1)
                         
                         Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMoveFast.duration
-                                easing.type: Appearance.animation.elementMoveFast.type
-                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                            }
+                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
 
                         MaterialSymbol {
@@ -137,95 +134,49 @@ Scope { // Scope
                 }
             }
 
-            // Shadow
-            DropShadow {
-                anchors.fill: cheatsheetBackground
-                horizontalOffset: 0
-                verticalOffset: 2
-                radius: Appearance.sizes.elevationMargin
-                samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.colors.colShadow
-                source: cheatsheetBackground
-            }
-
         }
-
     }
 
     IpcHandler {
         target: "cheatsheet"
 
         function toggle(): void {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = !panelWindow.visible;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            cheatsheetLoader.active = !cheatsheetLoader.active
         }
 
         function close(): void {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = false;
-                }
-            }
+            cheatsheetLoader.active = false
         }
 
         function open(): void {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = true;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            cheatsheetLoader.active = true
         }
     }
 
     GlobalShortcut {
         name: "cheatsheetToggle"
-        description: "Toggles cheatsheet on press"
+        description: qsTr("Toggles cheatsheet on press")
 
         onPressed: {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = !panelWindow.visible;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            cheatsheetLoader.active = !cheatsheetLoader.active;
         }
     }
 
     GlobalShortcut {
         name: "cheatsheetOpen"
-        description: "Opens cheatsheet on press"
+        description: qsTr("Opens cheatsheet on press")
 
         onPressed: {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = true;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            cheatsheetLoader.active = true;
         }
     }
 
     GlobalShortcut {
         name: "cheatsheetClose"
-        description: "Closes cheatsheet on press"
+        description: qsTr("Closes cheatsheet on press")
 
         onPressed: {
-            for (let i = 0; i < cheatsheetVariants.instances.length; i++) {
-                let panelWindow = cheatsheetVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = false;
-                }
-            }
+            cheatsheetLoader.active = false;
         }
     }
 

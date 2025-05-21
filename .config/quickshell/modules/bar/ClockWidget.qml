@@ -5,9 +5,10 @@ import QtQuick
 import QtQuick.Layouts
 
 Rectangle {
+    property bool borderless: ConfigOptions.bar.borderless
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 6 // idk, text seems nicer w/ more padding
     implicitHeight: 32
-    color: Appearance.colors.colLayer1
+    color: borderless ? "transparent" : Appearance.colors.colLayer1
     radius: Appearance.rounding.small
 
     RowLayout {

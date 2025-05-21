@@ -2,6 +2,7 @@ import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/icons.js" as Icons
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Layouts
@@ -42,37 +43,21 @@ Rectangle { // Window
 
     radius: Appearance.rounding.windowRounding * root.scale
     color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
-    border.color : Appearance.transparentize(Appearance.m3colors.m3outline, 0.9)
+    border.color : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.9)
     border.pixelAligned : false
     border.width : 1
 
     Behavior on x {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on y {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on width {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     Behavior on height {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveEnter.duration
-            easing.type: Appearance.animation.elementMoveEnter.type
-            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-        }
+        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
 
     ColumnLayout {
@@ -88,11 +73,7 @@ Rectangle { // Window
             implicitSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
 
             Behavior on implicitSize {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveEnter.duration
-                    easing.type: Appearance.animation.elementMoveEnter.type
-                    easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
 
             IconImage {

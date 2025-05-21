@@ -5,7 +5,7 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject ai: QtObject {
-        property string systemPrompt: "Use casual tone. No user knowledge is to be assumed except basic Linux literacy. Be brief and concise: When explaining concepts, use bullet points (prefer minus sign (-) over asterisk (*)) and highlight keywords in bold to pinpoint the main concepts instead of long paragraphs. You are also encouraged to split your response with h2 headers, each header title beginning with an emoji, like `## 🐧 Linux`."
+        property string systemPrompt: qsTr("Use casual tone. No user knowledge is to be assumed except basic Linux literacy. Be brief and concise: When explaining concepts, use bullet points (prefer minus sign (-) over asterisk (*)) and highlight keywords in bold to pinpoint the main concepts instead of long paragraphs. You are also encouraged to split your response with h2 headers, each header title beginning with an emoji, like `## 🐧 Linux`.")
     }
 
     property QtObject appearance: QtObject {
@@ -13,10 +13,10 @@ Singleton {
     }
 
     property QtObject apps: QtObject {
-        property string bluetooth: "blueberry"
+        property string bluetooth: "better-control --bluetooth"
         property string imageViewer: "loupe"
-        property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
-        property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
+        property string network: "better-control --wifi"
+        property string settings: "better-control"
         property string taskManager: "gnome-usage"
         property string terminal: "foot" // This is only for shell actions
     }
@@ -25,6 +25,7 @@ Singleton {
         property int batteryLowThreshold: 20
         property string topLeftIcon: "spark" // Options: distro, spark
         property bool showBackground: true
+        property bool borderless: false
         property QtObject resources: QtObject {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
@@ -70,7 +71,7 @@ Singleton {
             property string defaultProvider: "yandere"
             property int limit: 20
             property QtObject zerochan: QtObject {
-                property string username: ""
+                property string username: "[unset]"
             }
         }
     }

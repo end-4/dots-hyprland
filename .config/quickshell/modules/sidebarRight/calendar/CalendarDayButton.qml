@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -24,15 +25,10 @@ Button {
             Appearance.m3colors.m3primary) : 
             (interactable && button.down) ? Appearance.colors.colLayer1Active : 
             (interactable && button.hovered) ? Appearance.colors.colLayer1Hover : 
-            Appearance.transparentize(Appearance.colors.colLayer1, 1)
+            ColorUtils.transparentize(Appearance.colors.colLayer1, 1)
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
     
@@ -46,12 +42,7 @@ Button {
             Appearance.m3colors.m3outlineVariant
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 }

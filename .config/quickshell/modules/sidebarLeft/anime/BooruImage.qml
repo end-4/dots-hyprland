@@ -2,15 +2,17 @@ import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQml
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
+import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 
 Button {
     id: root
@@ -78,11 +80,7 @@ Button {
             }
 
             Behavior on opacity {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveEnter.duration
-                    easing.type: Appearance.animation.elementMoveEnter.type
-                    easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
             }
         }
 
@@ -97,13 +95,13 @@ Button {
             PointingHandInteraction {}
 
             StyledToolTip {
-                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\nClick for options`
+                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\n${qsTr("Click for options")}`
             }
 
             background: Rectangle {
-                color: menuButton.down ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
-                    menuButton.hovered ? Appearance.transparentize(Appearance.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
-                    Appearance.transparentize(Appearance.m3colors.m3surface, 0.3)
+                color: menuButton.down ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
+                    menuButton.hovered ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
+                    ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
                 radius: Appearance.rounding.full
             }
 
@@ -139,6 +137,16 @@ Button {
                     color: Appearance.m3colors.m3surfaceContainer
                     implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
                     implicitWidth: contextMenuColumnLayout.implicitWidth
+
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        source: contextMenu
+                        anchors.fill: contextMenu
+                        shadowEnabled: true
+                        shadowColor: Appearance.colors.colShadow
+                        shadowVerticalOffset: 1
+                        shadowBlur: 0.5
+                    }
 
                     Behavior on opacity {
                         NumberAnimation {
@@ -180,31 +188,11 @@ Button {
                         MenuButton {
                             id: downloadButton
                             Layout.fillWidth: true
-                            buttonText: "Download"
+                            buttonText: qsTr("Download")
                             onClicked: {
                                 root.showActions = false
                                 Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)
                             }
-                        }
-                    }
-                }
-
-                DropShadow {
-                    opacity: root.showActions ? 1 : 0
-                    visible: opacity > 0
-                    anchors.fill: contextMenu
-                    source: contextMenu
-                    radius: Appearance.sizes.elevationMargin
-                    samples: radius * 2 + 1
-                    color: Appearance.colors.colShadow
-                    verticalOffset: 2
-                    horizontalOffset: 0
-
-                    Behavior on opacity {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveFast.duration
-                            easing.type: Appearance.animation.elementMoveFast.type
-                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
                     }
                 }

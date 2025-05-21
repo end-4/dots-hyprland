@@ -26,7 +26,7 @@ ToolTip {
         }
     }
 
-    background: Item {}
+    background: null
     
     contentItem: Item {
         id: contentItemBackground

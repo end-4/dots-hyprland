@@ -29,11 +29,11 @@ Singleton {
             if (root.firstLoad) {
                 root.firstLoad = false;
             } else {
-                Hyprland.dispatch(`exec notify-send "Shell configuration reloaded" "${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
             }
         } catch (e) {
             console.error("[ConfigLoader] Error reading file:", e);
-            Hyprland.dispatch(`exec notify-send "Shell configuration failed to load" "${root.filePath}"`)
+            Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
             return;
         }
     }
@@ -66,9 +66,9 @@ Singleton {
                 console.log("[ConfigLoader] File not found, creating new file.")
                 const plainConfig = ObjectUtils.toPlainObject(ConfigOptions)
                 configFileView.setText(JSON.stringify(plainConfig, null, 2))
-                Hyprland.dispatch(`exec notify-send "Shell configuration created" "${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration created")}" "${root.filePath}"`)
             } else {
-                Hyprland.dispatch(`exec notify-send "Shell configuration failed to load" "${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
             }
         }
     }

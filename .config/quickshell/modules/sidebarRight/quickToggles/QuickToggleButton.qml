@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import Quickshell.Io
@@ -20,14 +21,10 @@ Button {
         radius: Appearance.rounding.full
         color: toggled ? 
             (button.down ? Appearance.colors.colPrimaryActive : button.hovered ? Appearance.colors.colPrimaryHover : Appearance.m3colors.m3primary) :
-            (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.colors.colLayer1Hover, 1))
+            (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
 
         }
         
@@ -39,11 +36,7 @@ Button {
             color: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
         }
 

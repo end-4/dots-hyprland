@@ -8,8 +8,8 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     id: root
-    property int sidebarLeftOpenCount: 0
-    property int sidebarRightOpenCount: 0
+    property bool sidebarLeftOpen: false
+    property bool sidebarRightOpen: false
     property bool overviewOpen: false
     property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true
@@ -31,7 +31,7 @@ Singleton {
 
     GlobalShortcut {
         name: "workspaceNumber"
-        description: "Hold to show workspace numbers, release to show icons"
+        description: qsTr("Hold to show workspace numbers, release to show icons")
 
         onPressed: {
             workspaceShowNumbersTimer.start()

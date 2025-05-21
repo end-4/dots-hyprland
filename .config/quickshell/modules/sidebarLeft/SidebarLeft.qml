@@ -5,6 +5,7 @@ import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
@@ -17,30 +18,31 @@ Scope { // Scope
     property int sidebarPadding: 15
     property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "bookmark_heart", "name": qsTr("Anime")}]
 
-    Variants { // Window repeater
-        id: sidebarVariants
-        model: Quickshell.screens
-
+    Loader {
+        id: sidebarLoader
+        active: false
+        onActiveChanged: {
+            GlobalStates.sidebarLeftOpen = sidebarLoader.active
+        }
+        
         PanelWindow { // Window
             id: sidebarRoot
-            visible: false
-            focusable: true
-            property int selectedTab: PersistentStates.sidebar.leftSide.selectedTab
+            visible: sidebarLoader.active
+            
+            property int selectedTab: 0
             property bool extend: false
+            property bool pin: false
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
 
-            onVisibleChanged: {
-                GlobalStates.sidebarLeftOpenCount += visible ? 1 : -1
+            function hide() {
+                sidebarLoader.active = false
             }
 
-            property var modelData
-
-            screen: modelData
-            exclusiveZone: 0
+            exclusiveZone: sidebarRoot.pin ? sidebarWidth : 0
             implicitWidth: Appearance.sizes.sidebarWidthExtended
             WlrLayershell.namespace: "quickshell:sidebarLeft"
-            // Hyprland 0.49: Focus is always exclusive and setting this breaks mouse focus grab
-            // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+            // Hyprland 0.49: OnDemand is Exclusive, Exclusive just breaks click-outside-to-close
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
             color: "transparent"
 
             anchors {
@@ -56,26 +58,12 @@ Scope { // Scope
             HyprlandFocusGrab { // Click outside to close
                 id: grab
                 windows: [ sidebarRoot ]
-                active: false
+                active: sidebarRoot.visible && !sidebarRoot.pin
+                onActiveChanged: { // Focus the selected tab
+                    if (active) swipeView.currentItem.forceActiveFocus()
+                }
                 onCleared: () => {
-                    if (!active) sidebarRoot.visible = false
-                }
-            }
-
-            Connections {
-                target: sidebarRoot
-                function onVisibleChanged() {
-                    delayedGrabTimer.start()
-                    swipeView.children[0].children[0].children[sidebarRoot.selectedTab].forceActiveFocus()
-                }
-            }
-
-            Timer {
-                id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-                repeat: false
-                onTriggered: {
-                    grab.active = sidebarRoot.visible
+                    if (!active) sidebarRoot.hide()
                 }
             }
 
@@ -87,40 +75,49 @@ Scope { // Scope
                 anchors.left: parent.left
                 anchors.topMargin: Appearance.sizes.hyprlandGapsOut
                 anchors.leftMargin: Appearance.sizes.hyprlandGapsOut
-                width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+                width: sidebarRoot.sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
                 focus: sidebarRoot.visible
 
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    source: sidebarLeftBackground
+                    anchors.fill: sidebarLeftBackground
+                    shadowEnabled: true
+                    shadowColor: Appearance.colors.colShadow
+                    shadowVerticalOffset: 1
+                    shadowBlur: 0.5
+                }
+
                 Behavior on width {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
 
                 Keys.onPressed: (event) => {
                     // console.log("Key pressed: " + event.key)
                     if (event.key === Qt.Key_Escape) {
-                        sidebarRoot.visible = false;
+                        sidebarRoot.hide();
                     }
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_PageDown) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", Math.min(sidebarRoot.selectedTab + 1, root.tabButtonList.length - 1))
+                            sidebarRoot.selectedTab = Math.min(sidebarRoot.selectedTab + 1, root.tabButtonList.length - 1)
                         } 
                         else if (event.key === Qt.Key_PageUp) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", Math.max(sidebarRoot.selectedTab - 1, 0))
+                            sidebarRoot.selectedTab = Math.max(sidebarRoot.selectedTab - 1, 0)
                         }
                         else if (event.key === Qt.Key_Tab) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", (sidebarRoot.selectedTab + 1) % root.tabButtonList.length);
+                            sidebarRoot.selectedTab = (sidebarRoot.selectedTab + 1) % root.tabButtonList.length;
                         }
                         else if (event.key === Qt.Key_Backtab) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", (sidebarRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length);
+                            sidebarRoot.selectedTab = (sidebarRoot.selectedTab - 1 + root.tabButtonList.length) % root.tabButtonList.length;
                         }
                         else if (event.key === Qt.Key_O) {
                             sidebarRoot.extend = !sidebarRoot.extend;
+                        }
+                        else if (event.key === Qt.Key_P) {
+                            sidebarRoot.pin = !sidebarRoot.pin;
                         }
                         event.accepted = true;
                     }
@@ -137,7 +134,7 @@ Scope { // Scope
                         tabButtonList: root.tabButtonList
                         externalTrackedTab: sidebarRoot.selectedTab
                         function onCurrentIndexChanged(currentIndex) {
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", currentIndex)
+                            sidebarRoot.selectedTab = currentIndex
                         }
                     }
 
@@ -146,10 +143,12 @@ Scope { // Scope
                         Layout.topMargin: 5
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        currentIndex: sidebarRoot.selectedTab
+                        spacing: 10
+                        
+                        currentIndex: tabBar.externalTrackedTab
                         onCurrentIndexChanged: {
                             tabBar.enableIndicatorAnimation = true
-                            PersistentStateManager.setState("sidebar.leftSide.selectedTab", currentIndex)
+                            sidebarRoot.selectedTab = currentIndex
                         }
 
                         clip: true
@@ -173,95 +172,53 @@ Scope { // Scope
                 }
             }
 
-            // Shadow
-            DropShadow {
-                anchors.fill: sidebarLeftBackground
-                horizontalOffset: 0
-                verticalOffset: 2
-                radius: Appearance.sizes.elevationMargin
-                samples: Appearance.sizes.elevationMargin * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-                color: Appearance.colors.colShadow
-                source: sidebarLeftBackground
-            }
-
         }
-
     }
 
     IpcHandler {
         target: "sidebarLeft"
 
         function toggle(): void {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = !panelWindow.visible;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            sidebarLoader.active = !sidebarLoader.active
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
 
         function close(): void {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = false;
-                }
-            }
+            sidebarLoader.active = false
         }
 
         function open(): void {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = true;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            sidebarLoader.active = true
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 
     GlobalShortcut {
         name: "sidebarLeftToggle"
-        description: "Toggles left sidebar on press"
+        description: qsTr("Toggles left sidebar on press")
 
         onPressed: {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = !panelWindow.visible;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            sidebarLoader.active = !sidebarLoader.active;
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 
     GlobalShortcut {
         name: "sidebarLeftOpen"
-        description: "Opens left sidebar on press"
+        description: qsTr("Opens left sidebar on press")
 
         onPressed: {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = true;
-                    if(panelWindow.visible) Notifications.timeoutAll();
-                }
-            }
+            sidebarLoader.active = true;
+            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 
     GlobalShortcut {
         name: "sidebarLeftClose"
-        description: "Closes left sidebar on press"
+        description: qsTr("Closes left sidebar on press")
 
         onPressed: {
-            for (let i = 0; i < sidebarVariants.instances.length; i++) {
-                let panelWindow = sidebarVariants.instances[i];
-                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
-                    panelWindow.visible = false;
-                }
-            }
+            sidebarLoader.active = false;
         }
     }
 

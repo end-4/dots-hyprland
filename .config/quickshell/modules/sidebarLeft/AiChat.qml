@@ -18,7 +18,6 @@ Item {
     id: root
     property var panelWindow
     property var inputField: messageInputField
-    readonly property var messages: Ai.messages
     property string commandPrefix: "/"
     property string faviconDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/favicons`)
 
@@ -31,7 +30,7 @@ Item {
 
     onFocusChanged: (focus) => {
         if (focus) {
-            messageInputField.forceActiveFocus()
+            root.inputField.forceActiveFocus()
         }
     }
 
@@ -179,46 +178,42 @@ int main(int argc, char* argv[]) {
                 }
 
                 add: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 0; to: 1
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 0,
+                        to: 1
+                    })]
                 }
                 remove: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 1; to: 0
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 1,
+                        to: 0
+                    })]
                 }
 
                 model: ScriptModel {
-                    values: root.messages
+                    values: Ai.messageIDs
                 }
                 delegate: AiMessage {
+                    required property var modelData
+                    required property int index
                     messageIndex: index
-                    messageData: modelData
+                    messageData: {
+                        Ai.messageByID[modelData]
+                    }
                     messageInputField: root.inputField
                     faviconDownloadPath: root.faviconDownloadPath
                 }
             }
 
             Item { // Placeholder when list is empty
-                opacity: root.messages.length === 0 ? 1 : 0
+                opacity: Ai.messageIDs.length === 0 ? 1 : 0
                 visible: opacity > 0
                 anchors.fill: parent
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 ColumnLayout {
@@ -356,11 +351,7 @@ int main(int argc, char* argv[]) {
             border.width: 1
 
             Behavior on implicitHeight {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
             RowLayout { // Input field and send button
@@ -383,7 +374,7 @@ int main(int argc, char* argv[]) {
                     placeholderText: StringUtils.format(qsTr('Message the model... "{0}" for commands'), root.commandPrefix)
                     placeholderTextColor: Appearance.m3colors.m3outline
 
-                    background: Item {}
+                    background: null
 
                     onTextChanged: { // Handle suggestions
                         if(messageInputField.text.length === 0) {
@@ -474,11 +465,7 @@ int main(int argc, char* argv[]) {
                             Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
                             
                         Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
+                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
 
@@ -566,11 +553,7 @@ int main(int argc, char* argv[]) {
                                 Appearance.colors.colLayer2
                                 
                             Behavior on color {
-                                ColorAnimation {
-                                    duration: Appearance.animation.elementMove.duration
-                                    easing.type: Appearance.animation.elementMove.type
-                                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                             }
                         }
                         onClicked: {

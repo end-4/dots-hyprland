@@ -7,6 +7,7 @@ import Qt5Compat.GraphicalEffects
 import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -160,6 +161,15 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: searchWidgetContent
+            anchors.fill: searchWidgetContent
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
 
         ColumnLayout {
             id: columnLayout
@@ -227,7 +237,7 @@ Item { // Wrapper
                         }
                     }
 
-                    background: Item {}
+                    background: null
 
                     cursorDelegate: Rectangle {
                         width: 1
@@ -276,7 +286,7 @@ Item { // Wrapper
                         nonAppResultsTimer.restart();
                         const mathResultObject = {
                             name: root.mathResult,
-                            clickActionName: "Copy",
+                            clickActionName: qsTr("Copy"),
                             type: qsTr("Math result"),
                             fontType: "monospace",
                             materialSymbol: 'calculate',
@@ -286,7 +296,7 @@ Item { // Wrapper
                         }
                         const commandResultObject = {
                             name: searchingText,
-                            clickActionName: "Run",
+                            clickActionName: qsTr("Run"),
                             type: qsTr("Run command"),
                             fontType: "monospace",
                             materialSymbol: 'terminal',
@@ -300,8 +310,8 @@ Item { // Wrapper
                                 if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
                                     return {
                                         name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
-                                        clickActionName: "Run",
-                                        type: "Action",
+                                        clickActionName: qsTr("Run"),
+                                        type: qsTr("Action"),
                                         materialSymbol: 'settings_suggest',
                                         execute: () => {
                                             action.execute(root.searchingText.split(" ").slice(1).join(" "))
@@ -319,8 +329,8 @@ Item { // Wrapper
                         result = result.concat(
                             AppSearch.fuzzyQuery(root.searchingText)
                                 .map((entry) => {
-                                    entry.clickActionName = "Launch";
-                                    entry.type = "App"
+                                    entry.clickActionName = qsTr("Launch");
+                                    entry.type = qsTr("App");
                                     return entry;
                                 })
                         );
@@ -344,8 +354,8 @@ Item { // Wrapper
                         // Web search
                         result.push({
                             name: root.searchingText,
-                            clickActionName: "Search",
-                            type: "Search the web",
+                            clickActionName: qsTr("Search"),
+                            type: qsTr("Search the web"),
                             materialSymbol: 'travel_explore',
                             execute: () => {
                                 let url = ConfigOptions.search.engineBaseUrl + root.searchingText
@@ -361,22 +371,9 @@ Item { // Wrapper
                 }
                 delegate: SearchItem {
                     entry: modelData
-                    // itemName: modelData.name
-                    // itemIcon: modelData.icon
                 }
             }
             
         }
-    }
-
-    DropShadow {
-        id: searchWidgetShadow
-        anchors.fill: searchWidgetContent
-        source: searchWidgetContent
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1
-        color: Appearance.colors.colShadow
-        verticalOffset: 2
-        horizontalOffset: 0
     }
 }

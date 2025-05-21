@@ -2,6 +2,7 @@
 import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -57,7 +58,9 @@ Button {
         anchors.leftMargin: root.horizontalMargin
         anchors.rightMargin: root.horizontalMargin
         radius: Appearance.rounding.normal
-        color: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : Appearance.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
+        color: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : 
+            ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : 
+            ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
     }
 
     RowLayout {
@@ -100,7 +103,7 @@ Button {
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.small
                 color: Appearance.colors.colSubtext
-                visible: root.itemType && root.itemType != "App"
+                visible: root.itemType && root.itemType != qsTr("App")
                 text: root.itemType
             }
             StyledText {

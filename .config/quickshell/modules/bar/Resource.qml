@@ -28,6 +28,7 @@ Item {
 
             MaterialSymbol {
                 anchors.centerIn: parent
+                fill: 1
                 text: iconName
                 iconSize: Appearance.font.pixelSize.normal
                 color: Appearance.m3colors.m3onSecondaryContainer
@@ -38,15 +39,11 @@ Item {
         StyledText {
             Layout.alignment: Qt.AlignVCenter
             color: Appearance.colors.colOnLayer1
-            text: `${Math.round(percentage * 100)}%`
+            text: `${Math.round(percentage * 100)}`
         }
 
         Behavior on x {
-            NumberAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
 
     }

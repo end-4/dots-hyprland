@@ -4,6 +4,7 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/file_utils.js" as FileUtils
 import "./anime/"
 import Qt.labs.platform
 import QtQuick
@@ -19,9 +20,9 @@ Item {
     property var panelWindow
     property var inputField: tagInputField
     readonly property var responses: Booru.responses
-    property string previewDownloadPath: `${XdgDirectories.cache}/media/waifus`.replace("file://", "")
-    property string downloadPath: (XdgDirectories.pictures  + "/homework").replace("file://", "")
-    property string nsfwPath: (XdgDirectories.pictures + "/homework/🌶️").replace("file://", "")
+    property string previewDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/waifus`)
+    property string downloadPath: FileUtils.trimFileProtocol(XdgDirectories.pictures  + "/homework")
+    property string nsfwPath: FileUtils.trimFileProtocol(XdgDirectories.pictures + "/homework/🌶️")
     property string commandPrefix: "/"
     property real scrollOnNewResponse: 100
     property int tagSuggestionDelay: 210
@@ -37,7 +38,8 @@ Item {
     }
 
     Component.onCompleted: {
-        Hyprland.dispatch(`exec rm -rf ${previewDownloadPath} && mkdir -p ${previewDownloadPath}`)
+        Hyprland.dispatch(`exec rm -rf '${previewDownloadPath}' && mkdir -p '${previewDownloadPath}'`)
+        Hyprland.dispatch(`exec mkdir -p '${downloadPath}' && mkdir -p '${downloadPath}'`)
     }
 
     property var allCommands: [
@@ -114,12 +116,6 @@ Item {
         }
     }
 
-    Connections {
-        target: panelWindow
-        function onVisibleChanged(visible) {
-            tagInputField.forceActiveFocus()
-        }
-    }
     onFocusChanged: (focus) => {
         if (focus) {
             tagInputField.forceActiveFocus()
@@ -174,13 +170,11 @@ Item {
                 }
 
                 add: Transition {
-                    NumberAnimation { 
-                        property: "opacity"
-                        from: 0; to: 1
-                        duration: Appearance.animation.elementMoveEnter.duration
-                        easing.type: Appearance.animation.elementMoveEnter.type
-                        easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                    }
+                    animations: [Appearance.animation.elementMoveEnter.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        from: 0,
+                        to: 1
+                    })]
                 }
 
                 model: ScriptModel {
@@ -208,11 +202,7 @@ Item {
                 anchors.fill: parent
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 ColumnLayout {
@@ -246,11 +236,7 @@ Item {
                 visible: opacity > 0
 
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: Appearance.animation.elementMove.duration
-                        easing.type: Appearance.animation.elementMove.type
-                        easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                    }
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
 
                 Rectangle {
@@ -392,11 +378,7 @@ Item {
             border.width: 1
 
             Behavior on implicitHeight {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
             RowLayout { // Input field and send button
@@ -419,7 +401,7 @@ Item {
                     placeholderText: StringUtils.format(qsTr('Enter tags, or "{0}" for commands'), root.commandPrefix)
                     placeholderTextColor: Appearance.m3colors.m3outline
 
-                    background: Item {}
+                    background: null
 
                     property Timer searchTimer: Timer { // Timer for tag suggestions
                         interval: root.tagSuggestionDelay
@@ -530,11 +512,7 @@ Item {
                             Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
                             
                         Behavior on color {
-                            ColorAnimation {
-                                duration: Appearance.animation.elementMove.duration
-                                easing.type: Appearance.animation.elementMove.type
-                                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                            }
+                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
 
@@ -666,11 +644,7 @@ Item {
                                 Appearance.colors.colLayer2
                                 
                             Behavior on color {
-                                ColorAnimation {
-                                    duration: Appearance.animation.elementMove.duration
-                                    easing.type: Appearance.animation.elementMove.type
-                                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                             }
                         }
                         onClicked: {

@@ -3,10 +3,11 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
-import Qt5Compat.GraphicalEffects
+// import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -14,27 +15,40 @@ Item {
     required property string icon
     required property string name
     property bool rotateIcon: false
+    property bool scaleIcon: false
 
-    property real valueIndicatorVerticalPadding: 5
+    property real valueIndicatorVerticalPadding: 9
     property real valueIndicatorLeftPadding: 10
     property real valueIndicatorRightPadding: 20 // An icon is circle ish, a column isn't, hence the extra padding
 
     Layout.margins: Appearance.sizes.elevationMargin
-    implicitWidth: valueIndicator.implicitWidth
+    implicitWidth: Appearance.sizes.osdWidth
     implicitHeight: valueIndicator.implicitHeight
 
     WrapperRectangle {
         id: valueIndicator
+        anchors.fill: parent
         radius: Appearance.rounding.full
         color: Appearance.colors.colLayer0
         implicitWidth: valueRow.implicitWidth
 
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: valueIndicator
+            anchors.fill: valueIndicator
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
+
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow
             Layout.margins: 10
+            anchors.fill: parent
             spacing: 10
 
-            Item {    
+            Item {
                 implicitWidth: 30
                 implicitHeight: 30
                 Layout.alignment: Qt.AlignVCenter
@@ -47,22 +61,14 @@ Item {
                     renderType: Text.QtRendering
 
                     text: root.icon
-                    iconSize: 20 + 10 * (root.rotateIcon ? value : 1)
+                    iconSize: 20 + 10 * (root.scaleIcon ? value : 1)
                     rotation: 180 * (root.rotateIcon ? value : 0)
 
                     Behavior on iconSize {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveEnter.duration
-                            easing.type: Appearance.animation.elementMoveEnter.type
-                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                        }
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                     }
                     Behavior on rotation {
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveEnter.duration
-                            easing.type: Appearance.animation.elementMoveEnter.type
-                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
-                        }
+                        animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                     }
                 
                 }
@@ -93,20 +99,10 @@ Item {
                 
                 StyledProgressBar {
                     id: valueProgressBar
+                    Layout.fillWidth: true
                     value: root.value
                 }
             }
         }
-    }
-
-    DropShadow {
-        id: valueShadow
-        anchors.fill: valueIndicator
-        source: valueIndicator
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1
-        color: Appearance.colors.colShadow
-        verticalOffset: 2
-        horizontalOffset: 0
     }
 }

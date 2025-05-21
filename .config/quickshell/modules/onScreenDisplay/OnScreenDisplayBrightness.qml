@@ -12,6 +12,8 @@ import Quickshell.Wayland
 Scope {
     id: root
     property bool showOsdValues: false
+    property var focusedScreen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    property var brightnessMonitor: Brightness.getMonitorForScreen(focusedScreen)
 
     function triggerOsd() {
         showOsdValues = true
@@ -36,81 +38,79 @@ Scope {
         }
     }
 
-    Variants {
-        model: Quickshell.screens
+    Connections {
+        target: Brightness
+        function onBrightnessChanged() {
+            if (!root.brightnessMonitor.ready) return
+            root.triggerOsd()
+        }
+    }
 
-        Loader {
-            id: osdLoader
-            property var modelData
-            active: showOsdValues
-            property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
+    Loader {
+        id: osdLoader
+        active: showOsdValues
+
+        PanelWindow {
+            id: osdRoot
 
             Connections {
-                target: brightnessMonitor
-                function onBrightnessChanged() {
-                    if (!brightnessMonitor.ready) return
-                    root.triggerOsd()
+                target: root
+                function onFocusedScreenChanged() {
+                    osdRoot.screen = root.focusedScreen
                 }
             }
 
-            PanelWindow {
-                screen: modelData
-                exclusionMode: ExclusionMode.Normal
-                WlrLayershell.namespace: "quickshell:onScreenDisplay"
-                WlrLayershell.layer: WlrLayer.Overlay
-                color: "transparent"
+            exclusionMode: ExclusionMode.Normal
+            WlrLayershell.namespace: "quickshell:onScreenDisplay"
+            WlrLayershell.layer: WlrLayer.Overlay
+            color: "transparent"
 
-                anchors {
-                    top: true
-                }
-                mask: Region {
-                    item: osdValuesWrapper
-                }
-
-                implicitWidth: columnLayout.implicitWidth
-                implicitHeight: columnLayout.implicitHeight
-                visible: osdLoader.active
-
-                ColumnLayout {
-                    id: columnLayout
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Item {
-                        height: 1 // Prevent Wayland protocol error
-                    }
-                    Item {
-                        id: osdValuesWrapper
-                        // Extra space for shadow
-                        implicitHeight: true ? (osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2) : 0
-                        implicitWidth: osdValues.implicitWidth + Appearance.sizes.elevationMargin * 2
-                        clip: true
-
-                        MouseArea {
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onEntered: root.showOsdValues = false
-                        }
-
-                        Behavior on implicitHeight {
-                            NumberAnimation {
-                                duration: Appearance.animation.menuDecel.duration
-                                easing.type: Appearance.animation.menuDecel.type
-                            }
-                        }
-
-                        OsdValueIndicator {
-                            id: osdValues
-                            anchors.centerIn: parent 
-                            value: brightnessMonitor.brightness
-                            icon: "light_mode"
-                            rotateIcon: true
-                            name: qsTr("Brightness")
-                        }
-                    }
-                }
-
+            anchors.top: true
+            mask: Region {
+                item: osdValuesWrapper
             }
+
+            implicitWidth: Appearance.sizes.osdWidth
+            implicitHeight: columnLayout.implicitHeight
+            visible: osdLoader.active
+
+            ColumnLayout {
+                id: columnLayout
+                anchors.horizontalCenter: parent.horizontalCenter
+                Item {
+                    id: osdValuesWrapper
+                    // Extra space for shadow
+                    implicitHeight: osdValues.implicitHeight + Appearance.sizes.elevationMargin * 2
+                    implicitWidth: osdValues.implicitWidth
+                    clip: true
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: root.showOsdValues = false
+                    }
+
+                    Behavior on implicitHeight {
+                        NumberAnimation {
+                            duration: Appearance.animation.menuDecel.duration
+                            easing.type: Appearance.animation.menuDecel.type
+                        }
+                    }
+
+                    OsdValueIndicator {
+                        id: osdValues
+                        anchors.fill: parent
+                        anchors.margins: Appearance.sizes.elevationMargin
+                        value: root.brightnessMonitor?.brightness ?? 50
+                        icon: "light_mode"
+                        rotateIcon: true
+                        scaleIcon: true
+                        name: qsTr("Brightness")
+                    }
+                }
+            }
+
         }
-
     }
 
     IpcHandler {
@@ -131,7 +131,7 @@ Scope {
 
     GlobalShortcut {
         name: "osdBrightnessTrigger"
-        description: "Triggers brightness OSD on press"
+        description: qsTr("Triggers brightness OSD on press")
 
         onPressed: {
             root.triggerOsd()
@@ -139,7 +139,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdBrightnessHide"
-        description: "Hides brightness OSD on press"
+        description: qsTr("Hides brightness OSD on press")
 
         onPressed: {
             root.showOsdValues = false

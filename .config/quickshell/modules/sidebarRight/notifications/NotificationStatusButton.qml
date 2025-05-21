@@ -9,7 +9,7 @@ Button {
     property string buttonText: ""
     property string buttonIcon: ""
 
-    implicitHeight: 30
+    // implicitHeight: 30
     implicitWidth: contentRowLayout.implicitWidth + 10 * 2
     Behavior on implicitWidth {
         SmoothedAnimation {
@@ -25,19 +25,13 @@ Button {
         color: (button.down) ? Appearance.colors.colLayer2Active : (button.hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2)
 
         Behavior on color {
-            ColorAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
-
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
     }
     contentItem: RowLayout {
         id: contentRowLayout
-        // anchors.centerIn: parent
-        anchors.right: parent.right
+        anchors.centerIn: parent
         spacing: 0
         MaterialSymbol {
             text: buttonIcon

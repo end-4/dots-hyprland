@@ -14,10 +14,21 @@ Singleton {
     readonly property string interfaceRole: "interface"
     readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
-    property string systemPrompt: ConfigOptions.ai.systemPrompt ?? ""
+    property string systemPrompt: ConfigOptions?.ai?.systemPrompt ?? ""
     property var messages: []
+    property var messageIDs: []
+    property var messageByID: ({})
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
+
+    function idForMessage(message) {
+        // Generate a unique ID using timestamp and random value
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 8);
+    }
+
+    function safeModelName(modelName) {
+        return modelName.replace(/:/g, "_").replace(/\./g, "_")
+    }
 
     // Model properties:
     // - name: Name of the model
@@ -36,14 +47,14 @@ Singleton {
         "gemini-2.0-flash-search": {
             "name": "Gemini 2.0 Flash",
             "icon": "google-gemini-symbolic",
-            "description": "Online | Google's model\nGives up-to-date information with search.",
+            "description": qsTr("Online | Google's model\nGives up-to-date information with search."),
             "homepage": "https://aistudio.google.com",
             "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:streamGenerateContent",
             "model": "gemini-2.0-flash",
             "requires_key": true,
             "key_id": "gemini",
             "key_get_link": "https://aistudio.google.com/app/apikey",
-            "key_get_description": "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
+            "key_get_description": qsTr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
             "api_format": "gemini",
             "tools": [
                 {
@@ -54,25 +65,26 @@ Singleton {
         "openrouter-llama4-maverick": {
             "name": "Llama 4 Maverick",
             "icon": "ollama-symbolic",
-            "description": "Online via OpenRouter | Meta's model",
+            "description": StringUtils.format(qsTr("Online via {0} | {1}'s model"), "OpenRouter", "Meta"),
             "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "meta-llama/llama-4-maverick:free",
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
-            "key_get_description": "**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
+            "key_get_description": qsTr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
         },
         "openrouter-deepseek-r1": {
             "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
-            "description": "Online via OpenRouter | DeepSeek's reasoning model",
+            "description": StringUtils.format(qsTr("Online via {0} | {1}'s model"), "OpenRouter", "DeepSeek"),
             "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "deepseek/deepseek-r1:free",
             "requires_key": true,
             "key_id": "openrouter",
             "key_get_link": "https://openrouter.ai/settings/keys",
+            "key_get_description": qsTr("**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key"),
         },
     }
     property var modelList: Object.keys(root.models)
@@ -114,10 +126,11 @@ Singleton {
                     const dataJson = JSON.parse(data);
                     root.modelList = [...root.modelList, ...dataJson];
                     dataJson.forEach(model => {
-                        root.models[model] = {
+                        const safeModelName = root.safeModelName(model);
+                        root.models[safeModelName] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
-                            "description": `Local Ollama model: ${model}`,
+                            "description": StringUtils.format(qsTr("Local Ollama model | {0}"), model),
                             "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
@@ -141,13 +154,17 @@ Singleton {
             "thinking": false,
             "done": true,
         });
-        root.messages = [...root.messages, aiMessage];
+        const id = idForMessage(aiMessage);
+        root.messageIDs = [...root.messageIDs, id];
+        root.messageByID[id] = aiMessage;
     }
 
     function removeMessage(index) {
-        if (index < 0 || index >= messages.length) return;
-        root.messages.splice(index, 1);
-        root.messages = [...root.messages];
+        if (index < 0 || index >= messageIDs.length) return;
+        const id = root.messageIDs[index];
+        root.messageIDs.splice(index, 1);
+        root.messageIDs = [...root.messageIDs];
+        delete root.messageByID[id];
     }
 
     function addApiKeyAdvice(model) {
@@ -167,7 +184,7 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             PersistentStateManager.setState("ai.model", modelId);
-            if (feedback) root.addMessage("Model set to " + models[modelId].name, Ai.interfaceRole)
+            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), models[modelId].name, Ai.interfaceRole))
             if (models[modelId].requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[models[modelId].key_id] || root.apiKeys[models[modelId].key_id].length === 0)) {
@@ -185,7 +202,7 @@ Singleton {
     function setApiKey(key) {
         const model = models[currentModelId];
         if (!model.requires_key) {
-            root.addMessage(`${model.name} does not require an API key`, Ai.interfaceRole);
+            root.addMessage(StringUtils.format(qsTr("{0} does not require an API key"), model.name), Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
@@ -194,7 +211,7 @@ Singleton {
             return;
         }
         KeyringStorage.setNestedField(["apiKeys", model.key_id], key.trim());
-        root.addMessage("API key set for " + model.name, Ai.interfaceRole);
+        root.addMessage(StringUtils.format(qsTr("API key set for {0}"), model.name, Ai.interfaceRole));
     }
 
     function printApiKey() {
@@ -207,12 +224,13 @@ Singleton {
                 root.addMessage(StringUtils.format(qsTr("No API key set for {0}"), model.name), Ai.interfaceRole);
             }
         } else {
-            root.addMessage(`This model (${model.name}) does not require an API key`, Ai.interfaceRole);
+            root.addMessage(StringUtils.format(qsTr("{0} does not require an API key"), model.name), Ai.interfaceRole);
         }
     }
 
     function clearMessages() {
-        messages = [];
+        root.messageIDs = [];
+        root.messageByID = ({});
     }
 
     Process {
@@ -274,7 +292,8 @@ Singleton {
 
             /* Build endpoint, request data */
             const endpoint = (apiFormat === "gemini") ? buildGeminiEndpoint(model) : buildOpenAIEndpoint(model);
-            const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, root.messages) : buildOpenAIRequestData(model, root.messages);
+            const messageArray = root.messageIDs.map(id => root.messageByID[id]);
+            const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, messageArray) : buildOpenAIRequestData(model, messageArray);
 
             let requestHeaders = {
                 "Content-Type": "application/json",
@@ -288,7 +307,9 @@ Singleton {
                 "thinking": true,
                 "done": false,
             });
-            root.messages = [...root.messages, requester.message];
+            const id = idForMessage(requester.message);
+            root.messageIDs = [...root.messageIDs, id];
+            root.messageByID[id] = requester.message;
 
             /* Build header string for curl */ 
             let headerString = Object.entries(requestHeaders)
@@ -318,14 +339,14 @@ Singleton {
                 const dataJson = JSON.parse(requester.geminiBuffer);
                 const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
                 requester.message.content += responseContent;
-                const annotationSources = dataJson.candidates[0]?.groundingMetadata.groundingChunks?.map(chunk => {
+                const annotationSources = dataJson.candidates[0]?.groundingMetadata?.groundingChunks?.map(chunk => {
                     return {
                         "type": "url_citation",
                         "text": chunk?.web?.title,
                         "url": chunk?.web?.uri,
                     }
                 });
-                const annotations = dataJson.candidates[0]?.groundingMetadata.groundingSupports?.map(citation => {
+                const annotations = dataJson.candidates[0]?.groundingMetadata?.groundingSupports?.map(citation => {
                     return {
                         "type": "url_citation",
                         "start_index": citation.segment?.startIndex,
@@ -446,15 +467,7 @@ Singleton {
 
     function sendUserMessage(message) {
         if (message.length === 0) return;
-
-        const userMessage = aiMessageComponent.createObject(root, {
-            "role": "user",
-            "content": message,
-            "thinking": false,
-            "done": true,
-        });
-        root.messages = [...root.messages, userMessage];
-
+        root.addMessage(message, "user");
         requester.makeRequest();
     }
 

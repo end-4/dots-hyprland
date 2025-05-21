@@ -16,8 +16,13 @@ Slider {
     property real handleWidth: (slider.pressed ? 3 : 5) * scale
     property real handleHeight: 44 * scale
     property real handleLimit: slider.backgroundDotMargins * scale
+    property real trackHeight: 15 * scale
+    property color highlightColor: Appearance.m3colors.m3primary
+    property color trackColor: Appearance.m3colors.m3secondaryContainer
+    property color handleColor: Appearance.m3colors.m3onSecondaryContainer
 
     property real limitedHandleRangeWidth: (slider.availableWidth - handleWidth - slider.handleLimit * 2)
+    property string tooltipContent: `${Math.round(value * 100)}%`
     Layout.fillWidth: true
     from: 0
     to: 1
@@ -44,14 +49,15 @@ Slider {
 
     background: Item {
         anchors.verticalCenter: parent.verticalCenter
-        implicitHeight: 12 // Somehow binding this makes it fill height. Must be set with a constant like this
+        implicitHeight: trackHeight
         
         // Fill left
         Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             width: slider.handleLimit + slider.visualPosition * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
-            height: parent.height
-            color: Appearance.m3colors.m3primary
+            height: trackHeight
+            color: slider.highlightColor
             topLeftRadius: Appearance.rounding.full
             bottomLeftRadius: Appearance.rounding.full
             topRightRadius: Appearance.rounding.unsharpen
@@ -60,10 +66,11 @@ Slider {
 
         // Fill right
         Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             width: slider.handleLimit + (1 - slider.visualPosition) * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
-            height: parent.height
-            color: Appearance.m3colors.m3secondaryContainer
+            height: trackHeight
+            color: slider.trackColor
             topLeftRadius: Appearance.rounding.unsharpen
             bottomLeftRadius: Appearance.rounding.unsharpen
             topRightRadius: Appearance.rounding.full
@@ -78,7 +85,7 @@ Slider {
             width: slider.backgroundDotSize
             height: slider.backgroundDotSize
             radius: Appearance.rounding.full
-            color: Appearance.m3colors.m3onSecondaryContainer
+            color: slider.handleColor
         }
     }
 
@@ -89,7 +96,7 @@ Slider {
         implicitWidth: slider.handleWidth
         implicitHeight: slider.handleHeight
         radius: Appearance.rounding.full
-        color: Appearance.m3colors.m3onSecondaryContainer
+        color: slider.handleColor
 
         Behavior on implicitWidth {
             NumberAnimation {
@@ -101,7 +108,7 @@ Slider {
 
         StyledToolTip {
             extraVisibleCondition: slider.pressed
-            content: `${Math.round(slider.value * 100)}%`
+            content: slider.tooltipContent
         }
     }
 }

@@ -1,7 +1,10 @@
 //@ pragma UseQApplication
+//@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
+//@ pragma Env QS_NO_RELOAD_POPUP=1
 
 import "./modules/bar/"
 import "./modules/cheatsheet/"
+import "./modules/mediaControls/"
 import "./modules/notificationPopup/"
 import "./modules/onScreenDisplay/"
 import "./modules/overview/"
@@ -25,6 +28,7 @@ ShellRoot {
 
     Bar {}
     Cheatsheet {}
+    MediaControls {}
     NotificationPopup {}
     OnScreenDisplayBrightness {}
     OnScreenDisplayVolume {}

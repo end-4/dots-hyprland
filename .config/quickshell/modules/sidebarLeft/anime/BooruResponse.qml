@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "../"
 import QtQuick
 import QtQuick.Controls
@@ -93,7 +94,8 @@ Rectangle {
                     anchors.centerIn: parent
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colOnLayer2
-                    text: `Page ${root.responseData.page}`
+                    // text: `Page ${root.responseData.page}`
+                    text: StringUtils.format(qsTr("Page {0}"), root.responseData.page)
                 }
             }
         }
@@ -120,18 +122,10 @@ Rectangle {
             }
 
             Behavior on height {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
             Behavior on implicitHeight {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
             }
 
             RowLayout {

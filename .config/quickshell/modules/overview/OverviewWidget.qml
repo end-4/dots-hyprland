@@ -2,8 +2,9 @@ import "root:/"
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import Qt5Compat.GraphicalEffects
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -58,6 +59,16 @@ Item {
         color: Appearance.colors.colLayer0
         radius: Appearance.rounding.screenRounding * root.scale + 5 * 2
 
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            source: overviewBackground
+            anchors.fill: overviewBackground
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
+        }
+
         ColumnLayout {
             id: workspaceColumnLayout
 
@@ -78,7 +89,7 @@ Item {
                             property int colIndex: index
                             property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * ConfigOptions.overview.numOfCols + colIndex + 1
                             property color defaultWorkspaceColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
-                            property color hoveredWorkspaceColor: Appearance.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
+                            property color hoveredWorkspaceColor: ColorUtils.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
                             property color activeBorderColor: Appearance.m3colors.m3secondary
                             property bool hoveredWhileDragging: false
@@ -208,16 +219,5 @@ Item {
                 }
             }
         }
-    }
-
-    DropShadow {
-        z: -9999
-        anchors.fill: overviewBackground
-        horizontalOffset: 0
-        verticalOffset: 2
-        radius: Appearance.sizes.elevationMargin
-        samples: radius * 2 + 1 // Ideally should be 2 * radius + 1, see qt docs
-        color: Appearance.colors.colShadow
-        source: overviewBackground
     }
 }

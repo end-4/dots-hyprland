@@ -155,11 +155,7 @@ Item {
         anchors.fill: parent
 
         Behavior on opacity {
-            NumberAnimation {
-                duration: Appearance.animation.elementMove.duration
-                easing.type: Appearance.animation.elementMove.type
-                easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-            }
+            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
 
         ColumnLayout {

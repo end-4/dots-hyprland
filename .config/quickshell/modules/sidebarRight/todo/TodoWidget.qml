@@ -1,10 +1,11 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 Item {
     id: root
@@ -79,37 +80,33 @@ Item {
                     tabIndicator.enableIndicatorAnimation = true
                 }
             }
+
             Rectangle {
+                id: indicator
+                property int tabCount: root.tabButtonList.length
+                property real fullTabSize: root.width / tabCount;
+                property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+
+                implicitWidth: targetWidth
+                anchors {
+                    top: parent.top
+                    bottom: parent.bottom
+                }
+
+                x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
+
                 color: Appearance.m3colors.m3primary
                 radius: Appearance.rounding.full
-                z: 2
 
-                anchors.fill: parent
-                anchors.leftMargin: {
-                    const tabCount = root.tabButtonList.length
-                    const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
-                    const fullTabSize = tabBar.width / tabCount;
-                    return fullTabSize * currentTab + (fullTabSize - targetWidth) / 2;
-                }
-                anchors.rightMargin: {
-                    const tabCount = root.tabButtonList.length
-                    const targetWidth = tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
-                    const fullTabSize = tabBar.width / tabCount;
-                    return fullTabSize * (tabCount - currentTab - 1) + (fullTabSize - targetWidth) / 2;
-                }
-                Behavior on anchors.leftMargin { 
+                Behavior on x {
                     enabled: tabIndicator.enableIndicatorAnimation
-                    SmoothedAnimation {
-                        velocity: Appearance.animation.positionShift.velocity
-                    } 
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
-                Behavior on anchors.rightMargin { 
+
+                Behavior on implicitWidth {
                     enabled: tabIndicator.enableIndicatorAnimation
-                    SmoothedAnimation {
-                        velocity: Appearance.animation.positionShift.velocity
-                    } 
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                 }
-                
             }
         }
 
@@ -125,6 +122,7 @@ Item {
             Layout.topMargin: 10
             Layout.fillWidth: true
             Layout.fillHeight: true
+            spacing: 10
             clip: true
             currentIndex: currentTab
             onCurrentIndexChanged: {
@@ -173,31 +171,17 @@ Item {
             color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.m3colors.m3primaryContainer)
 
             Behavior on color {
-                ColorAnimation {
-                    duration: Appearance.animation.elementMove.duration
-                    easing.type: Appearance.animation.elementMove.type
-                    easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
-                }
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
-        }
 
-        DropShadow {
-            id: fabShadow
-            anchors.fill: fabBackground
-            source: fabBackground
-            horizontalOffset: 0
-            verticalOffset: fabButton.hovered ? 4 : 2
-            radius: fabButton.hovered ? Appearance.sizes.fabHoveredShadowRadius : Appearance.sizes.fabShadowRadius
-            samples: fabShadow.radius * 2 + 1
-            color: Appearance.transparentize(Appearance.m3colors.m3shadow, 0.55)
-            z: fabBackground.z - 1
-
-            Behavior on verticalOffset {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                }
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                source: fabBackground
+                anchors.fill: fabBackground
+                shadowEnabled: true
+                shadowColor: Appearance.colors.colShadow
+                shadowBlur: 0.6
+                shadowVerticalOffset: fabButton.hovered ? 4 : 2
             }
         }
 

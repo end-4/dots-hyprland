@@ -1,9 +1,11 @@
 import "root:/modules/common"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
@@ -126,7 +128,7 @@ Item {
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
                 Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
-                notificationSummaryText.text = `${notificationObject.summary} (copied)`
+                notificationSummaryText.text = String.format(qsTr("{0} (copied)"), notificationObject.summary)
             }
         }
         onDragStartedChanged: () => {
@@ -187,8 +189,18 @@ Item {
             height: notificationColumnLayout.implicitHeight
 
             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                Appearance.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
+                ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
             radius: Appearance.rounding.normal
+
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                source: notificationBackground
+                anchors.fill: notificationBackground
+                shadowEnabled: popup
+                shadowColor: Appearance.colors.colShadow
+                shadowVerticalOffset: 1
+                shadowBlur: 0.5
+            }
 
             Behavior on x {
                 enabled: enableAnimation
@@ -205,20 +217,6 @@ Item {
                     easing.type: Appearance.animation.elementMoveFast.type
                     easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
-            }
-        }
-
-        Loader {
-            active: popup
-            anchors.fill: notificationBackground
-            sourceComponent: DropShadow {
-                id: notificationShadow
-                source: notificationBackground
-                radius: 5
-                samples: radius * 2 + 1
-                color: Appearance.colors.colShadow
-                verticalOffset: 2
-                horizontalOffset: 0
             }
         }
     }
@@ -289,7 +287,7 @@ Item {
                                 }
                                 anchors.fill: parent
                                 color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                    Appearance.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
+                                    ColorUtils.mix(Appearance.m3colors.m3onSecondary, Appearance.m3colors.m3onSecondaryContainer, 0.1) :
                                     Appearance.m3colors.m3onSecondaryContainer
                                 iconSize: 27
                                 horizontalAlignment: Text.AlignHCenter
@@ -422,17 +420,11 @@ Item {
                                 background: Rectangle {
                                     anchors.fill: parent
                                     radius: Appearance.rounding.full
-                                    color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : Appearance.transparentize(Appearance.colors.colLayer2, 1))
+                                    color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : ColorUtils.transparentize(Appearance.colors.colLayer2, 1))
 
                                     Behavior on color {
-                                        ColorAnimation {
-                                            duration: Appearance.animation.elementMoveFast.duration
-                                            easing.type: Appearance.animation.elementMoveFast.type
-                                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                        }
-
+                                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                                     }
-
                                 }
 
                                 contentItem: MaterialSymbol {
