@@ -21,7 +21,6 @@ Item {
     property bool expanded: false
     property bool enableAnimation: true
     property int notificationListSpacing: 5
-    property bool ready: false
     property int defaultTimeoutValue: 5000
 
     property var notificationXAnimation: Appearance.animation.elementMoveEnter
@@ -29,18 +28,9 @@ Item {
     Layout.fillWidth: true
     clip: !popup
 
-    implicitHeight: ready ? notificationColumnLayout.implicitHeight + notificationListSpacing : 0
-    Behavior on implicitHeight {
-        enabled: enableAnimation
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveFast.duration
-            easing.type: Appearance.animation.elementMoveFast.type
-            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-        }
-    }
+    implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
 
     Component.onCompleted: {
-        root.ready = true
         if (popup) timeoutTimer.start()
     }
 
@@ -89,7 +79,6 @@ Item {
         onTriggered: {
             notificationRowWrapper.anchors.top = undefined
             notificationRowWrapper.anchors.bottom = root.bottom
-            implicitHeight = 0
             destroyTimer2.start()
         }
     }
@@ -99,7 +88,7 @@ Item {
         interval: Appearance.animation.elementMoveFast.duration
         repeat: false
         onTriggered: {
-            root.destroy()
+            Notifications.discardNotification(notificationObject.id);
         }
     }
 
@@ -109,7 +98,7 @@ Item {
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         onClicked: (mouse) => {
             if (mouse.button == Qt.MiddleButton) 
-                Notifications.discardNotification(notificationObject.id);
+                root.destroyWithAnimation()
             else if (mouse.button == Qt.RightButton) 
                 root.toggleExpanded()
         }
@@ -141,7 +130,7 @@ Item {
             if (mouse.button === Qt.LeftButton) {
                 if (notificationRowWrapper.x > dragConfirmThreshold) {
                     root.notificationXAnimation = Appearance.animation.elementMoveEnter
-                    Notifications.discardNotification(notificationObject.id);
+                    root.destroyWithAnimation()
                 } else {
                     // Animate back if not far enough
                     root.notificationXAnimation = Appearance.animation.elementMoveFast
@@ -583,7 +572,7 @@ Item {
                             (contentItem.implicitWidth + leftPadding + rightPadding)
 
                         onClicked: {
-                            Notifications.discardNotification(notificationObject.id);
+                            root.destroyWithAnimation()
                         }
 
                         contentItem: MaterialSymbol {

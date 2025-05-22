@@ -5,67 +5,14 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Widgets
 
 Item {
     id: root
-    property Component notifComponent: NotificationWidget {}
-    property list<NotificationWidget> notificationWidgetList: []
 
-    // Signal handlers to add/remove notifications
-    Connections {
-        target: Notifications
-        function onInitDone() {
-            // notificationRepeater.model = Notifications.list.slice().reverse()
-            Notifications.list.slice().reverse().forEach((notification) => {
-                const notif = root.notifComponent.createObject(columnLayout, { notificationObject: notification });
-                notificationWidgetList.push(notif)
-            })
-        }
-
-        function onNotify(notification) {
-            // notificationRepeater.model = [notification, ...notificationRepeater.model]
-            const notif = root.notifComponent.createObject(columnLayout, { notificationObject: notification });
-            notificationWidgetList.unshift(notif)
-
-            // Remove stuff from t he column, add back
-            for (let i = 0; i < notificationWidgetList.length; i++) {
-                if (notificationWidgetList[i].parent === columnLayout) {
-                    notificationWidgetList[i].parent = null;
-                }
-            }
-
-            // Add notification widgets to the column
-            for (let i = 0; i < notificationWidgetList.length; i++) {
-                if (notificationWidgetList[i].parent === null) {
-                    notificationWidgetList[i].parent = columnLayout;
-                }
-            }
-        }
-
-        function onDiscard(id) {
-            for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
-                const widget = notificationWidgetList[i];
-                if (widget && widget.notificationObject && widget.notificationObject.id === id) {
-                    widget.destroyWithAnimation();
-                    notificationWidgetList.splice(i, 1);
-                }
-            }
-        }
-
-        function onDiscardAll() {
-            for (let i = notificationWidgetList.length - 1; i >= 0; i--) {
-                const widget = notificationWidgetList[i];
-                if (widget && widget.notificationObject) {
-                    widget.destroyWithAnimation();
-                }
-            }
-            notificationWidgetList = [];
-        }
-    }
-
-    Flickable { // Scrollable window
-        id: flickable
+    ListView { // Scrollable window
+        id: listview
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -76,28 +23,82 @@ Item {
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {
-                width: flickable.width
-                height: flickable.height
+                width: listview.width
+                height: listview.height
                 radius: Appearance.rounding.normal
             }
         }
 
-        ColumnLayout { // Scrollable window content
-            id: columnLayout
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 0 // The widgets themselves have margins for spacing
+        add: Transition {
+            animations: [
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    properties: "opacity,scale",
+                    from: 0,
+                    to: 1,
+                }),
+            ]
+        }
 
-            // Notifications are added by the above signal handlers
+        addDisplaced: Transition {
+            animations: [
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    property: "y",
+                }),
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    properties: "opacity,scale",
+                    to: 1,
+                }),
+            ]
+        }
+        
+        displaced: Transition {
+            animations: [
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    property: "y",
+                }),
+            ]
+        }
+        move: Transition {
+            animations: [
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    property: "y",
+                }),
+            ]
+        }
+
+        remove: Transition {
+            animations: [
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    property: "x",
+                    to: listview.width,
+                }),
+                Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                    property: "opacity",
+                    to: 0,
+                })
+            ]
+        }
+
+        model: ScriptModel {
+            values: Notifications.list.slice().reverse()
+        }
+        delegate: NotificationWidget {
+            required property var modelData
+            id: notificationWidget
+            // anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent?.left
+            anchors.right: parent?.right
+            Layout.fillWidth: true
+            notificationObject: modelData
         }
     }
 
     // Placeholder when list is empty
     Item {
-        anchors.fill: flickable
+        anchors.fill: listview
 
         visible: opacity > 0
-        opacity: (root.notificationWidgetList.length === 0) ? 1 : 0
+        opacity: (Notifications.list.length === 0) ? 1 : 0
 
         Behavior on opacity {
             NumberAnimation {
@@ -137,9 +138,9 @@ Item {
             Layout.alignment: Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: `${notificationWidgetList.length} notification${notificationWidgetList.length > 1 ? "s" : ""}`
+            text: `${Notifications.list.length} notifications`
 
-            opacity: notificationWidgetList.length > 0 ? 1 : 0
+            opacity: Notifications.list.length > 0 ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
