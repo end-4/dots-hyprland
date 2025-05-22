@@ -20,14 +20,11 @@ Scope { // Scope
 
     Loader {
         id: sidebarLoader
-        active: false
-        onActiveChanged: {
-            GlobalStates.sidebarLeftOpen = sidebarLoader.active
-        }
+        active: GlobalStates.sidebarLeftOpen
         
         PanelWindow { // Window
             id: sidebarRoot
-            visible: sidebarLoader.active
+            visible: GlobalStates.sidebarLeftOpen
             
             property int selectedTab: 0
             property bool extend: false
@@ -35,7 +32,7 @@ Scope { // Scope
             property real sidebarWidth: sidebarRoot.extend ? Appearance.sizes.sidebarWidthExtended : Appearance.sizes.sidebarWidth
 
             function hide() {
-                sidebarLoader.active = false
+                GlobalStates.sidebarLeftOpen = false
             }
 
             exclusiveZone: sidebarRoot.pin ? sidebarWidth : 0
@@ -179,15 +176,15 @@ Scope { // Scope
         target: "sidebarLeft"
 
         function toggle(): void {
-            sidebarLoader.active = !sidebarLoader.active
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen
         }
 
         function close(): void {
-            sidebarLoader.active = false
+            GlobalStates.sidebarLeftOpen = false
         }
 
         function open(): void {
-            sidebarLoader.active = true
+            GlobalStates.sidebarLeftOpen = true
         }
     }
 
@@ -196,7 +193,7 @@ Scope { // Scope
         description: qsTr("Toggles left sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = !sidebarLoader.active;
+            GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
         }
     }
 
@@ -205,7 +202,7 @@ Scope { // Scope
         description: qsTr("Opens left sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = true;
+            GlobalStates.sidebarLeftOpen = true;
         }
     }
 
@@ -214,7 +211,7 @@ Scope { // Scope
         description: qsTr("Closes left sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = false;
+            GlobalStates.sidebarLeftOpen = false;
         }
     }
 
