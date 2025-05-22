@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Button {
+RippleButton {
     id: button
     property string buttonText: ""
     property string tooltipText: ""
@@ -18,18 +18,12 @@ Button {
         }
     }
 
-    PointingHandInteraction {}
+    background.anchors.fill: button
+    buttonRadius: Appearance.rounding.full
+    colBackground: Appearance.colors.colLayer2
+    colBackgroundHover: Appearance.colors.colLayer2Hover
+    colRipple: Appearance.colors.colLayer2Active
 
-    background: Rectangle {
-        anchors.fill: parent
-        radius: Appearance.rounding.full
-        color: (button.down) ? Appearance.colors.colLayer2Active : (button.hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2)
-
-        Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-        }
-
-    }
     contentItem: StyledText {
         text: buttonText
         horizontalAlignment: Text.AlignHCenter

@@ -11,7 +11,7 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Hyprland
 
-Button {
+RippleButton {
     id: root
     property var entry
     property bool entryShown: entry?.shown ?? true
@@ -33,6 +33,18 @@ Button {
     anchors.right: parent?.right
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
+    buttonRadius: Appearance.rounding.normal
+    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : 
+        ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : 
+        ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
+    colBackgroundHover: Appearance.colors.colLayer1Hover
+    colRipple: Appearance.colors.colLayer1Active
+
+    background {
+        anchors.fill: root
+        anchors.leftMargin: root.horizontalMargin
+        anchors.rightMargin: root.horizontalMargin
+    }
 
     PointingHandInteraction {}
     onClicked: {
@@ -51,16 +63,6 @@ Button {
             root.keyboardDown = false
             event.accepted = true;
         }
-    }
-
-    background: Rectangle {
-        anchors.fill: parent
-        anchors.leftMargin: root.horizontalMargin
-        anchors.rightMargin: root.horizontalMargin
-        radius: Appearance.rounding.normal
-        color: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : 
-            ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : 
-            ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
     }
 
     RowLayout {

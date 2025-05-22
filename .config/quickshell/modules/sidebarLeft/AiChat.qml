@@ -282,14 +282,8 @@ int main(int argc, char* argv[]) {
                 }
                 delegate: ApiCommandButton {
                     id: commandButton
+                    colBackground: suggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
 
-                    background: Rectangle {
-                        radius: Appearance.rounding.small
-                        color: suggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : 
-                            commandButton.down ? Appearance.colors.colLayer2Active : 
-                            commandButton.hovered ? Appearance.colors.colLayer2Hover :
-                            Appearance.colors.colLayer2
-                    }
                     contentItem: RowLayout {
                         spacing: 5
                         StyledText {
@@ -440,13 +434,15 @@ int main(int argc, char* argv[]) {
                     }
                 }
 
-                Button { // Send button
+                RippleButton { // Send button
                     id: sendButton
                     Layout.alignment: Qt.AlignTop
                     Layout.rightMargin: 5
                     implicitWidth: 40
                     implicitHeight: 40
+                    buttonRadius: Appearance.rounding.small
                     enabled: messageInputField.text.length > 0
+                    toggled: enabled
 
                     MouseArea {
                         anchors.fill: parent
@@ -455,17 +451,6 @@ int main(int argc, char* argv[]) {
                             const inputText = messageInputField.text
                             root.handleInput(inputText)
                             messageInputField.clear()
-                        }
-                    }
-
-                    background: Rectangle {
-                        radius: Appearance.rounding.small
-                        color: sendButton.enabled ? (sendButton.down ? Appearance.colors.colPrimaryActive : 
-                            sendButton.hovered ? Appearance.colors.colPrimaryHover :
-                            Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
-                            
-                        Behavior on color {
-                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
 
@@ -546,16 +531,6 @@ int main(int argc, char* argv[]) {
                         id: commandButton
                         property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                         buttonText: commandRepresentation
-                        background: Rectangle {
-                            radius: Appearance.rounding.small
-                            color: commandButton.down ? Appearance.colors.colLayer2Active : 
-                                commandButton.hovered ? Appearance.colors.colLayer2Hover :
-                                Appearance.colors.colLayer2
-                                
-                            Behavior on color {
-                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                            }
-                        }
                         onClicked: {
                             if(modelData.sendDirectly) {
                                 root.handleInput(commandRepresentation)

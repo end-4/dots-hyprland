@@ -46,8 +46,6 @@ Button {
     implicitWidth: imageObject.width
     implicitHeight: imageObject.height
 
-    // PointingHandInteraction {}
-
     background: Rectangle {
         implicitWidth: imageObject.width
         implicitHeight: imageObject.height
@@ -84,7 +82,7 @@ Button {
             }
         }
 
-        Button {
+        RippleButton {
             id: menuButton
             anchors.top: parent.top
             anchors.right: parent.right
@@ -92,17 +90,13 @@ Button {
             implicitHeight: 30
             implicitWidth: 30
 
-            PointingHandInteraction {}
+            buttonRadius: Appearance.rounding.full
+            colBackground: ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
+            colBackgroundHover: ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2)
+            colRipple: ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1)
 
             StyledToolTip {
                 content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\n${qsTr("Click for options")}`
-            }
-
-            background: Rectangle {
-                color: menuButton.down ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1) :
-                    menuButton.hovered ? ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2) :
-                    ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
-                radius: Appearance.rounding.full
             }
 
             contentItem: MaterialSymbol {

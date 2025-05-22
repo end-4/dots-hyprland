@@ -389,25 +389,18 @@ Item {
                                 }
                             }
 
-                            Button { // Expand button
+                            RippleButton { // Expand button
                                 Layout.alignment: Qt.AlignTop
                                 id: expandButton
                                 implicitWidth: 22
                                 implicitHeight: 22
 
-                                PointingHandInteraction{}
+                                buttonRadius: Appearance.rounding.full
+                                colBackgroundHover: Appearance.colors.colLayer2Hover
+                                colRipple: Appearance.colors.colLayer2Active
+                                
                                 onClicked: {
                                     root.toggleExpanded()
-                                }
-
-                                background: Rectangle {
-                                    anchors.fill: parent
-                                    radius: Appearance.rounding.full
-                                    color: (expandButton.down) ? Appearance.colors.colLayer2Active : (expandButton.hovered ? Appearance.colors.colLayer2Hover : ColorUtils.transparentize(Appearance.colors.colLayer2, 1))
-
-                                    Behavior on color {
-                                        animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                                    }
                                 }
 
                                 contentItem: MaterialSymbol {

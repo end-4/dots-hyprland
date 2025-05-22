@@ -81,11 +81,12 @@ Scope { // Scope
                     }
                 }
 
-                Button { // Close button
+                RippleButton { // Close button
                     id: closeButton
                     focus: cheatsheetRoot.visible
                     implicitWidth: 40
                     implicitHeight: 40
+                    buttonRadius: Appearance.rounding.full
                     anchors {
                         top: parent.top
                         right: parent.right
@@ -93,28 +94,15 @@ Scope { // Scope
                         rightMargin: 20
                     }
 
-                    PointingHandInteraction {}
                     onClicked: {
                         cheatsheetRoot.hide()
                     }
 
-                    background: null
-                    contentItem: Rectangle {
-                        anchors.fill: parent
-                        radius: Appearance.rounding.full
-                        color: closeButton.pressed ? Appearance.colors.colLayer0Active :
-                            closeButton.hovered ? Appearance.colors.colLayer0Hover :
-                            ColorUtils.transparentize(Appearance.colors.colLayer0, 1)
-                        
-                        Behavior on color {
-                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                        }
-
-                        MaterialSymbol {
-                            anchors.centerIn: parent
-                            font.pixelSize: Appearance.font.pixelSize.title
-                            text: "close"
-                        }
+                    contentItem: MaterialSymbol {
+                        anchors.centerIn: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        font.pixelSize: Appearance.font.pixelSize.title
+                        text: "close"
                     }
                 }
 

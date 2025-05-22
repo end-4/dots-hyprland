@@ -6,7 +6,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Notifications
 
-Button {
+RippleButton {
     id: button
     property string buttonText
     property string urgency
@@ -14,20 +14,10 @@ Button {
     implicitHeight: 30
     leftPadding: 15
     rightPadding: 15
-
-    // PointingHandInteraction {}
-
-    background: Rectangle {
-        radius: Appearance.rounding.small
-        color: (urgency == NotificationUrgency.Critical) ? 
-        (button.down ? Appearance.colors.colSecondaryContainerActive : 
-            button.hovered ? Appearance.colors.colSecondaryContainerHover : 
-            Appearance.m3colors.m3secondaryContainer) : 
-        (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
-            button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-            Appearance.m3colors.m3surfaceContainerHighest)
-
-    }
+    buttonRadius: Appearance.rounding.small
+    colBackground: (urgency == NotificationUrgency.Critical) ? Appearance.m3colors.m3secondaryContainer : Appearance.m3colors.m3surfaceContainerHighest
+    colBackgroundHover: (urgency == NotificationUrgency.Critical) ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSurfaceContainerHighestHover
+    colRipple: (urgency == NotificationUrgency.Critical) ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colSurfaceContainerHighestActive
 
     contentItem: StyledText {
         horizontalAlignment: Text.AlignHCenter

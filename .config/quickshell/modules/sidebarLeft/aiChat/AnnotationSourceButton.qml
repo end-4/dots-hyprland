@@ -11,7 +11,7 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Hyprland
 
-Button {
+RippleButton {
     id: root
     property string displayText
     property string url
@@ -27,6 +27,10 @@ Button {
     implicitHeight: 30
     leftPadding: (implicitHeight - faviconSize) / 2
     rightPadding: 10
+    buttonRadius: Appearance.rounding.full
+    colBackground: Appearance.m3colors.m3surfaceContainerHighest
+    colBackgroundHover: Appearance.colors.colSurfaceContainerHighestHover
+    colRipple: Appearance.colors.colSurfaceContainerHighestActive
 
     Process {
         id: faviconDownloadProcess
@@ -47,13 +51,6 @@ Button {
             Qt.openUrlExternally(url)
             Hyprland.dispatch("global quickshell:sidebarLeftClose")
         }
-    }
-
-    background: Rectangle {
-        radius: Appearance.rounding.full
-        color: (root.down ? Appearance.colors.colSurfaceContainerHighestActive : 
-            root.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-            Appearance.m3colors.m3surfaceContainerHighest)
     }
 
     contentItem: RowLayout {

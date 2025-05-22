@@ -115,7 +115,7 @@ Singleton {
         property color colLayer2Disabled: ColorUtils.mix(colLayer2, m3colors.m3background, 0.8);
         property color colLayer3Hover: ColorUtils.mix(colLayer3, colOnLayer3, 0.90);
         property color colLayer3Active: ColorUtils.mix(colLayer3, colOnLayer3, 0.80);
-        property color colPrimaryHover: ColorUtils.mix(m3colors.m3primary, colLayer1Hover, 0.85)
+        property color colPrimaryHover: ColorUtils.mix(m3colors.m3primary, colLayer1Hover, 0.87)
         property color colPrimaryActive: ColorUtils.mix(m3colors.m3primary, colLayer1Active, 0.7)
         property color colPrimaryContainerHover: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Hover, 0.7)
         property color colPrimaryContainerActive: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
@@ -137,6 +137,7 @@ Singleton {
         property int small: 12
         property int normal: 17
         property int large: 23
+        property int verylarge: 30
         property int full: 9999
         property int screenRounding: large
         property int windowRounding: 18
@@ -147,7 +148,7 @@ Singleton {
             property string main: "Rubik"
             property string title: "Gabarito"
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "JetBrains Mono NF"
+            property string iconNerd: "SpaceMono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
         }
@@ -225,10 +226,15 @@ Singleton {
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.standardDecel
             property int velocity: 850
-            property Component colorAnimation: Component {ColorAnimation {
+            property Component colorAnimation: Component { ColorAnimation {
                 duration: root.animation.elementMoveFast.duration
                 easing.type: root.animation.elementMoveFast.type
                 easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
+            }}
+            property Component numberAnimation: Component { NumberAnimation {
+                    duration: root.animation.elementMoveFast.duration
+                    easing.type: root.animation.elementMoveFast.type
+                    easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
             }}
         }
         property QtObject scroll: QtObject {

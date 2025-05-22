@@ -309,14 +309,8 @@ Item {
                 delegate: ApiCommandButton {
                     id: tagButton
 
-                    background: Rectangle {
-                        radius: Appearance.rounding.small
-                        color: tagSuggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : 
-                            tagButton.down ? Appearance.colors.colLayer2Active : 
-                            tagButton.hovered ? Appearance.colors.colLayer2Hover :
-                            Appearance.colors.colLayer2
-
-                    }
+                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
+                    
                     contentItem: RowLayout {
                         spacing: 5
                         StyledText {
@@ -487,13 +481,15 @@ Item {
                     }
                 }
 
-                Button { // Send button
+                RippleButton { // Send button
                     id: sendButton
                     Layout.alignment: Qt.AlignTop
                     Layout.rightMargin: 5
                     implicitWidth: 40
                     implicitHeight: 40
+                    buttonRadius: Appearance.rounding.small
                     enabled: tagInputField.text.length > 0
+                    toggled: enabled
 
                     MouseArea {
                         anchors.fill: parent
@@ -502,17 +498,6 @@ Item {
                             const inputText = tagInputField.text
                             root.handleInput(inputText)
                             tagInputField.clear()
-                        }
-                    }
-
-                    background: Rectangle {
-                        radius: Appearance.rounding.small
-                        color: sendButton.enabled ? (sendButton.down ? Appearance.colors.colPrimaryActive : 
-                            sendButton.hovered ? Appearance.colors.colPrimaryHover :
-                            Appearance.m3colors.m3primary) : Appearance.colors.colLayer2Disabled
-                            
-                        Behavior on color {
-                            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                         }
                     }
 
@@ -637,16 +622,8 @@ Item {
                         id: tagButton
                         property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                         buttonText: commandRepresentation
-                        background: Rectangle {
-                            radius: Appearance.rounding.small
-                            color: tagButton.down ? Appearance.colors.colLayer2Active : 
-                                tagButton.hovered ? Appearance.colors.colLayer2Hover :
-                                Appearance.colors.colLayer2
-                                
-                            Behavior on color {
-                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                            }
-                        }
+                        colBackground: Appearance.colors.colLayer2
+
                         onClicked: {
                             if(modelData.sendDirectly) {
                                 root.handleInput(commandRepresentation)

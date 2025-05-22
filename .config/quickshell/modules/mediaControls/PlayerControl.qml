@@ -25,24 +25,15 @@ Item { // Player instance
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
 
-    component TrackChangeButton: Button {
+    component TrackChangeButton: RippleButton {
         id: playPauseButton
         implicitWidth: 24
         implicitHeight: 24
 
         property var iconName
-        PointingHandInteraction {}
-
-        background: Rectangle {
-            color: playPauseButton.pressed ? blendedColors.colSecondaryContainerActive : 
-                playPauseButton.hovered ? blendedColors.colSecondaryContainerHover : 
-                ColorUtils.transparentize(blendedColors.colSecondaryContainer, 1)
-            radius: Appearance.rounding.full
-
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
-        }
+        colBackground: ColorUtils.transparentize(blendedColors.colSecondaryContainer, 1)
+        colBackgroundHover: blendedColors.colSecondaryContainerHover
+        colRipple: blendedColors.colSecondaryContainerActive
 
         contentItem: MaterialSymbol {
             iconSize: Appearance.font.pixelSize.huge
@@ -98,7 +89,7 @@ Item { // Player instance
         property color colPrimaryActive: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.colors.colPrimaryActive, artDominantColor), artDominantColor, 0.3)
         property color colSecondaryContainer: ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, artDominantColor, 0.3)
         property color colSecondaryContainerHover: ColorUtils.mix(Appearance.colors.colSecondaryContainerHover, artDominantColor, 0.3)
-        property color colSecondaryContainerActive: ColorUtils.mix(Appearance.colors.colSecondaryContainerActive, artDominantColor, 0.3)
+        property color colSecondaryContainerActive: ColorUtils.mix(Appearance.colors.colSecondaryContainerActive, artDominantColor, 0.5)
         property color colOnPrimary: ColorUtils.mix(ColorUtils.adaptToAccent(Appearance.m3colors.m3onPrimary, artDominantColor), artDominantColor, 0.5)
         property color colOnSecondaryContainer: ColorUtils.mix(Appearance.m3colors.m3onSecondaryContainer, artDominantColor, 0.2)
 
@@ -247,7 +238,7 @@ Item { // Player instance
                         }
                     }
 
-                    Button {
+                    RippleButton {
                         id: playPauseButton
                         anchors.right: parent.right
                         anchors.bottom: sliderRow.top
@@ -256,22 +247,10 @@ Item { // Player instance
                         implicitHeight: 44
                         onClicked: playerController.player.togglePlaying();
 
-                        PointingHandInteraction {}
-
-                        background: Rectangle {
-                            color: playerController.player?.isPlaying ? 
-                                (playPauseButton.pressed ? blendedColors.colPrimaryActive : 
-                                    playPauseButton.hovered ? blendedColors.colPrimaryHover : 
-                                    blendedColors.colPrimary) : 
-                                (playPauseButton.pressed ? blendedColors.colSecondaryContainerActive : 
-                                    playPauseButton.hovered ? blendedColors.colSecondaryContainerHover : 
-                                    blendedColors.colSecondaryContainer)
-                            radius: Appearance.rounding.full
-
-                            Behavior on color {
-                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-                            }
-                        }
+                        buttonRadius: Appearance.rounding.full
+                        colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
+                        colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
+                        colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
 
                         contentItem: MaterialSymbol {
                             iconSize: Appearance.font.pixelSize.huge

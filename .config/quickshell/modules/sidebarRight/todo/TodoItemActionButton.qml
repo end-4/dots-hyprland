@@ -5,7 +5,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Button {
+RippleButton {
     id: button
     property string buttonText: ""
     property string tooltipText: ""
@@ -13,24 +13,14 @@ Button {
     implicitHeight: 30
     implicitWidth: implicitHeight
 
-    PointingHandInteraction {}
-
     Behavior on implicitWidth {
         SmoothedAnimation {
             velocity: Appearance.animation.elementMove.velocity
         }
     }
 
-    background: Rectangle {
-        anchors.fill: parent
-        radius: Appearance.rounding.full
-        color: (button.down) ? Appearance.colors.colLayer2Active : (button.hovered ? Appearance.colors.colLayer2Hover : ColorUtils.transparentize(Appearance.colors.colLayer2, 1))
+    buttonRadius: Appearance.rounding.small
 
-        Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-        }
-
-    }
     contentItem: StyledText {
         text: buttonText
         horizontalAlignment: Text.AlignHCenter

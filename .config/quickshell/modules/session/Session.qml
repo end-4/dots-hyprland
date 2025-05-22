@@ -82,8 +82,11 @@ Scope {
                     }
                 }
 
-                RowLayout { // First row of buttons
-                    spacing: 15
+                GridLayout {
+                    columns: 4
+                    columnSpacing: 15
+                    rowSpacing: 15
+
                     SessionActionButton {
                         id: sessionLock
                         focus: sessionRoot.visible
@@ -123,10 +126,7 @@ Scope {
                         KeyNavigation.left: sessionLogout
                         KeyNavigation.down: sessionFirmwareReboot
                     }
-                }
 
-                RowLayout { // Second row of buttons
-                    spacing: 15
                     SessionActionButton {
                         id: sessionHibernate
                         buttonIcon: "downloading"

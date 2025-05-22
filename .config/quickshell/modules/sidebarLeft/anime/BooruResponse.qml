@@ -251,7 +251,7 @@ Rectangle {
             }
         }
 
-        Button { // Next page button
+        RippleButton { // Next page button
             id: button
             property string buttonText
             visible: root.responseData.page != "" && root.responseData.page > 0
@@ -261,18 +261,15 @@ Rectangle {
             leftPadding: 10
             rightPadding: 5
 
-            PointingHandInteraction {}
             onClicked: {
                 tagInputField.text = `${responseData.tags.join(" ")} ${parseInt(root.responseData.page) + 1}`
                 tagInputField.accept()
             }
 
-            background: Rectangle {
-                radius: Appearance.rounding.small
-                color: (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
-                    button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-                    Appearance.m3colors.m3surfaceContainerHighest)
-            }
+            buttonRadius: Appearance.rounding.small
+            colBackground: Appearance.m3colors.m3surfaceContainerHighest
+            colBackgroundHover: Appearance.colors.colSurfaceContainerHighestHover
+            colRipple: Appearance.colors.colSurfaceContainerHighestActive            
 
             contentItem: Item {
                 anchors.fill: parent

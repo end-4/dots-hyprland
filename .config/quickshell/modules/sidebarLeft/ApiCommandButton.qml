@@ -6,7 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 
-Button {
+RippleButton {
     id: button
     property string buttonText
 
@@ -14,14 +14,9 @@ Button {
     leftPadding: 10
     rightPadding: 10
 
-    PointingHandInteraction {}
-
-    background: Rectangle {
-        radius: Appearance.rounding.small
-        color: (button.down ? Appearance.colors.colSurfaceContainerHighestActive : 
-            button.hovered ? Appearance.colors.colSurfaceContainerHighestHover :
-            Appearance.m3colors.m3surfaceContainerHighest)
-    }
+    colBackground: Appearance.colors.colLayer2
+    colBackgroundHover: Appearance.colors.colLayer2Hover
+    colRipple: Appearance.colors.colLayer2Active
 
     contentItem: StyledText {
         horizontalAlignment: Text.AlignHCenter
