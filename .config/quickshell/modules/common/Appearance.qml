@@ -147,7 +147,7 @@ Singleton {
             property string main: "Rubik"
             property string title: "Gabarito"
             property string iconMaterial: "Material Symbols Rounded"
-            property string iconNerd: "SpaceMono NF"
+            property string iconNerd: "JetBrains Mono NF"
             property string monospace: "JetBrains Mono NF"
             property string reading: "Readex Pro"
         }
