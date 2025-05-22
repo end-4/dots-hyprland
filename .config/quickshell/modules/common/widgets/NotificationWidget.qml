@@ -131,7 +131,6 @@ Item {
             }
         }
         onCanceled: (mouse) => {
-            console.log("Exited")
             dragStarted = false
             if (notificationRowWrapper.x > dragConfirmThreshold) {
                 root.notificationXAnimation = Appearance.animation.elementMoveEnter
