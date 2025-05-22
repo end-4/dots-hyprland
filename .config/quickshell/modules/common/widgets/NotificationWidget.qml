@@ -66,15 +66,15 @@ Item {
             notificationBackground.anchors.left = undefined
             notificationBackground.anchors.right = undefined
             notificationBackground.anchors.fill = undefined
-            notificationRowWrapper.x = width + 5 * 2 // Account for shadow
-            notificationBackground.x = width + 5 * 2 // Account for shadow
+            notificationRowWrapper.x = width + (Appearance.sizes.hyprlandGapsOut + Appearance.sizes.elevationMargin) * 2 // Account for shadow
+            notificationBackground.x = width + (Appearance.sizes.hyprlandGapsOut + Appearance.sizes.elevationMargin) * 2 // Account for shadow
             destroyTimer1.start()
         }
     }
 
     Timer {
         id: destroyTimer1
-        interval: Appearance.animation.elementMoveFast.duration
+        interval: notificationXAnimation.duration
         repeat: false
         onTriggered: {
             notificationRowWrapper.anchors.top = undefined
