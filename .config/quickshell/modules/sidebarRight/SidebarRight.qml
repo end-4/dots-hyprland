@@ -19,50 +19,48 @@ Scope {
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
 
-    Loader {
-        id: sidebarLoader
-        active: false
-        onActiveChanged: {
-            GlobalStates.sidebarRightOpen = sidebarLoader.active
+    PanelWindow {
+        id: sidebarRoot
+        visible: GlobalStates.sidebarRightOpen
+
+        function hide() {
+            GlobalStates.sidebarRightOpen = false
         }
 
-        sourceComponent: PanelWindow {
-            id: sidebarRoot
-            visible: sidebarLoader.active
+        exclusiveZone: 0
+        implicitWidth: sidebarWidth
+        WlrLayershell.namespace: "quickshell:sidebarRight"
+        // Hyprland 0.49: Focus is always exclusive and setting this breaks mouse focus grab
+        // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+        color: "transparent"
 
-            function hide() {
-                sidebarLoader.active = false
+        anchors {
+            top: true
+            right: true
+            bottom: true
+        }
+
+        HyprlandFocusGrab {
+            id: grab
+            windows: [ sidebarRoot ]
+            active: GlobalStates.sidebarRightOpen
+            onCleared: () => {
+                if (!active) sidebarRoot.hide()
             }
+        }
 
-            exclusiveZone: 0
-            implicitWidth: sidebarWidth
-            WlrLayershell.namespace: "quickshell:sidebarRight"
-            // Hyprland 0.49: Focus is always exclusive and setting this breaks mouse focus grab
-            // WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            color: "transparent"
-
-            anchors {
-                top: true
-                right: true
-                bottom: true
-            }
-
-            HyprlandFocusGrab {
-                id: grab
-                windows: [ sidebarRoot ]
-                active: sidebarRoot.visible
-                onCleared: () => {
-                    if (!active) sidebarRoot.hide()
-                }
-            }
-
-            // Background
+        Loader {
+            id: sidebarContentLoader
+            active: GlobalStates.sidebarRightOpen
+            anchors.centerIn: parent
+            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+            height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+            
             Rectangle {
                 id: sidebarRightBackground
 
-                anchors.centerIn: parent
-                width: parent.width - Appearance.sizes.hyprlandGapsOut * 2
-                height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+                implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+                implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
 
@@ -82,11 +80,11 @@ Scope {
                     }
                 }
 
+                
                 ColumnLayout {
+                    spacing: sidebarPadding
                     anchors.fill: parent
                     anchors.margins: sidebarPadding
-                    
-                    spacing: sidebarPadding
 
                     RowLayout {
                         Layout.fillHeight: false
@@ -174,24 +172,25 @@ Scope {
                     }
                 }
             }
-
         }
+        
+
     }
 
     IpcHandler {
         target: "sidebarRight"
 
         function toggle(): void {
-            sidebarLoader.active = !sidebarLoader.active;
-            if(sidebarLoader.active) Notifications.timeoutAll();
+            GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+            if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
         }
 
         function close(): void {
-            sidebarLoader.active = false;
+            GlobalStates.sidebarRightOpen = false;
         }
 
         function open(): void {
-            sidebarLoader.active = true;
+            GlobalStates.sidebarRightOpen = true;
             Notifications.timeoutAll();
         }
     }
@@ -201,8 +200,8 @@ Scope {
         description: qsTr("Toggles right sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = !sidebarLoader.active;
-            if(sidebarLoader.active) Notifications.timeoutAll();
+            GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
+            if(GlobalStates.sidebarRightOpen) Notifications.timeoutAll();
         }
     }
     GlobalShortcut {
@@ -210,7 +209,7 @@ Scope {
         description: qsTr("Opens right sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = true;
+            GlobalStates.sidebarRightOpen = true;
             Notifications.timeoutAll();
         }
     }
@@ -219,7 +218,7 @@ Scope {
         description: qsTr("Closes right sidebar on press")
 
         onPressed: {
-            sidebarLoader.active = false;
+            GlobalStates.sidebarRightOpen = false;
         }
     }
 
