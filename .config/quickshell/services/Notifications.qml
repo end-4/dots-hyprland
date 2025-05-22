@@ -2,6 +2,7 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import "root:/modules/common"
+import "root:/"
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -13,6 +14,7 @@ Singleton {
     property var filePath: `${XdgDirectories.cache}/notifications/notifications.json`
     property var list: []
     property var popupList: []
+    property bool popupInhibited: GlobalStates?.sidebarRightOpen ?? false
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
     // can already contain higher IDs. This is for avoiding id collisions
     property int idOffset
@@ -54,7 +56,8 @@ Singleton {
                 "urgency": notification.urgency.toString(),
             }
 			root.list = [...root.list, newNotifObject];
-            root.popupList = [...root.popupList, newNotifObject];
+            // console.log(root.popupInhibited)
+            if (!root.popupInhibited) root.popupList = [...root.popupList, newNotifObject];
             root.notify(newNotifObject);
             notifFileView.setText(JSON.stringify(root.list, null, 2))
         }

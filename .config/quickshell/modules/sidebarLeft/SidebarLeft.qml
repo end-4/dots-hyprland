@@ -180,7 +180,6 @@ Scope { // Scope
 
         function toggle(): void {
             sidebarLoader.active = !sidebarLoader.active
-            if(sidebarLoader.active) Notifications.timeoutAll();
         }
 
         function close(): void {
@@ -189,7 +188,6 @@ Scope { // Scope
 
         function open(): void {
             sidebarLoader.active = true
-            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 
@@ -199,7 +197,6 @@ Scope { // Scope
 
         onPressed: {
             sidebarLoader.active = !sidebarLoader.active;
-            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 
@@ -209,7 +206,6 @@ Scope { // Scope
 
         onPressed: {
             sidebarLoader.active = true;
-            if(sidebarLoader.active) Notifications.timeoutAll();
         }
     }
 

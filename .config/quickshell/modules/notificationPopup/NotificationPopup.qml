@@ -12,101 +12,96 @@ import Quickshell.Hyprland
 Scope {
     id: notificationPopup
 
-    LazyLoader {
-        loading: true
-        PanelWindow {
-            id: root
-            visible: (Notifications.popupList.length > 0)
-            screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
+    PanelWindow {
+        id: root
+        visible: (Notifications.popupList.length > 0)
+        screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
 
-            WlrLayershell.namespace: "quickshell:notificationPopup"
-            WlrLayershell.layer: WlrLayer.Overlay
-            exclusiveZone: 0
+        WlrLayershell.namespace: "quickshell:notificationPopup"
+        WlrLayershell.layer: WlrLayer.Overlay
+        exclusiveZone: 0
 
-            anchors {
-                top: true
-                right: true
-                bottom: true
+        anchors {
+            top: true
+            right: true
+            bottom: true
+        }
+
+        mask: Region {
+            item: listview.contentItem
+        }
+
+        color: "transparent"
+        implicitWidth: Appearance.sizes.notificationPopupWidth
+
+        ListView { // Scrollable window
+            id: listview
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
+
+            add: Transition {
+                animations: [
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        properties: "opacity,scale",
+                        from: 0,
+                        to: 1,
+                    }),
+                ]
             }
 
-            mask: Region {
-                item: listview.contentItem
+            addDisplaced: Transition {
+                animations: [
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        property: "y",
+                    }),
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        properties: "opacity,scale",
+                        to: 1,
+                    }),
+                ]
+            }
+            
+            displaced: Transition {
+                animations: [
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        property: "y",
+                    }),
+                ]
+            }
+            move: Transition {
+                animations: [
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        property: "y",
+                    }),
+                ]
             }
 
-            color: "transparent"
-            implicitWidth: Appearance.sizes.notificationPopupWidth
-
-            ListView { // Scrollable window
-                id: listview
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
-
-                add: Transition {
-                    animations: [
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            properties: "opacity,scale",
-                            from: 0,
-                            to: 1,
-                        }),
-                    ]
-                }
-
-                addDisplaced: Transition {
-                    animations: [
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            property: "y",
-                        }),
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            properties: "opacity,scale",
-                            to: 1,
-                        }),
-                    ]
-                }
-                
-                displaced: Transition {
-                    animations: [
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            property: "y",
-                        }),
-                    ]
-                }
-                move: Transition {
-                    animations: [
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            property: "y",
-                        }),
-                    ]
-                }
-
-                remove: Transition {
-                    animations: [
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            property: "x",
-                            to: listview.width,
-                        }),
-                        Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                            property: "opacity",
-                            to: 0,
-                        })
-                    ]
-                }
-
-                model: ScriptModel {
-                    values: Notifications.popupList.slice().reverse()
-                }
-                delegate: NotificationWidget {
-                    required property var modelData
-                    id: notificationWidget
-                    popup: true
-                    anchors.left: parent?.left
-                    anchors.right: parent?.right
-                    notificationObject: modelData
-                }
+            remove: Transition {
+                animations: [
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        property: "x",
+                        to: listview.width,
+                    }),
+                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
+                        property: "opacity",
+                        to: 0,
+                    })
+                ]
             }
 
+            model: ScriptModel {
+                values: Notifications.popupList.slice().reverse()
+            }
+            delegate: NotificationWidget {
+                required property var modelData
+                id: notificationWidget
+                popup: true
+                anchors.left: parent?.left
+                anchors.right: parent?.right
+                notificationObject: modelData
+            }
         }
     }
-
 }
