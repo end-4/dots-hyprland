@@ -16,11 +16,8 @@ Scope {
         loading: true
         PanelWindow {
             id: root
-            visible: (columnLayout.children.length > 0 || notificationWidgetList.length > 0)
+            visible: (Notifications.popupList.length > 0)
             screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name)
-
-            property Component notifComponent: NotificationWidget {}
-            property list<NotificationWidget> notificationWidgetList: []
 
             WlrLayershell.namespace: "quickshell:notificationPopup"
             WlrLayershell.layer: WlrLayer.Overlay
