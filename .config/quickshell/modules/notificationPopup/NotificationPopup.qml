@@ -40,7 +40,7 @@ Scope {
                 id: listview
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCente
+                anchors.horizontalCenter: parent.horizontalCenter
                 implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
 
                 add: Transition {
