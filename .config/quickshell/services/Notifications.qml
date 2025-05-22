@@ -12,6 +12,7 @@ Singleton {
 	id: root
     property var filePath: `${XdgDirectories.cache}/notifications/notifications.json`
     property var list: []
+    property var popupList: []
     // Quickshell's notification IDs starts at 1 on each run, while saved notifications
     // can already contain higher IDs. This is for avoiding id collisions
     property int idOffset
@@ -53,6 +54,7 @@ Singleton {
                 "urgency": notification.urgency.toString(),
             }
 			root.list = [...root.list, newNotifObject];
+            root.popupList = [...root.popupList, newNotifObject];
             root.notify(newNotifObject);
             notifFileView.setText(JSON.stringify(root.list, null, 2))
         }
@@ -69,6 +71,7 @@ Singleton {
         if (notifServerIndex !== -1) {
             notifServer.trackedNotifications.values[notifServerIndex].dismiss()
         }
+        root.popupList = root.popupList.filter((notif) => notif.id !== id);
         root.discard(id);
     }
 
@@ -83,6 +86,8 @@ Singleton {
     }
 
     function timeoutNotification(id) {
+        const index = root.list.findIndex((notif) => notif.id === id);
+        root.popupList = root.popupList.filter((notif) => notif.id !== id);
         root.timeout(id);
     }
 
@@ -90,6 +95,7 @@ Singleton {
         root.list.forEach((notif) => {
             root.timeout(notif.id);
         })
+        root.popupList = []
     }
 
     function attemptInvokeAction(id, notifIdentifier) {
@@ -100,7 +106,7 @@ Singleton {
             action.invoke()
         } 
         // else console.log("Notification not found in server: " + id)
-        root.discard(id);
+        // root.discard(id);
     }
 
     function triggerListChange() {
