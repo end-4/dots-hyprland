@@ -1,5 +1,8 @@
 .pragma library
 
+/**
+ * @type {{[key: string]: string}}
+ */
 const substitutions = {
     "code-url-handler": "visual-studio-code",
     "Code": "visual-studio-code",
@@ -13,6 +16,10 @@ const substitutions = {
     "zen": "zen-browser",
     "": "image-missing"
 }
+
+/**
+ * @type {{[key: string]: string}}
+ */
 const regexSubstitutions = [
     {
         "regex": "/^steam_app_(\\d+)$/",
@@ -20,11 +27,18 @@ const regexSubstitutions = [
     }
 ]
 
-
+/**
+ * @param { string } iconName 
+ * @returns { boolean }
+ */
 function iconExists(iconName) {
     return false; // TODO: Make this work without Gtk
 }
 
+/**
+ * @param { string } str 
+ * @returns { string }
+ */
 function substitute(str) {
     // Normal substitutions
     if (substitutions[str])
@@ -47,6 +61,10 @@ function substitute(str) {
     return str;
 }
 
+/**
+ * @param { string | undefined } str 
+ * @returns { string } 
+ */
 function noKnowledgeIconGuess(str) {
     if (!str) return "image-missing";
 

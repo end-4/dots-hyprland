@@ -1,5 +1,8 @@
 
-
+/**
+ * @param { string } summary 
+ * @returns { string }
+ */
 function findSuitableMaterialSymbol(summary = "") {
     const defaultType = 'chat';
     if(summary.length === 0) return defaultType;
@@ -49,6 +52,10 @@ function findSuitableMaterialSymbol(summary = "") {
 //         return messageTime.format(userOptions.time.dateFormat);
 // }
 
+/**
+ * @param { number | string | Date } timestamp 
+ * @returns { string }
+ */
 const getFriendlyNotifTimeString = (timestamp) => {
     const messageTime = new Date(timestamp);
     const now = new Date();
