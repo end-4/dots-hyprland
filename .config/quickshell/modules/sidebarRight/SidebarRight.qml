@@ -26,7 +26,7 @@ Scope {
             GlobalStates.sidebarRightOpen = sidebarLoader.active
         }
 
-        PanelWindow {
+        sourceComponent: PanelWindow {
             id: sidebarRoot
             visible: sidebarLoader.active
 
