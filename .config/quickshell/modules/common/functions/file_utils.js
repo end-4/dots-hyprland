@@ -1,5 +1,5 @@
 /**
- * Trims fthe File protocol off the input string
+ * Trims the File protocol off the input string
  * @param {string} str
  * @returns {string}
  */
