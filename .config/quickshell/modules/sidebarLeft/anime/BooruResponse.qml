@@ -274,18 +274,27 @@ Rectangle {
                     Appearance.m3colors.m3surfaceContainerHighest)
             }
 
-            contentItem: RowLayout {
-                spacing: 0
-                StyledText {
-                    Layout.alignment: Text.AlignVCenter
-                    text: "Next page"
-                    color: Appearance.m3colors.m3onSurface
-                }
-                MaterialSymbol {
-                    Layout.alignment: Text.AlignVCenter
-                    iconSize: Appearance.font.pixelSize.larger
-                    color: Appearance.m3colors.m3onSurface
-                    text: "chevron_right"
+            contentItem: Item {
+                anchors.fill: parent
+                implicitHeight: nextPageRow.implicitHeight
+                implicitWidth: nextPageRow.implicitWidth
+
+                RowLayout {
+                    id: nextPageRow
+                    anchors.centerIn: parent
+                    spacing: 0
+                    StyledText {
+                        Layout.alignment: Qt.AlignVCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: "Next page"
+                        color: Appearance.m3colors.m3onSurface
+                    }
+                    MaterialSymbol {
+                        Layout.alignment: Qt.AlignVCenter
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: Appearance.m3colors.m3onSurface
+                        text: "chevron_right"
+                    }
                 }
             }
         }
