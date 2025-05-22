@@ -56,7 +56,7 @@ Scope {
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
             
-            Rectangle {
+            sourceComponent: Rectangle {
                 id: sidebarRightBackground
 
                 implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
