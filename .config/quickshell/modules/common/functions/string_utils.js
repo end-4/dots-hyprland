@@ -21,7 +21,7 @@ function getDomain(url) {
 }
 
 /**
- * Returns the base path of the passed in url or null
+ * Returns the base url of the passed in url or null
  * @param { string } url 
  * @returns { string | null } 
  */
@@ -31,7 +31,7 @@ function getBaseUrl(url) {
 }
 
 /**
- * Escapes single quotes
+ * Escapes single quotes in shell commands
  * @param { string } str 
  * @returns { string }
  */
@@ -43,7 +43,7 @@ function shellSingleQuoteEscape(str) {
 }
 
 /**
- * Splits markdown Blocks
+ * Splits markdown blocks into three different types: text, think, and code.
  * @param { string } markdown 
  */
 function splitMarkdownBlocks(markdown) {
