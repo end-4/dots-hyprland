@@ -17,7 +17,6 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: statusRow.top
-        contentHeight: columnLayout.height
 
         clip: true
         layer.enabled: true
