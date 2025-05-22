@@ -79,15 +79,6 @@ Item {
         onTriggered: {
             notificationRowWrapper.anchors.top = undefined
             notificationRowWrapper.anchors.bottom = root.bottom
-            destroyTimer2.start()
-        }
-    }
-
-    Timer {
-        id: destroyTimer2
-        interval: Appearance.animation.elementMoveFast.duration
-        repeat: false
-        onTriggered: {
             Notifications.discardNotification(notificationObject.id);
         }
     }
@@ -139,6 +130,20 @@ Item {
                 }
             }
         }
+        onCanceled: (mouse) => {
+            console.log("Exited")
+            dragStarted = false
+            if (notificationRowWrapper.x > dragConfirmThreshold) {
+                root.notificationXAnimation = Appearance.animation.elementMoveEnter
+                root.destroyWithAnimation()
+            } else {
+                // Animate back if not far enough
+                root.notificationXAnimation = Appearance.animation.elementMoveFast
+                notificationRowWrapper.x = 0
+                notificationBackground.x = 0
+            }
+        }
+
         onPositionChanged: (mouse) => {
             if (mouse.buttons & Qt.LeftButton) {
                 let dx = mouse.x - startX
@@ -161,11 +166,9 @@ Item {
     Item {
         id: notificationBackgroundWrapper
 
-        // anchors.fill: parent
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        // anchors.top: parent.top
         anchors.topMargin: notificationListSpacing
         implicitHeight: notificationColumnLayout.implicitHeight + notificationListSpacing
 
@@ -175,7 +178,7 @@ Item {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             // anchors.top: parent.top
-            height: notificationColumnLayout.implicitHeight
+            implicitHeight: notificationColumnLayout.implicitHeight
 
             color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                 ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) : Appearance.colors.colLayer2
@@ -197,14 +200,6 @@ Item {
                     duration: root.notificationXAnimation.duration
                     easing.type: root.notificationXAnimation.type
                     easing.bezierCurve: root.notificationXAnimation.bezierCurve
-                }
-            }
-            Behavior on height {
-                enabled: enableAnimation
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                 }
             }
         }
