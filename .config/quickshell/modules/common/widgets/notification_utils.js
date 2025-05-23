@@ -20,6 +20,7 @@ function findSuitableMaterialSymbol(summary = "") {
         'config': 'reset_wrench',
         'update': 'update',
         'ai response': 'neurology',
+        'control': 'settings',
         'startswith:file': 'folder_copy', // Declarative startsWith check
     };
 
