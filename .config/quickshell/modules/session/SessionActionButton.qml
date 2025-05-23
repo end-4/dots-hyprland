@@ -16,9 +16,9 @@ RippleButton {
 
     buttonRadius: button.focus ? Appearance.rounding.full : Appearance.rounding.verylarge
     colBackground: button.keyboardDown ? Appearance.colors.colSecondaryContainerActive : 
-        button.focus ? Appearance.colors.colSecondaryContainerHover : 
+        button.focus ? Appearance.m3colors.m3tertiaryContainer : 
         Appearance.m3colors.m3secondaryContainer
-    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+    colBackgroundHover: Appearance.m3colors.m3tertiaryContainer
     colRipple: Appearance.colors.colSecondaryContainerActive
 
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -44,7 +44,7 @@ RippleButton {
         anchors.fill: parent
         color: Appearance.colors.colOnLayer0
         horizontalAlignment: Text.AlignHCenter
-        iconSize: 40
+        iconSize: 45
         text: buttonIcon
     }
 
