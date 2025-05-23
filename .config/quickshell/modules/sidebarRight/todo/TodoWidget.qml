@@ -167,7 +167,7 @@ Item {
         background: Rectangle {
             id: fabBackground
             anchors.fill: parent
-            radius: Appearance.rounding.small
+            radius: Appearance.rounding.normal
             color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.m3colors.m3primaryContainer)
 
             Behavior on color {
