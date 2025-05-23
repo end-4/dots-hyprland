@@ -13,6 +13,7 @@ Button {
     property bool toggled
     property string buttonText
     property real buttonRadius: Appearance?.rounding?.small ?? 4
+    property real buttonRadiusPressed: buttonRadius
     property int rippleDuration: 1200
 
     property color colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
@@ -29,6 +30,19 @@ Button {
             colBackground)) : colBackground
     property color rippleColor: root.toggled ? colRippleToggled : colRipple
 
+    function startRipple(x, y) {
+        const stateY = buttonBackground.y;
+        rippleAnim.x = x;
+        rippleAnim.y = y - stateY;
+
+        const dist = (ox,oy) => ox*ox + oy*oy
+        const stateEndY = stateY + buttonBackground.height
+        rippleAnim.radius = Math.sqrt(Math.max(dist(0, stateY), dist(0, stateEndY), dist(width, stateY), dist(width, stateEndY)))
+
+        rippleFadeAnim.complete();
+        rippleAnim.restart();
+    }
+
     component RippleAnim: NumberAnimation {
         duration: rippleDuration
         easing.type: Appearance.animation.elementMoveEnter.type
@@ -39,23 +53,17 @@ Button {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onPressed: (event) => { 
+            root.down = true
             const {x,y} = event
-            const stateY = buttonBackground.y;
-            rippleAnim.x = x;
-            rippleAnim.y = y - stateY;
-
-            const dist = (ox,oy) => ox*ox + oy*oy
-            const stateEndY = stateY + buttonBackground.height
-            rippleAnim.radius = Math.sqrt(Math.max(dist(0, stateY), dist(0, stateEndY), dist(width, stateY), dist(width, stateEndY)))
-
-            rippleFadeAnim.complete();
-            rippleAnim.restart();
+            startRipple(x, y)
         }
         onReleased: (event) => {
+            root.down = false
             root.click() // Because the MouseArea already consumed the event
             rippleFadeAnim.restart();
         }
         onCanceled: (event) => {
+            root.down = false
             rippleFadeAnim.restart();
         }
     }
@@ -101,7 +109,7 @@ Button {
 
     background: Rectangle {
         id: buttonBackground
-        radius: root.buttonRadius
+        radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
         implicitHeight: 50
 
         color: root.buttonColor
