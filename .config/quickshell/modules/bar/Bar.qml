@@ -2,6 +2,7 @@ import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -120,16 +121,27 @@ Scope {
                             anchors.fill: parent
                             spacing: 10
 
-                            Rectangle {
+                            RippleButton { // Left sidebar button
                                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
                                 Layout.leftMargin: Appearance.rounding.screenRounding
                                 Layout.fillWidth: false
+                                property real buttonPadding: 5
+                                implicitWidth: distroIcon.width + buttonPadding * 2
+                                implicitHeight: distroIcon.height + buttonPadding * 2
                                 
-                                // Layout.fillHeight: true
-                                radius: Appearance.rounding.full
-                                color: (barLeftSideMouseArea.pressed || GlobalStates.sidebarLeftOpen) ? Appearance.colors.colLayer1Active : barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
-                                implicitWidth: distroIcon.width + 5*2
-                                implicitHeight: distroIcon.height + 5*2
+                                buttonRadius: Appearance.rounding.full
+                                colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                                colBackgroundHover: Appearance.colors.colLayer1Hover
+                                colRipple: Appearance.colors.colLayer1Active
+                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                                toggled: GlobalStates.sidebarLeftOpen
+                                    property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+
+                                onPressed: {
+                                    Hyprland.dispatch('global quickshell:sidebarLeftToggle')
+                                }
 
                                 CustomIcon {
                                     id: distroIcon
@@ -295,13 +307,30 @@ Scope {
                             spacing: 5
                             layoutDirection: Qt.RightToLeft
                     
-                            Rectangle {
+                            RippleButton { // Right sidebar button
+                                id: rightSidebarButton
                                 Layout.margins: 4
                                 Layout.rightMargin: Appearance.rounding.screenRounding
                                 Layout.fillHeight: true
                                 implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
-                                radius: Appearance.rounding.full
-                                color: (barRightSideMouseArea.pressed || GlobalStates.sidebarRightOpen) ? Appearance.colors.colLayer1Active : barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : "transparent"
+                                buttonRadius: Appearance.rounding.full
+                                colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
+                                colBackgroundHover: Appearance.colors.colLayer1Hover
+                                colRipple: Appearance.colors.colLayer1Active
+                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
+                                colRippleToggled: Appearance.colors.colSecondaryContainerActive
+                                toggled: GlobalStates.sidebarRightOpen
+                                property color colText: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer0
+
+                                Behavior on colText {
+                                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                                }
+
+                                onPressed: {
+                                    Hyprland.dispatch('global quickshell:sidebarRightToggle')
+                                }
+
                                 RowLayout {
                                     id: indicatorsRowLayout
                                     anchors.centerIn: parent
@@ -322,7 +351,7 @@ Scope {
                                         MaterialSymbol {
                                             text: "volume_off"
                                             iconSize: Appearance.font.pixelSize.larger
-                                            color: Appearance.colors.colOnLayer0
+                                            color: rightSidebarButton.colText
                                         }
                                     }
                                     Revealer {
@@ -339,7 +368,7 @@ Scope {
                                         MaterialSymbol {
                                             text: "mic_off"
                                             iconSize: Appearance.font.pixelSize.larger
-                                            color: Appearance.colors.colOnLayer0
+                                            color: rightSidebarButton.colText
                                         }
                                     }
                                     MaterialSymbol {
@@ -352,12 +381,12 @@ Scope {
                                             "signal_wifi_0_bar"
                                         ) : "signal_wifi_off"
                                         iconSize: Appearance.font.pixelSize.larger
-                                        color: Appearance.colors.colOnLayer0
+                                        color: rightSidebarButton.colText
                                     }
                                     MaterialSymbol {
                                         text: Bluetooth.bluetoothConnected ? "bluetooth_connected" : Bluetooth.bluetoothEnabled ? "bluetooth" : "bluetooth_disabled"
                                         iconSize: Appearance.font.pixelSize.larger
-                                        color: Appearance.colors.colOnLayer0
+                                        color: rightSidebarButton.colText
                                     }
                                 }
                             }
