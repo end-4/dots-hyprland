@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 CONFIG_DIR="$XDG_CONFIG_HOME/ags"
+CACHE_DIR="$XDG_CACHE_HOME/ags"
 
-THUMBNAIL_DIR="/tmp/mpvpaper_thumbnails"
 CUSTOM_DIR="$XDG_CONFIG_HOME/hypr/custom"
 RESTORE_SCRIPT_DIR="$CUSTOM_DIR/scripts"
 RESTORE_SCRIPT="$RESTORE_SCRIPT_DIR/__restore_video_wallpaper.sh"
 
 VIDEO_OPTS="no-audio loop hwdec=auto scale=bilinear interpolation=no video-sync=display-resample panscan=1.0 video-scale-x=1.0 video-scale-y=1.0 video-align-x=0.5 video-align-y=0.5"
 
-mkdir -p "$THUMBNAIL_DIR"
 mkdir -p "$RESTORE_SCRIPT_DIR"
 
 is_video() {
@@ -19,8 +19,8 @@ is_video() {
 }
 
 kill_existing_mpvpaper() {
-    # Abort all mpvpapers' instance
-    pkill -f -9 mpvpaper || true
+	# Abort all mpvpapers' instance
+	pkill -f -9 mpvpaper || true
 }
 
 create_restore_script() {
@@ -34,8 +34,8 @@ create_restore_script() {
 pkill -f -9 mpvpaper
 
 for monitor in \$(hyprctl monitors -j | jq -r '.[] | .name'); do
-    mpvpaper -o "$VIDEO_OPTS" "\$monitor" "$video_path" &
-    sleep 0.1
+	mpvpaper -o "$VIDEO_OPTS" "\$monitor" "$video_path" &
+	sleep 0.1
 done
 EOF
 
@@ -94,12 +94,17 @@ switch() {
 			sleep 0.1
 		done
 
-		# We take the first frame of video to colorgen
-		thumbnail="$THUMBNAIL_DIR/$(basename "$imgpath").jpg"
+		# We take the first frame of video to colorgen and swww
+		thumbnail="$CACHE_DIR"/user/generated/mpvpaper_thumbnail.jpg
 		ffmpeg -y -i "$imgpath" -vframes 1 "$thumbnail" 2>/dev/null
 
 		if [ -f "$thumbnail" ]; then
+			# Apply swww wallpaper using the thumbnail
+			swww img "$thumbnail" --transition-step 100 --transition-fps 120 \
+				--transition-type grow --transition-angle 30 --transition-duration 1 \
+				--transition-pos "$cursorposx, $cursorposy_inverted"
 			"$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$thumbnail" --apply --smart
+
 			create_restore_script "$video_path" 
 		else
 			echo "Cannot create image to colorgen"
@@ -128,6 +133,6 @@ elif [[ "$1" ]]; then
 else
 	# Select and set image (hyprland)
 
-    cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
+	cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
 	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
