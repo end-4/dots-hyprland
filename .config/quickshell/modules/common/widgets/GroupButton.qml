@@ -17,11 +17,12 @@ Button {
     property var altAction
     property real baseWidth: 40
     property real baseHeight: 40
-    property real clickedWidth: 60
-    property real clickedHeight: 40
-    property int clickIndex: parent?.clickIndex ?? -1
+    property real clickedWidth: baseWidth + 20
+    property real clickedHeight: baseHeight
+    property var parentGroup: root.parent
+    property int clickIndex: parentGroup?.clickIndex ?? -1
 
-    Layout.fillWidth: (clickIndex - 1 <= parent.children.indexOf(button) && parent.children.indexOf(button) <= clickIndex + 1)
+    Layout.fillWidth: (clickIndex - 1 <= parentGroup.children.indexOf(button) && parentGroup.children.indexOf(button) <= clickIndex + 1)
     implicitWidth: button.down ? clickedWidth : baseWidth
     implicitHeight: button.down ? clickedHeight : baseHeight
     
@@ -35,15 +36,27 @@ Button {
 
     property color colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
     property color colBackgroundHover: Appearance.colors.colLayer1Hover
+    property color colBackgroundActive: Appearance.colors.colLayer1Active
     property color colBackgroundToggled: Appearance.m3colors.m3primary
     property color colBackgroundToggledHover: Appearance.colors.colPrimaryHover
+    property color colBackgroundToggledActive: Appearance.colors.colPrimaryActive
 
     property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property color color: root.enabled ? (root.toggled ? 
-        (root.hovered ? colBackgroundToggledHover : 
+        (root.down ? colBackgroundToggledActive : 
+            root.hovered ? colBackgroundToggledHover : 
             colBackgroundToggled) :
-        (root.hovered ? colBackgroundHover : 
+        (root.down ? colBackgroundActive : 
+            root.hovered ? colBackgroundHover : 
             colBackground)) : colBackground
+
+    onDownChanged: {
+        if (button.down) {
+            if (button.parent.clickIndex !== undefined) {
+                button.parent.clickIndex = parent.children.indexOf(button)
+            }
+        }
+    }
 
     MouseArea {
         anchors.fill: parent

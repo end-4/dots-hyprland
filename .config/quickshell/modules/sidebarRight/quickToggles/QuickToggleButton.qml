@@ -17,14 +17,6 @@ GroupButton {
     buttonRadius: Math.min(baseHeight, baseWidth) / 2
     buttonRadiusPressed: Appearance?.rounding?.small
 
-    onDownChanged: {
-        if (button.down) {
-            if (button.parent.clickIndex !== undefined) {
-                button.parent.clickIndex = parent.children.indexOf(button)
-            }
-        }
-    }
-
     contentItem: MaterialSymbol {
         anchors.centerIn: parent
         iconSize: Appearance.font.pixelSize.larger
