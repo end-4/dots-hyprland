@@ -293,7 +293,7 @@ Item {
             }
         }
 
-        Flow { // Tag suggestions
+        FlowButtonGroup { // Tag suggestions
             id: tagSuggestions
             visible: root.suggestionList.length > 0 && tagInputField.text.length > 0
             property int selectedIndex: 0

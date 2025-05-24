@@ -267,11 +267,10 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        Flow { // Suggestions
+        FlowButtonGroup { // Suggestions
             id: suggestions
             visible: root.suggestionList.length > 0 && messageInputField.text.length > 0
             property int selectedIndex: 0
-            property int clickIndex: -1
             Layout.fillWidth: true
             spacing: 5
 
