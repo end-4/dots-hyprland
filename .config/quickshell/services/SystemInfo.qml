@@ -12,6 +12,7 @@ Singleton {
     property string username: "user"
 
     Timer {
+        triggeredOnStart: true
         interval: 1
         running: true
         repeat: false
