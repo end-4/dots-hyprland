@@ -233,6 +233,7 @@ Rectangle {
             }
             delegate: RowLayout {
                 id: imageRow
+                required property var modelData
                 property var rowHeight: modelData.height
                 spacing: root.imageSpacing
 
@@ -242,6 +243,7 @@ Rectangle {
                         required property var modelData
                         imageData: modelData
                         rowHeight: imageRow.rowHeight
+                        imageRadius: imageRow.modelData.images.length == 1 ? 50 : Appearance.rounding.normal
                         manualDownload: ["danbooru", "waifu.im"].includes(root.responseData.provider)
                         previewDownloadPath: root.previewDownloadPath
                         downloadPath: root.downloadPath

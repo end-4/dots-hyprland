@@ -25,6 +25,7 @@ Button {
     property string fileName: decodeURIComponent((imageData.file_url).substring((imageData.file_url).lastIndexOf('/') + 1))
     property string filePath: `${root.previewDownloadPath}/${root.fileName}`
     property int maxTagStringLineLength: 50
+    property real imageRadius: Appearance.rounding.small
 
     property bool showActions: false
     Process {
@@ -43,13 +44,13 @@ Button {
     }
 
     padding: 0
-    implicitWidth: imageObject.width
-    implicitHeight: imageObject.height
+    implicitWidth: root.rowHeight * modelData.aspect_ratio
+    implicitHeight: root.rowHeight
 
     background: Rectangle {
-        implicitWidth: imageObject.width
-        implicitHeight: imageObject.height
-        radius: Appearance.rounding.small
+        implicitWidth: root.rowHeight * modelData.aspect_ratio
+        implicitHeight: root.rowHeight
+        radius: imageRadius
         color: Appearance.colors.colLayer2
     }
 
@@ -59,21 +60,21 @@ Button {
         Image {
             id: imageObject
             anchors.fill: parent
-            sourceSize.width: root.rowHeight * modelData.aspect_ratio
-            sourceSize.height: root.rowHeight
-            fillMode: Image.PreserveAspectFit
-            source: modelData.preview_url
             width: root.rowHeight * modelData.aspect_ratio
             height: root.rowHeight
             visible: opacity > 0
             opacity: status === Image.Ready ? 1 : 0
+            fillMode: Image.PreserveAspectFit
+            source: modelData.preview_url
+            sourceSize.width: root.rowHeight * modelData.aspect_ratio
+            sourceSize.height: root.rowHeight
 
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
-                    width: imageObject.width
-                    height: imageObject.height
-                    radius: Appearance.rounding.small
+                    width: root.rowHeight * modelData.aspect_ratio
+                    height: root.rowHeight
+                    radius: imageRadius
                 }
             }
 
@@ -86,9 +87,10 @@ Button {
             id: menuButton
             anchors.top: parent.top
             anchors.right: parent.right
-            anchors.margins: 8
-            implicitHeight: 30
-            implicitWidth: 30
+            property real buttonSize: 30
+            anchors.margins: Math.max(root.imageRadius - buttonSize / 2, 8)
+            implicitHeight: buttonSize
+            implicitWidth: buttonSize
 
             buttonRadius: Appearance.rounding.full
             colBackground: ColorUtils.transparentize(Appearance.m3colors.m3surface, 0.3)
