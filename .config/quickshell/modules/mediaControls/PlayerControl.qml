@@ -18,7 +18,6 @@ import Quickshell.Hyprland
 Item { // Player instance
     id: playerController
     required property MprisPlayer player
-    // property var artUrl: player?.metadata["xesam:url"] || player?.metadata["mpris:artUrl"] || player?.trackArtUrl
     property var artUrl: player?.trackArtUrl
     property color artDominantColor: Appearance.m3colors.m3secondaryContainer
 
