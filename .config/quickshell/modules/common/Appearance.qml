@@ -259,7 +259,8 @@ Singleton {
     sizes: QtObject {
         property real barHeight: 40
         property real barCenterSideModuleWidth: 360
-        property real barPreferredSideSectionWidth: 400
+        property real barCenterSideModuleWidthShortened: 280
+        property real barShortenScreenWidth: 1200 // Bar will be shortened if screen width is at most this value
         property real sidebarWidth: 460
         property real sidebarWidthExtended: 750
         property real osdWidth: 200

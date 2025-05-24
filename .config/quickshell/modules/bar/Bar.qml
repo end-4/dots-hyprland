@@ -17,7 +17,6 @@ Scope {
     id: bar
 
     readonly property int barHeight: Appearance.sizes.barHeight
-    readonly property int barCenterSideModuleWidth: Appearance.sizes.barCenterSideModuleWidth
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: ConfigOptions.bar.showBackground
 
@@ -26,11 +25,14 @@ Scope {
 
         PanelWindow { // Bar window
             id: barRoot
+            screen: modelData
 
             property ShellScreen modelData
             property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
+            property bool useShortenedForm: Appearance.sizes.barShortenScreenWidth >= screen.width
+            readonly property int centerSideModuleWidth: useShortenedForm ? 
+                Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
 
-            screen: modelData
             WlrLayershell.namespace: "quickshell:bar"
             implicitHeight: barHeight + Appearance.rounding.screenRounding
             exclusiveZone: showBarBackground ? barHeight : (barHeight - 4)
@@ -160,6 +162,7 @@ Scope {
                             }
 
                             ActiveWindow {
+                                visible: !barRoot.useShortenedForm
                                 Layout.rightMargin: Appearance.rounding.screenRounding
                                 Layout.fillWidth: true
                                 bar: barRoot
@@ -174,7 +177,7 @@ Scope {
                     spacing: 8
 
                     RowLayout {
-                        Layout.preferredWidth: barCenterSideModuleWidth
+                        Layout.preferredWidth: barRoot.centerSideModuleWidth
                         spacing: 4
                         Layout.fillHeight: true
                         implicitWidth: 350
@@ -209,7 +212,7 @@ Scope {
                     }
 
                     RowLayout {
-                        Layout.preferredWidth: barCenterSideModuleWidth
+                        Layout.preferredWidth: barRoot.centerSideModuleWidth
                         Layout.fillHeight: true
                         spacing: 4
 
@@ -219,6 +222,7 @@ Scope {
                         }
 
                         UtilButtons {
+                            visible: !barRoot.useShortenedForm
                             Layout.alignment: Qt.AlignVCenter
                         }
 
@@ -393,6 +397,7 @@ Scope {
 
                             SysTray {
                                 bar: barRoot
+                                visible: !barRoot.useShortenedForm
                                 Layout.fillWidth: false
                                 Layout.fillHeight: true
                             }
