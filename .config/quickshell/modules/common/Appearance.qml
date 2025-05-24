@@ -166,6 +166,7 @@ Singleton {
     }
 
     animationCurves: QtObject {
+        readonly property list<real> expressiveFastSpatial: [0.42, 1.67, 0.21, 0.90, 1, 1] // Default, 350ms
         readonly property list<real> expressiveDefaultSpatial: [0.38, 1.21, 0.22, 1.00, 1, 1] // Default, 500ms
         readonly property list<real> expressiveEffects: [0.34, 0.80, 0.34, 1.00, 1, 1] // Default, 200ms
         readonly property list<real> emphasized: [0.05, 0, 2 / 15, 0.06, 1 / 6, 0.4, 5 / 24, 0.82, 0.25, 1, 1, 1]
@@ -237,6 +238,18 @@ Singleton {
                     duration: root.animation.elementMoveFast.duration
                     easing.type: root.animation.elementMoveFast.type
                     easing.bezierCurve: root.animation.elementMoveFast.bezierCurve
+            }}
+        }
+
+        property QtObject clickBounce: QtObject {
+            property int duration: 250
+            property int type: Easing.BezierSpline
+            property list<real> bezierCurve: animationCurves.expressiveFastSpatial
+            property int velocity: 850
+            property Component numberAnimation: Component { NumberAnimation {
+                    duration: root.animation.clickBounce.duration
+                    easing.type: root.animation.clickBounce.type
+                    easing.bezierCurve: root.animation.clickBounce.bezierCurve
             }}
         }
         property QtObject scroll: QtObject {

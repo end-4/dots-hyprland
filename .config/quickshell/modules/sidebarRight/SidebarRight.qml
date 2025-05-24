@@ -137,7 +137,7 @@ Scope {
                         Layout.fillHeight: false
                         radius: Appearance.rounding.full
                         color: Appearance.colors.colLayer1
-                        implicitWidth: sidebarQuickControlsRow.implicitWidth + 10
+                        width: 40 * sidebarQuickControlsRow.children.length + sidebarQuickControlsRow.spacing * (sidebarQuickControlsRow.children.length-1) + 10
                         implicitHeight: sidebarQuickControlsRow.implicitHeight + 10
                         
                         
@@ -146,13 +146,18 @@ Scope {
                             anchors.fill: parent
                             anchors.margins: 5
                             spacing: 5
+                            width: 40 * sidebarQuickControlsRow.children.length
+                            property int clickIndex: -1
+
+                            onClickIndexChanged: {
+                                console.log("Click index changed to: " + clickIndex);
+                            }
 
                             NetworkToggle {}
                             BluetoothToggle {}
                             NightLight {}
                             GameMode {}
                             IdleInhibitor {}
-                            
                         }
                     }
 

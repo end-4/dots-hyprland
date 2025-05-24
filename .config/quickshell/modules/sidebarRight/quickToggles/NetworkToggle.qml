@@ -17,21 +17,12 @@ QuickToggleButton {
         Network.networkStrength > 20 ? "network_wifi_1_bar" :
         "signal_wifi_0_bar"
     ) : "signal_wifi_off"
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton | Qt.LeftButton
-        onClicked: (mouse) =>{
-            if (mouse.button === Qt.LeftButton) {
-                toggleNetwork.running = true
-            }
-            if (mouse.button === Qt.RightButton) {
-                Hyprland.dispatch(`exec ${ConfigOptions.apps.network}`)
-                Hyprland.dispatch("global quickshell:sidebarRightClose")
-            }
-        }
-        hoverEnabled: false
-        propagateComposedEvents: true
-        cursorShape: Qt.PointingHandCursor 
+    onClicked: {
+        toggleNetwork.running = true
+    }
+    altAction: () => {
+        Hyprland.dispatch(`exec ${ConfigOptions.apps.network}`)
+        Hyprland.dispatch("global quickshell:sidebarRightClose")
     }
     Process {
         id: toggleNetwork

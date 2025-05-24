@@ -14,7 +14,10 @@ Button {
     property string buttonText
     property real buttonRadius: Appearance?.rounding?.small ?? 4
     property real buttonRadiusPressed: buttonRadius
+    property real buttonEffectiveRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property int rippleDuration: 1200
+    property bool rippleEnabled: true
+    property var altAction
 
     property color colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
     property color colBackgroundHover: Appearance.colors.colLayer1Hover
@@ -52,18 +55,26 @@ Button {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         onPressed: (event) => { 
+            if(event.button === Qt.RightButton) {
+                if (root.altAction) root.altAction();
+                return;
+            }
             root.down = true
+            if (!root.rippleEnabled) return;
             const {x,y} = event
             startRipple(x, y)
         }
         onReleased: (event) => {
             root.down = false
             root.click() // Because the MouseArea already consumed the event
+            if (!root.rippleEnabled) return;
             rippleFadeAnim.restart();
         }
         onCanceled: (event) => {
             root.down = false
+            if (!root.rippleEnabled) return;
             rippleFadeAnim.restart();
         }
     }
@@ -109,7 +120,7 @@ Button {
 
     background: Rectangle {
         id: buttonBackground
-        radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
+        radius: root.buttonEffectiveRadius
         implicitHeight: 50
 
         color: root.buttonColor
@@ -122,7 +133,7 @@ Button {
             maskSource: Rectangle {
                 width: buttonBackground.width
                 height: buttonBackground.height
-                radius: buttonBackground.radius
+                radius: root.buttonEffectiveRadius
             }
         }
 
