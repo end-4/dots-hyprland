@@ -528,8 +528,7 @@ Item {
                         onClicked: {
                             Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
                             copyIcon.text = "inventory"
-                            copyIconTimer.stop()
-                            copyIconTimer.start()
+                            copyIconTimer.restart()
                         }
 
                         Timer {
