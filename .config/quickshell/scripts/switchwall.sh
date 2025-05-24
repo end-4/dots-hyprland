@@ -34,8 +34,13 @@ check_and_prompt_upscale() {
 
     if command -v identify &>/dev/null && [ -f "$img" ]; then
         local img_width img_height
-        img_width=$(identify -format "%w" "$img" 2>/dev/null)
-        img_height=$(identify -format "%h" "$img" 2>/dev/null)
+        if is_video "$img"; then # Not check resolution for videos, just let em pass
+            img_width=$min_width_desired
+            img_height=$min_height_desired
+        else
+            img_width=$(identify -format "%w" "$img" 2>/dev/null)
+            img_height=$(identify -format "%h" "$img" 2>/dev/null)
+        fi
         if [[ "$img_width" -lt "$min_width_desired" || "$img_height" -lt "$min_height_desired" ]]; then
             action=$(notify-send "Upscale?" \
                 "Image resolution (${img_width}x${img_height}) is lower than screen resolution (${min_width_desired}x${min_height_desired})" \
