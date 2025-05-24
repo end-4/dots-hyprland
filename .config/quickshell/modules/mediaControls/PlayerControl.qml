@@ -26,7 +26,6 @@ Item { // Player instance
     implicitHeight: widgetHeight
 
     component TrackChangeButton: RippleButton {
-        id: playPauseButton
         implicitWidth: 24
         implicitHeight: 24
 
