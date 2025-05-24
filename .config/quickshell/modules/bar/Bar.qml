@@ -12,6 +12,7 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Services.Mpris
+import Quickshell.Services.UPower
 
 Scope {
     id: bar
@@ -237,7 +238,7 @@ Scope {
                         }
 
                         Battery {
-                            visible: barRoot.useShortenedForm < 2
+                            visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                             Layout.alignment: Qt.AlignVCenter
                         }
 
