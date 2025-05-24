@@ -227,7 +227,7 @@ Singleton {
         property QtObject elementMoveFast: QtObject {
             property int duration: 200
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.standardDecel
+            property list<real> bezierCurve: animationCurves.expressiveEffects
             property int velocity: 850
             property Component colorAnimation: Component { ColorAnimation {
                 duration: root.animation.elementMoveFast.duration
@@ -260,12 +260,6 @@ Singleton {
         property QtObject menuDecel: QtObject {
             property int duration: 350
             property int type: Easing.OutExpo
-        }
-        property QtObject positionShift: QtObject {
-            property int duration: 300
-            property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.emphasized
-            property int velocity: 650
         }
     }
 
