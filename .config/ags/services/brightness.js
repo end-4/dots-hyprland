@@ -115,7 +115,7 @@ async function listDdcMonitorsSnBus() {
                     sn = line.split(':')[1].trim();
                     // Sometimes sn can be empty. In this cases let's relay on binary sn
                 } else if (line.startsWith('Binary') && !sn) {
-                    // Make the serial number upper case except for the leading '0x' since Hyperland
+                    // Make the serial number upper case except for the leading '0x' since Hyprland
                     // seems to use upper case for the rest of the string and ddcutil uses
                     // lower case for all the binary sn
                     sn = '0x'+line.split('(')[1].slice(2,-1).toUpperCase();
