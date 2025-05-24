@@ -29,9 +29,12 @@ Scope {
 
             property ShellScreen modelData
             property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
-            property bool useShortenedForm: Appearance.sizes.barShortenScreenWidth >= screen.width
-            readonly property int centerSideModuleWidth: useShortenedForm ? 
-                Appearance.sizes.barCenterSideModuleWidthShortened : Appearance.sizes.barCenterSideModuleWidth
+            property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 :
+                (Appearance.sizes.barShortenScreenWidthThreshold >= screen.width) ? 1 : 0
+            readonly property int centerSideModuleWidth: 
+                (useShortenedForm == 2) ? Appearance.sizes.barCenterSideModuleWidthHellaShortened :
+                (useShortenedForm == 1) ? Appearance.sizes.barCenterSideModuleWidthShortened : 
+                    Appearance.sizes.barCenterSideModuleWidth
 
             WlrLayershell.namespace: "quickshell:bar"
             implicitHeight: barHeight + Appearance.rounding.screenRounding
@@ -162,7 +165,7 @@ Scope {
                             }
 
                             ActiveWindow {
-                                visible: !barRoot.useShortenedForm
+                                visible: barRoot.useShortenedForm === 0
                                 Layout.rightMargin: Appearance.rounding.screenRounding
                                 Layout.fillWidth: true
                                 bar: barRoot
@@ -177,21 +180,26 @@ Scope {
                     spacing: 8
 
                     RowLayout {
+                        id: leftCenterGroup
                         Layout.preferredWidth: barRoot.centerSideModuleWidth
                         spacing: 4
                         Layout.fillHeight: true
                         implicitWidth: 350
 
                         Resources {
+                            alwaysShowAllResources: barRoot.useShortenedForm === 2
+                            Layout.fillWidth: barRoot.useShortenedForm === 2
                         }
 
                         Media {
+                            visible: barRoot.useShortenedForm < 2
                             Layout.fillWidth: true
                         }
 
                     }
 
                     RowLayout {
+                        id: middleCenterGroup
                         Layout.fillWidth: true
                         Layout.fillHeight: true
 
@@ -212,21 +220,24 @@ Scope {
                     }
 
                     RowLayout {
-                        Layout.preferredWidth: barRoot.centerSideModuleWidth
+                        id: rightCenterGroup
+                        Layout.preferredWidth: leftCenterGroup.width
                         Layout.fillHeight: true
                         spacing: 4
 
                         ClockWidget {
+                            showDate: barRoot.useShortenedForm < 2
                             Layout.alignment: Qt.AlignVCenter
                             Layout.fillWidth: true
                         }
 
                         UtilButtons {
-                            visible: !barRoot.useShortenedForm
+                            visible: barRoot.useShortenedForm === 0
                             Layout.alignment: Qt.AlignVCenter
                         }
 
                         Battery {
+                            visible: barRoot.useShortenedForm < 2
                             Layout.alignment: Qt.AlignVCenter
                         }
 
@@ -397,7 +408,7 @@ Scope {
 
                             SysTray {
                                 bar: barRoot
-                                visible: !barRoot.useShortenedForm
+                                visible: barRoot.useShortenedForm === 0
                                 Layout.fillWidth: false
                                 Layout.fillHeight: true
                             }

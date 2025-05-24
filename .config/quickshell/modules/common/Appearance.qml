@@ -260,7 +260,9 @@ Singleton {
         property real barHeight: 40
         property real barCenterSideModuleWidth: 360
         property real barCenterSideModuleWidthShortened: 280
-        property real barShortenScreenWidth: 1200 // Bar will be shortened if screen width is at most this value
+        property real barCenterSideModuleWidthHellaShortened: 190
+        property real barShortenScreenWidthThreshold: 1200 // Shorten if screen width is at most this value
+        property real barHellaShortenScreenWidthThreshold: 1000 // Shorten even more...
         property real sidebarWidth: 460
         property real sidebarWidthExtended: 750
         property real osdWidth: 200
