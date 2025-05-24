@@ -19,8 +19,7 @@ Singleton {
     property var previousCpuStats
 
 	Timer {
-        triggeredOnStart: true
-		interval: ConfigOptions?.resources?.updateInterval ?? 3000
+		interval: 1
         running: true 
         repeat: true
 		onTriggered: {
@@ -51,6 +50,7 @@ Singleton {
 
                 previousCpuStats = { total, idle }
             }
+            interval = ConfigOptions?.resources?.updateInterval ?? 3000
         }
 	}
 
