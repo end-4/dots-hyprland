@@ -109,17 +109,17 @@ Rectangle {
                     Item {
                         Layout.alignment: Qt.AlignVCenter
                         Layout.fillHeight: true
-                        implicitWidth: messageData.role == 'assistant' ? modelIcon.width : roleIcon.implicitWidth
-                        implicitHeight: messageData.role == 'assistant' ? modelIcon.height : roleIcon.implicitHeight
+                        implicitWidth: messageData?.role == 'assistant' ? modelIcon.width : roleIcon.implicitWidth
+                        implicitHeight: messageData?.role == 'assistant' ? modelIcon.height : roleIcon.implicitHeight
 
                         CustomIcon {
                             id: modelIcon
                             anchors.centerIn: parent
-                            visible: messageData.role == 'assistant' && Ai.models[messageData.model].icon
+                            visible: messageData?.role == 'assistant' && Ai.models[messageData?.model].icon
                             width: Appearance.font.pixelSize.large
                             height: Appearance.font.pixelSize.large
-                            source: messageData.role == 'assistant' ? Ai.models[messageData.model].icon :
-                                messageData.role == 'user' ? 'linux-symbolic' : 'desktop-symbolic'
+                            source: messageData?.role == 'assistant' ? Ai.models[messageData?.model].icon :
+                                messageData?.role == 'user' ? 'linux-symbolic' : 'desktop-symbolic'
                         }
                         ColorOverlay {
                             visible: modelIcon.visible
@@ -134,9 +134,9 @@ Rectangle {
                             visible: !modelIcon.visible
                             iconSize: Appearance.font.pixelSize.larger
                             color: Appearance.m3colors.m3onSecondaryContainer
-                            text: messageData.role == 'user' ? 'person' : 
-                                messageData.role == 'interface' ? 'settings' : 
-                                messageData.role == 'assistant' ? 'neurology' : 
+                            text: messageData?.role == 'user' ? 'person' : 
+                                messageData?.role == 'interface' ? 'settings' : 
+                                messageData?.role == 'assistant' ? 'neurology' : 
                                 'computer'
                         }
                     }
@@ -149,8 +149,8 @@ Rectangle {
                         font.pixelSize: Appearance.font.pixelSize.normal
                         font.weight: Font.DemiBold
                         color: Appearance.m3colors.m3onSecondaryContainer
-                        text: messageData.role == 'assistant' ? Ai.models[messageData.model].name :
-                            (messageData.role == 'user' && SystemInfo.username) ? SystemInfo.username :
+                        text: messageData?.role == 'assistant' ? Ai.models[messageData?.model].name :
+                            (messageData?.role == 'user' && SystemInfo.username) ? SystemInfo.username :
                             qsTr("Interface")
                     }
                 }
@@ -158,7 +158,7 @@ Rectangle {
 
             Button { // Not visible to model
                 id: modelVisibilityIndicator
-                visible: messageData.role == 'interface'
+                visible: messageData?.role == 'interface'
                 implicitWidth: 16
                 implicitHeight: 30
                 Layout.alignment: Qt.AlignVCenter
@@ -185,7 +185,7 @@ Rectangle {
                     buttonIcon: activated ? "inventory" : "content_copy"
 
                     onClicked: {
-                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(root.messageData.content)}'`)
+                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(root.messageData?.content)}'`)
                         copyButton.activated = true
                         copyIconTimer.restart()
                     }
@@ -205,7 +205,7 @@ Rectangle {
                 AiMessageControlButton {
                     id: editButton
                     activated: root.editing
-                    enabled: root.messageData.done
+                    enabled: root.messageData?.done
                     buttonIcon: "edit"
                     onClicked: {
                         root.editing = !root.editing
@@ -247,7 +247,7 @@ Rectangle {
             spacing: 0
             Repeater {
                 model: ScriptModel {
-                    values: StringUtils.splitMarkdownBlocks(root.messageData.content)
+                    values: StringUtils.splitMarkdownBlocks(root.messageData?.content)
                 }
                 delegate: Loader {
                     Layout.fillWidth: true
@@ -258,8 +258,8 @@ Rectangle {
                     property var editing: root.editing
                     property var renderMarkdown: root.renderMarkdown
                     property var enableMouseSelection: root.enableMouseSelection
-                    property bool thinking: root.messageData.thinking
-                    property bool done: root.messageData.done
+                    property bool thinking: root.messageData?.thinking
+                    property bool done: root.messageData?.done
                     property bool completed: modelData.completed ?? false
                     
                     source: modelData.type === "code" ? "MessageCodeBlock.qml" : 
@@ -278,7 +278,7 @@ Rectangle {
             Layout.alignment: Qt.AlignLeft
 
             Repeater {
-                model: root.messageData.annotationSources
+                model: root.messageData?.annotationSources
                 delegate: AnnotationSourceButton {
                     id: annotationButton
                     faviconDownloadPath: root.faviconDownloadPath
