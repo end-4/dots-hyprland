@@ -13,17 +13,24 @@ RippleButton {
     property string buttonIcon
     property string buttonText
     property bool keyboardDown: false
+    property real size: 120
 
-    buttonRadius: button.focus ? Appearance.rounding.full : Appearance.rounding.verylarge
+    buttonRadius: (button.focus || button.down) ? size / 2 : Appearance.rounding.verylarge
     colBackground: button.keyboardDown ? Appearance.colors.colSecondaryContainerActive : 
-        button.focus ? Appearance.m3colors.m3tertiaryContainer : 
+        button.focus ? Appearance.m3colors.m3primary : 
         Appearance.m3colors.m3secondaryContainer
-    colBackgroundHover: Appearance.m3colors.m3tertiaryContainer
-    colRipple: Appearance.colors.colSecondaryContainerActive
+    colBackgroundHover: Appearance.m3colors.m3primary
+    colRipple: Appearance.colors.colPrimaryActive
+    property color colText: (button.down || button.keyboardDown || button.focus || button.hovered) ?
+        Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
 
     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-    background.implicitHeight: 120
-    background.implicitWidth: 120
+    background.implicitHeight: size
+    background.implicitWidth: size
+
+    Behavior on buttonRadius {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
@@ -42,7 +49,7 @@ RippleButton {
     contentItem: MaterialSymbol {
         id: icon
         anchors.fill: parent
-        color: Appearance.colors.colOnLayer0
+        color: button.colText
         horizontalAlignment: Text.AlignHCenter
         iconSize: 45
         text: buttonIcon
