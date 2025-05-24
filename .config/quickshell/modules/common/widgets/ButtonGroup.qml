@@ -13,7 +13,7 @@ Rectangle {
     id: root
     default property alias content: rowLayout.data
     property real spacing: 5
-    property real padding: 5
+    property real padding: 0
     property int clickIndex: rowLayout.clickIndex
 
     property real contentWidth: {
