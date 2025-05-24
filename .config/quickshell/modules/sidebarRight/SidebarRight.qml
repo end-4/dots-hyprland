@@ -149,10 +149,6 @@ Scope {
                             width: 40 * sidebarQuickControlsRow.children.length
                             property int clickIndex: -1
 
-                            onClickIndexChanged: {
-                                console.log("Click index changed to: " + clickIndex);
-                            }
-
                             NetworkToggle {}
                             BluetoothToggle {}
                             NightLight {}
