@@ -181,7 +181,7 @@ Singleton {
         property QtObject elementMove: QtObject {
             property int duration: 500
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.emphasized
+            property list<real> bezierCurve: animationCurves.expressiveDefaultSpatial
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
