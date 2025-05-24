@@ -21,6 +21,8 @@ function findSuitableMaterialSymbol(summary = "") {
         'update': 'update',
         'ai response': 'neurology',
         'control': 'settings',
+        'upscale': 'compare',
+        'install': 'deployed_code_update',
         'startswith:file': 'folder_copy', // Declarative startsWith check
     };
 
