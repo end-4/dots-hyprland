@@ -16,7 +16,7 @@ Slider {
     property real handleMargins: (slider.pressed ? 0 : 2) * scale
     property real handleWidth: (slider.pressed ? 3 : 5) * scale
     property real handleHeight: 44 * scale
-    property real handleLimit: slider.backgroundDotMargins * scale
+    property real handleLimit: slider.backgroundDotMargins
     property real trackHeight: 30 * scale
     property color highlightColor: Appearance.m3colors.m3primary
     property color trackColor: Appearance.m3colors.m3secondaryContainer
