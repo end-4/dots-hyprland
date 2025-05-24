@@ -12,14 +12,16 @@ Slider {
     property real scale: 0.85
     property real backgroundDotSize: 4 * scale
     property real backgroundDotMargins: 4 * scale
-    property real handleMargins: (slider.pressed ? 3 : 6) * scale
+    // property real handleMargins: 0 * scale
+    property real handleMargins: (slider.pressed ? 0 : 2) * scale
     property real handleWidth: (slider.pressed ? 3 : 5) * scale
     property real handleHeight: 44 * scale
     property real handleLimit: slider.backgroundDotMargins * scale
-    property real trackHeight: 15 * scale
+    property real trackHeight: 30 * scale
     property color highlightColor: Appearance.m3colors.m3primary
     property color trackColor: Appearance.m3colors.m3secondaryContainer
     property color handleColor: Appearance.m3colors.m3onSecondaryContainer
+    property real trackRadius: Appearance.rounding.verysmall
 
     property real limitedHandleRangeWidth: (slider.availableWidth - handleWidth - slider.handleLimit * 2)
     property string tooltipContent: `${Math.round(value * 100)}%`
@@ -55,11 +57,11 @@ Slider {
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            width: slider.handleLimit + slider.visualPosition * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
+            width: slider.handleLimit * 2 + slider.visualPosition * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
             height: trackHeight
             color: slider.highlightColor
-            topLeftRadius: Appearance.rounding.full
-            bottomLeftRadius: Appearance.rounding.full
+            topLeftRadius: slider.trackRadius
+            bottomLeftRadius: slider.trackRadius
             topRightRadius: Appearance.rounding.unsharpen
             bottomRightRadius: Appearance.rounding.unsharpen
         }
@@ -68,13 +70,13 @@ Slider {
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            width: slider.handleLimit + (1 - slider.visualPosition) * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
+            width: slider.handleLimit * 2 + (1 - slider.visualPosition) * slider.limitedHandleRangeWidth - (slider.handleMargins + slider.handleWidth / 2)
             height: trackHeight
             color: slider.trackColor
             topLeftRadius: Appearance.rounding.unsharpen
             bottomLeftRadius: Appearance.rounding.unsharpen
-            topRightRadius: Appearance.rounding.full
-            bottomRightRadius: Appearance.rounding.full
+            topRightRadius: slider.trackRadius
+            bottomRightRadius: slider.trackRadius
         }
 
         // Dot at the end

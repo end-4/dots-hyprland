@@ -22,19 +22,10 @@ Item {
         anchors.fill: parent
         spacing: 10
 
-        Image {
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: source != ""
-            sourceSize.width: 38
-            sourceSize.height: 38
-            source: {
-                const icon = Icons.noKnowledgeIconGuess(root.node.properties["application.icon-name"]);
-                return Quickshell.iconPath(icon, "image-missing");
-            }
-        }
-
         ColumnLayout {
             Layout.fillWidth: true
+            spacing: 0
+
             RowLayout {
                 StyledText {
                     Layout.fillWidth: true
@@ -50,6 +41,17 @@ Item {
             }
 
             RowLayout {
+                Image {
+                    property real size: slider.trackHeight * 1.3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: source != ""
+                    sourceSize.width: size
+                    sourceSize.height: size
+                    source: {
+                        const icon = Icons.noKnowledgeIconGuess(root.node.properties["application.icon-name"]);
+                        return Quickshell.iconPath(icon, "image-missing");
+                    }
+                }
                 StyledSlider {
                     id: slider
                     value: root.node.audio.volume
