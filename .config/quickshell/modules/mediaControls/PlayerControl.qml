@@ -19,7 +19,11 @@ Item { // Player instance
     id: playerController
     required property MprisPlayer player
     property var artUrl: player?.trackArtUrl
+    property string artDownloadLocation: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/coverart`)
+    property string artFileName: Qt.md5(artUrl) + ".jpg"
+    property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: Appearance.m3colors.m3secondaryContainer
+    property bool downloaded: false
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
@@ -60,8 +64,27 @@ Item { // Player instance
             playerController.artDominantColor = Appearance.m3colors.m3secondaryContainer
             return;
         }
-        colorQuantizer.targetFile = playerController.artUrl // Yes this binding break is intentional
-        colorQuantizer.running = true
+        // console.log("PlayerControl: Art URL changed to", playerController.artUrl)
+        // console.log("Download cmd:", coverArtDownloader.command.join(" "))
+        playerController.downloaded = false
+        coverArtDownloader.running = true
+    }
+
+    Process { // Cover art downloader
+        id: coverArtDownloader
+        property string targetFile: playerController.artUrl
+        command: [ "bash", "-c", `[ -f ${artFilePath} ] || curl -sSL '${targetFile}' -o '${artFilePath}'` ]
+        stdout: SplitParser {
+            onRead: data => {
+                // console.log("Color quantizer output:", data)
+                playerController.artDominantColor = "#" + data
+            }
+        }
+        onExited: (exitCode, exitStatus) => {
+            colorQuantizer.targetFile = playerController.artUrl // Yes this binding break is intentional
+            colorQuantizer.running = true
+            playerController.downloaded = true
+        }
     }
 
     Process { // Average Color Runner
@@ -113,7 +136,7 @@ Item { // Player instance
             id: blurredArt
             anchors.fill: parent
             visible: true
-            source: playerController.artUrl
+            source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
             sourceSize.width: background.width
             sourceSize.height: background.height
             fillMode: Image.PreserveAspectCrop

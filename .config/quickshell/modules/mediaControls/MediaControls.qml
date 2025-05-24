@@ -88,6 +88,7 @@ Scope {
                     }
                     delegate: PlayerControl {
                         required property MprisPlayer modelData
+                        artDownloadLocation: root.baseCoverArtDir
                         player: modelData
                     }
                 }
