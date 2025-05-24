@@ -16,8 +16,8 @@ Button {
     property real buttonRadiusPressed: buttonRadius
     property var altAction
     property bool bounce: true
-    property real baseWidth: 40
-    property real baseHeight: 40
+    property real baseWidth: contentItem.implicitWidth + padding * 2
+    property real baseHeight: contentItem.implicitHeight + padding * 2
     property real clickedWidth: baseWidth + 20
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent
