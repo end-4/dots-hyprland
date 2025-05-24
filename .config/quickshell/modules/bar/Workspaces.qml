@@ -196,11 +196,7 @@ Item {
                                 Appearance.colors.colOnLayer1Inactive)
 
                         Behavior on opacity {
-                            NumberAnimation {
-                                duration: Appearance.animation.elementMoveFast.duration
-                                easing.type: Appearance.animation.elementMoveFast.type
-                                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                            }
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
                     }
@@ -223,32 +219,16 @@ Item {
                             implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
 
                             Behavior on opacity {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
                             Behavior on anchors.bottomMargin {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
                             Behavior on anchors.rightMargin {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
                             Behavior on implicitSize {
-                                NumberAnimation {
-                                    duration: Appearance.animation.elementMoveFast.duration
-                                    easing.type: Appearance.animation.elementMoveFast.type
-                                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                                }
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
                         }
                     }
