@@ -168,7 +168,7 @@ Rectangle {
                 MaterialSymbol {
                     id: notVisibleToModelText
                     anchors.centerIn: parent
-                    iconSize: Appearance.font.pixelSize.larger
+                    iconSize: Appearance.font.pixelSize.small
                     color: Appearance.colors.colSubtext
                     text: "visibility_off"
                 }
@@ -177,14 +177,26 @@ Rectangle {
                 }
             }
 
-            RowLayout {
+            ButtonGroup {
                 spacing: 5
 
                 AiMessageControlButton {
                     id: copyButton
-                    buttonIcon: "content_copy"
+                    buttonIcon: activated ? "inventory" : "content_copy"
+
                     onClicked: {
                         Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(root.messageData.content)}'`)
+                        copyButton.activated = true
+                        copyIconTimer.restart()
+                    }
+
+                    Timer {
+                        id: copyIconTimer
+                        interval: 1500
+                        repeat: false
+                        onTriggered: {
+                            copyButton.activated = false
+                        }
                     }
                     StyledToolTip {
                         content: qsTr("Copy")

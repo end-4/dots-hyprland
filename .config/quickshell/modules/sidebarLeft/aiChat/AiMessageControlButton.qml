@@ -7,14 +7,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 
-RippleButton {
+GroupButton {
     id: button
     property string buttonIcon
     property bool activated: false
     toggled: activated
 
-    implicitHeight: 30
-    implicitWidth: 30
+    baseWidth: height
 
     contentItem: MaterialSymbol {
         horizontalAlignment: Text.AlignHCenter
