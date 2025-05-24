@@ -198,6 +198,7 @@ Rectangle {
                             copyButton.activated = false
                         }
                     }
+                    
                     StyledToolTip {
                         content: qsTr("Copy")
                     }

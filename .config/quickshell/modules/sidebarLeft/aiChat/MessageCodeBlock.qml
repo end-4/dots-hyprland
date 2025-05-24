@@ -6,6 +6,7 @@ import "root:/modules/common/"
 import "root:/modules/common/widgets"
 import "../"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/file_utils.js" as FileUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -22,7 +23,7 @@ ColumnLayout {
     property bool renderMarkdown: parent?.renderMarkdown ?? true
     property bool enableMouseSelection: parent?.enableMouseSelection ?? false
     property var segmentContent: parent?.segmentContent ?? ({})
-    property var segmentLang: parent?.segmentLang ?? "plaintext"
+    property var segmentLang: parent?.segmentLang ?? "txt"
     property var messageData: parent?.messageData ?? {}
 
     property real codeBlockBackgroundRounding: Appearance.rounding.small
@@ -66,14 +67,51 @@ ColumnLayout {
 
             Item { Layout.fillWidth: true }
 
-            AiMessageControlButton {
-                id: copyCodeButton
-                buttonIcon: "content_copy"
-                onClicked: {
-                    Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segmentContent)}'`)
+            ButtonGroup {
+                AiMessageControlButton {
+                    id: copyCodeButton
+                    buttonIcon: activated ? "inventory" : "content_copy"
+
+                    onClicked: {
+                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segmentContent)}'`)
+                        copyCodeButton.activated = true
+                        copyIconTimer.restart()
+                    }
+
+                    Timer {
+                        id: copyIconTimer
+                        interval: 1500
+                        repeat: false
+                        onTriggered: {
+                            copyCodeButton.activated = false
+                        }
+                    }
+                    StyledToolTip {
+                        content: qsTr("Copy code")
+                    }
                 }
-                StyledToolTip {
-                    content: qsTr("Copy code")
+                AiMessageControlButton {
+                    id: saveCodeButton
+                    buttonIcon: activated ? "check" : "save"
+
+                    onClicked: {
+                        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${FileUtils.trimFileProtocol(XdgDirectories.downloads)}/code.${segmentLang || "txt"}'`)
+                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${FileUtils.trimFileProtocol(XdgDirectories.downloads)}/code.${segmentLang || "txt"}'`)
+                        saveCodeButton.activated = true
+                        saveIconTimer.restart()
+                    }
+
+                    Timer {
+                        id: saveIconTimer
+                        interval: 1500
+                        repeat: false
+                        onTriggered: {
+                            saveCodeButton.activated = false
+                        }
+                    }
+                    StyledToolTip {
+                        content: qsTr("Save to Downloads")
+                    }
                 }
             }
         }
