@@ -6,22 +6,16 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 
-RippleButton {
+GroupButton {
     id: button
-    rippleEnabled: false
     property string buttonIcon
-    property int clickIndex: parent?.clickIndex ?? -1
+    baseWidth: 40
+    baseHeight: 40
+    clickedWidth: 60
+    clickedHeight: 40
     toggled: false
-    buttonRadius: Appearance?.rounding?.full
+    buttonRadius: Math.min(baseHeight, baseWidth) / 2
     buttonRadiusPressed: Appearance?.rounding?.small
-
-    Layout.fillWidth: (clickIndex - 1 <= parent.children.indexOf(button) && parent.children.indexOf(button) <= clickIndex + 1)
-    implicitWidth: button.down ? 60 : 40
-    implicitHeight: 40
-
-    Behavior on implicitWidth {
-        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
-    }
 
     onDownChanged: {
         if (button.down) {

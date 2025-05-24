@@ -132,29 +132,17 @@ Scope {
                         }
                     }
 
-                    Rectangle {
+                    ButtonGroup {
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.fillHeight: false
-                        radius: Appearance.rounding.full
+                        spacing: 5
+                        padding: 5
                         color: Appearance.colors.colLayer1
-                        width: 40 * sidebarQuickControlsRow.children.length + sidebarQuickControlsRow.spacing * (sidebarQuickControlsRow.children.length-1) + 10
-                        implicitHeight: sidebarQuickControlsRow.implicitHeight + 10
-                        
-                        
-                        RowLayout {
-                            id: sidebarQuickControlsRow
-                            anchors.fill: parent
-                            anchors.margins: 5
-                            spacing: 5
-                            width: 40 * sidebarQuickControlsRow.children.length
-                            property int clickIndex: -1
 
-                            NetworkToggle {}
-                            BluetoothToggle {}
-                            NightLight {}
-                            GameMode {}
-                            IdleInhibitor {}
-                        }
+                        NetworkToggle {}
+                        BluetoothToggle {}
+                        NightLight {}
+                        GameMode {}
+                        IdleInhibitor {}
                     }
 
                     // Center widget group
