@@ -14,12 +14,13 @@ Rectangle {
     default property alias content: rowLayout.data
     property real spacing: 5
     property real padding: 5
+    property int clickIndex: rowLayout.clickIndex
 
     property real contentWidth: {
         let total = 0;
         for (let i = 0; i < rowLayout.children.length; ++i) {
-            if (rowLayout.children[i].baseWidth !== undefined)
-                total += rowLayout.children[i].baseWidth;
+            const child = rowLayout.children[i];
+            total += child.baseWidth ?? child.implicitWidth ?? child.width;
         }
         return total + rowLayout.spacing * (rowLayout.children.length - 1);
     }
@@ -27,23 +28,20 @@ Rectangle {
     topLeftRadius: rowLayout.children.length > 0 ? (rowLayout.children[0].radius + padding) : 
         Appearance?.rounding?.small
     bottomLeftRadius: topLeftRadius
-    topRightRadius: {
-        console.log(rowLayout.children.length > 0 ? (rowLayout.children[rowLayout.children.length - 1].radius + padding) : 
-            Appearance?.rounding?.small)
-        return rowLayout.children.length > 0 ? (rowLayout.children[rowLayout.children.length - 1].radius + padding) : 
-            Appearance?.rounding?.small
-    }
+    topRightRadius: rowLayout.children.length > 0 ? (rowLayout.children[rowLayout.children.length - 1].radius + padding) : 
+        Appearance?.rounding?.small
     bottomRightRadius: topRightRadius
 
     color: "transparent"
     width: root.contentWidth + padding * 2
     implicitHeight: rowLayout.implicitHeight + padding * 2
+    implicitWidth: root.contentWidth + padding * 2
     
     children: [RowLayout {
         id: rowLayout
         anchors.fill: parent
         anchors.margins: root.padding
         spacing: root.spacing
-        property int clickIndex: -1        
+        property int clickIndex: -1
     }]
 }

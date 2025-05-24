@@ -271,6 +271,7 @@ int main(int argc, char* argv[]) {
             id: suggestions
             visible: root.suggestionList.length > 0 && messageInputField.text.length > 0
             property int selectedIndex: 0
+            property int clickIndex: -1
             Layout.fillWidth: true
             spacing: 5
 
@@ -283,20 +284,12 @@ int main(int argc, char* argv[]) {
                 delegate: ApiCommandButton {
                     id: commandButton
                     colBackground: suggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
-
-                    contentItem: RowLayout {
-                        spacing: 5
-                        StyledText {
-                            font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.m3colors.m3onSurface
-                            text: modelData.displayName ?? modelData.name
-                        }
-                        StyledText {
-                            visible: modelData.count !== undefined
-                            font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.m3colors.m3outline
-                            text: modelData.count ?? ""
-                        }
+                    bounce: false
+                    contentItem: StyledText {
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        color: Appearance.m3colors.m3onSurface
+                        horizontalAlignment: Text.AlignHCenter
+                        text: modelData.displayName ?? modelData.name
                     }
 
                     onHoveredChanged: {
@@ -524,20 +517,25 @@ int main(int argc, char* argv[]) {
 
                 Item { Layout.fillWidth: true }
 
-                Repeater { // Command buttons
-                    id: commandRepeater
-                    model: commandButtonsRow.commandsShown
-                    delegate: ApiCommandButton {
-                        id: commandButton
-                        property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
-                        buttonText: commandRepresentation
-                        onClicked: {
-                            if(modelData.sendDirectly) {
-                                root.handleInput(commandRepresentation)
-                            } else {
-                                messageInputField.text = commandRepresentation + " "
-                                messageInputField.cursorPosition = messageInputField.text.length
-                                messageInputField.forceActiveFocus()
+                ButtonGroup {
+                    padding: 0
+
+                    Repeater { // Command buttons
+                        model: commandButtonsRow.commandsShown
+                        delegate: ApiCommandButton {
+                            property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
+                            buttonText: commandRepresentation
+                            onClicked: {
+                                if(modelData.sendDirectly) {
+                                    root.handleInput(commandRepresentation)
+                                } else {
+                                    messageInputField.text = commandRepresentation + " "
+                                    messageInputField.cursorPosition = messageInputField.text.length
+                                    messageInputField.forceActiveFocus()
+                                }
+                                if (modelData.name === "clear") {
+                                    messageInputField.text = ""
+                                }
                             }
                         }
                     }

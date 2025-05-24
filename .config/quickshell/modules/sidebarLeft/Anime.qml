@@ -308,20 +308,24 @@ Item {
                 }
                 delegate: ApiCommandButton {
                     id: tagButton
-
                     colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
-                    
+                    bounce: false
                     contentItem: RowLayout {
+                        anchors.centerIn: parent
                         spacing: 5
                         StyledText {
+                            Layout.fillWidth: false
                             font.pixelSize: Appearance.font.pixelSize.small
                             color: Appearance.m3colors.m3onSurface
+                            horizontalAlignment: Text.AlignRight
                             text: modelData.displayName ?? modelData.name
                         }
                         StyledText {
+                            Layout.fillWidth: false
                             visible: modelData.count !== undefined
                             font.pixelSize: Appearance.font.pixelSize.smaller
                             color: Appearance.m3colors.m3outline
+                            horizontalAlignment: Text.AlignLeft
                             text: modelData.count ?? ""
                         }
                     }
@@ -615,22 +619,28 @@ Item {
 
                 Item { Layout.fillWidth: true }
 
-                Repeater { // Command buttons
-                    id: commandRepeater
-                    model: commandButtonsRow.commandsShown
-                    delegate: ApiCommandButton {
-                        id: tagButton
-                        property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
-                        buttonText: commandRepresentation
-                        colBackground: Appearance.colors.colLayer2
+                ButtonGroup {
+                    padding: 0
+                    Repeater { // Command buttons
+                        id: commandRepeater
+                        model: commandButtonsRow.commandsShown
+                        delegate: ApiCommandButton {
+                            id: tagButton
+                            property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
+                            buttonText: commandRepresentation
+                            colBackground: Appearance.colors.colLayer2
 
-                        onClicked: {
-                            if(modelData.sendDirectly) {
-                                root.handleInput(commandRepresentation)
-                            } else {
-                                tagInputField.text = commandRepresentation + " "
-                                tagInputField.cursorPosition = tagInputField.text.length
-                                tagInputField.forceActiveFocus()
+                            onClicked: {
+                                if(modelData.sendDirectly) {
+                                    root.handleInput(commandRepresentation)
+                                } else {
+                                    tagInputField.text = commandRepresentation + " "
+                                    tagInputField.cursorPosition = tagInputField.text.length
+                                    tagInputField.forceActiveFocus()
+                                }
+                                if (modelData.name === "clear") {
+                                    tagInputField.text = ""
+                                }
                             }
                         }
                     }

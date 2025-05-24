@@ -15,6 +15,7 @@ Button {
     property real buttonRadius: Appearance?.rounding?.small ?? 4
     property real buttonRadiusPressed: buttonRadius
     property var altAction
+    property bool bounce: true
     property real baseWidth: 40
     property real baseHeight: 40
     property real clickedWidth: baseWidth + 20
@@ -23,8 +24,8 @@ Button {
     property int clickIndex: parentGroup?.clickIndex ?? -1
 
     Layout.fillWidth: (clickIndex - 1 <= parentGroup.children.indexOf(button) && parentGroup.children.indexOf(button) <= clickIndex + 1)
-    implicitWidth: button.down ? clickedWidth : baseWidth
-    implicitHeight: button.down ? clickedHeight : baseHeight
+    implicitWidth: (button.down && bounce) ? clickedWidth : baseWidth
+    implicitHeight: (button.down && bounce) ? clickedHeight : baseHeight
     
     Behavior on implicitWidth {
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
