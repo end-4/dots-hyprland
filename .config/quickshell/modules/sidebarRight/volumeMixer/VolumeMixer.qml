@@ -113,7 +113,7 @@ Item {
             }
         }
         // Device selector
-        RowLayout {
+        ButtonGroup {
             id: deviceSelectorRowLayout
             Layout.fillWidth: true
             Layout.fillHeight: false

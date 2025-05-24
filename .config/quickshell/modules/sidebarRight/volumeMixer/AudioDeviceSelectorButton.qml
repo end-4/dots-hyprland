@@ -8,14 +8,14 @@ import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
-RippleButton {
+GroupButton {
     id: button
     required property bool input
 
     buttonRadius: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
-    colRipple: Appearance.colors.colLayer2Active
+    colBackgroundActive: Appearance.colors.colLayer2Active
 
     contentItem: RowLayout {
         anchors.fill: parent
