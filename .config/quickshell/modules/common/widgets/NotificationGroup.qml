@@ -213,8 +213,8 @@ Item { // Notification group area
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
                     model: ScriptModel {
-                        // values: root.expanded ? root.notifications : root.notifications.slice(0, 2)
-                        values: root.notifications.slice().reverse()
+                        values: root.expanded ? root.notifications.slice().reverse() : 
+                            root.notifications.slice().reverse().slice(0, 2)
                     }
                     delegate: NotificationItem {
                         required property int index
