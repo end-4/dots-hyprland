@@ -79,7 +79,7 @@ function mix(color1, color2, percentage) {
  * @param {number} percentage - The amount to transparentize (0-1).
  * @returns {Qt.rgba} The resulting color.
  */
-function transparentize(color, percentage) {
+function transparentize(color, percentage = 1) {
     var c = Qt.color(color);
     return Qt.rgba(c.r, c.g, c.b, c.a * (1 - percentage));
 }

@@ -30,7 +30,9 @@ MouseArea { // Flick to dismiss
 
     onPressed: (mouse) => {
         if (!root.interactive) {
-            mouse.accepted = false;
+            if (mouse.button === Qt.LeftButton) {
+                mouse.accepted = false;
+            }
             return;
         }
         if (mouse.button === Qt.LeftButton) {
@@ -40,7 +42,6 @@ MouseArea { // Flick to dismiss
     }
     onReleased: (mouse) => {
         if (!root.interactive) {
-            mouse.accepted = false;
             return;
         }
         dragging = false
@@ -51,7 +52,6 @@ MouseArea { // Flick to dismiss
     }
     onPositionChanged: (mouse) => {
         if (!root.interactive) {
-            mouse.accepted = false;
             return;
         }
         if (mouse.buttons & Qt.LeftButton) {
@@ -64,7 +64,6 @@ MouseArea { // Flick to dismiss
     }
     onCanceled: (mouse) => {
         if (!root.interactive) {
-            mouse.accepted = false;
             return;
         }
         released(mouse);

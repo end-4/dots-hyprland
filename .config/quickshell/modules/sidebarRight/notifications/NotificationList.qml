@@ -11,7 +11,7 @@ import Quickshell.Widgets
 Item {
     id: root
 
-    ListView { // Scrollable window
+    NotificationListView { // Scrollable window
         id: listview
         anchors.left: parent.left
         anchors.right: parent.right
@@ -28,68 +28,7 @@ Item {
             }
         }
 
-        add: Transition {
-            animations: [
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    properties: "opacity,scale",
-                    from: 0,
-                    to: 1,
-                }),
-            ]
-        }
-
-        addDisplaced: Transition {
-            animations: [
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    property: "y",
-                }),
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    properties: "opacity,scale",
-                    to: 1,
-                }),
-            ]
-        }
-        
-        displaced: Transition {
-            animations: [
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    property: "y",
-                }),
-            ]
-        }
-        move: Transition {
-            animations: [
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    property: "y",
-                }),
-            ]
-        }
-
-        remove: Transition {
-            animations: [
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    property: "x",
-                    to: listview.width,
-                }),
-                Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                    property: "opacity",
-                    to: 0,
-                })
-            ]
-        }
-
-        model: ScriptModel {
-            values: Notifications.list.slice().reverse()
-        }
-        delegate: NotificationWidget {
-            required property var modelData
-            id: notificationWidget
-            // anchors.horizontalCenter: parent.horizontalCenter
-            anchors.left: parent?.left
-            anchors.right: parent?.right
-            Layout.fillWidth: true
-            notificationObject: modelData
-        }
+        popup: false
     }
 
     // Placeholder when list is empty

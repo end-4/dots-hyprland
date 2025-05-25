@@ -34,74 +34,14 @@ Scope {
         color: "transparent"
         implicitWidth: Appearance.sizes.notificationPopupWidth
 
-        ListView { // Scrollable window
+        NotificationListView {
             id: listview
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 5
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
-
-            add: Transition {
-                animations: [
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        properties: "opacity,scale",
-                        from: 0,
-                        to: 1,
-                    }),
-                ]
-            }
-
-            addDisplaced: Transition {
-                animations: [
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        property: "y",
-                    }),
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        properties: "opacity,scale",
-                        to: 1,
-                    }),
-                ]
-            }
-            
-            displaced: Transition {
-                animations: [
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        property: "y",
-                    }),
-                ]
-            }
-            move: Transition {
-                animations: [
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        property: "y",
-                    }),
-                ]
-            }
-
-            remove: Transition {
-                animations: [
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        property: "x",
-                        to: listview.width,
-                    }),
-                    Appearance.animation.elementMove.numberAnimation.createObject(this, {
-                        property: "opacity",
-                        to: 0,
-                    })
-                ]
-            }
-
-            model: ScriptModel {
-                values: Notifications.popupList.slice().reverse()
-            }
-            delegate: NotificationWidget {
-                required property var modelData
-                id: notificationWidget
-                popup: true
-                anchors.left: parent?.left
-                anchors.right: parent?.right
-                notificationObject: modelData
-            }
+            popup: true
         }
     }
 }
