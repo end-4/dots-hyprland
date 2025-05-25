@@ -21,7 +21,7 @@ Slider {
     property color highlightColor: Appearance.m3colors.m3primary
     property color trackColor: Appearance.m3colors.m3secondaryContainer
     property color handleColor: Appearance.m3colors.m3onSecondaryContainer
-    property real trackRadius: Appearance.rounding.verysmall
+    property real trackRadius: Appearance.rounding.verysmall * scale
 
     property real limitedHandleRangeWidth: (slider.availableWidth - handleWidth - slider.handleLimit * 2)
     property string tooltipContent: `${Math.round(value * 100)}%`
