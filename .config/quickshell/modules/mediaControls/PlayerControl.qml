@@ -187,7 +187,7 @@ Item { // Player instance
                     property int size: parent.height
                     anchors.fill: parent
 
-                    source: playerController.artUrl
+                    source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
                     fillMode: Image.PreserveAspectCrop
                     cache: false
                     antialiasing: true
