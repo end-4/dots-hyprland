@@ -100,7 +100,7 @@ Singleton {
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: ColorUtils.mix(colLayer0, colOnLayer0, 0.9)
         property color colLayer0Active: ColorUtils.mix(colLayer0, colOnLayer0, 0.8)
-        property color colLayer1: m3colors.m3surfaceContainerLow;
+        property color colLayer1: ColorUtils.mix(m3colors.m3surfaceContainerLow, m3colors.m3background, 0.7);
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
         property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, 0.45);
         property color colLayer2: ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
