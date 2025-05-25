@@ -2,7 +2,7 @@ const { GLib } = imports.gi;
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-const { Box, Button, EventBox, Label, Overlay, Revealer, Scrollable } = Widget;
+const { Box, Button, EventBox, Label, Overlay, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { AnimatedCircProg } from "../../.commonwidgets/cairo_circularprogress.js";
 import { MaterialIcon } from '../../.commonwidgets/materialicon.js';
@@ -136,8 +136,8 @@ export default () => {
                 setup: (self) => self.hook(Mpris, label => {
                     const mpris = Mpris.getPlayer('');
                     if (!mpris) return;
-                    label.toggleClassName('bar-music-playstate-playing', mpris !== null && mpris.playBackStatus == 'Playing');
-                    label.toggleClassName('bar-music-playstate', mpris !== null || mpris.playBackStatus == 'Paused');
+                    label.toggleClassName('bar-music-playstate-playing', mpris.playBackStatus == 'Playing');
+                    label.toggleClassName('bar-music-playstate', mpris.playBackStatus == 'Paused');
                 }),
             }),
             overlays: [
