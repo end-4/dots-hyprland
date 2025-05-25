@@ -19,6 +19,36 @@ Singleton {
     // can already contain higher IDs. This is for avoiding id collisions
     property int idOffset
 
+    function appNameListForGroups(groups) {
+        return Object.keys(groups).sort((a, b) => {
+            // Sort by time, descending
+            return groups[b].time - groups[a].time;
+        });
+    }
+
+    function groupsForList(list) {
+        const groups = {};
+        list.forEach((notif) => {
+            if (!groups[notif.appName]) {
+                groups[notif.appName] = {
+                    appName: notif.appName,
+                    appIcon: notif.appIcon,
+                    notifications: [],
+                    time: 0
+                };
+            }
+            groups[notif.appName].notifications.push(notif);
+            // Always set to the latest time in the group
+            groups[notif.appName].time = notif.time;
+        });
+        return groups;
+    }
+
+    property var groupsByAppName: groupsForList(root.list)
+    property var popupGroupsByAppName: groupsForList(root.popupList)
+    property var appNameList: appNameListForGroups(root.groupsByAppName)
+    property var popupAppNameList: appNameListForGroups(root.popupGroupsByAppName)
+
     signal initDone();
     signal notify(notification: var);
     signal discard(id: var);
