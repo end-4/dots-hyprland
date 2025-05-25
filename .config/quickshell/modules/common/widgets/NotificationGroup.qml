@@ -152,14 +152,17 @@ Item { // Notification group area
             NotificationAppIcon { // Icons
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
-
+                image: root.multipleNotifications ? "" : notificationGroup.notifications[0].image
                 appIcon: notificationGroup.appIcon
                 summary: notificationGroup.notifications[root.notificationCount - 1].summary
             }
 
             ColumnLayout { // Content
                 Layout.fillWidth: true
-                spacing: expanded ? 5 : 0
+                spacing: expanded ? 
+                    ((root.multipleNotifications && 
+                        notificationGroup.notifications[root.notificationCount - 1].image != "") ? 35 : 
+                        5) : 0
                 Behavior on spacing {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }

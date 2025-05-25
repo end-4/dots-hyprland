@@ -15,9 +15,22 @@ Singleton {
     property var list: []
     property var popupList: []
     property bool popupInhibited: GlobalStates?.sidebarRightOpen ?? false
-    // Quickshell's notification IDs starts at 1 on each run, while saved notifications
-    // can already contain higher IDs. This is for avoiding id collisions
-    property int idOffset
+    property var latestTimeForApp: ({})
+    
+    onListChanged: {
+        // Update latest time for each app
+        root.list.forEach((notif) => {
+            if (!root.latestTimeForApp[notif.appName] || notif.time > root.latestTimeForApp[notif.appName]) {
+                root.latestTimeForApp[notif.appName] = Math.max(root.latestTimeForApp[notif.appName] || 0, notif.time);
+            }
+        });
+        // Remove apps that no longer have notifications
+        Object.keys(root.latestTimeForApp).forEach((appName) => {
+            if (!root.list.some((notif) => notif.appName === appName)) {
+                delete root.latestTimeForApp[appName];
+            }
+        });
+    }
 
     function appNameListForGroups(groups) {
         return Object.keys(groups).sort((a, b) => {
@@ -39,7 +52,7 @@ Singleton {
             }
             groups[notif.appName].notifications.push(notif);
             // Always set to the latest time in the group
-            groups[notif.appName].time = notif.time;
+            groups[notif.appName].time = latestTimeForApp[notif.appName] || notif.time;
         });
         return groups;
     }
@@ -49,6 +62,9 @@ Singleton {
     property var appNameList: appNameListForGroups(root.groupsByAppName)
     property var popupAppNameList: appNameListForGroups(root.popupGroupsByAppName)
 
+    // Quickshell's notification IDs starts at 1 on each run, while saved notifications
+    // can already contain higher IDs. This is for avoiding id collisions
+    property int idOffset
     signal initDone();
     signal notify(notification: var);
     signal discard(id: var);
@@ -87,7 +103,9 @@ Singleton {
             }
 			root.list = [...root.list, newNotifObject];
             // console.log(root.popupInhibited)
-            if (!root.popupInhibited) root.popupList = [...root.popupList, newNotifObject];
+            if (!root.popupInhibited) {
+                root.popupList = [...root.popupList, newNotifObject];
+            }
             root.notify(newNotifObject);
             notifFileView.setText(JSON.stringify(root.list, null, 2))
         }
