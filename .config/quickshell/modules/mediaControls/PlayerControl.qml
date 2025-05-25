@@ -115,173 +115,188 @@ Item { // Player instance
         property color colOnSecondaryContainer: ColorUtils.mix(Appearance.m3colors.m3onSecondaryContainer, artDominantColor, 0.2)
 
     }
-
-    Rectangle { // Background
-        id: background
+    Rectangle { // Background wrapper with shadow
+        id: backgroundShadowLayer
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
-        color: blendedColors.colLayer0
         radius: root.popupRounding
 
         layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: background.width
-                height: background.height
-                radius: background.radius
-            }
+        layer.effect: MultiEffect {
+            source: backgroundShadowLayer
+            anchors.fill: backgroundShadowLayer
+            shadowEnabled: true
+            shadowColor: Appearance.colors.colShadow
+            shadowVerticalOffset: 1
+            shadowBlur: 0.5
         }
 
-        Image {
-            id: blurredArt
+        Rectangle { // Background
+            id: background
             anchors.fill: parent
-            visible: true
-            source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
-            sourceSize.width: background.width
-            sourceSize.height: background.height
-            fillMode: Image.PreserveAspectCrop
-            cache: false
-            antialiasing: true
-            asynchronous: true
+            color: blendedColors.colLayer0
+            radius: root.popupRounding
 
             layer.enabled: true
-            layer.effect: MultiEffect {
-                source: blurredArt
-                anchors.fill: blurredArt
-                saturation: 0.2
-                blurEnabled: true
-                blurMax: 100
-                blur: 1
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: background.width
+                    height: background.height
+                    radius: background.radius
+                }
             }
 
-            Rectangle {
+            Image {
+                id: blurredArt
                 anchors.fill: parent
-                color: ColorUtils.transparentize(blendedColors.colLayer0, 0.25)
-                radius: root.popupRounding
-            }
-        }
-
-        RowLayout {
-            anchors.fill: parent
-            anchors.margins: root.contentPadding
-            spacing: 15
-
-            Rectangle { // Art background
-                id: artBackground
-                Layout.fillHeight: true
-                implicitWidth: height
-                radius: root.artRounding
-                color: blendedColors.colLayer1
+                visible: true
+                source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+                sourceSize.width: background.width
+                sourceSize.height: background.height
+                fillMode: Image.PreserveAspectCrop
+                cache: false
+                antialiasing: true
+                asynchronous: true
 
                 layer.enabled: true
-                layer.effect: OpacityMask {
-                    maskSource: Rectangle {
-                        width: artBackground.width
-                        height: artBackground.height
-                        radius: artBackground.radius
-                    }
+                layer.effect: MultiEffect {
+                    source: blurredArt
+                    anchors.fill: blurredArt
+                    saturation: 0.2
+                    blurEnabled: true
+                    blurMax: 100
+                    blur: 1
                 }
 
-                Image { // Art image
-                    id: mediaArt
-                    property int size: parent.height
+                Rectangle {
                     anchors.fill: parent
-
-                    source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
-                    fillMode: Image.PreserveAspectCrop
-                    cache: false
-                    antialiasing: true
-                    asynchronous: true
-
-                    width: size
-                    height: size
-                    sourceSize.width: size
-                    sourceSize.height: size
+                    color: ColorUtils.transparentize(blendedColors.colLayer0, 0.25)
+                    radius: root.popupRounding
                 }
             }
 
-            ColumnLayout { // Info & controls
-                Layout.fillHeight: true
-                spacing: 2
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: root.contentPadding
+                spacing: 15
 
-                StyledText {
-                    id: trackTitle
-                    Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.large
-                    color: blendedColors.colOnLayer0
-                    elide: Text.ElideRight
-                    text: StringUtils.cleanMusicTitle(playerController.player?.trackTitle) || "Untitled"
+                Rectangle { // Art background
+                    id: artBackground
+                    Layout.fillHeight: true
+                    implicitWidth: height
+                    radius: root.artRounding
+                    color: blendedColors.colLayer1
+
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: artBackground.width
+                            height: artBackground.height
+                            radius: artBackground.radius
+                        }
+                    }
+
+                    Image { // Art image
+                        id: mediaArt
+                        property int size: parent.height
+                        anchors.fill: parent
+
+                        source: playerController.downloaded ? Qt.resolvedUrl(artFilePath) : ""
+                        fillMode: Image.PreserveAspectCrop
+                        cache: false
+                        antialiasing: true
+                        asynchronous: true
+
+                        width: size
+                        height: size
+                        sourceSize.width: size
+                        sourceSize.height: size
+                    }
                 }
-                StyledText {
-                    id: trackArtist
-                    Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.smaller
-                    color: blendedColors.colSubtext
-                    elide: Text.ElideRight
-                    text: playerController.player?.trackArtist
-                }
-                Item { Layout.fillHeight: true }
-                Item {
-                    Layout.fillWidth: true
-                    implicitHeight: trackTime.implicitHeight + sliderRow.implicitHeight
+
+                ColumnLayout { // Info & controls
+                    Layout.fillHeight: true
+                    spacing: 2
 
                     StyledText {
-                        id: trackTime
-                        anchors.bottom: sliderRow.top
-                        anchors.bottomMargin: 5
-                        anchors.left: parent.left
-                        font.pixelSize: Appearance.font.pixelSize.small
+                        id: trackTitle
+                        Layout.fillWidth: true
+                        font.pixelSize: Appearance.font.pixelSize.large
+                        color: blendedColors.colOnLayer0
+                        elide: Text.ElideRight
+                        text: StringUtils.cleanMusicTitle(playerController.player?.trackTitle) || "Untitled"
+                    }
+                    StyledText {
+                        id: trackArtist
+                        Layout.fillWidth: true
+                        font.pixelSize: Appearance.font.pixelSize.smaller
                         color: blendedColors.colSubtext
                         elide: Text.ElideRight
-                        text: `${StringUtils.friendlyTimeForSeconds(playerController.player?.position)} / ${StringUtils.friendlyTimeForSeconds(playerController.player?.length)}`
+                        text: playerController.player?.trackArtist
                     }
-                    RowLayout {
-                        id: sliderRow
-                        anchors {
-                            bottom: parent.bottom
-                            left: parent.left
-                            right: parent.right
-                        }
-                        TrackChangeButton {
-                            iconName: "skip_previous"
-                            onClicked: playerController.player?.previous()
-                        }
-                        StyledProgressBar {
-                            id: slider
-                            Layout.fillWidth: true
-                            highlightColor: blendedColors.colPrimary
-                            trackColor: blendedColors.colSecondaryContainer
-                            value: playerController.player?.position / playerController.player?.length
-                        }
-                        TrackChangeButton {
-                            iconName: "skip_next"
-                            onClicked: playerController.player?.next()
-                        }
-                    }
+                    Item { Layout.fillHeight: true }
+                    Item {
+                        Layout.fillWidth: true
+                        implicitHeight: trackTime.implicitHeight + sliderRow.implicitHeight
 
-                    RippleButton {
-                        id: playPauseButton
-                        anchors.right: parent.right
-                        anchors.bottom: sliderRow.top
-                        anchors.bottomMargin: 5
-                        implicitWidth: 44
-                        implicitHeight: 44
-                        onClicked: playerController.player.togglePlaying();
+                        StyledText {
+                            id: trackTime
+                            anchors.bottom: sliderRow.top
+                            anchors.bottomMargin: 5
+                            anchors.left: parent.left
+                            font.pixelSize: Appearance.font.pixelSize.small
+                            color: blendedColors.colSubtext
+                            elide: Text.ElideRight
+                            text: `${StringUtils.friendlyTimeForSeconds(playerController.player?.position)} / ${StringUtils.friendlyTimeForSeconds(playerController.player?.length)}`
+                        }
+                        RowLayout {
+                            id: sliderRow
+                            anchors {
+                                bottom: parent.bottom
+                                left: parent.left
+                                right: parent.right
+                            }
+                            TrackChangeButton {
+                                iconName: "skip_previous"
+                                onClicked: playerController.player?.previous()
+                            }
+                            StyledProgressBar {
+                                id: slider
+                                Layout.fillWidth: true
+                                highlightColor: blendedColors.colPrimary
+                                trackColor: blendedColors.colSecondaryContainer
+                                value: playerController.player?.position / playerController.player?.length
+                            }
+                            TrackChangeButton {
+                                iconName: "skip_next"
+                                onClicked: playerController.player?.next()
+                            }
+                        }
 
-                        buttonRadius: Appearance.rounding.full
-                        colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
-                        colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
-                        colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
+                        RippleButton {
+                            id: playPauseButton
+                            anchors.right: parent.right
+                            anchors.bottom: sliderRow.top
+                            anchors.bottomMargin: 5
+                            implicitWidth: 44
+                            implicitHeight: 44
+                            onClicked: playerController.player.togglePlaying();
 
-                        contentItem: MaterialSymbol {
-                            iconSize: Appearance.font.pixelSize.huge
-                            fill: 1
-                            horizontalAlignment: Text.AlignHCenter
-                            color: playerController.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
-                            text: playerController.player?.isPlaying ? "pause" : "play_arrow"
+                            buttonRadius: Appearance.rounding.full
+                            colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
+                            colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
+                            colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
 
-                            Behavior on color {
-                                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                            contentItem: MaterialSymbol {
+                                iconSize: Appearance.font.pixelSize.huge
+                                fill: 1
+                                horizontalAlignment: Text.AlignHCenter
+                                color: playerController.player?.isPlaying ? blendedColors.colOnPrimary : blendedColors.colOnSecondaryContainer
+                                text: playerController.player?.isPlaying ? "pause" : "play_arrow"
+
+                                Behavior on color {
+                                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                                }
                             }
                         }
                     }
