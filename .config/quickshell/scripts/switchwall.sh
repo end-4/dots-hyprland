@@ -44,7 +44,8 @@ check_and_prompt_upscale() {
         if [[ "$img_width" -lt "$min_width_desired" || "$img_height" -lt "$min_height_desired" ]]; then
             action=$(notify-send "Upscale?" \
                 "Image resolution (${img_width}x${img_height}) is lower than screen resolution (${min_width_desired}x${min_height_desired})" \
-                -A "open_upscayl=Open Upscayl")
+                -A "open_upscayl=Open Upscayl"\
+                -a "Wallpaper switcher")
             if [[ "$action" == "open_upscayl" ]]; then
                 if command -v upscayl &>/dev/null; then
                     nohup upscayl > /dev/null 2>&1 &
@@ -155,7 +156,7 @@ switch() {
                 if [[ "$action" == "install_arch" ]]; then
                     foot sudo pacman -S "${missing_deps[*]}"
                     if command -v mpvpaper &>/dev/null && command -v ffmpeg &>/dev/null; then
-                        notify-send 'Wallpaper switcher' 'Alright, try again!'
+                        notify-send 'Wallpaper switcher' 'Alright, try again!' -a "Wallpaper switcher"
                     fi
                 fi
                 exit 0
