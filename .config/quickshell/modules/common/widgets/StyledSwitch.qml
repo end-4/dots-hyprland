@@ -22,10 +22,10 @@ Switch {
         border.color: root.checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
 
         Behavior on color {
-            animation: Appearance.animation.elementMove.colorAnimation.createObject(this)
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
         Behavior on border.color {
-            animation: Appearance.animation.elementMove.colorAnimation.createObject(this)
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 
@@ -49,7 +49,7 @@ Switch {
             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
         }
         Behavior on color {
-            animation: Appearance.animation.elementMove.colorAnimation.createObject(this)
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 }
