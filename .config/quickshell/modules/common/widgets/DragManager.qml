@@ -29,14 +29,20 @@ MouseArea { // Flick to dismiss
     }
 
     onPressed: (mouse) => {
-        if (!root.interactive) return;
+        if (!root.interactive) {
+            mouse.accepted = false;
+            return;
+        }
         if (mouse.button === Qt.LeftButton) {
             startX = mouse.x
             startY = mouse.y
         }
     }
     onReleased: (mouse) => {
-        if (!root.interactive) return;
+        if (!root.interactive) {
+            mouse.accepted = false;
+            return;
+        }
         dragging = false
         root.dragReleased(_dragDiffX, _dragDiffY);
         if (root.automaticallyReset) {
@@ -44,7 +50,10 @@ MouseArea { // Flick to dismiss
         }
     }
     onPositionChanged: (mouse) => {
-        if (!root.interactive) return;
+        if (!root.interactive) {
+            mouse.accepted = false;
+            return;
+        }
         if (mouse.buttons & Qt.LeftButton) {
             root._dragDiffX = mouse.x - startX
             root._dragDiffY = mouse.y - startY
@@ -54,7 +63,10 @@ MouseArea { // Flick to dismiss
         }
     }
     onCanceled: (mouse) => {
-        if (!root.interactive) return;
+        if (!root.interactive) {
+            mouse.accepted = false;
+            return;
+        }
         released(mouse);
     }
 }
