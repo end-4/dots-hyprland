@@ -65,7 +65,8 @@ Singleton {
                     "-output=${imagePath}", 
                     "-textsize=${Appearance.font.pixelSize.normal}", 
                     "-padding=${renderPadding}", 
-                    "-foreground=${Appearance.colors.colOnLayer1}",
+                    "-background=${Appearance.m3colors.m3tertiary}",
+                    "-foreground=${Appearance.m3colors.m3onTertiary}",
                     "-maxwidth=0.85" ]
                 // stdout: SplitParser {
                 //     onRead: data => { console.log("MicroTeX: " + data) }
