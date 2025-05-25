@@ -61,10 +61,16 @@ Item { // Notification item area
     DragManager { // Drag manager
         id: dragManager
         anchors.fill: root
-        anchors.leftMargin: -notificationIcon.implicitWidth
+        anchors.leftMargin: root.expanded ? -notificationIcon.implicitWidth : 0
         interactive: expanded
         automaticallyReset: false
-        acceptedButtons: Qt.LeftButton
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.MiddleButton) {
+                root.destroyWithAnimation();
+            }
+        }
 
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {

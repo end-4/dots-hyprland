@@ -76,12 +76,13 @@ Item { // Notification group area
         anchors.fill: parent
         interactive: !expanded
         automaticallyReset: false
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
 
         onClicked: (mouse) => {
-            if (mouse.button === Qt.RightButton) {
+            if (mouse.button === Qt.RightButton) 
                 root.toggleExpanded();
-            }
+            else if (mouse.button === Qt.MiddleButton) 
+                root.destroyWithAnimation();
         }
 
         onDraggingChanged: () => {
