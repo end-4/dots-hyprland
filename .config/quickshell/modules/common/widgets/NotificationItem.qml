@@ -60,7 +60,8 @@ Item { // Notification item area
 
     DragManager { // Drag manager
         id: dragManager
-        anchors.fill: parent
+        anchors.fill: root
+        anchors.leftMargin: -notificationIcon.implicitWidth
         interactive: expanded
         automaticallyReset: false
         acceptedButtons: Qt.LeftButton
