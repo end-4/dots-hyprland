@@ -119,6 +119,7 @@ Item { // Player instance
         id: backgroundShadowLayer
         anchors.fill: parent
         anchors.margins: Appearance.sizes.elevationMargin
+        color: blendedColors.colLayer0
         radius: root.popupRounding
 
         layer.enabled: true
