@@ -1,6 +1,9 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+// From https://github.com/caelestia-dots/shell/ (`quickshell` branch)
+// It does not have a license, but the author has given permission.
+
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
