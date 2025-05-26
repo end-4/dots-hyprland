@@ -1,9 +1,12 @@
-// From https://github.com/rafzby/circular-progressbar
+// From https://github.com/rafzby/circular-progressbar with modifications
 // License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
-// Modified so it looks like in Material 3: https://m3.material.io/components/progress-indicators/specs
+
 import QtQuick
 import "root:/modules/common"
 
+/**
+ * Material 3 circular progress. See https://m3.material.io/components/progress-indicators/specs
+ */
 Item {
     id: root
 

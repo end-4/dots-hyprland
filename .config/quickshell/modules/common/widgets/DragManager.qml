@@ -4,7 +4,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-MouseArea { // Flick to dismiss
+/**
+ * A convenience MouseArea for handling drag events.
+ */
+MouseArea {
     id: root
     hoverEnabled: true
     acceptedButtons: Qt.LeftButton

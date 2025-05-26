@@ -8,6 +8,10 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell.Widgets
 
+/**
+ * Material 3 button with expressive bounciness. 
+ * See https://m3.material.io/components/button-groups/overview
+ */
 Button {
     id: root
     property bool toggled
@@ -35,12 +39,12 @@ Button {
         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
-    property color colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-    property color colBackgroundHover: Appearance.colors.colLayer1Hover
-    property color colBackgroundActive: Appearance.colors.colLayer1Active
-    property color colBackgroundToggled: Appearance.m3colors.m3primary
-    property color colBackgroundToggledHover: Appearance.colors.colPrimaryHover
-    property color colBackgroundToggledActive: Appearance.colors.colPrimaryActive
+    property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
+    property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
+    property color colBackgroundActive: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
+    property color colBackgroundToggled: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
+    property color colBackgroundToggledActive: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
     property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property color color: root.enabled ? (root.toggled ? 

@@ -7,7 +7,7 @@ import Quickshell
 import Quickshell.Io
 
 RippleButton {
-    id: button
+    id: root
 
     buttonRadius: 0
     implicitHeight: 36
@@ -18,10 +18,10 @@ RippleButton {
         anchors.fill: parent
         anchors.leftMargin: 14
         anchors.rightMargin: 14
-        text: button.buttonText
+        text: root.buttonText
         horizontalAlignment: Text.AlignLeft
         font.pixelSize: Appearance.font.pixelSize.small
-        color: button.enabled ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3outline
+        color: root.enabled ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3outline
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

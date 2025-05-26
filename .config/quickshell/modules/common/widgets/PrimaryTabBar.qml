@@ -10,6 +10,8 @@ ColumnLayout {
     required property var tabButtonList // Something like [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
     required property var externalTrackedTab
     property bool enableIndicatorAnimation: false
+    property color colIndicator: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colBorder: Appearance?.m3colors.m3outlineVariant ?? "#C6C6D0"
     signal currentIndexChanged(int index)
 
     TabBar {
@@ -67,15 +69,15 @@ ColumnLayout {
 
             x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
 
-            color: Appearance.m3colors.m3primary
-            radius: Appearance.rounding.full
+            color: root.colIndicator
+            radius: Appearance?.rounding.full ?? 9999
 
             Behavior on x {
-                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
             }
 
             Behavior on implicitWidth {
-                animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                animation: Appearance?.animation.elementMove.numberAnimation.createObject(this)
             }
         }
     }
@@ -83,7 +85,7 @@ ColumnLayout {
     Rectangle { // Tabbar bottom border
         id: tabBarBottomBorder
         Layout.fillWidth: true
-        height: 1
-        color: Appearance.m3colors.m3outlineVariant
+        implicitHeight: 1
+        color: root.colBorder
     }
 }

@@ -17,10 +17,16 @@ TabButton {
     property int rippleDuration: 1200
     height: buttonBackground.height
 
+    property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
+    property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
+    property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
+    property color colActive: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colInactive: Appearance?.colors.colOnLayer1 ?? "#45464F"
+
     component RippleAnim: NumberAnimation {
         duration: rippleDuration
-        easing.type: Appearance.animation.elementMoveEnter.type
-        easing.bezierCurve: Appearance.animationCurves.standardDecel
+        easing.type: Appearance?.animation.elementMoveEnter.type
+        easing.bezierCurve: Appearance?.animationCurves.standardDecel
     }
 
     MouseArea {
@@ -86,9 +92,9 @@ TabButton {
 
     background: Rectangle {
         id: buttonBackground
-        radius: Appearance.rounding.small
+        radius: Appearance?.rounding.small
         implicitHeight: 50
-        color: (button.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
+        color: (button.hovered ? button.colBackgroundHover : button.colBackground)
         layer.enabled: true
         layer.effect: OpacityMask {
             maskSource: Rectangle {
@@ -99,14 +105,14 @@ TabButton {
         }
         
         Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
         Rectangle {
             id: ripple
 
-            radius: Appearance.rounding.full
-            color: Appearance.colors.colLayer1Active
+            radius: Appearance?.rounding.full ?? 9999
+            color: button.colRipple
             opacity: 0
 
             transform: Translate {
@@ -126,22 +132,22 @@ TabButton {
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: buttonIcon
-                iconSize: Appearance.font.pixelSize.hugeass
+                iconSize: Appearance?.font.pixelSize.hugeass ?? 25
                 fill: selected ? 1 : 0
-                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                color: selected ? button.colActive : button.colInactive
                 Behavior on color {
-                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                    animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
             StyledText {
                 id: buttonTextWidget
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Appearance.font.pixelSize.small
-                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                font.pixelSize: Appearance?.font.pixelSize.small
+                color: selected ? button.colActive : button.colInactive
                 text: buttonText
                 Behavior on color {
-                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                    animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
         }
