@@ -9,8 +9,15 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
+/**
+ * A service that provides access to Hyprland keybinds.
+ * Uses the `get_keybinds.py` script to parse comments in config files in a certain format and convert to JSON.
+ */
 Singleton {
     id: root
+    property string keybindParserPath: FileUtils.trimFileProtocol(`${XdgDirectories.config}/quickshell/scripts/hyprland/get_keybinds.py`)
+    property string defaultKeybindConfigPath: FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/hyprland/keybinds.conf`)
+    property string userKeybindConfigPath: FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/custom/keybinds.conf`)
     property var defaultKeybinds: {"children": []}
     property var userKeybinds: {"children": []}
     property var keybinds: ({
@@ -34,8 +41,7 @@ Singleton {
     Process {
         id: getDefaultKeybinds
         running: true
-        command: [FileUtils.trimFileProtocol(`${XdgDirectories.config}/quickshell/scripts/hyprland/get_keybinds.py`), 
-            "--path", FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/hyprland/keybinds.conf`),]
+        command: [root.keybindParserPath, "--path", root.defaultKeybindConfigPath,]
         
         stdout: SplitParser {
             onRead: data => {
@@ -51,8 +57,7 @@ Singleton {
     Process {
         id: getUserKeybinds
         running: true
-        command: [FileUtils.trimFileProtocol(`${XdgDirectories.config}/quickshell/scripts/hyprland/get_keybinds.py`), 
-            "--path", FileUtils.trimFileProtocol(`${XdgDirectories.config}/hypr/custom/keybinds.conf`),]
+        command: [root.keybindParserPath, "--path", root.userKeybindConfigPath]
         
         stdout: SplitParser {
             onRead: data => {

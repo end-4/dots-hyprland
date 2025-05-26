@@ -4,6 +4,9 @@ import Quickshell.Services.Pipewire
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+/**
+ * A nice wrapper for default Pipewire audio sink and source.
+ */
 Singleton {
     id: root
 

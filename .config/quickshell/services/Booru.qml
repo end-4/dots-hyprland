@@ -7,6 +7,9 @@ import Quickshell.Io;
 import Qt.labs.platform
 import QtQuick;
 
+/**
+ * A service for interacting with various booru APIs.
+ */
 Singleton {
     id: root
     property Component booruResponseDataComponent: BooruResponseData {}

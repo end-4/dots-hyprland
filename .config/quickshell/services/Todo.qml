@@ -7,6 +7,10 @@ import Quickshell.Io;
 import Qt.labs.platform
 import QtQuick;
 
+/**
+ * Simple to-do list manager.
+ * Each item is an object with "content" and "done" properties.
+ */
 Singleton {
     id: root
     property var filePath: `${XdgDirectories.state}/user/todo.json`

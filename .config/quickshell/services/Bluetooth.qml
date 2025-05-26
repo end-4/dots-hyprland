@@ -5,6 +5,9 @@ import Quickshell;
 import Quickshell.Io;
 import QtQuick;
 
+/**
+ * Basic polled Bluetooth state.
+ */
 Singleton {
     id: root
 

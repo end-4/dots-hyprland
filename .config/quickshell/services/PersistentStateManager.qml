@@ -9,6 +9,10 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Qt.labs.platform
 
+/**
+ * Manages persistent states across sessions.
+ * Run loadStates() once at startup to load the states, then use setState() and getState() to modify and access them.
+ */
 Singleton {
     id: root
     property string fileDir: XdgDirectories.state

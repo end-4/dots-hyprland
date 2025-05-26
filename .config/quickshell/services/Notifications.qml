@@ -9,6 +9,12 @@ import Quickshell.Io
 import Quickshell.Services.Notifications
 import Qt.labs.platform
 
+/**
+ * Provides extra features not in Quickshell.Services.Notifications:
+ *  - Persistent storage
+ *  - Popup notifications, with timeout
+ *  - Notification groups by app
+ */
 Singleton {
 	id: root
     component Notif: QtObject {

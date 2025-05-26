@@ -5,6 +5,9 @@ import Quickshell.Io
 pragma Singleton
 pragma ComponentBehavior: Bound
 
+/**
+ * A nice wrapper for date and time strings.
+ */
 Singleton {
     property string time: Qt.formatDateTime(clock.date, "hh:mm")
     property string date: Qt.formatDateTime(clock.date, "dddd, dd/MM")

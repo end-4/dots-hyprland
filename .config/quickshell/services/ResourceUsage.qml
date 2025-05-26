@@ -6,6 +6,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
+/**
+ * Simple polled resource usage service with RAM, Swap, and CPU usage.
+ */
 Singleton {
 	property double memoryTotal: 1
 	property double memoryFree: 1

@@ -5,6 +5,9 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
+/**
+ * Provides some system info: distro, username.
+ */
 Singleton {
     property string distroName: "Unknown"
     property string distroId: "unknown"

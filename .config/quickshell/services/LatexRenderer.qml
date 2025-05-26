@@ -11,12 +11,12 @@ import Quickshell.Hyprland
 import Qt.labs.platform
 
 /**
-* Renders LaTeX snippets with MicroTeX.
-* For every request:
-*   1. Hash it
-*   2. Check if the hash is already processed
-*   3. If not, render it with MicroTeX and mark as processed
-*/
+ * Renders LaTeX snippets with MicroTeX.
+ * For every request:
+ *   1. Hash it
+ *   2. Check if the hash is already processed
+ *   3. If not, render it with MicroTeX and mark as processed
+ */
 Singleton {
     id: root
     

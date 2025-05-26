@@ -8,14 +8,15 @@ import Quickshell.Io;
 import Qt.labs.platform
 import QtQuick;
 
+/**
+ * For storing sensitive data in the keyring.
+ * Use this for small data only, since it stores a JSON of the contents directly and doesn't use a database.
+ */
 Singleton {
     id: root
 
     property bool loaded: false
     property var keyringData: ({})
-    // onKeyringDataChanged: {
-    //     console.log("[KeyringStorage] Keyring data changed:", JSON.stringify(root.keyringData));
-    // }
     
     property var properties: {
         "application": "illogical-impulse",

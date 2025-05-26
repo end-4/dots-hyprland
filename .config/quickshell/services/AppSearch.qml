@@ -4,6 +4,9 @@ import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import Quickshell
 import Quickshell.Io
 
+/**
+ * Eases searching for applications by name.
+ */
 Singleton {
     id: root
 
