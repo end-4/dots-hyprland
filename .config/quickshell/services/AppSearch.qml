@@ -12,6 +12,7 @@ Singleton {
 
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
         .sort((a, b) => a.name.localeCompare(b.name))
+        
     readonly property var preppedNames: list.map(a => ({
                 name: Fuzzy.prepare(`${a.name} `),
                 entry: a
