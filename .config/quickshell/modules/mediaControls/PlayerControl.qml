@@ -279,11 +279,12 @@ Item { // Player instance
                             anchors.right: parent.right
                             anchors.bottom: sliderRow.top
                             anchors.bottomMargin: 5
-                            implicitWidth: 44
-                            implicitHeight: 44
+                            property real size: 44
+                            implicitWidth: size
+                            implicitHeight: size
                             onClicked: playerController.player.togglePlaying();
 
-                            buttonRadius: Appearance.rounding.full
+                            buttonRadius: playerController.player?.isPlaying ? Appearance?.rounding.small : size / 2
                             colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
                             colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
                             colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
