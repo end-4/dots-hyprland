@@ -7,7 +7,6 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
-import Qt.labs.platform
 
 /**
  * Provides extra features not in Quickshell.Services.Notifications:
