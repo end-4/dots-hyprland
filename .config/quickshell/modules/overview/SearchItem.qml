@@ -67,7 +67,7 @@ RippleButton {
 
     RowLayout {
         id: rowLayout
-        spacing: 10
+        spacing: iconLoader.sourceComponent === null ? 0 : 10
         anchors.fill: parent
         anchors.leftMargin: root.horizontalMargin + root.buttonHorizontalPadding
         anchors.rightMargin: root.horizontalMargin + root.buttonHorizontalPadding
@@ -76,7 +76,9 @@ RippleButton {
         Loader {
             id: iconLoader
             active: true
-            sourceComponent: root.materialSymbol == "" ? iconImageComponent : materialSymbolComponent
+            sourceComponent: root.materialSymbol !== "" ? materialSymbolComponent :
+                root.itemIcon !== "" ? iconImageComponent : 
+                null
         }
 
         Component {
@@ -111,6 +113,7 @@ RippleButton {
             StyledText {
                 Layout.fillWidth: true
                 id: nameText
+                textFormat: Text.PlainText // TODO: make cliphist entry highlighting working
                 font.pixelSize: Appearance.font.pixelSize.normal
                 font.family: Appearance.font.family[root.fontType]
                 color: Appearance.m3colors.m3onSurface

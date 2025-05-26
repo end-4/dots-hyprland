@@ -24,6 +24,7 @@ ShellRoot {
         MaterialThemeLoader.reapplyTheme()
         ConfigLoader.loadConfig()
         PersistentStateManager.loadStates()
+        Cliphist.refresh()
     }
 
     Bar {}

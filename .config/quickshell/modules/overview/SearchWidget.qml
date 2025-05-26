@@ -24,6 +24,21 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
+    property bool lastQueryWasClipboard: false
+
+    onShowResultsChanged: {
+        lastQueryWasClipboard = false;
+    }
+    function cancelSearch() {
+        searchInput.selectAll()
+        root.searchingText = ""
+    }
+
+    function setSearchingText(text) {
+        searchInput.text = text;
+        root.searchingText = text;
+    }
+
     property var searchActions: [
         {
             action: "img", 
@@ -194,7 +209,7 @@ Item { // Wrapper
                     Layout.leftMargin: 15
                     iconSize: Appearance.font.pixelSize.huge
                     color: Appearance.m3colors.m3onSurface
-                    text: "search"
+                    text: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 'content_paste_search' : 'search'
                 }
                 TextField { // Search box
                     id: searchInput
@@ -219,13 +234,6 @@ Item { // Wrapper
                     }
 
                     onTextChanged: root.searchingText = text
-                    Connections {
-                        target: root
-                        function onVisibleChanged() {
-                            searchInput.selectAll()
-                            root.searchingText = ""
-                        }
-                    }
 
                     onAccepted: {
                         if (appResults.count > 0) {
@@ -279,10 +287,31 @@ Item { // Wrapper
 
                 model: ScriptModel {
                     id: model
-                    values: {
+                    values: { // Search results are handled here
+                        ////////////////// Skip? //////////////////
                         if(root.searchingText == "") return [];
 
-                        // Start math calculation, declare special result objects
+                        ///////////// Special cases ///////////////
+                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard)) { // Clipboard
+                            if (!root.lastQueryWasClipboard) {
+                                root.lastQueryWasClipboard = true;
+                                Cliphist.refresh(); // Refresh clipboard entries
+                            }
+                            const searchString = root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length);
+                            return Cliphist.fuzzyQuery(searchString).map(entry => {
+                                return {
+                                    name: entry.replace(/^\s*\S+\s+/, ""),
+                                    clickActionName: qsTr("Copy"),
+                                    type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
+                                    execute: () => {
+                                        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode | wl-copy`);
+                                    }
+                                };
+                            }).filter(Boolean);
+                        }
+                    
+
+                        ////////////////// Init ///////////////////
                         nonAppResultsTimer.restart();
                         const mathResultObject = {
                             name: root.mathResult,
@@ -322,10 +351,9 @@ Item { // Wrapper
                             })
                             .filter(Boolean);
 
-                        // Init result array
                         let result = [];
 
-                        // Add filtered application entries
+                        //////////////// Apps //////////////////
                         result = result.concat(
                             AppSearch.fuzzyQuery(root.searchingText)
                                 .map((entry) => {
@@ -335,23 +363,20 @@ Item { // Wrapper
                                 })
                         );
 
-                        // Add launcher actions
+                        ////////// Launcher actions ////////////
                         result = result.concat(launcherActionObjects);
 
-                        // Insert math result before command if search starts with a number
+                        /////////// Math result & command //////////
                         const startsWithNumber = /^\d/.test(root.searchingText);
-                        if (startsWithNumber)
+                        if (startsWithNumber) {
                             result.push(mathResultObject);
-
-                        // Command
-                        result.push(commandResultObject);
-
-                        // If not already added, add math result after command
-                        if (!startsWithNumber) {
+                            result.push(commandResultObject);
+                        } else {
+                            result.push(commandResultObject);
                             result.push(mathResultObject);
                         }
 
-                        // Web search
+                        ///////////////// Web search ////////////////
                         result.push({
                             name: root.searchingText,
                             clickActionName: qsTr("Search"),
@@ -369,7 +394,8 @@ Item { // Wrapper
                         return result;
                     }
                 }
-                delegate: SearchItem {
+
+                delegate: SearchItem { // The selectable item for each search result
                     entry: modelData
                 }
             }

@@ -62,6 +62,7 @@ Singleton {
         property list<string> excludedSites: [ "quora.com" ]
         property QtObject prefix: QtObject {
             property string action: "/"
+            property string clipboard: ":"
         }
     }
 

@@ -10,7 +10,10 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
+    id: overviewScope
+    property bool dontAutoCancelSearch: false
     Variants {
+        id: overviewVariants
         model: Quickshell.screens
         PanelWindow {
             id: root
@@ -50,7 +53,14 @@ Scope {
             Connections {
                 target: GlobalStates
                 function onOverviewOpenChanged() {
-                    delayedGrabTimer.start()
+                    if (!GlobalStates.overviewOpen) {
+                        overviewScope.dontAutoCancelSearch = false;
+                    } else {
+                        if (!overviewScope.dontAutoCancelSearch) {
+                            searchWidget.cancelSearch()
+                        }
+                        delayedGrabTimer.start()
+                    }
                 }
             }
 
@@ -66,6 +76,10 @@ Scope {
 
             implicitWidth: columnLayout.width
             implicitHeight: columnLayout.height
+
+            function setSearchingText(text) {
+                searchWidget.setSearchingText(text);
+            }
 
             ColumnLayout {
                 id: columnLayout
@@ -84,6 +98,7 @@ Scope {
                 }
 
                 SearchWidget {
+                    id: searchWidget
                     panelWindow: root
                     Layout.alignment: Qt.AlignHCenter
                     onSearchingTextChanged: (text) => {
@@ -161,6 +176,28 @@ Scope {
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = false
+        }
+    }
+    GlobalShortcut {
+        name: "overviewClipboardToggle"
+        description: qsTr("Toggle clipboard query on overview widget")
+
+        onPressed: {
+            if (GlobalStates.overviewOpen) {
+                GlobalStates.overviewOpen = false;
+                return;
+            }
+            for (let i = 0; i < overviewVariants.instances.length; i++) {
+                let panelWindow = overviewVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    overviewScope.dontAutoCancelSearch = true;
+                    panelWindow.setSearchingText(
+                        ConfigOptions.search.prefix.clipboard
+                    );
+                    GlobalStates.overviewOpen = true;
+                    return
+                }
+            }
         }
     }
 
