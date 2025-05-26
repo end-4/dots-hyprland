@@ -23,6 +23,6 @@ Singleton {
             key: "name"
         }).map(r => {
             return r.obj.entry
-    });
+        });
     }
 }
