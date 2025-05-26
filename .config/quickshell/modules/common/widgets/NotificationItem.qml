@@ -20,7 +20,7 @@ Item { // Notification item area
     property bool expanded: false
     property bool onlyNotification: false
     property real fontSize: Appearance.font.pixelSize.small
-    property real padding: 8
+    property real padding: onlyNotification ? 0 : 8
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: notificationIcon.implicitWidth + 20 // Account for gaps and bouncy animations
@@ -127,7 +127,7 @@ Item { // Notification item area
             }
         }
 
-        color: expanded ? 
+        color: (expanded && !onlyNotification) ? 
             (notificationObject.urgency == NotificationUrgency.Critical) ? 
                 ColorUtils.mix(Appearance.m3colors.m3secondaryContainer, Appearance.colors.colLayer2, 0.35) :
                 (Appearance.m3colors.m3surfaceContainerHigh) :
@@ -202,7 +202,7 @@ Item { // Notification item area
                     Layout.fillWidth: true
                     implicitHeight: actionRowLayout.implicitHeight
                     contentWidth: actionRowLayout.implicitWidth
-                    clip: true
+                    clip: !onlyNotification
 
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
