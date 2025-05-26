@@ -176,3 +176,13 @@ function friendlyTimeForSeconds(seconds) {
         return `${m}:${s.toString().padStart(2, '0')}`;
     }
 }
+
+function escapeHtml(str) {
+    if (typeof str !== 'string') return str;
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
