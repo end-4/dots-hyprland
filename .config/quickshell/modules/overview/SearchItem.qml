@@ -3,6 +3,8 @@ import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -14,6 +16,7 @@ import Quickshell.Hyprland
 RippleButton {
     id: root
     property var entry
+    property string query
     property bool entryShown: entry?.shown ?? true
     property string itemType: entry?.type
     property string itemName: entry?.name
@@ -22,6 +25,39 @@ RippleButton {
     property string fontType: entry?.fontType ?? "main"
     property string itemClickActionName: entry?.clickActionName
     property string materialSymbol: entry?.materialSymbol ?? ""
+
+    property string highlightPrefix: `<b><font color="${Appearance.m3colors.m3primary}">`
+    property string highlightSuffix: `</font></b>`
+    function highlightContent(content, query) {
+        if (!query || query.length === 0 || content == query || fontType === "monospace")
+            return StringUtils.escapeHtml(content);
+
+        let contentLower = content.toLowerCase();
+        let queryLower = query.toLowerCase();
+
+        let result = "";
+        let lastIndex = 0;
+        let qIndex = 0;
+
+        for (let i = 0; i < content.length && qIndex < query.length; i++) {
+            if (contentLower[i] === queryLower[qIndex]) {
+                // Add non-highlighted part (escaped)
+                if (i > lastIndex)
+                    result += StringUtils.escapeHtml(content.slice(lastIndex, i));
+                // Add highlighted character (escaped)
+                result += root.highlightPrefix + StringUtils.escapeHtml(content[i]) + root.highlightSuffix;
+                lastIndex = i + 1;
+                qIndex++;
+            }
+        }
+        // Add the rest of the string (escaped)
+        if (lastIndex < content.length)
+            result += StringUtils.escapeHtml(content.slice(lastIndex));
+
+        return result;
+    }
+
+    property string displayContent: highlightContent(root.itemName, root.query)
     
     visible: root.entryShown
     property int horizontalMargin: 10
@@ -113,13 +149,13 @@ RippleButton {
             StyledText {
                 Layout.fillWidth: true
                 id: nameText
-                textFormat: Text.PlainText // TODO: make cliphist entry highlighting work
+                textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
                 font.pixelSize: Appearance.font.pixelSize.normal
                 font.family: Appearance.font.family[root.fontType]
                 color: Appearance.m3colors.m3onSurface
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideRight
-                text: `${root.itemName}`
+                text: `${root.displayContent}`
             }
         }
 

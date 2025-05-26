@@ -396,7 +396,11 @@ Item { // Wrapper
                 }
 
                 delegate: SearchItem { // The selectable item for each search result
+                    required property var modelData
                     entry: modelData
+                    query: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 
+                        root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length) : 
+                        root.searchingText;
                 }
             }
             
