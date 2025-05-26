@@ -284,7 +284,7 @@ Item { // Player instance
                             implicitHeight: size
                             onClicked: playerController.player.togglePlaying();
 
-                            buttonRadius: playerController.player?.isPlaying ? Appearance?.rounding.small : size / 2
+                            buttonRadius: playerController.player?.isPlaying ? Appearance?.rounding.normal : size / 2
                             colBackground: playerController.player?.isPlaying ? blendedColors.colPrimary : blendedColors.colSecondaryContainer
                             colBackgroundHover: playerController.player?.isPlaying ? blendedColors.colPrimaryHover : blendedColors.colSecondaryContainerHover
                             colRipple: playerController.player?.isPlaying ? blendedColors.colPrimaryActive : blendedColors.colSecondaryContainerActive
