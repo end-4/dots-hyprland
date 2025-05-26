@@ -54,6 +54,7 @@ Scope {
                 target: GlobalStates
                 function onOverviewOpenChanged() {
                     if (!GlobalStates.overviewOpen) {
+                        searchWidget.disableExpandAnimation()
                         overviewScope.dontAutoCancelSearch = false;
                     } else {
                         if (!overviewScope.dontAutoCancelSearch) {

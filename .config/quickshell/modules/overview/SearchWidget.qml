@@ -29,9 +29,15 @@ Item { // Wrapper
     onShowResultsChanged: {
         lastQueryWasClipboard = false;
     }
+
+    function disableExpandAnimation() {
+        searchWidthBehavior.enabled = false;
+    }
+
     function cancelSearch() {
         searchInput.selectAll()
         root.searchingText = ""
+        searchWidthBehavior.enabled = true; 
     }
 
     function setSearchingText(text) {
@@ -226,10 +232,15 @@ Item { // Wrapper
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
 
                     Behavior on implicitWidth {
+                        id: searchWidthBehavior
+                        onEnabledChanged: {
+                            console.log("Search width behavior enabled:", enabled);
+                        }
+                        enabled: false
                         NumberAnimation {
-                            duration: Appearance.animation.elementMoveFast.duration
-                            easing.type: Appearance.animation.elementMoveFast.type
-                            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                            duration: 300
+                            easing.type: Appearance.animation.elementMove.type
+                            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
                         }
                     }
 
