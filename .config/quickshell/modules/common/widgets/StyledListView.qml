@@ -9,7 +9,10 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-ListView { // Scrollable window
+/**
+ * A ListView with animations.
+ */
+ListView {
     id: root
     spacing: 5
     property real removeOvershoot: 20 // Account for gaps and bouncy animations
@@ -23,7 +26,7 @@ ListView { // Scrollable window
 
     add: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 from: 0,
                 to: 1,
@@ -33,10 +36,10 @@ ListView { // Scrollable window
 
     addDisplaced: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 to: 1,
             }),
@@ -45,10 +48,10 @@ ListView { // Scrollable window
     
     displaced: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 to: 1,
             }),
@@ -57,10 +60,10 @@ ListView { // Scrollable window
 
     move: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 to: 1,
             }),
@@ -68,10 +71,10 @@ ListView { // Scrollable window
     }
     moveDisplaced: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 to: 1,
             }),
@@ -80,11 +83,11 @@ ListView { // Scrollable window
 
     remove: Transition {
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "x",
                 to: root.width + root.removeOvershoot,
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "opacity",
                 to: 0,
             })
@@ -94,10 +97,10 @@ ListView { // Scrollable window
     // This is movement when something is removed, not removing animation!
     removeDisplaced: Transition { 
         animations: [
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 property: "y",
             }),
-            Appearance.animation.elementMove.numberAnimation.createObject(this, {
+            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
                 properties: "opacity,scale",
                 to: 1,
             }),

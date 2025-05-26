@@ -8,6 +8,9 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell.Widgets
 
+/**
+ * A button with ripple effect similar to in Material Design.
+ */
 Button {
     id: root
     property bool toggled
@@ -19,12 +22,12 @@ Button {
     property bool rippleEnabled: true
     property var altAction
 
-    property color colBackground: ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
-    property color colBackgroundHover: Appearance.colors.colLayer1Hover
-    property color colBackgroundToggled: Appearance.m3colors.m3primary
-    property color colBackgroundToggledHover: Appearance.colors.colPrimaryHover
-    property color colRipple: Appearance.colors.colLayer1Active
-    property color colRippleToggled: Appearance.colors.colPrimaryActive
+    property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "#00000000"
+    property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
+    property color colBackgroundToggled: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
+    property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
+    property color colRippleToggled: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
     property color buttonColor: root.enabled ? (root.toggled ? 
         (root.hovered ? colBackgroundToggledHover : 
@@ -48,8 +51,8 @@ Button {
 
     component RippleAnim: NumberAnimation {
         duration: rippleDuration
-        easing.type: Appearance.animation.elementMoveEnter.type
-        easing.bezierCurve: Appearance.animationCurves.standardDecel
+        easing.type: Appearance?.animation.elementMoveEnter.type
+        easing.bezierCurve: Appearance?.animationCurves.standardDecel
     }
 
     MouseArea {
@@ -125,7 +128,7 @@ Button {
 
         color: root.buttonColor
         Behavior on color {
-            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
         layer.enabled: true
@@ -140,11 +143,11 @@ Button {
         Rectangle {
             id: ripple
 
-            radius: Appearance.rounding.full
+            radius: Appearance?.rounding.full ?? 9999
             opacity: 0
             color: root.rippleColor
             Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
             }
 
             transform: Translate {

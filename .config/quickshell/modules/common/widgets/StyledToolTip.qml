@@ -19,11 +19,7 @@ ToolTip {
     visible: opacity > 0
 
     Behavior on opacity {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveFast.duration
-            easing.type: Appearance.animation.elementMoveFast.type
-            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-        }
+        animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
     background: null
@@ -37,34 +33,26 @@ ToolTip {
             id: backgroundRectangle
             anchors.bottom: contentItemBackground.bottom
             anchors.horizontalCenter: contentItemBackground.horizontalCenter
-            color: Appearance.colors.colTooltip
-            radius: Appearance.rounding.verysmall
+            color: Appearance?.colors.colTooltip ?? "#3C4043"
+            radius: Appearance?.rounding.verysmall ?? 7
             width: internalVisibleCondition ? (tooltipTextObject.width + 2 * padding) : 0
             height: internalVisibleCondition ? (tooltipTextObject.height + 2 * padding) : 0
             clip: true
 
             Behavior on width {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                }
+                animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
             }
             Behavior on height {
-                NumberAnimation {
-                    duration: Appearance.animation.elementMoveFast.duration
-                    easing.type: Appearance.animation.elementMoveFast.type
-                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
-                }
+                animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
             }
 
             StyledText {
                 id: tooltipTextObject
                 anchors.centerIn: parent
                 text: content
-                font.pixelSize: Appearance.font.pixelSize.smaller
+                font.pixelSize: Appearance?.font.pixelSize.smaller ?? 14
                 font.hintingPreference: Font.PreferNoHinting // Prevent shaky text
-                color: Appearance.colors.colOnTooltip
+                color: Appearance?.colors.colOnTooltip ?? "#FFFFFF"
                 wrapMode: Text.Wrap
             }
         }   

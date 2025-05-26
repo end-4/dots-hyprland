@@ -58,11 +58,7 @@ Item {
     }
 
     Behavior on size {
-        NumberAnimation {
-            duration: root.animationDuration
-            easing.type: Easing.OutCubic
-        }
-
+        animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
 }

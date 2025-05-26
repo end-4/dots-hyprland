@@ -4,11 +4,16 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
+/**
+ * Material 3 switch. See https://m3.material.io/components/switch/overview
+ */
 Switch {
     id: root
     property real scale: 1
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
+    property color activeColor: Appearance?.m3colors.m3primary ?? "#685496"
+    property color inactiveColor: Appearance?.m3colors.m3surfaceContainerHighest ?? "#45464F"
 
     PointingHandInteraction {}
 
@@ -16,10 +21,10 @@ Switch {
     background: Rectangle {
         width: parent.width
         height: parent.height
-        radius: Appearance.rounding.full
-        color: root.checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3surfaceContainerHighest
+        radius: Appearance?.rounding.full ?? 9999
+        color: root.checked ? root.activeColor : root.inactiveColor
         border.width: 2 * root.scale
-        border.color: root.checked ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
+        border.color: root.checked ? root.activeColor : Appearance.m3colors.m3outline
 
         Behavior on color {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
