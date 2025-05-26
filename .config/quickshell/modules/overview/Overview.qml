@@ -183,7 +183,7 @@ Scope {
         description: qsTr("Toggle clipboard query on overview widget")
 
         onPressed: {
-            if (GlobalStates.overviewOpen) {
+            if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
                 GlobalStates.overviewOpen = false;
                 return;
             }
