@@ -95,7 +95,7 @@ Item {
                     day: modelData.day
                     isToday: modelData.today
                     bold: true
-                    interactable: false
+                    enabled: false
                 }
             }
         }

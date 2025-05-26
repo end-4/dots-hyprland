@@ -10,7 +10,6 @@ RippleButton {
     property string day
     property int isToday
     property bool bold
-    property bool interactable: true
 
     Layout.fillWidth: false
     Layout.fillHeight: false
