@@ -16,6 +16,7 @@ GroupButton {
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
     colBackgroundActive: Appearance.colors.colLayer2Active
+    clickedWidth: baseWidth + 30
 
     contentItem: RowLayout {
         anchors.fill: parent
