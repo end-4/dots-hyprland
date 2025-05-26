@@ -60,6 +60,7 @@ function findSuitableMaterialSymbol(summary = "") {
  * @returns { string }
  */
 const getFriendlyNotifTimeString = (timestamp) => {
+    if (!timestamp) return '';
     const messageTime = new Date(timestamp);
     const now = new Date();
     const oneMinuteAgo = new Date(now.getTime() - 60000);

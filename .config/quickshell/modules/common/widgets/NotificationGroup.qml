@@ -21,7 +21,7 @@ import Quickshell.Services.Notifications
 Item { // Notification group area
     id: root
     property var notificationGroup
-    property var notifications: notificationGroup.notifications
+    property var notifications: notificationGroup?.notifications ?? []
     property int notificationCount: notifications.length
     property bool multipleNotifications: notificationCount > 1
     property bool expanded: false
@@ -60,7 +60,9 @@ Item { // Notification group area
         }
         onFinished: () => {
             root.notifications.forEach((notif) => {
-                Notifications.discardNotification(notif.id);
+                Qt.callLater(() => {
+                    Notifications.discardNotification(notif.id);
+                });
             });
         }
     }
@@ -153,16 +155,16 @@ Item { // Notification group area
             NotificationAppIcon { // Icons
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: false
-                image: root.multipleNotifications ? "" : notificationGroup.notifications[0].image
-                appIcon: notificationGroup.appIcon
-                summary: notificationGroup.notifications[root.notificationCount - 1].summary
+                image: root?.multipleNotifications ? "" : notificationGroup?.notifications[0]?.image ?? ""
+                appIcon: notificationGroup?.appIcon
+                summary: notificationGroup?.notifications[root.notificationCount - 1]?.summary
             }
 
             ColumnLayout { // Content
                 Layout.fillWidth: true
                 spacing: expanded ? 
                     ((root.multipleNotifications && 
-                        notificationGroup.notifications[root.notificationCount - 1].image != "") ? 35 : 
+                        notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 : 
                         5) : 0
                 Behavior on spacing {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -176,9 +178,9 @@ Item { // Notification group area
 
                     StyledText {
                         id: appName
-                        text: topRow.showAppName ?
-                            notificationGroup.appName :
-                            notificationGroup.notifications[0].summary
+                        text: (topRow.showAppName ?
+                            notificationGroup?.appName :
+                            notificationGroup?.notifications[0]?.summary) || ""
                         font.pixelSize: topRow.showAppName ?
                             topRow.fontSize :
                             Appearance.font.pixelSize.small
@@ -188,7 +190,7 @@ Item { // Notification group area
                     }
                     StyledText {
                         id: timeText
-                        text: " • " + NotificationUtils.getFriendlyNotifTimeString(notificationGroup.time)
+                        text: " • " + NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
                         font.pixelSize: topRow.fontSize
                         color: Appearance.colors.colSubtext
                         Layout.alignment: Qt.AlignRight
