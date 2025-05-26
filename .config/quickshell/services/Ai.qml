@@ -8,6 +8,9 @@ import Quickshell.Io;
 import Qt.labs.platform
 import QtQuick;
 
+/**
+ * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
+ */
 Singleton {
     id: root
 
@@ -184,7 +187,7 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             PersistentStateManager.setState("ai.model", modelId);
-            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), models[modelId].name, Ai.interfaceRole))
+            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), models[modelId].name), Ai.interfaceRole)
             if (models[modelId].requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[models[modelId].key_id] || root.apiKeys[models[modelId].key_id].length === 0)) {
