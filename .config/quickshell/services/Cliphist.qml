@@ -2,6 +2,8 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
+import "root:/modules/common/functions/levendist.js" as Levendist
+import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common"
 import "root:/"
 import QtQuick
@@ -10,21 +12,29 @@ import Quickshell.Io
 
 Singleton {
     id: root
+    property bool sloppySearch: ConfigOptions?.search.sloppy ?? false
+    property real scoreThreshold: 0.2
     property list<string> entries: []
-    property string highlightPrefix: `<b><font color="${Appearance.m3colors.m3primary}">`
-    property string highlightSuffix: `</font></b>`
     readonly property var preparedEntries: entries.map(a => ({
         name: Fuzzy.prepare(`${a}`),
         entry: a
     }))
     function fuzzyQuery(search: string): var {
+        if (root.sloppySearch) {
+            const results = entries.slice(0, 100).map(str => ({
+                entry: str,
+                score: Levendist.computeTextMatchScore(str.toLowerCase(), search.toLowerCase())
+            })).filter(item => item.score > root.scoreThreshold)
+                .sort((a, b) => b.score - a.score)
+            return results
+                .map(item => item.entry)
+        }
+
         return Fuzzy.go(search, preparedEntries, {
             all: true,
             key: "name"
         }).map(r => {
             return r.obj.entry
-            // console.log(JSON.stringify(r))
-            // return r.highlight(highlightPrefix, highlightSuffix);
         });
     }
 

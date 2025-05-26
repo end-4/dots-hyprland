@@ -60,6 +60,7 @@ Singleton {
         property int nonAppResultDelay: 30 // This prevents lagging when typing
         property string engineBaseUrl: "https://www.google.com/search?q="
         property list<string> excludedSites: [ "quora.com" ]
+        property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
         property QtObject prefix: QtObject {
             property string action: "/"
             property string clipboard: ":"

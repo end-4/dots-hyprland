@@ -113,7 +113,7 @@ RippleButton {
             StyledText {
                 Layout.fillWidth: true
                 id: nameText
-                textFormat: Text.PlainText // TODO: make cliphist entry highlighting working
+                textFormat: Text.PlainText // TODO: make cliphist entry highlighting work
                 font.pixelSize: Appearance.font.pixelSize.normal
                 font.family: Appearance.font.family[root.fontType]
                 color: Appearance.m3colors.m3onSurface
