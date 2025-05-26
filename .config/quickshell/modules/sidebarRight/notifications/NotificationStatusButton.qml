@@ -4,23 +4,20 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-RippleButton {
+GroupButton {
     id: button
     property string buttonText: ""
     property string buttonIcon: ""
 
-    implicitHeight: 30
-    implicitWidth: contentRowLayout.implicitWidth + 10 * 2
-    Behavior on implicitWidth {
-        SmoothedAnimation {
-            velocity: Appearance.animation.elementMove.velocity
-        }
-    }
+    baseWidth: contentRowLayout.implicitWidth + 10 * 2
+    baseHeight: 30
+    clickedWidth: baseWidth + 15
 
-    buttonRadius: Appearance.rounding.full
+    buttonRadius: baseHeight / 2
+    buttonRadiusPressed: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
-    colRipple: Appearance.colors.colLayer2Active
+    colBackgroundActive: Appearance.colors.colLayer2Active
     background.anchors.fill: button
 
     contentItem: Item {
