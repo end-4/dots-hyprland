@@ -195,6 +195,17 @@ Item { // Notification item area
                     textFormat: Text.RichText
                     text: `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
                         `${notificationObject.body.replace(/\n/g, "<br/>")}` 
+
+                    onLinkActivated: (link) => {
+                        Qt.openUrlExternally(link)
+                        Hyprland.dispatch("global quickshell:sidebarRightClose")
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.NoButton // Only for hover
+                        hoverEnabled: true
+                        cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    }
                 }
 
                 Flickable { // Notification actions
