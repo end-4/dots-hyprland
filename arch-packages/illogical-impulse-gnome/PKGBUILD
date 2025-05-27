@@ -7,6 +7,6 @@ license=(None)
 depends=(
 	polkit-gnome
 	gnome-keyring
-	networkmanager
-	better-control-git
+	gnome-control-center
+	blueberry networkmanager
 )

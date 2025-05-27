@@ -13,10 +13,10 @@ Singleton {
     }
 
     property QtObject apps: QtObject {
-        property string bluetooth: "better-control --bluetooth"
+        property string bluetooth: "blueberry"
         property string imageViewer: "loupe"
-        property string network: "better-control --wifi"
-        property string settings: "better-control"
+        property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
+        property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
         property string taskManager: "gnome-usage"
         property string terminal: "foot" // This is only for shell actions
     }
