@@ -391,9 +391,7 @@ Singleton {
                 cleanData = cleanData.slice(5).trim();
             }
             // console.log("Clean data: ", cleanData);
-            if (!cleanData ||
-                cleanData === ": OPENROUTER PROCESSING"
-            ) return;
+            if (!cleanData || cleanData.startsWith(":")) return;
 
             if (cleanData === "[DONE]") {
                 requester.message.done = true;
