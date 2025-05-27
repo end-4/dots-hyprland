@@ -60,7 +60,7 @@ Singleton {
             destroy()
         }
     }
-    property var filePath: `${XdgDirectories.cache}/notifications/notifications.json`
+    property var filePath: Directories.notificationsPath
     property list<Notif> list: []
     property var popupList: list.filter((notif) => notif.popup);
     property bool popupInhibited: GlobalStates?.sidebarRightOpen ?? false
@@ -233,7 +233,7 @@ Singleton {
 
     FileView {
         id: notifFileView
-        path: filePath
+        path: Qt.resolvedUrl(filePath)
         onLoaded: {
             const fileContents = notifFileView.text()
             root.list = JSON.parse(fileContents).map((notif) => {

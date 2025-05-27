@@ -139,7 +139,7 @@ Singleton {
 
     Process {
         id: getOllamaModels
-        command: ["bash", "-c", `${XdgDirectories.config}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
+        command: ["bash", "-c", `${Directories.config}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
         stdout: SplitParser {
             onRead: data => {
                 try {

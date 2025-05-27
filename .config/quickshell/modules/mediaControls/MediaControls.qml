@@ -27,7 +27,6 @@ Scope {
     property real contentPadding: 13
     property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
     property real artRounding: Appearance.rounding.verysmall
-    property string baseCoverArtDir: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/coverart`)
 
     property bool hasPlasmaIntegration: false
     function isRealPlayer(player) {
@@ -68,10 +67,6 @@ Scope {
             group.forEach(idx => used.add(idx));
         }
         return filtered;
-    }
-
-    Component.onCompleted: {
-        Hyprland.dispatch(`exec rm -rf ${baseCoverArtDir} && mkdir -p ${baseCoverArtDir}`)
     }
 
     Loader {
@@ -116,7 +111,6 @@ Scope {
                     }
                     delegate: PlayerControl {
                         required property MprisPlayer modelData
-                        artDownloadLocation: root.baseCoverArtDir
                         player: modelData
                     }
                 }

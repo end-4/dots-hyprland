@@ -20,9 +20,9 @@ Item {
     property var panelWindow
     property var inputField: tagInputField
     readonly property var responses: Booru.responses
-    property string previewDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/waifus`)
-    property string downloadPath: FileUtils.trimFileProtocol(XdgDirectories.pictures  + "/homework")
-    property string nsfwPath: FileUtils.trimFileProtocol(XdgDirectories.pictures + "/homework/🌶️")
+    property string previewDownloadPath: Directories.booruPreviews
+    property string downloadPath: Directories.booruDownloads
+    property string nsfwPath: Directories.booruDownloadsNsfw
     property string commandPrefix: "/"
     property real scrollOnNewResponse: 100
     property int tagSuggestionDelay: 210
@@ -35,11 +35,6 @@ Item {
             root.suggestionQuery = query;
             root.suggestionList = suggestions;
         }
-    }
-
-    Component.onCompleted: {
-        Hyprland.dispatch(`exec rm -rf '${previewDownloadPath}' && mkdir -p '${previewDownloadPath}'`)
-        Hyprland.dispatch(`exec mkdir -p '${downloadPath}' && mkdir -p '${downloadPath}'`)
     }
 
     property var allCommands: [

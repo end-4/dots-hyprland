@@ -15,7 +15,7 @@ import Qt.labs.platform
  */
 Singleton {
     id: root
-    property string fileDir: XdgDirectories.state
+    property string fileDir: Directories.state
     property string fileName: "states.json"
     property string filePath: `${root.fileDir}/${root.fileName}`
     property bool allowWriteback: false

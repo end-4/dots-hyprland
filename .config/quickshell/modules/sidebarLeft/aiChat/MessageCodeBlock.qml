@@ -95,8 +95,9 @@ ColumnLayout {
                     buttonIcon: activated ? "check" : "save"
 
                     onClicked: {
-                        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${FileUtils.trimFileProtocol(XdgDirectories.downloads)}/code.${segmentLang || "txt"}'`)
-                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${FileUtils.trimFileProtocol(XdgDirectories.downloads)}/code.${segmentLang || "txt"}'`)
+                        const downloadPath = FileUtils.trimFileProtocol(Directories.downloads)
+                        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`)
+                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}'`)
                         saveCodeButton.activated = true
                         saveIconTimer.restart()
                     }

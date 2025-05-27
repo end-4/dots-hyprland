@@ -23,10 +23,6 @@ Item {
     property var suggestionQuery: ""
     property var suggestionList: []
 
-    Component.onCompleted: {
-        Hyprland.dispatch(`exec mkdir -p ${faviconDownloadPath}`)
-    }
-
     onFocusChanged: (focus) => {
         if (focus) {
             root.inputField.forceActiveFocus()

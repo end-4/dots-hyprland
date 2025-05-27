@@ -15,7 +15,7 @@ import Quickshell.Hyprland
 
 Item { // Wrapper
     id: root
-    readonly property string xdgConfigHome: XdgDirectories.config
+    readonly property string xdgConfigHome: Directories.config
     property string searchingText: ""
     property bool showResults: searchingText != ""
     property real searchBarHeight: searchBar.height + Appearance.sizes.elevationMargin * 2

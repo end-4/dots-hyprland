@@ -3,6 +3,7 @@ import "root:/modules/common/widgets"
 import "root:/services"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import "root:/modules/common/functions/file_utils.js" as FileUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Effects
@@ -19,7 +20,7 @@ Item { // Player instance
     id: playerController
     required property MprisPlayer player
     property var artUrl: player?.trackArtUrl
-    property string artDownloadLocation: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/coverart`)
+    property string artDownloadLocation: Directories.coverArt
     property string artFileName: Qt.md5(artUrl) + ".jpg"
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: Appearance.m3colors.m3secondaryContainer

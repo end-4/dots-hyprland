@@ -13,7 +13,7 @@ import QtQuick;
  */
 Singleton {
     id: root
-    property var filePath: `${XdgDirectories.state}/user/todo.json`
+    property var filePath: Directories.todoPath
     property var list: []
     
     function addItem(item) {
@@ -68,7 +68,7 @@ Singleton {
 
     FileView {
         id: todoFileView
-        path: filePath
+        path: Qt.resolvedUrl(root.filePath)
         onLoaded: {
             const fileContents = todoFileView.text()
             root.list = JSON.parse(fileContents)

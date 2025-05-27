@@ -26,13 +26,9 @@ Singleton {
     property var processedExpressions: ({})
     property var renderedImagePaths: ({})
     property string microtexBinaryPath: Qt.resolvedUrl("/opt/MicroTeX/LaTeX")
-    property string latexOutputPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/latex`)
+    property string latexOutputPath: Directories.latexOutput
 
     signal renderFinished(string hash, string imagePath)
-
-    Component.onCompleted: {
-        Hyprland.dispatch(`exec rm -rf ${latexOutputPath} && mkdir -p ${latexOutputPath}`)
-    }
 
     /**
     * Requests rendering of a LaTeX expression.

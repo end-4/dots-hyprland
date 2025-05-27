@@ -12,7 +12,7 @@ import Quickshell.Io
  */
 Singleton {
     id: root
-    property string filePath: `${XdgDirectories.state}/user/generated/colors.json`
+    property string filePath: Directories.generatedMaterialThemePath
 
     function reapplyTheme() {
         themeFileView.reload()
@@ -44,7 +44,7 @@ Singleton {
 
 	FileView { 
         id: themeFileView
-        path: root.filePath
+        path: Qt.resolvedUrl(root.filePath)
         watchChanges: true
         onFileChanged: {
             this.reload()
