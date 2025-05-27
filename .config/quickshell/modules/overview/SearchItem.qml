@@ -26,8 +26,8 @@ RippleButton {
     property string itemClickActionName: entry?.clickActionName
     property string materialSymbol: entry?.materialSymbol ?? ""
 
-    property string highlightPrefix: `<b><font color="${Appearance.m3colors.m3primary}">`
-    property string highlightSuffix: `</font></b>`
+    property string highlightPrefix: `<u><font color="${Appearance.m3colors.m3primary}">`
+    property string highlightSuffix: `</font></u>`
     function highlightContent(content, query) {
         if (!query || query.length === 0 || content == query || fontType === "monospace")
             return StringUtils.escapeHtml(content);
