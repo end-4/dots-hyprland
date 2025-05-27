@@ -272,7 +272,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
-                // clip: true
+                clip: true
                 topMargin: 10
                 bottomMargin: 10
                 spacing: 0
