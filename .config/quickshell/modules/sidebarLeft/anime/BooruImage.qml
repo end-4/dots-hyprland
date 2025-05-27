@@ -43,6 +43,10 @@ Button {
         }
     }
 
+    StyledToolTip {
+        content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}`
+    }
+
     padding: 0
     implicitWidth: root.rowHeight * modelData.aspect_ratio
     implicitHeight: root.rowHeight
@@ -97,10 +101,6 @@ Button {
             colBackgroundHover: ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.8), 0.2)
             colRipple: ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3surface, Appearance.m3colors.m3onSurface, 0.6), 0.1)
 
-            StyledToolTip {
-                content: `${StringUtils.wordWrap(root.imageData.tags, root.maxTagStringLineLength)}\n${qsTr("Click for options")}`
-            }
-
             contentItem: MaterialSymbol {
                 horizontalAlignment: Text.AlignHCenter
                 iconSize: Appearance.font.pixelSize.large
@@ -124,6 +124,13 @@ Button {
                 width: contextMenu.width
                 height: contextMenu.height
 
+                RectangularShadow { // Background shadow
+                    anchors.fill: contextMenu
+                    radius: contextMenu.radius
+                    blur: 1.2 * Appearance.sizes.elevationMargin
+                    spread: 1
+                    color: Appearance.colors.colShadow
+                }
                 Rectangle {
                     id: contextMenu
                     anchors.centerIn: parent
@@ -133,16 +140,6 @@ Button {
                     color: Appearance.m3colors.m3surfaceContainer
                     implicitHeight: contextMenuColumnLayout.implicitHeight + radius * 2
                     implicitWidth: contextMenuColumnLayout.implicitWidth
-
-                    layer.enabled: true
-                    layer.effect: MultiEffect {
-                        source: contextMenu
-                        anchors.fill: contextMenu
-                        shadowEnabled: true
-                        shadowColor: Appearance.colors.colShadow
-                        shadowVerticalOffset: 1
-                        shadowBlur: 0.5
-                    }
 
                     Behavior on opacity {
                         NumberAnimation {

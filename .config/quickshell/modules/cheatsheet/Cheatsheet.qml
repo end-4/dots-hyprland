@@ -55,7 +55,16 @@ Scope { // Scope
                 }
             }
 
+
             // Background
+            RectangularShadow {
+                anchors.fill: cheatsheetBackground
+                radius: cheatsheetBackground.radius
+                blur: 1.2 * Appearance.sizes.elevationMargin
+                spread: 1
+                color: Appearance.colors.colShadow
+                cached: true
+            }
             Rectangle {
                 id: cheatsheetBackground
                 anchors.centerIn: parent
@@ -64,16 +73,6 @@ Scope { // Scope
                 property real padding: 30
                 implicitWidth: cheatsheetColumnLayout.implicitWidth + padding * 2
                 implicitHeight: cheatsheetColumnLayout.implicitHeight + padding * 2
-
-                layer.enabled: true
-                layer.effect: MultiEffect {
-                    source: cheatsheetBackground
-                    anchors.fill: cheatsheetBackground
-                    shadowEnabled: true
-                    shadowVerticalOffset: 1
-                    shadowColor: Appearance.colors.colShadow
-                    shadowBlur: 0.5
-                }
 
                 Keys.onPressed: (event) => { // Esc to close
                     if (event.key === Qt.Key_Escape) {

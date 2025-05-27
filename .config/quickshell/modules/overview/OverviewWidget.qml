@@ -49,7 +49,14 @@ Item {
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
 
-    Rectangle {
+    RectangularShadow { // Background shadow
+        anchors.fill: overviewBackground
+        radius: overviewBackground.radius
+        blur: 1.2 * Appearance.sizes.elevationMargin
+        spread: 1
+        color: Appearance.colors.colShadow
+    }
+    Rectangle { // Background
         id: overviewBackground
         
         anchors.fill: parent
@@ -58,16 +65,6 @@ Item {
         implicitHeight: workspaceColumnLayout.implicitHeight + 5 * 2
         color: Appearance.colors.colLayer0
         radius: Appearance.rounding.screenRounding * root.scale + 5 * 2
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            source: overviewBackground
-            anchors.fill: overviewBackground
-            shadowEnabled: true
-            shadowColor: Appearance.colors.colShadow
-            shadowVerticalOffset: 1
-            shadowBlur: 0.5
-        }
 
         ColumnLayout {
             id: workspaceColumnLayout

@@ -65,6 +65,13 @@ Scope { // Scope
             }
 
             // Background
+            RectangularShadow { // Background shadow
+                anchors.fill: sidebarLeftBackground
+                radius: sidebarLeftBackground.radius
+                blur: 1.2 * Appearance.sizes.elevationMargin
+                spread: 1
+                color: Appearance.colors.colShadow
+            }
             Rectangle {
                 id: sidebarLeftBackground
 
@@ -77,16 +84,6 @@ Scope { // Scope
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
                 focus: sidebarRoot.visible
-
-                layer.enabled: true
-                layer.effect: MultiEffect {
-                    source: sidebarLeftBackground
-                    anchors.fill: sidebarLeftBackground
-                    shadowEnabled: true
-                    shadowColor: Appearance.colors.colShadow
-                    shadowVerticalOffset: 1
-                    shadowBlur: 0.5
-                }
 
                 Behavior on width {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)

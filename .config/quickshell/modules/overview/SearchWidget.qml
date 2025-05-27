@@ -175,6 +175,13 @@ Item { // Wrapper
         }
     }
 
+    RectangularShadow { // Background shadow
+        anchors.fill: searchWidgetContent
+        radius: searchWidgetContent.radius
+        blur: 1.2 * Appearance.sizes.elevationMargin
+        spread: 1
+        color: Appearance.colors.colShadow
+    }
     Rectangle { // Background
         id: searchWidgetContent
         anchors.centerIn: parent
@@ -182,15 +189,6 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            source: searchWidgetContent
-            anchors.fill: searchWidgetContent
-            shadowEnabled: true
-            shadowColor: Appearance.colors.colShadow
-            shadowVerticalOffset: 1
-            shadowBlur: 0.5
-        }
 
         ColumnLayout {
             id: columnLayout

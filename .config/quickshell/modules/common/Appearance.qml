@@ -128,7 +128,7 @@ Singleton {
         property color colTooltip: "#3C4043" // m3colors.m3inverseSurface in the specs, but the m3 website actually uses this color
         property color colOnTooltip: "#F8F9FA" // m3colors.m3inverseOnSurface in the specs, but the m3 website actually uses this color
         property color colScrim: ColorUtils.transparentize(m3colors.m3scrim, 0.5)
-        property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.75)
+        property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.85)
     }
 
     rounding: QtObject {

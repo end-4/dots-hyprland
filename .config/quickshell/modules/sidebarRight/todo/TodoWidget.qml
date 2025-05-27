@@ -152,6 +152,13 @@ Item {
     }
 
     // + FAB
+    RectangularShadow { // Background shadow
+        anchors.fill: fabButton
+        radius: Appearance.rounding.normal
+        blur: 1.2 * Appearance.sizes.elevationMargin
+        spread: 1
+        color: Appearance.colors.colShadow
+    }
     Button { 
         id: fabButton
         anchors.right: parent.right
@@ -172,16 +179,6 @@ Item {
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
-
-            layer.enabled: true
-            layer.effect: MultiEffect {
-                source: fabBackground
-                anchors.fill: fabBackground
-                shadowEnabled: true
-                shadowColor: Appearance.colors.colShadow
-                shadowBlur: 0.6
-                shadowVerticalOffset: fabButton.hovered ? 4 : 2
             }
         }
 

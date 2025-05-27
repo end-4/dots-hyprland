@@ -106,7 +106,14 @@ Item { // Notification group area
     }
 
     
-
+    RectangularShadow {
+        visible: popup
+        anchors.fill: background
+        radius: background.radius
+        blur: 1.2 * Appearance.sizes.elevationMargin
+        spread: 1
+        color: Appearance.colors.colShadow
+    }
     Rectangle { // Background of the notification
         id: background
         anchors.left: parent.left
@@ -132,16 +139,6 @@ Item { // Notification group area
         Behavior on implicitHeight {
             id: implicitHeightAnim
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-        }
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            source: background
-            anchors.fill: background
-            shadowEnabled: popup
-            shadowColor: Appearance.colors.colShadow
-            shadowVerticalOffset: 1
-            shadowBlur: 0.5
         }
 
         RowLayout { // Left column for icon, right column for content

@@ -56,108 +56,111 @@ Scope {
             width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
             
-            sourceComponent: Rectangle {
-                id: sidebarRightBackground
+            sourceComponent: Item {
+                implicitHeight: sidebarRightBackground.implicitHeight
+                implicitWidth: sidebarRightBackground.implicitWidth
 
-                implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
-                implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
-                color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
-
-                layer.enabled: true
-                layer.effect: MultiEffect {
-                    source: sidebarRightBackground
+                RectangularShadow { // Background shadow
                     anchors.fill: sidebarRightBackground
-                    shadowEnabled: true
-                    shadowColor: Appearance.colors.colShadow
-                    shadowVerticalOffset: 1
-                    shadowBlur: 0.5
+                    radius: sidebarRightBackground.radius
+                    blur: 1.2 * Appearance.sizes.elevationMargin
+                    spread: 1
+                    color: Appearance.colors.colShadow
                 }
+                Rectangle {
+                    id: sidebarRightBackground
 
-                Keys.onPressed: (event) => {
-                    if (event.key === Qt.Key_Escape) {
-                        sidebarRoot.hide();
-                    }
-                }
-
-                
-                ColumnLayout {
-                    spacing: sidebarPadding
                     anchors.fill: parent
-                    anchors.margins: sidebarPadding
+                    implicitHeight: parent.height - Appearance.sizes.hyprlandGapsOut * 2
+                    implicitWidth: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+                    color: Appearance.colors.colLayer0
+                    radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
 
-                    RowLayout {
-                        Layout.fillHeight: false
-                        spacing: 10
-                        Layout.margins: 10
-                        Layout.topMargin: 5
-                        Layout.bottomMargin: 0
+                    Keys.onPressed: (event) => {
+                        if (event.key === Qt.Key_Escape) {
+                            sidebarRoot.hide();
+                        }
+                    }
 
-                        Item {
-                            implicitWidth: distroIcon.width
-                            implicitHeight: distroIcon.height
-                            CustomIcon {
-                                id: distroIcon
-                                width: 25
-                                height: 25
-                                source: SystemInfo.distroIcon
+                    
+                    ColumnLayout {
+                        spacing: sidebarPadding
+                        anchors.fill: parent
+                        anchors.margins: sidebarPadding
+
+                        RowLayout {
+                            Layout.fillHeight: false
+                            spacing: 10
+                            Layout.margins: 10
+                            Layout.topMargin: 5
+                            Layout.bottomMargin: 0
+
+                            Item {
+                                implicitWidth: distroIcon.width
+                                implicitHeight: distroIcon.height
+                                CustomIcon {
+                                    id: distroIcon
+                                    width: 25
+                                    height: 25
+                                    source: SystemInfo.distroIcon
+                                }
+                                ColorOverlay {
+                                    anchors.fill: distroIcon
+                                    source: distroIcon
+                                    color: Appearance.colors.colOnLayer0
+                                }
                             }
-                            ColorOverlay {
-                                anchors.fill: distroIcon
-                                source: distroIcon
+
+                            StyledText {
+                                font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer0
+                                text: StringUtils.format(qsTr("Uptime: {0}"), DateTime.uptime)
+                                textFormat: Text.MarkdownText
+                            }
+
+                            Item {
+                                Layout.fillWidth: true
+                            }
+
+                            QuickToggleButton {
+                                toggled: false
+                                buttonIcon: "power_settings_new"
+                                onClicked: {
+                                    Hyprland.dispatch("global quickshell:sessionOpen")
+                                }
+                                StyledToolTip {
+                                    content: qsTr("Session")
+                                }
                             }
                         }
 
-                        StyledText {
-                            font.pixelSize: Appearance.font.pixelSize.normal
-                            color: Appearance.colors.colOnLayer0
-                            text: StringUtils.format(qsTr("Uptime: {0}"), DateTime.uptime)
-                            textFormat: Text.MarkdownText
+                        ButtonGroup {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: 5
+                            padding: 5
+                            color: Appearance.colors.colLayer1
+
+                            NetworkToggle {}
+                            BluetoothToggle {}
+                            NightLight {}
+                            GameMode {}
+                            IdleInhibitor {}
                         }
 
-                        Item {
+                        // Center widget group
+                        CenterWidgetGroup {
+                            focus: sidebarRoot.visible
+                            Layout.alignment: Qt.AlignHCenter
+                            Layout.fillHeight: true
                             Layout.fillWidth: true
                         }
 
-                        QuickToggleButton {
-                            toggled: false
-                            buttonIcon: "power_settings_new"
-                            onClicked: {
-                                Hyprland.dispatch("global quickshell:sessionOpen")
-                            }
-                            StyledToolTip {
-                                content: qsTr("Session")
-                            }
+                        BottomWidgetGroup {
+                            Layout.alignment: Qt.AlignHCenter
+                            Layout.fillHeight: false
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: implicitHeight
                         }
-                    }
-
-                    ButtonGroup {
-                        Layout.alignment: Qt.AlignHCenter
-                        spacing: 5
-                        padding: 5
-                        color: Appearance.colors.colLayer1
-
-                        NetworkToggle {}
-                        BluetoothToggle {}
-                        NightLight {}
-                        GameMode {}
-                        IdleInhibitor {}
-                    }
-
-                    // Center widget group
-                    CenterWidgetGroup {
-                        focus: sidebarRoot.visible
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                    }
-
-                    BottomWidgetGroup {
-                        Layout.alignment: Qt.AlignHCenter
-                        Layout.fillHeight: false
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: implicitHeight
                     }
                 }
             }

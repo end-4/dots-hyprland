@@ -25,22 +25,19 @@ Item {
     implicitWidth: Appearance.sizes.osdWidth
     implicitHeight: valueIndicator.implicitHeight
 
+    RectangularShadow {
+        anchors.fill: valueIndicator
+        radius: valueIndicator.radius
+        blur: 1.2 * Appearance.sizes.elevationMargin
+        spread: 1
+        color: Appearance.colors.colShadow
+    }
     WrapperRectangle {
         id: valueIndicator
         anchors.fill: parent
         radius: Appearance.rounding.full
         color: Appearance.colors.colLayer0
         implicitWidth: valueRow.implicitWidth
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            source: valueIndicator
-            anchors.fill: valueIndicator
-            shadowEnabled: true
-            shadowColor: Appearance.colors.colShadow
-            shadowVerticalOffset: 1
-            shadowBlur: 0.5
-        }
 
         RowLayout { // Icon on the left, stuff on the right
             id: valueRow
