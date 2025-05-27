@@ -141,7 +141,7 @@ RippleButton {
             Layout.alignment: Qt.AlignVCenter
             spacing: 0
             StyledText {
-                font.pixelSize: Appearance.font.pixelSize.small
+                font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colSubtext
                 visible: root.itemType && root.itemType != qsTr("App")
                 text: root.itemType
@@ -150,7 +150,7 @@ RippleButton {
                 Layout.fillWidth: true
                 id: nameText
                 textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
-                font.pixelSize: Appearance.font.pixelSize.normal
+                font.pixelSize: Appearance.font.pixelSize.small
                 font.family: Appearance.font.family[root.fontType]
                 color: Appearance.m3colors.m3onSurface
                 horizontalAlignment: Text.AlignLeft
