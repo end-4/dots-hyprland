@@ -22,16 +22,20 @@ Scope {
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(root.screen)
             property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
             screen: modelData
-            visible: true
+            visible: GlobalStates.overviewOpen
 
             WlrLayershell.namespace: "quickshell:overview"
             WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+            // WlrLayershell.keyboardFocus: GlobalStates.overviewOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
             color: "transparent"
 
             mask: Region {
                 item: GlobalStates.overviewOpen ? columnLayout : null
             }
+            HyprlandWindow.visibleMask: Region {
+                item: GlobalStates.overviewOpen ? columnLayout : null
+            }
+
 
             anchors {
                 top: true
