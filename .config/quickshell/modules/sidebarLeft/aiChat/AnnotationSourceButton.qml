@@ -42,9 +42,9 @@ RippleButton {
             anchors.fill: parent
             spacing: 5
             Favicon {
-                Layout.alignment: Qt.AlignVCenter
                 url: root.url
                 size: root.faviconSize
+                displayText: root.displayText
             }
             StyledText {
                 id: text
