@@ -25,6 +25,7 @@ RippleButton {
     property string fontType: entry?.fontType ?? "main"
     property string itemClickActionName: entry?.clickActionName
     property string materialSymbol: entry?.materialSymbol ?? ""
+    property string cliphistRawString: entry?.cliphistRawString ?? ""
 
     property string highlightPrefix: `<u><font color="${Appearance.m3colors.m3primary}">`
     property string highlightSuffix: `</font></u>`
@@ -62,8 +63,8 @@ RippleButton {
         if (!root.itemName) return [];
         // Regular expression to match URLs
         const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi;
-        const matches = root.itemName.match(urlRegex)
-            .filter(url => !url.includes("…")) // Elided = invalid
+        const matches = root.itemName?.match(urlRegex)
+            ?.filter(url => !url.includes("…")) // Elided = invalid
         return matches ? matches : [];
     }
     
@@ -143,6 +144,7 @@ RippleButton {
 
         // Main text
         ColumnLayout {
+            id: contentColumn
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
             spacing: 0
@@ -171,6 +173,15 @@ RippleButton {
                     horizontalAlignment: Text.AlignLeft
                     elide: Text.ElideRight
                     text: `${root.displayContent}`
+                }
+            }
+            Loader {
+                active: root.cliphistRawString && /^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(root.cliphistRawString)
+                sourceComponent: CliphistImage {
+                    Layout.fillWidth: true
+                    entry: root.cliphistRawString
+                    maxWidth: contentColumn.width
+                    maxHeight: 140
                 }
             }
         }

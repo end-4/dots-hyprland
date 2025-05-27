@@ -40,7 +40,6 @@ Singleton {
 
     function refresh() {
         readProc.buffer = []
-        readProc.running = false
         readProc.running = true
     }
 

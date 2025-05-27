@@ -26,15 +26,16 @@ Singleton {
     property string shellConfigName: "config.json"
     property string shellConfigPath: `${Directories.shellConfig}/${Directories.shellConfigName}`
     property string todoPath: FileUtils.trimFileProtocol(`${Directories.state}/user/todo.json`)
-    property string notificationsPath: `${Directories.cache}/notifications/notifications.json`
-    property string generatedMaterialThemePath: `${Directories.state}/user/generated/colors.json`
+    property string notificationsPath: FileUtils.trimFileProtocol(`${Directories.cache}/notifications/notifications.json`)
+    property string generatedMaterialThemePath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/colors.json`)
+    property string cliphistDecode: FileUtils.trimFileProtocol(`${Directories.cache}/media/cliphist`)
     // Cleanup on init
     Component.onCompleted: {
-        Hyprland.dispatch(`exec mkdir -p ${Directories.shellConfig}`)
-        Hyprland.dispatch(`exec mkdir -p ${favicons}`)
-        Hyprland.dispatch(`exec rm -rf ${coverArt} && mkdir -p ${coverArt}`)
-        Hyprland.dispatch(`exec rm -rf '${booruPreviews}' && mkdir -p '${booruPreviews}'`)
+        Hyprland.dispatch(`exec mkdir -p '${favicons}'`)
+        Hyprland.dispatch(`exec rm -rf '${coverArt}'; mkdir -p '${coverArt}'`)
+        Hyprland.dispatch(`exec rm -rf '${booruPreviews}'; mkdir -p '${booruPreviews}'`)
         Hyprland.dispatch(`exec mkdir -p '${booruDownloads}' && mkdir -p '${booruDownloadsNsfw}'`)
-        Hyprland.dispatch(`exec rm -rf ${latexOutput} && mkdir -p ${latexOutput}`)
+        Hyprland.dispatch(`exec rm -rf '${latexOutput}'; mkdir -p '${latexOutput}'`)
+        Hyprland.dispatch(`exec rm -rf '${cliphistDecode}'; mkdir -p '${cliphistDecode}'`)
     }
 }
