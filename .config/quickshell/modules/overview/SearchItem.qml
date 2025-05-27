@@ -56,8 +56,16 @@ RippleButton {
 
         return result;
     }
-
     property string displayContent: highlightContent(root.itemName, root.query)
+
+    property list<string> urls: {
+        if (!root.itemName) return [];
+        // Regular expression to match URLs
+        const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi;
+        const matches = root.itemName.match(urlRegex)
+            .filter(url => !url.includes("…")) // Elided = invalid
+        return matches ? matches : [];
+    }
     
     visible: root.entryShown
     property int horizontalMargin: 10
@@ -144,16 +152,26 @@ RippleButton {
                 visible: root.itemType && root.itemType != qsTr("App")
                 text: root.itemType
             }
-            StyledText {
-                Layout.fillWidth: true
-                id: nameText
-                textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
-                font.pixelSize: Appearance.font.pixelSize.small
-                font.family: Appearance.font.family[root.fontType]
-                color: Appearance.m3colors.m3onSurface
-                horizontalAlignment: Text.AlignLeft
-                elide: Text.ElideRight
-                text: `${root.displayContent}`
+            RowLayout {
+                Repeater {
+                    model: root.query == root.itemName ? [] : root.urls
+                    Favicon {
+                        required property var modelData
+                        size: parent.height
+                        url: modelData
+                    }
+                }
+                StyledText {
+                    Layout.fillWidth: true
+                    id: nameText
+                    textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
+                    font.pixelSize: Appearance.font.pixelSize.small
+                    font.family: Appearance.font.family[root.fontType]
+                    color: Appearance.m3colors.m3onSurface
+                    horizontalAlignment: Text.AlignLeft
+                    elide: Text.ElideRight
+                    text: `${root.displayContent}`
+                }
             }
         }
 

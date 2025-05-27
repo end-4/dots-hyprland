@@ -15,14 +15,16 @@ import Quickshell.Hyprland
 IconImage {
     id: root
     property string url
+    property string displayText
 
     property real size: 32
     property string downloadUserAgent: ConfigOptions?.networking.userAgent ?? ""
     property string faviconDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/favicons`)
-    property string domainName: url.includes("vertexaisearch") ? displayText : StringUtils.getBaseUrl(url)
+    property string domainName: url.includes("vertexaisearch") ? displayText : StringUtils.getDomain(url)
     property string faviconUrl: `https://www.google.com/s2/favicons?domain=${domainName}&sz=32`
     property string fileName: `${domainName}.ico`
     property string faviconFilePath: `${faviconDownloadPath}/${fileName}`
+    property string urlToLoad
 
     Process {
         id: faviconDownloadProcess
@@ -31,11 +33,13 @@ IconImage {
         onExited: (exitCode, exitStatus) => {
             console.log("Favicon download process exited with code:", exitCode, "and status:", exitStatus)
             console.log("Favicon file path:", faviconFilePath)
-            root.faviconUrl = root.faviconFilePath
+            root.urlToLoad = root.faviconFilePath
         }
     }
 
     Component.onCompleted: {
+        console.log("URL: ", root.url)
+        console.log("DOMAIN: ", root.domainName)
         console.log("faviconDownloadPath: ", faviconDownloadPath)
         console.log("faviconFilePath: ", faviconFilePath)
         console.log("faviconUrl: ", root.faviconUrl)
@@ -45,7 +49,7 @@ IconImage {
         faviconDownloadProcess.running = true
     }
 
-    source: Qt.resolvedUrl(root.faviconUrl)
+    source: Qt.resolvedUrl(root.urlToLoad)
     implicitSize: root.size
 
     layer.enabled: true
