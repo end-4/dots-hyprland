@@ -20,7 +20,6 @@ Rectangle {
     property int messageIndex
     property var messageData
     property var messageInputField
-    property string faviconDownloadPath
 
     property real messagePadding: 7
     property real contentSpacing: 3
@@ -282,7 +281,6 @@ Rectangle {
                 model: root.messageData?.annotationSources
                 delegate: AnnotationSourceButton {
                     id: annotationButton
-                    faviconDownloadPath: root.faviconDownloadPath
                     displayText: modelData.text
                     url: modelData.url
                 }

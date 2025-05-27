@@ -19,7 +19,6 @@ Item {
     property var panelWindow
     property var inputField: messageInputField
     property string commandPrefix: "/"
-    property string faviconDownloadPath: FileUtils.trimFileProtocol(`${XdgDirectories.cache}/media/favicons`)
 
     property var suggestionQuery: ""
     property var suggestionList: []
@@ -203,7 +202,6 @@ int main(int argc, char* argv[]) {
                         Ai.messageByID[modelData]
                     }
                     messageInputField: root.inputField
-                    faviconDownloadPath: root.faviconDownloadPath
                 }
             }
 
