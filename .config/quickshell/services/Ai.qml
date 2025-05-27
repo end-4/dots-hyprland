@@ -65,6 +65,24 @@ Singleton {
                 },
             ]
         },
+        "gemini-2.5-flash-preview-05-20": {
+            "name": "Gemini 2.5 Flash (preview)",
+            "icon": "google-gemini-symbolic",
+            "description": qsTr("Online | Google's model\nGives up-to-date information with search."),
+            "homepage": "https://aistudio.google.com",
+            "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:streamGenerateContent",
+            "model": "gemini-2.5-flash-preview-05-20",
+            "requires_key": true,
+            "key_id": "gemini",
+            "key_get_link": "https://aistudio.google.com/app/apikey",
+            "key_get_description": qsTr("**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key"),
+            "api_format": "gemini",
+            "tools": [
+                {
+                    "google_search": {}
+                },
+            ]
+        },
         "openrouter-llama4-maverick": {
             "name": "Llama 4 Maverick",
             "icon": "ollama-symbolic",
