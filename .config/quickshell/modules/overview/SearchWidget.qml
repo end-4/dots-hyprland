@@ -15,7 +15,6 @@ import Quickshell.Hyprland
 
 Item { // Wrapper
     id: root
-    required property var panelWindow
     readonly property string xdgConfigHome: XdgDirectories.config
     property string searchingText: ""
     property bool showResults: searchingText != ""
@@ -195,7 +194,7 @@ Item { // Wrapper
             anchors.centerIn: parent
             spacing: 0
 
-            clip: true
+            // clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -218,7 +217,7 @@ Item { // Wrapper
                 TextField { // Search box
                     id: searchInput
 
-                    focus: root.panelWindow.visible || GlobalStates.overviewOpen
+                    focus: GlobalStates.overviewOpen
                     Layout.rightMargin: 15
                     padding: 15
                     renderType: Text.NativeRendering
@@ -231,9 +230,6 @@ Item { // Wrapper
 
                     Behavior on implicitWidth {
                         id: searchWidthBehavior
-                        onEnabledChanged: {
-                            console.log("Search width behavior enabled:", enabled);
-                        }
                         enabled: false
                         NumberAnimation {
                             duration: 300
@@ -276,7 +272,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 implicitHeight: Math.min(600, appResults.contentHeight + topMargin + bottomMargin)
-                clip: true
+                // clip: true
                 topMargin: 10
                 bottomMargin: 10
                 spacing: 0
@@ -406,6 +402,8 @@ Item { // Wrapper
 
                 delegate: SearchItem { // The selectable item for each search result
                     required property var modelData
+                    anchors.left: parent?.left
+                    anchors.right: parent?.right
                     entry: modelData
                     query: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 
                         root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length) : 

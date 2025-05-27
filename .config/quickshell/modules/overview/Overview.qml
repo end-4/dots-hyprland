@@ -100,7 +100,6 @@ Scope {
 
                 SearchWidget {
                     id: searchWidget
-                    panelWindow: root
                     Layout.alignment: Qt.AlignHCenter
                     onSearchingTextChanged: (text) => {
                         root.searchingText = searchingText

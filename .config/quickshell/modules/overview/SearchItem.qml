@@ -65,8 +65,6 @@ RippleButton {
     property int buttonVerticalPadding: 5
     property bool keyboardDown: false
 
-    anchors.left: parent?.left
-    anchors.right: parent?.right
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
