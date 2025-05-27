@@ -218,6 +218,26 @@ Item { // Notification item area
                         id: actionRowLayout
                         Layout.alignment: Qt.AlignBottom
 
+                        NotificationActionButton {
+                            Layout.fillWidth: true
+                            buttonText: qsTr("Close")
+                            urgency: notificationObject.urgency
+                            implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
+                                (contentItem.implicitWidth + leftPadding + rightPadding)
+
+                            onClicked: {
+                                root.destroyWithAnimation()
+                            }
+
+                            contentItem: MaterialSymbol {
+                                iconSize: Appearance.font.pixelSize.large
+                                horizontalAlignment: Text.AlignHCenter
+                                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
+                                    Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
+                                text: "close"
+                            }
+                        }
+
                         Repeater {
                             id: actionRepeater
                             model: notificationObject.actions
@@ -259,26 +279,6 @@ Item { // Notification item area
                                 color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
                                     Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
                                 text: "content_copy"
-                            }
-                        }
-
-                        NotificationActionButton {
-                            Layout.fillWidth: true
-                            buttonText: qsTr("Close")
-                            urgency: notificationObject.urgency
-                            implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
-                                (contentItem.implicitWidth + leftPadding + rightPadding)
-
-                            onClicked: {
-                                root.destroyWithAnimation()
-                            }
-
-                            contentItem: MaterialSymbol {
-                                iconSize: Appearance.font.pixelSize.large
-                                horizontalAlignment: Text.AlignHCenter
-                                color: (notificationObject.urgency == NotificationUrgency.Critical) ? 
-                                    Appearance.m3colors.m3onSurfaceVariant : Appearance.m3colors.m3onSurface
-                                text: "close"
                             }
                         }
                         
