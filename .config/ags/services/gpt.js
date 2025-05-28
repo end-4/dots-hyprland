@@ -44,16 +44,6 @@ const PROVIDERS = Object.assign({
         "key_file": "openrouter_key.txt",
         "model": "meta-llama/llama-3-70b-instruct",
     },
-    "openai": {
-        "name": "OpenAI - GPT-3.5",
-        "logo_name": "openai-symbolic",
-        "description": getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
-        "base_url": "https://api.openai.com/v1/chat/completions",
-        "key_get_url": "https://platform.openai.com/api-keys",
-        "requires_key": true,
-        "key_file": "openai_key.txt",
-        "model": "gpt-3.5-turbo",
-    },
 }, userOptions.ai.extraGptModels)
 
 const installedOllamaModels = JSON.parse(
