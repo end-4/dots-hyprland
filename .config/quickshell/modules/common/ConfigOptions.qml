@@ -37,6 +37,12 @@ Singleton {
         }
     }
 
+    property QtObject dock: QtObject {
+        property real height: 60
+        property real hoverRegionHeight: 3
+        property bool pinnedOnStartup: false
+    }
+
     property QtObject networking: QtObject {
         property string userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     }
