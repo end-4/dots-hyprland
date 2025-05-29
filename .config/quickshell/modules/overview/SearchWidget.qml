@@ -23,11 +23,6 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
-    property bool lastQueryWasClipboard: false
-
-    onShowResultsChanged: {
-        lastQueryWasClipboard = false;
-    }
 
     function disableExpandAnimation() {
         searchWidthBehavior.enabled = false;
@@ -298,10 +293,6 @@ Item { // Wrapper
 
                         ///////////// Special cases ///////////////
                         if (root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard)) { // Clipboard
-                            if (!root.lastQueryWasClipboard) {
-                                root.lastQueryWasClipboard = true;
-                                Cliphist.refresh(); // Refresh clipboard entries
-                            }
                             const searchString = root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length);
                             return Cliphist.fuzzyQuery(searchString).map(entry => {
                                 return {
@@ -311,7 +302,6 @@ Item { // Wrapper
                                     type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
                                     execute: () => {
                                         Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode | wl-copy`);
-                                        Cliphist.refresh()
                                     }
                                 };
                             }).filter(Boolean);

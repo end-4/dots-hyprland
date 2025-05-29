@@ -192,7 +192,6 @@ Scope {
                 GlobalStates.overviewOpen = false;
                 return;
             }
-            Cliphist.refresh()
             for (let i = 0; i < overviewVariants.instances.length; i++) {
                 let panelWindow = overviewVariants.instances[i];
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
