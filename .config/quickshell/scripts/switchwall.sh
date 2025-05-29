@@ -10,12 +10,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 terminalscheme="$XDG_CONFIG_HOME/quickshell/scripts/terminal/scheme-base.json"
 
 pre_process() {
-    if [ ! -d "$CACHE_DIR"/user/generated ]; then
-        mkdir -p "$CACHE_DIR"/user/generated
-    fi
-}
-
-post_process() {
     local mode_flag="$1"
     # Set GNOME color-scheme if mode_flag is dark or light
     if [[ "$mode_flag" == "dark" ]]; then
@@ -25,6 +19,14 @@ post_process() {
         gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
         gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
     fi
+
+    if [ ! -d "$CACHE_DIR"/user/generated ]; then
+        mkdir -p "$CACHE_DIR"/user/generated
+    fi
+}
+
+post_process() {
+    true
 }
 
 check_and_prompt_upscale() {
@@ -208,7 +210,7 @@ switch() {
     generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
     generate_colors_material_args+=(--cache "$STATE_DIR/user/color.txt")
 
-    pre_process
+    pre_process "$mode_flag"
 
     matugen "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
@@ -217,7 +219,7 @@ switch() {
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
 
-    post_process "$mode_flag"
+    post_process
 }
 
 main() {
