@@ -155,15 +155,7 @@ RippleButton {
                 text: root.itemType
             }
             RowLayout {
-                Repeater {
-                    model: root.query == root.itemName ? [] : root.urls
-                    Favicon {
-                        required property var modelData
-                        size: parent.height
-                        url: modelData
-                    }
-                }
-                Loader {
+                Loader { // Checkmark for copied clipboard entry
                     visible: itemName == Quickshell.clipboardText 
                     active: itemName == Quickshell.clipboardText
                     sourceComponent: Rectangle {
@@ -180,7 +172,15 @@ RippleButton {
                         }
                     }
                 }
-                StyledText {
+                Repeater { // Favicons for links
+                    model: root.query == root.itemName ? [] : root.urls
+                    Favicon {
+                        required property var modelData
+                        size: parent.height
+                        url: modelData
+                    }
+                }
+                StyledText { // Item name/content
                     Layout.fillWidth: true
                     id: nameText
                     textFormat: Text.StyledText // RichText also works, but StyledText ensures elide work
