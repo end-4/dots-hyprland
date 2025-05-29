@@ -4,6 +4,7 @@
 - **Assumption**: You are already using the AGS illogical-impulse
 - **Install Qt packages** (idk which are actually needed so this is everything I have): `qt5-base qt5-declarative qt5-svg qt5-translations qt5-wayland qt6-5compat qt6-base qt6-declarative qt6-imageformats qt6-multimedia qt6-positioning qt6-quicktimeline qt6-sensors qt6-svg qt6-tools qt6-translations qt6-virtualkeyboard qt6-wayland syntax-highlighting`
 - **Install quickshell and more stuff**: `yay -S quickshell matugen-bin grimblast wtype kde-material-you-colors`
+- **Dolphin fix** for it asking what program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6`
 - **Copy** `.config/quickshell` folder and hyprland config files in `.config/hypr/hyprland/` (backing up is your responsibility) (or you can create a new user)
 - **Run quickshell** with `qs` and see how things are - it's not finished, but **feedback is very welcome**
   - We currently have bar, right sidebar, search/overview
@@ -141,6 +142,7 @@ _<sup>Get yande.re and konachan images from sidebar</sup>_
 
  - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
+ - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
