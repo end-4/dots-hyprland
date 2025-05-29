@@ -46,7 +46,16 @@ Singleton {
     Connections {
         target: Quickshell
         function onClipboardTextChanged() {
-            root.refresh() // TODO: Account for race condition with cliphist
+            delayedUpdateTimer.restart()
+        }
+    }
+
+    Timer {
+        id: delayedUpdateTimer
+        interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+        repeat: false
+        onTriggered: {
+            root.refresh()
         }
     }
 
