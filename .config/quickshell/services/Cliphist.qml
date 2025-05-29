@@ -43,6 +43,13 @@ Singleton {
         readProc.running = true
     }
 
+    Connections {
+        target: Quickshell
+        function onClipboardTextChanged() {
+            root.refresh() // TODO: Account for race condition with cliphist
+        }
+    }
+
     Process {
         id: readProc
         property list<string> buffer: []
