@@ -145,7 +145,7 @@ smallestReadableFont=Rubik,9,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 toolBarFont=Rubik,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
 [Icons]
-Theme=OneUI-dark
+Theme=breeze-dark
 
 [KFileDialog Settings]
 Allow Expansion=false
