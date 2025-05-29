@@ -176,8 +176,8 @@ Item {
                         id: dragArea
                         anchors.fill: parent
                         hoverEnabled: true
-                        onEntered: hovered = true
-                        onExited: hovered = false
+                        onEntered: hovered = true // For hover color change
+                        onExited: hovered = false // For hover color change
                         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                         drag.target: parent
                         onPressed: {
@@ -211,6 +211,12 @@ Item {
                                 Hyprland.dispatch(`closewindow address:${windowData.address}`)
                                 event.accepted = true
                             }
+                        }
+
+                        StyledToolTip {
+                            extraVisibleCondition: false
+                            alternativeVisibleCondition: dragArea.containsMouse && !window.Drag.active
+                            content: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}\n`
                         }
                     }
                 }
