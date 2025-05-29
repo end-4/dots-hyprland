@@ -2,7 +2,6 @@ import "root:/"
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/modules/common/functions/icons.js" as Icons
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -178,7 +177,7 @@ Item {
                             return winArea > maxArea ? win : maxWin
                         }, null)
                     }
-                    property var mainAppIconSource: Quickshell.iconPath(Icons.noKnowledgeIconGuess(biggestWindow?.class), "image-missing")
+                    property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
                     StyledText {
                         opacity: (ConfigOptions.bar.workspaces.alwaysShowNumbers || GlobalStates.workspaceShowNumbers || !workspaceButtonBackground.biggestWindow) ? 1 : 0

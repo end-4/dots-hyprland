@@ -42,19 +42,6 @@ function findSuitableMaterialSymbol(summary = "") {
     return defaultType;
 }
 
-// const getFriendlyNotifTimeString = (timeObject) => {
-//     const messageTime = GLib.DateTime.new_from_unix_local(timeObject);
-//     const oneMinuteAgo = GLib.DateTime.new_now_local().add_seconds(-60);
-//     if (messageTime.compare(oneMinuteAgo) > 0)
-//         return getString('Now');
-//     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
-//         return messageTime.format(userOptions.time.format);
-//     else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
-//         return getString('Yesterday');
-//     else
-//         return messageTime.format(userOptions.time.dateFormat);
-// }
-
 /**
  * @param { number | string | Date } timestamp 
  * @returns { string }
@@ -63,13 +50,28 @@ const getFriendlyNotifTimeString = (timestamp) => {
     if (!timestamp) return '';
     const messageTime = new Date(timestamp);
     const now = new Date();
-    const oneMinuteAgo = new Date(now.getTime() - 60000);
+    const diffMs = now.getTime() - messageTime.getTime();
 
-    if (messageTime > oneMinuteAgo) 
+    // Less than 1 minute
+    if (diffMs < 60000) 
         return 'Now';
-    if (messageTime.toDateString() === now.toDateString())
-        return Qt.formatDateTime(messageTime, "hh:mm");
+    
+    // Same day - show relative time
+    if (messageTime.toDateString() === now.toDateString()) {
+        const diffMinutes = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        
+        if (diffHours > 0) {
+            return `${diffHours}h`;
+        } else {
+            return `${diffMinutes}m`;
+        }
+    }
+    
+    // Yesterday
     if (messageTime.toDateString() === new Date(now.getTime() - 86400000).toDateString()) 
         return 'Yesterday';
+    
+    // Older dates
     return Qt.formatDateTime(messageTime, "MMMM dd");
 };

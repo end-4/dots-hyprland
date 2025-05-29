@@ -7,12 +7,32 @@ import Quickshell
 import Quickshell.Io
 
 /**
- * Eases searching for applications by name.
+ * - Eases fuzzy searching for applications by name
+ * - Guesses icon name for window class name with normalization, possibly with desktop entry searching later
  */
 Singleton {
     id: root
     property bool sloppySearch: ConfigOptions?.search.sloppy ?? false
     property real scoreThreshold: 0.2
+    property var substitutions: ({
+        "code-url-handler": "visual-studio-code",
+        "Code": "visual-studio-code",
+        "GitHub Desktop": "github-desktop",
+        "Minecraft* 1.20.1": "minecraft",
+        "gnome-tweaks": "org.gnome.tweaks",
+        "pavucontrol-qt": "pavucontrol",
+        "wps": "wps-office2019-kprometheus",
+        "wpsoffice": "wps-office2019-kprometheus",
+        "footclient": "foot",
+        "zen": "zen-browser",
+        "": "image-missing"
+    })
+    property var regexSubstitutions: [
+        {
+            "regex": "/^steam_app_(\\d+)$/",
+            "replace": "steam_icon_$1"
+        }
+    ]
 
     readonly property list<DesktopEntry> list: Array.from(DesktopEntries.applications.values)
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -39,5 +59,41 @@ Singleton {
         }).map(r => {
             return r.obj.entry
         });
+    }
+
+    function iconExists(iconName) {
+        return Quickshell.iconPath(iconName, true).length > 0;
+    }
+
+    function guessIcon(str) {
+        if (!str) return "image-missing";
+
+        // Normal substitutions
+        if (substitutions[str])
+            return substitutions[str];
+
+        // Regex substitutions
+        for (let i = 0; i < regexSubstitutions.length; i++) {
+            const substitution = regexSubstitutions[i];
+            const replacedName = str.replace(
+                substitution.regex,
+                substitution.replace,
+            );
+            if (replacedName != str) return replacedName;
+        }
+
+        // If it gets detected normally, no need to guess
+        if (iconExists(str)) return str;
+
+        let guessStr = str;
+        // Guess: Take only app name of reverse domain name notation
+        guessStr = str.split('.').slice(-1)[0].toLowerCase();
+        if (iconExists(guessStr)) return guessStr;
+        // Guess: normalize to kebab case
+        guessStr = str.toLowerCase().replace(/\s+/g, "-");
+        if (iconExists(guessStr)) return guessStr;
+
+        // Give up
+        return str;
     }
 }
