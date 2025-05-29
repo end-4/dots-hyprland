@@ -41,3 +41,8 @@ output_path = '~/.config/ags/assets/themes/sourceviewtheme-light.xml'
 input_path = '~/.config/matugen/templates/ags/_material.scss'
 output_path = '~/.local/state/ags/scss/_material.scss'
 post_hook = 'pidof gjs && agsv1 run-js "handleStyles(false)"'
+
+[templates.kde_colors]
+input_path = '~/.config/matugen/templates/kde/color.txt'
+output_path = '~/.local/state/quickshell/user/generated/color.txt'
+post_hook = '~/.config/matugen/templates/kde/kde-material-you-colors-wrapper.sh'
