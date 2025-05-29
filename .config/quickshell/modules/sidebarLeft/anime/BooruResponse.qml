@@ -77,7 +77,6 @@ Rectangle {
                     id: providerName
                     anchors.centerIn: parent
                     font.pixelSize: Appearance.font.pixelSize.large
-                    font.weight: Font.DemiBold
                     color: Appearance.m3colors.m3onSecondaryContainer
                     text: Booru.providers[root.responseData.provider].name
                 }

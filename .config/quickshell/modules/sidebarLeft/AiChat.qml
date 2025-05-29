@@ -487,7 +487,6 @@ int main(int argc, char* argv[]) {
                         StyledText {
                             id: providerName
                             font.pixelSize: Appearance.font.pixelSize.small
-                            font.weight: Font.DemiBold
                             color: Appearance.m3colors.m3onSurface
                             elide: Text.ElideRight
                             text: Ai.getModel().name

@@ -547,7 +547,6 @@ Item {
                         StyledText {
                             id: providerName
                             font.pixelSize: Appearance.font.pixelSize.small
-                            font.weight: Font.DemiBold
                             color: Appearance.m3colors.m3onSurface
                             text: Booru.providers[Booru.currentProvider].name
                         }
