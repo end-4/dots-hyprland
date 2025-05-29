@@ -63,7 +63,8 @@ Singleton {
     }
 
     function iconExists(iconName) {
-        return Quickshell.iconPath(iconName, true).length > 0;
+        return (Quickshell.iconPath(iconName, true).length > 0) 
+            && !iconName.includes("image-missing");
     }
 
     function guessIcon(str) {
@@ -93,6 +94,13 @@ Singleton {
         // Guess: normalize to kebab case
         guessStr = str.toLowerCase().replace(/\s+/g, "-");
         if (iconExists(guessStr)) return guessStr;
+        // Guess: First fuzze desktop entry match
+        const searchResults = root.fuzzyQuery(str);
+        if (searchResults.length > 0) {
+            const firstEntry = searchResults[0];
+            guessStr = firstEntry.icon
+            if (iconExists(guessStr)) return guessStr;
+        }
 
         // Give up
         return str;
