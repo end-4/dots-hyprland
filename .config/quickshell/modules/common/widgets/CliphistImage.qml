@@ -69,6 +69,10 @@ Rectangle {
         }
     }
 
+    Component.onDestruction: {
+        Hyprland.dispatch(`exec bash -c "[ -f '${imageDecodeFilePath}' ] && rm -f '${imageDecodeFilePath}'"`)
+    }
+
     Image {
         id: image
         anchors.fill: parent
