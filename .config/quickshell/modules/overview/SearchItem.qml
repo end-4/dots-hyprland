@@ -163,6 +163,23 @@ RippleButton {
                         url: modelData
                     }
                 }
+                Loader {
+                    visible: itemName == Quickshell.clipboardText 
+                    active: itemName == Quickshell.clipboardText
+                    sourceComponent: Rectangle {
+                        implicitWidth: activeText.implicitHeight
+                        implicitHeight: activeText.implicitHeight
+                        radius: Appearance.rounding.full
+                        color: Appearance.m3colors.m3primary
+                        MaterialSymbol {
+                            id: activeText
+                            anchors.centerIn: parent
+                            text: "check"
+                            font.pixelSize: Appearance.font.pixelSize.normal
+                            color: Appearance.m3colors.m3onPrimary
+                        }
+                    }
+                }
                 StyledText {
                     Layout.fillWidth: true
                     id: nameText
