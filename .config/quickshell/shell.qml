@@ -37,6 +37,7 @@ ShellRoot {
     property bool enableSidebarLeft: true
     property bool enableSidebarRight: true
 
+    // Force initialization of some singletons
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
         ConfigLoader.loadConfig()
