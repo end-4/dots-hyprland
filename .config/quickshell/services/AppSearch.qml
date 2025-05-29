@@ -8,7 +8,7 @@ import Quickshell.Io
 
 /**
  * - Eases fuzzy searching for applications by name
- * - Guesses icon name for window class name with normalization, possibly with desktop entry searching later
+ * - Guesses icon name for window class name
  */
 Singleton {
     id: root
@@ -17,20 +17,21 @@ Singleton {
     property var substitutions: ({
         "code-url-handler": "visual-studio-code",
         "Code": "visual-studio-code",
-        "GitHub Desktop": "github-desktop",
-        "Minecraft* 1.20.1": "minecraft",
         "gnome-tweaks": "org.gnome.tweaks",
         "pavucontrol-qt": "pavucontrol",
         "wps": "wps-office2019-kprometheus",
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
         "zen": "zen-browser",
-        "": "image-missing"
     })
     property var regexSubstitutions: [
         {
             "regex": "/^steam_app_(\\d+)$/",
             "replace": "steam_icon_$1"
+        },
+        {
+            "regex": "Minecraft.*",
+            "replace": "minecraft"
         }
     ]
 
@@ -66,7 +67,7 @@ Singleton {
     }
 
     function guessIcon(str) {
-        if (!str) return "image-missing";
+        if (!str || str.length == 0) return "image-missing";
 
         // Normal substitutions
         if (substitutions[str])
