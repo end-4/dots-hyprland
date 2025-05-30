@@ -80,8 +80,8 @@ Scope {
                 }
             }
 
-            implicitWidth: columnLayout.width
-            implicitHeight: columnLayout.height
+            implicitWidth: columnLayout.implicitWidth
+            implicitHeight: columnLayout.implicitHeight
 
             function setSearchingText(text) {
                 searchWidget.setSearchingText(text);

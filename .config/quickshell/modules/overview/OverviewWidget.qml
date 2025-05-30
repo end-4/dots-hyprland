@@ -54,13 +54,14 @@ Item {
     }
     Rectangle { // Background
         id: overviewBackground
-        
+        property real padding: 10
         anchors.fill: parent
+        anchors.margins: Appearance.sizes.elevationMargin
 
-        implicitWidth: workspaceColumnLayout.implicitWidth + 5 * 2
-        implicitHeight: workspaceColumnLayout.implicitHeight + 5 * 2
+        implicitWidth: workspaceColumnLayout.implicitWidth + padding * 2
+        implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
+        radius: Appearance.rounding.screenRounding * root.scale + padding
         color: Appearance.colors.colLayer0
-        radius: Appearance.rounding.screenRounding * root.scale + 5 * 2
 
         ColumnLayout {
             id: workspaceColumnLayout
