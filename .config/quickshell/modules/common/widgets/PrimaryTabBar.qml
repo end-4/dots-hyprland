@@ -10,7 +10,7 @@ ColumnLayout {
     required property var tabButtonList // Something like [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
     required property var externalTrackedTab
     property bool enableIndicatorAnimation: false
-    property color colIndicator: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colIndicator: Appearance?.colors.colPrimary ?? "#65558F"
     property color colBorder: Appearance?.m3colors.m3outlineVariant ?? "#C6C6D0"
     signal currentIndexChanged(int index)
 

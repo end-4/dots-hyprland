@@ -142,7 +142,7 @@ TabButton {
                     text: buttonIcon
                     iconSize: Appearance.font.pixelSize.huge
                     fill: selected ? 1 : 0
-                    color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                    color: selected ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
                     Behavior on color {
                         animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                     }
@@ -152,7 +152,7 @@ TabButton {
                 id: buttonTextWidget
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: Appearance.font.pixelSize.small
-                color: selected ? Appearance.m3colors.m3primary : Appearance.colors.colOnLayer1
+                color: selected ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
                 text: buttonText
                 Behavior on color {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)

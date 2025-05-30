@@ -95,7 +95,7 @@ Item {
 
                 x: tabBar.currentIndex * fullTabSize + (fullTabSize - targetWidth) / 2
 
-                color: Appearance.m3colors.m3primary
+                color: Appearance.colors.colPrimary
                 radius: Appearance.rounding.full
 
                 Behavior on x {
@@ -172,7 +172,7 @@ Item {
             id: fabBackground
             anchors.fill: parent
             radius: Appearance.rounding.normal
-            color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.m3colors.m3primaryContainer)
+            color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.colors.colPrimaryContainer)
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -274,13 +274,13 @@ Item {
                         anchors.fill: parent
                         radius: Appearance.rounding.verysmall
                         border.width: 2
-                        border.color: todoInput.activeFocus ? Appearance.m3colors.m3primary : Appearance.m3colors.m3outline
+                        border.color: todoInput.activeFocus ? Appearance.colors.colPrimary : Appearance.m3colors.m3outline
                         color: "transparent"
                     }
 
                     cursorDelegate: Rectangle {
                         width: 1
-                        color: todoInput.activeFocus ? Appearance.m3colors.m3primary : "transparent"
+                        color: todoInput.activeFocus ? Appearance.colors.colPrimary : "transparent"
                         radius: 1
                     }
                 }

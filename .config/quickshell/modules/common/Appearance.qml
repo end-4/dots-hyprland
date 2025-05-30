@@ -15,6 +15,12 @@ Singleton {
     property QtObject sizes
     property string syntaxHighlightingTheme
 
+    // [!] Enabling transparency can affect readability when using light theme.
+    property real transparency: 0
+    property real contentTransparency: 0
+    // property real transparency: 0.15
+    // property real contentTransparency: 0.5
+
     m3colors: QtObject {
         property bool darkmode: false
         property bool transparent: false
@@ -96,29 +102,31 @@ Singleton {
 
     colors: QtObject {
         property color colSubtext: m3colors.m3outline
-        property color colLayer0: m3colors.m3background
+        property color colLayer0: ColorUtils.transparentize(m3colors.m3background, root.transparency)
         property color colOnLayer0: m3colors.m3onBackground
-        property color colLayer0Hover: ColorUtils.mix(colLayer0, colOnLayer0, 0.9)
-        property color colLayer0Active: ColorUtils.mix(colLayer0, colOnLayer0, 0.8)
-        property color colLayer1: ColorUtils.mix(m3colors.m3surfaceContainerLow, m3colors.m3background, 0.7);
+        property color colLayer0Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.9, root.contentTransparency))
+        property color colLayer0Active: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.8, root.contentTransparency))
+        property color colLayer1: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainerLow, m3colors.m3background, 0.7), root.contentTransparency);
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
         property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, 0.45);
-        property color colLayer2: ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55);
+        property color colLayer2: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55), root.contentTransparency)
         property color colOnLayer2: m3colors.m3onSurface;
         property color colOnLayer2Disabled: ColorUtils.mix(colOnLayer2, m3colors.m3background, 0.4);
-        property color colLayer3: ColorUtils.mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96);
+        property color colLayer3: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96), root.contentTransparency)
         property color colOnLayer3: m3colors.m3onSurface;
-        property color colLayer1Hover: ColorUtils.mix(colLayer1, colOnLayer1, 0.92);
-        property color colLayer1Active: ColorUtils.mix(colLayer1, colOnLayer1, 0.85);
-        property color colLayer2Hover: ColorUtils.mix(colLayer2, colOnLayer2, 0.90);
-        property color colLayer2Active: ColorUtils.mix(colLayer2, colOnLayer2, 0.80);
-        property color colLayer2Disabled: ColorUtils.mix(colLayer2, m3colors.m3background, 0.8);
-        property color colLayer3Hover: ColorUtils.mix(colLayer3, colOnLayer3, 0.90);
-        property color colLayer3Active: ColorUtils.mix(colLayer3, colOnLayer3, 0.80);
-        property color colPrimaryHover: ColorUtils.mix(m3colors.m3primary, colLayer1Hover, 0.87)
-        property color colPrimaryActive: ColorUtils.mix(m3colors.m3primary, colLayer1Active, 0.7)
-        property color colPrimaryContainerHover: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Hover, 0.7)
-        property color colPrimaryContainerActive: ColorUtils.mix(m3colors.m3primaryContainer, colLayer1Active, 0.6)
+        property color colLayer1Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, 0.92), root.contentTransparency)
+        property color colLayer1Active: ColorUtils.transparentize(ColorUtils.mix(colLayer1, colOnLayer1, 0.85), root.contentTransparency);
+        property color colLayer2Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.90), root.contentTransparency)
+        property color colLayer2Active: ColorUtils.transparentize(ColorUtils.mix(colLayer2, colOnLayer2, 0.80), root.contentTransparency);
+        property color colLayer2Disabled: ColorUtils.transparentize(ColorUtils.mix(colLayer2, m3colors.m3background, 0.8), root.contentTransparency);
+        property color colLayer3Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer3, colOnLayer3, 0.90), root.contentTransparency)
+        property color colLayer3Active: ColorUtils.transparentize(ColorUtils.mix(colLayer3, colOnLayer3, 0.80), root.contentTransparency);
+        property color colPrimary: m3colors.m3primary
+        property color colPrimaryHover: ColorUtils.mix(colors.colPrimary, colLayer1Hover, 0.87)
+        property color colPrimaryActive: ColorUtils.mix(colors.colPrimary, colLayer1Active, 0.7)
+        property color colPrimaryContainer: m3colors.m3primaryContainer
+        property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Hover, 0.7)
+        property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Active, 0.6)
         property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
         property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)

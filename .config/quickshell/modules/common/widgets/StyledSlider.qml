@@ -18,7 +18,7 @@ Slider {
     property real handleHeight: 44 * scale
     property real handleLimit: root.backgroundDotMargins
     property real trackHeight: 30 * scale
-    property color highlightColor: Appearance.m3colors.m3primary
+    property color highlightColor: Appearance.colors.colPrimary
     property color trackColor: Appearance.m3colors.m3secondaryContainer
     property color handleColor: Appearance.m3colors.m3onSecondaryContainer
     property real trackRadius: Appearance.rounding.verysmall * scale

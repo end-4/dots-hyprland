@@ -245,7 +245,7 @@ Item { // Wrapper
 
                     cursorDelegate: Rectangle {
                         width: 1
-                        color: searchInput.activeFocus ? Appearance.m3colors.m3primary : "transparent"
+                        color: searchInput.activeFocus ? Appearance.colors.colPrimary : "transparent"
                         radius: 1
                     }
                 }

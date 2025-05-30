@@ -21,10 +21,15 @@ Singleton {
         property string terminal: "foot" // This is only for shell actions
     }
 
+    property QtObject battery: QtObject {
+        property int low: 20
+        property int critical: 5
+        property int suspend: 2
+    }
+
     property QtObject bar: QtObject {
         property bool bottom: false // Instead of top
         property bool borderless: true
-        property int batteryLowThreshold: 20
         property string topLeftIcon: "spark" // Options: distro, spark
         property bool showBackground: true
         property QtObject resources: QtObject {
@@ -43,6 +48,9 @@ Singleton {
         property real height: 60
         property real hoverRegionHeight: 3
         property bool pinnedOnStartup: false
+        property list<string> pinnedApps: [ // IDs of pinned entries
+            "org.kde.dolphin",
+        ]
     }
 
     property QtObject networking: QtObject {

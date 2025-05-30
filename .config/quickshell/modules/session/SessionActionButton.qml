@@ -17,9 +17,9 @@ RippleButton {
 
     buttonRadius: (button.focus || button.down) ? size / 2 : Appearance.rounding.verylarge
     colBackground: button.keyboardDown ? Appearance.colors.colSecondaryContainerActive : 
-        button.focus ? Appearance.m3colors.m3primary : 
+        button.focus ? Appearance.colors.colPrimary : 
         Appearance.m3colors.m3secondaryContainer
-    colBackgroundHover: Appearance.m3colors.m3primary
+    colBackgroundHover: Appearance.colors.colPrimary
     colRipple: Appearance.colors.colPrimaryActive
     property color colText: (button.down || button.keyboardDown || button.focus || button.hovered) ?
         Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0

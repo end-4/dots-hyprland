@@ -141,7 +141,7 @@ Item {
         implicitWidth: workspaceButtonWidth - activeWorkspaceMargin * 2
         implicitHeight: workspaceButtonWidth - activeWorkspaceMargin * 2
         radius: Appearance.rounding.full
-        color: Appearance.m3colors.m3primary
+        color: Appearance.colors.colPrimary
         anchors.verticalCenter: parent.verticalCenter
         x: animatedActiveWorkspaceIndex * workspaceButtonWidth + activeWorkspaceMargin
     }

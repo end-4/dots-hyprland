@@ -17,7 +17,7 @@ RippleButton {
     implicitWidth: buttonTextWidget.implicitWidth + 15 * 2
     buttonRadius: Appearance?.rounding.full ?? 9999
 
-    property color colEnabled: Appearance?.m3colors.m3primary ?? "#65558F"
+    property color colEnabled: Appearance?.colors.colPrimary ?? "#65558F"
     property color colDisabled: Appearance?.m3colors.m3outline ?? "#8D8C96"
 
     contentItem: StyledText {

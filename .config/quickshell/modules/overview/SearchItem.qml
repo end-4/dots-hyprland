@@ -27,7 +27,7 @@ RippleButton {
     property string materialSymbol: entry?.materialSymbol ?? ""
     property string cliphistRawString: entry?.cliphistRawString ?? ""
 
-    property string highlightPrefix: `<u><font color="${Appearance.m3colors.m3primary}">`
+    property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
     property string highlightSuffix: `</font></u>`
     function highlightContent(content, query) {
         if (!query || query.length === 0 || content == query || fontType === "monospace")
@@ -162,7 +162,7 @@ RippleButton {
                         implicitWidth: activeText.implicitHeight
                         implicitHeight: activeText.implicitHeight
                         radius: Appearance.rounding.full
-                        color: Appearance.m3colors.m3primary
+                        color: Appearance.colors.colPrimary
                         MaterialSymbol {
                             id: activeText
                             anchors.centerIn: parent
