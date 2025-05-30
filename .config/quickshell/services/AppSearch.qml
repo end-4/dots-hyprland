@@ -26,12 +26,16 @@ Singleton {
     })
     property var regexSubstitutions: [
         {
-            "regex": "/^steam_app_(\\d+)$/",
+            "regex": /^steam_app_(\\d+)$/,
             "replace": "steam_icon_$1"
         },
         {
-            "regex": "Minecraft.*",
+            "regex": /Minecraft.*/,
             "replace": "minecraft"
+        },
+        {
+            "regex": /.*polkit.*/,
+            "replace": "system-lock-screen"
         }
     ]
 
