@@ -124,12 +124,8 @@ Button {
                 width: contextMenu.width
                 height: contextMenu.height
 
-                RectangularShadow { // Background shadow
-                    anchors.fill: contextMenu
-                    radius: contextMenu.radius
-                    blur: 1.2 * Appearance.sizes.elevationMargin
-                    spread: 1
-                    color: Appearance.colors.colShadow
+                StyledRectangularShadow {
+                    target: contextMenu
                 }
                 Rectangle {
                     id: contextMenu

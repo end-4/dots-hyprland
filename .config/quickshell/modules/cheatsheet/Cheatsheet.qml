@@ -57,13 +57,8 @@ Scope { // Scope
 
 
             // Background
-            RectangularShadow {
-                anchors.fill: cheatsheetBackground
-                radius: cheatsheetBackground.radius
-                blur: 1.2 * Appearance.sizes.elevationMargin
-                spread: 1
-                color: Appearance.colors.colShadow
-                cached: true
+            StyledRectangularShadow {
+                target: cheatsheetBackground
             }
             Rectangle {
                 id: cheatsheetBackground

@@ -60,12 +60,8 @@ Scope {
                 implicitHeight: sidebarRightBackground.implicitHeight
                 implicitWidth: sidebarRightBackground.implicitWidth
 
-                RectangularShadow { // Background shadow
-                    anchors.fill: sidebarRightBackground
-                    radius: sidebarRightBackground.radius
-                    blur: 1.2 * Appearance.sizes.elevationMargin
-                    spread: 1
-                    color: Appearance.colors.colShadow
+                StyledRectangularShadow {
+                    target: sidebarRightBackground
                 }
                 Rectangle {
                     id: sidebarRightBackground

@@ -104,13 +104,8 @@ Item { // Player instance
 
     }
 
-    RectangularShadow {
-        anchors.fill: background
-        radius: background.radius
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
-        cached: true
+    StyledRectangularShadow {
+        target: background
     }
     Rectangle { // Background
         id: background

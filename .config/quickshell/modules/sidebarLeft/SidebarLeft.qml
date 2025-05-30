@@ -65,12 +65,8 @@ Scope { // Scope
             }
 
             // Background
-            RectangularShadow { // Background shadow
-                anchors.fill: sidebarLeftBackground
-                radius: sidebarLeftBackground.radius
-                blur: 1.2 * Appearance.sizes.elevationMargin
-                spread: 1
-                color: Appearance.colors.colShadow
+            StyledRectangularShadow {
+                target: sidebarLeftBackground
             }
             Rectangle {
                 id: sidebarLeftBackground

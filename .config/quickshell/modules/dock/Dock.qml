@@ -75,13 +75,8 @@ Scope { // Scope
                         implicitWidth: dockRow.implicitWidth + 5 * 2
                         height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
 
-                        RectangularShadow {
-                            anchors.fill: dockVisualBackground
-                            radius: dockVisualBackground.radius
-                            blur: 1.2 * Appearance.sizes.elevationMargin
-                            spread: 1
-                            color: Appearance.colors.colShadow
-                            cached: true
+                        StyledRectangularShadow {
+                            target: dockVisualBackground
                         }
                         Rectangle {
                             id: dockVisualBackground

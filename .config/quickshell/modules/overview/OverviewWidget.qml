@@ -49,12 +49,8 @@ Item {
     property Component windowComponent: OverviewWindow {}
     property list<OverviewWindow> windowWidgets: []
 
-    RectangularShadow { // Background shadow
-        anchors.fill: overviewBackground
-        radius: overviewBackground.radius
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
+    StyledRectangularShadow {
+        target: overviewBackground
     }
     Rectangle { // Background
         id: overviewBackground

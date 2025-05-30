@@ -105,14 +105,9 @@ Item { // Notification group area
         }
     }
 
-    
-    RectangularShadow {
+    StyledRectangularShadow {
+        target: background
         visible: popup
-        anchors.fill: background
-        radius: background.radius
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
     }
     Rectangle { // Background of the notification
         id: background

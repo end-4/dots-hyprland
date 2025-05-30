@@ -152,12 +152,9 @@ Item {
     }
 
     // + FAB
-    RectangularShadow { // Background shadow
-        anchors.fill: fabButton
+    StyledRectangularShadow {
+        target: fabButton
         radius: Appearance.rounding.normal
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
     }
     Button { 
         id: fabButton

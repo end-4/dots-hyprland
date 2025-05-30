@@ -25,12 +25,8 @@ Item {
     implicitWidth: Appearance.sizes.osdWidth
     implicitHeight: valueIndicator.implicitHeight
 
-    RectangularShadow {
-        anchors.fill: valueIndicator
-        radius: valueIndicator.radius
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
+    StyledRectangularShadow {
+        target: valueIndicator
     }
     WrapperRectangle {
         id: valueIndicator

@@ -169,12 +169,8 @@ Item { // Wrapper
         }
     }
 
-    RectangularShadow { // Background shadow
-        anchors.fill: searchWidgetContent
-        radius: searchWidgetContent.radius
-        blur: 1.2 * Appearance.sizes.elevationMargin
-        spread: 1
-        color: Appearance.colors.colShadow
+    StyledRectangularShadow {
+        target: searchWidgetContent
     }
     Rectangle { // Background
         id: searchWidgetContent
