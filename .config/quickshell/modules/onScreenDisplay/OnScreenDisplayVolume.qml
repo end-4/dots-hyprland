@@ -67,7 +67,10 @@ Scope {
             WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
 
-            anchors.top: true
+            anchors {
+                top: !ConfigOptions.bar.bottom
+                bottom: ConfigOptions.bar.bottom
+            }
             mask: Region {
                 item: osdValuesWrapper
             }

@@ -90,7 +90,11 @@ Scope {
             ColumnLayout {
                 id: columnLayout
                 visible: GlobalStates.overviewOpen
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    top: !ConfigOptions.bar.bottom ? parent.top : null
+                    bottom: ConfigOptions.bar.bottom ? parent.bottom : null
+                }
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {

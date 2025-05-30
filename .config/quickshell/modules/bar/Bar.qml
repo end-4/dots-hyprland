@@ -46,16 +46,20 @@ Scope {
             color: "transparent"
 
             anchors {
-                top: true
+                top: !ConfigOptions.bar.bottom
+                bottom: ConfigOptions.bar.bottom
                 left: true
                 right: true
             }
 
             Rectangle { // Bar background
                 id: barContent
-                anchors.right: parent.right
-                anchors.left: parent.left
-                anchors.top: parent.top
+                anchors {
+                    right: parent.right
+                    left: parent.left
+                    top: !ConfigOptions.bar.bottom ? parent.top : undefined
+                    bottom: ConfigOptions.bar.bottom ? parent.bottom : undefined
+                }
                 color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 height: barHeight
                 
@@ -425,23 +429,27 @@ Scope {
 
             // Round decorators
             Item {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: barContent.bottom
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    // top: barContent.bottom
+                    top: ConfigOptions.bar.bottom ? undefined : barContent.bottom
+                    bottom: ConfigOptions.bar.bottom ? barContent.top : undefined
+                }
                 height: Appearance.rounding.screenRounding
 
                 RoundCorner {
                     anchors.top: parent.top
                     anchors.left: parent.left
                     size: Appearance.rounding.screenRounding
-                    corner: cornerEnum.topLeft
+                    corner: ConfigOptions.bar.bottom ? cornerEnum.bottomLeft : cornerEnum.topLeft
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 }
                 RoundCorner {
                     anchors.top: parent.top
                     anchors.right: parent.right
                     size: Appearance.rounding.screenRounding
-                    corner: cornerEnum.topRight
+                    corner: ConfigOptions.bar.bottom ? cornerEnum.bottomRight : cornerEnum.topRight
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                 }
             }
