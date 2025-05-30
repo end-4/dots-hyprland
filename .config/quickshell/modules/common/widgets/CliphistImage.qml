@@ -41,7 +41,8 @@ Rectangle {
     property real scale: {
         return Math.min(
             root.maxWidth / imageWidth,
-            root.maxHeight / imageHeight
+            root.maxHeight / imageHeight,
+            1
         )
     }
 
