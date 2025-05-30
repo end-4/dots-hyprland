@@ -268,6 +268,7 @@ Item { // Wrapper
                 bottomMargin: 10
                 spacing: 2
                 KeyNavigation.up: searchBar
+                highlightMoveDuration : 100
 
                 onFocusChanged: {
                     if(focus) appResults.currentIndex = 1;
