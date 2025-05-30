@@ -43,6 +43,7 @@ MouseArea {
 
     IconImage {
         id: trayIcon
+        visible: false // There's already color overlay
         source: root.item.icon
         anchors.centerIn: parent
         width: parent.width
@@ -51,6 +52,7 @@ MouseArea {
 
     Desaturate {
         id: desaturatedIcon
+        visible: false // There's already color overlay
         anchors.fill: trayIcon
         source: trayIcon
         desaturation: 1 // 1.0 means fully grayscale
