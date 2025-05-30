@@ -2,6 +2,7 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 //@ pragma Env QS_NO_RELOAD_POPUP=1
 
+import "./modules/common/"
 import "./modules/bar/"
 import "./modules/cheatsheet/"
 import "./modules/dock/"
@@ -47,7 +48,7 @@ ShellRoot {
 
     Loader { active: enableBar; sourceComponent: Bar {} }
     Loader { active: enableCheatsheet; sourceComponent: Cheatsheet {} }
-    Loader { active: enableDock; sourceComponent: Dock {} }
+    Loader { active: enableDock || ConfigOptions?.dock.enable; sourceComponent: Dock {} }
     Loader { active: enableMediaControls; sourceComponent: MediaControls {} }
     Loader { active: enableNotificationPopup; sourceComponent: NotificationPopup {} }
     Loader { active: enableOnScreenDisplayBrightness; sourceComponent: OnScreenDisplayBrightness {} }

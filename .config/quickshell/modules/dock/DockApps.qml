@@ -16,10 +16,12 @@ import Quickshell.Hyprland
 Item {
     id: root
     property real maxWindowPreviewHeight: 200
-    property real maxWindowPreviewWidth: 350
+    property real maxWindowPreviewWidth: 300
+
     property Item lastHoveredButton
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
+    property real popupX: 0
 
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: rowLayout.implicitHeight
@@ -102,6 +104,7 @@ Item {
                 const parentWindow = root.QsWindow.window
                 const mappedPosition = parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2)
                 const modifiedX = mappedPosition.x - implicitWidth / 2
+                root.popupX = modifiedX
                 const modifiedY = 0
                 return Qt.rect(modifiedX, modifiedY, implicitWidth, implicitHeight)
             }
@@ -111,13 +114,13 @@ Item {
         visible: popupBackground.visible
         color: "transparent"
         implicitWidth: root.QsWindow.window.width
-        implicitHeight: popupBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
+        implicitHeight: popupMouseArea.implicitHeight + Appearance.sizes.elevationMargin * 2
 
         MouseArea {
             id: popupMouseArea
             anchors.bottom: parent.bottom
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
-            implicitHeight: popupBackground.implicitHeight + Appearance.sizes.elevationMargin * 2
+            implicitHeight: root.maxWindowPreviewHeight + Appearance.sizes.elevationMargin * 2
             anchors.horizontalCenter: parent.horizontalCenter
             hoverEnabled: true
             StyledRectangularShadow {
@@ -136,13 +139,23 @@ Item {
                 Behavior on opacity {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
+                clip: true
                 color: Appearance.colors.colLayer1
                 radius: Appearance.rounding.normal
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Appearance.sizes.elevationMargin
-                anchors.horizontalCenter: parent.horizontalCenter
+                implicitHeight: previewRowLayout.implicitHeight + padding * 2
                 implicitWidth: previewRowLayout.implicitWidth + padding * 2
-                implicitHeight: root.maxWindowPreviewHeight + padding * 2
+                x: root.popupX
+                Behavior on x {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
+                Behavior on implicitWidth {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on implicitHeight {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
 
                 RowLayout {
                     id: previewRowLayout
