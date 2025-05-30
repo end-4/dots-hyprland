@@ -214,6 +214,7 @@ Item {
 
                             opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
                                 1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
+                            visible: opacity > 0
                             source: workspaceButtonBackground.mainAppIconSource
                             implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
 
