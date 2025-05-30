@@ -64,7 +64,9 @@ Item {
         property bool allPreviewsReady: false
         Connections {
             target: root
-            onLastHoveredButtonChanged: previewPopup.allPreviewsReady = false; // Reset readiness when the hovered button changes
+            function onLastHoveredButtonChanged() {
+                previewPopup.allPreviewsReady = false; // Reset readiness when the hovered button changes
+            } 
         }
         function updatePreviewReadiness() {
             for(var i = 0; i < previewRowLayout.children.length; i++) {
@@ -113,7 +115,7 @@ Item {
         }
         visible: popupBackground.visible
         color: "transparent"
-        implicitWidth: root.QsWindow.window.width
+        implicitWidth: root.QsWindow.window?.width ?? 1
         implicitHeight: popupMouseArea.implicitHeight + Appearance.sizes.elevationMargin * 2
 
         MouseArea {
