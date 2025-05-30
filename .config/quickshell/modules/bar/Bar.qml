@@ -241,7 +241,7 @@ Scope {
                             Layout.alignment: Qt.AlignVCenter
                         }
 
-                        Battery {
+                        BatteryIndicator {
                             visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                             Layout.alignment: Qt.AlignVCenter
                         }
