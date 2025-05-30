@@ -580,7 +580,7 @@ fi
 if git remote get-url origin &>/dev/null; then
   # Pull changes
   log_info "Pulling changes from origin/$current_branch..."
-  if git pull origin "$current_branch"; then
+  if git pull; then
     log_success "Successfully pulled latest changes"
   else
     log_warning "Failed to pull changes from remote. Continuing with local repository..."
