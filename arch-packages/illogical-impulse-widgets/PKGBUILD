@@ -5,12 +5,12 @@ pkgdesc='Illogical Impulse Widget Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	dart-sass
+	fuzzel
 	hypridle
- hyprutils
+    hyprutils
 	hyprlock
-	wlogout
-	wl-clipboard
 	hyprpicker
 	nm-connection-editor
+	quickshell
+	wlogout
 )

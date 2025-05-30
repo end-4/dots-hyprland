@@ -6,18 +6,15 @@ arch=(any)
 license=(None)
 depends=(
   adw-gtk-theme-git
-  qt5ct
-  qt6ct
-  qt5-wayland
+  fish
   fontconfig
+  foot
+  kde-material-you-colors
+  matugen-bin
+  starship
   ttf-readex-pro
   ttf-jetbrains-mono-nerd
   ttf-material-symbols-variable-git
   ttf-rubik-vf
   ttf-gabarito-git
-  fish
-  foot
-  starship
-  kvantum
-  kvantum-qt5
 )

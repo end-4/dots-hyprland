@@ -1,18 +1,9 @@
 # Quickshell-powered illogical-impulse
-## Not ready, but feel free to try it. It's simple:
+## Quite usable at this point, see instructions below
 
-- **Assumption**: You are already using the AGS illogical-impulse
-- **Install Qt packages** (idk which are actually needed so this is everything I have): `qt5-base qt5-declarative qt5-svg qt5-translations qt5-wayland qt6-5compat qt6-base qt6-declarative qt6-imageformats qt6-multimedia qt6-positioning qt6-quicktimeline qt6-sensors qt6-svg qt6-tools qt6-translations qt6-virtualkeyboard qt6-wayland syntax-highlighting`
-- **Install quickshell and more stuff**: `yay -S quickshell matugen-bin grimblast wtype kde-material-you-colors`
-- **Dolphin fix** for it asking what program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu`
-- **Copy** `.config/quickshell` folder and hyprland config files in `.config/hypr/hyprland/` (backing up is your responsibility) (or you can create a new user)
-- **Run quickshell** with `qs` and see how things are - it's not finished, but **feedback is very welcome**
-  - We currently have bar, right sidebar, search/overview
-  - Tips: scrolled windows are flickable
-
-
-## Notes 
-- Gradience will no longer be needed
+- **Installation**: Run the install script (Note: If someone does this on a fresh system, please let us know if it works or is missing anything 👉 https://github.com/end-4/dots-hyprland/pull/1276)
+- **Dolphin fix** so it won't ask which program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu`
+- TODO: Update install script to include the above fix
 
 <div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
