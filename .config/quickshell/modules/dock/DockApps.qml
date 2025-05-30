@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -17,11 +18,12 @@ Item {
     id: root
     property real maxWindowPreviewHeight: 200
     property real maxWindowPreviewWidth: 300
+    property real windowControlsHeight: 30
 
     property Item lastHoveredButton
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
-    property real popupX: 0
+    property real popupX: parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2).x - implicitWidth / 2
 
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: rowLayout.implicitHeight
@@ -101,30 +103,31 @@ Item {
         }
         anchor {
             window: root.QsWindow.window
-            rect: {
-                if (root.lastHoveredButton === null) return; // Don't update
-                const parentWindow = root.QsWindow.window
-                const mappedPosition = parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2)
-                const modifiedX = mappedPosition.x - implicitWidth / 2
-                root.popupX = modifiedX
-                const modifiedY = 0
-                return Qt.rect(modifiedX, modifiedY, implicitWidth, implicitHeight)
-            }
-            gravity: Edges.Top
-            edges: Edges.Top
+            adjustment: PopupAdjustment.None
+            gravity: Edges.Top | Edges.Right
+            edges: Edges.Top | Edges.Left
+
         }
         visible: popupBackground.visible
         color: "transparent"
         implicitWidth: root.QsWindow.window?.width ?? 1
-        implicitHeight: popupMouseArea.implicitHeight + Appearance.sizes.elevationMargin * 2
+        implicitHeight: popupMouseArea.implicitHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
 
         MouseArea {
             id: popupMouseArea
             anchors.bottom: parent.bottom
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
-            implicitHeight: root.maxWindowPreviewHeight + Appearance.sizes.elevationMargin * 2
-            anchors.horizontalCenter: parent.horizontalCenter
+            implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
+            // anchors.horizontalCenter: parent.horizontalCenter
             hoverEnabled: true
+            // x: previewPopup.width / 2 + root.popupX
+            // Behavior on x {
+            //     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+            // }
+            x: {
+                const itemCenter = root.QsWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, 0);
+                return itemCenter.x - width / 2
+            }
             StyledRectangularShadow {
                 target: popupBackground
                 opacity: previewPopup.show ? 1 : 0
@@ -142,16 +145,13 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 clip: true
-                color: Appearance.colors.colLayer1
+                color: Appearance.m3colors.m3surfaceContainer
                 radius: Appearance.rounding.normal
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Appearance.sizes.elevationMargin
+                anchors.horizontalCenter: parent.horizontalCenter
                 implicitHeight: previewRowLayout.implicitHeight + padding * 2
                 implicitWidth: previewRowLayout.implicitWidth + padding * 2
-                x: root.popupX
-                Behavior on x {
-                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                }
                 Behavior on implicitWidth {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
@@ -174,12 +174,45 @@ Item {
                             onClicked: {
                                 windowButton.modelData?.activate();
                             }
-                            contentItem: Item {
+                            contentItem: ColumnLayout {
                                 implicitWidth: screencopyView.implicitWidth
                                 implicitHeight: screencopyView.implicitHeight
+
+                                ButtonGroup {
+                                    contentWidth: parent.width - anchors.margins * 2
+                                    WrapperRectangle {
+                                        Layout.fillWidth: true
+                                        color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer)
+                                        radius: Appearance.rounding.small
+                                        margin: 5
+                                        StyledText {
+                                            Layout.fillWidth: true
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: windowButton.modelData?.title
+                                            elide: Text.ElideRight
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                    }
+                                    GroupButton {
+                                        id: closeButton
+                                        colBackground: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer)
+                                        baseWidth: windowControlsHeight
+                                        baseHeight: windowControlsHeight
+                                        buttonRadius: Appearance.rounding.full
+                                        contentItem: MaterialSymbol {
+                                            anchors.centerIn: parent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            text: "close"
+                                            iconSize: Appearance.font.pixelSize.normal
+                                            color: Appearance.m3colors.m3onSurface
+                                        }
+                                        onClicked: {
+                                            windowButton.modelData?.close();
+                                        }
+                                    }
+                                }
                                 ScreencopyView {
                                     id: screencopyView
-                                    anchors.centerIn: parent
                                     captureSource: previewPopup ? windowButton.modelData : null
                                     live: true
                                     paintCursor: true
@@ -193,45 +226,6 @@ Item {
                                             width: screencopyView.width
                                             height: screencopyView.height
                                             radius: Appearance.rounding.small
-                                        }
-                                    }
-                                }
-                                ButtonGroup {
-                                    contentWidth: parent.width - anchors.margins * 2
-                                    anchors {
-                                        top: parent.top
-                                        left: parent.left
-                                        right: parent.right
-                                        margins: 3
-                                    }
-                                    WrapperRectangle {
-                                        Layout.fillWidth: true
-                                        color: Appearance.m3colors.m3surfaceContainer
-                                        radius: Appearance.rounding.small
-                                        margin: 5
-                                        StyledText {
-                                            Layout.fillWidth: true
-                                            font.pixelSize: Appearance.font.pixelSize.small
-                                            text: windowButton.modelData?.title
-                                            elide: Text.ElideRight
-                                            color: Appearance.m3colors.m3onSurface
-                                        }
-                                    }
-                                    GroupButton {
-                                        id: closeButton
-                                        colBackground: Appearance.m3colors.m3surfaceContainer
-                                        baseWidth: 30
-                                        baseHeight: 30
-                                        buttonRadius: Appearance.rounding.full
-                                        contentItem: MaterialSymbol {
-                                            anchors.centerIn: parent
-                                            horizontalAlignment: Text.AlignHCenter
-                                            text: "close"
-                                            iconSize: Appearance.font.pixelSize.normal
-                                            color: Appearance.m3colors.m3onSurface
-                                        }
-                                        onClicked: {
-                                            windowButton.modelData?.close();
                                         }
                                     }
                                 }
