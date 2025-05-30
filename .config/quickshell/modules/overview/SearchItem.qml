@@ -192,7 +192,7 @@ RippleButton {
                     text: `${root.displayContent}`
                 }
             }
-            Loader {
+            Loader { // Clipboard image preview
                 active: root.cliphistRawString && /^\d+\t\[\[.*binary data.*\d+x\d+.*\]\]$/.test(root.cliphistRawString)
                 sourceComponent: CliphistImage {
                     Layout.fillWidth: true
