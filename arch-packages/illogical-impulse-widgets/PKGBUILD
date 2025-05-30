@@ -6,6 +6,7 @@ arch=(any)
 license=(None)
 depends=(
 	fuzzel
+	glib2 # for `gsettings` it seems?
 	hypridle
     hyprutils
 	hyprlock
