@@ -13,7 +13,7 @@ Singleton {
     }
 
     property QtObject apps: QtObject {
-        property string bluetooth: "blueberry"
+        property string bluetooth: "better-control --bluetooth"
         property string imageViewer: "loupe"
         property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
         property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
