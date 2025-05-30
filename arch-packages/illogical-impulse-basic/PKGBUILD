@@ -15,7 +15,6 @@ depends=(
 	wget
 	ripgrep
 	jq
-	npm
 	meson
 	xdg-user-dirs
 )

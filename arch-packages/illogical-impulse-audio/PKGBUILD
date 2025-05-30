@@ -9,6 +9,5 @@ depends=(
 	wireplumber
 	libdbusmenu-gtk3
 	playerctl
-	swww
 )
 

@@ -12,5 +12,6 @@ depends=(
 	hyprpicker
 	nm-connection-editor
 	quickshell
+	swww
 	wlogout
 )
