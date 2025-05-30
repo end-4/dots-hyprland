@@ -7,7 +7,7 @@ import QtQuick.Layouts
 
 RippleButton {
     Layout.fillHeight: true
-    implicitWidth: background.height
+    implicitWidth: implicitHeight - topInset - bottomInset
     buttonRadius: Appearance.rounding.normal
 
     topInset: dockVisualBackground.margin + dockRow.padding

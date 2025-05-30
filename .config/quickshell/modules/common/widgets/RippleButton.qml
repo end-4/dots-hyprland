@@ -21,6 +21,7 @@ Button {
     property int rippleDuration: 1200
     property bool rippleEnabled: true
     property var altAction
+    property var middleClickAction
 
     property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
@@ -58,10 +59,14 @@ Button {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         onPressed: (event) => { 
             if(event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction();
+                return;
+            }
+            if(event.button === Qt.MiddleButton) {
+                if (root.middleClickAction) root.middleClickAction();
                 return;
             }
             root.down = true

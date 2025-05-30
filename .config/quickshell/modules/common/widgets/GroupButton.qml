@@ -19,6 +19,7 @@ Button {
     property real buttonRadius: Appearance?.rounding?.small ?? 4
     property real buttonRadiusPressed: buttonRadius
     property var altAction
+    property var middleClickAction
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + padding * 2
     property real baseHeight: contentItem.implicitHeight + padding * 2
@@ -67,9 +68,13 @@ Button {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         onPressed: (event) => { 
-            if(event.button === Qt.RightButton) {
+            if (event.button === Qt.MiddleButton) {
+                if (root.middleClickAction) root.middleClickAction();
+                return;
+            }
+            if (event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction();
                 return;
             }
