@@ -214,7 +214,7 @@ handle_file_conflict() {
 
     case $choice in
     1)
-      cp "$repo_file" "$home_file"
+      cp -p "$repo_file" "$home_file"
       log_success "Replaced $home_file with repository version"
       break
       ;;
@@ -224,12 +224,12 @@ handle_file_conflict() {
       ;;
     3)
       mv "$home_file" "${dirname}/${filename}.old"
-      cp "$repo_file" "$home_file"
+      cp -p "$repo_file" "$home_file"
       log_success "Backed up local file to ${filename}.old and updated with repository version"
       break
       ;;
     4)
-      cp "$repo_file" "${dirname}/${filename}.new"
+      cp -p "$repo_file" "${dirname}/${filename}.new"
       log_success "Saved repository version as ${filename}.new, kept local file"
       break
       ;;
@@ -251,7 +251,7 @@ handle_file_conflict() {
 
       case $subchoice in
       r)
-        cp "$repo_file" "$home_file"
+        cp -p "$repo_file" "$home_file"
         log_success "Replaced $home_file with repository version"
         break
         ;;
@@ -261,12 +261,12 @@ handle_file_conflict() {
         ;;
       b)
         mv "$home_file" "${dirname}/${filename}.old"
-        cp "$repo_file" "$home_file"
+        cp -p "$repo_file" "$home_file"
         log_success "Backed up local file to ${filename}.old and updated"
         break
         ;;
       n)
-        cp "$repo_file" "${dirname}/${filename}.new"
+        cp -p "$repo_file" "${dirname}/${filename}.new"
         log_success "Saved repository version as ${filename}.new"
         break
         ;;
@@ -756,7 +756,7 @@ if [[ "$process_files" == true ]]; then
         fi
       else
         # New file, copy it
-        cp "$repo_file" "$home_file"
+        cp -p "$repo_file" "$home_file"
         log_success "Created new file: $home_file"
         ((files_created++))
       fi
