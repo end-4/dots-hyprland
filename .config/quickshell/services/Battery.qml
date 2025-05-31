@@ -17,11 +17,14 @@ Singleton {
     property bool isCritical: percentage <= ConfigOptions.battery.critical / 100
     property bool isSuspending: percentage <= ConfigOptions.battery.suspend / 100
 
-    onIsLowChanged: {
-        if (available && isLow) Hyprland.dispatch(`exec notify-send "Low battery" "Consider plugging in your device" -u critical -a "Shell"`)
+    property bool isLowAndNotCharging: isLow && !isCharging
+    property bool isCriticalAndNotCharging: isCritical && !isCharging
+
+    onIsLowAndNotChargingChanged: {
+        if (available && isLowAndNotCharging) Hyprland.dispatch(`exec notify-send "Low battery" "Consider plugging in your device" -u critical -a "Shell"`)
     }
 
-    onIsCriticalChanged: {
-        if (available && isCritical) Hyprland.dispatch(`exec notify-send "Critically low battery" "🙏 I ask for pleas charge\nAutomatic suspend triggers at ${ConfigOptions.battery.suspend}%" -u critical -a "Shell"`)
+    onIsCriticalAndNotChargingChanged: {
+        if (available && isCriticalAndNotCharging) Hyprland.dispatch(`exec notify-send "Critically low battery" "🙏 I ask for pleas charge\nAutomatic suspend triggers at ${ConfigOptions.battery.suspend}%" -u critical -a "Shell"`)
     }
 }
