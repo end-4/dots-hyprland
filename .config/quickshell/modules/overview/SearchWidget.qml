@@ -43,27 +43,27 @@ Item { // Wrapper
         {
             action: "img", 
             execute: () => {
-                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh`.replace(/file:\/\//, ""))
+                executor.executeCommand(Directories.wallpaperSwitchScriptPath)
             }
         },
         {
             action: "dark",
             execute: () => {
-                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh --mode dark --noswitch`.replace(/file:\/\//, ""))
+                executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`)
             }
         },
         {
             action: "light",
             execute: () => {
-                executor.executeCommand(`${xdgConfigHome}/quickshell/scripts/switchwall.sh --mode light --noswitch`.replace(/file:\/\//, ""))
+                executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`)
             }
         },
         {
             action: "accentcolor",
             execute: (args) => {
                 executor.executeCommand(
-                    `${xdgConfigHome}/quickshell/scripts/switchwall.sh --noswitch --color ${args != '' ? ("'"+args+"'") : ""}`
-                    .replace(/file:\/\//, ""))
+                    `${Directories.wallpaperSwitchScriptPath} --noswitch --color ${args != '' ? ("'"+args+"'") : ""}`
+                )
             }
         },
         {

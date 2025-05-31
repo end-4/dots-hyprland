@@ -44,6 +44,7 @@ ShellRoot {
         ConfigLoader.loadConfig()
         PersistentStateManager.loadStates()
         Cliphist.refresh()
+        FirstRunExperience.load()
     }
 
     Loader { active: enableBar; sourceComponent: Bar {} }
