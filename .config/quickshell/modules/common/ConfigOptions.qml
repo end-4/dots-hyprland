@@ -18,7 +18,7 @@ Singleton {
         property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
         property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
         property string taskManager: "gnome-usage"
-        property string terminal: "foot" // This is only for shell actions
+        property string terminal: "kitty -1" // This is only for shell actions
     }
 
     property QtObject battery: QtObject {

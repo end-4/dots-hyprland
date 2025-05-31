@@ -47,7 +47,7 @@
     
    - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
      - For a list, hit `Super`+`/`
-     - For `foot` terminal, hit `Super`+`Enter`
+     - For a terminal, hit `Super`+`Enter`
 
 </details>
 

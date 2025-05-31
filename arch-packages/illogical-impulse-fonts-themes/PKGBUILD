@@ -9,8 +9,8 @@ depends=(
   breeze-plus
   fish
   fontconfig
-  foot
   kde-material-you-colors
+  kitty
   matugen-bin
   starship
   ttf-readex-pro
