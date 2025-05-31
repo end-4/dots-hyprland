@@ -180,7 +180,7 @@ Button {
                             buttonText: qsTr("Download")
                             onClicked: {
                                 root.showActions = false
-                                Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}'`)
+                                Hyprland.dispatch(`exec curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`)
                             }
                         }
                     }
