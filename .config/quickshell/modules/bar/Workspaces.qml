@@ -22,20 +22,11 @@ Item {
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
-    property real workspaceIconSize: workspaceButtonWidth * 0.7
+    property real workspaceIconSize: workspaceButtonWidth * 0.69
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
     property real workspaceIconMarginShrinked: -4
-    property int activeWorkspaceMargin: 1
-    property double animatedActiveWorkspaceIndex: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspaces.shown
-
-    Behavior on animatedActiveWorkspaceIndex {
-        NumberAnimation {
-            duration: Appearance.animation.menuDecel.duration
-            easing.type: Appearance.animation.menuDecel.type
-        }
-
-    }
+    property int workspaceIndexInGroup: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspaces.shown
 
     // Function to update workspaceOccupied
     function updateWorkspaceOccupied() {
@@ -138,12 +129,33 @@ Item {
     // Active workspace
     Rectangle {
         z: 2
-        implicitWidth: workspaceButtonWidth - activeWorkspaceMargin * 2
+        // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
+        property real activeWorkspaceMargin: 2
         implicitHeight: workspaceButtonWidth - activeWorkspaceMargin * 2
         radius: Appearance.rounding.full
         color: Appearance.colors.colPrimary
         anchors.verticalCenter: parent.verticalCenter
-        x: animatedActiveWorkspaceIndex * workspaceButtonWidth + activeWorkspaceMargin
+
+        property real idx1: workspaceIndexInGroup
+        property real idx2: workspaceIndexInGroup
+        x: Math.min(idx1, idx2) * workspaceButtonWidth + activeWorkspaceMargin
+        implicitWidth: Math.abs(idx1 - idx2) * workspaceButtonWidth + workspaceButtonWidth - activeWorkspaceMargin * 2
+
+        Behavior on activeWorkspaceMargin {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+        Behavior on idx1 {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.OutCirc
+            }
+        }
+        Behavior on idx2 {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.OutCirc
+            }
+        }
     }
 
     // Workspaces - numbers
@@ -213,7 +225,7 @@ Item {
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
                             opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
-                                1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
+                                0.8 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
                             visible: opacity > 0
                             source: workspaceButtonBackground.mainAppIconSource
                             implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
