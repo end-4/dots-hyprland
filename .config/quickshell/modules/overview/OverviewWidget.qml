@@ -25,6 +25,7 @@ Item {
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale: ConfigOptions.overview.scale
+    property color activeBorderColor: Appearance.m3colors.m3secondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
         ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
@@ -34,7 +35,7 @@ Item {
         ((monitor.height - monitorData?.reserved[1] - monitorData?.reserved[3]) * root.scale / monitor.scale)
 
     property real workspaceNumberMargin: 80
-    property real workspaceNumberSize: 80
+    property real workspaceNumberSize: Math.min(workspaceImplicitHeight, workspaceImplicitWidth) * monitor.scale
     property int workspaceZ: 0
     property int windowZ: 1
     property int windowDraggingZ: 99999
@@ -63,7 +64,7 @@ Item {
         radius: Appearance.rounding.screenRounding * root.scale + padding
         color: Appearance.colors.colLayer0
 
-        ColumnLayout {
+        ColumnLayout { // Workspaces
             id: workspaceColumnLayout
 
             z: root.workspaceZ
@@ -85,7 +86,6 @@ Item {
                             property color defaultWorkspaceColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
                             property color hoveredWorkspaceColor: ColorUtils.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
-                            property color activeBorderColor: Appearance.m3colors.m3secondary
                             property bool hoveredWhileDragging: false
 
                             implicitWidth: root.workspaceImplicitWidth
@@ -93,8 +93,17 @@ Item {
                             color: hoveredWhileDragging ? hoveredWorkspaceColor : defaultWorkspaceColor
                             radius: Appearance.rounding.screenRounding * root.scale
                             border.width: 2
-                            border.color: (monitor.activeWorkspace?.id == workspaceValue && root.monitorIsFocused) ? activeBorderColor : 
-                                hoveredWhileDragging ? hoveredBorderColor : "transparent"
+                            border.color: hoveredWhileDragging ? hoveredBorderColor : "transparent"
+
+                            StyledText {
+                                anchors.centerIn: parent
+                                text: workspaceValue
+                                font.pixelSize: root.workspaceNumberSize * root.scale
+                                font.weight: Font.DemiBold
+                                color: ColorUtils.transparentize(Appearance.colors.colOnLayer1, 0.8)
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
 
                             MouseArea {
                                 id: workspaceArea
@@ -128,7 +137,7 @@ Item {
             }
         }
 
-        Item {
+        Item { // Windows & focused workspace indicator
             id: windowSpace
             anchors.centerIn: parent
             implicitWidth: workspaceColumnLayout.implicitWidth
@@ -216,6 +225,28 @@ Item {
                             content: `${windowData.title}\n[${windowData.class}] ${windowData.xwayland ? "[XWayland] " : ""}\n`
                         }
                     }
+                }
+            }
+
+            Rectangle { // Focused workspace indicator
+                id: focusedWorkspaceIndicator
+                property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
+                property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / ConfigOptions.overview.numOfCols)
+                property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % ConfigOptions.overview.numOfCols
+                x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
+                y: (root.workspaceImplicitHeight + workspaceSpacing) * activeWorkspaceRowIndex
+                z: root.windowZ
+                width: root.workspaceImplicitWidth
+                height: root.workspaceImplicitHeight
+                color: "transparent"
+                radius: Appearance.rounding.screenRounding * root.scale
+                border.width: 2
+                border.color: root.activeBorderColor
+                Behavior on x {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                }
+                Behavior on y {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
             }
         }
