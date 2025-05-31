@@ -18,8 +18,10 @@ Button {
     property string buttonText
     property real buttonRadius: Appearance?.rounding?.small ?? 4
     property real buttonRadiusPressed: buttonRadius
-    property var altAction
-    property var middleClickAction
+    property var downAction // When left clicking (down)
+    property var releaseAction // When left clicking (release)
+    property var altAction // When right clicking
+    property var middleClickAction // When middle clicking
     property bool bounce: true
     property real baseWidth: contentItem.implicitWidth + padding * 2
     property real baseHeight: contentItem.implicitHeight + padding * 2
@@ -34,6 +36,10 @@ Button {
     implicitHeight: (root.down && bounce) ? clickedHeight : baseHeight
     
     Behavior on implicitWidth {
+        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
+    }
+
+    Behavior on implicitHeight {
         animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
     }
 
@@ -70,18 +76,21 @@ Button {
         cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
         onPressed: (event) => { 
-            if (event.button === Qt.MiddleButton) {
-                if (root.middleClickAction) root.middleClickAction();
-                return;
-            }
-            if (event.button === Qt.RightButton) {
+            if(event.button === Qt.RightButton) {
                 if (root.altAction) root.altAction();
                 return;
             }
+            if(event.button === Qt.MiddleButton) {
+                if (root.middleClickAction) root.middleClickAction();
+                return;
+            }
             root.down = true
+            if (root.downAction) root.downAction();
         }
         onReleased: (event) => {
             root.down = false
+            if (event.button != Qt.LeftButton) return;
+            if (root.releaseAction) root.releaseAction();
             root.click() // Because the MouseArea already consumed the event
         }
         onCanceled: (event) => {
