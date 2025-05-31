@@ -24,6 +24,7 @@ alias node="mise exec -- node"
 alias pipx="mise exec -- pipx"
 alias npm="mise exec -- npm"
 alias composer="mise exec -- composer"
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 # function fish_prompt
 #   set_color cyan; echo (pwd)
 #   set_color green; echo '> '
