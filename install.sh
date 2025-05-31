@@ -119,24 +119,24 @@ showfun install-python-packages
 v install-python-packages
 
 ## Optional dependencies
-if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
-case $SKIP_PLASMAINTG in
-  true) sleep 0;;
-  *)
-    if $ask;then
-      echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 250 MiB.\e[0m"
-      echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
-      echo -e "\e[33mInstall it? [y/N]\e[0m"
-      read -p "====> " p
-    else
-      p=y
-    fi
-    case $p in
-      y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
-      *) echo "Ok, won't install"
-    esac
-    ;;
-esac
+# if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
+# case $SKIP_PLASMAINTG in
+#   true) sleep 0;;
+#   *)
+#     if $ask;then
+#       echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 250 MiB.\e[0m"
+#       echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
+#       echo -e "\e[33mInstall it? [y/N]\e[0m"
+#       read -p "====> " p
+#     else
+#       p=y
+#     fi
+#     case $p in
+#       y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
+#       *) echo "Ok, won't install"
+#     esac
+#     ;;
+# esac
 
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"

@@ -49,11 +49,6 @@ export function launchCustomCommand(command) {
             .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
             .catch(print);
     }
-    else if (args[0] == '>pywal') { // Use Pywal (ik it looks shit but I'm not removing)
-        execAsync([`bash`, `-c`, `mkdir -p ${GLib.get_user_state_dir()}/ags/user && echo "pywal" > ${GLib.get_user_state_dir()}/ags/user/colorbackend.txt`]).catch(print)
-            .then(execAsync(['bash', '-c', `${App.configDir}/scripts/color_generation/switchwall.sh --noswitch`]).catch(print))
-            .catch(print);
-    }
     else if (args[0] == '>todo') { // Todo
         Todo.add(args.slice(1).join(' '));
     }

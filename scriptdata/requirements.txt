@@ -26,7 +26,7 @@ pycparser==2.22
     # via cffi
 pyproject-hooks==1.2.0
     # via build
-pywal==3.3.0
+# pywal==3.3.0
     # via -r scriptdata/requirements.in
 pywayland==0.4.18
     # via -r scriptdata/requirements.in

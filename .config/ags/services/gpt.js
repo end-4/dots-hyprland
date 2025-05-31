@@ -44,16 +44,6 @@ const PROVIDERS = Object.assign({
         "key_file": "openrouter_key.txt",
         "model": "meta-llama/llama-3-70b-instruct",
     },
-    "openai": {
-        "name": "OpenAI - GPT-3.5",
-        "logo_name": "openai-symbolic",
-        "description": getString('Official OpenAI API.\nPricing: Free for the first $5 or 3 months, whichever is less.'),
-        "base_url": "https://api.openai.com/v1/chat/completions",
-        "key_get_url": "https://platform.openai.com/api-keys",
-        "requires_key": true,
-        "key_file": "openai_key.txt",
-        "model": "gpt-3.5-turbo",
-    },
 }, userOptions.ai.extraGptModels)
 
 const installedOllamaModels = JSON.parse(
@@ -76,7 +66,7 @@ installedOllamaModels.forEach(model => {
 // Custom prompt
 const initMessages =
     [
-        { role: "user", content: getString("You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with brief explanation.\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\". \nNote: Use casual language, be short, while ensuring the factual correctness of your response. If you are unsure or don’t have enough information to provide a confident answer, simply say “I don’t know” or “I’m not sure.”. \nThanks!"), },
+        { role: "user", content: getString("You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with brief explanation.\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\". \nNote: Use casual language, be short, while ensuring the factual correctness of your response. If you are unsure or don't have enough information to provide a confident answer, simply say \"I don't know\" or \"I'm not sure.\". \nThanks!") },
         { role: "assistant", content: "- Got it!", },
         { role: "user", content: "\"He rushed to where the event was supposed to be hold, he didn't know it got canceled\"", },
         { role: "assistant", content: "## Grammar correction\nErrors:\n\"He rushed to where the event was supposed to be __hold____,__ he didn't know it got canceled\"\nCorrection + minor improvements:\n\"He rushed to the place where the event was supposed to be __held____, but__ he didn't know that it got canceled\"", },
@@ -259,11 +249,22 @@ class GPTService extends Service {
                 const [bytes] = stream.read_line_finish(res);
                 const line = this._decoder.decode(bytes);
                 if (line && line != '') {
+                    
+                    // Ignore SSE comments (lines starting with ":")
+                    if (line.startsWith(':')) {
+                        this.readResponse(stream, aiResponse);
+                        return;
+                    }
+                    
                     let data = line.substr(6);
                     if (data == '[DONE]') return;
                     try {
                         const result = JSON.parse(data);
                         if (result.choices[0].finish_reason === 'stop') {
+                            // If the stop payload has content, add it to the response
+                            if (result.choices[0].delta.content) {
+                                aiResponse.addDelta(result.choices[0].delta.content);
+                            }
                             aiResponse.done = true;
                             return;
                         }
@@ -334,16 +335,3 @@ class GPTService extends Service {
 }
 
 export default new GPTService();
-
-
-
-
-
-
-
-
-
-
-
-
-

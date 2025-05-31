@@ -90,27 +90,44 @@ class BrightnessDdcService extends BrightnessServiceBase {
 async function listDdcMonitorsSnBus() {
     let ddcSnBus = {};
     try {
-        const out = await Utils.execAsync('ddcutil detect --brief');
+        // Its' better not to use --brief. This way if a serial number is not
+        // found we can still use the binary serial number as an alternative
+        const out = await Utils.execAsync('ddcutil detect');
         const displays = out.split('\n\n');
         displays.forEach(display => {
-            const reg = /^Display \d+/;
-            if (!reg.test(display))
+            const reg = /[Dd]isplay/;
+            if (!reg.test(display)) {
                 return;
+            }
             const lines = display.split('\n');
             let sn, busNum;
+            let unresponsive = false;
             for (let line of lines) {
                 line = line.trim()
-                if (line.startsWith('Monitor:')) {
-                    sn = line.split(':')[3];
+
+                // Sometimes ddcutils will report a DP monitor twice, one of the
+                // two copies of the monitor will "not support DDC/CI". Just ignore it
+                // See https://www.ddcutil.com/faq/#duplicate_displayport
+                if (line.includes('unresponsive')) {
+                    unresponsive = true;
+                }
+                if (line.startsWith('Serial')) {
+                    sn = line.split(':')[1].trim();
+                    // Sometimes sn can be empty. In this cases let's relay on binary sn
+                } else if (line.startsWith('Binary') && !sn) {
+                    // Make the serial number upper case except for the leading '0x' since Hyprland
+                    // seems to use upper case for the rest of the string and ddcutil uses
+                    // lower case for all the binary sn
+                    sn = '0x'+line.split('(')[1].slice(2,-1).toUpperCase();
                 } else if (line.startsWith('I2C bus:')) {
                     busNum = line.split('/dev/i2c-')[1];
                 }
             }
-            if (sn && busNum)
+            if (sn && busNum && !unresponsive){
                 ddcSnBus[sn] = busNum;
+            }
         });
     } catch (err) {
-        print(err);
     }
     return ddcSnBus;
 }
@@ -133,10 +150,12 @@ for (let i = 0; i < service.length; i++) {
                 service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
                 break;
             case "auto":
-                if (monitorSn in ddcSnBus && !!exec(`bash -c 'command -v ddcutil'`))
+                if (monitorSn in ddcSnBus && !!exec(`bash -c 'command -v ddcutil'`)){
                     service[i] = new BrightnessDdcService(ddcSnBus[monitorSn]);
-                else
+                }
+                else {
                     service[i] = new BrightnessCtlService();
+                }
                 break;
             default:
                 throw new Error(`Unknown brightness controller ${preferredController}`);
