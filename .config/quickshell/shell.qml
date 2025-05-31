@@ -9,6 +9,7 @@ import "./modules/dock/"
 import "./modules/mediaControls/"
 import "./modules/notificationPopup/"
 import "./modules/onScreenDisplay/"
+import "./modules/onScreenKeyboard/"
 import "./modules/overview/"
 import "./modules/screenCorners/"
 import "./modules/session/"
@@ -31,6 +32,7 @@ ShellRoot {
     property bool enableNotificationPopup: true
     property bool enableOnScreenDisplayBrightness: true
     property bool enableOnScreenDisplayVolume: true
+    property bool enableOnScreenKeyboard: true
     property bool enableOverview: true
     property bool enableReloadPopup: true
     property bool enableScreenCorners: true
@@ -54,6 +56,7 @@ ShellRoot {
     Loader { active: enableNotificationPopup; sourceComponent: NotificationPopup {} }
     Loader { active: enableOnScreenDisplayBrightness; sourceComponent: OnScreenDisplayBrightness {} }
     Loader { active: enableOnScreenDisplayVolume; sourceComponent: OnScreenDisplayVolume {} }
+    Loader { active: enableOnScreenKeyboard; sourceComponent: OnScreenKeyboard {} }
     Loader { active: enableOverview; sourceComponent: Overview {} }
     Loader { active: enableReloadPopup; sourceComponent: ReloadPopup {} }
     Loader { active: enableScreenCorners; sourceComponent: ScreenCorners {} }

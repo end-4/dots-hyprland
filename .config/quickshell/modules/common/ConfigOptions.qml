@@ -61,6 +61,11 @@ Singleton {
         property int timeout: 1000
     }
 
+    property QtObject osk: QtObject {
+        property string layout: "qwerty_full"
+        property bool pinnedOnStartup: false
+    }
+
     property QtObject overview: QtObject {
         property real scale: 0.18 // Relative to screen size
         property real numOfRows: 2
