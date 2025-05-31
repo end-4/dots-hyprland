@@ -29,21 +29,35 @@ Rectangle {
                 horizontalAlignment: Qt.AlignHCenter
                 fill: 1
                 text: "screenshot_region"
-                iconSize: Appearance.font.pixelSize.normal
+                iconSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer2
             }
 
         }
 
+        // CircleUtilButton {
+        //     Layout.alignment: Qt.AlignVCenter
+        //     onClicked: Hyprland.dispatch("exec hyprpicker -a")
+
+        //     MaterialSymbol {
+        //         horizontalAlignment: Qt.AlignHCenter
+        //         fill: 1
+        //         text: "colorize"
+        //         iconSize: Appearance.font.pixelSize.large
+        //         color: Appearance.colors.colOnLayer2
+        //     }
+
+        // }
+
         CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
-            onClicked: Hyprland.dispatch("exec hyprpicker -a")
+            onClicked: Hyprland.dispatch("global quickshell:oskToggle")
 
             MaterialSymbol {
                 horizontalAlignment: Qt.AlignHCenter
-                fill: 1
-                text: "colorize"
-                iconSize: Appearance.font.pixelSize.normal
+                fill: 0
+                text: "keyboard"
+                iconSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer2
             }
 
