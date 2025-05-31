@@ -36,6 +36,10 @@ Singleton {
         {
             "regex": /.*polkit.*/,
             "replace": "system-lock-screen"
+        },
+        {
+            "regex": /gcr.prompter/,
+            "replace": "system-lock-screen"
         }
     ]
 
