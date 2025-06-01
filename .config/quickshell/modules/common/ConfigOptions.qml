@@ -17,7 +17,7 @@ Singleton {
         property string imageViewer: "loupe"
         property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
         property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
-        property string taskManager: "gnome-usage"
+        property string taskManager: "plasma-systemmonitor --page-name Processes"
         property string terminal: "kitty -1" // This is only for shell actions
     }
 

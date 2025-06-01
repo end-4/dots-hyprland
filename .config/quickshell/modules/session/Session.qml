@@ -26,7 +26,7 @@ Scope {
             function hide() {
                 sessionLoader.active = false
             }
-
+    
 
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.namespace: "quickshell:session"
@@ -121,7 +121,7 @@ Scope {
                         id: sessionTaskManager
                         buttonIcon: "browse_activity"
                         buttonText: qsTr("Task Manager")
-                        onClicked:  { Hyprland.dispatch("exec gnome-system-monitor & disown"); sessionRoot.hide() }
+                        onClicked:  { Hyprland.dispatch(`exec ${ConfigOptions.apps.taskManager}`); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLogout
                         KeyNavigation.down: sessionFirmwareReboot
