@@ -123,7 +123,7 @@ case $SKIP_PLASMAINTG in
   true) sleep 0;;
   *)
     if $ask;then
-      echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 250 MiB.\e[0m"
+      echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 600 MiB.\e[0m"
       echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
       echo -e "\e[33mInstall it? [y/N]\e[0m"
       read -p "====> " p
