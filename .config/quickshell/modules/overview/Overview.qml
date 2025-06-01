@@ -210,4 +210,27 @@ Scope {
         }
     }
 
+    GlobalShortcut {
+        name: "overviewEmojiToggle"
+        description: qsTr("Toggle emoji query on overview widget")
+
+        onPressed: {
+            if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
+                GlobalStates.overviewOpen = false;
+                return;
+            }
+            for (let i = 0; i < overviewVariants.instances.length; i++) {
+                let panelWindow = overviewVariants.instances[i];
+                if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
+                    overviewScope.dontAutoCancelSearch = true;
+                    panelWindow.setSearchingText(
+                        ConfigOptions.search.prefix.emojis
+                    );
+                    GlobalStates.overviewOpen = true;
+                    return
+                }
+            }
+        }
+    }
+
 }

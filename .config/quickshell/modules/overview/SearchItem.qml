@@ -24,6 +24,7 @@ RippleButton {
     property var itemExecute: entry?.execute
     property string fontType: entry?.fontType ?? "main"
     property string itemClickActionName: entry?.clickActionName
+    property string bigText: entry?.bigText ?? ""
     property string materialSymbol: entry?.materialSymbol ?? ""
     property string cliphistRawString: entry?.cliphistRawString ?? ""
 
@@ -120,6 +121,7 @@ RippleButton {
             id: iconLoader
             active: true
             sourceComponent: root.materialSymbol !== "" ? materialSymbolComponent :
+                root.bigText ? bigTextComponent :
                 root.itemIcon !== "" ? iconImageComponent : 
                 null
         }
@@ -138,6 +140,15 @@ RippleButton {
             MaterialSymbol {
                 text: root.materialSymbol
                 iconSize: 30
+                color: Appearance.m3colors.m3onSurface
+            }
+        }
+
+        Component {
+            id: bigTextComponent
+            StyledText {
+                text: root.bigText
+                font.pixelSize: Appearance.font.pixelSize.larger
                 color: Appearance.m3colors.m3onSurface
             }
         }

@@ -84,7 +84,8 @@ Singleton {
         property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
         property QtObject prefix: QtObject {
             property string action: "/"
-            property string clipboard: ":"
+            property string clipboard: ";"
+            property string emojis: ":"
         }
     }
 

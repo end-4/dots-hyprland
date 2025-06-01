@@ -302,7 +302,22 @@ Item { // Wrapper
                                     }
                                 };
                             }).filter(Boolean);
-                        }
+                        } 
+                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.emojis)) { // Clipboard
+                            const searchString = root.searchingText.slice(ConfigOptions.search.prefix.emojis.length);
+                            return Emojis.fuzzyQuery(searchString).map(entry => {
+                                return {
+                                    cliphistRawString: entry,
+                                    bigText: entry.match(/^\s*(\S+)/)?.[1] || "",
+                                    name: entry.replace(/^\s*\S+\s+/, ""),
+                                    clickActionName: "",
+                                    type: "Emoji",
+                                    execute: () => {
+                                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(entry.match(/^\s*(\S+)/)?.[1])}'`);
+                                    }
+                                };
+                            }).filter(Boolean);
+                        } 
                     
 
                         ////////////////// Init ///////////////////
