@@ -1,7 +1,11 @@
 # Quickshell-powered illogical-impulse
-## Quite usable at this point, see instructions below
+## Current status
 
-- **Installation**: Run `install.sh` (Note: If someone does this on a fresh system, please let us know if it works or is missing anything 👉 https://github.com/end-4/dots-hyprland/pull/1276)
+It's ready if you don't need localization... so quite likely
+
+## Instructions
+
+- **Installation**: Clone the repo, checkout this branch and run `install.sh`
 - **Dolphin fix** so it won't ask which program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu`
 - TODO: Update install script to include the above fix
 
