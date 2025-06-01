@@ -1,10 +1,6 @@
 [config]
 version_check = false
 
-[config.wallpaper]
-command = "swww"
-arguments = ["img", "--transition-step", "100", "--transition-fps", "120", "--transition-type", "grow", "--transition-angle", "30", "--transition-duration", "1"]
-
 [templates.m3colors]
 input_path = '~/.config/matugen/templates/colors.json'
 output_path = '~/.local/state/quickshell/user/generated/colors.json'
