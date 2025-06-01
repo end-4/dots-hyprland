@@ -147,13 +147,13 @@ Item {
         Behavior on idx1 {
             NumberAnimation {
                 duration: 100
-                easing.type: Easing.OutCirc
+                easing.type: Easing.OutSine
             }
         }
         Behavior on idx2 {
             NumberAnimation {
-                duration: 500
-                easing.type: Easing.OutCirc
+                duration: 300
+                easing.type: Easing.OutSine
             }
         }
     }
