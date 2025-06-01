@@ -66,7 +66,7 @@
 <details> 
   <summary>Help improve these dotfiles</summary>
 
-   - New: Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
+   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
    
 </details>
 
