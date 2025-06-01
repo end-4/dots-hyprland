@@ -16,7 +16,6 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property var panelWindow
     property var inputField: messageInputField
     property string commandPrefix: "/"
 

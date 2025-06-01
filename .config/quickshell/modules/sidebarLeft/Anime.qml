@@ -17,7 +17,6 @@ import Quickshell.Hyprland
 
 Item {
     id: root
-    property var panelWindow
     property var inputField: tagInputField
     readonly property var responses: Booru.responses
     property string previewDownloadPath: Directories.booruPreviews
