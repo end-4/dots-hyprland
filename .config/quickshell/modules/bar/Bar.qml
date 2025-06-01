@@ -10,8 +10,6 @@ import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import Quickshell.Io
-import Quickshell.Services.Mpris
 import Quickshell.Services.UPower
 
 Scope {
@@ -393,13 +391,7 @@ Scope {
                                     }
                                     MaterialSymbol {
                                         Layout.rightMargin: indicatorsRowLayout.realSpacing
-                                        text: (Network.networkName.length > 0 && Network.networkName != "lo") ? (
-                                            Network.networkStrength > 80 ? "signal_wifi_4_bar" :
-                                            Network.networkStrength > 60 ? "network_wifi_3_bar" :
-                                            Network.networkStrength > 40 ? "network_wifi_2_bar" :
-                                            Network.networkStrength > 20 ? "network_wifi_1_bar" :
-                                            "signal_wifi_0_bar"
-                                        ) : "signal_wifi_off"
+                                        text: Network.materialSymbol
                                         iconSize: Appearance.font.pixelSize.larger
                                         color: rightSidebarButton.colText
                                     }
