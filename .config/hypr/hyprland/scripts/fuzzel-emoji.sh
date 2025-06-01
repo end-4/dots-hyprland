@@ -1878,7 +1878,7 @@ exit
 → right arrow
 ↓ down arrow
 ←↑→↓ all directions up down left right arrows
-AH↗️HA↘️HA↗️HA↘️HA↗️HA↘️HA↗️HA↘️ pekora arrows hahaha rabbit
+AH↗️HA↘️HA↗️HA↘️ pekora arrows hahaha rabbit
 • dot circle separator
 「」 japanese quote square bracket
 ¯\_(ツ)_/¯ shrug idk i dont know
