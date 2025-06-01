@@ -30,7 +30,6 @@ Scope { // Scope
     }
 
     onPinChanged: {
-        console.log("Sidebar pin state changed:", root.pin);
         if (root.pin) {
             sidebarContent.parent = null; // Detach content from sidebar
             sidebarLoader.active = false; // Unload sidebar
@@ -104,6 +103,10 @@ Scope { // Scope
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
                 radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+
+                Behavior on width {
+                    animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                }
 
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Key_Escape) {
