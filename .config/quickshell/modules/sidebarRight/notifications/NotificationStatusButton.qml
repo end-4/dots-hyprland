@@ -27,10 +27,10 @@ GroupButton {
         RowLayout {
             id: contentRowLayout
             anchors.centerIn: parent
-            spacing: 0
+            spacing: 5
             MaterialSymbol {
                 text: buttonIcon
-                iconSize: Appearance.font.pixelSize.larger
+                iconSize: Appearance.font.pixelSize.large
                 color: button.colText
             }
             StyledText {
