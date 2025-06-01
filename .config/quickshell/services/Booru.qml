@@ -30,7 +30,6 @@ Singleton {
             "description": qsTr("All-rounder | Good quality, decent quantity"),
             "mapFunc": (response) => {
                 return response.map(item => {
-                    console.log(JSON.stringify(item, null, 2))
                     return {
                         "id": item.id,
                         "width": item.width,
@@ -338,7 +337,6 @@ Singleton {
             params.push("is_nsfw=" + (nsfw ? "null" : "false")) // null is random
         }
         else if (currentProvider === "t.alcy.cc") {
-            console.log(`"${tagString}"`)
             url += tagString
             params.push("json")
             params.push("quantity=" + limit)
@@ -363,7 +361,7 @@ Singleton {
 
     function makeRequest(tags, nsfw=false, limit=20, page=1) {
         var url = constructRequestUrl(tags, nsfw, limit, page)
-        console.log("[Booru] Making request to " + url)
+        // console.log("[Booru] Making request to " + url)
 
         const newResponse = root.booruResponseDataComponent.createObject(null, {
             "provider": currentProvider,
@@ -378,7 +376,7 @@ Singleton {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 try {
-                    console.log("[Booru] Raw response: " + xhr.responseText)
+                    // console.log("[Booru] Raw response: " + xhr.responseText)
                     const provider = providers[currentProvider]
                     let response;
                     if (provider.manualParseFunc) {
@@ -387,7 +385,7 @@ Singleton {
                         response = JSON.parse(xhr.responseText)
                         response = provider.mapFunc(response)
                     }
-                    console.log("[Booru] Mapped response: " + JSON.stringify(response))
+                    // console.log("[Booru] Mapped response: " + JSON.stringify(response))
                     newResponse.images = response
                     newResponse.message = response.length > 0 ? "" : root.failMessage
                     
