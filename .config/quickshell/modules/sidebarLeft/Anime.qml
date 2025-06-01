@@ -205,14 +205,14 @@ Item {
 
                     MaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
-                        iconSize: 55
+                        iconSize: 60
                         color: Appearance.m3colors.m3outline
                         text: "bookmark_heart"
                     }
                     StyledText {
                         id: widgetNameText
                         Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.normal
+                        font.pixelSize: Appearance.font.pixelSize.larger
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
                         text: qsTr("Anime boorus")

@@ -18,7 +18,7 @@ Scope { // Scope
     property int sidebarPadding: 15
     property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "bookmark_heart", "name": qsTr("Anime")}]
     property int selectedTab: 0
-    property bool pin: false
+    property bool detach: false
     property Component contentComponent: SidebarLeftContent {}
     property Item sidebarContent
 
@@ -29,8 +29,8 @@ Scope { // Scope
         sidebarLoader.item.contentParent.children = [root.sidebarContent];
     }
 
-    onPinChanged: {
-        if (root.pin) {
+    onDetachChanged: {
+        if (root.detach) {
             sidebarContent.parent = null; // Detach content from sidebar
             sidebarLoader.active = false; // Unload sidebar
             detachedSidebarLoader.active = true; // Load detached window
@@ -117,7 +117,7 @@ Scope { // Scope
                             sidebarRoot.extend = !sidebarRoot.extend;
                         }
                         else if (event.key === Qt.Key_P) {
-                            root.pin = !root.pin;
+                            root.detach = !root.detach;
                         }
                         event.accepted = true;
                     }
@@ -143,7 +143,7 @@ Scope { // Scope
                 Keys.onPressed: (event) => {
                     if (event.modifiers === Qt.ControlModifier) {
                         if (event.key === Qt.Key_P) {
-                            root.pin = !root.pin;
+                            root.detach = !root.detach;
                         }
                         event.accepted = true;
                     }
@@ -192,6 +192,15 @@ Scope { // Scope
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = false;
+        }
+    }
+
+    GlobalShortcut {
+        name: "sidebarLeftToggleDetach"
+        description: qsTr("Detach left sidebar into a window/Attach it back")
+
+        onPressed: {
+            root.detach = !root.detach;
         }
     }
 

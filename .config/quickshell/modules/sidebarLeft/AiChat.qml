@@ -215,17 +215,27 @@ int main(int argc, char* argv[]) {
 
                     MaterialSymbol {
                         Layout.alignment: Qt.AlignHCenter
-                        iconSize: 55
+                        iconSize: 60
                         color: Appearance.m3colors.m3outline
                         text: "neurology"
                     }
                     StyledText {
                         id: widgetNameText
                         Layout.alignment: Qt.AlignHCenter
-                        font.pixelSize: Appearance.font.pixelSize.normal
+                        font.pixelSize: Appearance.font.pixelSize.larger
+                        font.family: Appearance.font.family.title
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
                         text: qsTr("Large language models")
+                    }
+                    StyledText {
+                        id: widgetDescriptionText
+                        Layout.fillWidth: true
+                        font.pixelSize: Appearance.font.pixelSize.small
+                        color: Appearance.m3colors.m3outline
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.Wrap
+                        text: qsTr("Ctrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
                     }
                 }
             }
