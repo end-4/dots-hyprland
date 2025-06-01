@@ -60,10 +60,12 @@ Singleton {
             destroy()
         }
     }
+
+    property bool silent: false
     property var filePath: Directories.notificationsPath
     property list<Notif> list: []
     property var popupList: list.filter((notif) => notif.popup);
-    property bool popupInhibited: GlobalStates?.sidebarRightOpen ?? false
+    property bool popupInhibited: (GlobalStates?.sidebarRightOpen ?? false) || silent
     property var latestTimeForApp: ({})
     Component {
         id: notifComponent

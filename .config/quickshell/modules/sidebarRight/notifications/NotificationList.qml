@@ -17,6 +17,7 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: statusRow.top
+        anchors.bottomMargin: 5
 
         clip: true
         layer.enabled: true
@@ -65,17 +66,24 @@ Item {
         }
     }
 
-    RowLayout {
+    Item {
         id: statusRow
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        Layout.fillWidth: true
+        implicitHeight: Math.max(
+            controls.implicitHeight,
+            statusText.implicitHeight
+        )
+
         StyledText {
-            Layout.margins: 10
-            Layout.bottomMargin: 5
-            Layout.alignment: Qt.AlignVCenter
+            id: statusText
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 10
             horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
             text: `${Notifications.list.length} notifications`
 
             opacity: Notifications.list.length > 0 ? 1 : 0
@@ -85,16 +93,26 @@ Item {
             }
         }
 
-        Item { Layout.fillWidth: true }
+        ButtonGroup {
+            id: controls
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 5
 
-        NotificationStatusButton {
-            Layout.alignment: Qt.AlignVCenter
-            Layout.margins: 5
-            Layout.topMargin: 10
-            buttonIcon: "clear_all"
-            buttonText: qsTr("Clear")
-            onClicked: () => {
-                Notifications.discardAllNotifications()
+            NotificationStatusButton {
+                buttonIcon: "notifications_paused"
+                buttonText: qsTr("Silent")
+                toggled: Notifications.silent
+                onClicked: () => {
+                    Notifications.silent = !Notifications.silent;
+                }
+            }
+            NotificationStatusButton {
+                buttonIcon: "clear_all"
+                buttonText: qsTr("Clear")
+                onClicked: () => {
+                    Notifications.discardAllNotifications()
+                }
             }
         }
     }

@@ -9,33 +9,34 @@ GroupButton {
     property string buttonText: ""
     property string buttonIcon: ""
 
-    baseWidth: contentRowLayout.implicitWidth + 10 * 2
+    baseWidth: content.implicitWidth + 10 * 2
     baseHeight: 30
-    clickedWidth: baseWidth + 15
 
     buttonRadius: baseHeight / 2
     buttonRadiusPressed: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
     colBackgroundActive: Appearance.colors.colLayer2Active
-    background.anchors.fill: button
+    property color colText: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
 
     contentItem: Item {
+        id: content
+        anchors.fill: parent
+        implicitWidth: contentRowLayout.implicitWidth
+        implicitHeight: contentRowLayout.implicitHeight
         RowLayout {
             id: contentRowLayout
             anchors.centerIn: parent
             spacing: 0
             MaterialSymbol {
                 text: buttonIcon
-                Layout.fillWidth: false
                 iconSize: Appearance.font.pixelSize.larger
-                color: Appearance.colors.colOnLayer1
+                color: button.colText
             }
             StyledText {
                 text: buttonText
-                Layout.fillWidth: false
                 font.pixelSize: Appearance.font.pixelSize.small
-                color: Appearance.colors.colOnLayer1
+                color: button.colText
             }
         }
     }
