@@ -243,7 +243,8 @@ Rectangle {
                         imageData: modelData
                         rowHeight: imageRow.rowHeight
                         imageRadius: imageRow.modelData.images.length == 1 ? 50 : Appearance.rounding.normal
-                        manualDownload: ["danbooru", "waifu.im"].includes(root.responseData.provider)
+                        // Download manually to reduce redundant requests or make sure downloading works
+                        manualDownload: ["danbooru", "waifu.im", "t.alcy.cc"].includes(root.responseData.provider)
                         previewDownloadPath: root.previewDownloadPath
                         downloadPath: root.downloadPath
                         nsfwPath: root.nsfwPath
