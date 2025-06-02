@@ -12,10 +12,12 @@ TabButton {
     id: button
     property string buttonText
     property string buttonIcon
+    property real minimumWidth: 110
     property bool selected: false
     property int tabContentWidth: contentItem.children[0].implicitWidth
     property int rippleDuration: 1200
     height: buttonBackground.height
+    implicitWidth: Math.max(tabContentWidth, buttonBackground.implicitWidth, minimumWidth)
 
     property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"

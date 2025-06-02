@@ -14,6 +14,14 @@ ColumnLayout {
     property color colBorder: Appearance?.m3colors.m3outlineVariant ?? "#C6C6D0"
     signal currentIndexChanged(int index)
 
+    property bool centerTabBar: {
+        console.log("PARREND WIDHTH", parent.width)
+        parent.width > 500
+    }
+    Layout.fillWidth: !centerTabBar
+    Layout.alignment: Qt.AlignHCenter
+    implicitWidth: Math.max(tabBar.implicitWidth, 600)
+
     TabBar {
         id: tabBar
         Layout.fillWidth: true
@@ -40,6 +48,7 @@ ColumnLayout {
                 selected: (index == root.externalTrackedTab)
                 buttonText: modelData.name
                 buttonIcon: modelData.icon
+                minimumWidth: 160
             }
         }
     }
