@@ -5,7 +5,7 @@ pragma ComponentBehavior: Bound
 
 Singleton {
     property QtObject ai: QtObject {
-        property string model: "gemini-2.0-flash-search"
+        property string model
     }
 
     property QtObject sidebar: QtObject {
