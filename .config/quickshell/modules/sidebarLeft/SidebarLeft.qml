@@ -16,8 +16,6 @@ import Quickshell.Hyprland
 Scope { // Scope
     id: root
     property int sidebarPadding: 15
-    property var tabButtonList: [{"icon": "neurology", "name": qsTr("Intelligence")}, {"icon": "bookmark_heart", "name": qsTr("Anime")}]
-    property int selectedTab: 0
     property bool detach: false
     property Component contentComponent: SidebarLeftContent {}
     property Item sidebarContent

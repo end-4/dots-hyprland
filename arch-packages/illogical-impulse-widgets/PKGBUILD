@@ -14,5 +14,6 @@ depends=(
 	nm-connection-editor
 	quickshell
 	swww
+	translate-shell
 	wlogout
 )
