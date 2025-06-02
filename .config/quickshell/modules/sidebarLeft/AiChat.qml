@@ -145,7 +145,7 @@ int main(int argc, char* argv[]) {
         Item { // Messages
             Layout.fillWidth: true
             Layout.fillHeight: true
-            ListView { // Message list
+            StyledListView { // Message list
                 id: messageListView
                 anchors.fill: parent
                 spacing: 10
@@ -187,7 +187,10 @@ int main(int argc, char* argv[]) {
                 }
 
                 model: ScriptModel {
-                    values: Ai.messageIDs
+                    values: Ai.messageIDs.filter(id => {
+                        const message = Ai.messageByID[id];
+                        return message?.visibleToUser ?? true;
+                    })
                 }
                 delegate: AiMessage {
                     required property var modelData

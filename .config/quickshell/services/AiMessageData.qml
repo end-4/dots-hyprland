@@ -15,4 +15,5 @@ QtObject {
     property string functionName
     property string functionCall
     property string functionResponse
+    property bool visibleToUser: true
 }

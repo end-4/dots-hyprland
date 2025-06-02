@@ -126,7 +126,7 @@ Singleton {
             "api_format": "gemini",
             "tools": [
                 {
-                    "google_search": {}
+                    "google_search": ({})
                 },
             ]
         },
@@ -374,9 +374,11 @@ Singleton {
         function buildGeminiRequestData(model, messages) {
             let baseData = {
                 "contents": messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
-                    if (message.functionCall != undefined && message.functionCall.length > 0) {
+                    const geminiApiRoleName = (message.role === "assistant") ? "model" : message.role;
+                    const usingSearch = model.tools[0].google_search != undefined                
+                    if (!usingSearch && message.functionCall != undefined && message.functionCall.length > 0) {
                         return {
-                            "role": message.role,
+                            "role": geminiApiRoleName,
                             "parts": [{ 
                                 functionCall: {
                                     "name": message.functionName,
@@ -384,9 +386,9 @@ Singleton {
                             }]
                         }
                     }
-                    if (message.functionResponse != undefined && message.functionResponse.length > 0) {
+                    if (!usingSearch && message.functionResponse != undefined && message.functionResponse.length > 0) {
                         return {
-                            "role": message.role,
+                            "role": geminiApiRoleName,
                             "parts": [{ 
                                 functionResponse: {
                                     "name": message.functionName,
@@ -396,7 +398,7 @@ Singleton {
                         }
                     }
                     return {
-                        "role": message.role,
+                        "role": geminiApiRoleName,
                         "parts": [{ 
                             text: message.content,
                         }]
@@ -481,10 +483,13 @@ Singleton {
         }
 
         function parseGeminiBuffer() {
-            console.log("BUFFER DATA: ", requester.geminiBuffer);
+            // console.log("BUFFER DATA: ", requester.geminiBuffer);
             try {
                 if (requester.geminiBuffer.length === 0) return;
                 const dataJson = JSON.parse(requester.geminiBuffer);
+                if (dataJson.candidates[0]?.finishReason) {
+                    requester.markDone();
+                }
                 // Function call handling
                 if (dataJson.candidates[0]?.content?.parts[0]?.functionCall) {
                     const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
@@ -531,7 +536,6 @@ Singleton {
             } else if (line == "]") {
                 requester.geminiBuffer += line.slice(0, -1).trim();
                 parseGeminiBuffer();
-                requester.markDone();
             } else if (line.startsWith(",")) { // end of one entry 
                 parseGeminiBuffer();
             } else {
@@ -575,7 +579,9 @@ Singleton {
 
             requester.message.content += newContent;
 
-            if (dataJson.done) requester.markDone();
+            if (dataJson.done) {
+                requester.markDone();
+            }
         }
 
         stdout: SplitParser {
@@ -604,8 +610,8 @@ Singleton {
         }
 
         onExited: (exitCode, exitStatus) => {
-            requester.markDone();
             if (requester.apiFormat == "gemini") requester.parseGeminiBuffer();
+            else requester.markDone();
 
             try { // to parse full response into json for error handling
                 // console.log("Full response: ", requester.message.content + "]"); 
@@ -635,8 +641,9 @@ Singleton {
             "functionResponse": output,
             "thinking": false,
             "done": true,
+            "visibleToUser": false,
         });
-        console.log("Adding function output message: ", JSON.stringify(aiMessage));
+        // console.log("Adding function output message: ", JSON.stringify(aiMessage));
         const id = idForMessage(aiMessage);
         root.messageIDs = [...root.messageIDs, id];
         root.messageByID[id] = aiMessage;
