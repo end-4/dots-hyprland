@@ -102,7 +102,7 @@ Scope { // Scope
                 width: sidebarRoot.sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
                 height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
                 color: Appearance.colors.colLayer0
-                radius: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
+                radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                 Behavior on width {
                     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
