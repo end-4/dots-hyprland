@@ -1,3 +1,14 @@
+# Quickshell-powered illogical-impulse
+## Current status
+
+It's ready if you don't need localization... so quite likely
+
+## Instructions
+
+- **Installation**: Clone the repo, checkout this branch and run `install.sh`
+- **Dolphin fix** so it won't ask which program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu`
+- TODO: Update install script to include the above fix
+
 <div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
     <h3></h3>
@@ -37,15 +48,10 @@
    ```
    - **Manual** installation, other distros and more:
      - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
-     - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
     
-   - **Default keybinds**: Parts similar to Windows and GNOME. Hit Super+/ for a list.
-     <details> 
-       <summary>Here's an image, just in case...</summary>
-    
-       ![image](https://github.com/user-attachments/assets/dff2f842-5458-4f5a-89ec-3979095574de)
-
-     </details>
+   - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
+     - For a list, hit `Super`+`/`
+     - For a terminal, hit `Super`+`Enter`
 
 </details>
 
@@ -56,7 +62,7 @@
   | Software | Purpose |
   | ------------- | ------------- |
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
-  | [AGS](https://github.com/Aylur/ags) | A GTK widget system, responsible for the status bar, sidebars, etc. |
+  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, responsible for the status bar, sidebars, etc. |
   | [Fuzzel](https://mark.stosberg.com/fuzzel-a-great-dmenu-and-rofi-altenrative-for-wayland/) | For clipboard and emoji picker |
 
 
@@ -126,6 +132,7 @@ _<sup>Get yande.re and konachan images from sidebar</sup>_
 
  - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
+ - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples

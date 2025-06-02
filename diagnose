@@ -62,10 +62,10 @@ x declare -p XDG_CACHE_HOME # ~/.cache
 x declare -p XDG_CONFIG_HOME # ~/.config
 x declare -p XDG_DATA_HOME # ~/.local/share
 x declare -p XDG_STATE_HOME # ~/.local/state
-x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/ags/.venv
+x declare -p ILLOGICAL_IMPULSE_VIRTUAL_ENV # $XDG_STATE_HOME/quickshell/.venv
 
 e "Checking directories/files"
-x ls -l ~/.local/state/ags/.venv
+x ls -l ~/.local/state/quickshell/.venv
 #x cat ~/.config/ags/
 
 #e "Checking command existence"
@@ -77,8 +77,6 @@ commands+=(ags agsv1)
 
 e "Checking versions"
 x Hyprland --version
-x ags --version
-x agsv1 --version
 
 e "Finished. Output saved as \"$output_file\"."
 if ! command -v curl 2>&1 >>/dev/null ;then echo "\"curl\" not found, pastebin upload unavailable.";exit;fi

@@ -1,0 +1,12 @@
+pkgname=illogical-impulse-kde
+pkgver=1.0
+pkgrel=2
+pkgdesc='Illogical Impulse KDE Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	polkit-kde-agent
+	gnome-keyring
+	gnome-control-center
+	networkmanager better-control-git
+)

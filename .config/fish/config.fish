@@ -13,8 +13,8 @@ if status is-interactive
 end
 
 starship init fish | source
-if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
-    cat ~/.cache/ags/user/generated/terminal/sequences.txt
+if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
 end
 
 alias pamcan=pacman
