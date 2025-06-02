@@ -1,3 +1,4 @@
+const { GLib } = imports.gi;
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 const { execAsync, exec } = Utils;
 
@@ -5,7 +6,7 @@ import { getNestedProperty, updateNestedProperty } from "../.miscutils/objects.j
 import { ConfigSpinButton, ConfigToggle } from "./configwidgets.js";
 
 const AGS_CONFIG_FILE = `${App.configDir}/user_options.jsonc`;
-const HYPRLAND_CONFIG_FILE = `\${XDG_CONFIG_HOME:-$HOME/.config}/hypr/custom/general.conf`;
+const HYPRLAND_CONFIG_FILE = `${GLib.get_user_config_dir()}/hypr/custom/general.conf`;
 
 export const AgsToggle = ({
     icon, name, desc = null,

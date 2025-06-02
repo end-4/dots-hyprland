@@ -94,7 +94,7 @@ install-local-pkgbuild() {
 
 	source ./PKGBUILD
 	x yay -S $installflags --asdeps "${depends[@]}"
-	x makepkg -si --noconfirm
+	x makepkg -Asi --noconfirm
 
 	x popd
 }
@@ -294,7 +294,7 @@ case $existed_ags_opt in
 #    printf "\e[33mPlease use \"$XDG_CONFIG_HOME/ags/user_options.jsonc.new\" as a reference for a proper format.\e[0m\n"
 ;;esac
 case $existed_hypr_conf_firstrun in
-  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your firstrun, we replaced it with a new one. \e[0m\n"
+  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. \e[0m\n"
      printf "\e[33mAs it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".\e[0m\n"
 ;;esac
 case $existed_hypr_conf in

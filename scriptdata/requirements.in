@@ -1,6 +1,5 @@
 build
 pillow
-pywal
 setuptools-scm
 wheel
 pywayland

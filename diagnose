@@ -35,6 +35,7 @@ ii_check_distro() {
 }
 ii_check_venv() {
   source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
+  which python
   deactivate
 }
 ii_check_ags() {

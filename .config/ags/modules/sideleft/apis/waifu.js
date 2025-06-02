@@ -14,7 +14,7 @@ import WaifuService from '../../../services/waifus.js';
 import { darkMode } from '../../.miscutils/system.js';
 
 async function getImageViewerApp(preferredApp) {
-    Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
+   return Utils.execAsync(['bash', '-c', `command -v ${preferredApp}`])
         .then((output) => {
             if (output != '') return preferredApp;
             else return 'xdg-open';

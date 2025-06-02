@@ -71,9 +71,9 @@ It's ready if you don't need localization... so quite likely
 
 <details> 
   <summary>Help improve these dotfiles</summary>
-    
-   - Join the [discussions](https://github.com/end-4/dots-hyprland/discussions)
-   - If you'd like to suggest fixes or a new widget, feel free to [open an issue](https://github.com/end-4/dots-hyprland/issues/new/choose)
+
+   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
+   
 </details>
 
 <div align="center">

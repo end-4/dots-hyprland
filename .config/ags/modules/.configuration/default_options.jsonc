@@ -199,6 +199,7 @@
             "firefox",
             "org.gnome.Nautilus"
         ],
+        "ignoredAppsRegex": [],
         "layer": "top",
         "monitorExclusivity": true, // Dock will move to other monitor along with focus if enabled
         "searchPinnedAppIcons": false, // Try to search for the correct icon if the app class isn't an icon name
@@ -241,6 +242,7 @@
             "wps": "wps-office2019-kprometheus",
             "wpsoffice": "wps-office2019-kprometheus",
             "footclient": "foot",
+            "zen": "zen-browser",
             "": "image-missing"
         },
         "regexSubstitutions": [

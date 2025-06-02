@@ -124,19 +124,18 @@ install-uv (){
 install-python-packages (){
   UV_NO_MODIFY_PATH=1
   ILLOGICAL_IMPULSE_VIRTUAL_ENV=$XDG_STATE_HOME/quickshell/.venv
-  x mkdir -p $ILLOGICAL_IMPULSE_VIRTUAL_ENV
+  x mkdir -p $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)
   # we need python 3.12 https://github.com/python-pillow/Pillow/issues/8089
-  x uv venv --prompt .venv $ILLOGICAL_IMPULSE_VIRTUAL_ENV -p 3.12
-  x source $ILLOGICAL_IMPULSE_VIRTUAL_ENV/bin/activate
+  x uv venv --prompt .venv $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV) -p 3.12
+  x source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   x uv pip install -r scriptdata/requirements.txt
-
   x deactivate # We don't need the virtual environment anymore
 }
 
 # Only for Arch(based) distro.
 handle-deprecated-dependencies (){
   printf "\e[36m[$0]: Removing deprecated dependencies:\e[0m\n"
-  for i in illogical-impulse-{microtex,pymyc-aur,ags} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
+  for i in illogical-impulse-{microtex,pymyc-aur,ags,agsv1} {hyprutils,hyprpicker,hyprlang,hypridle,hyprland-qt-support,hyprland-qtutils,hyprlock,xdg-desktop-portal-hyprland,hyprcursor,hyprwayland-scanner,hyprland}-git;do try sudo pacman --noconfirm -Rdd $i;done
 # Convert old dependencies to non explicit dependencies so that they can be orphaned if not in meta packages
 	remove_bashcomments_emptylines ./scriptdata/previous_dependencies.conf ./cache/old_deps_stripped.conf
 	readarray -t old_deps_list < ./cache/old_deps_stripped.conf
