@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # update.sh - Enhanced dotfiles update script
 #
