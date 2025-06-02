@@ -487,6 +487,8 @@ Singleton {
             try {
                 if (requester.geminiBuffer.length === 0) return;
                 const dataJson = JSON.parse(requester.geminiBuffer);
+                if (!dataJson.candidates) return;
+                
                 if (dataJson.candidates[0]?.finishReason) {
                     requester.markDone();
                 }
