@@ -23,7 +23,7 @@ Rectangle {
 
         CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
-            onClicked: Hyprland.dispatch("exec grimblast copy area")
+            onClicked: Hyprland.dispatch("exec hyprshot --freeze --clipboard-only --mode region --silent")
 
             MaterialSymbol {
                 horizontalAlignment: Qt.AlignHCenter
