@@ -54,11 +54,10 @@ apply_fuzzel() {
     return
   fi
   # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/fuzzel
-  cp "scripts/templates/fuzzel/fuzzel.theme" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.theme
+  cp "scripts/templates/fuzzel/fuzzel.theme" "$XDG_CONFIG_HOME"/fuzzel/fuzzel.theme
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.theme
+    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/fuzzel/fuzzel.theme
   done
 }
 
