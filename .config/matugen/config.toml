@@ -42,3 +42,7 @@ post_hook = 'pidof gjs && agsv1 run-js "handleStyles(false)"'
 input_path = '~/.config/matugen/templates/kde/color.txt'
 output_path = '~/.local/state/quickshell/user/generated/color.txt'
 post_hook = '~/.config/matugen/templates/kde/kde-material-you-colors-wrapper.sh'
+
+[templates.wallpaper]
+input_path = '~/.config/matugen/templates/wallpaper.txt'
+output_path = '~/.local/state/quickshell/user/generated/wallpaper.txt'
