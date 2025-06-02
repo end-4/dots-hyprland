@@ -204,7 +204,7 @@ Rectangle {
                 AiMessageControlButton {
                     id: editButton
                     activated: root.editing
-                    enabled: root.messageData?.done
+                    enabled: root.messageData?.done ?? false
                     buttonIcon: "edit"
                     onClicked: {
                         root.editing = !root.editing
@@ -257,8 +257,8 @@ Rectangle {
                     property var editing: root.editing
                     property var renderMarkdown: root.renderMarkdown
                     property var enableMouseSelection: root.enableMouseSelection
-                    property bool thinking: root.messageData?.thinking
-                    property bool done: root.messageData?.done
+                    property bool thinking: root.messageData?.thinking ?? true
+                    property bool done: root.messageData?.done ?? false
                     property bool completed: modelData.completed ?? false
                     
                     source: modelData.type === "code" ? "MessageCodeBlock.qml" : 
