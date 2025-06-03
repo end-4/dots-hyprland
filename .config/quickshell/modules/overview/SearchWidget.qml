@@ -212,6 +212,11 @@ Item { // Wrapper
                     Layout.rightMargin: 15
                     padding: 15
                     renderType: Text.NativeRendering
+                    font {
+                        family: Appearance?.font.family.main ?? "sans-serif"
+                        pixelSize: Appearance?.font.pixelSize.small ?? 15
+                        hintingPreference: Font.PreferFullHinting
+                    }
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
                     selectionColor: Appearance.m3colors.m3secondaryContainer

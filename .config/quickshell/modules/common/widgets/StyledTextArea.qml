@@ -7,4 +7,9 @@ TextArea {
     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
     selectionColor: Appearance.m3colors.m3secondaryContainer
     placeholderTextColor: Appearance.m3colors.m3outline
+    font {
+        family: Appearance?.font.family.main ?? "sans-serif"
+        pixelSize: Appearance?.font.pixelSize.small ?? 15
+        hintingPreference: Font.PreferFullHinting
+    }
 }
