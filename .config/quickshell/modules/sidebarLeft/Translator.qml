@@ -60,7 +60,7 @@ Item {
             // 2. Extract relevant data
             root.translatedText = sections.length > 1 ? sections[1].trim() : "";
             root.outputField.text = root.translatedText;
-}
+        }
     }
     
     Flickable {
