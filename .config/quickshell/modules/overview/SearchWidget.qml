@@ -338,13 +338,13 @@ Item { // Wrapper
                             }
                         }
                         const commandResultObject = {
-                            name: searchingText,
+                            name: searchingText.replace("file://", ""),
                             clickActionName: qsTr("Run"),
                             type: qsTr("Run command"),
                             fontType: "monospace",
                             materialSymbol: 'terminal',
                             execute: () => {
-                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText}'` : root.searchingText);
+                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText.replace("file://", ""));
                             }
                         }
                         const launcherActionObjects = root.searchActions
