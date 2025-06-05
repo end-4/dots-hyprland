@@ -36,6 +36,10 @@ Singleton {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
         }
+        property list<string> screensList: [
+            "HDMI-A-1",
+            "DP-1"
+        ]
         property QtObject workspaces: QtObject {
             property int shown: 10
             property bool alwaysShowNumbers: false
