@@ -33,8 +33,14 @@
    - **Prerequisite**: Your system works. That's it. You don't have to reinstall your system!
    - **Automatic**, but guided and transparent, installation for Arch(-based) Linux:
    ```bash
+   bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
+   ```
+
+   If you are using fish shell (non-posix-compliant shell) then:
+   ```bash
    bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
    ```
+
    - **Manual** installation, other distros and more:
      - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
      - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
