@@ -35,6 +35,22 @@ Item { // Notification item area
 
     implicitHeight: background.implicitHeight
 
+    function processNotificationBody(body, appName) {
+        let processedBody = body
+        
+        // Handle Brave/Chrome notifications - remove first line
+        if (appName && appName.toLowerCase().includes('brave')) {
+            const lines = body.split('\n\n')
+            if (lines.length > 1) {
+                processedBody = lines.slice(1).join('\n\n')
+            }
+        }
+        
+        // Remove HTML tags
+        processedBody = processedBody.replace(/<[^>]*>/g, '')
+        return processedBody
+    }
+
     function destroyWithAnimation() {
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
@@ -173,7 +189,10 @@ Item { // Notification item area
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
                     textFormat: Text.StyledText
-                    text: notificationObject.body.replace(/<img/g, "\n <img").split("\n")[0]
+                    text: {
+                        const processedBody = processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
+                        return processedBody.replace(/<img/g, "\n <img").split("\n")[0]
+                    }
                 }
             }
 
@@ -193,8 +212,11 @@ Item { // Notification item area
                     wrapMode: Text.Wrap
                     elide: Text.ElideRight
                     textFormat: Text.RichText
-                    text: `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
-                        `${notificationObject.body.replace(/\n/g, "<br/>")}` 
+                    text: {
+                        const processedBody = processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
+                        return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                               `${processedBody.replace(/\n/g, "<br/>")}`
+                    }
 
                     onLinkActivated: (link) => {
                         Qt.openUrlExternally(link)
