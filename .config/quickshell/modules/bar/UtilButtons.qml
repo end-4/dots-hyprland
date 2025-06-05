@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Services.Pipewire
 
 Rectangle {
     id: root
@@ -57,6 +58,20 @@ Rectangle {
                 horizontalAlignment: Qt.AlignHCenter
                 fill: 0
                 text: "keyboard"
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnLayer2
+            }
+
+        }
+        
+        CircleUtilButton {
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Hyprland.dispatch("exec wpctl set-mute @DEFAULT_SOURCE@ toggle")
+
+            MaterialSymbol {
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 0
+                text: Pipewire.defaultAudioSource?.audio?.muted ? "mic_off" : "mic"
                 iconSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer2
             }
