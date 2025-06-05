@@ -97,7 +97,7 @@ Rectangle {
             property int remainingTasks: Todo.list.filter(task => !task.done).length;
             Layout.margins: 10
             Layout.leftMargin: 0
-            text: `${DateTime.day} ${DateTime.month} ${DateTime.year}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
+            text: `${DateTime.collapsedCalendarFormat}   •   ${remainingTasks} task${remainingTasks > 1 ? "s" : ""}`
             font.pixelSize: Appearance.font.pixelSize.large
             color: Appearance.colors.colOnLayer1
         }
