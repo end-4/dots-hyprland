@@ -111,6 +111,24 @@ Scope { // Scope
                                 }
                             }
                             DockSeparator {}
+                            // Pinned apps
+                            Repeater {
+                                model: ConfigOptions?.dock.pinnedApps ?? []
+                                
+                                DockButton {
+                                    required property string modelData
+                                    onClicked: {
+                                        Hyprland.dispatch(`exec gio launch ${modelData}`)
+                                    }
+                                    contentItem: IconImage {
+                                        anchors.centerIn: parent
+                                        source: Quickshell.iconPath(AppSearch.guessIcon(modelData), "image-missing")
+                                    }
+                                }
+                            }
+                            
+                            DockSeparator { visible: (ConfigOptions?.dock.pinnedApps ?? []).length > 0 }
+                            
                             DockApps { id: dockApps }
                             DockSeparator {}
                             DockButton {
