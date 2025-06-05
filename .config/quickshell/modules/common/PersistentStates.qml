@@ -6,6 +6,7 @@ pragma ComponentBehavior: Bound
 Singleton {
     property QtObject ai: QtObject {
         property string model
+        property real temperature: 0.5
     }
 
     property QtObject sidebar: QtObject {

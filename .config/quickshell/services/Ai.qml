@@ -25,6 +25,7 @@ Singleton {
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
     property var postResponseHook
+    property real temperature: PersistentStates?.ai?.temperature ?? 0.5
 
     function idForMessage(message) {
         // Generate a unique ID using timestamp and random value
@@ -311,6 +312,20 @@ Singleton {
             KeyringStorage.fetchKeyringData();
         } 
     }
+    
+    function getTemperature() {
+        return root.temperature;
+    }
+
+    function setTemperature(value) {
+        if (value == NaN || value < 0 || value > 2) {
+            root.addMessage(qsTr("Temperature must be between 0 and 2"), Ai.interfaceRole);
+            return;
+        }
+        PersistentStateManager.setState("ai.temperature", value);
+        root.temperature = value;
+        root.addMessage(StringUtils.format(qsTr("Temperature set to {0}"), value), Ai.interfaceRole);
+    }
 
     function setApiKey(key) {
         const model = models[currentModelId];
@@ -339,6 +354,10 @@ Singleton {
         } else {
             root.addMessage(StringUtils.format(qsTr("{0} does not require an API key"), model.name), Ai.interfaceRole);
         }
+    }
+
+    function printTemperature() {
+        root.addMessage(StringUtils.format(qsTr("Temperature: {0}"), root.temperature), Ai.interfaceRole);
     }
 
     function clearMessages() {
@@ -409,7 +428,11 @@ Singleton {
                 ],
                 "system_instruction": {
                     "parts": [{ text: root.systemPrompt }]
-                }
+                },
+                "generationConfig": {
+                    "temperature": root.temperature,
+                    "responseMimeType": "text/plain",
+                },
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
         }
@@ -427,6 +450,7 @@ Singleton {
                     }),
                 ],
                 "stream": true,
+                "temperature": root.temperature,
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
         }

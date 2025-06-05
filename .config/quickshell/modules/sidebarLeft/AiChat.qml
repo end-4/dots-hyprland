@@ -68,6 +68,19 @@ Item {
             }
         },
         {
+            name: "temp",
+            description: qsTr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
+            execute: (args) => {
+                // console.log(args)
+                if (args.length == 0 || args[0] == "get") {
+                    Ai.printTemperature()
+                } else {
+                    const temp = parseFloat(args[0]);
+                    Ai.setTemperature(temp);
+                }
+            }
+        },
+        {
             name: "test",
             description: qsTr("Markdown test"),
             execute: () => {
