@@ -46,40 +46,40 @@ ListView {
         ]
     }
     
-    displaced: Transition {
-        animations: [
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                property: "y",
-            }),
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                properties: "opacity,scale",
-                to: 1,
-            }),
-        ]
-    }
+    // displaced: Transition {
+    //     animations: [
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             property: "y",
+    //         }),
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             properties: "opacity,scale",
+    //             to: 1,
+    //         }),
+    //     ]
+    // }
 
-    move: Transition {
-        animations: [
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                property: "y",
-            }),
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                properties: "opacity,scale",
-                to: 1,
-            }),
-        ]
-    }
-    moveDisplaced: Transition {
-        animations: [
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                property: "y",
-            }),
-            Appearance?.animation.elementMove.numberAnimation.createObject(this, {
-                properties: "opacity,scale",
-                to: 1,
-            }),
-        ]
-    }
+    // move: Transition {
+    //     animations: [
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             property: "y",
+    //         }),
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             properties: "opacity,scale",
+    //             to: 1,
+    //         }),
+    //     ]
+    // }
+    // moveDisplaced: Transition {
+    //     animations: [
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             property: "y",
+    //         }),
+    //         Appearance?.animation.elementMove.numberAnimation.createObject(this, {
+    //             properties: "opacity,scale",
+    //             to: 1,
+    //         }),
+    //     ]
+    // }
 
     remove: Transition {
         animations: [
