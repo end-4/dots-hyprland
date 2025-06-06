@@ -144,13 +144,13 @@ Item {
         Behavior on activeWorkspaceMargin {
             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
         }
-        Behavior on idx1 {
+        Behavior on idx1 { // Leading anim
             NumberAnimation {
                 duration: 100
                 easing.type: Easing.OutSine
             }
         }
-        Behavior on idx2 {
+        Behavior on idx2 { // Following anim
             NumberAnimation {
                 duration: 300
                 easing.type: Easing.OutSine

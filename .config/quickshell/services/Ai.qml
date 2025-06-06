@@ -430,8 +430,7 @@ Singleton {
                     "parts": [{ text: root.systemPrompt }]
                 },
                 "generationConfig": {
-                    "temperature": root.temperature,
-                    "responseMimeType": "text/plain",
+                    // "temperature": root.temperature,
                 },
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
@@ -450,7 +449,7 @@ Singleton {
                     }),
                 ],
                 "stream": true,
-                "temperature": root.temperature,
+                // "temperature": root.temperature,
             };
             return model.extraParams ? Object.assign({}, baseData, model.extraParams) : baseData;
         }
@@ -612,7 +611,7 @@ Singleton {
 
         stdout: SplitParser {
             onRead: data => {
-                // console.log("RAW DATA: ", data);
+                console.log("RAW DATA: ", data);
                 if (data.length === 0) return;
 
                 // Handle response line
