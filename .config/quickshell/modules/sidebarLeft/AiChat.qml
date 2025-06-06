@@ -162,6 +162,7 @@ int main(int argc, char* argv[]) {
                 id: messageListView
                 anchors.fill: parent
                 spacing: 10
+                popin: false
 
                 property int lastResponseLength: 0
 
@@ -174,6 +175,8 @@ int main(int argc, char* argv[]) {
                         radius: Appearance.rounding.small
                     }
                 }
+
+                add: null // Prevent function calls from being janky
 
                 Behavior on contentY {
                     NumberAnimation {
