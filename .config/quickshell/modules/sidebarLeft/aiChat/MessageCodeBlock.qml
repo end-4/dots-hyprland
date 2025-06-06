@@ -97,7 +97,7 @@ ColumnLayout {
                     onClicked: {
                         const downloadPath = FileUtils.trimFileProtocol(Directories.downloads)
                         Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`)
-                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}'`)
+                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`)
                         saveCodeButton.activated = true
                         saveIconTimer.restart()
                     }
