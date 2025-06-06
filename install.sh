@@ -249,7 +249,7 @@ esac
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
-v rsync -av ".local/bin/" "$XDG_BIN_HOME"
+# v rsync -av ".local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 
 # Prevent hyprland from not fully loaded
 sleep 1

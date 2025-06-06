@@ -57,7 +57,6 @@ e "Checking distro"
 x ii_check_distro 
 
 e "Checking variables"
-x declare -p XDG_BIN_HOME # ~/.local/bin
 x declare -p XDG_CACHE_HOME # ~/.cache
 x declare -p XDG_CONFIG_HOME # ~/.config
 x declare -p XDG_DATA_HOME # ~/.local/share
