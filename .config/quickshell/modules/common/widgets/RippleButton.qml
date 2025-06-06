@@ -150,14 +150,26 @@ Button {
             }
         }
 
-        Rectangle {
+        Item {
             id: ripple
-
-            radius: Appearance?.rounding.full ?? 9999
+            width: ripple.implicitWidth
+            height: ripple.implicitHeight
             opacity: 0
-            color: root.rippleColor
-            Behavior on color {
+
+            property real implicitWidth: 0
+            property real implicitHeight: 0
+
+            Behavior on opacity {
                 animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
+
+            RadialGradient {
+                anchors.fill: parent
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: root.rippleColor }
+                    GradientStop { position: 0.3; color: root.rippleColor }
+                    GradientStop { position: 0.5; color: Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0) }
+                }
             }
 
             transform: Translate {
