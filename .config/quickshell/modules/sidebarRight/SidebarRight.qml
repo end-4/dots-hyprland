@@ -52,8 +52,17 @@ Scope {
         Loader {
             id: sidebarContentLoader
             active: GlobalStates.sidebarRightOpen
-            anchors.centerIn: parent
-            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+                topMargin: Appearance.sizes.hyprlandGapsOut
+                rightMargin: Appearance.sizes.hyprlandGapsOut
+                bottomMargin: Appearance.sizes.hyprlandGapsOut
+                leftMargin: Appearance.sizes.elevationMargin
+            }
+            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
             
             sourceComponent: Item {
