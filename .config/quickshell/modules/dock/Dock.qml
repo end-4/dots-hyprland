@@ -34,7 +34,9 @@ Scope { // Scope
             function hide() {
                 cheatsheetLoader.active = false
             }
-            exclusiveZone: root.pinned ? implicitHeight - Appearance.sizes.hyprlandGapsOut : 0
+            exclusiveZone: root.pinned ? implicitHeight 
+                - (Appearance.sizes.hyprlandGapsOut) 
+                - (Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut) : 0
 
             implicitWidth: dockBackground.implicitWidth
             WlrLayershell.namespace: "quickshell:dock"
@@ -63,11 +65,13 @@ Scope { // Scope
                     id: dockHoverRegion
                     anchors.fill: parent
 
-                    Item {
+                    Item { // Wrapper for the dock background
                         id: dockBackground
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors {
+                            top: parent.top
+                            bottom: parent.bottom
+                            horizontalCenter: parent.horizontalCenter
+                        }
 
                         implicitWidth: dockRow.implicitWidth + 5 * 2
                         height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
@@ -75,12 +79,12 @@ Scope { // Scope
                         StyledRectangularShadow {
                             target: dockVisualBackground
                         }
-                        Rectangle {
+                        Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
                             property real margin: Appearance.sizes.elevationMargin
                             anchors.fill: parent
                             anchors.topMargin: margin
-                            anchors.bottomMargin: margin
+                            anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
                             color: Appearance.colors.colLayer0
                             radius: Appearance.rounding.large
                         }
