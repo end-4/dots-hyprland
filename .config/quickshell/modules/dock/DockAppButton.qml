@@ -20,6 +20,7 @@ DockButton {
     property real iconSize: 35
     property real countDotWidth: 10
     property real countDotHeight: 4
+    property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
 
     MouseArea {
         id: mouseArea

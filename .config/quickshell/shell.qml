@@ -27,7 +27,7 @@ ShellRoot {
     // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
     property bool enableBar: true
     property bool enableCheatsheet: true
-    property bool enableDock: false
+    property bool enableDock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
     property bool enableOnScreenDisplayBrightness: true
@@ -51,7 +51,7 @@ ShellRoot {
 
     Loader { active: enableBar; sourceComponent: Bar {} }
     Loader { active: enableCheatsheet; sourceComponent: Cheatsheet {} }
-    Loader { active: (enableDock || ConfigOptions?.dock.enable); sourceComponent: Dock {} }
+    Loader { active: (enableDock && ConfigOptions?.dock.enable); sourceComponent: Dock {} }
     Loader { active: enableMediaControls; sourceComponent: MediaControls {} }
     Loader { active: enableNotificationPopup; sourceComponent: NotificationPopup {} }
     Loader { active: enableOnScreenDisplayBrightness; sourceComponent: OnScreenDisplayBrightness {} }
