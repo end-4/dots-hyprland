@@ -73,7 +73,7 @@ Scope {
                 item: osdValuesWrapper
             }
 
-            implicitWidth: Appearance.sizes.osdWidth
+            implicitWidth: columnLayout.implicitWidth
             implicitHeight: columnLayout.implicitHeight
             visible: osdLoader.active
 

@@ -12,6 +12,14 @@ Singleton {
         property int fakeScreenRounding: 1 // 0: None | 1: Always | 2: When not fullscreen
     }
 
+    property QtObject audio: QtObject { // Values in %
+        property QtObject protection: QtObject { // Prevent sudden bangs
+            property bool enable: true
+            property real maxAllowedIncrease: 10
+            property real maxAllowed: 90 // Realistically should already provide some protection when it's 99...
+        }
+    }
+
     property QtObject apps: QtObject {
         property string bluetooth: "better-control --bluetooth"
         property string imageViewer: "loupe"
