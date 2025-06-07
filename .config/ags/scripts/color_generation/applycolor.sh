@@ -49,19 +49,16 @@ get_light_dark() {
 
 apply_fuzzel() {
   # Check if template exists
-  if [ ! -f "scripts/templates/fuzzel/fuzzel.ini" ]; then
+  if [ ! -f "scripts/templates/fuzzel/fuzzel.theme" ]; then
     echo "Template file not found for Fuzzel. Skipping that."
     return
   fi
   # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/fuzzel
-  cp "scripts/templates/fuzzel/fuzzel.ini" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini
+  cp "scripts/templates/fuzzel/fuzzel.theme" "$XDG_CONFIG_HOME"/fuzzel/fuzzel.theme
   # Apply colors
   for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini
+    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/fuzzel/fuzzel.theme
   done
-
-  cp "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini "$XDG_CONFIG_HOME"/fuzzel/fuzzel.ini
 }
 
 apply_term() {

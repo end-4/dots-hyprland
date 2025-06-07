@@ -8,7 +8,7 @@ import Indicator from '../../services/indicator.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 
 const OsdValue = ({
-    name, icon, nameSetup = undefined, labelSetup, progressSetup,
+    name, icon, nameSetup = undefined, labelSetup, progressSetup, iconSetup,
     extraClassName = '', extraProgressClassName = '',
     ...rest
 }) => {
@@ -31,7 +31,7 @@ const OsdValue = ({
             }
         },
         children: [
-            MaterialIcon(icon, 'hugeass', {vpack: 'center'}),
+            MaterialIcon(icon, 'hugeass', {vpack: 'center', setup: iconSetup}),
             Box({
                 vertical: true,
                 className: 'spacing-v-5',
@@ -74,7 +74,6 @@ export default (monitor = 0) => {
 
     const volumeIndicator = OsdValue({
         name: 'Volume',
-        icon: 'volume_up',
         extraClassName: 'osd-volume',
         extraProgressClassName: 'osd-volume-progress',
         attribute: { headphones: undefined , device: undefined},
@@ -93,7 +92,9 @@ export default (monitor = 0) => {
         }),
         labelSetup: (self) => self.hook(Audio, (label) => {
             const newDevice = (Audio.speaker?.name);
-            const updateValue = Math.round(Audio.speaker?.volume * 100);
+            const updateValue = Audio.speaker?.stream?.isMuted
+                ? 0
+                : Math.round(Audio.speaker?.volume * 100);
             if (!isNaN(updateValue)) {
                 if (newDevice === volumeIndicator.attribute.device && updateValue != label.label) {
                     Indicator.popup(1);
@@ -103,11 +104,19 @@ export default (monitor = 0) => {
             label.label = `${updateValue}`;
         }),
         progressSetup: (self) => self.hook(Audio, (progress) => {
-            const updateValue = Audio.speaker?.volume;
+            const updateValue = Audio.speaker?.stream?.isMuted
+                ? 0
+                : Audio.speaker?.volume;
             if (!isNaN(updateValue)) {
                 if (updateValue > 1) progress.value = 1;
                 else progress.value = updateValue;
             }
+        }),
+        iconSetup: (self) => self.hook(Audio, (progress) => {
+            self.label =
+                Audio.speaker?.stream?.isMuted || !Audio.speaker.volume
+                    ? 'volume_off'
+                    : 'volume_up';
         }),
     });
     return MarginRevealer({

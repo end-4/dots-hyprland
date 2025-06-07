@@ -35,6 +35,12 @@
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
+
+   If you are using fish shell (non-posix-compliant shell) then:
+   ```bash
+   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+   ```
+
    - **Manual** installation, other distros and more:
      - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
      - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
@@ -66,7 +72,7 @@
 <details> 
   <summary>Help improve these dotfiles</summary>
 
-   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
+   - You can give feedback/suggestions for the [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) in [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
    
 </details>
 
@@ -76,6 +82,8 @@
 </div>
 
 ## Main branch (*illogical-impulse*)
+
+**Note**: Expect minimal maintenance for the main branch, as I'm already working on and using the new Quickshell version of illogical-impulse at the ii-qs branch. See [#1276](https://github.com/end-4/dots-hyprland/pull/1276).
 
 ### AI
 ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60)
