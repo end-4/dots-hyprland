@@ -11,7 +11,6 @@ source ./scriptdata/installers
 prevent_sudo_or_root
 
 if command -v pacman >/dev/null 2>&1;then printf "\e[31m[$0]: pacman found, it seems that the system is ArchLinux or Arch-based distro. Aborting...\e[0m\n";exit 1;fi
-v install-agsv1
 v install-Rubik
 v install-Gabarito
 v install-OneUI
