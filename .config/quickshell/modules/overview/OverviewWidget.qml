@@ -144,10 +144,12 @@ Item {
             implicitHeight: workspaceColumnLayout.implicitHeight
 
             Repeater { // Window repeater
-                model: windowAddresses.filter((address) => {
-                    var win = windowByAddress[address]
-                    return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
-                })
+                model: ScriptModel {
+                    values: windowAddresses.filter((address) => {
+                        var win = windowByAddress[address]
+                        return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                    })
+                }
                 delegate: OverviewWindow {
                     id: window
                     windowData: windowByAddress[modelData]
