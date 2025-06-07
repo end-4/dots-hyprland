@@ -58,6 +58,7 @@ Singleton {
         property bool pinnedOnStartup: false
         property list<string> pinnedApps: [ // IDs of pinned entries
             "org.kde.dolphin",
+            "kitty",
         ]
     }
 
