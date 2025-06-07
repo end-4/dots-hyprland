@@ -37,7 +37,7 @@ Singleton {
 
     property QtObject bar: QtObject {
         property bool bottom: false // Instead of top
-        property bool borderless: true
+        property bool borderless: false // true for no grouping of items
         property string topLeftIcon: "spark" // Options: distro, spark
         property bool showBackground: true
         property QtObject resources: QtObject {

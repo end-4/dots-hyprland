@@ -19,6 +19,14 @@ Scope {
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: ConfigOptions.bar.showBackground
 
+    component VerticalBarSeparator: Rectangle {
+        Layout.topMargin: barHeight / 3
+        Layout.bottomMargin: barHeight / 3
+        Layout.fillHeight: true
+        implicitWidth: 1
+        color: Appearance.m3colors.m3outlineVariant
+    }
+
     Variants { // For each monitor
         model: Quickshell.screens
 
@@ -180,7 +188,7 @@ Scope {
                 RowLayout { // Middle section
                     id: middleSection
                     anchors.centerIn: parent
-                    spacing: 8
+                    spacing: ConfigOptions?.bar.borderless ? 4 : 8
 
                     RowLayout {
                         id: leftCenterGroup
@@ -201,9 +209,10 @@ Scope {
 
                     }
 
+                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
+
                     RowLayout {
                         id: middleCenterGroup
-                        Layout.fillWidth: true
                         Layout.fillHeight: true
 
                         Workspaces {
@@ -221,6 +230,8 @@ Scope {
                         }
 
                     }
+
+                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
                     RowLayout {
                         id: rightCenterGroup
