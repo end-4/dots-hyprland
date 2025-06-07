@@ -822,8 +822,8 @@ if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo "  *.log                 # Ignore all .log files"
   echo "  .config/personal/     # Ignore entire directory"
   echo "  secret-config.conf    # Ignore specific file"
-  echo "  /temp-file           # Ignore from root only"
-  echo "  *secret*             # Ignore files containing 'secret'"
+  echo "  /temp-file            # Ignore from root only"
+  echo "  *secret*              # Ignore files containing 'secret'"
 fi
 
 echo
