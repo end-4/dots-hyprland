@@ -267,7 +267,7 @@ main() {
     # Only prompt for wallpaper if not using --color and not using --noswitch and no imgpath set
     if [[ -z "$imgpath" && -z "$color_flag" && -z "$noswitch_flag" ]]; then
         cd "$(xdg-user-dir PICTURES)/Wallpapers" 2>/dev/null || cd "$(xdg-user-dir PICTURES)" || return 1
-        imgpath="$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
+        imgpath="$(kdialog --getopenfilename . --title 'Choose wallpaper')"
     fi
 
     switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
