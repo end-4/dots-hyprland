@@ -24,7 +24,7 @@ Scope { // Scope
             screen: modelData
             
             property bool reveal: root.pinned 
-                || ((ConfigOptions?.dock.hoverToReveal ?? true) && dockMouseArea.containsMouse) 
+                || (ConfigOptions?.dock.hoverToReveal && dockMouseArea.containsMouse) 
                 || dockApps.requestDockShow 
                 || (!ToplevelManager.activeToplevel?.activated)
 

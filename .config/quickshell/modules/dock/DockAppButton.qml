@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
@@ -71,7 +72,7 @@ DockButton {
                     implicitWidth: (appToplevel.toplevels.length <= 3) ? 
                         appButton.countDotWidth : appButton.countDotHeight // Circles when too many
                     implicitHeight: appButton.countDotHeight
-                    color: Appearance.m3colors.m3primary
+                    color: appIsActive ? Appearance.m3colors.m3primary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)
                 }
             }
         }
