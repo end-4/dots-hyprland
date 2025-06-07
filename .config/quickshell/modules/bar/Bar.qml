@@ -26,6 +26,9 @@ Scope {
             id: barRoot
             screen: modelData
 
+            // Check screensList from config, If no screens are specified, show on all screens
+            visible: ConfigOptions.bar.screensList.includes(modelData.name) || ConfigOptions.bar.screensList.length === 0
+
             property ShellScreen modelData
             property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
             property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 :
