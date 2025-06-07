@@ -116,9 +116,11 @@ Scope { // Scope
                                 model: ConfigOptions?.dock.pinnedApps ?? []
                                 
                                 DockButton {
+                                    id: pinnedAppButton
                                     required property string modelData
+                                    property DesktopEntry entry: DesktopEntries.byId(modelData)
                                     onClicked: {
-                                        Hyprland.dispatch(`exec gio launch ${modelData}`)
+                                        pinnedAppButton?.entry.execute();
                                     }
                                     contentItem: IconImage {
                                         anchors.centerIn: parent
