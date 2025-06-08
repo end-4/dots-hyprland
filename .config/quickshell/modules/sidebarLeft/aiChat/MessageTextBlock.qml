@@ -30,6 +30,18 @@ ColumnLayout {
 
     Layout.fillWidth: true
 
+    Timer {
+        id: renderTimer
+        interval: 1000
+        repeat: true
+        onTriggered: {
+            renderLatex()
+            for (const hash of renderedLatexHashes) {
+                handleRenderedLatex(hash, true);
+            }
+        }
+    }
+
     function renderLatex() {
         // Regex for $...$, $$...$$, \[...\]
         // Note: This is a simple approach and may need refinement for edge cases
@@ -53,16 +65,13 @@ ColumnLayout {
             const imagePath = LatexRenderer.renderedImagePaths[hash];
             const markdownImage = `![latex](${imagePath})`;
 
-            const expression = StringUtils.escapeBackslashes(LatexRenderer.processedExpressions[hash]);
+            const expression = LatexRenderer.processedExpressions[hash];
             renderedSegmentContent = renderedSegmentContent.replace(expression, markdownImage);
         }
     }
 
     onDoneChanged: {
-        renderLatex()
-        for (const hash of renderedLatexHashes) {
-            handleRenderedLatex(hash, true);
-        }
+        renderTimer.restart();
     }
     onEditingChanged: {
         if (!editing) {

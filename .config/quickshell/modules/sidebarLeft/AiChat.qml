@@ -125,9 +125,9 @@ int main(int argc, char* argv[]) {
 
 ### LaTeX
 
-- Simple inline: $\\frac{1}{2} = \\frac{2}{4}$
-- Complex inline: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
-- Another complex inline: \\\\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\\\]
+- Inline w/ dollar signs: $\\frac{1}{2} = \\frac{2}{4}$
+- Inline w/ double dollar signs: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+- Inline w/ backslash and square brackets \\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\]
 `, 
                     Ai.interfaceRole);
             }

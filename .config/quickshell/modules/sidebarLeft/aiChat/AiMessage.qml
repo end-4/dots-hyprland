@@ -28,6 +28,8 @@ Rectangle {
     property bool renderMarkdown: true
     property bool editing: false
 
+    property list<var> messageBlocks: StringUtils.splitMarkdownBlocks(root.messageData?.content)
+
     anchors.left: parent?.left
     anchors.right: parent?.right
     implicitHeight: columnLayout.implicitHeight + root.messagePadding * 2
@@ -246,23 +248,25 @@ Rectangle {
             spacing: 0
             Repeater {
                 model: ScriptModel {
-                    values: StringUtils.splitMarkdownBlocks(root.messageData?.content)
+                    values: root.messageBlocks.map((block, index) => index)
                 }
                 delegate: Loader {
+                    required property int index
+                    property var thisBlock: root.messageBlocks[index]
                     Layout.fillWidth: true
-                    // property var segment: modelData
-                    property var segmentContent: modelData.content
-                    property var segmentLang: modelData.lang
+                    // property var segment: thisBlock
+                    property var segmentContent: thisBlock.content
+                    property var segmentLang: thisBlock.lang
                     property var messageData: root.messageData
                     property var editing: root.editing
                     property var renderMarkdown: root.renderMarkdown
                     property var enableMouseSelection: root.enableMouseSelection
                     property bool thinking: root.messageData?.thinking ?? true
                     property bool done: root.messageData?.done ?? false
-                    property bool completed: modelData.completed ?? false
+                    property bool completed: thisBlock.completed ?? false
                     
-                    source: modelData.type === "code" ? "MessageCodeBlock.qml" : 
-                        modelData.type === "think" ? "MessageThinkBlock.qml" :
+                    source: thisBlock.type === "code" ? "MessageCodeBlock.qml" : 
+                        thisBlock.type === "think" ? "MessageThinkBlock.qml" :
                         "MessageTextBlock.qml"
 
                 }
@@ -277,7 +281,9 @@ Rectangle {
             Layout.alignment: Qt.AlignLeft
 
             Repeater {
-                model: root.messageData?.annotationSources
+                model: ScriptModel {
+                    values: root.messageData?.annotationSources || []
+                }
                 delegate: AnnotationSourceButton {
                     id: annotationButton
                     displayText: modelData.text
