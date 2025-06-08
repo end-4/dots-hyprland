@@ -15,7 +15,7 @@ QuickToggleButton {
         toggleNetwork.running = true
     }
     altAction: () => {
-        Hyprland.dispatch(`exec ${ConfigOptions.apps.network}`)
+        Hyprland.dispatch(`exec ${Network.ethernet ? ConfigOptions.apps.networkEthernet : ConfigOptions.apps.network}`)
         Hyprland.dispatch("global quickshell:sidebarRightClose")
     }
     Process {

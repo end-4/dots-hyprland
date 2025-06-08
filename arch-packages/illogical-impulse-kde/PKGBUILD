@@ -7,6 +7,5 @@ license=(None)
 depends=(
 	polkit-kde-agent
 	gnome-keyring
-	gnome-control-center
 	networkmanager better-control-git
 )
