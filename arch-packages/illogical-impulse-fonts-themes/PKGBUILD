@@ -7,6 +7,7 @@ license=(None)
 depends=(
   adw-gtk-theme-git
   breeze-plus
+  eza
   fish
   fontconfig
   kde-material-you-colors
