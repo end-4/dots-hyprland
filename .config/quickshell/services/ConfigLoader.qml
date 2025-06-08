@@ -83,7 +83,6 @@ Singleton {
     Timer {
         id: delayedFileRead
         interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
-        repeat: false
         running: false
         onTriggered: {
             root.applyConfig(configFileView.text())
