@@ -11,11 +11,7 @@ material-color-utilities==0.2.1
 materialyoucolor==2.0.10
     # via -r scriptdata/requirements.in
 numpy==2.2.2
-    # via
-    #   material-color-utilities
-    #   opencv-python
-opencv-python==4.11.0.86
-    # via -r scriptdata/requirements.in
+    # via material-color-utilities
 packaging==24.2
     # via
     #   build

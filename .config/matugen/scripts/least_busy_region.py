@@ -1,4 +1,4 @@
-#!/usr/bin/env -S\_/bin/sh\_-c\_"source\_\$(eval\_echo\_\$ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate&&exec\_python\_-E\_"\$0"\_"\$@""
+#!/usr/bin/env python3
 # Disclaimer: This script is vibe-coded.
 
 import os
@@ -8,7 +8,17 @@ import numpy as np
 import argparse
 import json
 
-def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill"):
+def center_crop(img, target_w, target_h):
+    h, w = img.shape[:2]
+    if w == target_w and h == target_h:
+        return img
+    x1 = max(0, (w - target_w) // 2)
+    y1 = max(0, (h - target_h) // 2)
+    x2 = x1 + target_w
+    y2 = y1 + target_h
+    return img[y1:y2, x1:x2]
+
+def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", padding=50):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -26,6 +36,9 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
         if verbose:
             print(f"Scaling image from {orig_w}x{orig_h} to {new_w}x{new_h} (scale: {scale:.3f}, mode: {screen_mode})")
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        img = center_crop(img, screen_width, screen_height)
+        if verbose:
+            print(f"Cropped image to {screen_width}x{screen_height}")
     else:
         if verbose:
             print(f"Using original image size: {orig_w}x{orig_h}")
@@ -46,8 +59,12 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
     min_var = None
     min_coords = (0, 0)
     area = region_width * region_height
-    for y in range(0, h - region_height + 1, stride):
-        for x in range(0, w - region_width + 1, stride):
+    x_start = padding
+    y_start = padding
+    x_end = w - region_width - padding + 1
+    y_end = h - region_height - padding + 1
+    for y in range(y_start, max(y_end, y_start+1), stride):
+        for x in range(x_start, max(x_end, x_start+1), stride):
             x1, y1 = x, y
             x2, y2 = x + region_width - 1, y + region_height - 1
             s = region_sum(integral, x1, y1, x2, y2)
@@ -59,7 +76,7 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
                 min_coords = (x, y)
     return min_coords, min_var
 
-def find_largest_region(image_path, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", threshold=100.0, aspect_ratio=1.0):
+def find_largest_region(image_path, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", threshold=100.0, aspect_ratio=1.0, padding=50):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -77,6 +94,9 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
         if verbose:
             print(f"Scaling image from {orig_w}x{orig_h} to {new_w}x{new_h} (scale: {scale:.3f}, mode: {screen_mode})")
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        img = center_crop(img, screen_width, screen_height)
+        if verbose:
+            print(f"Cropped image to {screen_width}x{screen_height}")
     else:
         if verbose:
             print(f"Using original image size: {orig_w}x{orig_h}")
@@ -110,8 +130,12 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
             max_size = mid - 1
             continue
         found = False
-        for y in range(0, h - region_h + 1, stride):
-            for x in range(0, w - region_w + 1, stride):
+        x_start = padding
+        y_start = padding
+        x_end = w - region_w - padding + 1
+        y_end = h - region_h - padding + 1
+        for y in range(y_start, max(y_end, y_start+1), stride):
+            for x in range(x_start, max(x_end, x_start+1), stride):
                 x1, y1 = x, y
                 x2, y2 = x + region_w - 1, y + region_h - 1
                 s = region_sum(integral, x1, y1, x2, y2)
@@ -153,6 +177,7 @@ def draw_region(image_path, coords, region_width=300, region_height=200, output_
         new_w = int(orig_w * scale)
         new_h = int(orig_h * scale)
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        img = center_crop(img, screen_width, screen_height)
     x, y = coords
     cv2.rectangle(img, (x, y), (x+region_width-1, y+region_height-1), (0,0,255), 3)
     cv2.imwrite(output_path, img)
@@ -173,6 +198,7 @@ def draw_largest_region(image_path, center, size, output_path='output.png', scre
         new_w = int(orig_w * scale)
         new_h = int(orig_h * scale)
         img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        img = center_crop(img, screen_width, screen_height)
     cx, cy = center
     region_w, region_h = size
     x1 = cx - region_w // 2
@@ -183,11 +209,51 @@ def draw_largest_region(image_path, center, size, output_path='output.png', scre
     cv2.imwrite(output_path, img)
     print(f"Saved output image with largest region at {output_path}")
 
+def get_dominant_color(image_path, x, y, w, h, screen_width=None, screen_height=None, screen_mode="fill"):
+    img = cv2.imread(image_path)
+    if img is None:
+        raise FileNotFoundError(f"Image not found: {image_path}")
+    orig_h, orig_w = img.shape[:2]
+    if screen_width is not None and screen_height is not None:
+        scale_w = screen_width / orig_w
+        scale_h = screen_height / orig_h
+        if screen_mode == "fill":
+            scale = max(scale_w, scale_h)
+        else:
+            scale = min(scale_w, scale_h)
+        new_w = int(orig_w * scale)
+        new_h = int(orig_h * scale)
+        img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+        img = center_crop(img, screen_width, screen_height)
+    # Ensure region is within bounds
+    x = max(0, x)
+    y = max(0, y)
+    w = max(1, min(w, img.shape[1] - x))
+    h = max(1, min(h, img.shape[0] - y))
+    region = img[y:y+h, x:x+w]
+    if region.size == 0 or region.shape[0] == 0 or region.shape[1] == 0:
+        return [0, 0, 0]
+    region = region.reshape((-1, 3))
+    # Filter out black pixels (optional, improves accuracy for some images)
+    non_black = region[np.any(region > 10, axis=1)]
+    if non_black.shape[0] == 0:
+        non_black = region
+    region = np.float32(non_black)
+    if region.shape[0] < 3:
+        return [int(x) for x in np.mean(region, axis=0)]
+    # K-means to find dominant color
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    K = min(3, region.shape[0])
+    _, labels, centers = cv2.kmeans(region, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    counts = np.bincount(labels.flatten())
+    dominant = centers[np.argmax(counts)]
+    return [int(x) for x in dominant]
+
 def main():
     parser = argparse.ArgumentParser(description="Find least busy region in an image and output a JSON. Made for determining a suitable position for a wallpaper widget.")
     parser.add_argument("image_path", help="Path to the input image")
-    parser.add_argument("--width", type=int, default=500, help="Region width")
-    parser.add_argument("--height", type=int, default=250, help="Region height")
+    parser.add_argument("--width", type=int, default=300, help="Region width")
+    parser.add_argument("--height", type=int, default=200, help="Region height")
     parser.add_argument("-v", "--visual-output", action="store_true", help="Output image with rectangle")
     parser.add_argument("--screen-width", type=int, default=1920, help="Screen width for wallpaper scaling")
     parser.add_argument("--screen-height", type=int, default=1080, help="Screen height for wallpaper scaling")
@@ -196,7 +262,8 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Print verbose output")
     parser.add_argument("-l", "--largest-region", action="store_true", help="Find the largest region under the variance threshold and output its center")
     parser.add_argument("-t", "--variance-threshold", type=float, default=1000.0, help="Variance threshold for largest region mode")
-    parser.add_argument("--aspect-ratio", type=float, default=1.0, help="Aspect ratio (width/height) for largest region mode")
+    parser.add_argument("--aspect-ratio", type=float, default=1.78, help="Aspect ratio (width/height) for largest region mode")
+    parser.add_argument("--padding", type=int, default=50, help="Minimum distance from region to image edge (default: 50)")
     args = parser.parse_args()
 
     if args.largest_region:
@@ -208,18 +275,29 @@ def main():
             stride=args.stride,
             screen_mode=args.screen_mode,
             threshold=args.variance_threshold,
-            aspect_ratio=args.aspect_ratio
+            aspect_ratio=args.aspect_ratio,
+            padding=args.padding
         )
         if center:
             if args.visual_output:
                 draw_largest_region(args.image_path, center, size, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
-            # Output JSON
+            # Extract dominant color
+            cx, cy = center
+            region_w, region_h = size
+            x1 = cx - region_w // 2
+            y1 = cy - region_h // 2
+            dominant_color = get_dominant_color(
+                args.image_path, x1, y1, region_w, region_h,
+                screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode
+            )
+            dominant_color_hex = '#{:02x}{:02x}{:02x}'.format(*dominant_color)
             print(json.dumps({
                 "center_x": center[0],
                 "center_y": center[1],
                 "width": size[0],
                 "height": size[1],
-                "variance": var
+                "variance": var,
+                "dominant_color": dominant_color_hex
             }))
         else:
             print(json.dumps({"error": "No region found under the threshold."}))
@@ -233,19 +311,26 @@ def main():
         screen_height=args.screen_height,
         verbose=args.verbose,
         stride=args.stride,
-        screen_mode=args.screen_mode
+        screen_mode=args.screen_mode,
+        padding=args.padding
     )
     if args.visual_output:
         draw_region(args.image_path, coords, region_width=args.width, region_height=args.height, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
     # Output JSON with center point
     center_x = coords[0] + args.width // 2
     center_y = coords[1] + args.height // 2
+    dominant_color = get_dominant_color(
+        args.image_path, coords[0], coords[1], args.width, args.height,
+        screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode
+    )
+    dominant_color_hex = '#{:02x}{:02x}{:02x}'.format(*dominant_color)
     print(json.dumps({
         "center_x": center_x,
         "center_y": center_y,
         "width": args.width,
         "height": args.height,
-        "variance": variance
+        "variance": variance,
+        "dominant_color": dominant_color_hex
     }))
 
 if __name__ == "__main__":
