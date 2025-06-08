@@ -7,6 +7,7 @@ CONFIG_DIR="$XDG_CONFIG_HOME/quickshell"
 CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MATUGEN_DIR="$XDG_CONFIG_HOME/matugen"
 terminalscheme="$XDG_CONFIG_HOME/quickshell/scripts/terminal/scheme-base.json"
 
 pre_process() {
@@ -26,7 +27,19 @@ pre_process() {
 }
 
 post_process() {
-    true
+    local screen_width="$1"
+    local screen_height="$2"
+    local wallpaper_path="$3"
+
+    # Determine the largest region on the wallpaper that's sufficiently un-busy to put widgets in
+    if [ ! -f "$MATUGEN_DIR/scripts/least_busy_region.py" ]; then
+        echo "Error: least_busy_region.py script not found in $MATUGEN_DIR/scripts/"
+    else
+        "$MATUGEN_DIR/scripts/least_busy_region.py" \
+            --screen-width "$screen_width" --screen-height "$screen_height" \
+            --width 300 --height 200 \
+            "$wallpaper_path" > "$STATE_DIR"/user/generated/wallpaper/least_busy_region.json
+    fi
 }
 
 check_and_prompt_upscale() {
@@ -219,7 +232,10 @@ switch() {
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
 
-    post_process
+    # Pass screen width, height, and wallpaper path to post_process
+    min_width_desired="$(hyprctl monitors -j | jq '([.[].width] | max)' | xargs)"
+    min_height_desired="$(hyprctl monitors -j | jq '([.[].height] | max)' | xargs)"
+    post_process "$min_width_desired" "$min_height_desired" "$imgpath"
 }
 
 main() {

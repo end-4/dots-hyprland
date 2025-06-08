@@ -3,6 +3,7 @@
 //@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
 
 import "./modules/common/"
+import "./modules/backgroundWidgets/"
 import "./modules/bar/"
 import "./modules/cheatsheet/"
 import "./modules/dock/"
@@ -26,6 +27,7 @@ ShellRoot {
     // Enable/disable modules here. False = not loaded at all, so rest assured
     // no unnecessary stuff will take up memory if you decide to only use, say, the overview.
     property bool enableBar: true
+    property bool enableBackgroundWidgets: true
     property bool enableCheatsheet: true
     property bool enableDock: true
     property bool enableMediaControls: true
@@ -49,19 +51,20 @@ ShellRoot {
         FirstRunExperience.load()
     }
 
-    Loader { active: enableBar; sourceComponent: Bar {} }
-    Loader { active: enableCheatsheet; sourceComponent: Cheatsheet {} }
-    Loader { active: (enableDock && ConfigOptions?.dock.enable); sourceComponent: Dock {} }
-    Loader { active: enableMediaControls; sourceComponent: MediaControls {} }
-    Loader { active: enableNotificationPopup; sourceComponent: NotificationPopup {} }
-    Loader { active: enableOnScreenDisplayBrightness; sourceComponent: OnScreenDisplayBrightness {} }
-    Loader { active: enableOnScreenDisplayVolume; sourceComponent: OnScreenDisplayVolume {} }
-    Loader { active: enableOnScreenKeyboard; sourceComponent: OnScreenKeyboard {} }
-    Loader { active: enableOverview; sourceComponent: Overview {} }
-    Loader { active: enableReloadPopup; sourceComponent: ReloadPopup {} }
-    Loader { active: enableScreenCorners; sourceComponent: ScreenCorners {} }
-    Loader { active: enableSession; sourceComponent: Session {} }
-    Loader { active: enableSidebarLeft; sourceComponent: SidebarLeft {} }
-    Loader { active: enableSidebarRight; sourceComponent: SidebarRight {} }
+    LazyLoader { active: enableBar; component: Bar {} }
+    LazyLoader { active: enableBackgroundWidgets; component: BackgroundWidgets {} }
+    LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
+    LazyLoader { active: (enableDock && ConfigOptions?.dock.enable); component: Dock {} }
+    LazyLoader { active: enableMediaControls; component: MediaControls {} }
+    LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
+    LazyLoader { active: enableOnScreenDisplayBrightness; component: OnScreenDisplayBrightness {} }
+    LazyLoader { active: enableOnScreenDisplayVolume; component: OnScreenDisplayVolume {} }
+    LazyLoader { active: enableOnScreenKeyboard; component: OnScreenKeyboard {} }
+    LazyLoader { active: enableOverview; component: Overview {} }
+    LazyLoader { active: enableReloadPopup; component: ReloadPopup {} }
+    LazyLoader { active: enableScreenCorners; component: ScreenCorners {} }
+    LazyLoader { active: enableSession; component: Session {} }
+    LazyLoader { active: enableSidebarLeft; component: SidebarLeft {} }
+    LazyLoader { active: enableSidebarRight; component: SidebarRight {} }
 }
 
