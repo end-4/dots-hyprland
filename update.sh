@@ -489,6 +489,14 @@ has_new_commits() {
 # Main script starts here
 log_header "Dotfiles Update Script"
 
+log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
+safe_read "BY CONTINUE YOU WILL USE IT AT YOUR OWN RISK (y/N): " response "N"
+
+if [[ ! "$response" =~ ^[Yy]$ ]]; then
+  log_error "Update aborted by user"
+  exit 1
+fi
+
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
