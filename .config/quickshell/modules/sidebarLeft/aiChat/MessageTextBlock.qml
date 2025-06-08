@@ -33,7 +33,7 @@ ColumnLayout {
     Timer {
         id: renderTimer
         interval: 1000
-        repeat: true
+        repeat: false
         onTriggered: {
             renderLatex()
             for (const hash of renderedLatexHashes) {
@@ -45,17 +45,17 @@ ColumnLayout {
     function renderLatex() {
         // Regex for $...$, $$...$$, \[...\]
         // Note: This is a simple approach and may need refinement for edge cases
-        let regex = /(\$\$([\s\S]+?)\$\$)|(\$([^\$]+?)\$)|(\\\[((?:.|\n)+?)\\\])/g;
+        let regex = /(\$\$([\s\S]+?)\$\$)|(\$([^\$]+?)\$)|(\\\[((?:.|\n)+?)\\\])|(\\\(([\s\S]+?)\\\))/g;
         let match;
         while ((match = regex.exec(segmentContent)) !== null) {
-            let expression = match[1] || match[2] || match[3];
+            let expression = match[1] || match[2] || match[3] || match[4] || match[5] || match[6] || match[7] || match[8];
             if (expression) {
-                // Qt.callLater(() => {
-                // });
+                Qt.callLater(() => {
                     const [renderHash, isNew] = LatexRenderer.requestRender(expression.trim());
                     if (!renderedLatexHashes.includes(renderHash)) {
                         renderedLatexHashes.push(renderHash);
                     }
+                });
             }
         }
     }
