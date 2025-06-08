@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Disclaimer: This script is vibe-coded.
+# Disclaimer: This script was ai-generated and went through minimal revision.
 
 import os
 os.environ["OPENCV_LOG_LEVEL"] = "SILENT"
