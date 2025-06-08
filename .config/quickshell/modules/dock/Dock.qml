@@ -55,7 +55,9 @@ Scope { // Scope
                 id: dockMouseArea
                 anchors.top: parent.top
                 height: parent.height
-                anchors.topMargin: dockRoot.reveal ? 0 : dockRoot.implicitHeight - ConfigOptions.dock.hoverRegionHeight
+                anchors.topMargin: dockRoot.reveal ? 0 : 
+                    ConfigOptions?.dock.hoverToReveal ? (dockRoot.implicitHeight + 1) :
+                    (dockRoot.implicitHeight - ConfigOptions.dock.hoverRegionHeight)
                 anchors.left: parent.left
                 anchors.right: parent.right
                 hoverEnabled: true
