@@ -13,7 +13,7 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+REPO_DIR="$(cd "$(dirname $0)" &>/dev/null && pwd)"
 ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
@@ -489,13 +489,7 @@ has_new_commits() {
 # Main script starts here
 log_header "Dotfiles Update Script"
 
-log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
-safe_read "BY CONTINUE YOU WILL USE IT AT YOUR OWN RISK (y/N): " response "N"
-
-if [[ ! "$response" =~ ^[Yy]$ ]]; then
-  log_error "Update aborted by user"
-  exit 1
-fi
+check=true
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -530,6 +524,11 @@ while [[ $# -gt 0 ]]; do
     echo "  - Interactive selection of packages to build"
     exit 0
     ;;
+  --skip-notice)
+    log_warning "Skipping notice about script being untested"
+    check=false
+    shift
+    ;;
   *)
     log_error "Unknown option: $1"
     echo "Use --help for usage information"
@@ -538,12 +537,25 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Check if we're in a git repository
-if [[ ! -d "${REPO_DIR}/.git" ]]; then
-  die "Not in a git repository. Please run this script from your dotfiles repository."
+if [[ "$check" == true ]]; then
+  log_warning "THIS SCRIPT IS NOT FULLY TESTED AND MAY CAUSE ISSUES!"
+  safe_read "BY CONTINUE YOU WILL USE IT AT YOUR OWN RISK (y/N): " response "N"
+
+  if [[ ! "$response" =~ ^[Yy]$ ]]; then
+    log_error "Update aborted by user"
+    exit 1
+  fi
 fi
 
+# Check if we're in a git repository
 cd "$REPO_DIR" || die "Failed to change to repository directory"
+
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+  log_info "Running in git repository: $(git rev-parse --show-toplevel)"
+else
+  log_error "Not in a git repository. Please run this script from your dotfiles repository."
+  exit 1
+fi
 
 # Step 1: Pull latest commits
 log_header "Pulling Latest Changes"
