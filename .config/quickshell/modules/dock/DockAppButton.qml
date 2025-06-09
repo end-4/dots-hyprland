@@ -24,6 +24,7 @@ DockButton {
     property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
 
     property bool isSeparator: appToplevel.appId === "SEPARATOR"
+    property var desktopEntry: DesktopEntries.byId(appToplevel.appId)
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
@@ -60,11 +61,15 @@ DockButton {
 
     onClicked: {
         if (appToplevel.toplevels.length === 0) {
-            DesktopEntries.byId(root.appToplevel.appId)?.execute();
+            root.desktopEntry?.execute();
             return;
         }
         lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
         appToplevel.toplevels[lastFocused].activate()
+    }
+
+    middleClickAction: () => {
+        root.desktopEntry?.execute();
     }
 
     contentItem: Loader {
