@@ -68,6 +68,7 @@ Item { // Window
     }
 
     ScreencopyView {
+        id: windowPreview
         anchors.fill: parent
         captureSource: GlobalStates.overviewOpen ? root.toplevel : null
         live: true
@@ -76,7 +77,7 @@ Item { // Window
             anchors.fill: parent
             radius: Appearance.rounding.windowRounding * root.scale
             color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
-            opacity: pressed ? 0.3 : hovered ? 0.2 : 0
+            opacity: pressed ? 0.5 : hovered ? 0.3 : 0
             border.color : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.9)
             border.width : 1
         }
