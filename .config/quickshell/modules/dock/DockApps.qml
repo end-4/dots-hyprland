@@ -23,8 +23,9 @@ Item {
     property Item lastHoveredButton
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
-    property real popupX: parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2).x - implicitWidth / 2
-
+    property var parentWindow: root.QsWindow
+    property real popupX: parentWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, root.lastHoveredButton?.height / 2).x - implicitWidth / 2
+        ?? 0
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: rowLayout.implicitHeight
 
@@ -38,15 +39,33 @@ Item {
                 values: {
                     var map = new Map();
 
+                    // Pinned apps
+                    const pinnedApps = ConfigOptions?.dock.pinnedApps ?? [];
+                    for (const appId of pinnedApps) {
+                        if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
+                            pinned: true,
+                            toplevels: []
+                        }));
+                    }
+
+                    // Separator
+                    if (pinnedApps.length > 0) {
+                        map.set("SEPARATOR", { pinned: false, toplevels: [] });
+                    }
+                    
+                    // Open windows
                     for (const toplevel of ToplevelManager.toplevels.values) {
-                        if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), []);
-                        map.get(toplevel.appId.toLowerCase()).push(toplevel);
+                        if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
+                            pinned: false,
+                            toplevels: []
+                        }));
+                        map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
                     }
 
                     var values = [];
 
                     for (const [key, value] of map) {
-                        values.push({ appId: key, toplevels: value });
+                        values.push({ appId: key, toplevels: value.toplevels, pinned: value.pinned });
                     }
 
                     return values;
@@ -118,14 +137,9 @@ Item {
             anchors.bottom: parent.bottom
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
             implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
-            // anchors.horizontalCenter: parent.horizontalCenter
             hoverEnabled: true
-            // x: previewPopup.width / 2 + root.popupX
-            // Behavior on x {
-            //     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-            // }
             x: {
-                const itemCenter = root.QsWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, 0);
+                const itemCenter = root.QsWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, 0);
                 return itemCenter.x - width / 2
             }
             StyledRectangularShadow {
@@ -163,7 +177,9 @@ Item {
                     id: previewRowLayout
                     anchors.centerIn: parent
                     Repeater {
-                        model: previewPopup.appTopLevel?.toplevels ?? []
+                        model: ScriptModel {
+                            values: previewPopup.appTopLevel?.toplevels ?? []
+                        }
                         RippleButton {
                             id: windowButton
                             required property var modelData

@@ -120,26 +120,6 @@ Scope { // Scope
                                 }
                             }
                             DockSeparator {}
-                            // Pinned apps
-                            Repeater {
-                                model: ConfigOptions?.dock.pinnedApps ?? []
-                                
-                                DockButton {
-                                    id: pinnedAppButton
-                                    required property string modelData
-                                    property DesktopEntry entry: DesktopEntries.byId(modelData)
-                                    onClicked: {
-                                        pinnedAppButton?.entry.execute();
-                                    }
-                                    contentItem: IconImage {
-                                        anchors.centerIn: parent
-                                        source: Quickshell.iconPath(AppSearch.guessIcon(modelData), "image-missing")
-                                    }
-                                }
-                            }
-                            
-                            DockSeparator { visible: (ConfigOptions?.dock.pinnedApps ?? []).length > 0 }
-                            
                             DockApps { id: dockApps }
                             DockSeparator {}
                             DockButton {
