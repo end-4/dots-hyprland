@@ -176,7 +176,7 @@ Scope {
                             }
 
                             ActiveWindow {
-                                visible: barRoot.useShortenedForm === 0
+                                visible: barRoot.useShortenedForm === 0 && width > 0 && height > 0
                                 Layout.rightMargin: Appearance.rounding.screenRounding
                                 Layout.fillWidth: true
                                 bar: barRoot

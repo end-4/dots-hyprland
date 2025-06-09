@@ -118,6 +118,7 @@ TabButton {
 
             property real implicitWidth: 0
             property real implicitHeight: 0
+            visible: width > 0 && height > 0
 
             Behavior on opacity {
                 animation: Appearance?.animation.elementMoveFast.colorAnimation.createObject(this)
