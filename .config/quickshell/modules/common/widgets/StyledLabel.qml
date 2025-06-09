@@ -12,4 +12,5 @@ Label {
         pixelSize: Appearance?.font.pixelSize.small ?? 15
     }
     color: Appearance?.m3colors.m3onBackground ?? "black"
+    linkColor: Appearance?.m3colors.m3primary
 }
