@@ -13,7 +13,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
-Rectangle { // Window
+Item { // Window
     id: root
     property var toplevel
     property var windowData
@@ -42,8 +42,8 @@ Rectangle { // Window
     
     x: initX
     y: initY
-    width: Math.min(windowData?.size[0] * root.scale, (restrictToWorkspace ? windowData?.size[0] : availableWorkspaceWidth - x + xOffset))
-    height: Math.min(windowData?.size[1] * root.scale, (restrictToWorkspace ? windowData?.size[1] : availableWorkspaceHeight - y + yOffset))
+    width: Math.round(Math.min(windowData?.size[0] * root.scale, (restrictToWorkspace ? windowData?.size[0] : availableWorkspaceWidth - x + xOffset)))
+    height: Math.round(Math.min(windowData?.size[1] * root.scale, (restrictToWorkspace ? windowData?.size[1] : availableWorkspaceHeight - y + yOffset)))
 
     layer.enabled: true
     layer.effect: OpacityMask {
@@ -78,7 +78,6 @@ Rectangle { // Window
             color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
             opacity: pressed ? 0.3 : hovered ? 0.2 : 0
             border.color : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.9)
-            border.pixelAligned : false
             border.width : 1
         }
 
@@ -88,13 +87,20 @@ Rectangle { // Window
             anchors.right: parent.right
             spacing: Appearance.font.pixelSize.smaller * 0.5
 
-            IconImage {
+            Image {
                 id: windowIcon
+                property var iconSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+                // mipmap: true
                 Layout.alignment: Qt.AlignHCenter
                 source: root.iconPath
-                implicitSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+                width: iconSize
+                height: iconSize
+                sourceSize: Qt.size(iconSize, iconSize)
 
-                Behavior on implicitSize {
+                Behavior on width {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                }
+                Behavior on height {
                     animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
                 }
             }
