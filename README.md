@@ -87,7 +87,7 @@ It's ready if you don't need localization... so quite likely
 |:---|:---------------|
 | ![image](https://github.com/user-attachments/assets/08d26785-b54d-4ad1-875b-bb08cc6757f5) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
 | Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/a34a9664-326a-4e66-a643-480d6f7fcc19) |
+| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/e402f74a-6bd8-4ebe-bcf4-3a4a4846de10) |
 
 ## illogical-impulse<sup>AGS</sup>
 
