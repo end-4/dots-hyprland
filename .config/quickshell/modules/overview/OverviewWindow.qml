@@ -1,17 +1,21 @@
+import "root:/"
 import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Io
+import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Rectangle { // Window
     id: root
+    property var toplevel
     property var windowData
     property var monitorData
     property var scale
@@ -60,6 +64,12 @@ Rectangle { // Window
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
 
+    ScreencopyView {
+        anchors.fill: parent
+        captureSource: GlobalStates.overviewOpen ? root.toplevel : null
+        live: false
+    }
+
     ColumnLayout {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -77,12 +87,19 @@ Rectangle { // Window
             }
         }
 
-        StyledText {
+        StyledLabel {
             Layout.leftMargin: 10
             Layout.rightMargin: 10
             visible: !compactMode
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            background: Rectangle {
+                width: parent.width
+                color: Appearance.colors.colLayer2
+                radius: Appearance.rounding.windowRounding * root.scale
+            }
+            
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: Appearance.font.pixelSize.smaller
             font.italic: indicateXWayland ? true : false
