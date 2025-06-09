@@ -23,7 +23,7 @@ Scope {
     property color colText: ColorUtils.colorWithLightness(Appearance.m3colors.m3primary, (root.dominantColorIsDark ? 0.8 : 0.12))
 
     function updateWidgetPosition(fileContent) {
-        console.log("[BackgroundWidgets] Updating widget position with content:", fileContent)
+        // console.log("[BackgroundWidgets] Updating widget position with content:", fileContent)
         const parsedContent = JSON.parse(fileContent)
         root.centerX = parsedContent.center_x
         root.centerY = parsedContent.center_y

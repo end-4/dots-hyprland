@@ -129,6 +129,16 @@ Scope {
 
                             QuickToggleButton {
                                 toggled: false
+                                buttonIcon: "restart_alt"
+                                onClicked: {
+                                    Quickshell.reload(true)
+                                }
+                                StyledToolTip {
+                                    content: qsTr("Reload")
+                                }
+                            }
+                            QuickToggleButton {
+                                toggled: false
                                 buttonIcon: "power_settings_new"
                                 onClicked: {
                                     Hyprland.dispatch("global quickshell:sessionOpen")

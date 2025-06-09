@@ -45,11 +45,14 @@ Rectangle { // Window
     width: Math.min(windowData?.size[0] * root.scale, (restrictToWorkspace ? windowData?.size[0] : availableWorkspaceWidth - x + xOffset))
     height: Math.min(windowData?.size[1] * root.scale, (restrictToWorkspace ? windowData?.size[1] : availableWorkspaceHeight - y + yOffset))
 
-    radius: Appearance.rounding.windowRounding * root.scale
-    color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
-    border.color : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.9)
-    border.pixelAligned : false
-    border.width : 1
+    layer.enabled: true
+    layer.effect: OpacityMask {
+        maskSource: Rectangle {
+            width: root.width
+            height: root.height
+            radius: Appearance.rounding.windowRounding * root.scale
+        }
+    }
 
     Behavior on x {
         animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
@@ -67,44 +70,34 @@ Rectangle { // Window
     ScreencopyView {
         anchors.fill: parent
         captureSource: GlobalStates.overviewOpen ? root.toplevel : null
-        live: false
-    }
+        live: true
 
-    ColumnLayout {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: Appearance.font.pixelSize.smaller * 0.5
-
-        IconImage {
-            id: windowIcon
-            Layout.alignment: Qt.AlignHCenter
-            source: root.iconPath
-            implicitSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
-
-            Behavior on implicitSize {
-                animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
-            }
+        Rectangle {
+            anchors.fill: parent
+            radius: Appearance.rounding.windowRounding * root.scale
+            color: pressed ? Appearance.colors.colLayer2Active : hovered ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
+            opacity: pressed ? 0.3 : hovered ? 0.2 : 0
+            border.color : ColorUtils.transparentize(Appearance.m3colors.m3outline, 0.9)
+            border.pixelAligned : false
+            border.width : 1
         }
 
-        StyledLabel {
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            visible: !compactMode
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        ColumnLayout {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: Appearance.font.pixelSize.smaller * 0.5
 
-            background: Rectangle {
-                width: parent.width
-                color: Appearance.colors.colLayer2
-                radius: Appearance.rounding.windowRounding * root.scale
+            IconImage {
+                id: windowIcon
+                Layout.alignment: Qt.AlignHCenter
+                source: root.iconPath
+                implicitSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+
+                Behavior on implicitSize {
+                    animation: Appearance.animation.elementMoveEnter.numberAnimation.createObject(this)
+                }
             }
-            
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: Appearance.font.pixelSize.smaller
-            font.italic: indicateXWayland ? true : false
-            elide: Text.ElideRight
-            text: windowData?.title ?? ""
         }
     }
 }
