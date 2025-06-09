@@ -38,10 +38,18 @@ DockButton {
                 appListRoot.buttonHovered = false
             }
         }
-    }
-    onClicked: {
-        lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
-        appToplevel.toplevels[lastFocused].activate()
+        onClicked: {
+            if (mouse.button === Qt.MiddleButton ) {
+                appButton.entry.execute();
+                return;
+            }
+            if (modelData.isPinnedApp && !modelData.isRunning) {
+                appButton.entry.execute();
+                return;
+            }
+            lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
+            appToplevel.toplevels[lastFocused].activate()
+        }
     }
     contentItem: Item {
         anchors.centerIn: parent
@@ -65,11 +73,15 @@ DockButton {
                 horizontalCenter: parent.horizontalCenter
             }
             Repeater {
-                model: Math.min(appToplevel.toplevels.length, 3)
+                model: ScriptModel {
+                    values: {
+                        return appToplevel.toplevels ?? []
+                    }
+                }
                 delegate: Rectangle {
                     required property int index
                     radius: Appearance.rounding.full
-                    implicitWidth: (appToplevel.toplevels.length <= 3) ? 
+                    implicitWidth: !appToplevel.toplevels ? 0 : (appToplevel.toplevels.length <= 3) ? 
                         appButton.countDotWidth : appButton.countDotHeight // Circles when too many
                     implicitHeight: appButton.countDotHeight
                     color: appIsActive ? Appearance.m3colors.m3primary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)

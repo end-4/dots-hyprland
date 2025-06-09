@@ -25,6 +25,8 @@ Item {
     property bool requestDockShow: previewPopup.show
     property real popupX: parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2).x - implicitWidth / 2
 
+    property int pinnedCount: ConfigOptions?.dock?.pinnedApps?.length ?? 0
+
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: rowLayout.implicitHeight
 
@@ -39,23 +41,55 @@ Item {
                     var map = new Map();
 
                     for (const toplevel of ToplevelManager.toplevels.values) {
-                        if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), []);
-                        map.get(toplevel.appId.toLowerCase()).push(toplevel);
+                        const appId = toplevel.appId.toLowerCase();
+                        if (!map.has(appId)) map.set(appId, []);
+                        map.get(appId).push(toplevel);
                     }
 
                     var values = [];
+                    const pinnedApps = ConfigOptions?.dock?.pinnedApps ?? [];
+
+                    for (const appId of pinnedApps) {
+                        values.push({ appId, isPinnedApp: true});
+                    }
 
                     for (const [key, value] of map) {
-                        values.push({ appId: key, toplevels: value });
+                        let pinnedIndex = pinnedApps.indexOf(key);
+                        if(pinnedIndex < 0) {
+                            values.push({ appId: key, toplevels: value });
+                        } else {
+                            values[pinnedIndex].toplevels = value;
+                            values[pinnedIndex].isRunning = true;
+                        }
                     }
 
                     return values;
                 }
             }
-            delegate: DockAppButton {
-                required property var modelData
-                appToplevel: modelData
-                appListRoot: root
+
+            delegate: Item {
+                id: buttonWrapper
+
+                property int buttonIndex: index
+
+                implicitWidth: appButton.implicitWidth + (buttonIndex === pinnedCount ? separator.implicitWidth + rowLayout.spacing : 0)
+                implicitHeight: appButton.implicitHeight
+
+                RowLayout {
+
+                    spacing: rowLayout.spacing
+
+                    DockSeparator {
+                        id: separator
+                        visible: buttonIndex === pinnedCount
+                    }
+
+                    DockAppButton {
+                        id: appButton
+                        appToplevel: modelData
+                        appListRoot: root
+                    }
+                }
             }
         }
     }
