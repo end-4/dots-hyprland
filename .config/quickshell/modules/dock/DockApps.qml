@@ -23,59 +23,66 @@ Item {
     property Item lastHoveredButton
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
-    property var parentWindow: root.QsWindow
-    property real popupX: parentWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, root.lastHoveredButton?.height / 2).x - implicitWidth / 2
-        ?? 0
-    implicitWidth: rowLayout.implicitWidth
-    implicitHeight: rowLayout.implicitHeight
 
-    RowLayout {
-        id: rowLayout
+    Layout.fillHeight: true
+    Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
+    implicitWidth: listView.implicitWidth
+    
+    StyledListView {
+        id: listView
         spacing: 2
+        orientation: ListView.Horizontal
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+        }
+        implicitWidth: contentWidth
 
-        Repeater {
-            model: ScriptModel {
-                objectProp: "appId"
-                values: {
-                    var map = new Map();
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
 
-                    // Pinned apps
-                    const pinnedApps = ConfigOptions?.dock.pinnedApps ?? [];
-                    for (const appId of pinnedApps) {
-                        if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
-                            pinned: true,
-                            toplevels: []
-                        }));
-                    }
+        model: ScriptModel {
+            objectProp: "appId"
+            values: {
+                var map = new Map();
 
-                    // Separator
-                    if (pinnedApps.length > 0) {
-                        map.set("SEPARATOR", { pinned: false, toplevels: [] });
-                    }
-                    
-                    // Open windows
-                    for (const toplevel of ToplevelManager.toplevels.values) {
-                        if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
-                            pinned: false,
-                            toplevels: []
-                        }));
-                        map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
-                    }
-
-                    var values = [];
-
-                    for (const [key, value] of map) {
-                        values.push({ appId: key, toplevels: value.toplevels, pinned: value.pinned });
-                    }
-
-                    return values;
+                // Pinned apps
+                const pinnedApps = ConfigOptions?.dock.pinnedApps ?? [];
+                for (const appId of pinnedApps) {
+                    if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
+                        pinned: true,
+                        toplevels: []
+                    }));
                 }
+
+                // Separator
+                if (pinnedApps.length > 0) {
+                    map.set("SEPARATOR", { pinned: false, toplevels: [] });
+                }
+                
+                // Open windows
+                for (const toplevel of ToplevelManager.toplevels.values) {
+                    if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
+                        pinned: false,
+                        toplevels: []
+                    }));
+                    map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
+                }
+
+                var values = [];
+
+                for (const [key, value] of map) {
+                    values.push({ appId: key, toplevels: value.toplevels, pinned: value.pinned });
+                }
+
+                return values;
             }
-            delegate: DockAppButton {
-                required property var modelData
-                appToplevel: modelData
-                appListRoot: root
-            }
+        }
+        delegate: DockAppButton {
+            required property var modelData
+            appToplevel: modelData
+            appListRoot: root
         }
     }
 
