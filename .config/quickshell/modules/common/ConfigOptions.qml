@@ -25,7 +25,7 @@ Singleton {
         property string imageViewer: "loupe"
         property string network: "better-control --wifi"
         property string networkEthernet: "systemsettings kcm_networkmanagement"
-        property string settings: "systemsettings kcm_bluetooth"
+        property string settings: "systemsettings"
         property string taskManager: "plasma-systemmonitor --page-name Processes"
         property string terminal: "kitty -1" // This is only for shell actions
     }
