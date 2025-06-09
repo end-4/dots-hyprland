@@ -21,13 +21,14 @@ DockButton {
     property real iconSize: 35
     property real countDotWidth: 10
     property real countDotHeight: 4
-    property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+    property bool appIsActive: !appToplevel.toplevels ? false : appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+    property DesktopEntry entry: DesktopEntries.byId(modelData.appId)
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
-        acceptedButtons: Qt.NoButton
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         onEntered: {
             appListRoot.lastHoveredButton = appButton
             appListRoot.buttonHovered = true
