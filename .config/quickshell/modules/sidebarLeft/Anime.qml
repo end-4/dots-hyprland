@@ -562,8 +562,10 @@ Item {
                     text: "•"
                 }
 
-                Rectangle { // NSFW toggle
+                Item { // NSFW toggle
+                    visible: width > 0
                     implicitWidth: switchesRow.implicitWidth
+                    Layout.fillHeight: true
 
                     RowLayout {
                         id: switchesRow

@@ -19,9 +19,6 @@ Singleton {
 
     PwObjectTracker {
         objects: [sink, source]
-        Component.onCompleted: {
-            sink.audio.volume = sink.audio.volume; // Trigger initial volume change
-        }
     }
 
     Connections { // Protection against sudden volume changes
