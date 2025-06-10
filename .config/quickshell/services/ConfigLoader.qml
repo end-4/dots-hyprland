@@ -20,23 +20,30 @@ Singleton {
     id: root
     property string filePath: Directories.shellConfigPath
     property bool firstLoad: true
+    property bool preventNextLoad: false
 
     function loadConfig() {
         configFileView.reload()
     }
 
     function applyConfig(fileContent) {
+        console.log("[ConfigLoader] Applying config from file:", root.filePath);
         try {
+            if (fileContent.trim() === "") {
+                console.warn("[ConfigLoader] Config file is empty, skipping load.");
+                return;
+            }
             const json = JSON.parse(fileContent);
 
             ObjectUtils.applyToQtObject(ConfigOptions, json);
             if (root.firstLoad) {
                 root.firstLoad = false;
-            } else {
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                root.preventNextLoad = true;
+                root.saveConfig(); // Make sure new properties are added to the user's config file
             }
         } catch (e) {
             console.error("[ConfigLoader] Error reading file:", e);
+            console.log("[ConfigLoader] File content was:", fileContent);
             Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
             return;
 
@@ -85,7 +92,16 @@ Singleton {
         interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
         running: false
         onTriggered: {
-            root.applyConfig(configFileView.text())
+            if (root.preventNextLoad) {
+                root.preventNextLoad = false;
+                return;
+            }
+            if (root.firstLoad) {
+                root.applyConfig(configFileView.text())
+            } else {
+                root.applyConfig(configFileView.text())
+                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+            }
         }
     }
 
@@ -94,13 +110,12 @@ Singleton {
         path: Qt.resolvedUrl(root.filePath)
         watchChanges: true
         onFileChanged: {
-            console.log("[ConfigLoader] File changed, reloading...")
             this.reload()
             delayedFileRead.start()
         }
         onLoadedChanged: {
             const fileContent = configFileView.text()
-            root.applyConfig(fileContent)
+            delayedFileRead.start()
         }
         onLoadFailed: (error) => {
             if(error == FileViewError.FileNotFound) {
