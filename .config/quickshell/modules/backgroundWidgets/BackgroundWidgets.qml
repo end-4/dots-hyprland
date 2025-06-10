@@ -58,12 +58,13 @@ Scope {
 
         Loader {
             required property var modelData
+            readonly property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
             active: !ToplevelManager.activeToplevel?.activated
             sourceComponent: PanelWindow { // Window
                 id: windowRoot
                 screen: modelData
-                property var textHorizontalAlignment: root.centerX < windowRoot.width / 3 ? Text.AlignLeft :
-                    (root.centerX > windowRoot.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
+                property var textHorizontalAlignment: root.centerX / monitor.scale < windowRoot.width / 3 ? Text.AlignLeft :
+                    (root.centerX / monitor.scale > windowRoot.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
 
                 WlrLayershell.layer: WlrLayer.Bottom
                 WlrLayershell.namespace: "quickshell:backgroundWidgets"
@@ -90,8 +91,8 @@ Scope {
                     anchors {
                         left: parent.left
                         top: parent.top
-                        leftMargin: root.centerX - implicitWidth / 2
-                        topMargin: root.centerY - implicitHeight / 2
+                        leftMargin: (root.centerX / monitor.scale - implicitWidth / 2)
+                        topMargin: (root.centerY / monitor.scale - implicitHeight / 2)
                         Behavior on leftMargin {
                             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                         }
