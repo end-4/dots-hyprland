@@ -233,9 +233,9 @@ switch() {
     deactivate
 
     # Pass screen width, height, and wallpaper path to post_process
-    min_width_desired="$(hyprctl monitors -j | jq '([.[].width] | max)' | xargs)"
-    min_height_desired="$(hyprctl monitors -j | jq '([.[].height] | max)' | xargs)"
-    post_process "$min_width_desired" "$min_height_desired" "$imgpath"
+    max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
+    max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
+    post_process "$max_width_desired" "$max_height_desired" "$imgpath"
 }
 
 main() {
