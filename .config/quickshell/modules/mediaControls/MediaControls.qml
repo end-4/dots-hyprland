@@ -54,7 +54,7 @@ Scope {
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
                 if (p1.trackTitle && p2.trackTitle &&
-                    (p1.trackTitle.startsWith(p2.trackTitle) || p2.trackTitle.startsWith(p1.trackTitle))) {
+                    (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle))) {
                     group.push(j);
                 }
             }
@@ -81,8 +81,7 @@ Scope {
         stdout: SplitParser {
             onRead: data => {
                 // Parse `;`-separated values into the visualizerPoints array
-                let allPoints = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
-                let points = allPoints.slice(Math.floor(allPoints.length / 2), allPoints.length);
+                let points = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
                 root.visualizerPoints = points;
             }
         }

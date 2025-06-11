@@ -27,6 +27,7 @@ Item { // Player instance
     property bool downloaded: false
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
+    property int visualizerSmoothing: 2 // Number of points to average for smoothing
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
@@ -168,7 +169,7 @@ Item { // Player instance
 
                 // Smoothing: simple moving average (optional)
                 var smoothPoints = [];
-                var smoothWindow = 3; // adjust for more/less smoothing
+                var smoothWindow = playerController.visualizerSmoothing; // adjust for more/less smoothing
                 for (var i = 0; i < n; ++i) {
                     var sum = 0, count = 0;
                     for (var j = -smoothWindow; j <= smoothWindow; ++j) {
@@ -178,6 +179,7 @@ Item { // Player instance
                     }
                     smoothPoints.push(sum / count);
                 }
+                if (!playerController.player?.isPlaying) smoothedPoints.fill(0); // If not playing, show no points
 
                 ctx.beginPath();
                 ctx.moveTo(0, h);
@@ -193,7 +195,7 @@ Item { // Player instance
                     blendedColors.colPrimary.r,
                     blendedColors.colPrimary.g,
                     blendedColors.colPrimary.b,
-                    0.25
+                    0.15
                 );
                 ctx.fill();
             }
@@ -205,15 +207,14 @@ Item { // Player instance
             }
 
             layer.enabled: true
-            layer.effect: MultiEffect { // Blur a tiny bit to obscure away the points
+            layer.effect: MultiEffect { // Blur a bit to obscure away the points
                 source: visualizerCanvas
                 saturation: 0.2
                 blurEnabled: true
-                blurMax: 6
+                blurMax: 7
                 blur: 1
             }
         }
-        
 
         RowLayout {
             anchors.fill: parent
