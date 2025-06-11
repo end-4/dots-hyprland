@@ -15,6 +15,9 @@ RippleButton {
     property string displayText: ""
     colBackground: Appearance.colors.colLayer2
 
+    implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
+    implicitHeight: contentItem.implicitHeight + verticalPadding * 2
+
     contentItem: Item {
         anchors.centerIn: parent
         implicitWidth: languageRow.implicitWidth

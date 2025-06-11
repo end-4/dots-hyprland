@@ -32,9 +32,6 @@ Button {
     property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
     property color colRippleToggled: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
-    implicitWidth: contentItem.implicitWidth + horizontalPadding * 2
-    implicitHeight: contentItem.implicitHeight + verticalPadding * 2
-
     property color buttonColor: root.enabled ? (root.toggled ? 
         (root.hovered ? colBackgroundToggledHover : 
             colBackgroundToggled) :
