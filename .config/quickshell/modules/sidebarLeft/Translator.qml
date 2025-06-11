@@ -99,116 +99,120 @@ Item {
             getLanguagesProc.bufferList = []; // Clear the buffer
         }
     }
-    
-    Flickable {
+
+    ColumnLayout {
         anchors.fill: parent
-        contentHeight: contentColumn.implicitHeight
+        Flickable {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            contentHeight: contentColumn.implicitHeight
 
-        ColumnLayout {
-            id: contentColumn
-            anchors.fill: parent
+            ColumnLayout {
+                id: contentColumn
+                anchors.fill: parent
 
-            LanguageSelectorButton { // Source language button
-                id: sourceLanguageButton
-                displayText: root.sourceLanguage
-                onClicked: {
-                    root.showLanguageSelectorDialog(false);
-                }
-            }
-
-            TextCanvas { // Content input
-                id: inputCanvas
-                isInput: true
-                placeholderText: qsTr("Enter text to translate...")
-                onInputTextChanged: {
-                    translateTimer.restart();
-                }
-                GroupButton {
-                    id: pasteButton
-                    baseWidth: height
-                    buttonRadius: Appearance.rounding.small
-                    contentItem: MaterialSymbol {
-                        anchors.centerIn: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        iconSize: Appearance.font.pixelSize.larger
-                        text: "content_paste"
-                        color: deleteButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
-                    }
+                LanguageSelectorButton { // Target language button
+                    id: targetLanguageButton
+                    displayText: root.targetLanguage
                     onClicked: {
-                        root.inputField.text = Quickshell.clipboardText
+                        root.showLanguageSelectorDialog(true);
                     }
                 }
-                GroupButton {
-                    id: deleteButton
-                    baseWidth: height
-                    buttonRadius: Appearance.rounding.small
-                    enabled: inputCanvas.inputTextArea.text.length > 0
-                    contentItem: MaterialSymbol {
-                        anchors.centerIn: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        iconSize: Appearance.font.pixelSize.larger
-                        text: "close"
-                        color: deleteButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
-                    }
-                    onClicked: {
-                        root.inputField.text = ""
-                    }
-                }
-            }
 
-            LanguageSelectorButton { // Target language button
-                id: targetLanguageButton
-                displayText: root.targetLanguage
-                onClicked: {
-                    root.showLanguageSelectorDialog(true);
-                }
-            }
-
-            TextCanvas { // Content translation
-                id: outputCanvas
-                isInput: false
-                placeholderText: qsTr("Translation goes here...")
-                property bool hasTranslation: (root.translatedText.trim().length > 0)
-                text: hasTranslation ? root.translatedText : ""
-                GroupButton {
-                    id: copyButton
-                    baseWidth: height
-                    buttonRadius: Appearance.rounding.small
-                    enabled: outputCanvas.displayedText.trim().length > 0
-                    contentItem: MaterialSymbol {
-                        anchors.centerIn: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        iconSize: Appearance.font.pixelSize.larger
-                        text: "content_copy"
-                        color: copyButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
-                    }
-                    onClicked: {
-                        Quickshell.clipboardText = outputCanvas.displayedText
-                    }
-                }
-                GroupButton {
-                    id: searchButton
-                    baseWidth: height
-                    buttonRadius: Appearance.rounding.small
-                    enabled: outputCanvas.displayedText.trim().length > 0
-                    contentItem: MaterialSymbol {
-                        anchors.centerIn: parent
-                        horizontalAlignment: Text.AlignHCenter
-                        iconSize: Appearance.font.pixelSize.larger
-                        text: "travel_explore"
-                        color: searchButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
-                    }
-                    onClicked: {
-                        let url = ConfigOptions.search.engineBaseUrl + outputCanvas.displayedText;
-                        for (let site of ConfigOptions.search.excludedSites) {
-                            url += ` -site:${site}`;
+                TextCanvas { // Content translation
+                    id: outputCanvas
+                    isInput: false
+                    placeholderText: qsTr("Translation goes here...")
+                    property bool hasTranslation: (root.translatedText.trim().length > 0)
+                    text: hasTranslation ? root.translatedText : ""
+                    GroupButton {
+                        id: copyButton
+                        baseWidth: height
+                        buttonRadius: Appearance.rounding.small
+                        enabled: outputCanvas.displayedText.trim().length > 0
+                        contentItem: MaterialSymbol {
+                            anchors.centerIn: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            iconSize: Appearance.font.pixelSize.larger
+                            text: "content_copy"
+                            color: copyButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
                         }
-                        Qt.openUrlExternally(url);
+                        onClicked: {
+                            Quickshell.clipboardText = outputCanvas.displayedText
+                        }
+                    }
+                    GroupButton {
+                        id: searchButton
+                        baseWidth: height
+                        buttonRadius: Appearance.rounding.small
+                        enabled: outputCanvas.displayedText.trim().length > 0
+                        contentItem: MaterialSymbol {
+                            anchors.centerIn: parent
+                            horizontalAlignment: Text.AlignHCenter
+                            iconSize: Appearance.font.pixelSize.larger
+                            text: "travel_explore"
+                            color: searchButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
+                        }
+                        onClicked: {
+                            let url = ConfigOptions.search.engineBaseUrl + outputCanvas.displayedText;
+                            for (let site of ConfigOptions.search.excludedSites) {
+                                url += ` -site:${site}`;
+                            }
+                            Qt.openUrlExternally(url);
+                        }
                     }
                 }
-            }
 
-        }    
+            }    
+        }
+
+        LanguageSelectorButton { // Source language button
+            id: sourceLanguageButton
+            displayText: root.sourceLanguage
+            onClicked: {
+                root.showLanguageSelectorDialog(false);
+            }
+        }
+
+        TextCanvas { // Content input
+            id: inputCanvas
+            isInput: true
+            placeholderText: qsTr("Enter text to translate...")
+            onInputTextChanged: {
+                translateTimer.restart();
+            }
+            GroupButton {
+                id: pasteButton
+                baseWidth: height
+                buttonRadius: Appearance.rounding.small
+                contentItem: MaterialSymbol {
+                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    iconSize: Appearance.font.pixelSize.larger
+                    text: "content_paste"
+                    color: deleteButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
+                }
+                onClicked: {
+                    root.inputField.text = Quickshell.clipboardText
+                }
+            }
+            GroupButton {
+                id: deleteButton
+                baseWidth: height
+                buttonRadius: Appearance.rounding.small
+                enabled: inputCanvas.inputTextArea.text.length > 0
+                contentItem: MaterialSymbol {
+                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    iconSize: Appearance.font.pixelSize.larger
+                    text: "close"
+                    color: deleteButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
+                }
+                onClicked: {
+                    root.inputField.text = ""
+                }
+            }
+        }
     }
 
     Loader {
@@ -234,6 +238,8 @@ Item {
                     root.sourceLanguage = result;
                     ConfigOptions.language.translator.sourceLanguage = result; // Save to config
                 }
+
+                translateTimer.restart(); // Restart translation after language change
             }
         }
     }
