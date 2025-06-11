@@ -7,7 +7,7 @@ import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
-    toggled: idleInhibitor.running
+    toggled: false
     buttonIcon: "coffee"
     onClicked: {
         if (toggled) {
