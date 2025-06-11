@@ -47,7 +47,7 @@ Item {
         repeat: false
         onTriggered: () => {
             if (root.inputField.text.trim().length > 0) {
-                console.log("Translating with command:", translateProc.command);
+                // console.log("Translating with command:", translateProc.command);
                 translateProc.running = false;
                 translateProc.buffer = ""; // Clear the buffer
                 translateProc.running = true; // Restart the process
@@ -72,8 +72,8 @@ Item {
         onExited: (exitCode, exitStatus) => {
             // 1. Split into sections by double newlines
             const sections = translateProc.buffer.trim().split(/\n\s*\n/);
-            console.log("BUFFER:", translateProc.buffer);
-            console.log("SECTIONS:", sections);
+            // console.log("BUFFER:", translateProc.buffer);
+            // console.log("SECTIONS:", sections);
 
             // 2. Extract relevant data
             root.translatedText = sections.length > 1 ? sections[1].trim() : "";

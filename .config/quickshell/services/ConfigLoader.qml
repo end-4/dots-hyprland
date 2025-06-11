@@ -23,16 +23,11 @@ Singleton {
     property bool preventNextLoad: false
     property var preventNextNotification: false
 
-    onPreventNextNotificationChanged: {
-        console.log("HMM: preventNextNotification:", root.preventNextNotification);
-    }
-
     function loadConfig() {
         configFileView.reload()
     }
 
     function applyConfig(fileContent) {
-        console.log("[ConfigLoader] Applying config from file:", root.filePath);
         try {
             if (fileContent.trim() === "") {
                 console.warn("[ConfigLoader] Config file is empty, skipping load.");
@@ -82,8 +77,6 @@ Singleton {
             }
         }
 
-        console.log(parents.join("."));
-        console.log(`[ConfigLoader] Setting live config value: ${nestedKey} = ${convertedValue}`);
         obj[keys[keys.length - 1]] = convertedValue;
     }
 
@@ -95,7 +88,6 @@ Singleton {
     function setConfigValueAndSave(nestedKey, value, preventNextNotification = true) {
         setLiveConfigValue(nestedKey, value);
         root.preventNextNotification = preventNextNotification;
-        console.log("SETTING: preventNextNotification:", root.preventNextNotification);
         saveConfig();
     }
 
@@ -104,7 +96,6 @@ Singleton {
         interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
         running: false
         onTriggered: {
-            console.log("GONNA APPLY KONFIG preventNextNotification:", root.preventNextNotification);
             if (root.preventNextLoad) {
                 root.preventNextLoad = false;
                 return;
@@ -112,12 +103,11 @@ Singleton {
             if (root.firstLoad) {
                 root.applyConfig(configFileView.text())
             } else {
-                console.log("APPLYING: preventNextNotification:", root.preventNextNotification);
                 root.applyConfig(configFileView.text())
                 if (!root.preventNextNotification) {
-                    Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                    // Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
                 } else {
-                    // root.preventNextNotification = false;
+                    root.preventNextNotification = false;
                 }
             }
         }
