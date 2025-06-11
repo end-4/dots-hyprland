@@ -62,7 +62,7 @@ Item {
             lineWidth: 2
             value: activePlayer?.position / activePlayer?.length
             size: 26
-            secondaryColor: Appearance.m3colors.m3secondaryContainer
+            secondaryColor: Appearance.colors.colSecondaryContainer
             primaryColor: Appearance.m3colors.m3onSecondaryContainer
 
             MaterialSymbol {

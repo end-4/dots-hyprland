@@ -161,7 +161,7 @@ Item {
 
         Rectangle { // The dialog
             id: dialog
-            color: Appearance.m3colors.m3surfaceContainerHigh
+            color: Appearance.colors.colSurfaceContainerHigh
             radius: Appearance.rounding.normal
             anchors.left: parent.left
             anchors.right: parent.right

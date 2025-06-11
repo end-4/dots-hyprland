@@ -106,7 +106,7 @@ DockButton {
                         implicitWidth: (appToplevel.toplevels.length <= 3) ? 
                             root.countDotWidth : root.countDotHeight // Circles when too many
                         implicitHeight: root.countDotHeight
-                        color: appIsActive ? Appearance.m3colors.m3primary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)
+                        color: appIsActive ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)
                     }
                 }
             }

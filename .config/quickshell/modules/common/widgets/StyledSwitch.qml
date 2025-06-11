@@ -13,7 +13,7 @@ Switch {
     implicitHeight: 32 * root.scale
     implicitWidth: 52 * root.scale
     property color activeColor: Appearance?.colors.colPrimary ?? "#685496"
-    property color inactiveColor: Appearance?.m3colors.m3surfaceContainerHighest ?? "#45464F"
+    property color inactiveColor: Appearance?.colors.colSurfaceContainerHighest ?? "#45464F"
 
     PointingHandInteraction {}
 

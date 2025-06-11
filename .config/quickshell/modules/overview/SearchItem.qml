@@ -80,7 +80,7 @@ RippleButton {
     buttonRadius: Appearance.rounding.normal
     colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : 
         ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : 
-        ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainerHigh, 1))
+        ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh, 1))
     colBackgroundHover: Appearance.colors.colLayer1Hover
     colRipple: Appearance.colors.colLayer1Active
 

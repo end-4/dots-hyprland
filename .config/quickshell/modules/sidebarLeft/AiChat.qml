@@ -345,7 +345,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin 
                 + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + columnSpacing, 45)
             clip: true
-            border.color: Appearance.m3colors.m3outlineVariant
+            border.color: Appearance.colors.colOutlineVariant
             border.width: 1
 
             Behavior on implicitHeight {

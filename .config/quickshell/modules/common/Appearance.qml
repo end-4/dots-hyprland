@@ -15,11 +15,11 @@ Singleton {
     property QtObject sizes
     property string syntaxHighlightingTheme
 
-    // [!] Enabling transparency can affect readability when using light theme.
+    // Extremely conservative transparency values for consistency and readability
     property real transparency: 0
     property real contentTransparency: 0
-    // property real transparency: 0.15
-    // property real contentTransparency: 0.5
+    // property real transparency: m3colors.darkmode ? 0.05 : 0
+    // property real contentTransparency: m3colors.darkmode ? 0.18 : 0
 
     m3colors: QtObject {
         property bool darkmode: false
@@ -106,10 +106,10 @@ Singleton {
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.9, root.contentTransparency))
         property color colLayer0Active: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.8, root.contentTransparency))
-        property color colLayer1: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainerLow, m3colors.m3background, 0.7), root.contentTransparency);
+        property color colLayer1: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainerLow, m3colors.m3background, 0.8), root.contentTransparency);
         property color colOnLayer1: m3colors.m3onSurfaceVariant;
         property color colOnLayer1Inactive: ColorUtils.mix(colOnLayer1, colLayer1, 0.45);
-        property color colLayer2: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.55), root.contentTransparency)
+        property color colLayer2: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainer, m3colors.m3surfaceContainerHigh, 0.7), root.contentTransparency)
         property color colOnLayer2: m3colors.m3onSurface;
         property color colOnLayer2Disabled: ColorUtils.mix(colOnLayer2, m3colors.m3background, 0.4);
         property color colLayer3: ColorUtils.transparentize(ColorUtils.mix(m3colors.m3surfaceContainerHigh, m3colors.m3onSurface, 0.96), root.contentTransparency)
@@ -127,16 +127,23 @@ Singleton {
         property color colPrimaryContainer: m3colors.m3primaryContainer
         property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Hover, 0.7)
         property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Active, 0.6)
+        property color colSecondary: m3colors.m3secondary
         property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
+        property color colSecondaryContainer: ColorUtils.transparentize(m3colors.m3secondaryContainer, root.contentTransparency)
         property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)
         property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
+        property color colSurfaceContainerLow: ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency)
+        property color colSurfaceContainer: ColorUtils.transparentize(m3colors.m3surfaceContainer, root.contentTransparency)
+        property color colSurfaceContainerHigh: ColorUtils.transparentize(m3colors.m3surfaceContainerHigh, root.contentTransparency)
+        property color colSurfaceContainerHighest: ColorUtils.transparentize(m3colors.m3surfaceContainerHighest, root.contentTransparency)
         property color colSurfaceContainerHighestHover: ColorUtils.mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.95)
         property color colSurfaceContainerHighestActive: ColorUtils.mix(m3colors.m3surfaceContainerHighest, m3colors.m3onSurface, 0.85)
         property color colTooltip: m3colors.darkmode ? ColorUtils.mix(m3colors.m3background, "#3C4043", 0.5) : "#3C4043" // m3colors.m3inverseSurface in the specs, but the m3 website actually uses #3C4043
         property color colOnTooltip: "#F8F9FA" // m3colors.m3inverseOnSurface in the specs, but the m3 website actually uses this color
         property color colScrim: ColorUtils.transparentize(m3colors.m3scrim, 0.5)
         property color colShadow: ColorUtils.transparentize(m3colors.m3shadow, 0.7)
+        property color colOutlineVariant: m3colors.m3outlineVariant
     }
 
     rounding: QtObject {

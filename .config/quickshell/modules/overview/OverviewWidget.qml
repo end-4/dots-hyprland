@@ -25,7 +25,7 @@ Item {
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale: ConfigOptions.overview.scale
-    property color activeBorderColor: Appearance.m3colors.m3secondary
+    property color activeBorderColor: Appearance.colors.colSecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
         ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :

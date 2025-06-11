@@ -24,7 +24,7 @@ Scope {
         Layout.bottomMargin: barHeight / 3
         Layout.fillHeight: true
         implicitWidth: 1
-        color: Appearance.m3colors.m3outlineVariant
+        color: Appearance.colors.colOutlineVariant
     }
 
     Variants { // For each monitor
@@ -149,7 +149,7 @@ Scope {
                                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
                                 colBackgroundHover: Appearance.colors.colLayer1Hover
                                 colRipple: Appearance.colors.colLayer1Active
-                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggled: Appearance.colors.colSecondaryContainer
                                 colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                                 colRippleToggled: Appearance.colors.colSecondaryContainerActive
                                 toggled: GlobalStates.sidebarLeftOpen
@@ -346,7 +346,7 @@ Scope {
                                 colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
                                 colBackgroundHover: Appearance.colors.colLayer1Hover
                                 colRipple: Appearance.colors.colLayer1Active
-                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggled: Appearance.colors.colSecondaryContainer
                                 colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                                 colRippleToggled: Appearance.colors.colSecondaryContainerActive
                                 toggled: GlobalStates.sidebarRightOpen

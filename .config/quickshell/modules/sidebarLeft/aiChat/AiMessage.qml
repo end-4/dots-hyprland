@@ -91,7 +91,7 @@ Rectangle {
 
             Rectangle { // Name
                 id: nameWrapper
-                color: Appearance.m3colors.m3secondaryContainer
+                color: Appearance.colors.colSecondaryContainer
                 // color: "transparent"
                 radius: Appearance.rounding.small
                 implicitHeight: Math.max(nameRowLayout.implicitHeight + 5 * 2, 30)

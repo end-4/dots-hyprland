@@ -111,7 +111,7 @@ Scope { // Scope
                         Layout.bottomMargin: 20
                         Layout.fillHeight: true
                         implicitWidth: 1
-                        color: Appearance.m3colors.m3outlineVariant
+                        color: Appearance.colors.colOutlineVariant
                     }
                     OskContent {
                         id: oskContent

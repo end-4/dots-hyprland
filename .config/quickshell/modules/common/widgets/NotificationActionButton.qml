@@ -15,7 +15,7 @@ RippleButton {
     leftPadding: 15
     rightPadding: 15
     buttonRadius: Appearance.rounding.small
-    colBackground: (urgency == NotificationUrgency.Critical) ? Appearance.m3colors.m3secondaryContainer : Appearance.m3colors.m3surfaceContainerHighest
+    colBackground: (urgency == NotificationUrgency.Critical) ? Appearance.colors.colSecondaryContainer : Appearance.colors.colSurfaceContainerHighest
     colBackgroundHover: (urgency == NotificationUrgency.Critical) ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSurfaceContainerHighestHover
     colRipple: (urgency == NotificationUrgency.Critical) ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colSurfaceContainerHighestActive
 

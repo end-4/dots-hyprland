@@ -48,7 +48,7 @@ Rectangle {
             lineWidth: 2
             value: percentage
             size: 26
-            secondaryColor: (isLow && !isCharging) ? batteryLowBackground : Appearance.m3colors.m3secondaryContainer
+            secondaryColor: (isLow && !isCharging) ? batteryLowBackground : Appearance.colors.colSecondaryContainer
             primaryColor: (isLow && !isCharging) ? batteryLowOnBackground : Appearance.m3colors.m3onSecondaryContainer
             fill: (isLow && !isCharging)
 

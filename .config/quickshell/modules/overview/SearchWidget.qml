@@ -219,7 +219,7 @@ Item { // Wrapper
                     }
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-                    selectionColor: Appearance.m3colors.m3secondaryContainer
+                    selectionColor: Appearance.colors.colSecondaryContainer
                     placeholderText: qsTr("Search, calculate or run")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
@@ -260,7 +260,7 @@ Item { // Wrapper
                 visible: root.showResults
                 Layout.fillWidth: true
                 height: 1
-                color: Appearance.m3colors.m3outlineVariant
+                color: Appearance.colors.colOutlineVariant
             }
 
             ListView { // App results

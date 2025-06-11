@@ -17,17 +17,17 @@ Scope {
     property string filePath: `${Directories.state}/user/generated/wallpaper/least_busy_region.json`
     property real centerX: 0
     property real centerY: 0
-    property color dominantColor: Appearance.m3colors.m3primary
+    property color dominantColor: Appearance.colors.colPrimary
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
-    property color colBackground: ColorUtils.transparentize(ColorUtils.mix(Appearance.m3colors.m3primary, Appearance.m3colors.m3secondaryContainer), 1)
-    property color colText: ColorUtils.colorWithLightness(Appearance.m3colors.m3primary, (root.dominantColorIsDark ? 0.8 : 0.12))
+    property color colBackground: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer), 1)
+    property color colText: ColorUtils.colorWithLightness(Appearance.colors.colPrimary, (root.dominantColorIsDark ? 0.8 : 0.12))
 
     function updateWidgetPosition(fileContent) {
         // console.log("[BackgroundWidgets] Updating widget position with content:", fileContent)
         const parsedContent = JSON.parse(fileContent)
         root.centerX = parsedContent.center_x
         root.centerY = parsedContent.center_y
-        root.dominantColor = parsedContent.dominant_color || Appearance.m3colors.m3primary
+        root.dominantColor = parsedContent.dominant_color || Appearance.colors.colPrimary
     }
     
     Timer {

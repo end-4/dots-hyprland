@@ -120,7 +120,7 @@ ColumnLayout {
         font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
         font.pixelSize: Appearance.font.pixelSize.small
         selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-        selectionColor: Appearance.m3colors.m3secondaryContainer
+        selectionColor: Appearance.colors.colSecondaryContainer
         wrapMode: TextEdit.Wrap
         color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
         textFormat: renderMarkdown ? TextEdit.MarkdownText : TextEdit.PlainText

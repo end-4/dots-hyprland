@@ -9,5 +9,5 @@ Rectangle {
     Layout.bottomMargin: Appearance.sizes.hyprlandGapsOut + dockRow.padding + Appearance.rounding.normal
     Layout.fillHeight: true
     implicitWidth: 1
-    color: Appearance.m3colors.m3outlineVariant
+    color: Appearance.colors.colOutlineVariant
 }

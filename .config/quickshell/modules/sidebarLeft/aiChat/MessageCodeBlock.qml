@@ -40,7 +40,7 @@ ColumnLayout {
         topRightRadius: codeBlockBackgroundRounding
         bottomLeftRadius: Appearance.rounding.unsharpen
         bottomRightRadius: Appearance.rounding.unsharpen
-        color: Appearance.m3colors.m3surfaceContainerHighest
+        color: Appearance.colors.colSurfaceContainerHighest
         implicitHeight: codeBlockTitleBarRowLayout.implicitHeight + codeBlockHeaderPadding * 2
 
         RowLayout { // Language and buttons
@@ -209,7 +209,7 @@ ColumnLayout {
                     font.hintingPreference: Font.PreferNoHinting // Prevent weird bold text
                     font.pixelSize: Appearance.font.pixelSize.small
                     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
-                    selectionColor: Appearance.m3colors.m3secondaryContainer
+                    selectionColor: Appearance.colors.colSecondaryContainer
                     // wrapMode: TextEdit.Wrap
                     color: messageData.thinking ? Appearance.colors.colSubtext : Appearance.colors.colOnLayer1
 

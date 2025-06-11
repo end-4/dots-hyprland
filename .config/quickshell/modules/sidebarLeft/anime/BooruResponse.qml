@@ -67,7 +67,7 @@ Rectangle {
         RowLayout { // Header
             Rectangle { // Provider name
                 id: providerNameWrapper
-                color: Appearance.m3colors.m3secondaryContainer
+                color: Appearance.colors.colSecondaryContainer
                 radius: Appearance.rounding.small
                 implicitWidth: providerName.implicitWidth + 10 * 2
                 implicitHeight: Math.max(providerName.implicitHeight + 5 * 2, 30)
@@ -269,7 +269,7 @@ Rectangle {
             }
 
             buttonRadius: Appearance.rounding.small
-            colBackground: Appearance.m3colors.m3surfaceContainerHighest
+            colBackground: Appearance.colors.colSurfaceContainerHighest
             colBackgroundHover: Appearance.colors.colSurfaceContainerHighestHover
             colRipple: Appearance.colors.colSurfaceContainerHighestActive            
 

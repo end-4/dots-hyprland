@@ -113,7 +113,7 @@ Item { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: Appearance.m3colors.m3surfaceContainer
+        color: Appearance.colors.colSurfaceContainer
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 
