@@ -63,6 +63,14 @@ Singleton {
         ]
     }
 
+    property QtObject language: QtObject {
+        property QtObject translator: QtObject {
+            property string engine: "auto" // Run `trans -list-engines` for available engines. auto should use google
+            property string sourceLanguage: "auto"
+            property string targetLanguage: "English" // Run `trans -list-all` for available languages
+        }
+    }
+
     property QtObject networking: QtObject {
         property string userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     }
