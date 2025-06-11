@@ -29,12 +29,10 @@ Item {
 
     property bool showLanguageSelector: false
     property bool languageSelectorTarget: false // true for target language, false for source language
-    property string languageSelectorLanguage: ""
 
     function showLanguageSelectorDialog(isTargetLang: bool) {
-        root.showLanguageSelector = true
         root.languageSelectorTarget = isTargetLang;
-        root.languageSelectorLanguage = isTargetLang ? root.targetLanguage : root.sourceLanguage;
+        root.showLanguageSelector = true
     }
 
     onFocusChanged: (focus) => {
@@ -93,9 +91,12 @@ Item {
             }
         }
         onExited: (exitCode, exitStatus) => {
-            root.languages = getLanguagesProc.bufferList
-                .filter(lang => lang.trim().length > 0) // Filter out empty lines
-                .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
+            // Ensure "auto" is always the first language
+            let langs = getLanguagesProc.bufferList
+                .filter(lang => lang.trim().length > 0 && lang !== "auto")
+                .sort((a, b) => a.localeCompare(b));
+            langs.unshift("auto");
+            root.languages = langs;
             getLanguagesProc.bufferList = []; // Clear the buffer
         }
     }
@@ -224,6 +225,7 @@ Item {
             id: languageSelectorDialog
             titleText: qsTr("Select Language")
             items: root.languages
+            defaultChoice: root.languageSelectorTarget ? root.targetLanguage : root.sourceLanguage
             onCanceled: () => {
                 root.showLanguageSelector = false;
             }
@@ -233,10 +235,10 @@ Item {
 
                 if (root.languageSelectorTarget) {
                     root.targetLanguage = result;
-                    ConfigOptions.language.translator.targetLanguage = result; // Save to config
+                    ConfigLoader.setConfigValueAndSave("language.translator.targetLanguage", result); // Save to config
                 } else {
                     root.sourceLanguage = result;
-                    ConfigOptions.language.translator.sourceLanguage = result; // Save to config
+                    ConfigLoader.setConfigValueAndSave("language.translator.sourceLanguage", result); // Save to config
                 }
 
                 translateTimer.restart(); // Restart translation after language change

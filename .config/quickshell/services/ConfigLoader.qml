@@ -14,13 +14,18 @@ import Qt.labs.platform
 /**
  * Loads and manages the shell configuration file.
  * The config file is by default at XDG_CONFIG_HOME/illogical-impulse/config.json.
- * Automatically reloaded when the file changes, but does not provide a way to save changes.
+ * Automatically reloaded when the file changes.
  */
 Singleton {
     id: root
     property string filePath: Directories.shellConfigPath
     property bool firstLoad: true
     property bool preventNextLoad: false
+    property var preventNextNotification: false
+
+    onPreventNextNotificationChanged: {
+        console.log("HMM: preventNextNotification:", root.preventNextNotification);
+    }
 
     function loadConfig() {
         configFileView.reload()
@@ -87,11 +92,19 @@ Singleton {
         Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(JSON.stringify(plainConfig, null, 2))}' > '${root.filePath}'`)
     }
 
+    function setConfigValueAndSave(nestedKey, value, preventNextNotification = true) {
+        setLiveConfigValue(nestedKey, value);
+        root.preventNextNotification = preventNextNotification;
+        console.log("SETTING: preventNextNotification:", root.preventNextNotification);
+        saveConfig();
+    }
+
     Timer {
         id: delayedFileRead
         interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
         running: false
         onTriggered: {
+            console.log("GONNA APPLY KONFIG preventNextNotification:", root.preventNextNotification);
             if (root.preventNextLoad) {
                 root.preventNextLoad = false;
                 return;
@@ -99,8 +112,13 @@ Singleton {
             if (root.firstLoad) {
                 root.applyConfig(configFileView.text())
             } else {
+                console.log("APPLYING: preventNextNotification:", root.preventNextNotification);
                 root.applyConfig(configFileView.text())
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                if (!root.preventNextNotification) {
+                    Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                } else {
+                    // root.preventNextNotification = false;
+                }
             }
         }
     }

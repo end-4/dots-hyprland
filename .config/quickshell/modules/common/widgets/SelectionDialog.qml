@@ -13,7 +13,8 @@ Item {
     property real dialogMargin: 30
     property string titleText: "Selection Dialog"
     property alias items: choiceModel.values
-    property int selectedId: -1 // -1 means no selection
+    property int selectedId: choiceListView.currentIndex
+    property var defaultChoice
 
     signal canceled();
     signal selected(var result);
@@ -68,6 +69,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 clip: true
+                currentIndex: root.defaultChoice !== undefined ? root.items.indexOf(root.defaultChoice) : -1
 
                 model: ScriptModel {
                     id: choiceModel
@@ -85,11 +87,11 @@ Item {
                     }
 
                     description: modelData.toString()
-                    checked: index === root.selectedId
+                    checked: index === choiceListView.currentIndex
 
                     onCheckedChanged: {
                         if (checked) {
-                            root.selectedId = index;
+                            choiceListView.currentIndex = index;
                         }
                     }
                 }
