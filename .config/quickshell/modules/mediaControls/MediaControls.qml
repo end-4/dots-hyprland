@@ -26,6 +26,7 @@ Scope {
     property real contentPadding: 13
     property real popupRounding: Appearance.rounding.screenRounding - Appearance.sizes.elevationMargin + 1
     property real artRounding: Appearance.rounding.verysmall
+    property list<real> visualizerPoints: []
 
     property bool hasPlasmaIntegration: false
     function isRealPlayer(player) {
@@ -68,13 +69,32 @@ Scope {
         return filtered;
     }
 
+    Process {
+        id: cavaProc
+        running: mediaControlsLoader.active
+        onRunningChanged: {
+            if (!cavaProc.running) {
+                root.visualizerPoints = [];
+            }
+        }
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.config)}/quickshell/scripts/cava/raw_output_config.txt`]
+        stdout: SplitParser {
+            onRead: data => {
+                // Parse `;`-separated values into the visualizerPoints array
+                let allPoints = data.split(";").map(p => parseFloat(p.trim())).filter(p => !isNaN(p));
+                let points = allPoints.slice(Math.floor(allPoints.length / 2), allPoints.length);
+                root.visualizerPoints = points;
+            }
+        }
+    }
+
     Loader {
         id: mediaControlsLoader
         active: false
 
         sourceComponent: PanelWindow {
             id: mediaControlsRoot
-            visible: mediaControlsLoader.active
+            visible: true
 
             exclusiveZone: 0
             implicitWidth: (
@@ -112,6 +132,7 @@ Scope {
                     delegate: PlayerControl {
                         required property MprisPlayer modelData
                         player: modelData
+                        visualizerPoints: root.visualizerPoints
                     }
                 }
             }
