@@ -40,7 +40,7 @@ Singleton {
             property bool showMicToggle: true
             property bool showKeyboardToggle: true
             property bool showScreenSnip: true
-            // property bool showColorPicker: true
+            property bool showColorPicker: true
         }
         property QtObject workspaces: QtObject {
             property int shown: 10
