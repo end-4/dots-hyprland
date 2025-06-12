@@ -25,6 +25,7 @@ Rectangle {
         CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Hyprland.dispatch("exec hyprshot --freeze --clipboard-only --mode region --silent")
+            visible: ConfigOptions.bar.utilButtons.showScreenSnip
 
             MaterialSymbol {
                 horizontalAlignment: Qt.AlignHCenter
@@ -39,6 +40,7 @@ Rectangle {
         // CircleUtilButton {
         //     Layout.alignment: Qt.AlignVCenter
         //     onClicked: Hyprland.dispatch("exec hyprpicker -a")
+        //     visible: ConfigOptions.bar.utilButtons.showColorPicker
 
         //     MaterialSymbol {
         //         horizontalAlignment: Qt.AlignHCenter
@@ -47,12 +49,12 @@ Rectangle {
         //         iconSize: Appearance.font.pixelSize.large
         //         color: Appearance.colors.colOnLayer2
         //     }
-
         // }
 
         CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Hyprland.dispatch("global quickshell:oskToggle")
+            visible: ConfigOptions.bar.utilButtons.showKeyboardToggle
 
             MaterialSymbol {
                 horizontalAlignment: Qt.AlignHCenter
@@ -67,6 +69,7 @@ Rectangle {
         CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: Hyprland.dispatch("exec wpctl set-mute @DEFAULT_SOURCE@ toggle")
+            visible: ConfigOptions.bar.utilButtons.showMicToggle && Pipewire.defaultAudioSource?.audio
 
             MaterialSymbol {
                 horizontalAlignment: Qt.AlignHCenter
