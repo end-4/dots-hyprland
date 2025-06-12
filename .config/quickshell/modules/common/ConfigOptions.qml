@@ -46,10 +46,10 @@ Singleton {
             property bool alwaysShowCpu: false
         }
         property QtObject utilButtons: QtObject {
-            property bool showMicToggle: true
-            property bool showKeyboardToggle: true
             property bool showScreenSnip: true
-            property bool showColorPicker: true
+            property bool showColorPicker: false
+            property bool showMicToggle: false
+            property bool showKeyboardToggle: true
         }
         property QtObject workspaces: QtObject {
             property int shown: 10
