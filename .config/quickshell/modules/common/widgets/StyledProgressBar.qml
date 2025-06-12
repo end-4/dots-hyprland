@@ -62,17 +62,17 @@ ProgressBar {
                 var phase = Date.now() / 400.0;
                 var centerY = height / 2;
 
+                ctx.strokeStyle = root.highlightColor;
+                ctx.lineWidth = parent.height;
+                ctx.lineCap = "round";
                 ctx.beginPath();
-                for (var x = 0; x <= fillWidth; x += 1) {
+                for (var x = ctx.lineWidth / 2; x <= fillWidth; x += 1) {
                     var waveY = centerY + amplitude * Math.sin(frequency * 2 * Math.PI * x / width + phase);
                     if (x === 0)
                         ctx.moveTo(x, waveY);
                     else
                         ctx.lineTo(x, waveY);
                 }
-                ctx.strokeStyle = root.highlightColor;
-                ctx.lineWidth = parent.height;
-                ctx.lineCap = "round";
                 ctx.stroke();
             }
             Connections {
