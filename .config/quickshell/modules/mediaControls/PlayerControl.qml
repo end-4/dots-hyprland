@@ -259,6 +259,7 @@ Item { // Player instance
                                 highlightColor: blendedColors.colPrimary
                                 trackColor: blendedColors.colSecondaryContainer
                                 value: playerController.player?.position / playerController.player?.length
+                                sperm: playerController.player?.isPlaying
                             }
                         }
                         TrackChangeButton {
