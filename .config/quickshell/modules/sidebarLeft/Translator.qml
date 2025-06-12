@@ -82,7 +82,7 @@ Item {
 
     Process {
         id: getLanguagesProc
-        command: ["trans", "-list-languages"]
+        command: ["trans", "-list-languages", "-no-bidi"]
         property list<string> bufferList: ["auto"]
         running: true
         stdout: SplitParser {
