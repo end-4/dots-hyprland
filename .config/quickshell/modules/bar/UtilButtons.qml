@@ -24,6 +24,7 @@ Rectangle {
 
         Loader {
             active: ConfigOptions.bar.utilButtons.showScreenSnip
+            visible: ConfigOptions.bar.utilButtons.showScreenSnip
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("exec hyprshot --freeze --clipboard-only --mode region --silent")
@@ -39,6 +40,7 @@ Rectangle {
 
          Loader {
              active: ConfigOptions.bar.utilButtons.showColorPicker
+             visible: ConfigOptions.bar.utilButtons.showColorPicker
              sourceComponent: CircleUtilButton {
                  Layout.alignment: Qt.AlignVCenter
                  onClicked: Hyprland.dispatch("exec hyprpicker -a")
@@ -54,6 +56,7 @@ Rectangle {
 
         Loader {
             active: ConfigOptions.bar.utilButtons.showKeyboardToggle
+            visible: ConfigOptions.bar.utilButtons.showKeyboardToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("global quickshell:oskToggle")
@@ -69,6 +72,7 @@ Rectangle {
 
         Loader {
             active: ConfigOptions.bar.utilButtons.showMicToggle
+            visible: ConfigOptions.bar.utilButtons.showMicToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("exec wpctl set-mute @DEFAULT_SOURCE@ toggle")
