@@ -153,67 +153,14 @@ Item { // Player instance
             }
         }
 
-        Canvas { // Visualizer
+        WaveVisualizer {
             id: visualizerCanvas
             anchors.fill: parent
-            onPaint: {
-                var ctx = getContext("2d");
-                ctx.clearRect(0, 0, width, height);
-
-                var points = playerController.visualizerPoints;
-                var maxVal = playerController.maxVisualizerValue || 1;
-                var h = height;
-                var w = width;
-                var n = points.length;
-                if (n < 2) return;
-
-                // Smoothing: simple moving average (optional)
-                var smoothPoints = [];
-                var smoothWindow = playerController.visualizerSmoothing; // adjust for more/less smoothing
-                for (var i = 0; i < n; ++i) {
-                    var sum = 0, count = 0;
-                    for (var j = -smoothWindow; j <= smoothWindow; ++j) {
-                        var idx = Math.max(0, Math.min(n - 1, i + j));
-                        sum += points[idx];
-                        count++;
-                    }
-                    smoothPoints.push(sum / count);
-                }
-                if (!playerController.player?.isPlaying) smoothedPoints.fill(0); // If not playing, show no points
-
-                ctx.beginPath();
-                ctx.moveTo(0, h);
-                for (var i = 0; i < n; ++i) {
-                    var x = i * w / (n - 1);
-                    var y = h - (smoothPoints[i] / maxVal) * h;
-                    ctx.lineTo(x, y);
-                }
-                ctx.lineTo(w, h);
-                ctx.closePath();
-
-                ctx.fillStyle = Qt.rgba(
-                    blendedColors.colPrimary.r,
-                    blendedColors.colPrimary.g,
-                    blendedColors.colPrimary.b,
-                    0.15
-                );
-                ctx.fill();
-            }
-            Connections {
-                target: playerController
-                function onVisualizerPointsChanged() {
-                    visualizerCanvas.requestPaint()
-                }
-            }
-
-            layer.enabled: true
-            layer.effect: MultiEffect { // Blur a bit to obscure away the points
-                source: visualizerCanvas
-                saturation: 0.2
-                blurEnabled: true
-                blurMax: 7
-                blur: 1
-            }
+            live: playerController.player?.isPlaying
+            points: playerController.visualizerPoints
+            maxVisualizerValue: playerController.maxVisualizerValue
+            smoothing: playerController.visualizerSmoothing
+            color: blendedColors.colPrimary
         }
 
         RowLayout {
