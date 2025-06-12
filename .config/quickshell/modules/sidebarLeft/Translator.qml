@@ -59,7 +59,7 @@ Item {
 
     Process {
         id: translateProc
-        command: ["bash", "-c", `trans -no-theme`
+        command: ["bash", "-c", `trans -no-theme -no-bidi`
             + ` -source '${StringUtils.shellSingleQuoteEscape(root.sourceLanguage)}'`
             + ` -target '${StringUtils.shellSingleQuoteEscape(root.targetLanguage)}'`
             + ` -no-ansi '${StringUtils.shellSingleQuoteEscape(root.inputField.text.trim())}'`]
@@ -82,7 +82,7 @@ Item {
 
     Process {
         id: getLanguagesProc
-        command: ["trans", "-list-languages"]
+        command: ["trans", "-list-languages", "-no-bidi"]
         property list<string> bufferList: ["auto"]
         running: true
         stdout: SplitParser {

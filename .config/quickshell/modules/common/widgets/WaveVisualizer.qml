@@ -46,7 +46,7 @@ Canvas { // Visualizer
             }
             root.smoothPoints.push(sum / count);
         }
-        if (!root.live) smoothedPoints.fill(0); // If not playing, show no points
+        if (!root.live) root.smoothPoints.fill(0); // If not playing, show no points
 
         ctx.beginPath();
         ctx.moveTo(0, h);
