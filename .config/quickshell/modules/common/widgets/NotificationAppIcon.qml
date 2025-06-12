@@ -26,7 +26,7 @@ Rectangle { // App icon
     implicitWidth: size
     implicitHeight: size
     radius: Appearance.rounding.full
-    color: Appearance.m3colors.m3secondaryContainer
+    color: Appearance.colors.colSecondaryContainer
     Loader {
         id: materialSymbolLoader
         active: root.appIcon == ""

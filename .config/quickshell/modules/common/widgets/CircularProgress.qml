@@ -14,8 +14,8 @@ Item {
     property int lineWidth: 2
     property real value: 0
     property color primaryColor: Appearance.m3colors.m3onSecondaryContainer
-    property color secondaryColor: Appearance.m3colors.m3secondaryContainer
-    property real gapAngle: Math.PI / 10
+    property color secondaryColor: Appearance.colors.colSecondaryContainer
+    property real gapAngle: Math.PI / 9
     property bool fill: false
     property int fillOverflow: 2
     property int animationDuration: 1000

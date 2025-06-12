@@ -5,8 +5,10 @@ pkgdesc='Illogical Impulse KDE Dependencies'
 arch=(any)
 license=(None)
 depends=(
-	polkit-kde-agent
+	bluedevil
 	gnome-keyring
-	gnome-control-center
-	networkmanager better-control-git
+	networkmanager
+	plasma-nm
+	polkit-kde-agent
+	systemsettings
 )

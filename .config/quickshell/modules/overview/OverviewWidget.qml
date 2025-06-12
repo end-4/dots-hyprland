@@ -25,7 +25,7 @@ Item {
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
     property real scale: ConfigOptions.overview.scale
-    property color activeBorderColor: Appearance.m3colors.m3secondary
+    property color activeBorderColor: Appearance.colors.colSecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
         ((monitor.height - monitorData?.reserved[0] - monitorData?.reserved[2]) * root.scale / monitor.scale) :
@@ -144,25 +144,38 @@ Item {
             implicitHeight: workspaceColumnLayout.implicitHeight
 
             Repeater { // Window repeater
-                model: windowAddresses.filter((address) => {
-                    var win = windowByAddress[address]
-                    return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
-                })
+                model: ScriptModel {
+                    values: {
+                        // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
+                        return ToplevelManager.toplevels.values.filter((toplevel) => {
+                            const address = `0x${toplevel.HyprlandToplevel.address}`
+                            // console.log(`Checking window with address: ${address}`)
+                            var win = windowByAddress[address]
+                            return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                        })
+                    }
+                }
                 delegate: OverviewWindow {
                     id: window
-                    windowData: windowByAddress[modelData]
+                    required property var modelData
+                    property var address: `0x${modelData.HyprlandToplevel.address}`
+                    windowData: windowByAddress[address]
+                    toplevel: modelData
                     monitorData: root.monitorData
                     scale: root.scale
                     availableWorkspaceWidth: root.workspaceImplicitWidth
                     availableWorkspaceHeight: root.workspaceImplicitHeight
+
+                    property int monitorId: windowData?.monitor
+                    property var monitor: HyprlandData.monitors[monitorId]
 
                     property bool atInitPosition: (initX == x && initY == y)
                     restrictToWorkspace: Drag.active || atInitPosition
 
                     property int workspaceColIndex: (windowData?.workspace.id - 1) % ConfigOptions.overview.numOfCols
                     property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / ConfigOptions.overview.numOfCols)
-                    xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex
-                    yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex
+                    xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex - (monitor?.x * root.scale)
+                    yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex - (monitor?.y * root.scale)
 
                     Timer {
                         id: updateWindowPosition
@@ -170,8 +183,9 @@ Item {
                         repeat: false
                         running: false
                         onTriggered: {
-                            window.x = Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0) + xOffset
-                            window.y = Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0) + yOffset
+                            window.x = Math.round(Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0) + xOffset)
+                            window.y = Math.round(Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0) + yOffset)
+                            console.log(`[OverviewWindow] Updated position for window ${windowData?.address} to (${window.x}, ${window.y})`)
                         }
                     }
 
@@ -191,6 +205,7 @@ Item {
                             window.pressed = true
                             window.Drag.active = true
                             window.Drag.source = window
+                            console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
                         }
                         onReleased: {
                             const targetWorkspace = root.draggingTargetWorkspace

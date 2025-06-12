@@ -23,40 +23,66 @@ Item {
     property Item lastHoveredButton
     property bool buttonHovered: false
     property bool requestDockShow: previewPopup.show
-    property real popupX: parentWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, root.lastHoveredButton.height / 2).x - implicitWidth / 2
 
-    implicitWidth: rowLayout.implicitWidth
-    implicitHeight: rowLayout.implicitHeight
-
-    RowLayout {
-        id: rowLayout
+    Layout.fillHeight: true
+    Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
+    implicitWidth: listView.implicitWidth
+    
+    StyledListView {
+        id: listView
         spacing: 2
+        orientation: ListView.Horizontal
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+        }
+        implicitWidth: contentWidth
 
-        Repeater {
-            model: ScriptModel {
-                objectProp: "appId"
-                values: {
-                    var map = new Map();
+        Behavior on implicitWidth {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
 
-                    for (const toplevel of ToplevelManager.toplevels.values) {
-                        if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), []);
-                        map.get(toplevel.appId.toLowerCase()).push(toplevel);
-                    }
+        model: ScriptModel {
+            objectProp: "appId"
+            values: {
+                var map = new Map();
 
-                    var values = [];
-
-                    for (const [key, value] of map) {
-                        values.push({ appId: key, toplevels: value });
-                    }
-
-                    return values;
+                // Pinned apps
+                const pinnedApps = ConfigOptions?.dock.pinnedApps ?? [];
+                for (const appId of pinnedApps) {
+                    if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
+                        pinned: true,
+                        toplevels: []
+                    }));
                 }
+
+                // Separator
+                if (pinnedApps.length > 0) {
+                    map.set("SEPARATOR", { pinned: false, toplevels: [] });
+                }
+                
+                // Open windows
+                for (const toplevel of ToplevelManager.toplevels.values) {
+                    if (!map.has(toplevel.appId.toLowerCase())) map.set(toplevel.appId.toLowerCase(), ({
+                        pinned: false,
+                        toplevels: []
+                    }));
+                    map.get(toplevel.appId.toLowerCase()).toplevels.push(toplevel);
+                }
+
+                var values = [];
+
+                for (const [key, value] of map) {
+                    values.push({ appId: key, toplevels: value.toplevels, pinned: value.pinned });
+                }
+
+                return values;
             }
-            delegate: DockAppButton {
-                required property var modelData
-                appToplevel: modelData
-                appListRoot: root
-            }
+        }
+        delegate: DockAppButton {
+            required property var modelData
+            appToplevel: modelData
+            appListRoot: root
         }
     }
 
@@ -118,14 +144,9 @@ Item {
             anchors.bottom: parent.bottom
             implicitWidth: popupBackground.implicitWidth + Appearance.sizes.elevationMargin * 2
             implicitHeight: root.maxWindowPreviewHeight + root.windowControlsHeight + Appearance.sizes.elevationMargin * 2
-            // anchors.horizontalCenter: parent.horizontalCenter
             hoverEnabled: true
-            // x: previewPopup.width / 2 + root.popupX
-            // Behavior on x {
-            //     animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-            // }
             x: {
-                const itemCenter = root.QsWindow.mapFromItem(root.lastHoveredButton, root.lastHoveredButton.width / 2, 0);
+                const itemCenter = root.QsWindow?.mapFromItem(root.lastHoveredButton, root.lastHoveredButton?.width / 2, 0);
                 return itemCenter.x - width / 2
             }
             StyledRectangularShadow {
@@ -145,7 +166,7 @@ Item {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
                 clip: true
-                color: Appearance.m3colors.m3surfaceContainer
+                color: Appearance.colors.colSurfaceContainer
                 radius: Appearance.rounding.normal
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: Appearance.sizes.elevationMargin
@@ -163,7 +184,9 @@ Item {
                     id: previewRowLayout
                     anchors.centerIn: parent
                     Repeater {
-                        model: previewPopup.appTopLevel?.toplevels ?? []
+                        model: ScriptModel {
+                            values: previewPopup.appTopLevel?.toplevels ?? []
+                        }
                         RippleButton {
                             id: windowButton
                             required property var modelData
@@ -182,7 +205,7 @@ Item {
                                     contentWidth: parent.width - anchors.margins * 2
                                     WrapperRectangle {
                                         Layout.fillWidth: true
-                                        color: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer)
+                                        color: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
                                         radius: Appearance.rounding.small
                                         margin: 5
                                         StyledText {
@@ -195,7 +218,7 @@ Item {
                                     }
                                     GroupButton {
                                         id: closeButton
-                                        colBackground: ColorUtils.transparentize(Appearance.m3colors.m3surfaceContainer)
+                                        colBackground: ColorUtils.transparentize(Appearance.colors.colSurfaceContainer)
                                         baseWidth: windowControlsHeight
                                         baseHeight: windowControlsHeight
                                         buttonRadius: Appearance.rounding.full

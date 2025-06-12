@@ -81,23 +81,25 @@ It's ready if you don't need localization... so quite likely
     <h3></h3>
 </div>
 
-## Main branch (*illogical-impulse*)
+## illogical-impulse<sup>Quickshell</sup>
 
-### AI
-![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60)
-_<sup>Sidebar offers online and offline chat. Text selection summary is offline only for privacy.</sup>_
+| AI | Common widgets |
+|:---|:---------------|
+| ![image](https://github.com/user-attachments/assets/08d26785-b54d-4ad1-875b-bb08cc6757f5) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
+| Window management | Weeb power |
+| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/e402f74a-6bd8-4ebe-bcf4-3a4a4846de10) |
 
-### Notifications, music controls, system, calendar
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7)
-_<sup>On the sidebar: flicking the notification</sup>_
+By the way...
+- The funny notification positions are mimicking Android 16's dragging behavior
+- The clock on the wallpaper is automatically placed at the "least busy" region of the image
 
-### Intuitive window management
-![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5)
-_<sup>You can also drag and drop windows across workspaces</sup>_
+## illogical-impulse<sup>AGS</sup>
 
-### Power to weebs
-![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76)
-_<sup>Get yande.re and konachan images from sidebar</sup>_
+| AI | Common widgets |
+|:---|:---------------|
+| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
+| Window management | Weeb power |
+| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
 
 ## Unsupported stuff
 

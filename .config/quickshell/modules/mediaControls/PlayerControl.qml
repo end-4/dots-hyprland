@@ -25,6 +25,9 @@ Item { // Player instance
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
     property color artDominantColor: colorQuantizer?.colors[0] || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
+    property list<real> visualizerPoints: []
+    property real maxVisualizerValue: 1000 // Max value in the data points
+    property int visualizerSmoothing: 2 // Number of points to average for smoothing
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
@@ -150,6 +153,16 @@ Item { // Player instance
             }
         }
 
+        WaveVisualizer {
+            id: visualizerCanvas
+            anchors.fill: parent
+            live: playerController.player?.isPlaying
+            points: playerController.visualizerPoints
+            maxVisualizerValue: playerController.maxVisualizerValue
+            smoothing: playerController.visualizerSmoothing
+            color: blendedColors.colPrimary
+        }
+
         RowLayout {
             anchors.fill: parent
             anchors.margins: root.contentPadding
@@ -160,7 +173,7 @@ Item { // Player instance
                 Layout.fillHeight: true
                 implicitWidth: height
                 radius: root.artRounding
-                color: blendedColors.colLayer1
+                color: ColorUtils.transparentize(blendedColors.colLayer1, 0.5)
 
                 layer.enabled: true
                 layer.effect: OpacityMask {
@@ -235,12 +248,18 @@ Item { // Player instance
                             iconName: "skip_previous"
                             onClicked: playerController.player?.previous()
                         }
-                        StyledProgressBar {
-                            id: slider
+                        Item {
+                            id: progressBarContainer
                             Layout.fillWidth: true
-                            highlightColor: blendedColors.colPrimary
-                            trackColor: blendedColors.colSecondaryContainer
-                            value: playerController.player?.position / playerController.player?.length
+                            implicitHeight: progressBar.implicitHeight
+
+                            StyledProgressBar { 
+                                id: progressBar
+                                anchors.fill: parent
+                                highlightColor: blendedColors.colPrimary
+                                trackColor: blendedColors.colSecondaryContainer
+                                value: playerController.player?.position / playerController.player?.length
+                            }
                         }
                         TrackChangeButton {
                             iconName: "skip_next"

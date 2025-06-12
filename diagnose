@@ -38,16 +38,6 @@ ii_check_venv() {
   which python
   deactivate
 }
-ii_check_ags() {
-  pkill ags
-  pkill agsv1
-  agsv1 > ii_ags.log 2>&1 &
-  GUI_PID=$!
-  sleep 10
-  kill $GUI_PID
-  echo "AGS log saved to \"ii_ags.log\"."
-}
-#x ii_check_ags
 
 e "Checking git repo info"
 x git remote get-url origin
@@ -57,7 +47,6 @@ e "Checking distro"
 x ii_check_distro 
 
 e "Checking variables"
-x declare -p XDG_BIN_HOME # ~/.local/bin
 x declare -p XDG_CACHE_HOME # ~/.cache
 x declare -p XDG_CONFIG_HOME # ~/.config
 x declare -p XDG_DATA_HOME # ~/.local/share

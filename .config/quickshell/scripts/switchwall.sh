@@ -7,6 +7,7 @@ CONFIG_DIR="$XDG_CONFIG_HOME/quickshell"
 CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MATUGEN_DIR="$XDG_CONFIG_HOME/matugen"
 terminalscheme="$XDG_CONFIG_HOME/quickshell/scripts/terminal/scheme-base.json"
 
 pre_process() {
@@ -26,7 +27,19 @@ pre_process() {
 }
 
 post_process() {
-    true
+    local screen_width="$1"
+    local screen_height="$2"
+    local wallpaper_path="$3"
+
+    # Determine the largest region on the wallpaper that's sufficiently un-busy to put widgets in
+    if [ ! -f "$MATUGEN_DIR/scripts/least_busy_region.py" ]; then
+        echo "Error: least_busy_region.py script not found in $MATUGEN_DIR/scripts/"
+    else
+        "$MATUGEN_DIR/scripts/least_busy_region.py" \
+            --screen-width "$screen_width" --screen-height "$screen_height" \
+            --width 300 --height 200 \
+            "$wallpaper_path" > "$STATE_DIR"/user/generated/wallpaper/least_busy_region.json
+    fi
 }
 
 check_and_prompt_upscale() {
@@ -219,7 +232,10 @@ switch() {
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
 
-    post_process
+    # Pass screen width, height, and wallpaper path to post_process
+    max_width_desired="$(hyprctl monitors -j | jq '([.[].width] | min)' | xargs)"
+    max_height_desired="$(hyprctl monitors -j | jq '([.[].height] | min)' | xargs)"
+    post_process "$max_width_desired" "$max_height_desired" "$imgpath"
 }
 
 main() {
@@ -267,7 +283,7 @@ main() {
     # Only prompt for wallpaper if not using --color and not using --noswitch and no imgpath set
     if [[ -z "$imgpath" && -z "$color_flag" && -z "$noswitch_flag" ]]; then
         cd "$(xdg-user-dir PICTURES)/Wallpapers" 2>/dev/null || cd "$(xdg-user-dir PICTURES)" || return 1
-        imgpath="$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
+        imgpath="$(kdialog --getopenfilename . --title 'Choose wallpaper')"
     fi
 
     switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"

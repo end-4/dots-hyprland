@@ -64,7 +64,7 @@ Item {
 
         Rectangle { // Header background
             id: header
-            color: Appearance.m3colors.m3surfaceContainerHighest
+            color: Appearance.colors.colSurfaceContainerHighest
             Layout.fillWidth: true
             implicitHeight: thinkBlockTitleBarRowLayout.implicitHeight + thinkBlockHeaderPaddingVertical * 2
 

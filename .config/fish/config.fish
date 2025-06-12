@@ -17,7 +17,9 @@ if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
     cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
 end
 
-alias pamcan=pacman
+alias pamcan pacman
+alias ls 'eza --icons'
+    
 
 # function fish_prompt
 #   set_color cyan; echo (pwd)

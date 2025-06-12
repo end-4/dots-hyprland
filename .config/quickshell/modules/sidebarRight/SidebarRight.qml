@@ -52,8 +52,17 @@ Scope {
         Loader {
             id: sidebarContentLoader
             active: GlobalStates.sidebarRightOpen
-            anchors.centerIn: parent
-            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut * 2
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+                topMargin: Appearance.sizes.hyprlandGapsOut
+                rightMargin: Appearance.sizes.hyprlandGapsOut
+                bottomMargin: Appearance.sizes.hyprlandGapsOut
+                leftMargin: Appearance.sizes.elevationMargin
+            }
+            width: sidebarWidth - Appearance.sizes.hyprlandGapsOut - Appearance.sizes.elevationMargin
             height: parent.height - Appearance.sizes.hyprlandGapsOut * 2
             
             sourceComponent: Item {
@@ -118,14 +127,38 @@ Scope {
                                 Layout.fillWidth: true
                             }
 
-                            QuickToggleButton {
-                                toggled: false
-                                buttonIcon: "power_settings_new"
-                                onClicked: {
-                                    Hyprland.dispatch("global quickshell:sessionOpen")
+                            ButtonGroup {
+                                QuickToggleButton {
+                                    toggled: false
+                                    buttonIcon: "restart_alt"
+                                    onClicked: {
+                                        Hyprland.dispatch("reload")
+                                        Quickshell.reload(true)
+                                    }
+                                    StyledToolTip {
+                                        content: qsTr("Reload Hyprland & Quickshell")
+                                    }
                                 }
-                                StyledToolTip {
-                                    content: qsTr("Session")
+                                QuickToggleButton {
+                                    toggled: false
+                                    buttonIcon: "settings"
+                                    onClicked: {
+                                        Hyprland.dispatch(`exec ${ConfigOptions.apps.settings}`)
+                                        Hyprland.dispatch(`global quickshell:sidebarRightClose`)
+                                    }
+                                    StyledToolTip {
+                                        content: qsTr("Plasma Settings")
+                                    }
+                                }
+                                QuickToggleButton {
+                                    toggled: false
+                                    buttonIcon: "power_settings_new"
+                                    onClicked: {
+                                        Hyprland.dispatch("global quickshell:sessionOpen")
+                                    }
+                                    StyledToolTip {
+                                        content: qsTr("Session")
+                                    }
                                 }
                             }
                         }

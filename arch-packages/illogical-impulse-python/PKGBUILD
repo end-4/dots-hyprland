@@ -13,4 +13,5 @@ depends=(
   libportal-gtk4
   gobject-introspection
   sassc
+  python-opencv
 )

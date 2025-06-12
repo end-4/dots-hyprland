@@ -12,7 +12,6 @@ Item {
 
     height: parent.height
     width: colLayout.width
-    
 
     ColumnLayout {
         id: colLayout

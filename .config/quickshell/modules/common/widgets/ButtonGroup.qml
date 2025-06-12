@@ -11,7 +11,7 @@ import QtQuick.Layouts
  */
 Rectangle {
     id: root
-    default property alias content: rowLayout.data
+    default property alias data: rowLayout.data
     property real spacing: 5
     property real padding: 0
     property int clickIndex: rowLayout.clickIndex

@@ -30,7 +30,7 @@ Button {
             Layout.alignment: Qt.AlignHCenter
             radius: Appearance.rounding.full
             color: toggled ? 
-                (button.down ? Appearance.colors.colSecondaryContainerActive : button.hovered ? Appearance.colors.colSecondaryContainerHover : Appearance.m3colors.m3secondaryContainer) :
+                (button.down ? Appearance.colors.colSecondaryContainerActive : button.hovered ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer) :
                 (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
 
             Behavior on color {

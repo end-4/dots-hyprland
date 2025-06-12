@@ -21,7 +21,7 @@ Singleton {
     property string booruPreviews: FileUtils.trimFileProtocol(`${Directories.cache}/media/boorus`)
     property string booruDownloads: FileUtils.trimFileProtocol(Directories.pictures  + "/homework")
     property string booruDownloadsNsfw: FileUtils.trimFileProtocol(Directories.pictures + "/homework/🌶️")
-    property string latexOutput: FileUtils.trimFileProtocol(`${Directories.cache}/latex`)
+    property string latexOutput: FileUtils.trimFileProtocol(`${Directories.cache}/media/latex`)
     property string shellConfig: FileUtils.trimFileProtocol(`${Directories.config}/illogical-impulse`)
     property string shellConfigName: "config.json"
     property string shellConfigPath: `${Directories.shellConfig}/${Directories.shellConfigName}`
@@ -32,6 +32,7 @@ Singleton {
     property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/scripts/switchwall.sh`)
     // Cleanup on init
     Component.onCompleted: {
+        Hyprland.dispatch(`exec mkdir -p '${shellConfig}'`)
         Hyprland.dispatch(`exec mkdir -p '${favicons}'`)
         Hyprland.dispatch(`exec rm -rf '${coverArt}'; mkdir -p '${coverArt}'`)
         Hyprland.dispatch(`exec rm -rf '${booruPreviews}'; mkdir -p '${booruPreviews}'`)

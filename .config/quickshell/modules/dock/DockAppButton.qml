@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
@@ -13,32 +14,102 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 DockButton {
-    id: appButton
-    required property var appToplevel
+    id: root
+    property var appToplevel
     property var appListRoot
     property int lastFocused: -1
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        hoverEnabled: true
-        acceptedButtons: Qt.NoButton
-        onEntered: {
-            appListRoot.lastHoveredButton = appButton
-            appListRoot.buttonHovered = true
-            lastFocused = appToplevel.toplevels.length - 1
+    property real iconSize: 35
+    property real countDotWidth: 10
+    property real countDotHeight: 4
+    property bool appIsActive: appToplevel.toplevels.find(t => (t.activated == true)) !== undefined
+
+    property bool isSeparator: appToplevel.appId === "SEPARATOR"
+    property var desktopEntry: DesktopEntries.byId(appToplevel.appId)
+    enabled: !isSeparator
+    implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
+
+    Loader {
+        active: isSeparator
+        anchors {
+            fill: parent
+            topMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
+            bottomMargin: dockVisualBackground.margin + dockRow.padding + Appearance.rounding.normal
         }
-        onExited: {
-            if (appListRoot.lastHoveredButton === appButton) {
-                appListRoot.buttonHovered = false
+        sourceComponent: DockSeparator {}
+    }
+
+    Loader {
+        anchors.fill: parent
+        active: appToplevel.toplevels.length > 0
+        sourceComponent: MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton
+            onEntered: {
+                appListRoot.lastHoveredButton = root
+                appListRoot.buttonHovered = true
+                lastFocused = appToplevel.toplevels.length - 1
+            }
+            onExited: {
+                if (appListRoot.lastHoveredButton === root) {
+                    appListRoot.buttonHovered = false
+                }
             }
         }
     }
+
     onClicked: {
+        if (appToplevel.toplevels.length === 0) {
+            root.desktopEntry?.execute();
+            return;
+        }
         lastFocused = (lastFocused + 1) % appToplevel.toplevels.length
         appToplevel.toplevels[lastFocused].activate()
     }
-    contentItem: IconImage {
-        id: iconImage
-        source: Quickshell.iconPath(AppSearch.guessIcon(appToplevel.appId), "image-missing")
+
+    middleClickAction: () => {
+        root.desktopEntry?.execute();
+    }
+
+    contentItem: Loader {
+        active: !isSeparator
+        sourceComponent: Item {
+            anchors.centerIn: parent
+
+            Loader {
+                id: iconImageLoader
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    verticalCenter: parent.verticalCenter
+                }
+                active: !root.isSeparator
+                sourceComponent: IconImage {
+                    source: Quickshell.iconPath(AppSearch.guessIcon(appToplevel.appId), "image-missing")
+                    implicitSize: root.iconSize
+                }
+            }
+
+            RowLayout {
+                spacing: 3
+                anchors {
+                    top: iconImageLoader.bottom
+                    topMargin: 2
+                    horizontalCenter: parent.horizontalCenter
+                }
+                Repeater {
+                    model: Math.min(appToplevel.toplevels.length, 3)
+                    delegate: Rectangle {
+                        required property int index
+                        radius: Appearance.rounding.full
+                        implicitWidth: (appToplevel.toplevels.length <= 3) ? 
+                            root.countDotWidth : root.countDotHeight // Circles when too many
+                        implicitHeight: root.countDotHeight
+                        color: appIsActive ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer0, 0.4)
+                    }
+                }
+            }
+        }
     }
 }

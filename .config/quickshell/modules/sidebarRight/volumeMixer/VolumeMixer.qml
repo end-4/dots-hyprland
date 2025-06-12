@@ -5,6 +5,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
@@ -16,7 +17,7 @@ Item {
     property int dialogMargins: 16
     property PwNode selectedDevice
 
-    function showDeviceSelectorDialog(input) {
+    function showDeviceSelectorDialog(input: bool) {
         root.selectedDevice = null
         root.showDeviceSelector = true
         root.deviceSelectorInput = input
@@ -160,7 +161,7 @@ Item {
 
         Rectangle { // The dialog
             id: dialog
-            color: Appearance.m3colors.m3surfaceContainerHigh
+            color: Appearance.colors.colSurfaceContainerHigh
             radius: Appearance.rounding.normal
             anchors.left: parent.left
             anchors.right: parent.right
@@ -207,9 +208,11 @@ Item {
                         spacing: 0
 
                         Repeater {
-                            model: Pipewire.nodes.values.filter(node => {
-                                return !node.isStream && node.isSink !== root.deviceSelectorInput && node.audio
-                            })
+                            model: ScriptModel {
+                                values: Pipewire.nodes.values.filter(node => {
+                                    return !node.isStream && node.isSink !== root.deviceSelectorInput && node.audio
+                                })
+                            }
 
                             // This could and should be refractored, but all data becomes null when passed wtf
                             delegate: StyledRadioButton {

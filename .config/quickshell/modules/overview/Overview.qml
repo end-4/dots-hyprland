@@ -92,8 +92,8 @@ Scope {
                 visible: GlobalStates.overviewOpen
                 anchors {
                     horizontalCenter: parent.horizontalCenter
-                    top: !ConfigOptions.bar.bottom ? parent.top : null
-                    bottom: ConfigOptions.bar.bottom ? parent.bottom : null
+                    top: !ConfigOptions.bar.bottom ? parent.top : undefined
+                    bottom: ConfigOptions.bar.bottom ? parent.bottom : undefined
                 }
 
                 Keys.onPressed: (event) => {

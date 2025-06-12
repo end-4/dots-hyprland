@@ -125,9 +125,14 @@ int main(int argc, char* argv[]) {
 
 ### LaTeX
 
-- Simple inline: $\\frac{1}{2} = \\frac{2}{4}$
-- Complex inline: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
-- Another complex inline: \\\\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\\\]
+
+Inline w/ dollar signs: $\\frac{1}{2} = \\frac{2}{4}$
+
+Inline w/ double dollar signs: $$\\int_0^\\infty e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}$$
+
+Inline w/ backslash and square brackets \\[\\int_0^\\infty \\frac{1}{x^2} dx = \\infty\\]
+
+Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 `, 
                     Ai.interfaceRole);
             }
@@ -162,6 +167,7 @@ int main(int argc, char* argv[]) {
                 id: messageListView
                 anchors.fill: parent
                 spacing: 10
+                popin: false
 
                 property int lastResponseLength: 0
 
@@ -174,6 +180,8 @@ int main(int argc, char* argv[]) {
                         radius: Appearance.rounding.small
                     }
                 }
+
+                add: null // Prevent function calls from being janky
 
                 Behavior on contentY {
                     NumberAnimation {
@@ -337,7 +345,7 @@ int main(int argc, char* argv[]) {
             implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin 
                 + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + columnSpacing, 45)
             clip: true
-            border.color: Appearance.m3colors.m3outlineVariant
+            border.color: Appearance.colors.colOutlineVariant
             border.width: 1
 
             Behavior on implicitHeight {

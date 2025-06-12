@@ -19,7 +19,7 @@ Slider {
     property real handleLimit: root.backgroundDotMargins
     property real trackHeight: 30 * scale
     property color highlightColor: Appearance.colors.colPrimary
-    property color trackColor: Appearance.m3colors.m3secondaryContainer
+    property color trackColor: Appearance.colors.colSecondaryContainer
     property color handleColor: Appearance.m3colors.m3onSecondaryContainer
     property real trackRadius: Appearance.rounding.verysmall * scale
     property real unsharpenRadius: Appearance.rounding.unsharpen

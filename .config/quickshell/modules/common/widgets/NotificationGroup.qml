@@ -113,7 +113,7 @@ Item { // Notification group area
         id: background
         anchors.left: parent.left
         width: parent.width
-        color: Appearance.m3colors.m3surfaceContainer
+        color: Appearance.colors.colSurfaceContainer
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
 
@@ -154,42 +154,56 @@ Item { // Notification group area
 
             ColumnLayout { // Content
                 Layout.fillWidth: true
-                spacing: expanded ? 
-                    ((root.multipleNotifications && 
-                        notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 : 
-                        5) : 0
+                spacing: expanded ? (root.multipleNotifications ? 
+                    (notificationGroup?.notifications[root.notificationCount - 1].image != "") ? 35 : 
+                    5 : 0) : 0
+                // spacing: 00
                 Behavior on spacing {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
 
-                RowLayout { // App name (or summary when there's only 1 notif) and time
+                Item { // App name (or summary when there's only 1 notif) and time
                     id: topRow
-                    spacing: 0
+                    // spacing: 0
+                    Layout.fillWidth: true
                     property real fontSize: Appearance.font.pixelSize.smaller
                     property bool showAppName: root.multipleNotifications
+                    implicitHeight: Math.max(topTextRow.implicitHeight, expandButton.implicitHeight)
 
-                    StyledText {
-                        id: appName
-                        text: (topRow.showAppName ?
-                            notificationGroup?.appName :
-                            notificationGroup?.notifications[0]?.summary) || ""
-                        font.pixelSize: topRow.showAppName ?
-                            topRow.fontSize :
-                            Appearance.font.pixelSize.small
-                        color: topRow.showAppName ?
-                            Appearance.colors.colSubtext :
-                            Appearance.colors.colOnLayer2
+                    RowLayout {
+                        id: topTextRow
+                        anchors.left: parent.left
+                        anchors.right: expandButton.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 5
+                        StyledText {
+                            id: appName
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                            text: (topRow.showAppName ?
+                                notificationGroup?.appName :
+                                notificationGroup?.notifications[0]?.summary) || ""
+                            font.pixelSize: topRow.showAppName ?
+                                topRow.fontSize :
+                                Appearance.font.pixelSize.small
+                            color: topRow.showAppName ?
+                                Appearance.colors.colSubtext :
+                                Appearance.colors.colOnLayer2
+                        }
+                        StyledText {
+                            id: timeText
+                            // Layout.fillWidth: true
+                            Layout.rightMargin: 10
+                            horizontalAlignment: Text.AlignLeft
+                            text: NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
+                            font.pixelSize: topRow.fontSize
+                            color: Appearance.colors.colSubtext
+                        }
                     }
-                    StyledText {
-                        id: timeText
-                        text: " • " + NotificationUtils.getFriendlyNotifTimeString(notificationGroup?.time)
-                        font.pixelSize: topRow.fontSize
-                        color: Appearance.colors.colSubtext
-                        Layout.alignment: Qt.AlignRight
-                        Layout.fillWidth: true
-                    }
-                    Item { Layout.fillWidth: true }
                     NotificationGroupExpandButton {
+                        id: expandButton
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
                         count: root.notificationCount
                         expanded: root.expanded
                         fontSize: topRow.fontSize

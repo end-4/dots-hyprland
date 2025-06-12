@@ -5,6 +5,7 @@ pkgdesc='Illogical Impulse GTK/Qt Dependencies'
 arch=(any)
 license=(None)
 depends=(
+	kdialog
 	qt6-5compat 
 	qt6-base
 	qt6-declarative
@@ -21,7 +22,5 @@ depends=(
 	syntax-highlighting
 	upower
 	wtype
-	xdg-user-dirs-gtk
-	yad
 	ydotool
 )

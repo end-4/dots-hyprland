@@ -9,14 +9,23 @@ Singleton {
     }
 
     property QtObject appearance: QtObject {
-        property int fakeScreenRounding: 1 // 0: None | 1: Always | 2: When not fullscreen
+        property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+    }
+
+    property QtObject audio: QtObject { // Values in %
+        property QtObject protection: QtObject { // Prevent sudden bangs
+            property bool enable: true
+            property real maxAllowedIncrease: 10
+            property real maxAllowed: 90 // Realistically should already provide some protection when it's 99...
+        }
     }
 
     property QtObject apps: QtObject {
-        property string bluetooth: "better-control --bluetooth"
+        property string bluetooth: "kcmshell6 kcm_bluetooth"
         property string imageViewer: "loupe"
-        property string network: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center wifi"
-        property string settings: "XDG_CURRENT_DESKTOP=\"gnome\" gnome-control-center"
+        property string network: "plasmawindowed org.kde.plasma.networkmanagement"
+        property string networkEthernet: "kcmshell6 kcm_networkmanagement"
+        property string settings: "systemsettings"
         property string taskManager: "plasma-systemmonitor --page-name Processes"
         property string terminal: "kitty -1" // This is only for shell actions
     }
@@ -29,7 +38,7 @@ Singleton {
 
     property QtObject bar: QtObject {
         property bool bottom: false // Instead of top
-        property bool borderless: true
+        property bool borderless: false // true for no grouping of items
         property string topLeftIcon: "spark" // Options: distro, spark
         property bool showBackground: true
         property QtObject resources: QtObject {
@@ -48,13 +57,22 @@ Singleton {
     }
 
     property QtObject dock: QtObject {
-        property bool enable: false
         property real height: 60
         property real hoverRegionHeight: 3
         property bool pinnedOnStartup: false
+        property bool hoverToReveal: false // When false, only reveals on empty workspace
         property list<string> pinnedApps: [ // IDs of pinned entries
             "org.kde.dolphin",
+            "kitty",
         ]
+    }
+
+    property QtObject language: QtObject {
+        property QtObject translator: QtObject {
+            property string engine: "auto" // Run `trans -list-engines` for available engines. auto should use google
+            property string targetLanguage: "auto" // Run `trans -list-all` for available languages
+            property string sourceLanguage: "auto"
+        }
     }
 
     property QtObject networking: QtObject {

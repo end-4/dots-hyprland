@@ -359,7 +359,7 @@ Item {
             implicitHeight: Math.max(inputFieldRowLayout.implicitHeight + inputFieldRowLayout.anchors.topMargin 
                 + commandButtonsRow.implicitHeight + commandButtonsRow.anchors.bottomMargin + columnSpacing, 45)
             clip: true
-            border.color: Appearance.m3colors.m3outlineVariant
+            border.color: Appearance.colors.colOutlineVariant
             border.width: 1
 
             Behavior on implicitHeight {
@@ -562,8 +562,10 @@ Item {
                     text: "•"
                 }
 
-                Rectangle { // NSFW toggle
+                Item { // NSFW toggle
+                    visible: width > 0
                     implicitWidth: switchesRow.implicitWidth
+                    Layout.fillHeight: true
 
                     RowLayout {
                         id: switchesRow

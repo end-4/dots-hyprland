@@ -21,7 +21,7 @@ RippleButton {
     leftPadding: (implicitHeight - faviconSize) / 2
     rightPadding: 10
     buttonRadius: Appearance.rounding.full
-    colBackground: Appearance.m3colors.m3surfaceContainerHighest
+    colBackground: Appearance.colors.colSurfaceContainerHighest
     colBackgroundHover: Appearance.colors.colSurfaceContainerHighestHover
     colRipple: Appearance.colors.colSurfaceContainerHighestActive
 

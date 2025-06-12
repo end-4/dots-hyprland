@@ -19,6 +19,13 @@ Scope {
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: ConfigOptions.bar.showBackground
 
+    component VerticalBarSeparator: Rectangle {
+        Layout.topMargin: barHeight / 3
+        Layout.bottomMargin: barHeight / 3
+        Layout.fillHeight: true
+        implicitWidth: 1
+        color: Appearance.colors.colOutlineVariant
+
 
     // Check screensList from config, If no screens are specified, show on all screens
     property var filteredScreens: {
@@ -150,7 +157,7 @@ Scope {
                                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
                                 colBackgroundHover: Appearance.colors.colLayer1Hover
                                 colRipple: Appearance.colors.colLayer1Active
-                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggled: Appearance.colors.colSecondaryContainer
                                 colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                                 colRippleToggled: Appearance.colors.colSecondaryContainerActive
                                 toggled: GlobalStates.sidebarLeftOpen
@@ -177,7 +184,7 @@ Scope {
                             }
 
                             ActiveWindow {
-                                visible: barRoot.useShortenedForm === 0
+                                visible: barRoot.useShortenedForm === 0 && width > 0 && height > 0
                                 Layout.rightMargin: Appearance.rounding.screenRounding
                                 Layout.fillWidth: true
                                 bar: barRoot
@@ -189,7 +196,7 @@ Scope {
                 RowLayout { // Middle section
                     id: middleSection
                     anchors.centerIn: parent
-                    spacing: 8
+                    spacing: ConfigOptions?.bar.borderless ? 4 : 8
 
                     RowLayout {
                         id: leftCenterGroup
@@ -210,9 +217,10 @@ Scope {
 
                     }
 
+                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
+
                     RowLayout {
                         id: middleCenterGroup
-                        Layout.fillWidth: true
                         Layout.fillHeight: true
 
                         Workspaces {
@@ -230,6 +238,8 @@ Scope {
                         }
 
                     }
+
+                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
                     RowLayout {
                         id: rightCenterGroup
@@ -344,7 +354,7 @@ Scope {
                                 colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
                                 colBackgroundHover: Appearance.colors.colLayer1Hover
                                 colRipple: Appearance.colors.colLayer1Active
-                                colBackgroundToggled: Appearance.m3colors.m3secondaryContainer
+                                colBackgroundToggled: Appearance.colors.colSecondaryContainer
                                 colBackgroundToggledHover: Appearance.colors.colSecondaryContainerHover
                                 colRippleToggled: Appearance.colors.colSecondaryContainerActive
                                 toggled: GlobalStates.sidebarRightOpen
