@@ -37,20 +37,20 @@ Rectangle {
             }
         }
 
-        // Loader {
-        //     active: ConfigOptions.bar.utilButtons.showColorPicker
-        //     sourceComponent: CircleUtilButton {
-        //         Layout.alignment: Qt.AlignVCenter
-        //         onClicked: Hyprland.dispatch("exec hyprpicker -a")
-        //         MaterialSymbol {
-        //             horizontalAlignment: Qt.AlignHCenter
-        //             fill: 1
-        //             text: "colorize"
-        //             iconSize: Appearance.font.pixelSize.large
-        //             color: Appearance.colors.colOnLayer2
-        //         }
-        //     }
-        // }
+         Loader {
+             active: ConfigOptions.bar.utilButtons.showColorPicker
+             sourceComponent: CircleUtilButton {
+                 Layout.alignment: Qt.AlignVCenter
+                 onClicked: Hyprland.dispatch("exec hyprpicker -a")
+                 MaterialSymbol {
+                     horizontalAlignment: Qt.AlignHCenter
+                     fill: 1
+                     text: "colorize"
+                     iconSize: Appearance.font.pixelSize.large
+                     color: Appearance.colors.colOnLayer2
+                 }
+             }
+         }
 
         Loader {
             active: ConfigOptions.bar.utilButtons.showKeyboardToggle
