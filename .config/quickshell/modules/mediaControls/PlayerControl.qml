@@ -179,7 +179,7 @@ Item { // Player instance
                     }
                     smoothPoints.push(sum / count);
                 }
-                if (!playerController.player?.isPlaying) smoothedPoints.fill(0); // If not playing, show no points
+                if (!playerController.player?.isPlaying) smoothPoints.fill(0); // If not playing, show no points
 
                 ctx.beginPath();
                 ctx.moveTo(0, h);
