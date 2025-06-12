@@ -19,15 +19,21 @@ Scope {
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: ConfigOptions.bar.showBackground
 
+
+    // Check screensList from config, If no screens are specified, show on all screens
+    property var filteredScreens: {
+        const list = ConfigOptions.bar.screensList;
+        if (!list || list.length === 0)
+            return Quickshell.screens;
+        return Quickshell.screens.filter(screen => list.includes(screen.name));
+    }
+
     Variants { // For each monitor
-        model: Quickshell.screens
+        model: bar.filteredScreens
 
         PanelWindow { // Bar window
             id: barRoot
             screen: modelData
-
-            // Check screensList from config, If no screens are specified, show on all screens
-            visible: ConfigOptions.bar.screensList.includes(modelData.name) || ConfigOptions.bar.screensList.length === 0
 
             property ShellScreen modelData
             property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
