@@ -24,7 +24,7 @@ ProgressBar {
     property real spermFps: 60
 
     Behavior on waveAmplitude {
-        animation: Appearance?.animation.elementMoveEnter.numberAnimation.createObject(this)
+        animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
     Behavior on value {
