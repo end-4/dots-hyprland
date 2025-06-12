@@ -59,7 +59,7 @@ Item {
 
     Process {
         id: translateProc
-        command: ["bash", "-c", `trans -no-theme`
+        command: ["bash", "-c", `trans -no-theme -no-bidi`
             + ` -source '${StringUtils.shellSingleQuoteEscape(root.sourceLanguage)}'`
             + ` -target '${StringUtils.shellSingleQuoteEscape(root.targetLanguage)}'`
             + ` -no-ansi '${StringUtils.shellSingleQuoteEscape(root.inputField.text.trim())}'`]
