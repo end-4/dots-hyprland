@@ -46,6 +46,12 @@ It's ready if you don't need localization... so quite likely
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
+
+   If you are using fish shell (non-posix-compliant shell) then:
+   ```bash
+   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+   ```
+
    - **Manual** installation, other distros and more:
      - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
     
@@ -72,7 +78,7 @@ It's ready if you don't need localization... so quite likely
 <details> 
   <summary>Help improve these dotfiles</summary>
 
-   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
+   - You can give feedback/suggestions for the [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) in [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
    
 </details>
 
