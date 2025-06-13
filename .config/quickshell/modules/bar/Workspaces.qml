@@ -194,8 +194,11 @@ Item {
                     }
                     property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
-                    StyledText {
-                        opacity: (ConfigOptions.bar.workspaces.alwaysShowNumbers || GlobalStates.workspaceShowNumbers || !workspaceButtonBackground.biggestWindow) ? 1 : 0
+                    StyledText { // Workspace number text
+                        opacity: GlobalStates.workspaceShowNumbers
+                            || ((ConfigOptions?.bar.workspaces.alwaysShowNumbers && (!ConfigOptions?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || GlobalStates.workspaceShowNumbers))
+                            || (GlobalStates.workspaceShowNumbers && !ConfigOptions?.bar.workspaces.showAppIcons)
+                            )  ? 1 : 0
                         z: 3
 
                         anchors.centerIn: parent
@@ -212,26 +215,45 @@ Item {
                         Behavior on opacity {
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
-
                     }
-                    Item {
+                    Rectangle { // Dot instead of ws number
+                        opacity: (ConfigOptions?.bar.workspaces.alwaysShowNumbers
+                            || GlobalStates.workspaceShowNumbers
+                            || (ConfigOptions?.bar.workspaces.showAppIcons && workspaceButtonBackground.biggestWindow)
+                            ) ? 0 : 1
+                        visible: opacity > 0
+                        anchors.centerIn: parent
+                        width: workspaceButtonWidth * 0.15
+                        height: width
+                        radius: width / 2
+                        color: (monitor.activeWorkspace?.id == button.workspaceValue) ? 
+                            Appearance.m3colors.m3onPrimary : 
+                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
+                                Appearance.colors.colOnLayer1Inactive)
+
+                        Behavior on opacity {
+                            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                        }
+                    }
+                    Item { // Main app icon
                         anchors.centerIn: parent
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
+                        opacity: !ConfigOptions?.bar.workspaces.showAppIcons ? 0 :
+                            (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
+                            1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
+                            visible: opacity > 0
                         IconImage {
                             id: mainAppIcon
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
-                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
-                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
+                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
-                            opacity: (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? 
-                                1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
-                            visible: opacity > 0
                             source: workspaceButtonBackground.mainAppIconSource
-                            implicitSize: (!GlobalStates.workspaceShowNumbers && !ConfigOptions.bar.workspaces.alwaysShowNumbers) ? workspaceIconSize : workspaceIconSizeShrinked
+                            implicitSize: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked
 
                             Behavior on opacity {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)

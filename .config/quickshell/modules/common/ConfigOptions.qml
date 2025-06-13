@@ -54,6 +54,7 @@ Singleton {
         }
         property QtObject workspaces: QtObject {
             property int shown: 10
+            property bool showAppIcons: true
             property bool alwaysShowNumbers: false
             property int showNumberDelay: 150 // milliseconds
         }
