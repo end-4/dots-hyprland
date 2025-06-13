@@ -10,6 +10,7 @@ Singleton {
 
     property QtObject appearance: QtObject {
         property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+        property bool transparency: false
     }
 
     property QtObject audio: QtObject { // Values in %
