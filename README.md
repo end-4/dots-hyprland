@@ -64,13 +64,6 @@
   - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
 </details>
 
-<details> 
-  <summary>Help improve these dotfiles</summary>
-
-   - You can give feedback/suggestions for the [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) in [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
-   
-</details>
-
 <div align="center">
     <h2>• screenshots •</h2>
     <h3></h3>
