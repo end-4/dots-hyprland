@@ -120,8 +120,9 @@ By the way...
     <h3></h3>
 </div>
 
- - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
+ - [@clsty](https://github.com/clsty) for making my work accessible by taking care of the install script and many other things
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
+ - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
  - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
