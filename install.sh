@@ -15,6 +15,10 @@ prevent_sudo_or_root
 
 startask () {
   printf "\e[34m[$0]: Hi there! Before we start:\n"
+  printf '\n'
+  printf '[NEW] illogical-impulse is now powered by Quickshell. If you were using the AGS version and would like to keep it, do not run this script.\n'
+  printf '      For the AGS version, run the script in its branch instead: git checkout ii-ags && ./install.sh\n'
+  printf '\n'
   printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
   printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
   printf "\e[31m"
