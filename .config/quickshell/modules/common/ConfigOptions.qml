@@ -45,7 +45,7 @@ Singleton {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
         }
-        property list<string> screensList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
+        property list<string> screenList: [] // List of names, like "eDP-1", find out with 'hyprctl monitors' command
         property QtObject utilButtons: QtObject {
             property bool showScreenSnip: true
             property bool showColorPicker: false
