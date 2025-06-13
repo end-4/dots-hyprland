@@ -1,14 +1,3 @@
-# Quickshell-powered illogical-impulse
-## Current status
-
-It's ready if you don't need localization... so quite likely
-
-## Instructions
-
-- **Installation**: Clone the repo, checkout this branch and run `install.sh`
-- **Dolphin fix** so it won't ask which program to open file with every time: `sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu`
-- TODO: Update install script to include the above fix
-
 <div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
     <h3></h3>
