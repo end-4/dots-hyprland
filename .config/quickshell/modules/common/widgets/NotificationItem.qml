@@ -41,13 +41,11 @@ Item { // Notification item area
         // Handle Brave/Chrome notifications - remove first line
         if (appName && appName.toLowerCase().includes('brave')) {
             const lines = body.split('\n\n')
-            if (lines.length > 1) {
+            if (lines.length > 1 && lines[0].startsWith('<a')) {
                 processedBody = lines.slice(1).join('\n\n')
             }
         }
         
-        // Remove HTML tags
-        processedBody = processedBody.replace(/<[^>]*>/g, '')
         return processedBody
     }
 
@@ -190,8 +188,7 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.StyledText
                     text: {
-                        const processedBody = processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
-                        return processedBody.replace(/<img/g, "\n <img").split("\n")[0]
+                        return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
                     }
                 }
             }
@@ -213,9 +210,8 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.RichText
                     text: {
-                        const processedBody = processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
                         return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
-                               `${processedBody.replace(/\n/g, "<br/>")}`
+                               `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
                     }
 
                     onLinkActivated: (link) => {
