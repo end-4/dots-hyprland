@@ -58,7 +58,7 @@
   | ------------- | ------------- |
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
   | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, responsible for the status bar, sidebars, etc. |
-  | [Fuzzel](https://mark.stosberg.com/fuzzel-a-great-dmenu-and-rofi-altenrative-for-wayland/) | For clipboard and emoji picker |
+
 
 
   - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
