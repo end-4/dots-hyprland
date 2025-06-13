@@ -15,6 +15,11 @@ prevent_sudo_or_root
 
 startask () {
   printf "\e[34m[$0]: Hi there! Before we start:\n"
+  printf '\n'
+  printf '[NEW] illogical-impulse is now powered by Quickshell. If you were using the old AGS version and would like to keep it, do not run this script.\n'
+  printf '      The AGS version, although uses less memory, has much worse performance. If you do not need (inconsistent) translations, the Quickshell version is recommended.\n'
+  printf '      If you would like it anyway, run the script in its branch instead: git checkout ii-ags && ./install.sh\n'
+  printf '\n'
   printf 'This script 1. only works for ArchLinux and Arch-based distros.\n'
   printf '            2. does not handle system-level/hardware stuff like Nvidia drivers\n'
   printf "\e[31m"
@@ -100,11 +105,10 @@ install-local-pkgbuild() {
 }
 
 # Install core dependencies from the meta-packages
-metapkgs=(./arch-packages/illogical-impulse-{audio,python,backlight,basic,fonts-themes,gnome,gtk,portal,screencapture,widgets})
-metapkgs+=(./arch-packages/illogical-impulse-agsv1-git)
+metapkgs=(./arch-packages/illogical-impulse-{audio,backlight,basic,fonts-themes,kde,portal,python,screencapture,toolkit,widgets})
 metapkgs+=(./arch-packages/illogical-impulse-hyprland)
 metapkgs+=(./arch-packages/illogical-impulse-microtex-git)
-metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
+# metapkgs+=(./arch-packages/illogical-impulse-oneui4-icons-git)
 [[ -f /usr/share/icons/Bibata-Modern-Classic/index.theme ]] || \
   metapkgs+=(./arch-packages/illogical-impulse-bibata-modern-classic-bin)
 
@@ -119,24 +123,24 @@ showfun install-python-packages
 v install-python-packages
 
 ## Optional dependencies
-# if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
-# case $SKIP_PLASMAINTG in
-#   true) sleep 0;;
-#   *)
-#     if $ask;then
-#       echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 250 MiB.\e[0m"
-#       echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
-#       echo -e "\e[33mInstall it? [y/N]\e[0m"
-#       read -p "====> " p
-#     else
-#       p=y
-#     fi
-#     case $p in
-#       y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
-#       *) echo "Ok, won't install"
-#     esac
-#     ;;
-# esac
+if pacman -Qs ^plasma-browser-integration$ ;then SKIP_PLASMAINTG=true;fi
+case $SKIP_PLASMAINTG in
+  true) sleep 0;;
+  *)
+    if $ask;then
+      echo -e "\e[33m[$0]: NOTE: The size of \"plasma-browser-integration\" is about 600 MiB.\e[0m"
+      echo -e "\e[33mIt is needed if you want playtime of media in Firefox to be shown on the music controls widget.\e[0m"
+      echo -e "\e[33mInstall it? [y/N]\e[0m"
+      read -p "====> " p
+    else
+      p=y
+    fi
+    case $p in
+      y) x sudo pacman -S --needed --noconfirm plasma-browser-integration ;;
+      *) echo "Ok, won't install"
+    esac
+    ;;
+esac
 
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
@@ -156,11 +160,11 @@ v mkdir -p $XDG_BIN_HOME $XDG_CACHE_HOME $XDG_CONFIG_HOME $XDG_DATA_HOME
 # original dotfiles and new ones in the SAME DIRECTORY
 # (eg. in ~/.config/hypr) won't be mixed together
 
-# MISC (For .config/* but not AGS, not Fish, not Hyprland)
+# MISC (For .config/* but not fish, not Hyprland)
 case $SKIP_MISCCONF in
   true) sleep 0;;
   *)
-    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'ags' ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+    for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
 #      i=".config/$i"
       echo "[$0]: Found target: .config/$i"
       if [ -d ".config/$i" ];then v rsync -av --delete ".config/$i/" "$XDG_CONFIG_HOME/$i/"
@@ -177,24 +181,6 @@ case $SKIP_FISH in
     ;;
 esac
 
-# For AGS
-case $SKIP_AGS in
-  true) sleep 0;;
-  *)
-    v rsync -av --delete --exclude '/user_options.jsonc' .config/ags/ "$XDG_CONFIG_HOME"/ags/
-    t="$XDG_CONFIG_HOME/ags/user_options.jsonc"
-    if [ -f $t ];then
-      echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      # v cp -f .config/ags/user_options.jsonc $t.new
-      existed_ags_opt=y
-    else
-      echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
-      v cp .config/ags/user_options.jsonc $t
-      existed_ags_opt=n
-    fi
-    ;;
-esac
-
 # For Hyprland
 case $SKIP_HYPRLAND in
   true) sleep 0;;
@@ -203,15 +189,9 @@ case $SKIP_HYPRLAND in
     t="$XDG_CONFIG_HOME/hypr/hyprland.conf"
     if [ -f $t ];then
       echo -e "\e[34m[$0]: \"$t\" already exists.\e[0m"
-      if [ -f "$XDG_STATE_HOME/ags/user/firstrun.txt" ]
-      then
-        v cp -f .config/hypr/hyprland.conf $t.new
-        existed_hypr_conf=y
-      else
-        v mv $t $t.old
-        v cp -f .config/hypr/hyprland.conf $t
-        existed_hypr_conf_firstrun=y
-      fi
+      v mv $t $t.old
+      v cp -f .config/hypr/hyprland.conf $t
+      existed_hypr_conf_firstrun=y
     else
       echo -e "\e[33m[$0]: \"$t\" does not exist yet.\e[0m"
       v cp .config/hypr/hyprland.conf $t
@@ -250,7 +230,7 @@ esac
 
 # some foldes (eg. .local/bin) should be processed separately to avoid `--delete' for rsync,
 # since the files here come from different places, not only about one program.
-v rsync -av ".local/bin/" "$XDG_BIN_HOME"
+# v rsync -av ".local/bin/" "$XDG_BIN_HOME" # No longer needed since scripts are no longer in ~/.local/bin
 
 # Prevent hyprland from not fully loaded
 sleep 1
@@ -261,10 +241,7 @@ grep -q 'source ${XDG_CONFIG_HOME:-~/.config}/zshrc.d/dots-hyprland.zsh' ~/.zshr
 
 warn_files=()
 warn_files_tests=()
-warn_files_tests+=(/usr/local/bin/ags)
-warn_files_tests+=(/usr/local/etc/pam.d/ags)
 warn_files_tests+=(/usr/local/lib/{GUtils-1.0.typelib,Gvc-1.0.typelib,libgutils.so,libgvc.so})
-warn_files_tests+=(/usr/local/share/com.github.Aylur.ags)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Rubik{,-Italic}'[wght]'.ttf)
 warn_files_tests+=(/usr/local/share/licenses/ttf-rubik)
 warn_files_tests+=(/usr/local/share/fonts/TTF/Gabarito-{Black,Bold,ExtraBold,Medium,Regular,SemiBold}.ttf)
@@ -290,10 +267,6 @@ printf "\e[36mPress \e[30m\e[46m Ctrl+Super+T \e[0m\e[36m to select a wallpaper\
 printf "\e[36mPress \e[30m\e[46m Super+/ \e[0m\e[36m for a list of keybinds\e[0m\n"
 printf "\n"
 
-case $existed_ags_opt in
-  y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/ags/user_options.jsonc\" already existed before and we didn't overwrite it. \e[0m\n"
-#    printf "\e[33mPlease use \"$XDG_CONFIG_HOME/ags/user_options.jsonc.new\" as a reference for a proper format.\e[0m\n"
-;;esac
 case $existed_hypr_conf_firstrun in
   y) printf "\n\e[33m[$0]: Warning: \"$XDG_CONFIG_HOME/hypr/hyprland.conf\" already existed before. As it seems it is your first run, we replaced it with a new one. \e[0m\n"
      printf "\e[33mAs it seems it is your first run, we replaced it with a new one. The old one has been renamed to \"$XDG_CONFIG_HOME/hypr/hyprland.conf.old\".\e[0m\n"
@@ -312,7 +285,7 @@ case $existed_hyprlock_conf in
 ;;esac
 
 if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
-  printf "\n\e[31m[$0]: \!! Important \!! : Please ensure environment variable \e[0m \$ILLOGICAL_IMPULSE_VIRTUAL_ENV \e[31m is set to proper value (by default \"~/.local/state/ags/.venv\"), or AGS config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.\e[0m\n"
+  printf "\n\e[31m[$0]: \!! Important \!! : Please ensure environment variable \e[0m \$ILLOGICAL_IMPULSE_VIRTUAL_ENV \e[31m is set to proper value (by default \"~/.local/state/quickshell/.venv\"), or Quickshell config will not work. We have already provided this configuration in ~/.config/hypr/hyprland/env.conf, but you need to ensure it is included in hyprland.conf, and also a restart is needed for applying it.\e[0m\n"
 fi
 
 if [[ ! -z "${warn_files[@]}" ]]; then

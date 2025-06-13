@@ -1,0 +1,48 @@
+[config]
+version_check = false
+
+[templates.m3colors]
+input_path = '~/.config/matugen/templates/colors.json'
+output_path = '~/.local/state/quickshell/user/generated/colors.json'
+
+[templates.hyprland]
+input_path = '~/.config/matugen/templates/hyprland/colors.conf'
+output_path = '~/.config/hypr/hyprland/colors.conf'
+
+[templates.hyprlock]
+input_path = '~/.config/matugen/templates/hyprland/hyprlock.conf'
+output_path = '~/.config/hypr/hyprlock.conf'
+
+[templates.fuzzel]
+input_path = '~/.config/matugen/templates/fuzzel/fuzzel_theme.ini'
+output_path = '~/.config/fuzzel/fuzzel_theme.ini'
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/gtk.css'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/gtk.css'
+
+[templates.ags_source_view]
+input_path = '~/.config/matugen/templates/ags/sourceviewtheme.xml'
+output_path = '~/.config/ags/assets/themes/sourceviewtheme.xml'
+
+[templates.ags_source_view_light]
+input_path = '~/.config/matugen/templates/ags/sourceviewtheme-light.xml'
+output_path = '~/.config/ags/assets/themes/sourceviewtheme-light.xml'
+
+[templates.ags_scss]
+input_path = '~/.config/matugen/templates/ags/_material.scss'
+output_path = '~/.local/state/ags/scss/_material.scss'
+post_hook = 'pidof gjs && agsv1 run-js "handleStyles(false)"'
+
+[templates.kde_colors]
+input_path = '~/.config/matugen/templates/kde/color.txt'
+output_path = '~/.local/state/quickshell/user/generated/color.txt'
+post_hook = '~/.config/matugen/templates/kde/kde-material-you-colors-wrapper.sh'
+
+[templates.wallpaper]
+input_path = '~/.config/matugen/templates/wallpaper.txt'
+output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'

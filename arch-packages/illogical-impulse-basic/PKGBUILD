@@ -11,14 +11,10 @@ depends=(
 	cliphist
 	cmake
 	curl
-	fuzzel
 	rsync
 	wget
 	ripgrep
 	jq
-	npm
 	meson
-	typescript
-	gjs
 	xdg-user-dirs
 )
