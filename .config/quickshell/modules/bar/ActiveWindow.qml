@@ -6,12 +6,12 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Item {
+    id: root
     required property var bar
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
 
-    height: parent.height
-    width: colLayout.width
+    implicitWidth: colLayout.implicitWidth
 
     ColumnLayout {
         id: colLayout
@@ -26,7 +26,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: activeWindow?.activated ? activeWindow?.appId : qsTr("Desktop")
+            text: root.activeWindow?.activated ? root.activeWindow?.appId : qsTr("Desktop")
         }
 
         StyledText {
@@ -34,7 +34,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: activeWindow?.activated ? activeWindow?.title : `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
+            text: root.activeWindow?.activated ? root.activeWindow?.title : `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
         }
 
     }
