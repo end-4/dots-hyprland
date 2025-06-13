@@ -42,14 +42,6 @@ Item {
         }
     }
 
-    Rectangle { // Background
-        anchors.centerIn: parent
-        width: parent.width
-        implicitHeight: 32
-        color: borderless ? "transparent" : Appearance.colors.colLayer1
-        radius: Appearance.rounding.small
-    }
-
     RowLayout { // Real content
         id: rowLayout
 

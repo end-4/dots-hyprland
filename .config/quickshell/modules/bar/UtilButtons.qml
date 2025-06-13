@@ -7,14 +7,10 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Services.Pipewire
 
-Rectangle {
+Item {
     id: root
     property bool borderless: ConfigOptions.bar.borderless
-    Layout.alignment: Qt.AlignVCenter
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: 32
-    color: borderless ? "transparent" : Appearance.colors.colLayer1
-    radius: Appearance.rounding.small
 
     RowLayout {
         id: rowLayout

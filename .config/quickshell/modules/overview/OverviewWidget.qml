@@ -185,7 +185,7 @@ Item {
                         onTriggered: {
                             window.x = Math.round(Math.max((windowData?.at[0] - monitorData?.reserved[0]) * root.scale, 0) + xOffset)
                             window.y = Math.round(Math.max((windowData?.at[1] - monitorData?.reserved[1]) * root.scale, 0) + yOffset)
-                            console.log(`[OverviewWindow] Updated position for window ${windowData?.address} to (${window.x}, ${window.y})`)
+                            // console.log(`[OverviewWindow] Updated position for window ${windowData?.address} to (${window.x}, ${window.y})`)
                         }
                     }
 
@@ -205,7 +205,7 @@ Item {
                             window.pressed = true
                             window.Drag.active = true
                             window.Drag.source = window
-                            console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
+                            // console.log(`[OverviewWindow] Dragging window ${windowData?.address} from position (${window.x}, ${window.y})`)
                         }
                         onReleased: {
                             const targetWorkspace = root.draggingTargetWorkspace

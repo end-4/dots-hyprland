@@ -7,7 +7,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.UPower
 
-Rectangle {
+Item {
     id: root
     property bool borderless: ConfigOptions.bar.borderless
     readonly property var chargeState: Battery.chargeState
@@ -20,8 +20,6 @@ Rectangle {
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 32
-    color: borderless ? "transparent" : Appearance.colors.colLayer1
-    radius: Appearance.rounding.small
 
     RowLayout {
         id: rowLayout

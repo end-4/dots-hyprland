@@ -191,12 +191,10 @@ Scope {
                     anchors.centerIn: parent
                     spacing: ConfigOptions?.bar.borderless ? 4 : 8
 
-                    RowLayout {
+                    BarGroup {
                         id: leftCenterGroup
                         Layout.preferredWidth: barRoot.centerSideModuleWidth
-                        spacing: 4
                         Layout.fillHeight: true
-                        implicitWidth: 350
 
                         Resources {
                             alwaysShowAllResources: barRoot.useShortenedForm === 2
@@ -212,12 +210,15 @@ Scope {
 
                     VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
-                    RowLayout {
+                    BarGroup {
                         id: middleCenterGroup
+                        padding: workspacesWidget.widgetPadding
                         Layout.fillHeight: true
-
+                        
                         Workspaces {
+                            id: workspacesWidget
                             bar: barRoot
+                            Layout.fillHeight: true
                             MouseArea { // Right-click to toggle overview
                                 anchors.fill: parent
                                 acceptedButtons: Qt.RightButton
@@ -229,25 +230,23 @@ Scope {
                                 }
                             }
                         }
-
                     }
 
                     VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
-                    RowLayout {
+                    BarGroup {
                         id: rightCenterGroup
-                        Layout.preferredWidth: leftCenterGroup.width
+                        Layout.preferredWidth: barRoot.centerSideModuleWidth
                         Layout.fillHeight: true
-                        spacing: 4
-
+                        
                         ClockWidget {
-                            showDate: barRoot.useShortenedForm < 2
+                            showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
                             Layout.alignment: Qt.AlignVCenter
                             Layout.fillWidth: true
                         }
 
                         UtilButtons {
-                            visible: barRoot.useShortenedForm === 0
+                            visible: (ConfigOptions.bar.verbosebarRoot.useShortenedForm === 0)
                             Layout.alignment: Qt.AlignVCenter
                         }
 
@@ -255,7 +254,6 @@ Scope {
                             visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
                             Layout.alignment: Qt.AlignVCenter
                         }
-
                     }
 
                 }

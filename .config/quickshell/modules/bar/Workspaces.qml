@@ -47,19 +47,8 @@ Item {
         }
     }
 
-    Layout.fillHeight: true
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: 40
-
-    // Background
-    Rectangle {
-        z: 0
-        anchors.centerIn: parent
-        implicitHeight: 32
-        implicitWidth: rowLayout.implicitWidth + widgetPadding * 2
-        radius: Appearance.rounding.small
-        color: borderless ? "transparent" : Appearance.colors.colLayer1
-    }
 
     // Scroll to switch workspaces
     WheelHandler {
@@ -223,7 +212,7 @@ Item {
                             ) ? 0 : 1
                         visible: opacity > 0
                         anchors.centerIn: parent
-                        width: workspaceButtonWidth * 0.15
+                        width: workspaceButtonWidth * 0.18
                         height: width
                         radius: width / 2
                         color: (monitor.activeWorkspace?.id == button.workspaceValue) ? 

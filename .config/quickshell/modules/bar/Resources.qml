@@ -7,14 +7,12 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
-Rectangle {
+Item {
     id: root
     property bool borderless: ConfigOptions.bar.borderless
     property bool alwaysShowAllResources: false
     implicitWidth: rowLayout.implicitWidth + rowLayout.anchors.leftMargin + rowLayout.anchors.rightMargin
     implicitHeight: 32
-    color: borderless ? "transparent" : Appearance.colors.colLayer1
-    radius: Appearance.rounding.small
 
     RowLayout {
         id: rowLayout

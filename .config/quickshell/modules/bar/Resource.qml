@@ -10,6 +10,7 @@ Item {
     required property double percentage
     property bool shown: true
     clip: true
+    visible: width > 0 && height > 0
     implicitWidth: resourceRowLayout.x < 0 ? 0 : childrenRect.width
     implicitHeight: childrenRect.height
 
