@@ -246,7 +246,7 @@ Scope {
                         }
 
                         UtilButtons {
-                            visible: (ConfigOptions.bar.verbosebarRoot.useShortenedForm === 0)
+                            visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
                             Layout.alignment: Qt.AlignVCenter
                         }
 
