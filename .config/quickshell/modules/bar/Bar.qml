@@ -25,10 +25,15 @@ Scope {
         Layout.fillHeight: true
         implicitWidth: 1
         color: Appearance.colors.colOutlineVariant
-    }
 
     Variants { // For each monitor
-        model: Quickshell.screens
+        model: {
+            const screens = Quickshell.screens;
+            const list = ConfigOptions.bar.screenList;
+            if (!list || list.length === 0)
+                return screens;
+            return screens.filter(screen => list.includes(screen.name));
+        }
 
         PanelWindow { // Bar window
             id: barRoot
