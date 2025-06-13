@@ -38,11 +38,19 @@ Item { // Notification item area
     function processNotificationBody(body, appName) {
         let processedBody = body
         
-        // Handle Brave/Chrome notifications - remove first line
-        if (appName && appName.toLowerCase().includes('brave')) {
-            const lines = body.split('\n\n')
-            if (lines.length > 1 && lines[0].startsWith('<a')) {
-                processedBody = lines.slice(1).join('\n\n')
+        // Clean Chromium-based browsers notifications - remove first line
+        if (appName) {
+            const lowerApp = appName.toLowerCase()
+            const chromiumBrowsers = [
+                "brave", "chrome", "chromium", "vivaldi", "opera", "microsoft edge", "edge"
+            ]
+
+            if (chromiumBrowsers.some(name => lowerApp.includes(name))) {
+                const lines = body.split('\n\n')
+
+                if (lines.length > 1 && lines[0].startsWith('<a')) {
+                    processedBody = lines.slice(1).join('\n\n')
+                }
             }
         }
         
@@ -188,7 +196,7 @@ Item { // Notification item area
                     elide: Text.ElideRight
                     textFormat: Text.StyledText
                     text: {
-                        return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary)
+                        return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")
                     }
                 }
             }
