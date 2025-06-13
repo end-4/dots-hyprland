@@ -35,6 +35,28 @@ Item { // Notification item area
 
     implicitHeight: background.implicitHeight
 
+    function processNotificationBody(body, appName) {
+        let processedBody = body
+        
+        // Clean Chromium-based browsers notifications - remove first line
+        if (appName) {
+            const lowerApp = appName.toLowerCase()
+            const chromiumBrowsers = [
+                "brave", "chrome", "chromium", "vivaldi", "opera", "microsoft edge"
+            ]
+
+            if (chromiumBrowsers.some(name => lowerApp.includes(name))) {
+                const lines = body.split('\n\n')
+
+                if (lines.length > 1 && lines[0].startsWith('<a')) {
+                    processedBody = lines.slice(1).join('\n\n')
+                }
+            }
+        }
+        
+        return processedBody
+    }
+
     function destroyWithAnimation() {
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
@@ -173,7 +195,9 @@ Item { // Notification item area
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
                     textFormat: Text.StyledText
-                    text: notificationObject.body.replace(/<img/g, "\n <img").split("\n")[0]
+                    text: {
+                        return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")
+                    }
                 }
             }
 
@@ -193,8 +217,10 @@ Item { // Notification item area
                     wrapMode: Text.Wrap
                     elide: Text.ElideRight
                     textFormat: Text.RichText
-                    text: `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
-                        `${notificationObject.body.replace(/\n/g, "<br/>")}` 
+                    text: {
+                        return `<style>img{max-width:${notificationBodyText.width}px;}</style>` + 
+                               `${processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")}`
+                    }
 
                     onLinkActivated: (link) => {
                         Qt.openUrlExternally(link)
