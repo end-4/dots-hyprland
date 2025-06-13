@@ -19,11 +19,11 @@ ProgressBar {
     property color highlightColor: Appearance?.colors.colPrimary ?? "#685496"
     property color trackColor: Appearance?.m3colors.m3secondaryContainer ?? "#F1D3F9"
     property bool sperm: false // If true, the progress bar will have a wavy fill effect
-    property real waveAmplitude: sperm ? 3 : 0
-    property real frequency: 8
+    property real spermAmplitudeMultiplier: sperm ? 0.5 : 0
+    property real spermFrequency: 6
     property real spermFps: 60
 
-    Behavior on waveAmplitude {
+    Behavior on spermAmplitudeMultiplier {
         animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
@@ -57,8 +57,8 @@ ProgressBar {
 
                 var progress = root.visualPosition;
                 var fillWidth = progress * width;
-                var amplitude = root.waveAmplitude
-                var frequency = root.frequency;
+                var amplitude = parent.height * root.spermAmplitudeMultiplier;
+                var frequency = root.spermFrequency;
                 var phase = Date.now() / 400.0;
                 var centerY = height / 2;
 
