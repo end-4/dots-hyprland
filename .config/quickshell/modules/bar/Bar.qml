@@ -25,6 +25,7 @@ Scope {
         Layout.fillHeight: true
         implicitWidth: 1
         color: Appearance.colors.colOutlineVariant
+    }
 
     Variants { // For each monitor
         model: {
