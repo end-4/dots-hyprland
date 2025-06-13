@@ -148,6 +148,7 @@ v systemctl --user enable ydotool --now
 v sudo systemctl enable bluetooth --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'
 v gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+v sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu
 
 
 #####################################################################################
