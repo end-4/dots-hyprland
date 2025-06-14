@@ -15,8 +15,8 @@ import Quickshell.Services.UPower
 Scope {
     id: root
     property string filePath: `${Directories.state}/user/generated/wallpaper/least_busy_region.json`
-    property real centerX: 0
-    property real centerY: 0
+    property real centerX: -500
+    property real centerY: -500
     property color dominantColor: Appearance.colors.colPrimary
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
     property color colBackground: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer), 1)
