@@ -42,7 +42,7 @@
    ```
 
    - **Manual** installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
+     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
     
    - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
      - For a list, hit `Super`+`/`
