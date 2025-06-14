@@ -56,11 +56,11 @@ Scope {
     Variants { // For each monitor
         model: Quickshell.screens
 
-        Loader {
+        LazyLoader {
             required property var modelData
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
-            active: !ToplevelManager.activeToplevel?.activated
-            sourceComponent: PanelWindow { // Window
+            activeAsync: !ToplevelManager.activeToplevel?.activated
+            component: PanelWindow { // Window
                 id: windowRoot
                 screen: modelData
                 property var textHorizontalAlignment: root.centerX / monitor.scale < windowRoot.width / 3 ? Text.AlignLeft :
