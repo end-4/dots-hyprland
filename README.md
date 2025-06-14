@@ -81,7 +81,7 @@ By the way...
 - The funny notification positions are mimicking Android 16's dragging behavior
 - The clock on the wallpaper is automatically placed at the "least busy" region of the image
 
-## illogical-impulse<sup>AGS</sup>
+## illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
 | AI | Common widgets |
 |:---|:---------------|
