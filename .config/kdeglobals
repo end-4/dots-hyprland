@@ -137,6 +137,7 @@ ColorScheme=MaterialYouDark
 ColorSchemeHash=3c0cecefbea43cdb8fe3da156e4a106f7384a526
 LastUsedCustomAccentColor=184,117,220
 XftHintStyle=hintslight
+TerminalApplication=kitty -1
 XftSubPixel=none
 fixed=JetBrainsMono Nerd Font,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 font=Rubik,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
