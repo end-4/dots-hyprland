@@ -297,12 +297,18 @@ Singleton {
         if (!modelId) modelId = ""
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
+            const model = models[modelId]
+            // See if policy prevents online models
+            if (ConfigOptions.policies.ai === 2 && !model.endpoint.includes("localhost")) {
+                root.addMessage(StringUtils.format(StringUtils.format("Policy disallows online models\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
+                return;
+            }
             PersistentStateManager.setState("ai.model", modelId);
-            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), models[modelId].name), root.interfaceRole)
-            if (models[modelId].requires_key) {
+            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), model.name), root.interfaceRole);
+            if (model.requires_key) {
                 // If key not there show advice
-                if (root.apiKeysLoaded && (!root.apiKeys[models[modelId].key_id] || root.apiKeys[models[modelId].key_id].length === 0)) {
-                    root.addApiKeyAdvice(models[modelId])
+                if (root.apiKeysLoaded && (!root.apiKeys[model.key_id] || root.apiKeys[model.key_id].length === 0)) {
+                    root.addApiKeyAdvice(model)
                 }
             }
         } else {

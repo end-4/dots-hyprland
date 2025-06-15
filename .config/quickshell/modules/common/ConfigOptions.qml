@@ -4,6 +4,11 @@ pragma Singleton
 pragma ComponentBehavior: Bound
 
 Singleton {
+    property QtObject policies: QtObject {
+        property int ai: 1 // 0: No | 1: Yes | 2: Local
+        property int weeb: 1 // 0: No | 1: Open | 2: Closet
+    }
+
     property QtObject ai: QtObject {
         property string systemPrompt: qsTr("Use casual tone. No user knowledge is to be assumed except basic Linux literacy. Be brief and concise: When explaining concepts, use bullet points (prefer minus sign (-) over asterisk (*)) and highlight keywords in bold to pinpoint the main concepts instead of long paragraphs. You are also encouraged to split your response with h2 headers, each header title beginning with an emoji, like `## 🐧 Linux`. When making changes to the user's config, you must get the config to know what values there are before setting.")
     }
