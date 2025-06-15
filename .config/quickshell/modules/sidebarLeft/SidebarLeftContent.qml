@@ -18,9 +18,9 @@ Item {
     required property var scopeRoot
     anchors.fill: parent
     property var baseTabButtonList: [
-        {"icon": "neurology", "name": qsTr("Intelligence")}, 
+        ...(ConfigOptions.policies.ai !== 0 ? [{"icon": "neurology", "name": qsTr("Intelligence")}] : []),
         {"icon": "translate", "name": qsTr("Translator")},
-        {"icon": "bookmark_heart", "name": qsTr("Anime")}
+        ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
     ]
     property var tabButtonList: ConfigOptions.sidebar.booru.hide ? 
         baseTabButtonList.slice(0, 2) : baseTabButtonList
@@ -89,13 +89,25 @@ Item {
                 }
             }
 
-            AiChat {}
-            Translator {}
-            Loader {
-                active: !ConfigOptions.sidebar.booru.hide
-                sourceComponent: Anime {}
-            }
+            contentChildren: [
+                ...(ConfigOptions.policies.ai !== 0 ? [aiChat.createObject()] : []),
+                translator.createObject(),
+                ...(ConfigOptions.policies.weeb === 0 ? [] : [anime.createObject()])
+            ]
         }
         
+    }
+
+    Component {
+        id: aiChat
+        AiChat {}
+    }
+    Component {
+        id: translator
+        Translator {}
+    }
+    Component {
+        id: anime
+        Anime {}
     }
 }
