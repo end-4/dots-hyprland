@@ -16,6 +16,7 @@ Singleton {
     property QtObject appearance: QtObject {
         property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
         property bool transparency: false
+        property bool clock: true
     }
 
     property QtObject audio: QtObject { // Values in %
@@ -72,6 +73,8 @@ Singleton {
         property real hoverRegionHeight: 3
         property bool pinnedOnStartup: false
         property bool hoverToReveal: false // When false, only reveals on empty workspace
+        property bool hide: false
+        property bool hidePinButton: false
         property list<string> pinnedApps: [ // IDs of pinned entries
             "org.kde.dolphin",
             "kitty",
