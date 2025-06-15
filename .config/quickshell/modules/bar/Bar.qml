@@ -98,6 +98,9 @@ Scope {
                         if (event.button === Qt.LeftButton) {
                             Hyprland.dispatch('global quickshell:sidebarLeftOpen')
                         }
+                            else if (event.button === Qt.RightButton) {
+                            MprisController.activePlayer.previous()
+                        }
                     }
                     // Scroll to change brightness
                     WheelHandler {
@@ -254,6 +257,7 @@ Scope {
                         UtilButtons {
                             visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
                             Layout.alignment: Qt.AlignVCenter
+                            implicitHeight: barHeight
                         }
 
                         BatteryIndicator {

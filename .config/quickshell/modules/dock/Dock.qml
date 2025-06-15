@@ -57,6 +57,7 @@ Scope { // Scope
                     id: dockMouseArea
                     anchors.top: parent.top
                     height: parent.height
+                    implicitHeight: parent.height
                     anchors.topMargin: dockRoot.reveal ? 0 : 
                         ConfigOptions?.dock.hoverToReveal ? (dockRoot.implicitHeight - ConfigOptions.dock.hoverRegionHeight) :
                         (dockRoot.implicitHeight + 1)
@@ -72,6 +73,7 @@ Scope { // Scope
                     Item {
                         id: dockHoverRegion
                         anchors.fill: parent
+                        implicitHeight: parent.height
 
                         Item { // Wrapper for the dock background
                             id: dockBackground
@@ -80,6 +82,7 @@ Scope { // Scope
                                 bottom: parent.bottom
                                 horizontalCenter: parent.horizontalCenter
                             }
+                            implicitHeight: parent.height
 
                             implicitWidth: dockRow.implicitWidth + 5 * 2
                             height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
@@ -105,25 +108,34 @@ Scope { // Scope
                                 spacing: 3
                                 property real padding: 5
 
-                                VerticalButtonGroup {
-                                    Layout.topMargin: Appearance.sizes.hyprlandGapsOut // why does this work
-                                    GroupButton { // Pin button
-                                        baseWidth: 35
-                                        baseHeight: 35
-                                        clickedWidth: baseWidth
-                                        clickedHeight: baseHeight + 20
-                                        buttonRadius: Appearance.rounding.normal
-                                        toggled: root.pinned
-                                        onClicked: root.pinned = !root.pinned
-                                        contentItem: MaterialSymbol {
-                                            text: "keep"
-                                            horizontalAlignment: Text.AlignHCenter
-                                            iconSize: Appearance.font.pixelSize.larger
-                                            color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                Item {
+                                    visible: !(ConfigOptions?.dock.hidePinButton ?? false)
+                                    Layout.topMargin: Appearance.sizes.hyprlandGapsOut
+                                    implicitWidth: pinButtonGroup.implicitWidth
+                                    implicitHeight: pinButtonGroup.implicitHeight
+
+                                    VerticalButtonGroup {
+                                        id: pinButtonGroup
+                                        GroupButton { // Pin button
+                                            baseWidth: 35
+                                            baseHeight: 35
+                                            clickedWidth: baseWidth
+                                            clickedHeight: baseHeight + 20
+                                            buttonRadius: Appearance.rounding.normal
+                                            toggled: root.pinned
+                                            onClicked: root.pinned = !root.pinned
+                                            contentItem: MaterialSymbol {
+                                                text: "keep"
+                                                horizontalAlignment: Text.AlignHCenter
+                                                iconSize: Appearance.font.pixelSize.larger
+                                                color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                            }
                                         }
                                     }
                                 }
-                                DockSeparator {}
+                                DockSeparator {
+                                    visible: !(ConfigOptions?.dock.hidePinButton ?? false)
+                                }
                                 DockApps { id: dockApps; }
                                 DockSeparator {}
                                 DockButton {

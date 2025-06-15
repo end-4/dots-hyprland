@@ -17,11 +17,13 @@ Item {
     id: root
     required property var scopeRoot
     anchors.fill: parent
-    property var tabButtonList: [
+    property var baseTabButtonList: [
         {"icon": "neurology", "name": qsTr("Intelligence")}, 
         {"icon": "translate", "name": qsTr("Translator")},
-        {"icon": "bookmark_heart", "name": qsTr("Anime")},
+        {"icon": "bookmark_heart", "name": qsTr("Anime")}
     ]
+    property var tabButtonList: ConfigOptions.sidebar.booru.hide ? 
+        baseTabButtonList.slice(0, 2) : baseTabButtonList
     property int selectedTab: 0
 
     function focusActiveItem() {
@@ -89,7 +91,10 @@ Item {
 
             AiChat {}
             Translator {}
-            Anime {}
+            Loader {
+                active: !ConfigOptions.sidebar.booru.hide
+                sourceComponent: Anime {}
+            }
         }
         
     }

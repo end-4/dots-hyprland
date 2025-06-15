@@ -59,7 +59,7 @@ Scope {
         LazyLoader {
             required property var modelData
             readonly property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
-            activeAsync: !ToplevelManager.activeToplevel?.activated
+            activeAsync: !ToplevelManager.activeToplevel?.activated && ConfigOptions.appearance.clock
             component: PanelWindow { // Window
                 id: windowRoot
                 screen: modelData
