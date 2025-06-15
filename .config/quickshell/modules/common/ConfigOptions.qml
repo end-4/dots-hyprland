@@ -130,7 +130,6 @@ Singleton {
             property int delay: 300 // Delay before sending request. Reduces (potential) rate limits and lag.
         }
         property QtObject booru: QtObject {
-            property bool hide: false
             property bool allowNsfw: false
             property string defaultProvider: "yandere"
             property int limit: 20

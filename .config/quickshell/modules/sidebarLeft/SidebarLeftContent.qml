@@ -22,8 +22,7 @@ Item {
         {"icon": "translate", "name": qsTr("Translator")},
         ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
     ]
-    property var tabButtonList: ConfigOptions.sidebar.booru.hide ? 
-        baseTabButtonList.slice(0, 2) : baseTabButtonList
+    property var tabButtonList: baseTabButtonList
     property int selectedTab: 0
 
     function focusActiveItem() {
