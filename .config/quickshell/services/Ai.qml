@@ -300,7 +300,7 @@ Singleton {
             const model = models[modelId]
             // See if policy prevents online models
             if (ConfigOptions.policies.ai === 2 && !model.endpoint.includes("localhost")) {
-                root.addMessage(StringUtils.format(StringUtils.format("Policy disallows online models\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
+                root.addMessage(StringUtils.format(StringUtils.format("Online models disallowed\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
                 return;
             }
             PersistentStateManager.setState("ai.model", modelId);

@@ -13,14 +13,22 @@ Singleton {
     property string firstRunNotifSummary: "Welcome!"
     property string firstRunNotifBody: "Hit Super+/ for a list of keybinds"
     property string defaultWallpaperPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/assets/images/default_wallpaper.png`)
+    property string welcomeQmlPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/welcome.qml`)
 
     function load() {
         firstRunFileView.reload()
     }
 
+    function enableNextTime() {
+        Hyprland.dispatch(`exec rm -f '${root.firstRunFilePath}'`)
+    }
+    function disableNextTime() {
+        Hyprland.dispatch(`exec echo '${root.firstRunFileContent}' > '${root.firstRunFilePath}'`)
+    }
+
     function handleFirstRun() {
-        Hyprland.dispatch(`exec notify-send '${root.firstRunNotifSummary}' '${root.firstRunNotifBody}' -a 'Shell'`)
         Hyprland.dispatch(`exec '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`)
+        Hyprland.dispatch(`exec qs -p '${root.welcomeQmlPath}'`)
     }
 
     FileView {
