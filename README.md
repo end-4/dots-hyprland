@@ -35,17 +35,18 @@
    ```bash
    bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
    ```
-   - **Manual** installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
-     - (_Available in: English, Vietnamese, and Simplified Chinese. Translations are welcome._)
-    
-   - **Default keybinds**: Parts similar to Windows and GNOME. Hit Super+/ for a list.
-     <details> 
-       <summary>Here's an image, just in case...</summary>
-    
-       ![image](https://github.com/user-attachments/assets/dff2f842-5458-4f5a-89ec-3979095574de)
 
-     </details>
+   If you are using fish shell (non-posix-compliant shell) then:
+   ```bash
+   bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+   ```
+
+   - **Manual** installation, other distros and more:
+     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
+    
+   - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
+     - For a list, hit `Super`+`/`
+     - For a terminal, hit `Super`+`Enter`
 
 </details>
 
@@ -56,18 +57,11 @@
   | Software | Purpose |
   | ------------- | ------------- |
   | [Hyprland](https://github.com/hyprwm/hyprland) | The compositor (for noobs, you can just call it a window manager) |
-  | [AGS](https://github.com/Aylur/ags) | A GTK widget system, responsible for the status bar, sidebars, etc. |
-  | [Fuzzel](https://mark.stosberg.com/fuzzel-a-great-dmenu-and-rofi-altenrative-for-wayland/) | For clipboard and emoji picker |
+  | [Quickshell](https://quickshell.outfoxxed.me/) | A QtQuick-based widget system, responsible for the status bar, sidebars, etc. |
+
 
 
   - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
-</details>
-
-<details> 
-  <summary>Help improve these dotfiles</summary>
-
-   - Try the Quickshell-powered version at [`ii-qs` branch](https://github.com/end-4/dots-hyprland/tree/ii-qs) - It comes with major improvements, and you're free to make suggestions 👉 [#1276](https://github.com/end-4/dots-hyprland/pull/1276)
-   
 </details>
 
 <div align="center">
@@ -75,23 +69,25 @@
     <h3></h3>
 </div>
 
-## Main branch (*illogical-impulse*)
+## illogical-impulse<sup>Quickshell</sup>
 
-### AI
-![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60)
-_<sup>Sidebar offers online and offline chat. Text selection summary is offline only for privacy.</sup>_
+| AI | Common widgets |
+|:---|:---------------|
+| ![image](https://github.com/user-attachments/assets/08d26785-b54d-4ad1-875b-bb08cc6757f5) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
+| Window management | Weeb power |
+| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/292259fc-57d3-4663-a583-2ce2faad13fb) |
 
-### Notifications, music controls, system, calendar
-![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7)
-_<sup>On the sidebar: flicking the notification</sup>_
+By the way...
+- The funny notification positions are mimicking Android 16's dragging behavior
+- The clock on the wallpaper is automatically placed at the "least busy" region of the image
 
-### Intuitive window management
-![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5)
-_<sup>You can also drag and drop windows across workspaces</sup>_
+## illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
-### Power to weebs
-![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76)
-_<sup>Get yande.re and konachan images from sidebar</sup>_
+| AI | Common widgets |
+|:---|:---------------|
+| ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
+| Window management | Weeb power |
+| ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
 
 ## Unsupported stuff
 
@@ -124,8 +120,10 @@ _<sup>Get yande.re and konachan images from sidebar</sup>_
     <h3></h3>
 </div>
 
- - [@clsty](https://github.com/clsty) for making an actually good install script + many other stuff that I neglect
+ - [@clsty](https://github.com/clsty) for making my work accessible by taking care of the install script and many other things
  - [@midn8hustlr](https://github.com/midn8hustlr) for greatly improving the color generation system
+ - [@outfoxxed](https://github.com/outfoxxed/) for being extremely supportive in my Quickshell journey
+ - Quickshell: [Soramane](https://github.com/caelestia-dots/shell/), [FridayFaerie](https://github.com/FridayFaerie/quickshell), [nydragon](https://github.com/nydragon/nysh)
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
