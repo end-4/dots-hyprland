@@ -42,7 +42,7 @@
    ```
 
    - **Manual** installation, other distros and more:
-     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/)
+     - See the [Wiki](https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/01setup/)
     
    - **Default keybinds**: Should be somewhat familiar if you've used Windows or GNOME. 
      - For a list, hit `Super`+`/`
@@ -75,7 +75,7 @@
 |:---|:---------------|
 | ![image](https://github.com/user-attachments/assets/08d26785-b54d-4ad1-875b-bb08cc6757f5) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
 | Window management | Weeb power |
-| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/e402f74a-6bd8-4ebe-bcf4-3a4a4846de10) |
+| ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/292259fc-57d3-4663-a583-2ce2faad13fb) |
 
 By the way...
 - The funny notification positions are mimicking Android 16's dragging behavior
