@@ -21,7 +21,6 @@ Item {
         ...(ConfigOptions.policies.ai !== 0 ? [{"icon": "neurology", "name": qsTr("Intelligence")}] : []),
         {"icon": "translate", "name": qsTr("Translator")},
         ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
-        ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
     ]
     property var tabButtonList: ConfigOptions.sidebar.booru.hide ? 
         baseTabButtonList.slice(0, 2) : baseTabButtonList
