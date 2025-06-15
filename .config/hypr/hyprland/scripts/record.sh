@@ -22,7 +22,7 @@ if pgrep wf-recorder > /dev/null; then
     pkill wf-recorder &
 else
     if ! region="$(slurp 2>&1)"; then
-      notify-send "Recording Cancelled" "Selection was Cancelled" -a 'Recorder'
+      notify-send "Recording cancelled" "Selection was cancelled" -a 'Recorder'
       exit 1
     fi
 
