@@ -107,7 +107,7 @@ Item { // Wrapper
         property list<string> baseCommand: ["bash", "-c"]
         function executeCommand(command) {
             executor.command = baseCommand.concat(
-                `${command} || ${ConfigOptions.apps.terminal} fish -C 'echo "${qsTr("Searching for package with that command")}..." && pacman -F ${command}'`
+                `${command}`
             )
             executor.startDetached()
         }
