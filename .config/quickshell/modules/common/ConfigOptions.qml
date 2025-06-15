@@ -48,6 +48,7 @@ Singleton {
         property string topLeftIcon: "spark" // Options: distro, spark
         property bool showBackground: true
         property bool verbose: true
+        property bool startsVisible: true // false to have the bar start as hidden on login
         property QtObject resources: QtObject {
             property bool alwaysShowSwap: true
             property bool alwaysShowCpu: false
