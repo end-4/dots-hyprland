@@ -13,6 +13,7 @@ Singleton {
     property bool overviewOpen: false
     property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true
+    property bool barVisible: ConfigOptions.bar.startsVisible
 
     // When user is not reluctant while pressing super, they probably don't need to see workspace numbers
     onSuperReleaseMightTriggerChanged: { 
