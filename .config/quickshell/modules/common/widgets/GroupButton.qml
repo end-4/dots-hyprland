@@ -23,8 +23,8 @@ Button {
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
     property bool bounce: true
-    property real baseWidth: contentItem.implicitWidth + padding * 2
-    property real baseHeight: contentItem.implicitHeight + padding * 2
+    property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
+    property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
     property real clickedWidth: baseWidth + 20
     property real clickedHeight: baseHeight
     property var parentGroup: root.parent

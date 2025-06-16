@@ -19,12 +19,12 @@ Scope { // Scope
     Variants { // For each monitor
         model: Quickshell.screens
 
-        Loader {
+        LazyLoader {
             id: dockLoader
             required property var modelData
-            active: ConfigOptions?.dock.hoverToReveal || (!ToplevelManager.activeToplevel?.activated)
+            activeAsync: ConfigOptions?.dock.hoverToReveal || (!ToplevelManager.activeToplevel?.activated)
 
-            sourceComponent: PanelWindow { // Window
+            component: PanelWindow { // Window
                 id: dockRoot
                 screen: dockLoader.modelData
                 
