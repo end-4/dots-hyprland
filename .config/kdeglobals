@@ -166,7 +166,7 @@ Sort directories first=true
 Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=168
-View Style=DetailTree
+View Style=Simple
 
 [Sounds]
 Theme=freedesktop
