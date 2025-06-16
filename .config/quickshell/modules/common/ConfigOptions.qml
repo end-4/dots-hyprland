@@ -62,6 +62,9 @@ Singleton {
             property bool showMicToggle: false
             property bool showKeyboardToggle: true
         }
+        property QtObject tray: QtObject {
+            property bool monochromeIcons: true
+        }
         property QtObject workspaces: QtObject {
             property int shown: 10
             property bool showAppIcons: true
