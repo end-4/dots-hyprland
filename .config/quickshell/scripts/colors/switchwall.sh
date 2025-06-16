@@ -227,7 +227,7 @@ switch() {
 
     matugen "${matugen_args[@]}"
     source "$(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate"
-    python "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
+    python3 "$SCRIPT_DIR/generate_colors_material.py" "${generate_colors_material_args[@]}" \
         > "$STATE_DIR"/user/generated/material_colors.scss
     "$SCRIPT_DIR"/applycolor.sh
     deactivate
@@ -245,6 +245,15 @@ main() {
     color_flag=""
     color=""
     noswitch_flag=""
+
+    get_type_from_config() {
+        jq -r '.appearance.palette.type' "$XDG_CONFIG_HOME/illogical-impulse/config.json" 2>/dev/null || echo "auto"
+    }
+
+    detect_scheme_type_from_image() {
+        local img="$1"
+        "$SCRIPT_DIR"/scheme_for_image.py "$img" 2>/dev/null | tr -d '\n'
+    }
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -280,10 +289,53 @@ main() {
         esac
     done
 
+    # If type_flag is not set, get it from config
+    if [[ -z "$type_flag" ]]; then
+        type_flag="$(get_type_from_config)"
+    fi
+
+    # Validate type_flag (allow 'auto' as well)
+    allowed_types=(scheme-content scheme-expressive scheme-fidelity scheme-fruit-salad scheme-monochrome scheme-neutral scheme-rainbow scheme-tonal-spot auto)
+    valid_type=0
+    for t in "${allowed_types[@]}"; do
+        if [[ "$type_flag" == "$t" ]]; then
+            valid_type=1
+            break
+        fi
+    done
+    if [[ $valid_type -eq 0 ]]; then
+        echo "[switchwall.sh] Warning: Invalid type '$type_flag', defaulting to 'auto'" >&2
+        type_flag="auto"
+    fi
+
     # Only prompt for wallpaper if not using --color and not using --noswitch and no imgpath set
     if [[ -z "$imgpath" && -z "$color_flag" && -z "$noswitch_flag" ]]; then
         cd "$(xdg-user-dir PICTURES)/Wallpapers" 2>/dev/null || cd "$(xdg-user-dir PICTURES)" || return 1
         imgpath="$(kdialog --getopenfilename . --title 'Choose wallpaper')"
+    fi
+
+    # If type_flag is 'auto', detect scheme type from image (after imgpath is set)
+    if [[ "$type_flag" == "auto" ]]; then
+        if [[ -n "$imgpath" && -f "$imgpath" ]]; then
+            detected_type="$(detect_scheme_type_from_image "$imgpath")"
+            # Only use detected_type if it's valid
+            valid_detected=0
+            for t in "${allowed_types[@]}"; do
+                if [[ "$detected_type" == "$t" && "$detected_type" != "auto" ]]; then
+                    valid_detected=1
+                    break
+                fi
+            done
+            if [[ $valid_detected -eq 1 ]]; then
+                type_flag="$detected_type"
+            else
+                echo "[switchwall] Warning: Could not auto-detect a valid scheme, defaulting to 'scheme-tonal-spot'" >&2
+                type_flag="scheme-tonal-spot"
+            fi
+        else
+            echo "[switchwall] Warning: No image to auto-detect scheme from, defaulting to 'scheme-tonal-spot'" >&2
+            type_flag="scheme-tonal-spot"
+        fi
     fi
 
     switch "$imgpath" "$mode_flag" "$type_flag" "$color_flag" "$color"
