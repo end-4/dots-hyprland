@@ -15,8 +15,12 @@ import Quickshell.Services.UPower
 Scope {
     id: root
     property string filePath: `${Directories.state}/user/generated/wallpaper/least_busy_region.json`
-    property real centerX: -500
-    property real centerY: -500
+    property real defaultX: (ConfigOptions?.background.clockX ?? -500)
+    property real defaultY: (ConfigOptions?.background.clockY ?? -500)
+    property real centerX: defaultX
+    property real centerY: defaultY
+    property real effectiveCenterX: ConfigOptions?.background.fixedClockPosition ? defaultX : centerX
+    property real effectiveCenterY: ConfigOptions?.background.fixedClockPosition ? defaultY : centerY
     property color dominantColor: Appearance.colors.colPrimary
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
     property color colBackground: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer), 1)
@@ -42,7 +46,7 @@ Scope {
     FileView { 
         id: leastBusyRegionFileView
         path: Qt.resolvedUrl(root.filePath)
-        watchChanges: true
+        watchChanges: !ConfigOptions?.background.fixedClockPosition
         onFileChanged: {
             this.reload()
             delayedFileRead.start()
@@ -63,8 +67,8 @@ Scope {
             component: PanelWindow { // Window
                 id: windowRoot
                 screen: modelData
-                property var textHorizontalAlignment: root.centerX / monitor.scale < windowRoot.width / 3 ? Text.AlignLeft :
-                    (root.centerX / monitor.scale > windowRoot.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
+                property var textHorizontalAlignment: root.effectiveCenterX / monitor.scale < windowRoot.width / 3 ? Text.AlignLeft :
+                    (root.effectiveCenterX / monitor.scale > windowRoot.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
 
                 WlrLayershell.layer: WlrLayer.Bottom
                 WlrLayershell.namespace: "quickshell:backgroundWidgets"
@@ -91,8 +95,8 @@ Scope {
                     anchors {
                         left: parent.left
                         top: parent.top
-                        leftMargin: (root.centerX / monitor.scale - implicitWidth / 2)
-                        topMargin: (root.centerY / monitor.scale - implicitHeight / 2)
+                        leftMargin: (root.effectiveCenterX / monitor.scale - implicitWidth / 2)
+                        topMargin: (root.effectiveCenterY / monitor.scale - implicitHeight / 2)
                         Behavior on leftMargin {
                             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                         }

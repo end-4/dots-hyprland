@@ -39,10 +39,10 @@ Singleton {
         property string terminal: "kitty -1" // This is only for shell actions
     }
 
-    property QtObject battery: QtObject {
-        property int low: 20
-        property int critical: 5
-        property int suspend: 2
+    property QtObject background: QtObject {
+        property bool fixedClockPosition: false
+        property real clockX: -500
+        property real clockY: -500
     }
 
     property QtObject bar: QtObject {
@@ -68,6 +68,12 @@ Singleton {
             property bool alwaysShowNumbers: false
             property int showNumberDelay: 300 // milliseconds
         }
+    }
+
+    property QtObject battery: QtObject {
+        property int low: 20
+        property int critical: 5
+        property int suspend: 2
     }
 
     property QtObject dock: QtObject {
