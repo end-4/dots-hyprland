@@ -28,7 +28,7 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton | Qt.BackButton | Qt.ForwardButton
         onPressed: (event) => {
             if (event.button === Qt.MiddleButton) {
                 activePlayer.togglePlaying();
@@ -40,6 +40,10 @@ Item {
                 }
             } else if (event.button === Qt.LeftButton) {
                 Hyprland.dispatch("global quickshell:mediaControlsToggle")
+            } else if (event.button === Qt.BackButton) {
+                activePlayer.previous();
+            } else if (event.button === Qt.ForwardButton) {
+                activePlayer.next();
             }
         }
     }
