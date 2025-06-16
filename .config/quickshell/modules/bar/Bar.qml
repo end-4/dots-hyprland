@@ -19,8 +19,6 @@ Scope {
     readonly property int osdHideMouseMoveThreshold: 20
     property bool showBarBackground: ConfigOptions.bar.showBackground
 
-    visible: GlobalStates.barVisible
-
     component VerticalBarSeparator: Rectangle {
         Layout.topMargin: barHeight / 3
         Layout.bottomMargin: barHeight / 3
@@ -58,6 +56,7 @@ Scope {
                 item: barContent
             }
             color: "transparent"
+            visible: GlobalStates.barVisible
 
             anchors {
                 top: !ConfigOptions.bar.bottom
