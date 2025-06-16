@@ -17,7 +17,7 @@ Singleton {
     property double swapTotal: 1
 	property double swapFree: 1
 	property double swapUsed: swapTotal - swapFree
-    property double swapUsedPercentage: swapUsed / swapTotal
+    property double swapUsedPercentage: swapTotal > 0 ? (swapUsed / swapTotal) : 0
     property double cpuUsage: 0
     property var previousCpuStats
 
