@@ -124,7 +124,7 @@ create_restore_script() {
 pkill -f -9 mpvpaper
 
 for monitor in \$(hyprctl monitors -j | jq -r '.[] | .name'); do
-    mpvpaper -o "$VIDEO_OPTS" "\$monitor" "$video_path" &
+    mpvpaper -o "$VIDEO_OPTS" "\$monitor" "$video_path" --mpv-options '--load-scripts=no' &
     sleep 0.1
 done
 EOF
@@ -196,7 +196,7 @@ switch() {
             local video_path="$imgpath"
             monitors=$(hyprctl monitors -j | jq -r '.[] | .name')
             for monitor in $monitors; do
-                mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" &
+                mpvpaper -o "$VIDEO_OPTS" "$monitor" "$video_path" --mpv-options '--load-scripts=no' &
                 sleep 0.1
             done
 
