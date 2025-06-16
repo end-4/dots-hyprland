@@ -10,6 +10,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MATUGEN_DIR="$XDG_CONFIG_HOME/matugen"
 terminalscheme="$XDG_CONFIG_HOME/quickshell/scripts/terminal/scheme-base.json"
 
+handle_kde_material_you_colors() {
+    # Map $type_flag to allowed scheme variants for kde-material-you-colors-wrapper.sh
+    local kde_scheme_variant=""
+    case "$type_flag" in
+        scheme-content|scheme-expressive|scheme-fidelity|scheme-fruit-salad|scheme-monochrome|scheme-neutral|scheme-rainbow|scheme-tonal-spot)
+            kde_scheme_variant="$type_flag"
+            ;;
+        *)
+            kde_scheme_variant="scheme-tonal-spot" # default
+            ;;
+    esac
+    "$XDG_CONFIG_HOME"/matugen/templates/kde/kde-material-you-colors-wrapper.sh --scheme-variant "$kde_scheme_variant"
+}
+
 pre_process() {
     local mode_flag="$1"
     # Set GNOME color-scheme if mode_flag is dark or light
@@ -30,6 +44,8 @@ post_process() {
     local screen_width="$1"
     local screen_height="$2"
     local wallpaper_path="$3"
+
+    handle_kde_material_you_colors &
 
     # Determine the largest region on the wallpaper that's sufficiently un-busy to put widgets in
     if [ ! -f "$MATUGEN_DIR/scripts/least_busy_region.py" ]; then

@@ -56,11 +56,5 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
-apply_ags() {
-  pidof agsv1 && agsv1 run-js "handleStyles(false);"
-  pidof agsv1 && agsv1 run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
-}
-
-apply_ags &
 apply_qt &
 apply_term &
