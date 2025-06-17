@@ -38,7 +38,7 @@ ApplicationWindow {
     minimumWidth: 600
     minimumHeight: 400
     width: 800
-    height: 600
+    height: 650
     color: Appearance.m3colors.m3background
 
     Process {
@@ -53,13 +53,29 @@ ApplicationWindow {
         }
     }
 
+    component SelectionConnectedButton: GroupButton {
+        id: selectionConnectedButtonRoot
+        horizontalPadding: 12
+        verticalPadding: 8
+        bounce: false
+        property bool leftmost: false
+        property bool rightmost: false
+        leftRadius: (toggled || leftmost) ? (height / 2) : Appearance.rounding.unsharpenmore
+        rightRadius: (toggled || rightmost) ? (height / 2) : Appearance.rounding.unsharpenmore
+        colBackground: Appearance.colors.colSecondaryContainer
+        contentItem: StyledText {
+            color: parent.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+            text: selectionConnectedButtonRoot.buttonText
+        }
+    }
+
     component Section: ColumnLayout {
         id: sectionRoot
         property string title
         default property alias data: sectionContent.data
 
         Layout.fillWidth: true
-        spacing: 10
+        spacing: 8
         StyledText {
             text: sectionRoot.title
             font.pixelSize: Appearance.font.pixelSize.larger
@@ -84,10 +100,10 @@ ApplicationWindow {
         }
         implicitHeight: 35
         horizontalPadding: 15
-        buttonRadius: Appearance.rounding.full
-        colBackground: Appearance.colors.colSecondaryContainer
-        colBackgroundHover: Appearance.colors.colSecondaryContainerHover
-        colRipple: Appearance.colors.colSecondaryContainerActive
+        buttonRadius: Appearance.rounding.small
+        colBackground: Appearance.colors.colLayer2
+        // colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+        // colRipple: Appearance.colors.colSecondaryContainerActive
 
         contentItem: RowLayout {
             Item {
@@ -295,69 +311,165 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius: Appearance.rounding.windowRounding - root.contentPadding
-            ColumnLayout {
-                id: contentColumn
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    margins: 10
-                }
-                spacing: 20
-
-                Section {
-                    title: "Style & wallpaper"
-
-                    ButtonGroup {
-                        Layout.fillWidth: true
-                        LightDarkPrefButton {
-                            dark: false
-                        }
-                        LightDarkPrefButton {
-                            dark: true
-                        }
+            Flickable {
+                clip: true
+                anchors.fill: parent
+                contentHeight: contentColumn.implicitHeight
+                implicitWidth: contentColumn.implicitWidth
+                ColumnLayout {
+                    id: contentColumn
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        margins: 10
                     }
+                    spacing: 20
 
-                    RowLayout {
-                        Layout.alignment: Qt.AlignHCenter
-                        ButtonWithIcon {
-                            id: rndWallBtn
+                    Section {
+                        title: "Style & wallpaper"
+
+                        ButtonGroup {
+                            Layout.fillWidth: true
+                            LightDarkPrefButton {
+                                dark: false
+                            }
+                            LightDarkPrefButton {
+                                dark: true
+                            }
+                        }
+
+                        RowLayout {
                             Layout.alignment: Qt.AlignHCenter
-                            buttonRadius: Appearance.rounding.small
-                            iconText: "wallpaper"
-                            mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
-                            onClicked: {
-                                console.log(konachanWallProc.command.join(" "))
-                                konachanWallProc.running = true;
+                            ButtonWithIcon {
+                                id: rndWallBtn
+                                Layout.alignment: Qt.AlignHCenter
+                                buttonRadius: Appearance.rounding.small
+                                iconText: "wallpaper"
+                                mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                                onClicked: {
+                                    console.log(konachanWallProc.command.join(" "))
+                                    konachanWallProc.running = true;
+                                }
+                            }
+                            ButtonWithIcon {
+                                iconText: "wallpaper"
+                                onClicked: {
+                                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                                }
+                                mainContentComponent: Component {
+                                    RowLayout {
+                                        spacing: 10
+                                        StyledText {
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: "Choose file"
+                                            color: Appearance.colors.colOnSecondaryContainer
+                                        }
+                                        RowLayout {
+                                            spacing: 3
+                                            KeyboardKey {
+                                                key: "Ctrl"
+                                            }
+                                            KeyboardKey {
+                                                key: "󰖳"
+                                            }
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                text: "+"
+                                            }
+                                            KeyboardKey {
+                                                key: "T"
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-                        ButtonWithIcon {
-                            iconText: "wallpaper"
-                            onClicked: {
-                                Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
-                            }
-                            mainContentComponent: Component {
-                                RowLayout {
-                                    spacing: 10
-                                    StyledText {
-                                        font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Choose file"
-                                        color: Appearance.colors.colOnSecondaryContainer
+
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: "Change any time later with /dark, /light, /img in the launcher"
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.colors.colSubtext
+                        }
+                    }
+
+                    Section {
+                        title: "Policies"
+
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: 15
+                            ColumnLayout { // Weeb policy
+                                StyledText {
+                                    text: "Weeb"
+                                    color: Appearance.colors.colSubtext
+                                }
+                                ButtonGroup {
+                                    id: weebPolicyBtnGroup
+                                    property int selectedPolicy: ConfigOptions.policies.weeb
+                                    spacing: 2
+                                    SelectionConnectedButton {
+                                        property int value: 0
+                                        leftmost: true
+                                        buttonText: "No"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                        }
                                     }
-                                    RowLayout {
-                                        spacing: 3
-                                        KeyboardKey {
-                                            key: "Ctrl"
+                                    SelectionConnectedButton {
+                                        property int value: 1
+                                        buttonText: "Yes"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
                                         }
-                                        KeyboardKey {
-                                            key: "󰖳"
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 2
+                                        rightmost: true
+                                        buttonText: "Closet"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
                                         }
-                                        StyledText {
-                                            Layout.alignment: Qt.AlignVCenter
-                                            text: "+"
+                                    }
+                                }
+                            }
+                            ColumnLayout { // AI policy
+                                StyledText {
+                                    text: "AI"
+                                    color: Appearance.colors.colSubtext
+                                }
+                                ButtonGroup {
+                                    id: aiPolicyBtnGroup
+                                    property int selectedPolicy: ConfigOptions.policies.ai
+                                    spacing: 2
+                                    SelectionConnectedButton {
+                                        property int value: 0
+                                        leftmost: true
+                                        buttonText: "No"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
                                         }
-                                        KeyboardKey {
-                                            key: "T"
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 1
+                                        buttonText: "Yes"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                        }
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 2
+                                        rightmost: true
+                                        buttonText: "Local only"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
                                         }
                                     }
                                 }
@@ -365,99 +477,90 @@ ApplicationWindow {
                         }
                     }
 
-                    StyledText {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: "Change any time later with /dark, /light, /img in the launcher"
-                        font.pixelSize: Appearance.font.pixelSize.smaller
-                        color: Appearance.colors.colSubtext
-                    }
-                }
+                    Section {
+                        title: "Info"
 
-                Section {
-                    title: "Info"
+                        Flow {
+                            Layout.fillWidth: true
+                            spacing: 10
 
-                    Flow {
-                        Layout.fillWidth: true
-                        spacing: 10
-
-                        ButtonWithIcon {
-                            iconText: "keyboard_alt"
-                            onClicked: {
-                                Hyprland.dispatch("global quickshell:cheatsheetOpen")
-                            }
-                            mainContentComponent: Component {
-                                RowLayout {
-                                    spacing: 10
-                                    StyledText {
-                                        font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Keybinds"
-                                        color: Appearance.colors.colOnSecondaryContainer
-                                    }
+                            ButtonWithIcon {
+                                iconText: "keyboard_alt"
+                                onClicked: {
+                                    Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                                }
+                                mainContentComponent: Component {
                                     RowLayout {
-                                        spacing: 3
-                                        KeyboardKey {
-                                            key: "󰖳"
-                                        }
+                                        spacing: 10
                                         StyledText {
-                                            Layout.alignment: Qt.AlignVCenter
-                                            text: "+"
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: "Keybinds"
+                                            color: Appearance.colors.colOnSecondaryContainer
                                         }
-                                        KeyboardKey {
-                                            key: "/"
+                                        RowLayout {
+                                            spacing: 3
+                                            KeyboardKey {
+                                                key: "󰖳"
+                                            }
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                text: "+"
+                                            }
+                                            KeyboardKey {
+                                                key: "/"
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        ButtonWithIcon {
-                            iconText: "help"
-                            mainText: "Usage"
-                            onClicked: {
-                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                            ButtonWithIcon {
+                                iconText: "help"
+                                mainText: "Usage"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                                }
                             }
-                        }
-                        ButtonWithIcon {
-                            iconText: "construction"
-                            mainText: "Configuration"
-                            onClicked: {
-                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
+                            ButtonWithIcon {
+                                iconText: "construction"
+                                mainText: "Configuration"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
+                                }
                             }
                         }
                     }
-                }
 
-                Section {
-                    title: "Useless buttons"
+                    Section {
+                        title: "Useless buttons"
 
-                    Flow {
+                        Flow {
+                            Layout.fillWidth: true
+                            spacing: 10
+
+                            ButtonWithIcon {
+                                nerdIcon: "󰊤"
+                                mainText: "GitHub"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
+                                }
+                            }
+                            ButtonWithIcon {
+                                iconText: "favorite"
+                                mainText: "Funny number"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://github.com/sponsors/end-4")
+                                }
+                            }
+                        }
+                    }
+
+                    Item {
                         Layout.fillWidth: true
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        spacing: 10
-
-                        ButtonWithIcon {
-                            nerdIcon: "󰊤"
-                            mainText: "GitHub"
-                            onClicked: {
-                                Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
-                            }
-                        }
-                        ButtonWithIcon {
-                            iconText: "favorite"
-                            mainText: "Funny number"
-                            onClicked: {
-                                Qt.openUrlExternally("https://github.com/sponsors/end-4")
-                            }
-                        }
+                        Layout.fillHeight: true
                     }
-                }
 
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
                 }
-
             }
         }
     }
