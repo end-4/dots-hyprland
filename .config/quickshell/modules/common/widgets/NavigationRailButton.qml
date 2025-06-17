@@ -12,6 +12,9 @@ Button {
     property bool toggled
     property string buttonIcon
     property string buttonText
+    property bool expanded: false
+
+    property real baseSize: 50
 
     Layout.alignment: Qt.AlignHCenter
     implicitHeight: columnLayout.implicitHeight
@@ -25,7 +28,7 @@ Button {
         id: columnLayout
         spacing: 5
         Rectangle {
-            width: 62
+            implicitWidth: 62
             implicitHeight: navRailButtonIcon.height + 2 * 2
             Layout.alignment: Qt.AlignHCenter
             radius: Appearance.rounding.full

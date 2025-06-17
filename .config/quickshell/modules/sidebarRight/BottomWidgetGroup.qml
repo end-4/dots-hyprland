@@ -138,7 +138,7 @@ Rectangle {
                 spacing: 15
                 Repeater {
                     model: root.tabs
-                    NavRailButton {
+                    NavigationRailButton {
                         toggled: root.selectedTab == index
                         buttonText: modelData.name
                         buttonIcon: modelData.icon
