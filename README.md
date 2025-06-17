@@ -64,6 +64,13 @@
   - For a more comprehensive list of dependencies, see [scriptdata/dependencies.conf](https://github.com/end-4/dots-hyprland/blob/main/scriptdata/dependencies.conf)
 </details>
 
+<details>
+  <summary>Logo ideas welcome</summary>
+    
+  - See [#1436](https://github.com/end-4/dots-hyprland/issues/1436)
+    
+</details>
+
 <div align="center">
     <h2>• screenshots •</h2>
     <h3></h3>
