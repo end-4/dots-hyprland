@@ -11,6 +11,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 import "root:/services/"
 import "root:/modules/common/"
@@ -39,6 +40,18 @@ ApplicationWindow {
     width: 800
     height: 600
     color: Appearance.m3colors.m3background
+
+    Process {
+        id: konachanWallProc
+        property string status: ""
+        command: ["bash", "-c", FileUtils.trimFileProtocol(`${Directories.config}/quickshell/scripts/colors/random_konachan_wall.sh`)]
+        stdout: SplitParser {
+            onRead: data => {
+                console.log(`Konachan wall proc output: ${data}`);
+                konachanWallProc.status = data.trim();
+            }
+        }
+    }
 
     component Section: ColumnLayout {
         id: sectionRoot
@@ -235,7 +248,7 @@ ApplicationWindow {
                 id: welcomeText
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer0
-                text: "Welcome"
+                text: "Yooooo hi there"
                 font.pixelSize: Appearance.font.pixelSize.hugeass
                 font.family: Appearance.font.family.title
             }
@@ -304,6 +317,18 @@ ApplicationWindow {
                             dark: true
                         }
                     }
+
+                    ButtonWithIcon {
+                        id: rndWallBtn
+                        Layout.alignment: Qt.AlignHCenter
+                        buttonRadius: Appearance.rounding.small
+                        iconText: "ifl"
+                        mainText: konachanWallProc.running ? "Be patient..." : "Random SFW Konachan wallpaper"
+                        onClicked: {
+                            console.log(konachanWallProc.command.join(" "))
+                            konachanWallProc.running = true;
+                        }
+                    }
                 }
 
                 Section {
@@ -323,7 +348,7 @@ ApplicationWindow {
                                     spacing: 10
                                     StyledText {
                                         font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Open keybind cheatsheet"
+                                        text: "Keybinds"
                                         color: Appearance.colors.colOnSecondaryContainer
                                     }
                                     RowLayout {
