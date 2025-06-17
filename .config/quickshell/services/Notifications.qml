@@ -217,8 +217,10 @@ Singleton {
             const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
             action.invoke()
         } 
-        // else console.log("Notification not found in server: " + id)
-        // root.discard(id);
+        else {
+            console.log("Notification not found in server: " + id)
+            root.discardNotification(id);
+        }
     }
 
     function triggerListChange() {

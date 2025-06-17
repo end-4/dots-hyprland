@@ -16,8 +16,8 @@ Button {
     id: root
     property bool toggled
     property string buttonText
-    property real buttonRadius: Appearance?.rounding?.small ?? 4
-    property real buttonRadiusPressed: buttonRadius
+    property real buttonRadius: Appearance?.rounding?.small ?? 8
+    property real buttonRadiusPressed: Appearance?.rounding?.small ?? 6
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
     property var altAction // When right clicking
@@ -34,18 +34,6 @@ Button {
     Layout.fillHeight: (clickIndex - 1 <= parentGroup.children.indexOf(root) && parentGroup.children.indexOf(root) <= clickIndex + 1)
     implicitWidth: (root.down && bounce) ? clickedWidth : baseWidth
     implicitHeight: (root.down && bounce) ? clickedHeight : baseHeight
-    
-    Behavior on implicitWidth {
-        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
-    }
-
-    Behavior on implicitHeight {
-        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
-    }
-
-    Behavior on radius {
-        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
-    }
 
     property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
@@ -55,6 +43,8 @@ Button {
     property color colBackgroundToggledActive: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
 
     property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
+    property real leftRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
+    property real rightRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property color color: root.enabled ? (root.toggled ? 
         (root.down ? colBackgroundToggledActive : 
             root.hovered ? colBackgroundToggledHover : 
@@ -69,6 +59,21 @@ Button {
                 root.parent.clickIndex = parent.children.indexOf(root)
             }
         }
+    }
+
+    Behavior on implicitWidth {
+        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
+    }
+
+    Behavior on implicitHeight {
+        animation: Appearance.animation.clickBounce.numberAnimation.createObject(this)
+    }
+
+    Behavior on leftRadius {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+    Behavior on rightRadius {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
     }
 
     MouseArea {
@@ -100,7 +105,10 @@ Button {
 
     background: Rectangle {
         id: buttonBackground
-        radius: root.radius
+        topLeftRadius: root.leftRadius
+        topRightRadius: root.rightRadius
+        bottomLeftRadius: root.leftRadius
+        bottomRightRadius: root.rightRadius
         implicitHeight: 50
 
         color: root.color

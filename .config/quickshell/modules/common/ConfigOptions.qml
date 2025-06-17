@@ -155,6 +155,10 @@ Singleton {
         property string dateFormat: "dddd, dd/MM"
     }
 
+    property QtObject windows: QtObject {
+        property bool showTitlebar: true // Client-side decoration for shell apps
+    }
+
     property QtObject hacks: QtObject {
         property int arbitraryRaceConditionDelay: 20 // milliseconds
     }

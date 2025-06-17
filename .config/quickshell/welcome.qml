@@ -11,6 +11,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
 import Quickshell
+import Quickshell.Io
 import Quickshell.Hyprland
 import "root:/services/"
 import "root:/modules/common/"
@@ -25,7 +26,6 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 5
     property bool showNextTime: false
-
     visible: true
     onClosing: Qt.quit()
     title: "illogical-impulse Welcome"
@@ -38,8 +38,36 @@ ApplicationWindow {
     minimumWidth: 600
     minimumHeight: 400
     width: 800
-    height: 600
+    height: 650
     color: Appearance.m3colors.m3background
+
+    Process {
+        id: konachanWallProc
+        property string status: ""
+        command: ["bash", "-c", FileUtils.trimFileProtocol(`${Directories.config}/quickshell/scripts/colors/random_konachan_wall.sh`)]
+        stdout: SplitParser {
+            onRead: data => {
+                console.log(`Konachan wall proc output: ${data}`);
+                konachanWallProc.status = data.trim();
+            }
+        }
+    }
+
+    component SelectionConnectedButton: GroupButton {
+        id: selectionConnectedButtonRoot
+        horizontalPadding: 12
+        verticalPadding: 8
+        bounce: false
+        property bool leftmost: false
+        property bool rightmost: false
+        leftRadius: (toggled || leftmost) ? (height / 2) : Appearance.rounding.unsharpenmore
+        rightRadius: (toggled || rightmost) ? (height / 2) : Appearance.rounding.unsharpenmore
+        colBackground: Appearance.colors.colSecondaryContainer
+        contentItem: StyledText {
+            color: parent.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
+            text: selectionConnectedButtonRoot.buttonText
+        }
+    }
 
     component Section: ColumnLayout {
         id: sectionRoot
@@ -47,7 +75,7 @@ ApplicationWindow {
         default property alias data: sectionContent.data
 
         Layout.fillWidth: true
-        spacing: 10
+        spacing: 8
         StyledText {
             text: sectionRoot.title
             font.pixelSize: Appearance.font.pixelSize.larger
@@ -55,6 +83,56 @@ ApplicationWindow {
         ColumnLayout {
             id: sectionContent
             spacing: 5
+        }
+    }
+
+    component ButtonWithIcon: RippleButton {
+        id: buttonWithIconRoot
+        property string nerdIcon
+        property string iconText
+        property string mainText: "Button text"
+        property Component mainContentComponent: Component {
+            StyledText {
+                text: buttonWithIconRoot.mainText
+                font.pixelSize: Appearance.font.pixelSize.small
+                color: Appearance.colors.colOnSecondaryContainer
+            }
+        }
+        implicitHeight: 35
+        horizontalPadding: 15
+        buttonRadius: Appearance.rounding.small
+        colBackground: Appearance.colors.colLayer2
+
+        contentItem: RowLayout {
+            Item {
+                implicitWidth: Math.max(materialIconLoader.implicitWidth, nerdIconLoader.implicitWidth)
+                Loader {
+                    id: materialIconLoader
+                    anchors.centerIn: parent
+                    active: !nerdIcon
+                    sourceComponent: MaterialSymbol {
+                        text: buttonWithIconRoot.iconText
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: Appearance.colors.colOnSecondaryContainer
+                        fill: 1
+                    }
+                }
+                Loader {
+                    id: nerdIconLoader
+                    anchors.centerIn: parent
+                    active: nerdIcon
+                    sourceComponent: StyledText {
+                        text: buttonWithIconRoot.nerdIcon
+                        font.pixelSize: Appearance.font.pixelSize.larger
+                        font.family: Appearance.font.family.iconNerd
+                        color: Appearance.colors.colOnSecondaryContainer
+                    }
+                }
+            }
+            Loader {
+                sourceComponent: buttonWithIconRoot.mainContentComponent
+                Layout.alignment: Qt.AlignVCenter
+            }
         }
     }
 
@@ -178,14 +256,16 @@ ApplicationWindow {
             fill: parent
             margins: contentPadding
         }
+
         Item {
+            visible: ConfigOptions?.windows.showTitlebar
             Layout.fillWidth: true
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
                 id: welcomeText
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer0
-                text: "Welcome"
+                text: "Yooooo hi there"
                 font.pixelSize: Appearance.font.pixelSize.hugeass
                 font.family: Appearance.font.family.title
             }
@@ -232,69 +312,256 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             radius: Appearance.rounding.windowRounding - root.contentPadding
-            ColumnLayout {
-                id: contentColumn
-                anchors {
-                    top: parent.top
-                    bottom: parent.bottom
-                    horizontalCenter: parent.horizontalCenter
-                    margins: 10
-                }
-                spacing: 20
+            Flickable {
+                clip: true
+                anchors.fill: parent
+                contentHeight: contentColumn.implicitHeight
+                implicitWidth: contentColumn.implicitWidth
+                ColumnLayout {
+                    id: contentColumn
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        margins: 10
+                    }
+                    spacing: 20
 
-                Section {
-                    title: "Customize"
+                    Section {
+                        title: "Style & wallpaper"
 
-                    ButtonGroup {
+                        ButtonGroup {
+                            Layout.fillWidth: true
+                            LightDarkPrefButton {
+                                dark: false
+                            }
+                            LightDarkPrefButton {
+                                dark: true
+                            }
+                        }
+
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            ButtonWithIcon {
+                                id: rndWallBtn
+                                Layout.alignment: Qt.AlignHCenter
+                                buttonRadius: Appearance.rounding.small
+                                iconText: "wallpaper"
+                                mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                                onClicked: {
+                                    console.log(konachanWallProc.command.join(" "))
+                                    konachanWallProc.running = true;
+                                }
+                            }
+                            ButtonWithIcon {
+                                iconText: "wallpaper"
+                                onClicked: {
+                                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                                }
+                                mainContentComponent: Component {
+                                    RowLayout {
+                                        spacing: 10
+                                        StyledText {
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: "Choose file"
+                                            color: Appearance.colors.colOnSecondaryContainer
+                                        }
+                                        RowLayout {
+                                            spacing: 3
+                                            KeyboardKey {
+                                                key: "Ctrl"
+                                            }
+                                            KeyboardKey {
+                                                key: "󰖳"
+                                            }
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                text: "+"
+                                            }
+                                            KeyboardKey {
+                                                key: "T"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        StyledText {
+                            Layout.alignment: Qt.AlignHCenter
+                            text: "Change any time later with /dark, /light, /img in the launcher"
+                            font.pixelSize: Appearance.font.pixelSize.smaller
+                            color: Appearance.colors.colSubtext
+                        }
+                    }
+
+                    Section {
+                        title: "Policies"
+
+                        RowLayout {
+                            Layout.alignment: Qt.AlignHCenter
+                            spacing: 15
+                            ColumnLayout { // Weeb policy
+                                StyledText {
+                                    text: "Weeb"
+                                    color: Appearance.colors.colSubtext
+                                }
+                                ButtonGroup {
+                                    id: weebPolicyBtnGroup
+                                    property int selectedPolicy: ConfigOptions.policies.weeb
+                                    spacing: 2
+                                    SelectionConnectedButton {
+                                        property int value: 0
+                                        leftmost: true
+                                        buttonText: "No"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                        }
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 1
+                                        buttonText: "Yes"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                        }
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 2
+                                        rightmost: true
+                                        buttonText: "Closet"
+                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                        }
+                                    }
+                                }
+                            }
+                            ColumnLayout { // AI policy
+                                StyledText {
+                                    text: "AI"
+                                    color: Appearance.colors.colSubtext
+                                }
+                                ButtonGroup {
+                                    id: aiPolicyBtnGroup
+                                    property int selectedPolicy: ConfigOptions.policies.ai
+                                    spacing: 2
+                                    SelectionConnectedButton {
+                                        property int value: 0
+                                        leftmost: true
+                                        buttonText: "No"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                        }
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 1
+                                        buttonText: "Yes"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                        }
+                                    }
+                                    SelectionConnectedButton {
+                                        property int value: 2
+                                        rightmost: true
+                                        buttonText: "Local only"
+                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                        onClicked: {
+                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Section {
+                        title: "Info"
+
+                        Flow {
+                            Layout.fillWidth: true
+                            spacing: 10
+
+                            ButtonWithIcon {
+                                iconText: "keyboard_alt"
+                                onClicked: {
+                                    Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                                }
+                                mainContentComponent: Component {
+                                    RowLayout {
+                                        spacing: 10
+                                        StyledText {
+                                            font.pixelSize: Appearance.font.pixelSize.small
+                                            text: "Keybinds"
+                                            color: Appearance.colors.colOnSecondaryContainer
+                                        }
+                                        RowLayout {
+                                            spacing: 3
+                                            KeyboardKey {
+                                                key: "󰖳"
+                                            }
+                                            StyledText {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                text: "+"
+                                            }
+                                            KeyboardKey {
+                                                key: "/"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            ButtonWithIcon {
+                                iconText: "help"
+                                mainText: "Usage"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                                }
+                            }
+                            ButtonWithIcon {
+                                iconText: "construction"
+                                mainText: "Configuration"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
+                                }
+                            }
+                        }
+                    }
+
+                    Section {
+                        title: "Useless buttons"
+
+                        Flow {
+                            Layout.fillWidth: true
+                            spacing: 10
+
+                            ButtonWithIcon {
+                                nerdIcon: "󰊤"
+                                mainText: "GitHub"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
+                                }
+                            }
+                            ButtonWithIcon {
+                                iconText: "favorite"
+                                mainText: "Funny number"
+                                onClicked: {
+                                    Qt.openUrlExternally("https://github.com/sponsors/end-4")
+                                }
+                            }
+                        }
+                    }
+
+                    Item {
                         Layout.fillWidth: true
-                        LightDarkPrefButton {
-                            dark: false
-                        }
-                        LightDarkPrefButton {
-                            dark: true
-                        }
+                        Layout.fillHeight: true
                     }
+
                 }
-
-                Section {
-                    title: "Info"
-
-                    RippleButton {
-                        implicitHeight: 35
-                        horizontalPadding: 10
-                        // buttonRadius: Appearance.rounding.full
-                        colBackground: Appearance.colors.colSecondaryContainer
-                        colBackgroundHover: Appearance.colors.colSecondaryContainerHover
-                        colRipple: Appearance.colors.colSecondaryContainerActive
-
-                        onClicked: {
-                            Hyprland.dispatch("global quickshell:cheatsheetOpen")
-                        }
-
-                        contentItem: RowLayout {
-                            KeyboardKey {
-                                key: "󰖳"
-                            }
-                            StyledText {
-                                Layout.alignment: Qt.AlignVCenter
-                                text: "+"
-                            }
-                            KeyboardKey {
-                                key: "/"
-                            }
-                            StyledText {
-                                text: "Open keybind cheatsheet"
-                                color: Appearance.colors.colOnSecondaryContainer
-                            }
-                        }
-                    }
-                }
-
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-
             }
         }
     }
