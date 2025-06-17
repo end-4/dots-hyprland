@@ -240,25 +240,36 @@ Scope {
 
                     VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
-                    BarGroup {
+                    MouseArea {
                         id: rightCenterGroup
+                        implicitWidth: rightCenterGroupContent.implicitWidth
+                        implicitHeight: rightCenterGroupContent.implicitHeight
                         Layout.preferredWidth: barRoot.centerSideModuleWidth
                         Layout.fillHeight: true
-                        
-                        ClockWidget {
-                            showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
-                            Layout.alignment: Qt.AlignVCenter
-                            Layout.fillWidth: true
+
+                        onPressed: {
+                            Hyprland.dispatch('global quickshell:sidebarRightToggle')
                         }
 
-                        UtilButtons {
-                            visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
-                            Layout.alignment: Qt.AlignVCenter
-                        }
+                        BarGroup {
+                            id: rightCenterGroupContent
+                            anchors.fill: parent
+                            
+                            ClockWidget {
+                                showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
+                                Layout.alignment: Qt.AlignVCenter
+                                Layout.fillWidth: true
+                            }
 
-                        BatteryIndicator {
-                            visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
-                            Layout.alignment: Qt.AlignVCenter
+                            UtilButtons {
+                                visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
+                                Layout.alignment: Qt.AlignVCenter
+                            }
+
+                            BatteryIndicator {
+                                visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
+                                Layout.alignment: Qt.AlignVCenter
+                            }
                         }
                     }
 
