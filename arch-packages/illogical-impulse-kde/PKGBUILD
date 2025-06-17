@@ -11,4 +11,5 @@ depends=(
 	plasma-nm
 	polkit-kde-agent
 	systemsettings
+ 	loupe
 )
