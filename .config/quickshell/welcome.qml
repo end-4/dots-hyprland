@@ -25,7 +25,6 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 5
     property bool showNextTime: false
-
     visible: true
     onClosing: Qt.quit()
     title: "illogical-impulse Welcome"
@@ -55,6 +54,57 @@ ApplicationWindow {
         ColumnLayout {
             id: sectionContent
             spacing: 5
+        }
+    }
+
+    component ButtonWithIcon: RippleButton {
+        id: buttonWithIconRoot
+        property string nerdIcon
+        property string iconText
+        property string mainText: "Button text"
+        property Component mainContentComponent: Component {
+            StyledText {
+                text: buttonWithIconRoot.mainText
+                font.pixelSize: Appearance.font.pixelSize.small
+                color: Appearance.colors.colOnSecondaryContainer
+            }
+        }
+        implicitHeight: 35
+        horizontalPadding: 15
+        buttonRadius: Appearance.rounding.full
+        colBackground: Appearance.colors.colSecondaryContainer
+        colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+        colRipple: Appearance.colors.colSecondaryContainerActive
+
+        contentItem: RowLayout {
+            Item {
+                implicitWidth: Math.max(materialIconLoader.implicitWidth, nerdIconLoader.implicitWidth)
+                Loader {
+                    id: materialIconLoader
+                    anchors.centerIn: parent
+                    active: !nerdIcon
+                    sourceComponent: MaterialSymbol {
+                        text: buttonWithIconRoot.iconText
+                        iconSize: Appearance.font.pixelSize.larger
+                        color: Appearance.colors.colOnSecondaryContainer
+                    }
+                }
+                Loader {
+                    id: nerdIconLoader
+                    anchors.centerIn: parent
+                    active: nerdIcon
+                    sourceComponent: StyledText {
+                        text: buttonWithIconRoot.nerdIcon
+                        font.pixelSize: Appearance.font.pixelSize.larger
+                        font.family: Appearance.font.family.iconNerd
+                        color: Appearance.colors.colOnSecondaryContainer
+                    }
+                }
+            }
+            Loader {
+                sourceComponent: buttonWithIconRoot.mainContentComponent
+                Layout.alignment: Qt.AlignVCenter
+            }
         }
     }
 
@@ -259,32 +309,78 @@ ApplicationWindow {
                 Section {
                     title: "Info"
 
-                    RippleButton {
-                        implicitHeight: 35
-                        horizontalPadding: 10
-                        // buttonRadius: Appearance.rounding.full
-                        colBackground: Appearance.colors.colSecondaryContainer
-                        colBackgroundHover: Appearance.colors.colSecondaryContainerHover
-                        colRipple: Appearance.colors.colSecondaryContainerActive
+                    Flow {
+                        Layout.fillWidth: true
+                        spacing: 10
 
-                        onClicked: {
-                            Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                        ButtonWithIcon {
+                            iconText: "keyboard_alt"
+                            onClicked: {
+                                Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: "Open keybind cheatsheet"
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "/"
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        contentItem: RowLayout {
-                            KeyboardKey {
-                                key: "󰖳"
+                        ButtonWithIcon {
+                            iconText: "help"
+                            mainText: "Usage"
+                            onClicked: {
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
                             }
-                            StyledText {
-                                Layout.alignment: Qt.AlignVCenter
-                                text: "+"
+                        }
+                        ButtonWithIcon {
+                            iconText: "construction"
+                            mainText: "Configuration"
+                            onClicked: {
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
                             }
-                            KeyboardKey {
-                                key: "/"
+                        }
+                    }
+                }
+
+                Section {
+                    title: "Useless buttons"
+
+                    Flow {
+                        Layout.fillWidth: true
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        spacing: 10
+
+                        ButtonWithIcon {
+                            nerdIcon: "󰊤"
+                            mainText: "GitHub"
+                            onClicked: {
+                                Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
                             }
-                            StyledText {
-                                text: "Open keybind cheatsheet"
-                                color: Appearance.colors.colOnSecondaryContainer
+                        }
+                        ButtonWithIcon {
+                            iconText: "favorite"
+                            mainText: "Funny number"
+                            onClicked: {
+                                Qt.openUrlExternally("https://github.com/sponsors/end-4")
                             }
                         }
                     }
