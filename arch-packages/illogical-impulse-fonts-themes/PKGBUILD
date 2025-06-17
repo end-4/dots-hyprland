@@ -19,4 +19,5 @@ depends=(
   ttf-material-symbols-variable-git
   ttf-rubik-vf
   ttf-gabarito-git
+  noto-fonts-emoji
 )
