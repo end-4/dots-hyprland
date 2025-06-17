@@ -306,7 +306,7 @@ ApplicationWindow {
                 spacing: 20
 
                 Section {
-                    title: "Customize"
+                    title: "Style & wallpaper"
 
                     ButtonGroup {
                         Layout.fillWidth: true
@@ -318,16 +318,58 @@ ApplicationWindow {
                         }
                     }
 
-                    ButtonWithIcon {
-                        id: rndWallBtn
+                    RowLayout {
                         Layout.alignment: Qt.AlignHCenter
-                        buttonRadius: Appearance.rounding.small
-                        iconText: "ifl"
-                        mainText: konachanWallProc.running ? "Be patient..." : "Random SFW Konachan wallpaper"
-                        onClicked: {
-                            console.log(konachanWallProc.command.join(" "))
-                            konachanWallProc.running = true;
+                        ButtonWithIcon {
+                            id: rndWallBtn
+                            Layout.alignment: Qt.AlignHCenter
+                            buttonRadius: Appearance.rounding.small
+                            iconText: "wallpaper"
+                            mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                            onClicked: {
+                                console.log(konachanWallProc.command.join(" "))
+                                konachanWallProc.running = true;
+                            }
                         }
+                        ButtonWithIcon {
+                            iconText: "wallpaper"
+                            onClicked: {
+                                Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: "Choose file"
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "Ctrl"
+                                        }
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "T"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: "Change any time later with /dark, /light, /img in the launcher"
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.colors.colSubtext
                     }
                 }
 
