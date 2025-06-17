@@ -53,22 +53,6 @@ ApplicationWindow {
         }
     }
 
-    component SelectionConnectedButton: GroupButton {
-        id: selectionConnectedButtonRoot
-        horizontalPadding: 12
-        verticalPadding: 8
-        bounce: false
-        property bool leftmost: false
-        property bool rightmost: false
-        leftRadius: (toggled || leftmost) ? (height / 2) : Appearance.rounding.unsharpenmore
-        rightRadius: (toggled || rightmost) ? (height / 2) : Appearance.rounding.unsharpenmore
-        colBackground: Appearance.colors.colSecondaryContainer
-        contentItem: StyledText {
-            color: parent.toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSecondaryContainer
-            text: selectionConnectedButtonRoot.buttonText
-        }
-    }
-
     component Section: ColumnLayout {
         id: sectionRoot
         property string title
@@ -410,7 +394,7 @@ ApplicationWindow {
                                     id: weebPolicyBtnGroup
                                     property int selectedPolicy: ConfigOptions.policies.weeb
                                     spacing: 2
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 0
                                         leftmost: true
                                         buttonText: "No"
@@ -419,7 +403,7 @@ ApplicationWindow {
                                             ConfigLoader.setConfigValueAndSave("policies.weeb", value);
                                         }
                                     }
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 1
                                         buttonText: "Yes"
                                         toggled: (weebPolicyBtnGroup.selectedPolicy === value)
@@ -427,7 +411,7 @@ ApplicationWindow {
                                             ConfigLoader.setConfigValueAndSave("policies.weeb", value);
                                         }
                                     }
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 2
                                         rightmost: true
                                         buttonText: "Closet"
@@ -447,7 +431,7 @@ ApplicationWindow {
                                     id: aiPolicyBtnGroup
                                     property int selectedPolicy: ConfigOptions.policies.ai
                                     spacing: 2
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 0
                                         leftmost: true
                                         buttonText: "No"
@@ -456,7 +440,7 @@ ApplicationWindow {
                                             ConfigLoader.setConfigValueAndSave("policies.ai", value);
                                         }
                                     }
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 1
                                         buttonText: "Yes"
                                         toggled: (aiPolicyBtnGroup.selectedPolicy === value)
@@ -464,7 +448,7 @@ ApplicationWindow {
                                             ConfigLoader.setConfigValueAndSave("policies.ai", value);
                                         }
                                     }
-                                    SelectionConnectedButton {
+                                    SelectionGroupButton {
                                         property int value: 2
                                         rightmost: true
                                         buttonText: "Local only"
