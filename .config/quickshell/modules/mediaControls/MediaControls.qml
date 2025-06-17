@@ -45,6 +45,9 @@ Scope {
         let filtered = [];
         let used = new Set();
 
+        // Skip unwanted players
+        if (p1.trackTitle.includes("YouTube Music")) continue;
+
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i)) continue;
             let p1 = players[i];
