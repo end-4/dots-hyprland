@@ -97,7 +97,7 @@ Item { // Notification item area
         onPressAndHold: (mouse) => {
             if (mouse.button === Qt.LeftButton) {
                 Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
-                notificationSummaryText.text = String.format(qsTr("{0} (copied)"), notificationObject.summary)
+                notificationSummaryText.text = String.format(Translation.tr("{0} (copied)"), notificationObject.summary)
             }
         }
         onDraggingChanged: () => {
@@ -257,7 +257,7 @@ Item { // Notification item area
 
                         NotificationActionButton {
                             Layout.fillWidth: true
-                            buttonText: qsTr("Close")
+                            buttonText: Translation.tr("Close")
                             urgency: notificationObject.urgency
                             implicitWidth: (notificationObject.actions.length == 0) ? ((actionsFlickable.width - actionRowLayout.spacing) / 2) : 
                                 (contentItem.implicitWidth + leftPadding + rightPadding)

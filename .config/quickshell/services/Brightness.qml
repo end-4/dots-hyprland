@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 // From https://github.com/caelestia-dots/shell/ (`quickshell` branch) with modifications.
 // License: GPLv3
 
+import "root:/services/"
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
@@ -140,13 +141,13 @@ Singleton {
 
     GlobalShortcut {
         name: "brightnessIncrease"
-        description: qsTr("Increase brightness")
+        description: Translation.tr("Increase brightness")
         onPressed: root.increaseBrightness()
     }
 
     GlobalShortcut {
         name: "brightnessDecrease"
-        description: qsTr("Decrease brightness")
+        description: Translation.tr("Decrease brightness")
         onPressed: root.decreaseBrightness()
     }
 }

@@ -44,7 +44,7 @@ Singleton {
         } catch (e) {
             console.error("[ConfigLoader] Error reading file:", e);
             console.log("[ConfigLoader] File content was:", fileContent);
-            Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
+            Hyprland.dispatch(`exec notify-send "${Translation.tr("Shell configuration failed to load")}" "${root.filePath}"`)
             return;
 
         }
@@ -105,7 +105,7 @@ Singleton {
             } else {
                 root.applyConfig(configFileView.text())
                 if (!root.preventNextNotification) {
-                    // Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                    // Hyprland.dispatch(`exec notify-send "${Translation.tr("Shell configuration reloaded")}" "${root.filePath}"`)
                 } else {
                     root.preventNextNotification = false;
                 }
@@ -129,9 +129,9 @@ Singleton {
             if(error == FileViewError.FileNotFound) {
                 console.log("[ConfigLoader] File not found, creating new file.")
                 root.saveConfig()
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration created")}" "${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "${Translation.tr("Shell configuration created")}" "${root.filePath}"`)
             } else {
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
+                Hyprland.dispatch(`exec notify-send "${Translation.tr("Shell configuration failed to load")}" "${root.filePath}"`)
             }
         }
     }

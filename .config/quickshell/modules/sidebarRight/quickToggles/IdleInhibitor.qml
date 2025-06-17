@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "../"
+import "root:/services/"
 import Quickshell.Io
 import Quickshell
 import Quickshell.Hyprland
@@ -27,6 +28,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: qsTr("Keep system awake")
+        content: Translation.tr("Keep system awake")
     }
 }

@@ -91,6 +91,7 @@ Singleton {
     }
 
     property QtObject language: QtObject {
+        property string ui: "auto" // Interface language: "auto", "en", "zh-CN", "zh-TW", etc.
         property QtObject translator: QtObject {
             property string engine: "auto" // Run `trans -list-engines` for available engines. auto should use google
             property string targetLanguage: "auto" // Run `trans -list-all` for available languages

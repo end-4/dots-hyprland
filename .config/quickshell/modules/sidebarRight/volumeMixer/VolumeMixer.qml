@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/services/"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -108,7 +109,7 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.normal
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
-                        text: qsTr("No audio source")
+                        text: Translation.tr("No audio source")
                     }
                 }
             }
@@ -262,13 +263,13 @@ Item {
                     Layout.alignment: Qt.AlignRight
 
                     DialogButton {
-                        buttonText: qsTr("Cancel")
+                        buttonText: Translation.tr("Cancel")
                         onClicked: {
                             root.showDeviceSelector = false
                         }
                     }
                     DialogButton {
-                        buttonText: qsTr("OK")
+                        buttonText: Translation.tr("OK")
                         onClicked: {
                             root.showDeviceSelector = false
                             if (root.selectedDevice) {

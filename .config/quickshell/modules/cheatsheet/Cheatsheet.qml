@@ -110,7 +110,7 @@ Scope { // Scope
                         Layout.alignment: Qt.AlignHCenter
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
-                        text: qsTr("Cheat sheet")
+                        text: Translation.tr("Cheat sheet")
                     }
                     CheatsheetKeybinds {}
                 }
@@ -137,7 +137,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetToggle"
-        description: qsTr("Toggles cheatsheet on press")
+        description: Translation.tr("Toggles cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = !cheatsheetLoader.active;
@@ -146,7 +146,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetOpen"
-        description: qsTr("Opens cheatsheet on press")
+        description: Translation.tr("Opens cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = true;
@@ -155,7 +155,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetClose"
-        description: qsTr("Closes cheatsheet on press")
+        description: Translation.tr("Closes cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = false;

@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/services/"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland
@@ -26,7 +27,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
             elide: Text.ElideRight
-            text: root.activeWindow?.activated ? root.activeWindow?.appId : qsTr("Desktop")
+            text: root.activeWindow?.activated ? root.activeWindow?.appId : Translation.tr("Desktop")
         }
 
         StyledText {
@@ -34,7 +35,7 @@ Item {
             font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnLayer0
             elide: Text.ElideRight
-            text: root.activeWindow?.activated ? root.activeWindow?.title : `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
+            text: root.activeWindow?.activated ? root.activeWindow?.title : `${Translation.tr("Workspace")} ${monitor.activeWorkspace?.id}`
         }
 
     }

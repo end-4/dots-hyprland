@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/services/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -151,7 +152,7 @@ Scope {
 
     GlobalShortcut {
         name: "overviewToggle"
-        description: qsTr("Toggles overview on press")
+        description: Translation.tr("Toggles overview on press")
 
         onPressed: {
             GlobalStates.overviewOpen = !GlobalStates.overviewOpen   
@@ -159,7 +160,7 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewClose"
-        description: qsTr("Closes overview")
+        description: Translation.tr("Closes overview")
 
         onPressed: {
             GlobalStates.overviewOpen = false
@@ -167,7 +168,7 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewToggleRelease"
-        description: qsTr("Toggles overview on release")
+        description: Translation.tr("Toggles overview on release")
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = true
@@ -183,9 +184,9 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewToggleReleaseInterrupt"
-        description: qsTr("Interrupts possibility of overview being toggled on release. ") +
-            qsTr("This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. ") +
-            qsTr("To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything.")
+        description: Translation.tr("Interrupts possibility of overview being toggled on release. ") +
+            Translation.tr("This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. ") +
+            Translation.tr("To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything.")
 
         onPressed: {
             GlobalStates.superReleaseMightTrigger = false
@@ -193,7 +194,7 @@ Scope {
     }
     GlobalShortcut {
         name: "overviewClipboardToggle"
-        description: qsTr("Toggle clipboard query on overview widget")
+        description: Translation.tr("Toggle clipboard query on overview widget")
 
         onPressed: {
             if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {
@@ -216,7 +217,7 @@ Scope {
 
     GlobalShortcut {
         name: "overviewEmojiToggle"
-        description: qsTr("Toggle emoji query on overview widget")
+        description: Translation.tr("Toggle emoji query on overview widget")
 
         onPressed: {
             if (GlobalStates.overviewOpen && overviewScope.dontAutoCancelSearch) {

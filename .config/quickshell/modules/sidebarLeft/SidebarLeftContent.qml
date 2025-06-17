@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/services/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -18,9 +19,9 @@ Item {
     required property var scopeRoot
     anchors.fill: parent
     property var tabButtonList: [
-        ...(ConfigOptions.policies.ai !== 0 ? [{"icon": "neurology", "name": qsTr("Intelligence")}] : []),
-        {"icon": "translate", "name": qsTr("Translator")},
-        ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
+        ...(ConfigOptions.policies.ai !== 0 ? [{"icon": "neurology", "name": Translation.tr("Intelligence")}] : []),
+        {"icon": "translate", "name": Translation.tr("Translator")},
+        ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": Translation.tr("Anime")}] : [])
     ]
     property int selectedTab: 0
 

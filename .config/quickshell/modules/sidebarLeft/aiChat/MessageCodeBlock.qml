@@ -87,7 +87,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Copy code")
+                        content: Translation.tr("Copy code")
                     }
                 }
                 AiMessageControlButton {
@@ -111,7 +111,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Save to Downloads")
+                        content: Translation.tr("Save to Downloads")
                     }
                 }
             }

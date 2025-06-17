@@ -131,7 +131,7 @@ Scope {
                         ScrollHint {
                             reveal: barLeftSideMouseArea.hovered
                             icon: "light_mode"
-                            tooltipText: qsTr("Scroll to change brightness")
+                            tooltipText: Translation.tr("Scroll to change brightness")
                             side: "left"
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
@@ -329,7 +329,7 @@ Scope {
                         ScrollHint {
                             reveal: barRightSideMouseArea.hovered
                             icon: "volume_up"
-                            tooltipText: qsTr("Scroll to change volume")
+                            tooltipText: Translation.tr("Scroll to change volume")
                             side: "right"
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter

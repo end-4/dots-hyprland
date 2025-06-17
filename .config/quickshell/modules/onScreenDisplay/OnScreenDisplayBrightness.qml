@@ -108,7 +108,7 @@ Scope {
                         icon: "light_mode"
                         rotateIcon: true
                         scaleIcon: true
-                        name: qsTr("Brightness")
+                        name: Translation.tr("Brightness")
                     }
                 }
             }
@@ -134,7 +134,7 @@ Scope {
 
     GlobalShortcut {
         name: "osdBrightnessTrigger"
-        description: qsTr("Triggers brightness OSD on press")
+        description: Translation.tr("Triggers brightness OSD on press")
 
         onPressed: {
             root.triggerOsd()
@@ -142,7 +142,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdBrightnessHide"
-        description: qsTr("Hides brightness OSD on press")
+        description: Translation.tr("Hides brightness OSD on press")
 
         onPressed: {
             root.showOsdValues = false

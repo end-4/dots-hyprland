@@ -44,21 +44,21 @@ Item {
     property var allCommands: [
         {
             name: "model",
-            description: qsTr("Choose model"),
+            description: Translation.tr("Choose model"),
             execute: (args) => {
                 Ai.setModel(args[0]);
             }
         },
         {
             name: "clear",
-            description: qsTr("Clear chat history"),
+            description: Translation.tr("Clear chat history"),
             execute: () => {
                 Ai.clearMessages();
             }
         },
         {
             name: "key",
-            description: qsTr("Set API key"),
+            description: Translation.tr("Set API key"),
             execute: (args) => {
                 if (args[0] == "get") {
                     Ai.printApiKey()
@@ -69,7 +69,7 @@ Item {
         },
         {
             name: "temp",
-            description: qsTr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
+            description: Translation.tr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
             execute: (args) => {
                 // console.log(args)
                 if (args.length == 0 || args[0] == "get") {
@@ -82,7 +82,7 @@ Item {
         },
         {
             name: "test",
-            description: qsTr("Markdown test"),
+            description: Translation.tr("Markdown test"),
             execute: () => {
                 Ai.addMessage(`
 <think>
@@ -148,7 +148,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                Ai.addMessage(qsTr("Unknown command: ") + command, Ai.interfaceRole);
+                Ai.addMessage(Translation.tr("Unknown command: ") + command, Ai.interfaceRole);
             }
         }
         else {
@@ -235,7 +235,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         font.family: Appearance.font.family.title
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
-                        text: qsTr("Large language models")
+                        text: Translation.tr("Large language models")
                     }
                     StyledText {
                         id: widgetDescriptionText
@@ -244,7 +244,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.Wrap
-                        text: qsTr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
+                        text: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
                     }
                 }
             }
@@ -366,7 +366,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Layout.fillWidth: true
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    placeholderText: StringUtils.format(qsTr('Message the model... "{0}" for commands'), root.commandPrefix)
+                    placeholderText: StringUtils.format(Translation.tr('Message the model... "{0}" for commands'), root.commandPrefix)
 
                     background: null
 
@@ -510,7 +510,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        content: StringUtils.format(qsTr("Current model: {0}\nSet it with {1}model MODEL"), 
+                        content: StringUtils.format(Translation.tr("Current model: {0}\nSet it with {1}model MODEL"), 
                             Ai.getModel().name, root.commandPrefix)
                     }
 

@@ -2,6 +2,7 @@ import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/services/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -168,7 +169,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggle"
-        description: qsTr("Toggles left sidebar on press")
+        description: Translation.tr("Toggles left sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = !GlobalStates.sidebarLeftOpen;
@@ -177,7 +178,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftOpen"
-        description: qsTr("Opens left sidebar on press")
+        description: Translation.tr("Opens left sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = true;
@@ -186,7 +187,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftClose"
-        description: qsTr("Closes left sidebar on press")
+        description: Translation.tr("Closes left sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarLeftOpen = false;
@@ -195,7 +196,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "sidebarLeftToggleDetach"
-        description: qsTr("Detach left sidebar into a window/Attach it back")
+        description: Translation.tr("Detach left sidebar into a window/Attach it back")
 
         onPressed: {
             root.detach = !root.detach;
