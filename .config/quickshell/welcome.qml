@@ -241,7 +241,7 @@ ApplicationWindow {
             margins: contentPadding
         }
 
-        Item {
+        Item { // Titlebar
             visible: ConfigOptions?.windows.showTitlebar
             Layout.fillWidth: true
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
@@ -289,13 +289,13 @@ ApplicationWindow {
                 }
             }
         }
-        Rectangle {
+        Rectangle { // Content container
             color: Appearance.m3colors.m3surfaceContainerLow
+            radius: Appearance.rounding.windowRounding - root.contentPadding
             implicitHeight: contentColumn.implicitHeight
             implicitWidth: contentColumn.implicitWidth
             Layout.fillWidth: true
             Layout.fillHeight: true
-            radius: Appearance.rounding.windowRounding - root.contentPadding
             Flickable {
                 clip: true
                 anchors.fill: parent
