@@ -256,7 +256,9 @@ ApplicationWindow {
             fill: parent
             margins: contentPadding
         }
+
         Item {
+            visible: ConfigOptions?.windows.showTitlebar
             Layout.fillWidth: true
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
