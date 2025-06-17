@@ -27,7 +27,7 @@ Singleton {
     }
 
     function handleFirstRun() {
-        Hyprland.dispatch(`exec '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`)
+        Hyprland.dispatch(`exec swww query | grep 'image' || '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`)
         Hyprland.dispatch(`exec qs -p '${root.welcomeQmlPath}'`)
     }
 
