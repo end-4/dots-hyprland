@@ -14,10 +14,10 @@ depends=(
   kitty
   matugen-bin
   starship
-  ttf-readex-pro
+  ttf-gabarito-git
   ttf-jetbrains-mono-nerd
   ttf-material-symbols-variable-git
+  ttf-readex-pro
   ttf-rubik-vf
-  ttf-gabarito-git
-  noto-fonts-emoji
+  ttf-twemoji
 )
