@@ -102,8 +102,6 @@ ApplicationWindow {
         horizontalPadding: 15
         buttonRadius: Appearance.rounding.small
         colBackground: Appearance.colors.colLayer2
-        // colBackgroundHover: Appearance.colors.colSecondaryContainerHover
-        // colRipple: Appearance.colors.colSecondaryContainerActive
 
         contentItem: RowLayout {
             Item {
@@ -116,6 +114,7 @@ ApplicationWindow {
                         text: buttonWithIconRoot.iconText
                         iconSize: Appearance.font.pixelSize.larger
                         color: Appearance.colors.colOnSecondaryContainer
+                        fill: 1
                     }
                 }
                 Loader {
