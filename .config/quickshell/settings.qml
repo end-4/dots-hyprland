@@ -26,7 +26,30 @@ ApplicationWindow {
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
     property real contentPadding: 8
     property bool showNextTime: false
+    property var pages: [
+        {
+            name: "General",
+            icon: "tune",
+            component: "modules/settings/General.qml"
+        },
+        {
+            name: "Style",
+            icon: "palette",
+            component: "modules/settings/Style.qml"
+        },
+        {
+            name: "Services",
+            icon: "settings",
+            component: "modules/settings/Services.qml"
+        },
+        {
+            name: "About",
+            icon: "info",
+            component: "modules/settings/About.qml"
+        }
+    ]
     property int currentPage: 0
+
     visible: true
     onClosing: Qt.quit()
     title: "illogical-impulse Settings"
@@ -41,23 +64,6 @@ ApplicationWindow {
     width: 900
     height: 650
     color: Appearance.m3colors.m3background
-
-    component Section: ColumnLayout {
-        id: sectionRoot
-        property string title
-        default property alias data: sectionContent.data
-
-        Layout.fillWidth: true
-        spacing: 8
-        StyledText {
-            text: sectionRoot.title
-            font.pixelSize: Appearance.font.pixelSize.larger
-        }
-        ColumnLayout {
-            id: sectionContent
-            spacing: 5
-        }
-    }
 
     ColumnLayout {
         anchors {
@@ -101,54 +107,90 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: contentPadding
-            NavigationRail { // Window content with navigation rail and content pane
-                id: navRail
+            Item {
+                id: navRailWrapper
                 Layout.fillHeight: true
                 Layout.margins: 5
-                spacing: 10
-                expanded: root.width > 900
-                
-                NavigationRailExpandButton {}
-
-                FloatingActionButton {
-                    id: fab
-                    iconText: "edit"
-                    buttonText: "Edit config"
-                    expanded: navRail.expanded
-                    onClicked: {
-                        Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
-                    }
+                implicitWidth: navRail.expanded ? 150 : fab.baseSize
+                Behavior on implicitWidth {
+                    animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
-
-                ColumnLayout {
-                    Layout.topMargin: 25
-                    spacing: 4
-
-                    NavigationRailButton {
-                        toggled: root.currentPage === 0
-                        onClicked: root.currentPage = 0;
-                        expanded: navRail.expanded
-                        buttonIcon: "tune"
-                        buttonText: "General"
+                NavigationRail { // Window content with navigation rail and content pane
+                    id: navRail
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
                     }
-                    NavigationRailButton {
-                        toggled: root.currentPage === 1
-                        onClicked: root.currentPage = 1;
-                        expanded: navRail.expanded
-                        buttonIcon: "dashboard"
-                        buttonText: "Widgets"
-                    }
-                    NavigationRailButton {
-                        toggled: root.currentPage === 2
-                        onClicked: root.currentPage = 2;
-                        expanded: navRail.expanded
-                        buttonIcon: "settings"
-                        buttonText: "Services"
-                    }
-                }
+                    spacing: 10
+                    expanded: root.width > 900
+                    
+                    NavigationRailExpandButton {}
 
-                Item {
-                    Layout.fillHeight: true
+                    FloatingActionButton {
+                        id: fab
+                        iconText: "edit"
+                        buttonText: "Edit config"
+                        expanded: navRail.expanded
+                        onClicked: {
+                            Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);
+                        }
+
+                        StyledToolTip {
+                            extraVisibleCondition: !navRail.expanded
+                            content: "Edit shell config file"
+                        }
+                    }
+
+                    Item {
+                        implicitHeight: tabBarColumn.implicitHeight
+                        implicitWidth: tabBarColumn.implicitWidth
+                        Layout.topMargin: 25
+                        Rectangle {
+                            property real itemHeight: tabBarColumn.children[0].baseSize
+                            property real baseHighlightHeight: tabBarColumn.children[0].baseHighlightHeight
+                            anchors {
+                                top: tabBarColumn.top
+                                left: tabBarColumn.left
+                                topMargin: itemHeight * root.currentPage + (navRail.expanded ? 0 : ((itemHeight - baseHighlightHeight) / 2))
+                            }
+                            radius: Appearance.rounding.full
+                            color: Appearance.colors.colSecondaryContainer
+                            implicitHeight: navRail.expanded ? itemHeight : baseHighlightHeight
+                            implicitWidth: tabBarColumn.children[root.currentPage].visualWidth
+
+                            Behavior on anchors.topMargin {
+                                NumberAnimation {
+                                    duration: Appearance.animationCurves.expressiveFastSpatialDuration
+                                    easing.type: Appearance.animation.elementMove.type
+                                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
+                                }
+                            }
+                        }
+                        ColumnLayout {
+                            id: tabBarColumn
+                            anchors.fill: parent
+                            spacing: 0
+
+                            Repeater {
+                                model: root.pages
+                                NavigationRailButton {
+                                    required property var index
+                                    required property var modelData
+                                    toggled: root.currentPage === index
+                                    onClicked: root.currentPage = index;
+                                    expanded: navRail.expanded
+                                    buttonIcon: modelData.icon
+                                    buttonText: modelData.name
+                                    showToggledHighlight: false
+                                }
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
+                    }
                 }
             }
             Rectangle { // Content container
@@ -156,6 +198,49 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 color: Appearance.m3colors.m3surfaceContainerLow
                 radius: Appearance.rounding.windowRounding - root.contentPadding
+
+                Loader {
+                    id: pageLoader
+                    anchors.fill: parent
+                    opacity: 1.0
+                    source: root.pages[0].component
+                    Connections {
+                        target: root
+                        function onCurrentPageChanged() {
+                            if (pageLoader.sourceComponent !== root.pages[root.currentPage].component) {
+                                switchAnim.restart();
+                            }
+                        }
+                    }
+
+                    SequentialAnimation {
+                        id: switchAnim
+
+                        NumberAnimation {
+                            target: pageLoader
+                            properties: "opacity"
+                            from: 1
+                            to: 0
+                            duration: 200
+                            easing.type: Appearance.animation.elementMoveExit.type
+                            easing.bezierCurve: Appearance.animation.elementMoveExit.bezierCurve
+                        }
+                        PropertyAction {
+                            target: pageLoader
+                            property: "source"
+                            value: root.pages[root.currentPage].component
+                        }
+                        NumberAnimation {
+                            target: pageLoader
+                            properties: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 200
+                            easing.type: Appearance.animation.elementMoveEnter.type
+                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                        }
+                    }
+                }
             }
         }
     }
