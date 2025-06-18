@@ -13,21 +13,13 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
-DETECT_ONLY=false
 REPO_DIR="$(cd "$(dirname $0)" &>/dev/null && pwd)"
 ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
-# Directories to monitor for changes (matching install.sh behavior)
-# These correspond to what install.sh copies to XDG directories
-MONITOR_DIRS=(
-  ".config"           # XDG_CONFIG_HOME
-  ".local/bin"        # XDG_BIN_HOME  
-  ".local/share"      # XDG_DATA_HOME
-  ".local/state"      # XDG_STATE_HOME
-  ".cache"            # XDG_CACHE_HOME
-)
+# Directories to monitor for changes
+MONITOR_DIRS=(".config" ".local/bin")
 
 # === Color Codes ===
 RED='\033[0;31m'
@@ -62,6 +54,28 @@ log_header() {
 die() {
   log_error "$1"
   exit 1
+}
+
+# Function to install Python packages using uv
+install_python_packages() {
+  local python_pkgs_dir="${REPO_DIR}/scriptdata/python-packages"
+  
+  if [[ ! -f "$python_pkgs_dir" ]]; then
+    log_warning "Python packages file not found: $python_pkgs_dir"
+    return 1
+  fi
+
+  log_info "Installing Python packages using uv..."
+  
+  # Source the python packages installation function
+  if [[ -f "${REPO_DIR}/scriptdata/installers" ]]; then
+    source "${REPO_DIR}/scriptdata/installers"
+    install-python-packages
+    log_success "Python packages installed successfully"
+  else
+    log_error "Could not find installers script"
+    return 1
+  fi
 }
 
 # Function to safely read input with terminal compatibility
@@ -325,8 +339,6 @@ check_pkgbuild_changed() {
 list_packages() {
   local available_packages=()
   local changed_packages=()
-  local outdated_packages=()
-  local missing_packages=()
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
     log_warning "No arch-packages directory found"
@@ -338,18 +350,8 @@ list_packages() {
       local pkg_name=$(basename "$pkg_dir")
       available_packages+=("$pkg_name")
 
-      # Check if PKGBUILD changed
       if check_pkgbuild_changed "$pkg_dir"; then
         changed_packages+=("$pkg_name")
-      fi
-      
-      # Check if package needs updating
-      if check_package_needs_update "$pkg_name" "$pkg_dir"; then
-        if pacman -Q "$pkg_name" >/dev/null 2>&1; then
-          outdated_packages+=("$pkg_name")
-        else
-          missing_packages+=("$pkg_name")
-        fi
       fi
     fi
   done
@@ -361,37 +363,15 @@ list_packages() {
 
   echo -e "\n${CYAN}Available packages:${NC}"
   for pkg in "${available_packages[@]}"; do
-    local status=""
-    local color=""
-    
     if [[ " ${changed_packages[*]} " =~ " ${pkg} " ]]; then
-      status=" (PKGBUILD changed)"
-      color="${GREEN}●${NC}"
-    elif [[ " ${outdated_packages[*]} " =~ " ${pkg} " ]]; then
-      status=" (outdated)"
-      color="${YELLOW}●${NC}"
-    elif [[ " ${missing_packages[*]} " =~ " ${pkg} " ]]; then
-      status=" (not installed)"
-      color="${RED}●${NC}"
+      echo -e "  ${GREEN}● ${pkg}${NC} (PKGBUILD changed)"
     else
-      status=""
-      color="○"
+      echo -e "  ○ ${pkg}"
     fi
-    
-    echo -e "  ${color} ${pkg}${status}${NC}"
   done
 
-  # Show summary
   if [[ ${#changed_packages[@]} -gt 0 ]]; then
-    echo -e "\n${GREEN}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
-  fi
-  
-  if [[ ${#outdated_packages[@]} -gt 0 ]]; then
-    echo -e "${YELLOW}Outdated packages: ${outdated_packages[*]}${NC}"
-  fi
-  
-  if [[ ${#missing_packages[@]} -gt 0 ]]; then
-    echo -e "${RED}Missing packages: ${missing_packages[*]}${NC}"
+    echo -e "\n${YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
   fi
 
   return 0
@@ -528,246 +508,6 @@ has_new_commits() {
   fi
 }
 
-# Enhanced detection functions
-# Function to check if a file is different using multiple methods
-check_file_difference() {
-  local repo_file="$1"
-  local home_file="$2"
-  
-  # Method 1: Binary comparison (fastest)
-  if ! cmp -s "$repo_file" "$home_file" 2>/dev/null; then
-    return 0  # Files are different
-  fi
-  
-  # Method 2: Check file modification times (if available)
-  if [[ -f "$repo_file" && -f "$home_file" ]]; then
-    local repo_mtime=$(stat -c %Y "$repo_file" 2>/dev/null || echo "0")
-    local home_mtime=$(stat -c %Y "$home_file" 2>/dev/null || echo "0")
-    
-    # If repo file is newer, it might be different
-    if [[ $repo_mtime -gt $home_mtime ]]; then
-      # Double-check with diff to be sure
-      if ! diff -q "$repo_file" "$home_file" >/dev/null 2>&1; then
-        return 0  # Files are different
-      fi
-    fi
-  fi
-  
-  return 1  # Files are the same
-}
-
-# Function to check if a package needs updating
-check_package_needs_update() {
-  local pkg_name="$1"
-  local pkg_dir="$2"
-  
-  # Check if package is installed
-  if ! pacman -Q "$pkg_name" >/dev/null 2>&1; then
-    return 0  # Package not installed, needs installation
-  fi
-  
-  # Get installed version
-  local installed_version=$(pacman -Q "$pkg_name" | awk '{print $2}')
-  
-  # Get version from PKGBUILD
-  if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
-    cd "$pkg_dir" || return 1
-    source ./PKGBUILD 2>/dev/null || return 1
-    
-    # Compare versions (basic string comparison)
-    if [[ "$installed_version" != "$pkgver" ]]; then
-      cd "$REPO_DIR" || return 1
-      return 0  # Version mismatch, needs update
-    fi
-    
-    cd "$REPO_DIR" || return 1
-  fi
-  
-  return 1  # Package is up to date
-}
-
-# Function to detect all differences comprehensively
-detect_all_differences() {
-  local differences=()
-  local repo_file="$1"
-  local home_file="$2"
-  local rel_path="$3"
-  
-  # Only process files that exist in the repository
-  if [[ ! -f "$repo_file" ]]; then
-    return 1  # Not a repo file, skip
-  fi
-  
-  # Check if file exists in both locations
-  if [[ -f "$repo_file" && -f "$home_file" ]]; then
-    # Check for content differences
-    if check_file_difference "$repo_file" "$home_file"; then
-      differences+=("content")
-    fi
-    
-    # Check for permission differences
-    local repo_perm=$(stat -c %a "$repo_file" 2>/dev/null || echo "644")
-    local home_perm=$(stat -c %a "$home_file" 2>/dev/null || echo "644")
-    if [[ "$repo_perm" != "$home_perm" ]]; then
-      differences+=("permissions")
-    fi
-    
-    # Check for ownership differences (if running as root)
-    if [[ $EUID -eq 0 ]]; then
-      local repo_owner=$(stat -c %U "$repo_file" 2>/dev/null || echo "")
-      local home_owner=$(stat -c %U "$home_file" 2>/dev/null || echo "")
-      if [[ "$repo_owner" != "$home_owner" ]]; then
-        differences+=("ownership")
-      fi
-    fi
-  elif [[ -f "$repo_file" && ! -f "$home_file" ]]; then
-    differences+=("missing")
-  fi
-  
-  echo "${differences[*]}"
-}
-
-# Function to get comprehensive file list for comparison
-get_comprehensive_file_list() {
-  local dir_path="$1"
-  local file_list=()
-  
-  if [[ "$FORCE_CHECK" == true ]]; then
-    # Get all files in the repository directory
-    while IFS= read -r -d '' file; do
-      file_list+=("$file")
-    done < <(find "$dir_path" -type f -print0 2>/dev/null)
-  else
-    # Get files that changed in git
-    while IFS= read -r file; do
-      local full_path="${REPO_DIR}/${file}"
-      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
-        file_list+=("$full_path")
-      fi
-    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
-    
-    # If no git changes detected, check all files in repo for local differences
-    # This handles the case where there were no new commits but files might differ
-    if [[ ${#file_list[@]} -eq 0 ]]; then
-      # No git changes, check all files in repo for differences with local versions
-      while IFS= read -r -d '' file; do
-        local rel_path="${file#$REPO_DIR/}"
-        local home_file="${HOME}/${rel_path}"
-        
-        # Only include if home file exists and is different from repo file
-        if [[ -f "$home_file" ]] && check_file_difference "$file" "$home_file"; then
-          file_list+=("$file")
-        fi
-      done < <(find "$dir_path" -type f -print0 2>/dev/null)
-    fi
-  fi
-  
-  # Remove duplicates and return
-  printf '%s\n' "${file_list[@]}" | sort -u
-}
-
-# Function to generate comprehensive detection report
-generate_detection_report() {
-  local report_file="${REPO_DIR}/update-detection-report.txt"
-  local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-  
-  echo "=== Dotfiles Update Detection Report ===" > "$report_file"
-  echo "Generated: $timestamp" >> "$report_file"
-  echo "Repository: $(git rev-parse --show-toplevel)" >> "$report_file"
-  echo "Branch: $(git branch --show-current)" >> "$report_file"
-  echo "Commit: $(git rev-parse HEAD)" >> "$report_file"
-  echo "" >> "$report_file"
-  
-  # Package detection report
-  echo "=== PACKAGE DETECTION ===" >> "$report_file"
-  if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
-    local changed_pkgs=()
-    local outdated_pkgs=()
-    local missing_pkgs=()
-    
-    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
-      if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
-        local pkg_name=$(basename "$pkg_dir")
-        
-        if check_pkgbuild_changed "$pkg_dir"; then
-          changed_pkgs+=("$pkg_name")
-        fi
-        
-        if check_package_needs_update "$pkg_name" "$pkg_dir"; then
-          if pacman -Q "$pkg_name" >/dev/null 2>&1; then
-            outdated_pkgs+=("$pkg_name")
-          else
-            missing_pkgs+=("$pkg_name")
-          fi
-        fi
-      fi
-    done
-    
-    echo "Packages with changed PKGBUILDs: ${changed_pkgs[*]}" >> "$report_file"
-    echo "Outdated packages: ${outdated_pkgs[*]}" >> "$report_file"
-    echo "Missing packages: ${missing_pkgs[*]}" >> "$report_file"
-  else
-    echo "No arch-packages directory found" >> "$report_file"
-  fi
-  echo "" >> "$report_file"
-  
-  # File detection report
-  echo "=== FILE DETECTION ===" >> "$report_file"
-  local total_files=0
-  local content_diffs=0
-  local perm_diffs=0
-  local missing_files=0
-  local extra_files=0
-  
-  for dir_name in "${MONITOR_DIRS[@]}"; do
-    repo_dir_path="${REPO_DIR}/${dir_name}"
-    home_dir_path="${HOME}/${dir_name}"
-    
-    if [[ ! -d "$repo_dir_path" ]]; then
-      echo "Directory not found: $repo_dir_path" >> "$report_file"
-      continue
-    fi
-    
-    echo "Scanning: $dir_name" >> "$report_file"
-    
-    while IFS= read -r repo_file; do
-      rel_path="${repo_file#$repo_dir_path/}"
-      home_file="${home_dir_path}/${rel_path}"
-      
-      if should_ignore "$home_file"; then
-        continue
-      fi
-      
-      ((total_files++))
-      local differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
-      
-      if [[ -n "$differences" ]]; then
-        echo "  $rel_path: $differences" >> "$report_file"
-        
-        for diff_type in $differences; do
-          case $diff_type in
-            "content") ((content_diffs++)) ;;
-            "permissions") ((perm_diffs++)) ;;
-            "missing") ((missing_files++)) ;;
-            "extra") ((extra_files++)) ;;
-          esac
-        done
-      fi
-    done < <(get_comprehensive_file_list "$repo_dir_path")
-  done
-  
-  echo "" >> "$report_file"
-  echo "=== SUMMARY ===" >> "$report_file"
-  echo "Total files scanned: $total_files" >> "$report_file"
-  echo "Files with content differences: $content_diffs" >> "$report_file"
-  echo "Files with permission differences: $perm_diffs" >> "$report_file"
-  echo "Missing files: $missing_files" >> "$report_file"
-  echo "Extra files: $extra_files" >> "$report_file"
-  
-  log_info "Detection report saved to: $report_file"
-  return 0
-}
-
 # Main script starts here
 log_header "Dotfiles Update Script"
 
@@ -786,18 +526,12 @@ while [[ $# -gt 0 ]]; do
     log_info "Package checking enabled"
     shift
     ;;
-  -d | --detect-only)
-    DETECT_ONLY=true
-    log_info "Detection only mode enabled - will generate a detection report without making changes"
-    shift
-    ;;
   -h | --help)
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
     echo "  -f, --force      Force check all files even if no new commits"
     echo "  -p, --packages   Enable package checking and building"
-    echo "  -d, --detect-only Enable detection only mode"
     echo "  -h, --help       Show this help message"
     echo ""
     echo "This script updates your dotfiles by:"
@@ -810,11 +544,6 @@ while [[ $# -gt 0 ]]; do
     echo "  - If no PKGBUILDs changed: asks if you want to check packages anyway"
     echo "  - If PKGBUILDs changed: offers to build changed packages"
     echo "  - Interactive selection of packages to build"
-    echo ""
-    echo "Detection modes:"
-    echo "  - Normal mode: detects and applies changes"
-    echo "  - Detection-only mode (-d): generates a report without making changes"
-    echo "  - Force mode (-f): checks all files regardless of git changes"
     exit 0
     ;;
   --skip-notice)
@@ -902,20 +631,6 @@ if git remote get-url origin &>/dev/null; then
 else
   log_warning "No remote 'origin' configured. Skipping pull operation."
   log_info "This appears to be a local-only repository."
-fi
-
-# If in detection-only mode, generate report and exit
-if [[ "$DETECT_ONLY" == true ]]; then
-  log_header "Detection Only Mode"
-  log_info "Generating comprehensive detection report..."
-  generate_detection_report
-  
-  echo
-  log_success "Detection report generated successfully!"
-  echo "Report saved to: ${REPO_DIR}/update-detection-report.txt"
-  echo
-  echo "To apply changes, run the script without --detect-only flag"
-  exit 0
 fi
 
 # Step 2: Handle package building (only if requested)
@@ -1026,6 +741,15 @@ fi
 # Step 3: Update configuration files
 log_header "Updating Configuration Files"
 
+# Source required files for configuration handling
+if [[ -f "${REPO_DIR}/scriptdata/environment-variables" ]]; then
+  source "${REPO_DIR}/scriptdata/environment-variables"
+fi
+
+if [[ -f "${REPO_DIR}/scriptdata/functions" ]]; then
+  source "${REPO_DIR}/scriptdata/functions"
+fi
+
 # Check if we should process files
 process_files=false
 if [[ "$FORCE_CHECK" == true ]]; then
@@ -1043,77 +767,201 @@ if [[ "$process_files" == true ]]; then
   files_processed=0
   files_updated=0
   files_created=0
-  files_skipped=0
-  files_with_permission_changes=0
 
+  # Handle MISC configs (everything except fish and hypr)
+  log_info "Processing miscellaneous configuration files..."
+  for i in $(find .config/ -mindepth 1 -maxdepth 1 ! -name 'fish' ! -name 'hypr' -exec basename {} \;); do
+    config_path=".config/$i"
+    target_path="$XDG_CONFIG_HOME/$i"
+    
+    if should_ignore "$target_path"; then
+      continue
+    fi
+    
+    echo "[$0]: Found target: $config_path"
+    if [[ -d "$config_path" ]]; then
+      if [[ -d "$target_path" ]]; then
+        # Directory exists, handle conflicts file by file
+        find "$config_path" -type f | while read -r file; do
+          rel_path="${file#$config_path/}"
+          target_file="$target_path/$rel_path"
+          
+          if should_ignore "$target_file"; then
+            continue
+          fi
+          
+          mkdir -p "$(dirname "$target_file")"
+          
+          if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
+            handle_file_conflict "$file" "$target_file"
+            ((files_updated++))
+          elif [[ ! -f "$target_file" ]]; then
+            cp -p "$file" "$target_file"
+            log_success "Created new file: $target_file"
+            ((files_created++))
+          fi
+          ((files_processed++))
+        done
+      else
+        # Directory doesn't exist, create it
+        mkdir -p "$target_path"
+        rsync -av "$config_path/" "$target_path/"
+        log_success "Created new directory: $target_path"
+        ((files_created++))
+      fi
+    elif [[ -f "$config_path" ]]; then
+      mkdir -p "$(dirname "$target_path")"
+      if [[ -f "$target_path" ]] && ! cmp -s "$config_path" "$target_path"; then
+        handle_file_conflict "$config_path" "$target_path"
+        ((files_updated++))
+      elif [[ ! -f "$target_path" ]]; then
+        cp -p "$config_path" "$target_path"
+        log_success "Created new file: $target_path"
+        ((files_created++))
+      fi
+      ((files_processed++))
+    fi
+  done
+
+  # Handle Fish configuration
+  log_info "Processing Fish configuration..."
+  fish_source=".config/fish"
+  fish_target="$XDG_CONFIG_HOME/fish"
+  
+  if [[ -d "$fish_source" ]]; then
+    if [[ -d "$fish_target" ]]; then
+      # Handle fish config with conflict resolution
+      find "$fish_source" -type f | while read -r file; do
+        rel_path="${file#$fish_source/}"
+        target_file="$fish_target/$rel_path"
+        
+        if should_ignore "$target_file"; then
+          continue
+        fi
+        
+        mkdir -p "$(dirname "$target_file")"
+        
+        if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
+          handle_file_conflict "$file" "$target_file"
+          ((files_updated++))
+        elif [[ ! -f "$target_file" ]]; then
+          cp -p "$file" "$target_file"
+          log_success "Created new fish config file: $target_file"
+          ((files_created++))
+        fi
+        ((files_processed++))
+      done
+    else
+      mkdir -p "$fish_target"
+      rsync -av "$fish_source/" "$fish_target/"
+      log_success "Created Fish configuration directory"
+      ((files_created++))
+    fi
+  fi
+
+  # Handle Hyprland configuration with special logic
+  log_info "Processing Hyprland configuration..."
+  hypr_source=".config/hypr"
+  hypr_target="$XDG_CONFIG_HOME/hypr"
+  
+  if [[ -d "$hypr_source" ]]; then
+    mkdir -p "$hypr_target"
+    
+    # Handle all files except the special ones
+    find "$hypr_source" -type f ! -path "*/custom/*" ! -name "hyprland.conf" ! -name "hypridle.conf" ! -name "hyprlock.conf" | while read -r file; do
+      rel_path="${file#$hypr_source/}"
+      target_file="$hypr_target/$rel_path"
+      
+      if should_ignore "$target_file"; then
+        continue
+      fi
+      
+      mkdir -p "$(dirname "$target_file")"
+      
+      if [[ -f "$target_file" ]] && ! cmp -s "$file" "$target_file"; then
+        handle_file_conflict "$file" "$target_file"
+        ((files_updated++))
+      elif [[ ! -f "$target_file" ]]; then
+        cp -p "$file" "$target_file"
+        log_success "Created new Hyprland config file: $target_file"
+        ((files_created++))
+      fi
+      ((files_processed++))
+    done
+    
+    # Handle special Hyprland config files
+    for config_file in "hyprland.conf" "hypridle.conf" "hyprlock.conf"; do
+      source_file="$hypr_source/$config_file"
+      target_file="$hypr_target/$config_file"
+      
+      if [[ -f "$source_file" ]]; then
+        if [[ -f "$target_file" ]]; then
+          if ! cmp -s "$source_file" "$target_file"; then
+            echo -e "\n${YELLOW}Special Hyprland config detected: $config_file${NC}"
+            echo "This is a critical Hyprland configuration file."
+            handle_file_conflict "$source_file" "$target_file"
+            ((files_updated++))
+          fi
+        else
+          cp -p "$source_file" "$target_file"
+          log_success "Created new Hyprland config: $target_file"
+          ((files_created++))
+        fi
+        ((files_processed++))
+      fi
+    done
+    
+    # Handle custom directory (never overwrite)
+    custom_source="$hypr_source/custom"
+    custom_target="$hypr_target/custom"
+    
+    if [[ -d "$custom_source" && ! -d "$custom_target" ]]; then
+      rsync -av "$custom_source/" "$custom_target/"
+      log_success "Created Hyprland custom directory"
+      ((files_created++))
+    elif [[ -d "$custom_source" && -d "$custom_target" ]]; then
+      log_info "Hyprland custom directory exists, skipping (preserved user customizations)"
+    fi
+  fi
+
+  # Process the original monitored directories for any remaining files
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
     home_dir_path="${HOME}/${dir_name}"
 
     if [[ ! -d "$repo_dir_path" ]]; then
-      log_warning "Repository directory not found: $repo_dir_path"
       continue
     fi
 
-    log_info "Processing directory: $dir_name"
+    # Only process files not already handled above
+    if [[ "$dir_name" != ".config" ]]; then
+      log_info "Processing directory: $dir_name"
+      mkdir -p "$home_dir_path"
 
-    # Create home directory if it doesn't exist
-    mkdir -p "$home_dir_path"
+      while IFS= read -r -d '' repo_file; do
+        rel_path="${repo_file#$repo_dir_path/}"
+        home_file="${home_dir_path}/${rel_path}"
 
-    # Get comprehensive file list for comparison
-    while IFS= read -r repo_file; do
-      # Calculate relative path and corresponding home file path
-      rel_path="${repo_file#$repo_dir_path/}"
-      home_file="${home_dir_path}/${rel_path}"
-
-      # Check if file should be ignored
-      if should_ignore "$home_file"; then
-        ((files_skipped++))
-        continue
-      fi
-
-      ((files_processed++))
-
-      # Create directory structure if needed
-      mkdir -p "$(dirname "$home_file")"
-
-      # Detect all types of differences
-      differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
-      
-      if [[ -n "$differences" ]]; then
-        # Parse differences
-        has_content_diff=false
-        has_perm_diff=false
-        is_missing=false
-        is_extra=false
-        
-        for diff_type in $differences; do
-          case $diff_type in
-            "content") has_content_diff=true ;;
-            "permissions") has_perm_diff=true ;;
-            "missing") is_missing=true ;;
-            "extra") is_extra=true ;;
-          esac
-        done
-        
-        # Handle different types of differences
-        if [[ "$is_missing" == true ]]; then
-          # New file, copy it
-          cp -p "$repo_file" "$home_file"
-          log_success "Created new file: $rel_path"
-          ((files_created++))
-        elif [[ "$has_content_diff" == true ]]; then
-          # Content difference, handle as normal conflict
-          handle_file_conflict "$repo_file" "$home_file"
-          ((files_updated++))
-        elif [[ "$has_perm_diff" == true ]]; then
-          # Permission difference only
-          chmod --reference="$repo_file" "$home_file" 2>/dev/null || true
-          log_info "Fixed permissions for: $rel_path"
-          ((files_with_permission_changes++))
+        if should_ignore "$home_file"; then
+          continue
         fi
-      fi
-    done < <(get_comprehensive_file_list "$repo_dir_path")
+
+        ((files_processed++))
+        mkdir -p "$(dirname "$home_file")"
+
+        if [[ -f "$home_file" ]]; then
+          if ! cmp -s "$repo_file" "$home_file"; then
+            log_info "Found difference in: $rel_path"
+            handle_file_conflict "$repo_file" "$home_file"
+            ((files_updated++))
+          fi
+        else
+          cp -p "$repo_file" "$home_file"
+          log_success "Created new file: $home_file"
+          ((files_created++))
+        fi
+      done < <(get_changed_files "$repo_dir_path")
+    fi
   done
 
   # Show processing summary
@@ -1122,27 +970,84 @@ if [[ "$process_files" == true ]]; then
   log_info "- Files processed: $files_processed"
   log_info "- Files with conflicts: $files_updated"
   log_info "- New files created: $files_created"
-  log_info "- Files with permission fixes: $files_with_permission_changes"
-  log_info "- Files skipped (ignored): $files_skipped"
 else
   log_info "Skipping file updates (no changes detected and not in force mode)"
 fi
 
+# Step 3.5: Update system services and settings
+log_header "Updating System Services and Settings"
+
+# Install Python packages if they exist
+if [[ -f "${REPO_DIR}/scriptdata/python-packages" ]]; then
+  if safe_read "Update Python packages? (Y/n): " update_python "Y"; then
+    if [[ ! "$update_python" =~ ^[Nn]$ ]]; then
+      install_python_packages
+    fi
+  fi
+fi
+
+# Update system settings (only if force mode or user confirms)
+update_system_settings=false
+if [[ "$FORCE_CHECK" == true ]]; then
+  update_system_settings=true
+elif safe_read "Update system settings (font, theme, etc.)? (y/N): " update_settings "N"; then
+  if [[ "$update_settings" =~ ^[Yy]$ ]]; then
+    update_system_settings=true
+  fi
+fi
+
+if [[ "$update_system_settings" == true ]]; then
+  log_info "Updating system settings..."
+  
+  # Update user groups
+  if ! groups $(whoami) | grep -q video; then
+    log_info "Adding user to video group..."
+    sudo usermod -aG video "$(whoami)"
+  fi
+  
+  if ! groups $(whoami) | grep -q i2c; then
+    log_info "Adding user to i2c group..."
+    sudo usermod -aG i2c "$(whoami)"
+  fi
+  
+  if ! groups $(whoami) | grep -q input; then
+    log_info "Adding user to input group..."
+    sudo usermod -aG input "$(whoami)"
+  fi
+  
+  # Update module loading
+  if [[ ! -f /etc/modules-load.d/i2c-dev.conf ]]; then
+    log_info "Setting up i2c-dev module loading..."
+    echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf
+  fi
+  
+  # Update services
+  log_info "Enabling and starting services..."
+  systemctl --user enable ydotool --now 2>/dev/null || log_warning "Could not enable ydotool service"
+  sudo systemctl enable bluetooth --now 2>/dev/null || log_warning "Could not enable bluetooth service"
+  
+  # Update GNOME settings
+  log_info "Updating GNOME settings..."
+  gsettings set org.gnome.desktop.interface font-name 'Rubik 11' 2>/dev/null || log_warning "Could not set GNOME font"
+  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' 2>/dev/null || log_warning "Could not set GNOME color scheme"
+  
+  # Update KDE settings
+  log_info "Updating KDE settings..."
+  kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Darkly 2>/dev/null || log_warning "Could not set KDE widget style"
+  
+  log_success "System settings updated"
+else
+  log_info "Skipping system settings update"
+fi
+
+# Reload Hyprland if running
+if pgrep -x "Hyprland" > /dev/null; then
+  log_info "Reloading Hyprland configuration..."
+  sleep 1
+  hyprctl reload 2>/dev/null && log_success "Hyprland reloaded" || log_warning "Could not reload Hyprland"
+fi
+
 # Step 4: Update script permissions
-log_header "Updating Script Permissions"
-
-if [[ -d "${REPO_DIR}/scriptdata" ]]; then
-  find "${REPO_DIR}/scriptdata" -type f -name "*.sh" -exec chmod +x {} \;
-  find "${REPO_DIR}/scriptdata" -type f -executable -exec chmod +x {} \;
-  log_success "Updated script permissions"
-fi
-
-# Make sure local bin scripts are executable
-if [[ -d "${HOME}/.local/bin" ]]; then
-  find "${HOME}/.local/bin" -type f -exec chmod +x {} \; 2>/dev/null || true
-  log_success "Updated ~/.local/bin script permissions"
-fi
-
 log_header "Update Complete"
 log_success "Dotfiles update completed successfully!"
 
@@ -1152,7 +1057,6 @@ echo -e "${CYAN}Summary:${NC}"
 echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)')"
 echo "- Branch: $current_branch"
 echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
-echo "- Detection mode: $([ "$DETECT_ONLY" == true ] && echo "Detection only" || echo "Apply changes")"
 echo "- Package checking: $([ "$CHECK_PACKAGES" == true ] && echo "Enabled" || echo "Disabled")"
 
 if [[ $rebuilt_packages -gt 0 ]]; then
@@ -1163,13 +1067,26 @@ if [[ "$process_files" == true ]]; then
   echo "- Files processed: $files_processed"
   echo "- Files updated/conflicted: $files_updated"
   echo "- New files created: $files_created"
-  echo "- Files with permission fixes: $files_with_permission_changes"
-  echo "- Files skipped (ignored): $files_skipped"
 fi
 
 echo "- Configuration directories: ${MONITOR_DIRS[*]}"
 
-# Remind about ignore files and show examples
+# Post-installation reminders
+echo
+echo -e "${CYAN}Post-update reminders:${NC}"
+echo "- Check https://end-4.github.io/dots-hyprland-wiki/en/i-i/01setup/#post-installation"
+echo "- Press Ctrl+Super+T to select a wallpaper"  
+echo "- Press Super+/ for a list of keybinds"
+
+# Environment variable warning
+if [[ -z "${ILLOGICAL_IMPULSE_VIRTUAL_ENV}" ]]; then
+  echo
+  echo -e "${YELLOW}Warning: ILLOGICAL_IMPULSE_VIRTUAL_ENV environment variable is not set.${NC}"
+  echo -e "${YELLOW}Please ensure it's set to ~/.local/state/quickshell/.venv or Quickshell won't work.${NC}"
+  echo -e "${YELLOW}Check ~/.config/hypr/hyprland/env.conf and restart Hyprland.${NC}"
+fi
+
+# Remind about ignore files if none exist
 if [[ ! -f "$HOME_UPDATE_IGNORE_FILE" && ! -f "$UPDATE_IGNORE_FILE" ]]; then
   echo
   log_info "Tip: Create ignore files to exclude files from updates:"
