@@ -126,6 +126,7 @@ Singleton {
         property color colPrimaryContainer: m3colors.m3primaryContainer
         property color colPrimaryContainerHover: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Hover, 0.7)
         property color colPrimaryContainerActive: ColorUtils.mix(colors.colPrimaryContainer, colLayer1Active, 0.6)
+        property color colOnPrimaryContainer: m3colors.m3onPrimaryContainer
         property color colSecondary: m3colors.m3secondary
         property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
@@ -192,6 +193,10 @@ Singleton {
         readonly property list<real> standard: [0.2, 0, 0, 1, 1, 1]
         readonly property list<real> standardAccel: [0.3, 0, 1, 1, 1, 1]
         readonly property list<real> standardDecel: [0, 0, 0, 1, 1, 1]
+        readonly property real expressiveFastSpatialDuration: 350
+        readonly property real expressiveDefaultSpatialDuration: 500
+        readonly property real expressiveSlowSpatialDuration: 650
+        readonly property real expressiveEffectsDuration: 200
     }
 
     animation: QtObject {
