@@ -6,10 +6,12 @@ import "root:/modules/common/widgets/"
 
 Flickable {
     id: root
+    property real baseWidth: 400
     default property alias data: contentColumn.data
+
     clip: true
     contentHeight: contentColumn.implicitHeight
-    implicitWidth: contentColumn.implicitWidth
+    implicitWidth: Math.max(contentColumn.implicitWidth, baseWidth)
     ColumnLayout {
         id: contentColumn
         anchors {
