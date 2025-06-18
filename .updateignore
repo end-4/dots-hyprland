@@ -8,7 +8,6 @@
 # Ignore temporary files
 *.tmp
 *.temp
-*~
 
 # Ignore backup files
 *.bak
@@ -29,9 +28,3 @@
 *key*
 *api*
 *token*
-
-# Ignore specific applications that should not be updated
-.config/app-that-should-not-be-updated/
-
-# Ignore system-specific files
-.config/system-specific/ 
