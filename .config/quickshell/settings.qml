@@ -24,8 +24,9 @@ ApplicationWindow {
     id: root
     property string firstRunFilePath: FileUtils.trimFileProtocol(`${Directories.state}/user/first_run.txt`)
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
-    property real contentPadding: 5
+    property real contentPadding: 8
     property bool showNextTime: false
+    property int currentPage: 0
     visible: true
     onClosing: Qt.quit()
     title: "illogical-impulse Settings"
@@ -37,7 +38,7 @@ ApplicationWindow {
 
     minimumWidth: 600
     minimumHeight: 400
-    width: 800
+    width: 900
     height: 650
     color: Appearance.m3colors.m3background
 
@@ -74,7 +75,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer0
                 text: "Settings"
-                font.pixelSize: Appearance.font.pixelSize.hugeass
+                font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
             }
             RowLayout { // Window controls row
@@ -99,12 +100,13 @@ ApplicationWindow {
         RowLayout { // Window content with navigation rail and content pane
             Layout.fillWidth: true
             Layout.fillHeight: true
+            spacing: contentPadding
             NavigationRail { // Window content with navigation rail and content pane
                 id: navRail
                 Layout.fillHeight: true
                 Layout.margins: 5
                 spacing: 10
-                expanded: root.width > 800
+                expanded: root.width > 900
                 
                 NavigationRailExpandButton {}
 
@@ -118,7 +120,32 @@ ApplicationWindow {
                     }
                 }
 
-                
+                ColumnLayout {
+                    Layout.topMargin: 25
+                    spacing: 4
+
+                    NavigationRailButton {
+                        toggled: root.currentPage === 0
+                        onClicked: root.currentPage = 0;
+                        expanded: navRail.expanded
+                        buttonIcon: "tune"
+                        buttonText: "General"
+                    }
+                    NavigationRailButton {
+                        toggled: root.currentPage === 1
+                        onClicked: root.currentPage = 1;
+                        expanded: navRail.expanded
+                        buttonIcon: "dashboard"
+                        buttonText: "Widgets"
+                    }
+                    NavigationRailButton {
+                        toggled: root.currentPage === 2
+                        onClicked: root.currentPage = 2;
+                        expanded: navRail.expanded
+                        buttonIcon: "settings"
+                        buttonText: "Services"
+                    }
+                }
 
                 Item {
                     Layout.fillHeight: true

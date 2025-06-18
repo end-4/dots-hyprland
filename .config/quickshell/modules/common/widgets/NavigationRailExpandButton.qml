@@ -9,7 +9,7 @@ RippleButton {
     Layout.alignment: Qt.AlignLeft
     implicitWidth: 40
     implicitHeight: 40
-    Layout.leftMargin: 5
+    Layout.leftMargin: 8
     onClicked: {
         parent.expanded = !parent.expanded;
     }
@@ -18,7 +18,7 @@ RippleButton {
         id: icon
         anchors.centerIn: parent
         horizontalAlignment: Text.AlignHCenter
-        iconSize: Appearance.font.pixelSize.hugeass
+        iconSize: 24
         color: Appearance.colors.colOnLayer1
         text: root.parent.expanded ? "menu_open" : "menu"
     }

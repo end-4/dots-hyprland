@@ -7,42 +7,82 @@ import QtQuick.Layouts
 import Quickshell.Io
 
 Button {
-    id: button
+    id: root
 
     property bool toggled
     property string buttonIcon
     property string buttonText
     property bool expanded: false
 
-    property real baseSize: 50
+    property real baseSize: 56
+    property real baseHighlightHeight: 32
+    padding: 0
 
-    Layout.alignment: Qt.AlignHCenter
-    implicitHeight: columnLayout.implicitHeight
-    implicitWidth: columnLayout.implicitWidth
+    implicitHeight: baseSize
+    implicitWidth: contentItem.implicitWidth
 
     background: null
     PointingHandInteraction {}
 
     // Real stuff
-    ColumnLayout {
-        id: columnLayout
-        spacing: 5
+    contentItem: Item {
+        id: buttonContent
+        anchors {
+            left: parent.left
+            verticalCenter: parent.verticalCenter
+        }
+        
+        implicitWidth: root.expanded ? itemIconBackground.implicitWidth + 20 + itemText.implicitWidth :
+            itemIconBackground.implicitWidth
+        implicitHeight: root.expanded ? itemIconBackground.implicitHeight : itemIconBackground.implicitHeight + itemText.implicitHeight 
+
         Rectangle {
-            implicitWidth: 62
-            implicitHeight: navRailButtonIcon.height + 2 * 2
-            Layout.alignment: Qt.AlignHCenter
+            id: itemBackground
+            anchors.top: itemIconBackground.top
+            anchors.left: itemIconBackground.left
+            anchors.right: itemIconBackground.right
+            anchors.bottom: itemIconBackground.bottom
             radius: Appearance.rounding.full
             color: toggled ? 
-                (button.down ? Appearance.colors.colSecondaryContainerActive : button.hovered ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer) :
-                (button.down ? Appearance.colors.colLayer1Active : button.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
+                (root.down ? Appearance.colors.colSecondaryContainerActive : root.hovered ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer) :
+                (root.down ? Appearance.colors.colLayer1Active : root.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
+
+            states: State {
+                name: "expanded"
+                when: root.expanded
+                AnchorChanges {
+                    target: itemBackground
+                    anchors.top: buttonContent.top
+                    anchors.left: buttonContent.left
+                    anchors.right: buttonContent.right
+                    anchors.bottom: buttonContent.bottom
+                }
+            }
+            transitions: Transition {
+                AnchorAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
             }
+        }
+
+        Item {
+            id: itemIconBackground
+            implicitWidth: root.baseSize
+            implicitHeight: root.baseHighlightHeight
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
             MaterialSymbol {
                 id: navRailButtonIcon
                 anchors.centerIn: parent
-                iconSize: Appearance.font.pixelSize.hugeass
+                iconSize: 24
                 fill: toggled ? 1 : 0
                 text: buttonIcon
                 color: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
@@ -54,8 +94,34 @@ Button {
         }
 
         StyledText {
-            Layout.alignment: Qt.AlignHCenter
+            id: itemText
+            anchors {
+                top: itemIconBackground.bottom
+                topMargin: 6
+                horizontalCenter: itemIconBackground.horizontalCenter
+            }
+            states: State {
+                name: "expanded"
+                when: root.expanded
+                AnchorChanges {
+                    target: itemText
+                    anchors {
+                        top: undefined
+                        horizontalCenter: undefined
+                        left: itemIconBackground.right
+                        verticalCenter: itemIconBackground.verticalCenter
+                    }
+                }
+            }
+            transitions: Transition {
+                AnchorAnimation {
+                    duration: Appearance.animation.elementMoveFast.duration
+                    easing.type: Appearance.animation.elementMoveFast.type
+                    easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                }
+            }
             text: buttonText
+            font.pixelSize: 14
             color: Appearance.colors.colOnLayer1
         }
     }

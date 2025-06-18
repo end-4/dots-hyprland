@@ -177,7 +177,7 @@ Singleton {
             property int larger: 19
             property int huge: 22
             property int hugeass: 23
-            property int title: 28
+            property int title: huge
         }
     }
 

@@ -135,7 +135,7 @@ Rectangle {
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 id: tabBar
-                spacing: 15
+                spacing: 8
                 Repeater {
                     model: root.tabs
                     NavigationRailButton {

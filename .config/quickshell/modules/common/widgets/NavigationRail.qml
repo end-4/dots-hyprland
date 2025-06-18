@@ -7,7 +7,6 @@ import "root:/modules/common/widgets/"
 ColumnLayout { // Window content with navigation rail and content pane
     id: root
     property bool expanded: true
-    spacing: 10
-
-
+    property int currentIndex: 0
+    spacing: 5
 }
