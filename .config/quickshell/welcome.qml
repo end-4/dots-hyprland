@@ -24,7 +24,7 @@ ApplicationWindow {
     id: root
     property string firstRunFilePath: FileUtils.trimFileProtocol(`${Directories.state}/user/first_run.txt`)
     property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
-    property real contentPadding: 5
+    property real contentPadding: 8
     property bool showNextTime: false
     visible: true
     onClosing: Qt.quit()
@@ -250,7 +250,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 color: Appearance.colors.colOnLayer0
                 text: "Yooooo hi there"
-                font.pixelSize: Appearance.font.pixelSize.hugeass
+                font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
             }
             RowLayout { // Window controls row
@@ -336,9 +336,15 @@ ApplicationWindow {
                                     console.log(konachanWallProc.command.join(" "))
                                     konachanWallProc.running = true;
                                 }
+                                StyledToolTip {
+                                    content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
+                                }
                             }
                             ButtonWithIcon {
                                 iconText: "wallpaper"
+                                StyledToolTip {
+                                    content: "Pick wallpaper image on your system"
+                                }
                                 onClicked: {
                                     Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
                                 }
@@ -418,6 +424,9 @@ ApplicationWindow {
                                         toggled: (weebPolicyBtnGroup.selectedPolicy === value)
                                         onClicked: {
                                             ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                        }
+                                        StyledToolTip {
+                                            content: "The Anime tab on the left sidebar would still\nbe available, but its tab button won't show"
                                         }
                                     }
                                 }
