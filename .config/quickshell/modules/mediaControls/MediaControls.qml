@@ -45,13 +45,13 @@ Scope {
         let filtered = [];
         let used = new Set();
 
-        // Skip unwanted players
-        if (p1.trackTitle.includes("YouTube Music") || p1.trackTitle.includes("Amazon Prime Music")) continue;
-
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i)) continue;
             let p1 = players[i];
             let group = [i];
+
+            // Skip unwanted players
+            if (p1.trackTitle.includes("YouTube Music") || p1.trackTitle.includes("Amazon Prime Music")) continue;
 
             // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
@@ -60,7 +60,7 @@ Scope {
                     (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle))) {
                     group.push(j);
                 }
-            }
+            }            if (used.has(i)) continue;
 
             // Pick the one with non-empty trackArtUrl, or fallback to the first
             let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
