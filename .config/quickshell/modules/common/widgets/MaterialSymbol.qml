@@ -12,6 +12,7 @@ Text {
         hintingPreference: Font.PreferFullHinting
         family: Appearance?.font.family.iconMaterial ?? "Material Symbols Rounded"
         pixelSize: iconSize
+        weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill
     }
     verticalAlignment: Text.AlignVCenter
     color: Appearance.m3colors.m3onBackground
