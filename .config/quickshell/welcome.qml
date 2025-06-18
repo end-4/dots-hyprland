@@ -53,23 +53,6 @@ ApplicationWindow {
         }
     }
 
-    component Section: ColumnLayout {
-        id: sectionRoot
-        property string title
-        default property alias data: sectionContent.data
-
-        Layout.fillWidth: true
-        spacing: 8
-        StyledText {
-            text: sectionRoot.title
-            font.pixelSize: Appearance.font.pixelSize.larger
-        }
-        ColumnLayout {
-            id: sectionContent
-            spacing: 5
-        }
-    }
-
     component ButtonWithIcon: RippleButton {
         id: buttonWithIconRoot
         property string nerdIcon
@@ -296,264 +279,252 @@ ApplicationWindow {
             implicitWidth: contentColumn.implicitWidth
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Flickable {
-                clip: true
+            
+
+            ContentPage {
+                id: contentColumn
                 anchors.fill: parent
-                contentHeight: contentColumn.implicitHeight
-                implicitWidth: contentColumn.implicitWidth
-                ColumnLayout {
-                    id: contentColumn
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        horizontalCenter: parent.horizontalCenter
-                        margins: 10
-                    }
-                    spacing: 20
+                ContentSection {
+                    title: "Style & wallpaper"
 
-                    Section {
-                        title: "Style & wallpaper"
-
-                        ButtonGroup {
-                            Layout.fillWidth: true
-                            LightDarkPrefButton {
-                                dark: false
-                            }
-                            LightDarkPrefButton {
-                                dark: true
-                            }
-                        }
-
-                        RowLayout {
-                            Layout.alignment: Qt.AlignHCenter
-                            ButtonWithIcon {
-                                id: rndWallBtn
-                                Layout.alignment: Qt.AlignHCenter
-                                buttonRadius: Appearance.rounding.small
-                                iconText: "wallpaper"
-                                mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
-                                onClicked: {
-                                    console.log(konachanWallProc.command.join(" "))
-                                    konachanWallProc.running = true;
-                                }
-                                StyledToolTip {
-                                    content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
-                                }
-                            }
-                            ButtonWithIcon {
-                                iconText: "wallpaper"
-                                StyledToolTip {
-                                    content: "Pick wallpaper image on your system"
-                                }
-                                onClicked: {
-                                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
-                                }
-                                mainContentComponent: Component {
-                                    RowLayout {
-                                        spacing: 10
-                                        StyledText {
-                                            font.pixelSize: Appearance.font.pixelSize.small
-                                            text: "Choose file"
-                                            color: Appearance.colors.colOnSecondaryContainer
-                                        }
-                                        RowLayout {
-                                            spacing: 3
-                                            KeyboardKey {
-                                                key: "Ctrl"
-                                            }
-                                            KeyboardKey {
-                                                key: "󰖳"
-                                            }
-                                            StyledText {
-                                                Layout.alignment: Qt.AlignVCenter
-                                                text: "+"
-                                            }
-                                            KeyboardKey {
-                                                key: "T"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        StyledText {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: "Change any time later with /dark, /light, /img in the launcher"
-                            font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.colors.colSubtext
-                        }
-                    }
-
-                    Section {
-                        title: "Policies"
-
-                        RowLayout {
-                            Layout.alignment: Qt.AlignHCenter
-                            spacing: 15
-                            ColumnLayout { // Weeb policy
-                                StyledText {
-                                    text: "Weeb"
-                                    color: Appearance.colors.colSubtext
-                                }
-                                ButtonGroup {
-                                    id: weebPolicyBtnGroup
-                                    property int selectedPolicy: ConfigOptions.policies.weeb
-                                    spacing: 2
-                                    SelectionGroupButton {
-                                        property int value: 0
-                                        leftmost: true
-                                        buttonText: "No"
-                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                        }
-                                    }
-                                    SelectionGroupButton {
-                                        property int value: 1
-                                        buttonText: "Yes"
-                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                        }
-                                    }
-                                    SelectionGroupButton {
-                                        property int value: 2
-                                        rightmost: true
-                                        buttonText: "Closet"
-                                        toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                        }
-                                        StyledToolTip {
-                                            content: "The Anime tab on the left sidebar would still\nbe available, but its tab button won't show"
-                                        }
-                                    }
-                                }
-                            }
-                            ColumnLayout { // AI policy
-                                StyledText {
-                                    text: "AI"
-                                    color: Appearance.colors.colSubtext
-                                }
-                                ButtonGroup {
-                                    id: aiPolicyBtnGroup
-                                    property int selectedPolicy: ConfigOptions.policies.ai
-                                    spacing: 2
-                                    SelectionGroupButton {
-                                        property int value: 0
-                                        leftmost: true
-                                        buttonText: "No"
-                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                        }
-                                    }
-                                    SelectionGroupButton {
-                                        property int value: 1
-                                        buttonText: "Yes"
-                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                        }
-                                    }
-                                    SelectionGroupButton {
-                                        property int value: 2
-                                        rightmost: true
-                                        buttonText: "Local only"
-                                        toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                        onClicked: {
-                                            ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Section {
-                        title: "Info"
-
-                        Flow {
-                            Layout.fillWidth: true
-                            spacing: 10
-
-                            ButtonWithIcon {
-                                iconText: "keyboard_alt"
-                                onClicked: {
-                                    Hyprland.dispatch("global quickshell:cheatsheetOpen")
-                                }
-                                mainContentComponent: Component {
-                                    RowLayout {
-                                        spacing: 10
-                                        StyledText {
-                                            font.pixelSize: Appearance.font.pixelSize.small
-                                            text: "Keybinds"
-                                            color: Appearance.colors.colOnSecondaryContainer
-                                        }
-                                        RowLayout {
-                                            spacing: 3
-                                            KeyboardKey {
-                                                key: "󰖳"
-                                            }
-                                            StyledText {
-                                                Layout.alignment: Qt.AlignVCenter
-                                                text: "+"
-                                            }
-                                            KeyboardKey {
-                                                key: "/"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            ButtonWithIcon {
-                                iconText: "help"
-                                mainText: "Usage"
-                                onClicked: {
-                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
-                                }
-                            }
-                            ButtonWithIcon {
-                                iconText: "construction"
-                                mainText: "Configuration"
-                                onClicked: {
-                                    Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
-                                }
-                            }
-                        }
-                    }
-
-                    Section {
-                        title: "Useless buttons"
-
-                        Flow {
-                            Layout.fillWidth: true
-                            spacing: 10
-
-                            ButtonWithIcon {
-                                nerdIcon: "󰊤"
-                                mainText: "GitHub"
-                                onClicked: {
-                                    Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
-                                }
-                            }
-                            ButtonWithIcon {
-                                iconText: "favorite"
-                                mainText: "Funny number"
-                                onClicked: {
-                                    Qt.openUrlExternally("https://github.com/sponsors/end-4")
-                                }
-                            }
-                        }
-                    }
-
-                    Item {
+                    ButtonGroup {
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
+                        LightDarkPrefButton {
+                            dark: false
+                        }
+                        LightDarkPrefButton {
+                            dark: true
+                        }
                     }
 
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        ButtonWithIcon {
+                            id: rndWallBtn
+                            Layout.alignment: Qt.AlignHCenter
+                            buttonRadius: Appearance.rounding.small
+                            iconText: "wallpaper"
+                            mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                            onClicked: {
+                                console.log(konachanWallProc.command.join(" "))
+                                konachanWallProc.running = true;
+                            }
+                            StyledToolTip {
+                                content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
+                            }
+                        }
+                        ButtonWithIcon {
+                            iconText: "wallpaper"
+                            StyledToolTip {
+                                content: "Pick wallpaper image on your system"
+                            }
+                            onClicked: {
+                                Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: "Choose file"
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "Ctrl"
+                                        }
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "T"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    StyledText {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: "Change any time later with /dark, /light, /img in the launcher"
+                        font.pixelSize: Appearance.font.pixelSize.smaller
+                        color: Appearance.colors.colSubtext
+                    }
+                }
+
+                ContentSection {
+                    title: "Policies"
+
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+                        spacing: 15
+                        ColumnLayout { // Weeb policy
+                            StyledText {
+                                text: "Weeb"
+                                color: Appearance.colors.colSubtext
+                            }
+                            ButtonGroup {
+                                id: weebPolicyBtnGroup
+                                property int selectedPolicy: ConfigOptions.policies.weeb
+                                spacing: 2
+                                SelectionGroupButton {
+                                    property int value: 0
+                                    leftmost: true
+                                    buttonText: "No"
+                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                    }
+                                }
+                                SelectionGroupButton {
+                                    property int value: 1
+                                    buttonText: "Yes"
+                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                    }
+                                }
+                                SelectionGroupButton {
+                                    property int value: 2
+                                    rightmost: true
+                                    buttonText: "Closet"
+                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
+                                    }
+                                    StyledToolTip {
+                                        content: "The Anime tab on the left sidebar would still\nbe available, but its tab button won't show"
+                                    }
+                                }
+                            }
+                        }
+                        ColumnLayout { // AI policy
+                            StyledText {
+                                text: "AI"
+                                color: Appearance.colors.colSubtext
+                            }
+                            ButtonGroup {
+                                id: aiPolicyBtnGroup
+                                property int selectedPolicy: ConfigOptions.policies.ai
+                                spacing: 2
+                                SelectionGroupButton {
+                                    property int value: 0
+                                    leftmost: true
+                                    buttonText: "No"
+                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                    }
+                                }
+                                SelectionGroupButton {
+                                    property int value: 1
+                                    buttonText: "Yes"
+                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                    }
+                                }
+                                SelectionGroupButton {
+                                    property int value: 2
+                                    rightmost: true
+                                    buttonText: "Local only"
+                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
+                                    onClicked: {
+                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ContentSection {
+                    title: "Info"
+
+                    Flow {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        ButtonWithIcon {
+                            iconText: "keyboard_alt"
+                            onClicked: {
+                                Hyprland.dispatch("global quickshell:cheatsheetOpen")
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: "Keybinds"
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "/"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        ButtonWithIcon {
+                            iconText: "help"
+                            mainText: "Usage"
+                            onClicked: {
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
+                            }
+                        }
+                        ButtonWithIcon {
+                            iconText: "construction"
+                            mainText: "Configuration"
+                            onClicked: {
+                                Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
+                            }
+                        }
+                    }
+                }
+
+                ContentSection {
+                    title: "Useless buttons"
+
+                    Flow {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        ButtonWithIcon {
+                            nerdIcon: "󰊤"
+                            mainText: "GitHub"
+                            onClicked: {
+                                Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
+                            }
+                        }
+                        ButtonWithIcon {
+                            iconText: "favorite"
+                            mainText: "Funny number"
+                            onClicked: {
+                                Qt.openUrlExternally("https://github.com/sponsors/end-4")
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
                 }
             }
         }
