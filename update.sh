@@ -1153,14 +1153,14 @@ if [[ "$process_files" == true ]]; then
       mkdir -p "$(dirname "$home_file")"
 
       # Detect all types of differences
-      local differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
+      differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
       
       if [[ -n "$differences" ]]; then
         # Parse differences
-        local has_content_diff=false
-        local has_perm_diff=false
-        local is_missing=false
-        local is_extra=false
+        has_content_diff=false
+        has_perm_diff=false
+        is_missing=false
+        is_extra=false
         
         for diff_type in $differences; do
           case $diff_type in
