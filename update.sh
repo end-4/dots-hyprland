@@ -29,18 +29,6 @@ MONITOR_DIRS=(
   ".cache"            # XDG_CACHE_HOME
 )
 
-# Additional directories that install.sh handles specially
-HYPRLAND_CONFIG_DIR=".config/hypr"
-FISH_CONFIG_DIR=".config/fish"
-
-# Files that install.sh handles with special logic (backup/conflict resolution)
-SPECIAL_FILES=(
-  ".config/hypr/hyprland.conf"
-  ".config/hypr/hypridle.conf" 
-  ".config/hypr/hyprlock.conf"
-  ".config/hypr/custom"
-)
-
 # === Color Codes ===
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -678,75 +666,6 @@ get_comprehensive_file_list() {
   printf '%s\n' "${file_list[@]}" | sort -u
 }
 
-# Function to handle special files (like hyprland.conf, hypridle.conf, etc.)
-handle_special_file() {
-  local repo_file="$1"
-  local home_file="$2"
-  local filename=$(basename "$home_file")
-  local dirname=$(dirname "$home_file")
-  local rel_path="${home_file#$HOME/}"
-
-  # Check if this is a special file that needs special handling
-  local is_special=false
-  for special_file in "${SPECIAL_FILES[@]}"; do
-    if [[ "$rel_path" == "$special_file" ]]; then
-      is_special=true
-      break
-    fi
-  done
-
-  if [[ "$is_special" == false ]]; then
-    return 1  # Not a special file, handle normally
-  fi
-
-  echo -e "\n${CYAN}Special file detected: $rel_path${NC}"
-  echo "This file is handled specially by the install script."
-  echo "Choose an action:"
-  echo "1) Apply install.sh logic (backup existing, use repo version)"
-  echo "2) Handle like a normal file conflict"
-  echo "3) Skip this file"
-  echo
-
-  if ! safe_read "Enter your choice (1-3): " choice "1"; then
-    echo
-    log_warning "Failed to read input. Using install.sh logic."
-    choice="1"
-  fi
-
-  case $choice in
-    1)
-      # Apply install.sh logic
-      if [[ -f "$home_file" ]]; then
-        # Backup existing file
-        mv "$home_file" "${dirname}/${filename}.old"
-        log_success "Backed up existing file to ${filename}.old"
-      fi
-      # Copy repo version
-      cp -p "$repo_file" "$home_file"
-      log_success "Applied repository version of $rel_path"
-      ;;
-    2)
-      # Handle like normal conflict
-      handle_file_conflict "$repo_file" "$home_file"
-      ;;
-    3)
-      log_info "Skipping special file: $rel_path"
-      ;;
-    *)
-      log_warning "Invalid choice. Using install.sh logic."
-      # Apply install.sh logic as fallback
-      if [[ -f "$home_file" ]]; then
-        mv "$home_file" "${dirname}/${filename}.old"
-        log_success "Backed up existing file to ${filename}.old"
-      fi
-      cp -p "$repo_file" "$home_file"
-      log_success "Applied repository version of $rel_path"
-      ;;
-  esac
-
-  return 0  # Special file handled
-}
-
 # Function to generate comprehensive detection report
 generate_detection_report() {
   local report_file="${REPO_DIR}/update-detection-report.txt"
@@ -1184,11 +1103,8 @@ if [[ "$process_files" == true ]]; then
           log_success "Created new file: $rel_path"
           ((files_created++))
         elif [[ "$has_content_diff" == true ]]; then
-          # Content difference, check if it's a special file first
-          if ! handle_special_file "$repo_file" "$home_file"; then
-            # Not a special file, handle as normal conflict
-            handle_file_conflict "$repo_file" "$home_file"
-          fi
+          # Content difference, handle as normal conflict
+          handle_file_conflict "$repo_file" "$home_file"
           ((files_updated++))
         elif [[ "$has_perm_diff" == true ]]; then
           # Permission difference only
