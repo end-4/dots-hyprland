@@ -142,48 +142,20 @@ ApplicationWindow {
                         }
                     }
 
-                    Item {
-                        implicitHeight: tabBarColumn.implicitHeight
-                        implicitWidth: tabBarColumn.implicitWidth
-                        Layout.topMargin: 25
-                        Rectangle {
-                            property real itemHeight: tabBarColumn.children[0].baseSize
-                            property real baseHighlightHeight: tabBarColumn.children[0].baseHighlightHeight
-                            anchors {
-                                top: tabBarColumn.top
-                                left: tabBarColumn.left
-                                topMargin: itemHeight * root.currentPage + (navRail.expanded ? 0 : ((itemHeight - baseHighlightHeight) / 2))
-                            }
-                            radius: Appearance.rounding.full
-                            color: Appearance.colors.colSecondaryContainer
-                            implicitHeight: navRail.expanded ? itemHeight : baseHighlightHeight
-                            implicitWidth: tabBarColumn.children[root.currentPage].visualWidth
-
-                            Behavior on anchors.topMargin {
-                                NumberAnimation {
-                                    duration: Appearance.animationCurves.expressiveFastSpatialDuration
-                                    easing.type: Appearance.animation.elementMove.type
-                                    easing.bezierCurve: Appearance.animationCurves.expressiveFastSpatial
-                                }
-                            }
-                        }
-                        ColumnLayout {
-                            id: tabBarColumn
-                            anchors.fill: parent
-                            spacing: 0
-
-                            Repeater {
-                                model: root.pages
-                                NavigationRailButton {
-                                    required property var index
-                                    required property var modelData
-                                    toggled: root.currentPage === index
-                                    onClicked: root.currentPage = index;
-                                    expanded: navRail.expanded
-                                    buttonIcon: modelData.icon
-                                    buttonText: modelData.name
-                                    showToggledHighlight: false
-                                }
+                    NavigationRailTabArray {
+                        currentIndex: root.currentPage
+                        expanded: navRail.expanded
+                        Repeater {
+                            model: root.pages
+                            NavigationRailButton {
+                                required property var index
+                                required property var modelData
+                                toggled: root.currentPage === index
+                                onClicked: root.currentPage = index;
+                                expanded: navRail.expanded
+                                buttonIcon: modelData.icon
+                                buttonText: modelData.name
+                                showToggledHighlight: false
                             }
                         }
                     }
