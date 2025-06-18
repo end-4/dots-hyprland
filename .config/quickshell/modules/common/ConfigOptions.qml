@@ -31,7 +31,6 @@ Singleton {
 
     property QtObject apps: QtObject {
         property string bluetooth: "kcmshell6 kcm_bluetooth"
-        property string imageViewer: "loupe"
         property string network: "plasmawindowed org.kde.plasma.networkmanagement"
         property string networkEthernet: "kcmshell6 kcm_networkmanagement"
         property string settings: "systemsettings"
