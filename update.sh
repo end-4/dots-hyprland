@@ -13,13 +13,33 @@ set -uo pipefail
 # === Configuration ===
 FORCE_CHECK=false
 CHECK_PACKAGES=false
+DETECT_ONLY=false
 REPO_DIR="$(cd "$(dirname $0)" &>/dev/null && pwd)"
 ARCH_PACKAGES_DIR="${REPO_DIR}/arch-packages"
 UPDATE_IGNORE_FILE="${REPO_DIR}/.updateignore"
 HOME_UPDATE_IGNORE_FILE="${HOME}/.updateignore"
 
-# Directories to monitor for changes
-MONITOR_DIRS=(".config" ".local/bin")
+# Directories to monitor for changes (matching install.sh behavior)
+# These correspond to what install.sh copies to XDG directories
+MONITOR_DIRS=(
+  ".config"           # XDG_CONFIG_HOME
+  ".local/bin"        # XDG_BIN_HOME  
+  ".local/share"      # XDG_DATA_HOME
+  ".local/state"      # XDG_STATE_HOME
+  ".cache"            # XDG_CACHE_HOME
+)
+
+# Additional directories that install.sh handles specially
+HYPRLAND_CONFIG_DIR=".config/hypr"
+FISH_CONFIG_DIR=".config/fish"
+
+# Files that install.sh handles with special logic (backup/conflict resolution)
+SPECIAL_FILES=(
+  ".config/hypr/hyprland.conf"
+  ".config/hypr/hypridle.conf" 
+  ".config/hypr/hyprlock.conf"
+  ".config/hypr/custom"
+)
 
 # === Color Codes ===
 RED='\033[0;31m'
@@ -317,6 +337,8 @@ check_pkgbuild_changed() {
 list_packages() {
   local available_packages=()
   local changed_packages=()
+  local outdated_packages=()
+  local missing_packages=()
 
   if [[ ! -d "$ARCH_PACKAGES_DIR" ]]; then
     log_warning "No arch-packages directory found"
@@ -328,8 +350,18 @@ list_packages() {
       local pkg_name=$(basename "$pkg_dir")
       available_packages+=("$pkg_name")
 
+      # Check if PKGBUILD changed
       if check_pkgbuild_changed "$pkg_dir"; then
         changed_packages+=("$pkg_name")
+      fi
+      
+      # Check if package needs updating
+      if check_package_needs_update "$pkg_name" "$pkg_dir"; then
+        if pacman -Q "$pkg_name" >/dev/null 2>&1; then
+          outdated_packages+=("$pkg_name")
+        else
+          missing_packages+=("$pkg_name")
+        fi
       fi
     fi
   done
@@ -341,15 +373,37 @@ list_packages() {
 
   echo -e "\n${CYAN}Available packages:${NC}"
   for pkg in "${available_packages[@]}"; do
+    local status=""
+    local color=""
+    
     if [[ " ${changed_packages[*]} " =~ " ${pkg} " ]]; then
-      echo -e "  ${GREEN}● ${pkg}${NC} (PKGBUILD changed)"
+      status=" (PKGBUILD changed)"
+      color="${GREEN}●${NC}"
+    elif [[ " ${outdated_packages[*]} " =~ " ${pkg} " ]]; then
+      status=" (outdated)"
+      color="${YELLOW}●${NC}"
+    elif [[ " ${missing_packages[*]} " =~ " ${pkg} " ]]; then
+      status=" (not installed)"
+      color="${RED}●${NC}"
     else
-      echo -e "  ○ ${pkg}"
+      status=""
+      color="○"
     fi
+    
+    echo -e "  ${color} ${pkg}${status}${NC}"
   done
 
+  # Show summary
   if [[ ${#changed_packages[@]} -gt 0 ]]; then
-    echo -e "\n${YELLOW}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
+    echo -e "\n${GREEN}Packages with changed PKGBUILDs: ${changed_packages[*]}${NC}"
+  fi
+  
+  if [[ ${#outdated_packages[@]} -gt 0 ]]; then
+    echo -e "${YELLOW}Outdated packages: ${outdated_packages[*]}${NC}"
+  fi
+  
+  if [[ ${#missing_packages[@]} -gt 0 ]]; then
+    echo -e "${RED}Missing packages: ${missing_packages[*]}${NC}"
   fi
 
   return 0
@@ -486,6 +540,309 @@ has_new_commits() {
   fi
 }
 
+# Enhanced detection functions
+# Function to check if a file is different using multiple methods
+check_file_difference() {
+  local repo_file="$1"
+  local home_file="$2"
+  
+  # Method 1: Binary comparison (fastest)
+  if ! cmp -s "$repo_file" "$home_file" 2>/dev/null; then
+    return 0  # Files are different
+  fi
+  
+  # Method 2: Check file modification times (if available)
+  if [[ -f "$repo_file" && -f "$home_file" ]]; then
+    local repo_mtime=$(stat -c %Y "$repo_file" 2>/dev/null || echo "0")
+    local home_mtime=$(stat -c %Y "$home_file" 2>/dev/null || echo "0")
+    
+    # If repo file is newer, it might be different
+    if [[ $repo_mtime -gt $home_mtime ]]; then
+      # Double-check with diff to be sure
+      if ! diff -q "$repo_file" "$home_file" >/dev/null 2>&1; then
+        return 0  # Files are different
+      fi
+    fi
+  fi
+  
+  return 1  # Files are the same
+}
+
+# Function to check if a package needs updating
+check_package_needs_update() {
+  local pkg_name="$1"
+  local pkg_dir="$2"
+  
+  # Check if package is installed
+  if ! pacman -Q "$pkg_name" >/dev/null 2>&1; then
+    return 0  # Package not installed, needs installation
+  fi
+  
+  # Get installed version
+  local installed_version=$(pacman -Q "$pkg_name" | awk '{print $2}')
+  
+  # Get version from PKGBUILD
+  if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
+    cd "$pkg_dir" || return 1
+    source ./PKGBUILD 2>/dev/null || return 1
+    
+    # Compare versions (basic string comparison)
+    if [[ "$installed_version" != "$pkgver" ]]; then
+      cd "$REPO_DIR" || return 1
+      return 0  # Version mismatch, needs update
+    fi
+    
+    cd "$REPO_DIR" || return 1
+  fi
+  
+  return 1  # Package is up to date
+}
+
+# Function to detect all differences comprehensively
+detect_all_differences() {
+  local differences=()
+  local repo_file="$1"
+  local home_file="$2"
+  local rel_path="$3"
+  
+  # Check if file exists in both locations
+  if [[ -f "$repo_file" && -f "$home_file" ]]; then
+    # Check for content differences
+    if check_file_difference "$repo_file" "$home_file"; then
+      differences+=("content")
+    fi
+    
+    # Check for permission differences
+    local repo_perm=$(stat -c %a "$repo_file" 2>/dev/null || echo "644")
+    local home_perm=$(stat -c %a "$home_file" 2>/dev/null || echo "644")
+    if [[ "$repo_perm" != "$home_perm" ]]; then
+      differences+=("permissions")
+    fi
+    
+    # Check for ownership differences (if running as root)
+    if [[ $EUID -eq 0 ]]; then
+      local repo_owner=$(stat -c %U "$repo_file" 2>/dev/null || echo "")
+      local home_owner=$(stat -c %U "$home_file" 2>/dev/null || echo "")
+      if [[ "$repo_owner" != "$home_owner" ]]; then
+        differences+=("ownership")
+      fi
+    fi
+  elif [[ -f "$repo_file" && ! -f "$home_file" ]]; then
+    differences+=("missing")
+  elif [[ ! -f "$repo_file" && -f "$home_file" ]]; then
+    differences+=("extra")
+  fi
+  
+  echo "${differences[*]}"
+}
+
+# Function to get comprehensive file list for comparison
+get_comprehensive_file_list() {
+  local dir_path="$1"
+  local file_list=()
+  
+  if [[ "$FORCE_CHECK" == true ]]; then
+    # Get all files in the directory
+    while IFS= read -r -d '' file; do
+      file_list+=("$file")
+    done < <(find "$dir_path" -type f -print0 2>/dev/null)
+  else
+    # Get files that changed in git
+    while IFS= read -r file; do
+      local full_path="${REPO_DIR}/${file}"
+      if [[ "$full_path" == "$dir_path"/* ]] && [[ -f "$full_path" ]]; then
+        file_list+=("$full_path")
+      fi
+    done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
+    
+    # Also check for files that might have local modifications
+    # This catches cases where files were modified locally but not committed
+    while IFS= read -r -d '' file; do
+      local rel_path="${file#$REPO_DIR/}"
+      local home_file="${HOME}/${rel_path}"
+      
+      # If home file exists and is different, include it
+      if [[ -f "$home_file" ]] && check_file_difference "$file" "$home_file"; then
+        file_list+=("$file")
+      fi
+    done < <(find "$dir_path" -type f -print0 2>/dev/null)
+  fi
+  
+  # Remove duplicates
+  printf '%s\n' "${file_list[@]}" | sort -u
+}
+
+# Function to handle special files (like hyprland.conf, hypridle.conf, etc.)
+handle_special_file() {
+  local repo_file="$1"
+  local home_file="$2"
+  local filename=$(basename "$home_file")
+  local dirname=$(dirname "$home_file")
+  local rel_path="${home_file#$HOME/}"
+
+  # Check if this is a special file that needs special handling
+  local is_special=false
+  for special_file in "${SPECIAL_FILES[@]}"; do
+    if [[ "$rel_path" == "$special_file" ]]; then
+      is_special=true
+      break
+    fi
+  done
+
+  if [[ "$is_special" == false ]]; then
+    return 1  # Not a special file, handle normally
+  fi
+
+  echo -e "\n${CYAN}Special file detected: $rel_path${NC}"
+  echo "This file is handled specially by the install script."
+  echo "Choose an action:"
+  echo "1) Apply install.sh logic (backup existing, use repo version)"
+  echo "2) Handle like a normal file conflict"
+  echo "3) Skip this file"
+  echo
+
+  if ! safe_read "Enter your choice (1-3): " choice "1"; then
+    echo
+    log_warning "Failed to read input. Using install.sh logic."
+    choice="1"
+  fi
+
+  case $choice in
+    1)
+      # Apply install.sh logic
+      if [[ -f "$home_file" ]]; then
+        # Backup existing file
+        mv "$home_file" "${dirname}/${filename}.old"
+        log_success "Backed up existing file to ${filename}.old"
+      fi
+      # Copy repo version
+      cp -p "$repo_file" "$home_file"
+      log_success "Applied repository version of $rel_path"
+      ;;
+    2)
+      # Handle like normal conflict
+      handle_file_conflict "$repo_file" "$home_file"
+      ;;
+    3)
+      log_info "Skipping special file: $rel_path"
+      ;;
+    *)
+      log_warning "Invalid choice. Using install.sh logic."
+      # Apply install.sh logic as fallback
+      if [[ -f "$home_file" ]]; then
+        mv "$home_file" "${dirname}/${filename}.old"
+        log_success "Backed up existing file to ${filename}.old"
+      fi
+      cp -p "$repo_file" "$home_file"
+      log_success "Applied repository version of $rel_path"
+      ;;
+  esac
+
+  return 0  # Special file handled
+}
+
+# Function to generate comprehensive detection report
+generate_detection_report() {
+  local report_file="${REPO_DIR}/update-detection-report.txt"
+  local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+  
+  echo "=== Dotfiles Update Detection Report ===" > "$report_file"
+  echo "Generated: $timestamp" >> "$report_file"
+  echo "Repository: $(git rev-parse --show-toplevel)" >> "$report_file"
+  echo "Branch: $(git branch --show-current)" >> "$report_file"
+  echo "Commit: $(git rev-parse HEAD)" >> "$report_file"
+  echo "" >> "$report_file"
+  
+  # Package detection report
+  echo "=== PACKAGE DETECTION ===" >> "$report_file"
+  if [[ -d "$ARCH_PACKAGES_DIR" ]]; then
+    local changed_pkgs=()
+    local outdated_pkgs=()
+    local missing_pkgs=()
+    
+    for pkg_dir in "$ARCH_PACKAGES_DIR"/*/; do
+      if [[ -f "${pkg_dir}/PKGBUILD" ]]; then
+        local pkg_name=$(basename "$pkg_dir")
+        
+        if check_pkgbuild_changed "$pkg_dir"; then
+          changed_pkgs+=("$pkg_name")
+        fi
+        
+        if check_package_needs_update "$pkg_name" "$pkg_dir"; then
+          if pacman -Q "$pkg_name" >/dev/null 2>&1; then
+            outdated_pkgs+=("$pkg_name")
+          else
+            missing_pkgs+=("$pkg_name")
+          fi
+        fi
+      fi
+    done
+    
+    echo "Packages with changed PKGBUILDs: ${changed_pkgs[*]}" >> "$report_file"
+    echo "Outdated packages: ${outdated_pkgs[*]}" >> "$report_file"
+    echo "Missing packages: ${missing_pkgs[*]}" >> "$report_file"
+  else
+    echo "No arch-packages directory found" >> "$report_file"
+  fi
+  echo "" >> "$report_file"
+  
+  # File detection report
+  echo "=== FILE DETECTION ===" >> "$report_file"
+  local total_files=0
+  local content_diffs=0
+  local perm_diffs=0
+  local missing_files=0
+  local extra_files=0
+  
+  for dir_name in "${MONITOR_DIRS[@]}"; do
+    repo_dir_path="${REPO_DIR}/${dir_name}"
+    home_dir_path="${HOME}/${dir_name}"
+    
+    if [[ ! -d "$repo_dir_path" ]]; then
+      echo "Directory not found: $repo_dir_path" >> "$report_file"
+      continue
+    fi
+    
+    echo "Scanning: $dir_name" >> "$report_file"
+    
+    while IFS= read -r repo_file; do
+      rel_path="${repo_file#$repo_dir_path/}"
+      home_file="${home_dir_path}/${rel_path}"
+      
+      if should_ignore "$home_file"; then
+        continue
+      fi
+      
+      ((total_files++))
+      local differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
+      
+      if [[ -n "$differences" ]]; then
+        echo "  $rel_path: $differences" >> "$report_file"
+        
+        for diff_type in $differences; do
+          case $diff_type in
+            "content") ((content_diffs++)) ;;
+            "permissions") ((perm_diffs++)) ;;
+            "missing") ((missing_files++)) ;;
+            "extra") ((extra_files++)) ;;
+          esac
+        done
+      fi
+    done < <(get_comprehensive_file_list "$repo_dir_path")
+  done
+  
+  echo "" >> "$report_file"
+  echo "=== SUMMARY ===" >> "$report_file"
+  echo "Total files scanned: $total_files" >> "$report_file"
+  echo "Files with content differences: $content_diffs" >> "$report_file"
+  echo "Files with permission differences: $perm_diffs" >> "$report_file"
+  echo "Missing files: $missing_files" >> "$report_file"
+  echo "Extra files: $extra_files" >> "$report_file"
+  
+  log_info "Detection report saved to: $report_file"
+  return 0
+}
+
 # Main script starts here
 log_header "Dotfiles Update Script"
 
@@ -504,12 +861,18 @@ while [[ $# -gt 0 ]]; do
     log_info "Package checking enabled"
     shift
     ;;
+  -d | --detect-only)
+    DETECT_ONLY=true
+    log_info "Detection only mode enabled - will generate a detection report without making changes"
+    shift
+    ;;
   -h | --help)
     echo "Usage: $0 [OPTIONS]"
     echo ""
     echo "Options:"
     echo "  -f, --force      Force check all files even if no new commits"
     echo "  -p, --packages   Enable package checking and building"
+    echo "  -d, --detect-only Enable detection only mode"
     echo "  -h, --help       Show this help message"
     echo ""
     echo "This script updates your dotfiles by:"
@@ -522,6 +885,11 @@ while [[ $# -gt 0 ]]; do
     echo "  - If no PKGBUILDs changed: asks if you want to check packages anyway"
     echo "  - If PKGBUILDs changed: offers to build changed packages"
     echo "  - Interactive selection of packages to build"
+    echo ""
+    echo "Detection modes:"
+    echo "  - Normal mode: detects and applies changes"
+    echo "  - Detection-only mode (-d): generates a report without making changes"
+    echo "  - Force mode (-f): checks all files regardless of git changes"
     exit 0
     ;;
   --skip-notice)
@@ -609,6 +977,20 @@ if git remote get-url origin &>/dev/null; then
 else
   log_warning "No remote 'origin' configured. Skipping pull operation."
   log_info "This appears to be a local-only repository."
+fi
+
+# If in detection-only mode, generate report and exit
+if [[ "$DETECT_ONLY" == true ]]; then
+  log_header "Detection Only Mode"
+  log_info "Generating comprehensive detection report..."
+  generate_detection_report
+  
+  echo
+  log_success "Detection report generated successfully!"
+  echo "Report saved to: ${REPO_DIR}/update-detection-report.txt"
+  echo
+  echo "To apply changes, run the script without --detect-only flag"
+  exit 0
 fi
 
 # Step 2: Handle package building (only if requested)
@@ -736,6 +1118,8 @@ if [[ "$process_files" == true ]]; then
   files_processed=0
   files_updated=0
   files_created=0
+  files_skipped=0
+  files_with_permission_changes=0
 
   for dir_name in "${MONITOR_DIRS[@]}"; do
     repo_dir_path="${REPO_DIR}/${dir_name}"
@@ -751,14 +1135,15 @@ if [[ "$process_files" == true ]]; then
     # Create home directory if it doesn't exist
     mkdir -p "$home_dir_path"
 
-    # Get files to process (changed files or all files based on mode)
-    while IFS= read -r -d '' repo_file; do
+    # Get comprehensive file list for comparison
+    while IFS= read -r repo_file; do
       # Calculate relative path and corresponding home file path
       rel_path="${repo_file#$repo_dir_path/}"
       home_file="${home_dir_path}/${rel_path}"
 
       # Check if file should be ignored
       if should_ignore "$home_file"; then
+        ((files_skipped++))
         continue
       fi
 
@@ -767,20 +1152,46 @@ if [[ "$process_files" == true ]]; then
       # Create directory structure if needed
       mkdir -p "$(dirname "$home_file")"
 
-      if [[ -f "$home_file" ]]; then
-        # File exists, check if different
-        if ! cmp -s "$repo_file" "$home_file"; then
-          log_info "Found difference in: $rel_path"
-          handle_file_conflict "$repo_file" "$home_file"
+      # Detect all types of differences
+      local differences=$(detect_all_differences "$repo_file" "$home_file" "$rel_path")
+      
+      if [[ -n "$differences" ]]; then
+        # Parse differences
+        local has_content_diff=false
+        local has_perm_diff=false
+        local is_missing=false
+        local is_extra=false
+        
+        for diff_type in $differences; do
+          case $diff_type in
+            "content") has_content_diff=true ;;
+            "permissions") has_perm_diff=true ;;
+            "missing") is_missing=true ;;
+            "extra") is_extra=true ;;
+          esac
+        done
+        
+        # Handle different types of differences
+        if [[ "$is_missing" == true ]]; then
+          # New file, copy it
+          cp -p "$repo_file" "$home_file"
+          log_success "Created new file: $rel_path"
+          ((files_created++))
+        elif [[ "$has_content_diff" == true ]]; then
+          # Content difference, check if it's a special file first
+          if ! handle_special_file "$repo_file" "$home_file"; then
+            # Not a special file, handle as normal conflict
+            handle_file_conflict "$repo_file" "$home_file"
+          fi
           ((files_updated++))
+        elif [[ "$has_perm_diff" == true ]]; then
+          # Permission difference only
+          chmod --reference="$repo_file" "$home_file" 2>/dev/null || true
+          log_info "Fixed permissions for: $rel_path"
+          ((files_with_permission_changes++))
         fi
-      else
-        # New file, copy it
-        cp -p "$repo_file" "$home_file"
-        log_success "Created new file: $home_file"
-        ((files_created++))
       fi
-    done < <(get_changed_files "$repo_dir_path")
+    done < <(get_comprehensive_file_list "$repo_dir_path")
   done
 
   # Show processing summary
@@ -789,6 +1200,8 @@ if [[ "$process_files" == true ]]; then
   log_info "- Files processed: $files_processed"
   log_info "- Files with conflicts: $files_updated"
   log_info "- New files created: $files_created"
+  log_info "- Files with permission fixes: $files_with_permission_changes"
+  log_info "- Files skipped (ignored): $files_skipped"
 else
   log_info "Skipping file updates (no changes detected and not in force mode)"
 fi
@@ -817,6 +1230,7 @@ echo -e "${CYAN}Summary:${NC}"
 echo "- Repository: $(git log -1 --pretty=format:'%h - %s (%cr)')"
 echo "- Branch: $current_branch"
 echo "- Mode: $([ "$FORCE_CHECK" == true ] && echo "Force check" || echo "Normal")"
+echo "- Detection mode: $([ "$DETECT_ONLY" == true ] && echo "Detection only" || echo "Apply changes")"
 echo "- Package checking: $([ "$CHECK_PACKAGES" == true ] && echo "Enabled" || echo "Disabled")"
 
 if [[ $rebuilt_packages -gt 0 ]]; then
@@ -827,6 +1241,8 @@ if [[ "$process_files" == true ]]; then
   echo "- Files processed: $files_processed"
   echo "- Files updated/conflicted: $files_updated"
   echo "- New files created: $files_created"
+  echo "- Files with permission fixes: $files_with_permission_changes"
+  echo "- Files skipped (ignored): $files_skipped"
 fi
 
 echo "- Configuration directories: ${MONITOR_DIRS[*]}"
