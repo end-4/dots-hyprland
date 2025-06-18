@@ -605,6 +605,11 @@ detect_all_differences() {
   local home_file="$2"
   local rel_path="$3"
   
+  # Only process files that exist in the repository
+  if [[ ! -f "$repo_file" ]]; then
+    return 1  # Not a repo file, skip
+  fi
+  
   # Check if file exists in both locations
   if [[ -f "$repo_file" && -f "$home_file" ]]; then
     # Check for content differences
@@ -629,8 +634,6 @@ detect_all_differences() {
     fi
   elif [[ -f "$repo_file" && ! -f "$home_file" ]]; then
     differences+=("missing")
-  elif [[ ! -f "$repo_file" && -f "$home_file" ]]; then
-    differences+=("extra")
   fi
   
   echo "${differences[*]}"
@@ -642,7 +645,7 @@ get_comprehensive_file_list() {
   local file_list=()
   
   if [[ "$FORCE_CHECK" == true ]]; then
-    # Get all files in the directory
+    # Get all files in the repository directory
     while IFS= read -r -d '' file; do
       file_list+=("$file")
     done < <(find "$dir_path" -type f -print0 2>/dev/null)
@@ -655,20 +658,23 @@ get_comprehensive_file_list() {
       fi
     done < <(git diff --name-only HEAD@{1} HEAD 2>/dev/null || true)
     
-    # Also check for files that might have local modifications
-    # This catches cases where files were modified locally but not committed
-    while IFS= read -r -d '' file; do
-      local rel_path="${file#$REPO_DIR/}"
-      local home_file="${HOME}/${rel_path}"
-      
-      # If home file exists and is different, include it
-      if [[ -f "$home_file" ]] && check_file_difference "$file" "$home_file"; then
-        file_list+=("$file")
-      fi
-    done < <(find "$dir_path" -type f -print0 2>/dev/null)
+    # If no git changes detected, check all files in repo for local differences
+    # This handles the case where there were no new commits but files might differ
+    if [[ ${#file_list[@]} -eq 0 ]]; then
+      # No git changes, check all files in repo for differences with local versions
+      while IFS= read -r -d '' file; do
+        local rel_path="${file#$REPO_DIR/}"
+        local home_file="${HOME}/${rel_path}"
+        
+        # Only include if home file exists and is different from repo file
+        if [[ -f "$home_file" ]] && check_file_difference "$file" "$home_file"; then
+          file_list+=("$file")
+        fi
+      done < <(find "$dir_path" -type f -print0 2>/dev/null)
+    fi
   fi
   
-  # Remove duplicates
+  # Remove duplicates and return
   printf '%s\n' "${file_list[@]}" | sort -u
 }
 

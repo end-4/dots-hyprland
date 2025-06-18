@@ -1,0 +1,37 @@
+# .updateignore - Repository-level ignore patterns for dotfiles update script
+# This file contains patterns that should be ignored for ALL users of this repository
+# Patterns here are applied to everyone who uses this dotfiles setup
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+*~
+
+# Ignore backup files
+*.bak
+*.backup
+*.old
+
+# Ignore cache directories
+.cache/
+.config/cache/
+
+# Ignore specific files that should not be updated from repo
+.config/hypr/custom/
+.config/fish/fish_variables
+
+# Ignore files containing sensitive information
+*secret*
+*password*
+*key*
+*api*
+*token*
+
+# Ignore specific applications that should not be updated
+.config/app-that-should-not-be-updated/
+
+# Ignore system-specific files
+.config/system-specific/ 
