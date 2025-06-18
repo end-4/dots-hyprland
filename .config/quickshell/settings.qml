@@ -193,9 +193,9 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 1
                             to: 0
-                            duration: 200
+                            duration: 150
                             easing.type: Appearance.animation.elementMoveExit.type
-                            easing.bezierCurve: Appearance.animation.elementMoveExit.bezierCurve
+                            easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
                         }
                         PropertyAction {
                             target: pageLoader
@@ -207,9 +207,9 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 0
                             to: 1
-                            duration: 200
+                            duration: 250
                             easing.type: Appearance.animation.elementMoveEnter.type
-                            easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                            easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
                         }
                     }
                 }
