@@ -46,7 +46,7 @@ Scope {
         let used = new Set();
 
         // Skip unwanted players
-        if (p1.trackTitle.includes("YouTube Music")) continue;
+        if (p1.trackTitle.includes("YouTube Music") || p1.trackTitle.includes("Amazon Prime Music")) continue;
 
         for (let i = 0; i < players.length; ++i) {
             if (used.has(i)) continue;
