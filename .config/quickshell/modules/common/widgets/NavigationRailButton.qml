@@ -6,10 +6,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 
-Button {
+TabButton {
     id: root
 
-    property bool toggled
+    property bool toggled: TabBar.tabBar.currentIndex === TabBar.index
     property string buttonIcon
     property string buttonText
     property bool expanded: false
