@@ -15,6 +15,7 @@ depends=(
   hyprcursor
   hyprwayland-scanner
   hyprland
+  hyprsunset
   xdg-desktop-portal-hyprland
   wl-clipboard
 )
