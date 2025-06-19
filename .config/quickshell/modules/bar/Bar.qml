@@ -416,6 +416,13 @@ Scope {
                                             color: rightSidebarButton.colText
                                         }
                                     }
+                                    Label {
+                                        Layout.rightMargin: indicatorsRowLayout.realSpacing
+                                        text: LayoutService.currentLayout
+                                        visible: LayoutService.currentLayout !== ""
+                                        font.pixelSize: Appearance.font.pixelSize.larger - 3
+                                        color: rightSidebarButton.colText
+                                    }
                                     MaterialSymbol {
                                         Layout.rightMargin: indicatorsRowLayout.realSpacing
                                         text: Network.materialSymbol
