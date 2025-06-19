@@ -50,14 +50,13 @@ Scope {
             let p1 = players[i];
             let group = [i];
 
-            // Skip unwanted players
-            if (p1.trackTitle.includes("YouTube Music") || p1.trackTitle.includes("Amazon Prime Music")) continue;
-
             // Find duplicates by trackTitle prefix
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
                 if (p1.trackTitle && p2.trackTitle &&
                     (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle))) {
+                    group.push(j);
+                }else if (p1.position - p2.position <= 2 && ( p2.includes("Browser") || p2.includes("Music") )){
                     group.push(j);
                 }
             }            if (used.has(i)) continue;
