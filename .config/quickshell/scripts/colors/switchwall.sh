@@ -219,7 +219,7 @@ switch() {
             # Set wallpaper with swww
             swww img "$imgpath" --transition-step 100 --transition-fps 120 \
                 --transition-type grow --transition-angle 30 --transition-duration 1 \
-                --transition-pos "$cursorposx, $cursorposy_inverted"
+                --transition-pos "$cursorposx, $cursorposy_inverted" &
             remove_restore
         fi
     fi

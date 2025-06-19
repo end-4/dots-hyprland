@@ -54,7 +54,9 @@ Scope {
             for (let j = i + 1; j < players.length; ++j) {
                 let p2 = players[j];
                 if (p1.trackTitle && p2.trackTitle &&
-                    (p1.trackTitle.includes(p2.trackTitle) || p2.trackTitle.includes(p1.trackTitle))) {
+                    (p1.trackTitle.includes(p2.trackTitle) 
+                        || p2.trackTitle.includes(p1.trackTitle))
+                        || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
                     group.push(j);
                 }else if (p1.position - p2.position <= 2 && ( p2.includes("Browser") || p2.includes("Music") )){
                     group.push(j);
