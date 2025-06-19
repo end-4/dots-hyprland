@@ -456,6 +456,7 @@ Scope {
                     bottom: ConfigOptions.bar.bottom ? barContent.top : undefined
                 }
                 height: Appearance.rounding.screenRounding
+                visible: showBarBackground
 
                 RoundCorner {
                     anchors.top: parent.top
@@ -463,6 +464,7 @@ Scope {
                     size: Appearance.rounding.screenRounding
                     corner: ConfigOptions.bar.bottom ? cornerEnum.bottomLeft : cornerEnum.topLeft
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                    opacity: 1.0 - Appearance.transparency
                 }
                 RoundCorner {
                     anchors.top: parent.top
@@ -470,6 +472,7 @@ Scope {
                     size: Appearance.rounding.screenRounding
                     corner: ConfigOptions.bar.bottom ? cornerEnum.bottomRight : cornerEnum.topRight
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                    opacity: 1.0 - Appearance.transparency  
                 }
             }
 
