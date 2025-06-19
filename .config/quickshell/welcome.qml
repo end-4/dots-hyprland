@@ -138,7 +138,7 @@ ApplicationWindow {
                             id: rndWallBtn
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
-                            iconText: "wallpaper"
+                            materialIcon: "wallpaper"
                             mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
                             onClicked: {
                                 console.log(konachanWallProc.command.join(" "))
@@ -149,7 +149,7 @@ ApplicationWindow {
                             }
                         }
                         RippleButtonWithIcon {
-                            iconText: "wallpaper"
+                            materialIcon: "wallpaper"
                             StyledToolTip {
                                 content: "Pick wallpaper image on your system"
                             }
@@ -284,10 +284,10 @@ ApplicationWindow {
 
                     Flow {
                         Layout.fillWidth: true
-                        spacing: 10
+                        spacing: 5
 
                         RippleButtonWithIcon {
-                            iconText: "keyboard_alt"
+                            materialIcon: "keyboard_alt"
                             onClicked: {
                                 Hyprland.dispatch("global quickshell:cheatsheetOpen")
                             }
@@ -317,14 +317,14 @@ ApplicationWindow {
                         }
 
                         RippleButtonWithIcon {
-                            iconText: "help"
+                            materialIcon: "help"
                             mainText: "Usage"
                             onClicked: {
                                 Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
                             }
                         }
                         RippleButtonWithIcon {
-                            iconText: "construction"
+                            materialIcon: "construction"
                             mainText: "Configuration"
                             onClicked: {
                                 Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
@@ -338,7 +338,7 @@ ApplicationWindow {
 
                     Flow {
                         Layout.fillWidth: true
-                        spacing: 10
+                        spacing: 5
 
                         RippleButtonWithIcon {
                             nerdIcon: "󰊤"
@@ -348,7 +348,7 @@ ApplicationWindow {
                             }
                         }
                         RippleButtonWithIcon {
-                            iconText: "favorite"
+                            materialIcon: "favorite"
                             mainText: "Funny number"
                             onClicked: {
                                 Qt.openUrlExternally("https://github.com/sponsors/end-4")

@@ -7,7 +7,8 @@ import "root:/modules/common/widgets/"
 RippleButton {
     id: buttonWithIconRoot
     property string nerdIcon
-    property string iconText
+    property string materialIcon
+    property bool materialIconFill: true
     property string mainText: "Button text"
     property Component mainContentComponent: Component {
         StyledText {
@@ -29,10 +30,10 @@ RippleButton {
                 anchors.centerIn: parent
                 active: !nerdIcon
                 sourceComponent: MaterialSymbol {
-                    text: buttonWithIconRoot.iconText
+                    text: buttonWithIconRoot.materialIcon
                     iconSize: Appearance.font.pixelSize.larger
                     color: Appearance.colors.colOnSecondaryContainer
-                    fill: 1
+                    fill: buttonWithIconRoot.materialIconFill ? 1 : 0
                 }
             }
             Loader {

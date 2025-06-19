@@ -43,7 +43,7 @@ ContentPage {
                 id: rndWallBtn
                 Layout.alignment: Qt.AlignHCenter
                 buttonRadius: Appearance.rounding.small
-                iconText: "wallpaper"
+                materialIcon: "wallpaper"
                 mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
                 onClicked: {
                     console.log(konachanWallProc.command.join(" "))
@@ -54,7 +54,7 @@ ContentPage {
                 }
             }
             RippleButtonWithIcon {
-                iconText: "wallpaper"
+                materialIcon: "wallpaper"
                 StyledToolTip {
                     content: "Pick wallpaper image on your system"
                 }
