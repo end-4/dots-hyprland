@@ -23,6 +23,7 @@ RippleButton {
             scale: 0.75
             Layout.fillWidth: false
             checked: root.checked
+            onClicked: root.clicked()
         }
     }
 }
