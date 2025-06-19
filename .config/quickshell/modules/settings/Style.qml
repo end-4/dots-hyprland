@@ -96,5 +96,48 @@ ContentPage {
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
         }
+    
+    }
+
+    ContentSection {
+        title: "Shell style"
+
+        ColumnLayout { // Fake screen rounding
+            StyledText {
+                text: "Fake screen rounding"
+                color: Appearance.colors.colSubtext
+            }
+            ButtonGroup {
+                id: fakeScreenRoundingButtonGroup
+                property int selectedPolicy: ConfigOptions.appearance.fakeScreenRounding
+                spacing: 2
+                SelectionGroupButton {
+                    property int value: 0
+                    leftmost: true
+                    buttonText: "No"
+                    toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
+                    onClicked: {
+                        ConfigLoader.setConfigValueAndSave("appearance.fakeScreenRounding", value);
+                    }
+                }
+                SelectionGroupButton {
+                    property int value: 1
+                    buttonText: "Yes"
+                    toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
+                    onClicked: {
+                        ConfigLoader.setConfigValueAndSave("appearance.fakeScreenRounding", value);
+                    }
+                }
+                SelectionGroupButton {
+                    property int value: 2
+                    rightmost: true
+                    buttonText: "When not fullscreen"
+                    toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
+                    onClicked: {
+                        ConfigLoader.setConfigValueAndSave("appearance.fakeScreenRounding", value);
+                    }
+                }
+            }
+        }
     }
 }

@@ -28,19 +28,14 @@ ApplicationWindow {
     property bool showNextTime: false
     property var pages: [
         {
-            name: "General",
-            icon: "tune",
-            component: "modules/settings/General.qml"
-        },
-        {
             name: "Style",
             icon: "palette",
             component: "modules/settings/Style.qml"
         },
         {
-            name: "Services",
+            name: "Behavior",
             icon: "settings",
-            component: "modules/settings/Services.qml"
+            component: "modules/settings/BehaviorConfig.qml"
         },
         {
             name: "About",
