@@ -56,7 +56,7 @@ Scope {
                 if (p1.trackTitle && p2.trackTitle &&
                     (p1.trackTitle.includes(p2.trackTitle) 
                         || p2.trackTitle.includes(p1.trackTitle))
-                        || p1.position - p2.position <= 2) {
+                        || (p1.position - p2.position <= 2 && p1.length - p2.length <= 2)) {
                     group.push(j);
                 }
             }
