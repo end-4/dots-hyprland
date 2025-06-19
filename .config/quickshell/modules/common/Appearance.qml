@@ -16,8 +16,8 @@ Singleton {
     property string syntaxHighlightingTheme
 
     // Extremely conservative transparency values for consistency and readability
-    property real transparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.1 : 0) : 0
-    property real contentTransparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.55 : 0) : 0
+    property real transparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.14 : 0.07) : 0
+    property real contentTransparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.55 : 0.55) : 0
 
     m3colors: QtObject {
         property bool darkmode: false
