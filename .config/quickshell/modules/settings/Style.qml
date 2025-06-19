@@ -209,4 +209,17 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        title: "Shell windows"
+
+        ConfigSwitch {
+            text: "Title bar"
+            checked: ConfigOptions.windows.showTitlebar
+            onClicked: checked = !checked;
+            onCheckedChanged: {
+                ConfigLoader.setConfigValueAndSave("windows.showTitlebar", checked);
+            }
+        }
+    }
 }
