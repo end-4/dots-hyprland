@@ -59,7 +59,7 @@ Scope {
                 }else if (p1.position - p2.position <= 2 && ( p2.includes("Browser") || p2.includes("Music") )){
                     group.push(j);
                 }
-            }            if (used.has(i)) continue;
+            }
 
             // Pick the one with non-empty trackArtUrl, or fallback to the first
             let chosenIdx = group.find(idx => players[idx].trackArtUrl && players[idx].trackArtUrl.length > 0);
