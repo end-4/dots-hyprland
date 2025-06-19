@@ -3,6 +3,7 @@ import "root:/services/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/overview/MyUrls.js" as MyUrls
 import Qt5Compat.GraphicalEffects
 import Qt.labs.platform
 import QtQuick
@@ -13,7 +14,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-Item { // Wrapper
+Item {
     id: root
     readonly property string xdgConfigHome: Directories.config
     property string searchingText: ""
@@ -23,6 +24,13 @@ Item { // Wrapper
     implicitHeight: searchWidgetContent.implicitHeight + Appearance.sizes.elevationMargin * 2
 
     property string mathResult: ""
+
+    property var urlsJson: []
+    Component.onCompleted: {
+        MyUrls.load(Directories.config + "/myurls.json");
+       
+    }
+   
 
     function disableExpandAnimation() {
         searchWidthBehavior.enabled = false;
@@ -90,7 +98,6 @@ Item { // Wrapper
         id: mathProcess
         property list<string> baseCommand: ["qalc", "-t"]
         function calculateExpression(expression) {
-            // mathProcess.running = false
             mathProcess.command = baseCommand.concat(expression)
             mathProcess.running = true
         }
@@ -114,19 +121,15 @@ Item { // Wrapper
     }
 
     Keys.onPressed: (event) => {
-        // Prevent Esc and Backspace from registering
         if (event.key === Qt.Key_Escape) return;
 
-        // Handle Backspace: focus and delete character if not focused
         if (event.key === Qt.Key_Backspace) {
             if (!searchInput.activeFocus) {
                 searchInput.forceActiveFocus();
                 if (event.modifiers & Qt.ControlModifier) {
-                    // Delete word before cursor
                     let text = searchInput.text;
                     let pos = searchInput.cursorPosition;
                     if (pos > 0) {
-                        // Find the start of the previous word
                         let left = text.slice(0, pos);
                         let match = left.match(/(\s*\S+)\s*$/);
                         let deleteLen = match ? match[0].length : 1;
@@ -134,32 +137,27 @@ Item { // Wrapper
                         searchInput.cursorPosition = pos - deleteLen;
                     }
                 } else {
-                    // Delete character before cursor if any
                     if (searchInput.cursorPosition > 0) {
                         searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition - 1) +
                             searchInput.text.slice(searchInput.cursorPosition);
                         searchInput.cursorPosition -= 1;
                     }
                 }
-                // Always move cursor to end after programmatic edit
                 searchInput.cursorPosition = searchInput.text.length;
                 event.accepted = true;
             }
-            // If already focused, let TextField handle it
             return;
         }
 
-        // Only handle visible printable characters (ignore control chars, arrows, etc.)
         if (
             event.text &&
             event.text.length === 1 &&
             event.key !== Qt.Key_Enter &&
             event.key !== Qt.Key_Return &&
-            event.text.charCodeAt(0) >= 0x20 // ignore control chars like Backspace, Tab, etc.
+            event.text.charCodeAt(0) >= 0x20
         ) {
             if (!searchInput.activeFocus) {
                 searchInput.forceActiveFocus();
-                // Insert the character at the cursor position
                 searchInput.text = searchInput.text.slice(0, searchInput.cursorPosition) +
                                 event.text +
                                 searchInput.text.slice(searchInput.cursorPosition);
@@ -172,7 +170,7 @@ Item { // Wrapper
     StyledRectangularShadow {
         target: searchWidgetContent
     }
-    Rectangle { // Background
+    Rectangle {
         id: searchWidgetContent
         anchors.centerIn: parent
         implicitWidth: columnLayout.implicitWidth
@@ -185,7 +183,6 @@ Item { // Wrapper
             anchors.centerIn: parent
             spacing: 0
 
-            // clip: true
             layer.enabled: true
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
@@ -205,7 +202,7 @@ Item { // Wrapper
                     color: Appearance.m3colors.m3onSurface
                     text: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 'content_paste_search' : 'search'
                 }
-                TextField { // Search box
+                TextField {
                     id: searchInput
 
                     focus: GlobalStates.overviewOpen
@@ -238,7 +235,6 @@ Item { // Wrapper
 
                     onAccepted: {
                         if (appResults.count > 0) {
-                            // Get the first visible delegate and trigger its click
                             let firstItem = appResults.itemAtIndex(0);
                             if (firstItem && firstItem.clicked) {
                                 firstItem.clicked();
@@ -256,14 +252,14 @@ Item { // Wrapper
                 }
             }
 
-            Rectangle { // Separator
+            Rectangle {
                 visible: root.showResults
                 Layout.fillWidth: true
                 height: 1
                 color: Appearance.colors.colOutlineVariant
             }
 
-            ListView { // App results
+            ListView {
                 id: appResults
                 visible: root.showResults
                 Layout.fillWidth: true
@@ -289,12 +285,10 @@ Item { // Wrapper
 
                 model: ScriptModel {
                     id: model
-                    values: { // Search results are handled here
-                        ////////////////// Skip? //////////////////
+                    values: {
                         if(root.searchingText == "") return [];
 
-                        ///////////// Special cases ///////////////
-                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard)) { // Clipboard
+                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard)) {
                             const searchString = root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length);
                             return Cliphist.fuzzyQuery(searchString).map(entry => {
                                 return {
@@ -308,7 +302,7 @@ Item { // Wrapper
                                 };
                             }).filter(Boolean);
                         } 
-                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.emojis)) { // Clipboard
+                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.emojis)) {
                             const searchString = root.searchingText.slice(ConfigOptions.search.prefix.emojis.length);
                             return Emojis.fuzzyQuery(searchString).map(entry => {
                                 return {
@@ -324,8 +318,6 @@ Item { // Wrapper
                             }).filter(Boolean);
                         } 
                     
-
-                        ////////////////// Init ///////////////////
                         nonAppResultsTimer.restart();
                         const mathResultObject = {
                             name: root.mathResult,
@@ -344,7 +336,7 @@ Item { // Wrapper
                             fontType: "monospace",
                             materialSymbol: 'terminal',
                             execute: () => {
-                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText.replace("file://", ""));
+                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText)
                             }
                         }
                         const launcherActionObjects = root.searchActions
@@ -365,51 +357,69 @@ Item { // Wrapper
                             })
                             .filter(Boolean);
 
-                        let result = [];
-
-                        //////////////// Apps //////////////////
-                        result = result.concat(
-                            AppSearch.fuzzyQuery(root.searchingText)
-                                .map((entry) => {
-                                    entry.clickActionName = qsTr("Launch");
-                                    entry.type = qsTr("App");
-                                    return entry;
-                                })
-                        );
-
-                        ////////// Launcher actions ////////////
-                        result = result.concat(launcherActionObjects);
-
-                        /////////// Math result & command //////////
-                        const startsWithNumber = /^\d/.test(root.searchingText);
-                        if (startsWithNumber) {
-                            result.push(mathResultObject);
-                            result.push(commandResultObject);
-                        } else {
-                            result.push(commandResultObject);
-                            result.push(mathResultObject);
-                        }
-
-                        ///////////////// Web search ////////////////
-                        result.push({
-                            name: root.searchingText,
-                            clickActionName: qsTr("Search"),
-                            type: qsTr("Search the web"),
-                            materialSymbol: 'travel_explore',
-                            execute: () => {
-                                let url = ConfigOptions.search.engineBaseUrl + root.searchingText
-                                for (let site of ConfigOptions.search.excludedSites) {
-                                    url += ` -site:${site}`;
-                                }
-                                Qt.openUrlExternally(url);
-                            }
-                        });
-
-                        return result;
-                    }
+                       let result = [];
+                       
+                       // bookmarks before apps
+                       result = result.concat(
+                           MyUrls.fuzzyQuery(root.searchingText)
+                               .slice(0, 5)
+                               .map(entry => ({
+                                   name: entry.name,
+                                   clickActionName: qsTr("Open URL"),
+                                   type: qsTr("URL"),
+                                   materialSymbol: "link",
+                                   execute: () => { Qt.openUrlExternally(entry.url); }
+                               }))
+                       );
+                       
+                       // limited apps to 5 listings to reduce spam
+                       result = result.concat(
+                           AppSearch.fuzzyQuery(root.searchingText)
+                               .slice(0, 5)
+                               .map((entry) => {
+                                   entry.clickActionName = qsTr("Launch");
+                                   entry.type = qsTr("App");
+                                   return entry;
+                               })
+                       );
+                       
+                      
+                       
+                       // Launcher actions
+                       result = result.concat(launcherActionObjects);
+                       
+                       // Math result/command
+                       const startsWithNumber = /^\d/.test(root.searchingText);
+                       if (startsWithNumber) {
+                           result.push(mathResultObject);
+                           result.push(commandResultObject);
+                       } else {
+                           result.push(commandResultObject);
+                           result.push(mathResultObject);
+                       }
+                       
+                       // Web search
+                       result.push({
+                           name: root.searchingText,
+                           clickActionName: qsTr("Search"),
+                           type: qsTr("Search the web"),
+                           materialSymbol: 'travel_explore',
+                           execute: () => {
+                               let url = ConfigOptions.search.engineBaseUrl + root.searchingText
+                               for (let site of ConfigOptions.search.excludedSites) {
+                                   url += ` -site:${site}`;
+                               }
+                               Qt.openUrlExternally(url);
+                           }
+                       });
+                       
+                       return result;
+                                           
+                                           
+                                                               }
                 }
 
-                delegate: SearchItem { // The selectable item for each search result
+                delegate: SearchItem {
                     required property var modelData
                     anchors.left: parent?.left
                     anchors.right: parent?.right
@@ -419,7 +429,6 @@ Item { // Wrapper
                         root.searchingText;
                 }
             }
-            
         }
     }
 }
