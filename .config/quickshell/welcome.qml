@@ -65,7 +65,12 @@ ApplicationWindow {
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
                 id: welcomeText
-                anchors.centerIn: parent
+                anchors {
+                    left: ConfigOptions.windows.centerTitle ? undefined : parent.left
+                    horizontalCenter: ConfigOptions.windows.centerTitle ? parent.horizontalCenter : undefined
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: 12
+                }
                 color: Appearance.colors.colOnLayer0
                 text: "Yooooo hi there"
                 font.pixelSize: Appearance.font.pixelSize.title

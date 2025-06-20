@@ -212,13 +212,26 @@ ContentPage {
 
     ContentSection {
         title: "Shell windows"
+        spacing: 4
 
-        ConfigSwitch {
-            text: "Title bar"
-            checked: ConfigOptions.windows.showTitlebar
-            onClicked: checked = !checked;
-            onCheckedChanged: {
-                ConfigLoader.setConfigValueAndSave("windows.showTitlebar", checked);
+        RowLayout {
+            spacing: 10
+            uniformCellSizes: true
+            ConfigSwitch {
+                text: "Title bar"
+                checked: ConfigOptions.windows.showTitlebar
+                onClicked: checked = !checked;
+                onCheckedChanged: {
+                    ConfigLoader.setConfigValueAndSave("windows.showTitlebar", checked);
+                }
+            }
+            ConfigSwitch {
+                text: "Center title"
+                checked: ConfigOptions.windows.centerTitle
+                onClicked: checked = !checked;
+                onCheckedChanged: {
+                    ConfigLoader.setConfigValueAndSave("windows.centerTitle", checked);
+                }
             }
         }
     }
