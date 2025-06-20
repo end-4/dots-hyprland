@@ -10,7 +10,8 @@ import Quickshell.Services.Pipewire
 Item {
     id: root
     property bool borderless: ConfigOptions.bar.borderless
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
+    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 16
+    implicitHeight: rowLayout.implicitHeight
 
     RowLayout {
         id: rowLayout
@@ -34,21 +35,21 @@ Item {
             }
         }
 
-         Loader {
-             active: ConfigOptions.bar.utilButtons.showColorPicker
-             visible: ConfigOptions.bar.utilButtons.showColorPicker
-             sourceComponent: CircleUtilButton {
-                 Layout.alignment: Qt.AlignVCenter
-                 onClicked: Hyprland.dispatch("exec hyprpicker -a")
-                 MaterialSymbol {
-                     horizontalAlignment: Qt.AlignHCenter
-                     fill: 1
-                     text: "colorize"
-                     iconSize: Appearance.font.pixelSize.large
-                     color: Appearance.colors.colOnLayer2
-                 }
-             }
-         }
+        Loader {
+            active: ConfigOptions.bar.utilButtons.showColorPicker
+            visible: ConfigOptions.bar.utilButtons.showColorPicker
+            sourceComponent: CircleUtilButton {
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: Hyprland.dispatch("exec hyprpicker -a")
+                MaterialSymbol {
+                    horizontalAlignment: Qt.AlignHCenter
+                    fill: 1
+                    text: "colorize"
+                    iconSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnLayer2
+                }
+            }
+        }
 
         Loader {
             active: ConfigOptions.bar.utilButtons.showKeyboardToggle
@@ -79,6 +80,28 @@ Item {
                     iconSize: Appearance.font.pixelSize.large
                     color: Appearance.colors.colOnLayer2
                 }
+            }
+        }
+    }
+
+    Loader {
+        active: ConfigOptions.bar.utilButtons.darkMode.show
+        visible: ConfigOptions.bar.utilButtons.darkMode.show
+        sourceComponent: CircleUtilButton {
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: event => {
+                if (Appearance.m3colors.darkmode) {
+                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} ${ConfigOptions.bar.utilButtons.darkMode.lightImgPath} --mode light`);
+                } else {
+                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} ${ConfigOptions.bar.utilButtons.darkMode.darkImgPath} --mode dark`);
+                }
+            }
+            MaterialSymbol {
+                horizontalAlignment: Qt.AlignHCenter
+                fill: 0
+                text: Appearance.m3colors.darkmode ? "light_mode" : "dark_mode"
+                iconSize: Appearance.font.pixelSize.large
+                color: Appearance.colors.colOnLayer2
             }
         }
     }
