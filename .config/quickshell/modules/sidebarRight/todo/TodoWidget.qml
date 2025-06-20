@@ -16,6 +16,29 @@ Item {
     property int fabSize: 48
     property int fabMargins: 14
 
+    property bool isRefreshing: false
+
+    Timer {
+        id: refreshTimer
+        interval: 3000 // milliseconds = 3 seconds
+        running: root.isRefreshing
+        repeat: true
+        triggeredOnStart: false
+        onTriggered: {
+            Todo.refresh()
+        }
+    }
+
+    // Watch for visibility change
+    onVisibleChanged: {
+        if (visible) {
+            root.isRefreshing = true
+        } else {
+            root.isRefreshing = false
+        }
+    }
+    
+    
     Keys.onPressed: (event) => {
         if ((event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) && event.modifiers === Qt.NoModifier) {
             if (event.key === Qt.Key_PageDown) {
