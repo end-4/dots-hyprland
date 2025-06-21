@@ -75,7 +75,7 @@ Singleton {
             && !iconName.includes("image-missing");
     }
 
-    function getIconSource(appId, desktopEntry) {
+    function getIconSource(desktopEntry, appId) {
         if (desktopEntry?.icon) {
             const path = Quickshell.iconPath(desktopEntry.icon, "")
             if (path && !path.endsWith("image-missing")) {
