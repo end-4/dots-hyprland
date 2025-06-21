@@ -9,33 +9,37 @@ QuickToggleButton {
     property bool enabled: false
     toggled: enabled
     buttonIcon: "nightlight"
+
     onClicked: {
         nightLightButton.enabled = !nightLightButton.enabled
         if (enabled) {
             nightLightOn.startDetached()
-        } 
-        else {
+        } else {
             nightLightOff.startDetached()
         }
     }
+
     Process {
         id: nightLightOn
-        command: ["gammastep"]
+        command: ["hyprsunset","--temperature", "4000"]
     }
+
     Process {
         id: nightLightOff
-        command: ["pkill", "gammastep"]
+        command: ["pkill", "hyprsunset"]
     }
+
     Process {
         id: updateNightLightState
         running: true
-        command: ["pidof", "gammastep"]
+        command: ["pidof", "hyprsunset"]
         stdout: SplitParser {
-            onRead: (data) => { // if not empty then set toggled to true
+            onRead: (data) => {
                 nightLightButton.enabled = data.length > 0
             }
         }
     }
+
     StyledToolTip {
         content: qsTr("Night Light")
     }
