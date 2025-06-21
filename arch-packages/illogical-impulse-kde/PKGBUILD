@@ -10,5 +10,6 @@ depends=(
 	networkmanager
 	plasma-nm
 	polkit-kde-agent
+ 	dolphin
 	systemsettings
 )
