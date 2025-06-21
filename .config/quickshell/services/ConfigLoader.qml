@@ -44,9 +44,8 @@ Singleton {
         } catch (e) {
             console.error("[ConfigLoader] Error reading file:", e);
             console.log("[ConfigLoader] File content was:", fileContent);
-            Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
+            Quickshell.execDetached(["bash", "-c", `notify-send '${qsTr("Shell configuration failed to load")}' '${root.filePath}'`])
             return;
-
         }
     }
 
@@ -82,7 +81,7 @@ Singleton {
 
     function saveConfig() {
         const plainConfig = ObjectUtils.toPlainObject(ConfigOptions)
-        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(JSON.stringify(plainConfig, null, 2))}' > '${root.filePath}'`)
+        Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(JSON.stringify(plainConfig, null, 2))}' > '${FileUtils.trimFileProtocol(root.filePath)}'`])
     }
 
     function setConfigValueAndSave(nestedKey, value, preventNextNotification = true) {
@@ -105,7 +104,7 @@ Singleton {
             } else {
                 root.applyConfig(configFileView.text())
                 if (!root.preventNextNotification) {
-                    // Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration reloaded")}" "${root.filePath}"`)
+                    // Quickshell.execDetached(["bash", "-c", `notify-send '${qsTr("Shell configuration reloaded")}' '${root.filePath}'`])
                 } else {
                     root.preventNextNotification = false;
                 }
@@ -129,9 +128,9 @@ Singleton {
             if(error == FileViewError.FileNotFound) {
                 console.log("[ConfigLoader] File not found, creating new file.")
                 root.saveConfig()
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration created")}" "${root.filePath}"`)
+                Quickshell.execDetached(["bash", "-c", `notify-send '${qsTr("Shell configuration created")}' '${root.filePath}'`])
             } else {
-                Hyprland.dispatch(`exec notify-send "${qsTr("Shell configuration failed to load")}" "${root.filePath}"`)
+                Quickshell.execDetached(["bash", "-c", `notify-send '${qsTr("Shell configuration failed to load")}' '${root.filePath}'`])
             }
         }
     }

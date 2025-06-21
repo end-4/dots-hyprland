@@ -21,10 +21,12 @@ Singleton {
     property bool isCriticalAndNotCharging: isCritical && !isCharging
 
     onIsLowAndNotChargingChanged: {
-        if (available && isLowAndNotCharging) Hyprland.dispatch(`exec notify-send "Low battery" "Consider plugging in your device" -u critical -a "Shell"`)
+        if (available && isLowAndNotCharging) 
+            Quickshell.execDetached(["bash", "-c", `notify-send "Low battery" "Consider plugging in your device" -u critical -a "Shell"`]);
     }
 
     onIsCriticalAndNotChargingChanged: {
-        if (available && isCriticalAndNotCharging) Hyprland.dispatch(`exec notify-send "Critically low battery" "🙏 I beg for pleas charg\nAutomatic suspend triggers at ${ConfigOptions.battery.suspend}%" -u critical -a "Shell"`)
+        if (available && isCriticalAndNotCharging) 
+            Quickshell.execDetached(["bash", "-c", `notify-send "Critically low battery" "🙏 I beg for pleas charg\nAutomatic suspend triggers at ${ConfigOptions.battery.suspend}%" -u critical -a "Shell"`]);
     }
 }

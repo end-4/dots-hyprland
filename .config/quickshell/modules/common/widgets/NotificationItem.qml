@@ -94,12 +94,6 @@ Item { // Notification item area
             }
         }
 
-        onPressAndHold: (mouse) => {
-            if (mouse.button === Qt.LeftButton) {
-                Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
-                notificationSummaryText.text = String.format(qsTr("{0} (copied)"), notificationObject.summary)
-            }
-        }
         onDraggingChanged: () => {
             if (dragging) {
                 root.qmlParent.dragIndex = root.index ?? root.parent.children.indexOf(root);
@@ -226,12 +220,8 @@ Item { // Notification item area
                         Qt.openUrlExternally(link)
                         Hyprland.dispatch("global quickshell:sidebarRightClose")
                     }
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.NoButton // Only for hover
-                        hoverEnabled: true
-                        cursorShape: parent.hoveredLink !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
-                    }
+                    
+                    PointingHandLinkHover {}
                 }
 
                 Flickable { // Notification actions
@@ -295,7 +285,7 @@ Item { // Notification item area
                                 (contentItem.implicitWidth + leftPadding + rightPadding)
 
                             onClicked: {
-                                Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(notificationObject.body)}'`)
+                                Quickshell.clipboardText = notificationObject.body
                                 copyIcon.text = "inventory"
                                 copyIconTimer.restart()
                             }

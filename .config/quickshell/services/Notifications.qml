@@ -217,8 +217,10 @@ Singleton {
             const action = notifServerNotif.actions.find((action) => action.identifier === notifIdentifier);
             action.invoke()
         } 
-        // else console.log("Notification not found in server: " + id)
-        // root.discard(id);
+        else {
+            console.log("Notification not found in server: " + id)
+            root.discardNotification(id);
+        }
     }
 
     function triggerListChange() {
@@ -241,7 +243,7 @@ Singleton {
             root.list = JSON.parse(fileContents).map((notif) => {
                 return notifComponent.createObject(root, {
                     "id": notif.id,
-                    "actions": notif.actions,
+                    "actions": [], // Notification actions are meaningless if they're not tracked by the server or the sender is dead
                     "appIcon": notif.appIcon,
                     "appName": notif.appName,
                     "body": notif.body,

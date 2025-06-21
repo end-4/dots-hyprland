@@ -298,6 +298,8 @@ Singleton {
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
             const model = models[modelId]
+            // Fetch API keys if needed
+            if (model?.requires_key) KeyringStorage.fetchKeyringData();
             // See if policy prevents online models
             if (ConfigOptions.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(StringUtils.format(StringUtils.format("Online models disallowed\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
@@ -314,9 +316,6 @@ Singleton {
         } else {
             if (feedback) root.addMessage(qsTr("Invalid model. Supported: \n```\n") + modelList.join("\n```\n```\n"), Ai.interfaceRole) + "\n```"
         }
-        if (models[modelId]?.requires_key) {
-            KeyringStorage.fetchKeyringData();
-        } 
     }
     
     function getTemperature() {

@@ -41,8 +41,7 @@ ProgressBar {
     }
 
     contentItem: Item {
-        implicitWidth: parent.width
-        implicitHeight: parent.height
+        anchors.fill: parent
 
         Canvas {
             id: wavyFill

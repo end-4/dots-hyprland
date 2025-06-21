@@ -57,7 +57,6 @@ Scope { // Scope
                     id: dockMouseArea
                     anchors.top: parent.top
                     height: parent.height
-                    implicitHeight: parent.height
                     anchors.topMargin: dockRoot.reveal ? 0 : 
                         ConfigOptions?.dock.hoverToReveal ? (dockRoot.implicitHeight - ConfigOptions.dock.hoverRegionHeight) :
                         (dockRoot.implicitHeight + 1)
@@ -73,7 +72,6 @@ Scope { // Scope
                     Item {
                         id: dockHoverRegion
                         anchors.fill: parent
-                        implicitHeight: parent.height
 
                         Item { // Wrapper for the dock background
                             id: dockBackground
@@ -82,7 +80,6 @@ Scope { // Scope
                                 bottom: parent.bottom
                                 horizontalCenter: parent.horizontalCenter
                             }
-                            implicitHeight: parent.height
 
                             implicitWidth: dockRow.implicitWidth + 5 * 2
                             height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
@@ -108,14 +105,10 @@ Scope { // Scope
                                 spacing: 3
                                 property real padding: 5
 
-                                Item {
-                                    visible: !(ConfigOptions?.dock.hidePinButton ?? false)
+                                Loader {
+                                    active: ConfigOptions?.dock.showPinButton ?? true
                                     Layout.topMargin: Appearance.sizes.hyprlandGapsOut
-                                    implicitWidth: pinButtonGroup.implicitWidth
-                                    implicitHeight: pinButtonGroup.implicitHeight
-
-                                    VerticalButtonGroup {
-                                        id: pinButtonGroup
+                                    sourceComponent: VerticalButtonGroup {
                                         GroupButton { // Pin button
                                             baseWidth: 35
                                             baseHeight: 35
@@ -134,7 +127,7 @@ Scope { // Scope
                                     }
                                 }
                                 DockSeparator {
-                                    visible: !(ConfigOptions?.dock.hidePinButton ?? false)
+                                    visible: ConfigOptions?.dock.showPinButton ?? true
                                 }
                                 DockApps { id: dockApps; }
                                 DockSeparator {}

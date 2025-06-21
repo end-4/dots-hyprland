@@ -40,8 +40,11 @@ Singleton {
                 sink.audio.volume = lastVolume;
                 root.sinkProtectionTriggered("Illegal increment");
             } else if (newVolume > maxAllowed) {
-                sink.audio.volume = lastVolume;
                 root.sinkProtectionTriggered("Exceeded max allowed");
+                sink.audio.volume = Math.min(lastVolume, maxAllowed);
+            }
+            if (sink.ready && (isNaN(sink.audio.volume) || sink.audio.volume === undefined || sink.audio.volume === null)) {
+                sink.audio.volume = 0;
             }
             lastVolume = sink.audio.volume;
         }

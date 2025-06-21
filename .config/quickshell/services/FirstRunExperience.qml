@@ -20,15 +20,15 @@ Singleton {
     }
 
     function enableNextTime() {
-        Hyprland.dispatch(`exec rm -f '${root.firstRunFilePath}'`)
+        Quickshell.execDetached(["rm", "-f", root.firstRunFilePath])
     }
     function disableNextTime() {
-        Hyprland.dispatch(`exec echo '${root.firstRunFileContent}' > '${root.firstRunFilePath}'`)
+        Quickshell.execDetached(["bash", "-c", `echo '${root.firstRunFileContent}' > '${root.firstRunFilePath}'`])
     }
 
     function handleFirstRun() {
-        Hyprland.dispatch(`exec '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`)
-        Hyprland.dispatch(`exec qs -p '${root.welcomeQmlPath}'`)
+        Quickshell.execDetached(["bash", "-c", `swww query | grep 'image' || '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`])
+        Quickshell.execDetached(["bash", "-c", `qs -p '${root.welcomeQmlPath}'`])
     }
 
     FileView {

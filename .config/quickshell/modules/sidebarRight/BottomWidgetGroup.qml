@@ -130,15 +130,17 @@ Rectangle {
             Layout.topMargin: 10
             width: tabBar.width
             // Navigation rail buttons
-            ColumnLayout {
+            NavigationRailTabArray {
+                id: tabBar
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 5
-                id: tabBar
-                spacing: 15
+                currentIndex: root.selectedTab
+                expanded: false
                 Repeater {
                     model: root.tabs
-                    NavRailButton {
+                    NavigationRailButton {
+                        showToggledHighlight: false
                         toggled: root.selectedTab == index
                         buttonText: modelData.name
                         buttonIcon: modelData.icon

@@ -28,13 +28,13 @@ colorvalues=($colorstrings) # Array of color values
 
 apply_term() {
   # Check if terminal escape sequence template exists
-  if [ ! -f "$SCRIPT_DIR"/terminal/sequences.txt ]; then
+  if [ ! -f "$CONFIG_DIR"/scripts/terminal/sequences.txt ]; then
     echo "Template file not found for Terminal. Skipping that."
     return
   fi
   # Copy template
   mkdir -p "$STATE_DIR"/user/generated/terminal
-  cp "$SCRIPT_DIR"/terminal/sequences.txt "$STATE_DIR"/user/generated/terminal/sequences.txt
+  cp "$CONFIG_DIR"/scripts/terminal/sequences.txt "$STATE_DIR"/user/generated/terminal/sequences.txt
   # Apply colors
   for i in "${!colorlist[@]}"; do
     sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/sequences.txt
@@ -56,11 +56,5 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
-apply_ags() {
-  pidof agsv1 && agsv1 run-js "handleStyles(false);"
-  pidof agsv1 && agsv1 run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
-}
-
-apply_ags &
 apply_qt &
 apply_term &

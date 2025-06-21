@@ -67,7 +67,7 @@ ColumnLayout {
             property real fullTabSize: root.width / tabCount
             property real targetWidth: {
                 let tab = tabBar.itemAt(tabBar.currentIndex)
-                return tab ? tab.width : 0
+                return tab ? tab.tabContentWidth : 0
             }
 
             implicitWidth: targetWidth

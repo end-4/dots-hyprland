@@ -16,7 +16,14 @@ Singleton {
     property QtObject appearance: QtObject {
         property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
         property bool transparency: false
-        property bool clock: true
+        property QtObject background: QtObject {
+            property QtObject clock: QtObject {
+                property bool enable: true
+            }
+        }
+        property QtObject palette: QtObject {
+            property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
+        }
     }
 
     property QtObject audio: QtObject { // Values in %
@@ -29,18 +36,16 @@ Singleton {
 
     property QtObject apps: QtObject {
         property string bluetooth: "kcmshell6 kcm_bluetooth"
-        property string imageViewer: "loupe"
         property string network: "plasmawindowed org.kde.plasma.networkmanagement"
         property string networkEthernet: "kcmshell6 kcm_networkmanagement"
-        property string settings: "systemsettings"
         property string taskManager: "plasma-systemmonitor --page-name Processes"
         property string terminal: "kitty -1" // This is only for shell actions
     }
 
-    property QtObject battery: QtObject {
-        property int low: 20
-        property int critical: 5
-        property int suspend: 2
+    property QtObject background: QtObject {
+        property bool fixedClockPosition: false
+        property real clockX: -500
+        property real clockY: -500
     }
 
     property QtObject bar: QtObject {
@@ -60,6 +65,9 @@ Singleton {
             property bool showMicToggle: false
             property bool showKeyboardToggle: true
         }
+        property QtObject tray: QtObject {
+            property bool monochromeIcons: true
+        }
         property QtObject workspaces: QtObject {
             property int shown: 10
             property bool showAppIcons: true
@@ -68,13 +76,19 @@ Singleton {
         }
     }
 
+    property QtObject battery: QtObject {
+        property int low: 20
+        property int critical: 5
+        property int suspend: 2
+    }
+
     property QtObject dock: QtObject {
         property real height: 60
         property real hoverRegionHeight: 3
         property bool pinnedOnStartup: false
         property bool hoverToReveal: false // When false, only reveals on empty workspace
-        property bool hide: false
-        property bool hidePinButton: false
+        property bool enable: true
+        property bool showPinButton: true
         property list<string> pinnedApps: [ // IDs of pinned entries
             "org.kde.dolphin",
             "kitty",
@@ -143,6 +157,11 @@ Singleton {
         // https://doc.qt.io/qt-6/qtime.html#toString
         property string format: "hh:mm"
         property string dateFormat: "dddd, dd/MM"
+    }
+
+    property QtObject windows: QtObject {
+        property bool showTitlebar: true // Client-side decoration for shell apps
+        property bool centerTitle: true
     }
 
     property QtObject hacks: QtObject {

@@ -13,7 +13,7 @@ Item {
 
     implicitWidth: (reveal || vertical) ? childrenRect.width : 0
     implicitHeight: (reveal || !vertical) ? childrenRect.height : 0
-    visible: reveal && width > 0 && height > 0
+    visible: reveal || (width > 0 && height > 0)
 
     Behavior on implicitWidth {
         enabled: !vertical
