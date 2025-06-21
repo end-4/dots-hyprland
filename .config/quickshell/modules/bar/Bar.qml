@@ -56,6 +56,7 @@ Scope {
                 item: barContent
             }
             color: "transparent"
+            visible: GlobalStates.barVisible
 
             anchors {
                 top: !ConfigOptions.bar.bottom
@@ -479,5 +480,12 @@ Scope {
         }
 
     }
+    GlobalShortcut {
+        name: "topbarToggle"
+        description: qrTs("Toggles top bar on press")
 
+        onPressed:{
+            GlobalStates.barVisible = !GlobalStates.barVisible
+        }
+    }
 }
