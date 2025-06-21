@@ -1,5 +1,5 @@
 # Use the generated color scheme
 
-if test -f ~/.cache/ags/user/generated/terminal/sequences.txt; then
-    cat ~/.cache/ags/user/generated/terminal/sequences.txt
+if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt; then
+    cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
 fi

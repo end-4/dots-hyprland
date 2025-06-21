@@ -12,8 +12,9 @@ depends=(
   hyprland-qt-support
   hyprland-qtutils
   hyprlock
-  xdg-desktop-portal-hyprland
   hyprcursor
   hyprwayland-scanner
   hyprland
+  xdg-desktop-portal-hyprland
+  wl-clipboard
 )
