@@ -75,6 +75,18 @@ Singleton {
             && !iconName.includes("image-missing");
     }
 
+    function getIconSource() {
+        const desktopIcon = root.desktopEntry?.icon
+        if (desktopIcon) {
+            const path = Quickshell.iconPath(desktopIcon, "")
+            if (path && !path.endsWith("image-missing")) {
+                return path
+            }
+        }
+        const guessedIcon = AppSearch.guessIcon(appToplevel.appId)
+        return Quickshell.iconPath(guessedIcon, "image-missing")
+    }
+
     function guessIcon(str) {
         if (!str || str.length == 0) return "image-missing";
 

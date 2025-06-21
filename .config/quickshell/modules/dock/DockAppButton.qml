@@ -28,18 +28,6 @@ DockButton {
     enabled: !isSeparator
     implicitWidth: isSeparator ? 1 : implicitHeight - topInset - bottomInset
 
-    function getIconSource() {
-        const desktopIcon = root.desktopEntry?.icon
-        if (desktopIcon) {
-            const path = Quickshell.iconPath(desktopIcon, "")
-            if (path && !path.endsWith("image-missing")) {
-                return path
-            }
-        }
-        const guessedIcon = AppSearch.guessIcon(appToplevel.appId)
-        return Quickshell.iconPath(guessedIcon, "image-missing")
-    }
-
     Loader {
         active: isSeparator
         anchors {
@@ -98,7 +86,7 @@ DockButton {
                 }
                 active: !root.isSeparator
                 sourceComponent: IconImage {
-                    source: root.getIconSource()
+                    source: getIconSource()
                     implicitSize: root.iconSize
                 }
             }
@@ -124,4 +112,3 @@ DockButton {
             }
         }
     }
-}
