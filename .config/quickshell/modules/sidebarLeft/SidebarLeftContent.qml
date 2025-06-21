@@ -17,11 +17,12 @@ Item {
     id: root
     required property var scopeRoot
     anchors.fill: parent
-    property var tabButtonList: [
+    property var baseTabButtonList: [
         ...(ConfigOptions.policies.ai !== 0 ? [{"icon": "neurology", "name": qsTr("Intelligence")}] : []),
         {"icon": "translate", "name": qsTr("Translator")},
         ...(ConfigOptions.policies.weeb === 1 ? [{"icon": "bookmark_heart", "name": qsTr("Anime")}] : [])
     ]
+    property var tabButtonList: baseTabButtonList
     property int selectedTab: 0
 
     function focusActiveItem() {
@@ -93,19 +94,19 @@ Item {
                 ...(ConfigOptions.policies.weeb === 0 ? [] : [anime.createObject()])
             ]
         }
-
-        Component {
-            id: aiChat
-            AiChat {}
-        }
-        Component {
-            id: translator
-            Translator {}
-        }
-        Component {
-            id: anime
-            Anime {}
-        }
         
+    }
+
+    Component {
+        id: aiChat
+        AiChat {}
+    }
+    Component {
+        id: translator
+        Translator {}
+    }
+    Component {
+        id: anime
+        Anime {}
     }
 }
