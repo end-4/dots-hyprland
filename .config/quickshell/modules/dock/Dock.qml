@@ -108,26 +108,27 @@ Scope { // Scope
                                 Loader {
                                     active: ConfigOptions?.dock.showPinButton ?? true
                                     Layout.topMargin: Appearance.sizes.hyprlandGapsOut
-                                    sourceComponent: VerticalButtonGroup {
-                                        GroupButton { // Pin button
-                                            baseWidth: 35
-                                            baseHeight: 35
-                                            clickedWidth: baseWidth
-                                            clickedHeight: baseHeight + 20
-                                            buttonRadius: Appearance.rounding.normal
-                                            toggled: root.pinned
-                                            onClicked: root.pinned = !root.pinned
-                                            contentItem: MaterialSymbol {
-                                                text: "keep"
-                                                horizontalAlignment: Text.AlignHCenter
-                                                iconSize: Appearance.font.pixelSize.larger
-                                                color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                    sourceComponent: RowLayout {
+                                        spacing: parent.spacing
+                                        VerticalButtonGroup {
+                                            GroupButton { // Pin button
+                                                baseWidth: 35
+                                                baseHeight: 35
+                                                clickedWidth: baseWidth
+                                                clickedHeight: baseHeight + 20
+                                                buttonRadius: Appearance.rounding.normal
+                                                toggled: root.pinned
+                                                onClicked: root.pinned = !root.pinned
+                                                contentItem: MaterialSymbol {
+                                                    text: "keep"
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    iconSize: Appearance.font.pixelSize.larger
+                                                    color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                                }
                                             }
                                         }
+                                        DockSeparator {}
                                     }
-                                }
-                                DockSeparator {
-                                    visible: ConfigOptions?.dock.showPinButton ?? true
                                 }
                                 DockApps { id: dockApps; }
                                 DockSeparator {}
