@@ -16,11 +16,6 @@ Singleton {
     property QtObject appearance: QtObject {
         property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
         property bool transparency: false
-        property QtObject background: QtObject {
-            property QtObject clock: QtObject {
-                property bool enable: true
-            }
-        }
         property QtObject palette: QtObject {
             property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
         }
@@ -43,6 +38,7 @@ Singleton {
     }
 
     property QtObject background: QtObject {
+        property bool clock: true
         property bool fixedClockPosition: false
         property real clockX: -500
         property real clockY: -500

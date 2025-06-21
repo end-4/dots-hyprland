@@ -86,7 +86,7 @@ DockButton {
                 }
                 active: !root.isSeparator
                 sourceComponent: IconImage {
-                    source: AppSearch.getIconSource()
+                    source: AppSearch.getIconSource(appToplevel.appId, root.desktopEntry)
                     implicitSize: root.iconSize
                 }
             }
