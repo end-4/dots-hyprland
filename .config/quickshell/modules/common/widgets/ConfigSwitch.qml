@@ -8,6 +8,7 @@ RippleButton {
     id: root
     Layout.fillWidth: true
     implicitHeight: contentItem.implicitHeight + 8 * 2
+    onClicked: checked = !checked
 
     contentItem: RowLayout {
         spacing: 10

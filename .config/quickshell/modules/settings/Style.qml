@@ -174,15 +174,41 @@ ContentPage {
             }
         }
 
-        ConfigSwitch {
-            text: "Transparency"
-            checked: ConfigOptions.appearance.transparency
-            onClicked: checked = !checked;
-            onCheckedChanged: {
-                ConfigLoader.setConfigValueAndSave("appearance.transparency", checked);
+        ConfigRow {
+            ConfigSwitch {
+                text: "Transparency"
+                checked: ConfigOptions.appearance.transparency
+                onCheckedChanged: {
+                    ConfigLoader.setConfigValueAndSave("appearance.transparency", checked);
+                }
+                StyledToolTip {
+                    content: "Might look ass. Unsupported."
+                }
             }
-            StyledToolTip {
-                content: "Might look ass. Unsupported."
+        }
+
+        StyledText {
+            text: "Bar"
+            color: Appearance.colors.colSubtext
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                text: 'Borderless'
+                checked: ConfigOptions.bar.borderless
+                onCheckedChanged: {
+                    ConfigLoader.setConfigValueAndSave("bar.borderless", checked);
+                }
+            }
+            ConfigSwitch {
+                text: 'Show background'
+                checked: ConfigOptions.bar.showBackground
+                onCheckedChanged: {
+                    ConfigLoader.setConfigValueAndSave("bar.showBackground", checked);
+                }
+                StyledToolTip {
+                    content: "Note: turning off can hurt readability"
+                }
             }
         }
     }
@@ -196,7 +222,6 @@ ContentPage {
             ConfigSwitch {
                 text: "Title bar"
                 checked: ConfigOptions.windows.showTitlebar
-                onClicked: checked = !checked;
                 onCheckedChanged: {
                     ConfigLoader.setConfigValueAndSave("windows.showTitlebar", checked);
                 }
@@ -204,7 +229,6 @@ ContentPage {
             ConfigSwitch {
                 text: "Center title"
                 checked: ConfigOptions.windows.centerTitle
-                onClicked: checked = !checked;
                 onCheckedChanged: {
                     ConfigLoader.setConfigValueAndSave("windows.centerTitle", checked);
                 }
