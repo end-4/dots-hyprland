@@ -8,6 +8,7 @@ import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Hyprland
@@ -71,7 +72,7 @@ Rectangle {
     }
 
     Component.onDestruction: {
-        Hyprland.dispatch(`exec bash -c "[ -f '${imageDecodeFilePath}' ] && rm -f '${imageDecodeFilePath}'"`)
+        Quickshell.execDetached(["bash", "-c", `[ -f '${imageDecodeFilePath}' ] && rm -f '${imageDecodeFilePath}'`])
     }
 
     Image {

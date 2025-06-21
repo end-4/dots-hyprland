@@ -44,7 +44,6 @@
   "Disable NSFW content": "Disable NSFW content",
   "Done": "Done",
   "Download": "Download",
-  "Download complete": "Download complete",
   "Edit": "Edit",
   "Enter text to translate...": "Enter text to translate...",
   "Finished tasks will go here": "Finished tasks will go here",
@@ -90,7 +89,6 @@
   "Opens session screen on press": "Opens session screen on press",
   "Output": "Output",
   "Page {0}": "Page {0}",
-  "Plasma Settings": "Plasma Settings",
   "Reboot": "Reboot",
   "Reboot to firmware settings": "Reboot to firmware settings",
   "Reload Hyprland & Quickshell": "Reload Hyprland & Quickshell",
@@ -110,7 +108,6 @@
   "Set the current API provider": "Set the current API provider",
   "Shell configuration created": "Shell configuration created",
   "Shell configuration failed to load": "Shell configuration failed to load",
-  "Shell configuration reloaded": "Shell configuration reloaded",
   "Shutdown": "Shutdown",
   "Silent": "Silent",
   "Sleep": "Sleep",
@@ -151,7 +148,6 @@
   "Waifus only | Excellent quality, limited quantity": "Waifus only | Excellent quality, limited quantity",
   "Waiting for response...": "Waiting for response...",
   "Workspace": "Workspace",
-  "{0} (copied)": "{0} (copied)",
   "{0} Safe Storage": "{0} Safe Storage",
   "{0} does not require an API key": "{0} does not require an API key",
   "{0} queries pending": "{0} queries pending",
@@ -172,5 +168,6 @@
   "Switched to search mode. Continue with the user's request.": "Switched to search mode. Continue with the user's request.",
   "Experimental | Online | Google's model\nCan do a little more but doesn't search quickly": "Experimental | Online | Google's model\nCan do a little more but doesn't search quickly",
   "Message the model... \"{0}\" for commands": "Message the model... \"{0}\" for commands",
-  "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}": "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}"
+  "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}": "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}",
+  "Settings": "Settings"
 }

@@ -3,6 +3,7 @@ import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "root:/modules/common/functions/file_utils.js" as FileUtils
 import "./quickToggles/"
 import "root:/services/"
 import QtQuick
@@ -17,8 +18,10 @@ import Quickshell.Wayland
 import Quickshell.Hyprland
 
 Scope {
+    id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
+    property string settingsQmlPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/settings.qml`)
 
     PanelWindow {
         id: sidebarRoot
@@ -144,11 +147,11 @@ Scope {
                                     toggled: false
                                     buttonIcon: "settings"
                                     onClicked: {
-                                        Hyprland.dispatch(`exec ${ConfigOptions.apps.settings}`)
-                                        Hyprland.dispatch(`global quickshell:sidebarRightClose`)
+                                        Hyprland.dispatch("global quickshell:sidebarRightClose")
+                                        Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
-                                        content: Translation.tr("Plasma Settings")
+                                        content: Translation.tr("Settings")
                                     }
                                 }
                                 QuickToggleButton {

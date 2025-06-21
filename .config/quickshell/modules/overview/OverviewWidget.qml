@@ -111,7 +111,6 @@ Item {
                                 acceptedButtons: Qt.LeftButton
                                 onClicked: {
                                     if (root.draggingTargetWorkspace === -1) {
-                                        // Hyprland.dispatch(`exec qs ipc call overview close`)
                                         GlobalStates.overviewOpen = false
                                         Hyprland.dispatch(`workspace ${workspaceValue}`)
                                     }

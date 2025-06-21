@@ -9,10 +9,17 @@ import Quickshell.Io
  * Provides some system info: distro, username.
  */
 Singleton {
+    id: root
     property string distroName: "Unknown"
     property string distroId: "unknown"
     property string distroIcon: "linux-symbolic"
     property string username: "user"
+    property string homeUrl: ""
+    property string documentationUrl: ""
+    property string supportUrl: ""
+    property string bugReportUrl: ""
+    property string privacyPolicyUrl: ""
+    property string logo: ""
 
     Timer {
         triggeredOnStart: true
@@ -32,6 +39,20 @@ Singleton {
             // Extract the ID (LOGO field, fallback to "unknown")
             const logoMatch = textOsRelease.match(/^LOGO=(.+)$/m)
             distroId = logoMatch ? logoMatch[1].replace(/"/g, "") : "unknown"
+
+            // Extract additional URLs and logo
+            const homeUrlMatch = textOsRelease.match(/^HOME_URL="(.+?)"/m)
+            homeUrl = homeUrlMatch ? homeUrlMatch[1] : ""
+            const documentationUrlMatch = textOsRelease.match(/^DOCUMENTATION_URL="(.+?)"/m)
+            documentationUrl = documentationUrlMatch ? documentationUrlMatch[1] : ""
+            const supportUrlMatch = textOsRelease.match(/^SUPPORT_URL="(.+?)"/m)
+            supportUrl = supportUrlMatch ? supportUrlMatch[1] : ""
+            const bugReportUrlMatch = textOsRelease.match(/^BUG_REPORT_URL="(.+?)"/m)
+            bugReportUrl = bugReportUrlMatch ? bugReportUrlMatch[1] : ""
+            const privacyPolicyUrlMatch = textOsRelease.match(/^PRIVACY_POLICY_URL="(.+?)"/m)
+            privacyPolicyUrl = privacyPolicyUrlMatch ? privacyPolicyUrlMatch[1] : ""
+            const logoFieldMatch = textOsRelease.match(/^LOGO="?(.+?)"?$/m)
+            logo = logoFieldMatch ? logoFieldMatch[1] : ""
 
             // Update the distroIcon property based on distroId
             switch (distroId) {
@@ -57,7 +78,7 @@ Singleton {
         command: ["whoami"]
         stdout: SplitParser {
             onRead: data => {
-                username = data.trim()
+                root.username = data.trim()
             }
         }
     }

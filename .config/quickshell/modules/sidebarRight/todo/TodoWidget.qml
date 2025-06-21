@@ -154,30 +154,17 @@ Item {
     // + FAB
     StyledRectangularShadow {
         target: fabButton
-        radius: Appearance.rounding.normal
+        radius: fabButton.buttonRadius
+        blur: 0.6 * Appearance.sizes.elevationMargin
     }
-    Button { 
+    FloatingActionButton {
         id: fabButton
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: root.fabMargins
         anchors.bottomMargin: root.fabMargins
-        width: root.fabSize
-        height: root.fabSize
-        PointingHandInteraction {}
 
         onClicked: root.showAddDialog = true
-
-        background: Rectangle {
-            id: fabBackground
-            anchors.fill: parent
-            radius: Appearance.rounding.normal
-            color: (fabButton.down) ? Appearance.colors.colPrimaryContainerActive : (fabButton.hovered ? Appearance.colors.colPrimaryContainerHover : Appearance.colors.colPrimaryContainer)
-
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
-            }
-        }
 
         contentItem: MaterialSymbol {
             text: "add"

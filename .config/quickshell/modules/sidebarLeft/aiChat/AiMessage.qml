@@ -185,7 +185,7 @@ Rectangle {
                     buttonIcon: activated ? "inventory" : "content_copy"
 
                     onClicked: {
-                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(root.messageData?.content)}'`)
+                        Quickshell.clipboardText = root.messageData?.content
                         copyButton.activated = true
                         copyIconTimer.restart()
                     }

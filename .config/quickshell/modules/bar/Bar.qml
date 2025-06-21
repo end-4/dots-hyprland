@@ -1,7 +1,7 @@
 import "root:/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/modules/common/"
+import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
@@ -240,25 +240,36 @@ Scope {
 
                     VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
 
-                    BarGroup {
+                    MouseArea {
                         id: rightCenterGroup
+                        implicitWidth: rightCenterGroupContent.implicitWidth
+                        implicitHeight: rightCenterGroupContent.implicitHeight
                         Layout.preferredWidth: barRoot.centerSideModuleWidth
                         Layout.fillHeight: true
-                        
-                        ClockWidget {
-                            showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
-                            Layout.alignment: Qt.AlignVCenter
-                            Layout.fillWidth: true
+
+                        onPressed: {
+                            Hyprland.dispatch('global quickshell:sidebarRightToggle')
                         }
 
-                        UtilButtons {
-                            visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
-                            Layout.alignment: Qt.AlignVCenter
-                        }
+                        BarGroup {
+                            id: rightCenterGroupContent
+                            anchors.fill: parent
+                            
+                            ClockWidget {
+                                showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
+                                Layout.alignment: Qt.AlignVCenter
+                                Layout.fillWidth: true
+                            }
 
-                        BatteryIndicator {
-                            visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
-                            Layout.alignment: Qt.AlignVCenter
+                            UtilButtons {
+                                visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
+                                Layout.alignment: Qt.AlignVCenter
+                            }
+
+                            BatteryIndicator {
+                                visible: (barRoot.useShortenedForm < 2 && UPower.displayDevice.isLaptopBattery)
+                                Layout.alignment: Qt.AlignVCenter
+                            }
                         }
                     }
 
@@ -445,6 +456,7 @@ Scope {
                     bottom: ConfigOptions.bar.bottom ? barContent.top : undefined
                 }
                 height: Appearance.rounding.screenRounding
+                visible: showBarBackground
 
                 RoundCorner {
                     anchors.top: parent.top
@@ -452,6 +464,7 @@ Scope {
                     size: Appearance.rounding.screenRounding
                     corner: ConfigOptions.bar.bottom ? cornerEnum.bottomLeft : cornerEnum.topLeft
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                    opacity: 1.0 - Appearance.transparency
                 }
                 RoundCorner {
                     anchors.top: parent.top
@@ -459,6 +472,7 @@ Scope {
                     size: Appearance.rounding.screenRounding
                     corner: ConfigOptions.bar.bottom ? cornerEnum.bottomRight : cornerEnum.topRight
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                    opacity: 1.0 - Appearance.transparency
                 }
             }
 
