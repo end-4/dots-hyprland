@@ -1,9 +1,9 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import "../../"
+import "../../services"
+import "../../modules/common"
+import "../../modules/common/widgets"
+import "../../modules/common/functions/string_utils.js" as StringUtils
+import "../../modules/common/functions/file_utils.js" as FileUtils
 import "./quickToggles/"
 import QtQuick
 import QtQuick.Controls

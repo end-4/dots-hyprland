@@ -1,0 +1,4 @@
+OsdValueIndicator OsdValueIndicator.qml
+import Qt5Compat.GraphicalEffects
+OnScreenDisplayVolume OnScreenDisplayVolume.qml
+OnScreenDisplayBrightness OnScreenDisplayBrightness.qml

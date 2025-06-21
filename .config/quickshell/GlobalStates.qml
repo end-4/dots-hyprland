@@ -1,4 +1,4 @@
-import "root:/modules/common/"
+import "./modules/common/"
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -25,7 +25,7 @@ Singleton {
         // interval: 0
         repeat: false
         onTriggered: {
-            workspaceShowNumbers = true
+            root.workspaceShowNumbers = true
         }
     }
 
@@ -38,7 +38,7 @@ Singleton {
         }
         onReleased: {
             workspaceShowNumbersTimer.stop()
-            workspaceShowNumbers = false
+            root.workspaceShowNumbers = false
         }
     }
 }

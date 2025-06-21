@@ -1,6 +1,6 @@
-import "root:/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import "../../"
+import "../../modules/common"
+import "../../modules/common/widgets"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

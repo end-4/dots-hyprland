@@ -1,0 +1,6 @@
+GameMode GameMode.qml
+IdleInhibitor IdleInhibitor.qml
+NightLight NightLight.qml
+NetworkToggle NetworkToggle.qml
+QuickToggleButton QuickToggleButton.qml
+BluetoothToggle BluetoothToggle.qml

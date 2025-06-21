@@ -1,5 +1,5 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import "../../../modules/common"
+import "../../../modules/common/widgets"
 import "./calendar_layout.js" as CalendarLayout
 import QtQuick
 import QtQuick.Controls

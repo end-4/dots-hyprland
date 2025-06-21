@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Effects
-import "root:/modules/common"
+import "../../../modules/common"
 
 RectangularShadow {
     required property var target

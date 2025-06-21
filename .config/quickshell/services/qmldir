@@ -1,0 +1,27 @@
+singleton KeyringStorage KeyringStorage.qml
+singleton Network Network.qml
+singleton DateTime DateTime.qml
+singleton Ydotool Ydotool.qml
+singleton Bluetooth Bluetooth.qml
+singleton AppSearch AppSearch.qml
+singleton SystemInfo SystemInfo.qml
+singleton Todo Todo.qml
+singleton Cliphist Cliphist.qml
+singleton HyprlandData HyprlandData.qml
+singleton LatexRenderer LatexRenderer.qml
+singleton FirstRunExperience FirstRunExperience.qml
+singleton Ai Ai.qml
+singleton PersistentStateManager PersistentStateManager.qml
+singleton Notifications Notifications.qml
+singleton MaterialThemeLoader MaterialThemeLoader.qml
+BooruResponseData BooruResponseData.qml
+singleton Emojis Emojis.qml
+singleton ResourceUsage ResourceUsage.qml
+AiMessageData AiMessageData.qml
+singleton Battery Battery.qml
+singleton Booru Booru.qml
+singleton Brightness Brightness.qml
+singleton HyprlandKeybinds HyprlandKeybinds.qml
+singleton ConfigLoader ConfigLoader.qml
+singleton Audio Audio.qml
+singleton MprisController MprisController.qml

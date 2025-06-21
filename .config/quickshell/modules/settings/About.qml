@@ -4,9 +4,9 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import "../../services/"
+import "../../modules/common/"
+import "../../modules/common/widgets/"
 
 ContentPage {
     forceWidth: true

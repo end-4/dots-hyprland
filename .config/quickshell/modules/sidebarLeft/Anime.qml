@@ -1,10 +1,10 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import "../../"
+import "../../services"
+import "../../modules/common"
+import "../../modules/common/widgets"
+import "../../modules/common/functions/fuzzysort.js" as Fuzzy
+import "../../modules/common/functions/string_utils.js" as StringUtils
+import "../../modules/common/functions/file_utils.js" as FileUtils
 import "./anime/"
 import Qt.labs.platform
 import QtQuick

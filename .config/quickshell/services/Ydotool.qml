@@ -1,6 +1,6 @@
 pragma Singleton
 
-import "root:/modules/common"
+import "../modules/common"
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
