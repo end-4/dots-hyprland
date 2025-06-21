@@ -106,8 +106,12 @@ Scope { // Scope
                                 property real padding: 5
 
                                 Loader {
+                                    id: pinButtonLoader
                                     active: ConfigOptions?.dock.showPinButton ?? true
                                     Layout.topMargin: Appearance.sizes.hyprlandGapsOut
+                                    Layout.preferredWidth: active ? item?.implicitWidth ?? 0 : 0
+                                    Layout.preferredHeight: active ? item?.implicitHeight ?? 0 : 0
+                                    Layout.fillHeight: active
                                     sourceComponent: RowLayout {
                                         spacing: parent.spacing
                                         VerticalButtonGroup {
