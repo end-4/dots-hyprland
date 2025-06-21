@@ -85,15 +85,15 @@ Item {
     }
 
     Loader {
-        active: ConfigOptions.bar.utilButtons.darkMode.show
-        visible: ConfigOptions.bar.utilButtons.darkMode.show
+        active: ConfigOptions.bar.utilButtons.showDarkModeToggle
+        visible: ConfigOptions.bar.utilButtons.showDarkModeToggle
         sourceComponent: CircleUtilButton {
             Layout.alignment: Qt.AlignVCenter
             onClicked: event => {
                 if (Appearance.m3colors.darkmode) {
-                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} ${ConfigOptions.bar.utilButtons.darkMode.lightImgPath} --mode light`);
+                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`);
                 } else {
-                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} ${ConfigOptions.bar.utilButtons.darkMode.darkImgPath} --mode dark`);
+                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`);
                 }
             }
             MaterialSymbol {

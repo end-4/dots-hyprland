@@ -61,11 +61,7 @@ Singleton {
             property bool showColorPicker: false
             property bool showMicToggle: false
             property bool showKeyboardToggle: true
-            property QtObject darkMode: QtObject {
-                property bool show: true
-                property string lightImgPath: ""
-                property string darkImgPath: ""
-            }
+            property bool showDarkModeToggle: true
         }
         property QtObject tray: QtObject {
             property bool monochromeIcons: true
