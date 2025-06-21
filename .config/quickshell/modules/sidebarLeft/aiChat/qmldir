@@ -1,0 +1,6 @@
+MessageCodeBlock MessageCodeBlock.qml
+AiMessage AiMessage.qml
+MessageTextBlock MessageTextBlock.qml
+MessageThinkBlock MessageThinkBlock.qml
+AnnotationSourceButton AnnotationSourceButton.qml
+AiMessageControlButton AiMessageControlButton.qml

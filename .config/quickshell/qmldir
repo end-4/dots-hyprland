@@ -1,0 +1,5 @@
+welcome welcome.qml
+shell shell.qml
+ReloadPopup ReloadPopup.qml
+settings settings.qml
+singleton GlobalStates GlobalStates.qml

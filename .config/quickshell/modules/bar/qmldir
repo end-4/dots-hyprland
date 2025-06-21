@@ -1,0 +1,14 @@
+UtilButtons UtilButtons.qml
+ScrollHint ScrollHint.qml
+BatteryIndicator BatteryIndicator.qml
+Resource Resource.qml
+ClockWidget ClockWidget.qml
+CircleUtilButton CircleUtilButton.qml
+SysTrayItem SysTrayItem.qml
+Bar Bar.qml
+Media Media.qml
+ActiveWindow ActiveWindow.qml
+BarGroup BarGroup.qml
+Workspaces Workspaces.qml
+Resources Resources.qml
+SysTray SysTray.qml

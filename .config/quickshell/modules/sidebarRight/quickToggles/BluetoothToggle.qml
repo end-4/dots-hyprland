@@ -1,8 +1,8 @@
 import "../"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import "../../../services"
+import "../../../modules/common"
+import "../../../modules/common/widgets"
+import "../../../modules/common/functions/string_utils.js" as StringUtils
 import QtQuick
 import Quickshell
 import Quickshell.Io

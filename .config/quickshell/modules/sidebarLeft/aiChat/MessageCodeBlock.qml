@@ -1,12 +1,12 @@
 pragma ComponentBehavior: Bound
 
-import "root:/"
-import "root:/services"
-import "root:/modules/common/"
-import "root:/modules/common/widgets"
+import "../../../"
+import "../../../services"
+import "../../../modules/common/"
+import "../../../modules/common/widgets"
 import "../"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import "../../../modules/common/functions/string_utils.js" as StringUtils
+import "../../../modules/common/functions/file_utils.js" as FileUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
