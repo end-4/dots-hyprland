@@ -91,10 +91,9 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignVCenter
                     onCheckedChanged: {
                         if (checked) {
-                            Hyprland.dispatch(`exec rm '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
+                            Quickshell.execDetached(["rm", root.firstRunFilePath])
                         } else {
-                            console.log(`exec echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
-                            Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
+                            Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`])
                         }
                     }
                 }
@@ -159,7 +158,7 @@ ApplicationWindow {
                                 content: "Pick wallpaper image on your system"
                             }
                             onClicked: {
-                                Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                                Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`])
                             }
                             mainContentComponent: Component {
                                 RowLayout {

@@ -4,7 +4,7 @@ import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
+import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
@@ -19,7 +19,7 @@ GroupButton {
     colBackground: Appearance.colors.colLayer2
     toggled: Appearance.m3colors.darkmode === dark
     onClicked: {
-        Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode ${dark ? "dark" : "light"} --noswitch`)
+        Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --mode ${dark ? "dark" : "light"} --noswitch`])
     }
     contentItem: Item {
         anchors.centerIn: parent

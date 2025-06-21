@@ -12,7 +12,7 @@ depends=(
 	hyprlock
 	hyprpicker
 	nm-connection-editor
-	quickshell
+	quickshell-git
 	swww
 	translate-shell
 	wlogout

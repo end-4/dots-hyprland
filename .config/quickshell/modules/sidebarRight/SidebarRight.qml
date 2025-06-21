@@ -147,7 +147,7 @@ Scope {
                                     buttonIcon: "settings"
                                     onClicked: {
                                         Hyprland.dispatch("global quickshell:sidebarRightClose")
-                                        Hyprland.dispatch(`exec qs -p '${root.settingsQmlPath}'`)
+                                        Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
                                         content: qsTr("Settings")

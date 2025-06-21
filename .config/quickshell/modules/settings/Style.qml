@@ -93,7 +93,7 @@ ContentPage {
                     content: "Pick wallpaper image on your system"
                 }
                 onClicked: {
-                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                    Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`)
                 }
                 mainContentComponent: Component {
                     RowLayout {

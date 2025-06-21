@@ -73,7 +73,7 @@ ColumnLayout {
                     buttonIcon: activated ? "inventory" : "content_copy"
 
                     onClicked: {
-                        Hyprland.dispatch(`exec wl-copy '${StringUtils.shellSingleQuoteEscape(segmentContent)}'`)
+                        Quickshell.clipboardText = segmentContent
                         copyCodeButton.activated = true
                         copyIconTimer.restart()
                     }
@@ -96,8 +96,10 @@ ColumnLayout {
 
                     onClicked: {
                         const downloadPath = FileUtils.trimFileProtocol(Directories.downloads)
-                        Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`)
-                        Hyprland.dispatch(`exec notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`)
+                        Quickshell.execDetached(["bash", "-c", 
+                            `echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`
+                        ])
+                        Quickshell.execDetached(["bash", "-c", `notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`])
                         saveCodeButton.activated = true
                         saveIconTimer.restart()
                     }
