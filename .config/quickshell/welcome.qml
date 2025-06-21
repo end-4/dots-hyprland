@@ -65,7 +65,12 @@ ApplicationWindow {
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
                 id: welcomeText
-                anchors.centerIn: parent
+                anchors {
+                    left: ConfigOptions.windows.centerTitle ? undefined : parent.left
+                    horizontalCenter: ConfigOptions.windows.centerTitle ? parent.horizontalCenter : undefined
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: 12
+                }
                 color: Appearance.colors.colOnLayer0
                 text: "Yooooo hi there"
                 font.pixelSize: Appearance.font.pixelSize.title
@@ -86,10 +91,9 @@ ApplicationWindow {
                     Layout.alignment: Qt.AlignVCenter
                     onCheckedChanged: {
                         if (checked) {
-                            Hyprland.dispatch(`exec rm '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
+                            Quickshell.execDetached(["rm", root.firstRunFilePath])
                         } else {
-                            console.log(`exec echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
-                            Hyprland.dispatch(`exec echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`)
+                            Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`])
                         }
                     }
                 }
@@ -154,7 +158,7 @@ ApplicationWindow {
                                 content: "Pick wallpaper image on your system"
                             }
                             onClicked: {
-                                Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath}`)
+                                Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`])
                             }
                             mainContentComponent: Component {
                                 RowLayout {
@@ -196,84 +200,40 @@ ApplicationWindow {
                 ContentSection {
                     title: "Policies"
 
-                    RowLayout {
-                        Layout.alignment: Qt.AlignHCenter
-                        spacing: 15
+                    ConfigRow {
                         ColumnLayout { // Weeb policy
-                            StyledText {
+                            ContentSubsectionLabel {
                                 text: "Weeb"
-                                color: Appearance.colors.colSubtext
                             }
-                            ButtonGroup {
-                                id: weebPolicyBtnGroup
-                                property int selectedPolicy: ConfigOptions.policies.weeb
-                                spacing: 2
-                                SelectionGroupButton {
-                                    property int value: 0
-                                    leftmost: true
-                                    buttonText: "No"
-                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                    }
+                            ConfigSelectionArray {
+                                currentValue: ConfigOptions.policies.weeb
+                                configOptionName: "policies.weeb"
+                                onSelected: (newValue) => {
+                                    ConfigLoader.setConfigValueAndSave("policies.weeb", newValue);
                                 }
-                                SelectionGroupButton {
-                                    property int value: 1
-                                    buttonText: "Yes"
-                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                    }
-                                }
-                                SelectionGroupButton {
-                                    property int value: 2
-                                    rightmost: true
-                                    buttonText: "Closet"
-                                    toggled: (weebPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.weeb", value);
-                                    }
-                                    StyledToolTip {
-                                        content: "The Anime tab on the left sidebar would still\nbe available, but its tab button won't show"
-                                    }
-                                }
+                                options: [
+                                    { displayName: "No", value: 0 },
+                                    { displayName: "Yes", value: 1 },
+                                    { displayName: "Closet", value: 2 }
+                                ]
                             }
                         }
+
                         ColumnLayout { // AI policy
-                            StyledText {
+                            ContentSubsectionLabel {
                                 text: "AI"
-                                color: Appearance.colors.colSubtext
                             }
-                            ButtonGroup {
-                                id: aiPolicyBtnGroup
-                                property int selectedPolicy: ConfigOptions.policies.ai
-                                spacing: 2
-                                SelectionGroupButton {
-                                    property int value: 0
-                                    leftmost: true
-                                    buttonText: "No"
-                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                    }
+                            ConfigSelectionArray {
+                                currentValue: ConfigOptions.policies.ai
+                                configOptionName: "policies.ai"
+                                onSelected: (newValue) => {
+                                    ConfigLoader.setConfigValueAndSave("policies.ai", newValue);
                                 }
-                                SelectionGroupButton {
-                                    property int value: 1
-                                    buttonText: "Yes"
-                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                    }
-                                }
-                                SelectionGroupButton {
-                                    property int value: 2
-                                    rightmost: true
-                                    buttonText: "Local only"
-                                    toggled: (aiPolicyBtnGroup.selectedPolicy === value)
-                                    onClicked: {
-                                        ConfigLoader.setConfigValueAndSave("policies.ai", value);
-                                    }
-                                }
+                                options: [
+                                    { displayName: "No", value: 0 },
+                                    { displayName: "Yes", value: 1 },
+                                    { displayName: "Local only", value: 2 }
+                                ]
                             }
                         }
                     }

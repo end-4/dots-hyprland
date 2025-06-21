@@ -6,17 +6,21 @@ import "root:/modules/common/widgets/"
 
 ColumnLayout {
     id: root
-    property string title
+    property string title: ""
     default property alias data: sectionContent.data
 
     Layout.fillWidth: true
-    spacing: 8
-    StyledText {
+    Layout.topMargin: 4
+    spacing: 2
+
+    ContentSubsectionLabel {
+        Layout.fillWidth: true
+        visible: root.title && root.title.length > 0
         text: root.title
-        font.pixelSize: Appearance.font.pixelSize.larger
     }
     ColumnLayout {
         id: sectionContent
-        spacing: 8
+        Layout.fillWidth: true
+        spacing: 2
     }
 }
