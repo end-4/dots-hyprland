@@ -77,7 +77,8 @@ Singleton {
     property QtObject battery: QtObject {
         property int low: 20
         property int critical: 5
-        property int suspend: 2
+        property bool automaticSuspend: true
+        property int suspend: 3
     }
 
     property QtObject dock: QtObject {
