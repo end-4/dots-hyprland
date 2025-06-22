@@ -10,7 +10,7 @@ import Quickshell.Services.Pipewire
 Item {
     id: root
     property bool borderless: ConfigOptions.bar.borderless
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 16
+    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: rowLayout.implicitHeight
 
     RowLayout {
