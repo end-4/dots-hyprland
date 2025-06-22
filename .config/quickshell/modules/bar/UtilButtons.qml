@@ -82,26 +82,26 @@ Item {
                 }
             }
         }
-    }
 
-    Loader {
-        active: ConfigOptions.bar.utilButtons.showDarkModeToggle
-        visible: ConfigOptions.bar.utilButtons.showDarkModeToggle
-        sourceComponent: CircleUtilButton {
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: event => {
-                if (Appearance.m3colors.darkmode) {
-                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`);
-                } else {
-                    Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`);
+        Loader {
+            active: ConfigOptions.bar.utilButtons.showDarkModeToggle
+            visible: ConfigOptions.bar.utilButtons.showDarkModeToggle
+            sourceComponent: CircleUtilButton {
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: event => {
+                    if (Appearance.m3colors.darkmode) {
+                        Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`);
+                    } else {
+                        Hyprland.dispatch(`exec ${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`);
+                    }
                 }
-            }
-            MaterialSymbol {
-                horizontalAlignment: Qt.AlignHCenter
-                fill: 0
-                text: Appearance.m3colors.darkmode ? "light_mode" : "dark_mode"
-                iconSize: Appearance.font.pixelSize.large
-                color: Appearance.colors.colOnLayer2
+                MaterialSymbol {
+                    horizontalAlignment: Qt.AlignHCenter
+                    fill: 0
+                    text: Appearance.m3colors.darkmode ? "light_mode" : "dark_mode"
+                    iconSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnLayer2
+                }
             }
         }
     }
