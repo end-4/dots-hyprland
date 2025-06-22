@@ -202,9 +202,8 @@ ApplicationWindow {
 
                     ConfigRow {
                         ColumnLayout { // Weeb policy
-                            StyledText {
+                            ContentSubsectionLabel {
                                 text: "Weeb"
-                                color: Appearance.colors.colSubtext
                             }
                             ConfigSelectionArray {
                                 currentValue: ConfigOptions.policies.weeb
@@ -221,9 +220,8 @@ ApplicationWindow {
                         }
 
                         ColumnLayout { // AI policy
-                            StyledText {
+                            ContentSubsectionLabel {
                                 text: "AI"
-                                color: Appearance.colors.colSubtext
                             }
                             ConfigSelectionArray {
                                 currentValue: ConfigOptions.policies.ai

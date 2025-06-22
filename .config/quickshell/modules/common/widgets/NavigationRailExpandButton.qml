@@ -14,6 +14,12 @@ RippleButton {
         parent.expanded = !parent.expanded;
     }
     buttonRadius: Appearance.rounding.full
+
+    rotation: root.parent.expanded ? 0 : -180
+    Behavior on rotation {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
     contentItem: MaterialSymbol {
         id: icon
         anchors.centerIn: parent
