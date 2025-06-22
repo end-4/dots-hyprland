@@ -7,16 +7,37 @@ import "root:/modules/common/widgets/"
 ColumnLayout {
     id: root
     property string title: ""
+    property string tooltip: ""
     default property alias data: sectionContent.data
 
     Layout.fillWidth: true
     Layout.topMargin: 4
     spacing: 2
 
-    ContentSubsectionLabel {
-        Layout.fillWidth: true
-        visible: root.title && root.title.length > 0
-        text: root.title
+    RowLayout {
+        ContentSubsectionLabel {
+            visible: root.title && root.title.length > 0
+            text: root.title
+        }
+        MaterialSymbol {
+            visible: root.tooltip && root.tooltip.length > 0
+            text: "info"
+            iconSize: Appearance.font.pixelSize.large
+            
+            color: Appearance.colors.colSubtext
+            MouseArea {
+                id: infoMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.WhatsThisCursor
+                StyledToolTip {
+                    extraVisibleCondition: false
+                    alternativeVisibleCondition: infoMouseArea.containsMouse
+                    content: root.tooltip
+                }
+            }
+        }
+        Item { Layout.fillWidth: true }
     }
     ColumnLayout {
         id: sectionContent
