@@ -33,9 +33,14 @@ ApplicationWindow {
             component: "modules/settings/StyleConfig.qml"
         },
         {
-            name: "General",
+            name: "Interface",
+            icon: "cards",
+            component: "modules/settings/InterfaceConfig.qml"
+        },
+        {
+            name: "Services",
             icon: "settings",
-            component: "modules/settings/GeneralConfig.qml"
+            component: "modules/settings/ServicesConfig.qml"
         },
         {
             name: "About",
@@ -217,7 +222,7 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 1
                             to: 0
-                            duration: 0
+                            duration: 100
                             easing.type: Appearance.animation.elementMoveExit.type
                             easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
                         }
@@ -231,7 +236,7 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 0
                             to: 1
-                            duration: 0
+                            duration: 200
                             easing.type: Appearance.animation.elementMoveEnter.type
                             easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
                         }

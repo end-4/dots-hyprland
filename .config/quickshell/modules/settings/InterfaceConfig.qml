@@ -48,32 +48,6 @@ ContentPage {
             }
         }
     }
-    ContentSection {
-        title: "Audio"
-        ConfigSwitch {
-            text: "Earbang protection"
-            checked: ConfigOptions.audio.protection.enable
-            onCheckedChanged: {
-                ConfigLoader.setConfigValueAndSave("audio.protection.enable", checked);
-            }
-            StyledToolTip {
-                content: "Prevents abrupt increments and restricts volume limit"
-            }
-        }
-    }
-    ContentSection {
-        title: "AI"
-        MaterialTextField {
-            id: systemPromptField
-            Layout.fillWidth: true
-            placeholderText: "System prompt"
-            text: ConfigOptions.ai.systemPrompt
-            wrapMode: TextEdit.Wrap
-            onTextChanged: {
-                ConfigLoader.setConfigValueAndSave("ai.systemPrompt", text);
-            }
-        }
-    }
 
     ContentSection {
         title: "Bar"
@@ -225,7 +199,7 @@ ContentPage {
             }
         }
         ConfigRow {
-            uniform: false
+            uniform: true
             ConfigSwitch {
                 text: "Automatic suspend"
                 checked: ConfigOptions.battery.automaticSuspend
@@ -247,5 +221,43 @@ ContentPage {
                 }
             }
         }
+    }
+
+    ContentSection {
+        title: "Overview"
+        ConfigSpinBox {
+            text: "Scale (%)"
+            value: ConfigOptions.overview.scale * 100
+            from: 1
+            to: 100
+            stepSize: 1
+            onValueChanged: {
+                ConfigLoader.setConfigValueAndSave("overview.scale", value / 100);
+            }
+        }
+        ConfigRow {
+            uniform: true
+            ConfigSpinBox {
+                text: "Rows"
+                value: ConfigOptions.overview.rows
+                from: 1
+                to: 20
+                stepSize: 1
+                onValueChanged: {
+                    ConfigLoader.setConfigValueAndSave("overview.rows", value);
+                }
+            }
+            ConfigSpinBox {
+                text: "Columns"
+                value: ConfigOptions.overview.columns
+                from: 1
+                to: 20
+                stepSize: 1
+                onValueChanged: {
+                    ConfigLoader.setConfigValueAndSave("overview.columns", value);
+                }
+            }
+        }
+        
     }
 }
