@@ -1,6 +1,6 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
+import "../../modules/common"
+import "../../modules/common/widgets"
+import "../../services"
 import "./calendar"
 import "./todo"
 import QtQuick

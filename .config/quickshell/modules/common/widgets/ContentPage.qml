@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import "../../../modules/common/"
+import "../../../modules/common/widgets/"
 
 Flickable {
     id: root

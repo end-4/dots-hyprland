@@ -1,8 +1,8 @@
 pragma Singleton
 
-import "root:/modules/common"
-import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
-import "root:/modules/common/functions/levendist.js" as Levendist
+import "../modules/common"
+import "../modules/common/functions/fuzzysort.js" as Fuzzy
+import "../modules/common/functions/levendist.js" as Levendist
 import Quickshell
 import Quickshell.Io
 
