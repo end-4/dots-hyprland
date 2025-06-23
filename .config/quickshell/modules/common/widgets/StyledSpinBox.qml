@@ -26,7 +26,7 @@ SpinBox {
         StyledTextInput {
             id: labelText
             anchors.centerIn: parent
-            text: root.displayText
+            text: root.value // displayText would make the numbers weird like 1,000 instead of 1000
             color: Appearance.colors.colOnLayer2
             font.pixelSize: Appearance.font.pixelSize.small
             validator: root.validator
