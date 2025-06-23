@@ -6,7 +6,7 @@ import "root:/modules/common/widgets/"
 
 Flickable {
     id: root
-    property real baseWidth: 500
+    property real baseWidth: 550
     property bool forceWidth: false
     property real bottomContentPadding: 100
 
