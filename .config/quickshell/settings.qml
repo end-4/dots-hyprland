@@ -33,9 +33,14 @@ ApplicationWindow {
             component: "modules/settings/StyleConfig.qml"
         },
         {
-            name: "General",
+            name: "Interface",
+            icon: "cards",
+            component: "modules/settings/InterfaceConfig.qml"
+        },
+        {
+            name: "Services",
             icon: "settings",
-            component: "modules/settings/GeneralConfig.qml"
+            component: "modules/settings/ServicesConfig.qml"
         },
         {
             name: "About",
@@ -56,8 +61,8 @@ ApplicationWindow {
 
     minimumWidth: 600
     minimumHeight: 400
-    width: 900
-    height: 650
+    width: 1100
+    height: 750
     color: Appearance.m3colors.m3background
 
     ColumnLayout {
@@ -67,7 +72,6 @@ ApplicationWindow {
         }
 
         Keys.onPressed: (event) => {
-            console.log(`Key pressed: ${event.key}, Modifiers: ${event.modifiers}`);
             if (event.modifiers === Qt.ControlModifier) {
                 if (event.key === Qt.Key_PageDown) {
                     root.currentPage = Math.min(root.currentPage + 1, root.pages.length - 1)
@@ -218,7 +222,7 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 1
                             to: 0
-                            duration: 0
+                            duration: 100
                             easing.type: Appearance.animation.elementMoveExit.type
                             easing.bezierCurve: Appearance.animationCurves.emphasizedFirstHalf
                         }
@@ -232,7 +236,7 @@ ApplicationWindow {
                             properties: "opacity"
                             from: 0
                             to: 1
-                            duration: 0
+                            duration: 200
                             easing.type: Appearance.animation.elementMoveEnter.type
                             easing.bezierCurve: Appearance.animationCurves.emphasizedLastHalf
                         }
