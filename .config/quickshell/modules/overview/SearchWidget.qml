@@ -90,7 +90,7 @@ Item { // Wrapper
         id: mathProcess
         property list<string> baseCommand: ["qalc", "-t"]
         function calculateExpression(expression) {
-            // mathProcess.running = false
+            mathProcess.running = false
             mathProcess.command = baseCommand.concat(expression)
             mathProcess.running = true
         }
