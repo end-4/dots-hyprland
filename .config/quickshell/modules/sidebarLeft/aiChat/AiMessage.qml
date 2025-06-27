@@ -247,9 +247,7 @@ Rectangle {
 
             spacing: 0
             Repeater {
-                model: ScriptModel {
-                    values: root.messageBlocks.map((block, index) => index)
-                }
+                model: root.messageBlocks.length
                 delegate: Loader {
                     required property int index
                     property var thisBlock: root.messageBlocks[index]

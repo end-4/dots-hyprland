@@ -23,6 +23,7 @@ Singleton {
         "wpsoffice": "wps-office2019-kprometheus",
         "footclient": "foot",
         "zen": "zen-browser",
+        "brave-browser": "brave-desktop"
     })
     property var regexSubstitutions: [
         {

@@ -1,7 +1,7 @@
-import QtQuick
-import Quickshell
 pragma Singleton
 pragma ComponentBehavior: Bound
+import QtQuick
+import Quickshell
 
 Singleton {
     property QtObject policies: QtObject {
@@ -21,8 +21,10 @@ Singleton {
         }
     }
 
-    property QtObject audio: QtObject { // Values in %
-        property QtObject protection: QtObject { // Prevent sudden bangs
+    property QtObject audio: QtObject {
+        // Values in %
+        property QtObject protection: QtObject {
+            // Prevent sudden bangs
             property bool enable: true
             property real maxAllowedIncrease: 10
             property real maxAllowed: 90 // Realistically should already provide some protection when it's 99...
@@ -59,6 +61,7 @@ Singleton {
             property bool showColorPicker: false
             property bool showMicToggle: false
             property bool showKeyboardToggle: true
+            property bool showDarkModeToggle: true
         }
         property QtObject tray: QtObject {
             property bool monochromeIcons: true
@@ -74,7 +77,8 @@ Singleton {
     property QtObject battery: QtObject {
         property int low: 20
         property int critical: 5
-        property int suspend: 2
+        property bool automaticSuspend: true
+        property int suspend: 3
     }
 
     property QtObject dock: QtObject {
@@ -83,9 +87,7 @@ Singleton {
         property bool pinnedOnStartup: false
         property bool hoverToReveal: false // When false, only reveals on empty workspace
         property list<string> pinnedApps: [ // IDs of pinned entries
-            "org.kde.dolphin",
-            "kitty",
-        ]
+            "org.kde.dolphin", "kitty",]
     }
 
     property QtObject language: QtObject {
@@ -112,9 +114,8 @@ Singleton {
 
     property QtObject overview: QtObject {
         property real scale: 0.18 // Relative to screen size
-        property real numOfRows: 2
-        property real numOfCols: 5
-        property bool showXwaylandIndicator: true
+        property real rows: 2
+        property real columns: 5
     }
 
     property QtObject resources: QtObject {
@@ -124,7 +125,7 @@ Singleton {
     property QtObject search: QtObject {
         property int nonAppResultDelay: 30 // This prevents lagging when typing
         property string engineBaseUrl: "https://www.google.com/search?q="
-        property list<string> excludedSites: [ "quora.com" ]
+        property list<string> excludedSites: ["quora.com"]
         property bool sloppy: false // Uses levenshtein distance based scoring instead of fuzzy sort. Very weird.
         property QtObject prefix: QtObject {
             property string action: "/"
@@ -161,5 +162,4 @@ Singleton {
     property QtObject hacks: QtObject {
         property int arbitraryRaceConditionDelay: 20 // milliseconds
     }
-
 }

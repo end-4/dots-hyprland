@@ -32,10 +32,8 @@ ProgressBar {
         animation: Appearance?.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
     
-    background: Rectangle {
+    background: Item {
         anchors.fill: parent
-        color: "transparent"
-        radius: Appearance?.rounding.full ?? 9999
         implicitHeight: valueBarHeight
         implicitWidth: valueBarWidth
     }
