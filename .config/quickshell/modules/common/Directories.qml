@@ -16,6 +16,7 @@ Singleton {
     readonly property string downloads: StandardPaths.standardLocations(StandardPaths.DownloadLocation)[0]
     
     // Other dirs used by the shell, without "file://"
+    property string scriptPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/scripts`)
     property string favicons: FileUtils.trimFileProtocol(`${Directories.cache}/media/favicons`)
     property string coverArt: FileUtils.trimFileProtocol(`${Directories.cache}/media/coverart`)
     property string booruPreviews: FileUtils.trimFileProtocol(`${Directories.cache}/media/boorus`)
@@ -29,7 +30,7 @@ Singleton {
     property string notificationsPath: FileUtils.trimFileProtocol(`${Directories.cache}/notifications/notifications.json`)
     property string generatedMaterialThemePath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/colors.json`)
     property string cliphistDecode: FileUtils.trimFileProtocol(`/tmp/quickshell/media/cliphist`)
-    property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/scripts/colors/switchwall.sh`)
+    property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/switchwall.sh`)
     // Cleanup on init
     Component.onCompleted: {
         Quickshell.execDetached(["bash", "-c", `mkdir -p '${shellConfig}'`])
