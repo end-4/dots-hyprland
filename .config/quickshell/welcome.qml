@@ -5,7 +5,6 @@
 // Adjust this to make the app smaller or larger
 //@ pragma Env QT_SCALE_FACTOR=1
 
-import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
