@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import Quickshell.Io
 import QtQuick
+import QtPositioning
 
 import "root:/modules/common"
 
@@ -11,6 +12,16 @@ Singleton {
     id: root
     // 10 minute
     readonly property int fetchInterval: ConfigOptions.bar.weather.fetchInterval * 60 * 1000
+    readonly property string city: ConfigOptions.bar.weather.city
+    readonly property bool useUSCS: ConfigOptions.bar.weather.useUSCS
+    readonly property bool gpsActive: ConfigOptions.bar.weather.enableGPS
+
+    property var location: ({
+            valid: false,
+            lat: 0,
+            lon: 0,
+        })
+
     property var data: ({
             uv: 0,
             humidity: 0,
@@ -36,7 +47,7 @@ Singleton {
         temp.wCode = data?.current?.weatherCode || "113";
         temp.city = data?.location?.areaName[0].value || "Istanbul";
         temp.temp = "";
-        if (ConfigOptions.bar.weather.useUSCS) {
+        if (root.useUSCS) {
             temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
             temp.precip = (data?.current?.precipInches || 0) + " in";
             temp.visib = (data?.current?.visibilityMiles || 0) + " m";
@@ -58,10 +69,11 @@ Singleton {
 
     function getData() {
         let command = "curl -s wttr.in";
-        if (ConfigOptions.gps.active) {
-            command += `/${ConfigOptions.gps.latitude},${Config.gps.longitude}`;
+
+        if (root.gpsActive && root.location.valid) {
+            command += `/${root.location.lat},${root.location.long}`;
         } else {
-            command += `/${formatCityName(ConfigOptions.bar.weather.city)}`;
+            command += `/${formatCityName(root.city)}`;
         }
 
         // format as json
@@ -75,6 +87,13 @@ Singleton {
 
     function formatCityName(cityName) {
         return cityName.trim().split(/\s+/).join('+');
+    }
+
+    Component.onCompleted: {
+      if(!root.gpsActive) return
+
+      console.info("[WeatherService] Starting the GPS service.")
+      positionSource.start()
     }
 
     Process {
@@ -95,11 +114,41 @@ Singleton {
         }
     }
 
+    PositionSource {
+        id: positionSource
+        updateInterval: root.fetchInterval
+
+        onPositionChanged: {
+            // update the location if the given location is valid
+            // if it fails getting the location, use the last valid location
+            if (position.latitudeValid && position.longitudeValid) {
+                root.location.lat = position.coordinate.latitude;
+                root.location.long = position.coordinate.longitude;
+                root.location.valid = true
+                // console.info(`📍 Location: ${position.coordinate.latitude}, ${position.coordinate.longitude}`);
+                root.getData();
+                // if can't get initialized with valid location deactivate the GPS 
+              } else {
+                root.gpsActive = root.location.valid ? true : false
+              }
+        }
+
+        onValidityChanged: {
+          if(!valid) {
+            positionSource.stop()
+            root.location.valid = false
+            root.gpsActive = false
+            Quickshell.execDetached(["bash", "-c", `notify-send WeatherService 'Failed to load the GPS service. Using the fallback method instead.'`])
+            console.error("[WeatherService] Could not aquire a valid backend plugin.")
+          }
+        }
+    }
+
     Timer {
-        running: true
+        running: !root.gpsActive
         repeat: true
         interval: root.fetchInterval
-        triggeredOnStart: true
+        triggeredOnStart: !root.gpsActive 
         onTriggered: root.getData()
     }
 }
