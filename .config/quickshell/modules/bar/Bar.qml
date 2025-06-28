@@ -278,15 +278,17 @@ Scope {
                     VerticalBarSeparator {
                         visible: ConfigOptions?.bar.borderless
                     }
+                }
 
-                    // Weather
-                    BarGroup {
-                        id: weatherGroupContent
-                        Layout.fillHeight: true
-                        Layout.alignment: Qt.AlignVCenter
-                        WeatherBar {
-                            visible: ConfigOptions.bar.weather.show
-                        }
+                // Weather
+                Loader {
+                    id: weatherLoader
+                    active: ConfigOptions.bar.weather.show
+                    anchors.left: middleSection.right
+                    anchors.margins: 10
+                    sourceComponent: BarGroup {
+                        implicitHeight: barHeight
+                        WeatherBar {}
                     }
                 }
 
@@ -295,7 +297,7 @@ Scope {
 
                     anchors.right: parent.right
                     implicitHeight: barHeight
-                    width: (barRoot.width - middleSection.width) / 2
+                    width: (barRoot.width - (barLeftSideMouseArea.width + middleSection.width + weatherLoader.width))
 
                     property bool hovered: false
                     property real lastScrollX: 0
