@@ -40,7 +40,7 @@ Item {
 
             StyledText {
                 visible: true
-                font.pixelSize: Appearance.font.pixelSize.normal
+                font.pixelSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer1
                 text: WeatherService.data.temp
             }

@@ -6,10 +6,8 @@ import "root:/modules/common/widgets"
 
 Rectangle {
     id: root
-    radius: Appearance.rounding.verysmall
+    radius: Appearance.rounding.small
     color: Appearance.colors.colLayer1
-    border.color: Appearance.colors.colShadow
-    border.width: 1
     implicitWidth: columnLayout.implicitWidth * 2
     implicitHeight: columnLayout.implicitHeight * 2
     Layout.fillWidth: parent
@@ -29,17 +27,17 @@ Rectangle {
                 fill: 0
                 iconSize: Appearance.font.pixelSize.normal
             }
-            Text {
+            StyledText {
                 id: title
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: Appearance.colors.colOnLayer2
+                color: Appearance.colors.colOnLayer1
             }
         }
-        Text {
+        StyledText {
             id: value
             Layout.alignment: Qt.AlignHCenter
             font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnLayer2
+            color: Appearance.colors.colOnLayer1
         }
     }
 }

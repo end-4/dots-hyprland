@@ -35,9 +35,10 @@ Rectangle {
                 iconSize: Appearance.font.pixelSize.huge
             }
 
-            Text {
+            StyledText {
                 text: WeatherService.data.city
-                font.pixelSize: Appearance.font.pixelSize.large
+                font.pixelSize: Appearance.font.pixelSize.title
+                font.family: Appearance.font.family.title
                 color: Appearance.colors.colOnLayer0
             }
         }
