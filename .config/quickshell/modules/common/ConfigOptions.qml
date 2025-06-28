@@ -73,7 +73,7 @@ Singleton {
             property int showNumberDelay: 300 // milliseconds
         }
         property QtObject weather: QtObject {
-            property bool show: true
+            property bool show: false
             // for specific location checkout gps setting
             property string city: "Istanbul"
             // use uscs units
