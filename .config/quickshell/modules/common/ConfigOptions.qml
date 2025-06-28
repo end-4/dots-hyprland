@@ -73,8 +73,10 @@ Singleton {
             property int showNumberDelay: 300 // milliseconds
         }
         property QtObject weather: QtObject {
-            property bool show: false
-            // for specific location checkout gps setting
+            property bool show: true
+            // gps based location
+            property bool enableGPS: true
+            // use if 'enableGPS' is false
             property string city: "Istanbul"
             // use uscs units
             // by default use metric (SI) units
@@ -170,12 +172,5 @@ Singleton {
 
     property QtObject hacks: QtObject {
         property int arbitraryRaceConditionDelay: 20 // milliseconds
-    }
-
-    // this is for weather and feature apis
-    property QtObject gps: QtObject {
-        property bool active: false
-        property real latitude: 41.27830580591624
-        property real longitude: 28.730357071149154
     }
 }
