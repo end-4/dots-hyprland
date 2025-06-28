@@ -27,13 +27,14 @@ ShellRoot {
     property color genericContentForeground: "#ddffffff"
     property color selectionBorderColor: "#ddf1f1f1"
     property color selectionFillColor: "#33ffffff"
-    property color windowBorderColor: "#ddd4ecff"
-    property color windowFillColor: "#33d4ecff"
+    property color windowBorderColor: "#dda0c0da"
+    property color windowFillColor: "#22a0c0da"
     property color imageBorderColor: "#ddf1d1ff"
     property color imageFillColor: "#33f1d1ff"
     property color onBorderColor: "#ff000000"
     property real standardRounding: 4
     readonly property var windows: HyprlandData.windowList
+    readonly property var layers: HyprlandData.layers
     readonly property real falsePositivePreventionRatio: 0.5
 
     // Force initialization of some singletons
@@ -75,10 +76,7 @@ ShellRoot {
                 id: regionText
                 text: regionRect.text
                 color: root.genericContentForeground
-                anchors {
-                    centerIn: parent
-                    margins: regionLabelBackground.padding
-                }
+                anchors.centerIn: parent
             }
         }
     }
@@ -102,9 +100,24 @@ ShellRoot {
             property bool dragging: false
             property var mouseButton: null
             property var imageRegions: []
-            property var windowRegions: root.windows.filter(w => {
-                return w.workspace.id === panelWindow.activeWorkspaceId;
-            })
+            readonly property var windowRegions: filterWindowRegionsByLayers(
+                root.windows.filter(w => w.workspace.id === panelWindow.activeWorkspaceId),
+                panelWindow.layerRegions
+            )
+            readonly property var layerRegions: {
+                const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
+                const topLayers = layersOfThisMonitor.levels["2"]
+                const nonBarTopLayers = topLayers
+                    .filter(layer => !(layer.namespace.includes(":bar")))
+                    .map(layer => {
+                    return {
+                        at: [layer.x, layer.y],
+                        size: [layer.w, layer.h],
+                        namespace: layer.namespace,
+                    }
+                })
+                return nonBarTopLayers;
+            }
 
             property real targetedRegionX: -1
             property real targetedRegionY: -1
@@ -131,18 +144,58 @@ ShellRoot {
                 return unionArea > 0 ? interArea / unionArea : 0;
             }
 
-            function filterImageRegions(regions, windowRegions, threshold = 0.1) {
-                // Remove image regions that overlap too much with any window region
-                return regions.filter(region => {
-                    for (let i = 0; i < windowRegions.length; ++i) {
-                        if (intersectionOverUnion(region, windowRegions[i]) > threshold)
+            function filterOverlappingImageRegions(regions) {
+                let keep = [];
+                let removed = new Set();
+                for (let i = 0; i < regions.length; ++i) {
+                    if (removed.has(i)) continue;
+                    let regionA = regions[i];
+                    for (let j = i + 1; j < regions.length; ++j) {
+                        if (removed.has(j)) continue;
+                        let regionB = regions[j];
+                        if (intersectionOverUnion(regionA, regionB) > 0) {
+                            // Compare areas
+                            let areaA = regionA.size[0] * regionA.size[1];
+                            let areaB = regionB.size[0] * regionB.size[1];
+                            if (areaA <= areaB) {
+                                removed.add(j);
+                            } else {
+                                removed.add(i);
+                            }
+                        }
+                    }
+                }
+                for (let i = 0; i < regions.length; ++i) {
+                    if (!removed.has(i)) keep.push(regions[i]);
+                }
+                return keep;
+            }
+
+            function filterWindowRegionsByLayers(windowRegions, layerRegions) {
+                return windowRegions.filter(windowRegion => {
+                    for (let i = 0; i < layerRegions.length; ++i) {
+                        if (intersectionOverUnion(windowRegion, layerRegions[i]) > 0)
                             return false;
                     }
                     return true;
                 });
             }
 
+            function filterImageRegions(regions, windowRegions, threshold = 0.1) {
+                // Remove image regions that overlap too much with any window region
+                let filtered = regions.filter(region => {
+                    for (let i = 0; i < windowRegions.length; ++i) {
+                        if (intersectionOverUnion(region, windowRegions[i]) > threshold)
+                            return false;
+                    }
+                    return true;
+                });
+                // Remove overlapping image regions, keep only the smaller one
+                return filterOverlappingImageRegions(filtered);
+            }
+
             function updateTargetedRegion(x, y) {
+                // Image regions
                 const clickedRegion = panelWindow.imageRegions.find(region => {
                     return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
                 });
@@ -151,6 +204,18 @@ ShellRoot {
                     panelWindow.targetedRegionY = clickedRegion.at[1];
                     panelWindow.targetedRegionWidth = clickedRegion.size[0];
                     panelWindow.targetedRegionHeight = clickedRegion.size[1];
+                    return;
+                }
+
+                // Layer regions
+                const clickedLayer = panelWindow.layerRegions.find(region => {
+                    return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
+                });
+                if (clickedLayer) {
+                    panelWindow.targetedRegionX = clickedLayer.at[0];
+                    panelWindow.targetedRegionY = clickedLayer.at[1];
+                    panelWindow.targetedRegionWidth = clickedLayer.size[0];
+                    panelWindow.targetedRegionHeight = clickedLayer.size[1];
                     return;
                 }
 
@@ -210,7 +275,6 @@ ShellRoot {
                 stdout: StdioCollector {
                     id: imageDimensionCollector
                     onStreamFinished: {
-                        // imageRegions = JSON.parse(imageDimensionCollector.text);
                         imageRegions = filterImageRegions(
                             JSON.parse(imageDimensionCollector.text),
                             panelWindow.windowRegions
@@ -355,6 +419,7 @@ ShellRoot {
                             values: panelWindow.windowRegions
                         }
                         delegate: TargetRegion {
+                            z: 2
                             required property var modelData
                             targeted: !panelWindow.draggedAway &&
                                 (panelWindow.targetedRegionX === modelData.at[0] 
@@ -382,9 +447,41 @@ ShellRoot {
 
                     Repeater {
                         model: ScriptModel {
+                            values: panelWindow.layerRegions
+                        }
+                        delegate: TargetRegion {
+                            z: 3
+                            required property var modelData
+                            targeted: !panelWindow.draggedAway &&
+                                (panelWindow.targetedRegionX === modelData.at[0] 
+                                && panelWindow.targetedRegionY === modelData.at[1]
+                                && panelWindow.targetedRegionWidth === modelData.size[0]
+                                && panelWindow.targetedRegionHeight === modelData.size[1])
+
+                            opacity: panelWindow.draggedAway ? 0 : 1
+                            visible: opacity > 0
+                            Behavior on opacity {
+                                animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
+
+                            x: modelData.at[0]
+                            y: modelData.at[1]
+                            width: modelData.size[0]
+                            height: modelData.size[1]
+                            borderColor: root.windowBorderColor
+                            fillColor: targeted ? root.windowFillColor : "transparent"
+                            border.width: targeted ? 4 : 2
+                            text: `${modelData.namespace}`
+                            radius: Appearance.rounding.windowRounding
+                        }
+                    }
+
+                    Repeater {
+                        model: ScriptModel {
                             values: panelWindow.imageRegions
                         }
                         delegate: TargetRegion {
+                            z: 4
                             required property var modelData
                             targeted: !panelWindow.draggedAway &&
                                 (panelWindow.targetedRegionX === modelData.at[0] 
