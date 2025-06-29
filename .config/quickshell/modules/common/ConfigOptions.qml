@@ -72,6 +72,18 @@ Singleton {
             property bool alwaysShowNumbers: false
             property int showNumberDelay: 300 // milliseconds
         }
+        property QtObject weather: QtObject {
+            property bool show: true
+            // gps based location
+            property bool enableGPS: true
+            // use if 'enableGPS' is false
+            property string city: "Istanbul"
+            // use uscs units
+            // by default use metric (SI) units
+            property bool useUSCS: false
+            // in minutes
+            property int fetchInterval: 10
+        }
     }
 
     property QtObject battery: QtObject {
