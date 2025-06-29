@@ -52,6 +52,19 @@ ContentPage {
     ContentSection {
         title: "Bar"
 
+        ConfigSelectionArray {
+            currentValue: ConfigOptions.bar.cornerStyle
+            configOptionName: "bar.cornerStyle"
+            onSelected: (newValue) => {
+                ConfigLoader.setConfigValueAndSave("bar.cornerStyle", newValue);
+            }
+            options: [
+                { displayName: "Hug", value: 0 },
+                { displayName: "Float", value: 1 },
+                { displayName: "Plain rectangle", value: 2 }
+            ]
+        }
+
         ContentSubsection {
             title: "Appearance"
             ConfigRow {
