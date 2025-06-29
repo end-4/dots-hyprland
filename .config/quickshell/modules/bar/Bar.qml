@@ -88,8 +88,18 @@ Scope {
                     }
                 }
                 
+                // Background shadow
+                Loader {
+                    active: showBarBackground && ConfigOptions.bar.cornerStyle === 1
+                    anchors.fill: barBackground
+                    sourceComponent: StyledRectangularShadow {
+                        anchors.fill: undefined // The loader's anchors act on this, and this should not have any anchor
+                        target: barBackground
+                    }
+                }
                 // Background
                 Rectangle {
+                    id: barBackground
                     anchors {
                         fill: parent
                         margins: ConfigOptions.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
