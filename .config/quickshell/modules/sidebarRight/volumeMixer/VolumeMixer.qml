@@ -16,6 +16,10 @@ Item {
     property bool deviceSelectorInput
     property int dialogMargins: 16
     property PwNode selectedDevice
+    readonly property list<PwNode> appPwNodes: Pipewire.nodes.values.filter((node) => {
+        // return node.type == "21" // Alternative, not as clean
+        return node.isSink && node.isStream
+    })
 
     function showDeviceSelectorDialog(input: bool) {
         root.selectedDevice = null
@@ -59,21 +63,13 @@ Item {
                     anchors.margins: 10
                     spacing: 10
 
-                    // Get a list of nodes that output to the default sink
-                    PwNodeLinkTracker {
-                        id: linkTracker
-                        node: Pipewire.defaultAudioSink
-                    }
-
                     Repeater {
-                        model: linkTracker.linkGroups
+                        model: root.appPwNodes
 
                         VolumeMixerEntry {
                             Layout.fillWidth: true
-                            // Get links to the default sinnk
-                            required property PwLinkGroup modelData
-                            // Consider sources that output to the default sink
-                            node: modelData.source
+                            required property var modelData
+                            node: modelData
                         }
                     }
                 }
@@ -84,7 +80,7 @@ Item {
                 anchors.fill: flickable
 
                 visible: opacity > 0
-                opacity: (linkTracker.linkGroups.length === 0) ? 1 : 0
+                opacity: (root.appPwNodes.length === 0) ? 1 : 0
 
                 Behavior on opacity {
                     NumberAnimation {
