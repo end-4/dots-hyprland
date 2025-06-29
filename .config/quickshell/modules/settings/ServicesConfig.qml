@@ -53,7 +53,9 @@ ContentPage {
             text: ConfigOptions.ai.systemPrompt
             wrapMode: TextEdit.Wrap
             onTextChanged: {
-                ConfigLoader.setConfigValueAndSave("ai.systemPrompt", text);
+                Qt.callLater(() => {
+                    ConfigLoader.setConfigValueAndSave("ai.systemPrompt", text);
+                });
             }
         }
     }
