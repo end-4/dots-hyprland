@@ -48,7 +48,7 @@ Item {
     }
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: 40
+    implicitHeight: Appearance.sizes.barHeight
 
     // Scroll to switch workspaces
     WheelHandler {
@@ -78,7 +78,7 @@ Item {
 
         spacing: 0
         anchors.fill: parent
-        implicitHeight: 40
+        implicitHeight: Appearance.sizes.barHeight
 
         Repeater {
             model: ConfigOptions.bar.workspaces.shown
@@ -157,7 +157,7 @@ Item {
 
         spacing: 0
         anchors.fill: parent
-        implicitHeight: 40
+        implicitHeight: Appearance.sizes.barHeight
 
         Repeater {
             model: ConfigOptions.bar.workspaces.shown
