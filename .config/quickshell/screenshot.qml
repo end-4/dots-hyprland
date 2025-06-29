@@ -87,7 +87,8 @@ ShellRoot {
         PanelWindow {
             id: panelWindow
             required property var modelData
-            property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(modelData)
+            readonly property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(modelData)
+            readonly property real monitorScale: hyprlandMonitor.scale
             property int activeWorkspaceId: hyprlandMonitor.activeWorkspace?.id ?? 0
             property string screenshotPath: `${root.screenshotDir}/image-${modelData.name}`
             property real dragStartX: 0
@@ -293,7 +294,10 @@ ShellRoot {
                     snipProc.startDetached();
                     Qt.quit();
                 }
-                command: ["bash", "-c", `magick ${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)} -crop ${panelWindow.regionWidth}x${panelWindow.regionHeight}+${panelWindow.regionX}+${panelWindow.regionY} - ` + `| ${panelWindow.mouseButton === Qt.LeftButton ? "wl-copy" : "swappy -f -"}`]
+                command: ["bash", "-c", 
+                    `magick ${StringUtils.shellSingleQuoteEscape(panelWindow.screenshotPath)} `
+                    + `-crop ${panelWindow.regionWidth * panelWindow.monitorScale}x${panelWindow.regionHeight * panelWindow.monitorScale}+${panelWindow.regionX * panelWindow.monitorScale}+${panelWindow.regionY * panelWindow.monitorScale} - ` 
+                    + `| ${panelWindow.mouseButton === Qt.LeftButton ? "wl-copy" : "swappy -f -"}`]
             }
 
             ScreencopyView {
