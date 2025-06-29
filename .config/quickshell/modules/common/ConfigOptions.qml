@@ -40,6 +40,7 @@ Singleton {
     }
 
     property QtObject background: QtObject {
+        property bool clock: true
         property bool fixedClockPosition: false
         property real clockX: -500
         property real clockY: -500
@@ -86,6 +87,8 @@ Singleton {
         property real hoverRegionHeight: 3
         property bool pinnedOnStartup: false
         property bool hoverToReveal: false // When false, only reveals on empty workspace
+        property bool enable: true
+        property bool showPinButton: true
         property list<string> pinnedApps: [ // IDs of pinned entries
             "org.kde.dolphin", "kitty",]
     }
