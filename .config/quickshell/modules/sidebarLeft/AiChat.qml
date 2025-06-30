@@ -252,6 +252,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
 
         DescriptionBox {
             text: root.suggestionList[suggestions.selectedIndex]?.description ?? ""
+            showArrows: root.suggestionList.length > 1
         }
 
         FlowButtonGroup { // Suggestions

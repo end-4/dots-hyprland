@@ -7,6 +7,8 @@ import QtQuick.Layouts
 Item { // Tag suggestion description
     id: root
     property alias text: tagDescriptionText.text
+    property bool showArrows: true
+    property bool showTab: true
 
     visible: tagDescriptionText.text.length > 0
     Layout.fillWidth: true
@@ -36,17 +38,21 @@ Item { // Tag suggestion description
                 wrapMode: Text.Wrap
             }
             KeyboardKey {
+                visible: root.showArrows
                 key: "↑"
             }
             KeyboardKey {
+                visible: root.showArrows
                 key: "↓"
             }
             StyledText {
+                visible: root.showArrows && root.showTab
                 text: qsTr("or")
                 font.pixelSize: Appearance.font.pixelSize.smaller
             }
             KeyboardKey {
                 id: tagDescriptionKey
+                visible: root.showTab
                 key: "Tab"
                 Layout.alignment: Qt.AlignVCenter
             }

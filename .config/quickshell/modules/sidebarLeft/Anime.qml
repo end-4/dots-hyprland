@@ -250,6 +250,7 @@ Item {
 
         DescriptionBox { // Tag suggestion description
             text: root.suggestionList[tagSuggestions.selectedIndex]?.description ?? ""
+            showArrows: root.suggestionList.length > 1
         }
 
         FlowButtonGroup { // Tag suggestions
