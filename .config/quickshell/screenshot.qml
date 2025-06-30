@@ -102,11 +102,11 @@ ShellRoot {
             property bool dragging: false
             property var mouseButton: null
             property var imageRegions: []
-            readonly property var windowRegions: filterWindowRegionsByLayers(
+            readonly property list<var> windowRegions: filterWindowRegionsByLayers(
                 root.windows.filter(w => w.workspace.id === panelWindow.activeWorkspaceId),
                 panelWindow.layerRegions
             )
-            readonly property var layerRegions: {
+            readonly property list<var> layerRegions: {
                 const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
                 const topLayers = layersOfThisMonitor.levels["2"]
                 const nonBarTopLayers = topLayers
@@ -211,7 +211,10 @@ ShellRoot {
 
                 // Layer regions
                 const clickedLayer = panelWindow.layerRegions.find(region => {
-                    return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
+                    return region.at[0] - panelWindow.monitorOffsetX <= x 
+                        && x <= region.at[0] - panelWindow.monitorOffsetX + region.size[0] 
+                        && region.at[1] - panelWindow.monitorOffsetY <= y 
+                        && y <= region.at[1] - panelWindow.monitorOffsetY + region.size[1];
                 });
                 if (clickedLayer) {
                     panelWindow.targetedRegionX = clickedLayer.at[0];
@@ -223,7 +226,10 @@ ShellRoot {
 
                 // Window regions
                 const clickedWindow = panelWindow.windowRegions.find(region => {
-                    return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
+                    return region.at[0] - panelWindow.monitorOffsetX <= x 
+                        && x <= region.at[0] - panelWindow.monitorOffsetX + region.size[0] 
+                        && region.at[1] - panelWindow.monitorOffsetY <= y 
+                        && y <= region.at[1] - panelWindow.monitorOffsetY + region.size[1];
                 });
                 if (clickedWindow) {
                     panelWindow.targetedRegionX = clickedWindow.at[0];
@@ -419,6 +425,7 @@ ShellRoot {
                         }
                     }
 
+                    // Window regions
                     Repeater {
                         model: ScriptModel {
                             values: panelWindow.windowRegions
@@ -450,6 +457,7 @@ ShellRoot {
                         }
                     }
 
+                    // Layer regions
                     Repeater {
                         model: ScriptModel {
                             values: panelWindow.layerRegions
@@ -481,6 +489,7 @@ ShellRoot {
                         }
                     }
 
+                    // Image regions
                     Repeater {
                         model: ScriptModel {
                             values: panelWindow.imageRegions
@@ -500,10 +509,10 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0] / panelWindow.monitorScale
-                            y: modelData.at[1] / panelWindow.monitorScale
-                            width: modelData.size[0] / panelWindow.monitorScale
-                            height: modelData.size[1] / panelWindow.monitorScale
+                            x: modelData.at[0]
+                            y: modelData.at[1]
+                            width: modelData.size[0]
+                            height: modelData.size[1]
                             borderColor: root.imageBorderColor
                             fillColor: targeted ? root.imageFillColor : "transparent"
                             border.width: targeted ? 4 : 2
