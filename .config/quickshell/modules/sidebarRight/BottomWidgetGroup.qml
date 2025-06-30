@@ -15,7 +15,7 @@ Rectangle {
     clip: true
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
     property int selectedTab: 0
-    property bool collapsed: PersistentStates.sidebar.bottomGroup.collapsed
+    property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
         {"type": "calendar", "name": "Calendar", "icon": "calendar_month", "widget": calendarWidget}, 
         {"type": "todo", "name": "To Do", "icon": "done_outline", "widget": todoWidget}
@@ -30,7 +30,7 @@ Rectangle {
     }
 
     function setCollapsed(state) {
-        PersistentStateManager.setState("sidebar.bottomGroup.collapsed", state)
+        Persistent.states.sidebar.bottomGroup.collapsed = state
         if (collapsed) {
             bottomWidgetGroupRow.opacity = 0
         }

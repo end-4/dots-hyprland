@@ -25,7 +25,7 @@ Singleton {
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
     readonly property var apiKeysLoaded: KeyringStorage.loaded
     property var postResponseHook
-    property real temperature: PersistentStates?.ai?.temperature ?? 0.5
+    property real temperature: Persistent.states?.ai?.temperature ?? 0.5
 
     function idForMessage(message) {
         // Generate a unique ID using timestamp and random value
@@ -202,10 +202,10 @@ Singleton {
         },
     }
     property var modelList: Object.keys(root.models)
-    property var currentModelId: PersistentStates?.ai?.model || modelList[0]
+    property var currentModelId: Persistent.states?.ai?.model || modelList[0]
 
     Component.onCompleted: {
-        setModel(currentModelId, false); // Do necessary setup for model
+        setModel(currentModelId, false, false); // Do necessary setup for model
         getOllamaModels.running = true
     }
 
@@ -293,7 +293,7 @@ Singleton {
         return models[currentModelId];
     }
 
-    function setModel(modelId, feedback = true) {
+    function setModel(modelId, feedback = true, setPersistentState = true) {
         if (!modelId) modelId = ""
         modelId = modelId.toLowerCase()
         if (modelList.indexOf(modelId) !== -1) {
@@ -305,7 +305,7 @@ Singleton {
                 root.addMessage(StringUtils.format(StringUtils.format("Online models disallowed\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
                 return;
             }
-            PersistentStateManager.setState("ai.model", modelId);
+            if (setPersistentState) Persistent.states.ai.model = modelId;
             if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), model.name), root.interfaceRole);
             if (model.requires_key) {
                 // If key not there show advice
@@ -327,7 +327,7 @@ Singleton {
             root.addMessage(qsTr("Temperature must be between 0 and 2"), Ai.interfaceRole);
             return;
         }
-        PersistentStateManager.setState("ai.temperature", value);
+        Persistent.states.ai.temperature = value;
         root.temperature = value;
         root.addMessage(StringUtils.format(qsTr("Temperature set to {0}"), value), Ai.interfaceRole);
     }

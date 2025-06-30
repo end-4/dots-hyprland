@@ -65,14 +65,14 @@ Item {
             name: "safe",
             description: qsTr("Disable NSFW content"),
             execute: () => {
-                PersistentStateManager.setState("booru.allowNsfw", false);
+                Persistent.states.booru.allowNsfw = false;
             }
         },
         {
             name: "lewd",
             description: qsTr("Allow NSFW content"),
             execute: () => {
-                PersistentStateManager.setState("booru.allowNsfw", true);
+                Persistent.states.booru.allowNsfw = true;
             }
         },
     ]
@@ -106,7 +106,7 @@ Item {
                     break;
                 }
             }
-            Booru.makeRequest(tagList, PersistentStates.booru.allowNsfw, Config.options.sidebar.booru.limit, pageIndex);
+            Booru.makeRequest(tagList, Persistent.states.booru.allowNsfw, Config.options.sidebar.booru.limit, pageIndex);
         }
     }
 
@@ -593,10 +593,10 @@ Item {
                             enabled: Booru.currentProvider !== "zerochan"
                             scale: 0.6
                             Layout.alignment: Qt.AlignVCenter
-                            checked: (PersistentStates.booru.allowNsfw && Booru.currentProvider !== "zerochan")
+                            checked: (Persistent.states.booru.allowNsfw && Booru.currentProvider !== "zerochan")
                             onCheckedChanged: {
                                 if (!nsfwSwitch.enabled) return;
-                                PersistentStateManager.setState("booru.allowNsfw", checked)
+                                Persistent.states.booru.allowNsfw = checked;
                             }
                         }
                     }
@@ -610,7 +610,6 @@ Item {
                         id: commandRepeater
                         model: commandButtonsRow.commandsShown
                         delegate: ApiCommandButton {
-                            id: tagButton
                             property string commandRepresentation: `${root.commandPrefix}${modelData.name}`
                             buttonText: commandRepresentation
                             colBackground: Appearance.colors.colLayer2
