@@ -6,8 +6,8 @@ import QtQuick.Layouts
 
 Item {
     id: root
-    property bool borderless: ConfigOptions.bar.borderless
-    property bool showDate: ConfigOptions.bar.verbose
+    property bool borderless: Config.options.bar.borderless
+    property bool showDate: Config.options.bar.verbose
     implicitWidth: rowLayout.implicitWidth
     implicitHeight: 32
 

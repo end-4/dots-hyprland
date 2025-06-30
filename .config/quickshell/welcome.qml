@@ -31,7 +31,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        ConfigLoader.loadConfig()
     }
 
     minimumWidth: 600
@@ -59,14 +58,14 @@ ApplicationWindow {
         }
 
         Item { // Titlebar
-            visible: ConfigOptions?.windows.showTitlebar
+            visible: Config.options?.windows.showTitlebar
             Layout.fillWidth: true
             implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
                 id: welcomeText
                 anchors {
-                    left: ConfigOptions.windows.centerTitle ? undefined : parent.left
-                    horizontalCenter: ConfigOptions.windows.centerTitle ? parent.horizontalCenter : undefined
+                    left: Config.options.windows.centerTitle ? undefined : parent.left
+                    horizontalCenter: Config.options.windows.centerTitle ? parent.horizontalCenter : undefined
                     verticalCenter: parent.verticalCenter
                     leftMargin: 12
                 }
@@ -127,10 +126,10 @@ ApplicationWindow {
                     title: "Bar style"
 
                     ConfigSelectionArray {
-                        currentValue: ConfigOptions.bar.cornerStyle
+                        currentValue: Config.options.bar.cornerStyle
                         configOptionName: "bar.cornerStyle"
                         onSelected: (newValue) => {
-                            ConfigLoader.setConfigValueAndSave("bar.cornerStyle", newValue);
+                            Config.options.bar.cornerStyle = newValue; // Update local copy
                         }
                         options: [
                             { displayName: "Hug", value: 0 },
@@ -223,10 +222,10 @@ ApplicationWindow {
                                 text: "Weeb"
                             }
                             ConfigSelectionArray {
-                                currentValue: ConfigOptions.policies.weeb
+                                currentValue: Config.options.policies.weeb
                                 configOptionName: "policies.weeb"
                                 onSelected: (newValue) => {
-                                    ConfigLoader.setConfigValueAndSave("policies.weeb", newValue);
+                                    Config.options.policies.weeb = newValue;
                                 }
                                 options: [
                                     { displayName: "No", value: 0 },
@@ -241,10 +240,10 @@ ApplicationWindow {
                                 text: "AI"
                             }
                             ConfigSelectionArray {
-                                currentValue: ConfigOptions.policies.ai
+                                currentValue: Config.options.policies.ai
                                 configOptionName: "policies.ai"
                                 onSelected: (newValue) => {
-                                    ConfigLoader.setConfigValueAndSave("policies.ai", newValue);
+                                    Config.options.policies.ai = newValue;
                                 }
                                 options: [
                                     { displayName: "No", value: 0 },

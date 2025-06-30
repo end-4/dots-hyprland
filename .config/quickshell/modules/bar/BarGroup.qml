@@ -19,7 +19,7 @@ Item {
             topMargin: 4
             bottomMargin: 4
         }
-        color: ConfigOptions?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
+        color: Config.options?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
         radius: Appearance.rounding.small
     }
 

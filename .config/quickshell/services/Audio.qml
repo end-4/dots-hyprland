@@ -26,15 +26,15 @@ Singleton {
         property bool lastReady: false
         property real lastVolume: 0
         function onVolumeChanged() {
-            if (!ConfigOptions.audio.protection.enable) return;
+            if (!Config.options.audio.protection.enable) return;
             if (!lastReady) {
                 lastVolume = sink.audio.volume;
                 lastReady = true;
                 return;
             }
             const newVolume = sink.audio.volume;
-            const maxAllowedIncrease = ConfigOptions.audio.protection.maxAllowedIncrease / 100; 
-            const maxAllowed = ConfigOptions.audio.protection.maxAllowed / 100;
+            const maxAllowedIncrease = Config.options.audio.protection.maxAllowedIncrease / 100; 
+            const maxAllowed = Config.options.audio.protection.maxAllowed / 100;
 
             if (newVolume - lastVolume > maxAllowedIncrease) {
                 sink.audio.volume = lastVolume;

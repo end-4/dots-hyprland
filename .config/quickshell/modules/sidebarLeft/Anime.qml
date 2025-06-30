@@ -106,7 +106,7 @@ Item {
                     break;
                 }
             }
-            Booru.makeRequest(tagList, PersistentStates.booru.allowNsfw, ConfigOptions.sidebar.booru.limit, pageIndex);
+            Booru.makeRequest(tagList, PersistentStates.booru.allowNsfw, Config.options.sidebar.booru.limit, pageIndex);
         }
     }
 

@@ -40,7 +40,6 @@ ShellRoot {
     // Force initialization of some singletons
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme();
-        ConfigLoader.loadConfig();
     }
 
     component TargetRegion: Rectangle {

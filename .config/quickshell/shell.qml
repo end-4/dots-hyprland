@@ -48,7 +48,6 @@ ShellRoot {
     // Force initialization of some singletons
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        ConfigLoader.loadConfig()
         PersistentStateManager.loadStates()
         Cliphist.refresh()
         FirstRunExperience.load()
