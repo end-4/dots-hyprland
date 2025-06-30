@@ -105,7 +105,14 @@ ShellRoot {
             readonly property list<var> windowRegions: filterWindowRegionsByLayers(
                 root.windows.filter(w => w.workspace.id === panelWindow.activeWorkspaceId),
                 panelWindow.layerRegions
-            )
+            ).map(window => {
+                return {
+                    at: [window.at[0] - panelWindow.monitorOffsetX, window.at[1] - panelWindow.monitorOffsetY],
+                    size: [window.size[0], window.size[1]],
+                    class: window.class,
+                    title: window.title,
+                }
+            })
             readonly property list<var> layerRegions: {
                 const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
                 const topLayers = layersOfThisMonitor.levels["2"]
@@ -118,7 +125,14 @@ ShellRoot {
                         namespace: layer.namespace,
                     }
                 })
-                return nonBarTopLayers;
+                const offsetAdjustedLayers = nonBarTopLayers.map(layer => {
+                    return {
+                        at: [layer.at[0] - panelWindow.monitorOffsetX, layer.at[1] - panelWindow.monitorOffsetY],
+                        size: layer.size,
+                        namespace: layer.namespace,
+                    }
+                });
+                return offsetAdjustedLayers;
             }
 
             property real targetedRegionX: -1
@@ -211,10 +225,7 @@ ShellRoot {
 
                 // Layer regions
                 const clickedLayer = panelWindow.layerRegions.find(region => {
-                    return region.at[0] - panelWindow.monitorOffsetX <= x 
-                        && x <= region.at[0] - panelWindow.monitorOffsetX + region.size[0] 
-                        && region.at[1] - panelWindow.monitorOffsetY <= y 
-                        && y <= region.at[1] - panelWindow.monitorOffsetY + region.size[1];
+                    return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
                 });
                 if (clickedLayer) {
                     panelWindow.targetedRegionX = clickedLayer.at[0];
@@ -226,10 +237,7 @@ ShellRoot {
 
                 // Window regions
                 const clickedWindow = panelWindow.windowRegions.find(region => {
-                    return region.at[0] - panelWindow.monitorOffsetX <= x 
-                        && x <= region.at[0] - panelWindow.monitorOffsetX + region.size[0] 
-                        && region.at[1] - panelWindow.monitorOffsetY <= y 
-                        && y <= region.at[1] - panelWindow.monitorOffsetY + region.size[1];
+                    return region.at[0] <= x && x <= region.at[0] + region.size[0] && region.at[1] <= y && y <= region.at[1] + region.size[1];
                 });
                 if (clickedWindow) {
                     panelWindow.targetedRegionX = clickedWindow.at[0];
@@ -445,8 +453,8 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0] - panelWindow.monitorOffsetX
-                            y: modelData.at[1] - panelWindow.monitorOffsetY
+                            x: modelData.at[0]
+                            y: modelData.at[1]
                             width: modelData.size[0]
                             height: modelData.size[1]
                             borderColor: root.windowBorderColor
@@ -477,8 +485,8 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0] - panelWindow.monitorOffsetX
-                            y: modelData.at[1] - panelWindow.monitorOffsetY
+                            x: modelData.at[0]
+                            y: modelData.at[1]
                             width: modelData.size[0]
                             height: modelData.size[1]
                             borderColor: root.windowBorderColor
