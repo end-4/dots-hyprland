@@ -499,10 +499,10 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0]
-                            y: modelData.at[1]
-                            width: modelData.size[0]
-                            height: modelData.size[1]
+                            x: modelData.at[0] / panelWindow.monitorScale
+                            y: modelData.at[1] / panelWindow.monitorScale
+                            width: modelData.size[0] / panelWindow.monitorScale
+                            height: modelData.size[1] / panelWindow.monitorScale
                             borderColor: root.imageBorderColor
                             fillColor: targeted ? root.imageFillColor : "transparent"
                             border.width: targeted ? 4 : 2
