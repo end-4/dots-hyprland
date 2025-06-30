@@ -6,14 +6,11 @@ import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common/functions/file_utils.js" as FileUtils
 import "./anime/"
-import Qt.labs.platform
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
-import Quickshell.Io
 import Quickshell
-import Quickshell.Hyprland
 
 Item {
     id: root
@@ -251,33 +248,8 @@ Item {
             }
         }
 
-        Item { // Tag suggestion description
-            visible: tagDescriptionText.text.length > 0
-            Layout.fillWidth: true
-            implicitHeight: tagDescriptionBackground.implicitHeight
-
-            Rectangle {
-                id: tagDescriptionBackground
-                color: Appearance.colors.colTooltip
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                implicitHeight: tagDescriptionText.implicitHeight + 5 * 2
-                radius: Appearance.rounding.verysmall
-
-                StyledText {
-                    id: tagDescriptionText
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 10
-                    anchors.rightMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Appearance.font.pixelSize.smaller
-                    color: Appearance.colors.colOnTooltip
-                    wrapMode: Text.Wrap
-                    text: root.suggestionList[tagSuggestions.selectedIndex]?.description ?? ""
-                }
-            }
+        DescriptionBox { // Tag suggestion description
+            text: root.suggestionList[tagSuggestions.selectedIndex]?.description ?? ""
         }
 
         FlowButtonGroup { // Tag suggestions
@@ -295,7 +267,7 @@ Item {
                 }
                 delegate: ApiCommandButton {
                     id: tagButton
-                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colLayer2Hover : Appearance.colors.colLayer2
+                    colBackground: tagSuggestions.selectedIndex === index ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer
                     bounce: false
                     contentItem: RowLayout {
                         anchors.centerIn: parent
@@ -303,7 +275,7 @@ Item {
                         StyledText {
                             Layout.fillWidth: false
                             font.pixelSize: Appearance.font.pixelSize.small
-                            color: Appearance.m3colors.m3onSurface
+                            color: Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignRight
                             text: modelData.displayName ?? modelData.name
                         }
@@ -311,7 +283,7 @@ Item {
                             Layout.fillWidth: false
                             visible: modelData.count !== undefined
                             font.pixelSize: Appearance.font.pixelSize.smaller
-                            color: Appearance.m3colors.m3outline
+                            color: Appearance.colors.colOnSecondaryContainer
                             horizontalAlignment: Text.AlignLeft
                             text: modelData.count ?? ""
                         }
