@@ -89,6 +89,8 @@ ShellRoot {
             required property var modelData
             readonly property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(modelData)
             readonly property real monitorScale: hyprlandMonitor.scale
+            readonly property real monitorOffsetX: hyprlandMonitor.x
+            readonly property real monitorOffsetY: hyprlandMonitor.y
             property int activeWorkspaceId: hyprlandMonitor.activeWorkspace?.id ?? 0
             property string screenshotPath: `${root.screenshotDir}/image-${modelData.name}`
             property real dragStartX: 0
@@ -437,8 +439,8 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0]
-                            y: modelData.at[1]
+                            x: modelData.at[0] - panelWindow.monitorOffsetX
+                            y: modelData.at[1] - panelWindow.monitorOffsetY
                             width: modelData.size[0]
                             height: modelData.size[1]
                             borderColor: root.windowBorderColor
@@ -468,8 +470,8 @@ ShellRoot {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                             }
 
-                            x: modelData.at[0]
-                            y: modelData.at[1]
+                            x: modelData.at[0] - panelWindow.monitorOffsetX
+                            y: modelData.at[1] - panelWindow.monitorOffsetY
                             width: modelData.size[0]
                             height: modelData.size[1]
                             borderColor: root.windowBorderColor
