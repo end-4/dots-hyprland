@@ -14,7 +14,7 @@ Singleton {
     readonly property int fetchInterval: Config.options.bar.weather.fetchInterval * 60 * 1000
     readonly property string city: Config.options.bar.weather.city
     readonly property bool useUSCS: Config.options.bar.weather.useUSCS
-    readonly property bool gpsActive: Config.options.bar.weather.enableGPS
+    property bool gpsActive: Config.options.bar.weather.enableGPS
 
     property var location: ({
             valid: false,
@@ -130,15 +130,16 @@ Singleton {
                 // if can't get initialized with valid location deactivate the GPS
             } else {
                 root.gpsActive = root.location.valid ? true : false;
+                console.error("[WeatherService] Failed to get the GPS location.");
             }
         }
 
         onValidityChanged: {
-            if (!valid) {
+            if (!positionSource.valid) {
                 positionSource.stop();
                 root.location.valid = false;
                 root.gpsActive = false;
-                Quickshell.execDetached(["bash", "-c", `notify-send WeatherService 'Failed to load the GPS service. Using the fallback method instead.'`]);
+                Quickshell.execDetached(["bash", "-c", `notify-send WeatherService 'Can not find a GPS service. Using the fallback method instead.'`]);
                 console.error("[WeatherService] Could not aquire a valid backend plugin.");
             }
         }
