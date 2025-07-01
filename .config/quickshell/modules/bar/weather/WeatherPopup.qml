@@ -11,10 +11,8 @@ Rectangle {
     implicitWidth: columnLayout.implicitWidth + margin * 2
     implicitHeight: columnLayout.implicitHeight + margin * 2
     color: Appearance.colors.colLayer0
-    radius: 12
+    radius: Appearance.rounding.small
     clip: true
-    border.color: Appearance.colors.colShadow
-    border.width: 1
 
     ColumnLayout {
         id: columnLayout
