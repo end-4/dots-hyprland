@@ -138,16 +138,13 @@ ContentPage {
         }
     }
 
-    ContentSubsection {
+    ContentSection {
         title: "Weather"
-        ConfigRow {
-            uniform: false
-            ConfigSwitch {
-                text: "Show"
-                checked: ConfigOptions.bar.weather.show
-                onCheckedChanged: {
-                    ConfigLoader.setConfigValueAndSave("bar.weather.show", checked);
-                }
+        ConfigSwitch {
+            text: "Show"
+            checked: Config.options.bar.weather.show
+            onCheckedChanged: {
+                Config.options.bar.weather.show = checked;
             }
         }
     }
