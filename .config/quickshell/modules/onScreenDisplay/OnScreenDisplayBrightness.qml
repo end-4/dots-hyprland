@@ -22,7 +22,7 @@ Scope {
 
     Timer {
         id: osdTimeout
-        interval: ConfigOptions.osd.timeout
+        interval: Config.options.osd.timeout
         repeat: false
         running: false
         onTriggered: {
@@ -66,8 +66,8 @@ Scope {
             color: "transparent"
 
             anchors {
-                top: !ConfigOptions.bar.bottom
-                bottom: ConfigOptions.bar.bottom
+                top: !Config.options.bar.bottom
+                bottom: Config.options.bar.bottom
             }
             mask: Region {
                 item: osdValuesWrapper

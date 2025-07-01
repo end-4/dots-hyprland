@@ -11,7 +11,7 @@ import Quickshell.Io
 
 Singleton {
     id: root
-    property bool sloppySearch: ConfigOptions?.search.sloppy ?? false
+    property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property list<string> entries: []
     readonly property var preparedEntries: entries.map(a => ({
@@ -51,7 +51,7 @@ Singleton {
 
     Timer {
         id: delayedUpdateTimer
-        interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+        interval: Config.options.hacks.arbitraryRaceConditionDelay
         repeat: false
         onTriggered: {
             root.refresh()

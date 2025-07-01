@@ -72,7 +72,7 @@ Scope {
 
             Timer {
                 id: delayedGrabTimer
-                interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                interval: Config.options.hacks.arbitraryRaceConditionDelay
                 repeat: false
                 onTriggered: {
                     if (!grab.canBeActive) return
@@ -204,7 +204,7 @@ Scope {
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     overviewScope.dontAutoCancelSearch = true;
                     panelWindow.setSearchingText(
-                        ConfigOptions.search.prefix.clipboard
+                        Config.options.search.prefix.clipboard
                     );
                     GlobalStates.overviewOpen = true;
                     return
@@ -227,7 +227,7 @@ Scope {
                 if (panelWindow.modelData.name == Hyprland.focusedMonitor.name) {
                     overviewScope.dontAutoCancelSearch = true;
                     panelWindow.setSearchingText(
-                        ConfigOptions.search.prefix.emojis
+                        Config.options.search.prefix.emojis
                     );
                     GlobalStates.overviewOpen = true;
                     return

@@ -13,9 +13,9 @@ ContentPage {
 
         ConfigSwitch {
             text: "Earbang protection"
-            checked: ConfigOptions.audio.protection.enable
+            checked: Config.options.audio.protection.enable
             onCheckedChanged: {
-                ConfigLoader.setConfigValueAndSave("audio.protection.enable", checked);
+                Config.options.audio.protection.enable = checked;
             }
             StyledToolTip {
                 content: "Prevents abrupt increments and restricts volume limit"
@@ -25,22 +25,22 @@ ContentPage {
             // uniform: true
             ConfigSpinBox {
                 text: "Max allowed increase"
-                value: ConfigOptions.audio.protection.maxAllowedIncrease
+                value: Config.options.audio.protection.maxAllowedIncrease
                 from: 0
                 to: 100
                 stepSize: 2
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("audio.protection.maxAllowedIncrease", value);
+                    Config.options.audio.protection.maxAllowedIncrease = value;
                 }
             }
             ConfigSpinBox {
                 text: "Volume limit"
-                value: ConfigOptions.audio.protection.maxAllowed
+                value: Config.options.audio.protection.maxAllowed
                 from: 0
                 to: 100
                 stepSize: 2
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("audio.protection.maxAllowed", value);
+                    Config.options.audio.protection.maxAllowed = value;
                 }
             }
         }
@@ -50,10 +50,12 @@ ContentPage {
         MaterialTextField {
             Layout.fillWidth: true
             placeholderText: "System prompt"
-            text: ConfigOptions.ai.systemPrompt
+            text: Config.options.ai.systemPrompt
             wrapMode: TextEdit.Wrap
             onTextChanged: {
-                ConfigLoader.setConfigValueAndSave("ai.systemPrompt", text);
+                Qt.callLater(() => {
+                    Config.options.ai.systemPrompt = text;
+                });
             }
         }
     }
@@ -65,22 +67,22 @@ ContentPage {
             uniform: true
             ConfigSpinBox {
                 text: "Low warning"
-                value: ConfigOptions.battery.low
+                value: Config.options.battery.low
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.low", value);
+                    Config.options.battery.low = value;
                 }
             }
             ConfigSpinBox {
                 text: "Critical warning"
-                value: ConfigOptions.battery.critical
+                value: Config.options.battery.critical
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.critical", value);
+                    Config.options.battery.critical = value;
                 }
             }
         }
@@ -88,9 +90,9 @@ ContentPage {
             uniform: true
             ConfigSwitch {
                 text: "Automatic suspend"
-                checked: ConfigOptions.battery.automaticSuspend
+                checked: Config.options.battery.automaticSuspend
                 onCheckedChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.automaticSuspend", checked);
+                    Config.options.battery.automaticSuspend = checked;
                 }
                 StyledToolTip {
                     content: "Automatically suspends the system when battery is low"
@@ -98,12 +100,12 @@ ContentPage {
             }
             ConfigSpinBox {
                 text: "Suspend at"
-                value: ConfigOptions.battery.suspend
+                value: Config.options.battery.suspend
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.suspend", value);
+                    Config.options.battery.suspend = value;
                 }
             }
         }
@@ -114,10 +116,10 @@ ContentPage {
         MaterialTextField {
             Layout.fillWidth: true
             placeholderText: "User agent (for services that require it)"
-            text: ConfigOptions.networking.userAgent
+            text: Config.options.networking.userAgent
             wrapMode: TextEdit.Wrap
             onTextChanged: {
-                ConfigLoader.setConfigValueAndSave("networking.userAgent", text);
+                Config.options.networking.userAgent = text;
             }
         }
     }
@@ -126,12 +128,12 @@ ContentPage {
         title: "Resources"
         ConfigSpinBox {
             text: "Polling interval (ms)"
-            value: ConfigOptions.resources.updateInterval
+            value: Config.options.resources.updateInterval
             from: 100
             to: 10000
             stepSize: 100
             onValueChanged: {
-                ConfigLoader.setConfigValueAndSave("resources.updateInterval", value);
+                Config.options.resources.updateInterval = value;
             }
         }
     }

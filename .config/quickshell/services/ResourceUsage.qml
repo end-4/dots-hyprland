@@ -53,7 +53,7 @@ Singleton {
 
                 previousCpuStats = { total, idle }
             }
-            interval = ConfigOptions?.resources?.updateInterval ?? 3000
+            interval = Config.options?.resources?.updateInterval ?? 3000
         }
 	}
 

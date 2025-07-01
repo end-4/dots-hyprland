@@ -9,7 +9,7 @@ import Quickshell.Services.Pipewire
 
 Item {
     id: root
-    property bool borderless: ConfigOptions.bar.borderless
+    property bool borderless: Config.options.bar.borderless
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
     implicitHeight: rowLayout.implicitHeight
 
@@ -20,8 +20,8 @@ Item {
         anchors.centerIn: parent
 
         Loader {
-            active: ConfigOptions.bar.utilButtons.showScreenSnip
-            visible: ConfigOptions.bar.utilButtons.showScreenSnip
+            active: Config.options.bar.utilButtons.showScreenSnip
+            visible: Config.options.bar.utilButtons.showScreenSnip
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("exec hyprshot --freeze --clipboard-only --mode region --silent")
@@ -36,8 +36,8 @@ Item {
         }
 
         Loader {
-            active: ConfigOptions.bar.utilButtons.showColorPicker
-            visible: ConfigOptions.bar.utilButtons.showColorPicker
+            active: Config.options.bar.utilButtons.showColorPicker
+            visible: Config.options.bar.utilButtons.showColorPicker
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("exec hyprpicker -a")
@@ -52,8 +52,8 @@ Item {
         }
 
         Loader {
-            active: ConfigOptions.bar.utilButtons.showKeyboardToggle
-            visible: ConfigOptions.bar.utilButtons.showKeyboardToggle
+            active: Config.options.bar.utilButtons.showKeyboardToggle
+            visible: Config.options.bar.utilButtons.showKeyboardToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("global quickshell:oskToggle")
@@ -68,8 +68,8 @@ Item {
         }
 
         Loader {
-            active: ConfigOptions.bar.utilButtons.showMicToggle
-            visible: ConfigOptions.bar.utilButtons.showMicToggle
+            active: Config.options.bar.utilButtons.showMicToggle
+            visible: Config.options.bar.utilButtons.showMicToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: Hyprland.dispatch("exec wpctl set-mute @DEFAULT_SOURCE@ toggle")
@@ -84,8 +84,8 @@ Item {
         }
 
         Loader {
-            active: ConfigOptions.bar.utilButtons.showDarkModeToggle
-            visible: ConfigOptions.bar.utilButtons.showDarkModeToggle
+            active: Config.options.bar.utilButtons.showDarkModeToggle
+            visible: Config.options.bar.utilButtons.showDarkModeToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
                 onClicked: event => {

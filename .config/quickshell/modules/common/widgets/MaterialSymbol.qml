@@ -13,6 +13,12 @@ Text {
         family: Appearance?.font.family.iconMaterial ?? "Material Symbols Rounded"
         pixelSize: iconSize
         weight: Font.Normal + (Font.DemiBold - Font.Normal) * fill
+        variableAxes: { 
+            "FILL": truncatedFill,
+            // "wght": font.weight,
+            // "GRAD": 0,
+            "opsz": iconSize,
+        }
     }
     verticalAlignment: Text.AlignVCenter
     color: Appearance.m3colors.m3onBackground
@@ -24,11 +30,4 @@ Text {
     //         easing.bezierCurve: Appearance?.animation.elementMoveFast.bezierCurve ?? [0.34, 0.80, 0.34, 1.00, 1, 1]
     //     }
     // }
-
-    font.variableAxes: { 
-        "FILL": truncatedFill,
-        // "wght": font.weight,
-        // "GRAD": 0,
-        "opsz": iconSize,
-    }
 }

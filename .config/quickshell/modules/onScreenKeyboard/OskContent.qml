@@ -13,7 +13,7 @@ import Quickshell.Hyprland
 
 Item {
     id: root    
-    property var activeLayoutName: ConfigOptions?.osk.layout ?? Layouts.defaultLayout
+    property var activeLayoutName: Config.options?.osk.layout ?? Layouts.defaultLayout
     property var layouts: Layouts.byName
     property var currentLayout: layouts[activeLayoutName]
 

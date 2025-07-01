@@ -15,7 +15,7 @@ QuickToggleButton {
         toggleBluetooth.running = true
     }
     altAction: () => {
-        Quickshell.execDetached(["bash", "-c", `${ConfigOptions.apps.bluetooth}`])
+        Quickshell.execDetached(["bash", "-c", `${Config.options.apps.bluetooth}`])
         Hyprland.dispatch("global quickshell:sidebarRightClose")
     }
     Process {
