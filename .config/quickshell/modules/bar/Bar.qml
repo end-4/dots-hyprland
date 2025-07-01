@@ -314,7 +314,7 @@ Scope {
                 // Weather
                 Loader {
                     id: weatherLoader
-                    active: Config.options.bar.weather.show
+                    active: Config.options.bar.weather.enable
                     anchors.left: middleSection.right
                     anchors.margins: 10
                     sourceComponent: BarGroup {

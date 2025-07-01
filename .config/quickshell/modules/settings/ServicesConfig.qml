@@ -141,10 +141,10 @@ ContentPage {
     ContentSection {
         title: "Weather"
         ConfigSwitch {
-            text: "Show"
-            checked: Config.options.bar.weather.show
+            text: "enable"
+            checked: Config.options.bar.weather.enable
             onCheckedChanged: {
-                Config.options.bar.weather.show = checked;
+                Config.options.bar.weather.enable = checked;
             }
         }
     }
