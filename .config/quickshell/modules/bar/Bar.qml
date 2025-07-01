@@ -307,18 +307,19 @@ Scope {
                     }
 
                     VerticalBarSeparator {
-                        visible: ConfigOptions?.bar.borderless
+                        visible: Config.options.bar.borderless
                     }
                 }
 
                 // Weather
                 Loader {
                     id: weatherLoader
-                    active: ConfigOptions.bar.weather.show
+                    active: Config.options.bar.weather.show
                     anchors.left: middleSection.right
                     anchors.margins: 10
                     sourceComponent: BarGroup {
-                        implicitHeight: barHeight
+                        implicitHeight: Appearance.sizes.baseBarHeight
+                        height: Appearance.sizes.barHeight
                         WeatherBar {}
                     }
                 }
