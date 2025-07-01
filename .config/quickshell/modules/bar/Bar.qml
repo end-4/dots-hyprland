@@ -330,7 +330,7 @@ Scope {
                     anchors.right: parent.right
                     implicitHeight: Appearance.sizes.baseBarHeight
                     height: Appearance.sizes.barHeight
-                    width: (barRoot.width - middleSection.width) / 2
+                    width: barRoot.width - (barLeftSideMouseArea.width + middleSection.width + weatherLoader.width)
 
                     property bool hovered: false
                     property real lastScrollX: 0
