@@ -33,7 +33,7 @@ Item {
 
             MaterialSymbol {
                 fill: 0
-                text: WeatherIcons.codeToName[WeatherService.data.wCode]
+                text: WeatherIcons.codeToName[Weather.data.wCode]
                 iconSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer1
             }
@@ -42,7 +42,7 @@ Item {
                 visible: true
                 font.pixelSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer1
-                text: WeatherService.data.temp
+                text: Weather.data.temp
             }
         }
     }

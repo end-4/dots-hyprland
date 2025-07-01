@@ -34,7 +34,7 @@ Rectangle {
             }
 
             StyledText {
-                text: WeatherService.data.city
+                text: Weather.data.city
                 font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
                 color: Appearance.colors.colOnLayer0
@@ -52,42 +52,42 @@ Rectangle {
             WeatherCard {
                 title: "UV Index"
                 symbol: "wb_sunny"
-                value: WeatherService.data.uv
+                value: Weather.data.uv
             }
             WeatherCard {
                 title: "Wind"
                 symbol: "air"
-                value: `(${WeatherService.data.windDir}) ${WeatherService.data.wind}`
+                value: `(${Weather.data.windDir}) ${Weather.data.wind}`
             }
             WeatherCard {
                 title: "Precipitation"
                 symbol: "rainy_light"
-                value: WeatherService.data.precip
+                value: Weather.data.precip
             }
             WeatherCard {
                 title: "Humidity"
                 symbol: "humidity_low"
-                value: WeatherService.data.humidity
+                value: Weather.data.humidity
             }
             WeatherCard {
                 title: "Visibility"
                 symbol: "visibility"
-                value: WeatherService.data.visib
+                value: Weather.data.visib
             }
             WeatherCard {
                 title: "Pressure"
                 symbol: "readiness_score"
-                value: WeatherService.data.press
+                value: Weather.data.press
             }
             WeatherCard {
                 title: "Sunrise"
                 symbol: "wb_twilight"
-                value: WeatherService.data.sunrise
+                value: Weather.data.sunrise
             }
             WeatherCard {
                 title: "Sunset"
                 symbol: "bedtime"
-                value: WeatherService.data.sunset
+                value: Weather.data.sunset
             }
         }
     }
