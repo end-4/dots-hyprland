@@ -9,8 +9,8 @@ import QtQuick.Layouts
 
 Item {
     id: root
-    property real margin: 5
-    implicitHeight: 32
+    property real margin: 10
+    implicitHeight: mouseArea.implicitHeight
     implicitWidth: mouseArea.implicitWidth + margin * 2
 
     MouseArea {
@@ -30,12 +30,12 @@ Item {
 
         RowLayout {
             id: rowLayout
-
             MaterialSymbol {
                 fill: 0
                 text: WeatherIcons.codeToName[Weather.data.wCode]
                 iconSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer1
+                Layout.alignment: Qt.AlignVCenter
             }
 
             StyledText {
@@ -43,6 +43,7 @@ Item {
                 font.pixelSize: Appearance.font.pixelSize.large
                 color: Appearance.colors.colOnLayer1
                 text: Weather.data.temp
+                Layout.alignment: Qt.AlignVCenter
             }
         }
     }

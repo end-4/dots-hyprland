@@ -85,7 +85,7 @@ Scope {
                         }
                     }
                 }
-                
+
                 // Background shadow
                 Loader {
                     active: showBarBackground && Config.options.bar.cornerStyle === 1
@@ -105,7 +105,7 @@ Scope {
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                     radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
                 }
-                
+
                 MouseArea { // Left side | scroll to change brightness
                     id: barLeftSideMouseArea
                     anchors.left: parent.left
@@ -203,8 +203,7 @@ Scope {
                                     anchors.centerIn: parent
                                     width: 19.5
                                     height: 19.5
-                                    source: Config.options.bar.topLeftIcon == 'distro' ? 
-                                        SystemInfo.distroIcon : "spark-symbolic"
+                                    source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : "spark-symbolic"
                                 }
 
                                 ColorOverlay {
@@ -246,7 +245,9 @@ Scope {
                         }
                     }
 
-                    VerticalBarSeparator {visible: Config.options?.bar.borderless}
+                    VerticalBarSeparator {
+                        visible: Config.options?.bar.borderless
+                    }
 
                     BarGroup {
                         id: middleCenterGroup
@@ -271,7 +272,9 @@ Scope {
                         }
                     }
 
-                    VerticalBarSeparator {visible: Config.options?.bar.borderless}
+                    VerticalBarSeparator {
+                        visible: Config.options?.bar.borderless
+                    }
 
                     MouseArea {
                         id: rightCenterGroup
@@ -307,20 +310,7 @@ Scope {
                     }
 
                     VerticalBarSeparator {
-                        visible: Config.options.bar.borderless
-                    }
-                }
-
-                // Weather
-                Loader {
-                    id: weatherLoader
-                    active: Config.options.bar.weather.enable
-                    anchors.left: middleSection.right
-                    anchors.margins: 10
-                    sourceComponent: BarGroup {
-                        implicitHeight: Appearance.sizes.baseBarHeight
-                        height: Appearance.sizes.barHeight
-                        WeatherBar {}
+                        visible: Config.options.bar.borderless && Config.options.bar.weather.enable
                     }
                 }
 
@@ -330,7 +320,7 @@ Scope {
                     anchors.right: parent.right
                     implicitHeight: Appearance.sizes.baseBarHeight
                     height: Appearance.sizes.barHeight
-                    width: barRoot.width - (barLeftSideMouseArea.width + middleSection.width + weatherLoader.width)
+                    width: (barRoot.width - middleSection.width) / 2
 
                     property bool hovered: false
                     property real lastScrollX: 0
@@ -493,6 +483,15 @@ Scope {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+
+                                // Weather
+                                Loader {
+                                    active: Config.options.bar.weather.enable
+                                    sourceComponent: BarGroup {
+                                        implicitHeight: Appearance.sizes.baseBarHeight
+                                        WeatherBar {}
+                                    }
+                                }
                             }
                         }
                     }
