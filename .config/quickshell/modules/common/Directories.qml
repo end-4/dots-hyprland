@@ -31,6 +31,8 @@ Singleton {
     property string generatedMaterialThemePath: FileUtils.trimFileProtocol(`${Directories.state}/user/generated/colors.json`)
     property string cliphistDecode: FileUtils.trimFileProtocol(`/tmp/quickshell/media/cliphist`)
     property string wallpaperSwitchScriptPath: FileUtils.trimFileProtocol(`${Directories.scriptPath}/colors/switchwall.sh`)
+    property string defaultAiPrompts: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/defaults/ai/prompts`)
+    property string userAiPrompts: FileUtils.trimFileProtocol(`${Directories.shellConfig}/ai/prompts`)
     // Cleanup on init
     Component.onCompleted: {
         Quickshell.execDetached(["bash", "-c", `mkdir -p '${shellConfig}'`])

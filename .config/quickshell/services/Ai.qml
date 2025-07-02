@@ -36,6 +36,10 @@ Singleton {
         return modelName.replace(/:/g, "_").replace(/\./g, "_")
     }
 
+    property list<var> defaultPrompts: []
+    property list<var> userPrompts: []
+    property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
+
     // Model properties:
     // - name: Name of the model
     // - icon: Icon name of the model
@@ -206,7 +210,6 @@ Singleton {
 
     Component.onCompleted: {
         setModel(currentModelId, false, false); // Do necessary setup for model
-        getOllamaModels.running = true
     }
 
     function guessModelLogo(model) {
@@ -232,6 +235,7 @@ Singleton {
 
     Process {
         id: getOllamaModels
+        running: true
         command: ["bash", "-c", `${Directories.config}/quickshell/scripts/ai/show-installed-ollama-models.sh`.replace(/file:\/\//, "")]
         stdout: SplitParser {
             onRead: data => {
@@ -258,6 +262,54 @@ Singleton {
                 }
             }
         }
+    }
+
+    Process {
+        id: getDefaultPrompts
+        running: true
+        command: ["ls", "-1", Directories.defaultAiPrompts]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length === 0) return;
+                root.defaultPrompts = text.split("\n")
+                    .filter(fileName => fileName.endsWith(".md") || fileName.endsWith(".txt"))
+                    .map(fileName => `${Directories.defaultAiPrompts}/${fileName}`)
+            }
+        }
+    }
+
+    Process {
+        id: getUserPrompts
+        running: true
+        command: ["ls", "-1", Directories.userAiPrompts]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length === 0) return;
+                root.userPrompts = text.split("\n")
+                    .filter(fileName => fileName.endsWith(".md") || fileName.endsWith(".txt"))
+                    .map(fileName => `${Directories.userAiPrompts}/${fileName}`)
+            }
+        }
+    }
+
+    FileView {
+        id: promptLoader
+        watchChanges: false;
+        onLoadedChanged: {
+            if (!promptLoader.loaded) return;
+            Config.options.ai.systemPrompt = promptLoader.text();
+            root.addMessage(StringUtils.format("Loaded the following system prompt\n\n---\n\n{0}", Config.options.ai.systemPrompt), root.interfaceRole);
+        }
+    }
+
+    function printPrompt() {
+        root.addMessage(StringUtils.format("The current system prompt is\n\n---\n\n{0}", Config.options.ai.systemPrompt), root.interfaceRole);
+    }
+
+    function loadPrompt(filePath) {
+        promptLoader.path = "" // Unload
+        promptLoader.path = filePath; // Load
+        promptLoader.reload();
     }
 
     function addMessage(message, role) {
@@ -306,7 +358,7 @@ Singleton {
                 return;
             }
             if (setPersistentState) Persistent.states.ai.model = modelId;
-            if (feedback) root.addMessage(StringUtils.format(StringUtils.format("Model set to {0}"), model.name), root.interfaceRole);
+            if (feedback) root.addMessage(StringUtils.format("Model set to {0}", model.name), root.interfaceRole);
             if (model.requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[model.key_id] || root.apiKeys[model.key_id].length === 0)) {

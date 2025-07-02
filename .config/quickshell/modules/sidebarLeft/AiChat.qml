@@ -50,10 +50,14 @@ Item {
             }
         },
         {
-            name: "clear",
-            description: qsTr("Clear chat history"),
-            execute: () => {
-                Ai.clearMessages();
+            name: "prompt",
+            description: qsTr("Set the system prompt for the model."),
+            execute: (args) => {
+                if (args.length === 0 || args[0] === "get") {
+                    Ai.printPrompt();
+                    return;
+                }
+                Ai.loadPrompt(args.join(" ").trim());
             }
         },
         {
@@ -65,6 +69,13 @@ Item {
                 } else {
                     Ai.setApiKey(args[0]);
                 }
+            }
+        },
+        {
+            name: "clear",
+            description: qsTr("Clear chat history"),
+            execute: () => {
+                Ai.clearMessages();
             }
         },
         {
@@ -367,6 +378,24 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "model ") : ""}${model.target}`,
                                     displayName: `${Ai.models[model.target].name}`,
                                     description: `${Ai.models[model.target].description}`,
+                                }
+                            })
+                        } else if(messageInputField.text.startsWith(`${root.commandPrefix}prompt`)) {
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.promptFiles.map(file => {
+                                return {
+                                    name: Fuzzy.prepare(file),
+                                    obj: file,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            root.suggestionList = promptFileResults.map(file => {
+                                return {
+                                    name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "prompt ") : ""}${file.target}`,
+                                    displayName: `${FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target))}`,
+                                    description: `Load prompt from ${file.target}`,
                                 }
                             })
                         } else if(messageInputField.text.startsWith(root.commandPrefix)) {
