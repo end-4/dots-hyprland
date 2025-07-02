@@ -24,7 +24,6 @@ QuickToggleButton {
         running: true
         command: ["bash", "-c", `test "$(hyprctl getoption animations:enabled -j | jq ".int")" -ne 0`]
         onExited: (exitCode, exitStatus) => {
-            console.log("Game mode toggle exited with code:", exitCode, "and status:", exitStatus)
             root.toggled = exitCode !== 0 // Inverted because enabled = nonzero exit
         }
     }

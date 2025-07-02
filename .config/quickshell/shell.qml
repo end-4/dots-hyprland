@@ -32,7 +32,7 @@ ShellRoot {
     property bool enableBar: true
     property bool enableBackgroundWidgets: true
     property bool enableCheatsheet: true
-    property bool enableDock: false
+    property bool enableDock: true
     property bool enableMediaControls: true
     property bool enableNotificationPopup: true
     property bool enableOnScreenDisplayBrightness: true
@@ -48,8 +48,6 @@ ShellRoot {
     // Force initialization of some singletons
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        ConfigLoader.loadConfig()
-        PersistentStateManager.loadStates()
         Cliphist.refresh()
         FirstRunExperience.load()
     }
@@ -57,7 +55,7 @@ ShellRoot {
     LazyLoader { active: enableBar; component: Bar {} }
     LazyLoader { active: enableBackgroundWidgets; component: BackgroundWidgets {} }
     LazyLoader { active: enableCheatsheet; component: Cheatsheet {} }
-    LazyLoader { active: enableDock; component: Dock {} }
+    LazyLoader { active: enableDock && Config.options.dock.enable; component: Dock {} }
     LazyLoader { active: enableMediaControls; component: MediaControls {} }
     LazyLoader { active: enableNotificationPopup; component: NotificationPopup {} }
     LazyLoader { active: enableOnScreenDisplayBrightness; component: OnScreenDisplayBrightness {} }

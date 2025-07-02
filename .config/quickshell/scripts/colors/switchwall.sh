@@ -237,7 +237,7 @@ switch() {
     [[ -n "$mode_flag" ]] && matugen_args+=(--mode "$mode_flag") && generate_colors_material_args+=(--mode "$mode_flag")
     [[ -n "$type_flag" ]] && matugen_args+=(--type "$type_flag") && generate_colors_material_args+=(--scheme "$type_flag")
     generate_colors_material_args+=(--termscheme "$terminalscheme" --blend_bg_fg)
-    generate_colors_material_args+=(--cache "$STATE_DIR/user/color.txt")
+    generate_colors_material_args+=(--cache "$STATE_DIR/user/generated/color.txt")
 
     pre_process "$mode_flag"
 

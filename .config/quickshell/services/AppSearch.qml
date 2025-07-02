@@ -12,7 +12,7 @@ import Quickshell.Io
  */
 Singleton {
     id: root
-    property bool sloppySearch: ConfigOptions?.search.sloppy ?? false
+    property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
         "code-url-handler": "visual-studio-code",

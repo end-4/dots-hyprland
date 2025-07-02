@@ -108,8 +108,8 @@ Scope {
             WlrLayershell.namespace: "quickshell:mediaControls"
 
             anchors {
-                top: !ConfigOptions.bar.bottom
-                bottom: ConfigOptions.bar.bottom
+                top: !Config.options.bar.bottom
+                bottom: Config.options.bar.bottom
                 left: true
             }
             mask: Region {

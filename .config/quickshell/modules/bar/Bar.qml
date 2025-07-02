@@ -15,13 +15,12 @@ import Quickshell.Services.UPower
 Scope {
     id: bar
 
-    readonly property int barHeight: Appearance.sizes.barHeight
     readonly property int osdHideMouseMoveThreshold: 20
-    property bool showBarBackground: ConfigOptions.bar.showBackground
+    property bool showBarBackground: Config.options.bar.showBackground
 
     component VerticalBarSeparator: Rectangle {
-        Layout.topMargin: barHeight / 3
-        Layout.bottomMargin: barHeight / 3
+        Layout.topMargin: Appearance.sizes.baseBarHeight / 3
+        Layout.bottomMargin: Appearance.sizes.baseBarHeight / 3
         Layout.fillHeight: true
         implicitWidth: 1
         color: Appearance.colors.colOutlineVariant
@@ -30,7 +29,7 @@ Scope {
     Variants { // For each monitor
         model: {
             const screens = Quickshell.screens;
-            const list = ConfigOptions.bar.screenList;
+            const list = Config.options.bar.screenList;
             if (!list || list.length === 0)
                 return screens;
             return screens.filter(screen => list.includes(screen.name));
@@ -38,9 +37,9 @@ Scope {
 
         PanelWindow { // Bar window
             id: barRoot
+            required property ShellScreen modelData
             screen: modelData
 
-            property ShellScreen modelData
             property var brightnessMonitor: Brightness.getMonitorForScreen(modelData)
             property real useShortenedForm: (Appearance.sizes.barHellaShortenScreenWidthThreshold >= screen.width) ? 2 :
                 (Appearance.sizes.barShortenScreenWidthThreshold >= screen.width) ? 1 : 0
@@ -50,35 +49,70 @@ Scope {
                     Appearance.sizes.barCenterSideModuleWidth
 
             WlrLayershell.namespace: "quickshell:bar"
-            implicitHeight: barHeight + Appearance.rounding.screenRounding
-            exclusiveZone: showBarBackground ? barHeight : (barHeight - 4)
+            implicitHeight: Appearance.sizes.barHeight + Appearance.rounding.screenRounding
+            exclusiveZone: Appearance.sizes.baseBarHeight + (Config.options.bar.cornerStyle === 1 ? Appearance.sizes.hyprlandGapsOut : 0)
             mask: Region {
                 item: barContent
             }
             color: "transparent"
 
             anchors {
-                top: !ConfigOptions.bar.bottom
-                bottom: ConfigOptions.bar.bottom
+                top: !Config.options.bar.bottom
+                bottom: Config.options.bar.bottom
                 left: true
                 right: true
             }
 
-            Rectangle { // Bar background
+            Item { // Bar content region
                 id: barContent
                 anchors {
                     right: parent.right
                     left: parent.left
-                    top: !ConfigOptions.bar.bottom ? parent.top : undefined
-                    bottom: ConfigOptions.bar.bottom ? parent.bottom : undefined
+                    top: parent.top
+                    bottom: undefined
                 }
-                color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                height: barHeight
+                implicitHeight: Appearance.sizes.barHeight
+                height: Appearance.sizes.barHeight
+
+                states: State {
+                    name: "bottom"
+                    when: Config.options.bar.bottom
+                    AnchorChanges {
+                        target: barContent
+                        anchors {
+                            right: parent.right
+                            left: parent.left
+                            top: undefined
+                            bottom: parent.bottom
+                        }
+                    }
+                }
+                
+                // Background shadow
+                Loader {
+                    active: showBarBackground && Config.options.bar.cornerStyle === 1
+                    anchors.fill: barBackground
+                    sourceComponent: StyledRectangularShadow {
+                        anchors.fill: undefined // The loader's anchors act on this, and this should not have any anchor
+                        target: barBackground
+                    }
+                }
+                // Background
+                Rectangle {
+                    id: barBackground
+                    anchors {
+                        fill: parent
+                        margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
+                    }
+                    color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                    radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
+                }
                 
                 MouseArea { // Left side | scroll to change brightness
                     id: barLeftSideMouseArea
                     anchors.left: parent.left
-                    implicitHeight: barHeight
+                    implicitHeight: Appearance.sizes.baseBarHeight
+                    height: Appearance.sizes.barHeight
                     width: (barRoot.width - middleSection.width) / 2
                     property bool hovered: false
                     property real lastScrollX: 0
@@ -170,7 +204,7 @@ Scope {
                                     anchors.centerIn: parent
                                     width: 19.5
                                     height: 19.5
-                                    source: ConfigOptions.bar.topLeftIcon == 'distro' ? 
+                                    source: Config.options.bar.topLeftIcon == 'distro' ? 
                                         SystemInfo.distroIcon : "spark-symbolic"
                                 }
                                 
@@ -195,7 +229,7 @@ Scope {
                 RowLayout { // Middle section
                     id: middleSection
                     anchors.centerIn: parent
-                    spacing: ConfigOptions?.bar.borderless ? 4 : 8
+                    spacing: Config.options?.bar.borderless ? 4 : 8
 
                     BarGroup {
                         id: leftCenterGroup
@@ -214,7 +248,7 @@ Scope {
 
                     }
 
-                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
+                    VerticalBarSeparator {visible: Config.options?.bar.borderless}
 
                     BarGroup {
                         id: middleCenterGroup
@@ -238,7 +272,7 @@ Scope {
                         }
                     }
 
-                    VerticalBarSeparator {visible: ConfigOptions?.bar.borderless}
+                    VerticalBarSeparator {visible: Config.options?.bar.borderless}
 
                     MouseArea {
                         id: rightCenterGroup
@@ -256,13 +290,13 @@ Scope {
                             anchors.fill: parent
                             
                             ClockWidget {
-                                showDate: (ConfigOptions.bar.verbose && barRoot.useShortenedForm < 2)
+                                showDate: (Config.options.bar.verbose && barRoot.useShortenedForm < 2)
                                 Layout.alignment: Qt.AlignVCenter
                                 Layout.fillWidth: true
                             }
 
                             UtilButtons {
-                                visible: (ConfigOptions.bar.verbose && barRoot.useShortenedForm === 0)
+                                visible: (Config.options.bar.verbose && barRoot.useShortenedForm === 0)
                                 Layout.alignment: Qt.AlignVCenter
                             }
 
@@ -279,7 +313,8 @@ Scope {
                     id: barRightSideMouseArea
 
                     anchors.right: parent.right
-                    implicitHeight: barHeight
+                    implicitHeight: Appearance.sizes.baseBarHeight
+                    height: Appearance.sizes.barHeight
                     width: (barRoot.width - middleSection.width) / 2
 
                     property bool hovered: false
@@ -354,10 +389,14 @@ Scope {
                     
                             RippleButton { // Right sidebar button
                                 id: rightSidebarButton
-                                Layout.margins: 4
+
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 Layout.rightMargin: Appearance.rounding.screenRounding
-                                Layout.fillHeight: true
-                                implicitWidth: indicatorsRowLayout.implicitWidth + 10*2
+                                Layout.fillWidth: false
+
+                                implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2
+                                implicitHeight: indicatorsRowLayout.implicitHeight + 5 * 2
+
                                 buttonRadius: Appearance.rounding.full
                                 colBackground: barRightSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
                                 colBackgroundHover: Appearance.colors.colLayer1Hover
@@ -447,32 +486,68 @@ Scope {
             }
 
             // Round decorators
-            Item {
+            Loader {
+                id: roundDecorators
                 anchors {
                     left: parent.left
                     right: parent.right
-                    // top: barContent.bottom
-                    top: ConfigOptions.bar.bottom ? undefined : barContent.bottom
-                    bottom: ConfigOptions.bar.bottom ? barContent.top : undefined
                 }
+                y: Appearance.sizes.barHeight
+                width: parent.width
                 height: Appearance.rounding.screenRounding
-                visible: showBarBackground
+                active: showBarBackground && Config.options.bar.cornerStyle === 0 // Hug
 
-                RoundCorner {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    size: Appearance.rounding.screenRounding
-                    corner: ConfigOptions.bar.bottom ? cornerEnum.bottomLeft : cornerEnum.topLeft
-                    color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                    opacity: 1.0 - Appearance.transparency
+                states: State {
+                    name: "bottom"
+                    when: Config.options.bar.bottom
+                    PropertyChanges {
+                        roundDecorators.y: 0
+                    }
                 }
-                RoundCorner {
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    size: Appearance.rounding.screenRounding
-                    corner: ConfigOptions.bar.bottom ? cornerEnum.bottomRight : cornerEnum.topRight
-                    color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                    opacity: 1.0 - Appearance.transparency
+
+                sourceComponent: Item {
+                    implicitHeight: Appearance.rounding.screenRounding
+                    RoundCorner {
+                        id: leftCorner
+                        anchors {
+                            top: parent.top
+                            bottom: parent.bottom
+                            left: parent.left
+                        }
+
+                        size: Appearance.rounding.screenRounding
+                        color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                        opacity: 1.0 - Appearance.transparency
+
+                        corner: RoundCorner.CornerEnum.TopLeft
+                        states: State {
+                            name: "bottom"
+                            when: Config.options.bar.bottom
+                            PropertyChanges {
+                                leftCorner.corner: RoundCorner.CornerEnum.BottomLeft
+                            }
+                        }
+                    }
+                    RoundCorner {
+                        id: rightCorner
+                        anchors {
+                            right: parent.right
+                            top: !Config.options.bar.bottom ? parent.top : undefined
+                            bottom: Config.options.bar.bottom ? parent.bottom : undefined
+                        }
+                        size: Appearance.rounding.screenRounding
+                        color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
+                        opacity: 1.0 - Appearance.transparency
+
+                        corner: RoundCorner.CornerEnum.TopRight
+                        states: State {
+                            name: "bottom"
+                            when: Config.options.bar.bottom
+                            PropertyChanges {
+                                rightCorner.corner: RoundCorner.CornerEnum.BottomRight
+                            }
+                        }
+                    }
                 }
             }
 

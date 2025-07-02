@@ -56,7 +56,6 @@ ApplicationWindow {
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
-        ConfigLoader.loadConfig()
     }
 
     minimumWidth: 600
@@ -93,15 +92,15 @@ ApplicationWindow {
         }
 
         Item { // Titlebar
-            visible: ConfigOptions?.windows.showTitlebar
+            visible: Config.options?.windows.showTitlebar
             Layout.fillWidth: true
             Layout.fillHeight: false
             implicitHeight: Math.max(titleText.implicitHeight, windowControlsRow.implicitHeight)
             StyledText {
                 id: titleText
                 anchors {
-                    left: ConfigOptions.windows.centerTitle ? undefined : parent.left
-                    horizontalCenter: ConfigOptions.windows.centerTitle ? parent.horizontalCenter : undefined
+                    left: Config.options.windows.centerTitle ? undefined : parent.left
+                    horizontalCenter: Config.options.windows.centerTitle ? parent.horizontalCenter : undefined
                     verticalCenter: parent.verticalCenter
                     leftMargin: 12
                 }

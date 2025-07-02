@@ -188,6 +188,7 @@ Item { // Notification item area
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
+                    maximumLineCount: 1
                     textFormat: Text.StyledText
                     text: {
                         return processNotificationBody(notificationObject.body, notificationObject.appName || notificationObject.summary).replace(/\n/g, "<br/>")

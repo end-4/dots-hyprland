@@ -16,14 +16,20 @@ Singleton {
     property var addresses: []
     property var windowByAddress: ({})
     property var monitors: []
+    property var layers: ({})
 
     function updateWindowList() {
         getClients.running = true
         getMonitors.running = true
     }
 
+    function updateLayers() {
+        getLayers.running = true
+    }
+
     Component.onCompleted: {
         updateWindowList()
+        updateLayers()
     }
 
     Connections {
@@ -56,12 +62,23 @@ Singleton {
             }
         }
     }
+
     Process {
         id: getMonitors
         command: ["bash", "-c", "hyprctl monitors -j | jq -c"]
         stdout: SplitParser {
             onRead: (data) => {
                 root.monitors = JSON.parse(data)
+            }
+        }
+    }
+
+    Process {
+        id: getLayers
+        command: ["bash", "-c", "hyprctl layers -j | jq -c"]
+        stdout: SplitParser {
+            onRead: (data) => {
+                root.layers = JSON.parse(data)
             }
         }
     }

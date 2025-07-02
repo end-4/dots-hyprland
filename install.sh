@@ -144,7 +144,7 @@ esac
 
 v sudo usermod -aG video,i2c,input "$(whoami)"
 v bash -c "echo i2c-dev | sudo tee /etc/modules-load.d/i2c-dev.conf"
-v sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -s /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu
+v sudo pacman -S archlinux-xdg-menu && XDG_MENU_PREFIX=arch- kbuildsycoca6; sudo ln -sf /etc/xdg/menus/plasma-applications.menu /etc/xdg/menus/applications.menu
 v systemctl --user enable ydotool --now
 v sudo systemctl enable bluetooth --now
 v gsettings set org.gnome.desktop.interface font-name 'Rubik 11'

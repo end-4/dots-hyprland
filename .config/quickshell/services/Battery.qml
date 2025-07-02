@@ -12,11 +12,11 @@ Singleton {
     property bool isCharging: chargeState == UPowerDeviceState.Charging
     property bool isPluggedIn: isCharging || chargeState == UPowerDeviceState.PendingCharge
     property real percentage: UPower.displayDevice.percentage
-    readonly property bool allowAutomaticSuspend: ConfigOptions.battery.automaticSuspend
+    readonly property bool allowAutomaticSuspend: Config.options.battery.automaticSuspend
 
-    property bool isLow: percentage <= ConfigOptions.battery.low / 100
-    property bool isCritical: percentage <= ConfigOptions.battery.critical / 100
-    property bool isSuspending: percentage <= ConfigOptions.battery.suspend / 100
+    property bool isLow: percentage <= Config.options.battery.low / 100
+    property bool isCritical: percentage <= Config.options.battery.critical / 100
+    property bool isSuspending: percentage <= Config.options.battery.suspend / 100
 
     property bool isLowAndNotCharging: isLow && !isCharging
     property bool isCriticalAndNotCharging: isCritical && !isCharging
@@ -29,7 +29,7 @@ Singleton {
 
     onIsCriticalAndNotChargingChanged: {
         if (available && isCriticalAndNotCharging) 
-            Quickshell.execDetached(["bash", "-c", `notify-send "Critically low battery" "🙏 I beg for pleas charg\nAutomatic suspend triggers at ${ConfigOptions.battery.suspend}%" -u critical -a "Shell"`]);
+            Quickshell.execDetached(["bash", "-c", `notify-send "Critically low battery" "🙏 I beg for pleas charg\nAutomatic suspend triggers at ${Config.options.battery.suspend}%" -u critical -a "Shell"`]);
     }
 
     onIsSuspendingAndNotChargingChanged: {
