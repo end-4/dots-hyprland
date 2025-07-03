@@ -11,38 +11,58 @@ ContentPage {
         title: "Policies"
 
         ConfigRow {
-            ColumnLayout { // Weeb policy
+            ColumnLayout {
+                // Weeb policy
                 ContentSubsectionLabel {
                     text: "Weeb"
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.weeb
                     configOptionName: "policies.weeb"
-                    onSelected: (newValue) => {
+                    onSelected: newValue => {
                         Config.options.policies.weeb = newValue;
                     }
                     options: [
-                        { displayName: "No", value: 0 },
-                        { displayName: "Yes", value: 1 },
-                        { displayName: "Closet", value: 2 }
+                        {
+                            displayName: "No",
+                            value: 0
+                        },
+                        {
+                            displayName: "Yes",
+                            value: 1
+                        },
+                        {
+                            displayName: "Closet",
+                            value: 2
+                        }
                     ]
                 }
             }
 
-            ColumnLayout { // AI policy
+            ColumnLayout {
+                // AI policy
                 ContentSubsectionLabel {
                     text: "AI"
                 }
                 ConfigSelectionArray {
                     currentValue: Config.options.policies.ai
                     configOptionName: "policies.ai"
-                    onSelected: (newValue) => {
+                    onSelected: newValue => {
                         Config.options.policies.ai = newValue;
                     }
                     options: [
-                        { displayName: "No", value: 0 },
-                        { displayName: "Yes", value: 1 },
-                        { displayName: "Local only", value: 2 }
+                        {
+                            displayName: "No",
+                            value: 0
+                        },
+                        {
+                            displayName: "Yes",
+                            value: 1
+                        },
+                        {
+                            displayName: "Local only",
+                            value: 2
+                        }
                     ]
                 }
             }
@@ -55,13 +75,22 @@ ContentPage {
         ConfigSelectionArray {
             currentValue: Config.options.bar.cornerStyle
             configOptionName: "bar.cornerStyle"
-            onSelected: (newValue) => {
+            onSelected: newValue => {
                 Config.options.bar.cornerStyle = newValue;
             }
             options: [
-                { displayName: "Hug", value: 0 },
-                { displayName: "Float", value: 1 },
-                { displayName: "Plain rectangle", value: 2 }
+                {
+                    displayName: "Hug",
+                    value: 0
+                },
+                {
+                    displayName: "Float",
+                    value: 1
+                },
+                {
+                    displayName: "Plain rectangle",
+                    value: 2
+                }
             ]
         }
 
@@ -182,7 +211,7 @@ ContentPage {
                     Config.options.bar.workspaces.showNumberDelay = value;
                 }
             }
-        }   
+        }
     }
 
     ContentSection {
@@ -237,6 +266,36 @@ ContentPage {
     }
 
     ContentSection {
+        title: "Dock"
+
+        ConfigSwitch {
+            text: "Enable"
+            checked: Config.options.dock.enable
+            onCheckedChanged: {
+                Config.options.dock.enable = checked;
+            }
+        }
+
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                text: "Hover to reveal"
+                checked: Config.options.dock.hoverToReveal
+                onCheckedChanged: {
+                    Config.options.dock.hoverToReveal = checked;
+                }
+            }
+            ConfigSwitch {
+                text: "Pinned on startup"
+                checked: Config.options.dock.pinnedOnStartup
+                onCheckedChanged: {
+                    Config.options.dock.pinnedOnStartup = checked;
+                }
+            }
+        }
+    }
+
+    ContentSection {
         title: "Overview"
         ConfigSpinBox {
             text: "Scale (%)"
@@ -271,6 +330,5 @@ ContentPage {
                 }
             }
         }
-        
     }
 }
