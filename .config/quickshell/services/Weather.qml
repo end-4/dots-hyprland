@@ -45,7 +45,7 @@ Singleton {
         temp.sunset = data?.astronomy?.sunset || "0.0";
         temp.windDir = data?.current?.winddir16Point || "N";
         temp.wCode = data?.current?.weatherCode || "113";
-        temp.city = data?.location?.areaName[0].value || "Istanbul";
+        temp.city = data?.location?.areaName[0]?.value || "City";
         temp.temp = "";
         if (root.useUSCS) {
             temp.wind = (data?.current?.windspeedMiles || 0) + " mph";
