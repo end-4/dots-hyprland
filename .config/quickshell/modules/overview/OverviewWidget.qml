@@ -148,9 +148,10 @@ Item {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return ToplevelManager.toplevels.values.filter((toplevel) => {
                             const address = `0x${toplevel.HyprlandToplevel.address}`
-                            // console.log(`Checking window with address: ${address}`)
                             var win = windowByAddress[address]
-                            return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inMonitor = root.monitor.id === win.monitor
+                            return inWorkspaceGroup && inMonitor;
                         })
                     }
                 }
