@@ -117,6 +117,7 @@ Singleton {
                     property bool monochromeIcons: true
                 }
                 property JsonObject workspaces: JsonObject {
+                    property bool monochromeIcons: true
                     property int shown: 10
                     property bool showAppIcons: true
                     property bool alwaysShowNumbers: false
