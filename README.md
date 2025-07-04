@@ -70,9 +70,9 @@
     <h3></h3>
 </div>
 
-<!-- <div align="center">
-    <img src="illogical-impulse.svg" alt="illogical-impulse logo">
-</div> -->
+<div align="center">
+    <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo">
+</div>
 
 ### Quickshell
 
