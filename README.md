@@ -74,7 +74,7 @@
     <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo">
 </div>
 
-### Quickshell
+### illogical-impulse<sup>Quickshell</sup>
 
 | AI | Common widgets |
 |:---|:---------------|
@@ -86,7 +86,7 @@ By the way...
 - The funny notification positions are mimicking Android 16's dragging behavior
 - The clock on the wallpaper is automatically placed at the "least busy" region of the image
 
-### AGS
+### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
 | AI | Common widgets |
 |:---|:---------------|
