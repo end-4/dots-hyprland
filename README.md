@@ -74,7 +74,7 @@
     <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo">
 </div>
 
-_illogical-impulse is the latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below._
+_latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below._
 
 ### illogical-impulse<sup>Quickshell</sup>
 
