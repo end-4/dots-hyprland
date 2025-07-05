@@ -7,44 +7,37 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-Item {
+MouseArea {
     id: root
     property real margin: 10
-    implicitHeight: mouseArea.implicitHeight
-    implicitWidth: mouseArea.implicitWidth + margin * 2
+    property bool hovered: false
+    implicitWidth: rowLayout.implicitWidth + margin * 2
+    implicitHeight: rowLayout.implicitHeight
 
-    MouseArea {
-        id: mouseArea
-        property bool hovered: false
-        implicitWidth: rowLayout.implicitWidth
-        implicitHeight: rowLayout.implicitHeight
-        anchors.centerIn: root
+    hoverEnabled: true
+    onEntered: {
+        popupLoader.item.visible = true;
+    }
+    onExited: {
+        popupLoader.item.visible = false;
+    }
 
-        hoverEnabled: true
-        onEntered: {
-            popupLoader.item.visible = true;
+    RowLayout {
+        id: rowLayout
+        MaterialSymbol {
+            fill: 0
+            text: WeatherIcons.codeToName[Weather.data.wCode]
+            iconSize: Appearance.font.pixelSize.large
+            color: Appearance.colors.colOnLayer1
+            Layout.alignment: Qt.AlignVCenter
         }
-        onExited: {
-            popupLoader.item.visible = false;
-        }
 
-        RowLayout {
-            id: rowLayout
-            MaterialSymbol {
-                fill: 0
-                text: WeatherIcons.codeToName[Weather.data.wCode]
-                iconSize: Appearance.font.pixelSize.large
-                color: Appearance.colors.colOnLayer1
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            StyledText {
-                visible: true
-                font.pixelSize: Appearance.font.pixelSize.small
-                color: Appearance.colors.colOnLayer1
-                text: Weather.data.temp
-                Layout.alignment: Qt.AlignVCenter
-            }
+        StyledText {
+            visible: true
+            font.pixelSize: Appearance.font.pixelSize.small
+            color: Appearance.colors.colOnLayer1
+            text: Weather.data.temp
+            Layout.alignment: Qt.AlignVCenter
         }
     }
 
