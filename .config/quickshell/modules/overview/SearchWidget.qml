@@ -179,6 +179,8 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
+        border.width: 1
+        border.color: Appearance.m3colors.m3outlineVariant
 
         ColumnLayout {
             id: columnLayout
