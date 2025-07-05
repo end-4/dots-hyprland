@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/61d06199-d894-4dfc-84a6-b660ab98444a)<div align="center">
+<div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
     <h3></h3>
 </div>
