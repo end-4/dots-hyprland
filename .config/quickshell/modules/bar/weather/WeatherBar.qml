@@ -18,6 +18,8 @@ MouseArea {
 
     RowLayout {
         id: rowLayout
+        anchors.centerIn: parent
+        
         MaterialSymbol {
             fill: 0
             text: WeatherIcons.codeToName[Weather.data.wCode]
