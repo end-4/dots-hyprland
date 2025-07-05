@@ -15,12 +15,6 @@ MouseArea {
     implicitHeight: rowLayout.implicitHeight
 
     hoverEnabled: true
-    onEntered: {
-        popupLoader.item.visible = true;
-    }
-    onExited: {
-        popupLoader.item.visible = false;
-    }
 
     RowLayout {
         id: rowLayout
@@ -43,10 +37,11 @@ MouseArea {
 
     LazyLoader {
         id: popupLoader
-        active: true
+        active: root.containsMouse
 
         component: PopupWindow {
             id: popupWindow
+            visible: true
             implicitWidth: weatherPopup.implicitWidth
             implicitHeight: weatherPopup.implicitHeight
             anchor.item: root
