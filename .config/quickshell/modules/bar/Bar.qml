@@ -483,14 +483,14 @@ Scope {
                             Item {
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
+                            }
 
-                                // Weather
-                                Loader {
-                                    active: Config.options.bar.weather.enable
-                                    sourceComponent: BarGroup {
-                                        implicitHeight: Appearance.sizes.baseBarHeight
-                                        WeatherBar {}
-                                    }
+                            // Weather
+                            Loader {
+                                active: Config.options.bar.weather.enable
+                                sourceComponent: BarGroup {
+                                    implicitHeight: Appearance.sizes.baseBarHeight
+                                    WeatherBar {}
                                 }
                             }
                         }

@@ -40,7 +40,7 @@ Item {
 
             StyledText {
                 visible: true
-                font.pixelSize: Appearance.font.pixelSize.large
+                font.pixelSize: Appearance.font.pixelSize.small
                 color: Appearance.colors.colOnLayer1
                 text: Weather.data.temp
                 Layout.alignment: Qt.AlignVCenter
