@@ -280,7 +280,7 @@ class GPTService extends Service {
                             }
                         }
                         else {
-                            if (aiResponse.hasReasoningContent) {
+                            if (aiResponse.hasReasoningContent && !aiResponse.parsedReasoningContent) {
                                 aiResponse.parsedReasoningContent = true;
                                 aiResponse.addDelta(`\n</think>\n`);
                             }
