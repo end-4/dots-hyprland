@@ -15,6 +15,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import "./services/"
@@ -44,6 +45,7 @@ ShellRoot {
 
     component TargetRegion: Rectangle {
         id: regionRect
+        property bool showIcon: false
         property bool targeted: false
         property color borderColor
         property color fillColor: "transparent"
@@ -69,13 +71,27 @@ ShellRoot {
                 topMargin: regionRect.textPadding
                 leftMargin: regionRect.textPadding
             }
-            implicitWidth: regionText.implicitWidth + horizontalPadding * 2
-            implicitHeight: regionText.implicitHeight + verticalPadding * 2
-            StyledText {
-                id: regionText
-                text: regionRect.text
-                color: root.genericContentForeground
+            implicitWidth: regionInfoRow.implicitWidth + horizontalPadding * 2
+            implicitHeight: regionInfoRow.implicitHeight + verticalPadding * 2
+            RowLayout {
+                id: regionInfoRow
                 anchors.centerIn: parent
+                spacing: 8
+
+                Loader {
+                    id: regionIconLoader
+                    active: regionRect.showIcon
+                    sourceComponent: IconImage {
+                        implicitSize: Appearance.font.pixelSize.larger
+                        source: Quickshell.iconPath(AppSearch.guessIcon(regionRect.text), "image-missing")
+                    }
+                }
+
+                StyledText {
+                    id: regionText
+                    text: regionRect.text
+                    color: root.genericContentForeground
+                }
             }
         }
     }
@@ -117,7 +133,7 @@ ShellRoot {
                 const layersOfThisMonitor = root.layers[panelWindow.hyprlandMonitor.name]
                 const topLayers = layersOfThisMonitor.levels["2"]
                 const nonBarTopLayers = topLayers
-                    .filter(layer => !(layer.namespace.includes(":bar")))
+                    .filter(layer => !(layer.namespace.includes(":bar") || layer.namespace.includes(":dock")))
                     .map(layer => {
                     return {
                         at: [layer.x, layer.y],
@@ -441,6 +457,7 @@ ShellRoot {
                         delegate: TargetRegion {
                             z: 2
                             required property var modelData
+                            showIcon: true
                             targeted: !panelWindow.draggedAway &&
                                 (panelWindow.targetedRegionX === modelData.at[0] 
                                 && panelWindow.targetedRegionY === modelData.at[1]
