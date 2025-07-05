@@ -1,4 +1,4 @@
-<div align="center">
+![image](https://github.com/user-attachments/assets/61d06199-d894-4dfc-84a6-b660ab98444a)<div align="center">
     <h1>【 end_4's Hyprland dotfiles 】</h1>
     <h3></h3>
 </div>
@@ -77,6 +77,8 @@
 _latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below._
 
 ### illogical-impulse<sup>Quickshell</sup>
+
+[Showcase video](https://www.youtube.com/watch?v=RPwovTInagE)
 
 | AI, settings app | Some widgets |
 |:---|:---------------|
