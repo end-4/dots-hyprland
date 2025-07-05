@@ -48,7 +48,7 @@ Item {
                 var map = new Map();
 
                 // Pinned apps
-                const pinnedApps = ConfigOptions?.dock.pinnedApps ?? [];
+                const pinnedApps = Config.options?.dock.pinnedApps ?? [];
                 for (const appId of pinnedApps) {
                     if (!map.has(appId.toLowerCase())) map.set(appId.toLowerCase(), ({
                         pinned: true,

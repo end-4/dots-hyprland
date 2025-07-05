@@ -15,11 +15,11 @@ import Qt5Compat.GraphicalEffects
 
 Item {
     required property var bar
-    property bool borderless: ConfigOptions.bar.borderless
+    property bool borderless: Config.options.bar.borderless
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(bar.screen)
     readonly property Toplevel activeWindow: ToplevelManager.activeToplevel
     
-    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / ConfigOptions.bar.workspaces.shown)
+    readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / Config.options.bar.workspaces.shown)
     property list<bool> workspaceOccupied: []
     property int widgetPadding: 4
     property int workspaceButtonWidth: 26
@@ -27,12 +27,12 @@ Item {
     property real workspaceIconSizeShrinked: workspaceButtonWidth * 0.55
     property real workspaceIconOpacityShrinked: 1
     property real workspaceIconMarginShrinked: -4
-    property int workspaceIndexInGroup: (monitor.activeWorkspace?.id - 1) % ConfigOptions.bar.workspaces.shown
+    property int workspaceIndexInGroup: (monitor.activeWorkspace?.id - 1) % Config.options.bar.workspaces.shown
 
     // Function to update workspaceOccupied
     function updateWorkspaceOccupied() {
-        workspaceOccupied = Array.from({ length: ConfigOptions.bar.workspaces.shown }, (_, i) => {
-            return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * ConfigOptions.bar.workspaces.shown + i + 1);
+        workspaceOccupied = Array.from({ length: Config.options.bar.workspaces.shown }, (_, i) => {
+            return Hyprland.workspaces.values.some(ws => ws.id === workspaceGroup * Config.options.bar.workspaces.shown + i + 1);
         })
     }
 
@@ -48,7 +48,7 @@ Item {
     }
 
     implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
-    implicitHeight: 40
+    implicitHeight: Appearance.sizes.barHeight
 
     // Scroll to switch workspaces
     WheelHandler {
@@ -78,10 +78,10 @@ Item {
 
         spacing: 0
         anchors.fill: parent
-        implicitHeight: 40
+        implicitHeight: Appearance.sizes.barHeight
 
         Repeater {
-            model: ConfigOptions.bar.workspaces.shown
+            model: Config.options.bar.workspaces.shown
 
             Rectangle {
                 z: 1
@@ -157,14 +157,14 @@ Item {
 
         spacing: 0
         anchors.fill: parent
-        implicitHeight: 40
+        implicitHeight: Appearance.sizes.barHeight
 
         Repeater {
-            model: ConfigOptions.bar.workspaces.shown
+            model: Config.options.bar.workspaces.shown
 
             Button {
                 id: button
-                property int workspaceValue: workspaceGroup * ConfigOptions.bar.workspaces.shown + index + 1
+                property int workspaceValue: workspaceGroup * Config.options.bar.workspaces.shown + index + 1
                 Layout.fillHeight: true
                 onPressed: Hyprland.dispatch(`workspace ${workspaceValue}`)
                 width: workspaceButtonWidth
@@ -185,8 +185,8 @@ Item {
 
                     StyledText { // Workspace number text
                         opacity: GlobalStates.workspaceShowNumbers
-                            || ((ConfigOptions?.bar.workspaces.alwaysShowNumbers && (!ConfigOptions?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || GlobalStates.workspaceShowNumbers))
-                            || (GlobalStates.workspaceShowNumbers && !ConfigOptions?.bar.workspaces.showAppIcons)
+                            || ((Config.options?.bar.workspaces.alwaysShowNumbers && (!Config.options?.bar.workspaces.showAppIcons || !workspaceButtonBackground.biggestWindow || GlobalStates.workspaceShowNumbers))
+                            || (GlobalStates.workspaceShowNumbers && !Config.options?.bar.workspaces.showAppIcons)
                             )  ? 1 : 0
                         z: 3
 
@@ -206,9 +206,10 @@ Item {
                         }
                     }
                     Rectangle { // Dot instead of ws number
-                        opacity: (ConfigOptions?.bar.workspaces.alwaysShowNumbers
+                        id: wsDot
+                        opacity: (Config.options?.bar.workspaces.alwaysShowNumbers
                             || GlobalStates.workspaceShowNumbers
-                            || (ConfigOptions?.bar.workspaces.showAppIcons && workspaceButtonBackground.biggestWindow)
+                            || (Config.options?.bar.workspaces.showAppIcons && workspaceButtonBackground.biggestWindow)
                             ) ? 0 : 1
                         visible: opacity > 0
                         anchors.centerIn: parent
@@ -228,21 +229,21 @@ Item {
                         anchors.centerIn: parent
                         width: workspaceButtonWidth
                         height: workspaceButtonWidth
-                        opacity: !ConfigOptions?.bar.workspaces.showAppIcons ? 0 :
-                            (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
+                        opacity: !Config.options?.bar.workspaces.showAppIcons ? 0 :
+                            (workspaceButtonBackground.biggestWindow && !GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                             1 : workspaceButtonBackground.biggestWindow ? workspaceIconOpacityShrinked : 0
                             visible: opacity > 0
                         IconImage {
                             id: mainAppIcon
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
-                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
+                            anchors.bottomMargin: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
-                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? 
+                            anchors.rightMargin: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? 
                                 (workspaceButtonWidth - workspaceIconSize) / 2 : workspaceIconMarginShrinked
 
                             source: workspaceButtonBackground.mainAppIconSource
-                            implicitSize: (!GlobalStates.workspaceShowNumbers && ConfigOptions?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked
+                            implicitSize: (!GlobalStates.workspaceShowNumbers && Config.options?.bar.workspaces.showAppIcons) ? workspaceIconSize : workspaceIconSizeShrinked
 
                             Behavior on opacity {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -255,6 +256,25 @@ Item {
                             }
                             Behavior on implicitSize {
                                 animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                            }
+                        }
+
+                        Loader {
+                            active: Config.options.bar.workspaces.monochromeIcons
+                            anchors.fill: mainAppIcon
+                            sourceComponent: Item {
+                                Desaturate {
+                                    id: desaturatedIcon
+                                    visible: false // There's already color overlay
+                                    anchors.fill: parent
+                                    source: mainAppIcon
+                                    desaturation: 0.8
+                                }
+                                ColorOverlay {
+                                    anchors.fill: desaturatedIcon
+                                    source: desaturatedIcon
+                                    color: ColorUtils.transparentize(wsDot.color, 0.9)
+                                }
                             }
                         }
                     }

@@ -14,7 +14,7 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property bool pinned: ConfigOptions?.dock.pinnedOnStartup ?? false
+    property bool pinned: Config.options?.dock.pinnedOnStartup ?? false
 
     Variants { // For each monitor
         model: Quickshell.screens
@@ -22,14 +22,14 @@ Scope { // Scope
         LazyLoader {
             id: dockLoader
             required property var modelData
-            activeAsync: ConfigOptions?.dock.hoverToReveal || (!ToplevelManager.activeToplevel?.activated)
+            activeAsync: Config.options?.dock.hoverToReveal || (!ToplevelManager.activeToplevel?.activated)
 
             component: PanelWindow { // Window
                 id: dockRoot
                 screen: dockLoader.modelData
                 
                 property bool reveal: root.pinned 
-                    || (ConfigOptions?.dock.hoverToReveal && dockMouseArea.containsMouse) 
+                    || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) 
                     || dockApps.requestDockShow 
                     || (!ToplevelManager.activeToplevel?.activated)
 
@@ -47,7 +47,7 @@ Scope { // Scope
                 WlrLayershell.namespace: "quickshell:dock"
                 color: "transparent"
 
-                implicitHeight: (ConfigOptions?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
+                implicitHeight: (Config.options?.dock.height ?? 70) + Appearance.sizes.elevationMargin + Appearance.sizes.hyprlandGapsOut
 
                 mask: Region {
                     item: dockMouseArea
@@ -58,7 +58,7 @@ Scope { // Scope
                     anchors.top: parent.top
                     height: parent.height
                     anchors.topMargin: dockRoot.reveal ? 0 : 
-                        ConfigOptions?.dock.hoverToReveal ? (dockRoot.implicitHeight - ConfigOptions.dock.hoverRegionHeight) :
+                        Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) :
                         (dockRoot.implicitHeight + 1)
                         
                     anchors.left: parent.left
@@ -94,6 +94,8 @@ Scope { // Scope
                                 anchors.topMargin: Appearance.sizes.elevationMargin
                                 anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
                                 color: Appearance.colors.colLayer0
+                                border.width: 1
+                                border.color: Appearance.m3colors.m3outlineVariant
                                 radius: Appearance.rounding.large
                             }
 

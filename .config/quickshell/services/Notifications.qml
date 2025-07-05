@@ -219,8 +219,8 @@ Singleton {
         } 
         else {
             console.log("Notification not found in server: " + id)
-            root.discardNotification(id);
         }
+        root.discardNotification(id);
     }
 
     function triggerListChange() {

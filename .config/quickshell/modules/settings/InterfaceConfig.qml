@@ -11,38 +11,58 @@ ContentPage {
         title: "Policies"
 
         ConfigRow {
-            ColumnLayout { // Weeb policy
+            ColumnLayout {
+                // Weeb policy
                 ContentSubsectionLabel {
                     text: "Weeb"
                 }
                 ConfigSelectionArray {
-                    currentValue: ConfigOptions.policies.weeb
+                    currentValue: Config.options.policies.weeb
                     configOptionName: "policies.weeb"
-                    onSelected: (newValue) => {
-                        ConfigLoader.setConfigValueAndSave("policies.weeb", newValue);
+                    onSelected: newValue => {
+                        Config.options.policies.weeb = newValue;
                     }
                     options: [
-                        { displayName: "No", value: 0 },
-                        { displayName: "Yes", value: 1 },
-                        { displayName: "Closet", value: 2 }
+                        {
+                            displayName: "No",
+                            value: 0
+                        },
+                        {
+                            displayName: "Yes",
+                            value: 1
+                        },
+                        {
+                            displayName: "Closet",
+                            value: 2
+                        }
                     ]
                 }
             }
 
-            ColumnLayout { // AI policy
+            ColumnLayout {
+                // AI policy
                 ContentSubsectionLabel {
                     text: "AI"
                 }
                 ConfigSelectionArray {
-                    currentValue: ConfigOptions.policies.ai
+                    currentValue: Config.options.policies.ai
                     configOptionName: "policies.ai"
-                    onSelected: (newValue) => {
-                        ConfigLoader.setConfigValueAndSave("policies.ai", newValue);
+                    onSelected: newValue => {
+                        Config.options.policies.ai = newValue;
                     }
                     options: [
-                        { displayName: "No", value: 0 },
-                        { displayName: "Yes", value: 1 },
-                        { displayName: "Local only", value: 2 }
+                        {
+                            displayName: "No",
+                            value: 0
+                        },
+                        {
+                            displayName: "Yes",
+                            value: 1
+                        },
+                        {
+                            displayName: "Local only",
+                            value: 2
+                        }
                     ]
                 }
             }
@@ -52,22 +72,44 @@ ContentPage {
     ContentSection {
         title: "Bar"
 
+        ConfigSelectionArray {
+            currentValue: Config.options.bar.cornerStyle
+            configOptionName: "bar.cornerStyle"
+            onSelected: newValue => {
+                Config.options.bar.cornerStyle = newValue;
+            }
+            options: [
+                {
+                    displayName: "Hug",
+                    value: 0
+                },
+                {
+                    displayName: "Float",
+                    value: 1
+                },
+                {
+                    displayName: "Plain rectangle",
+                    value: 2
+                }
+            ]
+        }
+
         ContentSubsection {
             title: "Appearance"
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
                     text: 'Borderless'
-                    checked: ConfigOptions.bar.borderless
+                    checked: Config.options.bar.borderless
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.borderless", checked);
+                        Config.options.bar.borderless = checked;
                     }
                 }
                 ConfigSwitch {
                     text: 'Show background'
-                    checked: ConfigOptions.bar.showBackground
+                    checked: Config.options.bar.showBackground
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.showBackground", checked);
+                        Config.options.bar.showBackground = checked;
                     }
                     StyledToolTip {
                         content: "Note: turning off can hurt readability"
@@ -82,16 +124,16 @@ ContentPage {
                 uniform: true
                 ConfigSwitch {
                     text: "Screen snip"
-                    checked: ConfigOptions.bar.utilButtons.showScreenSnip
+                    checked: Config.options.bar.utilButtons.showScreenSnip
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.utilButtons.showScreenSnip", checked);
+                        Config.options.bar.utilButtons.showScreenSnip = checked;
                     }
                 }
                 ConfigSwitch {
                     text: "Color picker"
-                    checked: ConfigOptions.bar.utilButtons.showColorPicker
+                    checked: Config.options.bar.utilButtons.showColorPicker
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.utilButtons.showColorPicker", checked);
+                        Config.options.bar.utilButtons.showColorPicker = checked;
                     }
                 }
             }
@@ -99,16 +141,16 @@ ContentPage {
                 uniform: true
                 ConfigSwitch {
                     text: "Mic toggle"
-                    checked: ConfigOptions.bar.utilButtons.showMicToggle
+                    checked: Config.options.bar.utilButtons.showMicToggle
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.utilButtons.showMicToggle", checked);
+                        Config.options.bar.utilButtons.showMicToggle = checked;
                     }
                 }
                 ConfigSwitch {
                     text: "Keyboard toggle"
-                    checked: ConfigOptions.bar.utilButtons.showKeyboardToggle
+                    checked: Config.options.bar.utilButtons.showKeyboardToggle
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.utilButtons.showKeyboardToggle", checked);
+                        Config.options.bar.utilButtons.showKeyboardToggle = checked;
                     }
                 }
             }
@@ -116,9 +158,9 @@ ContentPage {
                 uniform: true
                 ConfigSwitch {
                     text: "Dark/Light toggle"
-                    checked: ConfigOptions.bar.utilButtons.showDarkModeToggle
+                    checked: Config.options.bar.utilButtons.showDarkModeToggle
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.utilButtons.showDarkModeToggle", checked);
+                        Config.options.bar.utilButtons.showDarkModeToggle = checked;
                     }
                 }
                 ConfigSwitch {
@@ -136,40 +178,40 @@ ContentPage {
                 uniform: true
                 ConfigSwitch {
                     text: 'Show app icons'
-                    checked: ConfigOptions.bar.workspaces.showAppIcons
+                    checked: Config.options.bar.workspaces.showAppIcons
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.workspaces.showAppIcons", checked);
+                        Config.options.bar.workspaces.showAppIcons = checked;
                     }
                 }
                 ConfigSwitch {
                     text: 'Always show numbers'
-                    checked: ConfigOptions.bar.workspaces.alwaysShowNumbers
+                    checked: Config.options.bar.workspaces.alwaysShowNumbers
                     onCheckedChanged: {
-                        ConfigLoader.setConfigValueAndSave("bar.workspaces.alwaysShowNumbers", checked);
+                        Config.options.bar.workspaces.alwaysShowNumbers = checked;
                     }
                 }
             }
             ConfigSpinBox {
                 text: "Workspaces shown"
-                value: ConfigOptions.bar.workspaces.shown
+                value: Config.options.bar.workspaces.shown
                 from: 1
                 to: 30
                 stepSize: 1
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("bar.workspaces.shown", value);
+                    Config.options.bar.workspaces.shown = value;
                 }
             }
             ConfigSpinBox {
                 text: "Number show delay when pressing Super (ms)"
-                value: ConfigOptions.bar.workspaces.showNumberDelay
+                value: Config.options.bar.workspaces.showNumberDelay
                 from: 0
                 to: 1000
                 stepSize: 50
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("bar.workspaces.showNumberDelay", value);
+                    Config.options.bar.workspaces.showNumberDelay = value;
                 }
             }
-        }   
+        }
     }
 
     ContentSection {
@@ -179,22 +221,22 @@ ContentPage {
             uniform: true
             ConfigSpinBox {
                 text: "Low warning"
-                value: ConfigOptions.battery.low
+                value: Config.options.battery.low
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.low", value);
+                    Config.options.battery.low = value;
                 }
             }
             ConfigSpinBox {
                 text: "Critical warning"
-                value: ConfigOptions.battery.critical
+                value: Config.options.battery.critical
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.critical", value);
+                    Config.options.battery.critical = value;
                 }
             }
         }
@@ -202,9 +244,9 @@ ContentPage {
             uniform: true
             ConfigSwitch {
                 text: "Automatic suspend"
-                checked: ConfigOptions.battery.automaticSuspend
+                checked: Config.options.battery.automaticSuspend
                 onCheckedChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.automaticSuspend", checked);
+                    Config.options.battery.automaticSuspend = checked;
                 }
                 StyledToolTip {
                     content: "Automatically suspends the system when battery is low"
@@ -212,12 +254,42 @@ ContentPage {
             }
             ConfigSpinBox {
                 text: "Suspend at"
-                value: ConfigOptions.battery.suspend
+                value: Config.options.battery.suspend
                 from: 0
                 to: 100
                 stepSize: 5
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("battery.suspend", value);
+                    Config.options.battery.suspend = value;
+                }
+            }
+        }
+    }
+
+    ContentSection {
+        title: "Dock"
+
+        ConfigSwitch {
+            text: "Enable"
+            checked: Config.options.dock.enable
+            onCheckedChanged: {
+                Config.options.dock.enable = checked;
+            }
+        }
+
+        ConfigRow {
+            uniform: true
+            ConfigSwitch {
+                text: "Hover to reveal"
+                checked: Config.options.dock.hoverToReveal
+                onCheckedChanged: {
+                    Config.options.dock.hoverToReveal = checked;
+                }
+            }
+            ConfigSwitch {
+                text: "Pinned on startup"
+                checked: Config.options.dock.pinnedOnStartup
+                onCheckedChanged: {
+                    Config.options.dock.pinnedOnStartup = checked;
                 }
             }
         }
@@ -227,37 +299,36 @@ ContentPage {
         title: "Overview"
         ConfigSpinBox {
             text: "Scale (%)"
-            value: ConfigOptions.overview.scale * 100
+            value: Config.options.overview.scale * 100
             from: 1
             to: 100
             stepSize: 1
             onValueChanged: {
-                ConfigLoader.setConfigValueAndSave("overview.scale", value / 100);
+                Config.options.overview.scale = value / 100;
             }
         }
         ConfigRow {
             uniform: true
             ConfigSpinBox {
                 text: "Rows"
-                value: ConfigOptions.overview.rows
+                value: Config.options.overview.rows
                 from: 1
                 to: 20
                 stepSize: 1
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("overview.rows", value);
+                    Config.options.overview.rows = value;
                 }
             }
             ConfigSpinBox {
                 text: "Columns"
-                value: ConfigOptions.overview.columns
+                value: Config.options.overview.columns
                 from: 1
                 to: 20
                 stepSize: 1
                 onValueChanged: {
-                    ConfigLoader.setConfigValueAndSave("overview.columns", value);
+                    Config.options.overview.columns = value;
                 }
             }
         }
-        
     }
 }

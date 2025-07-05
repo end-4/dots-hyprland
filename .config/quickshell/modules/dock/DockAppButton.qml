@@ -3,6 +3,7 @@ import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
@@ -88,6 +89,25 @@ DockButton {
                 sourceComponent: IconImage {
                     source: Quickshell.iconPath(AppSearch.guessIcon(appToplevel.appId), "image-missing")
                     implicitSize: root.iconSize
+                }
+            }
+
+            Loader {
+                active: Config.options.dock.monochromeIcons
+                anchors.fill: iconImageLoader
+                sourceComponent: Item {
+                    Desaturate {
+                        id: desaturatedIcon
+                        visible: false // There's already color overlay
+                        anchors.fill: parent
+                        source: iconImageLoader
+                        desaturation: 0.8
+                    }
+                    ColorOverlay {
+                        anchors.fill: desaturatedIcon
+                        source: desaturatedIcon
+                        color: ColorUtils.transparentize(Appearance.colors.colPrimary, 0.9)
+                    }
                 }
             }
 

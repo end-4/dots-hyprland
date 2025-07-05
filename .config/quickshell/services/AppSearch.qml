@@ -12,7 +12,7 @@ import Quickshell.Io
  */
 Singleton {
     id: root
-    property bool sloppySearch: ConfigOptions?.search.sloppy ?? false
+    property bool sloppySearch: Config.options?.search.sloppy ?? false
     property real scoreThreshold: 0.2
     property var substitutions: ({
         "code-url-handler": "visual-studio-code",
@@ -27,7 +27,7 @@ Singleton {
     })
     property var regexSubstitutions: [
         {
-            "regex": /^steam_app_(\\d+)$/,
+            "regex": /^steam_app_(\d+)$/,
             "replace": "steam_icon_$1"
         },
         {
@@ -72,6 +72,7 @@ Singleton {
     }
 
     function iconExists(iconName) {
+        if (!iconName || iconName.length == 0) return false;
         return (Quickshell.iconPath(iconName, true).length > 0) 
             && !iconName.includes("image-missing");
     }
@@ -103,7 +104,7 @@ Singleton {
         // Guess: normalize to kebab case
         guessStr = str.toLowerCase().replace(/\s+/g, "-");
         if (iconExists(guessStr)) return guessStr;
-        // Guess: First fuzze desktop entry match
+        // Guess: First fuzzy desktop entry match
         const searchResults = root.fuzzyQuery(str);
         if (searchResults.length > 0) {
             const firstEntry = searchResults[0];

@@ -80,7 +80,7 @@ Item { // Wrapper
 
     Timer {
         id: nonAppResultsTimer
-        interval: ConfigOptions.search.nonAppResultDelay
+        interval: Config.options.search.nonAppResultDelay
         onTriggered: {
             mathProcess.calculateExpression(root.searchingText);
         }
@@ -90,7 +90,7 @@ Item { // Wrapper
         id: mathProcess
         property list<string> baseCommand: ["qalc", "-t"]
         function calculateExpression(expression) {
-            // mathProcess.running = false
+            mathProcess.running = false
             mathProcess.command = baseCommand.concat(expression)
             mathProcess.running = true
         }
@@ -179,6 +179,8 @@ Item { // Wrapper
         implicitHeight: columnLayout.implicitHeight
         radius: Appearance.rounding.large
         color: Appearance.colors.colLayer0
+        border.width: 1
+        border.color: Appearance.m3colors.m3outlineVariant
 
         ColumnLayout {
             id: columnLayout
@@ -203,7 +205,7 @@ Item { // Wrapper
                     Layout.leftMargin: 15
                     iconSize: Appearance.font.pixelSize.huge
                     color: Appearance.m3colors.m3onSurface
-                    text: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 'content_paste_search' : 'search'
+                    text: root.searchingText.startsWith(Config.options.search.prefix.clipboard) ? 'content_paste_search' : 'search'
                 }
                 TextField { // Search box
                     id: searchInput
@@ -294,8 +296,8 @@ Item { // Wrapper
                         if(root.searchingText == "") return [];
 
                         ///////////// Special cases ///////////////
-                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard)) { // Clipboard
-                            const searchString = root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length);
+                        if (root.searchingText.startsWith(Config.options.search.prefix.clipboard)) { // Clipboard
+                            const searchString = root.searchingText.slice(Config.options.search.prefix.clipboard.length);
                             return Cliphist.fuzzyQuery(searchString).map(entry => {
                                 return {
                                     cliphistRawString: entry,
@@ -310,8 +312,8 @@ Item { // Wrapper
                                 };
                             }).filter(Boolean);
                         } 
-                        if (root.searchingText.startsWith(ConfigOptions.search.prefix.emojis)) { // Clipboard
-                            const searchString = root.searchingText.slice(ConfigOptions.search.prefix.emojis.length);
+                        if (root.searchingText.startsWith(Config.options.search.prefix.emojis)) { // Clipboard
+                            const searchString = root.searchingText.slice(Config.options.search.prefix.emojis.length);
                             return Emojis.fuzzyQuery(searchString).map(entry => {
                                 return {
                                     cliphistRawString: entry,
@@ -346,12 +348,12 @@ Item { // Wrapper
                             fontType: "monospace",
                             materialSymbol: 'terminal',
                             execute: () => {
-                                executor.executeCommand(searchingText.startsWith('sudo') ? `${ConfigOptions.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText.replace("file://", ""));
+                                executor.executeCommand(searchingText.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText.replace("file://", ""));
                             }
                         }
                         const launcherActionObjects = root.searchActions
                             .map(action => {
-                                const actionString = `${ConfigOptions.search.prefix.action}${action.action}`;
+                                const actionString = `${Config.options.search.prefix.action}${action.action}`;
                                 if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
                                     return {
                                         name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
@@ -399,8 +401,8 @@ Item { // Wrapper
                             type: qsTr("Search the web"),
                             materialSymbol: 'travel_explore',
                             execute: () => {
-                                let url = ConfigOptions.search.engineBaseUrl + root.searchingText
-                                for (let site of ConfigOptions.search.excludedSites) {
+                                let url = Config.options.search.engineBaseUrl + root.searchingText
+                                for (let site of Config.options.search.excludedSites) {
                                     url += ` -site:${site}`;
                                 }
                                 Qt.openUrlExternally(url);
@@ -416,8 +418,8 @@ Item { // Wrapper
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData
-                    query: root.searchingText.startsWith(ConfigOptions.search.prefix.clipboard) ? 
-                        root.searchingText.slice(ConfigOptions.search.prefix.clipboard.length) : 
+                    query: root.searchingText.startsWith(Config.options.search.prefix.clipboard) ? 
+                        root.searchingText.slice(Config.options.search.prefix.clipboard.length) : 
                         root.searchingText;
                 }
             }

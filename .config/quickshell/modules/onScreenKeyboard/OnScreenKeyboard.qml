@@ -15,7 +15,7 @@ import Quickshell.Hyprland
 
 Scope { // Scope
     id: root
-    property bool pinned: ConfigOptions?.osk.pinnedOnStartup ?? false
+    property bool pinned: Config.options?.osk.pinnedOnStartup ?? false
 
     component OskControlButton: GroupButton { // Pin button
         baseWidth: 40

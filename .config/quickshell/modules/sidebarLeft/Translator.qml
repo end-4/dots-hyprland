@@ -23,8 +23,8 @@ Item {
     property string translatedText: ""
     property list<string> languages: []
     // Options
-    property string targetLanguage: ConfigOptions.language.translator.targetLanguage
-    property string sourceLanguage: ConfigOptions.language.translator.sourceLanguage
+    property string targetLanguage: Config.options.language.translator.targetLanguage
+    property string sourceLanguage: Config.options.language.translator.sourceLanguage
     property string hostLanguage: targetLanguage
 
     property bool showLanguageSelector: false
@@ -43,7 +43,7 @@ Item {
 
     Timer {
         id: translateTimer
-        interval: ConfigOptions.sidebar.translator.delay
+        interval: Config.options.sidebar.translator.delay
         repeat: false
         onTriggered: () => {
             if (root.inputField.text.trim().length > 0) {
@@ -155,8 +155,8 @@ Item {
                             color: searchButton.enabled ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
                         }
                         onClicked: {
-                            let url = ConfigOptions.search.engineBaseUrl + outputCanvas.displayedText;
-                            for (let site of ConfigOptions.search.excludedSites) {
+                            let url = Config.options.search.engineBaseUrl + outputCanvas.displayedText;
+                            for (let site of Config.options.search.excludedSites) {
                                 url += ` -site:${site}`;
                             }
                             Qt.openUrlExternally(url);
@@ -235,10 +235,10 @@ Item {
 
                 if (root.languageSelectorTarget) {
                     root.targetLanguage = result;
-                    ConfigLoader.setConfigValueAndSave("language.translator.targetLanguage", result); // Save to config
+                    Config.options.language.translator.targetLanguage = result; // Save to config
                 } else {
                     root.sourceLanguage = result;
-                    ConfigLoader.setConfigValueAndSave("language.translator.sourceLanguage", result); // Save to config
+                    Config.options.language.translator.sourceLanguage = result; // Save to config
                 }
 
                 translateTimer.restart(); // Restart translation after language change

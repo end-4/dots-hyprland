@@ -15,12 +15,12 @@ import Quickshell.Services.UPower
 Scope {
     id: root
     property string filePath: `${Directories.state}/user/generated/wallpaper/least_busy_region.json`
-    property real defaultX: (ConfigOptions?.background.clockX ?? -500)
-    property real defaultY: (ConfigOptions?.background.clockY ?? -500)
+    property real defaultX: (Config.options?.background.clockX ?? -500)
+    property real defaultY: (Config.options?.background.clockY ?? -500)
     property real centerX: defaultX
     property real centerY: defaultY
-    property real effectiveCenterX: ConfigOptions?.background.fixedClockPosition ? defaultX : centerX
-    property real effectiveCenterY: ConfigOptions?.background.fixedClockPosition ? defaultY : centerY
+    property real effectiveCenterX: Config.options?.background.fixedClockPosition ? defaultX : centerX
+    property real effectiveCenterY: Config.options?.background.fixedClockPosition ? defaultY : centerY
     property color dominantColor: Appearance.colors.colPrimary
     property bool dominantColorIsDark: dominantColor.hslLightness < 0.5
     property color colBackground: ColorUtils.transparentize(ColorUtils.mix(Appearance.colors.colPrimary, Appearance.colors.colSecondaryContainer), 1)
@@ -36,7 +36,7 @@ Scope {
     
     Timer {
         id: delayedFileRead
-        interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+        interval: Config.options.hacks.arbitraryRaceConditionDelay
         running: false
         onTriggered: {
             root.updateWidgetPosition(leastBusyRegionFileView.text())
@@ -46,7 +46,7 @@ Scope {
     FileView { 
         id: leastBusyRegionFileView
         path: Qt.resolvedUrl(root.filePath)
-        watchChanges: !ConfigOptions?.background.fixedClockPosition
+        watchChanges: !Config.options?.background.fixedClockPosition
         onFileChanged: {
             this.reload()
             delayedFileRead.start()

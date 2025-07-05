@@ -9,8 +9,8 @@ Rectangle {
     id: root
     property string key
 
-    property real horizontalPadding: 7
-    property real verticalPadding: 2
+    property real horizontalPadding: 6
+    property real verticalPadding: 1
     property real borderWidth: 1
     property real extraBottomBorderWidth: 2
     property color borderColor: Appearance.colors.colOnLayer0

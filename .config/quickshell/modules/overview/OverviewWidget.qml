@@ -17,14 +17,14 @@ Item {
     required property var panelWindow
     readonly property HyprlandMonitor monitor: Hyprland.monitorFor(panelWindow.screen)
     readonly property var toplevels: ToplevelManager.toplevels
-    readonly property int workspacesShown: ConfigOptions.overview.rows * ConfigOptions.overview.columns
+    readonly property int workspacesShown: Config.options.overview.rows * Config.options.overview.columns
     readonly property int workspaceGroup: Math.floor((monitor.activeWorkspace?.id - 1) / workspacesShown)
     property bool monitorIsFocused: (Hyprland.focusedMonitor?.id == monitor.id)
     property var windows: HyprlandData.windowList
     property var windowByAddress: HyprlandData.windowByAddress
     property var windowAddresses: HyprlandData.addresses
     property var monitorData: HyprlandData.monitors.find(m => m.id === root.monitor.id)
-    property real scale: ConfigOptions.overview.scale
+    property real scale: Config.options.overview.scale
     property color activeBorderColor: Appearance.colors.colSecondary
 
     property real workspaceImplicitWidth: (monitorData?.transform % 2 === 1) ? 
@@ -63,6 +63,8 @@ Item {
         implicitHeight: workspaceColumnLayout.implicitHeight + padding * 2
         radius: Appearance.rounding.screenRounding * root.scale + padding
         color: Appearance.colors.colLayer0
+        border.width: 1
+        border.color: Appearance.m3colors.m3outlineVariant
 
         ColumnLayout { // Workspaces
             id: workspaceColumnLayout
@@ -71,18 +73,18 @@ Item {
             anchors.centerIn: parent
             spacing: workspaceSpacing
             Repeater {
-                model: ConfigOptions.overview.rows
+                model: Config.options.overview.rows
                 delegate: RowLayout {
                     id: row
                     property int rowIndex: index
                     spacing: workspaceSpacing
 
                     Repeater { // Workspace repeater
-                        model: ConfigOptions.overview.columns
+                        model: Config.options.overview.columns
                         Rectangle { // Workspace
                             id: workspace
                             property int colIndex: index
-                            property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * ConfigOptions.overview.columns + colIndex + 1
+                            property int workspaceValue: root.workspaceGroup * workspacesShown + rowIndex * Config.options.overview.columns + colIndex + 1
                             property color defaultWorkspaceColor: Appearance.colors.colLayer1 // TODO: reconsider this color for a cleaner look
                             property color hoveredWorkspaceColor: ColorUtils.mix(defaultWorkspaceColor, Appearance.colors.colLayer1Hover, 0.1)
                             property color hoveredBorderColor: Appearance.colors.colLayer2Hover
@@ -148,9 +150,10 @@ Item {
                         // console.log(JSON.stringify(ToplevelManager.toplevels.values.map(t => t), null, 2))
                         return ToplevelManager.toplevels.values.filter((toplevel) => {
                             const address = `0x${toplevel.HyprlandToplevel.address}`
-                            // console.log(`Checking window with address: ${address}`)
                             var win = windowByAddress[address]
-                            return (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inWorkspaceGroup = (root.workspaceGroup * root.workspacesShown < win?.workspace?.id && win?.workspace?.id <= (root.workspaceGroup + 1) * root.workspacesShown)
+                            const inMonitor = root.monitor.id === win.monitor
+                            return inWorkspaceGroup && inMonitor;
                         })
                     }
                 }
@@ -171,14 +174,14 @@ Item {
                     property bool atInitPosition: (initX == x && initY == y)
                     restrictToWorkspace: Drag.active || atInitPosition
 
-                    property int workspaceColIndex: (windowData?.workspace.id - 1) % ConfigOptions.overview.columns
-                    property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / ConfigOptions.overview.columns)
+                    property int workspaceColIndex: (windowData?.workspace.id - 1) % Config.options.overview.columns
+                    property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / Config.options.overview.columns)
                     xOffset: (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex - (monitor?.x * root.scale)
                     yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex - (monitor?.y * root.scale)
 
                     Timer {
                         id: updateWindowPosition
-                        interval: ConfigOptions.hacks.arbitraryRaceConditionDelay
+                        interval: Config.options.hacks.arbitraryRaceConditionDelay
                         repeat: false
                         running: false
                         onTriggered: {
@@ -245,8 +248,8 @@ Item {
             Rectangle { // Focused workspace indicator
                 id: focusedWorkspaceIndicator
                 property int activeWorkspaceInGroup: monitor.activeWorkspace?.id - (root.workspaceGroup * root.workspacesShown)
-                property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / ConfigOptions.overview.columns)
-                property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % ConfigOptions.overview.columns
+                property int activeWorkspaceRowIndex: Math.floor((activeWorkspaceInGroup - 1) / Config.options.overview.columns)
+                property int activeWorkspaceColIndex: (activeWorkspaceInGroup - 1) % Config.options.overview.columns
                 x: (root.workspaceImplicitWidth + workspaceSpacing) * activeWorkspaceColIndex
                 y: (root.workspaceImplicitHeight + workspaceSpacing) * activeWorkspaceRowIndex
                 z: root.windowZ

@@ -7,7 +7,8 @@ import QtQuick.Layouts
 Item {
     id: root
     property real padding: 5
-    implicitHeight: 40
+    implicitHeight: Appearance.sizes.baseBarHeight
+    height: Appearance.sizes.barHeight
     implicitWidth: rowLayout.implicitWidth + padding * 2
     default property alias items: rowLayout.children
 
@@ -18,7 +19,7 @@ Item {
             topMargin: 4
             bottomMargin: 4
         }
-        color: ConfigOptions?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
+        color: Config.options?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
         radius: Appearance.rounding.small
     }
 

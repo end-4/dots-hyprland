@@ -3,24 +3,21 @@ import QtQuick 2.9
 Item {
     id: root
 
+    enum CornerEnum { TopLeft, TopRight, BottomLeft, BottomRight }
+    property var corner: RoundCorner.CornerEnum.TopLeft // Default to TopLeft
+
     property int size: 25
     property color color: "#000000"
 
     onColorChanged: {
         canvas.requestPaint();
     }
-
-    property QtObject cornerEnum: QtObject {
-        property int topLeft: 0
-        property int topRight: 1
-        property int bottomLeft: 2
-        property int bottomRight: 3
+    onCornerChanged: {
+        canvas.requestPaint();
     }
 
-    property int corner: cornerEnum.topLeft // Default to TopLeft
-
-    width: size
-    height: size
+    implicitWidth: size
+    implicitHeight: size
 
     Canvas {
         id: canvas
@@ -31,22 +28,22 @@ Item {
         onPaint: {
             var ctx = getContext("2d");
             var r = root.size;
-
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             switch (root.corner) {
-                case cornerEnum.topLeft:
+                case RoundCorner.CornerEnum.TopLeft:
                     ctx.arc(r, r, r, Math.PI, 3 * Math.PI / 2);
                     ctx.lineTo(0, 0);
                     break;
-                case cornerEnum.topRight:
+                case RoundCorner.CornerEnum.TopRight:
                     ctx.arc(0, r, r, 3 * Math.PI / 2, 2 * Math.PI);
                     ctx.lineTo(r, 0);
                     break;
-                case cornerEnum.bottomLeft:
+                case RoundCorner.CornerEnum.BottomLeft:
                     ctx.arc(r, 0, r, Math.PI / 2, Math.PI);
                     ctx.lineTo(0, r);
                     break;
-                case cornerEnum.bottomRight:
+                case RoundCorner.CornerEnum.BottomRight:
                     ctx.arc(0, 0, r, 0, Math.PI / 2);
                     ctx.lineTo(r, r);
                     break;

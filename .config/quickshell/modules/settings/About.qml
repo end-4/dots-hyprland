@@ -20,7 +20,7 @@ ContentPage {
             Layout.topMargin: 10
             Layout.bottomMargin: 10
             IconImage {
-                implicitSize: 100
+                implicitSize: 80
                 source: Quickshell.iconPath(SystemInfo.logo)
             }
             ColumnLayout {
@@ -87,10 +87,9 @@ ContentPage {
             spacing: 20
             Layout.topMargin: 10
             Layout.bottomMargin: 10
-            MaterialSymbol {
-                iconSize: 70
-                text: "files"
-                color: Appearance.colors.colOnSecondaryContainer
+            IconImage {
+                implicitSize: 80
+                source: Quickshell.iconPath("illogical-impulse")
             }
             ColumnLayout {
                 Layout.alignment: Qt.AlignVCenter

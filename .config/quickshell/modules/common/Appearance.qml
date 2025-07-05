@@ -16,8 +16,8 @@ Singleton {
     property string syntaxHighlightingTheme
 
     // Extremely conservative transparency values for consistency and readability
-    property real transparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.1 : 0.07) : 0
-    property real contentTransparency: ConfigOptions?.appearance.transparency ? (m3colors.darkmode ? 0.55 : 0.55) : 0
+    property real transparency: Config.options?.appearance.transparency ? (m3colors.darkmode ? 0.1 : 0.07) : 0
+    property real contentTransparency: Config.options?.appearance.transparency ? (m3colors.darkmode ? 0.55 : 0.55) : 0
 
     m3colors: QtObject {
         property bool darkmode: false
@@ -100,7 +100,7 @@ Singleton {
 
     colors: QtObject {
         property color colSubtext: m3colors.m3outline
-        property color colLayer0: ColorUtils.transparentize(m3colors.m3background, root.transparency)
+        property color colLayer0: ColorUtils.mix(ColorUtils.transparentize(m3colors.m3background, root.transparency), m3colors.m3primary, Config.options.appearance.extraBackgroundTint ? 0.97 : 1)
         property color colOnLayer0: m3colors.m3onBackground
         property color colLayer0Hover: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.9, root.contentTransparency))
         property color colLayer0Active: ColorUtils.transparentize(ColorUtils.mix(colLayer0, colOnLayer0, 0.8, root.contentTransparency))
@@ -131,7 +131,7 @@ Singleton {
         property color colSecondaryHover: ColorUtils.mix(m3colors.m3secondary, colLayer1Hover, 0.85)
         property color colSecondaryActive: ColorUtils.mix(m3colors.m3secondary, colLayer1Active, 0.4)
         property color colSecondaryContainer: m3colors.m3secondaryContainer
-        property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Hover, 0.6)
+        property color colSecondaryContainerHover: ColorUtils.mix(m3colors.m3secondaryContainer, m3colors.m3onSecondaryContainer, 0.90)
         property color colSecondaryContainerActive: ColorUtils.mix(m3colors.m3secondaryContainer, colLayer1Active, 0.54)
         property color colOnSecondaryContainer: m3colors.m3onSecondaryContainer
         property color colSurfaceContainerLow: ColorUtils.transparentize(m3colors.m3surfaceContainerLow, root.contentTransparency)
@@ -171,7 +171,7 @@ Singleton {
         }
         property QtObject pixelSize: QtObject {
             property int smallest: 10
-            property int smaller: 13
+            property int smaller: 12
             property int small: 15
             property int normal: 16
             property int large: 17
@@ -288,8 +288,10 @@ Singleton {
     }
 
     sizes: QtObject {
-        property real barHeight: 40
-        property real barCenterSideModuleWidth: ConfigOptions?.bar.verbose ? 360 : 140
+        property real baseBarHeight: 40
+        property real barHeight: Config.options.bar.cornerStyle === 1 ? 
+            (baseBarHeight + Appearance.sizes.hyprlandGapsOut * 2) : baseBarHeight
+        property real barCenterSideModuleWidth: Config.options?.bar.verbose ? 360 : 140
         property real barCenterSideModuleWidthShortened: 280
         property real barCenterSideModuleWidthHellaShortened: 190
         property real barShortenScreenWidthThreshold: 1200 // Shorten if screen width is at most this value

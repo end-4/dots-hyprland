@@ -6,8 +6,8 @@ arch=(any)
 license=(None)
 depends=(
 	hyprshot
-	ksnip
 	slurp
+	swappy
 	tesseract
 	tesseract-data-eng
 	wf-recorder

@@ -14,6 +14,14 @@ Singleton {
     property bool workspaceShowNumbers: false
     property bool superReleaseMightTrigger: true
 
+    property real screenZoom: 1
+    onScreenZoomChanged: {
+        Quickshell.execDetached(["hyprctl", "keyword", "cursor:zoom_factor", root.screenZoom.toString()]);
+    }
+    Behavior on screenZoom {
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
     // When user is not reluctant while pressing super, they probably don't need to see workspace numbers
     onSuperReleaseMightTriggerChanged: { 
         workspaceShowNumbersTimer.stop()
@@ -21,7 +29,7 @@ Singleton {
 
     Timer {
         id: workspaceShowNumbersTimer
-        interval: ConfigOptions.bar.workspaces.showNumberDelay
+        interval: Config.options.bar.workspaces.showNumberDelay
         // interval: 0
         repeat: false
         onTriggered: {
@@ -41,4 +49,16 @@ Singleton {
             workspaceShowNumbers = false
         }
     }
+
+    IpcHandler {
+		target: "zoom"
+
+		function zoomIn() {
+            screenZoom = Math.min(screenZoom + 0.4, 3.0)
+        }
+
+        function zoomOut() {
+            screenZoom = Math.max(screenZoom - 0.4, 1)
+        } 
+	}
 }
