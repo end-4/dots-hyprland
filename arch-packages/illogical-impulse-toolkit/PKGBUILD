@@ -1,0 +1,27 @@
+pkgname=illogical-impulse-toolkit
+pkgver=1.0
+pkgrel=1
+pkgdesc='Illogical Impulse GTK/Qt Dependencies'
+arch=(any)
+license=(None)
+depends=(
+	kdialog
+	qt6-5compat 
+	qt6-avif-image-plugin
+	qt6-base
+	qt6-declarative
+	qt6-imageformats
+	qt6-multimedia
+	qt6-positioning
+	qt6-quicktimeline
+	qt6-sensors
+	qt6-svg
+	qt6-tools
+	qt6-translations
+	qt6-virtualkeyboard
+	qt6-wayland
+	syntax-highlighting
+	upower
+	wtype
+	ydotool
+)

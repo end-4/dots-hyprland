@@ -6,19 +6,20 @@ arch=(any)
 license=(None)
 depends=(
   adw-gtk-theme-git
-  qt5ct
-  qt6ct
-  qt5-wayland
+  breeze
+  breeze-plus
+  darkly-bin
+  eza
+  fish
   fontconfig
-  ttf-readex-pro
+  kde-material-you-colors
+  kitty
+  matugen-bin
+  starship
+  ttf-gabarito-git
   ttf-jetbrains-mono-nerd
   ttf-material-symbols-variable-git
-  ttf-space-mono-nerd
+  ttf-readex-pro
   ttf-rubik-vf
-  ttf-gabarito-git
-  fish
-  foot
-  starship
-  kvantum
-  kvantum-qt5
+  ttf-twemoji
 )

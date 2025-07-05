@@ -13,8 +13,8 @@ if status is-interactive
 end
 
 starship init fish | source
-if test -f ~/.cache/ags/user/generated/terminal/sequences.txt
-    cat ~/.cache/ags/user/generated/terminal/sequences.txt
+if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
 end
 
 alias pamcan=pamcan
@@ -25,6 +25,11 @@ alias pipx="mise exec -- pipx"
 alias npm="mise exec -- npm"
 alias composer="mise exec -- composer"
 alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+alias pamcan pacman
+alias ls 'eza --icons'
+alias clear "printf '\033[2J\033[3J\033[1;1H'"
+
+
 # function fish_prompt
 #   set_color cyan; echo (pwd)
 #   set_color green; echo '> '

@@ -26,13 +26,11 @@ pycparser==2.22
     # via cffi
 pyproject-hooks==1.2.0
     # via build
-# pywal==3.3.0
-    # via -r scriptdata/requirements.in
 pywayland==0.4.18
     # via -r scriptdata/requirements.in
 setproctitle==1.3.4
     # via -r scriptdata/requirements.in
-setuptools==75.8.0
+setuptools==80.9.0
     # via setuptools-scm
 setuptools-scm==8.1.0
     # via -r scriptdata/requirements.in

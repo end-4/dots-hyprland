@@ -4,31 +4,32 @@ add_newline = false
 # Powerline symbols                                     
 # Wedges 🭧🭒 🭣🭧🭓
 # Random noise 🬖🬥🬔🬗
+# Cool stuff 󰜥   
 
 # format = """
 # $cmd_duration$username$hostname $directory $git_branch
 # $character
 # """
 format = """
-$cmd_duration$directory $git_branch
+$cmd_duration 󰜥 $directory $git_branch
 $character
 """
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
-success_symbol = "[• ](bold fg:green) "
-error_symbol = "[• 󰅙](bold fg:red) "
+success_symbol = "[   ](bold fg:blue)"
+error_symbol = "[   ](bold fg:red)"
 
 # Disable the package module, hiding it from the prompt completely
 [package]
 disabled = true
 
 [git_branch]
-style = "bg: green"
+style = "bg: cyan"
 symbol = "󰘬"
-truncation_length = 4
+truncation_length = 12
 truncation_symbol = ""
-format = "• [](bold fg:green)[$symbol $branch(:$remote_branch)](fg:black bg:green)[ ](bold fg:green)"
+format = "󰜥 [](bold fg:cyan)[$symbol $branch(:$remote_branch)](fg:black bg:cyan)[ ](bold fg:cyan)"
 
 [git_commit]
 commit_hash_length = 4
@@ -52,7 +53,7 @@ deleted = " 🗑 "
 
 [hostname]
 ssh_only = false
-format =  "[•$hostname](bg:cyan bold fg:black)[](bold fg:cyan )"
+format =  "[•$hostname](bg:cyan bold fg:black)[](bold fg:cyan)"
 trim_at = ".companyname.com"
 disabled = false
 
@@ -82,8 +83,8 @@ home_symbol = "  "
 read_only = "  "
 style = "bg:green fg:black"
 truncation_length = 6
-truncation_symbol = "••/"
-format = '[](bold fg:green)[$path ]($style)[](bold fg:green)'
+truncation_symbol = " ••/"
+format = '[](bold fg:green)[󰉋 $path]($style)[](bold fg:green)'
 
 
 [directory.substitutions]
@@ -93,7 +94,8 @@ format = '[](bold fg:green)[$path ]($style)[](bold fg:green)'
 "Music" = " 󰎈 "
 "Pictures" = "  "
 "Videos" = "  "
+"GitHub" = " 󰊤 "
 
 [cmd_duration]
 min_time = 0
-format = '[](bold fg:yellow)[ $duration](bold bg:yellow fg:black)[](bold fg:yellow) •• '
+format = '[](bold fg:yellow)[󰪢 $duration](bold bg:yellow fg:black)[](bold fg:yellow)'
