@@ -12,6 +12,8 @@ Rectangle {
     implicitHeight: columnLayout.implicitHeight + margin * 2
     color: Appearance.colors.colLayer0
     radius: Appearance.rounding.small
+    border.width: 1
+    border.color: Appearance.m3colors.m3outlineVariant
     clip: true
 
     ColumnLayout {
