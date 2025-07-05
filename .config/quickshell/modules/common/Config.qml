@@ -123,16 +123,11 @@ Singleton {
                     property int showNumberDelay: 300 // milliseconds
                 }
                 property JsonObject weather: JsonObject {
-                    property bool enable: true
-                    // gps based location
-                    property bool enableGPS: true
-                    // use if 'enableGPS' is false
-                    property string city: ""
-                    // use uscs units
-                    // by default use metric (SI) units
-                    property bool useUSCS: false
-                    // in minutes
-                    property int fetchInterval: 10
+                    property bool enable: false
+                    property bool enableGPS: true // gps based location
+                    property string city: "" // When 'enableGPS' is false
+                    property bool useUSCS: false // Instead of metric (SI) units
+                    property int fetchInterval: 10 // minutes
                 }
             }
 
