@@ -12,6 +12,10 @@ Item {
     property int currentTab: 0
     property var tabButtonList: [{"icon": "checklist", "name": qsTr("Unfinished")}, {"name": qsTr("Done"), "icon": "check_circle"}]
     property bool showAddDialog: false
+    property bool showEditDialog: false
+    property int editIndex: 0
+    property bool editStateDone: false
+    property string editCurrentText: ""
     property int dialogMargins: 20
     property int fabSize: 48
     property int fabMargins: 14
@@ -31,8 +35,9 @@ Item {
             event.accepted = true;
         }
         // Close dialog on Esc if open
-        else if (event.key === Qt.Key_Escape && root.showAddDialog) {
+        else if (event.key === Qt.Key_Escape && (root.showAddDialog || root.showEditDialog)) {
             root.showAddDialog = false
+            root.showEditDialog = false
             event.accepted = true;
         }
     }
@@ -135,6 +140,7 @@ Item {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
                 emptyPlaceholderText: qsTr("Nothing here!")
+                editingCallback: root.editingCallback
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return !item.done; })
@@ -143,11 +149,11 @@ Item {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
                 emptyPlaceholderText: qsTr("Finished tasks will go here")
+                editingCallback: root.editingCallback
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return item.done; })
             }
-
         }
     }
 
@@ -179,7 +185,7 @@ Item {
         z: 9999
 
         visible: opacity > 0
-        opacity: root.showAddDialog ? 1 : 0
+        opacity: root.showAddDialog || root.showEditDialog ? 1 : 0
         Behavior on opacity {
             NumberAnimation { 
                 duration: Appearance.animation.elementMoveFast.duration
@@ -227,6 +233,14 @@ Item {
                 }
             }
 
+            function editTask() {
+                if (todoInput.text.length > 0) {
+                    Todo.editTask(root.editIndex, root.editStateDone, todoInput.text)
+                    todoInput.text = ""
+                    root.showEditDialog = false
+                }
+            }
+
             ColumnLayout {
                 id: dialogColumnLayout
                 anchors.fill: parent
@@ -239,7 +253,8 @@ Item {
                     Layout.alignment: Qt.AlignLeft
                     color: Appearance.m3colors.m3onSurface
                     font.pixelSize: Appearance.font.pixelSize.larger
-                    text: qsTr("Add task")
+                    // Prevent glitching from "Add Task" to "Edit Task" when closing the "Add Task" dialog by first changing the text to ""
+                    text: root.showAddDialog ? qsTr("Add Task") : root.showEditDialog ? qsTr("Edit Task") : ""
                 }
 
                 TextField {
@@ -254,8 +269,8 @@ Item {
                     selectionColor: Appearance.colors.colSecondaryContainer
                     placeholderText: qsTr("Task description")
                     placeholderTextColor: Appearance.m3colors.m3outline
-                    focus: root.showAddDialog
-                    onAccepted: dialog.addTask()
+                    focus: root.showAddDialog || root.showEditDialog
+                    onAccepted: root.showAddDialog ? dialog.addTask() : dialog.editTask()
 
                     background: Rectangle {
                         anchors.fill: parent
@@ -281,15 +296,26 @@ Item {
 
                     DialogButton {
                         buttonText: qsTr("Cancel")
-                        onClicked: root.showAddDialog = false
+                        onClicked: {
+                            root.showAddDialog = false
+                            root.showEditDialog = false
+                        }
                     }
                     DialogButton {
-                        buttonText: qsTr("Add")
-                        enabled: todoInput.text.length > 0
-                        onClicked: dialog.addTask()
+                        buttonText: root.showAddDialog ? qsTr("Add") : qsTr("Edit")
+                        enabled: todoInput.text.length > 0 && (root.showAddDialog || todoInput.text != root.editCurrentText)
+                        onClicked: root.showAddDialog ? dialog.addTask() : dialog.editTask()
                     }
                 }
             }
         }
+    }
+
+    function editingCallback(index, done, currentText) {
+        root.showEditDialog = true
+        root.editIndex = index
+        root.editStateDone = done
+        root.editCurrentText = currentText
+        todoInput.text = currentText
     }
 }

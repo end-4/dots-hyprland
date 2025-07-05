@@ -31,6 +31,17 @@ Singleton {
         addItem(item)
     }
 
+    function editTask(index, done, new_desc) {
+        const item = {
+            "content": new_desc,
+            "done": done,
+        }
+        root.list[index] = item
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
+    }
+
     function markDone(index) {
         if (index >= 0 && index < list.length) {
             list[index].done = true
@@ -85,4 +96,3 @@ Singleton {
         }
     }
 }
-
