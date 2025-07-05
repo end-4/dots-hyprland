@@ -268,12 +268,12 @@ Item {
                                     visible: false // There's already color overlay
                                     anchors.fill: parent
                                     source: mainAppIcon
-                                    desaturation: 1
+                                    desaturation: 0.8
                                 }
                                 ColorOverlay {
                                     anchors.fill: desaturatedIcon
                                     source: desaturatedIcon
-                                    color: ColorUtils.transparentize(wsDot.color, 0.6)
+                                    color: ColorUtils.transparentize(wsDot.color, 0.9)
                                 }
                             }
                         }
