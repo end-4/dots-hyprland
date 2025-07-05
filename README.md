@@ -78,9 +78,9 @@ _illogical-impulse is the latest and only style that I actively use. Other past 
 
 ### illogical-impulse<sup>Quickshell</sup>
 
-| AI | Common widgets |
+| AI, settings app | Some widgets |
 |:---|:---------------|
-| ![image](https://github.com/user-attachments/assets/08d26785-b54d-4ad1-875b-bb08cc6757f5) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
+| ![image](https://github.com/user-attachments/assets/4d45e860-ae60-418a-a564-309b4939f5c4) | ![image](https://github.com/user-attachments/assets/4fcd63d9-0943-4b21-8737-4bed97b71961) |
 | Window management | Weeb power |
 | ![image](https://github.com/user-attachments/assets/86cc511b-0d33-4c78-bcc0-3037d02a17da) | ![image](https://github.com/user-attachments/assets/292259fc-57d3-4663-a583-2ce2faad13fb) |
 
