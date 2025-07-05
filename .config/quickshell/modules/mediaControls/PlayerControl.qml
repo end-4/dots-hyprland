@@ -23,7 +23,7 @@ Item { // Player instance
     property string artDownloadLocation: Directories.coverArt
     property string artFileName: Qt.md5(artUrl) + ".jpg"
     property string artFilePath: `${artDownloadLocation}/${artFileName}`
-    property color artDominantColor: colorQuantizer?.colors[0] || Appearance.m3colors.m3secondaryContainer
+    property color artDominantColor: ColorUtils.mix(colorQuantizer?.colors[0], Appearance.colors.colPrimaryContainer, 0.8) || Appearance.m3colors.m3secondaryContainer
     property bool downloaded: false
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
