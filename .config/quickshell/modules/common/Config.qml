@@ -135,6 +135,7 @@ Singleton {
 
             property JsonObject dock: JsonObject {
                 property bool enable: false
+                property bool monochromeIcons: true
                 property real height: 60
                 property real hoverRegionHeight: 2
                 property bool pinnedOnStartup: false
