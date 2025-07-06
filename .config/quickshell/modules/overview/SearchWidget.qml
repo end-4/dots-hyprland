@@ -41,29 +41,31 @@ Item { // Wrapper
 
     property var searchActions: [
         {
-            action: "img", 
+            action: "img",
             execute: () => {
-                executor.executeCommand(Directories.wallpaperSwitchScriptPath)
+                executor.executeCommand([Directories.wallpaperSwitchScriptPath]);
             }
         },
         {
             action: "dark",
             execute: () => {
-                executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`)
+                executor.executeCommand([Directories.wallpaperSwitchScriptPath, "--mode", "dark", "--noswitch"]);
             }
         },
         {
             action: "light",
             execute: () => {
-                executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`)
+                executor.executeCommand([Directories.wallpaperSwitchScriptPath, "--mode", "light", "--noswitch"]);
             }
         },
         {
             action: "accentcolor",
             execute: (args) => {
-                executor.executeCommand(
-                    `${Directories.wallpaperSwitchScriptPath} --noswitch --color ${args != '' ? ("'"+args+"'") : ""}`
-                )
+                let command = [Directories.wallpaperSwitchScriptPath, "--noswitch", "--color"];
+                if (args && args.trim() !== '') {
+                    command.push(args.trim()); // Pass arg directly, script should handle validation
+                }
+                executor.executeCommand(command);
             }
         },
         {
@@ -104,12 +106,19 @@ Item { // Wrapper
 
     Process {
         id: executor
-        property list<string> baseCommand: ["bash", "-c"]
-        function executeCommand(command) {
-            executor.command = baseCommand.concat(
-                `${command}`
-            )
-            executor.startDetached()
+        // baseCommand removed, executor.command will be set to a full array.
+        function executeCommand(commandArray) { // command is now expected to be an array
+            if (!Array.isArray(commandArray) || commandArray.length === 0) {
+                console.log("[SearchWidget.executor] Error: executeCommand expects a non-empty array.");
+                return;
+            }
+            // Basic check for executable: it shouldn't be empty or look like an option
+            if (!commandArray[0] || commandArray[0].trim() === "" || commandArray[0].startsWith("-")) {
+                 console.log("[SearchWidget.executor] Error: Invalid executable in commandArray:", commandArray[0]);
+                return;
+            }
+            executor.command = commandArray;
+            executor.startDetached();
         }
     }
 
@@ -305,14 +314,13 @@ Item { // Wrapper
                                     clickActionName: "",
                                     type: `#${entry.match(/^\s*(\S+)/)?.[1] || ""}`,
                                     execute: () => {
-                                        Quickshell.execDetached(
-                                            ["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(entry)}' | cliphist decode | wl-copy`]
-                                        );
+                                        const scriptPath = FileUtils.trimFileProtocol(`${Directories.scriptPath}/cliphist_decode_and_copy.sh`);
+                                        Quickshell.execDetached([scriptPath, entry]);
                                     }
                                 };
                             }).filter(Boolean);
                         } 
-                        if (root.searchingText.startsWith(Config.options.search.prefix.emojis)) { // Clipboard
+                        if (root.searchingText.startsWith(Config.options.search.prefix.emojis)) { // Emojis (not clipboard, typo in original comment)
                             const searchString = root.searchingText.slice(Config.options.search.prefix.emojis.length);
                             return Emojis.fuzzyQuery(searchString).map(entry => {
                                 return {
@@ -341,16 +349,8 @@ Item { // Wrapper
                                 Quickshell.clipboardText = root.mathResult;
                             }
                         }
-                        const commandResultObject = {
-                            name: searchingText.replace("file://", ""),
-                            clickActionName: qsTr("Run"),
-                            type: qsTr("Run command"),
-                            fontType: "monospace",
-                            materialSymbol: 'terminal',
-                            execute: () => {
-                                executor.executeCommand(searchingText.startsWith('sudo') ? `${Config.options.apps.terminal} fish -C '${root.searchingText.replace("file://", "")}'` : root.searchingText.replace("file://", ""));
-                            }
-                        }
+                        // const commandResultObject = { ... } // Removed this entire object definition
+
                         const launcherActionObjects = root.searchActions
                             .map(action => {
                                 const actionString = `${Config.options.search.prefix.action}${action.action}`;
@@ -384,15 +384,13 @@ Item { // Wrapper
                         ////////// Launcher actions ////////////
                         result = result.concat(launcherActionObjects);
 
-                        /////////// Math result & command //////////
-                        const startsWithNumber = /^\d/.test(root.searchingText);
-                        if (startsWithNumber) {
-                            result.push(mathResultObject);
-                            result.push(commandResultObject);
-                        } else {
-                            result.push(commandResultObject);
+                        /////////// Math result //////////
+                        // Only add math result if it's not empty and searchingText is not empty
+                        if (root.mathResult && root.mathResult.trim() !== "" && root.searchingText && root.searchingText.trim() !== "" && !isNaN(parseFloat(root.searchingText[0]))) {
                             result.push(mathResultObject);
                         }
+
+                        // Removed the logic that pushed commandResultObject
 
                         ///////////////// Web search ////////////////
                         result.push({

@@ -35,12 +35,22 @@ Singleton {
     property string userAiPrompts: FileUtils.trimFileProtocol(`${Directories.shellConfig}/ai/prompts`)
     // Cleanup on init
     Component.onCompleted: {
-        Quickshell.execDetached(["bash", "-c", `mkdir -p '${shellConfig}'`])
-        Quickshell.execDetached(["bash", "-c", `mkdir -p '${favicons}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${coverArt}'; mkdir -p '${coverArt}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${booruPreviews}'; mkdir -p '${booruPreviews}'`])
-        Quickshell.execDetached(["bash", "-c", `mkdir -p '${booruDownloads}' && mkdir -p '${booruDownloadsNsfw}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${latexOutput}'; mkdir -p '${latexOutput}'`])
-        Quickshell.execDetached(["bash", "-c", `rm -rf '${cliphistDecode}'; mkdir -p '${cliphistDecode}'`])
+        const safeCleanupScript = FileUtils.trimFileProtocol(`${Directories.scriptPath}/safe_cleanup_dir.sh`);
+
+        // Ensure script is executable (though it should be set by deployment)
+        // Quickshell.execDetached(["chmod", "+x", safeCleanupScript]); // Consider if this is needed or handled elsewhere
+
+        // Directories to ensure exist (mkdir -p only)
+        Quickshell.execDetached(["mkdir", "-p", shellConfig]);
+        Quickshell.execDetached(["mkdir", "-p", favicons]);
+        Quickshell.execDetached(["mkdir", "-p", booruDownloads]);
+        Quickshell.execDetached(["mkdir", "-p", booruDownloadsNsfw]);
+
+        // Directories to be cleaned up (rm -rf path; mkdir -p path) via the safe script
+        // Note: safe_cleanup_dir.sh handles both rm and mkdir
+        Quickshell.execDetached([safeCleanupScript, coverArt]);
+        Quickshell.execDetached([safeCleanupScript, booruPreviews]);
+        Quickshell.execDetached([safeCleanupScript, latexOutput]);
+        Quickshell.execDetached([safeCleanupScript, cliphistDecode]);
     }
 }

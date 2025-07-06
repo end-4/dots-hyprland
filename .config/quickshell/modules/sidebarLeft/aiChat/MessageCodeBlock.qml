@@ -95,13 +95,21 @@ ColumnLayout {
                     buttonIcon: activated ? "check" : "save"
 
                     onClicked: {
-                        const downloadPath = FileUtils.trimFileProtocol(Directories.downloads)
-                        Quickshell.execDetached(["bash", "-c", 
-                            `echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`
-                        ])
-                        Quickshell.execDetached(["bash", "-c", `notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`])
-                        saveCodeButton.activated = true
-                        saveIconTimer.restart()
+                        const saveScriptPath = FileUtils.trimFileProtocol(`${Directories.scriptPath}/save_code_snippet.sh`);
+                        let language = segmentLang || "txt";
+                        // Basic sanitization for language to be part of filename extension
+                        language = language.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 10);
+                        if (language === "") language = "txt";
+
+                        const proposedFilename = `code.${language}`;
+
+                        // segmentContent does not need StringUtils.shellSingleQuoteEscape here
+                        // as it's passed as a direct argument to the script.
+                        Quickshell.execDetached([saveScriptPath, proposedFilename, segmentContent]);
+
+                        // The new script handles notifications.
+                        saveCodeButton.activated = true;
+                        saveIconTimer.restart();
                     }
 
                     Timer {

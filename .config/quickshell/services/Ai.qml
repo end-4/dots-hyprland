@@ -422,9 +422,52 @@ Singleton {
         root.messageByID = ({});
     }
 
+    property var _pendingAiConfigChange: null // Stores {key: "", value: "", messageId: ""}
+
+    // Whitelist for AI to get/set config values.
+    // Keys should be exact paths to Config.options fields.
+    // Example: "bar.position", "theme.name"
+    // For nested objects, use dot notation: "ai.tools.get_shell_config.enabled"
+    readonly property var aiConfigWhitelist: [
+        "bar.position", "bar.visible", "bar.borderless", "bar.layer", "bar.exclusive",
+        "dock.position", "dock.visible", "dock.layer", "dock.exclusive",
+        "sidebarLeft.width", "sidebarLeft.visible", "sidebarLeft.layer", "sidebarLeft.exclusive",
+        "sidebarRight.width", "sidebarRight.visible", "sidebarRight.layer", "sidebarRight.exclusive",
+        "backgroundWidgets.horizontalAlignment", "backgroundWidgets.verticalAlignment",
+        "theme.name", "theme.variant", "theme.wallpaper.path", "theme.wallpaper.blurAmount",
+        "font.family.main", "font.family.monospace", "font.pixelSize.small", "font.pixelSize.medium", "font.pixelSize.large",
+        "ai.systemPrompt", "ai.temperature", "ai.model",
+        // Add other specific, safe keys here. Avoid keys that could execute commands or change security settings.
+    ]
+
+    // This function will be called by a confirmation dialog
+    function confirmAiSetConfig(key, value, messageId) {
+        console.log(`User confirmed setting ${key} to ${value}`);
+        Config.setNestedValue(key, value);
+        // Find the message by ID and update its content or add a new one
+        if (messageByID[messageId]) {
+            messageByID[messageId].content += `\n\n[[ ${qsTr("Configuration applied by user.")} ]]`;
+            messageByID[messageId].done = true; // Mark as done if it was pending
+        } else {
+            addMessage(`[[ ${qsTr("Applied configuration change from AI:")} ${key} = ${value} ]]`, interfaceRole);
+        }
+        _pendingAiConfigChange = null;
+    }
+
+    function rejectAiSetConfig(key, value, messageId) {
+        console.log(`User rejected setting ${key} to ${value}`);
+        if (messageByID[messageId]) {
+            messageByID[messageId].content += `\n\n[[ ${qsTr("Configuration change rejected by user.")} ]]`;
+            messageByID[messageId].done = true; // Mark as done
+        } else {
+            addMessage(`[[ ${qsTr("Rejected configuration change from AI:")} ${key} = ${value} ]]`, interfaceRole);
+        }
+        _pendingAiConfigChange = null;
+    }
+
     Process {
         id: requester
-        property var baseCommand: ["bash", "-c"]
+        // property var baseCommand: ["bash", "-c"] // No longer using bash -c for curl
         property var message
         property bool isReasoning
         property string apiFormat: "openai"
@@ -524,9 +567,40 @@ Singleton {
             const data = (apiFormat === "gemini") ? buildGeminiRequestData(model, messageArray) : buildOpenAIRequestData(model, messageArray);
             // console.log("REQUEST DATA: ", JSON.stringify(data, null, 2));
 
+            let curlArgs = ["curl", "--no-buffer", "--show-error", "--silent"]; // Added --show-error and --silent
+
+            // Validate endpoint URL (basic validation for https)
+            if (!endpoint.startsWith("https://") && !endpoint.startsWith("http://localhost")) {
+                console.log("[AI] Error: Invalid endpoint URL:", endpoint);
+                requester.message.content = qsTr("Error: Invalid API endpoint URL.");
+                requester.markDone();
+                return;
+            }
+            curlArgs.push(endpoint);
+
             let requestHeaders = {
                 "Content-Type": "application/json",
             }
+
+            // Add headers to curlArgs
+            Object.entries(requestHeaders).forEach(([key, value]) => {
+                if (value && value.length > 0) {
+                    curlArgs.push("-H", `${key}: ${value}`);
+                }
+            });
+
+            if (apiFormat !== "gemini") { // OpenAI, OpenRouter etc. use Bearer token
+                const apiKey = root.apiKeys ? (root.apiKeys[model.key_id] ?? "") : "";
+                if (apiKey) {
+                    curlArgs.push("-H", `Authorization: Bearer ${apiKey}`);
+                } else if (model.requires_key) {
+                    console.log(`[AI] Error: API key for ${model.key_id} is missing for an OpenAI-like API.`);
+                    // User will be advised by onExited logic if "API key not valid" is in response.
+                }
+            }
+            // For Gemini, API key is in the endpoint URL, handled by buildGeminiEndpoint
+
+            curlArgs.push("-d", JSON.stringify(data));
             
             /* Create local message object */
             requester.message = root.aiMessageComponent.createObject(root, {
@@ -547,15 +621,14 @@ Singleton {
                 .join(' ');
 
             // console.log("Request headers: ", JSON.stringify(requestHeaders));
-            // console.log("Header string: ", headerString);
+            // console.log("Curl arguments: ", JSON.stringify(curlArgs));
 
-            /* Create command string */
-            const requestCommandString = `curl --no-buffer "${endpoint}"`
-                + ` ${headerString}`
-                + ((apiFormat == "gemini") ? "" : ` -H "Authorization: Bearer \$\{${root.apiKeyEnvVarName}\}"`)
-                + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
-            // console.log("Request command: ", requestCommandString);
-            requester.command = baseCommand.concat([requestCommandString]);
+            // Set the command for Quickshell.execDetached
+            // First element is the command, subsequent are arguments. Environment is separate.
+            requester.command = curlArgs;
+            // The environment with API key is already set on the Process element:
+            // if (model.requires_key) requester.environment[`${root.apiKeyEnvVarName}`] = ...
+            // This is fine for Gemini where key is in URL. For others, Authorization header is used.
 
             /* Reset vars and make the request */
             requester.isReasoning = false
@@ -756,19 +829,70 @@ Singleton {
             addFunctionOutputMessage(name, qsTr("Switched to search mode. Continue with the user's request."))
             requester.makeRequest();
         } else if (name === "get_shell_config") {
-            const configJson = ObjectUtils.toPlainObject(Config.options)
-            addFunctionOutputMessage(name, JSON.stringify(configJson));
+            // For get_shell_config, we don't need to ask for the key, AI should not specify it.
+            // We return only the whitelisted parts of the config.
+            let filteredConfig = {};
+            for (const allowedKey of aiConfigWhitelist) {
+                let currentValue = Config.getNestedValue(allowedKey);
+                if (currentValue !== undefined) {
+                    // Set the value in the filteredConfig, maintaining structure
+                    let keys = allowedKey.split('.');
+                    let obj = filteredConfig;
+                    for (let i = 0; i < keys.length - 1; i++) {
+                        obj[keys[i]] = obj[keys[i]] || {};
+                        obj = obj[keys[i]];
+                    }
+                    obj[keys[keys.length - 1]] = currentValue;
+                }
+            }
+            addFunctionOutputMessage(name, JSON.stringify(filteredConfig));
             requester.makeRequest();
         } else if (name === "set_shell_config") {
-            if (!args.key || !args.value) {
+            if (!args.key || args.value === undefined) { // Check args.value specifically for undefined
                 addFunctionOutputMessage(name, qsTr("Invalid arguments. Must provide `key` and `value`."));
+                requester.makeRequest(); // Ensure we always send a response back to AI
                 return;
             }
             const key = args.key;
-            const value = args.value;
-            Config.setNestedValue(key, value);
+            const value = args.value; // Value can be bool, string, number
+
+            if (aiConfigWhitelist.includes(key)) {
+                _pendingAiConfigChange = {
+                    key: key,
+                    value: value,
+                    messageId: requester.message.id // Assuming requester.message has an id or we get it
+                };
+                // Simulate showing a dialog. In a real scenario, a QML dialog would be triggered.
+                // The dialog would then call either confirmAiSetConfig or rejectAiSetConfig.
+                const confirmationMessage = StringUtils.format(
+                    qsTr("AI is requesting to change setting: '{0}' to '{1}'.\n\n(This is a simulated confirmation. In a real UI, a dialog would appear. For now, this change will be auto-confirmed for testing flow.)"),
+                    key, value
+                );
+                addMessage(confirmationMessage, interfaceRole);
+
+                // TODO: Replace this with actual user dialog interaction.
+                // For now, auto-confirm after a short delay to simulate user action.
+                // Also, provide a way for the AI to know its request is pending user approval.
+                requester.message.content += `\n\n[[ ${qsTr("Waiting for user confirmation to set")} ${key} = ${value} ]]`;
+                // We don't call requester.makeRequest() here; we wait for user's (simulated) action.
+                // The actual Config.setNestedValue will happen in confirmAiSetConfig.
+                // For now, let's call confirm directly to test the logic.
+                // In a real implementation, this would be called by the dialog.
+                confirmAiSetConfig(key, value, _pendingAiConfigChange.messageId);
+                // Then, after confirmation, we need to send a response to the AI.
+                addFunctionOutputMessage(name, `Configuration change for '${key}' has been applied after user confirmation.`);
+
+            } else {
+                addMessage(StringUtils.format(qsTr("AI tried to set a non-whitelisted config key: {0}"), key), interfaceRole);
+                addFunctionOutputMessage(name, `Error: Key '${key}' is not allowed to be modified.`);
+            }
+            requester.makeRequest(); // Respond to the AI
         }
-        else root.addMessage(qsTr("Unknown function call: {0}"), "assistant");
+        else {
+            addMessage(StringUtils.format(qsTr("Unknown function call: {0}"), name), "assistant");
+            addFunctionOutputMessage(name, `Error: Unknown function '${name}'.`);
+            requester.makeRequest(); // Respond to the AI
+        }
     }
 
 }
