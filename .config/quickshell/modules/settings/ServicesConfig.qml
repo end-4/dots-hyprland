@@ -137,15 +137,4 @@ ContentPage {
             }
         }
     }
-
-    ContentSection {
-        title: "Weather"
-        ConfigSwitch {
-            text: "enable"
-            checked: Config.options.bar.weather.enable
-            onCheckedChanged: {
-                Config.options.bar.weather.enable = checked;
-            }
-        }
-    }
 }
