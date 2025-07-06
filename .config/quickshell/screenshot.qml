@@ -517,7 +517,7 @@ ShellRoot {
                     // Image regions
                     Repeater {
                         model: ScriptModel {
-                            values: panelWindow.imageRegions
+                            values: Config.options.screenshotTool.showContentRegions ? panelWindow.imageRegions : []
                         }
                         delegate: TargetRegion {
                             z: 4

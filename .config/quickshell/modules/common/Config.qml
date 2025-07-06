@@ -222,6 +222,10 @@ Singleton {
             property JsonObject hacks: JsonObject {
                 property int arbitraryRaceConditionDelay: 20 // milliseconds
             }
+
+            property JsonObject screenshotTool: JsonObject {
+                property bool showContentRegions: true
+            }
         }
     }
 }
