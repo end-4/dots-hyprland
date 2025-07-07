@@ -137,4 +137,19 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        title: "Search"
+
+        ConfigSwitch {
+            text: "Use Levenshtein distance-based algorithm instead of fuzzy"
+            checked: Config.options.search.sloppy
+            onCheckedChanged: {
+                Config.options.search.sloppy = checked;
+            }
+            StyledToolTip {
+                content: "Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)"
+            }
+        }
+    }
 }
