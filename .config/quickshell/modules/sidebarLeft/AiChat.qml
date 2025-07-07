@@ -72,6 +72,30 @@ Item {
             }
         },
         {
+            name: "save",
+            description: qsTr("Save chat"),
+            execute: (args) => {
+                const joinedArgs = args.join(" ")
+                if (joinedArgs.trim().length == 0) {
+                    Ai.addMessage(`Usage: ${root.commandPrefix}save CHAT_NAME`, Ai.interfaceRole);
+                    return;
+                }
+                Ai.saveChat(joinedArgs)
+            }
+        },
+        {
+            name: "load",
+            description: qsTr("Load chat"),
+            execute: (args) => {
+                const joinedArgs = args.join(" ")
+                if (joinedArgs.trim().length == 0) {
+                    Ai.addMessage(`Usage: ${root.commandPrefix}load CHAT_NAME`, Ai.interfaceRole);
+                    return;
+                }
+                Ai.loadChat(joinedArgs)
+            }
+        },
+        {
             name: "clear",
             description: qsTr("Clear chat history"),
             execute: () => {

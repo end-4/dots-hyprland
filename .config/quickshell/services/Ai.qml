@@ -19,7 +19,7 @@ Singleton {
     readonly property string apiKeyEnvVarName: "API_KEY"
     property Component aiMessageComponent: AiMessageData {}
     property string systemPrompt: Config.options?.ai?.systemPrompt ?? ""
-    property var messages: []
+    // property var messages: []
     property var messageIDs: []
     property var messageByID: ({})
     readonly property var apiKeys: KeyringStorage.keyringData?.apiKeys ?? {}
@@ -317,6 +317,7 @@ Singleton {
         const aiMessage = aiMessageComponent.createObject(root, {
             "role": role,
             "content": message,
+            "rawContent": message,
             "thinking": false,
             "done": true,
         });
@@ -533,6 +534,7 @@ Singleton {
                 "role": "assistant",
                 "model": currentModelId,
                 "content": "",
+                "rawContent": "",
                 "thinking": true,
                 "done": false,
             });
@@ -719,6 +721,7 @@ Singleton {
         const aiMessage = aiMessageComponent.createObject(root, {
             "role": "user",
             "content": `[[ Output of ${name} ]]`,
+            "rawContent": `[[ Output of ${name} ]]`,
             "functionName": name,
             "functionResponse": output,
             "thinking": false,
@@ -771,4 +774,75 @@ Singleton {
         else root.addMessage(qsTr("Unknown function call: {0}"), "assistant");
     }
 
+    function chatToJson() {
+        return root.messageIDs.map(id => {
+            const message = root.messageByID[id]
+            return ({
+                "role": message.role,
+                "rawContent": message.rawContent,
+                "model": message.model,
+                "thinking": false,
+                "done": true,
+                "annotations": message.annotations,
+                "annotationSources": message.annotationSources,
+                "functionName": message.functionName,
+                "functionCall": message.functionCall,
+                "functionResponse": message.functionResponse,
+                "visibleToUser": message.visibleToUser,
+            })
+        })
+    }
+
+    FileView {
+        id: chatSaveFile
+        property string chatName: "chat"
+        path: `${Directories.aiChats}/${chatName}.json`
+    }
+
+    /**
+     * Saves chat to a JSON list of message objects.
+     * @param chatName name of the chat
+     */
+    function saveChat(chatName) {
+        chatSaveFile.chatName = chatName
+        const saveContent = JSON.stringify(root.chatToJson())
+        chatSaveFile.setText(saveContent)
+    }
+
+    /**
+     * Loads chat from a JSON list of message objects.
+     * @param chatName name of the chat
+     */
+    function loadChat(chatName) {
+        try {
+            chatSaveFile.chatName = chatName
+            const saveContent = chatSaveFile.text()
+            console.log(saveContent)
+            const saveData = JSON.parse(saveContent)
+            root.clearMessages()
+            root.messageIDs = saveData.map((_, i) => {
+                return i
+            })
+            console.log(JSON.stringify(messageIDs))
+            for (let i = 0; i < saveData.length; i++) {
+                const message = saveData[i];
+                root.messageByID[i] = root.aiMessageComponent.createObject(root, {
+                    "role": message.role,
+                    "rawContent": message.rawContent,
+                    "content": message.rawContent,
+                    "model": message.model,
+                    "thinking": message.thinking,
+                    "done": message.done,
+                    "annotations": message.annotations,
+                    "annotationSources": message.annotationSources,
+                    "functionName": message.functionName,
+                    "functionCall": message.functionCall,
+                    "functionResponse": message.functionResponse,
+                    "visibleToUser": message.visibleToUser,
+                });
+            }
+        } catch (e) {
+            console.log("[AI] Could not load chat: ", e);
+        }
+    }
 }
