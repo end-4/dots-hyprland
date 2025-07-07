@@ -307,6 +307,20 @@ ContentPage {
     }
 
     ContentSection {
+        title: "On-screen display"
+        ConfigSpinBox {
+            text: "Timeout (ms)"
+            value: Config.options.osd.timeout
+            from: 100
+            to: 3000
+            stepSize: 100
+            onValueChanged: {
+                Config.options.osd.timeout = value;
+            }
+        }
+    }
+
+    ContentSection {
         title: "Overview"
         ConfigSpinBox {
             text: "Scale (%)"
