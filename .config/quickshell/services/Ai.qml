@@ -39,6 +39,7 @@ Singleton {
     property list<var> defaultPrompts: []
     property list<var> userPrompts: []
     property list<var> promptFiles: [...defaultPrompts, ...userPrompts]
+    property list<var> savedChats: []
 
     // Model properties:
     // - name: Name of the model
@@ -288,6 +289,20 @@ Singleton {
                 root.userPrompts = text.split("\n")
                     .filter(fileName => fileName.endsWith(".md") || fileName.endsWith(".txt"))
                     .map(fileName => `${Directories.userAiPrompts}/${fileName}`)
+            }
+        }
+    }
+
+    Process {
+        id: getSavedChats
+        running: true
+        command: ["ls", "-1", Directories.aiChats]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (text.length === 0) return;
+                root.savedChats = text.split("\n")
+                    .filter(fileName => fileName.endsWith(".json"))
+                    .map(fileName => `${Directories.aiChats}/${fileName}`)
             }
         }
     }
@@ -797,6 +812,7 @@ Singleton {
         id: chatSaveFile
         property string chatName: "chat"
         path: `${Directories.aiChats}/${chatName}.json`
+        blockLoading: true
     }
 
     /**
@@ -804,9 +820,10 @@ Singleton {
      * @param chatName name of the chat
      */
     function saveChat(chatName) {
-        chatSaveFile.chatName = chatName
+        chatSaveFile.chatName = chatName.trim()
         const saveContent = JSON.stringify(root.chatToJson())
         chatSaveFile.setText(saveContent)
+        getSavedChats.running = true;
     }
 
     /**
@@ -815,9 +832,10 @@ Singleton {
      */
     function loadChat(chatName) {
         try {
-            chatSaveFile.chatName = chatName
+            chatSaveFile.chatName = chatName.trim()
+            chatSaveFile.reload()
             const saveContent = chatSaveFile.text()
-            console.log(saveContent)
+            // console.log(saveContent)
             const saveData = JSON.parse(saveContent)
             root.clearMessages()
             root.messageIDs = saveData.map((_, i) => {
@@ -843,6 +861,8 @@ Singleton {
             }
         } catch (e) {
             console.log("[AI] Could not load chat: ", e);
+        } finally {
+            getSavedChats.running = true;
         }
     }
 }
