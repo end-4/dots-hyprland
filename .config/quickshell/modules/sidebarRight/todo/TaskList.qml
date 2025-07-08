@@ -1,6 +1,5 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/modules/sidebarRight/todo"
 import "root:/services"
 import Qt5Compat.GraphicalEffects
 import QtQuick
@@ -38,6 +37,7 @@ Item {
             width: parent.width
             spacing: 0
             Repeater {
+                id: todoRepeater
                 model: ScriptModel {
                     values: taskList
                 }
@@ -47,6 +47,8 @@ Item {
                     property bool pendingEdit: false
                     property bool pendingDelete: false
                     property bool enableHeightAnimation: false
+                    property bool enableFading: false
+                    property EditingCallbackInfo editingCallbackInfo: EditingCallbackInfo {}
 
                     Layout.fillWidth: true
                     implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
@@ -60,6 +62,20 @@ Item {
                             easing.type: Appearance.animation.elementMoveFast.type
                             easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
+                    }
+
+                    Behavior on opacity {
+                        enabled: enableFading
+                        NumberAnimation {
+                            duration: Appearance.animation.elementMoveFast.duration
+                        }
+                    }
+
+                    function fadeIn() {
+                        opacity = 0
+                        enableFading = true
+                        opacity = 1
+                        enableFading = false
                     }
 
                     function startAction(showCloseAnimation) {
@@ -82,7 +98,11 @@ Item {
                                 else Todo.markUnfinished(modelData.originalIndex)
                             } else if (todoItem.pendingEdit) {
                                 todoItem.pendingEdit = false
-                                root.editingCallback(modelData.originalIndex, modelData.done, modelData.content)
+                                todoItem.editingCallbackInfo.totalIndex = modelData.originalIndex
+                                todoItem.editingCallbackInfo.listIndex = model.index
+                                todoItem.editingCallbackInfo.done = modelData.done
+                                todoItem.editingCallbackInfo.currentText = modelData.content
+                                root.editingCallback(todoItem.editingCallbackInfo)
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
                                 Todo.deleteItem(modelData.originalIndex)
@@ -201,5 +221,9 @@ Item {
                 text: emptyPlaceholderText
             }
         }
+    }
+
+    function fadeInTodoItem(index) {
+        todoRepeater.itemAt(index).fadeIn()
     }
 }

@@ -13,9 +13,7 @@ Item {
     property var tabButtonList: [{"icon": "checklist", "name": qsTr("Unfinished")}, {"name": qsTr("Done"), "icon": "check_circle"}]
     property bool showAddDialog: false
     property bool showEditDialog: false
-    property int editIndex: 0
-    property bool editStateDone: false
-    property string editCurrentText: ""
+    property var editingCallbackInfo
     property int dialogMargins: 20
     property int fabSize: 48
     property int fabMargins: 14
@@ -38,6 +36,7 @@ Item {
         else if (event.key === Qt.Key_Escape && (root.showAddDialog || root.showEditDialog)) {
             root.showAddDialog = false
             root.showEditDialog = false
+            root.editingCallbackInfo = undefined
             event.accepted = true;
         }
     }
@@ -137,6 +136,7 @@ Item {
 
             // To Do tab
             TaskList {
+                id: unfinishedTaskList
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
                 emptyPlaceholderText: qsTr("Nothing here!")
@@ -146,6 +146,7 @@ Item {
                     .filter(function(item) { return !item.done; })
             }
             TaskList {
+                id: doneTaskList
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
                 emptyPlaceholderText: qsTr("Finished tasks will go here")
@@ -235,9 +236,17 @@ Item {
 
             function editTask() {
                 if (todoInput.text.length > 0) {
-                    Todo.editTask(root.editIndex, root.editStateDone, todoInput.text)
+                    Todo.editTask(root.editingCallbackInfo.totalIndex, root.editingCallbackInfo.done, todoInput.text)
                     todoInput.text = ""
                     root.showEditDialog = false
+                    
+                    if (root.editingCallbackInfo.done) {
+                        doneTaskList.fadeInTodoItem(root.editingCallbackInfo.listIndex)
+                    } else {
+                        unfinishedTaskList.fadeInTodoItem(root.editingCallbackInfo.listIndex)
+                    }
+
+                    root.editingCallbackInfo = undefined
                 }
             }
 
@@ -299,11 +308,12 @@ Item {
                         onClicked: {
                             root.showAddDialog = false
                             root.showEditDialog = false
+                            root.editingCallbackInfo = undefined
                         }
                     }
                     DialogButton {
                         buttonText: root.showAddDialog ? qsTr("Add") : qsTr("Edit")
-                        enabled: todoInput.text.length > 0 && (root.showAddDialog || todoInput.text != root.editCurrentText)
+                        enabled: todoInput.text.length > 0 && (root.showAddDialog || todoInput.text != root.editingCallbackInfo?.currentText)
                         onClicked: root.showAddDialog ? dialog.addTask() : dialog.editTask()
                     }
                 }
@@ -311,11 +321,9 @@ Item {
         }
     }
 
-    function editingCallback(index, done, currentText) {
+    function editingCallback(editingCallbackInfo) {
+        root.editingCallbackInfo = editingCallbackInfo
+        todoInput.text = editingCallbackInfo.currentText
         root.showEditDialog = true
-        root.editIndex = index
-        root.editStateDone = done
-        root.editCurrentText = currentText
-        todoInput.text = currentText
     }
 }
