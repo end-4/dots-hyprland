@@ -236,16 +236,9 @@ Item {
 
             function editTask() {
                 if (todoInput.text.length > 0) {
-                    Todo.editTask(root.editingCallbackInfo.totalIndex, root.editingCallbackInfo.done, todoInput.text)
+                    Todo.editTask(root.editingCallbackInfo.index, root.editingCallbackInfo.done, todoInput.text)
                     todoInput.text = ""
                     root.showEditDialog = false
-                    
-                    if (root.editingCallbackInfo.done) {
-                        doneTaskList.fadeInTodoItem(root.editingCallbackInfo.listIndex)
-                    } else {
-                        unfinishedTaskList.fadeInTodoItem(root.editingCallbackInfo.listIndex)
-                    }
-
                     root.editingCallbackInfo = undefined
                 }
             }

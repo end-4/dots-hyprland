@@ -38,6 +38,7 @@ Item {
             spacing: 0
             Repeater {
                 id: todoRepeater
+                property list<int> fadingInIndexes: []
                 model: ScriptModel {
                     values: taskList
                 }
@@ -98,11 +99,11 @@ Item {
                                 else Todo.markUnfinished(modelData.originalIndex)
                             } else if (todoItem.pendingEdit) {
                                 todoItem.pendingEdit = false
-                                todoItem.editingCallbackInfo.totalIndex = modelData.originalIndex
-                                todoItem.editingCallbackInfo.listIndex = model.index
+                                todoItem.editingCallbackInfo.index = modelData.originalIndex
                                 todoItem.editingCallbackInfo.done = modelData.done
                                 todoItem.editingCallbackInfo.currentText = modelData.content
                                 root.editingCallback(todoItem.editingCallbackInfo)
+                                todoRepeater.fadingInIndexes.push(model.index)
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
                                 Todo.deleteItem(modelData.originalIndex)
@@ -186,6 +187,15 @@ Item {
                     }
                 }
 
+                onItemAdded: function(index, item) {
+                    for (let i = 0; i < fadingInIndexes.length; i++) {
+                        if (fadingInIndexes[i] == index) {
+                            fadingInIndexes.splice(i, 1)
+                            item.fadeIn()
+                            break
+                        }
+                    }
+                }
             }
             // Bottom padding
             Item {
