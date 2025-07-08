@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QuickShell.Hyprland
+import Quickshell.Hyprland
 import "root:/services/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
