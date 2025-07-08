@@ -93,6 +93,7 @@ Item {
                         interval: Appearance.animation.elementMoveFast.duration
                         repeat: false
                         onTriggered: {
+                            todoRepeater.fadingInIndexes = [] // Clears the list every time a button is pressed to prevent it being filled indefinitely
                             if (todoItem.pendingDoneToggle) {
                                 todoItem.pendingDoneToggle = false
                                 if (!modelData.done) Todo.markDone(modelData.originalIndex)
@@ -103,7 +104,7 @@ Item {
                                 todoItem.editingCallbackInfo.done = modelData.done
                                 todoItem.editingCallbackInfo.currentText = modelData.content
                                 root.editingCallback(todoItem.editingCallbackInfo)
-                                todoRepeater.fadingInIndexes.push(model.index)
+                                todoRepeater.fadingInIndexes.push(model.index) // Adds to list even when edit is canceled
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
                                 Todo.deleteItem(modelData.originalIndex)
@@ -191,8 +192,8 @@ Item {
                     for (let i = 0; i < fadingInIndexes.length; i++) {
                         if (fadingInIndexes[i] == index) {
                             fadingInIndexes.splice(i, 1)
+                            i--
                             item.fadeIn()
-                            break
                         }
                     }
                 }
