@@ -31,6 +31,64 @@ Singleton {
         addItem(item)
     }
 
+    function moveTop(current_index) {
+        var item = list[current_index]
+        list.splice(current_index, 1)
+        list.unshift(item)
+
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
+    }
+
+    function moveUp(current_index) {
+        var item = list[current_index]
+
+        for (var i = current_index - 1; i >= 0; i--) {
+            var next_item = list[i]
+            list[i] = item
+            list[current_index] = next_item
+
+            current_index = i
+            if (next_item.done == item.done) {
+                break
+            }
+        }
+
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
+    }
+
+    function moveDown(current_index) {
+        var item = list[current_index]
+
+        for (var i = current_index + 1; i < list.length; i++) {
+            var next_item = list[i]
+            list[i] = item
+            list[current_index] = next_item
+
+            current_index = i
+            if (next_item.done == item.done) {
+                break
+            }
+        }
+
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
+    }
+
+    function moveBottom(current_index) {
+        var item = list[current_index]
+        list.splice(current_index, 1)
+        list.push(item)
+
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
+    }
+
     function markDone(index) {
         if (index >= 0 && index < list.length) {
             list[index].done = true
