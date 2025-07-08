@@ -187,10 +187,11 @@ ContentPage {
 
                 function updateMonitors() {
                     loaded = true;
-                    
+
                     monitorsSelection.clear();
 
                     var empty_list = true;
+                    var monitor_count = 0;
 
                     var enabled_map = Config.options.bar.screenList.reduce((map, val) => {
                         if(!val || val === "")
@@ -204,6 +205,8 @@ ContentPage {
                             enabled: true
                         });
 
+                        ++monitor_count;
+
                         return map;
                     }, {})
 
@@ -215,8 +218,15 @@ ContentPage {
                             label: monitor.name,
                             enabled: empty_list
                         })
+
+                        ++monitor_count;
                     }
 
+                    if(monitor_count % 2 != 0)
+                        monitorsSelection.append({
+                            label: "",
+                            enabled: false
+                        })
                 }
 
                 Connections {
@@ -238,6 +248,7 @@ ContentPage {
                     ConfigSwitch {
                         text: model.label
                         checked: model.enabled
+                        opacity: model.label === "" ? 0 : 1
 
                         function removeMonitor() {
                             var screenList = Config.options.bar.screenList;
