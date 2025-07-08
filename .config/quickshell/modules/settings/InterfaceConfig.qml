@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QuickShell.Hyprland
 import "root:/services/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
@@ -166,6 +167,93 @@ ContentPage {
                 ConfigSwitch {
                     opacity: 0
                     enabled: false
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: "Monitors"
+            ConfigGrid {
+                id: monitorsGrid
+
+                uniform: true
+                columns: 2
+
+                ListModel {
+                    id: monitorsSelection
+                }
+
+                Connections {
+                    target: Hyprland.monitors
+                    function onValuesChanged() {
+                        monitorsSelection.clear();
+
+                        var empty_list = true;
+
+                        var enabled_map = Config.options.bar.screenList.reduce((map, val) => {
+                            if(!val || val === "")
+                                return map;
+
+                            empty_list = false;
+                            map[val] = true;
+                            
+                            monitorsSelection.append({
+                                label: val,
+                                enabled: true
+                            });
+
+                            return map;
+                        }, {})
+
+                        for(var monitor of Hyprland.monitors.values) {
+                            if(enabled_map[monitor.name])
+                                continue;
+
+                            monitorsSelection.append({
+                                label: monitor.name,
+                                enabled: empty_list
+                            })
+                        }
+                    } 
+                }
+
+                Repeater {
+                    model: monitorsSelection
+ 
+                    ConfigSwitch {
+                        text: model.label
+                        checked: model.enabled
+                        
+                        function removeMonitor() {
+                            var screenList = Config.options.bar.screenList;
+                            var index = screenList.indexOf(model.label);
+
+                            // make sure at least one monitor has a bar
+                            if(screenList.length === 1) {
+                                checked = true;
+                                return;
+                            }
+
+                            screenList.splice(index, 1);
+                        }
+
+                        function addMonitor() {
+                            var screenList = Config.options.bar.screenList;
+                            var index = screenList.indexOf(model.label);
+
+                            if(index != -1)
+                                return;
+
+                            screenList.push(model.label);
+                        }
+
+                        onCheckedChanged: {
+                            if(!checked)
+                                removeMonitor();
+                            else
+                                addMonitor();
+                        }
+                    }
                 }
             }
         }
