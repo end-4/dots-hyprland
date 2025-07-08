@@ -14,7 +14,7 @@ Rectangle {
     color: Appearance.colors.colLayer1
     clip: true
     implicitHeight: collapsed ? collapsedBottomWidgetGroupRow.implicitHeight : bottomWidgetGroupRow.implicitHeight
-    property int selectedTab: Config.options.sidebar.bottomWidgetRight.lastTab
+    property int selectedTab: Persistent.states.sidebar.bottomGroup.tab
     property bool collapsed: Persistent.states.sidebar.bottomGroup.collapsed
     property var tabs: [
         {"type": "calendar", "name": "Calendar", "icon": "calendar_month", "widget": calendarWidget}, 
@@ -146,7 +146,7 @@ Rectangle {
                         buttonIcon: modelData.icon
                         onClicked: {
                             root.selectedTab = index
-                            Config.options.sidebar.bottomWidgetRight.lastTab = index
+                            Persistent.states.sidebar.bottomGroup.tab = index
                         }
                     }
                 }

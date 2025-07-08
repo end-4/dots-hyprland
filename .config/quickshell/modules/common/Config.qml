@@ -206,9 +206,6 @@ Singleton {
                         property string username: "[unset]"
                     }
                 }
-                property JsonObject bottomWidgetRight: JsonObject {
-                    property int lastTab: 0
-                }
             }
 
             property JsonObject time: JsonObject {
