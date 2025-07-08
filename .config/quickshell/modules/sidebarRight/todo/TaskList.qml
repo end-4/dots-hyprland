@@ -232,8 +232,4 @@ Item {
             }
         }
     }
-
-    function fadeInTodoItem(index) {
-        todoRepeater.itemAt(index).fadeIn()
-    }
 }
