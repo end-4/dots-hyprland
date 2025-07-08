@@ -179,42 +179,57 @@ ContentPage {
                 uniform: true
                 columns: 2
 
+                property bool loaded: false
+
                 ListModel {
                     id: monitorsSelection
+                }
+
+                function updateMonitors() {
+                    loaded = true;
+                    
+                    monitorsSelection.clear();
+
+                    var empty_list = true;
+
+                    var enabled_map = Config.options.bar.screenList.reduce((map, val) => {
+                        if(!val || val === "")
+                            return map;
+
+                        empty_list = false;
+                        map[val] = true;
+                        
+                        monitorsSelection.append({
+                            label: val,
+                            enabled: true
+                        });
+
+                        return map;
+                    }, {})
+
+                    for(var monitor of Hyprland.monitors.values) {
+                        if(enabled_map[monitor.name])
+                            continue;
+
+                        monitorsSelection.append({
+                            label: monitor.name,
+                            enabled: empty_list
+                        })
+                    }
+
                 }
 
                 Connections {
                     target: Hyprland.monitors
                     function onValuesChanged() {
-                        monitorsSelection.clear();
-
-                        var empty_list = true;
-
-                        var enabled_map = Config.options.bar.screenList.reduce((map, val) => {
-                            if(!val || val === "")
-                                return map;
-
-                            empty_list = false;
-                            map[val] = true;
-                            
-                            monitorsSelection.append({
-                                label: val,
-                                enabled: true
-                            });
-
-                            return map;
-                        }, {})
-
-                        for(var monitor of Hyprland.monitors.values) {
-                            if(enabled_map[monitor.name])
-                                continue;
-
-                            monitorsSelection.append({
-                                label: monitor.name,
-                                enabled: empty_list
-                            })
-                        }
+                        monitorsGrid.updateMonitors()
                     } 
+                }
+
+                Component.onCompleted: {
+                    if(loaded)
+                        return;
+                    updateMonitors();
                 }
 
                 Repeater {
@@ -223,7 +238,7 @@ ContentPage {
                     ConfigSwitch {
                         text: model.label
                         checked: model.enabled
-                        
+
                         function removeMonitor() {
                             var screenList = Config.options.bar.screenList;
                             var index = screenList.indexOf(model.label);
