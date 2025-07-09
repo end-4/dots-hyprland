@@ -31,9 +31,9 @@ Singleton {
         addItem(item)
     }
 
-    function moveTop(current_index) {
-        var item = list[current_index]
-        list.splice(current_index, 1)
+    function moveTop(index) {
+        let item = list[index]
+        list.splice(index, 1)
         list.unshift(item)
 
         // Reassign to trigger onListChanged
@@ -41,16 +41,16 @@ Singleton {
         todoFileView.setText(JSON.stringify(root.list))
     }
 
-    function moveUp(current_index) {
-        var item = list[current_index]
+    function moveUp(index) {
+        let item = list[index]
 
-        for (var i = current_index - 1; i >= 0; i--) {
-            var next_item = list[i]
+        for (let i = index - 1; i >= 0; i--) {
+            let nextItem = list[i]
             list[i] = item
-            list[current_index] = next_item
+            list[index] = nextItem
 
-            current_index = i
-            if (next_item.done == item.done) {
+            index = i
+            if (nextItem.done == item.done) {
                 break
             }
         }
@@ -60,16 +60,16 @@ Singleton {
         todoFileView.setText(JSON.stringify(root.list))
     }
 
-    function moveDown(current_index) {
-        var item = list[current_index]
+    function moveDown(index) {
+        let item = list[index]
 
-        for (var i = current_index + 1; i < list.length; i++) {
-            var next_item = list[i]
+        for (let i = index + 1; i < list.length; i++) {
+            let nextItem = list[i]
             list[i] = item
-            list[current_index] = next_item
+            list[index] = nextItem
 
-            current_index = i
-            if (next_item.done == item.done) {
+            index = i
+            if (nextItem.done == item.done) {
                 break
             }
         }
@@ -79,9 +79,9 @@ Singleton {
         todoFileView.setText(JSON.stringify(root.list))
     }
 
-    function moveBottom(current_index) {
-        var item = list[current_index]
-        list.splice(current_index, 1)
+    function moveBottom(index) {
+        let item = list[index]
+        list.splice(index, 1)
         list.push(item)
 
         // Reassign to trigger onListChanged
