@@ -176,13 +176,6 @@ Item {
                     property int workspaceColIndex: (windowData?.workspace.id - 1) % Config.options.overview.columns
                     property int workspaceRowIndex: Math.floor((windowData?.workspace.id - 1) % root.workspacesShown / Config.options.overview.columns)
                     xOffset: {
-                        console.log("[OverviewWidget] " + windowData?.address + " title:", windowData?.title)
-                        console.log("[OverviewWidget] workspaceColIndex:", workspaceColIndex)
-                        console.log("[OverviewWidget] root.workspaceImplicitWidth:", root.workspaceImplicitWidth)
-                        console.log("[OverviewWidget] workspaceSpacing:", workspaceSpacing)
-                        console.log("[OverviewWidget] monitor?.x:", monitor?.x)
-                        console.log("[OverviewWidget] root.scale:", root.scale)
-                        console.log("[OverviewWidget] xOffset:", (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex - (monitor?.x * root.scale))
                         return (root.workspaceImplicitWidth + workspaceSpacing) * workspaceColIndex - (monitor?.x * root.scale)
                     }
                     yOffset: (root.workspaceImplicitHeight + workspaceSpacing) * workspaceRowIndex - (monitor?.y * root.scale)
