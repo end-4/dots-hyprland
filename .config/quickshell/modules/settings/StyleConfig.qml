@@ -50,6 +50,7 @@ ContentPage {
                 configOptionName: "appearance.palette.type"
                 onSelected: (newValue) => {
                     Config.options.appearance.palette.type = newValue;
+                    Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --noswitch`])
                 }
                 options: [
                     {"value": "auto", "displayName": "Auto"},

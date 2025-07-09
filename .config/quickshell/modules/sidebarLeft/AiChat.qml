@@ -72,6 +72,30 @@ Item {
             }
         },
         {
+            name: "save",
+            description: qsTr("Save chat"),
+            execute: (args) => {
+                const joinedArgs = args.join(" ")
+                if (joinedArgs.trim().length == 0) {
+                    Ai.addMessage(`Usage: ${root.commandPrefix}save CHAT_NAME`, Ai.interfaceRole);
+                    return;
+                }
+                Ai.saveChat(joinedArgs)
+            }
+        },
+        {
+            name: "load",
+            description: qsTr("Load chat"),
+            execute: (args) => {
+                const joinedArgs = args.join(" ")
+                if (joinedArgs.trim().length == 0) {
+                    Ai.addMessage(`Usage: ${root.commandPrefix}load CHAT_NAME`, Ai.interfaceRole);
+                    return;
+                }
+                Ai.loadChat(joinedArgs)
+            }
+        },
+        {
             name: "clear",
             description: qsTr("Clear chat history"),
             execute: () => {
@@ -358,11 +382,11 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     background: null
 
                     onTextChanged: { // Handle suggestions
-                        if(messageInputField.text.length === 0) {
+                        if (messageInputField.text.length === 0) {
                             root.suggestionQuery = ""
                             root.suggestionList = []
                             return
-                        } else if(messageInputField.text.startsWith(`${root.commandPrefix}model`)) {
+                        } else if (messageInputField.text.startsWith(`${root.commandPrefix}model`)) {
                             root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
                             const modelResults = Fuzzy.go(root.suggestionQuery, Ai.modelList.map(model => {
                                 return {
@@ -380,7 +404,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                     description: `${Ai.models[model.target].description}`,
                                 }
                             })
-                        } else if(messageInputField.text.startsWith(`${root.commandPrefix}prompt`)) {
+                        } else if (messageInputField.text.startsWith(`${root.commandPrefix}prompt`)) {
                             root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
                             const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.promptFiles.map(file => {
                                 return {
@@ -396,6 +420,44 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "prompt ") : ""}${file.target}`,
                                     displayName: `${FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target))}`,
                                     description: `Load prompt from ${file.target}`,
+                                }
+                            })
+                        } else if (messageInputField.text.startsWith(`${root.commandPrefix}save`)) {
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.savedChats.map(file => {
+                                return {
+                                    name: Fuzzy.prepare(file),
+                                    obj: file,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            root.suggestionList = promptFileResults.map(file => {
+                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim()
+                                return {
+                                    name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "save ") : ""}${chatName}`,
+                                    displayName: `${chatName}`,
+                                    description: `Save chat from ${chatName}`,
+                                }
+                            })
+                        } else if (messageInputField.text.startsWith(`${root.commandPrefix}load`)) {
+                            root.suggestionQuery = messageInputField.text.split(" ")[1] ?? ""
+                            const promptFileResults = Fuzzy.go(root.suggestionQuery, Ai.savedChats.map(file => {
+                                return {
+                                    name: Fuzzy.prepare(file),
+                                    obj: file,
+                                }
+                            }), {
+                                all: true,
+                                key: "name"
+                            })
+                            root.suggestionList = promptFileResults.map(file => {
+                                const chatName = FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target)).trim()
+                                return {
+                                    name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "load ") : ""}${chatName}`,
+                                    displayName: `${chatName}`,
+                                    description: `Load chat from ${file.target}`,
                                 }
                             })
                         } else if(messageInputField.text.startsWith(root.commandPrefix)) {

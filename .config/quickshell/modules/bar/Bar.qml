@@ -104,6 +104,8 @@ Scope {
                     }
                     color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
                     radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
+                    border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
+                    border.color: Appearance.m3colors.m3outlineVariant
                 }
 
                 MouseArea { // Left side | scroll to change brightness
@@ -204,11 +206,7 @@ Scope {
                                     width: 19.5
                                     height: 19.5
                                     source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : "spark-symbolic"
-                                }
-
-                                ColorOverlay {
-                                    anchors.fill: distroIcon
-                                    source: distroIcon
+                                    colorize: true
                                     color: Appearance.colors.colOnLayer0
                                 }
                             }

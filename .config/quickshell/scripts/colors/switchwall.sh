@@ -297,7 +297,7 @@ main() {
                 ;;
             --noswitch)
                 noswitch_flag="1"
-                imgpath=$(swww query | awk -F 'image: ' '{print $2}')
+                imgpath=$(swww query | head -1 | awk -F 'image: ' '{print $2}')
                 shift
                 ;;
             *)

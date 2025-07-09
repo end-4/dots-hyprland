@@ -1,7 +1,6 @@
 pragma ComponentBehavior: Bound
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/constants"
 import "root:/services"
 import Quickshell
 import QtQuick
