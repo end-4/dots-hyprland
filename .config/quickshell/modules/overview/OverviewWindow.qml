@@ -42,8 +42,8 @@ Item { // Window
     
     x: initX
     y: initY
-    width: Math.round(Math.min(windowData?.size[0] * root.scale, (restrictToWorkspace ? windowData?.size[0] : availableWorkspaceWidth - x + xOffset)))
-    height: Math.round(Math.min(windowData?.size[1] * root.scale, (restrictToWorkspace ? windowData?.size[1] : availableWorkspaceHeight - y + yOffset)))
+    width: windowData?.size[0] * root.scale
+    height: windowData?.size[1] * root.scale
 
     layer.enabled: true
     layer.effect: OpacityMask {
