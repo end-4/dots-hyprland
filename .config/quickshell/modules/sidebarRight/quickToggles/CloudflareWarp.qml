@@ -16,8 +16,7 @@ QuickToggleButton {
         source: 'cloudflare-dns-symbolic'
 
         anchors.centerIn: parent
-        width: 12
-        height: 12
+        height: 16
         colorize: true
         color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
 
@@ -40,11 +39,8 @@ QuickToggleButton {
         id: connectProc
         command: ["warp-cli", "connect"]
         onExited: (exitCode, exitStatus) => {
-            console.log("Warp connection exited with code and status:", exitCode, exitStatus)
-            if (exitCode === 0) {
-                connectProc.running = true
-            } else {
-                console.error("Warp connection failed, please check your connection or try again later.")
+            if (exitCode !== 0) {
+                Quickshell.execDetached(["notify-send", "Cloudflare WARP", "Connection failed. Please inspect manually with the <tt>warp-cli</tt> command", "-a", "Shell"])
             }
         }
     }
@@ -57,7 +53,7 @@ QuickToggleButton {
             if (exitCode === 0) {
                 connectProc.running = true
             } else {
-                Quickshell.execDetached(["notify-send", "Cloudflare Warp", "Registration failed. Please inspect manually with the <tt>warp-cli</tt> command", "-a", "Shell"])
+                Quickshell.execDetached(["notify-send", "Cloudflare WARP", "Registration failed. Please inspect manually with the <tt>warp-cli</tt> command", "-a", "Shell"])
             }
         }
     }
