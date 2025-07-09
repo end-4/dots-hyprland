@@ -49,7 +49,6 @@ Item {
                     property bool pendingDelete: false
                     property bool enableHeightAnimation: false
                     property bool enableFading: false
-                    property EditingCallbackInfo editingCallbackInfo: EditingCallbackInfo {}
 
                     Layout.fillWidth: true
                     implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
@@ -93,17 +92,14 @@ Item {
                         interval: Appearance.animation.elementMoveFast.duration
                         repeat: false
                         onTriggered: {
-                            todoRepeater.fadingInIndexes = [] // Clears the list every time a button is pressed to prevent it being filled indefinitely
+                            todoRepeater.fadingInIndexes = [] // Clears the list every time a button is pressed to prevent it from being filled by canceled edits
                             if (todoItem.pendingDoneToggle) {
                                 todoItem.pendingDoneToggle = false
                                 if (!modelData.done) Todo.markDone(modelData.originalIndex)
                                 else Todo.markUnfinished(modelData.originalIndex)
                             } else if (todoItem.pendingEdit) {
                                 todoItem.pendingEdit = false
-                                todoItem.editingCallbackInfo.index = modelData.originalIndex
-                                todoItem.editingCallbackInfo.done = modelData.done
-                                todoItem.editingCallbackInfo.currentText = modelData.content
-                                root.editingCallback(todoItem.editingCallbackInfo)
+                                root.editingCallback(modelData)
                                 todoRepeater.fadingInIndexes.push(model.index) // Adds to list even when edit is canceled
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
