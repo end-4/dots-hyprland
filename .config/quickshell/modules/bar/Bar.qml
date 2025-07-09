@@ -206,11 +206,7 @@ Scope {
                                     width: 19.5
                                     height: 19.5
                                     source: Config.options.bar.topLeftIcon == 'distro' ? SystemInfo.distroIcon : "spark-symbolic"
-                                }
-
-                                ColorOverlay {
-                                    anchors.fill: distroIcon
-                                    source: distroIcon
+                                    colorize: true
                                     color: Appearance.colors.colOnLayer0
                                 }
                             }
