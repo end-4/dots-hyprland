@@ -20,6 +20,7 @@ Rectangle {
         let total = 0;
         for (let i = 0; i < rowLayout.children.length; ++i) {
             const child = rowLayout.children[i];
+            if (!child.visible) continue;
             total += child.baseWidth ?? child.implicitWidth ?? child.width;
         }
         return total + rowLayout.spacing * (rowLayout.children.length - 1);
