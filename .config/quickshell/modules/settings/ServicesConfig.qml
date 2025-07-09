@@ -151,5 +151,52 @@ ContentPage {
                 content: "Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)"
             }
         }
+
+        ContentSubsection {
+            title: "Prefixes"
+            ConfigRow {
+                uniform: true
+
+                MaterialTextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Action"
+                    text: Config.options.search.prefix.action
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.action = text;
+                    }
+                }
+                MaterialTextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Clipboard"
+                    text: Config.options.search.prefix.clipboard
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.clipboard = text;
+                    }
+                }
+                MaterialTextField {
+                    Layout.fillWidth: true
+                    placeholderText: "Emojis"
+                    text: Config.options.search.prefix.emojis
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        Config.options.search.prefix.emojis = text;
+                    }
+                }
+            }
+        }
+        ContentSubsection {
+            title: "Web search"
+            MaterialTextField {
+                Layout.fillWidth: true
+                placeholderText: "Base URL"
+                text: Config.options.search.engineBaseUrl
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    Config.options.search.engineBaseUrl = text;
+                }
+            }
+        }
     }
 }
