@@ -307,6 +307,20 @@ ContentPage {
     }
 
     ContentSection {
+        title: "On-screen display"
+        ConfigSpinBox {
+            text: "Timeout (ms)"
+            value: Config.options.osd.timeout
+            from: 100
+            to: 3000
+            stepSize: 100
+            onValueChanged: {
+                Config.options.osd.timeout = value;
+            }
+        }
+    }
+
+    ContentSection {
         title: "Overview"
         ConfigSpinBox {
             text: "Scale (%)"
@@ -341,5 +355,20 @@ ContentPage {
                 }
             }
         }
+    }
+
+    ContentSection {
+        title: "Screenshot tool"
+
+        ConfigSwitch {
+            text: 'Show regions of potential interest'
+            checked: Config.options.screenshotTool.showContentRegions
+            onCheckedChanged: {
+                Config.options.screenshotTool.showContentRegions = checked;
+            }
+            StyledToolTip {
+                content: "Such regions could be images or parts of the screen that have some containment.\nMight not always be accurate.\nThis is done with an image processing algorithm run locally and no AI is used."
+            }
+        }        
     }
 }

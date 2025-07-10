@@ -27,6 +27,21 @@ RippleButton {
     property string bigText: entry?.bigText ?? ""
     property string materialSymbol: entry?.materialSymbol ?? ""
     property string cliphistRawString: entry?.cliphistRawString ?? ""
+    
+    visible: root.entryShown
+    property int horizontalMargin: 10
+    property int buttonHorizontalPadding: 10
+    property int buttonVerticalPadding: 5
+    property bool keyboardDown: false
+
+    implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
+    implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
+    buttonRadius: Appearance.rounding.normal
+    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colSecondaryContainerActive : 
+        ((root.hovered || root.focus) ? Appearance.colors.colSecondaryContainerHover : 
+        ColorUtils.transparentize(Appearance.colors.colSecondaryContainer, 1))
+    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
+    colRipple: Appearance.colors.colSecondaryContainerActive
 
     property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
     property string highlightSuffix: `</font></u>`
@@ -69,20 +84,7 @@ RippleButton {
         return matches ? matches : [];
     }
     
-    visible: root.entryShown
-    property int horizontalMargin: 10
-    property int buttonHorizontalPadding: 10
-    property int buttonVerticalPadding: 5
-    property bool keyboardDown: false
-
-    implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
-    implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
-    buttonRadius: Appearance.rounding.normal
-    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colLayer1Active : 
-        ((root.hovered || root.focus) ? Appearance.colors.colLayer1Hover : 
-        ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh, 1))
-    colBackgroundHover: Appearance.colors.colLayer1Hover
-    colRipple: Appearance.colors.colLayer1Active
+    PointingHandInteraction {}
 
     background {
         anchors.fill: root
@@ -90,7 +92,6 @@ RippleButton {
         anchors.rightMargin: root.horizontalMargin
     }
 
-    PointingHandInteraction {}
     onClicked: {
         root.itemExecute()
         Hyprland.dispatch("global quickshell:overviewClose")
