@@ -92,11 +92,20 @@ Scope {
                     color: root.colBackground
                     implicitHeight: columnLayout.implicitHeight + verticalPadding * 2
                     implicitWidth: columnLayout.implicitWidth + horizontalPadding * 2
+                    
+                    // Calculate constrained position to keep widget within screen bounds
+                    property real unconstrainedLeftMargin: (root.effectiveCenterX / monitor.scale - implicitWidth / 2)
+                    property real unconstrainedTopMargin: (root.effectiveCenterY / monitor.scale - implicitHeight / 2)
+                    
+                    // Constrain to screen boundaries
+                    property real constrainedLeftMargin: Math.max(0, Math.min(unconstrainedLeftMargin, windowRoot.width - implicitWidth))
+                    property real constrainedTopMargin: Math.max(0, Math.min(unconstrainedTopMargin, windowRoot.height - implicitHeight))
+                    
                     anchors {
                         left: parent.left
                         top: parent.top
-                        leftMargin: (root.effectiveCenterX / monitor.scale - implicitWidth / 2)
-                        topMargin: (root.effectiveCenterY / monitor.scale - implicitHeight / 2)
+                        leftMargin: constrainedLeftMargin
+                        topMargin: constrainedTopMargin
                         Behavior on leftMargin {
                             animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
                         }
