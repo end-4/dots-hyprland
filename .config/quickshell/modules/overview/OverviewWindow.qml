@@ -91,7 +91,14 @@ Item { // Window
 
             Image {
                 id: windowIcon
-                property var iconSize: Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+                property var iconSize: {
+                    // console.log("-=-=-", root.toplevel.title, "-=-=-")
+                    // console.log("Target window size:", targetWindowWidth, targetWindowHeight)
+                    // console.log("Icon ratio:", root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio)
+                    // console.log("Scale:", root.monitorData.scale)
+                    // console.log("Final:", Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale)
+                    return Math.min(targetWindowWidth, targetWindowHeight) * (root.compactMode ? root.iconToWindowRatioCompact : root.iconToWindowRatio) / root.monitorData.scale;
+                }
                 // mipmap: true
                 Layout.alignment: Qt.AlignHCenter
                 source: root.iconPath
