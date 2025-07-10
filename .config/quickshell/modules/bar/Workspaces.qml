@@ -173,14 +173,7 @@ Item {
                     id: workspaceButtonBackground
                     implicitWidth: workspaceButtonWidth
                     implicitHeight: workspaceButtonWidth
-                    property var biggestWindow: {
-                        const windowsInThisWorkspace = HyprlandData.windowList.filter(w => w.workspace.id == button.workspaceValue)
-                        return windowsInThisWorkspace.reduce((maxWin, win) => {
-                            const maxArea = (maxWin?.size?.[0] ?? 0) * (maxWin?.size?.[1] ?? 0)
-                            const winArea = (win?.size?.[0] ?? 0) * (win?.size?.[1] ?? 0)
-                            return winArea > maxArea ? win : maxWin
-                        }, null)
-                    }
+                    property var biggestWindow: HyprlandData.biggestWindowForWorkspace(button.workspaceValue)
                     property var mainAppIconSource: Quickshell.iconPath(AppSearch.guessIcon(biggestWindow?.class), "image-missing")
 
                     StyledText { // Workspace number text
