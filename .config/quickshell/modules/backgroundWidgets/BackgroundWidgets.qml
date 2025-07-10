@@ -80,9 +80,9 @@ Scope {
                     right: true
                 }
                 color: "transparent"
-                HyprlandWindow.visibleMask: Region {
-                    item: widgetBackground
-                }
+                // HyprlandWindow.visibleMask: Region { // Buggy with scaled monitors
+                //     item: widgetBackground
+                // }
 
                 Rectangle {
                     id: widgetBackground
