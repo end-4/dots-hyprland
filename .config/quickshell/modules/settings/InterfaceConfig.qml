@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell.Hyprland
 import "root:/services/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
@@ -166,6 +167,119 @@ ContentPage {
                 ConfigSwitch {
                     opacity: 0
                     enabled: false
+                }
+            }
+        }
+
+        ContentSubsection {
+            title: "Monitors"
+            ConfigGrid {
+                id: monitorsGrid
+
+                uniform: true
+                columns: 2
+
+                property bool loaded: false
+
+                ListModel {
+                    id: monitorsSelection
+                }
+
+                function updateMonitors() {
+                    loaded = true;
+
+                    monitorsSelection.clear();
+
+                    var empty_list = true;
+                    var monitor_count = 0;
+
+                    var enabled_map = Config.options.bar.screenList.reduce((map, val) => {
+                        if(!val || val === "")
+                            return map;
+
+                        empty_list = false;
+                        map[val] = true;
+                        
+                        monitorsSelection.append({
+                            label: val,
+                            enabled: true
+                        });
+
+                        ++monitor_count;
+
+                        return map;
+                    }, {})
+
+                    for(var monitor of Hyprland.monitors.values) {
+                        if(enabled_map[monitor.name])
+                            continue;
+
+                        monitorsSelection.append({
+                            label: monitor.name,
+                            enabled: empty_list
+                        })
+
+                        ++monitor_count;
+                    }
+
+                    if(monitor_count % 2 != 0)
+                        monitorsSelection.append({
+                            label: "",
+                            enabled: false
+                        })
+                }
+
+                Connections {
+                    target: Hyprland.monitors
+                    function onValuesChanged() {
+                        monitorsGrid.updateMonitors()
+                    } 
+                }
+
+                Component.onCompleted: {
+                    if(loaded)
+                        return;
+                    updateMonitors();
+                }
+
+                Repeater {
+                    model: monitorsSelection
+ 
+                    ConfigSwitch {
+                        text: model.label
+                        checked: model.enabled
+                        opacity: model.label === "" ? 0 : 1
+
+                        function removeMonitor() {
+                            var screenList = Config.options.bar.screenList;
+                            var index = screenList.indexOf(model.label);
+
+                            // make sure at least one monitor has a bar
+                            if(screenList.length === 1) {
+                                checked = true;
+                                return;
+                            }
+
+                            screenList.splice(index, 1);
+                        }
+
+                        function addMonitor() {
+                            var screenList = Config.options.bar.screenList;
+                            var index = screenList.indexOf(model.label);
+
+                            if(index != -1)
+                                return;
+
+                            screenList.push(model.label);
+                        }
+
+                        onCheckedChanged: {
+                            if(!checked)
+                                removeMonitor();
+                            else
+                                addMonitor();
+                        }
+                    }
                 }
             }
         }
