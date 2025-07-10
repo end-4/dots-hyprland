@@ -12,10 +12,10 @@ QuickToggleButton {
     onClicked: {
         if (toggled) {
             root.toggled = false
-            Hyprland.dispatch("exec pkill wayland-idle") // pkill doesn't accept too long names
+            Quickshell.execDetached(["pkill", "wayland-idle"]) // pkill doesn't accept too long names
         } else {
             root.toggled = true
-            Hyprland.dispatch('exec ${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/scripts/wayland-idle-inhibitor.py')
+            Quickshell.execDetached([`${Directories.scriptPath}/wayland-idle-inhibitor.py`])
         }
     }
     Process {

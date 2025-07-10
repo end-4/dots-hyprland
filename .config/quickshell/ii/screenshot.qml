@@ -22,7 +22,7 @@ import "./services/"
 
 ShellRoot {
     id: root
-    property string screenshotDir: "/tmp/quickshell/media/screenshot"
+    property string screenshotDir: Directories.screenshotTemp
     property color overlayColor: "#77111111"
     property color genericContentColor: Qt.alpha(root.overlayColor, 0.9)
     property color genericContentForeground: "#ddffffff"

@@ -79,7 +79,7 @@ Scope {
                 root.visualizerPoints = [];
             }
         }
-        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.config)}/quickshell/scripts/cava/raw_output_config.txt`]
+        command: ["cava", "-p", `${FileUtils.trimFileProtocol(Directories.scriptPath)}/cava/raw_output_config.txt`]
         stdout: SplitParser {
             onRead: data => {
                 // Parse `;`-separated values into the visualizerPoints array

@@ -129,7 +129,7 @@ Mowe uwu wem ipsum!
 ### Formatting
 
 - *Italic*, \`Monospace\`, **Bold**, [Link](https://example.com)
-- Arch lincox icon <img src="/home/end/.config/quickshell/assets/icons/arch-symbolic.svg" height="${Appearance.font.pixelSize.small}"/>
+- Arch lincox icon <img src="${Quickshell.configPath("assets/icons/arch-symbolic.svg")}" height="${Appearance.font.pixelSize.small}"/>
 
 ### Table
 

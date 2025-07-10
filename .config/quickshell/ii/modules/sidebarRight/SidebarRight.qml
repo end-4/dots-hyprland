@@ -20,7 +20,7 @@ Scope {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 15
-    property string settingsQmlPath: FileUtils.trimFileProtocol(`${Directories.config}/quickshell/settings.qml`)
+    property string settingsQmlPath: Quickshell.configPath("settings.qml")
 
     PanelWindow {
         id: sidebarRoot
