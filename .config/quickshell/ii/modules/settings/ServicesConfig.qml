@@ -203,11 +203,10 @@ ContentPage {
     ContentSection {
         title: "Time"
 
-        ColumnLayout {
-            // Format
-            ContentSubsectionLabel {
-                text: "Time format"
-            }
+        ContentSubsection {
+            title: "Format"
+            tooltip: ""
+
             ConfigSelectionArray {
                 currentValue: Config.options.time.format
                 configOptionName: "time.format"
