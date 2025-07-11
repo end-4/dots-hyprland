@@ -29,13 +29,13 @@ colorvalues=($colorstrings) # Array of color values
 
 apply_term() {
   # Check if terminal escape sequence template exists
-  if [ ! -f "$CONFIG_DIR"/scripts/terminal/sequences.txt ]; then
+  if [ ! -f "$SCRIPT_DIR/terminal/sequences.txt" ]; then
     echo "Template file not found for Terminal. Skipping that."
     return
   fi
   # Copy template
   mkdir -p "$STATE_DIR"/user/generated/terminal
-  cp "$CONFIG_DIR"/scripts/terminal/sequences.txt "$STATE_DIR"/user/generated/terminal/sequences.txt
+  cp "$SCRIPT_DIR/terminal/sequences.txt" "$STATE_DIR"/user/generated/terminal/sequences.txt
   # Apply colors
   for i in "${!colorlist[@]}"; do
     sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/sequences.txt
