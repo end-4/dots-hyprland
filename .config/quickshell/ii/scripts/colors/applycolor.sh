@@ -5,8 +5,8 @@ XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIG_DIR="$XDG_CONFIG_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
-CACHE_DIR="$XDG_CACHE_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
-STATE_DIR="$XDG_STATE_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
+CACHE_DIR="$XDG_CACHE_HOME/quickshell"
+STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 term_alpha=100 #Set this to < 100 make all your terminals transparent
@@ -29,13 +29,13 @@ colorvalues=($colorstrings) # Array of color values
 
 apply_term() {
   # Check if terminal escape sequence template exists
-  if [ ! -f "$CONFIG_DIR"/scripts/terminal/sequences.txt ]; then
+  if [ ! -f "$SCRIPT_DIR/terminal/sequences.txt" ]; then
     echo "Template file not found for Terminal. Skipping that."
     return
   fi
   # Copy template
   mkdir -p "$STATE_DIR"/user/generated/terminal
-  cp "$CONFIG_DIR"/scripts/terminal/sequences.txt "$STATE_DIR"/user/generated/terminal/sequences.txt
+  cp "$SCRIPT_DIR/terminal/sequences.txt" "$STATE_DIR"/user/generated/terminal/sequences.txt
   # Apply colors
   for i in "${!colorlist[@]}"; do
     sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$STATE_DIR"/user/generated/terminal/sequences.txt
