@@ -530,7 +530,6 @@ Scope {
 
                         size: Appearance.rounding.screenRounding
                         color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                        opacity: 1.0 - Appearance.transparency
 
                         corner: RoundCorner.CornerEnum.TopLeft
                         states: State {
@@ -550,7 +549,6 @@ Scope {
                         }
                         size: Appearance.rounding.screenRounding
                         color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                        opacity: 1.0 - Appearance.transparency
 
                         corner: RoundCorner.CornerEnum.TopRight
                         states: State {
