@@ -64,7 +64,7 @@
 
 <details>
     <summary>Discord</summary>
-        <a href="https://discord.gg/GtdRBXgMwq"> Join the server </a>
+        <a href="https://discord.gg/GtdRBXgMwq"> Server link </a> | I hope this provides a friendlier environment for support without needing me to personally accept every friend request/DM. For real issues, prefer GitHub
 
 </details>
 
