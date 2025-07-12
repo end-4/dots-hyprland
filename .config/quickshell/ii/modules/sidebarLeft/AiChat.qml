@@ -73,7 +73,7 @@ Item {
         },
         {
             name: "save",
-            description: qsTr("Save chat"),
+            description: Translation.tr("Save chat"),
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
@@ -85,7 +85,7 @@ Item {
         },
         {
             name: "load",
-            description: qsTr("Load chat"),
+            description: Translation.tr("Load chat"),
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
@@ -97,7 +97,7 @@ Item {
         },
         {
             name: "clear",
-            description: qsTr("Clear chat history"),
+            description: Translation.tr("Clear chat history"),
             execute: () => {
                 Ai.clearMessages();
             }

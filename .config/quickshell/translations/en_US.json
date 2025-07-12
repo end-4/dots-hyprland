@@ -96,8 +96,6 @@
   "Run command": "Run command",
   "Save": "Save",
   "Save to Downloads": "Save to Downloads",
-  "Scroll to change brightness": "Scroll to change brightness",
-  "Scroll to change volume": "Scroll to change volume",
   "Search": "Search",
   "Search the web": "Search the web",
   "Search, calculate or run": "Search, calculate or run",
@@ -106,8 +104,6 @@
   "Set API key": "Set API key",
   "Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.": "Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.",
   "Set the current API provider": "Set the current API provider",
-  "Shell configuration created": "Shell configuration created",
-  "Shell configuration failed to load": "Shell configuration failed to load",
   "Shutdown": "Shutdown",
   "Silent": "Silent",
   "Sleep": "Sleep",
@@ -169,5 +165,12 @@
   "Experimental | Online | Google's model\nCan do a little more but doesn't search quickly": "Experimental | Online | Google's model\nCan do a little more but doesn't search quickly",
   "Message the model... \"{0}\" for commands": "Message the model... \"{0}\" for commands",
   "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}": "To set an API key, pass it with the command\n\nTo view the key, pass \"get\" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}",
-  "Settings": "Settings"
+  "Settings": "Settings",
+  "Save chat": "Save chat",
+  "Load chat": "Load chat",
+  "or": "or",
+  "Set the system prompt for the model.": "Set the system prompt for the model.",
+  "To Do": "To Do",
+  "Calendar": "Calendar",
+  "notifications": "notifications"
 }

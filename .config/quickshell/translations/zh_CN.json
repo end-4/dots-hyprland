@@ -96,8 +96,6 @@
   "Run command": "运行命令",
   "Save": "保存",
   "Save to Downloads": "保存到下载文件夹",
-  "Scroll to change brightness": "滚动调节亮度",
-  "Scroll to change volume": "滚动调节音量",
   "Search": "搜索",
   "Search the web": "搜索网络",
   "Search, calculate or run": "搜索、计算或运行",
@@ -106,8 +104,6 @@
   "Set API key": "设置 API 密钥",
   "Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5.": "设置模型的温度（随机性）。Gemini 模型范围为 0 到 2，其他模型为 0 到 1。默认值为 0.5。",
   "Set the current API provider": "设置当前 API 提供商",
-  "Shell configuration created": "Shell 配置已创建",
-  "Shell configuration failed to load": "Shell 配置加载失败",
   "Shutdown": "关机",
   "Silent": "静音",
   "Sleep": "睡眠",
@@ -169,5 +165,12 @@
   "Online via {0} | {1}'s model": "通过 {0} 在线 | {1} 的模型",
   "That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number": "没有找到结果。提示：\n- 检查您的标签和 NSFW 设置\n- 如果没有想到标签，请输入页码",
   "Online | Google's model\nGives up-to-date information with search.": "在线 | Google 模型\n通过搜索提供最新信息。",
-  "Settings": "设置"
+  "Settings": "设置",
+  "Save chat": "保存对话",
+  "Load chat": "加载对话",
+  "or": "或",
+  "Set the system prompt for the model.": "为模型设置系统提示。",
+  "To Do": "待办",
+  "Calendar": "日历",
+  "notifications": "条通知"
 }
