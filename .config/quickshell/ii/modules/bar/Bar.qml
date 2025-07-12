@@ -37,11 +37,11 @@ Scope {
                 return screens;
             return screens.filter(screen => list.includes(screen.name));
         }
-        Loader {
+        LazyLoader {
             id: barLoader
-            active: GlobalStates.barOpen
+            activeAsync: GlobalStates.barOpen
             required property ShellScreen modelData
-            sourceComponent: PanelWindow { // Bar window
+            component: PanelWindow { // Bar window
                 id: barRoot
                 screen: barLoader.modelData
 
