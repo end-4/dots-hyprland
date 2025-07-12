@@ -41,12 +41,6 @@ Item { // Wrapper
 
     property var searchActions: [
         {
-            action: "img", 
-            execute: () => {
-                executor.executeCommand(Directories.wallpaperSwitchScriptPath)
-            }
-        },
-        {
             action: "dark",
             execute: () => {
                 executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode dark --noswitch`)
@@ -56,6 +50,18 @@ Item { // Wrapper
             action: "light",
             execute: () => {
                 executor.executeCommand(`${Directories.wallpaperSwitchScriptPath} --mode light --noswitch`)
+            }
+        },
+        {
+            action: "wall", 
+            execute: () => {
+                executor.executeCommand(Directories.wallpaperSwitchScriptPath)
+            }
+        },
+        {
+            action: "konachanwall", 
+            execute: () => {
+                Quickshell.execDetached([Quickshell.configPath("scripts/colors/random_konachan_wall.sh")])
             }
         },
         {
