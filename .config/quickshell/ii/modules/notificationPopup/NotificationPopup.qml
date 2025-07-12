@@ -36,10 +36,13 @@ Scope {
 
         NotificationListView {
             id: listview
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 5
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                right: parent.right
+                rightMargin: 4
+                topMargin: 4
+            }
             implicitWidth: parent.width - Appearance.sizes.elevationMargin * 2
             popup: true
         }
