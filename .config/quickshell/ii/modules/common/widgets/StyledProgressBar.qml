@@ -9,8 +9,8 @@ import Quickshell.Widgets
 import Qt5Compat.GraphicalEffects
 
 /**
- * Material 3 progress bar. See https://m3.material.io/components/progress-indicators/overview
- */
+* Material 3 progress bar. See https://m3.material.io/components/progress-indicators/overview
+*/
 ProgressBar {
     id: root
     property real valueBarWidth: 120
@@ -23,6 +23,9 @@ ProgressBar {
     property real spermAmplitudeMultiplier: sperm ? 0.5 : 0
     property real spermFrequency: 6
     property real spermFps: 60
+    property bool seekable: false // If true, allows clicking to seek
+
+    signal seekRequested(real position) // Emitted when user clicks to seek
 
     Behavior on spermAmplitudeMultiplier {
         animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -31,7 +34,7 @@ ProgressBar {
     Behavior on value {
         animation: Appearance?.animation.elementMoveEnter.numberAnimation.createObject(this)
     }
-    
+
     background: Item {
         anchors.fill: parent
         implicitHeight: valueBarHeight
@@ -40,6 +43,18 @@ ProgressBar {
 
     contentItem: Item {
         anchors.fill: parent
+
+        MouseArea {
+            anchors.fill: parent
+            enabled: root.seekable
+            cursorShape: root.seekable ? Qt.PointingHandCursor : Qt.ArrowCursor
+            onClicked: mouse => {
+                if (root.seekable) {
+                    var clickPosition = mouse.x / width;
+                    root.seekRequested(clickPosition);
+                }
+            }
+        }
 
         Canvas {
             id: wavyFill
@@ -75,8 +90,12 @@ ProgressBar {
             }
             Connections {
                 target: root
-                function onValueChanged() { wavyFill.requestPaint(); }
-                function onHighlightColorChanged() { wavyFill.requestPaint(); }
+                function onValueChanged() {
+                    wavyFill.requestPaint();
+                }
+                function onHighlightColorChanged() {
+                    wavyFill.requestPaint();
+                }
             }
             Timer {
                 interval: 1000 / root.spermFps
@@ -85,14 +104,16 @@ ProgressBar {
                 onTriggered: wavyFill.requestPaint()
             }
         }
-        Rectangle { // Right remaining part fill
+        Rectangle {
+            // Right remaining part fill
             anchors.right: parent.right
             width: (1 - root.visualPosition) * parent.width - valueBarGap
             height: parent.height
             radius: Appearance?.rounding.full ?? 9999
             color: root.trackColor
         }
-        Rectangle { // Stop point
+        Rectangle {
+            // Stop point
             anchors.right: parent.right
             width: valueBarGap
             height: valueBarGap
