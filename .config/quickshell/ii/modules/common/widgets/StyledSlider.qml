@@ -6,26 +6,53 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Widgets
 
-// Material 3 slider. See https://m3.material.io/components/sliders/overview
+/**
+ * Material 3 slider. See https://m3.material.io/components/sliders/overview
+ * It doesn't exactly match the spec because it does not make sense to have stuff on a computer that fucking huge.
+ * Should be at 3/4 scale...
+ */
+ 
 Slider {
     id: root
-    property real scale: 0.85
-    property real backgroundDotSize: 4 * scale
-    property real backgroundDotMargins: 4 * scale
-    // property real handleMargins: 0 * scale
-    property real handleMargins: (root.pressed ? 0 : 2) * scale
-    property real handleWidth: (root.pressed ? 3 : 5) * scale
-    property real handleHeight: 44 * scale
-    property real handleLimit: root.backgroundDotMargins
-    property real trackHeight: 30 * scale
+
+    property list<real> stopIndicatorValues: [1]
+    enum Configuration {
+        XS = 12,
+        S = 18,
+        M = 30,
+        L = 42,
+        XL = 72
+    }
+
+    property var configuration: StyledSlider.Configuration.S
+
+    property real handleDefaultWidth: 3
+    property real handlePressedWidth: 1.5
+
     property color highlightColor: Appearance.colors.colPrimary
     property color trackColor: Appearance.colors.colSecondaryContainer
     property color handleColor: Appearance.m3colors.m3onSecondaryContainer
-    property real trackRadius: Appearance.rounding.verysmall * scale
+    property color dotColor: Appearance.m3colors.m3onSecondaryContainer
+    property color dotColorHighlighted: Appearance.m3colors.m3onPrimary
     property real unsharpenRadius: Appearance.rounding.unsharpen
-
-    property real limitedHandleRangeWidth: (root.availableWidth - handleWidth - root.handleLimit * 2)
+    property real trackWidth: configuration
+    property real trackRadius: trackWidth >= StyledSlider.Configuration.XL ? 21
+        : trackWidth >= StyledSlider.Configuration.L ? 12
+        : trackWidth >= StyledSlider.Configuration.M ? 9
+        : 6
+    property real handleHeight: Math.max(33, trackWidth + 9)
+    property real handleWidth: root.pressed ? handlePressedWidth : handleDefaultWidth
+    property real handleMargins: 4
+    onHandleMarginsChanged: {
+        console.log("Handle margins changed to", handleMargins);
+    }
+    property real trackDotSize: 3
     property string tooltipContent: `${Math.round(value * 100)}%`
+
+    leftPadding: handleMargins
+    rightPadding: handleMargins
+    property real effectiveDraggingWidth: width - leftPadding - rightPadding
+
     Layout.fillWidth: true
     from: 0
     to: 1
@@ -37,10 +64,20 @@ Slider {
     }
 
     Behavior on handleMargins {
-        NumberAnimation {
-            duration: Appearance.animation.elementMoveFast.duration
-            easing.type: Appearance.animation.elementMoveFast.type
-            easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+    }
+
+    component TrackDot: Rectangle {
+        required property real value
+        anchors.verticalCenter: parent.verticalCenter
+        x: root.handleMargins + (value * root.effectiveDraggingWidth) - (root.trackDotSize / 2)
+        width: root.trackDotSize
+        height: root.trackDotSize
+        radius: Appearance.rounding.full
+        color: value > root.visualPosition ? root.dotColor : root.dotColorHighlighted
+
+        Behavior on color {
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
     }
 
@@ -52,14 +89,17 @@ Slider {
 
     background: Item {
         anchors.verticalCenter: parent.verticalCenter
-        implicitHeight: trackHeight
+        width: parent.width
+        implicitHeight: trackWidth
         
         // Fill left
         Rectangle {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            width: root.handleLimit * 2 + root.visualPosition * root.limitedHandleRangeWidth - (root.handleMargins + root.handleWidth / 2)
-            height: trackHeight
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+            }
+            width: root.handleMargins + (root.visualPosition * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
+            height: trackWidth
             color: root.highlightColor
             topLeftRadius: root.trackRadius
             bottomLeftRadius: root.trackRadius
@@ -69,35 +109,37 @@ Slider {
 
         // Fill right
         Rectangle {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            width: root.handleLimit * 2 + (1 - root.visualPosition) * root.limitedHandleRangeWidth - (root.handleMargins + root.handleWidth / 2)
-            height: trackHeight
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+            }
+            width: root.handleMargins + ((1 - root.visualPosition) * root.effectiveDraggingWidth) - (root.handleWidth / 2 + root.handleMargins)
+            height: trackWidth
             color: root.trackColor
-            topLeftRadius: root.unsharpenRadius
-            bottomLeftRadius: root.unsharpenRadius
             topRightRadius: root.trackRadius
             bottomRightRadius: root.trackRadius
+            topLeftRadius: root.unsharpenRadius
+            bottomLeftRadius: root.unsharpenRadius
         }
 
-        // Dot at the end
-        Rectangle {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: root.backgroundDotMargins
-            width: root.backgroundDotSize
-            height: root.backgroundDotSize
-            radius: Appearance.rounding.full
-            color: root.handleColor
+        // Stop indicators
+        Repeater {
+            model: root.stopIndicatorValues
+            TrackDot {
+                required property real modelData
+                value: modelData
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 
     handle: Rectangle {
         id: handle
-        x: root.leftPadding + root.handleLimit + root.visualPosition * root.limitedHandleRangeWidth
-        y: root.topPadding + root.availableHeight / 2 - height / 2
+
         implicitWidth: root.handleWidth
         implicitHeight: root.handleHeight
+        x: root.handleMargins + (root.visualPosition * root.effectiveDraggingWidth) - (root.handleWidth / 2)
+        anchors.verticalCenter: parent.verticalCenter
         radius: Appearance.rounding.full
         color: root.handleColor
 

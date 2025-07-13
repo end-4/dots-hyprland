@@ -57,5 +57,16 @@ apply_qt() {
   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
 }
 
-apply_qt &
-apply_term &
+# Check if terminal theming is enabled in config
+CONFIG_FILE="$XDG_CONFIG_HOME/illogical-impulse/config.json"
+if [ -f "$CONFIG_FILE" ]; then
+  enable_terminal=$(jq -r '.appearance.wallpaperTheming.enableTerminal' "$CONFIG_FILE")
+  if [ "$enable_terminal" = "true" ]; then
+    apply_term &
+  fi
+else
+  echo "Config file not found at $CONFIG_FILE. Applying terminal theming by default."
+  apply_term &
+fi
+
+# apply_qt & # Qt theming is already handled by kde-material-colors

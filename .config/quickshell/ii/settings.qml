@@ -43,6 +43,11 @@ ApplicationWindow {
             component: "modules/settings/ServicesConfig.qml"
         },
         {
+            name: "Advanced",
+            icon: "construction",
+            component: "modules/settings/AdvancedConfig.qml"
+        },
+        {
             name: "About",
             icon: "info",
             component: "modules/settings/About.qml"

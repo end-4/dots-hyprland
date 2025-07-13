@@ -66,6 +66,11 @@ Singleton {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
                 property bool transparency: false
+                property JsonObject wallpaperTheming: JsonObject {
+                    property bool enableAppsAndShell: true
+                    property bool enableQtApps: true
+                    property bool enableTerminal: true
+                }
                 property JsonObject palette: JsonObject {
                     property string type: "auto" // Allowed: auto, scheme-content, scheme-expressive, scheme-fidelity, scheme-fruit-salad, scheme-monochrome, scheme-neutral, scheme-rainbow, scheme-tonal-spot
                 }

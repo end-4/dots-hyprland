@@ -37,11 +37,11 @@ Scope {
                 return screens;
             return screens.filter(screen => list.includes(screen.name));
         }
-        LazyLoader {
+        Loader {
             id: barLoader
-            activeAsync: GlobalStates.barOpen
+            active: GlobalStates.barOpen
             required property ShellScreen modelData
-            component: PanelWindow { // Bar window
+            sourceComponent: PanelWindow { // Bar window
                 id: barRoot
                 screen: barLoader.modelData
 
@@ -533,7 +533,6 @@ Scope {
 
                             size: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                            opacity: 1.0 - Appearance.transparency
 
                             corner: RoundCorner.CornerEnum.TopLeft
                             states: State {
@@ -553,7 +552,6 @@ Scope {
                             }
                             size: Appearance.rounding.screenRounding
                             color: showBarBackground ? Appearance.colors.colLayer0 : "transparent"
-                            opacity: 1.0 - Appearance.transparency
 
                             corner: RoundCorner.CornerEnum.TopRight
                             states: State {
