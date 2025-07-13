@@ -1,3 +1,4 @@
+import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
@@ -115,7 +116,7 @@ GroupButton {
             }
             StyledText {
                 Layout.fillWidth: true
-                text: dark ? "Dark" : "Light"
+                text: dark ? Translation.tr("Dark") : Translation.tr("Light")
                 color: lightDarkButtonRoot.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer2
                 horizontalAlignment: Text.AlignHCenter
             }
