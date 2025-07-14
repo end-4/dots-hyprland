@@ -28,6 +28,7 @@ Item { // Player instance
     property list<real> visualizerPoints: []
     property real maxVisualizerValue: 1000 // Max value in the data points
     property int visualizerSmoothing: 2 // Number of points to average for smoothing
+    property bool seekable: Config.options.seekablePlayer?.useSeekableSlider || false // Whether the player supports seeking
 
     implicitWidth: widgetWidth
     implicitHeight: widgetHeight
@@ -56,6 +57,7 @@ Item { // Player instance
 
     Timer {
         // Force update for prevision
+        id: positionUpdateTimer
         running: playerController.player?.playbackState == MprisPlaybackState.Playing
         interval: 1000
         repeat: true
@@ -272,19 +274,51 @@ Item { // Player instance
 
                             StyledProgressBar {
                                 id: progressBar
+                                visible: !playerController.seekable
                                 anchors.fill: parent
                                 highlightColor: blendedColors.colPrimary
                                 trackColor: blendedColors.colSecondaryContainer
                                 value: playerController.player?.position / playerController.player?.length
                                 sperm: playerController.player?.isPlaying
-                                seekable: true
-                                onSeekRequested: position => {
+                            }
+
+                            StyledMediaSlider {
+                                id: seekableProgressBar
+                                visible: playerController.seekable
+                                anchors.fill: parent
+                                highlightColor: blendedColors.colPrimary
+                                trackColor: blendedColors.colSecondaryContainer
+                                value: playerController.player?.position / playerController.player?.length
+                                sperm: playerController.player?.isPlaying
+
+                                // Enable seeking only when there's a valid track
+                                enabled: playerController.player && playerController.player.length > 0
+
+                                onSeekStarted: {
+                                    positionUpdateTimer.running = false; // Pause position updates during seeking
+                                }
+
+                                // onSeeking: function (position) {
+                                //     console.log("Seeking to position:", position);
+                                // }
+
+                                onSeekEnded: {
                                     if (playerController.player && playerController.player.length > 0) {
-                                        var seekTime = position * playerController.player.length;
-                                        var currentPos = playerController.player.position || 0;
-                                        var relativeDelta = seekTime - currentPos;
-                                        playerController.player.seek(relativeDelta);
+                                        var seekPosition = value * playerController.player.length;
+                                        console.log("Seeking to:", seekPosition, "seconds");
+                                        playerController.player.position = seekPosition;
+                                    } else {
+                                        console.warn("Cannot seek: No player or invalid track length");
                                     }
+                                    positionUpdateTimer.running = playerController.player?.playbackState == MprisPlaybackState.Playing;
+                                }
+
+                                // Override value binding when seeking to prevent conflicts
+                                Binding {
+                                    target: seekableProgressBar
+                                    property: "value"
+                                    value: playerController.player?.position / playerController.player?.length
+                                    when: !progressBar.isSeeking && playerController.player?.length > 0
                                 }
                             }
                         }

@@ -230,4 +230,19 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        title: "Media Player"
+
+        ConfigSwitch {
+            text: 'Seekable slider'
+            checked: Config.options.seekablePlayer.useSeekableSlider
+            onCheckedChanged: {
+                Config.options.seekablePlayer.useSeekableSlider = checked;
+            }
+            StyledToolTip {
+                content: "Allows seeking in media players using the slider"
+            }
+        }
+    }
 }

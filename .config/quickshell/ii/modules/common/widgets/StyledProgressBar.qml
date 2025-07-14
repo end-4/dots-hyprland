@@ -23,9 +23,6 @@ ProgressBar {
     property real spermAmplitudeMultiplier: sperm ? 0.5 : 0
     property real spermFrequency: 6
     property real spermFps: 60
-    property bool seekable: false // If true, allows clicking to seek
-
-    signal seekRequested(real position) // Emitted when user clicks to seek
 
     Behavior on spermAmplitudeMultiplier {
         animation: Appearance?.animation.elementMoveFast.numberAnimation.createObject(this)
@@ -43,18 +40,6 @@ ProgressBar {
 
     contentItem: Item {
         anchors.fill: parent
-
-        MouseArea {
-            anchors.fill: parent
-            enabled: root.seekable
-            cursorShape: root.seekable ? Qt.PointingHandCursor : Qt.ArrowCursor
-            onClicked: mouse => {
-                if (root.seekable) {
-                    var clickPosition = mouse.x / width;
-                    root.seekRequested(clickPosition);
-                }
-            }
-        }
 
         Canvas {
             id: wavyFill
