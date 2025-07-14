@@ -13,7 +13,6 @@ Item {
     property var tabButtonList: [{"icon": "checklist", "name": qsTr("Unfinished")}, {"name": qsTr("Done"), "icon": "check_circle"}]
     property bool showDialog: false
     property bool isDialogEdit: false
-    property var editingTodoItemModelData
     property int dialogMargins: 20
     property int fabSize: 48
     property int fabMargins: 14
@@ -36,7 +35,7 @@ Item {
         else if (event.key === Qt.Key_Escape && root.showDialog) {
             root.showDialog = false
             root.isDialogEdit = false
-            root.editingTodoItemModelData = undefined
+            Todo.currentTodoItemData = undefined
             event.accepted = true;
         }
     }
@@ -236,11 +235,11 @@ Item {
 
             function editTask() {
                 if (todoInput.text.length > 0) {
-                    Todo.editTask(root.editingTodoItemModelData.originalIndex, todoInput.text)
+                    Todo.editTask(todoInput.text)
                     todoInput.text = ""
                     root.showDialog = false
                     root.isDialogEdit = false
-                    root.editingTodoItemModelData = undefined
+                    Todo.currentTodoItemData = undefined
                 }
             }
 
@@ -302,12 +301,12 @@ Item {
                         onClicked: {
                             root.showDialog = false
                             root.isDialogEdit = false
-                            root.editingTodoItemModelData = undefined
+                            Todo.currentTodoItemData = undefined
                         }
                     }
                     DialogButton {
                         buttonText: root.isDialogEdit ? qsTr("Edit") : qsTr("Add")
-                        enabled: todoInput.text.length > 0 && (!root.isDialogEdit || todoInput.text != root.editingTodoItemModelData?.content)
+                        enabled: todoInput.text.length > 0 && (!root.isDialogEdit || todoInput.text != Todo.currentTodoItemData?.content)
                         onClicked: root.isDialogEdit ? dialog.editTask() : dialog.addTask()
                     }
                 }
@@ -315,9 +314,8 @@ Item {
         }
     }
 
-    function editingCallback(editingTodoItemModelData) {
-        root.editingTodoItemModelData = editingTodoItemModelData
-        todoInput.text = editingTodoItemModelData.content
+    function editingCallback() {
+        todoInput.text = Todo.currentTodoItemData.content
         root.isDialogEdit = true
         root.showDialog = true
     }

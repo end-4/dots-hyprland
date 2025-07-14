@@ -82,7 +82,8 @@ Item {
                                 else Todo.markUnfinished(modelData.originalIndex)
                             } else if (todoItem.pendingEdit) {
                                 todoItem.pendingEdit = false
-                                root.editingCallback(modelData)
+                                Todo.currentTodoItemData = modelData
+                                root.editingCallback()
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
                                 Todo.deleteItem(modelData.originalIndex)
