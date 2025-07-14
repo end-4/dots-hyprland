@@ -13,7 +13,6 @@ depends=(
 	hyprpicker
 	nm-connection-editor
 	quickshell-git
-	swww
 	translate-shell
 	wlogout
 )
