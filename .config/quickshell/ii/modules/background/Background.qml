@@ -12,8 +12,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 
-// TODO REMOVE BACKGROUNDWIDGETS
-
 Scope {
     id: root
     readonly property bool fixedClockPosition: Config.options.background.fixedClockPosition
@@ -80,7 +78,7 @@ Scope {
                     id: leastBusyRegionOutputCollector
                     onStreamFinished: {
                         const output = leastBusyRegionOutputCollector.text
-                        console.log("[Background] Least busy region output:", output)
+                        // console.log("[Background] Least busy region output:", output)
                         if (output.length === 0) return;
                         const parsedContent = JSON.parse(output)
                         bgRoot.clockX = parsedContent.center_x
@@ -91,7 +89,7 @@ Scope {
             }
 
             // Wallpaper
-            AnimatedImage {
+            Image {
                 z: 0
                 anchors.fill: parent
                 source: bgRoot.wallpaperPath
