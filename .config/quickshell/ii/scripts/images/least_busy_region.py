@@ -257,7 +257,7 @@ def main():
     parser.add_argument("-v", "--visual-output", action="store_true", help="Output image with rectangle")
     parser.add_argument("--screen-width", type=int, default=1920, help="Screen width for wallpaper scaling")
     parser.add_argument("--screen-height", type=int, default=1080, help="Screen height for wallpaper scaling")
-    parser.add_argument("--stride", type=int, default=4, help="Step size for sliding window (higher is faster, less precise)")
+    parser.add_argument("--stride", type=int, default=10, help="Step size for sliding window (higher is faster, less precise)")
     parser.add_argument("--screen-mode", choices=["fill", "fit"], default="fill", help="Wallpaper scaling mode: 'fill' (default) or 'fit'")
     parser.add_argument("--verbose", action="store_true", help="Print verbose output")
     parser.add_argument("-l", "--largest-region", action="store_true", help="Find the largest region under the variance threshold and output its center")

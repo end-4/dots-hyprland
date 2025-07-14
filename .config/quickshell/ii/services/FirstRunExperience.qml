@@ -27,7 +27,7 @@ Singleton {
     }
 
     function handleFirstRun() {
-        Quickshell.execDetached(["bash", "-c", `swww query | grep 'image' || '${Directories.wallpaperSwitchScriptPath}' '${root.defaultWallpaperPath}'`])
+        Quickshell.execDetached([Directories.wallpaperSwitchScriptPath, root.defaultWallpaperPath])
         Quickshell.execDetached(["bash", "-c", `qs -p '${root.welcomeQmlPath}'`])
     }
 

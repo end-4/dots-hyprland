@@ -8,6 +8,7 @@ CONFIG_DIR="$XDG_CONFIG_HOME/quickshell/$QUICKSHELL_CONFIG_NAME"
 CACHE_DIR="$XDG_CACHE_HOME/quickshell"
 STATE_DIR="$XDG_STATE_HOME/quickshell"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHELL_CONFIG_FILE="$XDG_CONFIG_HOME/illogical-impulse/config.json"
 MATUGEN_DIR="$XDG_CONFIG_HOME/matugen"
 terminalscheme="$SCRIPT_DIR/terminal/scheme-base.json"
 
@@ -59,14 +60,14 @@ post_process() {
     handle_kde_material_you_colors &
 
     # Determine the largest region on the wallpaper that's sufficiently un-busy to put widgets in
-    if [ ! -f "$MATUGEN_DIR/scripts/least_busy_region.py" ]; then
-        echo "Error: least_busy_region.py script not found in $MATUGEN_DIR/scripts/"
-    else
-        "$MATUGEN_DIR/scripts/least_busy_region.py" \
-            --screen-width "$screen_width" --screen-height "$screen_height" \
-            --width 300 --height 200 \
-            "$wallpaper_path" > "$STATE_DIR"/user/generated/wallpaper/least_busy_region.json
-    fi
+    # if [ ! -f "$MATUGEN_DIR/scripts/least_busy_region.py" ]; then
+    #     echo "Error: least_busy_region.py script not found in $MATUGEN_DIR/scripts/"
+    # else
+    #     "$MATUGEN_DIR/scripts/least_busy_region.py" \
+    #         --screen-width "$screen_width" --screen-height "$screen_height" \
+    #         --width 300 --height 200 \
+    #         "$wallpaper_path" > "$STATE_DIR"/user/generated/wallpaper/least_busy_region.json
+    # fi
 }
 
 check_and_prompt_upscale() {
@@ -227,10 +228,10 @@ switch() {
         else
             matugen_args=(image "$imgpath")
             generate_colors_material_args=(--path "$imgpath")
-            # Set wallpaper with swww
-            swww img "$imgpath" --transition-step 100 --transition-fps 120 \
-                --transition-type grow --transition-angle 30 --transition-duration 1 \
-                --transition-pos "$cursorposx, $cursorposy_inverted" &
+            # Update wallpaper path in config
+            if [ -f "$SHELL_CONFIG_FILE" ]; then
+                jq --arg path "$imgpath" '.background.wallpaperPath = $path' "$SHELL_CONFIG_FILE" > "$SHELL_CONFIG_FILE.tmp" && mv "$SHELL_CONFIG_FILE.tmp" "$SHELL_CONFIG_FILE"
+            fi
             remove_restore
         fi
     fi
@@ -318,7 +319,7 @@ main() {
                 ;;
             --noswitch)
                 noswitch_flag="1"
-                imgpath=$(swww query | head -1 | awk -F 'image: ' '{print $2}')
+                imgpath=$(jq -r '.background.wallpaperPath' "$SHELL_CONFIG_FILE" 2>/dev/null || echo "")
                 shift
                 ;;
             *)
