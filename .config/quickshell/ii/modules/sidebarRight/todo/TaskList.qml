@@ -37,7 +37,6 @@ Item {
             spacing: 0
             Repeater {
                 id: todoRepeater
-                property list<int> fadingInIndexes: [] 
                 model: ScriptModel {
                     values: taskList
                 }
@@ -50,7 +49,6 @@ Item {
                     property bool pendingDoneToggle: false
                     property bool pendingDelete: false
                     property bool enableHeightAnimation: false
-                    property bool enableFading: false
 
                     Layout.fillWidth: true
                     implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
@@ -64,20 +62,6 @@ Item {
                             easing.type: Appearance.animation.elementMoveFast.type
                             easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
-                    }
-
-                    Behavior on opacity {
-                        enabled: enableFading
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveFast.duration
-                        }
-                    }
-
-                    function fadeIn() {
-                        opacity = 0
-                        enableFading = true
-                        opacity = 1
-                        enableFading = false
                     }
 
                     function startAction(showCloseAnimation) {
@@ -97,34 +81,6 @@ Item {
                         return modelData.originalIndex >= Todo.list.length - 1
                     }
 
-                    function isAtTaskListTop() {
-                        return index <= 0
-                    }
-
-                    function isAtTaskListBottom() {
-                        return index >= todoRepeater.count - 1
-                    }
-
-                    function calculateMoveUpNewTaskListIndex() {
-                        if (isAtTaskListTop(index)) {
-                            return 0
-                        } else {
-                            return index - 1
-                        }
-                    }
-
-                    function calculateMoveDownNewTaskListIndex() {
-                        if (isAtTaskListBottom(index)) {
-                            return index
-                        } else {
-                            return index + 1
-                        }
-                    }
-
-                    function calculateMoveBottomNewTaskListIndex() {
-                        return todoRepeater.count - 1
-                    }
-
                     Timer {
                         id: actionTimer
                         interval: Appearance.animation.elementMoveFast.duration
@@ -132,38 +88,27 @@ Item {
                         onTriggered: {
                             if (todoItem.pendingTopToggle) {
                                 todoItem.pendingTopToggle = false
-                                if (isAtListTop()) { return }
-                                if (!isAtTaskListTop()) {
-                                    todoRepeater.fadingInIndexes.push(0)
+                                if (!isAtListTop()) {
+                                    Todo.moveTop(modelData.originalIndex)
                                 }
-                                Todo.moveTop(modelData.originalIndex)
                             }
                             else if (todoItem.pendingUpToggle) {
                                 todoItem.pendingUpToggle = false
-                                if (isAtListTop()) { return }
-                                if (!isAtTaskListTop()) {
-                                    let newTaskListIndex = calculateMoveUpNewTaskListIndex()
-                                    todoRepeater.fadingInIndexes.push(newTaskListIndex)
+                                if (!isAtListTop()) { 
+                                    Todo.moveUp(modelData.originalIndex)
                                 }
-                                Todo.moveUp(modelData.originalIndex)
                             }
                             else if (todoItem.pendingDownToggle) {
                                 todoItem.pendingDownToggle = false
-                                if (isAtListBottom()) { return }
-                                if (!isAtTaskListBottom()) {
-                                    let newTaskListIndex = calculateMoveDownNewTaskListIndex()
-                                    todoRepeater.fadingInIndexes.push(newTaskListIndex)
+                                if (!isAtListBottom()) { 
+                                    Todo.moveDown(modelData.originalIndex)
                                 }
-                                Todo.moveDown(modelData.originalIndex)
                             }
                             else if (todoItem.pendingBottomToggle) {
                                 todoItem.pendingBottomToggle = false
-                                if (isAtListBottom()) { return }
-                                if (!isAtTaskListBottom()) {
-                                    let newTaskListIndex = calculateMoveBottomNewTaskListIndex()
-                                    todoRepeater.fadingInIndexes.push(newTaskListIndex)
+                                if (!isAtListBottom()) {
+                                    Todo.moveBottom(modelData.originalIndex)
                                 }
-                                Todo.moveBottom(modelData.originalIndex)
                             }
                             else if (todoItem.pendingDoneToggle) {
                                 todoItem.pendingDoneToggle = false
@@ -295,16 +240,6 @@ Item {
                                     }
                                 }
                             }
-                        }
-                    }
-                }
-
-                onItemAdded: function(index, item) {
-                    for (let i = 0; i < fadingInIndexes.length; i++) {
-                        if (fadingInIndexes[i] == index) {
-                            fadingInIndexes.splice(i, 1)
-                            i--
-                            item.fadeIn()
                         }
                     }
                 }
