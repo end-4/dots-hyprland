@@ -56,11 +56,22 @@ class TranslationManager:
                                     text = match[0] if match else ""
                             else:
                                 text = match
-                            
-                            # Decode escape characters
+
                             try:
-                                clean_text = text.encode().decode('unicode_escape')
-                            except:
+                                if '\\u' in text or '\\x' in text:
+                                    clean_text = bytes(text, "utf-8").decode("unicode_escape")
+                                else:
+                                    clean_text = (
+                                        text.replace('\\n', '\n')
+                                            .replace('\\t', '\t')
+                                            .replace('\\r', '\r')
+                                            .replace('\\"', '"')
+                                            .replace('\\\'', "'")
+                                            .replace('\\f', '\f')
+                                            .replace('\\b', '\b')
+                                            .replace('\\\\', '\\')
+                                    )
+                            except Exception:
                                 clean_text = text
                             
                             # Clean text (remove extra whitespace)

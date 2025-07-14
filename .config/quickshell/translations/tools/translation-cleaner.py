@@ -154,10 +154,9 @@ def sync_translations(translations_dir: str, source_lang: str = "en_US", target_
                     del target_translations[key]
                 print(f"  Deleted {len(extra_keys)} extra keys")
         
-        # Save file
-        with open(target_file, 'w', encoding='utf-8') as f:
+        # Save file (ensure UTF-8, fix for special chars)
+        with open(target_file, 'w', encoding='utf-8', newline='') as f:
             json.dump(target_translations, f, ensure_ascii=False, indent=2)
-        
         print(f"  Saved: {target_file}")
 
 def main():
