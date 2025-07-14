@@ -28,6 +28,7 @@ alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 alias pamcan pacman
 alias ls 'eza --icons'
 alias clear "printf '\033[2J\033[3J\033[1;1H'"
+alias q 'qs -c ii'
 
 
 # function fish_prompt
