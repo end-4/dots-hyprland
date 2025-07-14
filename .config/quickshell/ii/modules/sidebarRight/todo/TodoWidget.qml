@@ -236,7 +236,7 @@ Item {
 
             function editTask() {
                 if (todoInput.text.length > 0) {
-                    Todo.editTask(root.editingTodoItemModelData.originalIndex, root.editingTodoItemModelData.done, todoInput.text)
+                    Todo.editTask(root.editingTodoItemModelData.originalIndex, todoInput.text)
                     todoInput.text = ""
                     root.showEditDialog = false
                     root.editingTodoItemModelData = undefined

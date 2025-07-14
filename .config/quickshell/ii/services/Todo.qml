@@ -31,12 +31,8 @@ Singleton {
         addItem(item)
     }
 
-    function editTask(index, done, new_desc) {
-        const item = {
-            "content": new_desc,
-            "done": done,
-        }
-        root.list[index] = item
+    function editTask(index, new_desc) {
+        root.list[index].content = new_desc
         // Reassign to trigger onListChanged
         root.list = list.slice(0)
         todoFileView.setText(JSON.stringify(root.list))
