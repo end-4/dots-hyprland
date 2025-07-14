@@ -38,7 +38,6 @@ Item {
             spacing: 0
             Repeater {
                 id: todoRepeater
-                property list<int> fadingInIndexes: []
                 model: ScriptModel {
                     values: taskList
                 }
@@ -48,7 +47,6 @@ Item {
                     property bool pendingEdit: false
                     property bool pendingDelete: false
                     property bool enableHeightAnimation: false
-                    property bool enableFading: false
 
                     Layout.fillWidth: true
                     implicitHeight: todoItemRectangle.implicitHeight + todoListItemSpacing
@@ -62,20 +60,6 @@ Item {
                             easing.type: Appearance.animation.elementMoveFast.type
                             easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
                         }
-                    }
-
-                    Behavior on opacity {
-                        enabled: enableFading
-                        NumberAnimation {
-                            duration: Appearance.animation.elementMoveFast.duration
-                        }
-                    }
-
-                    function fadeIn() {
-                        opacity = 0
-                        enableFading = true
-                        opacity = 1
-                        enableFading = false
                     }
 
                     function startAction(showCloseAnimation) {
@@ -92,7 +76,6 @@ Item {
                         interval: Appearance.animation.elementMoveFast.duration
                         repeat: false
                         onTriggered: {
-                            todoRepeater.fadingInIndexes = [] // Clears the list every time a button is pressed to prevent it from being filled by canceled edits
                             if (todoItem.pendingDoneToggle) {
                                 todoItem.pendingDoneToggle = false
                                 if (!modelData.done) Todo.markDone(modelData.originalIndex)
@@ -100,7 +83,6 @@ Item {
                             } else if (todoItem.pendingEdit) {
                                 todoItem.pendingEdit = false
                                 root.editingCallback(modelData)
-                                todoRepeater.fadingInIndexes.push(model.index) // Adds to list even when edit is canceled
                             } else if (todoItem.pendingDelete) {
                                 todoItem.pendingDelete = false
                                 Todo.deleteItem(modelData.originalIndex)
@@ -180,16 +162,6 @@ Item {
                                     }
                                 }
                             }
-                        }
-                    }
-                }
-
-                onItemAdded: function(index, item) {
-                    for (let i = 0; i < fadingInIndexes.length; i++) {
-                        if (fadingInIndexes[i] == index) {
-                            fadingInIndexes.splice(i, 1)
-                            i--
-                            item.fadeIn()
                         }
                     }
                 }
