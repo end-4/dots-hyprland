@@ -199,4 +199,35 @@ ContentPage {
             }
         }
     }
+
+    ContentSection {
+        title: "Time"
+
+        ContentSubsection {
+            title: "Format"
+            tooltip: ""
+
+            ConfigSelectionArray {
+                currentValue: Config.options.time.format
+                configOptionName: "time.format"
+                onSelected: newValue => {
+                    Config.options.time.format = newValue;
+                }
+                options: [
+                    {
+                        displayName: "24h",
+                        value: "hh:mm"
+                    },
+                    {
+                        displayName: "12h am/pm",
+                        value: "h:mm ap"
+                    },
+                    {
+                        displayName: "12h AM/PM",
+                        value: "h:mm AP"
+                    },
+                ]
+            }
+        }
+    }
 }

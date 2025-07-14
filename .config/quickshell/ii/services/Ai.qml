@@ -461,6 +461,7 @@ Singleton {
                 root.postResponseHook();
                 root.postResponseHook = null; // Reset hook after use
             }
+            root.saveChat("lastSession")
         }
 
         function buildGeminiRequestData(model, messages) {
@@ -492,7 +493,7 @@ Singleton {
                     return {
                         "role": geminiApiRoleName,
                         "parts": [{ 
-                            text: message.content,
+                            text: message.rawContent,
                         }]
                     }
                 }),
@@ -517,7 +518,7 @@ Singleton {
                     ...messages.filter(message => (message.role != Ai.interfaceRole)).map(message => {
                         return {
                             "role": message.role,
-                            "content": message.content,
+                            "content": message.rawContent,
                         }
                     }),
                 ],
@@ -594,12 +595,15 @@ Singleton {
                     const functionCall = dataJson.candidates[0]?.content?.parts[0]?.functionCall;
                     requester.message.functionName = functionCall.name;
                     requester.message.functionCall = functionCall.name;
-                    requester.message.content += `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`;
+                    const newContent = `\n\n[[ Function: ${functionCall.name}(${JSON.stringify(functionCall.args, null, 2)}) ]]\n`
+                    requester.message.rawContent += newContent;
+                    requester.message.content += newContent;
                     root.handleGeminiFunctionCall(functionCall.name, functionCall.args);
                     return
                 }
                 // Normal text response
                 const responseContent = dataJson.candidates[0]?.content?.parts[0]?.text
+                requester.message.rawContent += responseContent;
                 requester.message.content += responseContent;
                 const annotationSources = dataJson.candidates[0]?.groundingMetadata?.groundingChunks?.map(chunk => {
                     return {
@@ -623,6 +627,7 @@ Singleton {
                 // console.log(JSON.stringify(requester.message, null, 2));
             } catch (e) {
                 console.log("[AI] Could not parse response from stream: ", e);
+                requester.message.rawContent += requester.geminiBuffer;
                 requester.message.content += requester.geminiBuffer
             } finally {
                 requester.geminiBuffer = "";
@@ -664,15 +669,19 @@ Singleton {
             if (responseContent && responseContent.length > 0) {
                 if (requester.isReasoning) {
                     requester.isReasoning = false;
-                    requester.message.content += "\n\n</think>\n\n";
+                    const endBlock = "\n\n</think>\n\n";
+                    requester.message.content += endBlock;
+                    requester.message.rawContent += endBlock;
                 }
                 newContent = dataJson.choices[0]?.delta?.content || dataJson.message.content;
             } else if (responseReasoning && responseReasoning.length > 0) {
                 // console.log("Reasoning content: ", dataJson.choices[0].delta.reasoning);
                 if (!requester.isReasoning) {
                     requester.isReasoning = true;
-                    requester.message.content += "\n\n<think>\n\n";
-                } 
+                    const startBlock = "\n\n<think>\n\n";
+                    requester.message.rawContent += startBlock;
+                    requester.message.content += startBlock;
+                }
                 newContent = dataJson.choices[0].delta.reasoning || dataJson.choices[0].delta.reasoning_content;
             }
 
@@ -699,10 +708,12 @@ Singleton {
                     }
                     else {
                         console.log("Unknown API format: ", requester.apiFormat);
+                        requester.message.rawContent += data;
                         requester.message.content += data;
                     }
                 } catch (e) {
                     console.log("[AI] Could not parse response from stream: ", e);
+                    requester.message.rawContent += data;
                     requester.message.content += data;
                 }
             }
@@ -714,8 +725,9 @@ Singleton {
 
             try { // to parse full response into json for error handling
                 // console.log("Full response: ", requester.message.content + "]"); 
-                const parsedResponse = JSON.parse(requester.message.content + "]");
-                requester.message.content = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
+                const parsedResponse = JSON.parse(requester.message.rawContent + "]");
+                requester.message.rawContent = `\`\`\`json\n${JSON.stringify(parsedResponse, null, 2)}\n\`\`\``;
+                requester.message.content = requester.message.rawContent;
             } catch (e) { 
                 // console.log("[AI] Could not parse response on exit: ", e);
             }

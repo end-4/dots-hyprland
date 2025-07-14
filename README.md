@@ -82,6 +82,8 @@ _latest and only style that I actively use. Other past styles are still there fo
 
 ### illogical-impulse<sup>Quickshell</sup>
 
+Widget system: Quickshell | Support: Yes
+
 [Showcase video](https://www.youtube.com/watch?v=RPwovTInagE)
 
 | AI, settings app | Some widgets |
@@ -92,33 +94,47 @@ _latest and only style that I actively use. Other past styles are still there fo
 
 ### illogical-impulse<sup>AGS</sup> <sub>(Deprecated)</sub>
 
+Widget system: AGS | Support: Limited, no new features
+
 | AI | Common widgets |
 |:---|:---------------|
 | ![image](https://github.com/user-attachments/assets/9d7af13f-89ef-470d-ba78-d2288b79cf60) | ![image](https://github.com/end-4/dots-hyprland/assets/97237370/406b72b6-fa38-4f0d-a6c4-4d7d5d5ddcb7) |
 | Window management | Weeb power |
 | ![image](https://github.com/user-attachments/assets/02983b9b-79ba-4c25-8717-90bef2357ae5) | ![image](https://github.com/user-attachments/assets/bbb332ec-962a-4e88-a95b-486d0bd8ce76) |
 
-### Unsupported stuff
+### Very old stuff
 
 - Source code not likely to work but still available in the [`archive`](https://github.com/end-4/dots-hyprland/tree/archive) branch. Extremely spaghetti.
 - Click image for a presentation video
 
 #### m3ww
+
+   Widget system: EWW | Support: No, dead
+
    <a href="https://streamable.com/85ch8x">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/09533e64-b6d7-47eb-a840-ee90c6776adf" alt="Material Eww!">
    </a>
 
 #### NovelKnock
+
+   Widget system: EWW | Support: No, dead
+
    <a href="https://streamable.com/7vo61k">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/42903d03-bf6f-49d4-be7f-dd77e6cb389d" alt="Desktop Preview">
    </a>
 
 #### Hybrid
+
+   Widget system: EWW | Support: No, dead
+   
    <a href="https://streamable.com/4oogot">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/190deb1e-f6f5-46ce-8cf0-9b39944c079d" alt="click the circles!">
    </a>
 
 #### Windoes
+
+   Widget system: EWW | Support: No, dead
+   
    <a href="https://streamable.com/5qx614">
     <img src="https://github.com/end-4/dots-hyprland/assets/97237370/b15317b1-f295-49f5-b90c-fb6328b8d886" alt="Desktop Preview">
    </a>
