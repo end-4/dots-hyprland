@@ -149,7 +149,7 @@ Item { // Player instance
 
             Rectangle {
                 anchors.fill: parent
-                color: ColorUtils.transparentize(blendedColors.colLayer0, 0.25)
+                color: ColorUtils.transparentize(blendedColors.colLayer0, 0.3)
                 radius: root.popupRounding
             }
         }

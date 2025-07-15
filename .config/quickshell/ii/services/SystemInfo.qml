@@ -36,9 +36,9 @@ Singleton {
             const nameMatch = textOsRelease.match(/^NAME="(.+?)"/m)
             distroName = prettyNameMatch ? prettyNameMatch[1] : (nameMatch ? nameMatch[1].replace(/Linux/i, "").trim() : "Unknown")
 
-            // Extract the ID (LOGO field, fallback to "unknown")
-            const logoMatch = textOsRelease.match(/^LOGO=(.+)$/m)
-            distroId = logoMatch ? logoMatch[1].replace(/"/g, "") : "unknown"
+            // Extract the ID
+            const idMatch = textOsRelease.match(/^ID="?(.+?)"?$/m)
+            distroId = idMatch ? idMatch[1] : "unknown"
 
             // Extract additional URLs and logo
             const homeUrlMatch = textOsRelease.match(/^HOME_URL="(.+?)"/m)
