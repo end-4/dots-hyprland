@@ -28,8 +28,8 @@ Scope {
             required property var modelData
             property string wallpaperPath: Config.options.background.wallpaperPath
             // Position
-            property real clockX: modelData.width / 2
-            property real clockY: modelData.height / 2
+            property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
+            property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
             property var textHorizontalAlignment: clockX < screen.width / 3 ? Text.AlignLeft :
                 (clockX > screen.width * 2 / 3 ? Text.AlignRight : Text.AlignHCenter)
             // Colors
