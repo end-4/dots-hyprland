@@ -39,6 +39,7 @@ Scope {
 
             // Layer props
             screen: modelData
+            exclusionMode: ExclusionMode.Ignore
             WlrLayershell.layer: WlrLayer.Bottom
             WlrLayershell.namespace: "quickshell:background"
             anchors {
