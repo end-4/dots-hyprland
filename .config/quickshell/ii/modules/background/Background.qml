@@ -141,7 +141,7 @@ Scope {
                 property real value // 0 to 1, for offset
                 value: {
                     // Range = half-groups that workspaces span on
-                    const chunkSize = 3;
+                    const chunkSize = 5;
                     const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
                     const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
                     const range = upper - lower;
