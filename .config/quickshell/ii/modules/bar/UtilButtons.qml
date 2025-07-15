@@ -104,5 +104,38 @@ Item {
                 }
             }
         }
+
+        Loader {
+            active: Config.options.bar.utilButtons.showPerfProfileToggle
+            visible: Config.options.bar.utilButtons.showPerfProfileToggle
+            sourceComponent: CircleUtilButton {
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: event => {
+                    if (PowerProfiles.hasPerformanceProfile) {
+                        switch(PowerProfiles.profile) {
+                            case PowerProfile.PowerSaver: PowerProfiles.profile = PowerProfile.Balanced
+                            break;
+                            case PowerProfile.Balanced: PowerProfiles.profile = PowerProfile.Performance
+                            break;
+                            case PowerProfile.Performance: PowerProfiles.profile = PowerProfile.PowerSaver
+                            break;
+                        }
+                    } else {
+                        PowerProfiles.profile = PowerProfiles.profile == PowerProfile.Balanced ? PowerProfile.PowerSaver : PowerProfile.Balanced
+                    }
+                }
+                MaterialSymbol {
+                    horizontalAlignment: Qt.AlignHCenter
+                    fill: 0
+                    text: switch(PowerProfiles.profile) {
+                        case PowerProfile.PowerSaver: return "battery_saver"
+                        case PowerProfile.Balanced: return "balance"
+                        case PowerProfile.Performance: return "speed"
+                    }
+                    iconSize: Appearance.font.pixelSize.large
+                    color: Appearance.colors.colOnLayer2
+                }
+            }
+        }
     }
 }
