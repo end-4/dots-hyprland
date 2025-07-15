@@ -11,6 +11,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 
 Scope {
     id: root
@@ -26,7 +27,19 @@ Scope {
             id: bgRoot
 
             required property var modelData
+            // Workspaces
+            property HyprlandMonitor monitor: Hyprland.monitorFor(modelData)
+            property list<var> relevantWindows: HyprlandData.windowList.filter(win => win.monitor == monitor.id && win.workspace.id >= 0).sort((a, b) => a.workspace.id - b.workspace.id)
+            property int firstWorkspaceId: relevantWindows[0]?.workspace.id || 1
+            property int lastWorkspaceId: relevantWindows[relevantWindows.length - 1]?.workspace.id || 10
+            // Wallpaper
             property string wallpaperPath: Config.options.background.wallpaperPath
+            property real preferredWallpaperScale: Config.options.background.parallax.workspaceZoom
+            property real effectiveWallpaperScale: 1 // Some reasonable init value, to be updated
+            property int wallpaperWidth: modelData.width // Some reasonable init value, to be updated
+            property int wallpaperHeight: modelData.height // Some reasonable init value, to be updated
+            property real movableXSpace: (effectiveWallpaperScale - 1) / 2 * screen.width
+            property real movableYSpace: (effectiveWallpaperScale - 1) / 2 * screen.height
             // Position
             property real clockX: (modelData.width / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.width)
             property real clockY: (modelData.height / 2) + ((Math.random() < 0.5 ? -1 : 1) * modelData.height)
@@ -50,29 +63,63 @@ Scope {
             }
             color: "transparent"
 
+            onWallpaperPathChanged: {
+                bgRoot.updateZoomScale()
+                // Clock position gets updated after zoom scale is updated
+            }
+
+            // Wallpaper zoom scale
+            function updateZoomScale() {
+                getWallpaperSizeProc.path = bgRoot.wallpaperPath
+                getWallpaperSizeProc.running = true;
+            }
+            Process {
+                id: getWallpaperSizeProc
+                property string path: bgRoot.wallpaperPath
+                command: [ "magick", "identify", "-format", "%w %h", path ]
+                stdout: StdioCollector {
+                    id: wallpaperSizeOutputCollector
+                    onStreamFinished: {
+                        const output = wallpaperSizeOutputCollector.text
+                        const [width, height] = output.split(" ").map(Number);
+                        bgRoot.wallpaperWidth = width
+                        bgRoot.wallpaperHeight = height
+                        bgRoot.effectiveWallpaperScale = Math.max(1, Math.min(
+                            bgRoot.preferredWallpaperScale,
+                            width / bgRoot.screen.width,
+                            height / bgRoot.screen.height
+                        ));
+
+                        bgRoot.updateClockPosition()
+                    }
+                }
+            }
+
             // Clock positioning
             function updateClockPosition() {
-                leastBusyRegionProc.path = wallpaperPath // Somehow this is needed to make the proc correctly use the new path
+                // Somehow all this manual setting is needed to make the proc correctly use the new values
+                leastBusyRegionProc.path = bgRoot.wallpaperPath
                 leastBusyRegionProc.contentWidth = clock.implicitWidth
                 leastBusyRegionProc.contentHeight = clock.implicitHeight
+                leastBusyRegionProc.horizontalPadding = (effectiveWallpaperScale - 1) / 2 * screen.width + 100
+                leastBusyRegionProc.verticalPadding = (effectiveWallpaperScale - 1) / 2 * screen.height + 100
                 leastBusyRegionProc.running = false;
                 leastBusyRegionProc.running = true;
             }
-            onWallpaperPathChanged: {
-                // console.log("[Background] Wallpaper path changed to:", wallpaperPath)
-                bgRoot.updateClockPosition()
-            }
             Process {
                 id: leastBusyRegionProc
-                running: true
                 property string path: bgRoot.wallpaperPath
-                property int contentWidth: bgRoot.screen.width
-                property int contentHeight: bgRoot.screen.height
+                property int contentWidth: 300
+                property int contentHeight: 300
+                property int horizontalPadding: bgRoot.movableXSpace
+                property int verticalPadding: bgRoot.movableYSpace
                 command: [Quickshell.configPath("scripts/images/least_busy_region.py"),
                     "--screen-width", bgRoot.screen.width,
                     "--screen-height", bgRoot.screen.height,
                     "--width", contentWidth,
                     "--height", contentHeight,
+                    "--horizontal-padding", horizontalPadding,
+                    "--vertical-padding", verticalPadding,
                     path
                 ]
                 stdout: StdioCollector {
@@ -91,58 +138,79 @@ Scope {
 
             // Wallpaper
             Image {
-                z: 0
-                anchors.fill: parent
+                property real value // 0 to 1, for offset
+                value: {
+                    // Range = half-groups that workspaces span on
+                    const chunkSize = 3;
+                    const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
+                    const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
+                    const range = upper - lower;
+                    return (bgRoot.monitor.activeWorkspace.id - lower) / range;
+                }
+                property real effectiveValue: Math.max(0, Math.min(1, value))
+                x: -(bgRoot.movableXSpace) - (effectiveValue - 0.5) * 2 * bgRoot.movableXSpace
+                y: -(bgRoot.movableYSpace)
                 source: bgRoot.wallpaperPath
                 fillMode: Image.PreserveAspectCrop
+                Behavior on x {
+                    NumberAnimation {
+                        duration: 600
+                        easing.type: Easing.OutCubic
+                    }
+                }
                 sourceSize {
-                    width: bgRoot.screen.width
-                    height: bgRoot.screen.height
-                }
-            }
-
-            // The clock
-            Item {
-                id: clock
-                z: 1
-                anchors {
-                    left: parent.left
-                    top: parent.top
-                    leftMargin: (root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX) - implicitWidth / 2
-                    topMargin: (root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY) - implicitHeight / 2
-                    Behavior on leftMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
-                    Behavior on topMargin {
-                        animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
-                    }
+                    width: bgRoot.screen.width * bgRoot.effectiveWallpaperScale
+                    height: bgRoot.screen.height * bgRoot.effectiveWallpaperScale
                 }
 
-                implicitWidth: clockColumn.implicitWidth
-                implicitHeight: clockColumn.implicitHeight
-
-                ColumnLayout {
-                    id: clockColumn
-                    anchors.centerIn: parent
-                    spacing: -5
-
-                    StyledText {
-                        Layout.fillWidth: true
-                        horizontalAlignment: bgRoot.textHorizontalAlignment
-                        font.pixelSize: 95
-                        color: bgRoot.colText
-                        style: Text.Raised
-                        styleColor: Appearance.colors.colShadow
-                        text: DateTime.time
+                // The clock
+                Item {
+                    id: clock
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        leftMargin: ((root.fixedClockPosition ? root.fixedClockX : bgRoot.clockX * bgRoot.effectiveWallpaperScale) - implicitWidth / 2)
+                        topMargin: ((root.fixedClockPosition ? root.fixedClockY : bgRoot.clockY * bgRoot.effectiveWallpaperScale) - implicitHeight / 2)
+                        Behavior on leftMargin {
+                            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                        }
+                        Behavior on topMargin {
+                            animation: Appearance.animation.elementMove.numberAnimation.createObject(this)
+                        }
                     }
-                    StyledText {
-                        Layout.fillWidth: true
-                        horizontalAlignment: bgRoot.textHorizontalAlignment
-                        font.pixelSize: 25
-                        color: bgRoot.colText
-                        style: Text.Raised
-                        styleColor: Appearance.colors.colShadow
-                        text: DateTime.date
+
+                    implicitWidth: clockColumn.implicitWidth
+                    implicitHeight: clockColumn.implicitHeight
+
+                    ColumnLayout {
+                        id: clockColumn
+                        anchors.centerIn: parent
+                        spacing: -5
+
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: bgRoot.textHorizontalAlignment
+                            font {
+                                pixelSize: 85
+                                weight: Font.Medium
+                            }
+                            color: bgRoot.colText
+                            style: Text.Raised
+                            styleColor: Appearance.colors.colShadow
+                            text: DateTime.time
+                        }
+                        StyledText {
+                            Layout.fillWidth: true
+                            horizontalAlignment: bgRoot.textHorizontalAlignment
+                            font {
+                                pixelSize: 20
+                                weight: Font.Medium
+                            }
+                            color: bgRoot.colText
+                            style: Text.Raised
+                            styleColor: Appearance.colors.colShadow
+                            text: DateTime.date
+                        }
                     }
                 }
             }
