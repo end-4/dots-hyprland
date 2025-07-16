@@ -311,7 +311,7 @@
   "Message the model... \"%1\" for commands": "与模型对话... \"%1\" 查看命令",
   "The current system prompt is\n\n---\n\n%1": "当前系统提示词为\n\n---\n\n%1",
   "Model set to %1": "模型已设置为 %1",
-  "Online models disallowed for %1\n\nControlled by `policies.ai` config option": "%1 禁止使用在线模型\n\n由 `policies.ai` 配置项控制",
+  "Online models disallowed for \n\nControlled by `policies.ai` config option": "禁止使用在线模型\n\n由 `policies.ai` 配置项控制",
   "Loaded the following system prompt\n\n---\n\n%1": "已加载以下系统提示词\n\n---\n\n%1",
   "%1 notifications": "%1 条通知",
   "Save chat from %1": "保存聊天记录到 %1",

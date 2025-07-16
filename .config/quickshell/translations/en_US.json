@@ -295,7 +295,6 @@
   "Loaded the following system prompt\n\n---\n\n%1": "Loaded the following system prompt\n\n---\n\n%1",
   "%1 | Right-click to configure": "%1 | Right-click to configure",
   "API key set for %1": "API key set for %1",
-  "Online models disallowed for %1\n\nControlled by `policies.ai` config option": "Online models disallowed for %1\n\nControlled by `policies.ai` config option",
   "Online via %1 | %2's model": "Online via %1 | %2's model",
   "Current API endpoint: %1\nSet it with %2mode PROVIDER": "Current API endpoint: %1\nSet it with %2mode PROVIDER",
   "Go to source (%1)": "Go to source (%1)",
@@ -316,5 +315,6 @@
   "%1 notifications": "%1 notifications",
   "Save chat from %1": "Save chat from %1",
   "Load chat from %1": "Load chat from %1",
-  "Load prompt from %1": "Load prompt from %1"
+  "Load prompt from %1": "Load prompt from %1",
+  "Online models disallowed for \n\nControlled by `policies.ai` config option": "Online models disallowed for \n\nControlled by `policies.ai` config option"
 }

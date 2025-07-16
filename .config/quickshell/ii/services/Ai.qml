@@ -372,7 +372,7 @@ Singleton {
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
                 root.addMessage(
-                    Translation.tr("Online models disallowed for %1\n\nControlled by `policies.ai` config option").arg(model.name),
+                    Translation.tr("Online models disallowed for \n\nControlled by `policies.ai` config option"),
                     root.interfaceRole
                 );
                 return;
