@@ -242,7 +242,7 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.m3colors.m3inverseOnSurface
                         wrapMode: Text.Wrap
-                        text: StringUtils.format(Translation.tr("{0} queries pending"), Booru.runningRequests)
+                        text: Translation.tr("%1 queries pending").arg(Booru.runningRequests)
                     }
                 }
             }
@@ -354,7 +354,7 @@ Item {
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     renderType: Text.NativeRendering
-                    placeholderText: StringUtils.format(Translation.tr('Enter tags, or "{0}" for commands'), root.commandPrefix)
+                    placeholderText: Translation.tr('Enter tags, or "%1" for commands').arg(root.commandPrefix)
 
                     background: null
 
@@ -518,8 +518,9 @@ Item {
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
                         // content: Translation.tr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + Translation.tr("\nSet with /mode PROVIDER")
-                        content: StringUtils.format(Translation.tr("Current API endpoint: {0}\nSet it with {1}mode PROVIDER"), 
-                            Booru.providers[Booru.currentProvider].url, root.commandPrefix)
+                        content: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
+                            .arg(Booru.providers[Booru.currentProvider].url)
+                            .arg(root.commandPrefix)
                     }
 
                     MouseArea {

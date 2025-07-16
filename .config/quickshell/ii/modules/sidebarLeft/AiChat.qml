@@ -377,7 +377,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Layout.fillWidth: true
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    placeholderText: StringUtils.format(Translation.tr('Message the model... "{0}" for commands'), root.commandPrefix)
+                    placeholderText: Translation.tr('Message the model... "%1" for commands').arg(root.commandPrefix)
 
                     background: null
 
@@ -577,8 +577,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        content: StringUtils.format(Translation.tr("Current model: {0}\nSet it with {1}model MODEL"), 
-                            Ai.getModel().name, root.commandPrefix)
+                        content: Translation.tr("Current model: %1\nSet it with %2model MODEL")
+                            .arg(Ai.getModel().name)
+                            .arg(root.commandPrefix)
                     }
 
                     MouseArea {

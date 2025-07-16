@@ -95,7 +95,7 @@ Rectangle {
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colOnLayer2
                     // text: `Page ${root.responseData.page}`
-                    text: StringUtils.format(Translation.tr("Page {0}"), root.responseData.page)
+                    text: Translation.tr("Page %1").arg(root.responseData.page)
                 }
             }
         }

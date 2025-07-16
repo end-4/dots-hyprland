@@ -185,7 +185,7 @@ Singleton {
         "openrouter-llama4-maverick": {
             "name": "Llama 4 Maverick",
             "icon": "ollama-symbolic",
-            "description": StringUtils.format(Translation.tr("Online via {0} | {1}'s model"), "OpenRouter", "Meta"),
+            "description": Translation.tr("Online via %1 | %2's model").arg("OpenRouter").arg("Meta"),
             "homepage": "https://openrouter.ai/meta-llama/llama-4-maverick:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "meta-llama/llama-4-maverick:free",
@@ -197,7 +197,7 @@ Singleton {
         "openrouter-deepseek-r1": {
             "name": "DeepSeek R1",
             "icon": "deepseek-symbolic",
-            "description": StringUtils.format(Translation.tr("Online via {0} | {1}'s model"), "OpenRouter", "DeepSeek"),
+            "description": Translation.tr("Online via %1 | %2's model").arg("OpenRouter").arg("DeepSeek"),
             "homepage": "https://openrouter.ai/deepseek/deepseek-r1:free",
             "endpoint": "https://openrouter.ai/api/v1/chat/completions",
             "model": "deepseek/deepseek-r1:free",
@@ -250,7 +250,7 @@ Singleton {
                         root.models[safeModelName] = {
                             "name": guessModelName(model),
                             "icon": guessModelLogo(model),
-                            "description": StringUtils.format(Translation.tr("Local Ollama model | {0}"), model),
+                            "description": Translation.tr("Local Ollama model | %1").arg(model),
                             "homepage": `https://ollama.com/library/${model}`,
                             "endpoint": "http://localhost:11434/v1/chat/completions",
                             "model": model,
@@ -314,12 +314,12 @@ Singleton {
         onLoadedChanged: {
             if (!promptLoader.loaded) return;
             Config.options.ai.systemPrompt = promptLoader.text();
-            root.addMessage(StringUtils.format("Loaded the following system prompt\n\n---\n\n{0}", Config.options.ai.systemPrompt), root.interfaceRole);
+            root.addMessage(Translation.tr("Loaded the following system prompt\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
         }
     }
 
     function printPrompt() {
-        root.addMessage(StringUtils.format("The current system prompt is\n\n---\n\n{0}", Config.options.ai.systemPrompt), root.interfaceRole);
+        root.addMessage(Translation.tr("The current system prompt is\n\n---\n\n%1").arg(Config.options.ai.systemPrompt), root.interfaceRole);
     }
 
     function loadPrompt(filePath) {
@@ -352,8 +352,8 @@ Singleton {
 
     function addApiKeyAdvice(model) {
         root.addMessage(
-            StringUtils.format(Translation.tr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/>\n\n### For {0}:\n\n**Link**: {1}\n\n{2}'), 
-                model.name, model.key_get_link, model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")), 
+            Translation.tr('To set an API key, pass it with the command\n\nTo view the key, pass "get" with the command<br/>\n\n### For %1:\n\n**Link**: %2\n\n%3')
+                .arg(model.name).arg(model.key_get_link).arg(model.key_get_description ?? Translation.tr("<i>No further instruction provided</i>")), 
             Ai.interfaceRole
         );
     }
@@ -371,11 +371,14 @@ Singleton {
             if (model?.requires_key) KeyringStorage.fetchKeyringData();
             // See if policy prevents online models
             if (Config.options.policies.ai === 2 && !model.endpoint.includes("localhost")) {
-                root.addMessage(StringUtils.format(StringUtils.format("Online models disallowed\n\nControlled by `policies.ai` config option"), model.name), root.interfaceRole);
+                root.addMessage(
+                    Translation.tr("Online models disallowed for %1\n\nControlled by `policies.ai` config option").arg(model.name),
+                    root.interfaceRole
+                );
                 return;
             }
             if (setPersistentState) Persistent.states.ai.model = modelId;
-            if (feedback) root.addMessage(StringUtils.format("Model set to {0}", model.name), root.interfaceRole);
+            if (feedback) root.addMessage(Translation.tr("Model set to %1").arg(model.name), root.interfaceRole);
             if (model.requires_key) {
                 // If key not there show advice
                 if (root.apiKeysLoaded && (!root.apiKeys[model.key_id] || root.apiKeys[model.key_id].length === 0)) {
@@ -398,13 +401,13 @@ Singleton {
         }
         Persistent.states.ai.temperature = value;
         root.temperature = value;
-        root.addMessage(StringUtils.format(Translation.tr("Temperature set to {0}"), value), Ai.interfaceRole);
+        root.addMessage(Translation.tr("Temperature set to %1").arg(value), Ai.interfaceRole);
     }
 
     function setApiKey(key) {
         const model = models[currentModelId];
         if (!model.requires_key) {
-            root.addMessage(StringUtils.format(Translation.tr("{0} does not require an API key"), model.name), Ai.interfaceRole);
+            root.addMessage(Translation.tr("%1 does not require an API key").arg(model.name), Ai.interfaceRole);
             return;
         }
         if (!key || key.length === 0) {
@@ -413,7 +416,7 @@ Singleton {
             return;
         }
         KeyringStorage.setNestedField(["apiKeys", model.key_id], key.trim());
-        root.addMessage(StringUtils.format(Translation.tr("API key set for {0}"), model.name, Ai.interfaceRole));
+        root.addMessage(Translation.tr("API key set for %1").arg(model.name), Ai.interfaceRole);
     }
 
     function printApiKey() {
@@ -421,17 +424,17 @@ Singleton {
         if (model.requires_key) {
             const key = root.apiKeys[model.key_id];
             if (key) {
-                root.addMessage(StringUtils.format(Translation.tr("API key:\n\n```txt\n{0}\n```"), key), Ai.interfaceRole);
+                root.addMessage(Translation.tr("API key:\n\n```txt\n%1\n```").arg(key), Ai.interfaceRole);
             } else {
-                root.addMessage(StringUtils.format(Translation.tr("No API key set for {0}"), model.name), Ai.interfaceRole);
+                root.addMessage(Translation.tr("No API key set for %1").arg(model.name), Ai.interfaceRole);
             }
         } else {
-            root.addMessage(StringUtils.format(Translation.tr("{0} does not require an API key"), model.name), Ai.interfaceRole);
+            root.addMessage(Translation.tr("%1 does not require an API key").arg(model.name), Ai.interfaceRole);
         }
     }
 
     function printTemperature() {
-        root.addMessage(StringUtils.format(Translation.tr("Temperature: {0}"), root.temperature), Ai.interfaceRole);
+        root.addMessage(Translation.tr("Temperature: %1").arg(root.temperature), Ai.interfaceRole);
     }
 
     function clearMessages() {
@@ -799,7 +802,7 @@ Singleton {
             const value = args.value;
             Config.setNestedValue(key, value);
         }
-        else root.addMessage(Translation.tr("Unknown function call: {0}"), "assistant");
+        else root.addMessage(Translation.tr("Unknown function call: %1").arg(name), "assistant");
     }
 
     function chatToJson() {

@@ -29,6 +29,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: StringUtils.format(Translation.tr("{0} | Right-click to configure"), Network.networkName)
+        content: Translation.tr("%1 | Right-click to configure").arg(Network.networkName)
     }
 }
