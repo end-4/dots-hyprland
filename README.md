@@ -74,11 +74,17 @@
     <h3></h3>
 </div>
 
-<div align="center">
-    <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo">
-</div>
+<table style="border-collapse: collapse;">
+  <tr>
+    <td width="25%">
+      <img src=".github/assets/illogical-impulse.svg" alt="illogical-impulse logo" style="float:left; width:100%;">
+    </td>
+    <td width="75%">
+      <i>latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below.</i>
+    </td>
+  </tr>
+</table>
 
-_latest and only style that I actively use. Other past styles are still there for your viewing pleasure and not actual use, but code is still available, see below._
 
 ### illogical-impulse<sup>Quickshell</sup>
 
@@ -151,6 +157,8 @@ Widget system: AGS | Support: Limited, no new features
  - AGS: [Aylur's config](https://github.com/Aylur/dotfiles/tree/ags-pre-ts), [kotontrion's config](https://github.com/kotontrion/dotfiles)
  - EWW: [fufexan's config](https://github.com/fufexan/dotfiles) (he thanks more people there btw)
  - AI bots for providing useful examples
+
+ <sup><sup><sup><sup><sup>[@tokyobot](https://github.com/tokyob0t) for saying hi</sup></sup></sup></sup></sup>
 
 <div align="center">
     <h2>• stonks •</h2>
