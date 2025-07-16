@@ -1,6 +1,6 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
-
+import "root:/"
 import "root:/modules/common"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import Quickshell;

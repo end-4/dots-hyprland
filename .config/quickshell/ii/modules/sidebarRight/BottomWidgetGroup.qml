@@ -1,5 +1,6 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/"
 import "root:/services"
 import "./calendar"
 import "./todo"

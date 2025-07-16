@@ -5,7 +5,7 @@ import "./calendar"
 import "./notifications"
 import "./todo"
 import "./volumeMixer"
-import "root:/services/"
+import "root:/"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls

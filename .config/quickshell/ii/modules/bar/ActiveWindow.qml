@@ -1,7 +1,7 @@
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
-import "root:/services/"
+import "root:/"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland

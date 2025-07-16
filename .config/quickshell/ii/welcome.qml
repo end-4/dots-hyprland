@@ -12,7 +12,7 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import "root:/services/"
+import "root:/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils

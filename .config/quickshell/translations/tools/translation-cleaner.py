@@ -52,7 +52,7 @@ def clean_translation_files(translations_dir: str, source_dir: str, backup: bool
         
         if backup:
             # Create backup
-            backup_file = Path(translations_dir) / f"{lang}.json.backup"
+            backup_file = Path(translations_dir) / f"{lang}.json.bak"
             with open(backup_file, 'w', encoding='utf-8') as f:
                 json.dump(translations, f, ensure_ascii=False, indent=2)
             print(f"Created backup: {backup_file}")

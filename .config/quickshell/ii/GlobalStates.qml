@@ -1,5 +1,5 @@
 import "root:/modules/common/"
-import "root:/services/"
+import "root:/"
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland

@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import QtQuick
 import QtQuick.Layouts

@@ -1,7 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "../"
-import "root:/services/"
+import "root:/"
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland

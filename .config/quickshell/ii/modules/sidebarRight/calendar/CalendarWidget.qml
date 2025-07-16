@@ -1,4 +1,5 @@
 import "root:/modules/common"
+import "root:/"
 import "root:/modules/common/widgets"
 import "./calendar_layout.js" as CalendarLayout
 import QtQuick

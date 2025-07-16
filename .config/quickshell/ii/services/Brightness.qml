@@ -4,7 +4,7 @@ pragma ComponentBehavior: Bound
 // From https://github.com/caelestia-dots/shell/ (`quickshell` branch) with modifications.
 // License: GPLv3
 
-import "root:/services/"
+import "root:/"
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland

@@ -1,7 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
-import "root:/services/"
+import "root:/"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
