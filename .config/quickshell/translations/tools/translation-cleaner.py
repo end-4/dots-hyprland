@@ -50,29 +50,34 @@ def clean_translation_files(translations_dir: str, source_dir: str, backup: bool
         translations = manager.load_translation_file(lang)
         original_count = len(translations)
         
-        if backup:
-            # Create backup
-            backup_file = Path(translations_dir) / f"{lang}.json.bak"
-            with open(backup_file, 'w', encoding='utf-8') as f:
-                json.dump(translations, f, ensure_ascii=False, indent=2)
-            print(f"Created backup: {backup_file}")
-        
-        # Find unused keys
-        unused_keys = set(translations.keys()) - current_texts
-        
+        # Find unused keys, skip those whose value ends with /*keep*/
+        unused_keys = set()
+        for k in translations.keys():
+            v = translations[k]
+            if k not in current_texts:
+                if isinstance(v, str) and v.strip().endswith('/*keep*/'):
+                    continue
+                unused_keys.add(k)
+
         if unused_keys:
             print(f"Found {len(unused_keys)} unused keys:")
             for i, key in enumerate(sorted(unused_keys)[:10], 1):  # Only show first 10
                 print(f"  {i}. \"{key[:50]}{'...' if len(key) > 50 else ''}\"")
             if len(unused_keys) > 10:
                 print(f"  ... and {len(unused_keys) - 10} more keys")
-            
+
             response = input(f"Delete these {len(unused_keys)} unused keys? (y/n): ")
             if response.lower().strip() in ['y', 'yes']:
+                if backup:
+                    # Create backup only when user confirms deletion
+                    backup_file = Path(translations_dir) / f"{lang}.json.bak"
+                    with open(backup_file, 'w', encoding='utf-8') as f:
+                        json.dump(translations, f, ensure_ascii=False, indent=2)
+                    print(f"Created backup: {backup_file}")
                 # Delete unused keys
                 for key in unused_keys:
                     del translations[key]
-                
+
                 # Save cleaned file
                 manager.save_translation_file(lang, translations)
                 removed_count = len(unused_keys)
@@ -82,7 +87,7 @@ def clean_translation_files(translations_dir: str, source_dir: str, backup: bool
                 print("Skipped deletion")
         else:
             print("No unused keys found")
-        
+
         new_count = len(translations)
         print(f"Original key count: {original_count}, after cleanup: {new_count}")
     

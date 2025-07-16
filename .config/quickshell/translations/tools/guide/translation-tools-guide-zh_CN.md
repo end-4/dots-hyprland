@@ -163,7 +163,6 @@ Translation.tr("Say \"Hello\"")
 
 // 带参数占位符
 Translation.tr("Hello, %1!").arg(name)
-Translation.tr("{0} files selected").arg(count)
 ```
 
 ## 示例输出
@@ -235,29 +234,25 @@ $ ./manage-translations.sh clean
   --source-dir /path/to/source
 ```
 
-### 批量处理
-
-```bash
-# 创建处理脚本
-cat > update-all-translations.sh << 'EOF'
-#!/bin/bash
-for lang in zh_CN ja_JP ko_KR; do
-  echo "Processing $lang..."
-  ./manage-translations.sh update -l $lang
-done
-EOF
-
-chmod +x update-all-translations.sh
-./update-all-translations.sh
-```
 
 ## 注意事项
 
 1. **备份重要**：在执行清理操作前，工具会自动创建备份，但建议手动备份重要文件
 
 2. **文本提取限制**：
-   - 只支持静态字符串，不支持动态构建的字符串
+   - ~~只支持静态字符串，不支持动态构建的字符串~~
+   - 动态资源（如变量拼接、运行时生成的文本）无法自动提取，需要在翻译文件中手动添加，并使用 `/*keep*/` 标记进行忽略管理。
    - 必须使用 `Translation.tr()` 格式
+### 忽略标记功能
+
+对于动态资源或特殊文本，如果不希望被自动清理，可在翻译值末尾添加 `/*keep*/`，工具会自动忽略这些键，不会在清理和同步时删除。
+
+示例：
+```json
+{
+  "dynamic_key": "Some dynamic value /*keep*/"
+}
+```
 
 3. **文件编码**：所有文件必须使用 UTF-8 编码
 
@@ -266,6 +261,10 @@ chmod +x update-all-translations.sh
 ## 故障排除
 
 ### 常见问题
+
+
+**Q: 添加了 Translation.tr 后文字不显示？**
+A: 需要在 QML 文件中使用 `import "root:/"` 导入翻译功能，否则无法正常显示翻译文本。
 
 **Q: 提取的文本数量与预期不符？**
 A: 检查是否所有可翻译文本都使用了 `Translation.tr()` 格式，确保没有动态构建的字符串。

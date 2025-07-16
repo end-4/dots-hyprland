@@ -163,7 +163,6 @@ Translation.tr("Say \"Hello\"")
 
 // With parameter placeholders
 Translation.tr("Hello, %1!").arg(name)
-Translation.tr("{0} files selected").arg(count)
 ```
 
 ## Example Output
@@ -235,20 +234,15 @@ Original key count: 470, after cleaning: 420
   --source-dir /path/to/source
 ```
 
-### Batch Processing
+### Ignore Mark Feature
 
-```bash
-# Create a processing script
-cat > update-all-translations.sh << 'EOF'
-#!/bin/bash
-for lang in zh_CN ja_JP ko_KR; do
-  echo "Processing $lang..."
-  ./manage-translations.sh update -l $lang
-done
-EOF
+For dynamic resources or special texts that should not be automatically cleaned, you can add `/*keep*/` at the end of the translation value. The tool will automatically ignore these keys and will not delete them during cleaning or syncing.
 
-chmod +x update-all-translations.sh
-./update-all-translations.sh
+Example:
+```json
+{
+  "dynamic_key": "Some dynamic value /*keep*/"
+}
 ```
 
 ## Notes
@@ -256,7 +250,8 @@ chmod +x update-all-translations.sh
 1. **Backup is important**: The tool automatically creates backups before cleaning, but it is recommended to manually back up important files
 
 2. **Text extraction limitations**:
-   - Only supports static strings, not dynamically constructed strings
+   - ~~Only supports static strings, not dynamically constructed strings~~
+   - Dynamic resources (such as variable concatenation or runtime-generated text) cannot be automatically extracted. You need to manually add them to the translation file and use the `/*keep*/` mark for ignore management.
    - Must use the `Translation.tr()` format
 
 3. **File encoding**: All files must use UTF-8 encoding
@@ -267,13 +262,16 @@ chmod +x update-all-translations.sh
 
 ### Common Issues
 
-**Q: The number of extracted texts does not match expectations?**  
+**Q: Text does not appear after adding Translation.tr?**
+A: You need to import the translation feature in your QML file using `import "root:/"`, otherwise the translation text will not be displayed correctly.
+
+**Q: The number of extracted texts does not match expectations?**
 A: Check whether all translatable texts use the `Translation.tr()` format and ensure there are no dynamically constructed strings.
 
-**Q: Some translations are missing after syncing?**  
+**Q: Some translations are missing after syncing?**
 A: Check whether the source language file contains all necessary keys, and consider using a different source language for syncing.
 
-**Q: The cleaning operation deleted needed keys?**  
+**Q: The cleaning operation deleted needed keys?**
 A: Restore from the automatically created backup file and check whether `Translation.tr()` is used correctly in the source code.
 
 ### Restore Backup

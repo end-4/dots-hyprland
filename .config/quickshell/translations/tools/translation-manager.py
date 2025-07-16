@@ -138,35 +138,52 @@ class TranslationManager:
         return missing_keys, extra_keys
     
     def interactive_update(self, lang_code: str, missing_keys: Set[str], extra_keys: Set[str]):
-        """Interactively update translation file"""
+        """Interactively update translation file, create backup only if updating"""
         translations = self.load_translation_file(lang_code)
         modified = False
-        
+        backup_created = False
+
         # Handle missing keys
         if missing_keys:
             print(f"\nFound {len(missing_keys)} missing translation keys:")
             for i, key in enumerate(sorted(missing_keys), 1):
                 print(f"{i}. \"{key}\"")
-            
+
             if self.ask_yes_no(f"\nAdd these {len(missing_keys)} missing keys?"):
+                if not backup_created:
+                    backup_file = self.translations_dir / f"{lang_code}.json.bak"
+                    with open(backup_file, 'w', encoding='utf-8') as f:
+                        json.dump(translations, f, ensure_ascii=False, indent=2)
+                    print(f"Created backup: {backup_file}")
+                    backup_created = True
                 for key in missing_keys:
                     translations[key] = key  # Default value is the key itself
                     modified = True
                 print(f"Added {len(missing_keys)} keys")
-        
+
         # Handle extra keys
         if extra_keys:
-            print(f"\nFound {len(extra_keys)} extra translation keys:")
-            for i, key in enumerate(sorted(extra_keys), 1):
-                print(f"{i}. \"{key}\" -> \"{translations.get(key, '')}\"")
-            
-            if self.ask_yes_no(f"\nDelete these {len(extra_keys)} extra keys?"):
-                for key in extra_keys:
-                    if key in translations:
-                        del translations[key]
-                        modified = True
-                print(f"Deleted {len(extra_keys)} keys")
-        
+            # Only show extra keys that are not marked with /*keep*/
+            filtered_extra_keys = [key for key in extra_keys if not (isinstance(translations.get(key, ""), str) and translations.get(key, "").strip().endswith('/*keep*/'))]
+            if filtered_extra_keys:
+                print(f"\nFound {len(filtered_extra_keys)} extra translation keys:")
+                for i, key in enumerate(sorted(filtered_extra_keys), 1):
+                    print(f"{i}. \"{key}\" -> \"{translations.get(key, '')}\"")
+                if self.ask_yes_no(f"\nDelete these {len(filtered_extra_keys)} extra keys?"):
+                    if not backup_created:
+                        backup_file = self.translations_dir / f"{lang_code}.json.bak"
+                        with open(backup_file, 'w', encoding='utf-8') as f:
+                            json.dump(translations, f, ensure_ascii=False, indent=2)
+                        print(f"Created backup: {backup_file}")
+                        backup_created = True
+                    deleted_count = 0
+                    for key in filtered_extra_keys:
+                        if key in translations:
+                            del translations[key]
+                            modified = True
+                            deleted_count += 1
+                    print(f"Deleted {deleted_count} keys")
+
         # Save changes
         if modified:
             self.save_translation_file(lang_code, translations)
@@ -288,7 +305,13 @@ def main():
             
             print(f"Analysis results:")
             print(f"  Missing keys: {len(missing_keys)}")
-            print(f"  Extra keys: {len(extra_keys)}")
+            # Load translation file for current lang to get values
+            current_translations = manager.load_translation_file(lang)
+            filtered_extra_keys = [key for key in extra_keys if not (isinstance(current_translations.get(key, ""), str) and current_translations.get(key, "").strip().endswith('/*keep*/'))]
+            ignored_extra_keys = [key for key in extra_keys if (isinstance(current_translations.get(key, ""), str) and current_translations.get(key, "").strip().endswith('/*keep*/'))]
+            print(f"  Extra keys: {len(filtered_extra_keys)}")
+            if ignored_extra_keys:
+                print(f"  Ignored keys: {len(ignored_extra_keys)} (marked with /*keep*/)")
             
             if missing_keys or extra_keys:
                 manager.interactive_update(lang, missing_keys, extra_keys)

@@ -145,12 +145,17 @@ Singleton {
         if (root.translations.hasOwnProperty(key)) {
             var translation = root.translations[key]
             if (translation && translation.toString().trim().length > 0) {
-                return translation.toString()
+                var str = translation.toString().trim()
+                if (str.endsWith("/*keep*/")) {
+                    return str.substring(0, str.length - 8).trim()
+                } else {
+                    return str
+                }
             } else {
                 return translation.toString()
             }
         }
-        
+
         return key // Fallback to key name
     }
     

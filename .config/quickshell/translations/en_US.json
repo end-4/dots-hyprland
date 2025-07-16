@@ -1,4 +1,11 @@
 {
+  "Mo": "Mo/*keep*/",
+  "Tu": "Tu/*keep*/",
+  "We": "We/*keep*/",
+  "Th": "Th/*keep*/",
+  "Fr": "Fr/*keep*/",
+  "Sa": "Sa/*keep*/",
+  "Su": "Su/*keep*/",
   "%1 characters": "%1 characters",
   "**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key": "**Pricing**: free. Data use policy varies depending on your OpenRouter account settings.\n\n**Instructions**: Log into OpenRouter account, go to Keys on the topright menu, click Create API Key",
   "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key": "**Pricing**: free. Data used for training.\n\n**Instructions**: Log into Google account, allow AI Studio to create Google Cloud project or whatever it asks, go back and click Get API key",
@@ -152,7 +159,6 @@
   "Set the system prompt for the model.": "Set the system prompt for the model.",
   "To Do": "To Do",
   "Calendar": "Calendar",
-  "notifications": "notifications",
   "Advanced": "Advanced",
   "About": "About",
   "Services": "Services",
@@ -306,5 +312,9 @@
   "Page %1": "Page %1",
   "Local Ollama model | %1": "Local Ollama model | %1",
   "The current system prompt is\n\n---\n\n%1": "The current system prompt is\n\n---\n\n%1",
-  "Unknown function call: %1": "Unknown function call: %1"
+  "Unknown function call: %1": "Unknown function call: %1",
+  "%1 notifications": "%1 notifications",
+  "Save chat from %1": "Save chat from %1",
+  "Load chat from %1": "Load chat from %1",
+  "Load prompt from %1": "Load prompt from %1"
 }

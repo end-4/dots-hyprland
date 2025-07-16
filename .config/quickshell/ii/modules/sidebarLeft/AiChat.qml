@@ -419,7 +419,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "prompt ") : ""}${file.target}`,
                                     displayName: `${FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target))}`,
-                                    description: `Load prompt from ${file.target}`,
+                                    description: Translation.tr("Load prompt from %1").arg(file.target),
                                 }
                             })
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}save`)) {
@@ -438,7 +438,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "save ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: `Save chat from ${chatName}`,
+                                    description: Translation.tr("Save chat from %1").arg(chatName),
                                 }
                             })
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}load`)) {
@@ -457,7 +457,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "load ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: `Load chat from ${file.target}`,
+                                    description: Translation.tr(`Load chat from %1`).arg(file.target),
                                 }
                             })
                         } else if(messageInputField.text.startsWith(root.commandPrefix)) {

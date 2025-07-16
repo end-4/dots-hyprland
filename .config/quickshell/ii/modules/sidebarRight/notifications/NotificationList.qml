@@ -85,7 +85,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin: 10
             horizontalAlignment: Text.AlignHCenter
-            text: `${Notifications.list.length} ${Translation.tr("notifications")}`
+            text: Translation.tr("%1 notifications").arg(Notifications.list.length)
 
             opacity: Notifications.list.length > 0 ? 1 : 0
             visible: opacity > 0

@@ -93,7 +93,7 @@ Item {
             Repeater {
                 model: CalendarLayout.weekDays
                 delegate: CalendarDayButton {
-                    day: modelData.day
+                    day: Translation.tr(modelData.day)
                     isToday: modelData.today
                     bold: true
                     enabled: false
