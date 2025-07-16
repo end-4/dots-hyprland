@@ -191,6 +191,7 @@ Scope {
                             Layout.fillWidth: true
                             horizontalAlignment: bgRoot.textHorizontalAlignment
                             font {
+                                family: Appearance.font.family.expressive
                                 pixelSize: 85
                                 weight: Font.Medium
                             }
@@ -203,6 +204,7 @@ Scope {
                             Layout.fillWidth: true
                             horizontalAlignment: bgRoot.textHorizontalAlignment
                             font {
+                                family: Appearance.font.family.expressive
                                 pixelSize: 20
                                 weight: Font.Medium
                             }

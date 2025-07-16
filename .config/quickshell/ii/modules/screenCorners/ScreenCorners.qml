@@ -26,20 +26,6 @@ Scope {
             mask: Region {
                 item: null
             }
-            // HyprlandWindow.visibleMask: Region {
-            //     Region {
-            //         item: topLeftCorner
-            //     }
-            //     Region {
-            //         item: topRightCorner
-            //     }
-            //     Region {
-            //         item: bottomLeftCorner
-            //     }
-            //     Region {
-            //         item: bottomRightCorner
-            //     }
-            // }
             WlrLayershell.namespace: "quickshell:screenCorners"
             WlrLayershell.layer: WlrLayer.Overlay
             color: "transparent"
