@@ -37,12 +37,8 @@ Scope {
             //     item: GlobalStates.overviewOpen ? columnLayout : null
             // }
 
-
             anchors {
                 top: true
-                left: true
-                right: true
-                bottom: true
             }
 
             HyprlandFocusGrab {
