@@ -10,6 +10,7 @@ import Quickshell
 Item {
     id: root
     required property var taskList;
+    required property var editingCallback;
     property string emptyPlaceholderIcon
     property string emptyPlaceholderText
     property int todoListItemSpacing: 5
@@ -36,12 +37,14 @@ Item {
             width: parent.width
             spacing: 0
             Repeater {
+                id: todoRepeater
                 model: ScriptModel {
                     values: taskList
                 }
                 delegate: Item {
                     id: todoItem
                     property bool pendingDoneToggle: false
+                    property bool pendingEdit: false
                     property bool pendingDelete: false
                     property bool enableHeightAnimation: false
 
@@ -59,9 +62,12 @@ Item {
                         }
                     }
 
-                    function startAction() {
-                        enableHeightAnimation = true
-                        todoItem.implicitHeight = 0
+                    function startAction(showCloseAnimation) {
+                        if (showCloseAnimation) {
+                            enableHeightAnimation = true
+                            todoItem.implicitHeight = 0
+                        }
+                        
                         actionTimer.start()
                     }
 
@@ -70,11 +76,17 @@ Item {
                         interval: Appearance.animation.elementMoveFast.duration
                         repeat: false
                         onTriggered: {
-                            if (todoItem.pendingDelete) {
-                                Todo.deleteItem(modelData.originalIndex)
-                            } else if (todoItem.pendingDoneToggle) {
+                            if (todoItem.pendingDoneToggle) {
+                                todoItem.pendingDoneToggle = false
                                 if (!modelData.done) Todo.markDone(modelData.originalIndex)
                                 else Todo.markUnfinished(modelData.originalIndex)
+                            } else if (todoItem.pendingEdit) {
+                                todoItem.pendingEdit = false
+                                Todo.currentTodoItemData = modelData
+                                root.editingCallback()
+                            } else if (todoItem.pendingDelete) {
+                                todoItem.pendingDelete = false
+                                Todo.deleteItem(modelData.originalIndex)
                             }
                         }
                     }
@@ -112,7 +124,7 @@ Item {
                                     Layout.fillWidth: false
                                     onClicked: {
                                         todoItem.pendingDoneToggle = true
-                                        todoItem.startAction()
+                                        todoItem.startAction(true)
                                     }
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
@@ -125,8 +137,22 @@ Item {
                                 TodoItemActionButton {
                                     Layout.fillWidth: false
                                     onClicked: {
+                                        todoItem.pendingEdit = true
+                                        todoItem.startAction(false)
+                                    }
+                                    contentItem: MaterialSymbol {
+                                        anchors.centerIn: parent
+                                        horizontalAlignment: Text.AlignHCenter
+                                        text: "edit"
+                                        iconSize: Appearance.font.pixelSize.larger
+                                        color: Appearance.colors.colOnLayer1
+                                    }
+                                }
+                                TodoItemActionButton {
+                                    Layout.fillWidth: false
+                                    onClicked: {
                                         todoItem.pendingDelete = true
-                                        todoItem.startAction()
+                                        todoItem.startAction(true)
                                     }
                                     contentItem: MaterialSymbol {
                                         anchors.centerIn: parent
@@ -140,7 +166,6 @@ Item {
                         }
                     }
                 }
-
             }
             // Bottom padding
             Item {

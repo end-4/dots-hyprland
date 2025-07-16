@@ -15,6 +15,7 @@ Singleton {
     id: root
     property var filePath: Directories.todoPath
     property var list: []
+    property var currentTodoItemData: undefined
     
     function addItem(item) {
         list.push(item)
@@ -29,6 +30,13 @@ Singleton {
             "done": false,
         }
         addItem(item)
+    }
+
+    function editTask(new_desc) {
+        root.list[root.currentTodoItemData.originalIndex].content = new_desc
+        // Reassign to trigger onListChanged
+        root.list = list.slice(0)
+        todoFileView.setText(JSON.stringify(root.list))
     }
 
     function markDone(index) {
@@ -85,4 +93,3 @@ Singleton {
         }
     }
 }
-
