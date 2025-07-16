@@ -20,8 +20,9 @@ Scope { // Scope
         model: Quickshell.screens
 
         PanelWindow { // Window
+            required property var modelData
             id: dockRoot
-            screen: dockLoader.modelData
+            screen: modelData
             
             property bool reveal: root.pinned 
                 || (Config.options?.dock.hoverToReveal && dockMouseArea.containsMouse) 
