@@ -39,6 +39,7 @@ Scope {
 
             anchors {
                 top: true
+                bottom: true
             }
 
             HyprlandFocusGrab {
@@ -81,6 +82,7 @@ Scope {
 
             function setSearchingText(text) {
                 searchWidget.setSearchingText(text);
+                searchWidget.focusFirstItemIfNeeded();
             }
 
             ColumnLayout {
