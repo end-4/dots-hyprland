@@ -438,7 +438,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "save ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: `Save chat from ${chatName}`,
+                                    description: `Save chat to ${chatName}`,
                                 }
                             })
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}load`)) {
