@@ -30,8 +30,6 @@ Scope { // Scope
 
             anchors {
                 bottom: true
-                left: true
-                right: true
             }
 
             exclusiveZone: root.pinned ? implicitHeight 
