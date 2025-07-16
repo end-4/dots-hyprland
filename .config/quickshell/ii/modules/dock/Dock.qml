@@ -30,6 +30,8 @@ Scope { // Scope
 
             anchors {
                 bottom: true
+                left: true
+                right: true
             }
 
             exclusiveZone: root.pinned ? implicitHeight 
@@ -48,14 +50,15 @@ Scope { // Scope
 
             MouseArea {
                 id: dockMouseArea
-                anchors.top: parent.top
                 height: parent.height
-                anchors.topMargin: dockRoot.reveal ? 0 : 
-                    Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) :
-                    (dockRoot.implicitHeight + 1)
-                    
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors {
+                    top: parent.top
+                    topMargin: dockRoot.reveal ? 0 : 
+                        Config.options?.dock.hoverToReveal ? (dockRoot.implicitHeight - Config.options.dock.hoverRegionHeight) :
+                        (dockRoot.implicitHeight + 1)
+                    horizontalCenter: parent.horizontalCenter
+                }
+                implicitWidth: dockHoverRegion.implicitWidth + Appearance.sizes.elevationMargin * 2
                 hoverEnabled: true
 
                 Behavior on anchors.topMargin {
@@ -65,6 +68,7 @@ Scope { // Scope
                 Item {
                     id: dockHoverRegion
                     anchors.fill: parent
+                    implicitWidth: dockBackground.implicitWidth
 
                     Item { // Wrapper for the dock background
                         id: dockBackground
