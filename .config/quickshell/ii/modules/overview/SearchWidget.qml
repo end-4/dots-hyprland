@@ -396,6 +396,8 @@ Item { // Wrapper
                     }
                 }
 
+                onModelChanged: root.focusFirstItemIfNeeded()
+
                 delegate: SearchItem {
                     // The selectable item for each search result
                     required property var modelData

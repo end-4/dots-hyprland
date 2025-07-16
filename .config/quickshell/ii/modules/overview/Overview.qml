@@ -37,11 +37,8 @@ Scope {
             //     item: GlobalStates.overviewOpen ? columnLayout : null
             // }
 
-
             anchors {
                 top: true
-                left: true
-                right: true
                 bottom: true
             }
 
@@ -85,6 +82,7 @@ Scope {
 
             function setSearchingText(text) {
                 searchWidget.setSearchingText(text);
+                searchWidget.focusFirstItemIfNeeded();
             }
 
             ColumnLayout {

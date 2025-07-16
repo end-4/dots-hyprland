@@ -41,7 +41,7 @@ Singleton {
     Process {
         id: getDefaultKeybinds
         running: true
-        command: [root.keybindParserPath, "--path", root.defaultKeybindConfigPath,]
+        command: [root.keybindParserPath, "--path", root.defaultKeybindConfigPath]
         
         stdout: SplitParser {
             onRead: data => {

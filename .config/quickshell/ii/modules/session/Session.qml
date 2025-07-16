@@ -76,7 +76,6 @@ Scope {
                     StyledText { // Small instruction
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignHCenter
-                        font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.normal
                         text: qsTr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
                     }
