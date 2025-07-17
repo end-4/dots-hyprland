@@ -20,7 +20,7 @@ QuickToggleButton {
     Process {
         id: fetchActiveState
         running: true
-        command: ["bash", "-c", "pidof wayland-idle-inhibitor.py"]
+        command: ["pidof", "wayland-idle-inhibitor.py"]
         onExited: (exitCode, exitStatus) => {
             root.toggled = exitCode === 0
         }

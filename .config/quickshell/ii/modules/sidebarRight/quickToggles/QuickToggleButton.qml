@@ -5,7 +5,7 @@ import QtQuick
 GroupButton {
     id: button
     property string buttonIcon
-    baseWidth: altAction ? 60 : 40
+    baseWidth: 40
     baseHeight: 40
     clickedWidth: baseWidth + 20
     toggled: false
@@ -14,7 +14,7 @@ GroupButton {
 
     contentItem: MaterialSymbol {
         anchors.centerIn: parent
-        iconSize: Appearance.font.pixelSize.larger
+        iconSize: 20
         fill: toggled ? 1 : 0
         color: toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1
         horizontalAlignment: Text.AlignHCenter

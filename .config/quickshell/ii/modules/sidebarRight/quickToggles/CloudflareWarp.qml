@@ -15,6 +15,7 @@ QuickToggleButton {
         source: 'cloudflare-dns-symbolic'
 
         anchors.centerIn: parent
+        width: 16
         height: 16
         colorize: true
         color: root.toggled ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer1

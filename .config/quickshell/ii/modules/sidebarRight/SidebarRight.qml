@@ -16,7 +16,7 @@ import Quickshell.Hyprland
 Scope {
     id: root
     property int sidebarWidth: Appearance.sizes.sidebarWidth
-    property int sidebarPadding: 15
+    property int sidebarPadding: 12
     property string settingsQmlPath: Quickshell.configPath("settings.qml")
 
     PanelWindow {
@@ -91,9 +91,9 @@ Scope {
                     radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
 
                     ColumnLayout {
-                        spacing: sidebarPadding
                         anchors.fill: parent
                         anchors.margins: sidebarPadding
+                        spacing: sidebarPadding
 
                         RowLayout {
                             Layout.fillHeight: false
@@ -177,6 +177,7 @@ Scope {
                             GameMode {}
                             IdleInhibitor {}
                             CloudflareWarp {}
+                            EasyEffectsToggle {}
                         }
 
                         // Center widget group
