@@ -66,7 +66,7 @@ ColumnLayout {
             id: indicator
             property int tabCount: root.tabButtonList.length
             property real fullTabSize: root.width / tabCount;
-            property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+            property real targetWidth: tabBar.contentItem?.children[0]?.children[tabBar.currentIndex]?.tabContentWidth ?? 0
 
             implicitWidth: targetWidth
             anchors {

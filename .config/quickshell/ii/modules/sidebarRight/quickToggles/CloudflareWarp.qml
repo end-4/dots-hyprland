@@ -74,7 +74,6 @@ QuickToggleButton {
             id: warpStatusCollector
             onStreamFinished: {
                 if (warpStatusCollector.text.length > 0) {
-                    console.log("Showing warp")
                     root.visible = true
                 }
                 if (warpStatusCollector.text.includes("Unable")) {
