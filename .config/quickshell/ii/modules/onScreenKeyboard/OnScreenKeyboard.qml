@@ -1,15 +1,12 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
@@ -141,7 +138,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskToggle"
-        description: qsTr("Toggles on screen keyboard on press")
+        description: "Toggles on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = !oskLoader.active;
@@ -150,7 +147,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskOpen"
-        description: qsTr("Opens on screen keyboard on press")
+        description: "Opens on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = true;
@@ -159,7 +156,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "oskClose"
-        description: qsTr("Closes on screen keyboard on press")
+        description: "Closes on screen keyboard on press"
 
         onPressed: {
             oskLoader.active = false;

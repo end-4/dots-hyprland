@@ -1,10 +1,9 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
 import "./anime/"
 import QtQuick
 import QtQuick.Controls
@@ -36,21 +35,21 @@ Item {
     property var allCommands: [
         {
             name: "mode",
-            description: qsTr("Set the current API provider"),
+            description: Translation.tr("Set the current API provider"),
             execute: (args) => {
                 Booru.setProvider(args[0]);
             }
         },
         {
             name: "clear",
-            description: qsTr("Clear the current list of images"),
+            description: Translation.tr("Clear the current list of images"),
             execute: () => {
                 Booru.clearResponses();
             }
         },
         {
             name: "next",
-            description: qsTr("Get the next page of results"),
+            description: Translation.tr("Get the next page of results"),
             execute: () => {
                 if (root.responses.length > 0) {
                     const lastResponse = root.responses[root.responses.length - 1];
@@ -60,14 +59,14 @@ Item {
         },
         {
             name: "safe",
-            description: qsTr("Disable NSFW content"),
+            description: Translation.tr("Disable NSFW content"),
             execute: () => {
                 Persistent.states.booru.allowNsfw = false;
             }
         },
         {
             name: "lewd",
-            description: qsTr("Allow NSFW content"),
+            description: Translation.tr("Allow NSFW content"),
             execute: () => {
                 Persistent.states.booru.allowNsfw = true;
             }
@@ -83,7 +82,7 @@ Item {
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                Booru.addSystemMessage(qsTr("Unknown command: ") + command);
+                Booru.addSystemMessage(Translation.tr("Unknown command: ") + command);
             }
         }
         else if (inputText.trim() == "+") {
@@ -205,7 +204,7 @@ Item {
                         font.family: Appearance.font.family.title
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
-                        text: qsTr("Anime boorus")
+                        text: Translation.tr("Anime boorus")
                     }
                 }
             }
@@ -242,7 +241,7 @@ Item {
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.m3colors.m3inverseOnSurface
                         wrapMode: Text.Wrap
-                        text: StringUtils.format(qsTr("{0} queries pending"), Booru.runningRequests)
+                        text: Translation.tr("%1 queries pending").arg(Booru.runningRequests)
                     }
                 }
             }
@@ -354,7 +353,7 @@ Item {
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     renderType: Text.NativeRendering
-                    placeholderText: StringUtils.format(qsTr('Enter tags, or "{0}" for commands'), root.commandPrefix)
+                    placeholderText: Translation.tr('Enter tags, or "%1" for commands').arg(root.commandPrefix)
 
                     background: null
 
@@ -517,9 +516,10 @@ Item {
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        // content: qsTr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + qsTr("\nSet with /mode PROVIDER")
-                        content: StringUtils.format(qsTr("Current API endpoint: {0}\nSet it with {1}mode PROVIDER"), 
-                            Booru.providers[Booru.currentProvider].url, root.commandPrefix)
+                        // content: Translation.tr("The current API used. Endpoint: ") + Booru.providers[Booru.currentProvider].url + Translation.tr("\nSet with /mode PROVIDER")
+                        content: Translation.tr("Current API endpoint: %1\nSet it with %2mode PROVIDER")
+                            .arg(Booru.providers[Booru.currentProvider].url)
+                            .arg(root.commandPrefix)
                     }
 
                     MouseArea {
@@ -559,7 +559,7 @@ Item {
                             Layout.alignment: Qt.AlignVCenter
                             font.pixelSize: Appearance.font.pixelSize.smaller
                             color: nsfwSwitch.enabled ? Appearance.colors.colOnLayer1 : Appearance.m3colors.m3outline
-                            text: qsTr("Allow NSFW")
+                            text: Translation.tr("Allow NSFW")
                         }
                         StyledSwitch {
                             id: nsfwSwitch

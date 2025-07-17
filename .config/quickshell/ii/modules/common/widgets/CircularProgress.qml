@@ -2,7 +2,7 @@
 // License: LGPL-3.0 - A copy can be found in `licenses` folder of repo
 
 import QtQuick
-import "root:/modules/common"
+import qs.modules.common
 
 /**
  * Material 3 circular progress. See https://m3.material.io/components/progress-indicators/specs

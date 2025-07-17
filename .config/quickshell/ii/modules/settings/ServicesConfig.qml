@@ -1,30 +1,30 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
 
     ContentSection {
-        title: "Audio"
+        title: Translation.tr("Audio")
 
         ConfigSwitch {
-            text: "Earbang protection"
+            text: Translation.tr("Earbang protection")
             checked: Config.options.audio.protection.enable
             onCheckedChanged: {
                 Config.options.audio.protection.enable = checked;
             }
             StyledToolTip {
-                content: "Prevents abrupt increments and restricts volume limit"
+                content: Translation.tr("Prevents abrupt increments and restricts volume limit")
             }
         }
         ConfigRow {
             // uniform: true
             ConfigSpinBox {
-                text: "Max allowed increase"
+                text: Translation.tr("Max allowed increase")
                 value: Config.options.audio.protection.maxAllowedIncrease
                 from: 0
                 to: 100
@@ -34,7 +34,7 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: "Volume limit"
+                text: Translation.tr("Volume limit")
                 value: Config.options.audio.protection.maxAllowed
                 from: 0
                 to: 100
@@ -46,10 +46,10 @@ ContentPage {
         }
     }
     ContentSection {
-        title: "AI"
+        title: Translation.tr("AI")
         MaterialTextField {
             Layout.fillWidth: true
-            placeholderText: "System prompt"
+            placeholderText: Translation.tr("System prompt")
             text: Config.options.ai.systemPrompt
             wrapMode: TextEdit.Wrap
             onTextChanged: {
@@ -61,12 +61,12 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Battery"
+        title: Translation.tr("Battery")
 
         ConfigRow {
             uniform: true
             ConfigSpinBox {
-                text: "Low warning"
+                text: Translation.tr("Low warning")
                 value: Config.options.battery.low
                 from: 0
                 to: 100
@@ -76,7 +76,7 @@ ContentPage {
                 }
             }
             ConfigSpinBox {
-                text: "Critical warning"
+                text: Translation.tr("Critical warning")
                 value: Config.options.battery.critical
                 from: 0
                 to: 100
@@ -89,17 +89,17 @@ ContentPage {
         ConfigRow {
             uniform: true
             ConfigSwitch {
-                text: "Automatic suspend"
+                text: Translation.tr("Automatic suspend")
                 checked: Config.options.battery.automaticSuspend
                 onCheckedChanged: {
                     Config.options.battery.automaticSuspend = checked;
                 }
                 StyledToolTip {
-                    content: "Automatically suspends the system when battery is low"
+                    content: Translation.tr("Automatically suspends the system when battery is low")
                 }
             }
             ConfigSpinBox {
-                text: "Suspend at"
+                text: Translation.tr("Suspend at")
                 value: Config.options.battery.suspend
                 from: 0
                 to: 100
@@ -112,10 +112,10 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Networking"
+        title: Translation.tr("Networking")
         MaterialTextField {
             Layout.fillWidth: true
-            placeholderText: "User agent (for services that require it)"
+            placeholderText: Translation.tr("User agent (for services that require it)")
             text: Config.options.networking.userAgent
             wrapMode: TextEdit.Wrap
             onTextChanged: {
@@ -125,9 +125,9 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Resources"
+        title: Translation.tr("Resources")
         ConfigSpinBox {
-            text: "Polling interval (ms)"
+            text: Translation.tr("Polling interval (ms)")
             value: Config.options.resources.updateInterval
             from: 100
             to: 10000
@@ -139,27 +139,27 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Search"
+        title: Translation.tr("Search")
 
         ConfigSwitch {
-            text: "Use Levenshtein distance-based algorithm instead of fuzzy"
+            text: Translation.tr("Use Levenshtein distance-based algorithm instead of fuzzy")
             checked: Config.options.search.sloppy
             onCheckedChanged: {
                 Config.options.search.sloppy = checked;
             }
             StyledToolTip {
-                content: "Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)"
+                content: Translation.tr("Could be better if you make a ton of typos,\nbut results can be weird and might not work with acronyms\n(e.g. \"GIMP\" might not give you the paint program)")
             }
         }
 
         ContentSubsection {
-            title: "Prefixes"
+            title: Translation.tr("Prefixes")
             ConfigRow {
                 uniform: true
 
                 MaterialTextField {
                     Layout.fillWidth: true
-                    placeholderText: "Action"
+                    placeholderText: Translation.tr("Action")
                     text: Config.options.search.prefix.action
                     wrapMode: TextEdit.Wrap
                     onTextChanged: {
@@ -168,7 +168,7 @@ ContentPage {
                 }
                 MaterialTextField {
                     Layout.fillWidth: true
-                    placeholderText: "Clipboard"
+                    placeholderText: Translation.tr("Clipboard")
                     text: Config.options.search.prefix.clipboard
                     wrapMode: TextEdit.Wrap
                     onTextChanged: {
@@ -177,7 +177,7 @@ ContentPage {
                 }
                 MaterialTextField {
                     Layout.fillWidth: true
-                    placeholderText: "Emojis"
+                    placeholderText: Translation.tr("Emojis")
                     text: Config.options.search.prefix.emojis
                     wrapMode: TextEdit.Wrap
                     onTextChanged: {
@@ -187,10 +187,10 @@ ContentPage {
             }
         }
         ContentSubsection {
-            title: "Web search"
+            title: Translation.tr("Web search")
             MaterialTextField {
                 Layout.fillWidth: true
-                placeholderText: "Base URL"
+                placeholderText: Translation.tr("Base URL")
                 text: Config.options.search.engineBaseUrl
                 wrapMode: TextEdit.Wrap
                 onTextChanged: {
@@ -201,10 +201,10 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Time"
+        title: Translation.tr("Time")
 
         ContentSubsection {
-            title: "Format"
+            title: Translation.tr("Format")
             tooltip: ""
 
             ConfigSelectionArray {
@@ -215,15 +215,15 @@ ContentPage {
                 }
                 options: [
                     {
-                        displayName: "24h",
+                        displayName: Translation.tr("24h"),
                         value: "hh:mm"
                     },
                     {
-                        displayName: "12h am/pm",
+                        displayName: Translation.tr("12h am/pm"),
                         value: "h:mm ap"
                     },
                     {
-                        displayName: "12h AM/PM",
+                        displayName: Translation.tr("12h AM/PM"),
                         value: "h:mm AP"
                     },
                 ]

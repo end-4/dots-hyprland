@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.modules.common.functions
 pragma Singleton
 pragma ComponentBehavior: Bound
 

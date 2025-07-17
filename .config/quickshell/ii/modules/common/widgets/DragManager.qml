@@ -1,8 +1,6 @@
-import "root:/modules/common"
-import "root:/services"
+import qs.modules.common
+import qs.services
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 
 /**
  * A convenience MouseArea for handling drag events.

@@ -1,11 +1,10 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
-
-import "root:/modules/common"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.modules.common
+import qs.modules.common.functions
 import Quickshell;
 import Quickshell.Io;
-import Qt.labs.platform
 import QtQuick;
 
 /**
@@ -20,14 +19,14 @@ Singleton {
     
     property var properties: {
         "application": "illogical-impulse",
-        "explanation": qsTr("For storing API keys and other sensitive information"),
+        "explanation": Translation.tr("For storing API keys and other sensitive information"),
     }
     property var propertiesAsArgs: Object.keys(root.properties).reduce(
         function(arr, key) {
             return arr.concat([key, root.properties[key]]);
         }, []
     )
-    property string keyringLabel: StringUtils.format(qsTr("{0} Safe Storage"), "illogical-impulse")
+    property string keyringLabel: Translation.tr("%1 Safe Storage").arg("illogical-impulse")
 
     function setNestedField(path, value) {
         if (!root.keyringData) root.keyringData = {};

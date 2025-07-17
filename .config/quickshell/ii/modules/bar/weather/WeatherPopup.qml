@@ -1,6 +1,7 @@
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 
 import QtQuick
 import QtQuick.Layouts
@@ -52,42 +53,42 @@ Rectangle {
             uniformCellWidths: true
 
             WeatherCard {
-                title: "UV Index"
+                title: Translation.tr("UV Index")
                 symbol: "wb_sunny"
                 value: Weather.data.uv
             }
             WeatherCard {
-                title: "Wind"
+                title: Translation.tr("Wind")
                 symbol: "air"
                 value: `(${Weather.data.windDir}) ${Weather.data.wind}`
             }
             WeatherCard {
-                title: "Precipitation"
+                title: Translation.tr("Precipitation")
                 symbol: "rainy_light"
                 value: Weather.data.precip
             }
             WeatherCard {
-                title: "Humidity"
+                title: Translation.tr("Humidity")
                 symbol: "humidity_low"
                 value: Weather.data.humidity
             }
             WeatherCard {
-                title: "Visibility"
+                title: Translation.tr("Visibility")
                 symbol: "visibility"
                 value: Weather.data.visib
             }
             WeatherCard {
-                title: "Pressure"
+                title: Translation.tr("Pressure")
                 symbol: "readiness_score"
                 value: Weather.data.press
             }
             WeatherCard {
-                title: "Sunrise"
+                title: Translation.tr("Sunrise")
                 symbol: "wb_twilight"
                 value: Weather.data.sunrise
             }
             WeatherCard {
-                title: "Sunset"
+                title: Translation.tr("Sunset")
                 symbol: "bedtime"
                 value: Weather.data.sunset
             }

@@ -1,15 +1,13 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "./calendar"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import "./notifications"
-import "./todo"
 import "./volumeMixer"
+import qs
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
 
 Rectangle {
     id: root
@@ -17,7 +15,7 @@ Rectangle {
     color: Appearance.colors.colLayer1
 
     property int selectedTab: 0
-    property var tabButtonList: [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
+    property var tabButtonList: [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}]
 
     Keys.onPressed: (event) => {
         if (event.key === Qt.Key_PageDown || event.key === Qt.Key_PageUp) {

@@ -1,10 +1,9 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common"
+import qs.modules.common
+import qs
 import Quickshell;
-import Quickshell.Io;
-import Qt.labs.platform
 import QtQuick;
 
 /**
@@ -16,18 +15,18 @@ Singleton {
 
     signal tagSuggestion(string query, var suggestions)
 
-    property string failMessage: qsTr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
+    property string failMessage: Translation.tr("That didn't work. Tips:\n- Check your tags and NSFW settings\n- If you don't have a tag in mind, type a page number")
     property var responses: []
     property int runningRequests: 0
     property var defaultUserAgent: Config.options?.networking?.userAgent || "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
     property var providerList: Object.keys(providers).filter(provider => provider !== "system" && providers[provider].api)
     property var providers: {
-        "system": { "name": qsTr("System") },
+        "system": { "name": Translation.tr("System") },
         "yandere": {
             "name": "yande.re",
             "url": "https://yande.re",
             "api": "https://yande.re/post.json",
-            "description": qsTr("All-rounder | Good quality, decent quantity"),
+            "description": Translation.tr("All-rounder | Good quality, decent quantity"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -61,7 +60,7 @@ Singleton {
             "name": "Konachan",
             "url": "https://konachan.com",
             "api": "https://konachan.com/post.json",
-            "description": qsTr("For desktop wallpapers | Good quality"),
+            "description": Translation.tr("For desktop wallpapers | Good quality"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -95,7 +94,7 @@ Singleton {
             "name": "Zerochan",
             "url": "https://www.zerochan.net",
             "api": "https://www.zerochan.net/?json",
-            "description": qsTr("Clean stuff | Excellent quality, no NSFW"),
+            "description": Translation.tr("Clean stuff | Excellent quality, no NSFW"),
             "mapFunc": (response) => {
                 response = response.items
                 return response.map(item => {
@@ -122,7 +121,7 @@ Singleton {
             "name": "Danbooru",
             "url": "https://danbooru.donmai.us",
             "api": "https://danbooru.donmai.us/posts.json",
-            "description": qsTr("The popular one | Best quantity, but quality can vary wildly"),
+            "description": Translation.tr("The popular one | Best quantity, but quality can vary wildly"),
             "mapFunc": (response) => {
                 return response.map(item => {
                     return {
@@ -157,7 +156,7 @@ Singleton {
             "name": "Gelbooru",
             "url": "https://gelbooru.com",
             "api": "https://gelbooru.com/index.php?page=dapi&s=post&q=index&json=1",
-            "description": qsTr("The hentai one | Great quantity, a lot of NSFW, quality varies wildly"),
+            "description": Translation.tr("The hentai one | Great quantity, a lot of NSFW, quality varies wildly"),
             "mapFunc": (response) => {
                 response = response.post
                 return response.map(item => {
@@ -192,7 +191,7 @@ Singleton {
             "name": "waifu.im",
             "url": "https://waifu.im",
             "api": "https://api.waifu.im/search",
-            "description": qsTr("Waifus only | Excellent quality, limited quantity"),
+            "description": Translation.tr("Waifus only | Excellent quality, limited quantity"),
             "mapFunc": (response) => {
                 response = response.images
                 return response.map(item => {
@@ -223,7 +222,7 @@ Singleton {
             "name": "Alcy",
             "url": "https://t.alcy.cc",
             "api": "https://t.alcy.cc/",
-            "description": qsTr("Large images | God tier quality, no NSFW."),
+            "description": Translation.tr("Large images | God tier quality, no NSFW."),
             "fixedTags": [
                 {
                     "name": "ycy",
@@ -287,10 +286,10 @@ Singleton {
         provider = provider.toLowerCase()
         if (providerList.indexOf(provider) !== -1) {
             Persistent.states.booru.provider = provider
-            root.addSystemMessage(qsTr("Provider set to ") + providers[provider].name
-                + (provider == "zerochan" ? qsTr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
+            root.addSystemMessage(Translation.tr("Provider set to ") + providers[provider].name
+                + (provider == "zerochan" ? Translation.tr(". Notes for Zerochan:\n- You must enter a color\n- Set your zerochan username in `sidebar.booru.zerochan.username` config option. You [might be banned for not doing so](https://www.zerochan.net/api#:~:text=The%20request%20may%20still%20be%20completed%20successfully%20without%20this%20custom%20header%2C%20but%20your%20project%20may%20be%20banned%20for%20being%20anonymous.)!") : ""))
         } else {
-            root.addSystemMessage(qsTr("Invalid API provider. Supported: \n- ") + providerList.join("\n- "))
+            root.addSystemMessage(Translation.tr("Invalid API provider. Supported: \n- ") + providerList.join("\n- "))
         }
     }
 

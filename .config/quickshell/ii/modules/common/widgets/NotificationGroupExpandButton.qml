@@ -1,12 +1,8 @@
-import "root:/modules/common"
-import "root:/services"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.services
+import qs.modules.common
+import qs.modules.common.functions
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Services.Notifications
 
 RippleButton { // Expand button
     id: root

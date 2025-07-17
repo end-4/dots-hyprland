@@ -1,43 +1,42 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 
 ContentPage {
     forceWidth: true
 
     ContentSection {
-        title: "Color generation"
+        title: Translation.tr("Color generation")
 
         ConfigRow {
             uniform: true
             ConfigSwitch {
-                text: "Shell & utilities"
+                text: Translation.tr("Shell & utilities")
                 checked: Config.options.appearance.wallpaperTheming.enableAppsAndShell
                 onCheckedChanged: {
                     Config.options.appearance.wallpaperTheming.enableAppsAndShell = checked;
                 }
             }
             ConfigSwitch {
-                text: "Qt apps"
+                text: Translation.tr("Qt apps")
                 checked: Config.options.appearance.wallpaperTheming.enableQtApps
                 onCheckedChanged: {
                     Config.options.appearance.wallpaperTheming.enableQtApps = checked;
                 }
                 StyledToolTip {
-                    content: "Shell & utilities theming must also be enabled"
+                    content: Translation.tr("Shell & utilities theming must also be enabled")
                 }
             }
             ConfigSwitch {
-                text: "Terminal"
+                text: Translation.tr("Terminal")
                 checked: Config.options.appearance.wallpaperTheming.enableTerminal
                 onCheckedChanged: {
                     Config.options.appearance.wallpaperTheming.enableTerminal = checked;
                 }
                 StyledToolTip {
-                    content: "Shell & utilities theming must also be enabled"
+                    content: Translation.tr("Shell & utilities theming must also be enabled")
                 }
             }
 

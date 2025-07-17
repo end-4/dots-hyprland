@@ -1,14 +1,11 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
 
 Rectangle {
     id: root
@@ -78,7 +75,7 @@ Rectangle {
                 visible: root.isInput
                 Layout.leftMargin: 10
                 sourceComponent: Text {
-                    text: qsTr("%1 characters").arg(inputLoader.item.text.length)
+                    text: Translation.tr("%1 characters").arg(inputLoader.item.text.length)
                     color: Appearance.colors.colOnLayer1
                     font.pixelSize: Appearance.font.pixelSize.smaller
                 }

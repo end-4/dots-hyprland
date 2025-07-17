@@ -1,20 +1,14 @@
 pragma ComponentBehavior: Bound
 
-import "root:/"
-import "root:/services"
-import "root:/modules/common/"
-import "root:/modules/common/widgets"
-import "../"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
-import Quickshell.Hyprland
-import Qt5Compat.GraphicalEffects
 import org.kde.syntaxhighlighting
 
 ColumnLayout {
@@ -87,7 +81,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Copy code")
+                        content: Translation.tr("Copy code")
                     }
                 }
                 AiMessageControlButton {
@@ -99,7 +93,11 @@ ColumnLayout {
                         Quickshell.execDetached(["bash", "-c", 
                             `echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`
                         ])
-                        Quickshell.execDetached(["bash", "-c", `notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`])
+                        Quickshell.execDetached(["notify-send", 
+                            Translation.tr("Code saved to file"), 
+                            Translation.tr("Saved to %1").arg(`${downloadPath}/code.${segmentLang || "txt"}`),
+                            "-a", "Shell"
+                        ])
                         saveCodeButton.activated = true
                         saveIconTimer.restart()
                     }
@@ -113,7 +111,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Save to Downloads")
+                        content: Translation.tr("Save to Downloads")
                     }
                 }
             }

@@ -1,11 +1,9 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import Qt5Compat.GraphicalEffects
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Widgets
 import Quickshell.Services.Pipewire
 
 GroupButton {
@@ -40,14 +38,14 @@ GroupButton {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.normal
-                text: input ? qsTr("Input") : qsTr("Output")
+                text: input ? Translation.tr("Input") : Translation.tr("Output")
                 color: Appearance.colors.colOnLayer2
             }
             StyledText {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? qsTr("Unknown")
+                text: (input ? Pipewire.defaultAudioSource?.description : Pipewire.defaultAudioSink?.description) ?? Translation.tr("Unknown")
                 color: Appearance.m3colors.m3outline
             }
         }

@@ -1,8 +1,7 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
+import qs.modules.common
+import qs.modules.common.widgets
 
 RippleButton {
     id: root

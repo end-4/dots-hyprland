@@ -1,15 +1,13 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import "./translator/"
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
 
 /**
  * Translator widget with the `trans` commandline tool.
@@ -123,7 +121,7 @@ Item {
                 TextCanvas { // Content translation
                     id: outputCanvas
                     isInput: false
-                    placeholderText: qsTr("Translation goes here...")
+                    placeholderText: Translation.tr("Translation goes here...")
                     property bool hasTranslation: (root.translatedText.trim().length > 0)
                     text: hasTranslation ? root.translatedText : ""
                     GroupButton {
@@ -178,7 +176,7 @@ Item {
         TextCanvas { // Content input
             id: inputCanvas
             isInput: true
-            placeholderText: qsTr("Enter text to translate...")
+            placeholderText: Translation.tr("Enter text to translate...")
             onInputTextChanged: {
                 translateTimer.restart();
             }
@@ -223,7 +221,7 @@ Item {
         z: 9999
         sourceComponent: SelectionDialog {
             id: languageSelectorDialog
-            titleText: qsTr("Select Language")
+            titleText: Translation.tr("Select Language")
             items: root.languages
             defaultChoice: root.languageSelectorTarget ? root.targetLanguage : root.sourceLanguage
             onCanceled: () => {

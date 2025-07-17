@@ -1,9 +1,8 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "../"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
 
 QuickToggleButton {
     id: root
@@ -27,6 +26,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: qsTr("Game mode")
+        content: Translation.tr("Game mode")
     }
 }

@@ -12,12 +12,10 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 ApplicationWindow {
     id: root
@@ -27,7 +25,7 @@ ApplicationWindow {
     property bool showNextTime: false
     visible: true
     onClosing: Qt.quit()
-    title: "illogical-impulse Welcome"
+    title: Translation.tr("illogical-impulse Welcome")
 
     Component.onCompleted: {
         MaterialThemeLoader.reapplyTheme()
@@ -70,7 +68,7 @@ ApplicationWindow {
                     leftMargin: 12
                 }
                 color: Appearance.colors.colOnLayer0
-                text: "Yooooo hi there"
+                text: Translation.tr("Yooooo hi there")
                 font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
             }
@@ -80,7 +78,7 @@ ApplicationWindow {
                 anchors.right: parent.right
                 StyledText {
                     font.pixelSize: Appearance.font.pixelSize.smaller
-                    text: "Show next time"
+                    text: Translation.tr("Show next time")
                 }
                 StyledSwitch {
                     id: showNextTimeSwitch
@@ -123,7 +121,7 @@ ApplicationWindow {
                 anchors.fill: parent
 
                 ContentSection {
-                    title: "Bar style"
+                    title: Translation.tr("Bar style")
 
                     ConfigSelectionArray {
                         currentValue: Config.options.bar.cornerStyle
@@ -132,15 +130,15 @@ ApplicationWindow {
                             Config.options.bar.cornerStyle = newValue; // Update local copy
                         }
                         options: [
-                            { displayName: "Hug", value: 0 },
-                            { displayName: "Float", value: 1 },
-                            { displayName: "Plain rectangle", value: 2 }
+                            { displayName: Translation.tr("Hug"), value: 0 },
+                            { displayName: Translation.tr("Float"), value: 1 },
+                            { displayName: Translation.tr("Plain rectangle"), value: 2 }
                         ]
                     }
                 }
 
                 ContentSection {
-                    title: "Style & wallpaper"
+                    title: Translation.tr("Style & wallpaper")
 
                     ButtonGroup {
                         Layout.fillWidth: true
@@ -159,19 +157,19 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter
                             buttonRadius: Appearance.rounding.small
                             materialIcon: "wallpaper"
-                            mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                            mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                             onClicked: {
                                 console.log(konachanWallProc.command.join(" "))
                                 konachanWallProc.running = true;
                             }
                             StyledToolTip {
-                                content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
+                                content: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "wallpaper"
                             StyledToolTip {
-                                content: "Pick wallpaper image on your system"
+                                content: Translation.tr("Pick wallpaper image on your system")
                             }
                             onClicked: {
                                 Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`])
@@ -181,7 +179,7 @@ ApplicationWindow {
                                     spacing: 10
                                     StyledText {
                                         font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Choose file"
+                                        text: Translation.tr("Choose file")
                                         color: Appearance.colors.colOnSecondaryContainer
                                     }
                                     RowLayout {
@@ -207,19 +205,19 @@ ApplicationWindow {
 
                     StyledText {
                         Layout.alignment: Qt.AlignHCenter
-                        text: "Change any time later with /dark, /light, /img in the launcher"
+                        text: Translation.tr("Change any time later with /dark, /light, /img in the launcher")
                         font.pixelSize: Appearance.font.pixelSize.smaller
                         color: Appearance.colors.colSubtext
                     }
                 }
 
                 ContentSection {
-                    title: "Policies"
+                    title: Translation.tr("Policies")
 
                     ConfigRow {
                         ColumnLayout { // Weeb policy
                             ContentSubsectionLabel {
-                                text: "Weeb"
+                                text: Translation.tr("Weeb")
                             }
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.weeb
@@ -228,16 +226,16 @@ ApplicationWindow {
                                     Config.options.policies.weeb = newValue;
                                 }
                                 options: [
-                                    { displayName: "No", value: 0 },
-                                    { displayName: "Yes", value: 1 },
-                                    { displayName: "Closet", value: 2 }
+                                    { displayName: Translation.tr("No"), value: 0 },
+                                    { displayName: Translation.tr("Yes"), value: 1 },
+                                    { displayName: Translation.tr("Closet"), value: 2 }
                                 ]
                             }
                         }
 
                         ColumnLayout { // AI policy
                             ContentSubsectionLabel {
-                                text: "AI"
+                                text: Translation.tr("AI")
                             }
                             ConfigSelectionArray {
                                 currentValue: Config.options.policies.ai
@@ -246,9 +244,9 @@ ApplicationWindow {
                                     Config.options.policies.ai = newValue;
                                 }
                                 options: [
-                                    { displayName: "No", value: 0 },
-                                    { displayName: "Yes", value: 1 },
-                                    { displayName: "Local only", value: 2 }
+                                    { displayName: Translation.tr("No"), value: 0 },
+                                    { displayName: Translation.tr("Yes"), value: 1 },
+                                    { displayName: Translation.tr("Local only"), value: 2 }
                                 ]
                             }
                         }
@@ -256,7 +254,7 @@ ApplicationWindow {
                 }
 
                 ContentSection {
-                    title: "Info"
+                    title: Translation.tr("Info")
 
                     Flow {
                         Layout.fillWidth: true
@@ -272,7 +270,7 @@ ApplicationWindow {
                                     spacing: 10
                                     StyledText {
                                         font.pixelSize: Appearance.font.pixelSize.small
-                                        text: "Keybinds"
+                                        text: Translation.tr("Keybinds")
                                         color: Appearance.colors.colOnSecondaryContainer
                                     }
                                     RowLayout {
@@ -294,14 +292,14 @@ ApplicationWindow {
 
                         RippleButtonWithIcon {
                             materialIcon: "help"
-                            mainText: "Usage"
+                            mainText: Translation.tr("Usage")
                             onClicked: {
                                 Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
                             }
                         }
                         RippleButtonWithIcon {
                             materialIcon: "construction"
-                            mainText: "Configuration"
+                            mainText: Translation.tr("Configuration")
                             onClicked: {
                                 Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/03config/")
                             }
@@ -310,7 +308,7 @@ ApplicationWindow {
                 }
 
                 ContentSection {
-                    title: "Useless buttons"
+                    title: Translation.tr("Useless buttons")
 
                     Flow {
                         Layout.fillWidth: true
@@ -318,7 +316,7 @@ ApplicationWindow {
 
                         RippleButtonWithIcon {
                             nerdIcon: "󰊤"
-                            mainText: "GitHub"
+                            mainText: Translation.tr("GitHub")
                             onClicked: {
                                 Qt.openUrlExternally("https://github.com/end-4/dots-hyprland")
                             }

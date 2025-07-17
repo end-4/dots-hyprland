@@ -1,16 +1,13 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
-import Qt5Compat.GraphicalEffects
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import qs
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 
@@ -160,7 +157,7 @@ Scope {
 
     GlobalShortcut {
         name: "mediaControlsToggle"
-        description: qsTr("Toggles media controls on press")
+        description: "Toggles media controls on press"
 
         onPressed: {
             if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
@@ -172,7 +169,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsOpen"
-        description: qsTr("Opens media controls on press")
+        description: "Opens media controls on press"
 
         onPressed: {
             mediaControlsLoader.active = true;
@@ -181,7 +178,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsClose"
-        description: qsTr("Closes media controls on press")
+        description: "Closes media controls on press"
 
         onPressed: {
             mediaControlsLoader.active = false;

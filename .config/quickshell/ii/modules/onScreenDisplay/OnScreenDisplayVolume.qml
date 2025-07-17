@@ -1,6 +1,7 @@
-import "root:/services/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -121,7 +122,7 @@ Scope {
                             Layout.fillWidth: true
                             value: Audio.sink?.audio.volume ?? 0
                             icon: Audio.sink?.audio.muted ? "volume_off" : "volume_up"
-                            name: qsTr("Volume")
+                            name: Translation.tr("Volume")
                         }
 
                         Item {
@@ -185,7 +186,7 @@ Scope {
 	}
     GlobalShortcut {
         name: "osdVolumeTrigger"
-        description: qsTr("Triggers volume OSD on press")
+        description: "Triggers volume OSD on press"
 
         onPressed: {
             root.triggerOsd()
@@ -193,7 +194,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdVolumeHide"
-        description: qsTr("Hides volume OSD on press")
+        description: "Hides volume OSD on press"
 
         onPressed: {
             root.showOsdValues = false

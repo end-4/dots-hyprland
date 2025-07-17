@@ -1,6 +1,7 @@
-import "root:/services/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -108,7 +109,7 @@ Scope {
                         icon: "light_mode"
                         rotateIcon: true
                         scaleIcon: true
-                        name: qsTr("Brightness")
+                        name: Translation.tr("Brightness")
                     }
                 }
             }
@@ -134,7 +135,7 @@ Scope {
 
     GlobalShortcut {
         name: "osdBrightnessTrigger"
-        description: qsTr("Triggers brightness OSD on press")
+        description: "Triggers brightness OSD on press"
 
         onPressed: {
             root.triggerOsd()
@@ -142,7 +143,7 @@ Scope {
     }
     GlobalShortcut {
         name: "osdBrightnessHide"
-        description: qsTr("Hides brightness OSD on press")
+        description: "Hides brightness OSD on press"
 
         onPressed: {
             root.showOsdValues = false

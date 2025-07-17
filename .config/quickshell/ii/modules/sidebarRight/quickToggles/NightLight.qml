@@ -1,8 +1,7 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "../"
+import qs.modules.common
+import qs.modules.common.widgets
+import qs
 import Quickshell.Io
-import Quickshell
 
 QuickToggleButton {
     id: nightLightButton
@@ -37,6 +36,6 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: qsTr("Night Light")
+        content: Translation.tr("Night Light")
     }
 }

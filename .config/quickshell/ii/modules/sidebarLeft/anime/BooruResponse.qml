@@ -1,16 +1,14 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import "../"
+import qs.services
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
-import Quickshell.Wayland
 import Quickshell.Hyprland
 import Qt5Compat.GraphicalEffects
 
@@ -94,7 +92,7 @@ Rectangle {
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colOnLayer2
                     // text: `Page ${root.responseData.page}`
-                    text: StringUtils.format(qsTr("Page {0}"), root.responseData.page)
+                    text: Translation.tr("Page %1").arg(root.responseData.page)
                 }
             }
         }

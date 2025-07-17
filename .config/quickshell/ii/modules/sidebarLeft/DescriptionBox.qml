@@ -1,6 +1,7 @@
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Layouts
 
@@ -47,7 +48,7 @@ Item { // Tag suggestion description
             }
             StyledText {
                 visible: root.showArrows && root.showTab
-                text: qsTr("or")
+                text: Translation.tr("or")
                 font.pixelSize: Appearance.font.pixelSize.smaller
             }
             KeyboardKey {

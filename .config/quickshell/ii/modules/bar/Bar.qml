@@ -1,18 +1,16 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common/"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import "./weather"
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Services.UPower
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 Scope {
     id: bar
@@ -169,7 +167,7 @@ Scope {
                             ScrollHint {
                                 reveal: barLeftSideMouseArea.hovered
                                 icon: "light_mode"
-                                tooltipText: qsTr("Scroll to change brightness")
+                                tooltipText: Translation.tr("Scroll to change brightness")
                                 side: "left"
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
@@ -380,7 +378,7 @@ Scope {
                             ScrollHint {
                                 reveal: barRightSideMouseArea.hovered
                                 icon: "volume_up"
-                                tooltipText: qsTr("Scroll to change volume")
+                                tooltipText: Translation.tr("Scroll to change volume")
                                 side: "right"
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
@@ -586,7 +584,7 @@ Scope {
 
     GlobalShortcut {
         name: "barToggle"
-        description: qsTr("Toggles bar on press")
+        description: "Toggles bar on press"
 
         onPressed: {
             GlobalStates.barOpen = !GlobalStates.barOpen;
@@ -595,7 +593,7 @@ Scope {
 
     GlobalShortcut {
         name: "barOpen"
-        description: qsTr("Opens bar on press")
+        description: "Opens bar on press"
 
         onPressed: {
             GlobalStates.barOpen = true;
@@ -604,7 +602,7 @@ Scope {
 
     GlobalShortcut {
         name: "barClose"
-        description: qsTr("Closes bar on press")
+        description: "Closes bar on press"
 
         onPressed: {
             GlobalStates.barOpen = false;

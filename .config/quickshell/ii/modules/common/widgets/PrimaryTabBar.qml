@@ -1,13 +1,13 @@
-import "root:/modules/common"
+import qs.modules.common
+import qs
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
 
 ColumnLayout {
     id: root
     spacing: 0
-    required property var tabButtonList // Something like [{"icon": "notifications", "name": qsTr("Notifications")}, {"icon": "volume_up", "name": qsTr("Volume mixer")}]
+    required property var tabButtonList // Something like [{"icon": "notifications", "name": Translation.tr("Notifications")}, {"icon": "volume_up", "name": Translation.tr("Volume mixer")}]
     required property var externalTrackedTab
     property bool enableIndicatorAnimation: false
     property color colIndicator: Appearance?.colors.colPrimary ?? "#65558F"
@@ -65,7 +65,7 @@ ColumnLayout {
             id: indicator
             property int tabCount: root.tabButtonList.length
             property real fullTabSize: root.width / tabCount;
-            property real targetWidth: tabBar.contentItem.children[0].children[tabBar.currentIndex].tabContentWidth
+            property real targetWidth: tabBar.contentItem?.children[0]?.children[tabBar.currentIndex]?.tabContentWidth ?? 0
 
             implicitWidth: targetWidth
             anchors {

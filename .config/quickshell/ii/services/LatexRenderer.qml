@@ -1,14 +1,10 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
-import "root:/modules/common"
+import qs.modules.common.functions
+import qs.modules.common
 import QtQuick
 import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
-import Qt.labs.platform
 
 /**
  * Renders LaTeX snippets with MicroTeX.

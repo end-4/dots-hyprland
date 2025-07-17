@@ -1,18 +1,14 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
-import Quickshell.Io
 import Quickshell
 import Quickshell.Widgets
-import Quickshell.Wayland
-import Quickshell.Hyprland
 
 DockButton {
     id: root
@@ -71,6 +67,14 @@ DockButton {
 
     middleClickAction: () => {
         root.desktopEntry?.execute();
+    }
+
+    altAction: () => {
+        if (Config.options.dock.pinnedApps.indexOf(appToplevel.appId) !== -1) {
+            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.filter(id => id !== appToplevel.appId)
+        } else {
+            Config.options.dock.pinnedApps = Config.options.dock.pinnedApps.concat([appToplevel.appId])
+        }
     }
 
     contentItem: Loader {

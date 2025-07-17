@@ -1,10 +1,5 @@
-import "root:/modules/common"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.modules.common
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
 
 RippleButton {
     id: root
