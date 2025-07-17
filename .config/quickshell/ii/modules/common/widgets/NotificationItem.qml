@@ -175,13 +175,14 @@ Item { // Notification item area
                 StyledText {
                     opacity: !root.expanded ? 1 : 0
                     visible: opacity > 0
+                    Layout.fillWidth: true
                     Behavior on opacity {
                         animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                     }
-                    Layout.fillWidth: true
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colSubtext
                     elide: Text.ElideRight
+                    wrapMode: Text.Wrap // Needed for proper eliding????
                     maximumLineCount: 1
                     textFormat: Text.StyledText
                     text: {
