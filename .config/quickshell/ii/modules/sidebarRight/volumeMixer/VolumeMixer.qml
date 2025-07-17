@@ -179,7 +179,7 @@ Item {
                     Layout.alignment: Qt.AlignLeft
                     color: Appearance.m3colors.m3onSurface
                     font.pixelSize: Appearance.font.pixelSize.larger
-                    text: `Select ${root.deviceSelectorInput ? "input" : "output"} device`
+                    text: root.deviceSelectorInput ? Translation.tr("Select input device") : Translation.tr("Select output device")
                 }
 
                 Rectangle {
