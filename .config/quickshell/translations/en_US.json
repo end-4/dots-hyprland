@@ -313,8 +313,8 @@
   "The current system prompt is\n\n---\n\n%1": "The current system prompt is\n\n---\n\n%1",
   "Unknown function call: %1": "Unknown function call: %1",
   "%1 notifications": "%1 notifications",
-  "Save chat from %1": "Save chat from %1",
   "Load chat from %1": "Load chat from %1",
   "Load prompt from %1": "Load prompt from %1",
-  "Online models disallowed for \n\nControlled by `policies.ai` config option": "Online models disallowed for \n\nControlled by `policies.ai` config option"
+  "Online models disallowed for \n\nControlled by `policies.ai` config option": "Online models disallowed for \n\nControlled by `policies.ai` config option",
+  "Save chat to %1": "Save chat to %1"
 }
