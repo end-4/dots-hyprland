@@ -93,7 +93,7 @@ Scope {
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
                         buttonText: Translation.tr("Lock")
-                        onClicked:  { Hyprland.dispatch("exec loginctl lock-session"); sessionRoot.hide() }
+                        onClicked:  { Quickshell.execDetached(["loginctl", "lock-session"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.right: sessionSleep
                         KeyNavigation.down: sessionHibernate
@@ -102,7 +102,7 @@ Scope {
                         id: sessionSleep
                         buttonIcon: "dark_mode"
                         buttonText: Translation.tr("Sleep")
-                        onClicked:  { Hyprland.dispatch("exec systemctl suspend || loginctl suspend"); sessionRoot.hide() }
+                        onClicked:  { Quickshell.execDetached(["bash", "-c", "systemctl suspend || loginctl suspend"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLock
                         KeyNavigation.right: sessionLogout
@@ -112,7 +112,7 @@ Scope {
                         id: sessionLogout
                         buttonIcon: "logout"
                         buttonText: Translation.tr("Logout")
-                        onClicked: { Hyprland.dispatch("exec pkill Hyprland"); sessionRoot.hide() }
+                        onClicked: { Quickshell.execDetached(["pkill", "Hyprland"]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
                         KeyNavigation.right: sessionTaskManager

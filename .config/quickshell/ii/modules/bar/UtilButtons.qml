@@ -24,7 +24,7 @@ Item {
             visible: Config.options.bar.utilButtons.showScreenSnip
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Hyprland.dispatch("exec hyprshot --freeze --clipboard-only --mode region --silent")
+                onClicked: Quickshell.execDetached(["qs", "-p", Quickshell.configPath("screenshot.qml")])
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 1
@@ -40,7 +40,7 @@ Item {
             visible: Config.options.bar.utilButtons.showColorPicker
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Hyprland.dispatch("exec hyprpicker -a")
+                onClicked: Quickshell.execDetached(["hyprpicker", "-a"])
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 1
@@ -72,7 +72,7 @@ Item {
             visible: Config.options.bar.utilButtons.showMicToggle
             sourceComponent: CircleUtilButton {
                 Layout.alignment: Qt.AlignVCenter
-                onClicked: Hyprland.dispatch("exec wpctl set-mute @DEFAULT_SOURCE@ toggle")
+                onClicked: Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_SOURCE@", "toggle"])
                 MaterialSymbol {
                     horizontalAlignment: Qt.AlignHCenter
                     fill: 0
