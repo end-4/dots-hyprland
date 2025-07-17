@@ -319,6 +319,24 @@
   "Select output device": "选择输出设备",
   "%1   •   %2 tasks": "%1   •   %2 个任务",
   "Online models disallowed\n\nControlled by `policies.ai` config option": "禁止在线模型\n\n由 `policies.ai` 配置项控制",
-  "Select input device": "选择输入设备"
-
+  "Select input device": "选择输入设备",
+  "Low battery": "电量低",
+  "Opens bar on press": "按下时打开条栏",
+  "Registration failed. Please inspect manually with the <tt>warp-cli</tt> command": "注册失败。请使用 <tt>warp-cli</tt> 命令手动检查",
+  "Code saved to file": "代码已保存到文件",
+  "Consider plugging in your device": "请考虑连接您的设备",
+  "Weather Service": "天气服务",
+  "Please charge!\nAutomatic suspend triggers at %1": "请充电！\n自动挂起将在 %1 时触发",
+  "Cloudflare WARP (1.1.1.1)": "Cloudflare WARP (1.1.1.1)",
+  "Cloudflare WARP": "Cloudflare WARP",
+  "Closes bar on press": "按下时关闭条栏",
+  "Download complete": "下载完成",
+  "Critically low battery": "电量极低",
+  "Scroll to change brightness": "滚动以调节亮度",
+  "Saved to %1": "已保存到 %1",
+  "Cannot find a GPS service. Using the fallback method instead.": "无法找到 GPS 服务。正在使用备用方法。",
+  "Elements": "元素",
+  "Scroll to change volume": "滚动以调节音量",
+  "Connection failed. Please inspect manually with the <tt>warp-cli</tt> command": "连接失败。请使用 <tt>warp-cli</tt> 命令手动检查",
+  "Toggles bar on press": "按下时切换条栏"
 }
