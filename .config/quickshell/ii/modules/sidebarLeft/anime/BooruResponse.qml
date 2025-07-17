@@ -4,6 +4,7 @@ import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "../"
+import "root:/services/"
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -94,7 +95,7 @@ Rectangle {
                     font.pixelSize: Appearance.font.pixelSize.smaller
                     color: Appearance.colors.colOnLayer2
                     // text: `Page ${root.responseData.page}`
-                    text: StringUtils.format(qsTr("Page {0}"), root.responseData.page)
+                    text: Translation.tr("Page %1").arg(root.responseData.page)
                 }
             }
         }

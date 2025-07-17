@@ -163,7 +163,7 @@ RippleButton {
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
                 color: Appearance.colors.colSubtext
-                visible: root.itemType && root.itemType != qsTr("App")
+                visible: root.itemType && root.itemType != Translation.tr("App")
                 text: root.itemType
             }
             RowLayout {

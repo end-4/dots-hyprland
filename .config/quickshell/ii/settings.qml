@@ -13,7 +13,7 @@ import QtQuick.Window
 import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
-import "root:/services/"
+import "root:/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
@@ -28,27 +28,27 @@ ApplicationWindow {
     property bool showNextTime: false
     property var pages: [
         {
-            name: "Style",
+            name: Translation.tr("Style"),
             icon: "palette",
             component: "modules/settings/StyleConfig.qml"
         },
         {
-            name: "Interface",
+            name: Translation.tr("Interface"),
             icon: "cards",
             component: "modules/settings/InterfaceConfig.qml"
         },
         {
-            name: "Services",
+            name: Translation.tr("Services"),
             icon: "settings",
             component: "modules/settings/ServicesConfig.qml"
         },
         {
-            name: "Advanced",
+            name: Translation.tr("Advanced"),
             icon: "construction",
             component: "modules/settings/AdvancedConfig.qml"
         },
         {
-            name: "About",
+            name: Translation.tr("About"),
             icon: "info",
             component: "modules/settings/About.qml"
         }
@@ -110,7 +110,7 @@ ApplicationWindow {
                     leftMargin: 12
                 }
                 color: Appearance.colors.colOnLayer0
-                text: "Settings"
+                text: Translation.tr("Settings")
                 font.pixelSize: Appearance.font.pixelSize.title
                 font.family: Appearance.font.family.title
             }
@@ -162,7 +162,7 @@ ApplicationWindow {
                     FloatingActionButton {
                         id: fab
                         iconText: "edit"
-                        buttonText: "Edit config"
+                        buttonText: Translation.tr("Edit config")
                         expanded: navRail.expanded
                         onClicked: {
                             Qt.openUrlExternally(`${Directories.config}/illogical-impulse/config.json`);

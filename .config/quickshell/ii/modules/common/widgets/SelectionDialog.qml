@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -113,11 +114,11 @@ Item {
                 Layout.alignment: Qt.AlignRight
 
                 DialogButton {
-                    buttonText: qsTr("Cancel")
+                    buttonText: Translation.tr("Cancel")
                     onClicked: root.canceled()
                 }
                 DialogButton {
-                    buttonText: qsTr("OK")
+                    buttonText: Translation.tr("OK")
                     onClicked: root.selected(
                         root.selectedId === -1 ? null :
                         root.items[root.selectedId]

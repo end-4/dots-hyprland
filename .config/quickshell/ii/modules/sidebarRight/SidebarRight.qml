@@ -124,7 +124,7 @@ Scope {
                             StyledText {
                                 font.pixelSize: Appearance.font.pixelSize.normal
                                 color: Appearance.colors.colOnLayer0
-                                text: StringUtils.format(qsTr("Uptime: {0}"), DateTime.uptime)
+                                text: Translation.tr("Uptime: %1").arg(DateTime.uptime)
                                 textFormat: Text.MarkdownText
                             }
 
@@ -141,7 +141,7 @@ Scope {
                                         Quickshell.reload(true)
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Reload Hyprland & Quickshell")
+                                        content: Translation.tr("Reload Hyprland & Quickshell")
                                     }
                                 }
                                 QuickToggleButton {
@@ -152,7 +152,7 @@ Scope {
                                         Quickshell.execDetached(["qs", "-p", root.settingsQmlPath])
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Settings")
+                                        content: Translation.tr("Settings")
                                     }
                                 }
                                 QuickToggleButton {
@@ -162,7 +162,7 @@ Scope {
                                         Hyprland.dispatch("global quickshell:sessionOpen")
                                     }
                                     StyledToolTip {
-                                        content: qsTr("Session")
+                                        content: Translation.tr("Session")
                                     }
                                 }
                             }
@@ -224,7 +224,7 @@ Scope {
 
     GlobalShortcut {
         name: "sidebarRightToggle"
-        description: qsTr("Toggles right sidebar on press")
+        description: Translation.tr("Toggles right sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarRightOpen = !GlobalStates.sidebarRightOpen;
@@ -233,7 +233,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightOpen"
-        description: qsTr("Opens right sidebar on press")
+        description: Translation.tr("Opens right sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarRightOpen = true;
@@ -242,7 +242,7 @@ Scope {
     }
     GlobalShortcut {
         name: "sidebarRightClose"
-        description: qsTr("Closes right sidebar on press")
+        description: Translation.tr("Closes right sidebar on press")
 
         onPressed: {
             GlobalStates.sidebarRightOpen = false;

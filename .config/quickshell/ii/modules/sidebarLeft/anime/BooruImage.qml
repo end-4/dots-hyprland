@@ -153,7 +153,7 @@ Button {
                         MenuButton {
                             id: openFileLinkButton
                             Layout.fillWidth: true
-                            buttonText: qsTr("Open file link")
+                            buttonText: Translation.tr("Open file link")
                             onClicked: {
                                 root.showActions = false
                                 Hyprland.dispatch("keyword cursor:no_warps true")
@@ -165,7 +165,7 @@ Button {
                             id: sourceButton
                             visible: root.imageData.source && root.imageData.source.length > 0
                             Layout.fillWidth: true
-                            buttonText: StringUtils.format(qsTr("Go to source ({0})"), StringUtils.getDomain(root.imageData.source))
+                            buttonText: Translation.tr("Go to source (%1)").arg(StringUtils.getDomain(root.imageData.source))
                             enabled: root.imageData.source && root.imageData.source.length > 0
                             onClicked: {
                                 root.showActions = false
@@ -177,11 +177,11 @@ Button {
                         MenuButton {
                             id: downloadButton
                             Layout.fillWidth: true
-                            buttonText: qsTr("Download")
+                            buttonText: Translation.tr("Download")
                             onClicked: {
                                 root.showActions = false
                                 Quickshell.execDetached(["bash", "-c", 
-                                    `curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${qsTr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
+                                    `curl '${root.imageData.file_url}' -o '${root.imageData.is_nsfw ? root.nsfwPath : root.downloadPath}/${root.fileName}' && notify-send '${Translation.tr("Download complete")}' '${root.downloadPath}/${root.fileName}' -a 'Shell'`
                                 ])
                             }
                         }

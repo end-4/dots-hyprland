@@ -44,14 +44,14 @@ Item {
     property var allCommands: [
         {
             name: "model",
-            description: qsTr("Choose model"),
+            description: Translation.tr("Choose model"),
             execute: (args) => {
                 Ai.setModel(args[0]);
             }
         },
         {
             name: "prompt",
-            description: qsTr("Set the system prompt for the model."),
+            description: Translation.tr("Set the system prompt for the model."),
             execute: (args) => {
                 if (args.length === 0 || args[0] === "get") {
                     Ai.printPrompt();
@@ -62,7 +62,7 @@ Item {
         },
         {
             name: "key",
-            description: qsTr("Set API key"),
+            description: Translation.tr("Set API key"),
             execute: (args) => {
                 if (args[0] == "get") {
                     Ai.printApiKey()
@@ -73,7 +73,7 @@ Item {
         },
         {
             name: "save",
-            description: qsTr("Save chat"),
+            description: Translation.tr("Save chat"),
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
@@ -85,7 +85,7 @@ Item {
         },
         {
             name: "load",
-            description: qsTr("Load chat"),
+            description: Translation.tr("Load chat"),
             execute: (args) => {
                 const joinedArgs = args.join(" ")
                 if (joinedArgs.trim().length == 0) {
@@ -97,14 +97,14 @@ Item {
         },
         {
             name: "clear",
-            description: qsTr("Clear chat history"),
+            description: Translation.tr("Clear chat history"),
             execute: () => {
                 Ai.clearMessages();
             }
         },
         {
             name: "temp",
-            description: qsTr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
+            description: Translation.tr("Set temperature (randomness) of the model. Values range between 0 to 2 for Gemini, 0 to 1 for other models. Default is 0.5."),
             execute: (args) => {
                 // console.log(args)
                 if (args.length == 0 || args[0] == "get") {
@@ -117,7 +117,7 @@ Item {
         },
         {
             name: "test",
-            description: qsTr("Markdown test"),
+            description: Translation.tr("Markdown test"),
             execute: () => {
                 Ai.addMessage(`
 <think>
@@ -183,7 +183,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
             if (commandObj) {
                 commandObj.execute(args);
             } else {
-                Ai.addMessage(qsTr("Unknown command: ") + command, Ai.interfaceRole);
+                Ai.addMessage(Translation.tr("Unknown command: ") + command, Ai.interfaceRole);
             }
         }
         else {
@@ -270,7 +270,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         font.family: Appearance.font.family.title
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignHCenter
-                        text: qsTr("Large language models")
+                        text: Translation.tr("Large language models")
                     }
                     StyledText {
                         id: widgetDescriptionText
@@ -279,7 +279,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         color: Appearance.m3colors.m3outline
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.Wrap
-                        text: qsTr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
+                        text: Translation.tr("Type /key to get started with online models\nCtrl+O to expand the sidebar\nCtrl+P to detach sidebar into a window")
                     }
                 }
             }
@@ -377,7 +377,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                     Layout.fillWidth: true
                     padding: 10
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
-                    placeholderText: StringUtils.format(qsTr('Message the model... "{0}" for commands'), root.commandPrefix)
+                    placeholderText: Translation.tr('Message the model... "%1" for commands').arg(root.commandPrefix)
 
                     background: null
 
@@ -419,7 +419,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "prompt ") : ""}${file.target}`,
                                     displayName: `${FileUtils.trimFileExt(FileUtils.fileNameForPath(file.target))}`,
-                                    description: `Load prompt from ${file.target}`,
+                                    description: Translation.tr("Load prompt from %1").arg(file.target),
                                 }
                             })
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}save`)) {
@@ -438,7 +438,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "save ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: `Save chat to ${chatName}`,
+                                    description: Translation.tr("Save chat to %1").arg(chatName),
                                 }
                             })
                         } else if (messageInputField.text.startsWith(`${root.commandPrefix}load`)) {
@@ -457,7 +457,7 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                                 return {
                                     name: `${messageInputField.text.trim().split(" ").length == 1 ? (root.commandPrefix + "load ") : ""}${chatName}`,
                                     displayName: `${chatName}`,
-                                    description: `Load chat from ${file.target}`,
+                                    description: Translation.tr(`Load chat from %1`).arg(file.target),
                                 }
                             })
                         } else if(messageInputField.text.startsWith(root.commandPrefix)) {
@@ -577,8 +577,9 @@ Inline w/ backslash and round brackets \\(e^{i\\pi} + 1 = 0\\)
                         id: toolTip
                         extraVisibleCondition: false
                         alternativeVisibleCondition: mouseArea.containsMouse // Show tooltip when hovered
-                        content: StringUtils.format(qsTr("Current model: {0}\nSet it with {1}model MODEL"), 
-                            Ai.getModel().name, root.commandPrefix)
+                        content: Translation.tr("Current model: %1\nSet it with %2model MODEL")
+                            .arg(Ai.getModel().name)
+                            .arg(root.commandPrefix)
                     }
 
                     MouseArea {

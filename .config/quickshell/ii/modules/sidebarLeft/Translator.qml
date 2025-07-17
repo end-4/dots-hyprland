@@ -123,7 +123,7 @@ Item {
                 TextCanvas { // Content translation
                     id: outputCanvas
                     isInput: false
-                    placeholderText: qsTr("Translation goes here...")
+                    placeholderText: Translation.tr("Translation goes here...")
                     property bool hasTranslation: (root.translatedText.trim().length > 0)
                     text: hasTranslation ? root.translatedText : ""
                     GroupButton {
@@ -178,7 +178,7 @@ Item {
         TextCanvas { // Content input
             id: inputCanvas
             isInput: true
-            placeholderText: qsTr("Enter text to translate...")
+            placeholderText: Translation.tr("Enter text to translate...")
             onInputTextChanged: {
                 translateTimer.restart();
             }
@@ -223,7 +223,7 @@ Item {
         z: 9999
         sourceComponent: SelectionDialog {
             id: languageSelectorDialog
-            titleText: qsTr("Select Language")
+            titleText: Translation.tr("Select Language")
             items: root.languages
             defaultChoice: root.languageSelectorTarget ? root.targetLanguage : root.sourceLanguage
             onCanceled: () => {

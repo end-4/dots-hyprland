@@ -148,7 +148,7 @@ Rectangle {
                         color: Appearance.m3colors.m3onSecondaryContainer
                         text: messageData?.role == 'assistant' ? Ai.models[messageData?.model].name :
                             (messageData?.role == 'user' && SystemInfo.username) ? SystemInfo.username :
-                            qsTr("Interface")
+                            Translation.tr("Interface")
                     }
                 }
             }
@@ -170,7 +170,7 @@ Rectangle {
                     text: "visibility_off"
                 }
                 StyledToolTip {
-                    content: qsTr("Not visible to model")
+                    content: Translation.tr("Not visible to model")
                 }
             }
 
@@ -197,7 +197,7 @@ Rectangle {
                     }
                     
                     StyledToolTip {
-                        content: qsTr("Copy")
+                        content: Translation.tr("Copy")
                     }
                 }
                 AiMessageControlButton {
@@ -212,7 +212,7 @@ Rectangle {
                         }
                     }
                     StyledToolTip {
-                        content: root.editing ? qsTr("Save") : qsTr("Edit")
+                        content: root.editing ? Translation.tr("Save") : Translation.tr("Edit")
                     }
                 }
                 AiMessageControlButton {
@@ -223,7 +223,7 @@ Rectangle {
                         root.renderMarkdown = !root.renderMarkdown
                     }
                     StyledToolTip {
-                        content: qsTr("View Markdown source")
+                        content: Translation.tr("View Markdown source")
                     }
                 }
                 AiMessageControlButton {
@@ -233,7 +233,7 @@ Rectangle {
                         Ai.removeMessage(root.messageIndex)
                     }
                     StyledToolTip {
-                        content: qsTr("Delete")
+                        content: Translation.tr("Delete")
                     }
                 }
             }

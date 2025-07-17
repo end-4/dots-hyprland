@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
 import QtQuick.Controls
@@ -10,7 +11,7 @@ import QtQuick.Layouts
 Item {
     id: root
     property int currentTab: 0
-    property var tabButtonList: [{"icon": "checklist", "name": qsTr("Unfinished")}, {"name": qsTr("Done"), "icon": "check_circle"}]
+    property var tabButtonList: [{"icon": "checklist", "name": Translation.tr("Unfinished")}, {"name": Translation.tr("Done"), "icon": "check_circle"}]
     property bool showAddDialog: false
     property int dialogMargins: 20
     property int fabSize: 48
@@ -134,7 +135,7 @@ Item {
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "check_circle"
-                emptyPlaceholderText: qsTr("Nothing here!")
+                emptyPlaceholderText: Translation.tr("Nothing here!")
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return !item.done; })
@@ -142,7 +143,7 @@ Item {
             TaskList {
                 listBottomPadding: root.fabSize + root.fabMargins * 2
                 emptyPlaceholderIcon: "checklist"
-                emptyPlaceholderText: qsTr("Finished tasks will go here")
+                emptyPlaceholderText: Translation.tr("Finished tasks will go here")
                 taskList: Todo.list
                     .map(function(item, i) { return Object.assign({}, item, {originalIndex: i}); })
                     .filter(function(item) { return item.done; })
@@ -239,7 +240,7 @@ Item {
                     Layout.alignment: Qt.AlignLeft
                     color: Appearance.m3colors.m3onSurface
                     font.pixelSize: Appearance.font.pixelSize.larger
-                    text: qsTr("Add task")
+                    text: Translation.tr("Add task")
                 }
 
                 TextField {
@@ -252,7 +253,7 @@ Item {
                     renderType: Text.NativeRendering
                     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
                     selectionColor: Appearance.colors.colSecondaryContainer
-                    placeholderText: qsTr("Task description")
+                    placeholderText: Translation.tr("Task description")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     focus: root.showAddDialog
                     onAccepted: dialog.addTask()
@@ -280,11 +281,11 @@ Item {
                     spacing: 5
 
                     DialogButton {
-                        buttonText: qsTr("Cancel")
+                        buttonText: Translation.tr("Cancel")
                         onClicked: root.showAddDialog = false
                     }
                     DialogButton {
-                        buttonText: qsTr("Add")
+                        buttonText: Translation.tr("Add")
                         enabled: todoInput.text.length > 0
                         onClicked: dialog.addTask()
                     }

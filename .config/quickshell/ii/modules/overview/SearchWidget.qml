@@ -206,7 +206,7 @@ Item { // Wrapper
                     color: activeFocus ? Appearance.m3colors.m3onSurface : Appearance.m3colors.m3onSurfaceVariant
                     selectedTextColor: Appearance.m3colors.m3onSecondaryContainer
                     selectionColor: Appearance.colors.colSecondaryContainer
-                    placeholderText: qsTr("Search, calculate or run")
+                    placeholderText: Translation.tr("Search, calculate or run")
                     placeholderTextColor: Appearance.m3colors.m3outline
                     implicitWidth: root.searchingText == "" ? Appearance.sizes.searchWidthCollapsed : Appearance.sizes.searchWidth
 
@@ -320,8 +320,8 @@ Item { // Wrapper
                         nonAppResultsTimer.restart();
                         const mathResultObject = {
                             name: root.mathResult,
-                            clickActionName: qsTr("Copy"),
-                            type: qsTr("Math result"),
+                            clickActionName: Translation.tr("Copy"),
+                            type: Translation.tr("Math result"),
                             fontType: "monospace",
                             materialSymbol: 'calculate',
                             execute: () => {
@@ -330,8 +330,8 @@ Item { // Wrapper
                         };
                         const commandResultObject = {
                             name: searchingText.replace("file://", ""),
-                            clickActionName: qsTr("Run"),
-                            type: qsTr("Run command"),
+                            clickActionName: Translation.tr("Run"),
+                            type: Translation.tr("Run command"),
                             fontType: "monospace",
                             materialSymbol: 'terminal',
                             execute: () => {
@@ -344,8 +344,8 @@ Item { // Wrapper
                             if (actionString.startsWith(root.searchingText) || root.searchingText.startsWith(actionString)) {
                                 return {
                                     name: root.searchingText.startsWith(actionString) ? root.searchingText : actionString,
-                                    clickActionName: qsTr("Run"),
-                                    type: qsTr("Action"),
+                                    clickActionName: Translation.tr("Run"),
+                                    type: Translation.tr("Action"),
                                     materialSymbol: 'settings_suggest',
                                     execute: () => {
                                         action.execute(root.searchingText.split(" ").slice(1).join(" "));
@@ -359,8 +359,8 @@ Item { // Wrapper
 
                         //////////////// Apps //////////////////
                         result = result.concat(AppSearch.fuzzyQuery(root.searchingText).map(entry => {
-                            entry.clickActionName = qsTr("Launch");
-                            entry.type = qsTr("App");
+                            entry.clickActionName = Translation.tr("Launch");
+                            entry.type = Translation.tr("App");
                             return entry;
                         }));
 
@@ -380,8 +380,8 @@ Item { // Wrapper
                         ///////////////// Web search ////////////////
                         result.push({
                             name: root.searchingText,
-                            clickActionName: qsTr("Search"),
-                            type: qsTr("Search the web"),
+                            clickActionName: Translation.tr("Search"),
+                            type: Translation.tr("Search the web"),
                             materialSymbol: 'travel_explore',
                             execute: () => {
                                 let url = Config.options.search.engineBaseUrl + root.searchingText;

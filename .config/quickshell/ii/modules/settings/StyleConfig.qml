@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Hyprland
+import "root:/"
 import "root:/services/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
@@ -28,7 +29,7 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Colors & Wallpaper"
+        title: Translation.tr("Colors & Wallpaper")
 
         // Light/Dark mode preference
         ButtonGroup {
@@ -44,7 +45,7 @@ ContentPage {
 
         // Material palette selection
         ContentSubsection {
-            title: "Material palette"
+            title: Translation.tr("Material palette")
             ConfigSelectionArray {
                 currentValue: Config.options.appearance.palette.type
                 configOptionName: "appearance.palette.type"
@@ -53,15 +54,15 @@ ContentPage {
                     Quickshell.execDetached(["bash", "-c", `${Directories.wallpaperSwitchScriptPath} --noswitch`])
                 }
                 options: [
-                    {"value": "auto", "displayName": "Auto"},
-                    {"value": "scheme-content", "displayName": "Content"},
-                    {"value": "scheme-expressive", "displayName": "Expressive"},
-                    {"value": "scheme-fidelity", "displayName": "Fidelity"},
-                    {"value": "scheme-fruit-salad", "displayName": "Fruit Salad"},
-                    {"value": "scheme-monochrome", "displayName": "Monochrome"},
-                    {"value": "scheme-neutral", "displayName": "Neutral"},
-                    {"value": "scheme-rainbow", "displayName": "Rainbow"},
-                    {"value": "scheme-tonal-spot", "displayName": "Tonal Spot"}
+                    {"value": "auto", "displayName": Translation.tr("Auto")},
+                    {"value": "scheme-content", "displayName": Translation.tr("Content")},
+                    {"value": "scheme-expressive", "displayName": Translation.tr("Expressive")},
+                    {"value": "scheme-fidelity", "displayName": Translation.tr("Fidelity")},
+                    {"value": "scheme-fruit-salad", "displayName": Translation.tr("Fruit Salad")},
+                    {"value": "scheme-monochrome", "displayName": Translation.tr("Monochrome")},
+                    {"value": "scheme-neutral", "displayName": Translation.tr("Neutral")},
+                    {"value": "scheme-rainbow", "displayName": Translation.tr("Rainbow")},
+                    {"value": "scheme-tonal-spot", "displayName": Translation.tr("Tonal Spot")}
                 ]
             }
         }
@@ -69,26 +70,26 @@ ContentPage {
 
         // Wallpaper selection
         ContentSubsection {
-            title: "Wallpaper"
+            title: Translation.tr("Wallpaper")
             RowLayout {
                 Layout.alignment: Qt.AlignHCenter
                 RippleButtonWithIcon {
                     id: rndWallBtn
                     buttonRadius: Appearance.rounding.small
                     materialIcon: "wallpaper"
-                    mainText: konachanWallProc.running ? "Be patient..." : "Random: Konachan"
+                    mainText: konachanWallProc.running ? Translation.tr("Be patient...") : Translation.tr("Random: Konachan")
                     onClicked: {
                         console.log(konachanWallProc.command.join(" "))
                         konachanWallProc.running = true;
                     }
                     StyledToolTip {
-                        content: "Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers"
+                        content: Translation.tr("Random SFW Anime wallpaper from Konachan\nImage is saved to ~/Pictures/Wallpapers")
                     }
                 }
                 RippleButtonWithIcon {
                     materialIcon: "wallpaper"
                     StyledToolTip {
-                        content: "Pick wallpaper image on your system"
+                        content: Translation.tr("Pick wallpaper image on your system")
                     }
                     onClicked: {
                         Quickshell.execDetached(`${Directories.wallpaperSwitchScriptPath}`)
@@ -98,7 +99,7 @@ ContentPage {
                             spacing: 10
                             StyledText {
                                 font.pixelSize: Appearance.font.pixelSize.small
-                                text: "Choose file"
+                                text: Translation.tr("Choose file")
                                 color: Appearance.colors.colOnSecondaryContainer
                             }
                             RowLayout {
@@ -126,7 +127,7 @@ ContentPage {
         StyledText {
             Layout.topMargin: 5
             Layout.alignment: Qt.AlignHCenter
-            text: "Alternatively use /dark, /light, /img in the launcher"
+            text: Translation.tr("Alternatively use /dark, /light, /img in the launcher")
             font.pixelSize: Appearance.font.pixelSize.smaller
             color: Appearance.colors.colSubtext
         }
@@ -134,27 +135,27 @@ ContentPage {
     }
 
     ContentSection {
-        title: "Decorations & Effects"
+        title: Translation.tr("Decorations & Effects")
 
         ContentSubsection {
-            title: "Transparency"
+            title: Translation.tr("Transparency")
 
             ConfigRow {
                 ConfigSwitch {
-                    text: "Enable"
+                    text: Translation.tr("Enable")
                     checked: Config.options.appearance.transparency
                     onCheckedChanged: {
                         Config.options.appearance.transparency = checked;
                     }
                     StyledToolTip {
-                        content: "Might look ass. Unsupported."
+                        content: Translation.tr("Might look ass. Unsupported.")
                     }
                 }
             }
         }
 
         ContentSubsection {
-            title: "Fake screen rounding"
+            title: Translation.tr("Fake screen rounding")
 
             ButtonGroup {
                 id: fakeScreenRoundingButtonGroup
@@ -163,7 +164,7 @@ ContentPage {
                 SelectionGroupButton {
                     property int value: 0
                     leftmost: true
-                    buttonText: "No"
+                    buttonText: Translation.tr("No")
                     toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
                     onClicked: {
                         Config.options.appearance.fakeScreenRounding = value;
@@ -171,7 +172,7 @@ ContentPage {
                 }
                 SelectionGroupButton {
                     property int value: 1
-                    buttonText: "Yes"
+                    buttonText: Translation.tr("Yes")
                     toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
                     onClicked: {
                         Config.options.appearance.fakeScreenRounding = value;
@@ -180,7 +181,7 @@ ContentPage {
                 SelectionGroupButton {
                     property int value: 2
                     rightmost: true
-                    buttonText: "When not fullscreen"
+                    buttonText: Translation.tr("When not fullscreen")
                     toggled: (fakeScreenRoundingButtonGroup.selectedPolicy === value)
                     onClicked: {
                         Config.options.appearance.fakeScreenRounding = value;
@@ -190,19 +191,19 @@ ContentPage {
         }
 
         ContentSubsection {
-            title: "Shell windows"
+            title: Translation.tr("Shell windows")
 
             ConfigRow {
                 uniform: true
                 ConfigSwitch {
-                    text: "Title bar"
+                    text: Translation.tr("Title bar")
                     checked: Config.options.windows.showTitlebar
                     onCheckedChanged: {
                         Config.options.windows.showTitlebar = checked;
                     }
                 }
                 ConfigSwitch {
-                    text: "Center title"
+                    text: Translation.tr("Center title")
                     checked: Config.options.windows.centerTitle
                     onCheckedChanged: {
                         Config.options.windows.centerTitle = checked;

@@ -19,11 +19,11 @@ Scope { // Scope
     property var tabButtonList: [
         {
             "icon": "keyboard",
-            "name": qsTr("Keybinds")
+            "name": Translation.tr("Keybinds")
         },
         {
             "icon": "experiment",
-            "name": qsTr("Elements")
+            "name": Translation.tr("Elements")
         },
     ]
     property int selectedTab: 0
@@ -139,7 +139,7 @@ Scope { // Scope
                         Layout.alignment: Qt.AlignHCenter
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
-                        text: qsTr("Cheat sheet")
+                        text: Translation.tr("Cheat sheet")
                     }
                     PrimaryTabBar { // Tab strip
                         id: tabBar
@@ -212,7 +212,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetToggle"
-        description: qsTr("Toggles cheatsheet on press")
+        description: Translation.tr("Toggles cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = !cheatsheetLoader.active;
@@ -221,7 +221,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetOpen"
-        description: qsTr("Opens cheatsheet on press")
+        description: Translation.tr("Opens cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = true;
@@ -230,7 +230,7 @@ Scope { // Scope
 
     GlobalShortcut {
         name: "cheatsheetClose"
-        description: qsTr("Closes cheatsheet on press")
+        description: Translation.tr("Closes cheatsheet on press")
 
         onPressed: {
             cheatsheetLoader.active = false;

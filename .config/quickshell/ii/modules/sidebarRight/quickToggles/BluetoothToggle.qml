@@ -1,4 +1,5 @@
 import "../"
+import "root:/"
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
@@ -28,9 +29,9 @@ QuickToggleButton {
         }
     }
     StyledToolTip {
-        content: StringUtils.format(qsTr("{0} | Right-click to configure"), 
+        content: Translation.tr("%1 | Right-click to configure").arg(
             (Bluetooth.bluetoothEnabled && Bluetooth.bluetoothDeviceName.length > 0) ? 
-            Bluetooth.bluetoothDeviceName : qsTr("Bluetooth"))
+            Bluetooth.bluetoothDeviceName : Translation.tr("Bluetooth"))
 
     }
 }

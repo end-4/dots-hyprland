@@ -87,7 +87,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Copy code")
+                        content: Translation.tr("Copy code")
                     }
                 }
                 AiMessageControlButton {
@@ -99,7 +99,11 @@ ColumnLayout {
                         Quickshell.execDetached(["bash", "-c", 
                             `echo '${StringUtils.shellSingleQuoteEscape(segmentContent)}' > '${downloadPath}/code.${segmentLang || "txt"}'`
                         ])
-                        Quickshell.execDetached(["bash", "-c", `notify-send 'Code saved to file' '${downloadPath}/code.${segmentLang || "txt"}' -a Shell`])
+                        Quickshell.execDetached(["notify-send", 
+                            Translation.tr("Code saved to file"), 
+                            Translation.tr("Saved to %1").arg(`${downloadPath}/code.${segmentLang || "txt"}`),
+                            "-a", "Shell"
+                        ])
                         saveCodeButton.activated = true
                         saveIconTimer.restart()
                     }
@@ -113,7 +117,7 @@ ColumnLayout {
                         }
                     }
                     StyledToolTip {
-                        content: qsTr("Save to Downloads")
+                        content: Translation.tr("Save to Downloads")
                     }
                 }
             }

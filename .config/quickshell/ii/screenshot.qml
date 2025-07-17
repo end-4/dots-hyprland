@@ -6,6 +6,7 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 pragma ComponentBehavior: "Bound"
+import "./"
 import "./modules/common/"
 import "./modules/common/widgets"
 import "./modules/common/functions/string_utils.js" as StringUtils
@@ -18,7 +19,6 @@ import Quickshell.Io
 import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
-import "./services/"
 
 ShellRoot {
     id: root
@@ -444,7 +444,7 @@ ShellRoot {
                                 }
                             }
                             StyledText {
-                                text: "Drag or click a region • LMB: Copy • RMB: Edit"
+                                text: Translation.tr("Drag or click a region • LMB: Copy • RMB: Edit")
                                 color: root.genericContentForeground
                             }
                         }

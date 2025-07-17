@@ -1,6 +1,7 @@
 import "root:/modules/common"
 import "root:/modules/common/widgets"
 import "root:/services"
+import "root:/"
 import "root:/modules/common/functions/string_utils.js" as StringUtils
 import "root:/modules/common/functions/file_utils.js" as FileUtils
 import Qt5Compat.GraphicalEffects
@@ -160,7 +161,7 @@ Scope {
 
     GlobalShortcut {
         name: "mediaControlsToggle"
-        description: qsTr("Toggles media controls on press")
+        description: Translation.tr("Toggles media controls on press")
 
         onPressed: {
             if (!mediaControlsLoader.active && Mpris.players.values.filter(player => isRealPlayer(player)).length === 0) {
@@ -172,7 +173,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsOpen"
-        description: qsTr("Opens media controls on press")
+        description: Translation.tr("Opens media controls on press")
 
         onPressed: {
             mediaControlsLoader.active = true;
@@ -181,7 +182,7 @@ Scope {
     }
     GlobalShortcut {
         name: "mediaControlsClose"
-        description: qsTr("Closes media controls on press")
+        description: Translation.tr("Closes media controls on press")
 
         onPressed: {
             mediaControlsLoader.active = false;

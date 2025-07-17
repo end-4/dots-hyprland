@@ -1,4 +1,6 @@
 import "root:/modules/common"
+import "root:/"
+import "root:/services/"
 import "root:/modules/common/widgets"
 import "root:/modules/common/functions/color_utils.js" as ColorUtils
 import QtQuick
@@ -70,14 +72,14 @@ Scope {
                         font.family: Appearance.font.family.title
                         font.pixelSize: Appearance.font.pixelSize.title
                         font.weight: Font.DemiBold
-                        text: qsTr("Session")
+                        text: Translation.tr("Session")
                     }
 
                     StyledText { // Small instruction
                         Layout.alignment: Qt.AlignHCenter
                         horizontalAlignment: Text.AlignHCenter
                         font.pixelSize: Appearance.font.pixelSize.normal
-                        text: qsTr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
+                        text: Translation.tr("Arrow keys to navigate, Enter to select\nEsc or click anywhere to cancel")
                     }
                 }
 
@@ -90,7 +92,7 @@ Scope {
                         id: sessionLock
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
-                        buttonText: qsTr("Lock")
+                        buttonText: Translation.tr("Lock")
                         onClicked:  { Hyprland.dispatch("exec loginctl lock-session"); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.right: sessionSleep
@@ -99,7 +101,7 @@ Scope {
                     SessionActionButton {
                         id: sessionSleep
                         buttonIcon: "dark_mode"
-                        buttonText: qsTr("Sleep")
+                        buttonText: Translation.tr("Sleep")
                         onClicked:  { Hyprland.dispatch("exec systemctl suspend || loginctl suspend"); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLock
@@ -109,7 +111,7 @@ Scope {
                     SessionActionButton {
                         id: sessionLogout
                         buttonIcon: "logout"
-                        buttonText: qsTr("Logout")
+                        buttonText: Translation.tr("Logout")
                         onClicked: { Hyprland.dispatch("exec pkill Hyprland"); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionSleep
@@ -119,7 +121,7 @@ Scope {
                     SessionActionButton {
                         id: sessionTaskManager
                         buttonIcon: "browse_activity"
-                        buttonText: qsTr("Task Manager")
+                        buttonText: Translation.tr("Task Manager")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `${Config.options.apps.taskManager}`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionLogout
@@ -129,7 +131,7 @@ Scope {
                     SessionActionButton {
                         id: sessionHibernate
                         buttonIcon: "downloading"
-                        buttonText: qsTr("Hibernate")
+                        buttonText: Translation.tr("Hibernate")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl hibernate || loginctl hibernate`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionLock
@@ -138,7 +140,7 @@ Scope {
                     SessionActionButton {
                         id: sessionShutdown
                         buttonIcon: "power_settings_new"
-                        buttonText: qsTr("Shutdown")
+                        buttonText: Translation.tr("Shutdown")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl poweroff || loginctl poweroff`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionHibernate
@@ -148,7 +150,7 @@ Scope {
                     SessionActionButton {
                         id: sessionReboot
                         buttonIcon: "restart_alt"
-                        buttonText: qsTr("Reboot")
+                        buttonText: Translation.tr("Reboot")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `reboot || loginctl reboot`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.left: sessionShutdown
@@ -158,7 +160,7 @@ Scope {
                     SessionActionButton {
                         id: sessionFirmwareReboot
                         buttonIcon: "settings_applications"
-                        buttonText: qsTr("Reboot to firmware settings")
+                        buttonText: Translation.tr("Reboot to firmware settings")
                         onClicked:  { Quickshell.execDetached(["bash", "-c", `systemctl reboot --firmware-setup || loginctl reboot --firmware-setup`]); sessionRoot.hide() }
                         onFocusChanged: { if (focus) sessionRoot.subtitle = buttonText }
                         KeyNavigation.up: sessionTaskManager
@@ -208,7 +210,7 @@ Scope {
 
     GlobalShortcut {
         name: "sessionToggle"
-        description: qsTr("Toggles session screen on press")
+        description: Translation.tr("Toggles session screen on press")
 
         onPressed: {
             sessionLoader.active = !sessionLoader.active;
@@ -217,7 +219,7 @@ Scope {
 
     GlobalShortcut {
         name: "sessionOpen"
-        description: qsTr("Opens session screen on press")
+        description: Translation.tr("Opens session screen on press")
 
         onPressed: {
             sessionLoader.active = true;

@@ -1,6 +1,7 @@
 import "root:/services"
 import "root:/modules/common"
 import "root:/modules/common/widgets"
+import "root:/"
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland
@@ -33,7 +34,7 @@ Item {
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.appId :
-                (root.biggestWindow?.class) ?? qsTr("Desktop")
+                (root.biggestWindow?.class) ?? Translation.tr("Desktop")
 
         }
 
@@ -44,7 +45,7 @@ Item {
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.title :
-                (root.biggestWindow?.title) ?? `${qsTr("Workspace")} ${monitor.activeWorkspace?.id}`
+                (root.biggestWindow?.title) ?? `${Translation.tr("Workspace")} ${monitor.activeWorkspace?.id}`
         }
 
     }

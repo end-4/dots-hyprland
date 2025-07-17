@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Widgets
+import "root:/"
 import "root:/services/"
 import "root:/modules/common/"
 import "root:/modules/common/widgets/"
@@ -12,7 +13,7 @@ ContentPage {
     forceWidth: true
 
     ContentSection {
-        title: "Distro"
+        title: Translation.tr("Distro")
         
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -48,21 +49,21 @@ ContentPage {
 
             RippleButtonWithIcon {
                 materialIcon: "auto_stories"
-                mainText: "Documentation"
+                mainText: Translation.tr("Documentation")
                 onClicked: {
                     Qt.openUrlExternally(SystemInfo.documentationUrl)
                 }
             }
             RippleButtonWithIcon {
                 materialIcon: "support"
-                mainText: "Help & Support"
+                mainText: Translation.tr("Help & Support")
                 onClicked: {
                     Qt.openUrlExternally(SystemInfo.supportUrl)
                 }
             }
             RippleButtonWithIcon {
                 materialIcon: "bug_report"
-                mainText: "Report a Bug"
+                mainText: Translation.tr("Report a Bug")
                 onClicked: {
                     Qt.openUrlExternally(SystemInfo.bugReportUrl)
                 }
@@ -70,7 +71,7 @@ ContentPage {
             RippleButtonWithIcon {
                 materialIcon: "policy"
                 materialIconFill: false
-                mainText: "Privacy Policy"
+                mainText: Translation.tr("Privacy Policy")
                 onClicked: {
                     Qt.openUrlExternally(SystemInfo.privacyPolicyUrl)
                 }
@@ -80,7 +81,7 @@ ContentPage {
 
     }
     ContentSection {
-        title: "Dotfiles"
+        title: Translation.tr("Dotfiles")
 
         RowLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -95,7 +96,7 @@ ContentPage {
                 Layout.alignment: Qt.AlignVCenter
                 // spacing: 10
                 StyledText {
-                    text: "illogical-impulse"
+                    text: Translation.tr("illogical-impulse")
                     font.pixelSize: Appearance.font.pixelSize.title
                 }
                 StyledText {
@@ -116,7 +117,7 @@ ContentPage {
 
             RippleButtonWithIcon {
                 materialIcon: "auto_stories"
-                mainText: "Documentation"
+                mainText: Translation.tr("Documentation")
                 onClicked: {
                     Qt.openUrlExternally("https://end-4.github.io/dots-hyprland-wiki/en/ii-qs/02usage/")
                 }
@@ -124,21 +125,21 @@ ContentPage {
             RippleButtonWithIcon {
                 materialIcon: "adjust"
                 materialIconFill: false
-                mainText: "Issues"
+                mainText: Translation.tr("Issues")
                 onClicked: {
                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/issues")
                 }
             }
             RippleButtonWithIcon {
                 materialIcon: "forum"
-                mainText: "Discussions"
+                mainText: Translation.tr("Discussions")
                 onClicked: {
                     Qt.openUrlExternally("https://github.com/end-4/dots-hyprland/discussions")
                 }
             }
             RippleButtonWithIcon {
                 materialIcon: "favorite"
-                mainText: "Donate"
+                mainText: Translation.tr("Donate")
                 onClicked: {
                     Qt.openUrlExternally("https://github.com/sponsors/end-4")
                 }
