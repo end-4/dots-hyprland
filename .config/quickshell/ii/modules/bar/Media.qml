@@ -1,12 +1,11 @@
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/services"
-import "root:/"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.services
+import qs
+import qs.modules.common.functions
+
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
 import Quickshell.Services.Mpris
 import Quickshell.Hyprland
 

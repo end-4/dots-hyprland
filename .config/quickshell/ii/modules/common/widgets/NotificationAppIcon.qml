@@ -1,9 +1,7 @@
-import "root:/modules/common"
+import qs.modules.common
 import "./notification_utils.js" as NotificationUtils
 import Qt5Compat.GraphicalEffects
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications

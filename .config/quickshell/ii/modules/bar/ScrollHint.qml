@@ -1,8 +1,7 @@
-import "root:/"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 Revealer { // Scroll hint

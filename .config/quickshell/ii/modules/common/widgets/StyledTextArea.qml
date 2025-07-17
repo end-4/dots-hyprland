@@ -1,4 +1,4 @@
-import "root:/modules/common"
+import qs.modules.common
 import QtQuick
 import QtQuick.Controls
 

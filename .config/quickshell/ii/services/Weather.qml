@@ -6,7 +6,7 @@ import Quickshell.Io
 import QtQuick
 import QtPositioning
 
-import "root:/modules/common"
+import qs.modules.common
 
 Singleton {
     id: root

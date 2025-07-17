@@ -1,14 +1,12 @@
 pragma Singleton
 pragma ComponentBehavior: Bound
 
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/object_utils.js" as ObjectUtils
-import "root:/modules/common"
-import "root:/"
-import Quickshell;
-import Quickshell.Io;
-import Qt.labs.platform
-import QtQuick;
+import qs.modules.common.functions as CF
+import qs.modules.common
+import qs
+import Quickshell
+import Quickshell.Io
+import QtQuick
 
 /**
  * Basic service to handle LLM chats. Supports Google's and OpenAI's API formats.
@@ -575,7 +573,7 @@ Singleton {
             const requestCommandString = `curl --no-buffer "${endpoint}"`
                 + ` ${headerString}`
                 + ((apiFormat == "gemini") ? "" : ` -H "Authorization: Bearer \$\{${root.apiKeyEnvVarName}\}"`)
-                + ` -d '${StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
+                + ` -d '${CF.StringUtils.shellSingleQuoteEscape(JSON.stringify(data))}'`
             // console.log("Request command: ", requestCommandString);
             requester.command = baseCommand.concat([requestCommandString]);
 
@@ -790,7 +788,7 @@ Singleton {
             addFunctionOutputMessage(name, Translation.tr("Switched to search mode. Continue with the user's request."))
             requester.makeRequest();
         } else if (name === "get_shell_config") {
-            const configJson = ObjectUtils.toPlainObject(Config.options)
+            const configJson = CF.ObjectUtils.toPlainObject(Config.options)
             addFunctionOutputMessage(name, JSON.stringify(configJson));
             requester.makeRequest();
         } else if (name === "set_shell_config") {
@@ -857,7 +855,7 @@ Singleton {
             root.messageIDs = saveData.map((_, i) => {
                 return i
             })
-            console.log(JSON.stringify(messageIDs))
+            // console.log(JSON.stringify(messageIDs))
             for (let i = 0; i < saveData.length; i++) {
                 const message = saveData[i];
                 root.messageByID[i] = root.aiMessageComponent.createObject(root, {

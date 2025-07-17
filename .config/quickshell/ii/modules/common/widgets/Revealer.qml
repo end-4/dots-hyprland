@@ -1,6 +1,5 @@
-import "root:/modules/common"
+import qs.modules.common
 import QtQuick
-import Quickshell
 
 /**
  * Recreation of GTK revealer. Expects one single child.

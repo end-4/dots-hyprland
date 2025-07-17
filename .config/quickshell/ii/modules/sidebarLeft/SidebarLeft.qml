@@ -1,15 +1,10 @@
-import "root:/"
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Effects
-import Qt5Compat.GraphicalEffects
 import Quickshell.Io
 import Quickshell
-import Quickshell.Widgets
 import Quickshell.Wayland
 import Quickshell.Hyprland
 

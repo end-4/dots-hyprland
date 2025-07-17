@@ -1,14 +1,9 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
-import Quickshell.Io
-import Quickshell.Hyprland
-import "root:/services/"
-import "root:/modules/common/"
-import "root:/modules/common/widgets/"
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
-import "root:/modules/common/functions/file_utils.js" as FileUtils
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 
 Flow {
     id: root

@@ -6,10 +6,10 @@
 //@ pragma Env QT_SCALE_FACTOR=1
 
 pragma ComponentBehavior: "Bound"
-import "./"
-import "./modules/common/"
-import "./modules/common/widgets"
-import "./modules/common/functions/string_utils.js" as StringUtils
+import qs
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Controls

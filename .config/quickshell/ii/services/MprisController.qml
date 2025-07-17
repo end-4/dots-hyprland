@@ -4,7 +4,7 @@ pragma ComponentBehavior: Bound
 // From https://git.outfoxxed.me/outfoxxed/nixnew
 // It does not have a license, but the author is okay with redistribution.
 
-import "root:/"
+import qs
 import QtQml.Models
 import QtQuick
 import Quickshell

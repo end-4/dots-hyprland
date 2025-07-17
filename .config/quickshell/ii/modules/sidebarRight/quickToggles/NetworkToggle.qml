@@ -1,9 +1,9 @@
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
 import "../"
-import "root:/"
+import qs
 import QtQuick
 import Quickshell
 import Quickshell.Io

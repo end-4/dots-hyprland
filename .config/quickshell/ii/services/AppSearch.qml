@@ -1,10 +1,9 @@
 pragma Singleton
 
-import "root:/modules/common"
+import qs.modules.common
 import "root:/modules/common/functions/fuzzysort.js" as Fuzzy
 import "root:/modules/common/functions/levendist.js" as Levendist
 import Quickshell
-import Quickshell.Io
 
 /**
  * - Eases fuzzy searching for applications by name

@@ -1,18 +1,10 @@
-import "root:/modules/common"
-import "root:/services"
-import "root:/modules/common/functions/string_utils.js" as StringUtils
-import "root:/modules/common/functions/color_utils.js" as ColorUtils
+import qs.modules.common
+import qs.services
+import qs.modules.common.functions
 import "./notification_utils.js" as NotificationUtils
-import Qt5Compat.GraphicalEffects
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Io
-import Quickshell.Widgets
-import Quickshell.Hyprland
-import Quickshell.Services.Notifications
 
 /**
  * A group of notifications from the same app.

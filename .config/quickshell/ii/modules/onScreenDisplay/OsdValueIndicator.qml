@@ -1,6 +1,6 @@
-import "root:/services"
-import "root:/modules/common"
-import "root:/modules/common/widgets"
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
