@@ -144,7 +144,7 @@ Scope {
                     const lower = Math.floor(bgRoot.firstWorkspaceId / chunkSize) * chunkSize;
                     const upper = Math.ceil(bgRoot.lastWorkspaceId / chunkSize) * chunkSize;
                     const range = upper - lower;
-                    return (bgRoot.monitor.activeWorkspace.id - lower) / range 
+                    return (Config.options.background.parallax.enableWorkspace ? ((bgRoot.monitor.activeWorkspace.id - lower) / range) : 0.5)
                         + (0.15 * GlobalStates.sidebarRightOpen * Config.options.background.parallax.enableSidebar)
                         - (0.15 * GlobalStates.sidebarLeftOpen * Config.options.background.parallax.enableSidebar)
                 }

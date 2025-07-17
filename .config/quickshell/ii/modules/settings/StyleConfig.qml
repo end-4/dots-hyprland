@@ -208,5 +208,38 @@ ContentPage {
                 }
             }
         }
+
+        ContentSubsection {
+            title: Translation.tr("Wallpaper parallax")
+
+            ConfigRow {
+                uniform: true
+                ConfigSwitch {
+                    text: Translation.tr("Depends on workspace")
+                    checked: Config.options.background.parallax.enableWorkspace
+                    onCheckedChanged: {
+                        Config.options.background.parallax.enableWorkspace = checked;
+                    }
+                }
+                ConfigSwitch {
+                    text: Translation.tr("Depends on sidebars")
+                    checked: Config.options.background.parallax.enableSidebar
+                    onCheckedChanged: {
+                        Config.options.background.parallax.enableSidebar = checked;
+                    }
+                }
+            }
+            ConfigSpinBox {
+                text: Translation.tr("Preferred wallpaper zoom (%)")
+                value: Config.options.background.parallax.workspaceZoom * 100
+                from: 100
+                to: 150
+                stepSize: 1
+                onValueChanged: {
+                    console.log(value/100)
+                    Config.options.background.parallax.workspaceZoom = value / 100;
+                }
+            }
+        }
     }
 }
