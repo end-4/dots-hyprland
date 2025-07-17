@@ -1,4 +1,4 @@
 # Contributing
-- Please understand that dotfiles are personal
-- If you make new stuff, I'll probably nitpick as I want quality
-- FFS pls make multiple PRs if you have many features 😭🙏
+- Please understand that dotfiles are after all personal. I can accept features I do not personally want, but in that case I will ask you to make it configurable/optionally loaded
+- If you add new stuff, it's a good idea to ask me first to not waste your work
+- Please make multiple PRs if you have many features

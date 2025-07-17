@@ -158,14 +158,20 @@ Scope { // Scope
                         spacing: 10
 
                         Behavior on implicitWidth {
+                            id: contentWidthBehavior
+                            enabled: false
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
                         Behavior on implicitHeight {
+                            id: contentHeightBehavior
+                            enabled: false
                             animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                         }
 
                         currentIndex: tabBar.externalTrackedTab
                         onCurrentIndexChanged: {
+                            contentWidthBehavior.enabled = true;
+                            contentHeightBehavior.enabled = true;
                             tabBar.enableIndicatorAnimation = true;
                             root.selectedTab = currentIndex;
                         }

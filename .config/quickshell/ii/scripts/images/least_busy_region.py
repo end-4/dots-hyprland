@@ -18,7 +18,7 @@ def center_crop(img, target_w, target_h):
     y2 = y1 + target_h
     return img[y1:y2, x1:x2]
 
-def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", padding=50):
+def find_least_busy_region(image_path, region_width=300, region_height=200, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", horizontal_padding=50, vertical_padding=50):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -59,10 +59,10 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
     min_var = None
     min_coords = (0, 0)
     area = region_width * region_height
-    x_start = padding
-    y_start = padding
-    x_end = w - region_width - padding + 1
-    y_end = h - region_height - padding + 1
+    x_start = horizontal_padding
+    y_start = vertical_padding
+    x_end = w - region_width - horizontal_padding + 1
+    y_end = h - region_height - vertical_padding + 1
     for y in range(y_start, max(y_end, y_start+1), stride):
         for x in range(x_start, max(x_end, x_start+1), stride):
             x1, y1 = x, y
@@ -76,7 +76,7 @@ def find_least_busy_region(image_path, region_width=300, region_height=200, scre
                 min_coords = (x, y)
     return min_coords, min_var
 
-def find_largest_region(image_path, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", threshold=100.0, aspect_ratio=1.0, padding=50):
+def find_largest_region(image_path, screen_width=None, screen_height=None, verbose=False, stride=2, screen_mode="fill", threshold=100.0, aspect_ratio=1.0, horizontal_padding=50, vertical_padding=50):
     img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if img is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
@@ -130,10 +130,10 @@ def find_largest_region(image_path, screen_width=None, screen_height=None, verbo
             max_size = mid - 1
             continue
         found = False
-        x_start = padding
-        y_start = padding
-        x_end = w - region_w - padding + 1
-        y_end = h - region_h - padding + 1
+        x_start = horizontal_padding
+        y_start = vertical_padding
+        x_end = w - region_w - horizontal_padding + 1
+        y_end = h - region_h - vertical_padding + 1
         for y in range(y_start, max(y_end, y_start+1), stride):
             for x in range(x_start, max(x_end, x_start+1), stride):
                 x1, y1 = x, y
@@ -257,13 +257,14 @@ def main():
     parser.add_argument("-v", "--visual-output", action="store_true", help="Output image with rectangle")
     parser.add_argument("--screen-width", type=int, default=1920, help="Screen width for wallpaper scaling")
     parser.add_argument("--screen-height", type=int, default=1080, help="Screen height for wallpaper scaling")
-    parser.add_argument("--stride", type=int, default=4, help="Step size for sliding window (higher is faster, less precise)")
+    parser.add_argument("--stride", type=int, default=10, help="Step size for sliding window (higher is faster, less precise)")
     parser.add_argument("--screen-mode", choices=["fill", "fit"], default="fill", help="Wallpaper scaling mode: 'fill' (default) or 'fit'")
     parser.add_argument("--verbose", action="store_true", help="Print verbose output")
     parser.add_argument("-l", "--largest-region", action="store_true", help="Find the largest region under the variance threshold and output its center")
     parser.add_argument("-t", "--variance-threshold", type=float, default=1000.0, help="Variance threshold for largest region mode")
     parser.add_argument("--aspect-ratio", type=float, default=1.78, help="Aspect ratio (width/height) for largest region mode")
-    parser.add_argument("--padding", type=int, default=50, help="Minimum distance from region to image edge (default: 50)")
+    parser.add_argument("--horizontal-padding", "-hp", type=int, default=50, help="Minimum horizontal distance from region to image edge")
+    parser.add_argument("--vertical-padding", "-vp", type=int, default=50, help="Minimum vertical distance from region to image edge")
     args = parser.parse_args()
 
     if args.largest_region:
@@ -276,7 +277,8 @@ def main():
             screen_mode=args.screen_mode,
             threshold=args.variance_threshold,
             aspect_ratio=args.aspect_ratio,
-            padding=args.padding
+            horizontal_padding=args.horizontal_padding,
+            vertical_padding=args.vertical_padding
         )
         if center:
             if args.visual_output:
@@ -312,7 +314,8 @@ def main():
         verbose=args.verbose,
         stride=args.stride,
         screen_mode=args.screen_mode,
-        padding=args.padding
+        horizontal_padding=args.horizontal_padding,
+        vertical_padding=args.vertical_padding
     )
     if args.visual_output:
         draw_region(args.image_path, coords, region_width=args.width, region_height=args.height, screen_width=args.screen_width, screen_height=args.screen_height, screen_mode=args.screen_mode)
