@@ -169,7 +169,7 @@ Scope {
                             ScrollHint {
                                 reveal: barLeftSideMouseArea.hovered
                                 icon: "light_mode"
-                                tooltipText: qsTr("Scroll to change brightness")
+                                tooltipText: Translation.tr("Scroll to change brightness")
                                 side: "left"
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
@@ -380,7 +380,7 @@ Scope {
                             ScrollHint {
                                 reveal: barRightSideMouseArea.hovered
                                 icon: "volume_up"
-                                tooltipText: qsTr("Scroll to change volume")
+                                tooltipText: Translation.tr("Scroll to change volume")
                                 side: "right"
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
@@ -586,7 +586,7 @@ Scope {
 
     GlobalShortcut {
         name: "barToggle"
-        description: qsTr("Toggles bar on press")
+        description: Translation.tr("Toggles bar on press")
 
         onPressed: {
             GlobalStates.barOpen = !GlobalStates.barOpen;
@@ -595,7 +595,7 @@ Scope {
 
     GlobalShortcut {
         name: "barOpen"
-        description: qsTr("Opens bar on press")
+        description: Translation.tr("Opens bar on press")
 
         onPressed: {
             GlobalStates.barOpen = true;
@@ -604,7 +604,7 @@ Scope {
 
     GlobalShortcut {
         name: "barClose"
-        description: qsTr("Closes bar on press")
+        description: Translation.tr("Closes bar on press")
 
         onPressed: {
             GlobalStates.barOpen = false;

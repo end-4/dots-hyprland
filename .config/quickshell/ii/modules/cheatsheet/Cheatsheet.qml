@@ -19,11 +19,11 @@ Scope { // Scope
     property var tabButtonList: [
         {
             "icon": "keyboard",
-            "name": qsTr("Keybinds")
+            "name": Translation.tr("Keybinds")
         },
         {
             "icon": "experiment",
-            "name": qsTr("Elements")
+            "name": Translation.tr("Elements")
         },
     ]
     property int selectedTab: 0
